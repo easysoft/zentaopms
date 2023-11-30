@@ -170,98 +170,22 @@ class jobModel extends model
      * @access public
      * @return int|bool
      */
-    public function create($job)
+    public function create(object $job): int|bool
     {
         $repo = $this->loadModel('repo')->getByID($job->repo);
 
-        if($job->engine == 'jenkins')
-        {
-            $job->server   = (int)zget($job, 'jkServer', 0);
-            $job->pipeline = zget($job, 'jkTask', '');
-        }
+        $result = $this->jobTao->getServerAndPipeline($job, $repo);
+        if(!$result) return false;
 
-        if(strtolower($job->engine) == 'gitlab')
-        {
-            $project = zget($repo, 'project');
-            if($job->repo && !empty($repo))
-            {
-                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
-                if(!is_array($pipeline) or empty($pipeline))
-                {
-                    dao::$errors['repo'][] = $this->lang->job->engineTips->error;
-                    return false;
-                }
-            }
-
-            $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'reference' => ''));
-        }
-
-        unset($job->jkServer);
-        unset($job->jkTask);
-        unset($job->gitlabRepo);
-
-        /* SonarQube tool is only used if the engine is JenKins. */
-        if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
-        {
-            dao::$errors['frame'][] = $this->lang->job->mustUseJenkins;
-            return false;
-        }
-
-        if($job->repo > 0 and $job->frame == 'sonarqube')
-        {
-            $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo));
-            if(!empty($sonarqubeJob))
-            {
-                $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
-                dao::$errors['repo'][] = $message;
-                return false;
-            }
-        }
-
-        if(!empty($job->projectKey) and $job->frame == 'sonarqube')
-        {
-            $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
-            if(!empty($projectList))
-            {
-                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
-                dao::$errors['projectKey'][] = $message;
-                return false;
-            }
-        }
+        $result = $this->jobTao->checkIframe($job);
+        if(!$result) return false;
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
-        $job->svnDir = '';
-        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
-        {
-            $job->svnDir = array_pop($_POST['svnDir']);
-            if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
-        }
+        $this->jobTao->getSvnDir($job, $repo);
 
-        $customParam = array();
-        foreach($job->paramName as $key => $paramName)
-        {
-            $paramValue = zget($job->paramValue, $key, '');
-
-            if(empty($paramName) and !empty($paramValue))
-            {
-                dao::$errors['paramName'][] = $this->lang->job->inputName;
-                return false;
-            }
-
-            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
-            {
-                dao::$errors['paramName'][] = $this->lang->job->invalidName;
-                return false;
-            }
-
-            if(!empty($paramName)) $customParam[$paramName] = $paramValue;
-        }
-        unset($job->paramName);
-        unset($job->paramValue);
-        unset($job->custom);
-        $job->customParam = json_encode($customParam);
+        $result = $this->jobTao->getCustomParam($job);
+        if(!$result) return false;
 
         $this->dao->insert(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
@@ -286,109 +210,22 @@ class jobModel extends model
      * @access public
      * @return bool
      */
-    public function update($id)
+    public function update(int $id, object $job): bool
     {
-        $job = fixer::input('post')
-            ->setDefault('atDay', '')
-            ->setIF($this->post->triggerType != 'commit', 'comment', '')
-            ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
-            ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
-            ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->remove('repoType,reference')
-            ->get();
         $repo = $this->loadModel('repo')->getByID($job->repo);
 
-        if($job->engine == 'jenkins')
-        {
-            $job->server   = (int)zget($job, 'jkServer', 0);
-            $job->pipeline = zget($job, 'jkTask', '');
-        }
-
-        if(strtolower($job->engine) == 'gitlab')
-        {
-            $project = zget($repo, 'project');
-            if(!empty($repo))
-            {
-                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
-                if(!is_array($pipeline) or empty($pipeline))
-                {
-                    dao::$errors['gitlabRepo'][] = $this->lang->job->engineTips->error;
-                    return false;
-                }
-            }
-
-            $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'reference' => ''));
-        }
-
-        unset($job->jkServer);
-        unset($job->jkTask);
-        unset($job->gitlabRepo);
-
-        /* SonarQube tool is only used if the engine is JenKins. */
-        if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
-        {
-            dao::$errors['engine'][] = $this->lang->job->mustUseJenkins;
-            return false;
-        }
-
-        if($job->repo > 0 and $job->frame == 'sonarqube')
-        {
-            $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo), $id);
-            if(!empty($sonarqubeJob))
-            {
-                $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
-                dao::$errors['repo'][] = $message;
-                return false;
-            }
-        }
-
-        if(!empty($job->projectKey) and $job->frame == 'sonarqube')
-        {
-            $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
-            if(!empty($projectList) && $projectList[$job->projectKey] != $id)
-            {
-                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]);
-                dao::$errors['projectKey'][] = $message;
-                return false;
-            }
-        }
+        $result = $this->jobTao->getServerAndPipeline($job, $repo);
+        if(!$result) return false;
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
-        $job->svnDir = '';
-        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
-        {
-            $job->svnDir = array_pop($_POST['svnDir']);
-            if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);
-        }
+        $result = $this->jobTao->checkIframe($job);
+        if(!$result) return false;
 
-        $customParam = array();
-        foreach($job->paramName as $key => $paramName)
-        {
-            $paramValue = zget($job->paramValue, $key, '');
+        $this->jobTao->getSvnDir($job, $repo);
 
-            if(empty($paramName) and !empty($paramValue))
-            {
-                dao::$errors['paramName'][] = $this->lang->job->inputName;
-                return false;
-            }
-
-            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
-            {
-                dao::$errors['paramName'][] = $this->lang->job->invalidName;
-                return false;
-            }
-
-            if(!empty($paramName)) $customParam[$paramName] = $paramValue;
-        }
-
-        unset($job->paramName);
-        unset($job->paramValue);
-        unset($job->custom);
-        $job->customParam = json_encode($customParam);
+        $result = $this->jobTao->getCustomParam($job);
+        if(!$result) return false;
 
         $this->dao->update(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->edit->requiredFields, 'notempty')

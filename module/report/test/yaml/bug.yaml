@@ -1,0 +1,7 @@
+title: bug.
+desc: bug data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: assignedTo
+    range: admin,user1,user2

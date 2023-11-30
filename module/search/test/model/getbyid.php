@@ -5,18 +5,31 @@ include dirname(__FILE__, 2) . '/search.class.php';
 su('admin');
 
 zdTable('userquery')->gen(6);
+
 /**
 
 title=测试 searchModel->getByID();
+timeout=0
 cid=1
-pid=1
 
-查询ID为1的模块名及条件名 >> task,这是搜索条件名称1
-查询ID为2的模块名及条件名 >> task,这是搜索条件名称2
-查询ID为3的模块名及条件名 >> task,这是搜索条件名称3
-查询ID为4的模块名及条件名 >> task,这是搜索条件名称4
-查询ID为5的模块名及条件名 >> task,这是搜索条件名称5
-查询ID为6的模块名及条件名 >> task,这是搜索条件名称6
+- 查询ID为1的模块名及条件名
+ - 属性module @task
+ - 属性title @这是搜索条件名称1
+- 查询ID为2的模块名及条件名
+ - 属性module @task
+ - 属性title @这是搜索条件名称2
+- 查询ID为3的模块名及条件名
+ - 属性module @task
+ - 属性title @这是搜索条件名称3
+- 查询ID为4的模块名及条件名
+ - 属性module @task
+ - 属性title @这是搜索条件名称4
+- 查询ID为5的模块名及条件名
+ - 属性module @task
+ - 属性title @这是搜索条件名称5
+- 查询ID为6的模块名及条件名
+ - 属性module @task
+ - 属性title @这是搜索条件名称6
 
 */
 

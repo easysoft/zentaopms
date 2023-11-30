@@ -71,6 +71,39 @@ class reportTest
     }
 
     /**
+     * 测试获取系统的 URL。
+     * Test get system URL.
+     *
+     * @param  string       $domain
+     * @param  stringi      $argv1
+     * @access public
+     * @return string|array
+     */
+    public function getSysURLTest(string $domain = '', string $argv1 = ''): string|array
+    {
+        global $tester;
+        if(!empty($domain))
+        {
+            if(!isset($tester->config->mail)) $tester->config->mail = new stdclass();
+            $tester->config->mail->domain = $domain;
+        }
+        else
+        {
+            unset($tester->config->mail->domain);
+        }
+        $_SERVER['argv'] = array('argv0', $argv1);
+
+        $url = $this->objectModel->getSysURL();
+
+        unset($tester->config->mail->domain);
+        unset($_SERVER['argv']);
+
+        if(dao::isError()) return dao::getError();
+
+        return $url;
+    }
+
+    /**
      * Test get executions.
      *
      * @param int $begin
@@ -191,19 +224,20 @@ class reportTest
     }
 
     /**
+     * 测试获取用户的 bugs。
      * Test get user bugs.
      *
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserBugsTest()
+    public function getUserBugsTest(): string|array
     {
         $objects = $this->objectModel->getUserBugs();
 
         if(dao::isError()) return dao::getError();
 
         $counts = '';
-        foreach($objects as $user => $bugs) $counts .= "$user:" . count($bugs) . ';';
+        foreach($objects as $user => $bugs) $counts .= "{$user}:" . count($bugs) . ';';
         return $counts;
     }
 

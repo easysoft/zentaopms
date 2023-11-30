@@ -461,7 +461,13 @@ class api extends control
     {
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->api->form->create)->add('product', 0)->add('version', 1)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+            $formData = form::data($this->config->api->form->create)
+                ->add('product', 0)
+                ->add('version', 1)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->add('editedDate', helper::now())
+                ->get();
 
             $apiID = $this->api->create($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -485,85 +491,51 @@ class api extends control
     }
 
     /**
+     * 编辑一个接口文档。
      * Edit library.
      *
-     * @param  int     $apiID
+     * @param  int    $apiID
      * @access public
      * @return void
      */
-    public function edit($apiID)
+    public function edit(int $apiID)
     {
         $api = $this->api->getLibById($apiID);
         if(!empty($_POST))
         {
-            $changes = $this->api->update($apiID);
+            $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->get();
+
+            $this->api->update($formData);
+
             if(dao::isError()) return $this->sendError(dao::getError());
-
-            if($changes)
-            {
-                $actionID = $this->action->create('api', $apiID, 'edited', '', '', '', false);
-                $this->action->logHistory($actionID, $changes);
-            }
-
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
         }
 
-        if($api)
-        {
-            $this->view->api  = $api;
-            $this->view->edit = true;
-        }
-
         $this->setMenu($api->lib);
-
         $this->getTypeOptions($api->lib);
 
-        $this->view->title            = $api->title . $this->lang->api->edit;
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID=$apiID");
-        $this->view->user             = $this->app->user->account;
+        $this->view->title            = $api->title . $this->lang->colon . $this->lang->api->edit;
+        $this->view->api              = $api;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
         $this->display();
     }
 
     /**
+     * 删除一个接口文档。
      * Delete an api.
      *
      * @param  int    $apiID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($apiID)
+    public function delete(int $apiID)
     {
         $api = $this->api->getLibById($apiID);
         $this->api->delete(TABLE_API, $apiID);
 
-        if(dao::isError())
-        {
-            $this->sendError(dao::getError());
-        }
-        else
-        {
-            return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
-        }
-    }
-
-    /**
-     * AJAX: Get params type options by scope.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetParamsTypeOptions()
-    {
-        $options = array();
-        foreach($this->lang->api->paramsTypeOptions as $key => $item)
-        {
-            $options[] = array('label' => $item, 'value' => $key);
-        }
-        $this->sendSuccess(array('data' => $options));
+        if(dao::isError()) $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
     }
 
     /**

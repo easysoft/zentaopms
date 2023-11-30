@@ -57,8 +57,6 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
 
-        a($searchFields);
-        a($fieldParams);exit;
         $queryForm = $this->initSession($module, $searchFields, $fieldParams);
 
         $scoreNum = 0;
@@ -216,6 +214,8 @@ class searchModel extends model
             $query->sql = $_SESSION[$querySessionName];
         }
 
+        /* 将queryform[filed1] 转换为 queryform[1]['field']。*/
+        /* Process queryform[filed1] to queryform[1]['field']. */
         $queryForm = array();
         if(isset($query->form['field1']))
         {

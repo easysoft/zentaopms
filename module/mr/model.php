@@ -263,7 +263,7 @@ class mrModel extends model
         $this->linkObjects($MR);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse', $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$this->post->executionID}" : ''));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$this->post->executionID}" : ''));
     }
 
     /**
@@ -415,7 +415,7 @@ class mrModel extends model
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse'));
     }
 
     /**
@@ -435,9 +435,9 @@ class mrModel extends model
 
         $MRAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink('mr', 'view', "mr={$MRID}");
 
-        $linkedStories = $this->getLinkedObjectPairs($MRID, 'story');
-        $linkedTasks   = $this->getLinkedObjectPairs($MRID, 'task');
-        $linkedBugs    = $this->getLinkedObjectPairs($MRID, 'bug');
+        $linkedStories = $this->mrTao->getLinkedObjectPairs($MRID, 'story');
+        $linkedTasks   = $this->mrTao->getLinkedObjectPairs($MRID, 'task');
+        $linkedBugs    = $this->mrTao->getLinkedObjectPairs($MRID, 'bug');
 
         foreach($linkedStories as $storyID) $this->action->create('story', $storyID, $action, '', $MRAction);
         foreach($linkedTasks as $taskID)    $this->action->create('task', $taskID, $action, '', $MRAction);
@@ -981,108 +981,72 @@ class mrModel extends model
     }
 
     /**
-     * Get sudo account pair, such as "zentao account" => "gitlab account|id".
-     *
-     * @param  int    $hostID
-     * @param  int    $projectID
-     * @param  int    $account
-     * @access public
-     * @return array
-     */
-    public function getSudoAccountPair($hostID, $projectID, $account)
-    {
-        $bindedUsers = $this->gitlab->getUserAccountIdPairs($hostID);
-        $accountPair = array();
-        if(isset($bindedUsers[$account])) $accountPair[$account] = $bindedUsers[$account];
-        return $accountPair;
-    }
-
-    /**
-     * Get sudo user ID in both GitLab and Project.
-     * Note: sudo parameter in GitLab API can be user ID or username.
-     * @param  int    $hostID
-     * @param  int    $projectID
-     * @access public
-     * @return int|string
-     */
-    public function getSudoUsername($hostID, $projectID)
-    {
-        $zentaoUser = $this->app->user->account;
-
-        /* Fetch user list both in Zentao and current GitLab project. */
-        $bindedUsers     = $this->gitlab->getUserAccountIdPairs($hostID);
-        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($hostID, $projectID);
-        $users           = array();
-        foreach($rawProjectUsers as $rawProjectUser)
-        {
-            if(!empty($bindedUsers[$rawProjectUser->username])) $users[$rawProjectUser->username] = $bindedUsers[$rawProjectUser->username];
-        }
-        if(!empty($users[$zentaoUser])) return $users[$zentaoUser];
-        return '';
-    }
-
-    /**
+     * 通过API创建合并请求待办。
      * Create a todo item for merge request.
      *
      * @param  int    $hostID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @param  int    $MRID
      * @access public
      * @return object
      */
-    public function apiCreateMRTodo($hostID, $projectID, $MRID)
+    public function apiCreateMRTodo(int $hostID, string $projectID, int $MRID): object
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/todo");
-        return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'POST')));
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/todo");
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST')));
     }
 
     /**
+     * 通过API获取合并请求的对比版本信息。
      * Get diff versions of MR from GitLab API.
      *
      * @param  int    $hostID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @param  int    $MRID
      * @access public
      * @return object
      */
-    public function apiGetDiffVersions($hostID, $projectID, $MRID)
+    public function apiGetDiffVersions(int $hostID, string $projectID, int $MRID): object
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions");
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过API获取合并请求的单个对比版本信息。
      * Get a single diff version of MR from GitLab API.
      *
      * @param  int    $hostID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @param  int    $MRID
-     * @param  int    $versionID
+     * @param  string $versionID
      * @access public
      * @return object
      */
-    public function apiGetSingleDiffVersion($hostID, $projectID, $MRID, $versionID)
+    public function apiGetSingleDiffVersion(int $hostID, string $projectID, int $MRID, string $versionID): object
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过Gitea API获取合并请求的对比信息。
      * Get diff of MR from Gitea API.
      *
      * @param  int    $hostID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return string
      */
-    public function apiGetDiffs($hostID, $projectID, $MRID)
+    public function apiGetDiffs(int $hostID, string $projectID, int $MRID): string
     {
         $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID.diff");
         return commonModel::http($url);
     }
 
     /**
+     * 审核合并请求。
      * Reject or Approve this MR.
      *
      * @param  object $MR
@@ -1090,27 +1054,26 @@ class mrModel extends model
      * @param  string $comment
      * @return array
      */
-    public function approve($MR, $action = 'approve', $comment = '')
+    public function approve(object $MR, string $action = 'approve', string $comment = ''): array
     {
-        $this->loadModel('action');
-        $actionID = $this->action->create('mr', $MR->id, $action);
+        $actionID = $this->loadModel('action')->create('mr', $MR->id, $action);
 
         $oldMR = $MR;
         if(isset($MR->status) and $MR->status == 'opened')
         {
-            $rawApprovalStatus = '';
-            if(isset($MR->approvalStatus)) $rawApprovalStatus = $MR->approvalStatus;
-            $MR->approver = $this->app->user->account;
-            if($action == 'reject' and $rawApprovalStatus != 'rejected')  $MR->approvalStatus = 'rejected';
-            if($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
-            if(isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus)
+            $rawApprovalStatus = zget($MR, 'approvalStatus', '');
+            if($action == 'reject'  && $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
+            if($action == 'approve' && $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
+            if(isset($MR->approvalStatus) && $rawApprovalStatus != $MR->approvalStatus)
             {
                 $changes = common::createChanges($oldMR, $MR);
                 $this->action->logHistory($actionID, $changes);
+
+                $MR->approver = $this->app->user->account;
                 $this->dao->update(TABLE_MR)->data($MR)
                     ->where('id')->eq($MR->id)
                     ->exec();
-                if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+                if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
                 /* Save approval history into db. */
                 $approval = new stdClass;
@@ -1123,371 +1086,65 @@ class mrModel extends model
                     ->batchCheck($this->config->mrapproval->create->requiredFields, 'notempty')
                     ->autoCheck()
                     ->exec();
-                if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+                if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
                 return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
             }
         }
-        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
     }
 
     /**
+     * 关闭合并请求。
      * Close this MR.
      *
-     * @param  mixed $MR
-     * @return void
-     */
-    public function close($MR)
-    {
-        $this->loadModel('action');
-        $actionID = $this->action->create('mr', $MR->id, 'closed');
-        $rawMR = $this->apiCloseMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        $changes = common::createChanges($MR, $rawMR);
-        $this->action->logHistory($actionID, $changes);
-        if(isset($rawMR->state) and $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
-        return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
-    }
-
-    /**
-     * Reopen this MR.
-     *
-     * @param  mixed $MR
-     * @return void
-     */
-    public function reopen($MR)
-    {
-        $this->loadModel('action');
-        $actionID = $this->action->create('mr', $MR->id, 'reopen');
-        $rawMR = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        $changes = common::createChanges($MR, $rawMR);
-        $this->action->logHistory($actionID, $changes);
-        if(isset($rawMR->state) and $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
-        return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
-    }
-
-
-    /**
-     * Get review.
-     *
-     * @param  int    $repoID
-     * @param  int    $MRID
-     * @param  string $revision
+     * @param  object $MR
      * @access public
      * @return array
      */
-    public function getReview($repoID, $MRID, $revision = '')
+    public function close(object $MR): array
     {
-        if(empty($repoID) or empty($MRID)) return array();
+        $actionID = $this->loadModel('action')->create('mr', $MR->id, 'closed');
+        $rawMR    = $this->apiCloseMR($MR->hostID, $MR->targetProject, $MR->mriid);
+        $changes  = common::createChanges($MR, $rawMR);
+        $this->action->logHistory($actionID, $changes);
 
-        $reviews = array();
-        $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
-            ->where('t1.repo')->eq((int)$repoID)
-            ->andWhere('t1.mr')->eq((int)$MRID)
-            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetchAll('id');
-        foreach($bugs as $bug)
-        {
-            if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
-            if(common::hasPriv('bug', 'delete')) $bug->delete = true;
-            if(common::hasPriv('bug', 'view'))   $bug->view   = true;
-            $lines = explode(',', trim($bug->lines, ','));
-            $line  = $lines[0];
-            $reviews[$line]['bug'][$bug->id] = $bug;
-        }
-
-        $tasks = $this->dao->select('t1.*, t2.realname')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
-            ->where('t1.repo')->eq((int)$repoID)
-            ->andWhere('t1.mr')->eq((int)$MRID)
-            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetchAll('id');
-        foreach($tasks as $task)
-        {
-            if(common::hasPriv('task', 'edit'))   $task->edit   = true;
-            if(common::hasPriv('task', 'delete')) $task->delete = true;
-            if(common::hasPriv('task', 'view'))   $task->view   = true;
-            $lines = explode(',', trim($task->lines, ','));
-            $line  = $lines[0];
-            $reviews[$line]['task'][$task->id] = $task;
-        }
-
-        return $reviews;
+        if(isset($rawMR->state) && $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
     }
 
     /**
-     * Get bugs by repo.
+     * 重新打开合并请求。
+     * Reopen this MR.
      *
-     * @param  int    $repoID
-     * @param  string $browseType
+     * @param  object $MR
+     * @access public
+     * @return array
+     */
+    public function reopen(object $MR): array
+    {
+        $actionID = $this->loadModel('action')->create('mr', $MR->id, 'reopen');
+        $rawMR    = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
+        $changes  = common::createChanges($MR, $rawMR);
+        $this->action->logHistory($actionID, $changes);
+
+        if(isset($rawMR->state) && $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
+
+    /**
+     * 获取合并请求关联的对象。
+     * Get mr link list.
+     *
+     * @param  int    $MRID
+     * @param  int    $productID
+     * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugsByRepo($repoID, $browseType, $orderBy, $pager)
-    {
-        /* Get execution that user can access. */
-        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty|withdelete');
-
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('repo')->eq($repoID)
-            ->andWhere('deleted')->eq('0')
-            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in(array_keys($executions))->fi()
-            ->beginIF($browseType == 'assigntome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'resolvedbyme')->andWhere('resolvedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'assigntonull')->andWhere('assignedTo')->eq('')->fi()
-            ->beginIF($browseType == 'unresolved')->andWhere('resolvedBy')->eq('')->fi()
-            ->beginIF($browseType == 'unclosed')->andWhere('status')->ne('closed')->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-        return $bugs;
-    }
-
-    /**
-     * Get execution pairs.
-     *
-     * @param  int    $product
-     * @param  int    $branch
-     * @access public
-     * @return array
-     */
-    public function getExecutionPairs($product, $branch = 0)
-    {
-        $pairs = array();
-        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
-        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
-        return $pairs;
-    }
-
-    /**
-     * Save bug.
-     *
-     * @param  int    $repoID
-     * @param  int    $mr
-     * @param  int    $v1
-     * @param  int    $v2
-     * @access public
-     * @return array
-     */
-    public function saveBug($repoID, $mr, $v1, $v2)
-    {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->stripTags('commentText', $this->config->allowedTags)
-            ->add('pri', 2)
-            ->add('severity', 2)
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', $now)
-            ->add('openedBuild', 'trunk')
-            ->add('type', 'codeerror')
-            ->add('repo', $repoID)
-            ->add('mr', $mr)
-            ->add('lines', $this->post->begin . ',' . $this->post->end)
-            ->add('v1', $v1)
-            ->add('v2', $v2)
-            ->cleanInt('module,execution,mr,repo')
-            ->remove('begin,end,uid,reviewType,taskExecution,taskModule,taskAssignedTo')
-            ->get();
-
-        $data->steps = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
-        if($data->execution) $data->project = (int)$this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($data->execution)->fetch('project');
-        if($data->assignedTo) $data->assignedDate = $now;
-        unset($data->commentText);
-
-        $this->loadModel('bug');
-        foreach(explode(',', $this->config->bug->create->requiredFields . ',repo,mr') as $requiredField)
-        {
-            $requiredField = trim($requiredField);
-            if(empty($requiredField)) continue;
-            if(!isset($data->$requiredField)) continue;
-            if(empty($data->$requiredField))
-            {
-                $fieldName = $requiredField;
-                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
-                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
-            }
-        }
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-
-        $this->dao->insert(TABLE_BUG)->data($data)->autocheck()->exec();
-
-        if(!dao::isError())
-        {
-            $bugID = $this->dao->lastInsertID();
-            $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
-            helper::setcookie("repoPairs[$repoID]", $data->product);
-
-            $bugInfo = array();
-            $bugInfo['result']     = 'success';
-            $bugInfo['id']         = $bugID;
-            $bugInfo['realname']   = $this->app->user->realname;
-            $bugInfo['openedDate'] = substr($now, 5, 11);
-            $bugInfo['edit']       = common::hasPriv('bug', 'edit');
-            $bugInfo['view']       = common::hasPriv('bug', 'view');
-            $bugInfo['delete']     = common::hasPriv('bug', 'delete');
-            $bugInfo['lines']      = $data->lines;
-            $bugInfo['line']       = $this->post->begin;
-            $bugInfo['content']    = $data->steps;
-            $bugInfo['title']      = $data->title;
-            $bugInfo['objectType'] = 'bug';
-            return $bugInfo;
-        }
-
-        return array('result' => 'fail', 'message' => dao::getError());
-    }
-
-    /**
-     * Save task.
-     *
-     * @param  int    $repoID
-     * @param  int    $mr
-     * @param  int    $v1
-     * @param  int    $v2
-     * @access public
-     * @return array
-     */
-    public function saveTask($repoID, $mr, $v1, $v2)
-    {
-        $now  = helper::now();
-        $data = fixer::input('post')->stripTags('commentText', $this->config->allowedTags)->get();
-
-        $task = new stdclass();
-        $task->execution  = (int)$data->taskExecution;
-        $task->project    = (int)$this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('project');
-        $task->module     = (int)$data->taskModule;
-        $task->name       = $data->title;
-        $task->type       = 'devel';
-        $task->pri        = '2';
-        $task->status     = 'wait';
-        $task->version    = '1';
-        $task->openedBy   = $this->app->user->account;
-        $task->assignedTo = $data->taskAssignedTo;
-        $task->repo       = (int)$repoID;
-        $task->mr         = (int)$mr;
-        $task->lines      = $this->post->begin . ',' . $this->post->end;
-        $task->entry      = helper::safe64Decode($data->entry);
-        $task->v1         = $v1;
-        $task->v2         = $v2;
-        $task->desc       = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
-        if($task->assignedTo) $task->assignedDate = $now;
-
-        $this->loadModel('task');
-        foreach(explode(',', $this->config->task->create->requiredFields . ',repo,mr') as $requiredField)
-        {
-            $requiredField = trim($requiredField);
-            if(empty($requiredField)) continue;
-            if(!isset($task->$requiredField)) continue;
-            if(empty($task->$requiredField))
-            {
-                $fieldName = $requiredField;
-                if(isset($this->lang->task->$requiredField)) $fieldName = $this->lang->task->$requiredField;
-                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
-            }
-        }
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-
-        $this->dao->insert(TABLE_TASK)->data($task)->autocheck()->exec();
-
-        if(!dao::isError())
-        {
-            $taskID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
-
-            $taskInfo = array();
-            $taskInfo['result']     = 'success';
-            $taskInfo['id']         = $taskID;
-            $taskInfo['realname']   = $this->app->user->realname;
-            $taskInfo['openedDate'] = substr($now, 5, 11);
-            $taskInfo['edit']       = common::hasPriv('task', 'edit');
-            $taskInfo['view']       = common::hasPriv('task', 'view');
-            $taskInfo['delete']     = common::hasPriv('task', 'delete');
-            $taskInfo['lines']      = $task->lines;
-            $taskInfo['line']       = $this->post->begin;
-            $taskInfo['content']    = $task->desc;
-            $taskInfo['title']      = $data->title;
-            $taskInfo['objectType'] = 'task';
-            $taskInfo['entry']      = $task->entry;
-            return $taskInfo;
-        }
-
-        return array('result' => 'fail', 'message' => dao::getError());
-    }
-
-    /**
-     * Update bug.
-     *
-     * @param  int    $bugID
-     * @param  string $title
-     * @access public
-     * @return string
-     */
-    public function updateBug($bugID, $title)
-    {
-        $this->dao->update(TABLE_BUG)->set('title')->eq($title)->where('id')->eq($bugID)->exec();
-        return $title;
-    }
-
-    /**
-     * Update comment.
-     *
-     * @param  int    $commentID
-     * @param  string $comment
-     * @access public
-     * @return string
-     */
-    public function updateComment($commentID, $comment)
-    {
-        $this->dao->update(TABLE_ACTION)->set('comment')->eq($comment)->where('id')->eq($commentID)->exec();
-        return $comment;
-    }
-
-    /**
-     * Delete comment.
-     *
-     * @param  int    $commentID
-     * @access public
-     * @return void
-     */
-    public function deleteComment($commentID)
-    {
-        return $this->dao->delete()->from(TABLE_ACTION)->where('id')->eq($commentID)->exec();
-    }
-
-    /**
-     * Get last review info.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return object
-     */
-    public function getLastReviewInfo($repoID)
-    {
-        if(empty($repoID)) return null;
-
-        $lastReview = new stdclass();
-        $lastReview->bug  = $this->dao->select('*')->from(TABLE_BUG)->where('repo')->eq((int)$repoID)->orderby('id_desc')->fetch();
-        $lastReview->task = $this->dao->select('*')->from(TABLE_TASK)->where('repo')->eq((int)$repoID)->orderby('id_desc')->fetch();
-        return $lastReview;
-    }
-
-    /**
-     * Get mr link list.
-     *
-     * @param int    $MRID
-     * @param int    $productID
-     * @param string $type
-     * @param string $orderBy
-     * @param object $pager
-     * @access public
-     * @return array
-     */
-    public function getLinkList($MRID, $productID, $type, $orderBy = 'id_desc', $pager = null)
+    public function getLinkList(int $MRID, int $productID, string $type, string $orderBy = 'id_desc', object $pager = null): array
     {
         $linkIDs = $this->dao->select('BID')->from(TABLE_RELATION)
             ->where('product')->eq($productID)
@@ -1496,12 +1153,12 @@ class mrModel extends model
             ->andWhere('AID')->eq($MRID)
             ->andWhere('BType')->eq($type)
             ->fetchPairs('BID');
+        if(empty($linkIDs)) return array();
 
-        $links = array();
-        if($type == 'story' and !empty($linkIDs))
+        $orderBy = str_replace('name_', 'title_', $orderBy);
+        if($type == 'story')
         {
-            $orderBy = str_replace('name_', 'title_', $orderBy);
-            $links = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
+            return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
                 ->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
@@ -1512,31 +1169,20 @@ class mrModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
-        if($type == 'bug' and !empty($linkIDs))
+        else
         {
-            $orderBy = str_replace('name_', 'title_', $orderBy);
-            $links = $this->dao->select('*')->from(TABLE_BUG)
+            if($type == 'task') $orderBy = str_replace('title_', 'name_', $orderBy);
+            return $this->dao->select('*')->from($this->config->objectTables[$type])
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($linkIDs)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
-        if($type == 'task' and !empty($linkIDs))
-        {
-            $orderBy = str_replace('title_', 'name_', $orderBy);
-            $links = $this->dao->select('*')->from(TABLE_TASK)
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in($linkIDs)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-
-        return $links;
     }
 
     /**
+     * 根据对象信息获取合并请求列表。
      * Get linked MR pairs.
      *
      * @param  int    $objectID
@@ -1544,7 +1190,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getLinkedMRPairs($objectID, $objectType = 'story')
+    public function getLinkedMRPairs(int $objectID, string $objectType = 'story'): array
     {
         return $this->dao->select("t2.id,t2.title")->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
@@ -1556,33 +1202,14 @@ class mrModel extends model
     }
 
     /**
-     * Get story,task,bug pairs which linked MR.
-     *
-     * @param  int    $MRID
-     * @param  string $objectType story|task|bug
-     * @access public
-     * @return array
-     */
-    public function getLinkedObjectPairs($MRID, $objectType = 'story')
-    {
-        $table = $this->config->objectTables[$objectType];
-        return $this->dao->select('relation.BID')->from(TABLE_RELATION)->alias('relation')
-            ->leftJoin($table)->alias('object')->on('relation.BID = object.id')
-            ->where('relation.AType')->eq('mr')
-            ->andWhere('relation.BType')->eq($objectType)
-            ->andWhere('relation.AID')->eq($MRID)
-            ->andWhere('object.deleted')->eq(0)
-            ->fetchPairs();
-    }
-
-    /**
+     * 获取合并请求的提交记录。
      * Get diff commits of MR.
      *
      * @param  object $MR
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function getDiffCommits($MR)
+    public function getDiffCommits(object $MR): array|object
     {
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         if($host->type == 'gogs')
@@ -1594,26 +1221,24 @@ class mrModel extends model
         }
         else
         {
-            $projectID = $MR->targetProject;
-            $MRID      = $MR->mriid;
-            if($host->type == 'gitlab') $url = sprintf($this->loadModel('gitlab')->getApiRoot($MR->hostID), "/projects/$projectID/merge_requests/$MRID/commits");
-            if($host->type == 'gitea')  $url = sprintf($this->loadModel('gitea')->getApiRoot($MR->hostID), "/repos/$projectID/pulls/$MRID/commits");
+            if($host->type == 'gitlab') $url = sprintf($this->loadModel('gitlab')->getApiRoot($MR->hostID), "/projects/{$MR->targetProject}/merge_requests/{$MR->mriid}/commits");
+            if($host->type == 'gitea')  $url = sprintf($this->loadModel('gitea')->getApiRoot($MR->hostID), "/repos/{$MR->targetProject}/pulls/{$MR->mriid}/commits");
             return json_decode(commonModel::http($url));
         }
     }
 
     /**
+     * 合并请求关联对象。
      * Create an mr link.
      *
-     * @param int    $MRID
-     * @param int    $productID
-     * @param string $type
+     * @param  int    $MRID
+     * @param  int    $productID
+     * @param  string $type
      * @access public
-     * @return void
+     * @return bool
      */
-    public function link($MRID, $productID, $type)
+    public function link(int $MRID, int $productID, string $type): bool
     {
-        $this->loadModel('action');
         if($type == 'story') $links = $this->post->stories;
         if($type == 'bug')   $links = $this->post->bugs;
         if($type == 'task')  $links = $this->post->tasks;
@@ -1623,6 +1248,7 @@ class mrModel extends model
         $users          = $this->loadModel('user')->getPairs('noletter');
         $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
+        $this->loadModel('action');
         foreach($links as $linkID)
         {
             $relation           = new stdclass;
@@ -1632,125 +1258,85 @@ class mrModel extends model
             $relation->relation = 'interrated';
             $relation->BType    = $type;
             $relation->BID      = $linkID;
-
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
-            if($type == 'bug')   $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
-            if($type == 'task')  $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create($type, $linkID, 'createmr', '', $MRCreateAction);
         }
+
+        return !dao::isError();
     }
 
     /**
-     * Link objects.
+     * 保存合并请求关联的对象。
+     * Save linked objects.
      *
      * @param  object $MR
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkObjects($MR)
+    public function linkObjects(object $MR): bool
     {
-        $this->loadModel('repo');
-        $this->loadModel('action');
-
-        /* Init objects. */
-        $stories = $bugs = $tasks = array();
-
         /* Get commits by MR. */
         $commits = $this->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
         if(empty($commits)) return true;
 
+        /* Init objects. */
+        $objectList = array();
+        $this->loadModel('repo');
         foreach($commits as $commit)
         {
             $objects = $this->repo->parseComment($commit->message);
-            $stories = array_merge($stories, $objects['stories']);
-            $bugs    = array_merge($bugs,    $objects['bugs']);
-            $tasks   = array_merge($tasks,   $objects['tasks']);
+            $objectList['story'] = array_merge($objectList['stories'], $objects['stories']);
+            $objectList['bug']   = array_merge($objectList['bugs'],    $objects['bugs']);
+            $objectList['task']  = array_merge($objectList['tasks'],   $objects['tasks']);
         }
 
         $users          = $this->loadModel('user')->getPairs('noletter');
         $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
         $product        = $this->getMRProduct($MR);
 
-        foreach($stories as $storyID)
+        $this->loadModel('action');
+        foreach($objectList as $type => $objectIDs)
         {
-            $relation           = new stdclass;
+            $relation           = new stdclass();
             $relation->product  = $product->id;
             $relation->AType    = 'mr';
             $relation->AID      = $MR->id;
             $relation->relation = 'interrated';
-            $relation->BType    = 'story';
-            $relation->BID      = $storyID;
-
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('story', $storyID, 'createmr', '', $MRCreateAction);
+            $relation->BType    = $type;
+            foreach($objectIDs as $objectID)
+            {
+                $relation->BID = $objectID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                $this->action->create($type, $objectID, 'createmr', '', $MRCreateAction);
+            }
         }
-
-        foreach($bugs as $bugID)
-        {
-            $relation           = new stdclass;
-            $relation->product  = $product->id;
-            $relation->AType    = 'mr';
-            $relation->AID      = $MR->id;
-            $relation->relation = 'interrated';
-            $relation->BType    = 'bug';
-            $relation->BID      = $bugID;
-
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('bug', $bugID, 'createmr', '', $MRCreateAction);
-        }
-
-        foreach($tasks as $taskID)
-        {
-            $relation           = new stdclass;
-            $relation->product  = $product->id;
-            $relation->AType    = 'mr';
-            $relation->AID      = $MR->id;
-            $relation->relation = 'interrated';
-            $relation->BType    = 'task';
-            $relation->BID      = $taskID;
-
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            $this->action->create('task', $taskID, 'createmr', '', $MRCreateAction);
-        }
+        return !dao::isError();
     }
 
     /**
-     * unLink an mr link.
+     * 解除合并请求关联的对象。
+     * Unlink an mr link.
      *
-     * @param int    $MRID
-     * @param int    $productID
-     * @param string $type
-     * @param int    $linkID
+     * @param  int    $MRID
+     * @param  int    $productID
+     * @param  string $type
+     * @param  int    $linkID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlink($MRID, $productID, $type, $linkID)
+    public function unlink(int $MRID, int $productID, string $type, int $linkID): bool
     {
-        $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('product')->eq($productID)
+            ->andWhere('AType')->eq('mr')
+            ->andWhere('AID')->eq($MRID)
+            ->andWhere('BType')->eq($type)
+            ->andWhere('BID')->eq($linkID)
+            ->exec();
 
         $this->loadModel('action')->create($type, $linkID, 'deletemr', '', helper::createLink('mr', 'view', "mr={$MRID}"));
-    }
-
-    /**
-     * Get links by mr commites.
-     *
-     * @param  object $MR
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function getCommitedLink($MR, $type)
-    {
-        $diffCommits = $this->getDiffCommits($MR);
-
-        $commits = array();
-        foreach($diffCommits as $diffCommit)
-        {
-            if(isset($diffCommit->id)) $commits[] = substr($diffCommit->id, 0, 10);
-        }
-
-        return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
+        return !dao::isError();
     }
 
     /**
@@ -1782,66 +1368,62 @@ class mrModel extends model
     }
 
     /**
+     * 获取合并请求的收件人和抄送人。
      * Get toList and ccList.
      *
      * @param  object $MR
      * @access public
-     * @return bool|array
+     * @return array
      */
-    public function getToAndCcList($MR)
+    public function getToAndCcList(object $MR): array
     {
         return array($MR->createdBy, $MR->assignee);
     }
 
     /**
+     * 将合并的操作记录到链接
      * Log merged action to links.
      *
-     * @param object $MR
+     * @param  object $MR
      * @access public
-     * @return void
+     * @return bool
      */
-    public function logMergedAction($MR)
+    public function logMergedAction(object $MR): bool
     {
         $this->loadModel('action')->create('mr', $MR->id, 'mergedmr');
+
         $product = $this->getMRProduct($MR);
-
-        $stories = $this->getLinkList($MR->id, $product->id, 'story');
-        foreach($stories as $story)
+        foreach(array('story', 'bug', 'task') as $type)
         {
-            $this->action->create('story', $story->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+            $objects = $this->getLinkList($MR->id, $product->id, $type);
+            foreach($objects as $object)
+            {
+                $this->action->create($type, $object->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+            }
         }
 
-        $bugs = $this->getLinkList($MR->id, $product->id, 'bug');
-        foreach($bugs as $bug)
-        {
-            $this->action->create('bug', $bug->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
-        }
-
-        $tasks = $this->getLinkList($MR->id, $product->id, 'task');
-        foreach($tasks as $task)
-        {
-            $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
-        }
-
-        return $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))->where('id')->eq($MR->id)->exec();
+        $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))->where('id')->eq($MR->id)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 检查是否有相同的未关闭合并请求。
      * Check same opened mr for source branch.
      *
      * @param  int    $hostID
-     * @param  int    $sourceProject
+     * @param  string $sourceProject
      * @param  string $sourceBranch
-     * @param  int    $targetProject
+     * @param  string $targetProject
      * @param  string $targetBranch
      * @access public
      * @return array
      */
-    public function checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)
+    public function checkSameOpened(int $hostID, string $sourceProject, string $sourceBranch, string $targetProject, string $targetBranch): array
     {
         if(empty($sourceProject) or empty($sourceBranch) or empty($targetProject) or empty($targetBranch)) return array('result' => 'success');
+        if(in_array(true, array(empty($sourceProject), empty($sourceBranch), empty($targetProject), empty($targetBranch)))) return array('result' => 'success');
 
-        if($sourceProject == $targetProject and $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
+        if($sourceProject == $targetProject && $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
         $dbOpenedID = $this->dao->select('id')->from(TABLE_MR)
             ->where('hostID')->eq($hostID)
             ->andWhere('sourceProject')->eq($sourceProject)
@@ -1859,13 +1441,14 @@ class mrModel extends model
     }
 
     /**
+     * 解析API错误信息。
      * Convert API error.
      *
      * @param  array  $message
      * @access public
      * @return string
      */
-    public function convertApiError($message)
+    public function convertApiError(array|string $message): string
     {
         if(is_array($message)) $message = $message[0];
         if(!is_string($message)) return $message;

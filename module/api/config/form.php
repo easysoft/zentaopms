@@ -50,3 +50,19 @@ $config->api->form->create['paramsExample']   = array('type' => 'string', 'requi
 $config->api->form->create['response']        = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->api->form->create['responseExample'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->api->form->create['desc']            = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+
+$config->api->form->edit = array();
+$config->api->form->edit['module']          = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->api->form->edit['title']           = array('type' => 'string', 'required' => true,  'default' => '');
+$config->api->form->edit['protocol']        = array('type' => 'string', 'required' => true,  'default' => '');
+$config->api->form->edit['method']          = array('type' => 'string', 'required' => true,  'default' => '');
+$config->api->form->edit['path']            = array('type' => 'string', 'required' => true,  'default' => '');
+$config->api->form->edit['requestType']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->api->form->edit['status']          = array('type' => 'string', 'required' => false, 'default' => '');
+$config->api->form->edit['owner']           = array('type' => 'string', 'required' => false, 'default' => '');
+$config->api->form->edit['params']          = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+$config->api->form->edit['paramsExample']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->api->form->edit['response']        = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+$config->api->form->edit['responseExample'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->api->form->edit['desc']            = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+$config->api->form->edit['editedDate']      = array('type' => 'date',   'required' => true,  'default' => '');

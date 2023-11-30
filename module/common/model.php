@@ -748,10 +748,11 @@ class commonModel extends model
         $changes = array();
         foreach($new as $key => $value)
         {
-            $key = strtolower($key);
             if(is_object($value) || is_array($value) || is_null($value)) continue;
-            if(in_array($key, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
-            if(in_array($key, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
+
+            $check = strtolower($key);
+            if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
+            if(in_array($check, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
 
             if(isset($old->$key))
             {
@@ -1683,7 +1684,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function canModify($type, $object)
+    public static function canModify(string $type, object $object): bool
     {
         global $config;
 
@@ -1840,16 +1841,16 @@ class commonModel extends model
     }
 
     /**
+     * 设置要展示的顶部一级菜单。
      * Set main menu.
      *
      * @static
      * @access public
-     * @return string
+     * @return void
      */
     public static function setMainMenu()
     {
         global $app, $lang;
-
         $tab = $app->tab;
 
         $isTutorialMode = common::isTutorialMode();
@@ -1858,12 +1859,10 @@ class commonModel extends model
         $currentMethod  = strtolower($currentMethod);
 
         /* If homeMenu is not exists or unset, display menu. */
-        if(!isset($lang->$tab->homeMenu))
-        {
-            $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
-            $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
-            return;
-        }
+        $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
+        $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
+
+        if(!isset($lang->$tab->homeMenu)) return;
 
         if($currentModule == $tab and $currentMethod == 'create')
         {
@@ -1898,10 +1897,6 @@ class commonModel extends model
                 return;
             }
         }
-
-        /* Default, display menu. */
-        $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
-        $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
     }
 
     /**

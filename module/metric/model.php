@@ -1267,22 +1267,22 @@ class metricModel extends model
         $headLength = count($header);
         if($headLength == 2)
         {
-            return $this->getTimeOptions($header, $data, $type);
+            return $this->getTimeOptions($header, $data, $type, $chartType);
         }
         elseif($headLength == 3)
         {
             if($this->isObjectMetric($header))
             {
-                return $this->getObjectOptions($data, $type);
+                return $this->getObjectOptions($data, $type, $chartType);
             }
             else
             {
-                return $this->getTimeOptions($header, $data, $type);
+                return $this->getTimeOptions($header, $data, $type, $chartType);
             }
         }
         elseif($headLength == 4)
         {
-            return $this->getObjectOptions($data, $type);
+            return $this->getObjectOptions($data, $type, $chartType);
         }
     }
 
@@ -1295,7 +1295,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getObjectOptions(array $data, string $type): array
+    public function getObjectOptions(array $data, string $type, string $chartType): array
     {
         $dateField = !isset(current($data)->dateString) ? 'calcTime' : 'dateString';
         usort($data, function($a, $b) use ($dateField)
@@ -1321,7 +1321,7 @@ class metricModel extends model
             $objects[$object][$time] = $value;
         }
 
-        $xAxis  = array('type' => 'category', 'data' => $times);
+        $xAxis  = array('type' => 'category', 'data' => array_keys($times));
         $yAxis  = array('type' => 'value');
         $series = array();
         foreach($objects as $object => $datas)
@@ -1338,10 +1338,15 @@ class metricModel extends model
         $legend = $this->getEchartLegend($series, 'object');
 
         $options = array();
-        $options['xAxis']  = $xAxis;
-        $options['yAxis']  = $yAxis;
-        $options['legend'] = $legend;
-        $options['series'] = $series;
+        $options['xAxis']   = $xAxis;
+        $options['yAxis']   = $yAxis;
+        $options['legend']  = $legend;
+        $options['series']  = $series;
+        $options['grid']    = $this->config->metric->chartConfig->grid;
+        $options['tooltip'] = $this->config->metric->chartConfig->tooltip;
+
+        $dataLength = count($series[0]['data']);
+        if($dataLength > 15) $options['dataZoom'] = $this->genDataZoom($dataLength, 15, $chartType == 'barY' ? 'y' : 'x');
 
         return $options;
     }
@@ -1355,7 +1360,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getTimeOptions(array $header, array $data, string $type): array
+    public function getTimeOptions(array $header, array $data, string $type, string $chartType): array
     {
         list($x, $y) = $this->getEchartXY($header);
 
@@ -1385,8 +1390,27 @@ class metricModel extends model
         $options['yAxis']  = $yAxis;
         $options['legend'] = $legend;
         $options['series'] = $series;
+        $options['grid']    = $this->config->metric->chartConfig->grid;
+        $options['tooltip'] = $this->config->metric->chartConfig->tooltip;
+
+        $dataLength = count($data);
+        if($dataLength > 15) $options['dataZoom'] = $this->genDataZoom($dataLength, 15, $chartType == 'barY' ? 'y' : 'x');
 
         return $options;
+    }
+
+    public function genDataZoom(int $dataLength, int $initZoom = 10, string $axis = 'x')
+    {
+        $percent = $initZoom / $dataLength * 100;
+        $percent = $percent > 100 ? 100 : $percent;
+
+        $dataZoom = $this->config->metric->chartConfig->dataZoom;
+        $dataZoom['start'] = 0;
+        $dataZoom['end']   = $percent;
+
+        if($axis == 'x') $dataZoom['xAxisIndex'] = array(0);
+        if($axis == 'y') $dataZoom['yAxisIndex'] = array(0);
+        return array($dataZoom);
     }
 
     /**
@@ -1537,9 +1561,9 @@ class metricModel extends model
             return array($begin, $end);
         }
 
-        if($key == 'calcDate')
+        if($key == 'calcDate' && $query['dateType'] == 'nodate')
         {
-            if(!isset($query[$key]) && $query['dateType'] == 'nodate') $query['calcDate'] = 7;
+            if(!isset($query[$key])) $query['calcDate'] = 7;
             return date('Y-m-d', strtotime("-{$query[$key]} days"));
         }
 

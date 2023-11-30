@@ -108,20 +108,21 @@ class reportModel extends model
     }
 
     /**
+     * 获取系统的 URL。
      * Get System URL.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function getSysURL()
+    public function getSysURL(): string
     {
         if(isset($this->config->mail->domain)) return $this->config->mail->domain;
 
         /* Ger URL when run in shell. */
         if(PHP_SAPI == 'cli')
         {
-            $url = parse_url(trim($this->server->argv[1]));
-            $port = (empty($url['port']) or $url['port'] == 80) ? '' : $url['port'];
+            $url  = parse_url(trim($this->server->argv[1]));
+            $port = empty($url['port']) || $url['port'] == 80 ? '' : $url['port'];
             $host = empty($port) ? $url['host'] : $url['host'] . ':' . $port;
             return $url['scheme'] . '://' . $host;
         }
@@ -132,12 +133,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的 bugs。
      * Get user bugs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserBugs()
+    public function getUserBugs(): array
     {
         return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')

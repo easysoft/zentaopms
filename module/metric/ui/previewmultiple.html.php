@@ -501,6 +501,9 @@ $metricBoxs = div
                     set::yAxis($echartOptions['yAxis']),
                     set::legend($echartOptions['legend']),
                     set::series($echartOptions['series']),
+                    set::dataZoom($echartOptions['dataZoom']),
+                    set::grid($echartOptions['grid']),
+                    set::tooltip($echartOptions['tooltip'])
                 )->size('100%', '100%') : null
             )
         )
