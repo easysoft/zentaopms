@@ -376,48 +376,10 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->lblMailto),
-            inputGroup
+            mailto
             (
-                picker
-                (
-                    set::multiple(true),
-                    set::name('mailto[]'),
-                    set::items($users),
-                    set::value($bug->mailto ? str_replace(' ', '', $bug->mailto) : '')
-                ),
-                span
-                (
-                    setID('contactBox'),
-                    setClass('input-group-addon'),
-                    $contactList ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
-                    $contactList ? picker
-                    (
-                        setClass('w-20'),
-                        set::name('contactListMenu'),
-                        set::items($contactList),
-                        set::value(),
-                        set::placeholder($lang->contact->common)
-                    ) :
-                    span
-                    (
-                        setClass('input-group-addon'),
-                        a
-                        (
-                            setClass('mr-2'),
-                            setData(array('toggle' => 'modal')),
-                            set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
-                            set('title', $lang->user->contacts->manage),
-                            icon('cog')
-                        ),
-                        a
-                        (
-                            setID('refreshMailto'),
-                            setClass('text-black'),
-                            set('href', 'javascript:void(0)'),
-                            icon('refresh')
-                        )
-                    )
-                ),
+                set::items($users),
+                set::value($bug->mailto ? str_replace(' ', '', $bug->mailto) : '')
             )
         ),
         formGroup
