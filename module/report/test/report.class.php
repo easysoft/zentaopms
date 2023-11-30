@@ -394,17 +394,16 @@ class reportTest
     }
 
     /**
+     * 测试获取本年度用户相关的每个产品的创建的需求和计划，关闭的需求数据。
      * Test get count of created story,plan and closed story by accounts every product in this year.
      *
-     * @param mixed $accounts
+     * @param  array        $accounts
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function getUserYearProductsTest($accounts)
+    public function getUserYearProductsTest(array $accounts): string|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearProducts($accounts, $year);
+        $objects = $this->objectModel->getUserYearProducts($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
