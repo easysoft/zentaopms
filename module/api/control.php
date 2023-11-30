@@ -539,6 +539,24 @@ class api extends control
     }
 
     /**
+     * Ajax获取接口允许的参数类型列表。
+     * AJAX: Get params type options by scope.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetParamsTypeOptions()
+    {
+        $options = array();
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $options[] = array('label' => $item, 'value' => $key);
+        }
+        $this->sendSuccess(array('data' => $options));
+    }
+
+    /**
+     * Ajax获取指定目录的数据结构。
      * AJAX: Get ref options.
      *
      * @param  int     $libID
@@ -546,7 +564,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function ajaxGetRefOptions($libID = 0, $structID = 0)
+    public function ajaxGetRefOptions(int $libID = 0, int $structID = 0)
     {
         $res = $this->api->getStructListByLibID($libID);
 
@@ -562,19 +580,21 @@ class api extends control
     }
 
     /**
+     * Ajax获取指定ID的数据结构。
      * AJAX: Get ref info.
      *
      * @param  int    $refID
      * @access public
      * @return void
      */
-    public function ajaxGetRefInfo($refID = 0)
+    public function ajaxGetRefInfo(int $refID = 0)
     {
         $info = $this->api->getStructByID($refID);
         $this->sendSuccess(array('info' => $info));
     }
 
     /**
+     * Ajax获取当前接口库的子目录结构。
      * AJAX: Get all child module.
      *
      * @param  int     $libID
@@ -582,7 +602,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function ajaxGetChild($libID, $type = 'module')
+    public function ajaxGetChild(int $libID, string $type = 'module')
     {
         $this->loadModel('tree');
         $childModules = $this->tree->getOptionMenu($libID, 'api');
