@@ -216,6 +216,8 @@ class searchModel extends model
             $query->sql = $_SESSION[$querySessionName];
         }
 
+        /* 将queryform[filed1] 转换为 queryform[1]['field']。*/
+        /* Process queryform[filed1] to queryform[1]['field']. */
         $queryForm = array();
         if(isset($query->form['field1']))
         {

@@ -97,22 +97,22 @@ class searchTest
      * @access public
      * @return array
      */
-    public function getQueryTest(int $queryID)
+    public function getQueryTest(int $queryID): object
     {
-        $objects = $this->objectModel->getQuery($queryID);
+        $query = $this->objectModel->getQuery($queryID);
+
+        $objectType = $query->module;
+        if($query->module == 'executionStory') $objectType = 'story';
+        if($query->module == 'projectBuild')   $objectType = 'build';
+        if($query->module == 'executionBuild') $objectType = 'build';
 
         global $tester;
-        $objectType = $objects->module;
-        if($objects->module == 'executionStory') $objectType = 'story';
-        if($objects->module == 'projectBuild')   $objectType = 'build';
-        if($objects->module == 'executionBuild') $objectType = 'build';
-
         $table = $tester->config->objectTables[$objectType];
-        $objects->queryCount = $tester->dao->select('count(*) as count')->from($table)->where($objects->sql)->fetch('count');
+        $query->queryCount = $tester->dao->select('count(*) AS count')->from($table)->where($query->sql)->fetch('count');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $query;
     }
 
     /**
