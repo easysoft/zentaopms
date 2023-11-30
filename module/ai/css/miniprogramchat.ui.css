@@ -1,0 +1,86 @@
+.mini-program {
+    top: 66px;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    gap: 16px;
+}
+
+.mini-program .detail {
+    flex-basis: 390px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-program .detail .header {
+    padding: 24px 20px 20px 20px;
+    display: flex;
+    gap: 20px;
+    color: var(--color-slate-800);
+    flex: none;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.mini-program .detail .header .program-avatar {
+    width: 46px;
+    height: 46px;
+    flex: none;
+}
+
+.mini-program .detail .header .content {
+    flex: auto;
+}
+
+.mini-program .detail .header .content .title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mini-program .detail .header .content .desc {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.mini-program .detail .body {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.mini-program .detail .body .language-model {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: none;
+}
+
+.mini-program .detail .body .language-model .btn {
+    color: var(--color-slate-700);
+}
+
+.mini-program .detail .body .language-model .btn:hover {
+    background: var(--color-gray-300);
+}
+
+.mini-program .detail .body .form-container {
+    flex: auto;
+    overflow-y: auto;
+}
+
+.mini-program .detail .footer {
+    padding: 20px 20px 24px 20px;
+    flex: none;
+}
+
+.mini-program .chat {
+    flex: auto;
+    flex-basis: 67%;
+    background: #fff;
+}

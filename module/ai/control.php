@@ -136,6 +136,20 @@ class ai extends control
     }
 
     /**
+     * Mini program chat.
+     *
+     * @param string $id
+     * @access public
+     * @return void
+     */
+    public function miniProgramChat($id)
+    {
+        $this->view->miniProgram = $this->ai->getMiniProgramByID($id);
+        $this->view->fields = $this->ai->getMiniProgramFields($id);
+        $this->display();
+    }
+
+    /**
      * Mini program square.
      *
      * @param string $category

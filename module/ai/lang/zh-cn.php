@@ -31,6 +31,7 @@ $lang->prompt->editedDate       = '编辑时间';
 $lang->prompt->deleted          = '是否已删除';
 
 /* Lang for privs, keys are paired with privlang items. */
+$lang->ai->modelCurrent           = '当前语言模型';
 $lang->ai->modelBrowse            = '浏览语言模型';
 $lang->ai->modelEdit              = '编辑语言模型';
 $lang->ai->modelTestConnection    = '测试连接';
@@ -491,6 +492,7 @@ $lang->ai->miniPrograms->optionName         = '选项名称';
 $lang->ai->miniPrograms->promptTemplate     = '提词模板';
 $lang->ai->miniPrograms->fieldConfiguration = '字段配置';
 $lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
+$lang->ai->miniPrograms->generate           = '生成';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';

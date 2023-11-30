@@ -66,7 +66,8 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs)
     $star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
     $delete = $star === 'star' ? 'true' : 'false';
 
-    return div(
+    return a(
+        set::href(createLink('ai', 'miniProgramChat', "id={$miniProgram->id}#app=ai")),
         setClass('miniprogram-card'),
         div(
             setClass('program-content'),

@@ -31,6 +31,7 @@ $lang->prompt->editedDate       = 'Edited Date';
 $lang->prompt->deleted          = 'Deleted';
 
 /* Lang for privs, keys are paired with privlang items. */
+$lang->ai->modelCurrent           = 'Current Model';
 $lang->ai->modelBrowse            = 'Browse Models';
 $lang->ai->modelEdit              = 'Edit Models';
 $lang->ai->modelTestConnection    = 'Test Model Connection';
@@ -475,6 +476,10 @@ $lang->ai->miniPrograms->field->default = array(
     'As a <Role>, I hope to <Objective> in <Scene>.'
 );
 
+$lang->ai->miniPrograms->field->emptyNameWarning      = 'Field name cannot be empty';
+$lang->ai->miniPrograms->field->duplicatedNameWarning = 'Duplicate field name';
+$lang->ai->miniPrograms->field->emptyOptionWarning    = 'Please configure at least one option';
+
 $lang->ai->miniPrograms->statuses = array(
     ''            => 'all',
     'draft'       => 'unpublished',
@@ -487,10 +492,7 @@ $lang->ai->miniPrograms->optionName         = 'Option name';
 $lang->ai->miniPrograms->promptTemplate     = 'Prompt template';
 $lang->ai->miniPrograms->fieldConfiguration = 'Field configuration';
 $lang->ai->miniPrograms->summary            = 'There are %s small programs on this page.';
-
-$lang->ai->miniPrograms->field->emptyNameWarning      = 'Field name cannot be empty';
-$lang->ai->miniPrograms->field->duplicatedNameWarning = 'Duplicate field name';
-$lang->ai->miniPrograms->field->emptyOptionWarning    = 'Please configure at least one option';
+$lang->ai->miniPrograms->generate           = 'Generate';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
