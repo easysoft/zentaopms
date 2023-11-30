@@ -15,7 +15,7 @@ class contactList extends wg
 {
     protected static array $defineProps = array(
         'name?: string="contactList"',  // 控件名称。
-        'target?: string="mailto"',     // 选中项改变时更新的目标
+        'target?: string',              // 选中项改变时更新的目标
         'items?: array',                // picker 列表项或表项获取方法。
         'placeholder?: string',         // picker 占位符。
     );

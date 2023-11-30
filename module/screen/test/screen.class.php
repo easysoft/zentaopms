@@ -85,4 +85,20 @@ class screenTest
         $chart = $tester->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
         return array($chart, $component);
     }
+
+    /**
+     * 测试completeComponent。
+     * Test completeComponent.
+     *
+     * @param  object $chart
+     * @param  string $type
+     * @param  array  $filters
+     * @param  object $component
+     * @access public
+     * @return array
+     */
+    public function completeComponentTest(object $chart, string $type, array $filters, object $component)
+    {
+        return $this->objectModel->completeComponent($chart, $type, $filters, $component);
+    }
 }

@@ -225,6 +225,19 @@ class searchTest
     }
 
     /**
+     * 测试替换日期和用户变量。
+     * Replace dynamic test.
+     *
+     * @param  string $query
+     * @access public
+     * @return string
+     */
+    public function replaceDynamicTest(string $query): string
+    {
+        return $this->objectModel->replaceDynamic($query);
+    }
+
+    /**
      * Test get list.
      *
      * @param  string $keywords
