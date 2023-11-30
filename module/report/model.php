@@ -227,14 +227,15 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户今年的登录次数。
      * Get user login count in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return int
      */
-    public function getUserYearLogins($accounts, $year)
+    public function getUserYearLogins(array $accounts, string $year): int
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->in($accounts)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
     }

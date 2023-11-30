@@ -300,21 +300,20 @@ class reportTest
     }
 
     /**
+     * 测试获取当前年的用户登录次数。
      * Test get user login count in this year.
      *
-     * @param  string $accounts
+     * @param  string    $accounts
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getUserYearLoginsTest($accounts)
+    public function getUserYearLoginsTest(array $accounts): int|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearLogins($accounts, $year);
+        $count = $this->objectModel->getUserYearLogins($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $count;
     }
 
     /**
