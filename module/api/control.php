@@ -461,7 +461,13 @@ class api extends control
     {
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->api->form->create)->add('product', 0)->add('version', 1)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+            $formData = form::data($this->config->api->form->create)
+                ->add('product', 0)
+                ->add('version', 1)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->add('editedDate', helper::now())
+                ->get();
 
             $apiID = $this->api->create($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -496,7 +502,7 @@ class api extends control
         $api = $this->api->getLibById($apiID);
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+            $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->get();
 
             $this->api->update($formData);
 

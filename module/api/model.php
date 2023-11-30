@@ -199,7 +199,15 @@ class apiModel extends model
      */
     public function update(object $formData): bool
     {
-        $oldApi  = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
+        $oldApi = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
+
+        if($oldApi->editedDate != $formData->editedDate)
+        {
+            dao::$errors['message'][] = $this->lang->error->editedByOther;
+            return false;
+        }
+        $formData->editedDate = helper::now();
+
         $changes = common::createChanges($oldApi, $formData);
         if(!empty($changes)) $formData->version = $formData->version + 1;
 

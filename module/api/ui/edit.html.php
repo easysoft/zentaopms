@@ -629,5 +629,6 @@ formPanel
             set::name('desc'),
             html($api->desc)
         )
-    )
+    ),
+    formHidden('editedDate', $api->editedDate)
 );
