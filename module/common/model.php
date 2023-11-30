@@ -1841,16 +1841,16 @@ class commonModel extends model
     }
 
     /**
+     * 设置要展示的顶部一级菜单。
      * Set main menu.
      *
      * @static
      * @access public
-     * @return string
+     * @return void
      */
     public static function setMainMenu()
     {
         global $app, $lang;
-
         $tab = $app->tab;
 
         $isTutorialMode = common::isTutorialMode();
@@ -1859,12 +1859,10 @@ class commonModel extends model
         $currentMethod  = strtolower($currentMethod);
 
         /* If homeMenu is not exists or unset, display menu. */
-        if(!isset($lang->$tab->homeMenu))
-        {
-            $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
-            $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
-            return;
-        }
+        $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
+        $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
+
+        if(!isset($lang->$tab->homeMenu)) return;
 
         if($currentModule == $tab and $currentMethod == 'create')
         {
@@ -1899,10 +1897,6 @@ class commonModel extends model
                 return;
             }
         }
-
-        /* Default, display menu. */
-        $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
-        $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
     }
 
     /**
