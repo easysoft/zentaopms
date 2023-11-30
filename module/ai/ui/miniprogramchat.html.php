@@ -58,13 +58,15 @@ foreach($fields as $field)
 jsVar('fieldNames', $fieldNames);
 
 list($iconName, $iconTheme) = explode('-', $miniProgram->icon);
+$star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
+$delete = $star === 'star' ? 'true' : 'false';
 
 div(
     setClass('mini-program fixed flex'),
     div(
         setClass('detail col shadow-md'),
         div(
-            setClass('header'),
+            setClass('header', 'relative'),
             div(
                 setClass('program-avatar center'),
                 setStyle(array('border' => "1px solid {$config->ai->miniPrograms->themeList[$iconTheme][1]}", 'background-color' => $config->ai->miniPrograms->themeList[$iconTheme][0])),
@@ -81,6 +83,14 @@ div(
                     set::title($miniProgram->desc),
                     $miniProgram->desc
                 )
+            ),
+            btn(
+                setClass('ghost btn-star absolute'),
+                set::size('md'),
+                setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
+                on::click('window.aiMiniProgramChat.handleStarBtnClick'),
+                html(html::image("static/svg/{$star}.svg", "class='$star'")),
+                $lang->ai->miniPrograms->collect
             )
         ),
         div(

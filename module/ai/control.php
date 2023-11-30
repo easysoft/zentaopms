@@ -146,6 +146,7 @@ class ai extends control
     {
         $this->view->miniProgram = $this->ai->getMiniProgramByID($id);
         $this->view->fields = $this->ai->getMiniProgramFields($id);
+        $this->view->collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
         $this->display();
     }
 

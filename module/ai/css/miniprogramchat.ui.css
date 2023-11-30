@@ -7,7 +7,8 @@
 }
 
 .mini-program .detail {
-    flex-basis: 390px;
+    width: 390px;
+    flex: none;
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -22,6 +23,11 @@
     border-bottom: 1px solid var(--color-gray-200);
 }
 
+.mini-program .detail .header .btn-star {
+    top: 20px;
+    right: 20px;
+}
+
 .mini-program .detail .header .program-avatar {
     width: 46px;
     height: 46px;
@@ -30,11 +36,16 @@
 
 .mini-program .detail .header .content {
     flex: auto;
+    overflow: hidden;
 }
 
 .mini-program .detail .header .content .title {
     font-size: 14px;
     font-weight: 500;
+    padding-right: 64px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .mini-program .detail .header .content .desc {
