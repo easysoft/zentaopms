@@ -116,7 +116,7 @@ class backup extends control
         $result = $this->backupZen->restoreFile($fileName);
         if($result['result'] == 'fail') return $this->send($result);
 
-        return $this->send(array('result' => 'success', 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}')"));
+        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}').then(() => {loadCurrentPage()})"));
     }
 
     /**

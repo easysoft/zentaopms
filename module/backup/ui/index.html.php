@@ -13,6 +13,7 @@ namespace zin;
 jsvar('backupLang', $lang->backup->common);
 jsvar('rmPHPHeaderLang', $lang->backup->rmPHPHeader);
 jsvar('restoreLang', $lang->backup->restore);
+jsvar('confirmDeleteLang', $lang->backup->confirmDelete);
 
 featureBar
 (

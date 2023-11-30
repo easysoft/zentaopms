@@ -27,7 +27,7 @@ window.backup = function(e)
             $('#waiting .modal-content #message').html(data);
         });
     }, 1000);
-}
+};
 
 window.getCellSpan = function(cell)
 {
@@ -35,20 +35,30 @@ window.getCellSpan = function(cell)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
-}
+};
+
+window.restore = function(name)
+{
+    zui.Modal.confirm({message: confirmDeleteLang, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res)
+        {
+            $.ajaxSubmit({url: $.createLink('backup', 'restore', 'file=' + name)});
+
+            zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
+            $('#waiting').addClass('show');
+            $('#waiting .modal-body #backupType').html(restoreLang);
+            $('#waiting .modal-body #message').empty();
+        }
+    });
+};
 
 $(document).off('click', '.rmPHPHeader').on('click', '.rmPHPHeader', function(data)
 {
+    if($(this).hasClass('disabled')) return false;
+
     zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
     $('#waiting').addClass('show');
     $('#waiting .modal-body #backupType').html(rmPHPHeaderLang);
-    $('#waiting .modal-body #message').empty();
-})
-
-$(document).off('click', '.restore').on('click', '.restore', function(data)
-{
-    zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
-    $('#waiting').addClass('show');
-    $('#waiting .modal-body #backupType').html(restoreLang);
     $('#waiting .modal-body #message').empty();
 });

@@ -14,9 +14,7 @@ $config->backup->actionList['rmPHPHeader']['className'] = 'ajax-submit rmPHPHead
 $config->backup->actionList['restore']['icon']         = 'restart';
 $config->backup->actionList['restore']['text']         = $lang->backup->restore;
 $config->backup->actionList['restore']['hint']         = $lang->backup->restore;
-$config->backup->actionList['restore']['url']          = array('module' => 'backup', 'method' => 'restore', 'params' => 'file={name}');
-$config->backup->actionList['restore']['className']    = 'ajax-submit restore';
-$config->backup->actionList['restore']['data-confirm'] = $lang->backup->confirmRestore;
+$config->backup->actionList['restore']['url']          = "javascript:restore('{name}')";
 
 $config->backup->actionList['delete']['icon']         = 'trash';
 $config->backup->actionList['delete']['text']         = $lang->delete;
