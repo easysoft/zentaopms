@@ -494,6 +494,7 @@ $lang->ai->miniPrograms->fieldConfiguration = 'Field configuration';
 $lang->ai->miniPrograms->summary            = 'There are %s small programs on this page.';
 $lang->ai->miniPrograms->generate           = 'Generate';
 $lang->ai->miniPrograms->regenerate         = 'Regenerate';
+$lang->ai->miniPrograms->chatTip            = 'Click the generate button on the left to give it a try.';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';

@@ -8,19 +8,13 @@
 
 .mini-program .detail {
     width: 390px;
-    flex: none;
     background: #fff;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
 }
 
 .mini-program .detail .header {
     padding: 24px 20px 20px 20px;
-    display: flex;
     gap: 20px;
     color: var(--color-slate-800);
-    flex: none;
     border-bottom: 1px solid var(--color-gray-200);
 }
 
@@ -32,21 +26,12 @@
 .mini-program .detail .header .program-avatar {
     width: 46px;
     height: 46px;
-    flex: none;
-}
-
-.mini-program .detail .header .content {
-    flex: auto;
-    overflow: hidden;
 }
 
 .mini-program .detail .header .content .title {
     font-size: 14px;
     font-weight: 500;
     padding-right: 64px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .mini-program .detail .header .content .desc {
@@ -58,20 +43,9 @@
 }
 
 .mini-program .detail .body {
-    flex: auto;
-    display: flex;
-    flex-direction: column;
     padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    overflow: hidden;
-}
-
-.mini-program .detail .body .language-model {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: none;
 }
 
 .mini-program .detail .body .language-model .btn {
@@ -82,18 +56,17 @@
     background: var(--color-gray-300);
 }
 
-.mini-program .detail .body .form-container {
-    flex: auto;
-    overflow-y: auto;
-}
-
 .mini-program .detail .footer {
     padding: 20px 20px 24px 20px;
-    flex: none;
 }
 
 .mini-program .chat {
-    flex: auto;
     flex-basis: 67%;
     background: #fff;
+}
+
+.mini-program .chat .chat-tip {
+    gap: 8px;
+    font-size: 14px;
+    color: var(--color-slate-600);
 }

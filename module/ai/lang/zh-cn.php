@@ -494,6 +494,7 @@ $lang->ai->miniPrograms->fieldConfiguration = '字段配置';
 $lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
 $lang->ai->miniPrograms->generate           = '生成';
 $lang->ai->miniPrograms->regenerate         = '重新生成';
+$lang->ai->miniPrograms->chatTip            = '点击左侧的生成按钮试试吧';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
