@@ -1,0 +1,14 @@
+title: action.
+desc: action data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: action
+    range: opened,activated,closed,changed,fromfeedback,fromticket,opened,started,finished,paused,activated,canceled,closed,fromfeedback,opened,bugconfirmed,activated,resolved,closed,fromfeedback,fromticket,opened,run,createBug
+  - field: objectType
+    range: story{6},task{8},bug{7},case{3}
+  - field: date
+    note: "日期"
+    range: "(-1m)-(0m):1s"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

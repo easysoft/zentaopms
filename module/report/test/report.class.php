@@ -452,18 +452,17 @@ class reportTest
     }
 
     /**
+     * 测试获取年度需求、任务或者 bug 的状态统计。
      * Test get year object stat, include status and action stat.
      *
-     * @param  string $accounts
-     * @param  string $objectType
+     * @param  array        $accounts
+     * @param  string       $objectType
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getYearObjectStatTest($accounts, $objectType)
+    public function getYearObjectStatTest(array $accounts, string $objectType): string|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getYearObjectStat($accounts, $year, $objectType);
+        $objects = $this->objectModel->getYearObjectStat($accounts, date('Y'), $objectType);
 
         if(dao::isError()) return dao::getError();
 

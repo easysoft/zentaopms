@@ -446,17 +446,17 @@ class reportModel extends model
     }
 
     /**
+     * 获取年度需求、任务或者 bug 的状态统计。
      * Get year object stat, include status and action stat
      *
      * @param  array  $accounts
      * @param  string $year
-     * @param  string $objectType   story|task|bug
+     * @param  string $objectType story|task|bug
      * @access public
      * @return array
      */
-    public function getYearObjectStat($accounts, $year, $objectType)
+    public function getYearObjectStat(array $accounts, string $year, string $objectType): array
     {
-        $table = '';
         if($objectType == 'story') $table = TABLE_STORY;
         if($objectType == 'task')  $table = TABLE_TASK;
         if($objectType == 'bug')   $table = TABLE_BUG;
@@ -472,15 +472,16 @@ class reportModel extends model
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();
 
-        /* Build object action stat and get status group. */
-        $statuses   = array();
+        /* Build object action stat and object status stat. */
         $actionStat = array();
+        $statusStat = array();
         while($action = $stmt->fetch())
         {
-            $statuses[$action->objectID] = $action->status;
+            if(!isset($statusStat[$action->status])) $statusStat[$action->status] = 0;
+            $statusStat[$action->status] ++;
 
+            /* Story, bug can from feedback and ticket, task can from feedback, change this action down to opened. */
             $lowerAction = strtolower($action->action);
-            /* Story,bug can from feedback and ticket, task can from feedback, boil this action down to opened. */
             if(in_array($lowerAction, array('fromfeedback', 'fromticket'))) $lowerAction = 'opened';
             if(!isset($actionStat[$lowerAction]))
             {
@@ -489,14 +490,6 @@ class reportModel extends model
 
             $month = substr($action->date, 0, 7);
             $actionStat[$lowerAction][$month] += 1;
-        }
-
-        /* Build status stat. */
-        $statusStat = array();
-        foreach($statuses as $storyID => $status)
-        {
-            if(!isset($statusStat[$status])) $statusStat[$status] = 0;
-            $statusStat[$status] += 1;
         }
 
         return array('statusStat' => $statusStat, 'actionStat' => $actionStat);
