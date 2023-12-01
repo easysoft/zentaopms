@@ -29,7 +29,7 @@ class formGroup extends wg
 
     protected function build(): wg
     {
-        list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly, $multiple) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple']);
+        list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly, $multiple, $id) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple', 'id']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -46,6 +46,7 @@ class formGroup extends wg
             if($placeholder !== null) $control['placeholder'] = $placeholder;
             if($readonly !== null)    $control['readonly']    = $readonly;
             if($multiple !== null)    $control['multiple']    = $multiple;
+            if($id)                   $control['id']          = '';
         }
 
         return div
@@ -54,7 +55,7 @@ class formGroup extends wg
             zui::width($width),
             set($this->getRestProps()),
             setCssVar('form-grid-label-width', $labelWidth),
-            empty($label) ? null : new formLabel
+            empty($label) && $label !== '0' ? null : new formLabel
             (
                 set::className($labelClass, $strong ? 'font-bold' : null),
                 set::required($required),
