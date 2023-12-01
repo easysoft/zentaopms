@@ -1603,19 +1603,17 @@ class executionModel extends model
     {
         if(empty($executions)) return $executions;
 
-        $memberGroup = $this->executionTao->getMemberCountGroup(array_keys($executions)); // Get execution team member count.
         $productList = $this->executionTao->getProductList($projectID); // Get product name of the linked execution.
 
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
         $parentList = array();
-        $emptyHour  = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $today      = helper::today();
         $burns      = $this->getBurnData($executions);
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
-            $execution->end         = date(DT_DATE1, strtotime($execution->end));
+            if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
 
             if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
@@ -2331,7 +2329,7 @@ class executionModel extends model
         {
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
-            $oldPlan = 0;
+            $oldPlan = '';
             $branch  = isset($branches[$i]) ? (array)$branches[$i] : array(0);
             foreach($branch as $branchID)
             {
