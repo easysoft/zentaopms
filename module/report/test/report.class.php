@@ -411,13 +411,14 @@ class reportTest
     }
 
     /**
+     * 测试获取本年度用户相关的每个迭代的创建的需求和计划，关闭的需求数据。
      * Test get count of finished task, story and resolved bug by accounts every executions in this years.
      *
-     * @param  string $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserYearExecutionsTest($accounts)
+    public function getUserYearExecutionsTest(array $accounts): string|array
     {
         $year = date('Y');
 
