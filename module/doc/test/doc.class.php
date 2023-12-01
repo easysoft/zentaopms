@@ -12,27 +12,27 @@ class docTest
     }
 
     /**
-     * Function createLib test by doc
+     * 创建一个文档库。
+     * Create a lib.
      *
-     * @param  array $param
+     * @param  array        $param
+     * @param  string       $type    api|project|product|execution|custom|mine
+     * @param  string       $libType
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function createLibTest($param)
+    public function createLibTest(array $param, string $type = '', string $libType = ''): object|array
     {
-        $createFields = array('type' => '', 'name' => '', 'acl' => '');
+        $createFields = array('type' => '', 'name' => '', 'acl' => '', 'product' => 0, 'project' => 0, 'execution' => 0);
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $objectID = $this->objectModel->createLib();
-
-        unset($_POST);
+        $lib = new stdClass();
+        foreach($createFields as $field => $defaultValue) $lib->{$field} = $defaultValue;
+        foreach($param as $key => $value) $lib->{$key} = $value;
+        $objectID = $this->objectModel->createLib($lib);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getLibById($objectID);
-
-        return $objects;
+        return $this->objectModel->getLibById($objectID);
     }
 
     /**
