@@ -7,8 +7,25 @@ su('admin');
 /**
 
 title=测试 settingModel->setItem();
+timeout=0
 cid=1
-pid=1
+
+- 设置没有vision的空数据 @0
+- 设置没有vision的my模块的系统数据 @0
+- 设置没有vision的project模块的系统数据 @test12
+- 设置没有vision的product模块的系统数据 @test13
+- 设置没有vision的所有者是admin的数据 @0
+- 设置没有vision的common模块的admin配置数据 @0
+- 设置没有vision的project模块的admin配置数据 @test16
+- 设置没有vision的product模块的admin配置数据 @test17
+- 设置有vision的所有者是system的数据 @0
+- 设置有vision的my模块的系统数据 @0
+- 设置有vision的project模块的系统数据 @test12
+- 设置有vision的product模块的系统数据 @test13
+- 设置有vision的所有者是admin的数据 @0
+- 设置有vision的common模块的admin配置数据 @0
+- 设置有vision的project模块的admin配置数据 @test16
+- 设置有vision的product模块的admin配置数据 @test17
 
 */
 
