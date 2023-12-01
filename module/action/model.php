@@ -911,7 +911,7 @@ class actionModel extends model
         /* If idList include ',*,' Format ',*,' to '*'. */
         foreach($projectIdList as $key => $idList)
         {
-            $idList = explode(',', $idList);
+            $idList = explode(',', (string)$idList);
 
             foreach($idList as $id) $projectIdList[] = $id;
             unset($projectIdList[$key]);
