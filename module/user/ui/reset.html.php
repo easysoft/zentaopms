@@ -15,8 +15,17 @@ $content = $needCreateFile ? div
     setClass('create-file cell flex justify-center mt-24'),
     panel
     (
-        setClass('create-file-panel w-full'),
-        set::title($lang->user->resetPassword),
+        setClass('create-file-panel w-full size-lg'),
+        set::title($lang->user->resetPwdByAdmin),
+        set::titleClass('text-lg'),
+        !empty($config->resetPWDByMail) ? to::headingActions
+        (
+            a
+            (
+                set::href(inlink('forgetPassword')),
+                $lang->user->resetPwdByMail
+            )
+        ) : null,
         cell
         (
             setClass('alert-info p-4 mb-6'),
@@ -46,14 +55,23 @@ $content = $needCreateFile ? div
     formPanel
     (
         setClass('reset-form w-full'),
-        set::title($lang->user->resetPassword),
+        set::title($lang->user->resetPwdByAdmin),
+        on::change('#password1,#password2', 'changePassword'),
+        on::click('button[type=submit]', 'encryptPassword'),
+        !empty($config->resetPWDByMail) ? to::headingActions
+        (
+            a
+            (
+                set::href(inlink('forgetPassword')),
+                $lang->user->resetPwdByMail
+            )
+        ) : null,
         formRow
         (
             formGroup
             (
                 set::label($lang->user->account),
                 set::name('account'),
-                set::value(''),
                 set::required(true)
             )
         ),
@@ -70,28 +88,20 @@ $content = $needCreateFile ? div
         (
             formGroup
             (
-                set::label($lang->user->password2),
+                set::label($lang->user->abbr->password2),
                 set::control('password'),
                 set::name('password2'),
-                set::value(''),
                 set::required(true)
             )
         ),
         formRow
         (
             setClass('hidden'),
-            formGroup
-            (
-                set::name('passwordLength'),
-                set::value(0)
-            ),
-            formGroup
-            (
-                set::name('verifyRand'),
-                set::value($rand)
-            )
+            input(set::name('passwordLength'), set::value(0)),
+            input(set::name('passwordStrength'), set::value(0))
         )
-    )
+    ),
+    formHidden('verifyRand', $rand)
 );
 
 set::zui(true);

@@ -226,7 +226,7 @@ class gogsModel extends model
      * @access public
      * @return array
      */
-    public function getGogsListByAccount($account = '')
+    public function getListByAccount($account = '')
     {
         if(!$account) $account = $this->app->user->account;
 

@@ -942,7 +942,9 @@ class baseControl
             $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
             $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
             $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . strtolower($methodName) . '.' . $viewType . '.php';
-            return $this->render($moduleName, $methodName);
+
+            if($moduleName != 'index') $this->app->loadModuleConfig('index');
+            if(!in_array("{$moduleName}-{$methodName}", $this->config->index->oldPages)) return $this->render($moduleName, $methodName);
         }
 
         if(empty($this->output)) $this->parse($moduleName, $methodName);

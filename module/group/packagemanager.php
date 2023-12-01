@@ -651,7 +651,7 @@ $config->group->package->createProduct->privs['product-edit']        = array('ed
 $config->group->package->createProduct->privs['product-batchEdit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('product-all'), 'recommend' => array('product-edit'));
 $config->group->package->createProduct->privs['product-close']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('product-view'), 'recommend' => array('product-create', 'product-edit'));
 $config->group->package->createProduct->privs['product-updateOrder'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 75, 'depend' => array('product-all'), 'recommend' => array('product-create', 'product-edit'));
-$config->group->package->createProduct->privs['product-activate']    = array('edition' => 'ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->createProduct->privs['product-activate']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->importProduct = new stdclass();
 $config->group->package->importProduct->order  = 20;
@@ -3192,7 +3192,7 @@ $config->group->package->track = new stdclass();
 $config->group->package->track->order  = 5;
 $config->group->package->track->subset = 'projecttrack';
 $config->group->package->track->privs  = array();
-$config->group->package->track->privs['projectstory-track'] = array('edition' => 'max', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index'), 'recommend' => array('design-revision', 'projectstory-story', 'projectstory-view'));
+$config->group->package->track->privs['projectstory-track'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index'), 'recommend' => array('design-revision', 'projectstory-story', 'projectstory-view'));
 
 $config->group->package->workflowRelation = new stdclass();
 $config->group->package->workflowRelation->order  = 65;
@@ -3538,10 +3538,11 @@ $config->group->package->exportDoc = new stdclass();
 $config->group->package->exportDoc->order  = 25;
 $config->group->package->exportDoc->subset = 'doc';
 $config->group->package->exportDoc->privs  = array();
-$config->group->package->exportDoc->privs['doc-mine2export']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 125, 'depend' => array('doc-mySpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-product2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 130, 'depend' => array('doc-productSpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-mine2export']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 125, 'depend' => array('doc-mySpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-product2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 130, 'depend' => array('doc-productSpace'), 'recommend' => array());
 $config->group->package->exportDoc->privs['doc-project2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 135, 'depend' => array('doc-projectSpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-custom2export']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 140, 'depend' => array('doc-teamSpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-custom2export']  = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 140, 'depend' => array('doc-teamSpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-exportFiles']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 145, 'depend' => array('doc-showFiles'), 'recommend' => array());
 
 $config->group->package->browseAPI = new stdclass();
 $config->group->package->browseAPI->order  = 5;
@@ -3748,6 +3749,12 @@ $config->group->package->exportDatatable->subset = 'dataview';
 $config->group->package->exportDatatable->privs  = array();
 $config->group->package->exportDatatable->privs['dataview-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('dataview-browse', 'dataview-query'), 'recommend' => array());
 
+$config->group->package->aiChatting = new stdclass();
+$config->group->package->aiChatting->order  = 2020;
+$config->group->package->aiChatting->subset = 'ai';
+$config->group->package->aiChatting->privs  = array();
+$config->group->package->aiChatting->privs['ai-chat'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->executePrompt = new stdclass();
 $config->group->package->executePrompt->order  = 2040;
 $config->group->package->executePrompt->subset = 'ai';
@@ -3759,9 +3766,9 @@ $config->group->package->manageLLM = new stdclass();
 $config->group->package->manageLLM->order  = 2060;
 $config->group->package->manageLLM->subset = 'ai';
 $config->group->package->manageLLM->privs  = array();
-$config->group->package->manageLLM->privs['ai-models']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array());
-$config->group->package->manageLLM->privs['ai-editModel']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('admin-index', 'ai-models', 'ai-testConnection'), 'recommend' => array());
-$config->group->package->manageLLM->privs['ai-testConnection'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('admin-index', 'ai-editModel', 'ai-models'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-models']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-editModel']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('admin-index', 'ai-models', 'ai-testConnection'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-testConnection'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('admin-index', 'ai-editModel', 'ai-models'), 'recommend' => array());
 
 $config->group->package->browsePrompt = new stdclass();
 $config->group->package->browsePrompt->order  = 2080;

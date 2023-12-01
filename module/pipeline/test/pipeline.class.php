@@ -1,7 +1,7 @@
 <?php
 class pipelineTest
 {
-    /**  
+    /**
      * __construct
      *
      * @access public
@@ -10,7 +10,7 @@ class pipelineTest
     public function __construct()
     {
         global $tester;
-        
+
         $this->objectModel = $tester->loadModel('pipeline');
     }
 
@@ -29,8 +29,8 @@ class pipelineTest
 
         return $objects;
     }
-    
-    /** 
+
+    /**
      * Get pipeline list.
      *
      * @param  string $type jenkins|gitlab
@@ -51,16 +51,16 @@ class pipelineTest
     /**
      * Get pipeline pairs
      *
-     * @param  int    $data 
+     * @param  int    $data
      * @access public
-     * @return array 
+     * @return array
      */
     public function getPairs($data)
     {
         $objects = $this->objectModel->getPairs($data['type']);
 
-        if(empty($objects))    return '没有获取到数据'; 
-        if(isset($data['id'])) return $objects[$data['id']]; 
+        if(empty($objects))    return '没有获取到数据';
+        if(isset($data['id'])) return $objects[$data['id']];
         if(dao::isError())     return dao::getError();
 
         return $objects;
@@ -69,8 +69,8 @@ class pipelineTest
     /**
      * Create a pipeline.
      *
-     * @param  int    $type 
-     * @param  int    $param 
+     * @param  int    $type
+     * @param  int    $param
      * @access public
      * @return void
      */
@@ -79,7 +79,7 @@ class pipelineTest
         foreach($param as $k => $v) $_POST[$k] = $v;
         $objects = $this->objectModel->create($type);
         unset($_POST);
-        
+
         if(dao::isError()) return dao::getError();
 
         $objects = $this->objectModel->getById($objects);
@@ -115,7 +115,7 @@ class pipelineTest
      */
     public function deleteTest($id, $object = 'gitlab')
     {
-        $objects = $this->objectModel->delete($id, $object = 'gitlab');
+        $objects = $this->objectModel->deleteByObject($id, $object);
 
         if(dao::isError()) return dao::getError();
 

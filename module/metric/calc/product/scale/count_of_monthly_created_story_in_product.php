@@ -47,18 +47,7 @@ class count_of_monthly_created_story_in_product extends baseCalc
 
     public function getResult($options = null)
     {
-        $records = array();
-        foreach($this->result as $product => $years)
-        {
-            foreach($years as $year => $months)
-            {
-                foreach($months as $month => $value)
-                {
-                    $records[] = array('product' => $product, 'year' => $year, 'month' => $month, 'value' => $value);
-                }
-            }
-        }
-
+        $records = $this->getRecords(array('product', 'year', 'month', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

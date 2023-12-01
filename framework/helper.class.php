@@ -384,7 +384,7 @@ class helper extends baseHelper
                 return (object)$value;
             case 'datetime':
             case 'date':
-                return $value ? (string)$value : null;
+                return $value ? trim((string)$value) : null;
             case 'string':
             default:
                 return trim((string)$value);

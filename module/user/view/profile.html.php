@@ -70,7 +70,7 @@
           <td><?php echo zget($lang->user->roleList, $user->role, '');?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->user->joinAB;?></th>
+          <th><?php echo $lang->user->abbr->join;?></th>
           <td><?php echo formatTime($user->join);?></td>
           <th><?php echo $lang->user->priv;?></th>
           <td><?php foreach($groups as $group) echo $group->name . ' ';?></td>
@@ -93,7 +93,7 @@
         <tr>
           <th><?php echo $lang->user->zipcode;?></th>
           <td><?php echo $user->zipcode;?></td>
-          <th><?php echo $lang->user->addressAB;?></th>
+          <th><?php echo $lang->user->abbr->address;?></th>
           <td title='<?php echo $user->address;?>'><?php echo $user->address;?></td>
         </tr>
       </table>

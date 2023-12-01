@@ -26,7 +26,7 @@ form
     (
         set('class', 'hidden'),
         set::name('target'),
-        set::value($datatableId)
+        set::value($datatableID)
     ),
     input
     (

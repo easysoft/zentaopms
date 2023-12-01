@@ -261,7 +261,7 @@ class gitlab extends control
     public function delete($id)
     {
         $oldGitLab = $this->loadModel('pipeline')->getByID($id);
-        $actionID  = $this->pipeline->delete($id, 'gitlab');
+        $actionID  = $this->pipeline->deleteByObject($id, 'gitlab');
         if(!$actionID)
         {
             $response['result']   = 'fail';

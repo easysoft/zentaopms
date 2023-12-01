@@ -114,17 +114,13 @@ $formItems['whitelist'] = formRow
             ),
             div
             (
-                inputGroup
+                whitelist
                 (
-                    $lang->product->users,
-                    picker
-                    (
-                        set::id($usersField['name']),
-                        set::name($usersField['name'] . '[]'),
-                        set::multiple(true),
-                        set::items($usersField['options']),
-                        set::value($usersField['default'])
-                    )
+                    set::label($lang->product->users),
+                    set::id($usersField['name']),
+                    set::name($usersField['name'] . '[]'),
+                    set::items($usersField['options']),
+                    set::value($usersField['default']),
                 )
             )
         )

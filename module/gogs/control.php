@@ -151,7 +151,7 @@ class gogs extends control
     public function delete($gogsID)
     {
         $oldGogs  = $this->loadModel('pipeline')->getByID($gogsID);
-        $actionID = $this->pipeline->delete($gogsID, 'gogs');
+        $actionID = $this->pipeline->deleteByObject($gogsID, 'gogs');
         if(!$actionID)
         {
             $response['result']   = 'fail';

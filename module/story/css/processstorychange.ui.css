@@ -1,2 +1,2 @@
-.changedStoryBox {border: 1px solid var(--color-slate-300); background:var(--color-slate-50); margin-bottom: 8px;}
+.changedStoryBox {border: 1px solid var(--color-gray-300); background:var(--color-gray-50); margin-bottom: 8px;}
 .changedStoryBox .entity-label{background:var(--color-gray-100); padding:10px;}

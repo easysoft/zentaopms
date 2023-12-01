@@ -1470,7 +1470,10 @@ class projectModel extends model
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-            $this->product->activate($productID);
+
+            $product = new stdclass();
+            $product->status = $this->config->vision == 'or' ? 'wait' : 'normal';
+            $this->product->activate($productID, $product);
         }
 
         return common::createChanges($oldProject, $project);

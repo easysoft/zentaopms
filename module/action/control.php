@@ -232,6 +232,7 @@ class action extends control
     {
         if(!empty($_POST))
         {
+            $isInZinPage = isInModal() || in_array($objectType, $this->config->action->newPageModule);
             /* 当评论的是任务，需判断当前用户是否拥有任务的权限。 */
             /* When commenting on a task, you need to determine whether the current user has the permission of the task. */
             if(strtolower($objectType) == 'task')
@@ -251,9 +252,15 @@ class action extends control
             }
 
             /* 获取评论内容并生成一条action数据。 */
-            $commentData = form::data($this->config->action->form->comment)->get();
-            $actionID    = $this->action->create($objectType, $objectID, 'Commented', $commentData->actioncomment);
+            $actionID = $this->action->create($objectType, $objectID, 'Commented', isset($this->post->actioncomment) ? $this->post->actioncomment : $this->post->comment);
+            if(empty($actionID))
+            {
+                if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                return print(js::error($this->lang->error->accessDenied));
+            }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
+
+            if($isInZinPage) return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => (int)$objectID))));
 
             /* 用于ZIN的新UI。*/
             /* For new UI with ZIN. */
@@ -302,6 +309,10 @@ class action extends control
             }
 
             $action = $this->action->getById($actionID);
+            if(isInModal() || in_array($action->objectType, $this->config->action->newPageModule))
+            {
+                return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => (int)$action->objectID))));
+            }
             return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => $action->objectID))));
         }
 

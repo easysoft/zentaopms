@@ -19,7 +19,7 @@ formPanel
     on::change('input[name=role]', 'changeRole'),
     on::change('input[name^=visions]', 'changeVision'),
     on::change('#password1,#password2,#verifyPassword', 'changePassword'),
-    on::click('button[type=submit]', 'clickSubmit'),
+    on::click('button[type=submit]', 'encryptPassword'),
     set::title($title),
     formRow
     (
@@ -32,14 +32,14 @@ formPanel
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->user->typeList),
-                set::value('inside')
+                set::value($type)
             )
         )
     ),
     formRow
     (
         set::id('companyBox'),
-        set::className('hidden'),
+        $type == 'inside' ? set::className('hidden') : null,
         formGroup
         (
             set::width('1/2'),
@@ -51,7 +51,6 @@ formPanel
                     set::control('picker'),
                     set::name('company'),
                     set::items($companies),
-                    set::value('')
                 ),
                 input
                 (
@@ -73,6 +72,7 @@ formPanel
     ),
     formRow
     (
+        $type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -90,7 +90,6 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->account),
             set::name('account'),
-            set::value('')
         )
     ),
     formRow
@@ -108,10 +107,10 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->user->password2),
+            set::label($lang->user->abbr->password2),
+            set::required(true),
             set::control('password'),
             set::name('password2'),
-            set::value('')
         )
     ),
     formRow
@@ -138,11 +137,11 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->realname),
             set::name('realname'),
-            set::value('')
         )
     ),
     formRow
     (
+        $type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -161,7 +160,6 @@ formPanel
             set::control('picker'),
             set::name('role'),
             set::items($lang->user->roleList),
-            set::value(''),
             set::placeholder($lang->user->placeholder->role)
         )
     ),
@@ -184,17 +182,16 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->email),
             set::name('email'),
-            set::value('')
         )
     ),
     formRow
     (
+        $type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
             set::label($lang->user->commiter),
             set::name('commiter'),
-            set::value()
         )
     ),
     formRow
@@ -221,23 +218,17 @@ formPanel
             set::control('password'),
             set::required(true),
             set::name('verifyPassword'),
-            set::value(''),
             set::placeholder($lang->user->placeholder->verify)
         )
     ),
-    input
+    formRow
     (
-        set::className('hidden'),
-        set::name('verifyRand'),
-        set::value($rand)
-    ),
-    input
-    (
-        set::className('hidden'),
-        set::id('passwordLength'),
-        set::name('passwordLength'),
-        set::value($rand)
+        setClass('hidden'),
+        input(set::name('passwordLength'), set::value(0)),
+        input(set::name('passwordStrength'), set::value(0))
     )
 );
+
+formHidden('verifyRand', $rand);
 
 render();

@@ -106,13 +106,13 @@ class searchModel extends model
      * 初始化搜索表单，并且保存到 session。
      * Init the search session for the first time search.
      *
-     * @param  string $module
-     * @param  object $fields
-     * @param  object $fieldParams
+     * @param  string       $module
+     * @param  object|array $fields
+     * @param  object|array $fieldParams
      * @access public
      * @return array
      */
-    public function initSession(string $module, object $fields, object $fieldParams): array
+    public function initSession(string $module, object|array $fields, object|array $fieldParams): array
     {
         if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';
@@ -134,6 +134,7 @@ class searchModel extends model
     }
 
     /**
+     * 设置默认的搜索参数。
      * Set default params for selection.
      *
      * @param  array  $fields
@@ -141,57 +142,27 @@ class searchModel extends model
      * @access public
      * @return array
      */
-    public function setDefaultParams($fields, $params)
+    public function setDefaultParams(array $fields, array $params): array
     {
-        $hasProduct   = false;
-        $hasExecution = false;
-        $hasUser      = false;
-
-        $appendUsers     = array();
-        $module          = $_SESSION['searchParams']['module'];
-        $formSessionName = $module . 'Form';
-        if(isset($_SESSION[$formSessionName]))
-        {
-            $_SESSION[$formSessionName] = $this->convertFormFrom20To18($_SESSION[$formSessionName]);
-            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
-            {
-                if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
-
-                $fieldName = $_SESSION[$formSessionName][$i - 1]['field'];
-                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
-                {
-                    if($_SESSION[$formSessionName][$i - 1]['value']) $appendUsers[] = $_SESSION[$formSessionName][$i - 1]['value'];
-                }
-            }
-        }
-
         $fields = array_keys($fields);
-        foreach($fields as $fieldName)
-        {
-            if(empty($params[$fieldName])) continue;
-            if($params[$fieldName]['values'] == 'products')   $hasProduct   = true;
-            if($params[$fieldName]['values'] == 'users')      $hasUser      = true;
-            if($params[$fieldName]['values'] == 'executions') $hasExecution = true;
-        }
 
-        if($hasUser)
-        {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
-            $users['$@me'] = $this->lang->search->me;
-        }
-        if($hasProduct) $products = $this->loadModel('product')->getPairs('', $this->session->project);
-        if($hasExecution) $executions = $this->loadModel('execution')->getPairs($this->session->project);
+        list($users, $products, $executions) = $this->searchTao->getParamValues($fields, $params);
 
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
+
             if($params[$fieldName]['values'] == 'users')
             {
                 if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
                 $params[$fieldName]['values'] = $users;
             }
+
             if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
             if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
+
+            /* 处理数组。*/
+            /* Process array value. */
             if(is_array($params[$fieldName]['values']))
             {
                 /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */
@@ -214,6 +185,7 @@ class searchModel extends model
     }
 
     /**
+     * 获取查询。
      * Get a query.
      *
      * @param  int    $queryID
@@ -229,16 +201,21 @@ class searchModel extends model
         $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
         $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
 
+        /* 如果搜索表单中值有变量，把表单值放到post 表单，重新生成 query。*/
+        /* If form has variable, regenerate query. */
         $hasDynamic  = str_contains($query->form, '$');
         $query->form = unserialize($query->form);
         if($hasDynamic)
         {
             $_POST = $query->form;
+
             $this->buildQuery();
             $querySessionName = $query->form['module'] . 'Query';
             $query->sql = $_SESSION[$querySessionName];
         }
 
+        /* 将queryform[filed1] 转换为 queryform[1]['field']。*/
+        /* Process queryform[filed1] to queryform[1]['field']. */
         $queryForm = array();
         if(isset($query->form['field1']))
         {
@@ -297,20 +274,20 @@ class searchModel extends model
     }
 
     /**
+     * 获取一个查询。
      * Get a query.
      *
-     * @param  int    $queryID
+     * @param  int          $queryID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($queryID)
+    public function getByID(int $queryID): object|false
     {
-        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
-        if(!$query) return false;
-        return $query;
+        return $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
     }
 
     /**
+     * 保存当前的查询。
      * Save current query to db.
      *
      * @access public
@@ -333,59 +310,53 @@ class searchModel extends model
         if($this->post->onMenuBar) $query->shortcut = '1';
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
-        if(!dao::isError())
-        {
-            $queryID = $this->dao->lastInsertID();
-            if(!dao::isError()) $this->loadModel('score')->create('search', 'saveQuery', $queryID);
-            return $queryID;
-        }
-        return false;
+        if(dao::isError()) return false;
+
+        $queryID = $this->dao->lastInsertID();
+        $this->loadModel('score')->create('search', 'saveQuery', $queryID);
+        return $queryID;
     }
 
     /**
+     * 删除保存的查询。
      * Delete current query from db.
      *
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteQuery($queryID)
+    public function deleteQuery(int $queryID): bool
     {
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 获取id,title 的键值对。
      * Get title => id pairs of a user.
      *
-     * @param  string    $module
+     * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryPairs($module)
+    public function getQueryPairs(string $module): array
     {
-        $queries = $this->dao->select('id, title')
-            ->from(TABLE_USERQUERY)
-            ->where('module')->eq($module)
-            ->andWhere('account', true)->eq($this->app->user->account)
-            ->orWhere('common')->eq(1)
-            ->markRight(1)
-            ->orderBy('id_desc')
-            ->fetchPairs();
-        if(!$queries) return array('' => $this->lang->search->myQuery);
-        $queries = array('' => $this->lang->search->myQuery) + $queries;
-        return $queries;
+        $queries = $this->dao->select('id, title')->from(TABLE_USERQUERY)->where('module')->eq($module)->andWhere('account', true)->eq($this->app->user->account)->orWhere('common')->eq(1)->markRight(1)->orderBy('id_desc')->fetchPairs();
+
+        return array('' => $this->lang->search->myQuery) + $queries;
     }
 
     /**
+     * 获取查询列表。
      * Get query list.
      *
-     * @param  string    $module
+     * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryList($module)
+    public function getQueryList(string $module): array
     {
-        $queries = $this->dao->select('id, account, title')
+        return $this->dao->select('id, account, title')
             ->from(TABLE_USERQUERY)
             ->where('module')->eq($module)
             ->andWhere('account', true)->eq($this->app->user->account)
@@ -393,9 +364,6 @@ class searchModel extends model
             ->markRight(1)
             ->orderBy('id_desc')
             ->fetchAll();
-
-        if(!$queries) return array();
-        return $queries;
     }
 
     /**
@@ -469,13 +437,14 @@ class searchModel extends model
     }
 
     /**
-      Replace dynamic account and date.
+     * 替换日期和用户变量。
+     * Replace dynamic account and date.
      *
      * @param  string $query
      * @access public
      * @return string
      */
-    public function replaceDynamic($query)
+    public function replaceDynamic(string $query): string
     {
         $this->app->loadClass('date');
         $lastWeek  = date::getLastWeek();
@@ -498,291 +467,94 @@ class searchModel extends model
     }
 
     /**
-     * Get list sql params.
-     *
-     * @param  string    $keywords
-     * @param  string    $type
-     * @access protected
-     * @return array
-     */
-    protected function getSqlParams($keywords, $type)
-    {
-        $spliter = $this->app->loadClass('spliter');
-        $words   = explode(' ', self::unify($keywords, ' '));
-
-        $against     = '';
-        $againstCond = '';
-
-        foreach($words as $word)
-        {
-            $splitedWords = $spliter->utf8Split($word);
-            $trimmedWord   = trim($splitedWords['words']);
-            $against     .= '"' . $trimmedWord . '" ';
-            $againstCond .= '(+"' . $trimmedWord . '") ';
-
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
-        }
-
-        $likeCondition = '';
-        /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimmedWord}%' OR content like '%{$trimmedWord}%'";
-
-        $words = str_replace('"', '', $against);
-        $words = str_pad($words, 5, '_');
-
-        $allowedObject = array();
-
-        if($type != 'all')
-        {
-            foreach($type as $module) $allowedObject[] = $module;
-        }
-        else
-        {
-            if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
-
-            foreach($this->config->search->fields as $objectType => $fields)
-            {
-                $module = $objectType;
-                if($module == 'case') $module = 'testcase';
-                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
-
-                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedObject[] = $objectType;
-                if($module == 'practice'   and common::haspriv('traincourse', 'practiceView')) $allowedObject[] = $objectType;
-            }
-        }
-
-        return array($words, $againstCond, $likeCondition, $allowedObject);
-    }
-
-    /**
+     * 获取可访问的有索引的模块。
      * Get counts of keyword search results.
      *
-     * @param  string    $keywords
-     * @param  string    $type
+     * @param  string|array $type
      * @access public
      * @return array
      */
-    public function getListCount($keywords = '', $type = 'all')
+    public function getListCount(array|string $type = 'all'): array
     {
-        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
+        $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
-        $filterObject = array();
-        foreach($allowedObject as $index => $object)
+        $filterObjects = array();
+        foreach($allowedObjects as $index => $object)
         {
             if(strpos(',feedback,ticket,', ",$object,") !== false)
             {
-                unset($allowedObject[$index]);
-                $filterObject[] = $object;
+                unset($allowedObjects[$index]);
+                $filterObjects[] = $object;
             }
         }
 
-        $typeCount = $this->dao->select("objectType, count(*) as objectCount")
-            ->from(TABLE_SEARCHINDEX)
+        $typeCount = $this->dao->select("objectType, count(*) AS objectCount")->from(TABLE_SEARCHINDEX)
             ->where('((vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObject)
+            ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->groupBy('objectType')
-            ->fetchPairs('objectType', 'objectCount');
+            ->fetchPairs();
         arsort($typeCount);
         return $typeCount;
     }
 
     /**
+     * 获取搜索结果。
      * get search results of keywords.
      *
-     * @param  string    $keywords
-     * @param  string    $type
-     * @param  object    $pager
+     * @param  string $keywords
+     * @param  string $type
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($keywords, $type, $pager = null)
+    public function getList(string $keywords, array|string $type, object $pager = null): array
     {
-        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
+        list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords, $type);
+        $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
-        $filterObject = array();
-        foreach($allowedObject as $index => $object)
+        $filterObjects = array();
+        foreach($allowedObjects as $index => $object)
         {
-            if(strpos(',feedback,ticket,', ",$object,") !== false)
-            {
-                unset($allowedObject[$index]);
-                $filterObject[] = $object;
-            }
+            if(strpos(',feedback,ticket,', ",$object,") === false) continue;
+
+            unset($allowedObjects[$index]);
+            $filterObjects[] = $object;
         }
 
-        $orderBy        = 'score_desc, editedDate_desc';
-        $scoreColumn    = "*, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) as score";
-        $whereCondition = "(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})";
-
-        if($this->config->db->driver == 'dm')
-        {
-            $whereCondition = preg_replace("/\b(AND|OR)\b/", "", $likeCondition, 1);
-            if(!$whereCondition) $whereCondition = '1=1';
-
-            $scoreColumn    = '*';
-            $orderBy        = 'editedDate_desc';
-        }
-        $stmt = $this->dao->select($scoreColumn)
-            ->from(TABLE_SEARCHINDEX)
-            ->where("($whereCondition)")
+        $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
+        $stmt = $this->dao->select("*, {$scoreColumn} as score")->from(TABLE_SEARCHINDEX)
+            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObject)
+            ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy($orderBy)
             ->query();
 
-        $idListGroup = array();
         $results     = array();
+        $idListGroup = array();
         while($record = $stmt->fetch())
         {
+            $results[$record->id] = $record;
+
             $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
             $idListGroup[$module][$record->objectID] = $record->objectID;
-
-            $results[$record->id] = $record;
         }
 
         $results = $this->checkPriv($results, $idListGroup);
         if(empty($results)) return $results;
 
         /* Reset pager total and get this page data. */
-        if($pager)
-        {
-            $pager->setRecTotal(count($results));
-            $pager->setPageTotal();
-            $pager->setPageID($pager->pageID);
-            $results = array_chunk($results, $pager->recPerPage, true);
-            $results = $results[$pager->pageID - 1];
-        }
+        if($pager) $this->searchTao->setResultsInPage($results, $pager);
 
-        $idListGroup = array();
-        foreach($results as $record)
-        {
-            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
-            $idListGroup[$module][$record->objectID] = $record->objectID;
-        }
-
-        $objectList = array();
-        $linkProjectModules = ',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,';
-        foreach($idListGroup as $module => $idList)
-        {
-            if(!isset($this->config->objectTables[$module])) continue;
-            $table = $this->config->objectTables[$module];
-
-            $fields = '';
-            if($module == 'issue') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
-            if($module == 'project') $fields = 'id,model';
-            if($module == 'execution')$fields = 'id,type,project';
-            if($module == 'story' or $module == 'requirement') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
-            if(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,lib';
-            if($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,assetLib,assetLibType';
-
-            if(empty($fields)) continue;
-
-            $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
-        }
-
-        foreach($results as $record)
-        {
-            $record->title   = str_replace('</span> ', '</span>', $this->decode($this->markKeywords($record->title, $words)));
-            $record->title   = str_replace('_', '', $record->title);
-            $record->summary = str_replace('</span> ', '</span>', $this->getSummary($record->content, $words));
-            $record->summary = str_replace('_', '', $record->summary);
-
-            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
-            $method = 'view';
-            if($module == 'deploystep')
-            {
-                $module = 'deploy';
-                $method = 'viewstep';
-            }
-            elseif($module == 'practice')
-            {
-                $module = 'traincourse';
-                $method = 'practiceview';
-            }
-
-            if(strpos($linkProjectModules, ",$module,") !== false)
-            {
-                if(!isset($this->config->objectTables[$record->objectType])) continue;
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}");
-            }
-            elseif($module == 'issue')
-            {
-                $issue = $objectList['issue'][$record->objectID];
-                if(!empty($issue->lib))
-                {
-                    $module = 'assetlib';
-                    $method = 'issueView';
-                }
-
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
-                $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
-            }
-            elseif($module == 'project')
-            {
-                $projectModel = $objectList['project'][$record->objectID]->model;
-                $method       = $projectModel == 'kanban' ? 'index' : 'view';
-                $record->url  = helper::createLink('project', $method, "id={$record->objectID}");
-            }
-            elseif($module == 'execution')
-            {
-                $execution         = $objectList['execution'][$record->objectID];
-                $method            = $execution->type == 'kanban' ? 'kanban' : $method;
-                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
-                $record->extraType = empty($execution->type) ? '' : $execution->type;
-            }
-            elseif($module == 'story' or $module == 'requirement')
-            {
-                $story  = $objectList[$module][$record->objectID];
-                $module = 'story';
-                if(!empty($story->lib))
-                {
-                    $module = 'assetlib';
-                    $method = 'storyView';
-                }
-
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-
-                if($this->config->vision == 'lite') $record->url = helper::createLink('projectstory', $method, "storyID={$record->objectID}", '', false, 0, true);
-
-                $record->extraType = isset($story->type) ? $story->type : '';
-            }
-            elseif(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max'  or $this->config->edition == 'ipd'))
-            {
-                $object = $objectList[$module][$record->objectID];
-                if(!empty($object->lib))
-                {
-                    $method = $module == 'risk' ? 'riskView' : 'opportunityView';
-                    $module = 'assetlib';
-                }
-
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-            }
-            elseif($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
-            {
-                $doc = $objectList['doc'][$record->objectID];
-                if(!empty($doc->assetLib))
-                {
-                    $module = 'assetlib';
-                    $method = $doc->assetLibType == 'practice' ? 'practiceView' : 'componentView';
-                }
-
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-            }
-            else
-            {
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}");
-            }
-        }
-
-        return $results;
+        $objectList = $this->searchTao->getobjectList($idListGroup);
+        return $this->processResults($results, $objectList, $words);
     }
 
     /**
@@ -850,18 +622,19 @@ class searchModel extends model
     }
 
     /**
+     * 将 unicode 转换为对应的字。
      * Transfer unicode to words.
      *
-     * @param  string    $string
+     * @param  string $string
      * @access public
-     * @return void
+     * @return string
      */
-    public function decode($string)
+    public function decode(string $string): string
     {
         static $dict;
         if(empty($dict))
         {
-            $dict = $this->dao->select("concat(`key`, ' ') as `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
+            $dict = $this->dao->select("concat(`key`, ' ') AS `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
             $dict['|'] = '';
         }
         if(strpos($string, ' ') === false) return zget($dict, $string . ' ');
@@ -869,14 +642,15 @@ class searchModel extends model
     }
 
     /**
+     * 获取结果显示的摘要。
      * Get summary of results.
      *
-     * @param  string    $content
-     * @param  string    $words
+     * @param  string $content
+     * @param  string $words
      * @access public
      * @return string
      */
-    public function getSummary($content, $words)
+    public function getSummary(string $content, string $words): string
     {
         $length = $this->config->search->summaryLength;
         if(strlen($content) <= $length) return $this->decode($this->markKeywords($content, $words));
@@ -901,9 +675,7 @@ class searchModel extends model
 
         $content = str_replace('<span class', ' <spanclass', $content);
         $content = explode(' ', $content);
-
         $pos     = array_search(str_replace('<span class', '<spanclass', $needle), $content);
-
         $start   = max(0, $pos - ($length / 2));
         $summary = join(' ', array_slice($content, $start, $length));
         $summary = str_replace(' <spanclass', '<span class', $summary);
@@ -912,203 +684,49 @@ class searchModel extends model
     }
 
     /**
+     * 检查查询到的结果的权限。
      * Check product and project priv.
      *
-     * @param  array    $results
-     * @param  array    $objectPairs
+     * @param  array  $results
+     * @param  array  $objectPairs
      * @access public
      * @return array
      */
-    public function checkPriv($results, $objectPairs = array())
+    public function checkPriv(array $results, array $objectPairs = array()): array
     {
         if($this->app->user->admin) return $results;
 
-        $this->loadModel('doc');
-        $products       = $this->app->user->view->products;
-        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs('id');
-        $programs       = $this->app->user->view->programs;
-        $projects       = $this->app->user->view->projects;
-        $executions     = $this->app->user->view->sprints;
+        $products   = $this->app->user->view->products;
+        $executions = $this->app->user->view->sprints;
 
-        $objectPairs = array();
-        $total       = count($results);
-        if(empty($objectPairs))
-        {
-            foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
-        }
-
+        if(empty($objectPairs)) foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
         foreach($objectPairs as $objectType => $objectIdList)
         {
-            $objectProducts = array();
-            $objectExecutions = array();
             if(!isset($this->config->objectTables[$objectType])) continue;
+
             $table = $this->config->objectTables[$objectType];
-            if(strpos(',bug,case,testcase,productplan,release,story,testtask,', ",$objectType,") !== false)
-            {
-               $objectProducts = $this->dao->select('id,product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
-            }
-            elseif(strpos(',build,task,testreport,', ",$objectType,") !== false)
-            {
-               $objectExecutions = $this->dao->select('id,execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('execution', 'id');
-            }
-            elseif($objectType == 'effort')
-            {
-                $efforts = $this->dao->select('id,product,execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll();
-                foreach($efforts as $effort)
-                {
-                    $objectExecutions[$effort->execution][$effort->id] = $effort;
-                    $effortProducts = explode(',', trim($effort->product, ','));
-                    foreach($effortProducts as $effortProduct) $objectProducts[$effortProduct][$effort->id] = $effort;
-                }
-            }
-            elseif($objectType == 'product')
-            {
-                foreach($objectIdList as $productID => $recordID)
-                {
-                    if(strpos(",$products,", ",$productID,") === false) unset($results[$recordID]);
-                    if(in_array($productID, $shadowProducts)) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'program')
-            {
-                foreach($objectIdList as $programID => $recordID)
-                {
-                    if(strpos(",$programs,", ",$programID,") === false) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'project')
-            {
-                foreach($objectIdList as $projectID => $recordID)
-                {
-                    if(strpos(",$projects,", ",$projectID,") === false) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'execution')
-            {
-                foreach($objectIdList as $executionID => $recordID)
-                {
-                    if(strpos(",$executions,", ",$executionID,") === false) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'doc')
-            {
-                $objectDocs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchAll('id');
-                $privLibs = array();
-                foreach($objectIdList as $docID => $recordID)
-                {
-                    if(!isset($objectDocs[$docID]) or !$this->doc->checkPrivDoc($objectDocs[$docID]))
-                    {
-                        unset($results[$recordID]);
-                        continue;
-                    }
-
-                    $objectDoc = $objectDocs[$docID];
-                    $privLibs[$objectDoc->lib] = $objectDoc->lib;
-                }
-
-                $libs = $this->doc->getLibs('all');
-                $objectDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('id')->in($privLibs)
-                    ->andWhere('id')->in(array_keys($libs))
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'id');
-                foreach($objectDocs as $docID => $doc)
-                {
-                    $libID = $doc->lib;
-                    if(!isset($objectDocLibs[$libID]))
-                    {
-                        $recordID = $objectIdList[$docID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            elseif($objectType == 'todo')
-            {
-                $objectTodos = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere("private")->eq(1)->andWhere('account')->ne($this->app->user->account)->fetchPairs('id', 'id');
-                foreach($objectTodos as $todoID)
-                {
-                    if(isset($objectIdList[$todoID]))
-                    {
-                        $recordID = $objectIdList[$todoID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            elseif($objectType == 'testsuite')
-            {
-                $objectSuites = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))
-                    ->andWhere("type")->eq('private')
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'id');
-                foreach($objectSuites as $suiteID)
-                {
-                    if(isset($objectIdList[$suiteID]))
-                    {
-                        $recordID = $objectIdList[$suiteID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            elseif(strpos(',feedback,ticket,', ",$objectType,") !== false)
-            {
-                $grantProducts = $this->loadModel('feedback')->getGrantProducts();
-                $objects       = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
-                foreach($objects as $objectID => $object)
-                {
-                    if($objectType == 'feedback' and $object->openedBy == $this->app->user->account) continue;
-                    if(isset($grantProducts[$object->product])) continue;
-                    if(isset($objectIdList[$objectID]))
-                    {
-                        $recordID = $objectIdList[$objectID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-
-            foreach($objectProducts as $productID => $idList)
-            {
-                if(empty($productID)) continue;
-                if(strpos(",$products,", ",$productID,") === false)
-                {
-                    foreach($idList as $object)
-                    {
-                        $recordID = $objectIdList[$object->id];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            foreach($objectExecutions as $executionID => $idList)
-            {
-                if(empty($executionID)) continue;
-                if(strpos(",$executions,", ",$executionID,") === false)
-                {
-                    foreach($idList as $object)
-                    {
-                        $recordID = $objectIdList[$object->id];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
+            $results = $this->searchTao->checkObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
+            $results = $this->searchTao->checkRelatedObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
         }
         return $results;
     }
 
     /**
+     * 在文中标记关键词。
      * Mark keywords in content.
      *
-     * @param  string    $content
-     * @param  string    $keywords
+     * @param  string $content
+     * @param  string $keywords
      * @access public
-     * @return void
+     * @return string
      */
-    public function markKeywords($content, $keywords)
+    public function markKeywords(string $content, string $keywords): string
     {
         $words = explode(' ', trim($keywords, ' '));
-        $markedWords = array();
         $leftMark  = '|0000';
         $rightMark = '0000|';
 
+        $markedWords = array();
         foreach($words as $key => $word)
         {
             if(preg_match('/^\|[0-9]+\|$/', $word))
@@ -1284,14 +902,15 @@ class searchModel extends model
     }
 
     /**
+     * 将特殊符号替换成统一的符号。
      * Unified processing of search keywords.
      *
-     * @param  string    $string
-     * @param  string    $to
+     * @param  string $string
+     * @param  string $to
      * @access public
-     * @return void
+     * @return string
      */
-    public static function unify($string, $to = ',')
+    public static function unify(string $string, string $to = ','): string
     {
         $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
         $string = str_replace($labels, $to, $string);

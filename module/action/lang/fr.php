@@ -454,6 +454,7 @@ $lang->action->label->syncprogram             = 'start';
 $lang->action->label->syncproject             = 'start';
 $lang->action->label->syncexecution           = 'start';
 $lang->action->label->syncexecutionbychild    = 'start';
+$lang->action->label->syncmultipleproject     = 'start';
 $lang->action->label->startProgram            = '(The start of the project sets the status of the program as Ongoing)';
 $lang->action->label->createmr                = 'Merge Request Linked';
 $lang->action->label->deletemr                = 'Merge Request Unlinked';
@@ -513,6 +514,7 @@ $lang->action->label->uncollected             = 'uncollected';
 $lang->action->label->online                  = 'online';
 $lang->action->label->offline                 = 'offline';
 $lang->action->label->linkhost                = 'link hosts to';
+$lang->action->label->delist                  = 'delist';
 $lang->action->label->createrepobranch        = 'Created branch from';
 
 /* Dynamic information is grouped by object. */

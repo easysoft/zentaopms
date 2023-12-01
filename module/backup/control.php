@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of backup of ZenTaoPMS.
  *
@@ -16,10 +17,12 @@ class backup extends control
     /**
      * __construct
      *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
@@ -50,33 +53,11 @@ class backup extends control
         $this->loadModel('action');
 
         $backups = array();
-        if(empty($this->view->error))
-        {
-            $sqlFiles = glob("{$this->backupPath}*.sql*");
-            if(!empty($sqlFiles))
-            {
-                foreach($sqlFiles as $file)
-                {
-                    $fileName   = basename($file);
-                    $backupFile = new stdclass();
-                    $backupFile->time  = filemtime($file);
-                    $backupFile->name  = substr($fileName, 0, strpos($fileName, '.'));
-                    $backupFile->files[$file] = $this->backup->getBackupSummary($file);
-
-                    $fileBackup = $this->backup->getBackupFile($backupFile->name, 'file');
-                    if($fileBackup) $backupFile->files[$fileBackup] = $this->backup->getBackupSummary($fileBackup);
-
-                    $codeBackup = $this->backup->getBackupFile($backupFile->name, 'code');
-                    if($codeBackup) $backupFile->files[$codeBackup] = $this->backup->getBackupSummary($codeBackup);
-
-                    $backups[$backupFile->name] = $backupFile;
-                }
-            }
-        }
-        krsort($backups);
+        if(empty($this->view->error)) $backups = $this->backupZen->getBackupList();
 
         $this->view->title   = $this->lang->backup->common;
         $this->view->backups = $backups;
+
         if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
         if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());
         $this->display();
@@ -88,7 +69,7 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDiskSpace(): void
+    public function ajaxGetDiskSpace()
     {
         set_time_limit(0);
         session_write_close();
@@ -102,7 +83,6 @@ class backup extends control
         echo json_encode($space);
     }
 
-
     /**
      * Backup.
      *
@@ -110,68 +90,41 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function backup($reload = 'no')
+    public function backup(string $reload = 'no')
     {
         if($reload == 'yes') session_write_close();
+
         set_time_limit(0);
-        $nofile = strpos($this->config->backup->setting, 'nofile') !== false;
-        $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
 
         $fileName = date('YmdHis') . mt_rand(0, 9);
-        $backFileName = "{$this->backupPath}{$fileName}.sql";
-        if(!$nosafe) $backFileName .= '.php';
-        $result = $this->backup->backSQL($backFileName);
-
-        if(!$result->result)
+        $result   = $this->backupZen->backupSQL($fileName, $reload);
+        if($result['result'] == 'fail')
         {
-            if($reload == 'yes') return print(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
-            printf($this->lang->backup->error->noWritable, $this->backupPath);
+            if($reload == 'yes') return print($result['message']);
+            printf($result['message']);
         }
-        if(!$nosafe) $this->backup->addFileHeader($backFileName);
 
+        $nofile = str_contains($this->config->backup->setting, 'nofile');
         if(!$nofile)
         {
-            $backFileName = "{$this->backupPath}{$fileName}.file";
-
-            $result = $this->backup->backFile($backFileName);
-
-            if(!$result->result)
+            $result = $this->backupZen->backupFile($fileName, $reload);
+            if($result['result'] == 'fail')
             {
-                if($reload == 'yes') return print(sprintf($this->lang->backup->error->backupFile, $result->error));
-                printf($this->lang->backup->error->backupFile, $result->error);
+                if($reload == 'yes') return print($result['message']);
+                printf($result['message']);
             }
 
-            $backFileName = "{$this->backupPath}{$fileName}.code";
-
-            $result = $this->backup->backCode($backFileName);
-            if(!$result->result)
+            $result = $this->backupZen->backupCode($fileName, $reload);
+            if($result['result'] == 'fail')
             {
-                if($reload == 'yes') return print(sprintf($this->lang->backup->error->backupCode, $result->error));
-                printf($this->lang->backup->error->backupCode, $result->error);
+                if($reload == 'yes') return print($result['message']);
+                printf($result['message']);
             }
         }
+
 
         /* Delete expired backup. */
-        $backupFiles = glob("{$this->backupPath}*.*");
-        if(!empty($backupFiles))
-        {
-            $time  = time();
-            $zfile = $this->app->loadClass('zfile');
-            foreach($backupFiles as $file)
-            {
-                /* Only delete backup file. */
-                $fileName = basename($file);
-                if(!preg_match('/[0-9]+\.(sql|file|code)/', $fileName)) continue;
-
-                /* Remove before holdDays file. */
-                if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600)
-                {
-                    $rmFunc = is_file($file) ? 'removeFile' : 'removeDir';
-                    $zfile->{$rmFunc}($file);
-                    if($rmFunc == 'removeDir') $this->backup->processSummary($file, 0, 0, array(), 0, 'delete');
-                }
-            }
-        }
+        $this->backupZen->removeExpiredFiles();
 
         if($reload == 'yes') return print($this->lang->backup->success->backup);
         echo $this->lang->backup->success->backup . "\n";
@@ -184,46 +137,19 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function restore($fileName)
+    public function restore(string $fileName)
     {
         set_time_limit(0);
 
         /* Restore database. */
-        if(file_exists("{$this->backupPath}{$fileName}.sql.php"))
-        {
-            $sqlBackup = "{$this->backupPath}{$fileName}.sql.php";
-            $this->backup->removeFileHeader($sqlBackup);
-            $result = $this->backup->restoreSQL($sqlBackup);
-            $this->backup->addFileHeader($sqlBackup);
-            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
-        }
-        elseif(file_exists("{$this->backupPath}{$fileName}.sql"))
-        {
-            $result = $this->backup->restoreSQL("{$this->backupPath}{$fileName}.sql");
-            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
-        }
+        $result = $this->backupZen->restoreSQL($fileName);
+        if($result['result'] == 'fail') return $this->send($result);
 
         /* Restore attachments. */
-        if(file_exists("{$this->backupPath}{$fileName}.file.zip.php"))
-        {
-            $fileBackup = "{$this->backupPath}{$fileName}.file.zip.php";
-            $this->backup->removeFileHeader($fileBackup);
-            $result = $this->backup->restoreFile($fileBackup);
-            $this->backup->addFileHeader($fileBackup);
-            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
-        }
-        elseif(file_exists("{$this->backupPath}{$fileName}.file.zip"))
-        {
-            $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file.zip");
-            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
-        }
-        elseif(file_exists("{$this->backupPath}{$fileName}.file"))
-        {
-            $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file");
-            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
-        }
+        $result = $this->backupZen->restoreFile($fileName);
+        if($result['result'] == 'fail') return $this->send($result);
 
-        return $this->send(array('result' => 'success', 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}')"));
+        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}').then(() => {loadCurrentPage()})"));
     }
 
     /**
@@ -233,7 +159,7 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function rmPHPHeader($fileName)
+    public function rmPHPHeader(string $fileName)
     {
         if(file_exists($this->backupPath . $fileName . '.sql.php'))
         {
@@ -251,7 +177,7 @@ class backup extends control
             rename($this->backupPath . $fileName . '.code.zip.php', $this->backupPath . $fileName . '.code.zip');
         }
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -261,48 +187,20 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function delete($fileName)
+    public function delete(string $fileName)
     {
-        /* Delete database file. */
-        if(file_exists($this->backupPath . $fileName . '.sql.php') and !unlink($this->backupPath . $fileName . '.sql.php'))
+        foreach(glob($this->backupPath . "{$fileName}*") as $backupFile)
         {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql.php')));
-        }
-        if(file_exists($this->backupPath . $fileName . '.sql') and !unlink($this->backupPath . $fileName . '.sql'))
-        {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql')));
-        }
-
-        /* Delete attachments file. */
-        if(file_exists($this->backupPath . $fileName . '.file.zip.php') and !unlink($this->backupPath . $fileName . '.file.zip.php'))
-        {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));
-        }
-        if(file_exists($this->backupPath . $fileName . '.file.zip') and !unlink($this->backupPath . $fileName . '.file.zip'))
-        {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip')));
-        }
-        if(file_exists($this->backupPath . $fileName . '.file'))
-        {
-            $zfile = $this->app->loadClass('zfile');
-            $zfile->removeDir($this->backupPath . $fileName . '.file');
-            $this->backup->processSummary($this->backupPath . $fileName . '.file', 0, 0, array(), 0, 'delete');
-        }
-
-        /* Delete code file. */
-        if(file_exists($this->backupPath . $fileName . '.code.zip.php') and !unlink($this->backupPath . $fileName . '.code.zip.php'))
-        {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
-        }
-        if(file_exists($this->backupPath . $fileName . '.code.zip') and !unlink($this->backupPath . $fileName . '.code.zip'))
-        {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip')));
-        }
-        if(file_exists($this->backupPath . $fileName . '.code'))
-        {
-            $zfile = $this->app->loadClass('zfile');
-            $zfile->removeDir($this->backupPath . $fileName . '.code');
-            $this->backup->processSummary($this->backupPath . $fileName . '.code', 0, 0, array(), 0, 'delete');
+            if(is_dir($backupFile))
+            {
+                $zfile = $this->app->loadClass('zfile');
+                $zfile->removeDir($backupFile);
+                $this->backup->processSummary($backupFile, 0, 0, array(), 0, 'delete');
+            }
+            elseif(!unlink($backupFile))
+            {
+                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $backupFile)));
+            }
         }
 
         return $this->sendSuccess(array('load' => true));
@@ -320,7 +218,7 @@ class backup extends control
         {
             $data = fixer::input('post')->get();
             $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->display();
@@ -364,8 +262,8 @@ class backup extends control
             if($settingDir)
             {
                 $settingDir = rtrim($settingDir, DS) . DS;
-                if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) return print(js::alert($this->lang->backup->error->noCreateDir));
-                if(!is_writable($settingDir)) return print(js::alert(strip_tags(sprintf($this->lang->backup->error->noWritable, $settingDir))));
+                if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) return $this->send(array('result' => 'fail', 'message' => $this->lang->backup->error->noCreateDir));
+                if(!is_writable($settingDir)) return $this->send(array('result' => 'fail', 'message' => strip_tags(sprintf($this->lang->backup->error->noWritable, $settingDir))));
                 if($data->settingDir == $this->app->getTmpRoot() . 'backup' . DS) $settingDir = '';
             }
 

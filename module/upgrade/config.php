@@ -41,7 +41,8 @@ $config->upgrade->maxVersion['max4_4']        = '18_4';
 $config->upgrade->maxVersion['max4_5']        = '18_5';
 $config->upgrade->maxVersion['max4_6']        = '18_6';
 $config->upgrade->maxVersion['max4_7']        = '18_7';
-$config->upgrade->maxVersion['max4_8']        = '18_8'; // max insert position.
+$config->upgrade->maxVersion['max4_8']        = '18_8';
+$config->upgrade->maxVersion['max4_9']        = '18_9'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']        = '9_5_1';
@@ -121,7 +122,8 @@ $config->upgrade->bizVersion['biz8_4']        = '18_4';
 $config->upgrade->bizVersion['biz8_5']        = '18_5';
 $config->upgrade->bizVersion['biz8_6']        = '18_6';
 $config->upgrade->bizVersion['biz8_7']        = '18_7';
-$config->upgrade->bizVersion['biz8_8']        = '18_8'; // biz insert position.
+$config->upgrade->bizVersion['biz8_8']        = '18_8';
+$config->upgrade->bizVersion['biz8_9']        = '18_9'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -238,7 +240,8 @@ $config->upgrade->ipdVersion['ipd1_0_beta1'] = '18_4_alpha1';
 $config->upgrade->ipdVersion['ipd1_0']       = '18_5';
 $config->upgrade->ipdVersion['ipd1_0_1']     = '18_6';
 $config->upgrade->ipdVersion['ipd1_0_2']     = '18_7';
-$config->upgrade->ipdVersion['ipd1_1']       = '18_8'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd1_1']       = '18_8';
+$config->upgrade->ipdVersion['ipd1_1_1']     = '18_9'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -911,7 +914,9 @@ $config->delete['18_6'][] = 'extension/ipd/ops/lang/en.php';
 $config->delete['18_6'][] = 'extension/ipd/ops/control.php';
 $config->delete['18_6'][] = 'extension/ipd/ops/js/setting.js';
 $config->delete['18_6'][] = 'module/gitlab/js/browseproject.js';
-
+$config->delete['18_8'][] = 'extension/biz/screen/ext/control/ajaxgetchart.php';
+$config->delete['18_8'][] = 'extension/max/screen/ext/control/ajaxgetchart.php';
+$config->delete['18_8'][] = 'extension/ipd/screen/ext/control/ajaxgetchart.php';
 $config->delete['18_8'][] = 'config/ext/feedback.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution');
@@ -972,3 +977,5 @@ $config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
 $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';
 
 $config->upgrade->missedFlowFieldVersions = array('max4_4_alpha1', 'max4_4_beta1', 'max4_4', 'max4_5', 'biz8_4_alpha1', 'biz8_4_beta1', 'biz8_4', 'biz8_5');
+
+include dirname(__FILE__) . DS . 'config' . DS . 'upgradeflow.php';

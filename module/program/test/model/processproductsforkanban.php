@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 programModel::processProductsForKanban();
+timeout=0
+cid=1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/program.class.php';
 zdTable('user')->gen(5);
@@ -13,13 +21,8 @@ zdTable('productplan')->gen(0);
 zdTable('release')->gen(0);
 zdTable('team')->gen(0);
 
-/**
-
-title=测试 programModel::processProductsForKanban();
-timeout=0
-cid=1
-
-*/
+global $app;
+$app->rawModule = 'program';
 
 $programTester = new programTest();
 $productGroup  = $programTester->processProductsForKanbanTest();

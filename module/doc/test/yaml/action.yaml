@@ -1,0 +1,14 @@
+title: zt_action.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: objectType
+    range: doc
+  - field: objectID
+    range: 1-20
+  - field: action
+    range: edited
+  - field: actor
+    range: admin,user1,user2

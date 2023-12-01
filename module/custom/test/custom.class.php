@@ -8,17 +8,17 @@ class customTest
     }
 
     /**
+     * 设置自定义语言项。
      * Test set value of an item.
      *
-     * @param  string      $path
-     * @param  string      $value
+     * @param  string           $path  zh-cn.story.soucreList.customer.1
+     * @param  string           $value
      * @access public
-     * @return object|int
+     * @return object|array|bool
      */
-    public function setItemTest($path, $value = '')
+    public function setItemTest(string $path, string $value = ''): object|array|bool
     {
         $objects = $this->objectModel->setItem($path, $value);
-
         if(dao::isError()) return dao::getError();
 
         $level = substr_count($path, '.');
@@ -28,27 +28,26 @@ class customTest
             if($level == 3) list($lang, $module, $section, $key) = explode('.', $path);
             if($level == 4) list($lang, $module, $section, $key, $system) = explode('.', $path);
 
-            global $tester;
-            $objects = $tester->dao->select('*')->from(TABLE_LANG)->where('`lang`')->eq($lang)->andWhere('`module`')->eq($module)->andWhere('`key`')->eq($key)->fetch();
+            $objects = $this->objectModel->dao->select('*')->from(TABLE_LANG)->where('`lang`')->eq($lang)->andWhere('`module`')->eq($module)->andWhere('`key`')->eq($key)->fetch();
         }
 
         return $objects;
     }
 
     /**
-     * Test get some items
+     * 获取自定义语言项。
+     * Get value of custom items.
      *
-     * @param  string   $paramString
+     * @param  string $paramString
      * @access public
      * @return array
      */
-    public function getItemsTest($paramString)
+    public function getItemsTest(string $paramString): array
     {
-        $objects = $this->objectModel->getItems($paramString);
+        $items = $this->objectModel->getItems($paramString);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $items;
     }
 
     /**
@@ -109,15 +108,6 @@ class customTest
         return $objects;
     }
 
-    public function saveCustomMenuTest($menu, $module, $method = '')
-    {
-        $objects = $this->objectModel->saveCustomMenu($menu, $module, $method);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * 获取必填字段。
      * Test get required fields.
@@ -136,68 +126,68 @@ class customTest
     }
 
     /**
-     * Test get module fields.
+     * 获取表单必填字段。
+     * Test get form required fields.
      *
      * @param  string $moduleName
      * @param  string $method
      * @access public
      * @return array
      */
-    public function getFormFieldsTest($moduleName, $method = '')
+    public function getFormFieldsTest($moduleName, $method = ''): array
     {
         global $app;
         $app->loadLang($moduleName);
 
-        $objects = $this->objectModel->getFormFields($moduleName, $method);
-
+        $fields = $this->objectModel->getFormFields($moduleName, $method);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $fields;
     }
 
     /**
-     * Test get UR and SR pairs.
+     * 获取需求概念集合。
+     * Get UR and SR pairs.
      *
      * @access public
      * @return array
      */
-    public function getURSRPairsTest()
+    public function getURSRPairsTest(): array
     {
-        $objects = $this->objectModel->getURSRPairs();
-
+        $URSRPairs = $this->objectModel->getURSRPairs();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $URSRPairs;
     }
 
     /**
+     * 获取用需求概念集合。
      * Test get UR pairs.
      *
      * @access public
      * @return array
      */
-    public function getURPairsTest()
+    public function getURPairsTest(): array
     {
-        $objects = $this->objectModel->getURPairs();
-
+        $URPairs = $this->objectModel->getURPairs();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $URPairs;
     }
 
     /**
+     * 获取软需概念集合。
      * Test get SR pairs.
      *
      * @access public
      * @return array
      */
-    public function getSRPairsTest()
+    public function getSRPairsTest(): array
     {
-        $objects = $this->objectModel->getSRPairs();
-
+        $SRPairs = $this->objectModel->getSRPairs();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $SRPairs;
     }
 
     /**
@@ -293,15 +283,6 @@ class customTest
 
         if(!$concept) return array();
         return json_decode($concept, true);
-    }
-
-    public function setStoryRequirementTest()
-    {
-        $objects = $this->objectModel->setStoryRequirement();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -623,5 +604,157 @@ class customTest
         $this->objectModel->config->vision = $oldVision;
         if(dao::isError()) return dao::getError();
         return $processedLang;
+    }
+
+    /**
+     * 构造自定义导航数据。
+     * Build custom menu data.
+     *
+     * @access public
+     * @return array
+     */
+    public static function buildCustomMenuMapTest(): array
+    {
+        global $config;
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+
+        return customModel::buildCustomMenuMap($customMenu, 'main')[0];
+    }
+
+    /**
+     * 构造菜单数据。
+     * Build menu data.
+     *
+     * @param  string $module main|product|my and so on
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function buildMenuItemsTest(string $module = 'main'): array
+    {
+        global $config, $lang;
+
+        $allMenu = new stdclass();
+        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
+        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
+        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
+        if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+
+        return customModel::buildMenuItems($allMenu, $customMenuMap, $module);
+    }
+
+    /**
+     * 构造菜单数据项。
+     * Build menu item.
+     *
+     * @static
+     * @access public
+     * @return object
+     */
+    public static function buildMenuItemTest(): object
+    {
+        global $config, $lang;
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+
+        return customModel::buildMenuItem('', $customMenuMap);
+    }
+
+    /**
+     * 构造菜单数据。
+     * Build menu data.
+     *
+     * @param  string $module main|product|my and so on
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function setMenuByConfigTest(string $module = 'main'): array
+    {
+        global $config, $lang;
+
+        $allMenu = new stdclass();
+        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
+        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
+        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
+        if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+
+        return customModel::setMenuByConfig($allMenu, $customMenuMap, $module);
+    }
+
+    /**
+     * 获取模块菜单数据，如果模块是'main'则返回主菜单。
+     * Get module menu data, if module is 'main' then return main menu.
+     *
+     * @param  string $module
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function getModuleMenuTest(string $module = 'main'): array
+    {
+        return customModel::getModuleMenu($module);
+    }
+
+    /**
+     * 获取主菜单数据。
+     * Get main menu data.
+     *
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function getMainMenuTest(): array
+    {
+        return customModel::getMainMenu();
+    }
+
+    /**
+     * 获取模块的筛选标签。
+     * Get feature menu.
+     *
+     * @param  string     $module
+     * @param  string     $method
+     * @static
+     * @access public
+     * @return array|null
+     */
+    public static function getFeatureMenuTest(string $module, string $method): array|null
+    {
+        return customModel::getFeatureMenu($module, $method);
+    }
+
+    /**
+     * 将查询条件合并到筛选标签中。
+     * Merge shortcut query in featureBar.
+     *
+     * @param  string     $module
+     * @param  string     $method
+     * @static
+     * @access public
+     * @return array|null
+     */
+    public static function mergeFeatureBarTest(string $module, string $method): array|null
+    {
+        global $lang;
+        customModel::mergeFeatureBar($module, $method);
+
+        return isset($lang->$module->featureBar[$method]) ? $lang->$module->featureBar[$method] : null;
     }
 }

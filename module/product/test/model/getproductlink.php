@@ -31,7 +31,7 @@ r($productModel->getProductLink('product',     'dynamic'))     && p() && e('/pro
 r($productModel->getProductLink('project',     'bug'))         && p() && e('/project-bug--%s.html');                              //当前页面是project-bug，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('qa',          'index'))       && p() && e('/bug-browse-%s.html');                                //当前页面是qa-index，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('story',       'report'))      && p() && e('/story-report-%s-all-.html');                         //当前页面是story-report，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('testcase',    'browse'))      && p() && e('/testcase-browse-%s-all-.html');                      //当前页面是testcase-browse，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('testcase',    'browse'))      && p() && e('/testcase-browse-%s-all.html');                      //当前页面是testcase-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testreport',  'create'))      && p() && e('/testreport-create--testtask-%s.html');               //当前页面是testreport-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testreport',  'edit'))        && p() && e('/testreport-browse-%s.html');                         //当前页面是testreport-edit，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testtask',    'browseUnits')) && p() && e('/testtask-browseUnits-%s-newest-id_desc-0-0-1.html'); //当前页面是testtask-browseUnits，切换1.5级导航时跳转链接。

@@ -253,7 +253,12 @@ class deptModel extends model
      */
     public function updateOrder($orders): bool
     {
-        foreach($orders as $deptID => $order) $this->dao->update(TABLE_DEPT)->set('`order`')->eq($order)->where('id')->eq($deptID)->exec();
+        $order = 1;
+        foreach($orders as $deptID)
+        {
+            $this->dao->update(TABLE_DEPT)->set('`order`')->eq($order)->where('id')->eq($deptID)->exec();
+            $order ++;
+        }
         return !dao::isError();
     }
 
@@ -436,7 +441,7 @@ class deptModel extends model
         }
 
         krsort($tree);
-        return array_pop($tree);
+        return $tree ? array_pop($tree) : array();
     }
 
     /**

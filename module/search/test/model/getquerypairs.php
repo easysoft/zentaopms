@@ -9,16 +9,16 @@ zdTable('userquery')->config('userquery')->gen(50);
 /**
 
 title=测试 searchModel->getQueryPairs();
+timeout=0
 cid=1
-pid=1
 
-查询module为task的键值对 >> 这是搜索条件名称1
-查询module为executionStory的键值对 >> 这是搜索条件名称2
-查询module为user的键值对 >> 这是搜索条件名称3
-查询module为projectBuild的键值对 >> 这是搜索条件名称4
-查询module为executionBuild的键值对 >> 这是搜索条件名称5
-查询module为design的键值对 >> 这是搜索条件名称6
-查询module不存在的情况 >> 我的查询
+- 查询module为task的键值对属性1 @这是搜索条件名称1
+- 查询module为executionStory的键值对属性2 @这是搜索条件名称2
+- 查询module为user的键值对属性3 @这是搜索条件名称3
+- 查询module为projectBuild的键值对属性4 @这是搜索条件名称4
+- 查询module为executionBuild的键值对属性5 @这是搜索条件名称5
+- 查询module为design的键值对属性6 @这是搜索条件名称6
+- 查询module不存在的情况属性-1 @我的查询
 
 */
 

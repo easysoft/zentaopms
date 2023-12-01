@@ -33,7 +33,7 @@ toolbar
         (
             setClass('btn primary create-user-btn'),
             set::icon('plus'),
-            set::url(createLink('user', 'create', "deptID={$deptID}")),
+            set::url(createLink('user', 'create', "deptID={$deptID}&type={$browseType}")),
             $lang->user->create
         ),
         dropdown
@@ -43,8 +43,8 @@ toolbar
             (
                 array
                 (
-                    array('text' => $lang->user->create,      'url' => createLink('user', 'create', "deptID={$deptID}"), 'className' => '.create-user-btn'),
-                    array('text' => $lang->user->batchCreate, 'url' => createLink('user', 'batchCreate', "deptID={$deptID}"))
+                    array('text' => $lang->user->create,      'url' => createLink('user', 'create', "deptID={$deptID}&type={$browseType}"), 'className' => '.create-user-btn'),
+                    array('text' => $lang->user->batchCreate, 'url' => createLink('user', 'batchCreate', "deptID={$deptID}&type={$browseType}")),
                 )
             ),
             set::placement('bottom-end')
@@ -67,7 +67,7 @@ sidebar
     )))
 );
 $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
-    'items' => array(array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'data-url' => createLink('user', 'batchEdit'))),
+    'items' => array(array('text' => $lang->edit, 'className' => 'secondary open-url', 'data-load' => 'post', 'data-url' => createLink('user', 'batchEdit', "deptID={$deptID}&type={$browseType}"), 'data-data-map' => 'userIdList[]: #userList~checkedIDList')),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
 ) : null;
 

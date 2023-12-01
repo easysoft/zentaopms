@@ -55,7 +55,7 @@ $emptyTitleProject = clone $data;
 $emptyTitleProject->name = '';
 
 $emptyBeginProject = clone $data;
-$emptyBeginProject->begin = null;
+$emptyBeginProject->begin = '0000-00-00';
 
 $emptyEndProject = clone $data;
 $emptyEndProject->end = '';

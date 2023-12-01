@@ -12,20 +12,10 @@
 class datatable extends control
 {
     /**
-     * Construct function, set menu.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
+     * 设置列表页是否显示模块名。
      * Set display.
      *
-     * @param  string $datatableId
+     * @param  string $datatableID
      * @param  string $moduleName
      * @param  string $methodName
      * @param  string $currentModule
@@ -33,15 +23,15 @@ class datatable extends control
      * @access public
      * @return void
      */
-    public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
+    public function ajaxDisplay(string $datatableID, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
     {
         $this->app->loadLang($currentModule);
         $this->app->loadConfig($currentModule);
 
-        if($currentModule == 'product' && $currentMethod == 'browse')     $this->view->showBranch = $this->loadModel('branch')->showBranch($this->session->product);
-        if($currentModule == 'projectstory' && $currentMethod == 'story') $this->view->showBranch = $this->loadModel('branch')->showBranch(0, 0, $this->session->project);
+        if($currentModule == 'product'      && $currentMethod == 'browse') $this->view->showBranch = $this->loadModel('branch')->showBranch($this->session->product);
+        if($currentModule == 'projectstory' && $currentMethod == 'story')  $this->view->showBranch = $this->loadModel('branch')->showBranch(0, 0, $this->session->project);
 
-        $this->view->datatableId   = $datatableId;
+        $this->view->datatableID   = $datatableID;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;
         $this->view->currentModule = $currentModule;
@@ -50,6 +40,7 @@ class datatable extends control
     }
 
     /**
+     * 保存列表页是否显示模块名的配置项。
      * Save config
      *
      * @access public
@@ -71,6 +62,7 @@ class datatable extends control
     }
 
     /**
+     * 自定义列页面保存配置。
      * Ajax save fields.
      *
      * @param  string $module
@@ -89,8 +81,9 @@ class datatable extends control
             $fieldList  = $this->datatable->getFieldList($rawModule, $method);
             $postFields = json_decode($this->post->fields);
 
+            /* 生成配置信息。 */
             $fields = array();
-            foreach($postFields as $index => $field)
+            foreach($postFields as $field)
             {
                 $id = $field->id;
                 if($module == 'testcase' && $id == 'caseID') $id = 'id';
@@ -103,7 +96,11 @@ class datatable extends control
 
             $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
             $value = json_encode($fields);
+
+            /* 保存个人配置信息。 */
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
+
+            /* 保存全局配置信息。 */
             if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
@@ -112,6 +109,7 @@ class datatable extends control
     }
 
     /**
+     * 自定义列配置页面。
      * custom fields.
      *
      * @param  string $module
@@ -120,7 +118,7 @@ class datatable extends control
      * @access public
      * @return void
      */
-    public function ajaxCustom($module, $method, $extra = '')
+    public function ajaxCustom(string $module, string $method, string $extra = '')
     {
         $cols = $this->datatable->getSetting($module, $method, true);
         if(!$method) $method = $this->app->getMethodName();
@@ -170,7 +168,8 @@ class datatable extends control
     }
 
     /**
-     * Ajax reset cols
+     * 恢复自定义项为默认配置。
+     * Ajax reset cols.
      *
      * @param  string $module
      * @param  string $method
@@ -178,7 +177,7 @@ class datatable extends control
      * @access public
      * @return void
      */
-    public function ajaxReset($module, $method, $system = 0)
+    public function ajaxReset(string $module, string $method, int $system = 0)
     {
         $account = !$system ? $this->app->user->account : 'system';
         $target  = $module . ucfirst($method);

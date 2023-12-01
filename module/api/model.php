@@ -84,40 +84,29 @@ class apiModel extends model
     /**
      * Create an api doc.
      *
+     * @param  object   $formData
      * @access public
-     * @return object | bool
+     * @return int|bool
      */
-    public function create()
+    public function create(object $formData)
     {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->trim('title,path')
-            ->remove('type,undefined')
-            ->skipSpecial('params,response')
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', $now)
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->add('version', 1)
-            ->setDefault('product,module', 0)
-            ->stripTags($this->config->api->editor->create['id'], $this->config->allowedTags)
-            ->get();
-
-        $this->dao->insert(TABLE_API)->data($data)
+        $this->dao->insert(TABLE_API)->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
-            ->check('title', 'unique', "lib = $data->lib AND module = $data->module")
-            ->check('path', 'unique', "lib = $data->lib AND module = $data->module AND method = '$data->method'")
+            ->check('title', 'unique', "lib = $formData->lib AND module = $formData->module")
+            ->check('path',  'unique', "lib = $formData->lib AND module = $formData->module AND method = '$formData->method'")
             ->exec();
 
         if(dao::isError()) return false;
 
-        $data->id = $this->dao->lastInsertID();
+        $apiID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('api', $apiID, 'Created', '', '', '', false);
 
-        $apiSpec = $this->getApiSpecByData($data);
+        $formData->id = $apiID;
+        $apiSpec      = $this->getApiSpecByData($formData);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return $data;
+        return $apiID;
     }
 
     /**
@@ -153,57 +142,52 @@ class apiModel extends model
 
         if(dao::isError()) return false;
 
-        return $id;
+        $this->loadModel('action')->create('apistruct', $id, 'Created');
+
+        return true;
     }
 
     /**
      * Update a struct.
      *
-     * @param  int    $id
+     * @param  object $formData
      * @access public
      * @return array
      */
-    public function updateStruct($id)
+    public function updateStruct($formData)
     {
-        $old = $this->dao->findByID($id)->from(TABLE_APISTRUCT)->fetch();
-
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->trim('name')
-            ->skipSpecial('attribute')
-            ->add('lib', $old->lib)
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->stripTags($this->config->api->editor->editstruct['id'], $this->config->allowedTags)
-            ->remove('undefined')
-            ->get();
-
-        unset($data->addedBy);
-        unset($data->addedDate);
-
-        $data->version = $old->version + 1;
+        $oldData = $this->dao->findByID($formData->id)->from(TABLE_APISTRUCT)->fetch();
 
         $this->dao->update(TABLE_APISTRUCT)
-            ->data($data)->autoCheck()
+            ->data($formData)->autoCheck()
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
-            ->where('id')->eq($id)
+            ->where('id')->eq($formData->id)
             ->exec();
 
         if(dao::isError()) return false;
 
         /* Create a struct version */
         $version = array(
-            'name'      => $data->name,
-            'type'      => $data->type,
-            'desc'      => $data->desc,
-            'version'   => $data->version,
-            'attribute' => $data->attribute,
-            'addedBy'   => $data->editedBy,
-            'addedDate' => $data->editedDate
+            'name'      => $formData->name,
+            'type'      => $formData->type,
+            'desc'      => $formData->desc,
+            'version'   => $formData->version,
+            'attribute' => $formData->attribute,
+            'addedBy'   => $formData->editedBy,
+            'addedDate' => $formData->editedDate
         );
         $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
 
-        return common::createChanges($old, $data);
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldData, $formData);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('apistruct', $formData->id, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
@@ -211,46 +195,41 @@ class apiModel extends model
      *
      * @param  int $apiID
      * @access public
-     * @return bool|array
+     * @return bool
      */
-    public function update($apiID)
+    public function update(object $formData): bool
     {
-        $oldApi = $this->dao->findByID($apiID)->from(TABLE_API)->fetch();
+        $oldApi = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
 
-        if(!empty($_POST['editedDate']) and $oldApi->editedDate != $this->post->editedDate)
+        if($oldApi->editedDate != $formData->editedDate)
         {
-            dao::$errors[] = $this->lang->error->editedByOther;
+            dao::$errors['message'][] = $this->lang->error->editedByOther;
             return false;
         }
+        $formData->editedDate = helper::now();
 
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->skipSpecial('params,response')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->add('version', $oldApi->version)
-            ->setDefault('product,module', 0)
-            ->stripTags($this->config->api->editor->edit['id'], $this->config->allowedTags)
-            ->remove('type,undefined')
-            ->get();
-
-        $changes = common::createChanges($oldApi, $data);
-        if(!empty($changes)) $data->version = $oldApi->version + 1;
+        $changes = common::createChanges($oldApi, $formData);
+        if(!empty($changes)) $formData->version = $formData->version + 1;
 
         $this->dao->update(TABLE_API)
-            ->data($data)
+            ->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
-            ->where('id')->eq($apiID)
+            ->where('id')->eq($formData->id)
             ->exec();
 
         if(dao::isError()) return false;
 
-        $data->id = $apiID;
-        $apiSpec  = $this->getApiSpecByData($data);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('api', $formData->id, 'edited', '', '', '', false);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $apiSpec = $this->getApiSpecByData($formData);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**

@@ -74,13 +74,14 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        //include 'test/groupData/' . 'time-day.php';
-
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
+        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
+        $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
+        $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
-        $this->view->headerGroup   = isset(current($groupHeader)['headerGroup']);
+        $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
 
         $this->view->metrics       = $metrics;
         $this->view->groupMetrics  = $groupMetrics;
@@ -158,11 +159,11 @@ class metric extends control
     {
         // 保存当前的错误报告级别和显示错误的设置
         $originalDebug = $this->config->debug;
+        $isFirstGenerate = $this->metric->isFirstGenerate();
 
         // 开启调试模式
         $this->config->debug = 2;
 
-        $this->metric->clearMetricLib();
         $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
 
@@ -178,10 +179,14 @@ class metric extends control
                 $rows = $statement->fetchAll();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
+                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList, $isFirstGenerate);
                 $this->metric->insertMetricLib($records);
             }
             catch(Exception $e)
+            {
+                a($e->getMessage());
+            }
+            catch(Error $e)
             {
                 a($e->getMessage());
             }
@@ -253,10 +258,10 @@ class metric extends control
         return $this->send($optionList);
     }
 
-    public function ajaxGetMetricSideTree()
+    public function ajaxGetMetricSideTree($metricIDList, $checkedList)
     {
-        $metricIDList = explode(',', $_POST['metricIDList']);
-        $checkedList  = explode(',', $_POST['checkedList']);
+        $metricIDList = explode(',', $metricIDList);
+        $checkedList  = explode(',', $checkedList);
         $metrics = $this->metric->getMetricsByIDList($metricIDList);
 
         $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
@@ -271,9 +276,17 @@ class metric extends control
         $resultHeader = $this->metricZen->getViewTableHeader($metric);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
+        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        $this->view->groupHeader   = $groupHeader;
+        $this->view->groupData     = $groupData;
+        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
+        $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
+        $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
+        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+        $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+
         $this->view->metric        = $metric;
-        $this->view->resultHeader  = $resultHeader;
-        $this->view->resultData    = $resultData;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
@@ -287,10 +300,15 @@ class metric extends control
         $resultHeader = $this->metricZen->getViewTableHeader($metric);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
+        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        $this->view->groupHeader   = $groupHeader;
+        $this->view->groupData     = $groupData;
+        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+        $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+
         $this->view->viewType      = $viewType;
         $this->view->metric        = $metric;
-        $this->view->resultHeader  = $resultHeader;
-        $this->view->resultData    = $resultData;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
 

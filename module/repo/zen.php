@@ -600,39 +600,24 @@ class repoZen extends repo
      * @param  object    $repo
      * @param  string    $path
      * @param  string    $branchID
-     * @param  int       $refresh
-     * @param  string    $revision
-     * @param  object    $lastRevision
      * @param  string    $base64BranchID
      * @param  int       $objectID
      * @access protected
      * @return array
      */
-    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision, string $base64BranchID, int $objectID): array
+    protected function getFilesInfo(object $repo, string $path, string $branchID, string $base64BranchID, int $objectID): array
     {
         if($repo->SCM == 'Gitlab')
         {
-            $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
-            $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
-            $this->scm->setEngine($repo);
-            if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
-            {
-                $infos = $this->repo->getFileList($repo, $branchID, $path);
+            $_COOKIE['repoBranch'] = $branchID ? $branchID : $this->cookie->repoBranch;
 
-                if($cacheFile && !empty($infos))
-                {
-                    if(!file_exists($cacheFile . '.lock'))
-                    {
-                        touch($cacheFile . '.lock');
-                        file_put_contents($cacheFile, serialize($infos));
-                        unlink($cacheFile . '.lock');
-                    }
-                }
-            }
-            else
+            $infos = $this->repo->getGitlabFilesByPath($repo, $path, $branchID);
+            foreach($infos as &$file)
             {
-                $infos = unserialize(file_get_contents($cacheFile));
-                if(empty($infos)) unlink($cacheFile);
+                $file->revision = '';
+                $file->comment  = '';
+                $file->account  = '';
+                $file->date     = '';
             }
         }
         else
@@ -850,17 +835,18 @@ class repoZen extends repo
             $scm->setEngine($repo);
             $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
             $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
+            $tags     = array();
             foreach($initTags as $tag) $tags[$tag] = $tag;
 
             if(empty($branchID) and $this->cookie->repoBranch && $this->session->repoID == $repo->id) $branchID = $this->cookie->repoBranch;
             if(!isset($branches[$branchID]) && !isset($tags[$branchID])) $branchID = (string)key($branches);
-            if($branchID) $this->repo->setRepoBranch($branchID);
+            if($branchID) $this->setRepoBranch($branchID);
 
             return array($branchID, $branches, $tags);
         }
         else
         {
-            $this->repo->setRepoBranch('');
+            $this->setRepoBranch('');
             return array('', array(), array());
         }
     }
@@ -900,7 +886,7 @@ class repoZen extends repo
      */
     protected function setBrowseSession(): void
     {
-        $this->repo->setBackSession('list', true);
+        $this->setBackSession('list', true);
 
         session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
@@ -1272,35 +1258,6 @@ class repoZen extends repo
     }
 
     /**
-     * 获取并列展示的对比信息。
-     * Get appose diff.
-     *
-     * @param  array     $diffs
-     * @access protected
-     * @return array
-     */
-    protected function getApposeDiff(array $diffs): array
-    {
-        foreach($diffs as $diffFile)
-        {
-            if(empty($diffFile->contents)) continue;
-            foreach($diffFile->contents as $content)
-            {
-                $old = array();
-                $new = array();
-                foreach($content->lines as $line)
-                {
-                    if($line->type != 'new') $old[$line->oldlc] = $line->line;
-                    if($line->type != 'old') $new[$line->newlc] = $line->line;
-                }
-                $content->old = $old;
-                $content->new = $new;
-            }
-        }
-        return $diffs;
-    }
-
-    /**
      * 获取代码同步本地的日志。
      * Get sync log.
      *
@@ -1316,21 +1273,21 @@ class repoZen extends repo
             $content  = file($logFile);
             foreach($content as $line)
             {
-                if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return $line;
-                if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return $line;
+                if($this->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return $line;
+                if($this->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return $line;
             }
 
             $lastLine = $content[count($content) - 1];
-            if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
+            if($this->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
             {
-                if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
+                if($this->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
                 {
                     @unlink($logFile);
                 }
-                elseif($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
+                elseif($this->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                 {
                     $logContent = file_get_contents($logFile);
-                    if($this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
+                    if($this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                     {
                         @unlink($logFile);
                     }
@@ -1386,7 +1343,7 @@ class repoZen extends repo
                     }
                 }
 
-                $this->repo->setRepoBranch($branchID);
+                $this->setRepoBranch($branchID);
                 helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             }
         }
@@ -1426,5 +1383,86 @@ class repoZen extends repo
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
         return $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
+    }
+
+    /**
+     * 设置返回链接。
+     * Set back session.
+     *
+     * @param  string $type
+     * @param  bool   $withOtherModule
+     * @access public
+     * @return void
+     */
+    public function setBackSession(string $type = 'list', bool $withOtherModule = false)
+    {
+        session_start();
+        $uri = $this->app->getURI(true);
+        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (strpos($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
+
+        $backKey = 'repo' . ucfirst(strtolower($type));
+        $this->session->set($backKey, $uri);
+
+        if($type == 'list') unset($_SESSION['repoView']);
+        if($withOtherModule)
+        {
+            $this->session->set('bugList', $uri, 'qa');
+            $this->session->set('taskList', $uri, 'execution');
+        }
+        session_write_close();
+    }
+
+    /**
+     * 设置代码库分支。
+     * Set repo branch.
+     *
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function setRepoBranch(string $branch)
+    {
+        helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        $_COOKIE['repoBranch'] = $branch;
+    }
+
+    /**
+     * 检查是否是二进制文件。
+     * Check content is binary.
+     *
+     * @param  string $content
+     * @param  string $suffix
+     * @access public
+     * @return bool
+     */
+    public function isBinary(string $content, string $suffix = ''): bool
+    {
+        if(strpos($this->config->repo->binary, "|$suffix|") !== false) return true;
+
+        $blk = substr($content, 0, 512);
+        return (
+            substr_count($blk, "^\r\n")/512 > 0.3 ||
+            substr_count($blk, "^ -~")/512 > 0.3 ||
+            substr_count($blk, "\x00") > 0
+        );
+    }
+
+    /**
+     * 检查字符串是否在数组元素中。
+     * Check str in array.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAry(string $str, array $checkAry): bool
+    {
+        foreach($checkAry as $check)
+        {
+            if(mb_strpos($str, $check) !== false) return true;
+        }
+
+        return false;
     }
 }

@@ -10,6 +10,7 @@ $lang->account->view   = '账号详情';
 $lang->account->editAction   = '编辑账号';
 $lang->account->deleteAction = '删除账号';
 
+$lang->account->id            = 'id';
 $lang->account->provider      = '服务商';
 $lang->account->type          = '类型';
 $lang->account->name          = '名称';

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class reportTest
 {
     public function __construct()
@@ -9,13 +10,14 @@ class reportTest
     }
 
     /**
+     * 测试计算每项数据的百分比。
      * Test compute percent of every item.
      *
-     * @param  array  $datas
+     * @param  array       $datas
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function computePercentTest($datas)
+    public function computePercentTest(array $datas): string|array
     {
         $objects = $this->objectModel->computePercent($datas);
 
@@ -27,13 +29,14 @@ class reportTest
     }
 
     /**
+     * 测试为单个图表创建json数据。
      * Test create json data of single charts.
      *
-     * @param  int    $executionID
+     * @param  int          $executionID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function createSingleJSONTest($executionID)
+    public function createSingleJSONTest(int $executionID): string|array
     {
         global $tester;
         $this->execution = $tester->loadModel('execution');
@@ -46,24 +49,58 @@ class reportTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', $objects);
     }
 
     /**
+     * 测试转换日期格式。
      * Test convert date format.
      *
-     * @param  array  $dateList
-     * @param  string $format
+     * @param  array        $dateList
+     * @param  string       $format
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function convertFormatTest($dateList, $format = 'Y-m-d')
+    public function convertFormatTest(array $dateList, string $format = 'Y-m-d'): string|array
     {
-        $objects = $this->objectModel->convertFormat($dateList, $format = 'Y-m-d');
+        $objects = $this->objectModel->convertFormat($dateList, $format);
 
         if(dao::isError()) return dao::getError();
 
         return implode(',', $objects);
+    }
+
+    /**
+     * 测试获取系统的 URL。
+     * Test get system URL.
+     *
+     * @param  string       $domain
+     * @param  stringi      $argv1
+     * @access public
+     * @return string|array
+     */
+    public function getSysURLTest(string $domain = '', string $argv1 = ''): string|array
+    {
+        global $tester;
+        if(!empty($domain))
+        {
+            if(!isset($tester->config->mail)) $tester->config->mail = new stdclass();
+            $tester->config->mail->domain = $domain;
+        }
+        else
+        {
+            unset($tester->config->mail->domain);
+        }
+        $_SERVER['argv'] = array('argv0', $argv1);
+
+        $url = $this->objectModel->getSysURL();
+
+        unset($tester->config->mail->domain);
+        unset($_SERVER['argv']);
+
+        if(dao::isError()) return dao::getError();
+
+        return $url;
     }
 
     /**
@@ -187,29 +224,31 @@ class reportTest
     }
 
     /**
+     * 测试获取用户的 bugs。
      * Test get user bugs.
      *
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserBugsTest()
+    public function getUserBugsTest(): string|array
     {
         $objects = $this->objectModel->getUserBugs();
 
         if(dao::isError()) return dao::getError();
 
         $counts = '';
-        foreach($objects as $user => $bugs) $counts .= "$user:" . count($bugs) . ';';
+        foreach($objects as $user => $bugs) $counts .= "{$user}:" . count($bugs) . ';';
         return $counts;
     }
 
     /**
+     * 测试获取用户的任务。
      * Test get user tasks.
      *
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserTasksTest()
+    public function getUserTasksTest(): string|array
     {
         $objects = $this->objectModel->getUserTasks();
 
@@ -221,12 +260,14 @@ class reportTest
     }
 
     /**
+     * 测试获取用户的待办。
      * Test get user todos.
      *
+     * @param  string       $userType
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserTodosTest($userType)
+    public function getUserTodosTest(string $userType): string|array
     {
         $objects = $this->objectModel->getUserTodos();
 
@@ -235,18 +276,19 @@ class reportTest
         $counts = '';
         foreach($objects as $user => $todos)
         {
-            if(strpos($user, $userType) !== false and str_replace($userType, '', $user) < 11) $counts .= "$user:" . count($todos) . ';';
+            if(strpos($user, $userType) !== false) $counts .= "$user:" . count($todos) . ';';
         }
         return $counts;
     }
 
     /**
+     * 测试获取用户的测试单。
      * Test get user test tasks.
      *
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserTestTasksTest()
+    public function getUserTestTasksTest(): string|array
     {
         $objects = $this->objectModel->getUserTestTasks();
 
@@ -258,97 +300,93 @@ class reportTest
     }
 
     /**
+     * 测试获取当前年的用户登录次数。
      * Test get user login count in this year.
      *
-     * @param  string $accounts
+     * @param  string    $accounts
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getUserYearLoginsTest($accounts)
+    public function getUserYearLoginsTest(array $accounts): int|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearLogins($accounts, $year);
+        $count = $this->objectModel->getUserYearLogins($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $count;
     }
 
     /**
+     * 测试获取当前年的用户操作数。
      * Test get user action count in this year.
      *
-     * @param  array $accounts
+     * @param  string    $accounts
      * @access public
-     * @return void
+     * @return int|array
      */
-    public function getUserYearActionsTest($accounts)
+    public function getUserYearActionsTest(array $accounts): int|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearActions($accounts, $year);
+        $count = $this->objectModel->getUserYearActions($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $count;
     }
 
     /**
+     * 测试获取用户某年的动态数。
      * Test get user contributions in this year.
      *
-     * @param  array  $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserYearContributionsTest($accounts)
+    public function getUserYearContributionsTest(array $accounts): string|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearContributions($accounts, $year);
+        $objects = $this->objectModel->getUserYearContributions($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
         $contributions = '';
         foreach($objects as $type => $contributionTypes)
         {
-            $contributions .= "$type:";
-            foreach($contributionTypes as $contributionType => $count) $contributions .= "$contributionType:$count,";
+            $contributions .= "{$type}:";
+            foreach($contributionTypes as $contributionType => $count) $contributions .= "{$contributionType}:{$count},";
             $contributions = trim($contributions, ',') . ';';
         }
         return $contributions;
     }
 
     /**
+     * 测试获取本年度用户的待办统计。
      * Test get user todo stat in this year.
      *
-     * @param  array  $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserYearTodosTest($accounts)
+    public function getUserYearTodosTest(array $accounts): string|array
     {
-        $year = date('Y');
-        $objects = $this->objectModel->getUserYearTodos($accounts, $year);
+        $objects = $this->objectModel->getUserYearTodos($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
         $count = '';
-        foreach($objects as $type => $value) $count .= "$type:$value;";
+        foreach($objects as $type => $value) $count .= "{$type}:{$value};";
         return $count;
     }
 
     /**
+     * 测试获取本年度用户的工时统计。
      * Test get user effort stat in this error.
      *
      * @param  string $accounts
      * @access public
      * @return object
      */
-    public function getUserYearEffortsTest($accounts)
+    public function getUserYearEffortsTest(array $accounts): object|array
     {
-        $year = date('Y');
-
-        $object = $this->objectModel->getUserYearEfforts($accounts, $year);
+        $object = $this->objectModel->getUserYearEfforts($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
@@ -356,17 +394,16 @@ class reportTest
     }
 
     /**
+     * 测试获取本年度用户相关的每个产品的创建的需求和计划，关闭的需求数据。
      * Test get count of created story,plan and closed story by accounts every product in this year.
      *
-     * @param mixed $accounts
+     * @param  array        $accounts
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function getUserYearProductsTest($accounts)
+    public function getUserYearProductsTest(array $accounts): string|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearProducts($accounts, $year);
+        $objects = $this->objectModel->getUserYearProducts($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 

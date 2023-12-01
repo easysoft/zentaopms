@@ -1,0 +1,13 @@
+title: zt_action
+desc: action data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: action
+    range: 'assigned'
+  - field: actor
+    range: admin{4},user1{4}
+  - field: objectID
+    range: 1-10
+  - field: objectType
+    range: bug,task,story,requirement

@@ -180,6 +180,7 @@ detailHeader
     )
 );
 
+$statusClass = $story->URChanged ? 'status-changed' : "status-{$story->status}";
 detailBody
 (
     sectionList
@@ -277,8 +278,8 @@ detailBody
                         set::name($lang->story->status),
                         span
                         (
-                            setClass("status-story status-{$story->status}"),
-                            $this->processStatus('story', $story)
+                            setClass("status-story $statusClass"),
+                            $story->URChanged ? $lang->story->URChanged : $this->processStatus('story', $story)
                         )
                     ),
                     $story->type == 'requirement' ? null : item

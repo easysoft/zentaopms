@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -14,7 +15,7 @@ class api extends control
     public $objectType = 'nolink';
     public $objectID   = 0;
 
-    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
         $this->user   = $this->loadModel('user');
@@ -26,6 +27,7 @@ class api extends control
     }
 
     /**
+     * 文档应用下接口空间页面。
      * Api doc index page.
      *
      * @param  int    $libID
@@ -33,148 +35,65 @@ class api extends control
      * @param  int    $apiID
      * @param  int    $version
      * @param  int    $release
-     * @param  int    $appendLib
      * @param  string $browseType
      * @param  int    $param
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
+    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = '', int $param = 0)
     {
-        if(!$apiID)
-        {
-            $this->session->set('spaceType', 'api', 'doc');
-            $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
-            setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        }
-
-        $this->setMenu($libID);
-        $objectType  = $this->objectType;
-        $objectID    = $this->objectID;
-        $isFirstLoad = $libID ? false : true;
-        if($libID)
-        {
-            $lib = $this->doc->getLibById($libID);
-            if($objectType == 'nolink' and !$objectID and ($lib->product or $lib->project))
-            {
-                $objectType = $lib->product ? 'product' : 'project';
-                $objectID   = $lib->product ? $lib->product : $lib->project;
-            }
-        }
-
-        if($release)
-        {
-            $browseType = 'byrelease';
-            $param      = $release;
-        }
-
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
-        if(empty($libs) and $objectType != 'nolink')
-        {
-            $objectType = 'nolink';
-            $objectID   = 0;
-            $libs       = $this->doc->getApiLibs($appendLib, 'nolink');
-        }
-
-        if(empty($libs))
-        {
-            list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
-
-            if(!empty($normalObjects))
-            {
-                $objectType = key($normalObjects);
-                $objectID   = key($normalObjects[$objectType]);
-                $libs       = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
-            }
-            elseif(!empty($closedObjects))
-            {
-                $objectType = key($closedObjects);
-                $objectID   = key($closedObjects[$objectType]);
-                $libs       = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
-            }
-        }
-
-        if($libID == 0 and !empty($libs))
-        {
-            $lib        = current($libs);
-            $libID      = $lib->id;
-            $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : '');
-            $objectID   = $lib->product ? $lib->product : $lib->project;
-        }
-
         /* Get an api doc. */
         if($apiID > 0)
         {
+            /* 有apiID的直接打印详情页面。 */
             echo $this->fetch('api', 'view', "libID=$libID&apiID=$apiID&moduleID=$moduleID&version=$version&release=$release");
             return;
         }
-        else
-        {
-            /* Get module api list. */
-            $apiList = $this->api->getListByModuleId($libID, $moduleID, $release);
 
-            $this->view->apiList  = $apiList;
-            $this->view->typeList = $this->api->getTypeList($libID);
-        }
+        /* 设置空间类型。 */
+        $this->session->set('spaceType', 'api', 'doc');
+        /* 详情页返回上一页用的链接。 */
+        $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
+        setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $lib       = $this->doc->getLibById($libID);
-        $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
+        $this->setMenu($libID);
+        $objectType = $this->objectType;
+        $objectID   = $this->objectID;
+
+        /* 获取文档目录列表和当前选中的文档目录. */
+        $libs       = $this->doc->getApiLibs($libID, $objectType, $objectID);
+        $lib        = $libID ? zget($libs, $libID) : current($libs);
+        $libID      = $lib ? $lib->id : 0;
+        $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
+        $objectID   = $lib->product ? $lib->product : ($lib->project ? $lib->project : 0);
 
         /* Build the search form. */
-        $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
-        $this->api->buildSearchForm($lib,$queryID, $actionURL, $libs);
+        $browseType = $release ? 'byrelease' : $browseType;
+        $param      = $release ? $release : $param;
+        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
+        $actionURL  = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&browseType=bySearch&param=myQueryID");
+        $this->api->buildSearchForm($lib, $queryID, $actionURL, $libs);
 
-        if($browseType == 'bySearch')
-        {
-            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs));
-            $this->view->typeList = $this->api->getTypeList($libID);
-        }
-
-        $this->view->lib               = $lib;
-        $this->view->release           = $release;
-        $this->view->isFirstLoad       = $isFirstLoad;
         $this->view->title             = $this->lang->api->pageTitle;
+        $this->view->lib               = $lib;
         $this->view->libID             = $libID;
-        $this->view->apiID             = $apiID;
         $this->view->libs              = $libs;
-        $this->view->browseType        = $browseType;
+        $this->view->release           = $release;
         $this->view->objectType        = $objectType;
         $this->view->objectID          = $objectID;
         $this->view->moduleID          = $moduleID;
         $this->view->version           = $version;
+        $this->view->apiList           = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $release);
         $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, (int)$param);
-        $this->view->users             = $this->user->getPairs('noclosed,noletter');
-        $this->view->objectDropdown    = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
+        $this->view->objectDropdown    = isset($libs[$libID]) ? $this->apiZen->generateLibsDropMenu($libs[$libID], $release) : '';
         $this->view->spaceType         = 'api';
         $this->view->linkParams        = '%s';
-        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID);
-
+        $this->view->defaultNestedShow = $this->apiZen->getDefacultNestedShow($libID, $moduleID);
         $this->display();
     }
 
     /**
-     * 设置文档树默认展开的节点。
-     * Set the default expanded nodes of the document tree.
-     *
-     * @param  int       $libID
-     * @param  int       $moduleID
-     * @access protected
-     * @return array
-     */
-    protected function getDefacultNestedShow(int $libID, int $moduleID): array
-    {
-        if(!$libID && !$moduleID) return array();
-        if($libID && !$moduleID) return array("{$libID}" => true);
-
-        $module = $this->loadModel('tree')->getByID($moduleID);
-        $path   = explode(',', trim($module->path, ','));
-        $path   = implode(':', $path);
-        return array("{$libID}:{$path}" => true);
-    }
-
-    /**
+     * API详情页面。
      * View api.
      *
      * @param  int    $libID
@@ -185,81 +104,47 @@ class api extends control
      * @access public
      * @return void
      */
-    public function view($libID, $apiID, $moduleID = 0, $version = 0, $release = 0)
+    public function view(int $libID, int $apiID, int $moduleID = 0, int $version = 0, int $release = 0)
     {
-        if(!strpos($this->server->http_referer, 'space') and !strpos($this->server->http_referer, 'api')) setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
-
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
-        $api  = $this->api->getLibById($apiID, $version, $release);
-        if($api)
+        if(strpos($this->server->http_referer, 'space') === false && strpos($this->server->http_referer, 'api') === false)
         {
-            $moduleID  = $api->module;
-            $libID     = $api->lib;
-            $api->desc = htmlspecialchars_decode($api->desc);
-
-            $this->view->api      = $api;
-            $this->view->apiID    = $apiID;
-            $this->view->version  = $version;
-            $this->view->typeList = $this->api->getTypeList($api->lib);
-            $this->view->actions  = $apiID ? $this->action->getList('api', $apiID) : array();
+            setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
         }
 
-        /* Crumbs links array. */
-        $lib  = zget($libs, $libID);
-        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
+        /* 获取文档目录列表和当前选中的文档目录. */
+        $libs      = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
+        $api       = $this->api->getLibById($apiID, $version, $release);
+        $libID     = $api->lib;
+        $lib       = zget($libs, $libID);
+        $api->desc = htmlspecialchars_decode($api->desc);
 
-        $methodName = $type != 'unlink' ? $type . 'Space' : 'index';
-        if($this->app->tab == 'doc') $methodName = 'index';
-
+        /* 生成一些必要的参数。 */
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
+        $objectID   = $lib->product ? $lib->product : $lib->project;
         $linkObject = zget($lib, $type, 0);
-        $linkParams = "libID=$lib->id";
-        if($methodName != 'index') $linkParams = "objectID=$linkObject&$linkParams";
+        $spaceType  = 'api';
+        $moduleID   = $api->module;
+        $linkParams = "%s";
+        if($this->app->tab != 'doc' && $type != 'nolink') $linkParams = "objectID=$linkObject&$linkParams";
 
-        $spaceType = 'api';
-        $objectID  = $this->objectID;
-        if($this->cookie->docSpaceParam) $docParam = json_decode($this->cookie->docSpaceParam);
-        if(isset($docParam) and !(in_array($docParam->type, array('product', 'project')) and $docParam->objectID == 0))
-        {
-            $docParam   = json_decode($this->cookie->docSpaceParam);
-            $type       = $docParam->type;
-            $objectID   = $docParam->objectID;
-            $libID      = $docParam->libID;
-            $moduleID   = $docParam->moduleID;
-            $browseType = $docParam->browseType;
-            $param      = $docParam->param;
-            $spaceType  = $docParam->type;
-            list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
+        /* 解析cookie并获取左侧目录树。 */
+        $this->apiZen->parseDocSpaceParam($libs, $libID, $type, $objectID, $moduleID, $spaceType, $release);
 
-            $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
-        }
-        else
-        {
-            $objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
-            $libTree = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
-        }
-        $this->view->title             = $this->lang->api->pageTitle;
-        $this->view->libs              = $libs;
-        $this->view->isRelease         = $release > 0;
-        $this->view->release           = $release;
-        $this->view->version           = $version;
-        $this->view->libID             = $libID;
-        $this->view->apiID             = $apiID;
-        $this->view->moduleID          = $moduleID;
-        $this->view->objectType        = $type;
-        $this->view->type              = $type;
-        $this->view->objectID          = $objectID;
-        $this->view->users             = $this->user->getPairs('noclosed,noletter');
-        $this->view->libTree           = $libTree;
-        $this->view->objectDropdown    = $objectDropdown;
-        $this->view->spaceType         = $spaceType;
-        $this->view->linkParams        = $linkParams;
-        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID);
-
+        $this->view->title      = $this->lang->api->pageTitle;
+        $this->view->isRelease  = $release > 0;
+        $this->view->release    = $release;
+        $this->view->version    = $version;
+        $this->view->apiID      = $apiID;
+        $this->view->api        = $api;
+        $this->view->linkParams = $linkParams;
+        $this->view->typeList   = $this->api->getTypeList($api->lib);
+        $this->view->users      = $this->user->getPairs('noclosed,noletter');
+        $this->view->actions    = $apiID ? $this->action->getList('api', $apiID) : array();
         $this->display();
     }
 
     /**
+     * 版本管理列表页面。
      * Release list.
      *
      * @param  int    $libID
@@ -267,64 +152,58 @@ class api extends control
      * @access public
      * @return void
      */
-    public function releases($libID, $orderBy = 'id')
+    public function releases(int $libID, string $orderBy = 'id')
     {
         $this->app->loadLang('custom');
-        $libs = $this->doc->getApiLibs();
-        $this->app->loadClass('pager', $static = true);
-        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
 
         /* Append id for second sort. */
         $sort     = common::appendOrder($orderBy);
         $releases = $this->api->getReleaseByQuery($libID, '', $sort);
 
+        $this->view->title    = $this->lang->api->managePublish;
         $this->view->releases = $releases;
         $this->view->orderBy  = $orderBy;
-        $this->view->title    = $this->lang->api->managePublish;
         $this->view->libID    = $libID;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
+     * 删除一个版本。
      * Delete a release.
      *
-     * @param  int $libID
-     * @param  int $id
+     * @param  int    $libID
+     * @param  int    $id
+     * @access public
+     * @return void
      */
-    public function deleteRelease($libID, $id = 0)
+    public function deleteRelease(int $libID, int $id = 0)
     {
         $this->api->deleteRelease($id);
+
         if(dao::isError()) return $this->sendError(dao::getError());
         return $this->sendSuccess(array('load' => true, 'closeModal' => true));
     }
 
     /**
+     * 创建一个接口版本。
      * Create a api doc lib.
      *
-     * @param  int $libID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function createRelease($libID)
+    public function createRelease(int $libID)
     {
-        $lib = $this->doc->getLibById($libID);
-
         if(!empty($_POST))
         {
-            $data = fixer::input('post')
-                ->trim('version')
-                ->add('lib', $libID)
-                ->add('addedBy', $this->app->user->account)
-                ->add('addedDate', helper::now())
-                ->get();
+            $formData = form::data($this->config->api->form->createRelease)->add('lib', $libID)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
 
             /* Check version is exist. */
-            if(!empty($data->version) and $this->api->getRelease($libID, 'byVersion', $data->version))
-            {
-                return $this->sendError($this->lang->api->noUniqueVersion);
-            }
-            $this->api->publishLib($data);
+            if(!empty($formData->version) && $this->api->getRelease($libID, 'byVersion', $formData->version)) return $this->sendError($this->lang->api->noUniqueVersion);
+
+            $this->api->publishLib($formData);
+
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
@@ -334,6 +213,7 @@ class api extends control
     }
 
     /**
+     * 接口数据结构列表页面。
      * Api doc global struct page.
      *
      * @param  int    $libID
@@ -345,7 +225,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function struct($libID = 0, $releaseID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function struct(int $libID = 0, int $releaseID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->setMenu($libID);
 
@@ -364,46 +244,34 @@ class api extends control
             $structs = $this->api->getStructByQuery($libID, $pager, $sort);
         }
 
-        common::setMenuVars('doc', $libID);
+        $this->view->title     = $this->lang->api->struct;
         $this->view->libID     = $libID;
         $this->view->releaseID = $releaseID;
         $this->view->structs   = $structs;
         $this->view->orderBy   = $orderBy;
-        $this->view->title     = $this->lang->api->struct;
         $this->view->pager     = $pager;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->display();
     }
 
     /**
+     * 创建数据结构页面。
      * Create struct page.
      *
-     * @param  int $libID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function createStruct($libID = 0)
+    public function createStruct(int $libID = 0)
     {
-        common::setMenuVars('doc', $libID);
         $this->setMenu($libID);
 
         if(!empty($_POST))
         {
-            $data = fixer::input('post')
-                ->trim('name')
-                ->add('lib', $libID)
-                ->add('addedBy', $this->app->user->account)
-                ->add('addedDate', helper::now())
-                ->skipSpecial('attribute')
-                ->stripTags($this->config->api->editor->createstruct['id'], $this->config->allowedTags)
-                ->remove('undefined')
-                ->get();
+            $formData = form::data($this->config->api->form->createStruct)->add('lib', $libID)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
 
-
-            $id = $this->api->createStruct($data);
+            $this->api->createStruct($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
-
-            $this->action->create('apistruct', $id, 'Created');
 
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID")));
         }
@@ -413,38 +281,36 @@ class api extends control
         {
             $options[] = array('label' => $item, 'value' => $key);
         }
-        $this->view->typeOptions = $options;
-        $this->view->title       = $this->lang->api->createStruct;
-        $this->view->gobackLink  = $this->createLink('api', 'struct', "libID=$libID");
 
+        $this->view->title       = $this->lang->api->createStruct;
+        $this->view->typeOptions = $options;
+        $this->view->gobackLink  = $this->createLink('api', 'struct', "libID=$libID");
         $this->display();
     }
 
     /**
+     * 编辑数据结构页面。
      * Edit struct
      *
-     * @param  int $libID
-     * @param  int $structID
+     * @param  int    $libID
+     * @param  int    $structID
      * @access public
      * @return void
      */
-    public function editStruct($libID, $structID)
+    public function editStruct(int $libID, int $structID)
     {
-        common::setMenuVars('doc', $libID);
         $this->setMenu($libID);
 
         $struct = $this->api->getStructByID($structID);
 
         if(!empty($_POST))
         {
-            $changes = $this->api->updateStruct($structID);
-            if(dao::isError()) return $this->sendError(dao::getError());
+            $formData = form::data($this->config->api->form->editStruct)->add('id', $structID)->add('lib', $libID)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+            $formData->version = $struct->version + 1;
 
-            if($changes)
-            {
-                $actionID = $this->action->create('apistruct', $structID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->api->updateStruct($formData);
+
+            if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID={$struct->lib}")));
         }
 
@@ -454,13 +320,14 @@ class api extends control
             $options[] = array('label' => $item, 'value' => $key);
         }
 
+        $this->view->title       = $struct->name . $this->lang->api->edit;
         $this->view->struct      = $struct;
         $this->view->typeOptions = $options;
-        $this->view->title       = $struct->name . $this->lang->api->edit;
         $this->display();
     }
 
     /**
+     * 删除一条数据结构。
      * Delete a struct.
      *
      * @param  int    $libID
@@ -468,39 +335,46 @@ class api extends control
      * @access public
      * @return void
      */
-    public function deleteStruct($libID, $structID = 0)
+    public function deleteStruct(int $libID, int $structID = 0)
     {
         $this->api->delete(TABLE_APISTRUCT, $structID);
+
         if(dao::isError()) return $this->sendError(dao::getError());
         return $this->sendSuccess(array('load' => inlink('struct', "libID=$libID")));
     }
 
     /**
+     * 创建一个接口文档库。
      * Create a api doc library.
      *
-     * @param  string $type project|product
+     * @param  string $type     project|product
      * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function createLib($type = 'product', $objectID = 0)
+    public function createLib(string $type = 'product', int $objectID = 0)
     {
         if(!empty($_POST))
         {
-            $libID = $this->doc->createApiLib();
+            /* 组装formData。 */
+            $formData = form::data($this->config->api->form->createLib)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+            $formData->product   = $formData->libType == 'product' && !empty($formData->product)   ? $formData->product   : 0;
+            $formData->project   = $formData->libType == 'project' && !empty($formData->project)   ? $formData->project   : 0;
+            $formData->execution = $formData->libType == 'project' && !empty($formData->execution) ? $formData->execution : 0;
+
+            $this->doc->createApiLib($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Record action for create api library. */
-            $this->action->create('doclib', $libID, 'created');
             if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
 
             /* Set locate object data. */
             setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot);
-            setCookie("objectID", $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectID",   $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true));
         }
 
+        /* 设置默认访问控制的语言项。 */
         $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
         $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $defaultAclLang);
 
@@ -510,40 +384,38 @@ class api extends control
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel('all');
         $this->view->products = $this->loadModel('product')->getPairs();
-
         $this->display();
     }
 
     /**
+     * 编辑一个接口文档库。
      * Edit an api doc library
      *
-     * @param  int     $id
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function editLib($id)
+    public function editLib(int $id)
     {
+        $lib = $this->doc->getLibById($id);
+
         if(!empty($_POST))
         {
-            $this->doc->updateApiLib($id);
+            /* 组装formData。 */
+            $formData = form::data($this->config->api->form->editLib)->add('id', $id)->get();
+            $formData->product   = $lib->product;
+            $formData->project   = $lib->project;
+            $formData->execution = $lib->execution;
+
+            $this->doc->updateApiLib($id, $formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $lib  = $this->doc->getLibById($id);
-        $type = 'nolink';
-        if(!empty($lib->product))
-        {
-            $type = 'product';
-            $this->view->object = $this->loadModel('product')->getByID($lib->product);
-        }
-        if(!empty($lib->project))
-        {
-            $type = 'project';
-            $this->view->object = $this->loadModel('project')->getById($lib->project);
-        }
+        $type   = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
+        $object = $lib->product ? $this->loadModel('product')->getByID($lib->product) : $this->loadModel('project')->getById($lib->project);
+
         if($type != 'nolink') $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
         if($type == 'nolink') unset($this->lang->api->aclList['default']);
 
@@ -553,138 +425,119 @@ class api extends control
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel();
         $this->view->products = $this->loadModel('product')->getPairs();
-
         $this->display();
     }
 
 
     /**
+     * 删除一个接口文档库。
      * Delete api library.
      *
      * @param  int    $libID
      * @access public
      * @return void
      */
-    public function deleteLib($libID)
+    public function deleteLib(int $libID)
     {
         $this->doc->delete(TABLE_DOCLIB, $libID);
-        if(isInModal()) return $this->send(array('result' => 'success', 'load' => $this->createLink('api', 'index'), 'closeModal' => true, 'app' => $this->app->tab));
 
+        if(isInModal()) return $this->send(array('result' => 'success', 'load' => $this->createLink('api', 'index'), 'closeModal' => true, 'app' => $this->app->tab));
         return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true, 'app' => $this->app->tab));
     }
 
     /**
-     * Edit library.
-     *
-     * @param  int     $apiID
-     * @access public
-     * @return void
-     */
-    public function edit($apiID)
-    {
-        $api = $this->api->getLibById($apiID);
-        if(helper::isAjaxRequest() && !empty($_POST))
-        {
-            $changes = $this->api->update($apiID);
-            if(dao::isError()) return $this->sendError(dao::getError());
-
-            if($changes)
-            {
-                $actionID = $this->action->create('api', $apiID, 'edited', '', '', '', false);
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
-        }
-
-        if($api)
-        {
-            $this->view->api  = $api;
-            $this->view->edit = true;
-        }
-
-        $this->setMenu($api->lib);
-
-        $this->getTypeOptions($api->lib);
-
-        $this->view->title            = $api->title . $this->lang->api->edit;
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID=$apiID");
-        $this->view->user             = $this->app->user->account;
-        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
-        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
-
-        $this->display();
-    }
-
-    /**
+     * 创建一个接口文档。
      * Create an api doc.
      *
-     * @param  int $libID
-     * @param  int $moduleID
+     * @param  int    $libID
+     * @param  int    $moduleID
      * @param  string $space     api|project|product
      * @access public
      * @return void
      */
-    public function create($libID, $moduleID = 0, $space = '')
+    public function create(int $libID, int $moduleID = 0, string $space = '')
     {
         if(!empty($_POST))
         {
-            $api = $this->api->create();
-            if($api === false) return $this->sendError(dao::getError());
+            $formData = form::data($this->config->api->form->create)
+                ->add('product', 0)
+                ->add('version', 1)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->add('editedDate', helper::now())
+                ->get();
 
-            $this->action->create('api', $api->id, 'Created', '', '', '', false);
+            $apiID = $this->api->create($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID={$api->id}")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$formData->lib}&moduleID={$formData->module}&apiID={$apiID}")));
         }
-
-        $libs = $this->doc->getLibs('api', '', $libID);
-        if(!$libID and !empty($libs)) $libID = key($libs);
 
         $this->setMenu($libID, $space);
 
         $lib     = $this->doc->getLibByID($libID);
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
-        $this->getTypeOptions($libID);
-        $this->view->user             = $this->app->user->account;
+        $this->view->title            = $libName . $this->lang->api->create;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
         $this->view->libName          = $lib->name;
+        $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        $this->view->libs             = $libs;
-        $this->view->title            = $libName . $this->lang->api->create;
-        $this->view->users            = $this->user->getPairs('nocode');
-
         $this->display();
     }
 
     /**
-     * Delete an api.
+     * 编辑一个接口文档。
+     * Edit library.
      *
      * @param  int    $apiID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($apiID)
+    public function edit(int $apiID)
+    {
+        $api = $this->api->getLibById($apiID);
+        if(!empty($_POST))
+        {
+            $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->get();
+
+            $this->api->update($formData);
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
+        }
+
+        $this->setMenu($api->lib);
+        $this->getTypeOptions($api->lib);
+
+        $this->view->title            = $api->title . $this->lang->colon . $this->lang->api->edit;
+        $this->view->api              = $api;
+        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
+        $this->display();
+    }
+
+    /**
+     * 删除一个接口文档。
+     * Delete an api.
+     *
+     * @param  int    $apiID
+     * @access public
+     * @return void
+     */
+    public function delete(int $apiID)
     {
         $api = $this->api->getLibById($apiID);
         $this->api->delete(TABLE_API, $apiID);
 
-        if(dao::isError())
-        {
-            $this->sendError(dao::getError());
-        }
-        else
-        {
-            return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
-        }
+        if(dao::isError()) $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
     }
 
     /**
+     * Ajax获取接口允许的参数类型列表。
      * AJAX: Get params type options by scope.
      *
      * @access public
@@ -701,14 +554,15 @@ class api extends control
     }
 
     /**
+     * Ajax获取指定目录的数据结构。
      * AJAX: Get ref options.
      *
-     * @param  int     $libID
-     * @param  int     $structID
+     * @param  int    $libID
+     * @param  int    $structID
      * @access public
      * @return void
      */
-    public function ajaxGetRefOptions($libID = 0, $structID = 0)
+    public function ajaxGetRefOptions(int $libID = 0, int $structID = 0)
     {
         $res = $this->api->getStructListByLibID($libID);
 
@@ -724,27 +578,29 @@ class api extends control
     }
 
     /**
+     * Ajax获取指定ID的数据结构。
      * AJAX: Get ref info.
      *
      * @param  int    $refID
      * @access public
      * @return void
      */
-    public function ajaxGetRefInfo($refID = 0)
+    public function ajaxGetRefInfo(int $refID = 0)
     {
         $info = $this->api->getStructByID($refID);
         $this->sendSuccess(array('info' => $info));
     }
 
     /**
+     * Ajax获取当前接口库的子目录结构。
      * AJAX: Get all child module.
      *
-     * @param  int     $libID
-     * @param  string  $type
+     * @param  int    $libID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxGetChild($libID, $type = 'module')
+    public function ajaxGetChild(int $libID, string $type = 'module')
     {
         $this->loadModel('tree');
         $childModules = $this->tree->getOptionMenu($libID, 'api');
@@ -753,17 +609,18 @@ class api extends control
     }
 
     /**
+     * 设置接口文档页面的导航菜单。
      * Set api menu by method name.
      *
-     * @param  int     $libID
-     * @param  string  $space |null|api|project|product
+     * @param  int    $libID
+     * @param  string $space |null|api|project|product
      * @access public
      * @return void
      */
-    private function setMenu($libID = 0, $space = '')
+    private function setMenu(int $libID = 0, string $space = '')
     {
-        if($space and strpos('|api|project|product|', "|{$space}|") === false) $space = '';
-        common::setMenuVars('doc', '');
+        common::setMenuVars('doc', $libID);
+        if($space && strpos('|api|project|product|', "|{$space}|") === false) $space = '';
 
         $lib = $this->loadModel('doc')->getLibByID($libID);
         if($this->app->tab == 'product')
@@ -775,12 +632,14 @@ class api extends control
             $this->loadModel('project')->setMenu($lib->project);
         }
 
-        $spaceType = $this->session->spaceType;
-        if(empty($spaceType)) $spaceType = 'api';
         if($space)
         {
             $spaceType = $space;
             $this->session->set('spaceType', $space, 'doc');
+        }
+        else
+        {
+            $spaceType = $this->session->spaceType ? $this->session->spaceType : 'api';
         }
 
         if(in_array($spaceType, array('product', 'project')))
@@ -795,41 +654,7 @@ class api extends control
     }
 
     /**
-     * Generate api doc index page dropMenu
-     *
-     * @param  object $lib
-     * @param  int    $version
-     * @access public
-     * @return string
-     */
-    private function generateLibsDropMenu($lib, $version = 0)
-    {
-        if(empty($lib)) return '';
-
-        $objectTitle = $this->lang->api->noLinked;
-        $objectType  = 'nolink';
-        $objectID    = 0;
-        if($lib->product)
-        {
-            $objectType = 'product';
-            $objectID   = $lib->product;
-            $product    = $this->loadModel('product')->getByID($objectID);
-            $objectTitle = zget($product, 'name', '');
-        }
-        elseif($lib->project)
-        {
-            $objectType  = 'project';
-            $objectID    = $lib->project;
-            $project     = $this->loadModel('project')->getByID($objectID);
-            $objectTitle = zget($project, 'name', '');
-        }
-
-        $objectDropdown['text'] = $objectTitle;
-        $objectDropdown['link'] = helper::createLink('api', 'ajaxGetDropMenu', "objectType=$objectType&objectID=$objectID&libID=$lib->id&version=$version");
-        return $objectDropdown;
-    }
-
-    /**
+     * 返回当前客户端的session信息。
      * Return session to the client.
      *
      * @access public
@@ -845,6 +670,7 @@ class api extends control
     }
 
     /**
+     * 调用指定模型下的指定函数，并返回结果。
      * Execute a module's model's method, return the result.
      *
      * @param  string $moduleName
@@ -853,7 +679,7 @@ class api extends control
      * @access public
      * @return string
      */
-    public function getModel($moduleName, $methodName, $params = '')
+    public function getModel(string $moduleName, string $methodName, string $params = '')
     {
         if(!$this->config->features->apiGetModel) return printf($this->lang->api->error->disabled, '$config->features->apiGetModel');
 
@@ -869,6 +695,7 @@ class api extends control
         $module = $this->loadModel($moduleName);
         $result = call_user_func_array(array(&$module, $methodName), $params);
         if(dao::isError()) return print(json_encode(dao::getError()));
+
         $output['status'] = $result ? 'success' : 'fail';
         $output['data']   = json_encode($result);
         $output['md5']    = md5($output['data']);
@@ -877,18 +704,19 @@ class api extends control
     }
 
     /**
+     * 请求某个接口并返回测试结果。
      * The interface of api.
      *
-     * @param  int $filePath
-     * @param  int $action
+     * @param  string $filePath
+     * @param  string $action
      * @access public
      * @return void
      */
-    public function debug($filePath, $action)
+    public function debug(string $filePath, string $action)
     {
         $filePath    = helper::safe64Decode($filePath);
         $fileDirPath = realpath(dirname($filePath));
-        if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 and strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
+        if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 && strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
         if($action == 'extendModel')
         {
             $method = $this->api->getMethod($filePath, 'Model');
@@ -919,13 +747,14 @@ class api extends control
     }
 
     /**
+     * 通过接口进行sql查询并返回结果。
      * Query sql.
      *
      * @param  string $keyField
      * @access public
-     * @return void
+     * @return string
      */
-    public function sql($keyField = '')
+    public function sql(string $keyField = '')
     {
         if(!$this->config->features->apiSQL) return printf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
@@ -938,15 +767,17 @@ class api extends control
     }
 
     /**
+     * 获取接口类型和数据结构组成的数组。
      * Get options of type.
      *
-     * @param  int   $libID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    private function getTypeOptions($libID)
+    private function getTypeOptions(int $libID)
     {
         $options = array();
+        /* 获取接口类型。 */
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
             $options[] = array('label' => $item, 'value' => $key);
@@ -962,6 +793,7 @@ class api extends control
     }
 
     /**
+     * Ajax获取库所属产品或者项目的下拉菜单。
      * Ajax get objectType drop menu.
      *
      * @param  string $objectType
@@ -971,7 +803,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
+    public function ajaxGetDropMenu(string $objectType, int $objectID, string $module, string $method)
     {
         list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
 
@@ -989,11 +821,11 @@ class api extends control
         $this->view->closedObjects = $closedObjects;
         $this->view->nolinkLibs    = $this->doc->getApiLibs(0, 'nolink');
         $this->view->objectsPinYin = common::convert2Pinyin($titleList);
-
         $this->display();
     }
 
     /**
+     * 编辑接口库下的子目录。
      * Edit a catalog.
      *
      * @param  int    $moduleID
@@ -1001,24 +833,26 @@ class api extends control
      * @access public
      * @return void
      */
-    public function editCatalog($moduleID, $type)
+    public function editCatalog(int $moduleID, string $type)
     {
         echo $this->fetch('tree', 'edit', "moduleID=$moduleID&type=$type");
     }
 
     /**
+     * 删除接口库下的子目录。
      * Delete a catalog.
      *
      * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function deleteCatalog($moduleID)
+    public function deleteCatalog(int $moduleID)
     {
         echo $this->fetch('tree', 'delete', "moduleID=$moduleID&confirm=yes");
     }
 
     /**
+     * 排序接口库下的子目录。
      * Catalog sort.
      *
      * @access public
@@ -1026,20 +860,20 @@ class api extends control
      */
     public function sortCatalog()
     {
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        if(!empty($_POST['orders']))
         {
             foreach($_POST['orders'] as $id => $order)
             {
                 $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($id)->andWhere('type')->eq('api')->exec();
             }
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success'));
         }
 
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
+     * 点击dropMenu后的页面跳转。
      * Get api list.
      *
      * @param  int    $objectID

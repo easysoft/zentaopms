@@ -1,10 +1,9 @@
 .form-row.form-row-group {border-bottom: unset;}
-#casesResults .result-detail .steps-header > div {font-size: 13px; color: var(--color-slate-700); padding: 8px;}
+#casesResults .result-detail .steps-header > div {font-size: 13px; color: var(--color-gray-700); padding: 8px;}
 #casesResults .result-detail .steps-header > div.desc {padding-left: 32px;}
 #casesResults .result-detail .fail .steps-header > div.desc {padding-left: 52px;}
 #casesResults .result-detail .steps-body > .step:last-child {border-bottom: 0;}
 #casesResults .result-detail .steps-body > .step > div {padding: 8px;}
-#casesResults .result-item {background-color: var(--color-slate-50); border-color: rgba(var(--color-gray-300-rgb), 0.7);}
+#casesResults .result-item {background-color: var(--color-gray-50); border-color: rgba(var(--color-gray-300-rgb), 0.7);}
 #casesResults .result-detail > td {padding: 0;}
-#casesResults .step-item-id {color: var(--color-slate-500);}
-
+#casesResults .step-item-id {color: var(--color-gray-500);}

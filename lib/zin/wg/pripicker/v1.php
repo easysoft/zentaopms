@@ -39,6 +39,7 @@ class priPicker extends wg
         'value?: string|string[]',          // 默认值。
         'onChange?: function',              // 值变更回调函数。
         'disabled?: boolean',               // 是否禁用。
+        'readonly?: boolean',               // 是否只读。
         'multiple?: boolean|number=false',  // 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'placeholder?: string',             // 选择框上的占位文本。

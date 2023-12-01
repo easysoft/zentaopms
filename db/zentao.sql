@@ -13258,7 +13258,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `name` varchar(50) NOT NULL DEFAULT '',
   `type` enum('single','batch') NOT NULL DEFAULT 'single',
   `batchMode` enum('same','different') NOT NULL DEFAULT 'different',
-  `extensionType` varchar(10) NOT NULL DEFAULT 'override' COMMENT 'none | extend | override',
+  `extensionType` varchar(10) NOT NULL DEFAULT 'override',
   `open` varchar(20) NOT NULL DEFAULT '',
   `position` enum('menu','browseandview','browse','view') NOT NULL DEFAULT 'browseandview',
   `layout` char(20) NOT NULL DEFAULT '',
@@ -13480,13 +13480,13 @@ CREATE INDEX `version` ON `zt_workflowversion` (`version`);
 -- DROP TABLE IF EXISTS `zt_workflowreport`;
 CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(30) NOT NULL COMMENT 'module name',
-  `name` varchar(100) NOT NULL COMMENT 'report name',
-  `type` enum('pie', 'line', 'bar') NOT NULL DEFAULT 'pie' COMMENT 'report type',
-  `countType` enum('sum', 'count') NOT NULL DEFAULT 'sum' COMMENT 'report count method',
-  `displayType` enum('value', 'percent') NOT NULL DEFAULT 'value' COMMENT 'report display method',
-  `dimension` varchar(130) NOT NULL COMMENT 'dimension field code of zt_workflowfield',
-  `fields` text NOT NULL COMMENT 'count fileds code of zt_workflowfield,use comma split',
+  `module` varchar(30) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `type` enum('pie', 'line', 'bar') NOT NULL DEFAULT 'pie',
+  `countType` enum('sum', 'count') NOT NULL DEFAULT 'sum',
+  `displayType` enum('value', 'percent') NOT NULL DEFAULT 'value',
+  `dimension` varchar(130) NOT NULL,
+  `fields` text NOT NULL,
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
@@ -14207,9 +14207,9 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
- `contents` text NOT NULL COMMENT '问题描述',
- `support` text NOT NULL COMMENT '是否需要高层支持',
- `measures` text NOT NULL COMMENT '解决建议',
+ `contents` text NOT NULL,
+ `support` text NOT NULL,
+ `measures` text NOT NULL,
  `type` char(30) NOT NULL DEFAULT '',
  `addedBy` varchar(30) NOT NULL DEFAULT '',
  `addedDate` date NULL,
@@ -15951,6 +15951,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `value`      varchar(100) NOT NULL DEFAULT '0',
   `date`       datetime              DEFAULT NULL,
   PRIMARY KEY (`id`)
+  INDEX `metricCode`(`metricCode`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `collector`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `implementedBy`, `implementedDate`, `delistedBy`, `delistedDate`, `builtin`, `fromID`, `order`, `deleted`) VALUES ('scale', 'system', 'program', 'released', 'php', '按系统统计的所有层级的项目集总数', 'count_of_program', 'count', NULL, '按系统统计的所有层级的项目集总数表示在整个组织范围内的项目集数量。此度量项反映了整个组织所管理的项目集数量。可以作为评估组织规模和复杂度的指标。', '所有项目集的个数求和\r\n过滤已删除的项目集', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, '', NULL, '', NULL, '1', 0, 0, '0');

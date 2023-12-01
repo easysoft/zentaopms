@@ -279,7 +279,7 @@ class giteaModel extends model
      * @access public
      * @return array
      */
-    public function getGiteaListByAccount($account = '')
+    public function getListByAccount($account = '')
     {
         if(!$account) $account = $this->app->user->account;
 

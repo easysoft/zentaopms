@@ -7,7 +7,7 @@ formPanel
         div
         (
             setClass('panel-title text-lg'),
-            $lang->api->create
+            $title
         )
     ),
     formGroup
@@ -30,7 +30,8 @@ formPanel
         (
             set::items($moduleOptionMenu),
             set::name('module'),
-            set::required(true)
+            set::required(true),
+            set::value($moduleID)
         )
     ),
     formGroup

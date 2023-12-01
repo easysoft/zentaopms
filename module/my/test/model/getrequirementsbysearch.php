@@ -2,6 +2,14 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/my.class.php';
+
+zdTable('story')->config('story')->gen('20');
+zdTable('product')->gen('10');
+zdTable('productplan')->gen('15');
+zdTable('planstory')->gen('20');
+zdTable('userquery')->config('userquery')->gen('2');
+zdTable('user')->gen('1');
+
 su('admin');
 
 /**
@@ -10,16 +18,17 @@ title=测试 myModel->getRequirementsBySearch();
 cid=1
 pid=1
 
-获取requirement状态的项目 >> 用户需求397,draft
-获取requirement状态的项目 >> 用户需求1,active
-
 */
 
 $my       = new myTest();
+$queryID  = array(0, 2);
 $typeList = array('contribute', 'other');
 $orderBy  = array('id_desc', 'id_asc');
-
-$requirement1 = $my->getRequirementsBySearchTest(0, $typeList[0], $orderBy[0]);
-$requirement2 = $my->getRequirementsBySearchTest(0, $typeList[1], $orderBy[1]);
-r($requirement1) && p('397:title,status') && e('用户需求397,draft');//获取requirement状态的项目
-r($requirement2) && p('1:title,status')   && e('用户需求1,active'); //获取requirement状态的项目
+r($my->getRequirementsBySearchTest($queryID[0], $typeList[0], $orderBy[0])) && p() && e('10,9,5,4');    // 测试获取 queryID 0 类型 contribute 排序 id_desc 的需求。
+r($my->getRequirementsBySearchTest($queryID[0], $typeList[0], $orderBy[1])) && p() && e('4,5,9,10');    // 测试获取 queryID 0 类型 contribute 排序 id_asc 的需求。
+r($my->getRequirementsBySearchTest($queryID[0], $typeList[1], $orderBy[0])) && p() && e('19,10,9,5,4'); // 测试获取 queryID 0 类型 other 排序 id_desc 的需求。
+r($my->getRequirementsBySearchTest($queryID[0], $typeList[1], $orderBy[1])) && p() && e('4,5,9,10,19'); // 测试获取 queryID 0 类型 other 排序 id_asc 的需求。
+r($my->getRequirementsBySearchTest($queryID[1], $typeList[0], $orderBy[0])) && p() && e('10');          // 测试获取 queryID 1 类型 contribute 排序 id_desc 的需求。
+r($my->getRequirementsBySearchTest($queryID[1], $typeList[0], $orderBy[1])) && p() && e('10');          // 测试获取 queryID 1 类型 contribute 排序 id_asc 的需求。
+r($my->getRequirementsBySearchTest($queryID[1], $typeList[1], $orderBy[0])) && p() && e('19,10');       // 测试获取 queryID 1 类型 other 排序 id_desc 的需求。
+r($my->getRequirementsBySearchTest($queryID[1], $typeList[1], $orderBy[1])) && p() && e('10,19');       // 测试获取 queryID 1 类型 other 排序 id_asc 的需求。

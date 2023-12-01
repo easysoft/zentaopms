@@ -4,25 +4,29 @@ $config->company->user->actionList = array();
 
 if(!empty($config->sso->turnon))
 {
-    $config->company->user->actionList['unbind']['icon'] = 'unlink';
-    $config->company->user->actionList['unbind']['text'] = '';
-    $config->company->user->actionList['unbind']['hint'] = '';
-    $config->company->user->actionList['unbind']['url']  = array('module' => 'user', 'method' => 'unbind', 'params' => 'userID={id}');
+    $config->company->user->actionList['unbind']['icon']         = 'unlink';
+    $config->company->user->actionList['unbind']['text']         = $lang->user->unbind;
+    $config->company->user->actionList['unbind']['hint']         = $lang->user->unbind;
+    $config->company->user->actionList['unbind']['url']          = array('module' => 'user', 'method' => 'unbind', 'params' => 'userID={id}');
+    $config->company->user->actionList['unbind']['className']    = 'ajax-submit';
+    $config->company->user->actionList['unbind']['data-confirm'] = $lang->user->confirmUnbind;
 }
 
-$config->company->user->actionList['unlock']['icon'] = 'unlock';
-$config->company->user->actionList['unlock']['text'] = '';
-$config->company->user->actionList['unlock']['hint'] = '';
-$config->company->user->actionList['unlock']['url']  = array('module' => 'user', 'method' => 'unlock', 'params' => 'userID={id}');
+$config->company->user->actionList['unlock']['icon']         = 'unlock';
+$config->company->user->actionList['unlock']['text']         = $lang->user->unlock;
+$config->company->user->actionList['unlock']['hint']         = $lang->user->unlock;
+$config->company->user->actionList['unlock']['url']          = array('module' => 'user', 'method' => 'unlock', 'params' => 'account={account}');
+$config->company->user->actionList['unlock']['className']    = 'ajax-submit';
+$config->company->user->actionList['unlock']['data-confirm'] = $lang->user->confirmUnlock;
 
 $config->company->user->actionList['edit']['icon'] = 'edit';
-$config->company->user->actionList['edit']['text'] = '';
-$config->company->user->actionList['edit']['hint'] = '';
+$config->company->user->actionList['edit']['text'] = $lang->user->edit;
+$config->company->user->actionList['edit']['hint'] = $lang->user->edit;
 $config->company->user->actionList['edit']['url']  = array('module' => 'user', 'method' => 'edit', 'params' => 'userID={id}&from=company');
 
 $config->company->user->actionList['delete']['icon']        = 'trash';
-$config->company->user->actionList['delete']['text']        = '';
-$config->company->user->actionList['delete']['hint']        = '';
+$config->company->user->actionList['delete']['text']        = $lang->user->delete;
+$config->company->user->actionList['delete']['hint']        = $lang->user->delete;
 $config->company->user->actionList['delete']['url']         = array('module' => 'user', 'method' => 'delete', 'params' => 'userID={id}');
 $config->company->user->actionList['delete']['data-toggle'] = 'modal';
 

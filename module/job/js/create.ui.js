@@ -20,7 +20,7 @@ function changeEngine(event)
         repoItems.push({'text': repos[i], 'value': i});
     }
 
-    const picker = $('#repo').zui('picker');
+    const picker = $('[name=repo]').zui('picker');
     picker.render({items: repoItems});
     picker.$.setValue(repoID);
 
@@ -40,7 +40,7 @@ function changeEngine(event)
     {
         if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
     }
-    zui.Picker.query('#frame').render({items: items});
+    zui.Picker.query('[name=frame]').render({items: items});
 
     changeRepo();
 }

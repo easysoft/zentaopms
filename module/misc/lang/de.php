@@ -111,6 +111,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.9']        = '2023-11-09';
 $lang->misc->releaseDate['18.8']        = '2023-09-28';
 $lang->misc->releaseDate['18.7']        = '2023-08-29';
 $lang->misc->releaseDate['18.6']        = '2023-08-15';
@@ -215,6 +216,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.9'][]        = array('title' => 'We have now implemented comprehensive integration of AI Large Language Models, introduced an upgraded client version for meetings, and improved the ability to add participants in test requests. To enhance usability, we have also implemented online preview capabilities for video attachments and increased flexibility in customizing review inspection categories.', 'desc' => '');
 $lang->misc->feature->all['18.8'][]        = array('title' => 'In the BI section, we have introduced new features such as metric item functionality and an application inspection report dashboard. The DevOps platform edition now includes a configuration wizard. Additionally, we have enhanced the requitement and market management interface by adding a market management feature. New revision of client navigation and personal center.', 'desc' => '');
 $lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps has introduced new features such as cloud-native platform, artifact repository, and application management, while also enhancing the navigation structure and improving the UI interactions. Additionally, a new AI suggestion designer has been added, which supports integration with large language models and allows for customization of AI applications.', 'desc' => '');
 $lang->misc->feature->all['18.6'][]        = array('title' => "We have made significant improvements to the performance of commonly used lists and the details of BI functionality, while also refining the functionality details of waterfall projects. Additionally, we have diligently addressed and resolved any identified bugs.", 'desc' => '');

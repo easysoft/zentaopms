@@ -52,8 +52,18 @@ $lang->metric->testMetric    = 'Test Metric';
 $lang->metric->calcTime      = 'Calculate Time';
 $lang->metric->to            = 'to';
 
+$lang->metric->placeholder = new stdclass();
+$lang->metric->placeholder->select    = "Please select";
+$lang->metric->placeholder->project   = "All Projects";
+$lang->metric->placeholder->product   = "All Products";
+$lang->metric->placeholder->execution = "All Executions";
+$lang->metric->placeholder->dept      = "All Teams";
+$lang->metric->placeholder->user      = "All Users";
+$lang->metric->placeholder->program   = "All Program Sets";
+
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = 'query';
+
 $lang->metric->query->scope = array();
 $lang->metric->query->scope['project']   = 'Project';
 $lang->metric->query->scope['product']   = 'Product';
@@ -61,6 +71,30 @@ $lang->metric->query->scope['execution'] = 'Execution';
 $lang->metric->query->scope['dept']      = 'Dept';
 $lang->metric->query->scope['user']      = 'User';
 $lang->metric->query->scope['program']   = 'Program';
+
+$lang->metric->query->yearLabels = array();
+$lang->metric->query->yearLabels['3']   = '3 years';
+$lang->metric->query->yearLabels['5']   = '5 years';
+$lang->metric->query->yearLabels['10']  = '10 years';
+$lang->metric->query->yearLabels['all'] = 'All';
+
+$lang->metric->query->monthLabels = array();
+$lang->metric->query->monthLabels['6']   = '6 months';
+$lang->metric->query->monthLabels['12']  = '12 months';
+$lang->metric->query->monthLabels['24']  = '24 months';
+$lang->metric->query->monthLabels['36']  = '36 months';
+
+$lang->metric->query->weekLabels = array();
+$lang->metric->query->weekLabels['4']  = '4 weeks';
+$lang->metric->query->weekLabels['8']  = '8 weeks';
+$lang->metric->query->weekLabels['12'] = '12 weeks';
+$lang->metric->query->weekLabels['16'] = '16 weeks';
+
+$lang->metric->query->dayLabels = array();
+$lang->metric->query->dayLabels['7']  = '7 days';
+$lang->metric->query->dayLabels['14'] = '14 days';
+$lang->metric->query->dayLabels['21'] = '21 days';
+$lang->metric->query->dayLabels['28'] = '28 days';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -78,6 +112,7 @@ $lang->metric->saveSqlMeasSuccess = "Query success，result is：%s";
 $lang->metric->monthText          = "%s day";
 $lang->metric->errorDateRange     = "The start date cannot be longer than the end date";
 $lang->metric->errorCalcTimeRange = "The start time of collection cannot be later than the end time of collection";
+$lang->metric->updateTimeTip      = "Update snapshot time：%s";
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";

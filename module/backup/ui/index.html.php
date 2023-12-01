@@ -10,15 +10,14 @@
 declare(strict_types=1);
 namespace zin;
 
-jsvar('backup', $lang->backup->common);
-jsvar('rmPHPHeader', $lang->backup->rmPHPHeader);
-jsvar('restore', $lang->backup->restore);
-jsvar('startBackup', $lang->backup->backup);
-jsvar('getSpaceLoading', $lang->backup->getSpaceLoading);
-jsvar('confirmRestore', $lang->backup->confirmRestore);
-jsvar('backupTimeout', $lang->backup->error->timeout);
+jsvar('backupLang', $lang->backup->common);
+jsvar('rmPHPHeaderLang', $lang->backup->rmPHPHeader);
+jsvar('restoreLang', $lang->backup->restore);
 jsvar('alertTips', $lang->backup->insufficientDisk);
 jsvar('backupError', empty($backupError) ? '' : $backupError);
+jsvar('startBackup', $lang->backup->backup);
+jsvar('getSpaceLoading', $lang->backup->getSpaceLoading);
+jsvar('confirmDeleteLang', $lang->backup->confirmDelete);
 
 featureBar
 (

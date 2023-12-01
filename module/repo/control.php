@@ -369,7 +369,7 @@ class repo extends control
         }
 
         $this->commonAction($repoID, $objectID);
-        $this->repo->setBackSession('view', true);
+        $this->repoZen->setBackSession('view', true);
         $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"), 'product');
 
         return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
@@ -441,7 +441,7 @@ class repo extends control
 
         /* Get files info. */
         $base64BranchID = helper::safe64Encode(base64_encode($branchID));
-        $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision, $base64BranchID, $objectID);
+        $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, $base64BranchID, $objectID);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
@@ -484,7 +484,7 @@ class repo extends control
     public function log(int $repoID = 0, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $type = 'dir', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setBackSession('log', true);
+        $this->repoZen->setBackSession('log', true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
         $repo  = $this->repo->getByID($repoID);
@@ -667,7 +667,7 @@ class repo extends control
         }
 
         if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
-        if($arrange == 'appose') $diffs = $this->repoZen->getApposeDiff($diffs);
+        if($arrange == 'appose') $diffs = $this->repo->getApposeDiff($diffs);
 
         $this->view->entry         = urldecode($entry);
         $this->view->encoding      = str_replace('-', '_', $encoding);
@@ -1078,7 +1078,7 @@ class repo extends control
 
         $suffix   = '';
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
-        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
+        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repoZen->isBinary($content, $suffix) ? 'binary' : 'c';
 
         if(strpos($this->config->repo->images, "|$suffix|") !== false)
         {
@@ -1166,7 +1166,7 @@ class repo extends control
 
         $this->scm->setEngine($repo);
 
-        $this->repo->setRepoBranch($branch);
+        $this->repoZen->setRepoBranch($branch);
         helper::setcookie("syncBranch", $branch);
 
         $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
@@ -1382,7 +1382,7 @@ class repo extends control
      */
     public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = '')
     {
-        $projects = $this->repo->getGitlabProjects($gitlabID, $projectIdList, $filter);
+        $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
 
         if(!$projects) return print('[]');
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
@@ -1542,25 +1542,13 @@ class repo extends control
      */
     public function ajaxGetCommitInfo()
     {
-        $line       = $this->post->line;
-        $repo       = $this->repo->getByID($this->post->repoID);
-        $entry      = $this->repo->decodePath($this->post->entry);
-        $revision   = $this->post->revision;
-        $returnType = $this->post->returnType ? $this->post->returnType : 'view';
+        $repo  = $this->repo->getByID((int)$this->post->repoID);
+        $entry = $this->repo->decodePath($this->post->entry);
 
         $this->scm->setEngine($repo);
         $blames = $this->scm->blame($entry, $this->post->revision);
         if(!$blames) $blames =$this->scm->blame($entry, $this->post->sourceRevision);
 
-        while($line > 0)
-        {
-            if(isset($blames[$line]['revision']))
-            {
-                $revision = $blames[$line]['revision'];
-                break;
-            }
-            $line--;
-        }
         return $this->send(array('result' => 'success', 'blames' => $blames));
     }
 
@@ -1590,7 +1578,7 @@ class repo extends control
      */
     public function ajaxGetFileCommitInfo()
     {
-        $repo = $this->repo->getByID($this->post->repoID);
+        $repo = $this->repo->getByID((int)$this->post->repoID);
         echo json_encode($this->loadModel('gitlab')->getFileLastCommit($repo, $this->post->path, $this->post->branch));
     }
 }

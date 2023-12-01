@@ -54,7 +54,7 @@ class mainNavbar extends nav
         if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
 
         \commonModel::setMainMenu();
-        $activeMenu = \commonModel::printMainMenu(false);
+        $activeMenu = \commonModel::getActiveMainMenu();
         $items = \customModel::getModuleMenu($activeMenu);
 
         if($items)

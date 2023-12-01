@@ -22,7 +22,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     const postData = new FormData();
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
-    $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage($.createLink('release', 'view', `releaseID=${releaseID}&type=${type}`))});
+    $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage($.createLink(releaseModule, 'view', `releaseID=${releaseID}&type=${type}`))});
 });
 
 /**

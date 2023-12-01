@@ -454,40 +454,15 @@ class user extends control
     }
 
     /**
-     * 设置来源地址。
-     * Set referer.
-     *
-     * @param  string $referer
-     * @access public
-     * @return void
-     */
-    public function setReferer(string $referer = '')
-    {
-        $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
-        if(!empty($referer)) $this->referer = helper::safe64Decode($referer);
-        if($this->post->referer) $this->referer = $this->post->referer;
-
-        /* 构建禅道链接的正则表达式。*/
-        /* Build zentao link regular expression. */
-        $webRoot = $this->config->webRoot;
-        $linkReg = $webRoot . 'index.php?' . $this->config->moduleVar . '=\w+&' . $this->config->methodVar . '=\w+';
-        if($this->config->requestType == 'PATH_INFO') $linkReg = $webRoot . '\w+' . $this->config->requestFix . '\w+';
-        $linkReg = str_replace(array('/', '.', '?', '-'), array('\/', '\.', '\?', '\-'), $linkReg);
-
-        /* 检查来源地址是否为禅道链接。*/
-        /* Check zentao link by regular expression. */
-        $this->referer = preg_match('/^' . $linkReg . '/', $this->referer) ? $this->referer : $webRoot;
-    }
-
-    /**
      * 添加一个用户。
      * Create a user.
      *
      * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create(int $deptID = 0)
+    public function create(int $deptID = 0, $type = 'inside')
     {
         if(!empty($_POST))
         {
@@ -512,63 +487,45 @@ class user extends control
         $this->view->rand      = $this->user->updateSessionRandom();
         $this->view->visions   = $this->user->getVisionList();
         $this->view->deptID    = $deptID;
+        $this->view->type      = $type;
 
         $this->display();
     }
 
     /**
+     * 批量添加用户。
      * Batch create users.
      *
      * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchCreate($deptID = 0)
+    public function batchCreate(int $deptID = 0, $type = 'inside')
     {
         if(!empty($_POST))
         {
-            $userIdList = $this->user->batchCreate();
+            $users = form::batchData($this->config->user->form->batchCreate)->get();
+            $this->userZen->checkBeforeBatchCreate($users, $this->post->verifyPassword);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $userIdList = $this->user->batchCreate($users);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIdList));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('company', 'browse')));
         }
 
-        $groups = $this->dao->select('id, name, role')
-            ->from(TABLE_GROUP)
-            ->where('vision')->eq($this->config->vision)
-            ->fetchAll();
-        $groupList = array();
-        $roleGroup = array();
-        foreach($groups as $group)
-        {
-            $groupList[$group->id] = $group->name;
-            if($group->role) $roleGroup[$group->role] = $group->id;
-        }
+        $this->userZen->prepareRolesAndGroups();
+        $this->userZen->prepareCustomFields('batchCreate', 'create');
 
-        /* Set custom. */
-        foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
-        {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
-        }
-
-        $batchCreateFields = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=user&section=custom&key=batchCreateFields");
-        if(!$batchCreateFields) $batchCreateFields = $this->config->user->custom->batchCreateFields;
-        foreach(explode(',', $batchCreateFields) as $field)
-        {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
-        }
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = join(',', $showFields);
-
-        $this->view->title      = $this->lang->user->batchCreate;
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->deptID     = $deptID;
-        $this->view->groupList  = $groupList;
-        $this->view->roleGroup  = $roleGroup;
-        $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $this->user->getVisionList();
-        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->title     = $this->lang->user->batchCreate;
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->visions   = $this->user->getVisionList();
+        $this->view->deptID    = $deptID;
+        $this->view->type      = $type;
 
         $this->display();
     }
@@ -599,14 +556,13 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $user        = $this->user->getById($userID, 'id');
-        $userVisions = explode(',', trim($user->visions, ','));
-        $userGroups  = $this->loadModel('group')->getByAccount($user->account, count($userVisions) > 1);
+        $user       = $this->user->getById($userID, 'id');
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, true);
 
         $this->view->title      = $this->lang->user->edit;
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->groups     = $this->user->getGroupsByVisions($userVisions);
+        $this->view->groups     = $this->user->getGroupsByVisions($user->visions);
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visions    = $this->user->getVisionList();
         $this->view->userGroups = array_keys($userGroups);
@@ -616,67 +572,67 @@ class user extends control
     }
 
     /**
-     * Batch edit user.
+     * 批量编辑用户。
+     * Batch edit users.
      *
      * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchEdit($deptID = 0)
+    public function batchEdit(int $deptID = 0, string $type = 'inside')
     {
-        if(empty($_POST)) return $this->send(array('result' => 'success', 'load' => $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID")));
-        if(!empty($_POST['account']))
+        if($this->post->account)
         {
-            $this->user->batchEdit();
+            $users = form::batchData($this->config->user->form->batchEdit)->get();
+            $this->userZen->checkBeforeBatchEdit($users, $this->post->verifyPassword);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID")));
-        }
-        if(isset($_POST['users'])) $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
 
-        /* Set custom. */
-        foreach(explode(',', $this->config->user->availableBatchEditFields) as $field)
+            $this->user->batchUpdate($users, $type);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $locate = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID={$deptID}&browseType={$type}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
+        }
+
+        if(!$this->post->userIdList)
         {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
+            $locate = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID={$deptID}&browseType={$type}");
+            $this->locate($locate);
         }
 
-        $batchEditFields = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=user&section=custom&key=batchEditFields");
-        if(!$batchEditFields) $batchEditFields = $this->config->user->custom->batchEditFields;
-        foreach(explode(',', $batchEditFields) as $field)
-        {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
-        }
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = join(',', $showFields);
+        $this->userZen->prepareCustomFields('batchEdit', 'edit');
 
-        $this->view->title      = $this->lang->user->batchEdit;
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $this->user->getVisionList();
+        $this->view->title     = $this->lang->user->batchEdit;
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users     = $this->user->getByIdList($this->post->userIdList);
+        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->visions   = $this->user->getVisionList();
+        $this->view->type      = $type;
 
         $this->display();
     }
 
     /**
+     * 删除一个用户。
      * Delete a user.
      *
      * @param  int    $userID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($userID)
+    public function delete(int $userID)
     {
         $user = $this->user->getByID($userID, 'id');
         if($this->app->user->admin and $this->app->user->account == $user->account) return;
+
         if($_POST)
         {
             if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
 
             $this->user->delete(TABLE_USER, $userID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->loadModel('mail');
-            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('delete', $user->email);
 
             /* if ajax request, send result. */
             if($this->viewType == 'json') return $this->send(array('result' => 'success'));
@@ -689,320 +645,162 @@ class user extends control
     }
 
     /**
+     * 解锁一个用户。
      * Unlock a user.
      *
      * @param  int    $userID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function unlock($userID, $confirm = 'no')
+    public function unlock(int $userID)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->user->confirmUnlock, $this->createLink('user', 'unlock', "userID=$userID&confirm=yes")));
-
         $user = $this->user->getById($userID, 'id');
         $this->user->cleanLocked($user->account);
-        return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
-     * Unbind Ranzhi
+     * 解除一个用户和 ZDOO 的绑定。
+     * Unbind a user from ZDOO.
      *
-     * @param  string $userID
-     * @param  string $confirm
+     * @param  int    $userID
      * @access public
      * @return void
      */
-    public function unbind($userID, $confirm = 'no')
+    public function unbind(int $userID)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->user->confirmUnbind, $this->createLink('user', 'unbind', "userID=$userID&confirm=yes")));
-
         $user = $this->user->getById($userID, 'id');
         $this->user->unbind($user->account);
-        return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
-
     /**
-     * User login, identify him and authorize him.
+     * 用户登录。
+     * User login.
      *
-     * @param string $referer
-     * @param string $from
-     *
+     * @param  string $referer
      * @access public
      * @return void
      */
-    public function login($referer = '', $from = '')
+    public function login(string $referer = '')
     {
-        /* Check if you can operating on the folder. */
-        $canModifyDIR = true;
-        if($this->user->checkTmp() === false)
-        {
-            $canModifyDIR = false;
-            $folderPath   = $this->app->tmpRoot;
-        }
-        elseif(!is_dir($this->app->dataRoot) or substr(decoct(fileperms($this->app->dataRoot)), -4) != '0777')
-        {
-            $canModifyDIR = false;
-            $folderPath   = $this->app->dataRoot;
-        }
+        $viewType = $this->app->getViewType();
 
-        if(!$canModifyDIR)
-        {
-            if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-            {
-                return print(sprintf($this->lang->user->mkdirWin, $folderPath, $folderPath));
-            }
-            else
-            {
-                return print(sprintf($this->lang->user->mkdirLinux, $folderPath, $folderPath, $folderPath, $folderPath));
-            }
-        }
+        /* 重新加载语言项。*/
+        /* Reload lang. */
+        if($viewType == 'json' && $this->get->lang && $this->get->lang != $this->app->getClientLang()) $this->userZen->reloadLang($this->get->lang);
 
-        $this->setReferer($referer);
+        /* 检查缓存目录和数据目录访问权限。如果不能访问，终止程序并输出提示信息。*/
+        /* Check the access permissions of the cache directory and data directory. If you cannot access, terminate the program and output the prompt message. */
+        $this->userZen->checkDirPermission();
 
-        $loginLink = $this->createLink('user', 'login');
-        $denyLink  = $this->createLink('user', 'deny');
+        /* 设置来源网址。*/
+        /* Set referer. */
+        $this->referer = $this->userZen->setReferer($referer);
 
-        /* Reload lang by lang of get when viewType is json. */
-        if($this->app->getViewType() == 'json' and $this->get->lang and $this->get->lang != $this->app->getClientLang())
-        {
-            $this->app->setClientLang($this->get->lang);
-            $this->app->loadLang('user');
-        }
+        /* 预处理变量。*/
+        /* Prepare variables. */
+        $loginLink     = inlink('login');
+        $denyLink      = inlink('deny');
+        $locateWebRoot = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
+        $locateReferer = $this->referer;
+        if(helper::isWithTID() && strpos($locateReferer, 'tid=') === false) $locateReferer .= (strpos($locateReferer, '?') === false ? '?' : '&') . "tid={$this->get->tid}";
 
-        /* If user is logon, back to the referer. */
-        if($this->user->isLogon())
-        {
-            if($this->app->getViewType() == 'json')
-            {
-                $data = $this->user->getDataInJSON($this->app->user);
-                return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
-            }
+        /* 如果用户已经登录则返回相关信息。*/
+        /* If user has logon, return related info. */
+        if($this->user->isLogon()) return $this->send($this->userZen->responseForLogon($this->referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot));
 
-            $response['result'] = 'success';
-            if(strpos($this->referer, $loginLink) === false and
-               strpos($this->referer, $denyLink)  === false and
-               strpos($this->referer, 'ajax') === false and
-               strpos($this->referer, 'block')  === false and $this->referer
-            )
-            {
-                $response['locate'] = $this->referer;
-                if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
-                return $this->send($response);
-            }
-            else
-            {
-                $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
-                return $this->send($response);
-            }
-        }
+        /* 处理登录逻辑。*/
+        /* Process login. */
+        $result = $this->userZen->login($this->referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot);
+        if($result) return $this->send($result);
 
-        /* Passed account and password by post or get. */
-        if(!empty($_POST) or (isset($_GET['account']) and isset($_GET['password'])))
-        {
-            $account  = '';
-            $password = '';
-            if($this->post->account)  $account  = $this->post->account;
-            if($this->get->account)   $account  = $this->get->account;
-            if($this->post->password) $password = $this->post->password;
-            if($this->get->password)  $password = $this->get->password;
+        helper::setcookie('tab', '', time());
+        $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) || $this->referer == $this->config->webRoot || empty($this->referer) || preg_match("/\/www\/$/", strtolower($this->referer), $output));
 
-            $account = trim($account);
-            if($this->user->checkLocked($account))
-            {
-                $response['result']  = 'fail';
-                $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $response['message']))));
-                return $this->send($response);
-            }
-
-            if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->lang->user->errorCaptcha;
-                return $this->send($response);
-            }
-
-            $user = $this->user->identify($account, $password);
-
-            if($user)
-            {
-                /* Set user group, rights, view and award login score. */
-                $user = $this->user->login($user);
-
-                /* Go to the referer. */
-                if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false and strpos($this->post->referer, 'block') === false)
-                {
-                    if($this->app->getViewType() == 'json')
-                    {
-                        $data = $this->user->getDataInJSON($user);
-                        return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
-                    }
-
-                    /* Get the module and method of the referer. */
-                    $module = $this->config->default->module;
-                    $method = $this->config->default->method;
-                    if($this->config->requestType == 'PATH_INFO')
-                    {
-                        $requestFix = $this->config->requestFix;
-
-                        $path = substr($this->post->referer, strrpos($this->post->referer, '/') + 1);
-                        $path = rtrim($path, '.html');
-                        if($path and strpos($path, $requestFix) !== false) list($module, $method) = explode($requestFix, $path);
-                    }
-                    else
-                    {
-                        $url   = html_entity_decode($this->post->referer);
-                        $param = substr($url, strrpos($url, '?') + 1);
-
-                        if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
-                        $module = str_replace('m=', '', $module);
-                        $method = str_replace('f=', '', $method);
-                    }
-
-                    /* Check parsed name of module and method from referer. */
-                    if(empty($module) or !$this->app->checkModuleName($module, $exit = false) or
-                       empty($method) or !$this->app->checkMethodName($module, $exit = false))
-                    {
-                        $module = $this->config->default->module;
-                        $method = $this->config->default->method;
-                    }
-
-                    $response['result']  = 'success';
-                    if(common::hasPriv($module, $method))
-                    {
-                        $response['locate'] = $this->post->referer;
-                        if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
-                        return $this->send($response);
-                    }
-                    else
-                    {
-                        $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
-                        return $this->send($response);
-                    }
-                }
-                else
-                {
-                    if($this->app->getViewType() == 'json')
-                    {
-                        $data = $this->user->getDataInJSON($user);
-                        return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
-                    }
-
-                    $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
-                    $response['result']  = 'success';
-                    return $this->send($response);
-                }
-            }
-            else
-            {
-                $response['result']  = 'fail';
-                $fails = $this->user->failPlus($account);
-                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed))));
-                $remainTimes = $this->config->user->failTimes - $fails;
-                if($remainTimes <= 0)
-                {
-                    $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                    return $this->send($response);
-                }
-                elseif($remainTimes <= 3)
-                {
-                    $response['message'] = sprintf($this->lang->user->lockWarning, $remainTimes);
-                    return $this->send($response);
-                }
-
-                $response['message'] = $this->lang->user->loginFailed;
-                if(dao::isError()) $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-        }
-        else
-        {
-            helper::setcookie('tab', '', time(), $this->config->webRoot);
-            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
-
-            $this->loadModel('misc');
-            $this->loadModel('extension');
-            $this->view->title        = $this->lang->user->login;
-            $this->view->referer      = $this->referer;
-            $this->view->s            = zget($this->config->global, 'sn', '');
-            $this->view->keepLogin    = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
-            $this->view->rand         = $this->user->updateSessionRandom();
-            $this->view->unsafeSites  = $this->misc->checkOneClickPackage();
-            $this->view->plugins      = $this->extension->getExpiringPlugins(true);
-            $this->view->loginExpired = $loginExpired;
-            $this->display();
-        }
+        $this->view->title        = $this->lang->user->login;
+        $this->view->plugins      = $this->loadModel('extension')->getExpiringPlugins(true);
+        $this->view->unsafeSites  = $this->loadModel('misc')->checkOneClickPackage();
+        $this->view->rand         = $this->user->updateSessionRandom();
+        $this->view->keepLogin    = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
+        $this->view->sn           = zget($this->config->global, 'sn', '');
+        $this->view->referer      = $this->referer;
+        $this->view->loginExpired = $loginExpired;
+        $this->display();
     }
 
     /**
+     * 拒绝访问页面。
      * Deny page.
      *
      * @param  string $module
      * @param  string $method
-     * @param  string $refererBeforeDeny    the referer of the denied page.
+     * @param  string $referer the referer of the denied page.
      * @access public
      * @return void
      */
-    public function deny($module, $method, $refererBeforeDeny = '')
+    public function deny(string $module, string $method, string $referer = '')
     {
-        $this->setReferer();
-        $this->view->title             = $this->lang->user->deny;
-        $this->view->module            = $module;
-        $this->view->method            = $method;
-        $this->view->denyPage          = $this->referer;        // The denied page.
-        $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
-        if($module == 'requirement') $this->app->loadLang('story');
-        if($module != 'requirement') $this->app->loadLang($module);
+        $this->userZen->setReferer();
+
+        $module = strtolower($module);
+        $method = strtolower($method);
 
         $this->app->loadLang('my');
+        $this->app->loadLang($module == 'requirement' ? 'story' : $module);
 
-        /* Check deny type. */
-        $rights  = $this->app->user->rights['rights'];
-        $acls    = $this->app->user->rights['acls'];
-
-        $module  = strtolower($module);
-        $method  = strtolower($method);
-
+        /* 判断禁止访问的类型。*/
+        /* Judge the type of deny. */
         $denyType = 'nopriv';
+        $rights   = $this->app->user->rights['rights'];
+        $acls     = $this->app->user->rights['acls'];
         if(isset($rights[$module][$method]))
         {
             $menu = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
             if(!isset($acls['views'][$menu])) $denyType = 'noview';
+
             $this->view->menu = $menu;
         }
 
+        $this->view->title    = $this->lang->user->deny;
+        $this->view->module   = $module;
+        $this->view->method   = $method;
+        $this->view->denyPage = $this->referer; // The denied page.
+        $this->view->referer  = $referer;       // The referer of the denied page.
         $this->view->denyType = $denyType;
 
         $this->display();
     }
 
     /**
-     * Logout.
+     * 退出登录。
+     * User logout.
      *
+     * @param  string $referer
      * @access public
      * @return void
      */
-    public function logout($referer = 0)
+    public function logout(string $referer = '')
     {
-        if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
-        helper::setcookie('za', '', time() - 3600, $this->config->webRoot);
-        helper::setcookie('zp', '', time() - 3600, $this->config->webRoot);
-        helper::setcookie('tab', '', time() - 3600, $this->config->webRoot);
+        if(!empty($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
 
-        $_SESSION = array();
+        helper::setcookie('za',  '', time() - 3600);
+        helper::setcookie('zp',  '', time() - 3600);
+        helper::setcookie('tab', '', time() - 3600);
+
+        $_SESSION = array();    // Clear session in roadrunner.
         session_destroy();
 
         if($this->app->getViewType() == 'json') return $this->send(array('status' => 'success'));
-        $vars = !empty($referer) ? "referer=$referer" : '';
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('user', 'login', $vars)));
+
+        return $this->send(array('result' => 'success', 'load' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
     }
 
     /**
-     * Reset password.
+     * 管理员重置密码。
+     * Admin reset password.
      *
      * @access public
      * @return void
@@ -1014,29 +812,33 @@ class user extends control
             $resetFileName = $this->app->getBasePath() . 'tmp' . DIRECTORY_SEPARATOR . uniqid('reset_') . '.txt';
             $this->session->set('resetFileName', $resetFileName);
         }
-
-        $resetFileName = $this->session->resetFileName;
-
-        $needCreateFile = false;
-        if(!file_exists($resetFileName) or (time() - filemtime($resetFileName)) > 60 * 2) $needCreateFile = true;
+        $resetFileName  = $this->session->resetFileName;
+        $needCreateFile = !file_exists($resetFileName) || (time() - filemtime($resetFileName)) > 60 * 2;
 
         if($_POST)
         {
             if($needCreateFile) return $this->send(array('result' => 'success', 'load' => true));
 
-            $result = $this->user->resetPassword();
+            $user = form::data($this->config->user->form->reset)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
+            $this->userZen->checkPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $result = $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => $this->createLink('user', 'logout', 'referer=' . $referer)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => inlink('logout', 'referer=' . $referer)));
         }
 
-        /* Remove the real path for security reason. */
+        /* 移除真实路径以确保安全。*/
+        /* Remove the real path to ensure security. */
         $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
-        $this->view->title          = $this->lang->user->resetPassword;
-        $this->view->status         = 'reset';
+        $this->view->title          = $this->lang->user->resetPwdByAdmin;
+        $this->view->rand           = $this->user->updateSessionRandom();
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
 
@@ -1044,6 +846,7 @@ class user extends control
     }
 
     /**
+     * 忘记密码。
      * Forget password.
      *
      * @access public
@@ -1051,48 +854,43 @@ class user extends control
      */
     public function forgetPassword()
     {
-        $this->app->loadLang('admin');
-        $this->loadModel('mail');
-
         if(!empty($_POST))
         {
-            /* Check account and email. */
-            $account = $_POST['account'];
-            $email   = $_POST['email'];
-            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->accountEmpty));
-            if(empty($email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailEmpty));
+            $data = form::data($this->config->user->form->forgetPassword)->get();
 
-            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noUser));
-            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noEmail));
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
+            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => array('account' => $this->lang->user->error->noUser)));
+            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => array('email' => $this->lang->user->error->noEmail)));
+            if($user->email != $data->email) return $this->send(array('result' => 'fail', 'message' => array('email' => $this->lang->user->error->errorEmail)));
 
-            if($user->email != $email) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->errorEmail));
+            $this->loadModel('mail');
             if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
 
             $code = uniqid();
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($user->account)->exec();
 
-            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
-            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
+            $result = $this->mail->send($user->account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
+            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
         }
 
-        $this->view->title = $this->lang->user->resetPassword;
+        $this->view->title = $this->lang->user->resetPwdByMail;
         $this->display();
     }
 
     /**
-     * Reset password.
+     * 邮箱重置密码。
+     * Reset password by email.
      *
-     * @param  string  $code
+     * @param  string $code
      * @access public
      * @return void
      */
-    public function resetPassword($code)
+    public function resetPassword(string $code)
     {
         $expired = true;
-        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"' . $code . '"%')->fetch();
+        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"code":"' . $code . '"%')->fetch();
         if($user)
         {
             $resetToken = json_decode($user->resetToken);
@@ -1102,32 +900,26 @@ class user extends control
         if(!empty($_POST))
         {
             if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
-            $_POST['account'] = $user->account;
 
-            $this->user->resetPassword();
-            if(dao::isError())
-            {
-                if(empty($_POST['password2'])) dao::$errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+            $user = form::data($this->config->user->form->resetPassword)
+                ->add('account', $user->account)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
 
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+            $this->userZen->checkPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                return $this->send($response);
-            }
+            $this->user->resetPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($this->post->account)->exec();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($user->account)->exec();
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = inlink('login');
-
-            return $this->send($response);
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->saveSuccess, 'load' => inlink('login')));
         }
 
         $this->view->title   = $this->lang->user->resetPWD;
-        $this->view->expired = $expired;
-        $this->view->user    = empty($user) ? '' : $user;
         $this->view->rand    = $this->user->updateSessionRandom();
+        $this->view->expired = $expired;
 
         $this->display();
     }
@@ -1184,95 +976,82 @@ class user extends control
         $this->display();
     }
 
-	/**
-     * crop avatar
+    /**
+     * 裁剪头像。
+     * Crop avatar.
      *
-     * @param  int    $image
+     * @param  int    $imageID
      * @access public
      * @return void
      */
-    public function cropAvatar($image)
+    public function cropAvatar(int $imageID)
     {
-        $image = $this->loadModel('file')->getByID($image);
+        $image = $this->loadModel('file')->getByID($imageID);
 
         if(!empty($_POST))
         {
-            $size = fixer::input('post')->get();
+            $size = form::data($this->config->user->form->cropAvatar)->get();
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
 
             $this->app->user->avatar = $image->webPath;
             $this->session->set('user', $this->app->user);
             $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . helper::createLink('my', 'profile') . "', 'profile', {}, window.updateUserAvatar);"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . $this->createLink('my', 'profile') . "', 'profile', {}, $.apps.updateUserToolbar);"));
         }
 
-        $this->view->user  = $this->user->getById($this->app->user->account);
         $this->view->title = $this->lang->user->cropAvatar;
         $this->view->image = $image;
         $this->display();
     }
 
     /**
-     * Get user for ajax
-     *
-     * @param  string $requestID
-     * @param  string $assignedTo
-     * @access public
-     * @return void
-     */
-    public function ajaxGetUser($taskID = '', $assignedTo = '')
-    {
-        $users = $this->user->getPairs('noletter, noclosed');
-        $html = "<form method='post' target='hiddenwin' action='" . $this->createLink('task', 'assignedTo', "taskID=$taskID&assignedTo=$assignedTo") . "'>";
-        $html .= html::select('assignedTo', $users, $assignedTo);
-        $html .= html::submitButton('', '', 'btn btn-primary');
-        $html .= '</form>';
-        echo $html;
-    }
-
-    /**
-     * AJAX: 获取联系人列表人员。
-     * AJAX: get users from a contact list.
+     * AJAX: 获取某个联系人列表中包含的用户。
+     * AJAX: Get users in a contact list.
      *
      * @param  int    $contactListID
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetContactUsers(int $contactListID)
     {
-        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $users = $this->user->getContactUserPairs($list ? $list->userList : '');
+        if(!$contactListID) return $this->send(array());
 
-        $items = array();
-        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
-        return print(json_encode($items));
+        $list = $this->user->getContactListByID($contactListID);
+        if(!$list) return $this->send(array());
+
+        $accountList = array_filter(array_unique(explode(',', $list->userList)));
+        if(!$accountList) return $this->send(array());
+
+        $users = $this->user->getListByAccounts($accountList);
+        $items = array_map(function($user){return array('text' => $user->realname, 'value' => $user->account);}, $users);
+        return $this->send(array_values($items));
+
     }
 
     /**
-     * Ajax: 获取联系人列表。
-     * Ajax get contact list.
+     * Ajax: 获取当前用户可以查看的联系人列表。
+     * Ajax: Get contact lists that current user can view.
      *
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetContactList()
     {
-        $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
-
-        $items = array();
-        foreach($contactList as $contactID => $contactName) $items[] = array('text' => $contactName, 'value' => $contactID);
-        return print(json_encode($items));
+        $lists = $this->user->getContactLists();
+        $items = array_map(function($id, $name){return array('text' => $name, 'value' => $id);}, array_keys($lists), $lists);
+        return $this->send($items);
     }
 
     /**
-     * Ajax print templates.
+     * AJAX: 打印用户模板。
+     * AJAX: Print user templates.
      *
-     * @param  int    $type
+     * @param  string $type
      * @param  string $link
      * @access public
      * @return void
      */
-    public function ajaxPrintTemplates($type, $link = '')
+    public function ajaxPrintTemplates(string $type, string $link = '')
     {
         $this->view->link      = $link;
         $this->view->type      = $type;
@@ -1281,30 +1060,35 @@ class user extends control
     }
 
     /**
-     * Save current template.
+     * AJAX: 保存一个用户模板。
+     * AJAX: Save a user template.
      *
+     * @param  string $type
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxSaveTemplate($type)
+    public function ajaxSaveTemplate(string $type)
     {
         $this->user->saveUserTemplate($type);
-        if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        return print($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => inlink('ajaxPrintTemplates', "type=$type")));
     }
 
     /**
-     * Delete a user template.
+     * AJAX：删除一个用户模板。
+     * AJAX: Delete a user template.
      *
      * @param  int    $templateID
      * @access public
      * @return void
      */
-    public function ajaxDeleteTemplate($templateID)
+    public function ajaxDeleteTemplate(int $templateID)
     {
-        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)
+        $this->dao->delete()->from(TABLE_USERTPL)
+            ->where('id')->eq($templateID)
             ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
             ->exec();
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -1335,38 +1119,31 @@ class user extends control
     }
 
     /**
-     * Ajax get group by vision.
+     * AJAX: 根据界面类型获取权限组。
+     * AJAX: Get groups by vision.
      *
-     * @param  string  $visions rnd|lite
-     * @param  int     $i
-     * @param  string  $selected
+     * @param  string  $visions rnd|lite|rnd,lite
      * @access public
      * @return string
      */
-    public function ajaxGetGroup($visions, $i = 0, $selected = '')
+    public function ajaxGetGroups(string $visions)
     {
-        if(!$visions) $visions = $this->config->vision;
-        $visions   = explode(',', $visions);
-        $groupList = $this->user->getGroupsByVisions($visions);
-        if($i)
-        {
-            if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
-            return print(html::select("group[$i][]", $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
-        }
-        $items = array();
-        foreach($groupList as $groupID => $groupName) $items[] = array('text' => $groupName, 'value' => $groupID, 'keys' => $groupName);
-        return print(json_encode($items));
+        if(!$visions) $visions = array($this->config->vision);
+        $groups = $this->user->getGroupsByVisions($visions);
+        $items  = array_map(function($groupID, $groupName){return array('text' => $groupName, 'value' => $groupID);}, array_keys($groups), $groups);
+        return $this->send($items);
     }
 
     /**
-     * Refresh random for login
+     * 刷新用于登录的随机数。
+     * Refresh random for login.
      *
      * @access public
      * @return void
      */
     public function refreshRandom()
     {
-        $rand = (string)$this->user->updateSessionRandom();
-        echo $rand;
+        $rand = $this->user->updateSessionRandom();
+        echo (string)$rand;
     }
 }

@@ -1303,8 +1303,8 @@ $lang->resource->repo->linkBug         = 'linkBug';
 $lang->resource->repo->linkTask        = 'linkTask';
 $lang->resource->repo->unlink          = 'unlink';
 $lang->resource->repo->import          = 'importAction';
-$lang->resource->repo->createBranch    = 'createBranchAction';
 $lang->resource->repo->createRepo      = 'createRepoAction';
+//$lang->resource->repo->createBranch    = 'createBranchAction';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
@@ -1325,8 +1325,8 @@ $lang->repo->methodOrder[85]  = 'linkBug';
 $lang->repo->methodOrder[90]  = 'linkTask';
 $lang->repo->methodOrder[95]  = 'unlink';
 $lang->repo->methodOrder[100] = 'import';
-$lang->repo->methodOrder[105] = 'createBranch';
-$lang->repo->methodOrder[110] = 'createRepo';
+$lang->repo->methodOrder[105] = 'createRepo';
+//$lang->repo->methodOrder[110] = 'createBranch';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1421,7 +1421,7 @@ $lang->resource->doc->myEdited       = 'myEdited';
 $lang->resource->doc->createLib      = 'createLib';
 $lang->resource->doc->editLib        = 'editLib';
 $lang->resource->doc->deleteLib      = 'deleteLib';
-$lang->resource->doc->create         = 'create';
+$lang->resource->doc->create         = 'createOrUpload';
 $lang->resource->doc->edit           = 'edit';
 $lang->resource->doc->view           = 'view';
 $lang->resource->doc->delete         = 'delete';
@@ -1436,6 +1436,7 @@ $lang->resource->doc->editCatalog    = 'editCatalog';
 $lang->resource->doc->sortCatalog    = 'sortCatalog';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 $lang->resource->doc->displaySetting = 'displaySetting';
+$lang->resource->doc->exportFiles    = 'exportFiles';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';
@@ -1461,6 +1462,7 @@ $lang->doc->methodOrder[105] = 'editCatalog';
 $lang->doc->methodOrder[110] = 'sortCatalog';
 $lang->doc->methodOrder[115] = 'deleteCatalog';
 $lang->doc->methodOrder[120] = 'displaySetting';
+$lang->doc->methodOrder[125] = 'exportFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1880,6 +1882,7 @@ $lang->resource->ai->prompts                = 'promptBrowse';
 $lang->resource->ai->promptView             = 'promptView';
 $lang->resource->ai->promptExecute          = 'promptExecute';
 $lang->resource->ai->promptExecutionReset   = 'promptExecutionReset';
+$lang->resource->ai->chat                   = 'chat';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';

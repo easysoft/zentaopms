@@ -279,7 +279,7 @@ class taskZen extends task
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
-        $this->view->contactLists  = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+        $this->view->contactLists  = $this->loadModel('user')->getContactLists();
         $this->display();
     }
 
@@ -1682,17 +1682,18 @@ class taskZen extends task
      *
      * @param  array     $skipTasks
      * @param  array     $parentTasks
-     * @param  array     $skipTaskIdList
+     * @param  string    $confirm       yes|no
      * @access protected
      * @return array
      */
-    protected function responseAfterBatchClose(array $skipTasks, array $parentTasks, array $skipTaskIdList): array
+    protected function responseAfterBatchClose(array $skipTasks, array $parentTasks, string $confirm): array
     {
-        if(!empty($skipTasks) && empty($skipTaskIdList))
+        if(!empty($skipTasks) && $confirm == 'no')
         {
             $skipTasks  = implode(',', $skipTasks);
-            $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
+            $confirmURL = $this->createLink('task', 'batchClose', "confirm=yes");
             $cancelURL  = $this->server->HTTP_REFERER;
+            $this->session->set('batchCloseTaskIDList', $skipTasks, 'task');
             return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
         }
 

@@ -11,12 +11,13 @@ class sidebar extends wg
         'minWidth?:string|number=160',
         'showToggle?:bool=true',
         'parent?:string',
-        'preserve?:string'
+        'preserve?:string',
+        'dragToResize?:bool'
     );
 
     protected function build(): wg
     {
-        list($side, $showToggle, $width, $preserve, $parent, $maxWidth, $minWidth) = $this->prop(array('side', 'showToggle', 'width', 'preserve', 'parent', 'maxWidth', 'minWidth'));
+        list($side, $showToggle, $width, $preserve, $parent, $maxWidth, $minWidth, $dragToResize) = $this->prop(array('side', 'showToggle', 'width', 'preserve', 'parent', 'maxWidth', 'minWidth', 'dragToResize'));
         if($preserve === null)
         {
             global $app;
@@ -26,7 +27,7 @@ class sidebar extends wg
         (
             setClass('sidebar'),
             width($width),
-            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth)),
+            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth, 'dragToResize' => $dragToResize)),
             set($this->getRestProps()),
             $this->children()
         );

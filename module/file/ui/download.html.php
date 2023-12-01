@@ -55,15 +55,35 @@ else
         ) : null
     );
 
-    $fileType == 'image' ? div
-    (
-        setID('imageFile'),
-        h::img(set::src($this->createLink('file', 'read', "fileID={$file->id}")))
-    ) : div
-    (
-        setID('txtFile'),
-        h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent)
-    );
+    if($fileType == 'image')
+    {
+        div 
+        (
+            setID('imageFile'),
+            h::img(set::src($this->createLink('file', 'read', "fileID={$file->id}")))
+        );
+    }
+    elseif($fileType == 'video')
+    {
+        div
+        (
+            setID('videoFile'),
+            h::video(set::src($file->webPath), set::controls(true), set::autoplay(true), set::controlsList('nodownload'), set::onerror('showError()'), set::onloadedmetadata('loadedmetadata()'), set::style(array('width' => '100%'))),
+            div
+            (
+                setClass('playfailed hide'),
+                $lang->file->playFailed
+            )
+        );
+    }
+    else
+    {
+        div
+        (
+            setID('txtFile'),
+            h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent)
+        );
+    }
 
 $isInModal = isInModal();
 h::js
@@ -78,6 +98,23 @@ window.setCharset = function(obj)
     if("{$isInModal}") loadModal(link, $(obj).closest('.modal.show').attr('id'));
     else loadPage(link);
 };
+
+function showError()
+{
+    $('.playfailed').show();
+}
+
+function loadedmetadata()
+{
+    var videoElem      = $('video')[0];
+    var metaHeight     = videoElem.videoHeight;
+    var parentHeight   = window.parent.innerHeight;
+    var videoMaxHeight = parentHeight - 190;
+    if(videoMaxHeight < metaHeight)
+    {
+        $(videoElem).css('height', videoMaxHeight);
+    }
+}
 JAVASCRIPT
 );
 }

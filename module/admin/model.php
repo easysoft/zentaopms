@@ -52,34 +52,35 @@ class adminModel extends model
     }
 
     /**
+     * 获取禅道官网配置信息。
      * Get api config.
      *
      * @access public
      * @return object
      */
-    public function getApiConfig()
+    public function getApiConfig(): object
     {
-        if(!$this->session->apiConfig or time() - $this->session->apiConfig->serverTime > $this->session->apiConfig->expiredTime)
+        if(!$this->session->apiConfig || time() - $this->session->apiConfig->serverTime > $this->session->apiConfig->expiredTime)
         {
             $config = file_get_contents($this->config->admin->apiRoot . "?mode=getconfig");
             $config = json_decode($config);
-            if(empty($config) or empty($config->sessionID)) return null;
+            if(empty($config) || empty($config->sessionID)) return null;
             $this->session->set('apiConfig', $config);
         }
         return $this->session->apiConfig;
     }
 
     /**
+     * 弱口令扫描。
      * Check weak.
      *
      * @param  object    $user
      * @access public
      * @return bool
      */
-    public function checkWeak($user)
+    public function checkWeak(object $user): bool
     {
         $weaks = array();
-
         foreach(explode(',', $this->config->safe->weak) as $weak)
         {
             $weak = md5(trim($weak));
@@ -88,26 +89,26 @@ class adminModel extends model
 
         if(isset($weaks[$user->password])) return true;
         if($user->password == md5($user->account)) return true;
-        if($user->phone    and $user->password == md5($user->phone))    return true;
-        if($user->mobile   and $user->password == md5($user->mobile))   return true;
-        if($user->birthday and $user->password == md5($user->birthday)) return true;
+        if($user->phone    && $user->password == md5($user->phone))    return true;
+        if($user->mobile   && $user->password == md5($user->mobile))   return true;
+        if($user->birthday && $user->password == md5($user->birthday)) return true;
         return false;
     }
 
     /**
+     * 设置后台二级导航。
      * Set admin menu.
      *
      * @access public
      * @return void
      */
-    public function setMenu()
+    public function setMenu(): void
     {
         $this->checkPrivMenu();
 
         $menuKey = $this->getMenuKey();
         if(empty($menuKey)) return;
 
-        $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
             if(isset($this->lang->admin->menuList->{$menuKey}['subMenu']))
@@ -119,9 +120,9 @@ class adminModel extends model
                 foreach($this->lang->admin->menuList->{$menuKey}['subMenu'] as $subMenuKey => $subMenu)
                 {
                     $subModule = '';
-                    if($moduleName == 'custom' and strpos(',required,set,', $methodName) !== false)
+                    if($moduleName == 'custom' && strpos(',required,set,', $methodName) !== false)
                     {
-                        if(isset($this->config->admin->navsGroup[$menuKey][$subMenuKey]) and strpos($this->config->admin->navsGroup[$menuKey][$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
+                        if(isset($this->config->admin->navsGroup[$menuKey][$subMenuKey]) && strpos($this->config->admin->navsGroup[$menuKey][$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
 
@@ -149,102 +150,32 @@ class adminModel extends model
     }
 
     /**
+     * 检查导航权限并设置导航链接。
      * Check priv menu.
      *
      * @access public
      * @return void
      */
-    public function checkPrivMenu()
+    public function checkPrivMenu(): void
     {
         $orders = array();
         foreach($this->lang->admin->menuList as $menuKey => $menu)
         {
             $menu['disabled'] = true;
             if(!isset($menu['link'])) $menu['link'] = '';
+
             if($menuKey == 'company')
             {
                 $dept = $this->dao->select('id')->from(TABLE_DEPT)->fetch();
-                if($dept and common::hasPriv('company', 'browse')) $menu['link'] = helper::createLink('company', 'browse');
+                if($dept && common::hasPriv('company', 'browse')) $menu['link'] = helper::createLink('company', 'browse');
             }
 
             /* Set links to authorized navigation. */
             if(isset($menu['subMenu']))
             {
-                /* Reorder secondary navigation. */
-                $subMenuList   = array();
-                $subMenuOrders = $menu['menuOrder'];
-                ksort($subMenuOrders);
-                foreach($subMenuOrders as $value)
-                {
-                    if(!isset($menu['subMenu'][$value])) continue;
-                    $subMenuList[$value] = $menu['subMenu'][$value];
-                }
-
-                /* Check sub menu priv. */
-                foreach($subMenuList as $subMenuKey => $subMenu)
-                {
-                    if($menuKey == 'message' and $subMenuKey == 'mail')
-                    {
-                        $this->loadModel('mail');
-                        if(!$this->config->mail->turnon and !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
-                    }
-                    if($menuKey == 'dev' and $subMenuKey == 'editor')
-                    {
-                        if(!empty($this->config->global->editor)) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
-                        if(empty($this->config->global->editor) and !$this->app->user->admin)
-                        {
-                            unset($menu['subMenu']['editor']);
-                            continue;
-                        }
-                    }
-
-                    $link = array();
-                    if(isset($menu['tabMenu'][$subMenuKey]))
-                    {
-                        /* Reorder tertiary navigation. */
-                        $tabMenuList   = $menu['tabMenu'][$subMenuKey];
-                        if(isset($menu['tabMenu']['menuOrder'][$subMenuKey]))
-                        {
-                            $tabMenuOrders = $menu['tabMenu']['menuOrder'][$subMenuKey];
-                            ksort($tabMenuOrders);
-                            foreach($tabMenuOrders as $value) $tabMenuList[$value] = $menu['tabMenu'][$subMenuKey][$value];
-                        }
-
-                        /* Check tab menu priv. */
-                        foreach($tabMenuList as $tabMenuKey => $tabMenu)
-                        {
-                            $tabMenuLink = $this->getHasPrivLink($tabMenu);
-                            if(!empty($tabMenuLink))
-                            {
-                                /* Updated tertiary navigation links. */
-                                list($module, $method, $params) = $tabMenuLink;
-                                $tabMenuLabel = $tabMenu['link'];
-                                $menu['tabMenu'][$subMenuKey][$tabMenuKey]['link'] = substr($tabMenuLabel, 0, strpos($tabMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
-
-                                if(empty($link)) $link = $tabMenuLink;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $link = $this->getHasPrivLink($subMenu);
-                    }
-
-                    if(!empty($link))
-                    {
-                        /* Updated secondary navigation link. */
-                        list($module, $method, $params) = $link;
-                        $subMenuLabel = $subMenu['link'];
-                        $menu['subMenu'][$subMenuKey]['link'] = substr($subMenuLabel, 0, strpos($subMenuLabel, '|') + 1) . $module . '|' . $method . '|' . $params;
-
-                        /* Update the level 1 navigation link. */
-                        if(empty($menu['link'])) $menu['link'] = helper::createLink($module, $method, $params);
-                        $menu['disabled'] = false;
-                    }
-                }
+                $menu = $this->setSubMenu($menuKey, $menu);
             }
-            
-            if(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
+            elseif(!empty($menu['link']) && strpos($menu['link'], '|') !== false)
             {
                 list($module, $method) = explode('|', $menu['link']);
                 $menu['link'] = helper::createLink($module, $method);
@@ -269,13 +200,116 @@ class adminModel extends model
     }
 
     /**
+     * 设置二级导航。
+     * Set sub menu.
+     *
+     * @param  string $menuKey
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public function setSubMenu(string $menuKey, array $menu): array
+    {
+        /* Reorder secondary navigation. */
+        $subMenuList   = array();
+        $subMenuOrders = $menu['menuOrder'];
+        if(empty($subMenuOrders)) return array();
+        ksort($subMenuOrders);
+        foreach($subMenuOrders as $value)
+        {
+            if(!isset($menu['subMenu'][$value])) continue;
+            $subMenuList[$value] = $menu['subMenu'][$value];
+        }
+
+        foreach($subMenuList as $subMenuKey => $subMenu)
+        {
+            /* Set links by special config. */
+            if($menuKey == 'message' && $subMenuKey == 'mail')
+            {
+                $this->loadModel('mail');
+                if(!$this->config->mail->turnon && !$this->session->mailConfig) $subMenu['link'] = $this->lang->mail->common . '|mail|detect|';
+            }
+            if($menuKey == 'dev' && $subMenuKey == 'editor')
+            {
+                if(!empty($this->config->global->editor)) $subMenu['link'] = $this->lang->editor->common . '|editor|index|';
+                if(empty($this->config->global->editor) && !$this->app->user->admin)
+                {
+                    unset($menu['subMenu']['editor']);
+                    continue;
+                }
+            }
+
+            /* Get authorized links and change parent navigation links. */
+            $link = array();
+            if(isset($menu['tabMenu'][$subMenuKey]))
+            {
+                list($menu, $link) = $this->setTabMenu($subMenuKey, $menu);
+            }
+            else
+            {
+                $link = $this->getHasPrivLink($subMenu);
+            }
+
+            if(!empty($link))
+            {
+                /* Updated secondary navigation link. */
+                list($module, $method, $params) = $link;
+                $menu['subMenu'][$subMenuKey]['link'] = substr($subMenu['link'], 0, strpos($subMenu['link'], '|') + 1) . $module . '|' . $method . '|' . $params;
+
+                /* Update the level 1 navigation link. */
+                if(empty($menu['link'])) $menu['link'] = helper::createLink($module, $method, $params);
+                $menu['disabled'] = false;
+            }
+        }
+
+        return $menu;
+    }
+
+    /**
+     * 设置三级导航。
+     * Set tab menu.
+     *
+     * @param  string $subMenuKey
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public function setTabMenu(string $subMenuKey, array $menu): array
+    {
+        /* Reorder tertiary navigation. */
+        $tabMenuList = $menu['tabMenu'][$subMenuKey];
+        if(isset($menu['tabMenu']['menuOrder'][$subMenuKey]))
+        {
+            $tabMenuOrders = $menu['tabMenu']['menuOrder'][$subMenuKey];
+            ksort($tabMenuOrders);
+            foreach($tabMenuOrders as $value) $tabMenuList[$value] = $menu['tabMenu'][$subMenuKey][$value];
+        }
+
+        /* Check tab menu priv. */
+        $link = array();
+        foreach($tabMenuList as $tabMenuKey => $tabMenu)
+        {
+            $tabMenuLink = $this->getHasPrivLink($tabMenu);
+            if(!empty($tabMenuLink))
+            {
+                /* Updated tertiary navigation links. */
+                list($module, $method, $params) = $tabMenuLink;
+                $menu['tabMenu'][$subMenuKey][$tabMenuKey]['link'] = substr($tabMenu['link'], 0, strpos($tabMenu['link'], '|') + 1) . $module . '|' . $method . '|' . $params;
+            }
+            if(empty($link)) $link = $tabMenuLink;
+        }
+        return array($menu, $link);
+    }
+
+    /**
+     * 获取有权限的链接。
      * Get the authorized link.
      *
      * @param  array  $menu
      * @access public
      * @return array
      */
-    public function getHasPrivLink($menu)
+    public function getHasPrivLink(array $menu): array
     {
         $link = array();
         if(!empty($menu['link']))
@@ -303,17 +337,17 @@ class adminModel extends model
     }
 
     /**
+     * 获取页面所在的导航索引。
      * Get menu key
      *
      * @access public
      * @return string
      */
-    public function getMenuKey()
+    public function getMenuKey(): string
     {
-        $moduleName  = $this->app->rawModule;
-        $methodName  = $this->app->rawMethod;
-        $firstParam  = $this->app->rawParams ? reset($this->app->rawParams) : '';
-        $secondParam = $this->app->rawParams ? next($this->app->rawParams)  : '';
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+        $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
 
         foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
         {
@@ -323,7 +357,7 @@ class adminModel extends model
             }
             elseif(in_array("$moduleName|$methodName", $menuGroup))
             {
-                if($moduleName == 'custom' and ($methodName == 'required' or $methodName == 'set'))
+                if($moduleName == 'custom' && ($methodName == 'required' || $methodName == 'set'))
                 {
                     if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
                 }
@@ -333,45 +367,17 @@ class adminModel extends model
                 }
             }
         }
-        return null;
+        return '';
     }
 
     /**
-     * Set switcher.
-     *
-     * @param  string $currentMenuKey
-     * @access public
-     * @return string
-     */
-    public function setSwitcher($currentMenuKey = 'system')
-    {
-        if(empty($currentMenuKey)) return null;
-
-        $currentMenu = $this->lang->admin->menuList->$currentMenuKey;
-        $output      = "<div class='btn-group header-btn'>";
-        $output     .= "<button class='btn pull-right btn-link' data-toggle='dropdown'>";
-        $output     .= "<span class='text'>{$currentMenu['name']}</span> ";
-        $output     .= "<span class='caret'></span></button>";
-        $output     .= "<ul class='dropdown-menu menu-hover-primary menu-active-primary' id='adminMenu'>";
-        foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
-        {
-            if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
-            $class = $menuKey == $currentMenuKey ? "active" : '';
-            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
-            $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>" . $menuGroup['name']) . "</li>";
-        }
-        $output .= "</ul></div>";
-
-        $this->lang->switcherMenu = $output;
-    }
-
-    /**
+     * 检查网络。
      * Check internet.
      *
      * @access public
      * @return bool
      */
-    public function checkInternet()
+    public function checkInternet(): bool
     {
         $timeout = 1;
         $curl    = curl_init();
@@ -388,12 +394,13 @@ class adminModel extends model
     }
 
     /**
+     * 获取禅道使用时长。
      * Get date used object.
      *
      * @access public
      * @return object
      */
-    public function genDateUsed()
+    public function genDateUsed(): object
     {
         $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
             ->where('date')->gt('1970-01-01')

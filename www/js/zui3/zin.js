@@ -27,7 +27,6 @@
 {
     let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
-    if(isIndexPage) return;
 
     const DEBUG       = config.debug;
     const currentCode = window.name.substring(4);
@@ -55,12 +54,13 @@
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
             return state;
         },
-        isOldPage:      () => false,
-        reloadApp:      function(_code, url){loadPage(url);},
-        openApp:        function(url, options){loadPage(url, options);},
-        goBack:         function(){history.go(-1);},
-        changeAppsLang: changeAppLang,
-        changeAppsTheme: changeAppTheme
+        isOldPage:         () => false,
+        reloadApp:         function(_code, url){loadPage(url);},
+        openApp:           function(url, options){loadPage(url, options);},
+        goBack:            function(){history.go(-1);},
+        changeAppsLang:    changeAppLang,
+        changeAppsTheme:   changeAppTheme,
+        updateUserToolbar: function(){loadPage({selector: '#toolbar', partial: true, target: '#toolbar'})},
     }, parent.window.$.apps);
 
     const renderMap =
@@ -96,7 +96,7 @@
 
     function initZinbar()
     {
-        if(!DEBUG || isIndexPage) return;
+        if(!DEBUG || DEBUG < 3 || isIndexPage) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 
@@ -691,13 +691,15 @@
             target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
-        const selectors = [`dtable/${target}`];
-        if(!$(target).closest('.modal').length)
+        let selector = `dtable/${target}:component`;
+        if(options.selector && options.selector !== 'dtable') selector = options.selector;
+        if(!$(target).closest('.modal').length && !options.selector)
         {
-            selectors.push('#featureBar>*');
-            if($('#moduleMenu').length) selectors.push('#moduleMenu');
+            selector += ',#featureBar>*';
+            if($('#moduleMenu').length) selector += ',#moduleMenu';
         }
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selectors.join(',')}, options));
+        delete options.selector;
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector}, options));
     }
 
     /**
@@ -882,6 +884,7 @@
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
+        if(options.app === 'current') options.app = currentCode;
         if(options.confirm)
         {
             return zui.Modal.confirm(options.confirm).then(confirmed =>
@@ -1155,12 +1158,7 @@
         layoutNanavbar();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage});
-    $.extend($.apps, {openUrl: openUrl});
-    $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
-
-    /* Transfer click event to parent */
-    $(document).on('click', (e) =>
+    function handleGlobalClick(e)
     {
         if(e.defaultPrevented) return;
         if(isInAppTab) window.parent.$('body').trigger('click');
@@ -1204,7 +1202,14 @@
 
         openUrl(url, options, e);
         e.preventDefault();
-    }).on('locate.zt', (_e, data) =>
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage});
+    $.extend($.apps, {openUrl: openUrl});
+    $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
+
+    /* Transfer click event to parent */
+    $(document).on('click', handleGlobalClick).on('locate.zt', (_e, data) =>
     {
         if(!data) return;
         if(data === true) return loadCurrentPage();
@@ -1248,6 +1253,8 @@
 
     $(() =>
     {
+        if(isIndexPage) return;
+
         initZinbar();
 
         if(window.defaultAppUrl) loadPage(window.defaultAppUrl);

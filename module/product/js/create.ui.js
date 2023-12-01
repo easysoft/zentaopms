@@ -14,13 +14,13 @@ function toggleLine(obj)
 
     if($obj.prop('checked'))
     {
-        $formRow.find('#lineName').removeClass('hidden');
+        $formRow.find('[name=lineName]').removeClass('hidden');
         $line.addClass('hidden');
         $line.attr('disabled', 'disabled');
     }
     else
     {
-        $formRow.find('#lineName').addClass('hidden');
+        $formRow.find('[name=lineName]').addClass('hidden');
         $line.removeClass('hidden');
         $line.removeAttr('disabled');
     }

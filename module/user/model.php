@@ -32,6 +32,25 @@ class userModel extends model
     }
 
     /**
+     * 根据用户 id 列表获取用户。
+     * Get users by id list.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getByIdList(array $idList): array
+    {
+        if(!$idList) return array();
+
+        return $this->dao->select('*')->from(TABLE_USER)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($idList)
+            ->orderBy('id')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get inside users list of current company.
      *
      * @param  string $params
@@ -318,22 +337,21 @@ class userModel extends model
     {
         $this->dao->begin();
 
-        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
+        $requiredFields = $this->config->user->create->requiredFields;
+        if($user->type == 'outside')
+        {
+            if($user->new) $user->company = $this->createCompany($user->newCompany);
+            $requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $requiredFields . ','), ',');
+        }
 
-        if($user->type == 'outside') $this->config->user->create->requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $this->config->user->create->requiredFields . ','), ',');
-
-        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
-            ->batchCheck($this->config->user->create->requiredFields, 'notempty')
+        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength')
+            ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique')
             ->checkIF($user->account, 'account', 'account')
             ->checkIF($user->email, 'email', 'email')
             ->autoCheck()
             ->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
+        if(dao::isError()) return $this->rollback();
 
         $userID = $this->dao->lastInsertID();
 
@@ -344,11 +362,7 @@ class userModel extends model
         $this->computeUserView($user->account);
         $this->loadModel('action')->create('user', $userID, 'Created');
 
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
+        if(dao::isError()) return $this->rollback();
 
         $this->dao->commit();
 
@@ -403,151 +417,47 @@ class userModel extends model
     }
 
     /**
+     * 批量创建用户。
      * Batch create users.
      *
-     * @param  int    $users
+     * @param  array  $users
      * @access public
-     * @return array
+     * @return bool|array
      */
-    public function batchCreate()
+    public function batchCreate(array $users): bool|array
     {
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
+        $this->loadModel('action');
 
-        $users    = fixer::input('post')->get();
-        $data     = array();
-        $accounts = array();
-        for($i = 1; $i < $this->config->user->batchCreate; $i++)
-        {
-            if(!empty($users->account[$i])) $users->account[$i] = trim($users->account[$i]);
-            if($users->account[$i] != '')
-            {
-                if(strtolower($users->account[$i]) == 'guest') dao::$errors["account{$i}"][] = $this->lang->user->error->reserved;
-                $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
-                if($account) dao::$errors["account[{$i}]"][] = $this->lang->user->error->accountDupl;
-                if(in_array($users->account[$i], $accounts)) dao::$errors["account[{$i}]"][] = $this->lang->user->error->accountDupl;
-                if(!validater::checkAccount($users->account[$i])) dao::$errors["account[{$i}]"][] = $this->lang->user->error->account;
+        $this->dao->begin();
 
-                if($users->email[$i] and !validater::checkEmail($users->email[$i])) dao::$errors["email[{$i}]"][] = $this->lang->user->error->mail;
-                $users->password[$i] = $this->post->password[$i];
-                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) dao::$errors["password[{$i}]"][] = $this->lang->user->error->password;
-
-                /* Check weak and common weak password. */
-                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) dao::$errors["password[{$i}]"][] = $this->lang->user->error->weakPassword;
-                if(!empty($this->config->safe->changeWeak))
-                {
-                    if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) dao::$errors["password[{$i}]"][] = sprintf($this->lang->user->error->dangerPassword, $this->config->safe->weak);
-                }
-
-                $data[$i] = new stdclass();
-                if($users->userType == 'outside')
-                {
-                    $data[$i]->company    = isset($users->new[$i]) ? $users->newCompany[$i] : $users->company[$i];
-                    $data[$i]->newCompany = isset($users->new[$i]) ? true : false;
-                    $data[$i]->type       = 'outside';
-                    $data[$i]->dept       = 0;
-                    $data[$i]->join       = null;
-                }
-                else
-                {
-                    $data[$i]->dept = $users->dept[$i];
-                    $data[$i]->join = empty($users->join[$i]) ? null : ($users->join[$i]);
-                    $data[$i]->type = 'inside';
-                }
-                $data[$i]->account  = $users->account[$i];
-                $data[$i]->realname = $users->realname[$i];
-                $data[$i]->role     = $users->role[$i];
-                $data[$i]->group    = $users->group[$i];
-                $data[$i]->email    = $users->email[$i];
-                $data[$i]->gender   = $users->gender[$i];
-                $data[$i]->password = md5(trim($users->password[$i]));
-                $data[$i]->commiter = $users->commiter[$i];
-                $data[$i]->skype    = $users->skype[$i];
-                $data[$i]->qq       = $users->qq[$i];
-                $data[$i]->dingding = $users->dingding[$i];
-                $data[$i]->weixin   = $users->weixin[$i];
-                $data[$i]->mobile   = $users->mobile[$i];
-                $data[$i]->slack    = $users->slack[$i];
-                $data[$i]->whatsapp = $users->whatsapp[$i];
-                $data[$i]->phone    = $users->phone[$i];
-                $data[$i]->address  = $users->address[$i];
-                $data[$i]->zipcode  = $users->zipcode[$i];
-                $data[$i]->visions  = is_array($users->visions[$i]) ? join(',', $users->visions[$i]) : $users->visions[$i];
-
-                /* Check required fields. */
-                foreach(explode(',', $this->config->user->create->requiredFields) as $field)
-                {
-                    $field = trim($field);
-                    if(empty($field)) continue;
-
-                    if(!isset($data[$i]->$field)) continue;
-                    if(!empty($data[$i]->$field)) continue;
-
-                    dao::$errors["{$field}[{$i}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->$field);
-                }
-
-                /* Change for append field, such as feedback. */
-                if(!empty($this->config->user->batchAppendFields))
-                {
-                    $appendFields = explode(',', $this->config->user->batchAppendFields);
-                    foreach($appendFields as $appendField)
-                    {
-                        if(empty($appendField)) continue;
-                        if(!isset($users->$appendField)) continue;
-                        $fieldList = $users->$appendField;
-                        $data[$i]->$appendField = $fieldList[$i];
-                    }
-                }
-
-                $accounts[$i] = $data[$i]->account;
-            }
-        }
-        if(dao::isError()) return false;
-
-        $this->loadModel('mail');
         $userIdList = array();
-        foreach($data as $user)
+        foreach($users as $user)
         {
-            if($user->type == 'outside' and $user->newCompany)
-            {
-                $company = new stdClass();
-                $company->name = $user->company;
-                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+            if(empty($user->account)) continue;
 
-                $user->company = $this->dao->lastInsertID();
-            }
-            unset($user->newCompany);
+            $user->password = md5($user->password);
 
-            if(is_array($user->group))
-            {
-                foreach($user->group as $group)
-                {
-                    $groups = new stdClass();
-                    $groups->account = $user->account;
-                    $groups->group   = $group;
-                    $groups->project = '';
-                    $this->dao->replace(TABLE_USERGROUP)->data($groups)->exec();
-                }
-            }
-            unset($user->group);
-            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()
-                ->checkIF($user->email  != '', 'email',  'email')
-                ->checkIF($user->phone  != '', 'phone',  'phone')
-                ->checkIF($user->mobile != '', 'mobile', 'mobile')
-                ->exec();
-            if(dao::isError()) return false;
+            if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
-            /* Fix bug #2941 */
-            $userID       = $this->dao->lastInsertID();
-            $userIdList[] = $userID;
-            $this->loadModel('action')->create('user', $userID, 'Created');
+            $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,group')->exec();
+            if(dao::isError()) return $this->rollback();
 
-            if(dao::isError()) return false;
+            $userID = $this->dao->lastInsertID();
 
+            /* 创建用户组，更新用户视图并记录日志。*/
+            /* Create user group, update user view and save log. */
+            $groups = array_filter($user->group);
+            if($groups) $this->createUserGroup($groups, $user->account);
             $this->computeUserView($user->account);
-            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+            $this->action->create('user', $userID, 'Created');
 
+            if(dao::isError()) return $this->rollback();
+
+            $userIdList[] = $userID;
         }
+
+        $this->dao->commit();
+
         return $userIdList;
     }
 
@@ -563,18 +473,25 @@ class userModel extends model
     {
         $this->dao->begin();
 
-        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
+        if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
-        $requiredFields = array();
-        foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
-        {
-            /* 根据后台自定义的必填项和可用联系方式过滤必填字段。*/
-            /* Filter required fields by the custom required fields and contact fields. */
-            if(!isset($this->lang->user->contactFieldList[$field]) || strpos(",{$this->config->user->contactField},", ",{$field},") !== false) $requiredFields[$field] = $field;
-        }
-        $requiredFields = join(',', $requiredFields);
+        /* 获取所有的联系方式字段。*/
+        /* Get all contact fields. */
+        $allContactFields = array_keys($this->lang->user->contactFieldList);
+        /* 获取可用的联系方式字段，转为数组并去空、去重。*/
+        /* Get available contact fields, convert to array and remove empty and duplicate. */
+        $availableContactFields = array_unique(array_filter(explode(',', trim($this->config->user->contactField, ','))));
+        /* 获取不可用的联系方式字段。*/
+        /* Get unavailable contact fields. */
+        $unAvailableContactFields = array_diff($allContactFields, $availableContactFields);
+        /* 从配置文件获取必填项字段，转为数组并去空、去重。*/
+        /* Get required fields from config file, convert to array and remove empty and duplicate. */
+        $requiredFields = array_unique(array_filter(explode(',', trim($this->config->user->edit->requiredFields, ','))));
+        /* 从必填项字段中去除不可用的联系方式字段。*/
+        /* Remove unavailable contact fields from available fields. */
+        $requiredFields = implode(',', array_diff($requiredFields, $unAvailableContactFields));
 
-        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
+        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength')
             ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique', "id != '$user->id'")
             ->checkIF($user->account, 'account', 'account')
@@ -584,35 +501,32 @@ class userModel extends model
             ->autoCheck()
             ->where('id')->eq($user->id)
             ->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollBack();
-            return false;
-        }
-
-        $oldUser = $this->getById($user->id, 'id');
+        if(dao::isError()) return $this->rollBack();
 
         /* 更新用户组和用户视图并记录积分和日志。*/
         /* Update user group and user view, and save log and score. */
+        $oldUser = $this->getById($user->id, 'id');
         $this->checkAccountChange($oldUser->account, $user->account);
         $this->checkGroupChange($user);
         $this->loadModel('score')->create('user', 'editProfile');
-        $this->loadModel('action')->create('user', $user->id, 'edited');
-
-        if(dao::isError())
+        $changes = common::createChanges($user, $oldUser);
+        if($changes)
         {
-            $this->dao->rollBack();
-            return false;
+            $actionID = $this->action->create('user', $user->id, 'edited');
+            $this->action->logHistory($actionID, $changes);
         }
+
+        if(dao::isError()) return $this->rollBack();
 
         $this->dao->commit();
 
         /* 更新当前用户的信息。*/
+        /* Update current user's info. */
         if($user->account == $this->app->user->account)
         {
             if(!empty($user->password)) $this->app->user->password = $user->password;
-            if(!empty($user->realname)) $this->app->user->realname = $user->realname;
-            $this->app->user->role = $user->role;
+            $this->app->user->realname = $user->realname;
+            $this->app->user->role     = $user->role;
         }
 
         return true;
@@ -691,115 +605,51 @@ class userModel extends model
     }
 
     /**
-     * Batch edit user.
+     * 批量编辑用户。
+     * Batch update user.
      *
+     * @param  array  $users
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchEdit()
+    public function batchUpdate(array $users): bool
     {
-        $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return dao::$errors['verifyPassword'] = $this->lang->user->error->verifyPassword;
-
-        $oldUsers     = $this->dao->select('id,account,email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
-        $accountGroup = $this->dao->select('id,account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
-
-        $accounts = array();
-        foreach($data->account as $id => $account)
-        {
-            $users[$id]['account']  = trim($account);
-            $users[$id]['realname'] = $data->realname[$id];
-            $users[$id]['commiter'] = $data->commiter[$id];
-            $users[$id]['email']    = $data->email[$id];
-            $users[$id]['type']     = $data->type[$id];
-            $users[$id]['join']     = $data->join[$id];
-            $users[$id]['skype']    = $data->skype[$id];
-            $users[$id]['qq']       = $data->qq[$id];
-            $users[$id]['dingding'] = $data->dingding[$id];
-            $users[$id]['weixin']   = $data->weixin[$id];
-            $users[$id]['mobile']   = $data->mobile[$id];
-            $users[$id]['slack']    = $data->slack[$id];
-            $users[$id]['whatsapp'] = $data->whatsapp[$id];
-            $users[$id]['phone']    = $data->phone[$id];
-            $users[$id]['address']  = $data->address[$id];
-            $users[$id]['zipcode']  = $data->zipcode[$id];
-            $users[$id]['visions']  = !empty($data->visions[$id]) ? join(',', $data->visions[$id]) : '';
-            $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
-            $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
-
-            /* Check required fields. */
-            foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if(empty($field)) continue;
-
-                if(!isset($users[$id][$field])) continue;
-                if(!empty($users[$id][$field])) continue;
-
-                dao::$errors["{$field}[{$id}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->$field);
-                return false;
-            }
-
-            if(!empty($this->config->user->batchAppendFields))
-            {
-                $appendFields = explode(',', $this->config->user->batchAppendFields);
-                foreach($appendFields as $appendField)
-                {
-                    if(empty($appendField)) continue;
-                    if(!isset($data->$appendField)) continue;
-                    $fieldList = $data->$appendField;
-                    $users[$id][$appendField] = $fieldList[$id];
-                }
-            }
-
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->ser->error->accountDupl, $id);
-            if(in_array($account, $accounts)) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->user->error->accountDupl, $id);
-            if(!validater::checkAccount($users[$id]['account'])) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->user->error->account, $id);
-            if($users[$id]['realname'] == '') return dao::$errors["realname[{$id}]"][] = sprintf($this->lang->user->error->realname, $id);
-            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) return dao::$errors["email[{$id}]"][] = sprintf($this->lang->user->error->mail, $id);
-
-            $accounts[$id] = $account;
-            $prev['dept']  = $users[$id]['dept'];
-            $prev['role']  = $users[$id]['role'];
-        }
-
-        $this->loadModel('mail');
         $this->loadModel('action');
+
+        $accounts = array_map(function($user){return $user->account;}, $users);
+        $oldUsers = $this->dao->select('*')->from(TABLE_USER)->where('account')->in($accounts)->fetchAll('id');
+
+        $this->dao->begin();
+
         foreach($users as $id => $user)
         {
-            $this->dao->update(TABLE_USER)->data($user)
-                ->autoCheck()
-                ->checkIF($user['email']  != '', 'email',  'email')
-                ->checkIF($user['phone']  != '', 'phone',  'phone')
-                ->checkIF($user['mobile'] != '', 'mobile', 'mobile')
-                ->where('id')->eq((int)$id)
-                ->exec();
-            if(dao::isError()) return false;
+            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq($id)->exec();
+            if(dao::isError()) return $this->rollback();
 
-            $this->action->create('user', $id, 'edited');
-
+            /* 更新用户组和用户视图并记录日志。*/
+            /* Update user group and user view, and save log and score. */
             $oldUser = $oldUsers[$id];
-            if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
+            $changes = common::createChanges($user, $oldUser);
+            if($changes)
             {
-                $this->mail->syncSendCloud('delete', $oldUser->email);
-                $this->mail->syncSendCloud('sync', $user['email'], $user['realname']);
+                $actionID = $this->action->create('user', $id, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
 
-            if($this->app->user->account == $user['account'] and !empty($user['realname'])) $this->app->user->realname = $user['realname'];
+            if(dao::isError()) return $this->rollback();
 
-            if($user['account'] != $oldUser->account)
+            /* 更新当前用户的信息。*/
+            /* Update current user's info. */
+            if($user->account == $this->app->user->account)
             {
-                $oldAccount = $oldUser->account;
-                $this->dao->update(TABLE_USERGROUP)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
-                $this->dao->update(TABLE_USERVIEW)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
-                if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
-                {
-                    $admins = str_replace(',' . $oldAccount . ',', ',' . $user['account'] . ',', $this->app->company->admins);
-                    $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
-                }
-                if(!dao::isError() and $this->app->user->account == $oldAccount) $this->app->user->account = $users['account'];
+                $this->app->user->realname = $user->realname;
+                $this->app->user->role     = $user->role;
             }
         }
+
+        $this->dao->commit();
+
+        return true;
     }
 
     /**
@@ -837,21 +687,20 @@ class userModel extends model
     }
 
     /**
+     * 重置密码。
      * Reset password.
      *
+     * @param  object $user
      * @access public
      * @return bool
      */
-    public function resetPassword()
+    public function resetPassword(object $user): bool
     {
-        $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword()) return false;
-
-        $user = $this->getById($this->post->account);
+        $user = $this->getById($user->account);
         if(!$user) return false;
 
-        $password = substr($this->post->password1, 0, 32);
-        $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
+        $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('account')->eq($user->account)->exec();
+
         return !dao::isError();
     }
 
@@ -1181,26 +1030,31 @@ class userModel extends model
     }
 
     /**
+     * 根据界面类型获取权限组。
      * Get groups by visions.
      *
-     * @param  array $visions
+     * @param  string|array $visions
      * @access public
      * @return array
      */
-    public function getGroupsByVisions($visions)
+    public function getGroupsByVisions(string|array $visions): array
     {
-        if(!is_array($visions)) return array();
+        if(is_string($visions)) $visions = array_unique(array_filter(explode(',', $visions)));
+        if(!$visions) return array();
+
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
 
-        $visionList = $this->getVisionList();
+        $visionCount = count($visions);
+        $visionList  = $this->getVisionList();
 
-        foreach($groups as $key => $group)
+        foreach($groups as $id => $group)
         {
-            $groups[$key] = $group->name;
-            if(count($visions) > 1) $groups[$key] = $visionList[$group->vision] . ' / ' . $group->name;
+            $groups[$id] = $group->name;
+
+            if($visionCount > 1) $groups[$id] = $visionList[$group->vision] . ' / ' . $group->name;
         }
 
         return $groups;
@@ -1409,28 +1263,26 @@ class userModel extends model
     }
 
     /**
-     * Get contact list of a user.
+     * 获取某个用户可以查看的联系人列表。
+     * Get the contact list of a user.
      *
      * @param  string $account
-     * @param  string $params  withempty|withnote
      * @param  string $mode    pairs|list
      * @access public
      * @return array
      */
-    public function getContactLists(string $account, string $params = '', string $mode = 'pairs'): array
+    public function getContactLists(string $account = '', string $mode = 'pairs'): array
     {
+        if(!$account) $account = $this->app->user->account;
+
         $this->dao->select('*')->from(TABLE_USERCONTACT)
             ->where('account')->eq($account)
             ->orWhere('public')->eq(1)
             ->orderBy('public, id_desc');
 
-        $contacts = $mode == 'pairs' ? $this->dao->fetchPairs('id', 'listName') : $this->dao->fetchAll();
-        if(empty($contacts)) return array();
+        if($mode == 'pairs') return $this->dao->fetchPairs('id', 'listName');
 
-        if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
-        if(strpos($params, 'withnote')  !== false) $contacts = array('' => $this->lang->user->contacts->common) + $contacts;
-
-        return $contacts;
+        return $this->dao->fetchAll();
     }
 
     /**
@@ -1468,18 +1320,6 @@ class userModel extends model
     public function getContactListByID($listID)
     {
         return $this->dao->select('*')->from(TABLE_USERCONTACT)->where('id')->eq($listID)->fetch();
-    }
-
-    /**
-     * Get user account and realname pairs from a contact list.
-     *
-     * @param  string|array    $accountList
-     * @access public
-     * @return array
-     */
-    public function getContactUserPairs($accountList)
-    {
-        return $this->dao->select('account, realname')->from(TABLE_USER)->where('account')->in($accountList)->fetchPairs();
     }
 
     /**
@@ -1563,27 +1403,6 @@ class userModel extends model
     public function deleteContactList($listID)
     {
         return $this->dao->delete()->from(TABLE_USERCONTACT)->where('id')->eq($listID)->exec();
-    }
-
-    /**
-     * Get data in JSON.
-     *
-     * @param  object    $user
-     * @access public
-     * @return array
-     */
-    public function getDataInJSON($user)
-    {
-        $newUser = new stdclass();
-        foreach($user as $key => $value) $newUser->$key = $value;
-        unset($newUser->password);
-        unset($newUser->deleted);
-        $newUser->company = $this->app->company->name;
-
-        /* App client will use session id as token. */
-        $newUser->token = session_id();
-
-        return array('user' => $newUser);
     }
 
     /**

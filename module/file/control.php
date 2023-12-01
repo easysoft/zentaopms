@@ -157,7 +157,7 @@ class file extends control
 
         /* Judge the mode, down or open. */
         $mode      = 'down';
-        $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
+        $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html|mp4';
         if(stripos($fileTypes, $file->extension) !== false && $mouse == 'left') $mode = 'open';
         if($file->extension == 'txt')
         {
@@ -172,11 +172,11 @@ class file extends control
             /* If the mode is open, locate directly. */
             if($mode == 'open')
             {
-                if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
+                if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false)
                 {
                     $this->view->file     = $file;
                     $this->view->charset  = $this->get->charset ? $this->get->charset : $this->config->charset;
-                    $this->view->fileType = ($file->extension == 'txt') ? 'txt' : 'image';
+                    $this->view->fileType = ($file->extension == 'txt') ? 'txt' : ($file->extension == 'mp4' ? 'video' : 'image');
                     $this->display();
                 }
                 else
@@ -587,6 +587,7 @@ class file extends control
     {
         if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
         $file = $this->file->getById($fileID);
+        if(!$this->file->checkPriv($file)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->file->accessDenied, 'locate' => helper::createLink('my', 'index')), 'closeModal' => true));
         if(empty($file) or !$this->file->fileExists($file)) return false;
 
         $obLevel = ob_get_level();

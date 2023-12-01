@@ -2046,7 +2046,7 @@ class executionModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('status')->notin('closed,cancel')
             ->andWhere('execution')->in($executionIdList)
-            ->orderBy('id_asc')
+            ->orderBy('order_asc')
             ->fetchGroup('execution', 'id');
 
         $taskIdList = array();
@@ -2126,6 +2126,19 @@ class executionModel extends model
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
 
         return $execution;
+    }
+
+    /**
+     * Get execution by build id.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return object
+     */
+    public function getByBuild(int $buildID)
+    {
+        $build = $this->loadModel('build')->getById($buildID);
+        return $this->getById($build->execution);
     }
 
     /**

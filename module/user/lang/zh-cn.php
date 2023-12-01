@@ -17,8 +17,8 @@ $lang->user->company          = '所属公司';
 $lang->user->dept             = '部门';
 $lang->user->account          = '用户名';
 $lang->user->password         = '密码';
-$lang->user->password2        = '请重复密码';
-$lang->user->password2AB      = '重复密码';
+$lang->user->password1        = '密码';
+$lang->user->password2        = '重复密码';
 $lang->user->role             = '职位';
 $lang->user->group            = '权限分组';
 $lang->user->realname         = '姓名';
@@ -40,10 +40,8 @@ $lang->user->dingding         = '钉钉';
 $lang->user->slack            = 'Slack';
 $lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = '通讯地址';
-$lang->user->addressAB        = '地址';
 $lang->user->zipcode          = '邮编';
 $lang->user->join             = '入职日期';
-$lang->user->joinAB           = '入职';
 $lang->user->priv             = '权限';
 $lang->user->visits           = '访问次数';
 $lang->user->visions          = '界面类型';
@@ -54,7 +52,7 @@ $lang->user->ditto            = '同上';
 $lang->user->originalPassword = '原密码';
 $lang->user->newPassword      = '新密码';
 $lang->user->verifyPassword   = '您的密码';
-$lang->user->resetPassword    = '忘记密码';
+$lang->user->forgetPassword   = '忘记密码';
 $lang->user->score            = '积分';
 $lang->user->name             = '名称';
 $lang->user->type             = '用户类型';
@@ -80,10 +78,14 @@ $lang->user->identity         = '身份';
 $lang->user->switchVision     = '切换到 %s';
 $lang->user->submit           = '提交';
 $lang->user->resetPWD         = '重置密码';
-$lang->user->resetTitle       = '系统管理员重置密码';
+$lang->user->resetPwdByAdmin  = '管理员重置密码';
+$lang->user->resetPwdByMail   = '邮件重置密码';
 
 $lang->user->abbr = new stdclass();
-$lang->user->abbr->id = '序号';
+$lang->user->abbr->id        = '序号';
+$lang->user->abbr->password2 = '请重复密码';
+$lang->user->abbr->address   = '地址';
+$lang->user->abbr->join      = '入职';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
@@ -296,7 +298,7 @@ $lang->user->resetSuccess     = "重置密码成功，请用新密码登录。";
 $lang->user->noticeDelete     = "你确认要把“%s”从系统中删除吗？";
 $lang->user->noticeHasDeleted = "该人员已经删除，如需查看，请到回收站还原后再查看。";
 $lang->user->noticeResetFile  = "<h5>普通用户请联系管理员重置密码</h5>
-    <h5>管理员请登录禅道所在的服务器，创建<span> '%s' </span>文件。</h5>
+    <h5>管理员请登录禅道所在的服务器，创建<span> %s </span>文件。</h5>
     <p>注意：</p>
     <ol>
     <li>文件内容为空。</li>
@@ -322,7 +324,7 @@ $lang->user->mkdirLinux = <<<EOT
     </td></tr></table></body></html>
 EOT;
 
-$lang->user->jumping = "<span id='time'>10</span>秒钟后页面将自动跳转登录页。 <a href='%s' class='btn primary size-xs' type='button'>立即跳转</a>";
+$lang->user->jumping = "<span id='time'>10</span>秒钟后页面将自动跳转登录页。 <a href='%s' id='redirect' class='btn primary'>立即跳转</a>";
 
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = '退出登录';

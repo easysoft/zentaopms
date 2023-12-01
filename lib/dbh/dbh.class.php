@@ -265,8 +265,7 @@ class dbh
      */
     public function tableExits($tableName)
     {
-        $tableName = str_replace('`', "'", $tableName);
-        $tableName = str_replace("'", "", $tableName);
+        $tableName = str_replace(array("'", '`'), "", $tableName);
         $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
         switch($this->config->driver)
         {
@@ -764,6 +763,17 @@ class dbh
     public function beginTransaction()
     {
         return $this->pdo->beginTransaction();
+    }
+
+    /**
+     * Check in transaction or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function inTransaction()
+    {
+        return $this->pdo->inTransaction();
     }
 
     /**

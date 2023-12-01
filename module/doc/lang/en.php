@@ -167,6 +167,7 @@ $lang->doc->collectCount  = '%s Collections';
 $lang->doc->index            = 'Dashboard';
 $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Create Document';
+$lang->doc->createOrUpload   = 'Create/Upload Document';
 $lang->doc->edit             = 'Edit Document';
 $lang->doc->delete           = 'Delete Document';
 $lang->doc->createBook       = 'Create Book';
@@ -212,6 +213,14 @@ $lang->doc->confirm           = 'Confirm';
 $lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
 $lang->doc->showDoc           = 'Whether to display documents';
+$lang->doc->uploadFile        = 'Upload File';
+$lang->doc->uploadDoc         = 'Upload Document';
+$lang->doc->uploadFormat      = 'Upload Format';
+$lang->doc->editedList        = 'File editor';
+
+$lang->doc->uploadFormatList = array();
+$lang->doc->uploadFormatList['separateDocs'] = 'Save files as different document';
+$lang->doc->uploadFormatList['combinedDocs'] = 'Save files as one document';
 
 $lang->doc->fileType = new stdclass();
 $lang->doc->fileType->stepResult = 'Case Result';
@@ -263,10 +272,11 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['template'] = 'Wiki';
-$lang->doc->createList['word']     = 'Word';
-$lang->doc->createList['ppt']      = 'PPT';
-$lang->doc->createList['excel']    = 'Excel';
+$lang->doc->createList['template']   = 'Wiki';
+$lang->doc->createList['word']       = 'Word';
+$lang->doc->createList['ppt']        = 'PPT';
+$lang->doc->createList['excel']      = 'Excel';
+$lang->doc->createList['attachment'] = $lang->doc->uploadDoc;
 
 $lang->doc->types['doc'] = 'Wiki';
 $lang->doc->types['api'] = 'API';

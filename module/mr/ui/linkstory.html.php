@@ -13,6 +13,8 @@ namespace zin;
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
+$this->loadModel('release');
+$app->loadLang('productplan');
 $footToolbar = array('items' => array
 (
     array('text' => $lang->mr->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))

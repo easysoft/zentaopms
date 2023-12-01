@@ -1,0 +1,18 @@
+title: table zt_storyreview
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: story
+      range: 1-400
+    - field: version
+      range: "1"
+    - field: reviewer
+      range: admin
+    - field: result
+      range: ""
+    - field: reviewDate
+      note: "创建日期"
+      range: "(M)-(w)"
+      type: timestamp
+      format: "YY/MM/DD"

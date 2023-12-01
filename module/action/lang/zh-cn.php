@@ -454,6 +454,7 @@ $lang->action->label->syncprogram             = '开始了';
 $lang->action->label->syncproject             = '开始了';
 $lang->action->label->syncexecution           = '开始了';
 $lang->action->label->syncexecutionbychild    = '开始了';
+$lang->action->label->syncmultipleproject     = '开始了';
 $lang->action->label->startProgram            = "（因{$lang->projectCommon}开始而启动项目集）";
 $lang->action->label->createmr                = '合并请求关联了';
 $lang->action->label->deletemr                = '合并请求取消了';

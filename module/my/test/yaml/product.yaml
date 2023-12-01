@@ -1,0 +1,7 @@
+title: zt_product
+desc: product data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: PO
+    range: admin,user1

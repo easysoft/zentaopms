@@ -24,6 +24,9 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: project
+    note: "所属项目"
+    range: "0"
   - field: desc
     note: "分组描述"
     range: "1-10000"

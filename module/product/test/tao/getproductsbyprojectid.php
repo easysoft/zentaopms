@@ -24,15 +24,15 @@ $withDeleted   = array(false, true);
 
 global $tester;
 $tester->loadModel('product');
-r($tester->product->getProductsByProjectID($projectIdList[0], '',        $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品1,normal');  // 获取敏捷项目关联的产品数据
-r($tester->product->getProductsByProjectID($projectIdList[1], '',        $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品2,normal');  // 获取瀑布项目关联的产品数据
-r($tester->product->getProductsByProjectID($projectIdList[2], '',        $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品4,normal');  // 获取看板项目关联的产品数据
-r($tester->product->getProductsByProjectID($projectIdList[0], '',        $statusList[1], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品1,normal');  // 获取敏捷项目关联的未关闭产品数据
-r($tester->product->getProductsByProjectID($projectIdList[1], '',        $statusList[1], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品2,normal');  // 获取瀑布项目关联的未关闭产品数据
-r($tester->product->getProductsByProjectID($projectIdList[2], '',        $statusList[1], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品4,normal');  // 获取看板项目关联的未关闭产品数据
-r($tester->product->getProductsByProjectID($projectIdList[0], '',        $statusList[0], $orderBy, $withDeleted[1])) && p('0:name,status') && e('产品1,normal');  // 获取敏捷项目关联的所有产品数据
-r($tester->product->getProductsByProjectID($projectIdList[1], '',        $statusList[0], $orderBy, $withDeleted[1])) && p('0:name,status') && e('产品2,normal');  // 获取瀑布项目关联的所有产品数据
-r($tester->product->getProductsByProjectID($projectIdList[2], '',        $statusList[0], $orderBy, $withDeleted[1])) && p('0:name,status') && e('产品4,normal');  // 获取看板项目关联的所有产品数据
-r($tester->product->getProductsByProjectID($projectIdList[0], $appendID, $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品10,normal'); // 获取敏捷项目关联的产品数据
-r($tester->product->getProductsByProjectID($projectIdList[1], $appendID, $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品10,normal'); // 获取瀑布项目关联的产品数据
-r($tester->product->getProductsByProjectID($projectIdList[2], $appendID, $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品10,normal'); // 获取看板项目关联的产品数据
+r($tester->product->getProductsByProjectID($projectIdList[0], '',        $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品1,normal'); // 获取敏捷项目关联的产品数据
+r($tester->product->getProductsByProjectID($projectIdList[1], '',        $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品2,normal'); // 获取瀑布项目关联的产品数据
+r($tester->product->getProductsByProjectID($projectIdList[2], '',        $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品4,normal'); // 获取看板项目关联的产品数据
+r($tester->product->getProductsByProjectID($projectIdList[0], '',        $statusList[1], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品1,normal'); // 获取敏捷项目关联的未关闭产品数据
+r($tester->product->getProductsByProjectID($projectIdList[1], '',        $statusList[1], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品2,normal'); // 获取瀑布项目关联的未关闭产品数据
+r($tester->product->getProductsByProjectID($projectIdList[2], '',        $statusList[1], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品4,normal'); // 获取看板项目关联的未关闭产品数据
+r($tester->product->getProductsByProjectID($projectIdList[0], '',        $statusList[0], $orderBy, $withDeleted[1])) && p('0:name,status') && e('产品1,normal'); // 获取敏捷项目关联的所有产品数据
+r($tester->product->getProductsByProjectID($projectIdList[1], '',        $statusList[0], $orderBy, $withDeleted[1])) && p('0:name,status') && e('产品2,normal'); // 获取瀑布项目关联的所有产品数据
+r($tester->product->getProductsByProjectID($projectIdList[2], '',        $statusList[0], $orderBy, $withDeleted[1])) && p('0:name,status') && e('产品4,normal'); // 获取看板项目关联的所有产品数据
+r($tester->product->getProductsByProjectID($projectIdList[0], $appendID, $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品1,normal'); // 获取敏捷项目关联的产品数据
+r($tester->product->getProductsByProjectID($projectIdList[1], $appendID, $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品2,normal'); // 获取瀑布项目关联的产品数据
+r($tester->product->getProductsByProjectID($projectIdList[2], $appendID, $statusList[0], $orderBy, $withDeleted[0])) && p('0:name,status') && e('产品4,normal'); // 获取看板项目关联的产品数据

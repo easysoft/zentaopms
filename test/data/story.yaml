@@ -140,6 +140,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: demand
+    note: "用户需求"
+    range: '0'
+  - field: duration
+    range: ''
+  - field: BSA
+    range: ''
   - field: openedBy
     note: "由谁创建"
     fields:
@@ -191,6 +198,9 @@ fields:
     prefix: ""
     postfix: ""
     format: ""
+  - field: submitedBy
+    note: "提交人"
+    range: ''
   - field: closedBy
     note: "关闭者"
     fields:

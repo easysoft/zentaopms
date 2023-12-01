@@ -1,0 +1,13 @@
+title: zt_action
+desc: action data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: action
+    range: submitreview{8},reviewed{8}
+  - field: actor
+    range: admin{4},user1{4}
+  - field: objectID
+    range: 1-10
+  - field: objectType
+    range: story,case

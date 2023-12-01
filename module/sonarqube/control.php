@@ -231,7 +231,7 @@ class sonarqube extends control
     {
         $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->loadModel('action');
-        $actionID = $this->pipeline->delete($sonarqubeID, 'sonarqube');
+        $actionID = $this->pipeline->deleteByObject($sonarqubeID, 'sonarqube');
         if($actionID)
         {
             $response['result']   = 'fail';

@@ -269,6 +269,7 @@ $lang->task->deniedNotice              = '当前任务只有%s才可以%s。';
 $lang->task->deniedStatusNotice        = '当前任务状态是%s，不能维护日志。';
 $lang->task->transferNotice            = '串行多人任务不能转交。';
 $lang->task->noTask                    = '暂时没有任务。';
+$lang->task->noModule                  = '<div>您现在还没有模块信息</div><div>请维护任务模块</div>';
 $lang->task->createDenied              = "你不能在该{$lang->projectCommon}添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';

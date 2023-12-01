@@ -781,7 +781,7 @@ class bugModel extends model
         $query = $this->session->$queryName;
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
 
-        if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
+        if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
         return $this->dao->select("t1.*, t2.name AS productName, t2.shadow, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
@@ -1783,7 +1783,10 @@ class bugModel extends model
         $relatedObjectIdList = array();
         $relatedObjects      = array();
 
-        foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
+        foreach($bugs as $bug)
+        {
+            if(is_numeric($bug->$object)) $relatedObjectIdList[$bug->$object] = $bug->$object;
+        }
 
         if($object == 'openedBuild' or $object == 'resolvedBuild') $object = 'build';
 

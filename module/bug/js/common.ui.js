@@ -141,7 +141,7 @@ function refreshModule(event)
 
 function refreshContact(event)
 {
-    const link = $.createLink('user', 'ajaxGetContactList', 'dropdownName=mailto');
+    const link = $.createLink('user', 'ajaxGetContactList');
     $.getJSON(link, function(contacts)
     {
         let contactID      = $('[name="contactListMenu"]').val();

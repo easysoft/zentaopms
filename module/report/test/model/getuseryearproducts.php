@@ -1,8 +1,15 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/report.class.php';
-su('po1');
+
+zdTable('product')->gen(20);
+zdTable('story')->gen(20);
+zdTable('productplan')->gen(20);
+zdTable('user')->gen(1);
+
+su('admin');
 
 /**
 
@@ -10,19 +17,14 @@ title=测试 reportModel->getUserYearProducts();
 cid=1
 pid=1
 
-测试获取本年度 po1 的产品数 >> 1,11,21,31,41,51,61,71,81,91,101,111
-测试获取本年度 dev17 的产品数 >> 17,117
-测试获取本年度 test18 的产品数 >> 18,118
-测试获取本年度 po1 dev17 的产品数 >> 1,11,17,21,31,41,51,61,71,81,91,101,111,117
-测试获取本年度 po1 test18 的产品数 >> 1,11,18,21,31,41,51,61,71,81,91,101,111,118
-
 */
-$account = array('po1', 'dev17', 'test18', 'po1,dev17', 'po1,test18');
+$account = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'), array());
 
 $report = new reportTest();
 
-r($report->getUserYearProductsTest($account[0])) && p() && e('1,11,21,31,41,51,61,71,81,91,101,111');        // 测试获取本年度 po1 的产品数
-r($report->getUserYearProductsTest($account[1])) && p() && e('17,117');                                      // 测试获取本年度 dev17 的产品数
-r($report->getUserYearProductsTest($account[2])) && p() && e('18,118');                                      // 测试获取本年度 test18 的产品数
-r($report->getUserYearProductsTest($account[3])) && p() && e('1,11,17,21,31,41,51,61,71,81,91,101,111,117'); // 测试获取本年度 po1 dev17 的产品数
-r($report->getUserYearProductsTest($account[4])) && p() && e('1,11,18,21,31,41,51,61,71,81,91,101,111,118'); // 测试获取本年度 po1 test18 的产品数
+r($report->getUserYearProductsTest($account[0])) && p() && e('1,2,3,4,5');                                          // 测试获取本年度 admin 的产品数
+r($report->getUserYearProductsTest($account[1])) && p() && e('17');                                                 // 测试获取本年度 dev17 的产品数
+r($report->getUserYearProductsTest($account[2])) && p() && e('1,18');                                               // 测试获取本年度 test18 的产品数
+r($report->getUserYearProductsTest($account[3])) && p() && e('1,2,3,4,5,17');                                       // 测试获取本年度 admin dev17 的产品数
+r($report->getUserYearProductsTest($account[4])) && p() && e('1,2,3,4,5,18');                                       // 测试获取本年度 admin test18 的产品数
+r($report->getUserYearProductsTest($account[5])) && p() && e('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20'); // 测试获取本年度 所有用户 的产品数

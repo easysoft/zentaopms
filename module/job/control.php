@@ -37,8 +37,10 @@ class job extends control
     }
 
     /**
+     * 流水线列表。
      * Browse job.
      *
+     * @param  int    $repoID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -46,15 +48,15 @@ class job extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $repoID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('ci');
+        $this->app->loadLang('compile');
 
         if($repoID)
         {
-            $repos = $this->loadModel('repo')->getRepoPairs('devops');
-            if(empty($repos)) $this->locate($this->repo->createLink('create'));
-            $repoID = $this->repo->saveState($repoID);
+            $this->jobZen->checkRepoEmpty();
+            $repoID = $this->loadModel('repo')->saveState($repoID);
 
             /* Set session. */
             $this->ci->setMenu($repoID);
@@ -67,36 +69,7 @@ class job extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $products = $this->loadModel('product')->getPairs();
-
-        $this->app->loadLang('compile');
-        $jobList = $this->job->getList($repoID, $orderBy, $pager);
-        $this->loadModel('gitlab');
-        foreach($jobList as $job)
-        {
-            $job->canExec = true;
-
-            if($job->engine == 'gitlab')
-            {
-                $pipeline = json_decode($job->pipeline);
-                $branch   = $this->gitlab->apiGetSingleBranch($job->server, $pipeline->project, $pipeline->reference);
-                if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
-                /* query buildSpec */
-                if(is_numeric($job->pipeline))  $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
-                if(isset($pipeline->reference)) $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $pipeline->project);
-            }
-            elseif($job->engine == 'jenkins')
-            {
-                if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
-            }
-
-            $job->lastExec    = $job->lastExec ? $job->lastExec : '';
-            $job->triggerType = $this->job->getTriggerConfig($job);
-            $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
-            $job->engine      = zget($this->lang->job->engineList, $job->engine);
-            $job->frame       = zget($this->lang->job->frameList, $job->frame);
-            $job->productName = zget($products, $job->product, '');
-        }
+        $jobList = $this->jobZen->getJobList($repoID, $orderBy, $pager);
 
         $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->repoID  = $repoID;
@@ -126,57 +99,21 @@ class job extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $jobID = $this->job->create($job);
-            if(dao::isError())
-            {
-                $errors = dao::getError();
-                if($this->post->engine == 'gitlab' and isset($errors['server']))
-                {
-                    if(!isset($errors['repo'])) $errors['repo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repoServer);
-                    unset($errors['server']);
-                    unset($errors['pipeline']);
-                }
-                elseif($this->post->engine == 'jenkins')
-                {
-                    if(isset($errors['server']))
-                    {
-                        $errors['jkServer'] = $errors['server'];
-                        unset($errors['server']);
-                    }
-                    if(isset($errors['pipeline']))
-                    {
-                        $errors['jkTask'] = $errors['pipeline'];
-                        unset($errors['pipeline']);
-                    }
-                }
-                return $this->send(array('result' => 'fail', 'message' => $errors));
-            }
+            if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'created');
 
-            $this->loadModel('action')->create('job', $jobID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$this->post->repo}")));
+            return $this->send($this->jobZen->reponseAfterCreateEdit());
         }
 
         $this->loadModel('ci');
         $this->app->loadLang('action');
-        $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
-        $repoPairs   = array();
-        $gitlabRepos = array();
-        $repoTypes   = array();
-        $gitlabs     = array();
 
-        foreach($repoList as $repo)
-        {
-            if(empty($repo->synced)) continue;
-            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-            $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-        }
+        list($repoPairs, $gitlabRepos, $repoTypes) = $this->jobZen->getRepoList($this->projectID);
 
-        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->repoPairs   = $repoPairs;
-        $this->view->gitlabRepos = $gitlabRepos;
-        $this->view->repoTypes   = $repoTypes;
-        $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
-
+        $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
+        $this->view->repoPairs           = $repoPairs;
+        $this->view->gitlabRepos         = $gitlabRepos;
+        $this->view->repoTypes           = $repoTypes;
+        $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
         $this->view->sonarqubeServerList = $this->loadModel('pipeline')->getPairs('sonarqube');
 
@@ -190,75 +127,30 @@ class job extends control
      * @access public
      * @return void
      */
-    public function edit($jobID)
+    public function edit(int $jobID)
     {
         $job = $this->job->getByID($jobID);
         if($_POST)
         {
-            $this->job->update($jobID);
-            if(dao::isError())
-            {
-                $errors = dao::getError();
-                if($this->post->engine == 'gitlab' and isset($errors['server']))
-                {
-                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
-                    unset($errors['server']);
-                    unset($errors['pipeline']);
-                }
-                elseif($this->post->engine == 'jenkins')
-                {
-                    if(isset($errors['server']))
-                    {
-                        $errors['jkServer'] = $errors['server'];
-                        unset($errors['server']);
-                    }
-                    if(isset($errors['pipeline']))
-                    {
-                        $errors['jkTask'] = $errors['pipeline'];
-                        unset($errors['pipeline']);
-                    }
-                }
-                return $this->send(array('result' => 'fail', 'message' => $errors));
-            }
+            $job = form::data($this->config->job->form->edit)
+                ->setIF($this->post->triggerType != 'commit', 'comment', '')
+                ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
+                ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
+                ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->get();
+            $this->job->update($jobID, $job);
+            if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'edited');
 
-            $this->loadModel('action')->create('job', $jobID, 'edited');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$job->repo}")));
+            return $this->send($this->jobZen->reponseAfterCreateEdit($job->repo));
         }
 
         $this->loadModel('ci');
-        $repo = $this->loadModel('repo')->getByID($job->repo);
-        $this->view->repo = $this->loadModel('repo')->getByID($job->repo);
+        $this->view->repo = $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
-        if($repo->SCM == 'Subversion' && $job->triggerType == 'tag')
-        {
-            $dirs = array();
-            $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
-            $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
-            if($tags)
-            {
-                $dirs['/'] = $path;
-                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
-            }
-            $this->view->dirs = $dirs;
+        $this->jobZen->getSubversionDir($repo, $job->triggerType);
 
-            foreach($this->lang->job->triggerTypeList as $type => $name)
-            {
-                if($type == 'tag') $this->lang->job->triggerTypeList[$type] = $this->lang->job->dirChange;
-            }
-        }
-
-        $repoList             = $this->repo->getList($this->projectID);
-        $repoPairs            = array($repo->id => $repo->name);
-        $gitlabRepos          = array();
-        $repoTypes[$repo->id] = $repo->SCM;
-        foreach($repoList as $repo)
-        {
-            if(empty($repo->synced)) continue;
-            $repoPairs[$repo->id] = "[{$repo->SCM}] {$repo->name}";
-            $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] {$repo->name}";
-        }
+        list($repoPairs, $gitlabRepos, $repoTypes) = $this->jobZen->getRepoList($this->projectID, $repo);
 
         $products = $this->repo->getProductsByRepo($job->repo);
         if(!isset($products[$job->product]))

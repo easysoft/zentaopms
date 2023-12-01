@@ -1,0 +1,11 @@
+title: effort.
+desc: effort data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: account
+    fields:
+    - field: account1
+      range: admin,dev,test,user
+    - field: account2
+      range: "[],17-20,17-20,17-20"

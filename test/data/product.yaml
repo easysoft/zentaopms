@@ -38,7 +38,10 @@ fields:
     range: normal{20},closed{20},normal{20},closed{20},normal{20},closed{20},normal{10},closed{10},normal{10},closed{10},normal{10},closed{10},normal{20}
   - field: subStatus
     note: "子状态"
-    range: 0
+    range: ''
+  - field: PMT
+    note: "产品管理团队"
+    range: ''
   - field: desc
     note: "产品描述"
     fields:

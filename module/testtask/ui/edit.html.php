@@ -38,7 +38,8 @@ formPanel
         set::name('build'),
         set::value($task->build),
         set::control('picker'),
-        set::items($builds)
+        set::items($builds),
+        on::change('setExecutionByBuild')
     ),
     formGroup
     (
@@ -58,6 +59,19 @@ formPanel
         set::value($task->owner),
         set::control('picker'),
         set::items($users)
+    ),
+    formgroup
+    (
+        set::width('1/2'),
+        set::label($lang->testtask->members),
+        picker
+        (
+            setid('members'),
+            set::name('members[]'),
+            set::items($users),
+            set::value($task->members),
+            set::multiple(true)
+        )
     ),
     formGroup
     (

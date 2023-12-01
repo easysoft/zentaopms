@@ -182,4 +182,45 @@ class docZen extends doc
         $path   = implode(':', $path);
         return array("{$prefix}{$libID}:{$path}" => true);
     }
+
+    /**
+     * 展示我的空间相关变量。
+     * Show my space related variables.
+     *
+     * @param  string    $type
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  array     $docs
+     * @param  object    $pager
+     * @param  array     $libs
+     * @param  string    $objectDropdown
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForMySpace(string $type, int $objectID, int $libID, int $moduleID, string $browseType, int $param, string $orderBy, array $docs, object $pager, array $libs, string $objectDropdown): void
+    {
+        $this->view->title             = $this->lang->doc->common;
+        $this->view->type              = $type;
+        $this->view->libID             = $libID;
+        $this->view->moduleID          = $moduleID;
+        $this->view->browseType        = $browseType;
+        $this->view->param             = $param;
+        $this->view->orderBy           = $orderBy;
+        $this->view->docs              = $docs;
+        $this->view->pager             = $pager;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->objectID          = 0;
+        $this->view->libType           = 'lib';
+        $this->view->spaceType         = 'mine';
+        $this->view->users             = $this->user->getPairs('noletter');
+        $this->view->lib               = $this->doc->getLibByID($libID);
+        $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
+        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', 'mine2export') && $type == 'mine');
+        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
+        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID, $type);
+    }
 }

@@ -246,25 +246,38 @@ class zdb
             fwrite($fp, $backupSql);
             if($tableType != 'table') continue;
 
-            $rows = $this->dbh->query("select * from `$table`");
+            $desc       = $this->dbh->query("desc `$table`")->fetchAll();
+            $nullFields = array();
+            foreach($desc as $field) $nullFields[$field->Field] = $field->Null == 'YES';
+
+            /* Create key sql for insert. */
+            $fields   = "`" . join('`,`', array_map('addslashes', array_keys($nullFields))) . "`";
+            $rows     = $this->dbh->query("select * from `$table`");
+            $values   = array();
+            $batchNum = 200;
             while($row = $rows->fetch(PDO::FETCH_ASSOC))
             {
-                /* Create key sql for insert. */
-                $keys = array_keys($row);
-                $keys = array_map('addslashes', $keys);
-                $keys = join('`,`', $keys);
-                $keys = "`" . $keys . "`";
-
                 /* Create a value sql. */
-                $value = array_values($row);
-                $value = $this->addslashes($value);
-                $value = join("','", $value);
-                $value = "'" . $value . "'";
-                $sql   = "INSERT INTO `$table`($keys) VALUES (" . $value . ");\n";
+                $row   = array_map('addslashes', $row);
+                $value = array();
+                foreach($row as $fieldName => $fieldValue)
+                {
+                    $length     = strlen($fieldValue);
+                    $fieldValue = "'{$fieldValue}'";
+                    if($length == 0 and $nullFields[$fieldName]) $fieldValue = 'null';
 
-                /* Write sql code. */
-                fwrite($fp, $sql);
+                    $value[] = $fieldValue;
+                }
+
+                $values[] = '(' . join(',', $value) . ')';
+                if(count($values) == $batchNum)
+                {
+                    /* Write sql code. */
+                    fwrite($fp, "INSERT INTO `$table`($fields) VALUES " . implode(",\n", $values) . ";\n");
+                    $values = array();
+                }
             }
+            if($values) fwrite($fp, "INSERT INTO `$table`($fields) VALUES " . implode(",\n", $values) . ";\n");
         }
         fclose($fp);
         return $return;
@@ -290,41 +303,46 @@ class zdb
             return $return;
         }
 
-        $fp     = fopen($fileName, 'r');
-        $sqlEnd = 0;
-        while(($buffer = fgets($fp)) !== false)
+        $fp        = fopen($fileName, 'r');
+        $sql       = '';
+        $startTags = '^DROP TABLE|^CREATE TABLE|^INSERT INTO|^SET';
+        $isInsert  = false;
+        while(!feof($fp))
         {
-            $line = trim($buffer);
+            $line = fgets($fp);
             if(empty($line)) continue;
 
-            if($sqlEnd == 0) $sql = '';
-            $quotNum = substr_count($line, "'") - substr_count($line, "\'");
-            if(substr($line, -1) == ';' and $quotNum % 2 == 0 and $sqlEnd == 0)
+            $sqlStart = false;
+            $sqlEnd   = false;
+            $execSQL  = false;
+            if(empty($sql) and preg_match("/{$startTags}/", $line)) $sqlStart = true;
+            if(!$isInsert and $sqlStart and strpos($line, 'INSERT INTO') === 0) $isInsert = true;
+
+            $endTag = $isInsert ? "[^\\\]\'\);$" : ";$";
+            if(preg_match("/{$endTag}/", $line)) $sqlEnd = true;
+
+            if($sqlStart && $sqlEnd)        // Only one line sql. e.g. DROP TABLE IF EXISTS `blog`;
             {
-                $sql .= $buffer;
+                $sql     = $line;
+                $execSQL = true;
             }
-            elseif($quotNum % 2 == 1 and $sqlEnd == 0)
+            elseif($sqlStart && !$sqlEnd)   // Start sql line. e.g. CREATE TABLE `zt_account` (
             {
-                $sql   .= $buffer;
-                $sqlEnd = 1;
+                $sql     = $line;
+                $execSQL = false;
             }
-            elseif(substr($line, -1) == ';' and $quotNum % 2 == 1 and $sqlEnd == 1)
+            elseif(!$sqlStart && !$sqlEnd)  // Not start and not end. e.g.  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
             {
-                $sql   .= $buffer;
-                $sqlEnd = 0;
+                $sql    .= $line;
+                $execSQL = false;
             }
-            elseif(substr($line, -1) == ';' and $quotNum % 2 == 0 and $sqlEnd == 2)
+            elseif($sqlEnd)                 // More line sql, and end line. e.g. ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
             {
-                $sql   .= $buffer;
-                $sqlEnd = 0;
-            }
-            else
-            {
-                $sql .= $buffer;
-                $sqlEnd = $sqlEnd == 0 ? 2 : $sqlEnd;
+                $sql    .= $line;
+                $execSQL = true;
             }
 
-            if($sqlEnd == 0)
+            if($execSQL)
             {
                 try
                 {
@@ -332,9 +350,13 @@ class zdb
                 }
                 catch(PDOException $e)
                 {
+                    a($sql);
+                    exit;
                     $return->result = false;
                     $return->error .= $e->getMessage() . "\n";
                 }
+                $sql      = '';
+                $isInsert = false;
             }
         }
         return $return;

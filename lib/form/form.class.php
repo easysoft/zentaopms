@@ -224,30 +224,20 @@ class form extends fixer
             $this->errors[$field][] = "Field '{$field}' need defined type";
         }
 
-        $requireValue = isset($config['required']) && $config['required'] && !isset($config['default']);
-        if($requireValue && (!isset($this->rawdata->$field) || $this->rawdata->$field === ''))
-        {
-            if(!isset($this->errors[$field])) $this->errors[$field] = array();
-            $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
-            $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
-        }
-
-        if(isset($this->rawdata->$field))
-        {
-            $data = $this->rawdata->$field;
-        }
+        if(isset($this->rawdata->$field)) $data = $this->rawdata->$field;
 
         /* Assign the default value to the data if the default value exists and the data is not exist or null or empty string. */
-        if(array_key_exists('default', $config) && (!isset($this->rawdata->$field) || is_null($this->rawdata->$field) || $this->rawdata->$field === ''))
-        {
-            $data = $config['default'];
-        }
+        if(isset($config['default']) && (!isset($this->rawdata->$field) || is_null($this->rawdata->$field) || $this->rawdata->$field === '')) $data = $config['default'];
 
         $data = helper::convertType($data, $config['type']);
 
-        if(isset($config['filter']))
+        if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
+
+        if(isset($config['required']) && $config['required'] && empty($data))
         {
-            $data = $this->filter($data, $config['filter']);
+            $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
+            if(!isset($this->errors[$field])) $this->errors[$field] = array();
+            $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
         }
 
         $this->data->$field = $data;

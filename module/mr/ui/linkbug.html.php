@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$this->loadModel('release');
+$this->app->loadLang('productplan');
+
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('mr', 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 

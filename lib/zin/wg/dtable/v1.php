@@ -6,17 +6,19 @@ class dtable extends wg
 {
     protected static array $defineProps = array(
         'className?:string="shadow-sm rounded"', // 表格样式。
-        'id?:string',                         // ID。
-        'customCols?: bool|array',            // 是否支持自定义列。
-        'cols?:array',                        // 表格列配置
-        'data?:array',                        // 表格数据源
-        'module?:string',                     // 模块信息，主要是获取语言项
-        'emptyTip?:string',                   // 表格数据源为空时显示的文本
-        'createTip?:string',                  // 表格数据源为空时的创建文本
-        'createLink?:array|string',           // 表格数据源为空时的创建链接
-        'createAttr?:string',                 // 表格数据源为空时的创建链接属性
-        'sortLink?:array|string',             // 排序链接
-        'orderBy?:string'                     // 排序字段
+        'id?:string',                            // ID。
+        'customCols?: bool|array',               // 是否支持自定义列。
+        'cols?:array',                           // 表格列配置。
+        'data?:array',                           // 表格数据源。
+        'module?:string',                        // 模块信息，主要是获取语言项。
+        'emptyTip?:string',                      // 表格数据源为空时显示的文本。
+        'createTip?:string',                     // 表格数据源为空时的创建文本。
+        'createLink?:array|string',              // 表格数据源为空时的创建链接。
+        'createAttr?:string',                    // 表格数据源为空时的创建链接属性。
+        'sortLink?:array|string',                // 排序链接。
+        'orderBy?:string',                       // 排序字段。
+        'loadPartial?: bool',                    // 启用部分加载，不更新浏览器地址栏 URL。
+        'loadOptions?: array'                    // 分页和排序加载选项。
     );
 
     static $dtableID = 0;
@@ -39,7 +41,6 @@ class dtable extends wg
         $this->initCustomCols();
         $this->initCols($module);
         $this->initSortLink();
-        $this->initPager();
         $this->initFooterBar();
 
         $tableData = $this->prop('data', array());
@@ -60,40 +61,6 @@ class dtable extends wg
         {
             list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
             $this->setProp('orderBy', array($orderByName => $orderByType));
-        }
-
-        global $app;
-        $sortLink = $this->prop('sortLink');
-        if(is_string($sortLink) && !str_contains($sortLink, 'RAWJS')) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
-    }
-
-    /**
-     * 格式化表格分页属性。
-     * Format table pagination properties.
-     *
-     * @access public
-     * @return void
-     */
-    public function initPager()
-    {
-        $pager = $this->prop('footPager');
-        if(!empty($pager) && isset($pager['items']))
-        {
-            if(!isset($pager['btnProps'])) $pager['btnProps'] = array('data-load' => 'table', 'type' => 'ghost', 'size' => 'sm');
-            foreach($pager['items'] as $index => $item)
-            {
-                if($item['type'] !== 'size-menu') continue;
-                if(isset($item['itemProps']))
-                {
-                    $pager['items'][$index]['itemProps']['data-load']   = 'table';
-                    $pager['items'][$index]['itemProps']['data-target'] = $this->prop('id');
-                }
-                else
-                {
-                    $pager['items'][$index]['itemProps'] = array('data-load' => 'table', 'data-target' => $this->prop('id'));
-                }
-            }
-            $this->setProp('footPager', $pager);
         }
     }
 

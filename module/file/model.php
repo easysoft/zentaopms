@@ -155,6 +155,41 @@ class fileModel extends model
     }
 
     /**
+     * Save a file.
+     *
+     * @param  object $file
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
+     * @access public
+     * @return array
+     */
+    public function saveAFile($file, $objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
+    {
+        $fileTitle  = new stdclass();
+        $now        = helper::today();
+
+        if($file['size'] == 0) return array();
+        if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
+
+        $file = $this->compressImage($file);
+
+        $file['objectType'] = $objectType;
+        $file['objectID']   = $objectID;
+        $file['addedBy']    = $this->app->user->account;
+        $file['addedDate']  = $now;
+        $file['extra']      = $extra;
+        unset($file['tmpname']);
+        $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        $fileTitle->id    = $this->dao->lastInsertId();
+        $fileTitle->title = $file['title'];
+
+        return $fileTitle;
+    }
+
+    /**
      * Get counts of uploaded files.
      *
      * @access public
@@ -527,45 +562,53 @@ class fileModel extends model
      */
     public function checkPriv($file): bool
     {
-        if($this->app->user->admin) return true;
-
         $objectType = $file->objectType;
         $objectID   = $file->objectID;
+        $table      = $this->config->objectTables[$objectType];
 
-        $projectObjects   = array('design', 'issue', 'risk');
-        $productObjects   = array('story', 'bug', 'testcase', 'productplan');
-        $executionObjects = array('task', 'build');
-
-        $table = $this->config->objectTables[$objectType];
         if(!$table) return true;
 
-        if(in_array($objectType, $projectObjects))
+        $objectGroup = array(
+            'design'      => 'project',
+            'issue'       => 'project',
+            'risk'        => 'project',
+            'story'       => 'product',
+            'requirement' => 'product',
+            'bug'         => 'product',
+            'testcase'    => 'product',
+            'testtask'    => 'product',
+            'task'        => 'execution',
+            'build'       => 'execution'
+        );
+
+        if(isset($objectGroup[$objectType]))
+        {
+            $groupName = $objectGroup[$objectType]; 
+            $groupID   = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
+            return $this->loadModel($groupName)->checkPriv($groupID);
+        }
+
+        if($objectType == 'release')
         {
             $projectID = $this->dao->findByID($objectID)->from($table)->fetch('project');
+            if((isset($projectID) and $projectID   > 0)) return $this->loadModel('project')->checkPriv($projectID);
+
+            $productID= $this->dao->findByID($objectID)->from(TABLE_RELEASE)->fetch('product');
+            return $this->loadModel('product')->checkPriv($productID);
         }
-        elseif(in_array($objectType, $productObjects))
-        {
-            $productID = $this->dao->findByID($objectID)->from($table)->fetch('product');
-        }
-        elseif(in_array($objectType, $executionObjects))
-        {
-            $executionID = $this->dao->findByID($objectID)->from($table)->fetch('execution');
-        }
-        elseif($objectType == 'doc')
+
+        if($objectType == 'doc')
         {
             $doc = $this->dao->findById($objectID)->from(TABLE_DOC)->fetch();
             return $this->loadModel('doc')->checkPrivDoc($doc);
         }
-        elseif($objectType == 'feedback')
+
+        if($objectType == 'feedback')
         {
             $productID     = $this->dao->findById($objectID)->from(TABLE_FEEDBACK)->fetch('product');
             $grantProducts = $this->loadModel('feedback')->getGrantProducts();
             return in_array($productID, array_keys($grantProducts));
         }
-
-        if((isset($projectID)   and $projectID   > 0) and strpos(",{$this->app->user->view->projects},", ",$projectID,")  === false) return false;
-        if((isset($productID)   and $productID   > 0) and strpos(",{$this->app->user->view->products},", ",$productID,")  === false) return false;
-        if((isset($executionID) and $executionID > 0) and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) return false;
 
         return true;
     }
@@ -1225,7 +1268,7 @@ class fileModel extends model
 
         /* For the open source version of the file judgment. */
         $canPreview = false;
-        if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false) $canPreview = true;
+        if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
         if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1)
         {
             $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';

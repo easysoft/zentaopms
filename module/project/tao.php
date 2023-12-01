@@ -492,7 +492,7 @@ class projectTao extends projectModel
 
             $projectAdmin = new stdclass();
             $projectAdmin->account  = $this->app->user->account;
-            $projectAdmin->group    = $projectAdminID;
+            $projectAdmin->group    = (int)$projectAdminID;
             $projectAdmin->projects = $projectID;
             $this->dao->replace(TABLE_PROJECTADMIN)->data($projectAdmin)->exec();
         }

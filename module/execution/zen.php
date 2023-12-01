@@ -751,10 +751,11 @@ class executionZen extends execution
      * @param  int       $queryID
      * @param  array     $products
      * @param  array     $executions
+     * @param  array     $projects
      * @access protected
      * @return void
      */
-    protected function buildImportBugSearchForm(object $execution, int $queryID, array $products, array $executions)
+    protected function buildImportBugSearchForm(object $execution, int $queryID, array $products, array $executions, array $projects)
     {
         $project = $this->loadModel('project')->getByID($execution->project);
 
@@ -789,6 +790,10 @@ class executionZen extends execution
             }
         }
         $this->config->bug->search['params']['module']['values'] = $bugModules;
+
+        $this->config->bug->search['params']['project']['values'] = array('' => '') + $projects;
+
+        $this->config->bug->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
 
         unset($this->config->bug->search['fields']['resolvedBy']);
         unset($this->config->bug->search['fields']['closedBy']);

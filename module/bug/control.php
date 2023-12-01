@@ -314,6 +314,8 @@ class bug extends control
             $bug = form::data($this->config->bug->form->assignTo)->add('id', $bugID)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
 
+            if($this->app->rawMethod == 'batchassignto') unset($bug->mailto);
+
             if($oldBug->status != 'closed') $this->bug->assign($bug, $oldBug);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

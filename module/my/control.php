@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of dashboard module of ZenTaoPMS.
  *
@@ -356,7 +357,7 @@ EOF;
         $this->loadModel('story');
         if($type == 'assignedBy')
         {
-            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'story');
         }
         elseif($type == 'bysearch')
         {
@@ -419,7 +420,7 @@ EOF;
         $this->loadModel('story');
         if($type == 'assignedBy')
         {
-            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'requirement');
         }
         elseif($type == 'bysearch')
         {
@@ -483,7 +484,7 @@ EOF;
         $queryID = $type == 'bySearch' ? $param : 0;
         if($type == 'assignedBy')
         {
-            $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 'task');
+            $tasks = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'task');
         }
         elseif($type == 'bySearch')
         {
@@ -545,7 +546,7 @@ EOF;
         if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         if($type == 'assignedBy')
         {
-            $bugs = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'bug');
+            $bugs = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'bug');
         }
         else
         {
@@ -852,7 +853,7 @@ EOF;
         $this->view->pager       = $pager;
         $this->view->type        = $type;
         $this->view->param       = $param;
-        $this->view->issues      = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
+        $this->view->issues      = $type == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
         $this->display();
     }
@@ -889,7 +890,7 @@ EOF;
         $this->loadModel('risk');
         if($type == 'assignedBy')
         {
-            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'risk');
+            $risks = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'risk');
         }
         elseif($type == 'bysearch')
         {
@@ -1035,7 +1036,7 @@ EOF;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $status = $this->app->rawMethod == 'contribute' ? '' : 'active';
-        $ncList = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, $status);
+        $ncList = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, $status);
 
         foreach($ncList as $nc) $ncIdList[] = $nc->id;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
@@ -1301,7 +1302,7 @@ EOF;
             if(!$listID) $this->user->createContactList();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderContactList"));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('manageContacts', "listID={$listID}")));
         }
 
@@ -1323,7 +1324,7 @@ EOF;
         $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $userList, $this->config->maxCount);
 
         $this->view->title = $this->lang->my->common . $this->lang->colon . $label;
-        $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
+        $this->view->lists = $this->user->getContactLists($this->app->user->account, 'list');
         $this->view->users = $users;
         $this->view->mode  = $mode;
         $this->view->label = $label;
@@ -1356,7 +1357,7 @@ EOF;
      */
     public function buildContactLists(string $dropdownName = 'mailto', string $attr = '')
     {
-        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $this->view->contactLists = $this->user->getContactLists();
         $this->view->dropdownName = $dropdownName;
         $this->view->attr         = $attr;
         $this->display();
@@ -1418,6 +1419,7 @@ EOF;
     }
 
     /**
+     * 我的动态列表。
      * My dynamic.
      *
      * @param  string $type
@@ -1427,7 +1429,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(string $type = 'today', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1463,17 +1465,14 @@ EOF;
         $this->session->set('opportunityList',    $uri, 'project');
 
         /* Append id for second sort. */
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-
-        /* The header and position. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
-
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
         $this->view->type       = $type;
         $this->view->orderBy    = $orderBy;
         $this->view->dateGroups = $dateGroups;
@@ -1484,6 +1483,7 @@ EOF;
     }
 
     /**
+     * 上传头像。
      * Upload avatar.
      *
      * @access public
@@ -1494,18 +1494,19 @@ EOF;
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $result = $this->user->uploadAvatar();
-            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . helper::createLink('user', 'cropavatar', "image={$result['fileID']}") . "', 'profile');"));
+            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . $this->createLink('user', 'cropavatar', "imageID={$result['fileID']}") . "', 'profile');"));
         }
     }
 
     /**
-     * Unbind ranzhi
+     * 取消与然之的绑定。
+     * Unbind ranzhi.
      *
      * @param  string $confirm
      * @access public
      * @return void
      */
-    public function unbind($confirm = 'no')
+    public function unbind(string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -1519,13 +1520,14 @@ EOF;
     }
 
     /**
+     * Ajax: 切换界面.
      * Switch vision by ajax.
      *
      * @param  string $vision
      * @access public
      * @return void
      */
-    public function ajaxSwitchVision($vision)
+    public function ajaxSwitchVision(string $vision)
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);

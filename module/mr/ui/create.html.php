@@ -14,6 +14,7 @@ h::importJs('js/misc/base64.js');
 jsVar('hostType', strtolower($repo->SCM));
 jsVar('hostID', $repo->gitService);
 jsVar('repo', $repo);
+jsVar('jobPairs', $jobPairs);
 jsVar('objectID', $objectID);
 jsVar('projectID', $project->id);
 jsVar('mrLang', $lang->mr);
@@ -134,17 +135,15 @@ formPanel
             set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1'))
         )
     ),
-    formRow
+    formGroup
     (
+        setID('jobID'),
         setClass('hidden'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::required(true),
-            set::name('jobID'),
-            set::label($lang->job->common),
-            set::items($jobPairs)
-        )
+        set::width('1/2'),
+        set::required(true),
+        set::name('jobID'),
+        set::label($lang->job->common),
+        set::items($jobPairs)
     ),
     formGroup
     (
@@ -178,7 +177,7 @@ formPanel
             'text'     => $lang->goback,
             'class'    => 'btn',
             'data-app' => $app->tab,
-            'url'      => createLink('mr', 'browse', "repoID=" . ($executionID ? 0 : $repoID) . "&mode=status&param=opened&objectID={$executionID}")
+            'url'      => createLink('mr', 'browse', "repoID=" . ($executionID ? 0 : $repo->id) . "&mode=status&param=opened&objectID={$executionID}")
         )
     ))
 );

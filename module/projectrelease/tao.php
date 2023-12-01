@@ -6,9 +6,9 @@ class projectreleaseTao extends projectreleaseModel
      * 处理项目发布信息，包括分支名称、版本信息等。
      * Process release.
      *
-     * @param  int    $release
-     * @param  int    $branchGroup
-     * @param  int    $builds
+     * @param  object    $release
+     * @param  array     $branchGroup
+     * @param  array     $builds
      * @access protected
      * @return void
      */

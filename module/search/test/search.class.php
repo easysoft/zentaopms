@@ -8,6 +8,7 @@ class searchTest
     }
 
     /**
+     * 设置搜索参数的测试用例。
      * Test set search params.
      *
      * @param  array $searchConfig
@@ -25,78 +26,215 @@ class searchTest
     }
 
     /**
+     * 测试生成查询表单和查询语句。
+     * Test build query.
+     *
+     * @param  array  $searchConfig
+     * @param  array  $postDatas
+     * @param  string $return
+     * @access public
+     * @return array|string
+     */
+    public function buildQueryTest(array $searchConfig, array $postDatas, string $return = 'form'): array|string
+    {
+        $this->objectModel->setSearchParams($searchConfig);
+
+        $module = $searchConfig['module'];
+        $_SESSION['searchParams']['module'] = $module;
+
+        $_POST['module'] = $module;
+
+        foreach($postDatas as $postData)
+        {
+            foreach($postData as $postKey => $postValue) $_POST[$postKey] = $postValue;
+        }
+
+        $this->objectModel->buildQuery();
+
+        if($return == 'form')
+        {
+            $formSessionName = $module . 'Form';
+            return $_SESSION[$formSessionName];
+        }
+
+        $querySessionName = $module . 'Query';
+        return $_SESSION[$querySessionName];
+    }
+
+    public function setDefaultParamsTest(array $fields, array $params): array
+    {
+        global $tester;
+        $tester->session->set('project', 0);
+
+        $params = $this->objectModel->setDefaultParams($fields, $params);
+
+        $paramValues = array();
+        foreach($params as $field => $param) $paramValues[$field] = $param['values'];
+
+        return $paramValues;
+    }
+
+    /**
+     * 测试初始化 session。
+     * Test init session function.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
+     * @access public
+     * @return array
+     */
+    public function initSessionTest(string $module, array $fields, array $fieldParams): array
+    {
+        return $this->objectModel->initSession($module, $fields, $fieldParams);
+    }
+
+    /**
+     * 测试获取查询。
      * Test get query.
      *
      * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getQueryTest($queryID)
+    public function getQueryTest(int $queryID): object
     {
-        $objects = $this->objectModel->getQuery($queryID);
+        $query = $this->objectModel->getQuery($queryID);
+
+        $objectType = $query->module;
+        if($query->module == 'executionStory') $objectType = 'story';
+        if($query->module == 'projectBuild')   $objectType = 'build';
+        if($query->module == 'executionBuild') $objectType = 'build';
 
         global $tester;
-        $objectType = $objects->module;
-        if($objects->module == 'executionStory') $objectType = 'story';
-        if($objects->module == 'projectBuild')   $objectType = 'build';
-        if($objects->module == 'executionBuild') $objectType = 'build';
-
         $table = $tester->config->objectTables[$objectType];
-        $objects->queryCount = $tester->dao->select('count(*) as count')->from($table)->where($objects->sql)->fetch('count');
+        $query->queryCount = $tester->dao->select('count(*) AS count')->from($table)->where($query->sql)->fetch('count');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $query;
     }
 
     /**
+     * 测试设置查询语句。
+     * Set query test.
+     *
+     * @param  string $module
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function setQueryTest(string $module, int $queryID): string
+    {
+        return $this->objectModel->setQuery($module, $queryID);
+    }
+
+    /**
+     * 测试根据 ID 获取查询。
      * Test get by ID.
      *
      * @param  int    $queryID
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function getByIDTest($queryID)
+    public function getByIDTest(int $queryID): array|object
     {
-        $objects = $this->objectModel->getByID($queryID);
+        $query = $this->objectModel->getByID($queryID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $query;
     }
 
     /**
+     * 保存查询的测试。
+     * Test save query.
+     *
+     * @param  string  $module
+     * @param  string  $title
+     * @param  string  $where
+     * @param  array  $queryForm
+     * @access public
+     * @return object|array
+     */
+    public function saveQueryTest(string $module, string $title, string $where, array $queryForm): object|array
+    {
+        $_POST['module'] = $module;
+        $_POST['title']  = $title;
+        $_SESSION[$module . 'Query'] = $where;
+        $_SESSION[$module . 'Form']  = $queryForm;
+
+        $queryID = $this->objectModel->saveQuery();
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getByID($queryID);
+    }
+
+
+    /**
+     * 测试删除搜索查询。
      * Test delete query.
      *
      * @param  int    $queryID
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function deleteQueryTest($queryID)
+    public function deleteQueryTest(int $queryID): int|array
     {
-        global $tester;
         $this->objectModel->deleteQuery($queryID);
         if(dao::isError()) return dao::getError();
 
-        $count = $tester->dao->select('count(*) as count')->from(TABLE_USERQUERY)->fetch('count');
+        global $tester;
+        $count = $tester->dao->select('count(*) AS count')->from(TABLE_USERQUERY)->fetch('count');
         if(dao::isError()) return dao::getError();
         return $count;
     }
 
     /**
+     * 测试获取查询键值对。
      * Test get query pairs.
      *
      * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryPairsTest($module)
+    public function getQueryPairsTest(string $module): array
     {
         $objects = $this->objectModel->getQueryPairs($module);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 测试获取查询列表。
+     * Test get query list.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getQueryListTest(string $module): array
+    {
+        $queryList = $this->objectModel->getQueryList($module);
+
+        if(dao::isError()) return dao::getError();
+
+        return $queryList;
+    }
+
+    /**
+     * 测试替换日期和用户变量。
+     * Replace dynamic test.
+     *
+     * @param  string $query
+     * @access public
+     * @return string
+     */
+    public function replaceDynamicTest(string $query): string
+    {
+        return $this->objectModel->replaceDynamic($query);
     }
 
     /**

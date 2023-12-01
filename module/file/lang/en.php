@@ -38,6 +38,7 @@ $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
 $lang->file->batchExport   = 'Export in batches';
 $lang->file->downloadFile  = 'Download';
+$lang->file->playFailed    = 'Video preview failed, please contact admin';
 $lang->file->exportData    = "Export Data";
 
 $lang->file->pathname  = 'Path Name';

@@ -1,0 +1,9 @@
+title: zt_userquery
+desc: userquery data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: sql
+    range: "deleted='0',t1.id like '%1%'"
+  - field: module
+    range: risk,story

@@ -26,28 +26,33 @@ class dataviewModel extends model
     }
 
     /**
+     * 获取模块名数组。
      * Get module names.
      *
-     * @param  string    $tables
+     * @param  array  $tables
      * @access public
      * @return array
      */
-    public function getModuleNames($tables)
+    public function getModuleNames(array $tables): array
     {
         $moduleNames = array();
         foreach($tables as $table)
         {
+            /* 没有带zt_的表忽视掉。 */
             if(strpos($table, $this->config->db->prefix) === false) continue;
 
+            /* 过滤掉zt_后获取到模块名。 */
             $module = str_replace($this->config->db->prefix, '', $table);
             if(!preg_match("/^[a-zA-Z]+$/", $module)) continue;
 
+            /* 某些比较特殊的模块需要单独处理。 */
             if($module == 'case')   $module = 'testcase';
             if($module == 'module') $module = 'tree';
 
             /* Code for workflow.*/
             if(strpos($module, 'flow_') !== false)
             {
+                /* 如果是工作流创建的表，则将工作流的字段名当做语言项初始化。 */
                 $moduleName = substr($module, 5);
 
                 $flowFields = $this->loadModel('workflowfield')->getFieldPairs($moduleName);
@@ -62,6 +67,7 @@ class dataviewModel extends model
             }
             else
             {
+                /* 如果不是工作流创建的表，则直接读取这个模块的语言项。 */
                 if($this->app->loadLang($module))
                 {
                     if($module == 'project') $this->lang->project->statusList += $this->lang->dataview->projectStatusList;
@@ -74,6 +80,7 @@ class dataviewModel extends model
     }
 
     /**
+     * 获取别名数组。
      * Get alias names.
      *
      * @param  object $statement
@@ -81,7 +88,7 @@ class dataviewModel extends model
      * @access public
      * @return array
      */
-    public function getAliasNames($statement, $moduleNames)
+    public function getAliasNames(object $statement, array $moduleNames): array
     {
         $aliasNames = array();
         if(isset($statement->from))
@@ -109,6 +116,7 @@ class dataviewModel extends model
     }
 
     /**
+     * 合并字段。
      * Merge fields.
      *
      * @param  array  $dataFields
@@ -116,9 +124,9 @@ class dataviewModel extends model
      * @param  array  $moduleNames
      * @param  array  $aliasNames
      * @access public
-     * @return void
+     * @return array
      */
-    public function mergeFields($dataFields, $sqlFields, $moduleNames, $aliasNames = array())
+    public function mergeFields(array $dataFields, array $sqlFields, array $moduleNames, array $aliasNames = array()): array
     {
         $mergeFields   = array();
         $relatedObject = array();
@@ -128,7 +136,7 @@ class dataviewModel extends model
             $relatedObject[$field] = current($moduleNames);
 
             /* Such as $sqlFields['id'] = zt_task.id. */
-            if(isset($sqlFields[$field]) and strrpos($sqlFields[$field], '.') !== false)
+            if(isset($sqlFields[$field]) && strrpos($sqlFields[$field], '.') !== false)
             {
                 $sqlField  = $sqlFields[$field];
                 $table     = substr($sqlField, 0, strrpos($sqlField, '.'));
@@ -200,13 +208,14 @@ class dataviewModel extends model
     }
 
     /**
+     * 获取表的字段类型。
      * Get table data.
      *
      * @param  string $sql
      * @access public
-     * @return array
+     * @return object
      */
-    public function getColumns($sql)
+    public function getColumns(string $sql): object
     {
         $columns = $this->dao->getColumns($sql);
 
@@ -225,14 +234,15 @@ class dataviewModel extends model
     }
 
     /**
+     * 检查查询结果的唯一性。
      * Check that the column of an sql query is unique.
      *
-     * @param  string $sql
-     * @param  bool   $repeat
+     * @param  string     $sql
+     * @param  bool       $repeat
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function checkUniColumn($sql, $repeat = false)
+    public function checkUniColumn($sql, $repeat = false): bool|array
     {
         $columns = $this->dao->getColumns($sql);
 
@@ -256,13 +266,14 @@ class dataviewModel extends model
     }
 
     /**
-     * Get type options
+     * 获取该模块的字段列表。
+     * Get type options.
      *
-     * @param string $objectName
+     * @param  string $objectName
      * @access public
      * @return array
      */
-    public function getTypeOptions($objectName)
+    public function getTypeOptions(string $objectName): array
     {
         $schema  = $this->includeTable($objectName);
         if(empty($schema)) return array();
@@ -276,14 +287,15 @@ class dataviewModel extends model
         return $options;
     }
 
-    /**
+   /**
+    * 替换语言项。
     * Replace title for workflow.
     *
     * @param  string $title
     * @access public
     * @return string
     */
-    public function replace4Workflow($title)
+    public function replace4Workflow(string $title): string
     {
         $clientLang = $this->app->getClientLang();
 
@@ -299,14 +311,15 @@ class dataviewModel extends model
         return $title;
     }
 
-    /**
-    * Include table
+   /**
+    * 加载表配置项。
+    * Include table.
     *
-    * @param  string    $table
+    * @param  string $table
     * @access public
-    * @return void
+    * @return object
     */
-    public function includeTable($table)
+    public function includeTable(string $table): object
     {
         $path = __DIR__ . DS . 'table' . DS . "$table.php";
         if(file_exists($path))
@@ -324,18 +337,19 @@ class dataviewModel extends model
     }
 
     /**
+     * 组装父子层级结构数据。
      * Gen tree options.
      *
-     * @param object $tree
-     * @param array  $values
-     * @param array  $paths
+     * @param  object $tree
+     * @param  array  $values
+     * @param  array  $paths
      * @access public
      * @return void
      */
-    public function genTreeOptions(&$moduleTree, $values, $paths)
+    public function genTreeOptions(object &$moduleTree, array $values, array $paths)
     {
         $path = $paths[0];
-        if(!isset($moduleTree->children))$moduleTree->children = array();
+        if(!isset($moduleTree->children)) $moduleTree->children = array();
 
         foreach($moduleTree->children as $child)
         {
@@ -353,7 +367,8 @@ class dataviewModel extends model
         if(count($paths) > 1) return $this->genTreeOptions($child, $values, array_slice($paths, 1));
     }
 
-    /**
+   /**
+    * 检查按钮是否可以点击。
     * Adjust the action is clickable.
     *
     * @param  object $dataview
@@ -362,7 +377,7 @@ class dataviewModel extends model
     * @access public
     * @return bool
     */
-    public static function isClickable($dataview, $action)
+    public static function isClickable(object $dataview, string $action): bool
     {
        return true;
     }

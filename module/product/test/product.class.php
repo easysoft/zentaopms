@@ -27,6 +27,7 @@ class productTest
 
         su($user);
         $this->objectModel = $tester->loadModel('product');
+        $this->objectModel->config->global->syncProduct = '';
         $tester->app->loadClass('dao');
     }
 
@@ -54,6 +55,8 @@ class productTest
         $createFields['desc']           = '';
         $createFields['acl']            = 'open';
         $createFields['whitelist']      = '';
+        $createFields['subStatus']      = '';
+        $createFields['PMT']            = '';
         $createFields['createdBy']      = $this->objectModel->app->user->account;
         $createFields['createdDate']    = helper::now();
         $createFields['createdVersion'] = $this->objectModel->config->version;
@@ -671,6 +674,7 @@ class productTest
      */
     public function getProjectStatsByProductTest(int $productID, string $browseType = 'all', string $branch = '', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
+        $this->objectModel->loadModel('program')->refreshStats(true);
         $objects = $this->objectModel->getProjectStatsByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
 
         $projects = array();
@@ -678,10 +682,10 @@ class productTest
         {
             $project = new stdclass();
             $project->id            = $object->id;
-            $project->totalConsumed = $object->hours->totalConsumed;
-            $project->totalEstimate = $object->hours->totalEstimate;
-            $project->totalLeft     = $object->hours->totalLeft;
-            $project->progress      = $object->hours->progress;
+            $project->totalConsumed = $object->consumed;
+            $project->totalEstimate = $object->estimate;
+            $project->totalLeft     = $object->left;
+            $project->progress      = $object->progress;
             $project->teamCount     = $object->teamCount;
             $projects[$project->id] = $project;
         }
@@ -808,6 +812,7 @@ class productTest
      */
     public function getStatsTest(array $productIdList)
     {
+        $this->objectModel->refreshStats(true);
         $objects = $this->objectModel->getStats($productIdList);
 
         if(dao::isError()) return dao::getError();
@@ -1201,5 +1206,89 @@ class productTest
         list($orderedPlans, $parentPlans) = $this->objectModel->filterOrderedAndParentPlans($planList);
 
         return $this->objectModel->getRoadmapOfPlans($orderedPlans, $parentPlans, $branch, $count);
+    }
+
+    /**
+     * 激活产品。
+     * Activate a product.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array|false
+     */
+    public function activateTest(int $productID): array|false
+    {
+        $oldProduct = $this->objectModel->getByID($productID);
+        if(!$oldProduct) return false;
+
+        $product = new stdClass();
+        $product->status = 'normal';
+        $changes = $this->objectModel->activate($productID, $product);
+        if(dao::isError()) return dao::getError();
+
+        return $changes;
+    }
+
+    /**
+     * 获取产品下需求的统计数据。
+     * Get story statistic data.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getStoryStatsTest(array $productIdList): array
+    {
+        $productStories = $this->objectModel->getStoryStats($productIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $productStories;
+    }
+
+    /**
+     * 获取产品下bug的统计数据。
+     * Get bug statistic data.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getBugStatsTest(array $productIdList): array
+    {
+        $productBugs = $this->objectModel->getBugStats($productIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $productBugs;
+    }
+
+    /**
+     * 获取产品的统计数据。
+     * Get summary of products to be refreshed.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getProductStatsTest(array $productIdList): array
+    {
+        $products = $this->objectModel->getProductStats($productIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $products;
+    }
+
+    /**
+     * 刷新产品的统计信息。
+     * Refresh stats info of products.
+     *
+     * @access public
+     * @return array
+     */
+    public function refreshStatsTest(): array
+    {
+        $this->objectModel->refreshStats(true);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getProducts();
     }
 }

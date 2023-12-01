@@ -1,4 +1,5 @@
 <?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false): ?>
+<?php $this->app->setClientTheme('blue'); ?>
 <style>
 #appsBar, #apps {left: 0!important;}
 </style>
@@ -50,13 +51,13 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && 
 <style>
 #chatBtn {padding: 3px; position: relative;}
 #chatBtn .icon {font-size: 24px;}
-#chatNoticeBadge {position: absolute; top: -4px; right: -2px; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
+#chatNoticeBadge {position: absolute; bottom: 4px; right: 0; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {bottom: 40px!important; z-index: 1010!important;}
 #xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}
-#xx-embed-container .xx-embed {width: 280px; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
+#xx-embed-container .xx-embed {width: 330px; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
 #xx-embed-container .xx-embed.xx-embed-hidden,
-#xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
+#xx-embed-container .xx-embed.xx-embed-collapsed {width: 330px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
 #xx-embed-container .xx-embed.has-chat-view {min-width: 1000px!important;}
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
@@ -96,21 +97,8 @@ Xuanxuan.setGlobalOptions(
     lang:          lang
 });
 
-$(function() {
-    /* Create chat button */
-    var $chatBtn = $('<a href="javascript:void(0)" id="chatBtn" class="btn btn-link"><i class="text-primary icon icon-chat-solid"></i><span class="badge bg-red" id="chatNoticeBadge"></span></a>');
-    $chatBtn.insertBefore('#globalSearchDiv').on('click', toggleXuanClient);
-});
-
 /* Create client instance */
 window.xuan = new Xuanxuan(xuanConfig);
-
-/* Hide xuan popover on click page */
-$(document).on('click', function(e)
-{
-    if(!window.xuan.shown || $(e.target).closest('#xx-embed-container,#chatBtn').length) return;
-    window.xuan.hide();
-});
 </script>
 <?php endif; ?>
 <?php endif; ?>

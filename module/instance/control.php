@@ -493,7 +493,7 @@ class instance extends control
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
         $oldApp = $this->loadModel('pipeline')->getByID($externalID);
-        $actionID = $this->pipeline->delete($externalID, $oldApp->type);
+        $actionID = $this->pipeline->deleteByObject($externalID, $oldApp->type);
         if(!$actionID)
         {
             $response['result']   = 'fail';
@@ -642,7 +642,7 @@ class instance extends control
         $externalApp = $this->loadModel('space')->getExternalAppByApp($instance);
         if($externalApp)
         {
-            $actionID = $this->loadModel('pipeline')->delete($externalApp->id, strtolower($instance->appName));
+            $actionID = $this->loadModel('pipeline')->deleteByObject($externalApp->id, strtolower($instance->appName));
             if(!$actionID) return $this->send(array('result' => 'fail', 'message' => $this->lang->pipeline->delError));
         }
 

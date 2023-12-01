@@ -13,24 +13,23 @@ jsVar('expired', $expired);
 
 $content = $expired ? div
 (
-    setClass('alert-danger p-4 mb-6'),
+    setClass('text-center text-danger bg-danger-pale p-4 mx-auto'),
+    setStyle(array('width' => '750px', 'margin-top' => '100px')),
     $lang->user->linkExpired,
     html(sprintf($lang->user->jumping, inlink('login')))
 ) : formPanel
 (
-    setClass('reset-password w-full'),
-    set::title($lang->user->resetPassword),
-    set::actions(array()),
+    setStyle(array('width' => '500px', 'margin-top' => '100px')),
+    set::title($lang->user->resetPWD),
+    on::change('#password1,#password2', 'changePassword'),
+    on::click('button[type=submit]', 'encryptPassword'),
     formRow
     (
         formGroup
         (
             set::label($lang->user->password),
             set::required(true),
-            password
-            (
-                set::checkStrength(true)
-            )
+            password(set::checkStrength(true))
         )
     ),
     formRow
@@ -39,24 +38,14 @@ $content = $expired ? div
         (
             set::label($lang->user->password2),
             set::required(true),
-            set::control('password'),
-            set::name('password2'),
-            set::value('')
+            password(set::name('password2'))
         )
     ),
     formRow
     (
         setClass('hidden'),
-        formGroup
-        (
-            set::name('passwordLength'),
-            set::value(0)
-        ),
-        formGroup
-        (
-            set::name('verifyRand'),
-            set::value($rand)
-        )
+        input(set::name('passwordLength'), set::value(0)),
+        input(set::name('passwordStrength'), set::value(0))
     ),
     formRow
     (
@@ -77,7 +66,8 @@ div
     (
         set::id('mainContent'),
         $content
-    )
+    ),
+    formHidden('verifyRand', $rand)
 );
 
 render('pagebase');

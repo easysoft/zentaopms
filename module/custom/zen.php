@@ -143,7 +143,7 @@ class customZen extends custom
         }
         elseif(($module == 'story' || $module == 'demand') && $field == 'review')
         {
-            $this->setStoryReview($data);
+            $this->setStoryReview($module, $data);
         }
         elseif(($module == 'story' || $module == 'demand') && $field == 'reviewRules')
         {
@@ -200,7 +200,8 @@ class customZen extends custom
         $this->checkInvalidKeys($module, $field);
         if(dao::$errors) return false;
 
-        $lang = $_POST['lang'];
+        $lang        = $_POST['lang'];
+        $currentLang = $this->app->getClientLang();
         $this->custom->deleteItems("lang={$lang}&module={$module}&section={$field}&vision={$this->config->vision}");
         if($lang == 'all') $this->custom->deleteItems("lang={$currentLang}&module={$module}&section={$field}&vision={$this->config->vision}");
 
@@ -303,11 +304,12 @@ class customZen extends custom
      * 设置需求评审规则。
      * Set the review rules of story.
      *
+     * @param  string    $module
      * @param  array     $data
      * @access protected
      * @return bool
      */
-    protected function setStoryReview(array $data): bool
+    protected function setStoryReview(string $module, array $data): bool
     {
         $forceFields = array('forceReview', 'forceNotReview', 'forceReviewRoles', 'forceNotReviewRoles', 'forceReviewDepts', 'forceNotReviewDepts');
         foreach($forceFields as $forceField)
@@ -323,7 +325,7 @@ class customZen extends custom
             if(!strpos($key, 'Not') && $data['needReview'] == 1) $data[$key] = '';
         }
 
-        $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
+        $this->loadModel('setting')->setItems("system.{$module}@{$this->config->vision}", $data);
 
         return !dao::isError();
     }

@@ -14,6 +14,7 @@
 class datatableModel extends model
 {
     /**
+     * 获取列表字段的基本配置信息。
      * Get field list.
      *
      * @param  string $module
@@ -21,7 +22,7 @@ class datatableModel extends model
      * @access public
      * @return array
      */
-    public function getFieldList($module, $method = '')
+    public function getFieldList(string $module, string $method = ''): array
     {
         /* Load corresponding module. */
         if(!isset($this->config->$module)) $this->loadModel($module);
@@ -74,15 +75,16 @@ class datatableModel extends model
     }
 
     /**
+     * 获取列表显示的字段信息。
      * Get save setting field.
      *
      * @param  string $module
      * @param  string $method
      * @param  bool   $showAll
      * @access public
-     * @return object
+     * @return array
      */
-    public function getSetting(string $module, string $method = '', bool $showAll = false)
+    public function getSetting(string $module, string $method = '', bool $showAll = false): array
     {
         if(!$method) $method = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
@@ -133,6 +135,7 @@ class datatableModel extends model
     }
 
     /**
+     * 获取期望的配置项。
      * Format fields by config.
      *
      * @param  string $module
@@ -141,9 +144,9 @@ class datatableModel extends model
      * @access public
      * @return array
      */
-    public function formatFields($module, $fieldList, $onlyshow = true): array
+    public function formatFields(string $module, array $fieldList, bool $onlyshow = true): array
     {
-        $this->app->loadLang('module');
+        $this->app->loadLang($module);
 
         $setting = array();
         $order   = 1;
@@ -170,106 +173,18 @@ class datatableModel extends model
     }
 
     /**
+     * 字段排序规则。
      * Sort cols.
      *
-     * @param  object $a
-     * @param  object $b
+     * @param  array $a
+     * @param  array $b
      * @static
      * @access public
      * @return int
      */
-    public static function sortCols($a, $b)
+    public static function sortCols(array $a, array $b): int
     {
         if(!isset($a['order']) or !isset($b['order'])) return 0;
         return $a['order'] - $b['order'];
-    }
-
-    /**
-     * Print table head.
-     *
-     * @param  object $col
-     * @param  string $orderBy
-     * @param  string $vars
-     * @param  bool   $checkBox
-     * @access public
-     * @return void
-     */
-    public function printHead($col, $orderBy, $vars, $checkBox = true)
-    {
-        $id = $col->id;
-        if($col->show)
-        {
-            $fixed = $col->fixed == 'no' ? 'true' : 'false';
-            $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
-            $title = isset($col->title) ? "title='$col->title'" : '';
-            $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
-            if($id == 'id' and (int)$width < 90) $width = '90px';
-            $align = $id == 'actions' ? 'text-center' : '';
-            $align = in_array($id, array('budget', 'teamCount', 'estimate', 'consume', 'consumed', 'left')) ? 'text-right' : $align;
-
-            $style  = '';
-            $data   = '';
-            $data  .= "data-width='$width'";
-            $style .= "width:$width;";
-            if(isset($col->minWidth))
-            {
-                $data  .= "data-minWidth='{$col->minWidth}px'";
-                $style .= "min-width:{$col->minWidth}px;";
-            }
-            if(isset($col->maxWidth))
-            {
-                $data  .= "data-maxWidth='{$col->maxWidth}px'";
-                $style .= "max-width:{$col->maxWidth}px;";
-            }
-            if(isset($col->pri)) $data .= "data-pri='{$col->pri}'";
-
-            echo "<th data-flex='$fixed' $data style='$style' class='c-$id $align' $title>";
-            if($id == 'actions')
-            {
-                echo $this->lang->actions;
-            }
-            elseif(isset($col->sort) and $col->sort == 'no')
-            {
-                echo $col->title;
-            }
-            else
-            {
-                if($id == 'id' && $checkBox) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";
-                common::printOrderLink($id, $orderBy, $vars, $col->title);
-            }
-            echo '</th>';
-        }
-    }
-
-    /**
-     * Set fixed field width
-     *
-     * @param  object $setting
-     * @param  int    $minLeftWidth
-     * @param  int    $minRightWidth
-     * @access public
-     * @return array
-     */
-    public function setFixedFieldWidth($setting, $minLeftWidth = '550', $minRightWidth = '140')
-    {
-        $widths['leftWidth']  = 30;
-        $widths['rightWidth'] = 0;
-        $hasLeftAuto  = false;
-        $hasRightAuto = false;
-        foreach($setting as $key => $value)
-        {
-            if($value->fixed != 'no')
-            {
-                if($value->fixed == 'left' and $value->width == 'auto')  $hasLeftAuto  = true;
-                if($value->fixed == 'right' and $value->width == 'auto') $hasRightAuto = true;
-                $widthKey = $value->fixed . 'Width';
-                if(!isset($widths[$widthKey])) $widths[$widthKey] = 0;
-                $widths[$widthKey] += (int)trim($value->width, 'px');
-            }
-        }
-        if($widths['leftWidth'] <= 550 and $hasLeftAuto) $widths['leftWidth']  = 550;
-        if($widths['rightWidth'] <= 0 and $hasRightAuto) $widths['rightWidth'] = 140;
-
-        return $widths;
     }
 }

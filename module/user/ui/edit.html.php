@@ -45,8 +45,10 @@ formPanel
         )
     ),
     set::formClass('border-0'),
-    on::click('button[type="submit"]', 'computePassword'),
+    on::change('input[name=type]', 'changeType'),
     on::change('input[name^=visions]', 'changeVision'),
+    on::change('#password1, #password, #verifyPassword', 'changePassword'),
+    on::click('button[type="submit"]', 'encryptPassword'),
     formRow
     (
         formGroup
@@ -68,7 +70,7 @@ formPanel
     ),
     formRow
     (
-        setClass($user->type == 'inside' ? '' : 'hidden'),
+        $user->type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -103,7 +105,7 @@ formPanel
         ),
         formGroup
         (
-            setClass($user->type == 'inside' ? 'hidden' : ''),
+            $user->type == 'inside' ? setClass('hidden') : null,
             set::width('1/2'),
             set::label($lang->user->company),
             inputGroup
@@ -140,7 +142,6 @@ formPanel
             set::label($lang->user->type),
             radioList
             (
-                on::change('changeType'),
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->user->typeList),
@@ -183,26 +184,23 @@ formPanel
     (
         formGroup
         (
-            on::change('password1Change'),
             set::width('1/2'),
             set::label($lang->user->password),
             password(set::checkStrength(true))
         ),
         formGroup
         (
-            on::change('password2Change'),
             set::width('1/2'),
             set::label($lang->user->password2),
             set::control('password'),
             set::name('password2'),
-            set::value('')
         )
     ),
     formRow
     (
-        setClass($user->type == 'inside' ? '' : 'hidden'),
         formGroup
         (
+            $user->type == 'inside' ? null : setClass('hidden'),
             set::width('1/2'),
             set::label($lang->user->commiter),
             set::name('commiter'),
@@ -249,26 +247,19 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->verifyPassword),
             set::control('password'),
+            set::required(true),
             set::name('verifyPassword'),
-            set::value(''),
             set::placeholder($lang->user->placeholder->verify)
         )
     ),
     formRow
     (
         setClass('hidden'),
-        formGroup
-        (
-            set::name('passwordLength'),
-            set::value(0)
-        ),
-        formGroup
-        (
-            set::name('verifyRand'),
-            set::value($rand)
-        )
+        input(set::name('passwordLength'), set::value(0)),
+        input(set::name('passwordStrength'), set::value(0))
     )
 );
 
-render();
+formHidden('verifyRand', $rand);
 
+render();

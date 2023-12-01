@@ -13,6 +13,7 @@ declare(strict_types=1);
 class qa extends control
 {
     /**
+     * 测试应用仪表盘页面。
      * The index of qa, go to bug's browse page.
      *
      * @param  string $locate
@@ -25,12 +26,13 @@ class qa extends control
     {
         $this->loadModel('product');
         $products = $projectID ? $this->product->getProductPairsByProject($projectID, 'noclosed') : $this->product->getPairs('noclosed', 0, '', 'all');
-        if(empty($products)) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=index")));
-        if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
+        if(empty($products)) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=index"));
 
         $productID = $this->product->checkAccess($productID, $products);
         $branch    = (int)$this->cookie->preBranch;
         $this->qa->setMenu($productID, $branch);
+
+        if($locate == 'yes') $this->locate($this->createLink('bug', 'browse', "product=$productID"));
 
         $this->view->title    = $this->lang->qa->index;
         $this->view->products = $products;

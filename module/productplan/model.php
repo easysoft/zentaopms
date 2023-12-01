@@ -193,7 +193,7 @@ class productplanModel extends model
             if(is_string($branch)) $branch = array_unique(array_filter(explode(',', trim($branch, ','))));
             if(is_array($branch) && !empty($branch))
             {
-                if(count($branch) == 1) $branchQuery = "t1.branch = '" + current($branch) + "'";
+                if(count($branch) == 1) $branchQuery = "t1.branch = '" . current($branch) . "'";
                 if(count($branch) > 1)
                 {
                     foreach($branch as $key => $branchID) $branch[$key] = "FIND_IN_SET('$branchID', t1.branch)";

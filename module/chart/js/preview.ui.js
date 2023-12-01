@@ -7,7 +7,7 @@
  */
 function previewCharts()
 {
-    const checkedList = $('#moduleMenu ul').zui('tree').$.getChecks();
+    const checkedList = $('#moduleMenu menu').zui('tree').$.getChecks();
     if(checkedList.length > 0)
     {
         const form = new FormData();

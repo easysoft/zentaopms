@@ -116,27 +116,23 @@ class screen extends control
     {
         if(!empty($_POST))
         {
-            $chartID      = $this->post->sourceID;
-            $type         = $this->post->type;
-            $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
-
-            $type = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
-
-            $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
-            $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+            $chartID   = $this->post->sourceID;
+            $type      = $this->post->type;
+            $queryType = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+            $type      = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
+            $table     = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+            $chart     = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
             $filterFormat = '';
             if($queryType == 'filter')
             {
                 $filterParams = json_decode($this->post->filters, true);
-                $filters      = json_decode($chart->filters, true);
+                $filters      = json_decode($chart->filters,      true);
                 $mergeFilters = array();
-
                 foreach($filters as $index => $filter)
                 {
-                    $default = isset($filterParams[$index]['default']) ? $filterParams[$index]['default'] : null;
-                    $filterType = $filter['type'];
-                    if($filterType == 'date' or $filterType == 'datetime')
+                    $default = $filterParams[$index]['default'] ?? null;
+                    if(in_array($filter['type'], array('date', 'datetime')))
                     {
                         if(isset($filter['from']) and $filter['from'] == 'query')
                         {
@@ -144,22 +140,8 @@ class screen extends control
                         }
                         else
                         {
-                            if(is_array($default))
-                            {
-                                $begin = $default[0];
-                                $end   = $default[1];
-
-                                $begin = date('Y-m-d H:i:s', $begin / 1000);
-                                $end = date('Y-m-d H:i:s', $end / 1000);
-
-                                $default = array('begin' => $begin, 'end' => $end);
-                            }
-                            else
-                            {
-                                $default = array('begin' => '', 'end' => '');
-                            }
+                            $default = is_array($default) ? array('begin' => date('Y-m-d H:i:s', $default[0] / 1000), 'end' => date('Y-m-d H:i:s', $default[1] / 1000)) : array('begin' => '', 'end' => '');
                         }
-
                     }
                     $filter['default'] = $default;
                     $mergeFilters[] = $filter;
@@ -167,8 +149,7 @@ class screen extends control
 
                 if($table == TABLE_PIVOT)
                 {
-                    list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
-                    $chart->sql = $sql;
+                    list($chart->sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
                 }
                 else
                 {
@@ -176,8 +157,9 @@ class screen extends control
                 }
             }
 
-            $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
-            print(json_encode($chartData));
+            $component = new stdclass();
+            $this->screen->genComponentData($chart, $component, $type, $filterFormat);
+            print(json_encode($component));
         }
     }
 }

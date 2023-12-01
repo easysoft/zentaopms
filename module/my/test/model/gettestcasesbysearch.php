@@ -1,7 +1,13 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/my.class.php';
+
+zdTable('case')->config('case_admin_create')->gen('20');
+zdTable('testrun')->gen('20');
+zdTable('user')->gen('1');
+
 su('admin');
 
 /**
@@ -10,21 +16,20 @@ title=测试 myModel->getTestcasesBySearch();
 cid=1
 pid=1
 
-获取testcase状态的项目 >> com.ngtesting.autotest.test.TestLogin账号过期,normal
-获取testcase的统计 >> 20
-获取testcase状态的项目 >> com.ngtesting.autotest.test.TestLogin密码错误,normal
-获取testcase的统计 >> 18
-
 */
 
 $my    = new myTest();
 $type  = array('contribute', 'openedbyme');
 $order = 'id_desc';
 
+global $tester;
+$tester->session->set('workTestcaseQuery', "title like '%测试%'");
+$tester->session->set('contributeTestcaseQuery', "title like '%测试%'");
+
 $cases1 = $my->getTestcasesBySearchTest(0, $type[0], $order);
 $cases2 = $my->getTestcasesBySearchTest(0, $type[1], $order);
 
-r($cases1)        && p('560:title,status') && e('com.ngtesting.autotest.test.TestLogin账号过期,normal');//获取testcase状态的项目
-r(count($cases1)) && p()                   && e('20');                                                 //获取testcase的统计
-r($cases2)        && p('439:title,status') && e('com.ngtesting.autotest.test.TestLogin密码错误,normal');//获取testcase状态的项目
-r(count($cases2)) && p()                   && e('18');                                                 //获取testcase的统计
+r(current($cases1)) && p('title,status') && e('这个是测试用例19,blocked'); // 测试通过搜索获取用例 1 的当前用例名称和状态
+r(count($cases1))   && p()               && e('10');                       // 测试通过搜索获取用例 1 的用例数量
+r(current($cases2)) && p('title,status') && e('这个是测试用例17,wait');    // 测试通过搜索获取用例 2 的当前用例名称和状态
+r(count($cases2))   && p()               && e('5');                       // 测试通过搜索获取用例 2 的用例数量

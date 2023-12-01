@@ -14,6 +14,7 @@
 class reportModel extends model
 {
     /**
+     * 构造函数。
      * Construct.
      *
      * @access public
@@ -26,17 +27,20 @@ class reportModel extends model
     }
 
     /**
+     * 计算每项数据的百分比。
      * Compute percent of every item.
      *
-     * @param  array    $datas
+     * @param  array  $datas
      * @access public
      * @return array
      */
-    public function computePercent($datas)
+    public function computePercent(array $datas): array
     {
+        /* Get data total. */
         $sum = 0;
         foreach($datas as $data) $sum += $data->value;
 
+        /* Compute percent, and get total percent. */
         $totalPercent = 0;
         foreach($datas as $i => $data)
         {
@@ -48,22 +52,25 @@ class reportModel extends model
     }
 
     /**
+     * 创建单个图表的 json 数据。
      * Create json data of single charts
+     *
      * @param  array $sets
      * @param  array $dateList
-     * @return string the json string
+     * @return array
      */
-    public function createSingleJSON($sets, $dateList)
+    public function createSingleJSON(array $sets, array $dateList): array
     {
-        $data = array();
-        $now  = date('Y-m-d');
         $preValue = 0;
+        $data     = array();
+        $now      = date('Y-m-d');
         $setsDate = array_keys($sets);
-        foreach($dateList as $i => $date)
+        foreach($dateList as $date)
         {
-            $date  = date('Y-m-d', strtotime($date));
+            $date = date('Y-m-d', strtotime($date));
             if($date > $now) break;
-            if(!isset($sets[$date]) and $sets)
+
+            if(!isset($sets[$date]) && $sets)
             {
                 $tmpDate = $setsDate;
                 $tmpDate[] = $date;
@@ -79,13 +86,14 @@ class reportModel extends model
                 }
             }
 
-            $data[] = isset($sets[$date]) ? "{$sets[$date]->value}" : "{$preValue}";
+            $data[] = isset($sets[$date]) ? $sets[$date]->value : $preValue;
         }
 
         return $data;
     }
 
     /**
+     * 转换日期格式。
      * Convert date format.
      *
      * @param  array  $dateList
@@ -93,27 +101,28 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function convertFormat($dateList, $format = 'Y-m-d')
+    public function convertFormat(array $dateList, string $format = 'Y-m-d'): array
     {
         foreach($dateList as $i => $date) $dateList[$i] = date($format, strtotime($date));
         return $dateList;
     }
 
     /**
+     * 获取系统的 URL。
      * Get System URL.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function getSysURL()
+    public function getSysURL(): string
     {
         if(isset($this->config->mail->domain)) return $this->config->mail->domain;
 
         /* Ger URL when run in shell. */
         if(PHP_SAPI == 'cli')
         {
-            $url = parse_url(trim($this->server->argv[1]));
-            $port = (empty($url['port']) or $url['port'] == 80) ? '' : $url['port'];
+            $url  = parse_url(trim($this->server->argv[1]));
+            $port = empty($url['port']) || $url['port'] == 80 ? '' : $url['port'];
             $host = empty($port) ? $url['host'] : $url['host'] . ':' . $port;
             return $url['scheme'] . '://' . $host;
         }
@@ -124,12 +133,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的 bugs。
      * Get user bugs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserBugs()
+    public function getUserBugs(): array
     {
         return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')
@@ -146,12 +156,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的任务。
      * Get user tasks.
      *
      * @access public
      * @return void
      */
-    public function getUserTasks()
+    public function getUserTasks(): array
     {
         return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
@@ -171,12 +182,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的待办。
      * Get user todos.
      *
      * @access public
      * @return array
      */
-    public function getUserTodos()
+    public function getUserTodos(): array
     {
         $stmt = $this->dao->select('t1.*, t2.account as user')
             ->from(TABLE_TODO)->alias('t1')
@@ -198,12 +210,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的测试单。
      * Get user testTasks.
      *
      * @access public
      * @return array
      */
-    public function getUserTestTasks()
+    public function getUserTestTasks(): array
     {
         return $this->dao->select('t1.*, t2.account as user')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.owner = t2.account')
@@ -214,27 +227,29 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户今年的登录次数。
      * Get user login count in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return int
      */
-    public function getUserYearLogins($accounts, $year)
+    public function getUserYearLogins(array $accounts, string $year): int
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->in($accounts)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
     }
 
     /**
+     * 获取用户本年的操作数。
      * Get user action count in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return int
      */
-    public function getUserYearActions($accounts, $year)
+    public function getUserYearActions(array $accounts, string $year): int
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
@@ -243,83 +258,74 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户某年的动态数。
      * Get user contributions in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return array
      */
-    public function getUserYearContributions($accounts, $year)
+    public function getUserYearContributions(array $accounts, string $year): array
     {
-        $stmt = $this->dao->select('*')->from(TABLE_ACTION)
+        /* Get required actions for annual report. */
+        $filterActions = array();
+        $stmt          = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributions']))
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
             ->orderBy('objectType,objectID,id')
             ->query();
-
-        $filterActions = array();
-        $objectIdList  = array();
         while($action = $stmt->fetch())
         {
-            $objectType  = $action->objectType;
-            $objectID    = $action->objectID;
-            $lowerAction = strtolower($action->action);
-            if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
-
-            $objectIdList[$objectType][$objectID] = $objectID;
-            $filterActions[$objectType][$objectID][$action->id] = $action;
+            if(isset($this->config->report->annualData['contributions'][$action->objectType][strtolower($action->action)])) $filterActions[$action->objectType][$action->objectID][$action->id] = $action;
         }
 
-        foreach($objectIdList as $objectType => $idList)
-        {
-            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($idList)->fetchPairs('id', 'id');
-            foreach($deletedIdList as $id) unset($filterActions[$objectType][$id]);
-        }
-
+        /* Only get undeleted actions. */
         $actionGroups = array();
         foreach($filterActions as $objectType => $objectActions)
         {
-            foreach($objectActions as $objectID => $actions)
+            $deletedIdList = $this->dao->select('id,id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in(array_keys($objectActions))->fetchPairs();
+            foreach($objectActions as $actions)
             {
-                foreach($actions as $action) $actionGroups[$objectType][$action->id] = $action;
+                foreach($actions as $action)
+                {
+                    if(!isset($deletedIdList[$action->id])) $actionGroups[$objectType][$action->id] = $action;
+                }
             }
         }
 
+        /* Calculate the number of actions . */
         $contributions = array();
         foreach($actionGroups as $objectType => $actions)
         {
             foreach($actions as $action)
             {
-                $lowerAction = strtolower($action->action);
-                $actionName  = $this->config->report->annualData['contributions'][$objectType][$lowerAction];
-
-                $type = ($actionName == 'svnCommit' or $actionName == 'gitCommit') ? 'repo' : $objectType;
+                $actionName  = $this->config->report->annualData['contributions'][$objectType][strtolower($action->action)];
+                $type        = $actionName == 'svnCommit' || $actionName == 'gitCommit' ? 'repo' : $objectType;
                 if(!isset($contributions[$type][$actionName])) $contributions[$type][$actionName] = 0;
                 $contributions[$type][$actionName] += 1;
             }
         }
-
         $contributions['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
             ->fetch('count');
-
         return $contributions;
     }
 
     /**
+     * 获取用户某年的待办统计。
      * Get user todo stat in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return object
      */
-    public function getUserYearTodos($accounts, $year)
+    public function getUserYearTodos(array $accounts, string $year): object
     {
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
@@ -330,14 +336,15 @@ class reportModel extends model
     }
 
     /**
-     * Get user effort stat in this error.
+     * 获取用户某年的工时统计。
+     * Get user effort stat in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return object
      */
-    public function getUserYearEfforts($accounts, $year)
+    public function getUserYearEfforts(array $accounts, string $year): object
     {
         $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('LEFT(date, 4)')->eq($year)
@@ -350,84 +357,18 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户某年的产品下创建的需求、计划，创建和关闭的需求数量统计。
      * Get count of created story,plan and closed story by accounts every product in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return array
      */
-    public function getUserYearProducts($accounts, $year)
+    public function getUserYearProducts(array $accounts, string $year): array
     {
         /* Get changed products in this year. */
-        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->andWhere('LEFT(createdDate, 4)')->eq($year)
-            ->beginIF($accounts)
-            ->andWhere('createdBy', true)->in($accounts)
-            ->orWhere('PO')->in($accounts)
-            ->orWhere('QD')->in($accounts)
-            ->orWhere('RD')->in($accounts)
-            ->markRight(1)
-            ->fi()
-            ->andWhere('shadow')->eq(0)
-            ->fetchAll('id');
-
-        /* Get created plans in this year. */
-        $plans = $this->dao->select('t1.id,t1.product')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
-            ->where('LEFT(t2.date, 4)')->eq($year)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.product')->in(array_keys($products))
-            ->beginIF($accounts)
-            ->andWhere('t2.actor')->in($accounts)
-            ->fi()
-            ->andWhere('t2.action')->eq('opened')
-            ->fetchAll();
-
-        $planProducts = array();
-        $planGroups   = array();
-        foreach($plans as $plan)
-        {
-            $planProducts[$plan->product] = $plan->product;
-            $planGroups[$plan->product][$plan->id] = $plan->id;
-        }
-
-        $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
-            ->where('LEFT(openedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
-            ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
-            ->fetchPairs('product', 'product');
-        $closeStoryProducts  = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
-            ->where('LEFT(closedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
-            ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
-            ->fetchPairs('product', 'product');
-        if($createStoryProducts or $closeStoryProducts)
-        {
-            $products += $this->dao->select('id,name')->from(TABLE_PRODUCT)
-                ->where('id')->in($createStoryProducts + $closeStoryProducts + $planProducts)
-                ->andWhere('deleted')->eq(0)
-                ->fetchAll('id');
-        }
-
-        $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story")->from(TABLE_STORY)
-            ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('LEFT(openedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
-            ->groupBy('product')
-            ->fetchAll('product');
-
-        $closedStoryStats = $this->dao->select("product,sum(if((status = 'closed'), 1, 0)) as closed")->from(TABLE_STORY)
-            ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('LEFT(closedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
-            ->groupBy('product')
-            ->fetchAll('product');
+        list($products, $planGroups, $createdStoryStats, $closedStoryStats) = $this->reportTao->getAnnualProductStat($accounts, $year);
 
         /* Merge created plan, created story and closed story in every product. */
         foreach($products as $productID => $product)

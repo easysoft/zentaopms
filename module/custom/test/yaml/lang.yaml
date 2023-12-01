@@ -7,7 +7,7 @@ fields:
   - field: lang
     range: 'zh-cn'
   - field: module
-    range: 'custom{5}common{2},myMenu,mySubMenu,my'
+    range: "custom{5},common{2},myMenu,mySubMenu,my"
   - field: section
     range: 'URSRList{5},[],mainNav,menu,work,`featureBar-todo`'
   - field: key

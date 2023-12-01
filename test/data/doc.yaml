@@ -164,6 +164,9 @@ fields:
     prefix: ""
     postfix: ""
     format: ""
+  - field: draft
+    note: "草稿内容"
+    range: ''
   - field: version
     note: "版本号"
     range: 2{10},1{890}

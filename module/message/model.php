@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of message module of ZenTaoCMS.
  *
@@ -11,7 +12,15 @@
  */
 class messageModel extends model
 {
-    public function getMessages($status = '')
+    /**
+     * 获取消息。
+     * Get messages.
+     *
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getMessages(string $status = ''): array
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('message')
@@ -21,39 +30,40 @@ class messageModel extends model
     }
 
     /**
-     * Get objectTypes
+     * 获取对象类型。
+     * Get object types.
      *
      * @access public
      * @return array
      */
-    public function getObjectTypes()
+    public function getObjectTypes(): array
     {
+        $this->app->loadLang('action');
         $objectTypes = array();
-        foreach($this->config->message->objectTypes as $objectType => $actions)
-        {
-            $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
-        }
+        foreach($this->config->message->objectTypes as $objectType => $actions) $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
         return $objectTypes;
     }
 
     /**
+     * 获取对象操作。
      * Get object actions.
      *
      * @access public
      * @return array
      */
-    public function getObjectActions()
+    public function getObjectActions(): array
     {
         $objectActions = array();
         foreach($this->config->message->objectTypes as $objectType => $actions)
         {
-            foreach($actions as $action) $objectActions[$objectType][$action] = $this->lang->message->label->$action;
+            foreach($actions as $action) $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
         }
         return $objectActions;
     }
 
     /**
-     * Check send.
+     * 发送消息。
+     * Send messages.
      *
      * @param  string $objectType
      * @param  int    $objectID
@@ -64,7 +74,7 @@ class messageModel extends model
      * @access public
      * @return void
      */
-    public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
+    public function send(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = '', string $extra = ''): void
     {
         if(commonModel::isTutorialMode()) return;
 
@@ -75,22 +85,15 @@ class messageModel extends model
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
+            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType]))
             {
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
                 $requestType = $config->requestType;
-                if(defined('RUN_MODE') and RUN_MODE == 'api')
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
                     $configRoot = $this->app->getConfigRoot();
-                    if(file_exists($configRoot . 'my.php'))
-                    {
-                        include $configRoot . 'my.php';
-                    }
-                    else
-                    {
-                        include $configRoot . 'config.php';
-                    }
+                    include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
                 }
 
                 if($objectType == 'feedback')
@@ -102,42 +105,38 @@ class messageModel extends model
                     $this->loadModel('mail')->sendmail($objectID, $actionID);
                 }
 
-                if(defined('RUN_MODE') and RUN_MODE == 'api') $config->requestType = $requestType;
+                if(defined('RUN_MODE') && RUN_MODE == 'api') $config->requestType = $requestType;
             }
         }
 
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
-            {
-                $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
-            }
+            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
         }
         if(isset($messageSetting['message']))
         {
             $actions = $messageSetting['message']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
-            {
-                $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
-            }
+            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
     /**
+     * 存储提示消息。
      * Save notice.
      *
      * @param  string $objectType
      * @param  int    $objectID
      * @param  string $actionType
      * @param  int    $actionID
+     * @param  string $actor
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveNotice($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function saveNotice(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
-        if(empty($actor)) return false;
+        if(empty($actor) || !$objectID) return false;
 
         $this->loadModel('action');
         $user   = $this->loadModel('user')->getById($actor);
@@ -145,8 +144,7 @@ class messageModel extends model
         $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         $toList = $this->getToList($object, $objectType, $actionID);
-        if(empty($toList)) return false;
-        if($toList == $actor) return false;
+        if(empty($toList) || $toList == $actor) return false;
 
         $this->app->loadConfig('mail');
         $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
@@ -155,11 +153,11 @@ class messageModel extends model
         if($isonlybody) unset($_GET['onlybody']);
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        $moduleName = $objectType == 'kanbancard' ? 'kanban' : $objectType;
+        if($objectType == 'kanbancard') $moduleName = 'kanban';
         $space      = common::checkNotCN() ? ' ' : '';
-        $data       = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
+        $data       = $user->realname . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, 'view', "id=$dataID");
+        $url        = helper::createLink($moduleName, 'view', "id={$dataID}");
         $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
@@ -174,26 +172,28 @@ class messageModel extends model
         $notify->createdDate = helper::now();
 
         $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        return true;
     }
 
     /**
+     * 获取抄送给的人员。
      * Get toList.
      *
-     * @param  object    $object
-     * @param  string    $objectType
-     * @param  int       $actionID
+     * @param  object $object
+     * @param  string $objectType
+     * @param  int    $actionID
      * @access public
      * @return string
      */
-    public function getToList($object, $objectType, $actionID = 0)
+    public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
         if(!empty($object->assignedTo)) $toList = $object->assignedTo;
-        if(empty($toList) and $objectType == 'todo') $toList = $object->account;
-        if(empty($toList) and $objectType == 'testtask') $toList = $object->owner;
-        if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
-        if(empty($toList) and $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
-        if(empty($toList) and $objectType == 'release')
+        if(empty($toList) && $objectType == 'todo') $toList = $object->account;
+        if(empty($toList) && $objectType == 'testtask') $toList = $object->owner;
+        if(empty($toList) && $objectType == 'meeting') $toList = $object->host . $object->participant;
+        if(empty($toList) && $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) && $objectType == 'release')
         {
             /* Get notifiy persons. */
             $notifyPersons = array();
@@ -201,8 +201,9 @@ class messageModel extends model
 
             if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
         }
-        if(empty($toList) and $objectType == 'task' and $object->mode == 'multi')
+        if(empty($toList) && $objectType == 'task' && $object->mode == 'multi')
         {
+            /* Get task team members. */
             $teamMembers = $this->loadModel('task')->getMultiTaskMembers($object->id);
             $toList      = array_filter($teamMembers, function($account){
                 return $account != $this->app->user->account;
@@ -211,24 +212,32 @@ class messageModel extends model
         }
 
         if($toList == 'closed') $toList = '';
-        if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if($objectType == 'story' and $actionID)
+        if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
+        if($objectType == 'story' && $actionID)
         {
             $action = $this->loadModel('action')->getById($actionID);
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
             $toList = $toList . $ccList;
         }
 
+        if($objectType == 'testtask')
+        {
+            $toList = array_merge(explode(',', $toList), explode(',', $object->members));
+            $toList = array_filter(array_unique($toList));
+            $toList = implode(',', $toList);
+        }
+
         return $toList;
     }
 
     /**
+     * 获取提示待办。
      * Get notice todos.
      *
      * @access public
      * @return array
      */
-    public function getNoticeTodos()
+    public function getNoticeTodos(): array
     {
         $todos    = $this->loadModel('todo')->getList('today', $this->app->user->account, 'wait');
         $notices  = array();
@@ -236,21 +245,23 @@ class messageModel extends model
         $interval = 60;
         if($todos)
         {
-            $begins[1]  = date('Hi', strtotime($now));
-            $ends[1]    = date('Hi', strtotime("+$interval seconds $now"));
-            $begins[10] = date('Hi', strtotime("+10 minute $now"));
-            $ends[10]   = date('Hi', strtotime("+10 minute $interval seconds $now"));
-            $begins[30] = date('Hi', strtotime("+30 minute $now"));
-            $ends[30]   = date('Hi', strtotime("+30 minute $interval seconds $now"));
+            /* Set date array. */
+            $begins[1]  = (int)date('Hi', strtotime($now));
+            $begins[10] = (int)date('Hi', strtotime("+10 minute {$now}"));
+            $begins[30] = (int)date('Hi', strtotime("+30 minute {$now}"));
+            $ends[1]    = (int)date('Hi', strtotime("+{$interval} seconds {$now}"));
+            $ends[10]   = (int)date('Hi', strtotime("+10 minute {$interval} seconds {$now}"));
+            $ends[30]   = (int)date('Hi', strtotime("+30 minute {$interval} seconds {$now}"));
             foreach($todos as $todo)
             {
                 if(empty($todo->begin)) continue;
-                $time = str_replace(':', '', $todo->begin);
+                $time = (int)str_replace(':', '', $todo->begin);
 
                 $lastTime = 0;
-                if((int)$time > (int)$begins[1]  and (int)$time <= (int)$ends[1])  $lastTime = 1;
-                if((int)$time > (int)$begins[10] and (int)$time <= (int)$ends[10]) $lastTime = 10;
-                if((int)$time > (int)$begins[30] and (int)$time <= (int)$ends[30]) $lastTime = 30;
+                if($time > $begins[1]  && $time <= $ends[1])  $lastTime = 1;
+                if($time > $begins[10] && $time <= $ends[10]) $lastTime = 10;
+                if($time > $begins[30] && $time <= $ends[30]) $lastTime = 30;
+                /* If the todo needs to be reminded, add it to notices array. */
                 if($lastTime)
                 {
                     $notice = new stdclass();

@@ -32,6 +32,7 @@ $projectProduct->branch->range('0{3},0,1,0,4,0,7,10,11,13,15,16,18');
 $projectProduct->gen(15);
 
 global $tester;
+$tester->config->global->syncProduct = '';
 $product = $tester->loadModel('product');
 $product->app->tab = 'product';
 

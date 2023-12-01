@@ -1815,3 +1815,35 @@ function resultFilter(): resultFilter
 {
     return createWg('resultFilter', func_get_args());
 }
+
+/**
+ * Contact list widget.
+ */
+function contactList(): contactList
+{
+    return createWg('contactList', func_get_args());
+}
+
+/**
+ * Users widget.
+ */
+function users(): users
+{
+    return createWg('users', func_get_args());
+}
+
+/**
+ * Mailto widget.
+ */
+function mailto(): mailto
+{
+    return createWg('mailto', func_get_args());
+}
+
+/**
+ * whitelist widget.
+ */
+function whitelist(): whitelist
+{
+    return createWg('whitelist', func_get_args());
+}

@@ -13,7 +13,8 @@ declare(strict_types=1);
 class qaModel extends model
 {
     /**
-     * Set menu.
+     * 设置测试应用下导航权限和链接。
+     * Set qa menu.
      *
      * @param  int         $productID
      * @param  int|string  $branch
@@ -22,56 +23,22 @@ class qaModel extends model
      */
     public function setMenu(int $productID = 0, int|string $branch = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !commonModel::isTutorialMode())
+        if(!$this->app->user->admin && strpos(",{$this->app->user->view->products},", ",$productID,") === false && $productID != 0 && !commonModel::isTutorialMode())
         {
             $this->app->loadLang('product');
-            return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+            return $this->app->control->sendError($this->lang->product->accessDenied, helper::createLink('qa', 'index'));
         }
 
         if($this->session->branch) $branch = $this->session->branch;
         if($this->cookie->preBranch !== '' and $branch === '') $branch = $this->cookie->preBranch;
-        helper::setcookie('preBranch', $branch);
+        helper::setcookie('preBranch', (string)$branch);
 
         $product = $this->loadModel('product')->getByID($productID);
         if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         if(!common::hasPriv('zahost', 'browse') and !common::hasPriv('zanode', 'browse')) unset($this->lang->qa->menu->automation);
         common::setMenuVars('qa', $productID);
-    }
 
-    /**
-     * Set qa subMenu.
-     *
-     * @param  string $module
-     * @param  string $key
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function setSubMenu($module, $key, $id)
-    {
-        if(!isset($this->lang->$module->subMenu->$key)) return true;
-
-        $moduleSubMenu = $this->lang->$module->subMenu->$key;
-        $subMenu       = common::createSubMenu($this->lang->$module->subMenu->$key, $id);
-        $moduleName    = $this->app->getModuleName();
-        $methodName    = $this->app->getMethodName();
-
-        if(!empty($subMenu))
-        {
-            foreach($subMenu as $menuKey => $menu)
-            {
-                $itemMenu = zget($moduleSubMenu, $menuKey, '');
-                $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
-                $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos(',' . $itemMenu['alias'] . ',', ",$methodName,") !== false));
-                $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
-                if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
-                {
-                    $this->lang->$module->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
-                    break;
-                }
-            }
-            $this->lang->$module->menu->{$key}['subMenu'] = $subMenu;
-        }
+        return true;
     }
 }

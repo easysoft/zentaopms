@@ -23,38 +23,30 @@ class pivotModel extends model
         $this->loadBIDAO();
     }
 
-    /**
+    /*
+     * 获取透视表。
      * Get pivot.
      *
-     * @param  int    $pivotID
+     * @param  int         $pivotID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID($pivotID)
+    public function getByID(int $pivotID): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
 
-        if(!empty($pivot->fields) and $pivot->fields != 'null')
+        $pivot->fieldSettings = array();
+        if(!empty($pivot->fields) && $pivot->fields != 'null')
         {
             $pivot->fieldSettings = json_decode($pivot->fields);
-            $pivot->fields        = array();
-
-            foreach($pivot->fieldSettings as $field => $settings) $pivot->fields[] = $field;
-        }
-        else
-        {
-            $pivot->fieldSettings = array();
+            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
         }
 
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            foreach($filters as $key => $filter)
-            {
-                if(empty($filter['default'])) continue;
-                $filters[$key]['default'] = $this->processDateVar($filter['default']);
-            }
+            $this->pivotTao->setFilterDefault($filters);
             $pivot->filters = $filters;
         }
 
@@ -62,96 +54,17 @@ class pivotModel extends model
     }
 
     /**
-     * Get pivots.
-     *
-     * @param  int    $dimensionID
-     * @param  int    $groupID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList($dimensionID = 0, $groupID = 0, $orderBy = 'id_desc', $pager = null)
-    {
-        $this->loadModel('screen');
-        if($groupID)
-        {
-            $groups = $this->dao->select('id')->from(TABLE_MODULE)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->eq('pivot')
-                ->andWhere('path')->like("%,$groupID,%")
-                ->fetchPairs('id');
-
-            $conditions = '';
-            foreach($groups as $groupID)
-            {
-                $conditions .= " FIND_IN_SET($groupID, `group`) or";
-            }
-            $conditions = trim($conditions, 'or');
-
-            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
-                ->where('deleted')->eq(0)
-                ->beginIF($conditions)->andWhere("({$conditions})")->fi()
-                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
-                ->orderBy($orderBy)
-                ->fetchAll();
-
-            $charts = $this->dao->select('*')->from(TABLE_CHART)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->eq('table')
-                ->beginIF($conditions)->andWhere("({$conditions})")->fi()
-                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
-                ->orderBy($orderBy)
-                ->fetchAll();
-
-            $pivots = array_merge($pivots, $charts);
-        }
-        else
-        {
-            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
-                ->where('deleted')->eq(0)
-                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
-                ->orderBy($orderBy)
-                ->fetchAll();
-
-            $charts = $this->dao->select('*')->from(TABLE_CHART)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->eq('table')
-                ->beginIF(!empty($dimensionID))->andWhere('dimension')->eq($dimensionID)->fi()
-                ->orderBy($orderBy)
-                ->fetchAll();
-
-            $pivots = array_merge($pivots, $charts);
-        }
-
-        if(!empty($pager))
-        {
-            $pager->setRecTotal(count($pivots));
-            $pager->setPageTotal();
-            if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
-
-            if($pivots)
-            {
-                $pivots = array_chunk($pivots, $pager->recPerPage);
-                $pivots = $pivots[$pager->pageID - 1];
-            }
-
-        }
-
-        return $this->processPivot($pivots, false);
-    }
-
-    /**
-     * Process date vars in sql.
+     * 构建sql的时间查询。
+     * Build sql date query.
      *
      * @param  string $var
      * @param  string $type
      * @access public
      * @return string
      */
-    public function processDateVar($var, $type = 'date')
+    public function processDateVar(string $var, string $type = 'date'): string
     {
-        if(empty($var)) return null;
+        if(empty($var)) return '';
 
         $format = $type == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
         switch($var)
@@ -165,6 +78,7 @@ class pivotModel extends model
     }
 
     /**
+     * 构建透视表的信息。
      * Process sql and correct type.
      *
      * @param  object|array $pivots
@@ -172,47 +86,85 @@ class pivotModel extends model
      * @access public
      * @return object|array
      */
-    public function processPivot($pivots, $isObject = true)
+    public function processPivot(object|array $pivots, bool $isObject = true): object|array
     {
         if($isObject) $pivots = array($pivots);
 
-        $this->loadModel('screen');
         $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
-        foreach($pivots as $index => $pivot)
+        foreach($pivots as $pivot) $this->completePivot($pivot, $screenList);
+
+        if($isObject && $pivot->stage == 'published') $this->processFieldSettings($pivot);
+
+        return $isObject ? $pivot : $pivots;
+    }
+
+    /**
+     * 补充透视表的信息。
+     * Complete pivot.
+     *
+     * @param  object $pivot
+     * @param  array  $screenList
+     * @access public
+     * @return void
+     */
+    public function completePivot(object $pivot, array $screenList): void
+    {
+        if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
+        if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
+
+        if(empty($pivot->type))
         {
-            if(!empty($pivot->sql))      $pivots[$index]->sql = trim(str_replace(';', '', $pivot->sql));
-            if(!empty($pivot->settings)) $pivots[$index]->settings = json_decode($pivot->settings, true);
-
-            if(empty($pivot->type))
+            $pivot->names = array();
+            $pivot->descs = array();
+            if(!empty($pivot->name))
             {
-                $pivot->names = '';
-                $pivot->descs = '';
-                if(!empty($pivot->name))
-                {
-                    $pivotNames   = json_decode($pivot->name, true);
-                    $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '');
-                    $pivot->names = $pivotNames;
-
-                    if(!$pivot->name)
-                    {
-                        $pivotNames  = array_filter($pivotNames);
-                        $pivot->name = reset($pivotNames);
-                    }
-                }
-
-                if(!empty($pivot->desc))
-                {
-                    $pivotDescs   = json_decode($pivot->desc, true);
-                    $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
-                    $pivot->descs = $pivotDescs;
-                }
-                $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
+                $pivotNames   = json_decode($pivot->name, true);
+                $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '') ? : reset($pivotNames);
+                $pivot->names = $pivotNames;
             }
 
-            if($isObject and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
-        }
+            if(!empty($pivot->desc))
+            {
+                $pivotDescs   = json_decode($pivot->desc, true);
+                $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
+                $pivot->descs = $pivotDescs;
+            }
 
-        return $isObject ? reset($pivots) : $pivots;
+            $pivot->used = $this->checkIFChartInUse($pivot->id, $screenList, 'pivot');
+        }
+    }
+
+    /**
+     * 检测图表是否在使用。
+     * Check if the Chart is in use.
+     *
+     * @param  int    $chartID
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
+    {
+        foreach($screenList as $screen)
+        {
+            $scheme = json_decode($screen->scheme);
+            if(empty($scheme->componentList)) continue;
+
+            foreach($scheme->componentList as $component)
+            {
+                $list = !empty($component->isGroup) ? $component->groupList : array($component);
+                foreach($list as $groupComponent)
+                {
+                    if(!isset($groupComponent->chartConfig)) continue;
+
+                    $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
+                    $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+
+                    if($chartID == $sourceID && $type == $sourceType) return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -244,12 +196,7 @@ class pivotModel extends model
 
         if(!empty($filters))
         {
-            foreach($filters as $index => $filter)
-            {
-                if(empty($filter['default'])) continue;
-
-                $filters[$index]['default'] = $this->processDateVar($filter['default']);
-            }
+            $this->pivotTao->setFilterDefault($filters);
         }
         $querySQL = $this->chart->parseSqlVars($sql, $filters);
 
@@ -1602,7 +1549,8 @@ class pivotModel extends model
         {
             foreach($settings['columns'] as $column)
             {
-                if($column['showOrigin']) $column['slice'] = 'noSlice';
+                $columnShowOrigin = zget($column, 'showOrigin', false);
+                if($columnShowOrigin) $column['slice'] = 'noSlice';
 
                 $stat   = $column['stat'];
                 $field  = $column['field'];
@@ -1610,7 +1558,7 @@ class pivotModel extends model
                 $uuName = $field . $number;
                 $number ++;
 
-                if($column['showOrigin'])
+                if($columnShowOrigin)
                 {
                     $columnSQL = "select $groupList, tt.`$field` from ($sql) tt" . $connectSQL . $orderSQL;
                 }
@@ -1640,14 +1588,14 @@ class pivotModel extends model
                 $columnRows = $this->dao->query($columnSQL)->fetchAll();
 
                 $rowcount = array_fill(0, count($columnRows), 1);
-                if($showOrigin && !$column['showOrigin'])
+                if($showOrigin && !$columnShowOrigin)
                 {
                     $countSQL = "select $groupList, count(tt.`$field`) as rowCount from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
                     $countRows = $this->dao->query($countSQL)->fetchAll();
                     foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
                 }
 
-                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $column['showOrigin']);
+                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
                 if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
                 $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 
@@ -2380,7 +2328,6 @@ class pivotModel extends model
         $sql = preg_replace("/= *'\!/U", "!='", $sql);
         return $sql;
     }
-
 }
 
 /**

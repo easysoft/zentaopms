@@ -731,18 +731,15 @@ function changeAppsTheme(theme)
     });
 }
 
-/**
- * Check if link1 and link2 are same link.
- *
- * @param {string} link1
- * @param {string} link2
- * @returns {boolean}
- */
-function isSameLink(link1, link2)
+function updateUserToolbar()
 {
-    link2 = link2 || location;
-    if(typeof link2 === 'object') link2 = link2.href + link2.hash;
-    return $.parseLink(link1).url === $.parseLink(link2).url;
+    $.each(apps.openedMap, function(_code, app)
+    {
+        if(app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.loadPage)
+        {
+            app.iframe.contentWindow.loadPage({selector: '#toolbar', partial: true, target: '#toolbar'});
+        }
+    });
 }
 
 initAppsMenu();
@@ -805,7 +802,7 @@ $.get($.createLink('index', 'app'), html =>
     if(!code && defaultOpen)
     {
         const lastOpenApp = zui.store.session.get('lastOpenApp');
-        if(lastOpenApp) code = lastOpenApp.code;
+        if(lastOpenApp && lastOpenApp.url === url) code = lastOpenApp.code;
     }
     openApp(url, code);
 });
@@ -823,7 +820,8 @@ $.apps = $.extend(apps,
     getAppCode:     getAppCode,
     updateAppsMenu: updateAppsMenu,
     changeAppsLang: changeAppsLang,
-    changeAppsTheme: changeAppsTheme
+    changeAppsTheme: changeAppsTheme,
+    updateUserToolbar: updateUserToolbar
 });
 
 window.notifyMessage = function(data)

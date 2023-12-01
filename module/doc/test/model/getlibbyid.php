@@ -1,22 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getLibById();
+timeout=0
 cid=1
-pid=1
-
-正常查询文档库 >> 产品主库
-查询不存在的文档库 >> 0
 
 */
-global $tester;
-$doc = $tester->loadModel('doc');
 
-$docLibIDList = array('0', '17');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-r($doc->getLibById($docLibIDList[1])) && p('name') && e('产品主库');//正常查询文档库
-r($doc->getLibById($docLibIDList[0])) && p()       && e('0');       //查询不存在的文档库
+zdTable('doclib')->config('doclib')->gen(5);
+zdTable('user')->gen(5);
+su('admin');
+
+$idList = array(0, 1, 4);
+
+$docTester = new docTest();
+r($docTester->getLibByIdTest($idList[0])) && p()            && e('0');               // 测试空数据
+r($docTester->getLibByIdTest($idList[1])) && p('type,name') && e('api,项目接口库1'); // 获取ID=1的文档库信息
+r($docTester->getLibByIdTest($idList[2])) && p('type,name') && e('api,产品接口库4'); // 获取ID=4的文档库信息
