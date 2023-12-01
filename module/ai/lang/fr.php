@@ -450,7 +450,7 @@ $lang->ai->miniPrograms->field                    = new stdClass();
 $lang->ai->miniPrograms->field->name              = 'Field name';
 $lang->ai->miniPrograms->field->duplicatedNameTip = 'This name is already used, please try another name';
 $lang->ai->miniPrograms->field->type              = 'control type';
-$lang->ai->miniPrograms->field->typeList          = array('text' => 'single-line text', 'textarea' => 'multi-line text', 'radio' => 'single selection', 'checkbox' => 'multi-selection');
+$lang->ai->miniPrograms->field->typeList          = array('text' => 'single-line text', 'textarea' => 'multi-line text', 'radio' => 'single-selection', 'checkbox' => 'multi-selection');
 $lang->ai->miniPrograms->field->placeholder       = 'Fill hints';
 $lang->ai->miniPrograms->field->required          = 'Required';
 $lang->ai->miniPrograms->field->requiredOptions   = array('No', 'Yes');
