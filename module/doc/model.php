@@ -3408,18 +3408,19 @@ class docModel extends model
     }
 
     /**
-     * Get action by object.
+     * 获取文档的所有操作信息。
+     * Get action by doc ID.
      *
-     * @param  int    $docID
-     * @param  string $action    view|collect
-     * @param  string $account
+     * @param  int          $docID
+     * @param  string       $action    view|collect
+     * @param  string       $account
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getActionByObject($docID, $action, $account = '')
+    public function getActionByObject(int $docID, string $action, string $account = ''): object|bool
     {
         if(empty($account)) $account = $this->app->user->account;
-        return $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->eq((int)$docID)->andWhere('action')->eq($action)->andWhere('actor')->eq($account)->fetch();
+        return $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq($action)->andWhere('actor')->eq($account)->fetch();
     }
 
     /**
