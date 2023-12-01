@@ -888,4 +888,27 @@ class docTest
 
         return empty($data[$type]) ? array() : current($data[$type]);
     }
+
+    /**
+     * 获取文档库的树形结构。
+     * Get lib tree.
+     *
+     * @param  int    $libID
+     * @param  array  $libIdList
+     * @param  string $type       mine|product|project|execution|api|custom
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  string $browseType bysearch|byrelease
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getLibTreeTest(int $libID, array $libIdList, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $param = 0): array
+    {
+        $libs    = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $libTree = $this->objectModel->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+
+        if(dao::isError()) return dao::getError();
+        return $libTree;
+    }
 }
