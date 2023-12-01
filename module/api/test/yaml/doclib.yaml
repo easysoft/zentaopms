@@ -1,0 +1,33 @@
+---
+title: zt_doclib
+author: Yuting Wang
+version: "1.0"
+fields:
+  - field: type
+    note: "文档类型"
+    range: api
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品库"
+    range: 0{10},1-100,
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "项目库"
+    range: 0{10},1-100,
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "文档库名称"
+    fields:
+      - field: name1
+        range: 文档库
+      - field: name2
+        range: 1-10000

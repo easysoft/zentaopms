@@ -19,11 +19,11 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
     {
         if(empty($metrics)) continue;
 
-        $metricList[] = li
-            (
-                set::className('metric-group'),
-                $lang->metric->objectList[$key]
-            );
+        if($scope != 'collect')
+        {
+            $metricCount  = count($metrics);
+            $metricList[] = li(set::className('metric-group'), $lang->metric->objectList[$key] . "($metricCount)");
+        }
 
         foreach($metrics as $metric)
         {

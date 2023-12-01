@@ -1,0 +1,12 @@
+---
+title: zt_module
+author: Yuting Wang
+version: "1.0"
+fields:
+  - field: type
+    note: "对象类型"
+    range: api
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

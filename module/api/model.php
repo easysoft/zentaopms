@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of api module of ZenTaoCMS.
  *
@@ -28,17 +29,18 @@ class apiModel extends model
     const PARAMS_TYPE_CUSTOM = 'custom';
 
     /**
+     * 发布接口。
      * Create release.
      *
-     * @param  object $data
+     * @param  object $formData
      * @access public
-     * @return int
+     * @return bool
      */
-    public function publishLib($data)
+    public function publishLib(object $formData): bool
     {
         /* Get lib modules list. */
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('root')->eq((int)$data->lib)
+            ->where('root')->eq((int)$formData->lib)
             ->andWhere('type')->eq('api')
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
@@ -46,39 +48,39 @@ class apiModel extends model
 
         /* Get all api list. */
         $apis = $this->dao->select('id,version')->from(TABLE_API)
-            ->where('lib')->eq($data->lib)
+            ->where('lib')->eq($formData->lib)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
 
         /* Get all struct list. */
         $structs = $this->dao->select('id,version')->from(TABLE_APISTRUCT)
-            ->where('lib')->eq($data->lib)
+            ->where('lib')->eq($formData->lib)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
 
         $snap = array('modules' => $modules, 'apis' => $apis, 'structs' => $structs);
 
-        $data->snap = json_encode($snap);
-        $this->dao->insert(TABLE_API_LIB_RELEASE)->data($data)
+        $formData->snap = json_encode($snap);
+        $this->dao->insert(TABLE_API_LIB_RELEASE)->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->createrelease->requiredFields, 'notempty')
             ->exec();
 
-        return dao::isError() ? false : $this->dao->lastInsertID();
+        return !dao::isError();
     }
 
     /**
+     * 删除一条发布。
      * Delete a lib publish.
      *
      * @param  int    $id
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteRelease($id)
+    public function deleteRelease(int $id): bool
     {
-        $this->dao->delete()->from(TABLE_API_LIB_RELEASE)
-            ->where('id')->eq($id)
-            ->exec();
+        $this->dao->delete()->from(TABLE_API_LIB_RELEASE)->where('id')->eq($id)->exec();
+        return !dao::isError();
     }
 
     /**

@@ -89,7 +89,7 @@ class searchTao extends searchModel
         /* Skip empty values. */
         if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
         if(isset($fieldParams->$field) && $fieldParams->$field->control == 'select' && $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
-        $value = addcslashes(trim($this->post->$valueName), '%');
+        $value = addcslashes(trim((string)$this->post->{$valueName}), '%');
 
         return array($andOr, $operator, $value);
     }

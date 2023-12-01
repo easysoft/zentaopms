@@ -823,4 +823,92 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 构建文档库树形结构的节点。
+     * Build a node of the tree structure of the document library.
+     *
+     * @param  int    $libID
+     * @param  int    $id
+     * @param  string $type     mine|product|project|execution|api|custom
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  int    $showDoc
+     * @access public
+     * @return object
+     */
+    public function buildLibItemTest(int $libID, int $id, string $type, int $moduleID, int $objectID, int $showDoc): object
+    {
+        $this->objectModel->loadModel('setting')->setItem('admin.doc.showDoc', $showDoc);
+        $lib = $this->objectModel->getLibByID($id);
+
+        $item = $this->objectModel->buildLibItem($libID, $lib, $type, $moduleID, $objectID);
+
+        if(dao::isError()) return dao::getError();
+        return $item;
+    }
+
+    /**
+     * 获取产品、项目、执行文档库的树形结构。
+     * Get a tree structure of the product, project, and execution document library.
+     *
+     * @param  int    $libID
+     * @param  array  $libIdList
+     * @param  string $type       mine|product|project|execution|api|custom
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  string $browseType bysearch|byrelease
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getObjectTreeTest(int $libID, array $libIdList, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $param = 0): array
+    {
+        $libs = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $data = $this->objectModel->getObjectTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+
+        if(dao::isError()) return dao::getError();
+        return isset($data[0][$type]) ? $data[0][$type] : array();
+    }
+
+    /**
+     * 处理产品、项目、执行的文档库树形结构。
+     * Process the tree structure of the document library of product, project, and execution.
+     *
+     * @param  int          $libID
+     * @param  string       $type     mine|product|project|execution|api|custom
+     * @param  int          $objectID
+     * @access public
+     * @return array|object
+     */
+    public function processObjectTree(int $libID, string $type, int $objectID): array|object
+    {
+        $libTree = array($type => array());
+        $data    =  $this->objectModel->processObjectTree($libTree, $type, $libID, $objectID);
+
+        return empty($data[$type]) ? array() : current($data[$type]);
+    }
+
+    /**
+     * 获取文档库的树形结构。
+     * Get lib tree.
+     *
+     * @param  int    $libID
+     * @param  array  $libIdList
+     * @param  string $type       mine|product|project|execution|api|custom
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  string $browseType bysearch|byrelease
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getLibTreeTest(int $libID, array $libIdList, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $param = 0): array
+    {
+        $libs    = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $libTree = $this->objectModel->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+
+        if(dao::isError()) return dao::getError();
+        return $libTree;
+    }
 }

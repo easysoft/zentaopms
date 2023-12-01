@@ -1,80 +1,54 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-
-$product = zdTable('product');
-$product->id->range('1');
-$product->name->range('产品1');
-$product->gen(1);
-
-$project = zdTable('project');
-$project->id->range('1-2');
-$project->name->range('项目1,执行1');
-$project->type->range('project,sprint');
-$project->acl->range('open');
-$project->gen(2);
-
-$doclib = zdTable('doclib');
-$doclib->id->range('1-5');
-$doclib->name->range('产品库1,产品接口库1,项目库1,执行库1,自定义库1');
-$doclib->type->range('product,api,project,execution,custom');
-$doclib->vision->range('rnd');
-$doclib->product->range('1{2},0{3}');
-$doclib->project->range('0{2},1{2},0');
-$doclib->execution->range('0{3},2,0');
-$doclib->gen(5);
-
-$module = zdTable('module');
-$module->id->range('1-10');
-$module->name->range('第一章,第二章,第一章第一节,第一章第二节,第三章');
-$module->parent->range('0{2},1{2},0{3},6{2},0{2}');
-$module->root->range('1{5},2{5}');
-$module->type->range('doc{5},api{5}');
-$module->gen(10);
-
-su('admin');
-
 /**
 
 title=测试 docModel->getLibTree();
+timeout=0
 cid=1
-pid=1
-
-获取产品树并检查高亮 >> 产品库1,1
-获取项目树 >> 项目库1
-获取执行树 >> 执行库1
-获取自定义树 >> 自定义库1
-检查产品库个数 >> 3
-检查项目库个数 >> 3
-检查执行库个数 >> 2
-检查自定义库个数 >> 1
 
 */
 
-global $tester;
-$tester->loadModel('doc');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-$libIDList    = array(1, 3, 4, 5);
-$moduleIDList = array(1, 6);
-$objectIDList = array(0, 1, 2);
-$typeList     = array('product', 'project', 'execution', 'custom');
+$userqueryTable = zdTable('userquery');
+$userqueryTable->id->range('1-2');
+$userqueryTable->sql->range("`(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))`");
+$userqueryTable->gen(1);
 
-$libs['product']   = $tester->doc->getLibsByObject('product', 1);
-$libs['project']   = $tester->doc->getLibsByObject('project', 1);
-$libs['execution'] = $tester->doc->getLibsByObject('execution', 2);
-$libs['custom']    = $tester->doc->getLibsByObject('custom', 0);
+zdTable('project')->config('execution')->gen(10);
+zdTable('product')->config('product')->gen(5);
+zdTable('module')->config('module')->gen(3);
+zdTable('doclib')->config('doclib')->gen(30);
+zdTable('doc')->config('doc')->gen(50);
+zdTable('apilibrelease')->gen(0);
+zdTable('user')->gen(5);
+su('admin');
 
-$productLibTree   = $tester->doc->getLibTree($libIDList[0], $libs['product'], $typeList[0], $moduleIDList[0], $objectIDList[1]);
-$projectLibTree   = $tester->doc->getLibTree($libIDList[1], $libs['project'], $typeList[1], $moduleIDList[1], $objectIDList[1]);
-$executionLibTree = $tester->doc->getLibTree($libIDList[2], $libs['execution'], $typeList[2], $moduleIDList[1], $objectIDList[2]);
-$customLibTree    = $tester->doc->getLibTree($libIDList[3], $libs['custom'], $typeList[3], $moduleIDList[1], $objectIDList[0]);
+$libID       = 1;
+$libIds      = array(1, 6, 11, 16, 20, 26);
+$types       = array('api', 'custom', 'mine', 'project', 'execution', 'product');
+$moduleID    = 1;
+$objectIds   = array(0, 1, 11, 101);
+$browseTypes = array('', 'bysearch', 'byrelease');
+$queries     = array(0, 1);
 
-r($productLibTree)          && p('0:name,active') && e('产品库1,1'); // 获取产品树并检查高亮
-r($projectLibTree)          && p('0:name')        && e('项目库1');   // 获取项目树
-r($executionLibTree)        && p('0:name')        && e('执行库1');   // 获取执行树
-r($customLibTree)           && p('0:name')        && e('自定义库1'); // 获取自定义树
-r(count($productLibTree))   && p()                && e('3');         // 检查产品库个数
-r(count($projectLibTree))   && p()                && e('3');         // 检查项目库个数
-r(count($executionLibTree)) && p()                && e('2');         // 检查执行库个数
-r(count($customLibTree))    && p()                && e('1');         // 检查自定义库个数
+$docTester = new docTest();
+r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('apiLib,项目接口库1,api,11');           // 获取接口库的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('apiLib,项目接口库1,api,11');           // 获取搜索后的api文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('apiLib,项目接口库1,api,11');           // 获取切换版本后的api文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[1], $moduleID, $objectIds[0], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('docLib,自定义文档库6,custom,0');       // 获取自定义库的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[1], $moduleID, $objectIds[0], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,自定义文档库6,custom,0');       // 获取搜索后的自定义文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[1], $moduleID, $objectIds[0], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,自定义文档库6,custom,0');       // 获取切换版本后的自定义文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('mine,我的个人库,doc,0');               // 获取我的文档库的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('mine,我的个人库,doc,0');               // 获取搜索后的我的文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('mine,我的个人库,doc,0');               // 获取切换版本后的我的文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[3], $moduleID, $objectIds[2], $browseTypes[0], $queries[0])['project']) && p('0:type,name,objectType,objectID') && e('docLib,项目文档主库16,project,11');    // 获取项目的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[3], $moduleID, $objectIds[2], $browseTypes[1], $queries[1])['project']) && p('0:type,name,objectType,objectID') && e('docLib,项目文档主库16,project,11');    // 获取搜索后的项目文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[3], $moduleID, $objectIds[2], $browseTypes[2], $queries[1])['project']) && p('0:type,name,objectType,objectID') && e('docLib,项目文档主库16,project,11');    // 获取切换版本后的项目文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[4], $moduleID, $objectIds[3], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('docLib,执行文档主库20,execution,101'); // 获取执行的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[4], $moduleID, $objectIds[3], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,执行文档主库20,execution,101'); // 获取搜索后的执行文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[4], $moduleID, $objectIds[3], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,执行文档主库20,execution,101'); // 获取切换版本后的执行文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[5], $moduleID, $objectIds[1], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('docLib,产品文档主库26,product,1');     // 获取产品的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[5], $moduleID, $objectIds[1], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,产品文档主库26,product,1');     // 获取搜索后的产品文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[5], $moduleID, $objectIds[1], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,产品文档主库26,product,1');     // 获取切换版本后的产品文档树
