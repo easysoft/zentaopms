@@ -508,20 +508,21 @@ class reportTest
     }
 
     /**
+     * 测试获取状态总览。
      * Test get status overview.
      *
-     * @param  string $objectType
-     * @param  array  $statusStat
+     * @param  string       $objectType
+     * @param  array        $statusStat
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getStatusOverviewTest($objectType, $statusStat)
+    public function getStatusOverviewTest(string $objectType, array $statusStat): string|array
     {
-        $object = $this->objectModel->getStatusOverview($objectType, $statusStat);
+        $return = $this->objectModel->getStatusOverview($objectType, $statusStat);
 
         if(dao::isError()) return dao::getError();
 
-        return $object;
+        return $return;
     }
 
     /**

@@ -530,6 +530,7 @@ class reportModel extends model
     }
 
     /**
+     * 获取状态总览。
      * Get status overview.
      *
      * @param  string $objectType
@@ -537,16 +538,16 @@ class reportModel extends model
      * @access public
      * @return string
      */
-    public function getStatusOverview($objectType, $statusStat)
+    public function getStatusOverview(string $objectType, array $statusStat): string
     {
         $allCount    = 0;
         $undoneCount = 0;
         foreach($statusStat as $status => $count)
         {
             $allCount += $count;
-            if($objectType == 'story' and $status != 'closed') $undoneCount += $count;
-            if($objectType == 'task' and $status != 'done' and $status != 'closed' and $status != 'cancel') $undoneCount += $count;
-            if($objectType == 'bug' and $status == 'active') $undoneCount += $count;
+            if($objectType == 'story' && $status != 'closed') $undoneCount += $count;
+            if($objectType == 'task' && $status != 'done' && $status != 'closed' && $status != 'cancel') $undoneCount += $count;
+            if($objectType == 'bug' && $status == 'active') $undoneCount += $count;
         }
 
         $overview = '';
