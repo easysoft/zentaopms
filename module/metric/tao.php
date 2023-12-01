@@ -278,4 +278,104 @@ class metricTao extends metricModel
 
         return $records;
     }
+
+    /**
+     * 获取度量数据有效字段。
+     * Get metric record fields.
+     *
+     * @param  string $code
+     * @access protected
+     * @return array|false
+     */
+    protected function getRecordFields(string $code): array|false
+    {
+        $record = $this->dao->select('*')
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->limit(1)
+            ->fetch();
+
+        if(!$record) return false;
+
+        $fields = array();
+        foreach(array_keys((array)$record) as $field)
+        {
+            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date'))) continue;
+            if(!empty($record->$field)) $fields[] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 创建临时表用于存储最新的非重复度量数据的id。
+     * Create temp table for storing distinct metric record id.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function createDistinctTempTable(): void
+    {
+        $sql  = "CREATE TABLE IF NOT EXISTS `metriclib_distinct` ( ";
+        $sql .= " id INT AUTO_INCREMENT PRIMARY KEY ";
+        $sql .= " )";
+
+        $this->dao->exec($sql);
+        $this->dao->exec("TRUNCATE TABLE `metriclib_distinct`");
+    }
+
+    /**
+     * 将度量数据不重复的id插入到临时表中。
+     * Insert distinct metric record id to temp table.
+     *
+     * @param  string $code
+     * @param  array $fields
+     * @access protected
+     * @return void
+     */
+    protected function insertDistinctId2TempTable(string $code, array $fields): void
+    {
+        if(empty($fields)) return;
+        /**
+         * 判断fields中的字段是否与array('year', 'month', 'week', 'day')存在交集
+         */
+        $intersect = array_intersect($fields, array('year', 'month', 'week', 'day'));
+        if(empty($intersect)) $fields[] = 'left(date, 10)';
+
+        $sql  = "INSERT INTO `metriclib_distinct` (id) ";
+        $sql .= "SELECT MAX(id) AS id ";
+        $sql .= "FROM zt_metriclib WHERE metricCode = '{$code}' ";
+        $sql .= "GROUP BY " . implode(',', $fields);
+
+        $this->dao->exec($sql);
+    }
+
+    /**
+     * 删除重复的度量数据。
+     * Delete duplication metric record.
+     *
+     * @param  string $code
+     * @access protected
+     * @return void
+     */
+    protected function deleteDuplicationRecord(string $code): void
+    {
+        $sql  = "DELETE FROM zt_metriclib ";
+        $sql .= "WHERE id NOT IN (SELECT id FROM metriclib_distinct) ";
+        $sql .= "AND metricCode = '{$code}'";
+
+        $this->dao->exec($sql);
+    }
+
+    /**
+     * 删除记录不重复度量数据id的临时表。
+     * Drop temp table for storing distinct metric record id.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function dropDistinctTempTable(): void
+    {
+        $this->dao->exec("DROP TABLE IF EXISTS `metriclib_distinct`");
+    }
 }

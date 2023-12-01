@@ -195,6 +195,9 @@ class metric extends control
             }
         }
 
+        $metrics = $this->metric->getExecutableMetric();
+        foreach($metrics as $code) $this->metric->deduplication($code);
+
         // 恢复之前的调试状态
         $this->config->debug = $originalDebug;
 
