@@ -120,37 +120,23 @@ class doc extends control
     }
 
     /**
+     * 创建一个文档库。
      * Create a library.
      *
-     * @param string $type
-     * @param int $objectID
+     * @param  string $type     api|project|product|execution|custom|mine
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function createLib($type = '', $objectID = 0)
+    public function createLib(string $type = '', int $objectID = 0)
     {
         if(!empty($_POST))
         {
-            $libID = $this->doc->createLib();
-            if(!dao::isError())
-            {
-                if($type == 'project' and $this->post->project) $objectID = $this->post->project;
+            $lib = $this->docZen->buildLibForCreateLib();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                if($type == 'product' and $this->post->product) $objectID = $this->post->product;
-
-                if($type == 'execution' and $this->post->execution) $objectID = $this->post->execution;
-                if($type == 'custom') $objectID = 0;
-                $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
-
-                $this->action->create('docLib', $libID, 'Created');
-
-                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "locateNewLib(\"$type\", \"$objectID\", \"$libID\")"));
-            }
-            else
-            {
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+            $libID = $this->doc->createLib($lib, (string)$this->post->type, (string)$this->post->libType);
+            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID);
         }
 
         if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
@@ -175,37 +161,13 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        $acl = 'default';
-        if($type == 'custom')
-        {
-            $acl = 'open';
-            unset($this->lang->doclib->aclList['default']);
-        }
-        elseif($type == 'mine')
-        {
-            $acl = 'private';
-            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
-        }
+        $this->docZen->setAclForCreateLib($type);
 
-        if($type != 'custom' and $type != 'mine')
-        {
-            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
-            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
-            unset($this->lang->doclib->aclList['open']);
-        }
-
-        if($type != 'mine')
-        {
-            $this->app->loadLang('api');
-            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
-        }
-
-        $this->view->groups         = $this->loadModel('group')->getPairs();
-        $this->view->users          = $this->user->getPairs('nocode|noclosed');
-        $this->view->objects        = $objects;
-        $this->view->type           = $type;
-        $this->view->acl            = $acl;
-        $this->view->objectID       = $objectID;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->user->getPairs('nocode|noclosed');
+        $this->view->objects  = $objects;
+        $this->view->type     = $type;
+        $this->view->objectID = $objectID;
         $this->display();
     }
 

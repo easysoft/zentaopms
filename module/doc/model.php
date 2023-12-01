@@ -195,43 +195,34 @@ class docModel extends model
     }
 
     /**
-     * Create a library.
+     * 创建一个文档库。
+     * Create a lib.
      *
+     * @param  object   $lib
+     * @param  string   $libType wiki|api
+     * @param  string   $type    api|project|product|execution|custom|mine
      * @access public
-     * @return void
+     * @return int|bool
      */
-    public function createLib()
+    public function createLib(object $lib, string $type = '', string $libType = ''): int|bool
     {
-        $lib = fixer::input('post')
-            ->setForce('product', ($this->post->type == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
-            ->setForce('project', ($this->post->type == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
-            ->setForce('execution', ($this->post->libType != 'api' and !empty($_POST['execution'])) ? $this->post->execution : 0)
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->add('vision', $this->config->vision)
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', helper::now())
-            ->add('vision', $this->config->vision)
-            ->remove('uid,contactListMenu,libType')
-            ->get();
-
         if($lib->execution) $lib->type = 'execution';
-        if($lib->type == 'execution' and $lib->execution and !$lib->project)
+        if($lib->type == 'execution' && $lib->execution && !$lib->project)
         {
             $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
         }
-        if($this->post->libType == 'api')
+        if($libType == 'api')
         {
             $lib->type = 'api';
-            $this->checkApiLibName($lib, $this->post->type);
+            $this->checkApiLibName($lib, $type);
         }
 
-        $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
             ->exec();
 
+        if(dao::isError()) return false;
         return $this->dao->lastInsertID();
     }
 

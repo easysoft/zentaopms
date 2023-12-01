@@ -223,4 +223,87 @@ class docZen extends doc
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
         $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID, $type);
     }
+
+    /**
+     * 处理创建文档库的访问控制。
+     * Handle the access control of creating document library.
+     *
+     * @param  string    $type api|project|product|execution|custom|mine
+     * @access protected
+     * @return void
+     */
+    protected function setAclForCreateLib(string $type): void
+    {
+        $acl = 'default';
+        if($type == 'custom')
+        {
+            $acl = 'open';
+            unset($this->lang->doclib->aclList['default']);
+        }
+        elseif($type == 'mine')
+        {
+            $acl = 'private';
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
+        }
+        $this->view->acl = $acl;
+
+        if($type != 'custom' && $type != 'mine')
+        {
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
+            unset($this->lang->doclib->aclList['open']);
+        }
+
+        if($type != 'mine')
+        {
+            $this->app->loadLang('api');
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
+    }
+
+    /**
+     * 为创建文档库构造库数据。
+     * Build library data for creating document library.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildLibForCreateLib(): object
+    {
+        $this->lang->doc->name = $this->lang->doclib->name;
+        $lib = form::data()
+            ->setIF($this->post->type == 'product' && !empty($_POST['product']), 'product', $this->post->product)
+            ->setIF($this->post->type == 'project' && !empty($_POST['project']), 'project', $this->post->project)
+            ->setIF($this->post->libType != 'api' && !empty($_POST['execution']), 'execution', $this->post->execution)
+            ->get();
+
+        return $lib;
+    }
+
+    /**
+     * 在创建文档库后的返回。
+     * Return after create a document library.
+     *
+     * @param  string    $type     api|project|product|execution|custom|mine
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @access protected
+     * @return bool|int
+     */
+    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0): bool|int
+    {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
+        if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
+        if($type == 'execution' && $this->post->execution) $objectID = $this->post->execution;
+        if($type == 'custom')                              $objectID = 0;
+
+        $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
+
+        $this->action->create('docLib', $libID, 'Created');
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "locateNewLib(\"$type\", \"$objectID\", \"$libID\")"));
+    }
 }
