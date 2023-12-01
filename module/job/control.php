@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of job of ZenTaoPMS.
  *
@@ -22,17 +23,16 @@ class job extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($this->app->methodName != 'browse')
+
+        if(in_array($this->app->methodName, array('create', 'edit')))
         {
-            if(in_array($this->app->methodName, array('create', 'edit')))
-            {
-                if($this->session->repoID) $this->loadModel('ci')->setMenu();
-            }
-            else
-            {
-                $this->loadModel('ci')->setMenu();
-            }
+            if($this->session->repoID) $this->loadModel('ci')->setMenu();
         }
+        elseif($this->app->methodName != 'browse')
+        {
+            $this->loadModel('ci')->setMenu();
+        }
+
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
@@ -185,7 +185,7 @@ class job extends control
      * @access public
      * @return void
      */
-    public function delete($jobID)
+    public function delete(int $jobID)
     {
         $this->job->delete(TABLE_JOB, $jobID);
 
@@ -202,7 +202,7 @@ class job extends control
      * @access public
      * @return void
      */
-    public function view($jobID, $compileID = 0)
+    public function view(int $jobID, int $compileID = 0)
     {
         $job = $this->job->getById($jobID);
 
@@ -216,54 +216,9 @@ class job extends control
             $compile = $this->compile->getLastResult($jobID);
         }
 
-        if($compile and $compile->testtask)
-        {
-            $this->app->loadLang('project');
-            $taskID = $compile->testtask;
-            $task   = $this->loadModel('testtask')->getById($taskID);
-            $runs   = $this->testtask->getRuns($taskID, 0, 'id');
+        if($compile && $compile->testtask) $this->jobZen->getCompileData($compile);
 
-            $cases = array();
-            $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
-            foreach($runs as $run) $cases[$run->case] = $run;
-
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
-            foreach($results as $result)
-            {
-                $runs[$result->run]->caseResult = $result->caseResult;
-                $runs[$result->run]->xml        = $result->xml;
-                $runs[$result->run]->duration   = $result->duration;
-            }
-
-            $groupCases = $this->dao->select('*')->from(TABLE_SUITECASE)->where('`case`')->in(array_keys($cases))->orderBy('case')->fetchGroup('suite', 'case');
-            $summary    = array();
-            if(empty($groupCases)) $groupCases[] = $cases;
-            foreach($groupCases as $suiteID => $groupCase)
-            {
-                $caseCount = 0;
-                $failCount = 0;
-                $duration  = 0;
-                foreach($groupCase as $caseID => $suitecase)
-                {
-                    $case = $cases[$caseID];
-                    $groupCases[$suiteID][$caseID] = $case;
-                    $duration += $case->duration;
-                    $caseCount ++;
-                    if($case->caseResult == 'fail') $failCount ++;
-                }
-                $summary[$suiteID] = sprintf($this->lang->testtask->summary, $caseCount, $failCount, $duration);
-            }
-
-            $suites = $this->loadModel('testsuite')->getUnitSuites($task->product);
-
-            $this->view->groupCases = $groupCases;
-            $this->view->suites     = $suites;
-            $this->view->summary    = $summary;
-            $this->view->taskID     = $taskID;
-        }
-
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
-
+        $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->job     = $job;
         $this->view->compile = $compile;
@@ -274,17 +229,16 @@ class job extends control
     }
 
     /**
+     * 执行流水线。
      * Exec a job.
      *
      * @param  int     $jobID
-     * @param  string  $showForm
      * @access public
      * @return void
      */
-    public function exec($jobID)
+    public function exec(int $jobID)
     {
         $job = $this->job->getByID($jobID);
-        //if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
         if(dao::isError())
@@ -315,13 +269,14 @@ class job extends control
     }
 
     /**
+     * ajax方式获取产品根据版本库。
      * AJAX: Get product by repo.
      *
      * @param  int    $repoID
      * @access public
      * @return string
      */
-    public function ajaxGetProductByRepo($repoID)
+    public function ajaxGetProductByRepo(int $repoID)
     {
         $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return print(json_encode(array(""=>"")));
@@ -348,13 +303,14 @@ class job extends control
     }
 
     /**
+     * ajax方式获取版本库分支列表。
      * Ajax get reference list function.
      *
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function ajaxGetRefList($repoID)
+    public function ajaxGetRefList(int $repoID)
     {
         $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
@@ -369,13 +325,14 @@ class job extends control
     }
 
     /**
+     * ajax方式获取版本库列表根据引擎。
      * Ajax get repo list.
      *
      * @param  int    $engine
      * @access public
      * @return void
      */
-    public function ajaxGetRepoList($engine)
+    public function ajaxGetRepoList(int $engine)
     {
         $repoList  = $this->loadModel('repo')->getList($this->projectID);
         $repoPairs = array(0 => '');
@@ -395,26 +352,28 @@ class job extends control
     }
 
     /**
+     * ajax方式获取版本库类型。
      * Ajax get an repo type.
      *
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function ajaxGetRepoType($repoID)
+    public function ajaxGetRepoType(int $repoID)
     {
         $repo = $this->loadModel('repo')->getByID($repoID);
         $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
     }
 
     /**
+     * ajax检查该版本库是否已关联sonarqube。
      * Ajax check SonarQube linked by repoID.
      *
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
+    public function ajaxCheckSonarqubeLink(int $repoID, int $jobID = 0)
     {
         $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID, true);
         if(!empty($repo))

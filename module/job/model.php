@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of job module of ZenTaoCMS.
  *
@@ -12,13 +13,14 @@
 class jobModel extends model
 {
     /**
+     * 根据id获取流水线。
      * Get by id.
      *
      * @param  int    $id
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID(int $id): object
     {
         $job = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($id)->fetch();
         if(empty($job)) return new stdClass();
@@ -42,6 +44,7 @@ class jobModel extends model
     }
 
     /**
+     * 获取流水线列表。
      * Get job list.
      *
      * @param  int    $repoID
@@ -67,13 +70,14 @@ class jobModel extends model
     }
 
      /**
+     * 获取流水线列表根据版本库ID。
      * Get job list by RepoID.
      *
      * @param  int    $repoID
      * @access public
      * @return array
      */
-    public function getListByRepoID($repoID)
+    public function getListByRepoID(int $repoID): array
     {
         return $this->dao->select('id, name, lastStatus')->from(TABLE_JOB)
             ->where('deleted')->eq('0')
@@ -83,6 +87,7 @@ class jobModel extends model
     }
 
      /**
+     * 获取流水线键值对根据版本库ID。
      * Get job pairs by RepoID.
      *
      * @param  int    $repoID
@@ -90,7 +95,7 @@ class jobModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($repoID, $engine = '')
+    public function getPairs(int $repoID, string $engine = ''): array
     {
         return $this->dao->select('id, name')->from(TABLE_JOB)
             ->where('deleted')->eq('0')
@@ -108,7 +113,7 @@ class jobModel extends model
      * @access public
      * @return array
      */
-    public function getListByTriggerType($triggerType, $repoIdList = array())
+    public function getListByTriggerType(string $triggerType, array $repoIdList = array()): array
     {
         return $this->dao->select('*')->from(TABLE_JOB)
             ->where('deleted')->eq('0')
@@ -124,7 +129,7 @@ class jobModel extends model
      * @access public
      * @return string
      */
-    public function getTriggerConfig($job)
+    public function getTriggerConfig(object $job): string
     {
           $triggerType = zget($this->lang->job->triggerTypeList, $job->triggerType);
           if($job->triggerType == 'tag')
@@ -154,7 +159,7 @@ class jobModel extends model
      * @access public
      * @return array
      */
-    public function getTriggerGroup($triggerType, $repoIdList)
+    public function getTriggerGroup(string $triggerType, array $repoIdList): array
     {
         $jobs  = $this->getListByTriggerType($triggerType, $repoIdList);
         $group = array();
@@ -199,7 +204,7 @@ class jobModel extends model
         if(dao::isError()) return false;
 
         $id = $this->dao->lastInsertId();
-        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $repo->SCM);
+        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job);
         return $id;
     }
 
@@ -239,20 +244,20 @@ class jobModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->initJob($id, $job, $repo->SCM);
+        $this->initJob($id, $job);
         return true;
     }
 
     /**
+     * 创建或者更新流水线的时候初始化工作。
      * Init when create or update job.
      *
      * @param  int    $id
      * @param  object $job
-     * @param  string $repoType
      * @access public
      * @return bool
      */
-    public function initJob($id, $job, $repoType)
+    public function initJob(int $id, object $job): bool
     {
         if(empty($id)) return false;
         if($job->triggerType == 'schedule' and strpos($job->atDay, date('w')) !== false)
@@ -269,34 +274,23 @@ class jobModel extends model
         if($job->triggerType == 'tag')
         {
             $repo    = $this->loadModel('repo')->getByID($job->repo);
-            $lastTag = '';
-            if($repoType == 'Subversion')
-            {
-                $dirs = $this->loadModel('svn')->getRepoTags($repo, $job->svnDir);
-                end($dirs);
-                $lastTag = current($dirs);
-            }
-            else
-            {
-                $tags = $this->loadModel('git')->getRepoTags($repo);
-                end($tags);
-                $lastTag = current($tags);
-            }
-            $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($id)->exec();
+            $lastTag = $this->getLastTagByRepo($repo, $job);
+            $this->jobTao->updateLastTag($id, $lastTag);
         }
 
         return true;
     }
 
     /**
+     * 执行流水线。
      * Exec job.
      *
-     * @param  int   $id
-     * @param  array $extraParam
+     * @param  int    $id
+     * @param  array  $extraParam
      * @access public
-     * @return string|bool
+     * @return object|false
      */
-    public function exec($id, $extraParam = array())
+    public function exec(int $id, array $extraParam = array()): object|false
     {
         $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
@@ -309,29 +303,21 @@ class jobModel extends model
         $repo = $this->loadModel('repo')->getByID($job->repo);
         $now  = helper::now();
 
-        /* Save compile data. */
-        $build = new stdclass();
-        $build->job         = $job->id;
-        $build->name        = $job->name;
-        $build->createdBy   = $this->app->user->account;
-        $build->createdDate = $now;
-        $build->updateDate  = $now;
-
-        if($job->triggerType == 'schedule') $build->atTime = $job->atTime;
+        if($job->triggerType == 'schedule') $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
 
         if($job->triggerType == 'tag')
         {
             $job->lastTag = $this->getLastTagByRepo($repo, $job);
 
+            $tag = '';
             if($job->lastTag)
             {
-                $build->tag = $job->lastTag;
-                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($job->lastTag)->where('id')->eq($job->id)->exec();
+                $tag = $job->lastTag;
+                $this->jobTao->updateLastTag($job->id, $job->lastTag);
             }
-        }
 
-        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
-        $compileID = $this->dao->lastInsertId();
+            $compileID = $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
+        }
 
         if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID, $extraParam);
         if($job->engine == 'gitlab')  $compile = $this->execGitlabPipeline($job);
@@ -348,6 +334,7 @@ class jobModel extends model
     }
 
     /**
+     * 执行jenkins流水线。
      * Exec jenkins pipeline.
      *
      * @param  object    $job
@@ -357,7 +344,7 @@ class jobModel extends model
      * @access public
      * @return object
      */
-    public function execJenkinsPipeline($job, $repo, $compileID, $extraParam = array())
+    public function execJenkinsPipeline(object $job, object $repo, int $compileID, array $extraParam = array()): object
     {
         $pipeline = new stdclass();
         $pipeline->PARAM_TAG   = '';
@@ -369,7 +356,7 @@ class jobModel extends model
         {
             $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
             $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
-            $paramValue = str_replace('$zentao_product',  $job->product, $paramValue);
+            $paramValue = str_replace('$zentao_product',  (string)$job->product, $paramValue);
             $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
 
             $pipeline->$paramName = $paramValue;
@@ -391,16 +378,18 @@ class jobModel extends model
     }
 
     /**
+     * 执行gitlab流水线。
      * Exec gitlab pipeline.
      *
      * @param  object $job
      * @access public
-     * @return void
+     * @return object
      */
-    public function execGitlabPipeline($job)
+    public function execGitlabPipeline(object $job): object
     {
         $pipeline = json_decode($job->pipeline);
 
+        /* Set pipeline run branch. */
         $pipelineParams = new stdclass;
         $pipelineParams->ref = zget($pipeline, 'reference', '');
         if(!$pipelineParams->ref)
@@ -412,6 +401,7 @@ class jobModel extends model
             $this->dao->update(TABLE_JOB)->set('pipeline')->eq(json_encode($pipeline))->where('id')->eq($job->id)->exec();
         }
 
+        /* Set pipeline params. */
         $customParams = json_decode($job->customParam);
         $variables    = array();
         foreach($customParams as $paramName => $paramValue)
@@ -423,19 +413,17 @@ class jobModel extends model
 
             $variables[] = $variable;
         }
-
         if(!empty($variables)) $pipelineParams->variables = $variables;
 
-        $compile = new stdclass;
-
+        /* Run pipeline. */
+        $compile  = new stdclass;
         $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
         if(empty($pipeline->id))
         {
             $this->gitlab->apiErrorHandling($pipeline);
             $compile->status = 'create_fail';
         }
-
-        if(!empty($pipeline->id))
+        else
         {
             $compile->queue  = $pipeline->id;
             $compile->status = zget($pipeline, 'status', 'create_fail');
@@ -445,14 +433,15 @@ class jobModel extends model
     }
 
     /**
+     * 获取版本库最新tag。
      * Get last tag of one repo.
      *
      * @param  object $repo
      * @param  object $job
      * @access public
-     * @return void
+     * @return string
      */
-    public function getLastTagByRepo($repo, $job)
+    public function getLastTagByRepo(object $repo, object $job): string
     {
         if($repo->SCM == 'Subversion')
         {
@@ -478,6 +467,7 @@ class jobModel extends model
     }
 
      /**
+     * 根据版本库获取sonarqube框架的流水线。
      * Get sonarqube by RepoID.
      *
      * @param  array  $repoIDList
@@ -486,7 +476,7 @@ class jobModel extends model
      * @access public
      * @return array
      */
-    public function getSonarqubeByRepo($repoIDList, $jobID = 0, $showDeleted = false)
+    public function getSonarqubeByRepo(array $repoIDList, int $jobID = 0, bool $showDeleted = false)
     {
         return $this->dao->select('id,name,repo,deleted')->from(TABLE_JOB)
             ->where('frame')->eq('sonarqube')
@@ -497,6 +487,7 @@ class jobModel extends model
     }
 
     /**
+     * 获取流水线键值对根据sonarqubeID或者sonarqube项目。
      * Get job pairs by sonarqube projectkeys.
      *
      * @param  int    $sonarqubeID
@@ -504,9 +495,9 @@ class jobModel extends model
      * @param  bool   $emptyShowAll
      * @param  bool   $showDeleted
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array(), $emptyShowAll = false, $showDeleted = false)
+    public function getJobBySonarqubeProject(int $sonarqubeID, array $projectKeys = array(), bool $emptyShowAll = false, bool $showDeleted = false): array|false
     {
         return $this->dao->select('projectKey,id')->from(TABLE_JOB)
             ->where('frame')->eq('sonarqube')
@@ -526,7 +517,7 @@ class jobModel extends model
      * @access public
      * @return bool
      */
-    public static function isClickable($object, $action, $module = 'job')
+    public static function isClickable(object $object, string $action, string $module = 'job'): bool
     {
         $action = strtolower($action);
 
@@ -536,14 +527,15 @@ class jobModel extends model
     }
 
     /**
+     * 检查jenkins是否启用参数构建。
      * Check if jenkins has enabled parameterized build.
      *
-     * @param  string    $url
-     * @param  string    $userPWD
+     * @param  string $url
+     * @param  string $userPWD
      * @access public
      * @return bool
      */
-    public function checkParameterizedBuild($url, $userPWD)
+    public function checkParameterizedBuild(string $url, string $userPWD): bool
     {
         $response = common::http($url, null, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
 

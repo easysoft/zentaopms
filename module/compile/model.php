@@ -211,9 +211,9 @@ class compileModel extends model
      * @param  string $data
      * @param  string $type
      * @access public
-     * @return void
+     * @return int|false
      */
-    public function createByJob($jobID, $data = '', $type = 'tag')
+    public function createByJob(int $jobID, string $data = '', string $type = 'tag'): int|false
     {
         $job = $this->dao->select('id,name')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch();
 
@@ -225,6 +225,7 @@ class compileModel extends model
         $build->createdDate = helper::now();
 
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+        return $this->dao->lastInsertId();
     }
 
     /**
