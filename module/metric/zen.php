@@ -600,39 +600,34 @@ class metricZen extends metric
         });
 
         $groupHeader = array();
-        $groupData   = array(array());
+        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->date, 'align' => 'center');
+        $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center');
+        $groupData   = array();
 
         foreach($data as $dataInfo)
         {
             if($dateType == 'year')
             {
-                $year          = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
-                $name          = "year{$year}";
-                $groupHeader[] = array('name' => $name, 'title' => $year, 'align' => 'center');
+                $date = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
             }
             elseif($dateType == 'month')
             {
-                $year          = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
-                $month         = substr($dataInfo->$dateField, 5, 2) . $this->lang->month;
-                $name          = "year{$year}month{$month}";
-                $groupHeader[] = array('name' => $name, 'title' => $month, 'headerGroup' => $year, 'align' => 'center');
+                $year  = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
+                $month = substr($dataInfo->$dateField, 5, 2) . $this->lang->month;
+                $date  = "{$year}{$month}";
             }
             elseif($dateType == 'week')
             {
-                $year          = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
-                $week          = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
-                $name          = "year{$year}week{$week}";
-                $groupHeader[] = array('name' => $name, 'title' => $week, 'headerGroup' => $year, 'align' => 'center');
+                $year = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
+                $week = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
+                $date = "{$year}{$week}";
             }
             elseif($dateType == 'day')
             {
-                $year          = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
-                $day           = substr($dataInfo->$dateField, 5, 5);
-                $name          = "year{$year}day{$day}";
-                $groupHeader[] = array('name' => $name, 'title' => $day, 'headerGroup' => $year, 'align' => 'center');
+                $date = substr($dataInfo->$dateField, 0, 10);
             }
-
-            $groupData[0][$name] = array($dataInfo->value, $dataInfo->calcTime);
+            $dataSeries  = array('date' => $date, 'value' => array($dataInfo->value, $dataInfo->calcTime));
+            $groupData[] = $dataSeries;
         }
 
         return array($groupHeader, $groupData);
