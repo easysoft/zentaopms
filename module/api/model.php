@@ -70,17 +70,17 @@ class apiModel extends model
     }
 
     /**
+     * 删除一条发布。
      * Delete a lib publish.
      *
      * @param  int    $id
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteRelease($id)
+    public function deleteRelease(int $id): bool
     {
-        $this->dao->delete()->from(TABLE_API_LIB_RELEASE)
-            ->where('id')->eq($id)
-            ->exec();
+        $this->dao->delete()->from(TABLE_API_LIB_RELEASE)->where('id')->eq($id)->exec();
+        return !dao::isError();
     }
 
     /**
