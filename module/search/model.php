@@ -558,23 +558,26 @@ class searchModel extends model
     }
 
     /**
+     * 保存一个索引项。
      * Save an index item.
      *
-     * @param  string    $objectType article|blog|page|product|thread|reply|
-     * @param  int       $objectID
+     * @param  string $objectType article|blog|page|product|thread|reply|
+     * @param  object $object
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveIndex($objectType, $object)
+    public function saveIndex(string $objectType, object $object): bool
     {
         $fields = $this->config->search->fields->{$objectType};
         if(empty($fields)) return true;
 
+        /* 如果是文档，将文档的内容追加上。*/
+        /* If the objectType is doc, append the content of doc. */
         if($objectType == 'doc' && $this->config->edition != 'open') $object = $this->appendFiles($object);
 
         $index = new stdclass();
-        $index->objectID   = $object->{$fields->id};
         $index->objectType = $objectType;
+        $index->objectID   = $object->{$fields->id};
         $index->title      = $object->{$fields->title};
         $index->addedDate  = isset($object->{$fields->addedDate}) ? $object->{$fields->addedDate} : '0000-00-00 00:00:00';
         $index->editedDate = isset($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : '0000-00-00 00:00:00';
@@ -589,15 +592,16 @@ class searchModel extends model
         }
 
         $spliter = $this->app->loadClass('spliter');
-
         $titleSplited   = $spliter->utf8Split($index->title);
-        $index->title   = $titleSplited['words'];
         $contentSplited = $spliter->utf8Split(strip_tags($index->content));
+
+        $index->title   = $titleSplited['words'];
         $index->content = $contentSplited['words'];
 
         $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
         $this->dao->replace(TABLE_SEARCHINDEX)->data($index)->exec();
-        return true;
+
+        return !dao::isError();
     }
 
     /**
