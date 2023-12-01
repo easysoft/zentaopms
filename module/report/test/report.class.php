@@ -43,7 +43,7 @@ class reportTest
 
         $execution = $this->execution->getByID($executionID);
         $sets      = $this->execution->getBurnDataFlot($executionID, 'left');
-        $dateList  = $this->execution->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d');
+        $dateList  = $this->execution->getDateList($execution->begin, $execution->end, '', 0, 'Y-m-d');
 
         $objects = $this->objectModel->createSingleJSON($sets, $dateList[0]);
 
