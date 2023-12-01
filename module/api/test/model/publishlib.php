@@ -16,7 +16,7 @@ title=测试 apiModel->publishLib();
 timeout=0
 cid=1
 
-- 测试所属模块为空。 @1
+- 测试正常添加发布。 @1
 - 测试版本号为空。 @0
 - 测试版本号为空的提示信息。第version条的0属性 @『版本号』不能为空。
 
@@ -30,7 +30,7 @@ $formData->lib     = '1';
 $formData->version = 'version1.0';
 $formData->desc    = '我是描述';
 
-r($tester->api->publishLib($formData)) && p() && e(1); // 测试所属模块为空。
+r($tester->api->publishLib($formData)) && p() && e(1); // 测试正常添加发布。
 
 $formData = new stdclass();
 $formData->lib     = '1';

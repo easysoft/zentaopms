@@ -84,13 +84,14 @@ class apiModel extends model
     }
 
     /**
+     * 创建一个接口。
      * Create an api doc.
      *
-     * @param  object   $formData
+     * @param  object    $formData
      * @access public
-     * @return int|bool
+     * @return int|false
      */
-    public function create(object $formData)
+    public function create(object $formData): int|false
     {
         $this->dao->insert(TABLE_API)->data($formData)
             ->autoCheck()
@@ -698,21 +699,21 @@ class apiModel extends model
     {
         return array(
             'doc'             => $data->id,
-            'module'          => $data->module,
+            'module'          => !empty($data->module) ? $data->module : 0,
             'title'           => $data->title,
             'path'            => $data->path,
-            'protocol'        => $data->protocol,
-            'method'          => $data->method,
-            'requestType'     => $data->requestType,
-            'responseType'    => isset($data->responseType) ? $data->responseType : '',
-            'status'          => $data->status,
-            'owner'           => $data->owner,
-            'desc'            => $data->desc,
-            'version'         => $data->version,
-            'params'          => $data->params,
-            'paramsExample'   => $data->paramsExample,
-            'responseExample' => $data->responseExample,
-            'response'        => $data->response,
+            'protocol'        => !empty($data->protocol) ? $data->protocol : 'HTTP',
+            'method'          => !empty($data->method) ? $data->method : 'GET',
+            'requestType'     => !empty($data->requestType) ? $data->requestType : '',
+            'responseType'    => !empty($data->responseType) ? $data->responseType : '',
+            'status'          => !empty($data->status) ? $data->status : 'done',
+            'owner'           => !empty($data->owner) ? $data->owner : '',
+            'desc'            => !empty($data->desc) ? $data->desc : '',
+            'version'         => !empty($data->version) ? $data->version : 1,
+            'params'          => !empty($data->params) ? $data->params : '',
+            'paramsExample'   => !empty($data->paramsExample) ? $data->paramsExample : '',
+            'responseExample' => !empty($data->responseExample) ? $data->responseExample : '',
+            'response'        => !empty($data->response) ? $data->response : '',
             'addedBy'         => $this->app->user->account,
             'addedDate'       => helper::now(),
         );
