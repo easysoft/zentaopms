@@ -2944,20 +2944,67 @@ class docModel extends model
     }
 
     /**
+     * 获取文档库的树形结构。
      * Get lib tree.
      *
      * @param  int    $libID
      * @param  array  $libs
-     * @param  string $type product|project|api|custom
+     * @param  string $type       mine|product|project|execution|api|custom
      * @param  int    $moduleID
      * @param  int    $objectID
-     * @param  string $browseType bySearch
+     * @param  string $browseType bysearch|byrelease
      * @param  int    $param
      * @param  int    $docID
      * @access public
      * @return array
      */
-    public function getLibTree(int $libID, array $libs, string $type, int $moduleID, int $objectID = 0, string $browseType = '', int $param = 0, int $docID = 0)
+    public function getLibTree(int $libID, array $libs, string $type, int $moduleID, int $objectID = 0, string $browseType = '', int $param = 0, int $docID = 0): array
+    {
+        list($libTree, $apiLibs, $apiLibIDList) = $this->getObjectTree($libID, $libs, $type, $moduleID, $objectID, strtolower($browseType), $param, $docID);
+        $libTree = $this->processObjectTree($libTree, $type, $libID, $objectID, $apiLibs, $apiLibIDList);
+
+        if($type != 'project') $libTree = array_values($libTree[$type]);
+        if($type == 'mine')
+        {
+            $libType     = $this->app->rawMethod == 'view' ? 'mine' : zget($this->app->rawParams, 'type', '');
+            $mineMethods = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdBy' => 'myCreation', 'editedBy' => 'myEdited');
+            $libTree     = array();
+            foreach($mineMethods as $type => $mineMethod)
+            {
+                if($mineMethod != 'myLib' && !common::hasPriv('doc', $mineMethod)) continue;
+
+                $myItem = new stdclass();
+                $myItem->id         = 0;
+                $myItem->name       = $this->lang->doc->{$mineMethod};
+                $myItem->type       = $type;
+                $myItem->objectType = 'doc';
+                $myItem->objectID   = 0;
+                $myItem->hasAction  = false;
+                $myItem->active     = strtolower($libType) == strtolower($type) ? 1 : 0;
+
+                $libTree[] = $myItem;
+            }
+        }
+
+        return $libTree;
+    }
+
+    /**
+     * 获取产品、项目、执行文档库的树形结构。
+     * Get a tree structure of the product, project, and execution document library.
+     *
+     * @param  int    $libID
+     * @param  array  $libs
+     * @param  string $type       mine|product|project|execution|api|custom
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  string $browseType bysearch|byrelease
+     * @param  int    $docID
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getObjectTree(int $libID, array $libs, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $param = 0, int $docID = 0): array
     {
         if($type == 'project')
         {
@@ -2971,49 +3018,13 @@ class docModel extends model
             $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(array_keys($executionLibs))->fetchPairs();
         }
 
-        $release = null;
-        if($browseType == 'byrelease' and $param) $release = $this->loadModel('api')->getRelease(0, 'byId', $param);
-
-        $browseType   = strtolower($browseType);
-        $libTree      = array($type => array());
-        $apiLibs      = array();
-        $apiLibIDList = array();
+        $release = $browseType == 'byrelease' && $param ? $this->loadModel('api')->getRelease(0, 'byId', $param) : null;
+        $libTree = array($type => array());
+        $apiLibs = $apiLibIDList = array();
         foreach($libs as $lib)
         {
-            $releaseModule = array();
-            if($release and $release->lib == $lib->id)
-            {
-                foreach($release->snap['modules'] as $module) $releaseModule[$module['id']] = (object)$module;
-            }
-
-            $item = new stdclass();
-            $item->id         = $lib->id;
-            $item->type       = $lib->type == 'api' ? 'apiLib' : 'docLib';
-            $item->name       = $lib->name;
-            $item->order      = $lib->order;
-            $item->objectType = $type;
-            $item->objectID   = $objectID;
-            $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;
-            $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule, $docID);
-            $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
-            $showDoc = $showDoc === '0' ? 0 : 1;
-            if($this->app->rawMethod == 'view' and $lib->type != 'apiLib' and $showDoc)
-            {
-                $docIDList = $this->getPrivDocs(array($lib->id));
-                $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
-                    ->where('id')->in($docIDList)
-                    ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
-                    ->andWhere('deleted')->eq(0)
-                    ->andWhere('module')->eq(0)
-                    ->fetchAll('id');
-                if(!empty($docs))
-                {
-                    $docs = array_values($docs);
-                    foreach($docs as $doc) $doc->active = $doc->id == $docID ? 1 : 0;
-                    $item->children = array_merge($docs, $item->children);
-                }
-            }
-            if(($type == 'project' and $lib->type != 'execution') or $type != 'project')
+            $item = $this->buildLibItem($libID, $lib, $type, $moduleID, $objectID, $browseType, $docID, $release);
+            if(($type == 'project' && $lib->type != 'execution') || $type != 'project')
             {
                 if($item->type == 'docLib') $libTree[$lib->type][$lib->id] = $item;
                 if($item->type == 'apiLib') $apiLibs[$lib->id] = $item;
@@ -3048,11 +3059,84 @@ class docModel extends model
 
             if($item->type == 'apiLib') $apiLibIDList[] = $lib->id;
         }
+        return array($libTree, $apiLibs, $apiLibIDList);
+    }
 
+    /**
+     * 构建文档库树形结构的节点。
+     * Build a node of the tree structure of the document library.
+     *
+     * @param  int         $libID
+     * @param  object      $lib
+     * @param  string      $type       mine|product|project|execution|api|custom
+     * @param  int         $moduleID
+     * @param  int         $objectID
+     * @param  string      $browseType bysearch|byrelease
+     * @param  int         $docID
+     * @param  object|null $release
+     * @access public
+     * @return object
+     */
+    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, object|null $release = null): object
+    {
+        $releaseModule = array();
+        if($release && $release->lib == $lib->id)
+        {
+            foreach($release->snap['modules'] as $module) $releaseModule[$module['id']] = (object)$module;
+        }
+
+        $item = new stdclass();
+        $item->id         = $lib->id;
+        $item->type       = $lib->type == 'api' ? 'apiLib' : 'docLib';
+        $item->name       = $lib->name;
+        $item->order      = $lib->order;
+        $item->objectType = $type;
+        $item->objectID   = $objectID;
+        $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;
+        $item->children   = $this->getModuleTree($lib->id, $moduleID, $lib->type == 'api' ? 'api' : 'doc', 0, $releaseModule, $docID);
+
+        $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
+        $showDoc = $showDoc === '0' ? 0 : 1;
+        if($this->app->rawMethod == 'view' && $lib->type != 'apiLib' && $showDoc)
+        {
+            $docIDList = $this->getPrivDocs(array($lib->id));
+            $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
+                ->where('id')->in($docIDList)
+                ->andWhere("(status = 'normal' || (status = 'draft' && addedBy='{$this->app->user->account}'))")
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('module')->eq(0)
+                ->fetchAll('id');
+
+            if(!empty($docs))
+            {
+                $docs = array_values($docs);
+                foreach($docs as $doc) $doc->active = $doc->id == $docID ? 1 : 0;
+                $item->children = array_merge($docs, $item->children);
+            }
+        }
+
+        return $item;
+    }
+
+    /**
+     * 处理产品、项目、执行的文档库树形结构。
+     * Process the tree structure of the document library of product, project, and execution.
+     *
+     * @param  array  $libTree
+     * @param  array  $apiLibs
+     * @param  array  $apiLibIDList
+     * @param  string $type         mine|product|project|execution|api|custom
+     * @param  int    $libID
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function processObjectTree(array $libTree, string $type, int $libID = 0, int $objectID = 0, array $apiLibs = array(), array $apiLibIDList = array()): array
+    {
         if(in_array($type, array('product', 'project', 'execution')))
         {
             $libTree[$type] = array_merge($libTree[$type], $apiLibs);
-            if($type == 'project' and !empty($libTree['execution'])) $libTree['execution'] = array_values($libTree['execution']);
+            if($type == 'project' && !empty($libTree['execution'])) $libTree['execution'] = array_values($libTree['execution']);
 
             $annex = new stdclass();
             $annex->id         = 0;
@@ -3061,15 +3145,8 @@ class docModel extends model
             $annex->objectType = $type;
             $annex->objectID   = $objectID;
             $annex->active     = empty($libID) ? 1 : 0;
-
-            if($type == 'project')
-            {
-                $libTree['annex'][] = $annex;
-            }
-            else
-            {
-                $libTree[$type][''] = $annex;
-            }
+            if($type == 'project') $libTree['annex'][] = $annex;
+            if($type != 'project') $libTree[$type][''] = $annex;
         }
         elseif($type == 'api')
         {
@@ -3082,90 +3159,26 @@ class docModel extends model
         {
             foreach($libList as &$lib)
             {
-                if(!is_object($lib) or $lib->type != 'apiLib') continue;
+                if(!is_object($lib) || $lib->type != 'apiLib') continue;
 
                 $lib->versions = array();
                 foreach($releases as $index => $release)
                 {
-                    if($lib->id == $release->lib)
-                    {
-                        $lib->versions[] = $release;
-                        unset($releases[$index]);
-                    }
+                    if($lib->id != $release->lib) continue;
+
+                    $lib->versions[] = $release;
+                    unset($releases[$index]);
                 }
 
-                if(!empty($lib->versions))
-                {
-                    /* Set default version. */
-                    $defaultVersion = new stdclass();
-                    $defaultVersion->id      = 0;
-                    $defaultVersion->version = $this->lang->build->common;
-                    $lib->versions = array_merge(array($defaultVersion), $lib->versions);
-                }
+                if(empty($lib->versions)) continue;
+
+                /* Set default version. */
+                $defaultVersion = new stdclass();
+                $defaultVersion->id      = 0;
+                $defaultVersion->version = $this->lang->build->common;
+                $lib->versions = array_merge(array($defaultVersion), $lib->versions);
             }
         }
-
-        if($type != 'project') $libTree = array_values($libTree[$type]);
-        if($type == 'mine')
-        {
-            $libType = $this->app->rawMethod == 'view' ? 'mine' : zget($this->app->rawParams, 'type', '');
-            $libType = strtolower($libType);
-
-            $myLib = new stdclass();
-            $myLib->id         = 0;
-            $myLib->name       = $this->lang->doc->myLib;
-            $myLib->type       = 'mine';
-            $myLib->objectType = 'doc';
-            $myLib->objectID   = 0;
-            $myLib->active     = 0;
-            $myLib->hasAction  = false;
-            $myLib->active     = $libType == 'mine' ? 1 : 0;
-            $myLib->children   = $libTree;
-
-            $myView = new stdclass();
-            $myView->id         = 0;
-            $myView->name       = $this->lang->doc->myView;
-            $myView->type       = 'view';
-            $myView->objectType = 'doc';
-            $myView->objectID   = 0;
-            $myView->hasAction  = false;
-            $myView->active     = $libType == 'view' ? 1 : 0;
-
-            $myCollection = new stdclass();
-            $myCollection->id         = 0;
-            $myCollection->name       = $this->lang->doc->myCollection;
-            $myCollection->type       = 'collect';
-            $myCollection->objectType = 'doc';
-            $myCollection->objectID   = 0;
-            $myCollection->hasAction  = false;
-            $myCollection->active     = $libType == 'collect' ? 1 : 0;
-
-            $myCreation = new stdclass();
-            $myCreation->id         = 0;
-            $myCreation->name       = $this->lang->doc->myCreation;
-            $myCreation->type       = 'createdBy';
-            $myCreation->objectType = 'doc';
-            $myCreation->objectID   = 0;
-            $myCreation->hasAction  = false;
-            $myCreation->active     = $libType == 'createdby' ? 1 : 0;
-
-            $myEdited = new stdclass();
-            $myEdited->id         = 0;
-            $myEdited->name       = $this->lang->doc->myEdited;
-            $myEdited->type       = 'editedBy';
-            $myEdited->objectType = 'doc';
-            $myEdited->objectID   = 0;
-            $myEdited->hasAction  = false;
-            $myEdited->active     = $libType == 'editedby' ? 1 : 0;
-
-            $libTree   = array();
-            $libTree[] = $myLib;
-            if(common::hasPriv('doc', 'myView'))       $libTree[] = $myView;
-            if(common::hasPriv('doc', 'myCollection')) $libTree[] = $myCollection;
-            if(common::hasPriv('doc', 'myCreation'))   $libTree[] = $myCreation;
-            if(common::hasPriv('doc', 'myEdited'))     $libTree[] = $myEdited;
-        }
-
         return $libTree;
     }
 
