@@ -1635,15 +1635,6 @@ class baseSQL
      */
     public $conditionIsTrue = false;
 
-        /**
-     * 条件层级。
-     * The condition level.
-     *
-     * @var bool
-     * @access public;
-     */
-    public $conditionLevel = 0;
-
     /**
      * 条件结果，beginIF 中表达式的结果会存储到这个数组中。
      * Store the result of the expression.
