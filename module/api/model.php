@@ -294,24 +294,30 @@ class apiModel extends model
     }
 
     /**
+     * 根据接口ID获取接口信息。
      * Get api doc by id.
      *
-     * @param  int    $id
-     * @param  int    $version
-     * @param  int    $release
+     * @param  int          $id
+     * @param  int          $version
+     * @param  int          $releaseID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getLibById($id, $version = 0, $release = 0)
+    public function getByID(int $id, int $version = 0, int $releaseID = 0): object|false
     {
-        if($release)
+        if($releaseID)
         {
-            $rel = $this->getRelease(0, 'byID', $release);
-            foreach($rel->snap['apis'] as $api)
+            $release = $this->getRelease(0, 'byID', $releaseID);
+            if(!empty($release->snap['apis']))
             {
-                if($api['id'] == $id) $version = $api['version'];
+                foreach($release->snap['apis'] as $api)
+                {
+                    if($api['id'] == $id) $version = $api['version'];
+                }
             }
         }
+
+        /* 如果要根据版本号查询，那主要查询的是spec表，否则查询api表即可。 */
         if($version)
         {
             $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
@@ -321,7 +327,7 @@ class apiModel extends model
             $fields = 'api.*,doc.name as libName,module.name as moduleName';
         }
 
-        $model = $this->dao->select($fields)->from(TABLE_API)->alias('api')
+        $api = $this->dao->select($fields)->from(TABLE_API)->alias('api')
             ->beginIF($version)->leftJoin(TABLE_API_SPEC)->alias('spec')->on('api.id = spec.doc')->fi()
             ->leftJoin(TABLE_DOCLIB)->alias('doc')->on('api.lib = doc.id')
             ->leftJoin(TABLE_MODULE)->alias('module')->on('api.module = module.id')
@@ -329,12 +335,13 @@ class apiModel extends model
             ->beginIF($version)->andWhere('spec.version')->eq($version)->fi()
             ->fetch();
 
-        if($model)
+        if($api)
         {
-            $model->params   = json_decode($model->params, true);
-            $model->response = json_decode($model->response, true);
+            $api->params   = json_decode($api->params,   true);
+            $api->response = json_decode($api->response, true);
         }
-        return $model;
+
+        return $api;
     }
 
     /**

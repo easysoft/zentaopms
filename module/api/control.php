@@ -113,7 +113,7 @@ class api extends control
 
         /* 获取文档目录列表和当前选中的文档目录. */
         $libs      = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
-        $api       = $this->api->getLibByID($apiID, $version, $release);
+        $api       = $this->api->getByID($apiID, $version, $release);
         $libID     = $api->lib;
         $lib       = zget($libs, $libID);
         $api->desc = htmlspecialchars_decode($api->desc);
@@ -529,7 +529,7 @@ class api extends control
      */
     public function delete(int $apiID)
     {
-        $api = $this->api->getLibByID($apiID);
+        $api = $this->api->getByID($apiID);
         $this->api->delete(TABLE_API, $apiID);
 
         if(dao::isError()) $this->sendError(dao::getError());

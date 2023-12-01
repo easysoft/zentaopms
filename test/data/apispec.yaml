@@ -1,0 +1,60 @@
+title: table zt_api
+desc: "接口"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: doc
+    note: "文档ID"
+    range: 1{10}, 2{10}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    fields:
+      - field: title1
+        range: BUG接口{10} 
+      - field: title2
+        range: 1{10}, 2{10}
+  - field: path
+    note: "接口路径"
+    range: bug-getList
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: protocol
+    note: "请求协议"
+    range: HTTP,HTTPS,WS,WSS
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: method
+    note: "请求方式"
+    range: GET,POST,PUT,DELETE,PATCH,OPTIONS,HEAD
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "开发状态"
+    range: doing,done,hidden
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: version
+    note: "版本"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
