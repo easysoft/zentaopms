@@ -267,7 +267,7 @@ class apiModel extends model
      * @access public
      * @return object|false
      */
-    public function getRelease($libID = 0, $type = 'byID', string|int $param = '0'): object|false
+    public function getRelease(int $libID = 0, string $type = 'byID', string|int $param = '0'): object|false
     {
         $release = $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
             ->where('1 = 1')
@@ -282,13 +282,13 @@ class apiModel extends model
 
     /**
      * 根据文档库ID获取发布列表。
-     * Get Versions by api id.
+     * Get releases by lib id.
      *
      * @param  int    $libID
      * @access public
      * @return array
      */
-    public function getReleaseListByApi($libID)
+    public function getReleaseListByLib(int $libID): array
     {
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)->where('lib')->eq($libID)->fetchAll('id');
     }
