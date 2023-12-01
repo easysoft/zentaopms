@@ -244,11 +244,11 @@ class apiModel extends model
     /**
      * Get a struct info.
      *
-     * @param  int    $id
+     * @param  int          $id
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getStructByID($id)
+    public function getStructByID(int $id): object|false
     {
         $model = $this->dao->select('*')
             ->from(TABLE_APISTRUCT)
