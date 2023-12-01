@@ -46,4 +46,18 @@ class chartTest
         $rows = $this->objectModel->getRows($defaultSql, array(), $date, $group, $metric, 'count');
         return $this->objectModel->processRows($rows, $date, $group, $metric);
     }
+
+    /**
+     * 测试按钮是否可点击。
+     * Test isClickable.
+     *
+     * @param  int $chartID
+     * @access public
+     * @return string
+     */
+    public function isClickableTest(int $chartID): string
+    {
+        $chart = $this->objectModel->getByID($chartID);
+        return $this->objectModel->isClickable($chart) ? 'true' : 'false';
+    }
 }
