@@ -1,3 +1,6 @@
+/**
+ * @type {string}
+ */
 let miniProgramID;
 
 /**

@@ -343,6 +343,7 @@ function handleSaveEditedFieldClick()
 
     words.delete(oldName);
     words.set(name, $fieldView.attr('data-id'));
+    if(oldName !== name) updatePromptPreview();
     $editingField = null;
 }
 
