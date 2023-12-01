@@ -5,14 +5,14 @@
       "version": "8.0"
     },
     "zentaoext": {
-      "gitVersion": "18.x",
+      "gitVersion": "fixbugs_max4.9",
       "gitRepo": "https://git.zcorp.cc/easycorp/zentaoext.git"
     },
     "zdoo": {
-      "gitVersion": "master"
+      "gitVersion": "9ca2516ce3049b895705fe4e0941a54175d6acf3"
     },
     "zdooext": {
-      "gitVersion": "master"
+      "gitVersion": "02c244d53abbc38faba35cb0967220bddf49e2a0"
     },
     "downgrade": {
       "gitRepo": "https://git.zcorp.cc/devops/zentaopms-downgrade.git"
