@@ -297,6 +297,7 @@ class searchTest
     }
 
     /**
+     * 测试搜索搜索字典。
      * Test save dict.
      *
      * @param  string $word
@@ -311,12 +312,13 @@ class searchTest
         $spliter = $tester->app->loadClass('spliter');
         $titleSplited = $spliter->utf8Split($word);
 
-        $objects = $this->objectModel->saveDict($titleSplited['dict']);
+        $this->objectModel->saveDict($titleSplited['dict']);
         if(dao::isError()) return dao::getError();
 
-        $count = $tester->dao->select("count('*') as count")->from(TABLE_SEARCHDICT)->fetch('count');
+        $dicts = $tester->dao->select("*")->from(TABLE_SEARCHDICT)->where('`key`')->in(array_keys($titleSplited['dict']))->fetchAll();
         $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
-        return $count;
+
+        return $dicts;
     }
 
     /**
