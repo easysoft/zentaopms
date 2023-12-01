@@ -184,17 +184,6 @@ window.isMetricChecked = function(id)
     return window.checkedList.filter(function(metric){return metric.id == id}).length != 0;
 }
 
-window.renderCheckList = function(metrics)
-{
-    $('.side .metric-tree').empty();
-
-    var ids     = metrics.map(obj => obj.id).join(',');
-    var checked = window.checkedList.map(obj => obj.id).join(',');
-    var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'metricIDList=' + ids + '&checkedList=' + checked);
-
-    loadTarget(url, '.side .metric-tree');
-}
-
 window.updateCheckList = function(id, name, isChecked)
 {
     if(isChecked)
@@ -219,7 +208,12 @@ window.ajaxGetMetrics = function(scope, filters = '', callback)
         var metrics = JSON.parse(resp);
         var total   = metrics.length;
 
-        window.renderCheckList(metrics);
+        $('.side .metric-tree').empty();
+        var ids     = metrics.map(obj => obj.id).join(',');
+        var checked = window.checkedList.map(obj => obj.id).join(',');
+        var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'scope=' + scope + '&metricIDList=' + ids + '&checkedList=' + checked);
+
+        loadTarget(url, '.side .metric-tree');
 
         if(typeof callback == 'function') callback(metrics, total);
     });

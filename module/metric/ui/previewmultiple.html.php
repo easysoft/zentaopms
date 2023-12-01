@@ -277,7 +277,7 @@ foreach($groupMetrics as $key => $metrics)
                 bind::change('window.handleCheckboxChange($element)')
             );
     }
-    $metricTrees[] = div(setClass('check-list-title') ,$this->lang->metric->objectList[$key]);
+    if($scope != 'collect') $metricTrees[] = div(setClass('check-list-title') ,$this->lang->metric->objectList[$key]);
     $metricTrees[] = checkList
         (
             set::className('check-list-metric'),

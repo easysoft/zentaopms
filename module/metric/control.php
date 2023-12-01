@@ -77,7 +77,7 @@ class metric extends control
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
-        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
+        $this->view->dateType      = $current ? $this->metric->getDateTypeByCode($current->code) : 'nodate';
         $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
@@ -258,7 +258,7 @@ class metric extends control
         return $this->send($optionList);
     }
 
-    public function ajaxGetMetricSideTree($metricIDList, $checkedList)
+    public function ajaxGetMetricSideTree($scope, $metricIDList, $checkedList)
     {
         $metricIDList = explode(',', $metricIDList);
         $checkedList  = explode(',', $checkedList);
@@ -266,6 +266,7 @@ class metric extends control
 
         $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
         $this->view->checkedList  = $checkedList;
+        $this->view->scope        = $scope;
         $this->display();
     }
 
