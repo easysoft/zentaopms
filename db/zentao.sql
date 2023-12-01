@@ -15950,7 +15950,8 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `day`        char(2)      NOT NULL DEFAULT '0',
   `value`      varchar(100) NOT NULL DEFAULT '0',
   `date`       datetime              DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `metricID`(`metricID`) USING BTREE
   INDEX `metricCode`(`metricCode`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
