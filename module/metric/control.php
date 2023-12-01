@@ -276,7 +276,7 @@ class metric extends control
     public function ajaxGetMultipleMetricBox($metricID, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->app->loadClass('pager', true);
-        $pager = new pager($metricID, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $metric    = $this->metric->getByID($metricID);
         $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
@@ -304,12 +304,20 @@ class metric extends control
         $this->display();
     }
 
-    public function ajaxGetTableAndCharts($metricID, $viewType = 'single')
+    public function ajaxGetTableAndCharts($metricID, $viewType = 'single', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $metric = $this->metric->getByID($metricID);
-        $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
-        $resultHeader = $this->metricZen->getViewTableHeader($metric);
-        $resultData   = $this->metricZen->getViewTableData($metric, $result);
+        $usePager = (!isset($_POST['scope']) or empty($_POST['scope']));
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $metric    = $this->metric->getByID($metricID);
+        $result    = $this->metric->getResultByCode($metric->code, $_POST, 'cron', $usePager ? $pager : null);
+        $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+        $resultHeader  = $this->metricZen->getViewTableHeader($metric);
+        $resultData    = $this->metricZen->getViewTableData($metric, $result);
+        $allResultData = $this->metricZen->getViewTableData($metric, $allResult);
+        if($usePager) $this->view->dtablePager = $pager;
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
@@ -321,7 +329,7 @@ class metric extends control
         $this->view->viewType      = $viewType;
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
-        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
 
         $this->display();
     }
