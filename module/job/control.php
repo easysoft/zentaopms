@@ -114,8 +114,8 @@ class job extends control
         $this->view->gitlabRepos         = $gitlabRepos;
         $this->view->repoTypes           = $repoTypes;
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
-        $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
-        $this->view->sonarqubeServerList = $this->loadModel('pipeline')->getPairs('sonarqube');
+        $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
+        $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
 
         $this->display();
     }
@@ -171,9 +171,9 @@ class job extends control
         $this->view->repoType            = zget($repoTypes, $job->repo, 'Git');
         $this->view->job                 = $job;
         $this->view->products            = $products;
-        $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
-        $this->view->sonarqubeServerList = $this->loadModel('pipeline')->getPairs('sonarqube');
-        $this->view->pipelines           = $this->jenkins->getTasks($job->server);
+        $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
+        $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
+        $this->view->pipelines           = $this->loadModel('jenkins')->getTasks($job->server);
 
         $this->display();
     }
@@ -223,7 +223,7 @@ class job extends control
         $this->view->job     = $job;
         $this->view->compile = $compile;
         $this->view->repo    = $this->loadModel('repo')->getByID($job->repo);
-        $this->view->jenkins = $this->loadModel('jenkins')->getById($job->server);
+        $this->view->jenkins = $this->loadModel('pipeline')->getById($job->server);
         $this->view->product = $this->loadModel('product')->getById($job->product);
         $this->display();
     }

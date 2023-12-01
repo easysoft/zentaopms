@@ -11,45 +11,6 @@ class jenkinsTest
     }
 
     /**
-     * Get by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        $jenkins = $this->jenkins->getByID($id);
-        if(empty($jenkins)) return 0;
-        return $jenkins;
-    }
-
-    /**
-     * Get jenkins list.
-     *
-     * @param  string $orderBy
-     * @access public
-     * @return object
-     */
-    public function getList($orderBy = 'id_desc')
-    {
-        $jenkins = $this->jenkins->getList($orderBy);
-        if(empty($jenkins)) return 0;
-        return array_shift($jenkins);
-    }
-
-    /**
-     * Get jenkins pairs
-     *
-     * @return string
-     */
-    public function getPairs()
-    {
-        $pairs = $this->jenkins->getPairs();
-        return key($pairs);
-    }
-
-    /**
      * Get jenkins tasks.
      *
      * @param  int    $id
@@ -78,25 +39,6 @@ class jenkinsTest
             return key($errors);
         }
 
-        return $this->jenkins->getById($jenkinsID);
-    }
-
-    /**
-     * Update a jenkins.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object|string
-     */
-    public function update($id)
-    {
-        $this->jenkins->update($id);
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            return key($errors);
-        }
-
-        return $this->jenkins->getById($id);
+        return $this->tester->loadModel('pipeline')->getById($jenkinsID);
     }
 }

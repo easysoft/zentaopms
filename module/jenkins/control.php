@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 /**
  * The control file of jenkins module of ZenTaoPMS.
  *
@@ -17,17 +17,16 @@ class jenkins extends control
      * @param string $moduleName
      * @param string $methodName
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if(stripos($this->methodName, 'ajax') === false)
-        {
-            if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-        }
+
+        if(stripos($this->methodName, 'ajax') === false && !commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $this->loadModel('ci')->setMenu();
     }
 
     /**
+     * Jenkins 列表。
      * Browse jenkinss.
      *
      * @param  string $orderBy
@@ -37,14 +36,13 @@ class jenkins extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->browse;
-
-        $this->view->jenkinsList = $this->jenkins->getList($orderBy, $pager);
+        $this->view->title       = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->browse;
+        $this->view->jenkinsList = $this->loadModel('pipeline')->getList('jenkins', $orderBy, $pager);
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
 
@@ -73,7 +71,7 @@ class jenkins extends control
             $jenkinsID = $this->loadModel('pipeline')->create($jenkins);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('jenkins', $jenkinsID, 'created');
+            $this->loadModel('action')->create('jenkins', $jenkinsID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jenkinsID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
@@ -84,31 +82,30 @@ class jenkins extends control
     }
 
     /**
+     * 编辑一个Jenkins服务器。
      * Edit a jenkins.
      *
-     * @param  int    $id
+     * @param  int    $jenkinsID
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $jenkinsID)
     {
-        $jenkins = $this->jenkins->getByID($id);
+        $jenkins = $this->loadModel('pipeline')->getByID($jenkinsID);
         if($_POST)
         {
-            $this->jenkins->update($id);
+            $this->pipeline->update($jenkinsID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $newJenkins = $this->jenkins->getByID($id);
-            $actionID   = $this->loadModel('action')->create('jenkins', $id, 'edited');
+            $newJenkins = $this->pipeline->getByID($jenkinsID);
+            $actionID   = $this->loadModel('action')->create('jenkins', $jenkinsID, 'edited');
             $changes    = common::createChanges($jenkins, $newJenkins);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;
-
-        $this->view->jenkins    = $jenkins;
-
+        $this->view->title   = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;
+        $this->view->jenkins = $jenkins;
         $this->display();
     }
 
@@ -116,42 +113,31 @@ class jenkins extends control
      * 删除一条jenkins数据。
      * Delete a jenkins.
      *
-     * @param  int    $id
+     * @param  int    $jenkinsID
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete($jenkinsID)
     {
-        $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs)
-        {
-            $response['result']   = 'fail';
-            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->jenkins->error->linkedJob);
+        $jobs = $this->jenkins->getJobPairs($jenkinsID);
+        if(!empty($jobs)) return $this->sendError($this->lang->jenkins->error->linkedJob, true);
 
-            return $this->send($response);
-        }
-
-        $this->jenkins->delete(TABLE_PIPELINE, $id);
-
-        $response['load']   = $this->createLink('space', 'browse');
-        $response['result'] = 'success';
-
-        return $this->send($response);
+        $this->jenkins->delete(TABLE_PIPELINE, $jenkinsID);
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('space', 'browse')));
     }
 
     /**
+     * 获取Jenkins任务列表。
      * AJAX: Get jenkins tasks.
      *
-     * @param  int    $id
+     * @param  int    $jenkinsID
      * @access public
      * @return void
      */
-    public function ajaxGetJenkinsTasks($id = 0)
+    public function ajaxGetJenkinsTasks(int $jenkinsID = 0)
     {
-        $this->app->loadLang('job');
-
         $tasks = array();
-        if($id) $tasks = $this->jenkins->getTasks($id, 3);
+        if($jenkinsID) $tasks = $this->jenkins->getTasks($jenkinsID, 3);
 
         $this->view->tasks = $this->jenkinsZen->buildTree($tasks);
         $this->display();

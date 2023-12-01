@@ -160,7 +160,7 @@ class compileModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $jenkins         = $this->loadModel('jenkins')->getByID($job->server);
+            $jenkins         = $this->loadModel('pipeline')->getByID($job->server);
             $jenkinsUser     = $jenkins->account;
             $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
             $userPWD         = "$jenkinsUser:$jenkinsPassword";

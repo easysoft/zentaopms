@@ -1,70 +1,36 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of jenkins module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     product
- * @version     $Id: $
+ * @author      Yanyi Cao <caoyanyi@easycorp.com>
+ * @package     jenkins
  * @link        http://www.zentao.net
  */
 
 class jenkinsModel extends model
 {
     /**
-     * Get a jenkins by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-         return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
-     * Get jenkins list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList($orderBy = 'id_desc', $pager = null)
-    {
-         return $this->loadModel('pipeline')->getList('jenkins', $orderBy, $pager);
-    }
-
-    /**
-     * Get jenkins pairs
-     *
-     * @return array
-     */
-    public function getPairs()
-    {
-       return $this->loadModel('pipeline')->getPairs('jenkins');
-    }
-
-    /**
+     * 获取流水线列表。
      * Get jenkins tasks.
      *
-     * @param  int    $id
+     * @param  int    $jenkinsID
      * @param  int    $depth
      * @access public
      * @return array
      */
-    public function getTasks($id, $depth = 0)
+    public function getTasks(int $jenkinsID, int $depth = 0): array
     {
-        $jenkins = $this->getById($id);
+        $jenkins = $this->loadModel('pipeline')->getByID($jenkinsID);
 
         $jenkinsServer   = $jenkins->url;
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
 
         $userPWD  = "$jenkinsUser:$jenkinsPassword";
-        $response = common::http($jenkinsServer . '/api/json/items/list' . ($depth ? "?depth=1" : ''), '', array(CURLOPT_USERPWD => $userPWD), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false);
+        $response = common::http($jenkinsServer . '/api/json/items/list' . ($depth ? "?depth=1" : ''), '', array(CURLOPT_USERPWD => $userPWD));
         $response = json_decode($response);
 
         $tasks = array();
@@ -84,15 +50,16 @@ class jenkinsModel extends model
     }
 
     /**
+     * 根据深度获取流水线。
      * Get jobs by depth.
      *
-     * @param object $jobs
-     * @param string $userPWD
-     * @param int    $depth
+     * @param  object    $jobs
+     * @param  string    $userPWD
+     * @param  int       $depth
      * @access protected
      * @return array
      */
-    protected function getDepthJobs($jobs, $userPWD, $depth = 1)
+    protected function getDepthJobs(array $jobs, string $userPWD, int $depth = 1): array
     {
         if($depth > 4) return array();
 
@@ -102,7 +69,7 @@ class jenkinsModel extends model
             if(empty($job->url)) continue;
 
             $isJob = true;
-            if(stripos($job->_class, '.multibranch') !== false or stripos($job->_class, '.folder') !== false or stripos($job->_class, '.OrganizationFolder') !== false) $isJob = false;
+            if(stripos($job->_class, '.multibranch') !== false || stripos($job->_class, '.folder') !== false || stripos($job->_class, '.OrganizationFolder') !== false) $isJob = false;
             if(!empty($job->buildable) and $job->buildable == true) $isJob = true;
 
             if($isJob)
@@ -114,7 +81,7 @@ class jenkinsModel extends model
             {
                 if($depth > 1)
                 {
-                    $response = common::http($job->url . 'api/json', '', array(CURLOPT_USERPWD => $userPWD), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false);
+                    $response = common::http($job->url . 'api/json', '', array(CURLOPT_USERPWD => $userPWD));
                     $job = json_decode($response);
                 }
 
@@ -129,14 +96,19 @@ class jenkinsModel extends model
     }
 
     /**
-     * Update a jenkins.
+     * 获取Jenkins流水线。
+     * Get jobs by jenkins.
      *
-     * @param  int    $id
+     * @param  int    $jenkinsID
      * @access public
-     * @return bool
+     * @return array
      */
-    public function update($id)
+    public function getJobPairs(int $jenkinsID): array
     {
-       return $this->loadModel('pipeline')->update($id);
+        return $this->dao->select('id, name')->from(TABLE_JOB)
+            ->where('server')->eq($jenkinsID)
+            ->andWhere('engine')->eq('jenkins')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
     }
 }
