@@ -292,7 +292,7 @@ class cron extends control
         /* Get and parse crons. */
         $tasks = $this->dao->select('cron,MAX(`createdDate`) `datetime`')->from(TABLE_QUEUE)->groupBy('cron')->fetchAll('cron');
         $crons = $this->cron->getCrons('nostop');
-        foreach($crons as $index => $cron)
+        foreach($crons as $cron)
         {
             $cron->datetime = isset($tasks[$cron->id]) ? $tasks[$cron->id]->datetime : '1970-01-01';
         }
@@ -385,6 +385,7 @@ class cron extends control
                 parse_str($task->command, $params);
                 if(isset($params['moduleName']) and isset($params['methodName']))
                 {
+                    $this->app->loadLang($params['moduleName']);
                     $this->app->loadConfig($params['moduleName']);
                     $output = $this->fetch($params['moduleName'], $params['methodName']);
                 }
