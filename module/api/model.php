@@ -242,6 +242,7 @@ class apiModel extends model
     }
 
     /**
+     * 根据ID获取数据结构信息。
      * Get a struct info.
      *
      * @param  int          $id
@@ -250,14 +251,10 @@ class apiModel extends model
      */
     public function getStructByID(int $id): object|false
     {
-        $model = $this->dao->select('*')
-            ->from(TABLE_APISTRUCT)
-            ->where('id')->eq($id)
-            ->fetch();
+        $struct = $this->dao->select('*')->from(TABLE_APISTRUCT)->where('id')->eq($id)->fetch();
+        if($struct) $struct->attribute = json_decode($struct->attribute, true);
 
-        if($model) $model->attribute = json_decode($model->attribute, true);
-
-        return $model;
+        return $struct;
     }
 
     /**
