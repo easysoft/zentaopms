@@ -258,6 +258,7 @@ $star = (!empty($current->collector) and strpos($current->collector, ',' . $app-
 sidebar
 (
     set::width('25%'),
+    set::onToggle(jsRaw("window.handleSidebarToggle")),
     div
     (
         setClass('side'),
