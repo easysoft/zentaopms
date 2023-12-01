@@ -7,15 +7,15 @@ su('admin');
 /**
 
 title=测试 settingModel->snNeededUpdate();
+timeout=0
 cid=1
-pid=1
 
-测试sn值为空，返回true >> 1
-测试sn值为281602d8ff5ee7533eeafd26eda4e776，返回true >> 1
-测试sn值为9bed3108092c94a0db2b934a46268b4a，返回true >> 1
-测试sn值为8522dd4d76762a49d02261ddbe4ad432，返回true >> 1
-测试sn值为13593e340ee2bdffed640d0c4eed8bec，返回true >> 1
-测试sn值为error，返回false >> 0
+- 测试sn值为空，返回true @1
+- 测试sn值为281602d8ff5ee7533eeafd26eda4e776，返回true @1
+- 测试sn值为9bed3108092c94a0db2b934a46268b4a，返回true @1
+- 测试sn值为8522dd4d76762a49d02261ddbe4ad432，返回true @1
+- 测试sn值为13593e340ee2bdffed640d0c4eed8bec，返回true @1
+- 测试sn值为error，返回false @0
 
 */
 
