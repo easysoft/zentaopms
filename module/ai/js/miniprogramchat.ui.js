@@ -1,13 +1,16 @@
 if(!window.aiMiniProgramChat) window.aiMiniProgramChat = {};
 
+let firstGenerate = true;
+
 function getFormValue()
 {
     /**
      * @type {Map<string, string>}
      */
     const fieldValueMap = new Map();
-    fieldNames.forEach(name =>
+    fields.forEach(field =>
     {
+        const {name} = field;
         const $field = $(`[data-name="${name}"]`);
         if(!$field.hasClass('picker-box'))
         {
@@ -21,21 +24,78 @@ function getFormValue()
     return fieldValueMap;
 }
 
-function generatePrompt()
+/**
+ * Get required fields.
+ *
+ * @returns {string[]}
+ */
+function getRequiredFields()
+{
+    return fields
+        .filter(field => field.required === '1')
+        .map(field => field.name);
+}
+
+/**
+ * Generate prompt string.
+ *
+ * @param {Map<string, string>} fields
+ * @returns {string}
+ */
+function generatePrompt(fields)
 {
     let promptStr = prompt;
-    const map = getFormValue();
-    map.forEach((value, key) =>
+    fields.forEach((value, key) =>
     {
         promptStr = promptStr.replace(new RegExp(`\\s&lt;${key}&gt;\\s`, 'g'), value);
     });
     return promptStr;
 }
 
+/**
+ * Check required fields.
+ *
+ * @param {string[]} requiredFieldNames
+ * @param {Map<string, string>} fields
+ * @returns {true|string}
+ */
+function checkRequiredFields(requiredFieldNames, fields)
+{
+    for(const name of requiredFieldNames)
+    {
+        if(!fields.has(name) || !fields.get(name)) return name;
+    }
+    return true;
+}
+
+function clearErrorTip()
+{
+    $('.form-container').find('.has-error').removeClass('has-error');
+    $('.form-container').find('.form-tip').remove();
+}
+
 window.aiMiniProgramChat.startAIChat = function()
 {
-    const promptStr = generatePrompt();
+    clearErrorTip();
+    const fields = getFormValue();
+    const requiredFieldNames = getRequiredFields();
+    const result = checkRequiredFields(requiredFieldNames, fields);
+    if(typeof result === 'string')
+    {
+        const $formGroup = $('.form-container').find(`[data-name="${result}"]`).closest('.form-group');
+        $formGroup
+            .addClass('has-error')
+            .append(`<div class="form-tip">${emptyNameWarning.replace('%s', result)}</div>`);
+        return;
+    }
+
+    const promptStr = generatePrompt(fields);
     console.log(promptStr);
+    if(firstGenerate)
+    {
+        $(this).text(regenerateLang);
+        firstGenerate = false;
+    }
 };
 
 window.aiMiniProgramChat.handleStarBtnClick = function()
@@ -57,3 +117,16 @@ window.aiMiniProgramChat.handleStarBtnClick = function()
     }, 'json');
 };
 
+window.aiMiniProgramChat.handleRestBtnClick = function()
+{
+    try
+    {
+        $('.form-container .picker-box').each(function()
+        {
+            $(this).zui('picker').$.clear();
+        });
+        $('.form-container .form-group > input[data-name]').val('');
+        $('.form-container .form-group > textarea[data-name]').val('');
+    }
+    catch (error) {}
+}

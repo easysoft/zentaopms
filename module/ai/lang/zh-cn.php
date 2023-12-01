@@ -476,8 +476,8 @@ $lang->ai->miniPrograms->field->default = array(
     '作为一名 <角色> ，我希望在 <场景> 时，能 <目标> 。'
 );
 
-$lang->ai->miniPrograms->field->emptyNameWarning       = '『字段名称』不能为空';
-$lang->ai->miniPrograms->field->duplicatedNameWarning  = '『字段名称』重复';
+$lang->ai->miniPrograms->field->emptyNameWarning       = '「%s」不能为空';
+$lang->ai->miniPrograms->field->duplicatedNameWarning  = '「%s」重复';
 $lang->ai->miniPrograms->field->emptyOptionWarning     = '请至少配置一个选项';
 
 $lang->ai->miniPrograms->statuses = array(
@@ -493,6 +493,7 @@ $lang->ai->miniPrograms->promptTemplate     = '提词模板';
 $lang->ai->miniPrograms->fieldConfiguration = '字段配置';
 $lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
 $lang->ai->miniPrograms->generate           = '生成';
+$lang->ai->miniPrograms->regenerate         = '重新生成';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';

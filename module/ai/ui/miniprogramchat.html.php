@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('prompt', $miniProgram->prompt);
+jsVar('regenerateLang', $lang->ai->miniPrograms->regenerate);
+jsVar('emptyNameWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
 
 $formGroups = array();
-$fieldNames = array();
 foreach($fields as $field)
 {
     if($field->type === 'textarea')
@@ -51,11 +52,9 @@ foreach($fields as $field)
         set::required($field->required === '1'),
         $control
     );
-
-    $fieldNames[] = $field->name;
 }
 
-jsVar('fieldNames', $fieldNames);
+jsVar('fields', $fields);
 
 list($iconName, $iconTheme) = explode('-', $miniProgram->icon);
 $star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
@@ -106,9 +105,11 @@ div(
                     span($lang->ai->miniPrograms->modelList[$miniProgram->model]),
                 ),
                 btn(
+                    set::size('md'),
                     setClass('ghost'),
                     set::icon('trash'),
-                    $lang->ai->chatReset
+                    $lang->ai->chatReset,
+                    on::click('window.aiMiniProgramChat.handleRestBtnClick')
                 ),
             ),
             div(

@@ -248,7 +248,7 @@ function showFieldNameErrorIfExist($required, form)
     {
         $required
             .addClass('has-error')
-            .append(`<div class="text-danger help-text">${emptyWarning}</div>`);
+            .append(`<div class="text-danger help-text">${emptyWarning.replace('%s', name)}</div>`);
         return true;
     }
 
@@ -258,7 +258,7 @@ function showFieldNameErrorIfExist($required, form)
         {
             $required
                 .addClass('has-error')
-                .append(`<div class="text-danger help-text">${duplicatedWarning}</div>`);
+                .append(`<div class="text-danger help-text">${duplicatedWarning.replace('%s', name)}</div>`);
             return true;
         }
     }

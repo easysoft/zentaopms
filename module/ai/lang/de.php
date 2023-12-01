@@ -476,8 +476,8 @@ $lang->ai->miniPrograms->field->default = array(
     'As a <Role>, I hope to <Objective> in <Scene>.'
 );
 
-$lang->ai->miniPrograms->field->emptyNameWarning      = 'Field name cannot be empty';
-$lang->ai->miniPrograms->field->duplicatedNameWarning = 'Duplicate field name';
+$lang->ai->miniPrograms->field->emptyNameWarning      = '「%s」 cannot be empty';
+$lang->ai->miniPrograms->field->duplicatedNameWarning = 'Duplicate 「%s」';
 $lang->ai->miniPrograms->field->emptyOptionWarning    = 'Please configure at least one option';
 
 $lang->ai->miniPrograms->statuses = array(
@@ -493,6 +493,7 @@ $lang->ai->miniPrograms->promptTemplate     = 'Prompt template';
 $lang->ai->miniPrograms->fieldConfiguration = 'Field configuration';
 $lang->ai->miniPrograms->summary            = 'There are %s small programs on this page.';
 $lang->ai->miniPrograms->generate           = 'Generate';
+$lang->ai->miniPrograms->regenerate         = 'Regenerate';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
