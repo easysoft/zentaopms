@@ -412,7 +412,7 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' && !empty($release->build))
             {
-                $stories  = implode(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
+                $stories  = implode(',', $this->dao->select('id,stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchPairs('id', 'stories'));
                 $stories .= ',' . $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
                 $stories  = trim(str_replace(',,', ',', $stories), ',');
                 if(empty($stories)) continue;
@@ -510,6 +510,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
+        $this->loadModel('story')->setStage($storyID);
 
         return !dao::isError();
     }
@@ -536,7 +537,11 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+        foreach($storyIdList as $unlinkStoryID)
+        {
+            $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+            $this->loadModel('story')->setStage($unlinkStoryID);
+        }
 
         return !dao::isError();
     }
@@ -995,13 +1000,13 @@ class releaseModel extends model
      * Get the story list linked with the release.
      *
      * @param  string $storyIdList
-     * @param  int    $branch
+     * @param  string $branch
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStoryList(string $storyIdList, int $branch, string $orderBy = '', object $pager = null): array
+    public function getStoryList(string $storyIdList, string $branch, string $orderBy = '', object $pager = null): array
     {
         $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
@@ -1009,12 +1014,12 @@ class releaseModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!empty($storyIdList))->groupBy('t1.id')->fi()
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($branch)->fetchPairs('story', 'stage');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->in($branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         return $stories;

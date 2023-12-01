@@ -13,8 +13,6 @@ declare(strict_types=1);
 class admin extends control
 {
     /**
-     * 后台首页。
-     * Background homepage.
      *
      * @access public
      * @return void
@@ -57,7 +55,7 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
-        if(helper::isIntranet()) return $this->send(array('result' => 'fail'));
+        if(helper::isIntranet()) return $this->send(array('result' => 'ignore'));
 
         if($this->admin->checkInternet())
         {
@@ -261,7 +259,7 @@ class admin extends control
 
             $this->setting->setItem('system.common.closedFeatures', rtrim($closedFeatures, ','));
             $this->setting->setItem('system.common.global.scoreStatus', $data->module['myScore']);
-            $this->setting->setItem('system.custom.URAndSR', $data->module['productUR']);
+            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : $data->module['productUR']);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppMenu'));
         }

@@ -50,6 +50,8 @@ window.setStatistics = function(element, checkedIDList)
         {
             const task = row.data;
 
+            if(task.isParent == true) return true;
+
             if(!task.isParent)
             {
                 totalEstimate += Number(task.estimate);

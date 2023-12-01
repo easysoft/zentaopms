@@ -107,6 +107,21 @@ $('#showData').on('mouseenter', '.picker', function(e){
 
 $(function()
 {
+    $('#showData > tbody').addClass('load-indicator loading');
+    $.get(createLink('transfer', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pagerID=<?php echo $pagerID;?>'), function(data)
+    {
+        $('#showData > tbody').append(data);
+        if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
+        $('#showData tbody').find('.picker-select').picker({chosenMode: true});
+        $('.form-date').datetimepicker({minView: 2, format: "yyyy-mm-dd"});
+        $('.form-datetime').datetimepicker('update');
+        $('#showData > tbody').removeClass('load-indicator loading');
+
+        if($('#showData tr.text-top').length == allCount) $('#showData tfoot').removeClass('hidden');
+
+        if(typeof(getTbodyLoaded) == 'function') getTbodyLoaded();
+    })
+
     $.fixedTableHead('#showData');
     $("#showData th").each(function()
     {
@@ -114,5 +129,9 @@ $(function()
     });
 });
 
+function delItem(val)
+{
+    $(val).parents('tr').remove();
+}
 </script>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

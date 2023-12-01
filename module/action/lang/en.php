@@ -107,7 +107,7 @@ $lang->action->objectTypes['project']          = $lang->projectCommon;
 $lang->action->objectTypes['execution']        = $lang->executionCommon;
 $lang->action->objectTypes['task']             = 'Task';
 $lang->action->objectTypes['build']            = 'Build';
-$lang->action->objectTypes['job']              = 'Job';
+$lang->action->objectTypes['job']              = 'Pipeline';
 $lang->action->objectTypes['bug']              = 'Bug';
 $lang->action->objectTypes['case']             = 'Case';
 $lang->action->objectTypes['caseresult']       = 'Case Result';
@@ -167,7 +167,11 @@ $lang->action->objectTypes['privpackage']      = 'Priv Package';
 $lang->action->objectTypes['serverroom']       = 'IDC';
 $lang->action->objectTypes['account']          = 'Account';
 $lang->action->objectTypes['host']             = 'Host';
+$lang->action->objectTypes['deploy']           = 'Deploy';
+$lang->action->objectTypes['service']          = 'Service';
+$lang->action->objectTypes['domain']           = 'Domain';
 $lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
+$lang->action->objectTypes['prompt']           = 'Prompt';
 $lang->action->objectTypes['metric']           = 'Metric';
 
 /* Used to describe operation history. */
@@ -294,6 +298,10 @@ $lang->action->desc->releaseddoc = '$date, <strong>$actor</strong> released <str
 /* This parameter describes historical operations that are performed when a document is collected or uncollected. */
 $lang->action->desc->collected   = '$date, <strong>$actor</strong> collected <strong>$extra</strong>.' . "\n";
 $lang->action->desc->uncollected = '$date, <strong>$actor</strong> uncollected <strong>$extra</strong>.' . "\n";
+
+/* AI prompts related actions. */
+$lang->action->desc->published   = '$date, published by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->unpublished = '$date, unpublished by <strong>$actor</strong>.' . "\n";
 
 /* 用来描述应用的历史操作记录。*/
 $lang->action->desc->install                 = '$date, installed by <strong>$actor</strong>.' . "\n";
@@ -438,6 +446,7 @@ $lang->action->label->estimated               = 'estimated';
 $lang->action->label->reviewpassed            = 'Pass';
 $lang->action->label->reviewrejected          = 'Reject';
 $lang->action->label->reviewclarified         = 'Clarify';
+$lang->action->label->reviewreverted          = 'Revert';
 $lang->action->label->commitsummary           = 'Commit Summary';
 $lang->action->label->updatetrainee           = 'Update Trainee';
 $lang->action->label->setdefaultbranch        = 'Set default branch';
@@ -445,6 +454,7 @@ $lang->action->label->syncprogram             = 'start';
 $lang->action->label->syncproject             = 'start';
 $lang->action->label->syncexecution           = 'start';
 $lang->action->label->syncexecutionbychild    = 'start';
+$lang->action->label->syncmultipleproject     = 'start';
 $lang->action->label->startProgram            = '(The start of the project sets the status of the program as Ongoing)';
 $lang->action->label->createmr                = 'Merge Request Linked';
 $lang->action->label->deletemr                = 'Merge Request Unlinked';

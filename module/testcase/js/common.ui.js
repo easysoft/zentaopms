@@ -120,6 +120,8 @@ function onModuleChangedForBatch(event)
 function loadScenesForBatch(productID, moduleID, $currentRow)
 {
     let branchID = $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val();
+    if(!branchID) branchID = 0;
+
     let sceneLink = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID);
     $.getJSON(sceneLink, function(scenes)
     {
@@ -148,6 +150,8 @@ function loadScenesForBatch(productID, moduleID, $currentRow)
 function loadStoriesForBatch(productID, moduleID, num, $currentRow = null)
 {
     const branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
+    if(!branchID) branchID = 0;
+
     var storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
     $.getJSON(storyLink, function(stories)
     {

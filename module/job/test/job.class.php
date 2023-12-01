@@ -302,4 +302,21 @@ class jobTest
         return $array;
     }
 
+    /**
+     * Test Check parameterizedBuild.
+     *
+     * @param  string $url
+     * @param  string $userPWD
+     * @access public
+     * @return bool
+     */
+    public function checkParameterizedBuildTest(string $url, string $userPWD): bool
+    {
+        $checked = $this->objectModel->checkParameterizedBuild($url, $userPWD);
+
+        if(dao::isError()) return dao::getError();
+
+        return $checked;
+    }
+
 }

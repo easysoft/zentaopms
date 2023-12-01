@@ -3219,7 +3219,7 @@ class kanbanModel extends model
             dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
             return false;
         }
-        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress ? $this->post->progress : 0)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
     }
 
     /**

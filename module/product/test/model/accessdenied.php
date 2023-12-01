@@ -8,6 +8,8 @@ title=测试 productModel::accessDenied();
 timeout=0
 cid=1
 
+- 权限不足跳转 @fail
+
 */
 
 global $tester;

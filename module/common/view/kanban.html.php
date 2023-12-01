@@ -197,7 +197,7 @@ function renderProjectItem(item, $item)
         {
             $progress = $('<div class="ring"><span></span></div>').appendTo($item);
         }
-        var progress = Math.max(0, Math.min(100, Math.round(item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress || 0) : 0)));
+        var progress = Math.max(0, Math.min(100, Math.round(item.progress ? Math.round(item.progress || 0) : 0)));
         $progress.find('span').text(progress);
         $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
         $item.addClass('has-progress');

@@ -56,6 +56,7 @@ $lang->testtask->run              = 'Test Run ID';
 $lang->testtask->job              = 'Job';
 $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
+$lang->testtask->myInvolved       = 'Involved';
 
 $lang->testtask->viewAction     = "View Request";
 $lang->testtask->casesAction    = 'Browse Cases List';
@@ -74,6 +75,7 @@ $lang->testtask->execution         = $lang->execution->common;
 $lang->testtask->type              = 'Type';
 $lang->testtask->build             = 'Build';
 $lang->testtask->owner             = 'Owner';
+$lang->testtask->members           = 'Participant';
 $lang->testtask->executor          = 'Executor';
 $lang->testtask->execTime          = 'Exec Time';
 $lang->testtask->pri               = 'Priority';
@@ -200,6 +202,7 @@ $lang->testtask->report->charts['testTaskPerModule']    = 'Test Case Module';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'Test Case RunBy';
 
 $lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
+$lang->testtask->featureBar['browse']['myinvolved']  = $lang->testtask->myInvolved;
 $lang->testtask->featureBar['browse']['wait']        = $lang->testtask->wait;
 $lang->testtask->featureBar['browse']['doing']       = $lang->testtask->testing;
 $lang->testtask->featureBar['browse']['blocked']     = $lang->testtask->blocked;

@@ -21,7 +21,7 @@ $isProjectApp  = $this->app->tab == 'project';
 $currentModule = $isProjectApp ? 'project'  : 'testcase';
 $currentMethod = $isProjectApp ? 'testcase' : 'browse';
 $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
-$initModule    = isset($moduleID) ? (int)$moduleID : 0;
+$moduleID      = isset($moduleID) ? (int)$moduleID : 0;
 $rawMethod     = $app->rawMethod;
 $load          = $rawMethod !== 'browse' ? null : 'table';
 
@@ -194,7 +194,7 @@ if(!empty($productID))
     }
     if($canExportXmind)
     {
-        $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$initModule&branch=$branch");
+        $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch");
         $exportItems[] = array('text' => $lang->testcase->xmindExport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
     }
 
@@ -223,20 +223,20 @@ if(!empty($productID))
 $createItems = array();
 if($canCreateCase)
 {
-    $params = "productID={$productID}&branch={$branch}&moduleID={$initModule}";
+    $params = "productID={$productID}&branch={$branch}&moduleID={$moduleID}";
     if($app->tab == 'project') $params .= "&from=project&param={$projectID}";
     $createItems[] = array('text' => $lang->testcase->create, 'url' => createLink('testcase', 'create', $params), 'data-app' => $app->tab);
 }
 
 if($canBatchCreateCase)
 {
-    $link = createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+    $link = createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
     $createItems[] = array('text' => $lang->testcase->batchCreate, 'url' => $link, 'data-app' => $app->tab);
 }
 
 if($canCreateScene)
 {
-    $link = createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule");
+    $link = createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$moduleID");
     $createItems[] = array('text' => $lang->testcase->newScene, 'url' => $link, 'data-app' => $app->tab);
 }
 
@@ -318,7 +318,7 @@ if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'gro
         moduleMenu(set(array
         (
             'modules'     => $moduleTree,
-            'activeKey'   => $initModule,
+            'activeKey'   => $moduleID,
             'settingLink' => $settingLink,
             'closeLink'   => $closeLink
         )))

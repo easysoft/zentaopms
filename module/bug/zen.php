@@ -459,6 +459,12 @@ class bugZen extends bug
             $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
         }
 
+        if($execution and !$execution->multiple)
+        {
+            $this->config->bug->list->customCreateFields = str_replace('execution,', '', $this->config->bug->list->customCreateFields);
+            $this->config->bug->custom->createFields     = str_replace('execution,', '', $this->config->bug->custom->createFields);
+        }
+
         return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
     }
 
@@ -1250,13 +1256,22 @@ class bugZen extends bug
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
+        $cases = array();
+        if($bug->case)
+        {
+            $case  = $this->loadModel('testcase')->getByID($bug->case);
+            $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
+        }
+
+        $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
+
         $this->view->openedBuilds   = $openedBuilds;
         $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks      = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, (string)$bug->testtask);
-        $this->view->cases          = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $this->view->cases          = $cases;
         $this->view->users          = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->actions        = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->contactList    = $this->loadModel('user')->getContactLists();

@@ -104,6 +104,7 @@ function loadList(type, id, todoDefaultType, objectID)
     id = id ? id : '';
     var param = 'userID=' + userID + '&id=' + id;
     if(type == 'task') param += '&status=wait,doing';
+    if(type == 'risk') param += '&status=active,hangup';
 
     if(todoDefaultType && type == todoDefaultType && objectID != 0) param += '&objectID=' + objectID;
 

@@ -393,4 +393,53 @@ class backupModel extends model
         if(file_put_contents($summaryFile, json_encode($summary))) return true;
         return false;
     }
+
+    /**
+     * Get disk space.
+     *
+     * @param  int    $backupPath
+     * @access public
+     * @return string
+     */
+    public function getDiskSpace(string $backupPath): string
+    {
+        $nofile        = strpos($this->config->backup->setting, 'nofile') !== false;
+        $diskFreeSpace = disk_free_space($backupPath);
+        $backFileSize  = 0;
+
+        if(!$nofile)
+        {
+            $appRoot      = $this->app->getAppRoot();
+            $appRootSize  = $this->getDirSize($appRoot);
+            $backFileSize = $appRootSize - $this->getDirSize($appRoot . 'tmp') - $this->getDirSize($appRoot . 'www/data/course');
+        }
+
+        $backSqlSize = $this->dao->select('sum(data_length+index_length) as size')
+            ->from('information_schema.tables')
+            ->where('TABLE_SCHEMA')->eq($this->config->db->name)
+            ->groupBy('TABLE_SCHEMA')
+            ->fetch('size');
+
+        return $diskFreeSpace . ',' . ($backFileSize + $backSqlSize);
+    }
+
+    /**
+     * Get directory size.
+     *
+     * @param  string $dir
+     * @access public
+     * @return int
+     */
+    public function getDirSize(string $dir): string
+    {
+        if(!file_exists($dir)) return 0;
+        $totalSize = 0;
+        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS));
+
+        foreach($iterator as $file)
+        {
+            $totalSize += $file->getSize();
+        }
+        return $totalSize;
+    }
 }

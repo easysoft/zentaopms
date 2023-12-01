@@ -22,3 +22,20 @@ window.programMenuOnClick = function(data, url)
 {
     loadPage(url.replace('%d', data.item.key));
 };
+
+
+/**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    $('#productListForm [name^=productIDList]:checked').each(function(index, ele)
+    {
+        checkedItems.push($(ele).val());
+    });
+    return checkedItems;
+};

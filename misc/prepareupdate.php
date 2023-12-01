@@ -59,6 +59,7 @@ class prepareUpdate
         $this->internalZT->pmsProductID = '';
         $this->internalZT->bizProductID = '';
         $this->internalZT->maxProductID = '';
+        $this->internalZT->ipdProductID = '';
 
         $this->getLatestVersion();
     }
@@ -102,7 +103,7 @@ class prepareUpdate
     public function getRelatedStoriesAndBugs()
     {
         $latestReleases = $this->getLatestRelease();
-        $title          = array('pms' => '开源版：', 'biz' => '企业版：', 'max' => '旗舰版：');
+        $title          = array('pms' => '开源版：', 'biz' => '企业版：', 'max' => '旗舰版：', 'ipd' => 'IPD版：');
 
         $releaseHeader = date('Y-m-d') . ' ' . $this->internalZT->pmsVersion . "\n";
         $doneStories   = "完成的需求\n";
@@ -117,12 +118,14 @@ class prepareUpdate
             foreach($stories as $storyID)
             {
                 $storyTitle   = $this->getStoryOrBugTitle('story', $storyID);
+                $storyTitle   = htmlspecialchars_decode($storyTitle);
                 $doneStories .= $storyTitle ? $storyID . ' ' . $storyTitle . "\n" : '';
             }
 
             foreach($bugs as $bugID)
             {
                 $bugTitle   = $this->getStoryOrBugTitle('bug', $bugID);
+                $bugTitle   = htmlspecialchars_decode($bugTitle);
                 $fixedBugs .= $bugTitle ? $bugID . ' ' . $bugTitle . "\n" : '';
             }
         }
@@ -166,21 +169,21 @@ class prepareUpdate
     }
 
     /**
-     * Get last max version.
+     * Get last ipd version.
      *
-     * @param  object  $lastMaxRelease
+     * @param  object  $lastIPDRelease
      * @access public
      * @return array
      */
-    public function getLastMaxVersion($lastMaxRelease)
+    public function getLastIPDVersion($lastIPDRelease)
     {
-        $releaseParse = explode(' ', $lastMaxRelease->name);
-        $this->internalZT->lastMaxVersion   = str_replace('.stable', '', $releaseParse[1]);
-        $this->internalZT->lastMaxVersionAB = str_replace('.', '_', $this->internalZT->lastMaxVersion);
+        $releaseParse = explode(' ', $lastIPDRelease->name);
+        $this->internalZT->lastIPDVersion   = str_replace('.stable', '', $releaseParse[1]);
+        $this->internalZT->lastIPDVersionAB = str_replace('.', '_', $this->internalZT->lastIPDVersion);
     }
 
     /**
-     * Get pms, biz and max latest release.
+     * Get pms, biz, max and ipd latest release.
      *
      * @access public
      * @return array
@@ -195,9 +198,12 @@ class prepareUpdate
 
         $maxReleases      = $this->getReleases($this->internalZT->maxProductID);
         $maxLatestRelease = current($maxReleases);
-        $this->getLastMaxVersion($maxReleases[1]);
 
-        return array('pms' => $pmsLatestRelease, 'biz' => $bizLatestRelease, 'max' => $maxLatestRelease);
+        $ipdReleases      = $this->getReleases($this->internalZT->ipdProductID);
+        $ipdLatestRelease = current($ipdReleases);
+        $this->getLastIPDVersion($ipdReleases[1]);
+
+        return array('pms' => $pmsLatestRelease, 'biz' => $bizLatestRelease, 'max' => $maxLatestRelease, 'ipd' => $ipdLatestRelease);
     }
 
     /**
@@ -250,10 +256,9 @@ class prepareUpdate
         $detail = '';
         foreach($releases as $product => $release) $detail .= $release->desc;
 
-        `sed -i "s/\/\* Release Date. \*\/$/\/* Release Date. *\/\\n\\\$lang->misc->releaseDate['{$this->internalZT->pmsVersion}']        = '$date';/" ../module/misc/lang/zh-cn.php`;
-        `sed -i "s/\/\* Release Detail. \*\/$/\/* Release Detail. *\/\\n\\\$lang->misc->feature->all['{$this->internalZT->pmsVersion}'][]       = array('title' => '$detail', 'desc' => '');/" ../module/misc/lang/zh-cn.php`;
+        foreach(array('de', 'fr', 'en', 'zh-cn') as $lang) `sed -i "s/\/\* Release Date. \*\/$/\/* Release Date. *\/\\n\\\$lang->misc->releaseDate['{$this->internalZT->pmsVersion}']        = '$date';/" ../module/misc/lang/$lang.php`;
 
-        /* Other lang. */
+        `sed -i "s/\/\* Release Detail. \*\/$/\/* Release Detail. *\/\\n\\\$lang->misc->feature->all['{$this->internalZT->pmsVersion}'][]       = array('title' => '$detail', 'desc' => '');/" ../module/misc/lang/zh-cn.php`;
     }
 
     /**
@@ -265,8 +270,9 @@ class prepareUpdate
     public function addLastVersion()
     {
         `sed -i "s/ \/\/ pms insert position\.$/\\n\\\$lang->upgrade->fromVersions['{$this->internalZT->pmsVersionAB}']       = '{$this->internalZT->pmsVersion}'; \/\/ pms insert position\./" ../module/upgrade/lang/version.php`;
-        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$lang->upgrade->fromVersions['biz{$this->internalZT->bizVersionAB}']       = 'Biz{$this->internalZT->bizVersion}'; \/\/ biz insert position\./" ../module/upgrade/lang/version.php`;
-        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->lastMaxVersionAB}']       = 'Max{$this->internalZT->lastMaxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
+        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$lang->upgrade->fromVersions['biz{$this->internalZT->bizVersionAB}']        = 'Biz{$this->internalZT->bizVersion}'; \/\/ biz insert position\./" ../module/upgrade/lang/version.php`;
+        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$lang->upgrade->fromVersions['max{$this->internalZT->maxVersionAB}']        = 'Max{$this->internalZT->maxVersion}'; \/\/ max insert position\./" ../module/upgrade/lang/version.php`;
+        `sed -i "s/ \/\/ ipd insert position\.$/\\n\\\$lang->upgrade->fromVersions['ipd{$this->internalZT->lastIPDVersionAB}']        = 'Ipd{$this->internalZT->lastIPDVersion}'; \/\/ ipd insert position\./" ../module/upgrade/lang/version.php`;
     }
 
     /**
@@ -277,8 +283,9 @@ class prepareUpdate
      */
     public function addVersionCorrespondence()
     {
-        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$config->upgrade->bizVersion['biz{$this->internalZT->bizVersionAB}']       = '{$this->internalZT->pmsVersionAB}'; \/\/ biz insert position\./" ../module/upgrade/config.php`;
-        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$config->upgrade->maxVersion['max{$this->internalZT->maxVersionAB}']       = '{$this->internalZT->pmsVersionAB}'; \/\/ max insert position\./" ../module/upgrade/config.php`;
+        `sed -i "s/ \/\/ biz insert position\.$/\\n\\\$config->upgrade->bizVersion['biz{$this->internalZT->bizVersionAB}']        = '{$this->internalZT->pmsVersionAB}'; \/\/ biz insert position\./" ../module/upgrade/config.php`;
+        `sed -i "s/ \/\/ max insert position\.$/\\n\\\$config->upgrade->maxVersion['max{$this->internalZT->maxVersionAB}']        = '{$this->internalZT->pmsVersionAB}'; \/\/ max insert position\./" ../module/upgrade/config.php`;
+        `sed -i "s/ \/\/ ipd insert position\.$/\\n\\\$config->upgrade->ipdVersion['ipd{$this->internalZT->ipdVersionAB}']        = '{$this->internalZT->pmsVersionAB}'; \/\/ ipd insert position\./" ../module/upgrade/config.php`;
     }
 
     /**

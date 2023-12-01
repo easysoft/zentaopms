@@ -13,9 +13,14 @@
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
 <?php if(isset($project) and $project->model == 'ipd') js::set('reviewPoints', json_encode($reviewPoints));?>
+<?php js::set('projectID', $projectID);?>
 <style>
 .submitBtn{display:none}
 .gantt_row_task:hover .submitBtn{ display: inline-block;}
+.editDeadline {display: none; line-height: normal !important; padding: 2px 6px; color: #fff !important;}
+td:hover > .editDeadline {display: inline-block !important;}
+.gantt_tree_content table {width: 100%;}
+.gantt_tree_content table td {padding: 0 !important;}
 #ganttView {height: 600px;}
 #mainContent:before {background: #fff;}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
@@ -26,7 +31,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 .gantt_link_arrow_right {border-left-color: #2196F3;}
 .gantt_link_arrow_left {border-right-color: #2196F3;}
-.icon-confirm {color: #18a6fd}
+.icon-confirm {color: #18a6fd; font-size: 18px;}
+.icon-seal{font-size: 18px;}
 .gantt_task_link .gantt_line_wrapper div{background-color: #2196F3;}
 .gantt_critical_link .gantt_line_wrapper>div {background-color: #e63030 !important;}
 .gantt_critical_link.start_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
@@ -79,6 +85,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent > .pull-left > .btn-group > a > .text{overflow: hidden;display: block;}
 #mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
 .pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
+#ganttView .gantt_resizer{min-width: unset !important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -88,11 +95,12 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <?php js::set('zooming', isset($zooming) ? $zooming : 'day');?>
+<?php js::set('canEditDeadline', common::hasPriv('review', 'edit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group'>
-      <?php if($project->stageBy == 'product'):?>
+      <?php if(!empty($project->division)):?>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -249,7 +257,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
 
     var ganttRowHeight = $ganttView.find('.gantt_row').first().outerHeight() || 25;
-    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($stages['data'])?> * ganttRowHeight;
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($plans['data'])?> * ganttRowHeight;
     <?php if($selectCustom == 'task'):?>
     var ganttWidth  = $ganttDridData.width() - 100;
     <?php else:?>
@@ -490,7 +498,7 @@ function validateResources(id)
     flag = true;
 
     /* Check status. */
-    if(status !== statusLang)
+    if(status !== statusLang && type != 'point')
     {
         if(type == 'task')
         {
@@ -508,9 +516,27 @@ function validateResources(id)
         return false;
     }
 
+    task.begin    = from;
+    task.deadline = (new Date(to.valueOf() - 1));;
+
+    gantt.updateTask(task.id);
+    var itemID;
+    if(type == 'task')
+    {
+        itemID = task.id.split("-")[1];
+    }
+    else if(type == 'plan')
+    {
+        itemID = task.id;
+    }
+    else if(type == 'point')
+    {
+        itemID = task.id.split("-")[2];
+    }
+
     /* Check data. */
     var postData = {
-        'id'        : type == 'task' ? task.id.split("-")[1] : task.id,
+        'id'        : itemID,
         'startDate' : from.toLocaleDateString('en-CA'),
         'endDate'   : to.toLocaleDateString('en-CA'),
         'type'      : type
@@ -551,7 +577,7 @@ $(function()
         $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
-    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($stages));?>);
+    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
     if(!ganttData.data) ganttData.data = [];
 
     <?php
@@ -569,13 +595,13 @@ $(function()
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
-    gantt.config.readonly            = canGanttEdit;
+    gantt.config.readonly            = canGanttEdit ? false : true;
     gantt.config.details_on_dblclick = false;
-    gantt.config.order_branch        = ganttType == 'assignedTo';
+    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : true;
     gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
-    gantt.config.drag_move           = ganttType == 'assignedTo';
-    gantt.config.drag_resize         = ganttType == 'assignedTo';
+    gantt.config.drag_move           = ganttType == 'assignedTo' ? false : true;
+    gantt.config.drag_resize         = ganttType == 'assignedTo' ? false : true;
     gantt.config.smart_rendering     = true;
     gantt.config.smart_scales        = true;
     gantt.config.static_background   = true;
@@ -590,10 +616,10 @@ $(function()
     gantt.config.columns = [];
     gantt.config.columns.push({name: 'text', width: '*', tree: true, resize: true, min_width:120, width:200});
     gantt.config.columns.push({name:"custom", label:"", align: "left", width: 40, template: getSubmitBtn});
-    if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'center', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
+    if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'left', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
     if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
-    gantt.config.columns.push({name: 'start_date', align: 'center', resize: true, width: 80});
-    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 80});
+    gantt.config.columns.push({name: 'begin', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'deadline', align: 'center', resize: true, width: 140, template: getDeadlineBtn});
     gantt.config.columns.push({name: 'duration', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('estimate') != -1) gantt.config.columns.push({name: 'estimate', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan){ if(plan.percent) return Math.round(plan.percent) + '%';}});
@@ -603,6 +629,13 @@ $(function()
     if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
+
+    function getDeadlineBtn(task)
+    {
+        var date = task.deadline;
+        if(task.type == 'point' && canEditDeadline && (!task.rawStatus || task.rawStatus == 'fail' || task.rawStatus == 'draft')) return "<table><tr><td><span class='deadline'>" + gridDateToStr(new Date(date.valueOf())) + '</span> <a class="btn btn-primary editDeadline" title="<?php echo $lang->programplan->edit;?>"><i class="icon-common-edit icon-edit"></i> <?php echo $lang->programplan->edit;?></a></td></tr></table>';
+        return date;
+    }
 
     function getSubmitBtn(task)
     {
@@ -636,7 +669,9 @@ $(function()
     gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
+    gantt.locale.labels.column_begin        = "<?php echo $lang->programplan->begin;?>";
     gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->begin;?>";
+    gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
     gantt.locale.labels.column_end_date     = "<?php echo $lang->programplan->end;?>";
     gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
     gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
@@ -659,7 +694,6 @@ $(function()
     });
 
     gantt.templates.task_class     = function(start, end, task){return 'pri-' + (task.pri || 0);};
-
     gantt.templates.rightside_text = function(start, end, task)
     {
         if(typeof task.owner_id == 'undefined') return;
@@ -756,11 +790,61 @@ $(function()
     var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
-        if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
+        var editBtn = $(e.srcElement);
+        if(editBtn.hasClass('icon-common-edit'))
+        {
+           editBtn = editBtn.parent();
+        }
+        if(editBtn.hasClass('editDeadline'))
+        {
+           var parentID     = id.split("-")[0];
+           var stageEndDate = $("div[data-task-id='" + parentID + "']").find('div[data-column-name="end_date"] > .gantt_tree_content').text();
+           var reviewID     = id;
+           var deadlineDate = editBtn.prev().text();
+
+           editBtn.datetimepicker(
+           {
+               weekStart: 1,
+               todayBtn:  1,
+               autoclose: 1,
+               todayHighlight: 1,
+               startView: 2,
+               minView: 2,
+               forceParse: 0,
+               format: "yyyy-mm-dd",
+               startDate: new Date(),
+               endDate: new Date(stageEndDate),
+               initialDate: new Date(deadlineDate),
+           })
+           .on('changeDate', function(ev){
+               var year  = ev.date.getFullYear();
+               var month = ev.date.getMonth() + 1;
+               var day   = ev.date.getUTCDate();
+               var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+
+               $.post(createLink('review', 'ajaxChangeTRDeadline'), {'deadline' : formattedDate, 'id' : reviewID , 'projectID' : projectID}, function()
+               {
+                  location.reload();
+               });
+
+           })
+           .on('show', function(){
+               editBtn.css('display', 'inline-block');
+           })
+           .on('hide', function(){
+               editBtn.css('display', 'none');
+           });
+           editBtn.datetimepicker('show');
+           return false;
+        }
+
+        if(editBtn.hasClass('gantt_close') || editBtn.hasClass('gantt_open')) return false;
+
         var task = gantt.getTask(id);
         if(task.type == 'point' && task.rawStatus) location.href = createLink('review', 'view', 'reviewID=' + task.reviewID);
-        if(task.type == 'plan')                    window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
-        if($(e.srcElement).hasClass('icon-confirm'))
+        if(task.type == 'plan' && !task.isParent)  window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
+
+        if(editBtn.hasClass('icon-confirm'))
         {
             var pointAttr = JSON.parse(reviewPoints);
             var category  = id.split("-")[1];
@@ -778,6 +862,7 @@ $(function()
                 location.href = createLink('review', 'create', 'projectID=' + projectID);
             }
         }
+
         if(ganttType == 'assignedTo')
         {
             taskID = id;
@@ -858,6 +943,13 @@ $(function()
     gantt.attachEvent("onBeforeTaskChanged", function(id, mode, task)
     {
         return validateResources(id);
+    });
+
+    gantt.attachEvent("onRowDragStart", function(id, target, e) {
+        //any custom logic here
+        var task = gantt.getTask(id);
+        if(task.type != 'task') return false;
+        return true;
     });
 });
 </script>

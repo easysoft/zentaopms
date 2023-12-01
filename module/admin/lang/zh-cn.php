@@ -159,7 +159,7 @@ $lang->admin->safe->resetPWDList[0] = '关闭';
 $lang->admin->safe->noticeMode     = '系统会在创建和修改用户、修改密码的时候检查用户口令。';
 $lang->admin->safe->noticeWeakMode = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
 $lang->admin->safe->noticeStrong   = '密码长度越长，含有大写字母或数字或特殊符号越多，密码字母越不重复，安全度越强！';
-$lang->admin->safe->noticeGd       = '系统检测到您的服务器未安装GD模块，无法使用验证码功能，请安装后使用。';
+$lang->admin->safe->noticeGd       = '系统检测到您的服务器未安装GD模块或未启用FreeType支持，无法使用验证码功能，请安装后使用。';
 
 $lang->admin->menuSetting['system']['name']    = '系统设置';
 $lang->admin->menuSetting['system']['desc']    = '备份、聊天、安全等系统各要素配置。';
@@ -183,6 +183,8 @@ $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
 $lang->admin->menuSetting['platform']['name']  = 'DevOps设置';
 $lang->admin->menuSetting['platform']['desc']  = '资源、环境等DevOps各要素配置。';
+$lang->admin->menuSetting['ai']['name']        = 'AI 配置';
+$lang->admin->menuSetting['ai']['desc']        = '支持配置与管理AI提词、AI小程序及大语言模型。';
 
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
@@ -193,6 +195,7 @@ $lang->admin->noPriv           = '您没有访问该区块的权限。';
 $lang->admin->openTag = '禅道';
 $lang->admin->bizTag  = '禅道企业版';
 $lang->admin->maxTag  = '禅道旗舰版';
+$lang->admin->ipdTag  = '禅道IPD版';
 
 $lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
 $lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
@@ -205,5 +208,10 @@ $lang->admin->productFeature['max'][] = '120+概念，全面覆盖瀑布管理�
 $lang->admin->productFeature['max'][] = '项目管理可视化，精准掌控项目进度';
 $lang->admin->productFeature['max'][] = '资产库管理，为项目提供数据支撑';
 $lang->admin->productFeature['max'][] = '严格权限控制，方式灵活安全';
+
+$lang->admin->ai = new stdclass();
+$lang->admin->ai->model        = '语言模型';
+$lang->admin->ai->conversation = '会话';
+$lang->admin->ai->prompt       = '提词';
 
 include dirname(__FILE__) . '/menu.php';

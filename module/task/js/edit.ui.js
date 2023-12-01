@@ -194,8 +194,15 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 
     if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
-        zui.Modal.alert(totalLeftError);
-        return false;
+        if(confirm(confirmRecord))
+        {
+            const statusPicker = $('input[name="status"]').closest('.picker').zui('picker');
+            statusPicker.$.setValue('done');
+        }
+        else
+        {
+            return false;
+        }
     }
 
     $('#estimate').val(totalEstimate);

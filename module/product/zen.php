@@ -434,8 +434,10 @@ class productZen extends product
         {
             $product->line              = zget($lines, $product->line, '');
             $product->manager           = zget($users, $product->PO, '');
+            $product->changedStories    = (int)$product->changingStories;
             $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
             $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
+            $product->unResolvedBugs    = (int)$product->unresolvedBugs;
             $product->program           = $product->programName;
         }
 
@@ -999,7 +1001,7 @@ class productZen extends product
             $this->products = $this->product->getProducts($projectID, 'all', '', false);
 
             if($browseType == 'bybranch') $param = $branchID;
-            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $storyType, '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $storyType, '', '', $pager);
         }
         else
         {

@@ -101,6 +101,11 @@ class actionZen extends action
                 $methodName = 'setSQL';
                 $params     = "id={$trash->objectID}";
             }
+            if($module == 'deploystep')
+            {
+                $module     = 'deploy';
+                $methodName = 'viewStep';
+            }
             if($trash->objectType == 'api')
             {
                 $params     = "libID=0&moduelID=0&apiID={$trash->objectID}";

@@ -165,7 +165,7 @@ panel
                     (
                         set::label(''),
                         button(setClass('btn primary'), set::type('submit'), $lang->save),
-                        $mode == 'edit' ? button
+                        ($mode == 'edit' && common::hasPriv('my', 'deleteContacts')) ? button
                         (
                             setClass('btn ajax-submit ml-4'),
                             setData('url', createLink('my', 'deleteContacts', "listID=$listID")),

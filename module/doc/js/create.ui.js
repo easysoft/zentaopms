@@ -23,8 +23,16 @@ $(function()
 
 window.loadExecutions = function(e)
 {
-    const projectID = e.target.value;
-    const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+    const projectID   = e.target.value;
+    const executionID = $('#execution').val();
+    if(executionID)
+    {
+        const link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+    }
+    else
+    {
+        const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+    }
     $.get(link, function(data)
     {
         data = JSON.parse(data);

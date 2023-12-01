@@ -1,12 +1,12 @@
 <?php
 /**
- * The action->dynamic view file of dashboard module of ZenTaoPMS.
+ * The dynamic view file of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     dashboard
- * @version     $Id: action->dynamic.html.php 1477 2011-03-01 15:25:50Z wwccss $
+ * @package     user
+ * @version     $Id: dynamic.html.php 1477 2011-03-01 15:25:50Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>
@@ -23,7 +23,7 @@
     if($period == $type)
     {
         $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        $label .= " <span class='label label-light label-badge'>{$recTotal}</span>";
     }
     echo html::a(inlink('dynamic', "userID={$user->id}&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
@@ -76,8 +76,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "userID={$user->id}&type=$type&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "userID={$user->id}&type=$type&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "userID={$user->id}&type=$type&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "userID={$user->id}&type=$type&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

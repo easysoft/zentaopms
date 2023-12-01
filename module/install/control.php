@@ -21,7 +21,7 @@ class install extends control
     {
         parent::__construct();
 
-        if(!$this->app->installing && $this->app->tab != 'devops') helper::end();
+        if(!$this->app->installing && $this->app->tab != 'devops' && !isInModal()) helper::end();
 
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
@@ -144,6 +144,8 @@ class install extends control
         if(getenv('MYSQL_DB'))       $dbName     = getenv('MYSQL_DB');
         if(getenv('MYSQL_USER'))     $dbUser     = getenv('MYSQL_USER');
         if(getenv('MYSQL_PASSWORD')) $dbPassword = getenv('MYSQL_PASSWORD');
+
+        if($this->config->edition == 'ipd') unset($this->lang->install->dbDriverList['dm']);
 
         $this->view->title = $this->lang->install->setConfig;
 
@@ -349,14 +351,12 @@ class install extends control
             $this->setting->setItem('system.common.safe.changeWeak', '1');
             $this->setting->setItem('system.common.global.cron', '1');
 
-            $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
-            if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
-            if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
-            if(strpos($this->app->getClientLang(), 'zh') === 0) $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, "{$httpType}://{$_SERVER['HTTP_HOST']}" . $this->app->config->webRoot . 'api.php/v1', '16.0');
-
             if($this->config->edition != 'open') $this->loadModel('upgrade')->processDataset();
 
+            $this->loadModel('metric')->updateMetricDate();
+
             $link = $this->config->inQuickon ? inlink('app') : inlink('step6');
+
             return $this->send(array('result' => 'success', 'load' => $link));
         }
 

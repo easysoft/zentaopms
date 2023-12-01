@@ -186,9 +186,9 @@ div
                         set::items($lang->admin->safe->loginCaptchaList),
                         set::value(isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0),
                         set::inline(true),
-                        set::disabled(!extension_loaded('gd'))
+                        set::disabled(!extension_loaded('gd') || empty($gdInfo['FreeType Support']))
                     ),
-                    !extension_loaded('gd') ? span
+                    (!extension_loaded('gd') || empty($gdInfo['FreeType Support'])) ? span
                     (
                         setClass('flex items-center ml-8 text-gray'),
                         icon

@@ -44,6 +44,10 @@ class commonModel extends model
     {
         global $app;
         $rawModule = $app->rawModule;
+        $rawMethod = strtolower($app->rawMethod);
+
+        if($rawModule == 'marketresearch' and strpos($rawMethod, 'task') !== false)  $rawModule = 'task';
+        if($rawModule == 'marketresearch' and strpos($rawMethod, 'stage') !== false) $rawModule = 'execution';
 
         if($rawModule == 'task' or $rawModule == 'effort')
         {
@@ -323,6 +327,7 @@ class commonModel extends model
 
         $required   = $app->dbQuery("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
         $fields     = $app->control->loadModel('flow')->getExtendFields($module, $method);
+        $fields     = (new self())->loadModel('flow')->getExtendFields($module, $method);
         $formConfig = array();
         $type       = 'string';
         foreach($fields as $fieldObject)
@@ -540,6 +545,9 @@ class commonModel extends model
 
         $app->loadLang('my');
 
+        /* Ensure user has latest rights set. */
+        $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
+
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
 
@@ -579,6 +587,27 @@ class commonModel extends model
 
             /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
             if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
+
+            /* Check whether the homeMenu of this group have permissions. If yes, point to them. */
+            if($display == false and isset($lang->$group->homeMenu))
+            {
+                foreach($lang->$group->homeMenu as $menu)
+                {
+                    if(!isset($menu['link'])) continue;
+
+                    $linkPart = explode('|', $menu['link']);
+                    if(count($linkPart) < 3) continue;
+                    list($label, $module, $method) = $linkPart;
+
+                    if(common::hasPriv($module, $method))
+                    {
+                        $display       = true;
+                        $currentModule = $module;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break;
+                    }
+                }
+            }
 
             if(!$display) continue;
 
@@ -754,7 +783,7 @@ class commonModel extends model
             if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
             if(in_array($check, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
 
-            if(isset($old->$key))
+            if(isset($old->$key) && is_string($old->$key))
             {
                 if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
 
@@ -1142,7 +1171,8 @@ class commonModel extends model
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module    = $this->app->getModuleName();
-        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
+
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**
@@ -1175,6 +1205,7 @@ class commonModel extends model
         $method = strtolower($method);
         parse_str($vars, $params);
 
+        if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($app->user)) return false;
         list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
 
@@ -1464,7 +1495,10 @@ class commonModel extends model
             $itemsPinYin     = explode(trim($sign), $convertedPinYin);
             foreach($notConvertedItems as $item)
             {
-                $itemPinYin  = array_shift($itemsPinYin);
+                $key        = key($itemsPinYin);
+                $itemPinYin = $itemsPinYin[$key];
+                unset($itemsPinYin[$key]);
+
                 $wordsPinYin = explode("\t", trim($itemPinYin));
 
                 $abbr = '';
@@ -2338,6 +2372,23 @@ class commonModel extends model
 
         return $duration;
     }
+
+    /**
+     * Check object priv.
+     *
+     * @param  string   $objectType program|project|product|execution
+     * @param  int      $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivByObject(string $objectType, int $objectID): bool
+    {
+        $objectType = strtolower($objectType);
+        if(in_array($objectType, array('program', 'project', 'product', 'execution'))) return $this->loadModel($objectType)->checkPriv($objectID);
+
+        return false;
+    }
+
 }
 
 class common extends commonModel

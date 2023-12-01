@@ -443,16 +443,20 @@ class testcaseModel extends model
      *
      * @param  int       $productID
      * @param  int|array $branch
+     * @param  string    $search
+     * @param  int       $limit
      * @access public
      * @return array
      */
-    public function getPairsByProduct(int $productID, int|array $branch = 0): array
+    public function getPairsByProduct(int $productID, int|array $branch = 0, string $search = '', int $limit = 0): array
     {
         return $this->dao->select("id, concat_ws(':', id, title) as title")->from(TABLE_CASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->orderBy('id_desc')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchPairs();
     }
 

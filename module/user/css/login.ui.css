@@ -1,27 +1,40 @@
 body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); background-color: #1183fb;}
 #main {min-height:0px;}
-#login {max-width: 600px !important; margin: 0 auto; margin-top: 5%; padding: 0 48px;}
+#login {max-width: 720px !important; margin: 0 auto; margin-top: 5%; padding: 0 40px;}
 #loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
-#loginPanel > .header {padding: 20px; border-bottom: 1px #eee solid; position: relative;}
-#loginPanel > .header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: 83%;}
-#loginPanel > .header > .actions {position: absolute; right: 20px; top: 20px;}
+#loginPanel .header {position: relative;}
+#loginPanel .header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: calc(100% - 90px); display: inline-block;}
+
+#logo-box {background-size: cover; background-position: center; position: relative;}
+#login-logo, #login-ai {position: absolute; left: 50%; transform: translateX(-50%);}
+
+#loginBox {padding: 24px 40px 0 40px;}
+
 #loginPanel > .footer {background: #eee; padding: 20px; color: #838a9d;}
 #loginPanel > .footer a {display: inline-block; margin-left: 5px; color: var(--color-gray-900);}
 #loginPanel > .footer a:hover {color: var(--color-primary-500);}
-#loginPanel > .loginBody {margin: 20px 0;}
+#loginPanel > .loginBody {align-items: stretch;}
 #loginPanel > .loginBody .loginExpired {margin-bottom: 8px;}
-#loginPanel form {margin-right: 40px;}
 #login #info {margin-top: 10px; color: #fff; text-align:center;}
 #login #info a {display: inline-block; margin-left: 5px;}
 .actions.btn {min-width: 0; width: 85px;}
 .langsDropMenu.dropdown-menu {min-width: 85px;}
+#langs-toggle {float: right; position: absolute; right: 0;}
+
+#loginForm {margin: 32px 0 20px 0;}
+#loginOptions {position: relative;}
+#keepLogin {display: inline-block; vertical-align: middle;}
+.resetPassword {position: absolute; top: 50%; right: 0; transform: translateY(-50%); color: var(--color-fore);}
+
+.form-actions {padding-bottom: 0 !important;}
+.form-actions > button {width: 100%; margin-top: 28px;}
 
 .form-actions .btn {min-width: unset;}
 .form-actions .resetPassword {box-shadow: unset; background-color: unset; color: unset;}
 .form-actions .resetPassword:before {background-color: unset;}
 
-#logo-box img {margin-left: 40px; width: 130px;}
 .captchaBox .input-group-addon {width: 110px; padding: 0px;}
+input[name="captcha"] {border-bottom-right-radius: var(--radius-none) !important; border-top-right-radius: var(--radius-none) !important;}
 
 .showNotice {color: yellow;}
 .showNotice:hover {color: yellow;}

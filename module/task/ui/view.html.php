@@ -148,7 +148,7 @@ foreach($linkMRTitles as $MRID => $linkMRTitle)
     (
         set::href(createLink('mr', 'view', "MRID=$MRID")),
         "#$MRID $linkMRTitle",
-        setData(array('ap' => $app->tab))
+        setData(array('app' => $app->tab))
     ) : div("#$MRID $linkMRTitle");
 }
 
@@ -161,7 +161,7 @@ foreach($linkCommits as $commit)
     (
         set::href(createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}")),
         "#$MRID $linkMRTitle",
-        setData(array('ap' => $app->tab))
+        setData(array('app' => $app->tab))
     ) : div($revision . ' ' . $commit->comment);
 }
 

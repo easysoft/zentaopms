@@ -534,7 +534,7 @@ class searchModel extends model
             ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
-            ->orderBy('score_desc, editedDate_desc')
+            ->orderBy($orderBy)
             ->query();
 
         $results     = array();

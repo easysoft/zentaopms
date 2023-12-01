@@ -103,7 +103,11 @@ class program extends control
     public function product(int $programID = 0, string $browseType = 'noclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $programPairs = $this->program->getPairs();
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID])) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+        if(!isset($programPairs[$programID]))
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('program', 'browse')));
+        }
 
         $programID = $this->program->checkAccess($programID, $programPairs);
 
@@ -575,7 +579,7 @@ class program extends control
 
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$programID]);
                 }
             }

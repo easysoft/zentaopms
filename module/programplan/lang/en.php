@@ -21,6 +21,7 @@ $lang->programplan->close         = 'Close Stage';
 $lang->programplan->activate      = 'Activate Stage';
 $lang->programplan->createSubPlan = 'Create Sub Stage';
 $lang->programplan->subPlanManage = 'Sub-stages management';
+$lang->programplan->submit        = 'Submit';
 
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';

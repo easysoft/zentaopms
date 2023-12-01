@@ -62,6 +62,9 @@ class actionTao extends actionModel
                     if(!$project) $project = 0;
                 }
                 break;
+            case 'marketresearch':
+                $project = $objectID;
+                break;
         }
 
         return array($product, $project, $execution);
@@ -245,7 +248,7 @@ class actionTao extends actionModel
         if($result)
         {
             $product = $result->product;
-            $project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+            $project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->in($result->build)->fetch('project');
         }
         return array($product, $project);
     }
@@ -331,7 +334,7 @@ class actionTao extends actionModel
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF(strpos('project,case,story,module', $objectType) === false)
+            ->beginIF(!in_array($objectType, array('project', 'case', 'story', 'module')))
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->fi()
@@ -353,6 +356,7 @@ class actionTao extends actionModel
         if($type == 'plan')     $type = 'productplan';
         if($type == 'revision') $type = 'repohistory';
         if($type == 'bug')      $type = 'build';
+        if($type == 'roadmap' && $action->objectType == 'story') $type = 'roadmap';
         $table = zget($this->config->objectTables, $type, '');
         if(empty($table)) return false;
 
@@ -380,7 +384,7 @@ class actionTao extends actionModel
             $plan = $this->fetchObjectInfoByID($table, (int)$action->extra, 'title');
             if($plan && $plan->title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title) : $plan->title;
         }
-        elseif(in_array($type, array('build', 'bug', 'release', 'testtask')))
+        elseif(in_array($type, array('build', 'bug', 'release', 'testtask', 'roadmap')))
         {
             $object = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name');
             if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), $object->name) : $object->name;
@@ -393,6 +397,11 @@ class actionTao extends actionModel
                 $revision = substr($commit->revision, 0, 10);
                 $action->extra = common::hasPriv('repo', 'revision') ? html::a(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) : $revision;
             }
+        }
+        elseif($type == 'roadmap')
+        {
+            $object = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name');
+            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#$action->extra " . $object->name) : "#$action->extra " . $object->name;
         }
         return true;
     }
@@ -483,6 +492,12 @@ class actionTao extends actionModel
                 break;
             case 'caselib':
                 $paramString = "libID={$action->extra}";
+                break;
+            case 'roadmap':
+                $paramString = "roadmapID={$action->extra}";
+                break;
+            case 'demand':
+                $paramString = "demandID={$action->extra}";
                 break;
         }
 

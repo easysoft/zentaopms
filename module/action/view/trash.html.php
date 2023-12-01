@@ -122,6 +122,11 @@
                 $methodName = 'setSQL';
                 $params     = "id={$action->objectID}";
             }
+            if($module == 'deploystep')
+            {
+                $module     = 'deploy';
+                $methodName = 'viewStep';
+            }
             if($action->objectType == 'api')
             {
                 $params     = "libID=0&moduelID=0&apiID={$action->objectID}";

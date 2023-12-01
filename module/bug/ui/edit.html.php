@@ -174,7 +174,8 @@ detailBody
                     (
                         set::name('plan'),
                         set::items($plans),
-                        set::value($bug->plan)
+                        set::value($bug->plan),
+                        setData('max_drop_width', '100%')
                     )
                 )
             ),
@@ -458,7 +459,8 @@ detailBody
                     (
                         set::name('task'),
                         set::items($tasks),
-                        set::value($bug->task)
+                        set::value($bug->task),
+                        setData('max_drop_width', '100%')
                     )
                 )
             )

@@ -141,7 +141,7 @@
                   <td class='pd-0'><?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class='form-control' onchange=setDuplicate(this.value,$bugID)");?></td>
                   <td class='pd-0 w-p50' id='<?php echo 'duplicateBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
                     <?php
-                    $productBugs = $productBugList[$bug->product][$bug->branch];
+                    $productBugs = isset($productBugList[$bug->product]) && isset($productBugList[$bug->product][$bug->branch]) ? $productBugList[$bug->product][$bug->branch] : array();
                     if(isset($productBugs[$bug->id])) unset($productBugs[$bug->id]);
                     ?>
                     <?php echo html::select("duplicates[$bugID]", $productBugs, $bug->duplicate, "class='form-control' placeholder='{$lang->bug->placeholder->duplicate}'");?>

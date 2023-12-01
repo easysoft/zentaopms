@@ -35,6 +35,7 @@ $lang->productplan->more       = 'More';
 $lang->productplan->comment    = 'Comment';
 $lang->productplan->storyPoint = 'Story Point';
 
+$lang->productplan->batchEditAction   = 'Batch Edit Plan';
 $lang->productplan->batchUnlink       = "Retirer par lot";
 $lang->productplan->batchClose        = "Batch Close";
 $lang->productplan->batchChangeStatus = "Batch Change Status";

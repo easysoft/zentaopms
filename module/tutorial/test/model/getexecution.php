@@ -7,12 +7,12 @@ su('admin');
 /**
 
 title=测试 tutorialModel->getExecution();
+timeout=0
 cid=1
-pid=1
 
-检查获取数据的id >> 3
-检查获取数据的PM >> admin
-检查获取数据的burns >> 35
+- 检查获取数据的id属性id @3
+- 检查获取数据的PM属性PM @admin
+- 检查获取数据的burns第burns条的0属性 @35
 
 */
 

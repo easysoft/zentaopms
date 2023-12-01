@@ -173,6 +173,16 @@ class baseDAO
     static public $cache = array();
 
     /**
+     * 实时记录日志设置，并设置记录文件。
+     * Open real time log and set real time file.
+     *
+     * @var array
+     * @access public
+     */
+    static public $realTimeLog  = false;
+    static public $realTimeFile = '';
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -299,6 +309,18 @@ class baseDAO
     public function begin()
     {
         $this->dbh->beginTransaction();
+    }
+
+    /**
+     * 检查是否在事务内。
+     * Check in transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function inTransaction()
+    {
+        $this->dbh->inTransaction();
     }
 
     /**
@@ -757,6 +779,9 @@ class baseDAO
 
         try
         {
+            /* Real-time save log. */
+            if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
+
             $method = $this->method;
             $this->reset();
 
@@ -862,6 +887,8 @@ class baseDAO
 
         try
         {
+            /* Real-time save log. */
+            if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
             if($this->table) unset(dao::$cache[$this->table]);
             $this->reset();
 
@@ -1608,6 +1635,42 @@ class baseSQL
      */
     public $conditionIsTrue = false;
 
+        /**
+     * 条件层级。
+     * The condition level.
+     *
+     * @var bool
+     * @access public;
+     */
+    public $conditionLevel = 0;
+
+    /**
+     * 条件结果，beginIF 中表达式的结果会存储到这个数组中。
+     * Store the result of the expression.
+     *
+     * @var bool
+     * @access public;
+     */
+    public $conditionResults = array();
+
+    /**
+     * 条件层级。
+     * The condition level.
+     *
+     * @var bool
+     * @access public;
+     */
+    public $conditionLevel = 0;
+
+    /**
+     * 条件结果，beginIF 中表达式的结果会存储到这个数组中。
+     * Store the result of the expression.
+     *
+     * @var bool
+     * @access public;
+     */
+    public $conditionResults = array();
+
     /**
      * WHERE条件嵌套小括号标记。
      * If in mark or not.
@@ -1919,7 +1982,9 @@ class baseSQL
     public function beginIF($condition)
     {
         $this->inCondition = true;
-        $this->conditionIsTrue = $condition;
+        $this->conditionLevel += 1;
+        $this->conditionResults[$this->conditionLevel] = $condition;
+        $this->conditionIsTrue = !in_array(false, $this->conditionResults);
         return $this;
     }
 
@@ -1932,6 +1997,14 @@ class baseSQL
      */
     public function fi()
     {
+        unset($this->conditionResults[$this->conditionLevel]);
+        $this->conditionLevel -= 1;
+        if($this->conditionLevel > 0)
+        {
+            $this->conditionIsTrue = !in_array(false, $this->conditionResults);
+            return $this;
+        }
+
         $this->inCondition = false;
         $this->conditionIsTrue = false;
         return $this;
@@ -1960,7 +2033,7 @@ class baseSQL
         }
         else
         {
-            $condition = ctype_alnum((string)$arg1) ? '`' . $arg1 . '`' : $arg1;
+            $condition = (is_string($arg1) && ctype_alnum($arg1)) ? '`' . $arg1 . '`' : $arg1;
         }
 
         if(!$this->inMark) $this->sql .= ' ' . DAO::WHERE ." $condition ";
@@ -1979,7 +2052,7 @@ class baseSQL
     public function andWhere($condition, $addMark = false)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(ctype_alnum((string)$condition)) $condition = '`' . $condition . '`';
+        if(is_string($condition) && ctype_alnum($condition)) $condition = '`' . $condition . '`';
 
         $mark = $addMark ? '(' : '';
         $this->sql .= " AND {$mark} $condition ";
@@ -1997,7 +2070,7 @@ class baseSQL
     public function orWhere($condition)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(ctype_alnum((string)$condition)) $condition = '`' . $condition . '`';
+        if(is_string($condition) && ctype_alnum($condition)) $condition = '`' . $condition . '`';
 
         $this->sql .= " OR $condition ";
         return $this;

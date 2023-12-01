@@ -195,6 +195,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
 
+/* 引用缓存的配置。 Include the cache config file. */
+$cacheConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache.php';
+if(file_exists($cacheConfig)) include $cacheConfig;
+
 /* 读取环境变量的配置。 Read the env config. */
 if($config->inContainer || $config->inQuickon)
 {

@@ -589,14 +589,12 @@ class programModel extends model
             $query = str_replace('`id`','t1.id', $this->session->projectQuery);
         }
 
-        $projectList = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
-            ->where('t1.deleted')->eq('0')
+        $stmt = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1');
+        if($this->cookie->involved) $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
+        $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch' && $query)->andWhere($query)->fi()
             ->andWhere('t1.type')->eq('project')
-            ->beginIF($this->cookie->involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone' || $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
@@ -604,23 +602,24 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->cookie->involved)
-            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t1.PM')->eq($this->app->user->account)
-            ->orWhere('t2.account')->eq($this->app->user->account)
-            ->orWhere('(t3.user')->eq($this->app->user->account)
-            ->andWhere('t3.deleted')->eq(0)
-            ->markRight(1)
-            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
-            ->markRight(1)
-            ->fi()
-            ->orderBy($orderBy)
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
+
+        if($this->cookie->involved)
+        {
+            $stmt->andWhere('t2.type')->eq('project')
+                ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+                ->orWhere('t1.PM')->eq($this->app->user->account)
+                ->orWhere('t2.account')->eq($this->app->user->account)
+                ->orWhere('(t3.user')->eq($this->app->user->account)
+                ->andWhere('t3.deleted')->eq(0)
+                ->markRight(1)
+                ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
+                ->markRight(1);
+        }
+        $projectList = $stmt->orderBy($orderBy)->page($pager, 't1.id')->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'ALM') $projectList = $this->batchProcessProgramName($projectList, $programTitle);
+        if($programTitle and in_array($this->config->systemMode, array('ALM', 'PLM'))) $projectList = $this->batchProcessProgramName($projectList, $programTitle);
         return $projectList;
     }
 
@@ -694,7 +693,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = " . $this->dao->sqlobj->quote($program->parent) . " and `deleted` = '0'")
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -744,7 +743,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = " . (int)$program->parent . " and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = " . $this->dao->sqlobj->quote($program->parent) . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($programID)
             ->exec();
@@ -1218,10 +1217,10 @@ class programModel extends model
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $programTitle, $queryAll, $pager);
         if(empty($projects)) return array();
 
-        $stats = $this->appendStatToProjects($projects);
-        foreach($stats as $project) $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES); //  Convert predefined HTML entities to characters.
+        /* Get the members of project teams. */
+        $teamMembers = $this->loadModel('project')->getTeamMemberGroup(array_keys($projects));
 
-        return $stats;
+        return $this->appendStatToProjects($projects, $teamMembers);
     }
 
     /**
@@ -1439,5 +1438,17 @@ class programModel extends model
 
         /* 4. Clear actions older than 30 days. */
         $this->loadModel('action')->cleanActions();
+    }
+
+    /**
+     * Check the privilege.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv(int $programID):bool
+    {
+        return !empty($programID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->programs},", ",{$programID},") !== false));
     }
 }

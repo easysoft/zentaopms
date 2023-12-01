@@ -99,7 +99,7 @@ class myModel extends model
 
         /* Sort by storyCount, get 5 records */
         $products = json_decode(json_encode($products), true);
-        array_multisort(array_column($products, 'storyEstimateCount'), SORT_DESC, $products);
+        array_multisort(helper::arrayColumn($products, 'storyEstimateCount'), SORT_DESC, $products);
         $products = array_slice($products, 0, 5);
 
         $data = new stdClass();
@@ -886,6 +886,7 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
+        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
         if($this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
@@ -1094,10 +1095,10 @@ class myModel extends model
     public function getReviewingApprovals(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('review', 'assess')) return array();
-        if($this->config->edition != 'max') return array();
+        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
-        $projectReviews = $this->loadModel('review')->getByList($pendingList, $orderBy);
+        $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         $this->app->loadLang('project');
         $this->session->set('reviewList', $this->app->getURI(true));

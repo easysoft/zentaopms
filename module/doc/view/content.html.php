@@ -115,7 +115,7 @@
           <?php endif;?>
         </div>
         <div id="diffContain">
-          <div class="detail-content article-content table-col">
+          <div class="detail-content article-content table-col" <?php if('attachment' == $doc->type) echo 'style="max-height: 60px"';?>>
             <div class='info'>
               <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
               <span class='user-time text-muted'><i class='icon-contacts'></i> <?php echo $createInfo;?></span>
@@ -163,11 +163,12 @@
             {
                 echo "<textarea id='markdownContent'>{$doc->content}</textarea>";
             }
-            else
+            elseif($doc->type != 'attachment')
             {
                 echo $doc->content;
             }
             ?>
+            <?php if($doc->type != 'attachment'):?>
             <?php foreach($doc->files as $file):?>
             <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
             <div class='file-image'>
@@ -190,6 +191,7 @@
             <?php unset($doc->files[$file->id]);?>
             <?php endif;?>
             <?php endforeach;?>
+            <?php endif;?>
           </div>
         </div>
       </div>

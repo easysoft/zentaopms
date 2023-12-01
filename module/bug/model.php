@@ -197,10 +197,11 @@ class bugModel extends model
      * @param  string     $executions
      * @param  array      $excludeBugs
      * @param  object     $pager
+     * @param  string     $orderBy
      * @access public
      * @return array
      */
-    public function getActiveBugs(array|int $products, int|string $branch, string $executions, array $excludeBugs, object $pager = null): array
+    public function getActiveBugs(array|int $products, int|string $branch, string $executions, array $excludeBugs, object $pager = null, string $orderBy = 'id desc'): array
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
@@ -211,7 +212,7 @@ class bugModel extends model
             ->beginIF(!empty($executions))->andWhere('execution')->in($executions)->fi()
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
     }
@@ -1023,10 +1024,12 @@ class bugModel extends model
      *
      * @param  int        $productID
      * @param  int|string $branch
+     * @param  string     $search
+     * @param  int        $limit
      * @access public
      * @return array
      */
-    public function getProductBugPairs(int $productID, int|string $branch = ''): array
+    public function getProductBugPairs(int $productID, int|string $branch = '', string $search = '', int $limit = 0): array
     {
         /* 获取产品的bugs。 */
         /* Get product bugs. */
@@ -1034,8 +1037,10 @@ class bugModel extends model
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
+            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
         /* 将bugs转为bug键对。 */
         /* Convert bugs to bug pairs. */

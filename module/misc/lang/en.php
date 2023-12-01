@@ -85,23 +85,37 @@ $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenT
     </ol>";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest        = 'Latest Version';
-$lang->misc->feature->detailed       = 'Detail';
-$lang->misc->feature->introduction   = 'Features';
-$lang->misc->feature->tutorial       = 'Tutorial';
-$lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial_en.png';
-$lang->misc->feature->youngBlueTheme = 'Young Blue Theme';
-$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme_en.png';
-$lang->misc->feature->visions        = "Interface switching";
-$lang->misc->feature->nextStep       = 'Next step';
-$lang->misc->feature->close          = 'Close';
-$lang->misc->feature->downloadFile   = 'Download introduction';
-$lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
-$lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
-$lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
-$lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
+$lang->misc->feature->lastest           = 'Latest Version';
+$lang->misc->feature->detailed          = 'Detail';
+$lang->misc->feature->introduction      = 'Features';
+$lang->misc->feature->tutorial          = 'Tutorial';
+$lang->misc->feature->tutorialImage     = 'theme/default/images/main/tutorial_en.png';
+$lang->misc->feature->youngBlueTheme    = 'Young Blue Theme';
+$lang->misc->feature->youngBlueImage    = 'theme/default/images/main/new_theme_en.png';
+$lang->misc->feature->visions           = "Interface switching";
+$lang->misc->feature->nextStep          = 'Next step';
+$lang->misc->feature->prevStep          = 'Previous step';
+$lang->misc->feature->close             = 'Close';
+$lang->misc->feature->learnMore         = 'Learn More';
+$lang->misc->feature->downloadFile      = 'Download introduction';
+$lang->misc->feature->tutorialDesc      = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
+$lang->misc->feature->themeDesc         = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
+$lang->misc->feature->visionsDesc       = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
+$lang->misc->feature->visionsImage      = 'theme/default/images/main/visions_en.png';
+$lang->misc->feature->aiPrompts         = 'AI prompts';
+$lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.svg';
+$lang->misc->feature->promptDesign      = 'Prompt Engineering';
+$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.svg';
+$lang->misc->feature->promptExec        = 'Prompt Execution';
+$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.svg';
+$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.9']        = '2023-11-09';
+$lang->misc->releaseDate['18.8']        = '2023-09-28';
+$lang->misc->releaseDate['18.7']        = '2023-08-29';
+$lang->misc->releaseDate['18.6']        = '2023-08-15';
+$lang->misc->releaseDate['18.5']        = '2023-07-05';
 $lang->misc->releaseDate['18.4']        = '2023-06-14';
 $lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
 $lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
@@ -202,6 +216,11 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.9'][]        = array('title' => 'We have now implemented comprehensive integration of AI Large Language Models, introduced an upgraded client version for meetings, and improved the ability to add participants in test requests. To enhance usability, we have also implemented online preview capabilities for video attachments and increased flexibility in customizing review inspection categories.', 'desc' => '');
+$lang->misc->feature->all['18.8'][]        = array('title' => 'In the BI section, we have introduced new features such as metric item functionality and an application inspection report dashboard. The DevOps platform edition now includes a configuration wizard. Additionally, we have enhanced the requitement and market management interface by adding a market management feature. New revision of client navigation and personal center.', 'desc' => '');
+$lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps has introduced new features such as cloud-native platform, artifact repository, and application management, while also enhancing the navigation structure and improving the UI interactions. Additionally, a new AI suggestion designer has been added, which supports integration with large language models and allows for customization of AI applications.', 'desc' => '');
+$lang->misc->feature->all['18.6'][]        = array('title' => "We have made significant improvements to the performance of commonly used lists and the details of BI functionality, while also refining the functionality details of waterfall projects. Additionally, we have diligently addressed and resolved any identified bugs.", 'desc' => '');
+$lang->misc->feature->all['18.5'][]        = array('title' => "Our academy's curriculum now supports cloud-based importing and the previewing of PDF files within courses. Additionally, we've optimized the loading speed of commonly used lists and addressed multiple bugs.", 'desc' => '');
 $lang->misc->feature->all['18.4'][]        = array('title' => 'In this release, we have improved the performance of the core list, added compatibility with Dameng databases, and resolved multiple bugs.', 'desc' => '');
 $lang->misc->feature->all['18.4.beta1'][]  = array('title' => 'Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.4.alpha1'][] = array('title' => 'We have enhanced the interaction experience of permissions and documents, while introducing the concept of test scenarios. Moreover, we now provide support for importing use cases with XMIND. Additionally, we have fully revamped the BI module by incorporating large screens, pivot tables, charts, and data capabilities.', 'desc' => '');

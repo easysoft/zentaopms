@@ -573,7 +573,14 @@ class baseHTML
             }
         }
 
-        return "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
+        $button = "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
+
+        $app->loadClass('purifier', true);
+        $purifierConfig   = HTMLPurifier_Config::createDefault();
+        $purifierConfig->set('Cache.DefinitionImpl', null);
+        $purifier = new HTMLPurifier($purifierConfig);
+
+        return $purifier->purify($button);
     }
 
     /**
@@ -1303,7 +1310,7 @@ EOT;
      * Set js value.
      *
      * @param  string   $key
-     * @param  mix      $value
+     * @param  mixed    $value
      * @static
      * @access public
      * @return string

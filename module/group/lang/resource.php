@@ -82,11 +82,6 @@ $lang->moduleOrder[245] = 'gitea';
 $lang->moduleOrder[250] = 'holiday';
 
 $lang->resource = new stdclass();
-/* Index module. */
-$lang->resource->index = new stdclass();
-$lang->resource->index->index = 'index';
-
-$lang->index->methodOrder[0] = 'index';
 
 /* My module. */
 $lang->resource->my = new stdclass();
@@ -98,14 +93,12 @@ $lang->resource->my->audit           = 'audit';
 $lang->resource->my->contribute      = 'contributeAction';
 $lang->resource->my->project         = 'project';
 $lang->resource->my->uploadAvatar    = 'uploadAvatar';
-$lang->resource->my->preference      = 'preference';
 $lang->resource->my->dynamic         = 'dynamicAction';
 $lang->resource->my->editProfile     = 'editProfile';
 $lang->resource->my->manageContacts  = 'manageContacts';
 $lang->resource->my->deleteContacts  = 'deleteContacts';
 $lang->resource->my->score           = 'score';
 $lang->resource->my->team            = 'team';
-$lang->resource->my->doc             = 'doc';
 $lang->resource->my->execution       = 'execution';
 
 $lang->my->methodOrder[1]  = 'index';
@@ -395,7 +388,6 @@ $lang->stage->methodOrder[35] = 'plusBrowse';
 $lang->resource->program = new stdclass();
 $lang->resource->program->browse                  = 'browse';
 $lang->resource->program->kanban                  = 'kanbanAction';
-$lang->resource->program->view                    = 'view';
 $lang->resource->program->product                 = 'product';
 $lang->resource->program->create                  = 'create';
 $lang->resource->program->edit                    = 'edit';
@@ -628,7 +620,7 @@ $lang->resource->productplan->batchUnlinkStory  = 'batchUnlinkStory';
 $lang->resource->productplan->linkBug           = 'linkBug';
 $lang->resource->productplan->unlinkBug         = 'unlinkBug';
 $lang->resource->productplan->batchUnlinkBug    = 'batchUnlinkBug';
-$lang->resource->productplan->batchEdit         = 'batchEdit';
+$lang->resource->productplan->batchEdit         = 'batchEditAction';
 $lang->resource->productplan->start             = 'start';
 $lang->resource->productplan->finish            = 'finish';
 $lang->resource->productplan->close             = 'close';
@@ -1311,8 +1303,8 @@ $lang->resource->repo->linkBug         = 'linkBug';
 $lang->resource->repo->linkTask        = 'linkTask';
 $lang->resource->repo->unlink          = 'unlink';
 $lang->resource->repo->import          = 'importAction';
-$lang->resource->repo->createBranch    = 'createBranchAction';
 $lang->resource->repo->createRepo      = 'createRepoAction';
+//$lang->resource->repo->createBranch    = 'createBranchAction';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
@@ -1326,7 +1318,6 @@ $lang->repo->methodOrder[45]  = 'log';
 $lang->repo->methodOrder[50]  = 'revision';
 $lang->repo->methodOrder[55]  = 'blame';
 $lang->repo->methodOrder[60]  = 'download';
-$lang->repo->methodOrder[65]  = 'setRules';
 $lang->repo->methodOrder[70]  = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75]  = 'downloadCode';
 $lang->repo->methodOrder[80]  = 'linkStory';
@@ -1334,8 +1325,8 @@ $lang->repo->methodOrder[85]  = 'linkBug';
 $lang->repo->methodOrder[90]  = 'linkTask';
 $lang->repo->methodOrder[95]  = 'unlink';
 $lang->repo->methodOrder[100] = 'import';
-$lang->repo->methodOrder[105] = 'createBranch';
-$lang->repo->methodOrder[110] = 'createRepo';
+$lang->repo->methodOrder[105] = 'createRepo';
+//$lang->repo->methodOrder[110] = 'createBranch';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1430,7 +1421,7 @@ $lang->resource->doc->myEdited       = 'myEdited';
 $lang->resource->doc->createLib      = 'createLib';
 $lang->resource->doc->editLib        = 'editLib';
 $lang->resource->doc->deleteLib      = 'deleteLib';
-$lang->resource->doc->create         = 'create';
+$lang->resource->doc->create         = 'createOrUpload';
 $lang->resource->doc->edit           = 'edit';
 $lang->resource->doc->view           = 'view';
 $lang->resource->doc->delete         = 'delete';
@@ -1445,6 +1436,7 @@ $lang->resource->doc->editCatalog    = 'editCatalog';
 $lang->resource->doc->sortCatalog    = 'sortCatalog';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 $lang->resource->doc->displaySetting = 'displaySetting';
+$lang->resource->doc->exportFiles    = 'exportFiles';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';
@@ -1470,6 +1462,7 @@ $lang->doc->methodOrder[105] = 'editCatalog';
 $lang->doc->methodOrder[110] = 'sortCatalog';
 $lang->doc->methodOrder[115] = 'deleteCatalog';
 $lang->doc->methodOrder[120] = 'displaySetting';
+$lang->doc->methodOrder[125] = 'exportFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1889,6 +1882,7 @@ $lang->resource->ai->prompts                = 'promptBrowse';
 $lang->resource->ai->promptView             = 'promptView';
 $lang->resource->ai->promptExecute          = 'promptExecute';
 $lang->resource->ai->promptExecutionReset   = 'promptExecutionReset';
+$lang->resource->ai->chat                   = 'chat';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';

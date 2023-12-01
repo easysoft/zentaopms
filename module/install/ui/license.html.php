@@ -43,7 +43,7 @@ div
                 btn
                 (
                     setClass('px-6 btn-install'),
-                    set::url(inlink('step1')),
+                    $config->inQuickon ? set::url(inlink('step5')) : set::url(inlink('step1')),
                     set::type('primary'),
                     $lang->install->next
                 )

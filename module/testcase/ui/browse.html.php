@@ -142,7 +142,11 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->testcase->noCase),
     set::createTip($lang->testcase->create),
+<<<<<<< HEAD
+    set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', "productID={$product->id}&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+=======
     set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', "productID={$productID}&branch={$branch}&moduleID={$initModule}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+>>>>>>> master
     set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
 );
 

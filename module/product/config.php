@@ -16,7 +16,7 @@ if($config->systemMode == 'ALM') $config->product->custom->batchEditFields .= ',
 
 /* Export fields of product list page. */
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,bugs,unResolvedBugs,assignToNullBugs,bugFixedRate,plans,releases';
+$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
 
 $config->product->actionsMap['normal'] = array('edit');
 
@@ -46,7 +46,7 @@ $config->product->report->planLabels = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'totalStories');
+$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'finishClosedStories', 'totalStories');
 $config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
 $config->product->statisticFields['plans']    = array('plans');
 $config->product->statisticFields['releases'] = array('releases');

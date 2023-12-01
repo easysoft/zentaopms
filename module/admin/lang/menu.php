@@ -44,6 +44,10 @@ $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert'][
 $lang->admin->menuList->convert['link']  = 'convert|convertjira';
 $lang->admin->menuList->convert['order'] = 50;
 
+$lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
+$lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
+$lang->admin->menuList->platform['order'] = 55;
+
 if(helper::hasFeature('devops'))
 {
     $lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
@@ -222,11 +226,36 @@ if(helper::hasFeature('devops'))
         unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['55']);
     }
 
-    //$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
-    $lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
-    $lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
+    $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
+    $lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
+    $lang->admin->menuList->ai['link']  = 'ai|adminindex';
+    $lang->admin->menuList->ai['order'] = 60;
+    
+    $lang->admin->menuList->ai['subMenu']['models'] = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
 
-    $lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
+    $lang->admin->menuList->ai['menuOrder']['15'] = 'models';
+
+    if($config->vision != 'or')
+    {
+        $lang->admin->menuList->ai['subMenu']['prompts'] = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
+        $lang->admin->menuList->ai['menuOrder']['5']     = 'prompts';
+    }
+}
+
+if($config->vision != 'or')
+{
+    $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
+    $lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
+    $lang->admin->menuList->ai['link']  = 'ai|adminindex';
+    $lang->admin->menuList->ai['order'] = 60;
+
+    $lang->admin->menuList->ai['subMenu']['prompts']       = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
+    // $lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
+    $lang->admin->menuList->ai['subMenu']['models']        = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
+
+    $lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
+    // $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
+    $lang->admin->menuList->ai['menuOrder']['15'] = 'models';
 }
 
 if($config->edition != 'max' and $config->edition != 'ipd')

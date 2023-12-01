@@ -46,7 +46,7 @@
           <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->release->generatedBugs;?></a></li>
           <li <?php if($type == 'releaseInfo') echo "class='active'"?>><a href='#releaseInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->release->view;?></a></li>
           <?php if($summary or $countBugs or $countLeftBugs):?>
-          <li class='pull-right'><div><?php common::printIcon('projectrelease', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
+          <li class='pull-right'><div><?php common::printIcon('projectrelease', 'export', "releaseID=$release->id", '', 'button', '', '', "export btn-sm");?></div></li>
           <?php endif;?>
         </ul>
         <div class='tab-content'>

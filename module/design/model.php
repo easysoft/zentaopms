@@ -179,9 +179,30 @@ class designModel extends model
      * @access public
      * @return void
      */
-    public function linkCommit($designID = 0, $repoID = 0)
+    public function linkCommit(int $designID = 0, int $repoID = 0)
     {
+        $repo      = $this->loadModel('repo')->getByID($repoID);
         $revisions = $_POST['revision'];
+
+        if($repo->SCM == 'Gitlab')
+        {
+            $logs = array();
+            foreach($this->session->designRevisions as $key => $commit)
+            {
+                if(in_array($commit->revision, $revisions))
+                {
+                    $log = new stdclass();
+                    $log->committer = $commit->committer_name;
+                    $log->revision  = $commit->id;
+                    $log->comment   = $commit->message;
+                    $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+
+                    $logs[] = $log;
+                }
+            }
+            $this->repo->saveCommit($repoID, array('commits' => $logs), 0);
+            $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
+        }
 
         foreach($revisions as $revision)
         {
@@ -256,7 +277,7 @@ class designModel extends model
 
         $design->commit = '';
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
-        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "repoID=$relation->BID&projectID={$design->project}"), "#$relation->BID", '', 'data-app=devops');
+        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID=$relation->BID&projectID={$design->project}"), "#$relation->BID");
 
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
@@ -438,20 +459,20 @@ class designModel extends model
      * @param  int    $projectID
      * @param  int    $products
      * @param  int    $productID
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     * @param  string $extra
-     * @param  int    $branch
      * @access public
-     * @return void
+     * @return string
      */
-    public function setMenu($projectID, $products, $productID = 0)
+    public function setMenu(int $projectID, array $products, int $productID = 0): string
     {
+        $project  = $this->loadModel('project')->getByID($projectID);
+        $typeList = 'typeList';
+        if(!empty($project) and $project->model == 'waterfallplus') $typeList = 'plusTypeList';
+
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
         $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
         $count = 1;
-        foreach(array_filter($this->lang->design->typeList) as $key => $value)
+        foreach(array_filter($this->lang->design->{$typeList}) as $key => $value)
         {
             $key = strtolower($key);
 
@@ -465,6 +486,8 @@ class designModel extends model
 
             $count ++;
         }
+
+        if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
 
         if(empty($products) || !$productID) return '';
 

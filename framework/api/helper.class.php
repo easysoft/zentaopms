@@ -70,27 +70,29 @@ class helper extends baseHelper
         }
         else
         {
-            if($feature == 'product' or $feature == 'scrum' or $feature == 'waterfall') return !str_contains(",$config->disabledFeatures,", ",{$feature},");
+            if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
-            $hasFeature = false;
+            $hasFeature       = false;
+            $canConfigFeature = false;
             foreach($config->featureGroup as $group => $modules)
             {
-                if($feature == $group)
+                foreach($modules as $module)
                 {
-                    foreach($modules as $module)
+                    if($feature == $group or $feature == $module)
                     {
-                        if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
-                    }
-                }
-                else
-                {
-                    foreach($modules as $module)
-                    {
-                        if($feature == $module and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        $canConfigFeature = true;
+                        if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
+                        {
+                            if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        }
+                        else
+                        {
+                            if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
+                        }
                     }
                 }
             }
-            return $hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},");
+            return !$canConfigFeature or ($hasFeature && strpos(",$config->disabledFeatures,", ",{$feature},") === false);
         }
     }
 

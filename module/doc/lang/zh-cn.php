@@ -167,6 +167,7 @@ $lang->doc->collectCount  = '%s次收藏';
 $lang->doc->index            = '仪表盘';
 $lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
+$lang->doc->createOrUpload   = '创建/上传文档';
 $lang->doc->edit             = '编辑文档';
 $lang->doc->delete           = '删除文档';
 $lang->doc->createBook       = '创建手册';
@@ -212,6 +213,17 @@ $lang->doc->confirm           = '确认';
 $lang->doc->docSummary        = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary = '共选中 <strong>%total%</strong> 个文档。';
 $lang->doc->showDoc           = '是否显示文档';
+$lang->doc->uploadFile        = '上传文件';
+$lang->doc->uploadDoc         = '上传文档';
+$lang->doc->uploadFormat      = '上传格式';
+$lang->doc->editedList        = '文档编辑者';
+
+$lang->doc->uploadFormatList = array();
+$lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
+$lang->doc->uploadFormatList['combinedDocs'] = '所有文件存为一个文档';
+
+$lang->doc->fileType = new stdclass();
+$lang->doc->fileType->stepResult = '测试结果';
 
 global $config;
 /* 查询条件列表 */
@@ -260,10 +272,11 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['template'] = 'Wiki文档';
-$lang->doc->createList['word']     = 'Word';
-$lang->doc->createList['ppt']      = 'PPT';
-$lang->doc->createList['excel']    = 'Excel';
+$lang->doc->createList['template']   = 'Wiki文档';
+$lang->doc->createList['word']       = 'Word';
+$lang->doc->createList['ppt']        = 'PPT';
+$lang->doc->createList['excel']      = 'Excel';
+$lang->doc->createList['attachment'] = $lang->doc->uploadDoc;
 
 $lang->doc->types['doc'] = 'Wiki文档';
 $lang->doc->types['api'] = '接口文档';

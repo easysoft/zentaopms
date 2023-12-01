@@ -21,6 +21,8 @@ jsVar('changeAttrLang', $lang->programplan->confirmChangeAttr);
 jsVar('isTopStage',     $isTopStage);
 jsVar('isLeafStage',    $isLeafStage);
 
+if($project->model == 'ipd') unset($config->programplan->edit->form['parent']);
+
 modalHeader
 (
     set::title($this->lang->programplan->edit),

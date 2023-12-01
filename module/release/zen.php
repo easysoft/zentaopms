@@ -163,7 +163,7 @@ class releaseZen extends release
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        $stories = $this->release->getStoryList($release->stories, (int)$release->branch, $type == 'story' ? $sort : '', $storyPager);
+        $stories = $this->release->getStoryList($release->stories, $release->branch, $type == 'story' ? $sort : '', $storyPager);
 
         $sort = common::appendOrder($orderBy);
         $bugs = $this->release->getBugList($release->bugs, $type == 'bug' ? $sort : '', $bugPager);
@@ -314,15 +314,27 @@ class releaseZen extends release
         $html .= '</tr>';
         foreach($rows as $row)
         {
-            $html .= "<tr valign='top'>\n";
-            foreach($fields as $fieldName => $fieldLabel)
+            $stories = $this->story->getByList($release->stories);
+            foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
+
+            $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+            $rows   = $stories;
+
+            $html .= '<table><tr>';
+            foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+            $html .= '</tr>';
+            foreach($rows as $row)
             {
-                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                $html .= "<tr valign='top'>\n";
+                foreach($fields as $fieldName => $fieldLabel)
+                {
+                    $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                    $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                }
+                $html .= "</tr>\n";
             }
-            $html .= "</tr>\n";
+            $html .= '</table>';
         }
-        $html .= '</table>';
 
         return $html;
     }
@@ -352,15 +364,27 @@ class releaseZen extends release
         $html .= '</tr>';
         foreach($rows as $row)
         {
-            $html .= "<tr valign='top'>\n";
-            foreach($fields as $fieldName => $fieldLabel)
+            $bugs = $this->bug->getByIdList($release->bugs);
+            foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+            $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+            $rows   = $bugs;
+
+            $html .= '<table><tr>';
+            foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+            $html .= '</tr>';
+            foreach($rows as $row)
             {
-                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                $html .= "<tr valign='top'>\n";
+                foreach($fields as $fieldName => $fieldLabel)
+                {
+                    $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                    $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                }
+                $html .= "</tr>\n";
             }
-            $html .= "</tr>\n";
+            $html .= '</table>';
         }
-        $html .= '</table>';
 
         return $html;
     }
@@ -376,6 +400,7 @@ class releaseZen extends release
     {
         $html  = '';
         $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
+        $this->loadModel('bug');
 
         $bugs = $this->release->getBugList($release->leftBugs);
         foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
@@ -388,15 +413,27 @@ class releaseZen extends release
         $html .= '</tr>';
         foreach($rows as $row)
         {
-            $html .= "<tr valign='top'>\n";
-            foreach($fields as $fieldName => $fieldLabel)
+            $bugs = $this->bug->getByIdList($release->bugs);
+            foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+            $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+            $rows   = $bugs;
+
+            $html .= '<table><tr>';
+            foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+            $html .= '</tr>';
+            foreach($rows as $row)
             {
-                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                $html .= "<tr valign='top'>\n";
+                foreach($fields as $fieldName => $fieldLabel)
+                {
+                    $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                    $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                }
+                $html .= "</tr>\n";
             }
-            $html .= "</tr>\n";
+            $html .= '</table>';
         }
-        $html .= '</table>';
 
         return $html;
     }

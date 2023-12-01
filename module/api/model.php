@@ -465,10 +465,10 @@ class apiModel extends model
      */
     public function getStructByQuery($libID, $pager = '', $orderBy = '')
     {
-        return $this->dao->select('s.*,user.realname as addedName')->from(TABLE_APISTRUCT)->alias('s')
-            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = s.addedBy')
-            ->where('s.deleted')->eq(0)
-            ->andWhere('s.lib')->eq($libID)
+        return $this->dao->select('t1.*,t2.realname as addedName')->from(TABLE_APISTRUCT)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.addedBy')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->eq($libID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

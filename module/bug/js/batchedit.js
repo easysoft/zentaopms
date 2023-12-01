@@ -80,14 +80,29 @@ $(function()
 
     var firstResolution  = $('select[id^="resolutions"]').eq(0);
     var maxAutoDropWidth = document.body.scrollWidth + ($(firstResolution)[0].offsetWidth / 2) - $(firstResolution)[0].getBoundingClientRect().right;
-    $('select[id^="duplicateBugs"]').picker(
+    initPicker = function($element)
     {
-        disableEmptySearch : true,
-        dropWidth : 'auto',
-        maxAutoDropWidth : maxAutoDropWidth,
-        onReady: function(event)
+        var picker = $element.data('zui.picker');
+        var originOptions = picker.options;
+
+        if(picker) picker.destroy();
+
+        var addOptions =
         {
-            $(event.picker.$container).addClass('required');
+            disableEmptySearch : true,
+            dropWidth : 'auto',
+            maxAutoDropWidth : maxAutoDropWidth,
+            searchDelay : 1000,
+            onReady: function(event)
+            {
+                $(event.picker.$container).addClass('required');
+            }
         }
+        var options = $.extend({}, originOptions, addOptions);
+        $element.picker(options);
+    };
+
+    $('select[id^="duplicateBugs"]').each(function(){
+      initPicker($(this));
     });
 });

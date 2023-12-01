@@ -332,6 +332,16 @@ class todo extends control
     {
         if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->todo->confirmDelete, 'confirmed' => $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes"), 'canceled' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'))));
 
+        $todo        = $this->todo->getByID($todoID);
+        $allowDelete = true;
+        if(!$this->app->user->admin && $todo && $todo->account != $this->app->user->account && $todo->assignedTo != $this->app->user->account) $allowDelete = false;
+        if(!$allowDelete)
+        {
+            if(isonlybody()) return print(js::alert($this->lang->error->accessDenied));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->error->accessDenied));
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+        }
+
         $this->todo->delete(TABLE_TODO, $todoID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

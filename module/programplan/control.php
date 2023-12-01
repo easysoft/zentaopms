@@ -241,14 +241,17 @@ class programplan extends control
      *
      * @param  int    $stageID
      * @param  string $attribute
+     * @param  string $projectModel
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute(int $stageID, string $attribute): int
+    public function ajaxGetAttribute(int $stageID, string $attribute, string $projectModel = ''): int
     {
         $this->app->loadLang('stage');
 
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
+
+        if($projectModel == 'ipd') $this->lang->stage->typeList = $this->lang->stage->ipdTypeList;
 
         if(empty($stageAttribute) || $stageAttribute == 'mix')
         {

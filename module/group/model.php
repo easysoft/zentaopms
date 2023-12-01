@@ -454,6 +454,8 @@ class groupModel extends model
      * Update privilege of a group.
      *
      * @param  int    $groupID
+     * @param  string $nav
+     * @param  string $version
      * @access public
      * @return bool
      */
@@ -1848,7 +1850,7 @@ class groupModel extends model
                 /* If version is selected, only show privs before the version. */
                 if(!empty($version) and strpos($versionPrivs, ",$privCode,") === false) continue;
 
-                /* Remove privs unused in the edition. */
+                /* Add methods in workflow menus, remove privs unused in the edition. */
                 if(isset($this->lang->$moduleName->menus) && isset($this->lang->$moduleName->menus[$methodName]))
                 {
                     $privName = $this->lang->$moduleName->menus[$methodName];

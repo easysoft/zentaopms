@@ -587,6 +587,8 @@ class product extends control
             $products = $this->product->getList($programID, $browseType);
         }
 
+        $this->product->refreshStats(); // Refresh stats fields of products.
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -765,7 +767,7 @@ class product extends control
             /* 如果只导出选中产品，删除非选中产品。 */
             if($this->post->exportType == 'selected')
             {
-                $checkedItem = $this->cookie->checkedItem;
+                $checkedItem = $this->post->checkedItem;
                 foreach($productStats as $i => $product)
                 {
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);

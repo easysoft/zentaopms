@@ -500,7 +500,7 @@ class baseHelper
         if(function_exists('mb_substr')) $string = mb_substr($string, 0, $length, 'utf-8');
 
         preg_match_all("/./su", $string, $data);
-        $string = join("", array_slice($data[0],  0, $length));
+        $string = implode("", array_slice($data[0],  0, $length));
 
         return ($string != $rawString) ? $string . $append : $string;
     }

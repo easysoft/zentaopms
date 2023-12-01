@@ -309,6 +309,7 @@ class release extends control
     {
         if(!empty($_POST))
         {
+            $release  = $this->release->getByID($releaseID);
             $type     = $this->post->type;
             $fileName = $this->post->fileName;
             if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));

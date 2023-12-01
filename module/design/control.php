@@ -93,8 +93,8 @@ class design extends control
         $this->app->loadClass('pager', true);
         $pager   = pager::init(0, $recPerPage, $pageID);
 
-        if(!$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
-        if($project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
+        if(isset($project->hasProduct) && !$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
+        if(isset($project->hasProduct) && $project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
         if(!helper::hasFeature('devops')) $this->config->design->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 
         $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
@@ -297,8 +297,18 @@ class design extends control
      * @access public
      * @return void
      */
-    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recPerPage = 50, int $pageID = 1)
+    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
+        if($_POST)
+        {
+            $this->design->linkCommit($designID, $repoID);
+
+            $result['result']  = 'success';
+            $result['message'] = $this->lang->saveSuccess;
+            $result['locate']  = 'parent';
+            return $this->send($result);
+        }
+
         $design = $this->design->getById($designID);
         $this->commonAction($design->project, (int)$design->product, $designID);
 
@@ -314,11 +324,7 @@ class design extends control
         $repo      = $this->loadModel('repo')->getByID($repoID);
         $revisions = $this->design->getCommits($repo,$begin, date('Y-m-d 23:59:59', strtotime($end)));
 
-        if($_POST)
-        {
-            $this->design->linkCommit($designID, $repoID);
-            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
-        }
+        $this->session->set('designRevisions', $revisions);
 
         /* Linked submission. */
         $linkedRevisions = array();
@@ -382,14 +388,13 @@ class design extends control
      */
     public function viewCommit(int $designID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $design = $this->design->getByID($designID);
-        $this->commonAction($design->project, (int)$design->product, $designID);
+        $design = $this->design->getCommit($designID, $pager);
+        $this->commonAction($design->project, $design->product, $designID);
 
         /* Init pager. */
         $this->app->loadClass('pager', true);
-        $pager   = pager::init(0, $recPerPage, $pageID);
+        $pager = pager::init(0, $recPerPage, $pageID);
 
-        $design = $this->design->getCommit($designID, $pager);
         $this->config->design->viewcommit->dtable->fieldList['actions']['list']['unlinkCommit']['url'] = sprintf($this->config->design->viewcommit->actionList['unlinkCommit']['url'], $designID);
 
         $this->view->title  = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
@@ -404,15 +409,15 @@ class design extends control
     /**
      * A version of the repository.
      *
-     * @param  int    $repoID
+     * @param  int    $revisionID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function revision(int $repoID = 0, int $projectID = 0)
+    public function revision(int $revisionID = 0, int $projectID = 0)
     {
-        $repo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
-        $this->locate(helper::createLink('repo', 'revision', "repoID={$repo->repo}&objectID={$projectID}&revistion={$repo->revision}"));
+        $revision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($revisionID)->fetch();
+        $this->locate(helper::createLink('repo', 'revision', "repoID=$revision->repo&objectID=$projectID&revistion=$revision->revision"));
     }
 
     /**

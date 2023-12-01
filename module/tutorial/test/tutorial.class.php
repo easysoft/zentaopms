@@ -80,7 +80,7 @@ class tutorialTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects[0][0]['products'];
+        return $objects;
     }
 
     /**

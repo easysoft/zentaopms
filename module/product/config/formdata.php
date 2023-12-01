@@ -20,7 +20,7 @@ $config->product->form->create['whitelist']      = array('type' => 'array',   'c
 $config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => (isset($app->user) && isset($app->user->account)) ? $app->user->account : '');
 $config->product->form->create['createdDate']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
 $config->product->form->create['createdVersion'] = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $config->version);
-if($config->systemMode != 'ALM') unset($config->product->form->create['program'], $config->product->form->create['line']);
+if($config->systemMode != 'ALM' && $config->systemMode != 'PLM') unset($config->product->form->create['program'], $config->product->form->create['line']);
 
 $config->product->form->edit = array();
 $config->product->form->edit['program']   = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
@@ -50,7 +50,7 @@ $config->product->form->batchEdit['RD']      = array('type' => 'string', 'contro
 $config->product->form->batchEdit['type']    = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => 'normal',  'options' => $lang->product->typeList);
 $config->product->form->batchEdit['status']  = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => 'normal',  'options' => $lang->product->statusList);
 $config->product->form->batchEdit['acl']     = array('type' => 'string', 'control' => 'radioList', 'width' => '120px', 'required' => false, 'default' => 'private', 'options' => $lang->product->abbr->aclList);
-if($config->systemMode != 'ALM') unset($config->product->form->batchEdit['program'], $config->product->form->batchEdit['line']);
+if($config->systemMode != 'ALM' && $config->systemMode != 'PLM') unset($config->product->form->batchEdit['program'], $config->product->form->batchEdit['line']);
 
 $config->product->form->close = array();
 $config->product->form->close['status']     = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');

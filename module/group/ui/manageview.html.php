@@ -293,11 +293,11 @@ formPanel
             )
         )
     ),
-    formGroup
+    $config->vision != 'or' ? formGroup
     (
         set::label($lang->group->dynamic),
         $dynamicActionList
-    )
+    ) : null
 );
 
 /* ====== Render page ====== */

@@ -32,11 +32,13 @@ $lang->file->exportRange   = "Data";
 $lang->file->defaultTPL    = "Default";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
+$lang->file->previewFile   = "Preview File";
 $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
 $lang->file->batchExport   = 'Export in batches';
 $lang->file->downloadFile  = 'Download';
+$lang->file->playFailed    = 'Video preview failed, please contact admin';
 $lang->file->exportData    = "Export Data";
 
 $lang->file->pathname  = 'Path Name';

@@ -61,14 +61,12 @@ CREATE TABLE IF NOT EXISTS `zt_session` (
     KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-UPDATE `zt_grouppriv` SET `method` = 'batchChangeType' WHERE `method` = 'batchCaseTypeChange';
-UPDATE `zt_priv` SET `method` = 'batchChangeType' WHERE `method` = 'batchCaseTypeChange';
-UPDATE `zt_privlang` SET `key` = 'testcase-batchChangeType' WHERE `key` = 'testcase-batchCaseTypeChange';
-UPDATE `zt_privrelation` SET `priv` = 'testcase-batchChangeType' WHERE `priv` = 'testcase-batchCaseTypeChange';
-
 ALTER TABLE `zt_action` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE `zt_actionrecent` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE `zt_mr` ADD executionID mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `jobID`;
+
+ALTER TABLE `zt_testtask` ADD COLUMN `members` text NULL;
+UPDATE `zt_solutions` SET `deleted` = '0' WHERE `deleted` = '';
 
 /* Update createdBy to system in chart and pivot. */
 UPDATE `zt_chart` SET `createdBy` = 'system' WHERE `builtin` = '1';
@@ -104,3 +102,10 @@ CREATE TABLE `zt_queue` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+UPDATE `zt_dimension` SET `desc` = '为管理层提供洞察力和决策支持，从而推动业务增长和发展' WHERE `id` = 1;
+UPDATE `zt_dimension` SET `desc` = '识别项目管理流程中的关键步骤、瓶颈和性能指标，从而做出有针对性的改进措施，达到优化项目管理流程和降本增效的目的' WHERE `id` = 2;
+UPDATE `zt_dimension` SET `desc` = '确保项目交付过程和成果符合预期的质量标准和要求，从而实现客户满意度、提高项目绩效、保障项目可持续性和促进持续改进' WHERE `id` = 3;
+
+INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES ('Bug转需求', 0, 'bug', ',bug.title,bug.steps,bug.severity,bug.pri,bug.status,bug.confirmed,bug.type,', 'story.create', '请将Bug转化为相应的研发需求。', '分条编写需求描述，分条编写验收标准，需求逻辑条理清晰。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active');
+INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES ('拆分一个子计划', 0, 'productplan', ',productplan.title,productplan.desc,productplan.begin,productplan.end,', 'productplan.create', '根据给定计划名称、描述、计划开始时间和计划结束时间，将给定计划明确为其小范围的子计划。拆分出来的子计划可以更专注于给定计划中的某一类工作。	', '要求子计划的时间不能超出计划开始时间和计划结束时间，并且名称不能与原计划名称相同。润色子计划的描述。', '请你扮演一名资深的产品经理。', '负责产品计划、设计、用户体验等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active');

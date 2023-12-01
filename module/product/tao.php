@@ -86,7 +86,7 @@ class productTao extends productModel
             ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
             ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
@@ -125,7 +125,7 @@ class productTao extends productModel
             ->markRight(1)
             ->orWhere("CONCAT(',', t2.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
-            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
@@ -331,7 +331,7 @@ class productTao extends productModel
         $line->parent = 0;
         $line->grade  = 1;
         $line->name   = htmlSpecialString($lineName);
-        $line->root   = $programID;
+        $line->root   = in_array($this->config->systemMode, array('ALM', 'PLM')) ? $programID : 0;
 
         $existedLineID = (int)$this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch('id');
         if($existedLineID) return $existedLineID;

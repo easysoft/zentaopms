@@ -330,6 +330,163 @@ class doc extends control
 
         return $this->send(array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab));
     }
+        /**
+     * Upload docs.
+     *
+     * @param  string     $objectType   product|project|execution|custom
+     * @param  int        $objectID
+     * @param  int|string $libID
+     * @param  int        $moduleID
+     * @param  string     $docType       html|word|ppt|excel|attachment
+     * @param  string     $from
+     * @access public
+     * @return void
+     */
+    public function uploadDocs($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $from = 'doc')
+    {
+        $linkType = $objectType;
+
+        if(!empty($_POST))
+        {
+            $doclib   = $this->loadModel('doc')->getLibById($libID);
+            $canVisit = true;
+
+            if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
+
+            switch($objectType)
+            {
+                case 'custom':
+                    $account = (string)$this->app->user->account;
+                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account and !(isset($groupAccounts) and in_array($account, $groupAccounts, true))) $canVisit = false;
+                    break;
+                case 'product':
+                    $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
+                    break;
+                case 'project':
+                    $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
+                    break;
+                case 'execution':
+                    $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
+                    break;
+                default:
+                break;
+            }
+            if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
+            $libID    = $this->post->lib;
+            $moduleID = $this->post->module;
+            if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
+            setcookie('lastDocModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            if($this->post->uploadFormat == 'combinedDocs')
+            {
+                unset($_POST['uploadFormat']);
+                $docResult = $this->doc->create();
+                if(!$docResult or dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $docID = $docResult['id'];
+                $files = zget($docResult, 'files', '');
+
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+                $actionType = 'created';
+                $this->action->create('doc', $docID, $actionType, $fileAction);
+
+                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+                $params   = "docID=" . $docResult['id'];
+                $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'view', $params);
+            }
+            else
+            {
+                $docResult = $this->doc->createSeperateDocs();
+                if(!$docResult or dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $docsAction = zget($docResult, 'docsAction', '');
+
+                if(!empty($docsAction))
+                {
+                    foreach($docsAction as $docID => $fileTitle)
+                    {
+                        $fileAction = $this->lang->addFiles . $fileTitle->title . "\n";
+                        $actionType = 'created';
+                        $this->action->create('doc', $docID, $actionType, $fileAction);
+                    }
+                }
+
+                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+                $link = 'parent';
+            }
+
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
+            return $this->send($response);
+        }
+
+        unset($_GET['onlybody']);
+        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
+
+        $lib = $libID ? $this->doc->getLibByID($libID) : '';
+        if(empty($objectID) and $lib) $objectID = zget($lib, $lib->type, 0);
+
+        /* Get libs and the default lib id. */
+        $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$linkType") : '';
+        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
+        if(!$libID and !empty($libs)) $libID = key($libs);
+        if(empty($lib) and $libID) $lib = $this->doc->getLibByID($libID);
+
+        $objects  = array();
+        if($linkType == 'project')
+        {
+            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
+            $objects       = $this->project->getPairsByProgram('', 'all', false, 'order_asc', $excludedModel);
+            $this->view->executions = array();
+            if($lib->type == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getById($lib->execution);
+                $objectID  = $execution->project;
+                $libs      = $this->doc->getLibs('execution', $extra = "withObject,$unclosed", $libID, $lib->execution);
+                $this->view->execution  = $execution;
+                $this->view->executions = array(0 => '') + $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
+            }
+        }
+        elseif($linkType == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getById($objectID);
+            $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
+        }
+        elseif($linkType == 'product')
+        {
+            $objects = $this->loadModel('product')->getPairs();
+        }
+        elseif($linkType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+        }
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+
+        $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        $moduleID = $libID . '_' . $moduleID;
+
+        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->uploadDoc;
+        $this->view->linkType         = $linkType;
+        $this->view->objectType       = $objectType;
+        $this->view->objectID         = empty($lib) ? 0 : zget($lib, $lib->type, 0);
+        $this->view->libID            = $libID;
+        $this->view->lib              = $lib;
+        $this->view->libs             = $libs;
+        $this->view->objects          = $objects;
+        $this->view->gobackLink       = $gobackLink;
+        $this->view->libName          = zget($lib, 'name', '');
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->moduleID         = $moduleID;
+        $this->view->docType          = $docType;
+        $this->view->groups           = $this->loadModel('group')->getPairs();
+        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->from             = $from;
+
+        $this->display();
+    }
+
 
     /**
      * Create a doc.
@@ -349,7 +506,32 @@ class doc extends control
         if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
 
         if(!empty($_POST))
-        {
+        {            
+            $doclib   = $this->loadModel('doc')->getLibById($libID);
+            $canVisit = true;
+
+            if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
+
+            switch($objectType)
+            {
+                case 'custom':
+                    $account = (string)$this->app->user->account;
+                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account and !(isset($groupAccounts) and in_array($account, $groupAccounts, true))) $canVisit = false;
+                    break;
+                case 'product':
+                    $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
+                    break;
+                case 'project':
+                    $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
+                    break;
+                case 'execution':
+                    $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
+                    break;
+                default:
+                break;
+            }
+            if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
@@ -563,7 +745,7 @@ class doc extends control
         elseif($objectType == 'execution')
         {
             $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+            $objects   = $this->execution->resetExecutionSorts($objects, array(), array(), $execution->project);
         }
         elseif($objectType == 'product')
         {
@@ -639,6 +821,7 @@ class doc extends control
     public function deleteFile($docID, $fileID, $confirm = 'no')
     {
         $this->loadModel('file');
+        $this->loadModel('action');
         if($confirm == 'no')
         {
             return print(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "docID=$docID&fileID=$fileID&confirm=yes")));
@@ -646,17 +829,17 @@ class doc extends control
         else
         {
             $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
-                                    ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
-                                    ->where('t2.id')->eq($docID)
-                                    ->fetch();
+                ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+                ->where('t2.id')->eq($docID)
+                ->fetch();
             unset($docContent->id);
-            $docContent->files   = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+            $docContent->files = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
             $docContent->version += 1;
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
 
             $file = $this->file->getById($fileID);
-            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
+            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
             return print(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
@@ -1065,6 +1248,7 @@ class doc extends control
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
         $objectID   = zget($doc, $type, 0);
+        if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
         /* Get doc. */
@@ -1377,7 +1561,7 @@ class doc extends control
         if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
-        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
+        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
 
         $this->view->spaceList  = $spaceList;
         $this->view->typeList   = $typeList;
