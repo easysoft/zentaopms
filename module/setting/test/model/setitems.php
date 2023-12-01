@@ -7,37 +7,37 @@ su('admin');
 /**
 
 title=测试 settingModel->setItems();
+timeout=0
 cid=1
-pid=1
 
-创建空数据 >> 1
-创建没有vision，只有视图且值为空的数据 >> 1
-创建没有vision，只有所有者且值为空的数据 >> 1
-创建没有vision，my模块且值为空的数据 >> 1
-创建没有vision，只有所有者且值为空的数据 >> 1
-创建没有vision，common模块且值为空的数据 >> 1
-创建有vision，只有所有者且值为空的数据 >> 1
-创建有vision，my模块且值为空的数据 >> 1
-创建有vision，只有所有者且值为空的数据 >> 1
-创建有vision，common模块且值为空的数据 >> 1
-创建没有vision，只有视图且值project的数据 >> 1
-创建没有vision，只有所有者且值为project的数据 >> 1
-创建没有vision，my模块且值为project的数据 >> 1
-创建没有vision，只有所有者且值为project的数据 >> 1
-创建没有vision，common模块且值为project的数据 >> 1
-创建有vision，只有所有者且值为project的数据 >> 1
-创建有vision，my模块且值为project的数据 >> 1
-创建有vision，只有所有者且值为project的数据 >> 1
-创建有vision，common模块且值为project的数据 >> 1
-创建没有vision，只有视图且值project和story的数据 >> 1
-创建没有vision，只有所有者且值为project和story的数据 >> 1
-创建没有vision，my模块且值为project和story的数据 >> 1
-创建没有vision，只有所有者且值为project和story的数据 >> 1
-创建没有vision，common模块且值为project和story的数据 >> 1
-创建有vision，只有所有者且值为project和story的数据 >> 1
-创建有vision，my模块且值为project和story的数据 >> 1
-创建有vision，只有所有者且值为project和story的数据 >> 1
-创建有vision，common模块且值为project和story的数据 >> 1
+- 创建空数据 @1
+- 创建没有vision，只有视图且值为空的数据 @1
+- 创建没有vision，只有所有者且值为空的数据 @1
+- 创建没有vision，my模块且值为空的数据 @1
+- 创建没有vision，只有所有者且值为空的数据 @1
+- 创建没有vision，common模块且值为空的数据 @1
+- 创建有vision，只有所有者且值为空的数据 @1
+- 创建有vision，my模块且值为空的数据 @1
+- 创建有vision，只有所有者且值为空的数据 @1
+- 创建有vision，common模块且值为空的数据 @1
+- 创建没有vision，只有视图且值project的数据 @1
+- 创建没有vision，只有所有者且值为project的数据 @1
+- 创建没有vision，my模块且值为project的数据 @1
+- 创建没有vision，只有所有者且值为project的数据 @1
+- 创建没有vision，common模块且值为project的数据 @1
+- 创建有vision，只有所有者且值为project的数据 @1
+- 创建有vision，my模块且值为project的数据 @1
+- 创建有vision，只有所有者且值为project的数据 @1
+- 创建有vision，common模块且值为project的数据 @1
+- 创建没有vision，只有视图且值project和story的数据 @1
+- 创建没有vision，只有所有者且值为project和story的数据 @1
+- 创建没有vision，my模块且值为project和story的数据 @1
+- 创建没有vision，只有所有者且值为project和story的数据 @1
+- 创建没有vision，common模块且值为project和story的数据 @1
+- 创建有vision，只有所有者且值为project和story的数据 @1
+- 创建有vision，my模块且值为project和story的数据 @1
+- 创建有vision，只有所有者且值为project和story的数据 @1
+- 创建有vision，common模块且值为project和story的数据 @1
 
 */
 
@@ -89,4 +89,3 @@ r($setting->setItemsTest($pathList[6], $items)) && p() && e('1'); // 创建有vi
 r($setting->setItemsTest($pathList[7], $items)) && p() && e('1'); // 创建有vision，my模块且值为project和story的数据
 r($setting->setItemsTest($pathList[8], $items)) && p() && e('1'); // 创建有vision，只有所有者且值为project和story的数据
 r($setting->setItemsTest($pathList[9], $items)) && p() && e('1'); // 创建有vision，common模块且值为project和story的数据
-
