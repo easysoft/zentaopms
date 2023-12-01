@@ -162,4 +162,20 @@ class screenTest
     {
         return $this->objectModel->getChartFilters($chart);
     }
+
+    /**
+     * 测试getChartFilters。
+     * Test getChartFilters.
+     *
+     * @param  array $xlabel
+     * @param  string $type
+     * @param  string $object
+     * @param  string $field
+     * @access public
+     * @return array
+     */
+    public function processXlabelTest(array $xlabel, string $type, string $object, string $field): array
+    {
+        return $this->objectModel->processXlabel($xlabel, $type, $object, $field);
+    }
 }
