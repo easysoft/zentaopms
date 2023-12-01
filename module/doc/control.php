@@ -666,37 +666,23 @@ class doc extends control
     }
 
     /**
+     * 删除一个文档。
      * Delete a doc.
      *
-     * @param int $docID
-     * @param string $confirm yes|no
-     * @param string $from
+     * @param  int    $docID
      * @access public
      * @return void
      */
-    public function delete($docID)
+    public function delete(int $docID)
     {
-        $this->loadModel('file');
-        $doc        = $this->doc->getByID($docID);
-        $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
         $this->doc->delete(TABLE_DOC, $docID);
 
         /* Delete doc files. */
-        if($doc->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in(array_keys($doc->files))->exec();
+        $doc = $this->doc->getByID($docID);
+        if($doc->files) $this->doc->deleteFiles(array_keys($doc->files));
 
-        /* if ajax request, send result. */
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = true;
-        }
-        return $this->send($response);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
