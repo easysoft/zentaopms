@@ -268,7 +268,7 @@ class cron extends control
                 if($setting->value > $expirDate)
                 {
                     $consumerCount ++;
-                    if($consumer < $this->config->cron->maxConsumer && $setting->key == strval($execId)) $roles[] = 'consumer';
+                    if($consumerCount < $this->config->cron->maxConsumer && $setting->key == strval($execId)) $roles[] = 'consumer';
                 }
                 else
                 {
