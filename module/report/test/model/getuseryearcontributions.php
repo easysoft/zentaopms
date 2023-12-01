@@ -7,6 +7,7 @@ include dirname(__FILE__, 2) . '/report.class.php';
 zdTable('action')->gen('100');
 zdTable('case')->gen('20');
 zdTable('testrun')->gen('20');
+zdTable('testresult')->gen('10');
 zdTable('user')->gen(1);
 
 su('admin');
