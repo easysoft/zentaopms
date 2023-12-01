@@ -5,7 +5,7 @@ class docTest
     {
          global $tester, $app;
          $this->objectModel = $tester->loadModel('doc');
-        $this->objectModel->config->global->syncProduct = '';
+         $this->objectModel->config->global->syncProduct = '';
 
          $app->rawModule = 'doc';
          $app->rawMethod = 'index';
@@ -89,24 +89,22 @@ class docTest
     }
 
     /**
-     * Function updateLib test by doc
+     * 编辑一个文档库。
+     * Update a lib.
      *
-     * @param  int $libID
-     * @param  array $param
+     * @param  int    $libID
+     * @param  array  $param
      * @access public
      * @return array
      */
-    public function updateLibTest($libID, $param)
+    public function updateLibTest($libID, $param): array
     {
-        global $tester;
-        $tester->app->loadConfig('doc');
-
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $objects = $this->objectModel->updateLib($libID);
+        $libData = new stdclass();
+        foreach($param as $key => $value) $libData->{$key} = $value;
+        $changes = $this->objectModel->updateLib($libID, $libData);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $changes;
     }
 
     /**
