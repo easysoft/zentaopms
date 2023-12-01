@@ -7,14 +7,13 @@ su('admin');
 /**
 
 title=测试 settingModel->setSN();
+timeout=0
 cid=1
-pid=1
 
-测试正常设置SN >> 1
+- 测试正常设置SN @1
 
 */
 
 $setting = new settingTest();
 
 r($setting->setSNTest()) && p() && e('1'); //测试正常设置SN
-
