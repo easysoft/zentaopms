@@ -264,12 +264,12 @@ CREATE TABLE `zt_artifactrepo` (
   `type` char(7) CHARACTER SET utf8 NOT NULL,
   `status` varchar(10) CHARACTER SET utf8 NOT NULL,
   `createdBy` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdDate` datetime NULL,
   `editedBy` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `editedDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `editedDate` datetime NULL,
   `deleted` tinyint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_assetlib` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -2537,7 +2537,7 @@ CREATE TABLE `zt_prompt` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_promptrole` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
@@ -2547,7 +2547,7 @@ CREATE TABLE `zt_promptrole` (
   `characterization` text,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_relation` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) NOT NULL,
@@ -2994,7 +2994,7 @@ CREATE TABLE `zt_solution` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdAt` datetime NOT NULL,
-  `updatedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_solutions` (
