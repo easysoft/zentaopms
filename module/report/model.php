@@ -357,84 +357,18 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户某年的产品下创建的需求、计划，创建和关闭的需求数量统计。
      * Get count of created story,plan and closed story by accounts every product in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return array
      */
-    public function getUserYearProducts($accounts, $year)
+    public function getUserYearProducts(array $accounts, string $year): array
     {
         /* Get changed products in this year. */
-        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->andWhere('LEFT(createdDate, 4)')->eq($year)
-            ->beginIF($accounts)
-            ->andWhere('createdBy', true)->in($accounts)
-            ->orWhere('PO')->in($accounts)
-            ->orWhere('QD')->in($accounts)
-            ->orWhere('RD')->in($accounts)
-            ->markRight(1)
-            ->fi()
-            ->andWhere('shadow')->eq(0)
-            ->fetchAll('id');
-
-        /* Get created plans in this year. */
-        $plans = $this->dao->select('t1.id,t1.product')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
-            ->where('LEFT(t2.date, 4)')->eq($year)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.product')->in(array_keys($products))
-            ->beginIF($accounts)
-            ->andWhere('t2.actor')->in($accounts)
-            ->fi()
-            ->andWhere('t2.action')->eq('opened')
-            ->fetchAll();
-
-        $planProducts = array();
-        $planGroups   = array();
-        foreach($plans as $plan)
-        {
-            $planProducts[$plan->product] = $plan->product;
-            $planGroups[$plan->product][$plan->id] = $plan->id;
-        }
-
-        $createStoryProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
-            ->where('LEFT(openedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
-            ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
-            ->fetchPairs('product', 'product');
-        $closeStoryProducts  = $this->dao->select('DISTINCT product')->from(TABLE_STORY)
-            ->where('LEFT(closedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('product')->in(array_keys($products))
-            ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
-            ->fetchPairs('product', 'product');
-        if($createStoryProducts or $closeStoryProducts)
-        {
-            $products += $this->dao->select('id,name')->from(TABLE_PRODUCT)
-                ->where('id')->in($createStoryProducts + $closeStoryProducts + $planProducts)
-                ->andWhere('deleted')->eq(0)
-                ->fetchAll('id');
-        }
-
-        $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story")->from(TABLE_STORY)
-            ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('LEFT(openedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
-            ->groupBy('product')
-            ->fetchAll('product');
-
-        $closedStoryStats = $this->dao->select("product,sum(if((status = 'closed'), 1, 0)) as closed")->from(TABLE_STORY)
-            ->where('product')->in(array_keys($products))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('LEFT(closedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
-            ->groupBy('product')
-            ->fetchAll('product');
+        list($products, $planGroups, $createdStoryStats, $closedStoryStats) = $this->reportTao->getAnnualProductStat($accounts, $year);
 
         /* Merge created plan, created story and closed story in every product. */
         foreach($products as $productID => $product)
