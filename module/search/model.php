@@ -761,27 +761,28 @@ class searchModel extends model
     }
 
     /**
+     * 构建索引查询。
      * Build index query.
      *
-     * @param  string   $type
-     * @param  bool     $testDelete
+     * @param  string $type
+     * @param  bool   $testDelete
      * @access public
      * @return string
      */
-    public function buildIndexQuery($type, $testDeleted = true)
+    public function buildIndexQuery(string $type, bool $testDeleted = true)
     {
         $table = $this->config->objectTables[$type];
-        if($type == 'story' or $type == 'requirement')
+        if($type == 'story' || $type == 'requirement')
         {
-            $query = $this->dao->select('DISTINCT t1.*,t2.spec,t2.verify')->from($table)->alias('t1')
+            $query = $this->dao->select('DISTINCT t1.*, t2.spec, t2.verify')->from($table)->alias('t1')
                 ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
-                ->where('t1.deleted')->eq(0)
+                ->where('t1.deleted')->eq('0')
                 ->andWhere('type')->eq($type)
                 ->andWhere('t1.version=t2.version');
         }
         elseif($type == 'doc')
         {
-            $query = $this->dao->select('DISTINCT t1.*,t2.content,t2.digest')->from($table)->alias('t1')->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc')->where('t1.deleted')->eq(0)->andWhere('t1.version=t2.version');
+            $query = $this->dao->select('DISTINCT t1.*, t2.content, t2.digest')->from($table)->alias('t1')->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc')->where('t1.deleted')->eq('0')->andWhere('t1.version=t2.version');
         }
         else
         {
@@ -793,7 +794,7 @@ class searchModel extends model
                 ->beginIF($type == 'program')->andWhere('type')->eq('program')->fi()
                 ->beginIF($type == 'project')->andWhere('type')->eq('project')->fi()
                 ->beginIF($type == 'execution')->andWhere('type')->in('stage,sprint,kanban')->fi()
-                ->beginIF(isset($data->deleted))->andWhere('t1.deleted')->eq(0)->fi();
+                ->beginIF(isset($data->deleted))->andWhere('t1.deleted')->eq('0')->fi();
         }
         return $query;
     }
