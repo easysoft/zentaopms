@@ -102,14 +102,65 @@ class apiModel extends model
 
         if(dao::isError()) return false;
 
+        /* 维护历史记录。 */
         $apiID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('api', $apiID, 'Created', '', '', '', false);
 
+        /* 维护接口文档的历史版本。 */
         $formData->id = $apiID;
         $apiSpec      = $this->getApiSpecByData($formData);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
         return $apiID;
+    }
+
+    /**
+     * 更新一个接口。
+     * Update an api doc.
+     *
+     * @param  object $formData
+     * @access public
+     * @return bool
+     */
+    public function update(object $formData): bool
+    {
+        $oldApi = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
+
+        if(!empty($formData->editedDate) && $oldApi->editedDate != $formData->editedDate)
+        {
+            /* 如果提交之前已有其他人变更接口则提示错误信息。 */
+            dao::$errors['message'][] = $this->lang->error->editedByOther;
+            return false;
+        }
+        $formData->editedDate = helper::now();
+
+        /* 仅在有变更的情况下才变更版本号。 */
+        $changes = common::createChanges($oldApi, $formData);
+        if(!empty($changes)) $formData->version = $oldApi->version + 1;
+
+        $this->dao->update(TABLE_API)
+            ->data($formData)
+            ->autoCheck()
+            ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
+            ->check('title', 'unique', "id != $formData->id AND lib = $formData->lib AND module = $formData->module")
+            ->check('path',  'unique', "id != $formData->id AND lib = $formData->lib AND module = $formData->module AND method = '$formData->method'")
+            ->where('id')->eq($formData->id)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        /* 维护历史记录。 */
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('api', $formData->id, 'edited', '', '', '', false);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        /* 维护接口文档的历史版本。 */
+        $apiSpec = $this->getApiSpecByData($formData);
+        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -191,48 +242,6 @@ class apiModel extends model
         }
 
         return true;
-    }
-
-    /**
-     * Update an api doc.
-     *
-     * @param  int $apiID
-     * @access public
-     * @return bool
-     */
-    public function update(object $formData): bool
-    {
-        $oldApi = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
-
-        if($oldApi->editedDate != $formData->editedDate)
-        {
-            dao::$errors['message'][] = $this->lang->error->editedByOther;
-            return false;
-        }
-        $formData->editedDate = helper::now();
-
-        $changes = common::createChanges($oldApi, $formData);
-        if(!empty($changes)) $formData->version = $formData->version + 1;
-
-        $this->dao->update(TABLE_API)
-            ->data($formData)
-            ->autoCheck()
-            ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
-            ->where('id')->eq($formData->id)
-            ->exec();
-
-        if(dao::isError()) return false;
-
-        if($changes)
-        {
-            $actionID = $this->loadModel('action')->create('api', $formData->id, 'edited', '', '', '', false);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        $apiSpec = $this->getApiSpecByData($formData);
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
-
-        return !dao::isError();
     }
 
     /**
