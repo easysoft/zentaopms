@@ -104,28 +104,6 @@ class reportTest
     }
 
     /**
-     * Test get products.
-     *
-     * @param  string $conditions
-     * @param  string $storyType
-     * @access public
-     * @return string
-     */
-    public function getProductsTest($conditions, $storyType = 'story')
-    {
-        $objects = $this->objectModel->getProducts($conditions, $storyType);
-
-        if(dao::isError()) return dao::getError();
-
-        $planCount = 0;
-        foreach($objects as $object)
-        {
-            if(isset($object->plans)) $planCount += count($object->plans);
-        }
-        return 'product:' . count($objects) . ';plan:' . $planCount;
-    }
-
-    /**
      * Test get workload.
      *
      * @param  int    $dept
