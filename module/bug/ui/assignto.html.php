@@ -32,11 +32,7 @@ formPanel
     formGroup
     (
         set::label($lang->bug->mailto),
-        set::control('picker'),
-        set::name('mailto[]'),
-        set::value(str_replace(' ', '', $bug->mailto ?: '')),
-        set::items($users),
-        set::multiple(true)
+        mailto(set::items($users), set::value(str_replace(' ', '', $bug->mailto ?: '')))
     ),
     formGroup
     (

@@ -356,49 +356,7 @@ detailBody
             item
             (
                 set::name($lang->bug->mailto),
-                inputGroup
-                (
-                    picker
-                    (
-                        set::items($users),
-                        set::multiple(true),
-                        set::name('mailto[]'),
-                        set::value($bug->mailto)
-                    ),
-                    span
-                    (
-                        set('id', 'contactBox'),
-                        set('class', 'input-group-addon'),
-                        $contactList ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
-                        $contactList ? picker
-                        (
-                            set::className('width', 'w-20'),
-                            set::name('contactListMenu'),
-                            set::items($contactList),
-                            set::value(),
-                            set::placeholder($lang->contact->common)
-                        ) :
-                        span
-                        (
-                            set('class', 'input-group-addon'),
-                            a
-                            (
-                                set('class', 'mr-2'),
-                                set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
-                                set('title', $lang->user->contacts->manage),
-                                set('data-toggle', 'modal'),
-                                icon('cog'),
-                            ),
-                            a
-                            (
-                                set('id', 'refreshMailto'),
-                                set('class', 'text-black'),
-                                set('href', 'javascript:void(0)'),
-                                icon('refresh')
-                            )
-                        )
-                    ),
-                )
+                mailto(set::items($users), set::value($bug->mailto)),
             )
         ),
         tableData
