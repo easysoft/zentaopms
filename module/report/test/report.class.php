@@ -564,18 +564,18 @@ class reportTest
     }
 
     /**
+     * 测试获取项目和执行名称。
      * Test get project and execution name.
      *
-     * @param  bool   $count
      * @access public
-     * @return int|array
+     * @return array
      */
-    public function getProjectExecutionsTest($count = false)
+    public function getProjectExecutionsTest(): array
     {
         $objects = $this->objectModel->getProjectExecutions();
 
         if(dao::isError()) return dao::getError();
 
-        return $count ? count($objects) : $objects;
+        return $objects;
     }
 }

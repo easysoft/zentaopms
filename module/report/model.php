@@ -624,12 +624,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取项目和执行名称。
      * Get project and execution name.
      *
      * @access public
      * @return array
      */
-    public function getProjectExecutions()
+    public function getProjectExecutions(): array
     {
         $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status, t1.multiple')
             ->from(TABLE_EXECUTION)->alias('t1')
