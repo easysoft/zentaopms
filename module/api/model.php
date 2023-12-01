@@ -258,30 +258,33 @@ class apiModel extends model
     }
 
     /**
+     * 根据版本号或者发布ID获取发布信息。
      * Get release.
      *
-     * @param  int    $libID
-     * @param  string $type
-     * @param  int    $param
+     * @param  int          $libID
+     * @param  string       $type   byVersion | byID
+     * @param  string|int   $param
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getRelease($libID = 0, $type = '', $param = 0)
+    public function getRelease($libID = 0, $type = 'byID', string|int $param = '0'): object|false
     {
-        $model = $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
+        $release = $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
             ->where('1 = 1')
             ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
             ->beginIF($type == 'byVersion')->andWhere('version')->eq($param)->fi()
-            ->beginIF($type == 'byId')->andWhere('id')->eq($param)->fi()
+            ->beginIF($type == 'byID')->andWhere('id')->eq($param)->fi()
             ->fetch();
-        if($model) $model->snap = json_decode($model->snap, true);
-        return $model;
+
+        if($release) $release->snap = json_decode($release->snap, true);
+        return $release;
     }
 
     /**
-     * Get Versions by api id
+     * 根据文档库ID获取发布列表。
+     * Get Versions by api id.
      *
-     * @param int $libID
+     * @param  int    $libID
      * @access public
      * @return array
      */
@@ -290,13 +293,12 @@ class apiModel extends model
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)->where('lib')->eq($libID)->fetchAll('id');
     }
 
-
     /**
      * Get api doc by id.
      *
-     * @param int $id
-     * @param int $version
-     * @param int $release
+     * @param  int    $id
+     * @param  int    $version
+     * @param  int    $release
      * @access public
      * @return object
      */
@@ -304,7 +306,7 @@ class apiModel extends model
     {
         if($release)
         {
-            $rel = $this->getRelease(0, 'byId', $release);
+            $rel = $this->getRelease(0, 'byID', $release);
             foreach($rel->snap['apis'] as $api)
             {
                 if($api['id'] == $id) $version = $api['version'];
@@ -376,7 +378,7 @@ class apiModel extends model
         /* Get release info. */
         if($release > 0)
         {
-            $rel = $this->getRelease(0, 'byId', $release);
+            $rel = $this->getRelease(0, 'byID', $release);
 
             $where = "1=1 and lib = $libID ";
             if($moduleID > 0 and isset($rel->snap['modules']))

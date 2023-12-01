@@ -1,0 +1,29 @@
+title: table zt_api_lib_release
+desc: "文档库发布"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: lib
+    note: "文档库ID"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: version
+    fields:
+      - field: version1
+        range: version 
+      - field: version2
+        range: 1{10},2{10},3{10},4{10},5{10},6{10}
+      - field: version3
+        range: .
+      - field: version4
+        range: 0-9

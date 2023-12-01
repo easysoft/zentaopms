@@ -113,7 +113,7 @@ class api extends control
 
         /* 获取文档目录列表和当前选中的文档目录. */
         $libs      = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
-        $api       = $this->api->getLibById($apiID, $version, $release);
+        $api       = $this->api->getLibByID($apiID, $version, $release);
         $libID     = $api->lib;
         $lib       = zget($libs, $libID);
         $api->desc = htmlspecialchars_decode($api->desc);
@@ -236,7 +236,7 @@ class api extends control
 
         if($releaseID)
         {
-            $release = $this->api->getRelease($libID, 'byId', $releaseID);
+            $release = $this->api->getRelease($libID, 'byID', $releaseID);
             $structs = $this->api->getStructListByRelease($release, '1 = 1 ', $sort);
         }
         else
@@ -397,7 +397,7 @@ class api extends control
      */
     public function editLib(int $id)
     {
-        $lib = $this->doc->getLibById($id);
+        $lib = $this->doc->getLibByID($id);
 
         if(!empty($_POST))
         {
@@ -498,7 +498,7 @@ class api extends control
      */
     public function edit(int $apiID)
     {
-        $api = $this->api->getLibById($apiID);
+        $api = $this->api->getLibByID($apiID);
         if(!empty($_POST))
         {
             $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->get();
@@ -529,7 +529,7 @@ class api extends control
      */
     public function delete(int $apiID)
     {
-        $api = $this->api->getLibById($apiID);
+        $api = $this->api->getLibByID($apiID);
         $this->api->delete(TABLE_API, $apiID);
 
         if(dao::isError()) $this->sendError(dao::getError());
