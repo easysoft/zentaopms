@@ -19,11 +19,11 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
     {
         if(empty($metrics)) continue;
 
-        $metricList[] = li
-            (
-                set::className('metric-group'),
-                $lang->metric->objectList[$key]
-            );
+        if($scope != 'collect')
+        {
+            $metricCount  = count($metrics);
+            $metricList[] = li(set::className('metric-group'), $lang->metric->objectList[$key] . "($metricCount)");
+        }
 
         foreach($metrics as $metric)
         {
@@ -254,43 +254,36 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, 
 
 $sideTitle = $scope == 'filter' ? sprintf($lang->metric->filter->filterTotal, count($metrics)) : $metricList;
 $star = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
-div
+
+sidebar
 (
-    setClass('side sidebar sidebar-left'),
-    setStyle('overflow', 'visible'),
+    set::width('25%'),
     div
     (
-        setClass('canvas'),
+        setClass('side'),
         div
         (
-            setClass('title flex items-center'),
-            span
+            setClass('canvas'),
+            div
             (
-                setClass('name-color'),
-                $sideTitle
+                setClass('title flex items-center'),
+                span
+                (
+                    setClass('name-color'),
+                    $sideTitle
+                )
+            ),
+            div
+            (
+                setClass('metric-tree'),
+                $fnGenerateSide($groupMetrics, $current, $viewType, $scope, $lang)
             )
         ),
-        div
-        (
-            setClass('metric-tree'),
-            $fnGenerateSide($groupMetrics, $current, $viewType, $scope, $lang)
-        )
-    ),
-    div
-    (
-        on::click('.sidebar-gutter', 'window.toggleCollapsed()'),
-        setClass('sidebar-gutter gutter gutter-horz'),
-        button
-        (
-            setClass('gutter-toggle'),
-            span(setClass('chevron-left'))
-        )
     )
 );
 div
 (
     setClass('main'),
-    setStyle('flex', 'auto'),
     empty($current) ? div(setClass('canvas')) :
     div
     (

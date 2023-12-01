@@ -528,8 +528,8 @@ class metricZen extends metric
             return ($dateA > $dateB) ? -1 : 1;
         });
 
-        $times    = array();
-        $objects  = array();
+        $times     = array();
+        $objects   = array();
         foreach($data as $dataInfo)
         {
             $time     = substr($dataInfo->$dateField, 0, 10);
@@ -537,7 +537,7 @@ class metricZen extends metric
             $object = $dataInfo->scope;
             $value  = $dataInfo->value;
 
-            if(!isset($times[$time]))     $times[$time] = $time;
+            if(!isset($times[$time]))     $times[$time]     = $time;
             if(!isset($objects[$object])) $objects[$object] = array();
             $objects[$object][$time] = array($value, $calcTime);
         }

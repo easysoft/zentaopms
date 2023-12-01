@@ -184,23 +184,6 @@ window.isMetricChecked = function(id)
     return window.checkedList.filter(function(metric){return metric.id == id}).length != 0;
 }
 
-window.renderCheckList = function(metrics)
-{
-    $('.side .metric-tree').empty();
-
-    var ids     = metrics.map(obj => obj.id).join(',');
-    var checked = window.checkedList.map(obj => obj.id).join(',');
-    $.post($.createLink('metric', 'ajaxGetMetricSideTree'),
-    {
-        'metricIDList': ids,
-        'checkedList' : checked
-    },
-    function(resp)
-    {
-        $('.side .metric-tree').html(resp);
-    });
-}
-
 window.updateCheckList = function(id, name, isChecked)
 {
     if(isChecked)
@@ -225,7 +208,12 @@ window.ajaxGetMetrics = function(scope, filters = '', callback)
         var metrics = JSON.parse(resp);
         var total   = metrics.length;
 
-        window.renderCheckList(metrics);
+        $('.side .metric-tree').empty();
+        var ids     = metrics.map(obj => obj.id).join(',');
+        var checked = window.checkedList.map(obj => obj.id).join(',');
+        var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'scope=' + scope + '&metricIDList=' + ids + '&checkedList=' + checked);
+
+        loadTarget(url, '.side .metric-tree');
 
         if(typeof callback == 'function') callback(metrics, total);
     });
@@ -384,10 +372,16 @@ window.updateMetricBoxs = function(id, isChecked)
  */
 window.appendMetricBox = function(id, mode = 'add')
 {
-    $.get($.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id), function(resp)
-    {
-        $('.table-and-charts').append(resp);
-    });
+    var url = $.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id);
+
+    var metricDom = $('<div>');
+    var metricID  = 'metricBox' + id;
+    metricDom.attr('id', metricID);
+    metricDom.attr('metric-id', id);
+    metricDom.addClass('metricBox');
+
+    $('.table-and-charts').append(metricDom);
+    loadTarget(url, metricID);
 }
 
 window.handleQueryClick = function(id, viewType = 'single')
@@ -649,7 +643,7 @@ window.messagerWarning = function(message)
 
 window.getTableHeight = function(actual)
 {
-    return $('.table-side').height();
+    return Math.min(800, $('.table-side').height());
 }
 
 window.setMultiTableHeight = function(contentHeight)

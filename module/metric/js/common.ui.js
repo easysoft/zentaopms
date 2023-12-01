@@ -38,6 +38,7 @@ window.renderDTableCell = function(result, {row, col})
         cellWidth[col] = Math.floor(cellWidth[col] / colsWidth * width);
     });
 
+
     if(Array.isArray(row.data[col.name]))
     {
         var value = row.data[col.name][0];

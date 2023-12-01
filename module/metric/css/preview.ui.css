@@ -1,6 +1,7 @@
+#mainMenu {padding-left: unset !important; padding-right: unset !important;}
 #mainContent {display: flex; padding-top: 0;}
-#mainContent .side {flex: 0 0 25%; overflow-x: hidden; padding-right: 4px;}
-#mainContent .main {flex: 0 0 75%; overflow-x: hidden;}
+#mainContent .side {overflow-x: hidden; padding-right: 4px;}
+#mainContent .main {overflow-x: hidden;}
 
 #featureBar .nav-feature li:last-child {padding-left: 4px;}
 #featureBar .nav-feature li:nth-last-child(2):before {content: ""; position: absolute; left: 2px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
@@ -10,7 +11,7 @@
 .main, .side {border-radius: 2px;}
 .side .title {height: 48px; padding-left: 16px; margin-bottom: 2px;}
 .side .name-color {color: var(--color-gray-600);}
-.side .metric-tree {height: calc(100vh - 180px); max-height: 864px; overflow-y: scroll;}
+.side .metric-tree {height: calc(100vh - 174px); max-height: 870px; overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .metric-item:hover {background-color: var(--color-gray-100);}
 .side .metric-item a {color: var(--color-inherit);}

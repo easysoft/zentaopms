@@ -51,88 +51,6 @@ div
     )
 );
 
-div
-(
-    set::id('metricBox-tpl'),
-    setClass('hidden'),
-    div
-    (
-        set::id('metricBox{id}'),
-        set('metric-id', '{id}'),
-        setClass('metricBox'),
-        div
-        (
-            setClass('metric-name metric-name-notfirst flex flex-between items-center'),
-            div
-            (
-                span
-                (
-                    setClass('metric-name-weight'),
-                    "{name}"
-                )
-            ),
-            div
-            (
-                setClass('flex-start'),
-                toolbar
-                (
-                    haspriv('metric', 'details') ? item(set(array
-                    (
-                        'text'  => $this->lang->metric->details,
-                        'class' => 'ghost details',
-                        'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
-                        'data-toggle' => 'modal'
-                    ))) : null,
-                    item(set(array
-                    (
-                        'text'    => $this->lang->metric->remove,
-                        'class'   => 'ghost metric-remove',
-                        'onclick' => "window.handleRemoveLabel({id})"
-                    ))),
-                    haspriv('metric', 'filters') ? item(set(array
-                    (
-                        'icon'  => 'menu-backend',
-                        'text'  => $this->lang->metric->filters,
-                        'class' => 'ghost hidden',
-                        'url'   => '#'
-                    ))) : null,
-                    haspriv('metric', 'zAnalysis') ? item(set(array
-                    (
-                        'icon'  => 'chart-line',
-                        'text'  => $this->lang->metric->zAnalysis,
-                        'class' => 'ghost chart-line-margin hidden',
-                        'url'   => '#'
-                    ))) : null
-                )
-            )
-        ),
-        div
-        (
-            setClass('table-and-chart table-and-chart-multiple'),
-            div
-            (
-                setClass('table-side'),
-                div
-                (
-                    setClass('dtable')
-                )
-            ),
-            div
-            (
-                setClass('chart-side'),
-                div
-                (
-                    setClass('chart-type')
-                ),
-                div
-                (
-                    setClass('chart chart-multiple')
-                )
-            )
-        )
-    )
-);
-
 $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
 {
     $panelClass = $filterItem['class'];
@@ -359,7 +277,11 @@ foreach($groupMetrics as $key => $metrics)
                 bind::change('window.handleCheckboxChange($element)')
             );
     }
-    $metricTrees[] = div(setClass('check-list-title') ,$this->lang->metric->objectList[$key]);
+    if($scope != 'collect')
+    {
+        $metricCount  = count($metrics);
+        $metricTrees[] = div(setClass('check-list-title') ,$this->lang->metric->objectList[$key] . "($metricCount)");
+    }
     $metricTrees[] = checkList
         (
             set::className('check-list-metric'),
@@ -370,37 +292,30 @@ foreach($groupMetrics as $key => $metrics)
         );
 }
 
-div
+sidebar
 (
-    setClass('side sidebar sidebar-left'),
-    setStyle('overflow', 'visible'),
+    set::width('25%'),
     div
     (
-        setClass('canvas'),
+        setClass('side'),
         div
         (
-            setClass('title flex items-center'),
-            span
+            setClass('canvas'),
+            div
             (
-                setClass('name-color side-title'),
-                $metricList
+                setClass('title flex items-center'),
+                span
+                (
+                    setClass('name-color side-title'),
+                    $metricList
+                )
+            ),
+            div
+            (
+                setClass('metric-tree'),
+                $metricTrees
             )
         ),
-        div
-        (
-            setClass('metric-tree'),
-            $metricTrees
-        )
-    ),
-    div
-    (
-        on::click('.sidebar-gutter', 'window.toggleCollapsed()'),
-        setClass('sidebar-gutter gutter gutter-horz'),
-        button
-        (
-            setClass('gutter-toggle'),
-            span(setClass('chevron-left'))
-        )
     )
 );
 
@@ -473,7 +388,8 @@ $metricBoxs = div
                     set::data(array_values($groupData)),
                     ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
                     $headerGroup ? set::plugins(array('header-group')) : null,
-                    set::onRenderCell(jsRaw('window.renderDTableCell'))
+                    set::onRenderCell(jsRaw('window.renderDTableCell')),
+                    set::loadPartial(true)
                 ) : null
             )
         ),
@@ -513,7 +429,6 @@ $metricBoxs = div
 div
 (
     setClass('main'),
-    setStyle('flex', 'auto'),
     div
     (
         setClass('canvas'),
