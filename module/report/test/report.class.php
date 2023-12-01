@@ -180,23 +180,6 @@ class reportTest
     }
 
     /**
-     * Test get bug assign.
-     *
-     * @access public
-     * @return void
-     */
-    public function getBugAssignTest()
-    {
-        $objects = $this->objectModel->getBugAssign();
-
-        if(dao::isError()) return dao::getError();
-
-        $count = array();
-        foreach($objects as $user => $object) $count[$user] = $object['total']['count'];
-        return $count;
-    }
-
-    /**
      * 测试获取用户的 bugs。
      * Test get user bugs.
      *
