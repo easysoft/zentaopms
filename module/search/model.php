@@ -605,24 +605,28 @@ class searchModel extends model
     }
 
     /**
+     * 保存搜索字典。
      * Save dict info.
      *
-     * @param  array    $words
+     * @param  array  $dict
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveDict($dict)
+    public function saveDict(array $dict): bool
     {
         static $savedDict;
-        if(empty($savedDict)) $savedDict = $this->dao->select("`key`")->from(TABLE_SEARCHDICT)->fetchPairs('key', 'key');
-        foreach($dict as $key => $value)
+        if(empty($savedDict)) $savedDict = $this->dao->select("`key`")->from(TABLE_SEARCHDICT)->fetchPairs();
+
+        foreach($dict as $key)
         {
-            if(!is_numeric($key) or empty($value) or strlen($key) != 5 or $key < 0 or $key > 65535) continue;
+            if(!is_numeric($key) || empty($key) || strlen($key) != 5 || $key < 0 || $key > 65535) continue;
             if(isset($savedDict[$key])) continue;
 
-            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $key))->exec();
             $savedDict[$key] = $key;
         }
+
+        return !dao::isError();
     }
 
     /**
