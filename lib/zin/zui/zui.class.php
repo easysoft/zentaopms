@@ -26,6 +26,7 @@ class zui extends wg
         '_tag:string="div"',
         '_map?:array',
         '_props?: array',
+        '_options?: array',
         '_size?: array',
         '_id?: string',
         '_class?: string',
@@ -35,7 +36,7 @@ class zui extends wg
 
     protected function build(): wg|array
     {
-        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call, $initWithShareData) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call', '_initWithShareData'));
+        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call, $initWithShareData, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call', '_initWithShareData', '_options'));
         list($width, $height) = $size;
 
         $options  = $this->getRestProps();
@@ -67,6 +68,7 @@ class zui extends wg
                 if(empty($id)) $id = $this->gid;
                 $selector = "#$id";
             }
+            if(is_array($userOptions)) $options = array_merge($options, $userOptions);
             $children[] = h::jsCall($call, $name, $selector, $options);
         }
 

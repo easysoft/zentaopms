@@ -4,60 +4,34 @@ namespace zin;
 
 class globalSearch extends wg
 {
-    protected static array $defineProps = array(
-        'commonSearchText?: string',
-        'commonSearchUrl?: string',
-        'searchItems?: array',
-        'searchFunc?: callable'
-    );
-
     public static function getPageJS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): array
+    protected function build(): wg
     {
         global $config, $lang;
-
-        jsVar('searchObjectList', array_keys($lang->searchObjects));
 
         if($config->systemMode == 'light') unset($lang->searchObjects['program']);
         unset($lang->searchObjects['all']);
 
         $searchItems = array();
-        foreach($lang->searchObjects as $key => $module) $searchItems[] = array('key' => $key, 'text' => $module);
+        $searchItems[] = array('key' => 'search', 'text' => $lang->searchAB . ' {0}');
+        foreach($lang->searchObjects as $key => $module) $searchItems[] = array('key' => $key, 'text' => $module . ' #{0}');
 
-        $this->setDefaultProps(array(
-            'commonSearchText' => $lang->searchAB,
-            'commonSearchKey' => 'all',
-            'searchItems' => $searchItems,
-            'searchFunc' => jsRaw('window.globalSearch')
-        ));
-
-        $input = inputGroup
+        return zui::globalSearch
         (
-            set($this->getRestProps()),
-            input
-            (
-                setID('globalSearchInput'),
-                set::placeholder($lang->index->pleaseInput)
-            ),
-            btn
-            (
-                set::icon('search'),
-                set::type('primary')
-            )
-        );
-        $input->setProp('data-zin-id', $input->gid);
-        $props = array_merge
-        (
-            $this->props->pick(array('commonSearchText', 'commonSearchKey', 'searchItems', 'searchFunc')),
-            array('_to' => "[data-zin-id='{$input->gid}']")
-        );
-        return array(
-            $input,
-            zui::globalSearch(set($props))
+            set::_id('globalSearch'),
+            set::_class('w-44'),
+            set::items($searchItems),
+            set::searchHint($lang->searchAB),
+            set::popPlacement('top-start'),
+            set::popWidth(240),
+            set::searchBox(array('circle' => true, 'suffixClass' => 'text-primary opacity-100')),
+            set::getSearchType(jsRaw('window.getGlobalSearchType')),
+            set::onSearch(jsRaw('window.handleGlobalSearch')),
+            inherit($this)
         );
     }
 }
