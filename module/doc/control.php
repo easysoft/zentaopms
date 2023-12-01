@@ -552,45 +552,6 @@ class doc extends control
     }
 
     /**
-     * Create basic info for doc of text type.
-     *
-     * @param  string     $objectType
-     * @param  int        $objectID
-     * @param  int|string $libID
-     * @param  int        $moduleID
-     * @param  string     $docType
-     * @access public
-     * @return void
-     */
-    public function createBasicInfo($objectType, $objectID, $libID, $moduleID = 0, $docType = '')
-    {
-        /* Get libs and the default lib id. */
-        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
-        if(!$libID and !empty($libs)) $libID = key($libs);
-
-        $lib     = $this->doc->getLibByID($libID);
-        $type    = isset($lib->type) ? $lib->type : 'product';
-        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
-
-        $this->view->title = $libName . $this->lang->doc->create;
-
-        $this->view->objectType       = $objectType;
-        $this->view->objectID         = zget($lib, $lib->type, 0);
-        $this->view->libID            = $libID;
-        $this->view->lib              = $lib;
-        $this->view->libs             = $libs;
-        $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        $this->view->docType          = $docType;
-        $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
-
-        $this->display();
-    }
-
-    /**
      * Edit a doc.
      *
      * @param  int     $docID
