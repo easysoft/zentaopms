@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Yuchun Li <liyuchun@easycorp.ltd>
+ * @author      Guangming Sun<sunguangming@easycorp.ltd>
  * @package     kanban
  * @version     $Id: control.php 4460 2021-10-26 11:03:02Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.net
@@ -12,6 +13,7 @@
 class kanban extends control
 {
     /**
+     * 看板空间列表。
      * Kanban space.
      *
      * @param  string $browseType involved|cooperation|public|private
@@ -21,7 +23,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function space($browseType = 'involved', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function space(string $browseType = 'involved', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->session->set('regionID', 'all', 'kanban');
 
@@ -30,10 +32,10 @@ class kanban extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title         = $this->lang->kanbanspace->common;
-        $this->view->spaceList     = $this->kanban->getSpaceList($browseType, $pager, $this->cookie->showClosed);
-        $this->view->unclosedSpace = $this->kanban->getCanViewObjects('kanbanspace', 'noclosed');
         $this->view->browseType    = $browseType;
         $this->view->pager         = $pager;
+        $this->view->spaceList     = $this->kanban->getSpaceList($browseType, $pager, $this->cookie->showClosed);
+        $this->view->unclosedSpace = $this->kanban->getCanViewObjects('kanbanspace', 'noclosed');
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->userIdPairs   = $this->user->getPairs('noletter|nodeleted|showid');
         $this->view->usersAvatar   = $this->user->getAvatarPairs();
@@ -42,13 +44,14 @@ class kanban extends control
     }
 
     /**
+     * 创建看板空间。
      * Create a space.
      *
      * @param  string $type
      * @access public
      * @return void
      */
-    public function createSpace($type = 'private')
+    public function createSpace(string $type = 'private')
     {
         if(!empty($_POST))
         {
@@ -60,58 +63,45 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        unset($this->lang->kanban->featureBar['space']['involved']);
-
-        $this->view->title    = $this->lang->kanban->createSpace;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $this->view->type     = $type;
-        $this->view->typeList = $this->lang->kanban->featureBar['space'];
+        $this->view->title = $this->lang->kanban->createSpace;
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->type  = $type;
 
         $this->display();
     }
 
     /**
+     * 编辑看板空间。
      * Edit a space.
      *
      * @param  int    $spaceID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function editSpace($spaceID, $type = '')
+    public function editSpace(int $spaceID, string $type = '')
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->kanban->updateSpace($spaceID, $type);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $actionID = $this->action->create('kanbanSpace', $spaceID, 'edited');
+            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
-
-        $typeList = $this->lang->kanbanspace->typeList;
-        if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
-
-        if($space->type == 'private' and ($type == 'cooperation' or $type == 'public'))
-        {
-            $team = $space->whitelist;
-        }
-        else
-        {
-            $team = $space->team;
-        }
+        if(in_array($space->type, array('cooperation', 'public'))) unset($this->lang->kanbanspace->typeList['private']);
 
         $this->view->spaceID     = $spaceID;
         $this->view->space       = $space;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->typeList    = $typeList;
+        $this->view->typeList    = $this->lang->kanbanspace->typeList;
         $this->view->type        = $type;
-        $this->view->team        = $team;
+        $this->view->team        = ($space->type == 'private' && in_array($type, array('cooperation', 'public'))) ? $space->whitelist : $space->team;
         $this->view->defaultType = $type == '' ? $space->type : $type;
 
         $this->display();

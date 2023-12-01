@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 modalHeader(set::title($lang->kanban->createSpace), set::titleClass('article-h1'));
 
+unset($this->lang->kanban->featureBar['space']['involved']);
 formPanel
 (
     on::change('[name="type"]', 'changeSpaceType'),
@@ -22,7 +23,7 @@ formPanel
             radioList
             (
                 set::name('type'),
-                set::items($typeList),
+                set::items($lang->kanban->featureBar['space']),
                 set::inline(true),
                 set::value($type)
             )
