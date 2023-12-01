@@ -11,7 +11,7 @@
 .main, .side {border-radius: 2px;}
 .side .title {height: 48px; padding-left: 16px; margin-bottom: 2px;}
 .side .name-color {color: var(--color-gray-600);}
-.side .metric-tree {height: calc(100vh - 180px); max-height: 864px; overflow-y: scroll;}
+.side .metric-tree {height: calc(100vh - 174px); max-height: 870px; overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .metric-item:hover {background-color: var(--color-gray-100);}
 .side .metric-item a {color: var(--color-inherit);}

@@ -643,7 +643,7 @@ window.messagerWarning = function(message)
 
 window.getTableHeight = function(actual)
 {
-    return $('.table-side').height();
+    return Math.min(800, $('.table-side').height());
 }
 
 window.setMultiTableHeight = function(contentHeight)
