@@ -14209,20 +14209,20 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
 CREATE TABLE `zt_artifactrepo` (
   `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `products` varchar(1000) CHARACTER SET utf8 NOT NULL,
-  `serverID` smallint(8) NOT NULL,
-  `repoName` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `format` varchar(10) CHARACTER SET utf8 NOT NULL,
-  `type` char(7) CHARACTER SET utf8 NOT NULL,
-  `status` varchar(10) CHARACTER SET utf8 NOT NULL,
-  `createdBy` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `name` varchar(45) NOT NULL DEFAULT '',
+  `products` varchar(255) NOT NULL DEFAULT '',
+  `serverID` smallint(8) NOT NULL DEFAULT 0,
+  `repoName` varchar(45) NOT NULL DEFAULT '',
+  `format` varchar(10) NOT NULL DEFAULT '',
+  `type` char(7) NOT NULL DEFAULT '',
+  `status` varchar(10) NOT NULL DEFAULT '',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `editedBy` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
-  `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
+  `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_measqueue`;
 CREATE TABLE IF NOT EXISTS `zt_measqueue` (
@@ -15136,7 +15136,7 @@ CREATE TABLE `zt_space` (
   `k8space` char(64) NOT NULL,
   `owner` char(30) NOT NULL,
   `default` tinyint(1) NOT NULL DEFAULT 0,
-  `createdAt` datetime NOT NULL,
+  `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
@@ -15147,31 +15147,31 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `space` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `solution` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `name` char(50) DEFAULT '',
+  `name` char(50) NOT NULL DEFAULT '',
   `appID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `appName` char(50) NOT NULL DEFAULT '',
   `appVersion` char(20) NOT NULL DEFAULT '',
   `chart` char(50) NOT NULL DEFAULT '',
-  `logo` varchar(255) DEFAULT '',
+  `logo` varchar(255) NOT NULL DEFAULT '',
   `version` char(50) NOT NULL DEFAULT '',
-  `desc` text,
-  `introduction` varchar(500) DEFAULT '',
+  `desc` text NULL,
+  `introduction` text NULL,
   `source` char(20) NOT NULL DEFAULT '',
-  `channel` char(20) DEFAULT '',
+  `channel` char(20) NOT NULL DEFAULT '',
   `k8name` char(64) NOT NULL DEFAULT '',
   `status` char(20) NOT NULL DEFAULT '',
   `pinned` enum('0', '1') NOT NULL DEFAULT '0',
   `domain` char(255) NOT NULL DEFAULT '',
-  `smtpSnippetName` char(30) NULL DEFAULT '',
-  `ldapSnippetName` char(30) NULL DEFAULT '',
-  `ldapSettings` text,
-  `dbSettings` text,
+  `smtpSnippetName` char(30) NOT NULL DEFAULT '',
+  `ldapSnippetName` char(30) NOT NULL DEFAULT '',
+  `ldapSettings` text NULL,
+  `dbSettings` text NULL,
   `autoBackup` tinyint(1) NOT NULL DEFAULT 0,
   `backupKeepDays` int unsigned NOT NULL DEFAULT 1,
   `autoRestore` tinyint(1) NOT NULL DEFAULT 0,
-  `env` text,
+  `env` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdAt` datetime NOT NULL,
+  `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `space` (`space`),
@@ -15181,22 +15181,22 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
 -- DROP TABLE IF EXISTS `zt_solution`;
 CREATE TABLE IF NOT EXISTS `zt_solution` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(50),
-  `appID` mediumint(8) unsigned NOT NULL,
-  `appName` char(50) NOT NULL,
-  `appVersion` char(20) NOT NULL,
-  `version` char(50) NOT NULL,
-  `chart` char(50) NOT NULL,
-  `cover` varchar(255),
-  `desc` text,
-  `introduction` varchar(500),
-  `source` char(20) NOT NULL,
-  `channel` char(20),
-  `components` text,
-  `status` char(20) NOT NULL,
+  `name` char(50) NOT NULL DEFAULT '',
+  `appID` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `appName` char(50) NOT NULL DEFAULT '',
+  `appVersion` char(20) NOT NULL DEFAULT '',
+  `version` char(50) NOT NULL DEFAULT '',
+  `chart` char(50) NOT NULL DEFAULT '',
+  `cover` varchar(255) NOT NULL DEFAULT '',
+  `desc` text NULL,
+  `introduction` varchar(255) NOT NULL DEFAULT '',
+  `source` char(20) NOT NULL DEFAULT '',
+  `channel` char(20) NOT NULL DEFAULT '',
+  `components` text NULL,
+  `status` char(20) NOT NULL DEFAULT '',
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `createdBy` char(30) NOT NULL,
-  `createdAt` datetime NOT NULL,
+  `createdBy` char(30) NOT NULL DEFAULT '',
+  `createdAt` datetime NULL,
   `updatedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -15811,7 +15811,7 @@ CREATE TABLE IF NOT EXISTS `zt_prompt` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES
 ('需求润色', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.change', '帮忙优化其中各字段的表述，使表述清晰准确。必要时可以修改需求使其更加合理。', '需求描述格式建议使用：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。验收标准建议列举多条。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-08-10 13:24:14', 'active'),
@@ -15833,7 +15833,7 @@ CREATE TABLE IF NOT EXISTS `zt_promptrole` (
   `characterization` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_promptrole` (`role`, `characterization`) VALUES
 ('请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。'),
