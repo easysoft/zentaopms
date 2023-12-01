@@ -104,33 +104,6 @@ class reportTest
     }
 
     /**
-     * Test get workload.
-     *
-     * @param  int    $dept
-     * @param  string $assign
-     * @access public
-     * @return string
-     */
-    public function getWorkloadTest($dept = 0, $assign = 'assign')
-    {
-        $objects = $this->objectModel->getWorkload($dept, $assign);
-
-        if(dao::isError()) return dao::getError();
-
-        $workload = '';
-        foreach($objects as $user => $work)
-        {
-            if(strlen($workload) > 40) break;
-
-            $workload .= "$user:";
-            foreach($work['total'] as $key => $value) $workload .= "$key:$value,";
-            $workload = trim($workload, ',');
-            $workload .= ';';
-        }
-        return $workload;
-    }
-
-    /**
      * 测试获取用户的 bugs。
      * Test get user bugs.
      *
