@@ -124,7 +124,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
       <div class="modal-footer" style="display: flex; padding-top: 0; justify-content: center; border-top: none; gap: 10px;">
         <button class="btn btn-wide btn-primary" onclick="backWithSave()"><?= $lang->save; ?></button>
         <button class="btn btn-wide" data-dismiss="modal"><?= $lang->cancel; ?></button>
-        <button class="btn btn-wide btn-link text-primary" onclick="backWithoutSave()"><?= $lang->ai->prompts->roleTemplateSaveList['discard']; ?></button>
+        <button class="btn btn-wide btn-link" style="color: var(--color-primary);" onclick="backWithoutSave()"><?= $lang->ai->prompts->roleTemplateSaveList['discard']; ?></button>
       </div>
     </div>
   </div>
