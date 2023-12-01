@@ -272,14 +272,15 @@ class searchTest
     }
 
     /**
+     * 测试保存搜索索引。
      * Test save index.
      *
      * @param  string $objectType
      * @param  int    $objectID
      * @access public
-     * @return bool
+     * @return array|object
      */
-    public function saveIndexTest($objectType, $objectID)
+    public function saveIndexTest(string $objectType, int $objectID): array|object
     {
         global $tester;
         $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
@@ -289,15 +290,10 @@ class searchTest
         $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         $object->comment = '';
 
-        $objects = $this->objectModel->saveIndex($objectType, $object);
+        $this->objectModel->saveIndex($objectType, $object);
         if(dao::isError()) return dao::getError();
 
-        $insertedIndex = $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch();
-
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
-
-        if($insertedIndex) return true;
+        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch();
     }
 
     /**
