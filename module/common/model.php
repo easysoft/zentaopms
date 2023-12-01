@@ -1200,7 +1200,7 @@ class commonModel extends model
      */
     public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
-        global $app;
+        global $app,$config;
         $module = strtolower($module);
         $method = strtolower($method);
         parse_str($vars, $params);

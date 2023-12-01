@@ -68,10 +68,13 @@ class metric extends control
         if(!empty($current))
         {
             $metric = $this->metric->getByID($current->id);
-            $result = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
 
-            $resultHeader = $this->metricZen->getViewTableHeader($metric);
-            $resultData   = $this->metricZen->getViewTableData($metric, $result);
+            $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
+            $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+            $resultHeader  = $this->metricZen->getViewTableHeader($metric);
+            $resultData    = $this->metricZen->getViewTableData($metric, $result);
+            $allResultData = $this->metricZen->getViewTableData($metric, $allResult);
         }
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
@@ -95,7 +98,7 @@ class metric extends control
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->dtablePager   = $pager;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
-        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
         $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
         $this->display();
     }
@@ -270,12 +273,18 @@ class metric extends control
         $this->display();
     }
 
-    public function ajaxGetMultipleMetricBox($metricID)
+    public function ajaxGetMultipleMetricBox($metricID, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $metric = $this->metric->getByID($metricID);
-        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
-        $resultHeader = $this->metricZen->getViewTableHeader($metric);
-        $resultData   = $this->metricZen->getViewTableData($metric, $result);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($metricID, $recPerPage, $pageID);
+
+        $metric    = $this->metric->getByID($metricID);
+        $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
+        $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+        $resultHeader  = $this->metricZen->getViewTableHeader($metric);
+        $resultData    = $this->metricZen->getViewTableData($metric, $result);
+        $allResultData = $this->metricZen->getViewTableData($metric, $allResult);
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
@@ -285,11 +294,12 @@ class metric extends control
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
+        $this->view->dtablePager   = $pager;
         $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
 
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
-        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
 
         $this->display();
     }
