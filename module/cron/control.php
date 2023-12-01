@@ -396,6 +396,7 @@ class cron extends control
                 if(isset($params['moduleName']) and isset($params['methodName']))
                 {
                     $this->app->loadConfig($params['moduleName']);
+                    $this->app->loadLang($params['moduleName']);
                     $output = $this->fetch($params['moduleName'], $params['methodName']);
                 }
             }
