@@ -1,0 +1,11 @@
+title: testresult.
+desc: testresult data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: lastRunner
+    fields:
+    - field: lastRunner1
+      range: admin,test{5},dev{5}
+    - field: lastRunner2
+      range: "[],15-20,14-19"

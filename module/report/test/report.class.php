@@ -472,22 +472,21 @@ class reportTest
     }
 
     /**
+     * 测试获取用例的年度统计，包括结果和操作统计。
      * Test get year case stat, include result and action stat.
      *
-     * @param  string $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getYearCaseStatTest($accounts)
+    public function getYearCaseStatTest(array $accounts): string|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getYearCaseStat($accounts, $year);
+        $objects = $this->objectModel->getYearCaseStat($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
         $result = '';
-        foreach($objects['resultStat'] as $type => $value) $result .= "$type:$value;";
+        foreach($objects['resultStat'] as $type => $value) $result .= "{$type}:{$value};";
         return $result;
     }
 

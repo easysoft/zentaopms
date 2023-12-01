@@ -496,6 +496,7 @@ class reportModel extends model
     }
 
     /**
+     * 获取年度用例的结果状态和动态统计。
      * Get year case stat, include result and action stat.
      *
      * @param  array  $accounts
@@ -503,67 +504,13 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function getYearCaseStat($accounts, $year)
+    public function getYearCaseStat(array $accounts, string $year): array
     {
-        $months = $this->getYearMonths($year);
-        $stmt   = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq('case')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.action')->eq('opened')
-            ->andWhere('LEFT(t1.date, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
-            ->query();
+        $actionStat = $resultStat = array();
+        $months     = $this->getYearMonths($year);
+        foreach($months as $month) $actionStat['opened'][$month] = $actionStat['run'][$month] = $actionStat['createBug'][$month] = 0;
 
-        /* Build create case stat. */
-        $resultStat = array();
-        $actionStat = array();
-        foreach($months as $month)
-        {
-            $actionStat['opened'][$month]    = 0;
-            $actionStat['run'][$month]       = 0;
-            $actionStat['createBug'][$month] = 0;
-        }
-
-        while($action = $stmt->fetch())
-        {
-            $month = substr($action->date, 0, 7);
-            $actionStat['opened'][$month] += 1;
-        }
-
-        /* Build testcase result stat and run case stat. */
-        $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
-            ->query();
-        while($testResult = $stmt->fetch())
-        {
-            if(!isset($resultStat[$testResult->caseResult])) $resultStat[$testResult->caseResult] = 0;
-            $resultStat[$testResult->caseResult] += 1;
-
-            $month = substr($testResult->date, 0, 7);
-            $actionStat['run'][$month] += 1;
-        }
-
-        /* Build testcase create bug stat. */
-        $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq('bug')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t1.action')->eq('opened')
-            ->andWhere('t2.case')->ne('0')
-            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
-            ->query();
-        while($action = $stmt->fetch())
-        {
-            $month = substr($action->date, 0, 7);
-            $actionStat['createBug'][$month] += 1;
-        }
-
-        return array('resultStat' => $resultStat, 'actionStat' => $actionStat);
+        return $this->reportTao->buildAnnualCaseStat($accounts, $year, $actionStat, $resultStat);
     }
 
     /**
