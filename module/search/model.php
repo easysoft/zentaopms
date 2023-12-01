@@ -918,31 +918,32 @@ class searchModel extends model
     }
 
     /**
+     * 将文档的内容追加到文档的索引备注中。
      * Append document content to the document.
      *
-     * @param  string    $object
+     * @param  object $object
      * @access public
-     * @return void
+     * @return object
      */
-    public function appendFiles($object)
+    public function appendFiles(object $object): object
     {
         $docFiles = $this->dao->select('files')->from(TABLE_DOCCONTENT)->where('doc')->eq($object->id)->orderBy('version')->limit(1)->fetch('files');
         if(empty($docFiles)) return $object;
 
-        $allDocFiles = $this->loadModel('file')->getByObject('doc', $object->id);
         if(!isset($object->comment)) $object->comment = '';
+
+        $allDocFiles = $this->loadModel('file')->getByObject('doc', $object->id);
         foreach($allDocFiles as $file)
         {
             if(strpos(",$docFiles,", ",{$file->id},") === false) continue;
+
             if(strpos('docx|doc', $file->extension) !== false)
             {
                 $convertedFile = $this->file->convertOffice($file, 'txt');
                 if($convertedFile) $object->comment .= substr(file_get_contents($convertedFile), 0, $this->config->search->maxFileSize);
             }
-            if($file->extension == 'txt')
-            {
-                $object->comment .= substr(file_get_contents($file->realPath), 0, $this->config->search->maxFileSize);
-            }
+
+            if($file->extension == 'txt') $object->comment .= substr(file_get_contents($file->realPath), 0, $this->config->search->maxFileSize);
         }
 
         return $object;
