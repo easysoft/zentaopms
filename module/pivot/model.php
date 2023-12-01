@@ -1540,13 +1540,13 @@ class pivotModel extends model
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
         $showOrigin   = false;
 
-        foreach($settings['columns'] as $column)
-        {
-            if(isset($column['showOrigin']) and $column['showOrigin']) $showOrigin = true;
-        }
-
         if(isset($settings['columns']))
         {
+            foreach($settings['columns'] as $column)
+            {
+                if(isset($column['showOrigin']) and $column['showOrigin']) $showOrigin = true;
+            }
+
             foreach($settings['columns'] as $column)
             {
                 $columnShowOrigin = zget($column, 'showOrigin', false);

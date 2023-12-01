@@ -1,6 +1,8 @@
 <?php
 class screenTest
 {
+
+    public $componentList = array();
     public function __construct()
     {
          global $tester;
@@ -52,25 +54,41 @@ class screenTest
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
-    public function getAllComponent()
+    public function getAllComponent(array $filters = array())
     {
-        global $tester;
-        $sql = "SELECT * FROM `zt_screen`";
-        $screenList = $tester->dbh->query($sql)->fetchAll();
-        $componentList = [];
-        foreach($screenList as $screen)
+        if(!empty($this->componentList))
         {
-            if(!in_array($screen->id, array(5, 6, 8)))
+            $componentList = $this->componentList;
+        }
+        else
+        {
+            global $tester;
+            $sql = "SELECT * FROM `zt_screen`";
+            $screenList = $tester->dbh->query($sql)->fetchAll();
+            $componentList = [];
+            foreach($screenList as $screen)
             {
-                $componentList = array_merge($componentList, json_encode($screen->scheme));
+                if(!in_array($screen->id, array(5, 6, 8)))
+                {
+                    $componentList = array_merge($componentList, json_decode($screen->scheme));
+                }
+                else
+                {
+                    $scheme = json_decode($screen->scheme);
+                    if($scheme) $componentList = array_merge($componentList, $scheme->componentList);
+                }
             }
-            else
-            {
-                $componentList = array_merge($componentList, json_encode($screen->scheme->componentList));
-            }
+            $this->componentList = $componentList;
         }
 
-        return $componentList;
+        return array_filter($componentList, function($component)use($filters){
+            foreach($filters as $field => $value)
+            {
+                if(isset($component->$field) && $component->$field == $value) return true;
+            }
+
+            return false;
+        });
     }
 
     public function completeComponent($component)
@@ -100,5 +118,10 @@ class screenTest
     public function completeComponentTest(object $chart, string $type, array $filters, object $component)
     {
         return $this->objectModel->completeComponent($chart, $type, $filters, $component);
+    }
+
+    public function getChartOptionTest(object $chart, object $component)
+    {
+        return $this->objectModel->getChartOption($chart, $component, array());
     }
 }
