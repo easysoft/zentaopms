@@ -1654,15 +1654,6 @@ class baseSQL
     public $conditionLevel = 0;
 
     /**
-     * 条件结果，beginIF 中表达式的结果会存储到这个数组中。
-     * Store the result of the expression.
-     *
-     * @var bool
-     * @access public;
-     */
-    public $conditionResults = array();
-
-    /**
      * WHERE条件嵌套小括号标记。
      * If in mark or not.
      *
