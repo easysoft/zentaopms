@@ -457,7 +457,7 @@ function updatePromptPreview()
     const innerText = $('#autocomplete-textarea').text();
     let innerHTML = formatContent(innerText);
     $('#autocomplete-textarea').html(innerHTML);
-    if(!innerHTML || words.size === 0)
+    if(words.size === 0)
     {
         $('.prompt-preview-area .preview-container').html(innerHTML);
         return;
@@ -465,7 +465,11 @@ function updatePromptPreview()
 
     const regex = /<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
     const matches = innerHTML.match(regex);
-    if(!matches) return;
+    if(!matches)
+    {
+        $('.prompt-preview-area .preview-container').html(innerHTML);
+        return;
+    }
 
     matches.forEach((match) =>
     {
