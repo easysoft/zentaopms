@@ -295,6 +295,7 @@ foreach($groupMetrics as $key => $metrics)
 sidebar
 (
     set::width('25%'),
+    set::onToggle(jsRaw("window.handleSidebarToggle")),
     div
     (
         setClass('side'),

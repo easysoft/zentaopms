@@ -474,9 +474,16 @@ window.collectMetric = function(id)
     });
 }
 
-window.toggleCollapsed = function()
+window.handleSidebarToggle = function(status)
 {
-    $('.sidebar').toggleClass('is-collapsed');
+    setTimeout(function(){
+        $('.chart-side .chart').children().each(function(index, elem){
+            var chart = $(elem).zui().chart;
+            if(!chart) return;
+
+            chart.resize();
+        });
+    }, 300);
 }
 
 window.renderCheckedLabel = function()
