@@ -164,51 +164,41 @@ class apiModel extends model
     }
 
     /**
+     * 创建数据结构。
      * Create a global struct.
      *
-     * @param  object $data
+     * @param  object $formData
      * @access public
-     * @return int
+     * @return bool
      */
-    public function createStruct($data)
+    public function createStruct(object $formData): bool
     {
-        $data->version = 1;
-        $this->dao->insert(TABLE_APISTRUCT)->data($data)
+        $this->dao->insert(TABLE_APISTRUCT)->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
             ->exec();
 
         if(dao::isError()) return false;
 
-        $id = $this->dao->lastInsertID();
+        /* 维护历史记录。 */
+        $structID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('apistruct', $structID, 'Created');
 
-        /* Create a struct version. */
-        $version = array(
-            'name'      => $data->name,
-            'type'      => $data->type,
-            'desc'      => $data->desc,
-            'version'   => $data->version,
-            'attribute' => $data->attribute,
-            'addedBy'   => $data->addedBy,
-            'addedDate' => $data->addedDate
-        );
-        $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
-
-        if(dao::isError()) return false;
-
-        $this->loadModel('action')->create('apistruct', $id, 'Created');
-
-        return true;
+        /* 维护数据结构的历史版本。 */
+        $structSpec = $this->getApiStructSpecByData($formData);
+        $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($structSpec)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 更新数据结构。
      * Update a struct.
      *
      * @param  object $formData
      * @access public
-     * @return array
+     * @return bool
      */
-    public function updateStruct($formData)
+    public function updateStruct(object $formData): bool
     {
         $oldData = $this->dao->findByID($formData->id)->from(TABLE_APISTRUCT)->fetch();
 
@@ -220,20 +210,7 @@ class apiModel extends model
 
         if(dao::isError()) return false;
 
-        /* Create a struct version */
-        $version = array(
-            'name'      => $formData->name,
-            'type'      => $formData->type,
-            'desc'      => $formData->desc,
-            'version'   => $formData->version,
-            'attribute' => $formData->attribute,
-            'addedBy'   => $formData->editedBy,
-            'addedDate' => $formData->editedDate
-        );
-        $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
-
-        if(dao::isError()) return false;
-
+        /* 维护历史记录。 */
         $changes = common::createChanges($oldData, $formData);
         if($changes)
         {
@@ -241,7 +218,11 @@ class apiModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        return true;
+        /* 维护数据结构的历史版本。 */
+        $structSpec = $this->getApiStructSpecByData($formData);
+        $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($structSpec)->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -700,7 +681,7 @@ class apiModel extends model
     /**
      * Get spec of api.
      *
-     * @param object $data
+     * @param  object  $data
      * @access private
      * @return array
      */
@@ -725,6 +706,26 @@ class apiModel extends model
             'response'        => !empty($data->response) ? $data->response : '',
             'addedBy'         => $this->app->user->account,
             'addedDate'       => helper::now(),
+        );
+    }
+
+    /**
+     * Get struct spec of api
+     *
+     * @param  object  $data
+     * @access private
+     * @return void
+     */
+    private function getApiStructSpecByData($data)
+    {
+        return array(
+            'name'      => $data->name,
+            'type'      => !empty($data->type) ? $data->type : '',
+            'desc'      => !empty($data->desc) ? $data->desc : '',
+            'version'   => !empty($data->version) ? $data->version : 1,
+            'attribute' => !empty($data->attribute) ? $data->attribute : '',
+            'addedBy'   => !empty($data->addedBy) ? $data->addedBy : $this->app->user->account,
+            'addedDate' => !empty($data->addedDate) ? $data->addedDate : helper::now()
         );
     }
 

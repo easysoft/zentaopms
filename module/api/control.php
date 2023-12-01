@@ -268,7 +268,7 @@ class api extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->api->form->createStruct)->add('lib', $libID)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+            $formData = form::data($this->config->api->form->createStruct)->add('lib', $libID)->add('version', 1)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
 
             $this->api->createStruct($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
