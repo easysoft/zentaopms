@@ -430,18 +430,18 @@ class reportModel extends model
     }
 
     /**
+     * 获取所有时间的状态，包括需求、任务和 bug。
      * Get status stat that is all time, include story, task and bug.
      *
      * @access public
      * @return array
      */
-    public function getAllTimeStatusStat()
+    public function getAllTimeStatusStat(): array
     {
         $statusStat = array();
         $statusStat['story'] = $this->dao->select('status, count(status) as count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('type')->eq('story')->groupBy('status')->fetchPairs('status', 'count');
         $statusStat['task']  = $this->dao->select('status, count(status) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->groupBy('status')->fetchPairs('status', 'count');
         $statusStat['bug']   = $this->dao->select('status, count(status) as count')->from(TABLE_BUG)->where('deleted')->eq(0)->groupBy('status')->fetchPairs('status', 'count');
-
         return $statusStat;
     }
 

@@ -430,12 +430,13 @@ class reportTest
     }
 
     /**
+     * 测试获取所有时间的状态，包括需求、任务和 bug。
      * Test get status stat that is all time, include story, task and bug.
      *
      * @access public
      * @return array
      */
-    public function getAllTimeStatusStatTest()
+    public function getAllTimeStatusStatTest(): array
     {
         $objects = $this->objectModel->getAllTimeStatusStat();
 
@@ -445,7 +446,7 @@ class reportTest
         foreach($objects as $type => $status)
         {
             $types[$type] = '';
-            foreach($status as $statusType => $statusCount) $types[$type] .= "$statusType:$statusCount;";
+            foreach($status as $statusType => $statusCount) $types[$type] .= "{$statusType}:{$statusCount};";
         }
         return $types;
     }
