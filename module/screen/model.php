@@ -787,13 +787,14 @@ class screenModel extends model
      */
     public function setDefaultByDate(array &$filter): void
     {
-        $filter['default'] = null;
+        $filter['default'] = $filter['default'] ?? null;
 
         if(isset($filter['default']))
         {
             extract($filter['default']);
-            if(empty($begin) || empty($end))   $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
-            if(!empty($begin) || !empty($end)) $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
+            if(empty($begin)  || empty($end))  $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
+            if(!empty($begin) && !empty($end)) $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
+            if(empty($begin)  && empty($end))  $filter['default'] = null;
         }
     }
 

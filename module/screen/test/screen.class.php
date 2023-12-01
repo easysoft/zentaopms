@@ -54,6 +54,14 @@ class screenTest
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
+    /**
+     * 获取所有组件。
+     * Get all components.
+     *
+     * @param  array $filters
+     * @access public
+     * @return array
+     */
     public function getAllComponent(array $filters = array())
     {
         if(!empty($this->componentList))
@@ -91,7 +99,15 @@ class screenTest
         });
     }
 
-    public function completeComponent($component)
+    /**
+     * 补充组件信息。
+     * Supplement component information.
+     *
+     * @param  object $component
+     * @access public
+     * @return array
+     */
+    public function completeComponent($component): array
     {
         if(isset($component->key) && $component->key === 'Select') return array(null, $component);
         $chartID = zget($component->chartConfig, 'sourceID', '');
@@ -113,15 +129,37 @@ class screenTest
      * @param  array  $filters
      * @param  object $component
      * @access public
-     * @return array
+     * @return void
      */
-    public function completeComponentTest(object $chart, string $type, array $filters, object $component)
+    public function completeComponentTest(object $chart, string $type, array $filters, object $component): void
     {
-        return $this->objectModel->completeComponent($chart, $type, $filters, $component);
+        $this->objectModel->completeComponent($chart, $type, $filters, $component);
     }
 
-    public function getChartOptionTest(object $chart, object $component)
+    /**
+     * 测试getChartOption。
+     * Test getChartOption.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function getChartOptionTest(object $chart, object $component): void
     {
-        return $this->objectModel->getChartOption($chart, $component, array());
+        $this->objectModel->getChartOption($chart, $component, array());
+    }
+
+    /**
+     * 测试getChartFilters。
+     * Test getChartFilters.
+     *
+     * @param  object $chart
+     * @access public
+     * @return void
+     */
+    public function getChartFiltersTest(object $chart): array
+    {
+        return $this->objectModel->getChartFilters($chart);
     }
 }
