@@ -172,48 +172,35 @@ class doc extends control
     }
 
     /**
+     * 编辑一个文档库。
      * Edit a library.
      *
-     * @param int $libID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function editLib($libID)
+    public function editLib(int $libID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->doc->updateLib($libID);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            $this->lang->doc->name = $this->lang->doclib->name;
+            $libData = form::data()->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $changes = $this->doc->updateLib($libID, $libData);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
                 $actionID = $this->action->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $docLib   = $this->doc->getLibByID($libID);
-            $objectID = 0;
-            if(strpos('product,project,execution', $docLib->type) !== false)
-            {
-                $libType  = $docLib->type;
-                $objectID = $docLib->$libType;
-            }
-            $hasLibPriv = $this->doc->checkPrivLib($docLib) ? 1 : 0;
-
-            $response['message']    = $this->lang->saveSuccess;
-            $response['result']     = 'success';
-            $response['closeModal'] = true;
-            $response['load']       = true;
-            return $this->send($response);
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'load' => true));
         }
 
         $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
-        if(!empty($lib->project) and empty($lib->execution)) $this->view->object = $this->project->getById($lib->project);
+        if(!empty($lib->project) && empty($lib->execution)) $this->view->object = $this->project->getByID($lib->project);
         if(!empty($lib->execution))
         {
             $execution = $this->execution->getByID($lib->execution);
@@ -221,7 +208,7 @@ class doc extends control
             {
                 if($execution->grade > 1)
                 {
-                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                    $parentExecutions = $this->execution->getPairsByList(explode(',', trim($execution->path, ',')), 'stage,kanban,sprint');
                     $execution->name  = implode('/', $parentExecutions);
                 }
 
@@ -231,29 +218,7 @@ class doc extends control
             $this->view->object = $execution;
         }
 
-        if($lib->type == 'custom')
-        {
-            unset($this->lang->doclib->aclList['default']);
-        }
-        elseif($lib->type == 'api')
-        {
-            $this->app->loadLang('api');
-            $type = !empty($lib->product) ? 'product' : 'project';
-            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
-        }
-        elseif($lib->type == 'mine')
-        {
-            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
-        }
-        elseif($lib->type != 'custom')
-        {
-            $type = isset($type) ? $type : $lib->type;
-            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
-            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
-            unset($this->lang->doclib->aclList['open']);
-        }
-
-        if(!empty($lib->main)) unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
+        $this->docZen->setAclForEditLib($lib);
 
         $this->view->lib    = $lib;
         $this->view->groups = $this->loadModel('group')->getPairs();
@@ -468,8 +433,8 @@ class doc extends control
         if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
 
         if(!empty($_POST))
-        {            
-            $doclib   = $this->loadModel('doc')->getLibById($libID);
+        {
+            $doclib   = $this->loadModel('doc')->getLibByID($libID);
             $canVisit = true;
 
             if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));

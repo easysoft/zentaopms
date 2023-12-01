@@ -306,4 +306,39 @@ class docZen extends doc
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "locateNewLib(\"$type\", \"$objectID\", \"$libID\")"));
     }
+
+    /**
+     * 处理编辑文档库的访问控制。
+     * Handle the access control of editing document library.
+     *
+     * @param  object    $lib
+     * @access protected
+     * @return void
+     */
+    protected function setAclForEditLib(object $lib): void
+    {
+        if($lib->type == 'custom')
+        {
+            unset($this->lang->doclib->aclList['default']);
+        }
+        elseif($lib->type == 'api')
+        {
+            $this->app->loadLang('api');
+            $type = !empty($lib->product) ? 'product' : 'project';
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
+        elseif($lib->type == 'mine')
+        {
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
+        }
+        elseif($lib->type != 'custom')
+        {
+            $type = isset($type) ? $type : $lib->type;
+            $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
+            $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
+            unset($this->lang->doclib->aclList['open']);
+        }
+
+        if(!empty($lib->main)) unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
+    }
 }

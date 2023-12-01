@@ -331,32 +331,25 @@ class docModel extends model
     }
 
     /**
-     * Update a library.
+     * 更新一个文档库。
+     * Update a doc lib.
      *
-     * @param  int $libID
+     * @param  int        $libID
+     * @param  object     $lib
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function updateLib($libID)
+    public function updateLib(int $libID, object $lib): array|bool
     {
-        $libID  = (int)$libID;
         $oldLib = $this->getLibByID($libID);
-        $lib    = fixer::input('post')
-            ->setDefault('users', '')
-            ->setDefault('groups', '')
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->remove('uid,contactListMenu')
-            ->get();
-
         if($oldLib->type == 'project')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
 
             $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
-            if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
+            if($lib->acl == 'private' && $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
         }
-        if($oldLib->acl != $lib->acl and $lib->acl == 'open') $lib->users = '';
+        if($oldLib->acl != $lib->acl && $lib->acl == 'open') $lib->users = '';
 
         if($oldLib->type == 'api')
         {
@@ -368,12 +361,13 @@ class docModel extends model
             $this->checkApiLibName($lib, $type, $libID);
         }
 
-        $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
         $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->doc->editlib->requiredFields, 'notempty')
             ->where('id')->eq($libID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldLib, $lib);
+
+        if(dao::isError()) return false;
+        return common::createChanges($oldLib, $lib);
     }
 
     /**
