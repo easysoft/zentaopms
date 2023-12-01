@@ -184,7 +184,7 @@ js::set('defaultFields', $lang->ai->miniPrograms->field->default);
           <i title="<?= $lang->help; ?>" class="icon icon-help text-warning"></i>
           <span class="text-muted"><?= $lang->ai->miniPrograms->field->prompterDesignTip; ?></span>
         </div>
-        <div class="form-control" id="autocomplete-textarea" contenteditable="true" style="overflow-y: auto; position: absolute; top: 32px; left: 24px; right: 24px; bottom: 24px; height: auto; width: auto;"></div>
+        <div class="form-control" id="autocomplete-textarea" contenteditable="true" style="overflow-wrap: break-word; overflow-y: auto; position: absolute; top: 32px; left: 24px; right: 24px; bottom: 24px; height: auto; width: auto;"></div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
       </div>
     </main>
