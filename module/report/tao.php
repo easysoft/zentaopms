@@ -183,4 +183,65 @@ class reportTao extends reportModel
         }
         return array('resultStat' => $resultStat, 'actionStat' => $actionStat);
     }
+
+    /**
+     * 获取要输出的数据。
+     * Get output data.
+     *
+     * @param  array     $accounts
+     * @param  string    $year
+     * @access protected
+     * @return array
+     */
+    protected function getOutputData(array $accounts, string $year): array
+    {
+        /* Get output actions. */
+        $outputData = $actionGroup = $objectIdList = array();
+        $stmt       = $this->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)
+            ->where('objectType')->in(array_keys($this->config->report->outputData))
+            ->andWhere('LEFT(date, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            if($action->objectType == 'release' && $action->action == 'changestatus')
+            {
+                if($action->extra == 'terminate') $action->action = 'stoped';
+                if($action->extra == 'normal')    $action->action = 'activated';
+            }
+            unset($action->extra);
+
+            if(!isset($this->config->report->outputData[$action->objectType][$action->action])) continue;
+
+            if(!isset($outputData[$action->objectType][$action->action])) $outputData[$action->objectType][$action->action] = 0;
+            $objectIdList[$action->objectType][$action->objectID] = $action->objectID;
+            $actionGroup[$action->objectType][$action->id]        = $action;
+        }
+        foreach($actionGroup as $objectType => $actions)
+        {
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($objectIdList[$objectType])->fetchPairs('id', 'id');
+            foreach($actions as $action)
+            {
+                if(!isset($deletedIdList[$action->objectID])) $outputData[$action->objectType][$action->action] += 1;
+            }
+        }
+
+        /* Get output case data. */
+        $outputData['case']['createBug'] = $this->dao->select('count(t2.id) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.objectType')->eq('bug')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.action')->eq('opened')
+            ->andWhere('t2.case')->ne('0')
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
+            ->fetch('count');
+        $outputData['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+            ->fetch('count');
+        return $outputData;
+    }
 }

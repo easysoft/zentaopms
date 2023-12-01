@@ -545,22 +545,21 @@ class reportTest
     }
 
     /**
+     * 测试为 API 获取输出数据。
      * Test get output data for API.
      *
-     * @param  string $accounts
-     * @param  string $year
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getOutput4APITest($accounts)
+    public function getOutput4APITest(array $accounts)
     {
-        $year = date('Y');
-        $objects = $this->objectModel->getOutput4API($accounts, $year);
+        $objects = $this->objectModel->getOutput4API($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
         $output = '';
-        foreach($objects as $objectType => $object) $output .= "$objectType:" . $object['total'] . ";";
+        foreach($objects as $objectType => $object) $output .= "{$objectType}:{$object['total']};";
         return $output;
     }
 
