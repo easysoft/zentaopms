@@ -309,7 +309,7 @@ class programplanTao extends programplanModel
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
-            reviewDeadline[$plan->id]['stageEnd'] = $plan->end;
+            $reviewDeadline[$plan->id]['stageEnd'] = $plan->end;
 
             $start     = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
             $end       = helper::isZeroDate($plan->end)   ? '' : $plan->end;
@@ -627,13 +627,13 @@ class programplanTao extends programplanModel
 
     /**
      * 构建IPD版本的甘特图数据。
-     * Build gantt's data for ipd edition. 
-     * 
-     * @param  array     $datas 
-     * @param  int       $projectID 
-     * @param  int       $productID 
-     * @param  string    $selectCustom 
-     * @param  array     $reviewDeadline 
+     * Build gantt's data for ipd edition.
+     *
+     * @param  array     $datas
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  string    $selectCustom
+     * @param  array     $reviewDeadline
      * @access protected
      * @return void
      */
