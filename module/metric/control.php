@@ -315,7 +315,7 @@ class metric extends control
 
         $metric    = $this->metric->getByID($metricID);
         $result    = $this->metric->getResultByCode($metric->code, $_POST, 'cron', $usePager ? $pager : null);
-        $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+        $allResult = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
 
         $resultHeader  = $this->metricZen->getViewTableHeader($metric);
         $resultData    = $this->metricZen->getViewTableData($metric, $result);
