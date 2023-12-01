@@ -909,4 +909,20 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $libTree;
     }
+
+    /**
+     * 删除附件。
+     * Delete files.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function deleteFilesTest(array $idList): array
+    {
+        $this->objectModel->deleteFiles($idList);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('deleted')->from(TABLE_FILE)->where('id')->in($idList)->fetchPairs();
+    }
 }
