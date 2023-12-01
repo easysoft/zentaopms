@@ -229,15 +229,17 @@ class doc extends control
     }
 
     /**
+     * 删除一个数据库。
      * Delete a library.
      *
      * @param  int    $libID
      * @access public
      * @return void
      */
-    public function deleteLib($libID)
+    public function deleteLib(int $libID)
     {
-        if($libID == 'product' || $libID == 'execution') return;
+        if(in_array($libID, array('product', 'execution'))) return;
+
         $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
 
@@ -248,7 +250,7 @@ class doc extends control
         $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         $moduleName = 'doc';
         $methodName = zget($this->config->doc->spaceMethod, $objectType);
-        if($this->app->tab == 'execution' and $objectType == 'execution')
+        if($this->app->tab == 'execution' && $objectType == 'execution')
         {
             $moduleName = 'execution';
             $methodName = 'doc';
