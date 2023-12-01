@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of ci module of ZenTaoPMS.
- * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     product
- * @version     $Id: $
- * @link        http://www.zentao.net
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
+ * @package     ci
+ * @link        https://www.zentao.net
  */
-
 class ciModel extends model
 {
     /**
@@ -16,7 +18,7 @@ class ciModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($repoID = 0)
+    public function setMenu(int $repoID = 0)
     {
         if($repoID)
         {
@@ -36,23 +38,20 @@ class ciModel extends model
     }
 
     /**
+     * 向jenkins发送请求以检查构建状态。
      * Send a request to jenkins to check build status.
      *
      * @param  int    $compileID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkCompileStatus($compileID = 0)
+    public function checkCompileStatus(int $compileID = 0): bool
     {
         $compiles = $this->dao->select('compile.*, job.engine,job.pipeline, pipeline.name as jenkinsName,job.server,pipeline.url,pipeline.account,pipeline.token,pipeline.password')
             ->from(TABLE_COMPILE)->alias('compile')
             ->leftJoin(TABLE_JOB)->alias('job')->on('compile.job=job.id')
             ->leftJoin(TABLE_PIPELINE)->alias('pipeline')->on('job.server=pipeline.id')
-            ->where('compile.status')->ne('success')
-            ->andWhere('compile.status')->ne('failure')
-            ->andWhere('compile.status')->ne('create_fail')
-            ->andWhere('compile.status')->ne('timeout')
-            ->andWhere('compile.status')->ne('canceled')
+            ->where('compile.status')->notIN('success, failure, create_fail, timeout, canceled')
             ->beginIf($compileID)->andWhere('compile.id')->eq($compileID)->fi()
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
@@ -64,6 +63,24 @@ class ciModel extends model
             ->fetchPairs();
 
         foreach($compiles as $compile) $this->syncCompileStatus($compile, $notCompileMR);
+        return !dao::isError();
+    }
+
+    /**
+     * 根据编译ID获取编译信息。
+     * Get compile by ID.
+     *
+     * @param  int    $compileID
+     * @access public
+     * @return object|false
+     */
+    public function getCompileByID(int $compileID): object|false
+    {
+        return $this->dao->select('t1.*, t2.pipeline,t2.product,t2.frame,t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')->from(TABLE_COMPILE)->alias('t1')
+            ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.server=t3.id')
+            ->where('t1.id')->eq($compileID)
+            ->fetch();
     }
 
     /**
@@ -318,5 +335,60 @@ class ciModel extends model
         $response = common::http($url, (array)$data, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
         if(preg_match("!Location: .*item/(.*)/!", $response, $matches)) return $matches[1];
         return 0;
+    }
+
+    /**
+     * 根据ztf结果更新测试单。
+     * Save test task for ztf.
+     *
+     * @param  string $testType
+     * @param  int    $productID
+     * @param  int    $compileID
+     * @param  int    $taskID
+     * @param  string $name
+     * @access public
+     * @return bool
+     */
+    public function saveTestTaskForZtf(string $testType, int $productID, int $compileID, int $taskID = 0, string $name = ''): bool
+    {
+        $this->loadModel('testtask');
+        if(!empty($taskID))
+        {
+            $testtask  = $this->testtask->getByID($taskID);
+            $this->dao->update(TABLE_TESTTASK)->set('auto')->eq(strtolower($testType))->where('id')->eq($taskID)->exec();
+            $productID = $testtask->product;
+        }
+        else
+        {
+            $lastProject = $this->dao->select('t2.id,t2.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($productID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.project')->ne('0')
+                ->orderBy('t2.id desc')
+                ->limit(1)
+                ->fetch();
+
+            $testtask = new stdclass();
+            $testtask->product     = $productID;
+            $testtask->name        = !empty($name) ? $name : sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
+            $testtask->owner       = $this->app->user->account;
+            $testtask->project     = $lastProject->project;
+            $testtask->execution   = $lastProject->id;
+            $testtask->build       = 'trunk';
+            $testtask->auto        = strtolower($testType);
+            $testtask->begin       = date('Y-m-d');
+            $testtask->end         = date('Y-m-d', time() + 24 * 3600);
+            $testtask->status      = 'done';
+            $testtask->createdBy   = $this->app->user->account;
+            $testtask->createdDate = helper::now();
+
+            $this->dao->insert(TABLE_TESTTASK)->data($testtask)->exec();
+            $taskID = $this->dao->lastInsertId();
+            $this->loadModel('action')->create('testtask', $taskID, 'opened');
+        }
+
+        if($compileID) $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compileID)->exec();
+        return !dao::isError();
     }
 }
