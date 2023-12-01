@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/report.class.php';
+
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
@@ -17,7 +21,7 @@ pid=1
 测试获取 2024 的月份 >> 2024-01,2024-02,2024-03,2024-04,2024-05,2024-06,2024-07,2024-08,2024-09,2024-10,2024-11,2024-12
 
 */
-$year = array(2020, 2021, 2022, 2023, 2024);
+$year = array('2020', '2021', '2022', '2023', '2024');
 
 $report = new reportTest();
 

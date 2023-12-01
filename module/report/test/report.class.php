@@ -491,13 +491,14 @@ class reportTest
     }
 
     /**
+     * 测试获取本年的月份。
      * Test get year months.
      *
-     * @param  string $year
+     * @param  string       $year
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getYearMonthsTest($year)
+    public function getYearMonthsTest(string $year): string|array
     {
         $objects = $this->objectModel->getYearMonths($year);
 

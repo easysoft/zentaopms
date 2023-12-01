@@ -514,13 +514,14 @@ class reportModel extends model
     }
 
     /**
+     * 获取年度月份。
      * Get year months.
      *
      * @param  string $year
      * @access public
      * @return array
      */
-    public function getYearMonths($year)
+    public function getYearMonths(string $year): array
     {
         $months = array();
         for($i = 1; $i <= 12; $i ++) $months[] = $year . '-' . sprintf('%02d', $i);
