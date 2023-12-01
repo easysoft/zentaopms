@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of setting module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     setting
@@ -35,21 +36,21 @@ class settingModel extends model
      * @access public
      * @return array
      */
-    public function getItems($paramString)
+    public function getItems(string $paramString)
     {
         return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id');
     }
 
     /**
-     * 设置配置。
+     * 保存配置。
      * Set value of an item.
      *
-     * @param  string $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
-     * @param  string $value
+     * @param  string     $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
+     * @param  string|int $value
      * @access public
      * @return bool
      */
-    public function setItem(string $path, string $value = ''): bool
+    public function setItem(string $path, string|int $value = ''): bool
     {
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
@@ -61,6 +62,7 @@ class settingModel extends model
     }
 
     /**
+     * 批量保存配置。
      * Batch set items, the example:
      *
      * $path = 'system.mail';
@@ -72,7 +74,7 @@ class settingModel extends model
      * @access public
      * @return bool
      */
-    public function setItems($path, $items)
+    public function setItems(string $path, array|object $items)
     {
         /* Determine vision of config item. */
         $pathVision = explode('@', $path);
@@ -100,14 +102,15 @@ class settingModel extends model
     }
 
     /**
+     * 如果配置项存在则更新，不存在则插入。
      * When exists this item then update it. No exists then insert this item.
      *
-     * @param  string $path
-     * @param  string $value
+     * @param  string     $path
+     * @param  string|int $value
      * @access public
      * @return void
      */
-    public function updateItem($path, $value = '')
+    public function updateItem(string $path, string|int $value = '')
     {
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
@@ -120,6 +123,7 @@ class settingModel extends model
             ->andWhere('section')->eq($item->section)
             ->andWhere('`key`')->eq($item->key)
             ->fetch('id');
+
         if($updateID)
         {
             $this->dao->update(TABLE_CONFIG)->set('value')->eq($value)->where('id')->eq($updateID)->exec();
@@ -131,25 +135,27 @@ class settingModel extends model
     }
 
     /**
+     * 删除配置项。
      * Delete items.
      *
      * @param  string   $paramString    see parseItemParam();
      * @access public
      * @return void
      */
-    public function deleteItems($paramString)
+    public function deleteItems(string $paramString)
     {
         $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
     }
 
     /**
+     * 处理传入的配置项，返回标准的配置项对象。
      * Parse item path
      *
      * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function parseItemPath($path)
+    public function parseItemPath(string $path): object|bool
     {
         /* Determine vision of config item. */
         $pathVision = explode('@', $path);
@@ -184,13 +190,14 @@ class settingModel extends model
     }
 
     /**
+     * 解析配置项参数。
      * Parse the param string for select or delete items.
      *
      * @param  string    $paramString     owner=xxx&key=sn and so on.
      * @access public
      * @return array
      */
-    public function parseItemParam($paramString)
+    public function parseItemParam(string $paramString): array
     {
         /* Parse the param string into array. */
         parse_str($paramString, $params);
@@ -204,6 +211,7 @@ class settingModel extends model
     }
 
     /**
+     * 创建DAO对象，用于查询或删除多条记录。
      * Create a DAO object to select or delete one or more records.
      *
      * @param  array  $params     the params parsed by parseItemParam() method.
@@ -211,7 +219,7 @@ class settingModel extends model
      * @access public
      * @return object
      */
-    public function createDAO($params, $method = 'select')
+    public function createDAO($params, $method = 'select'): object
     {
         $params['vision']  = isset($params['vision'])  ? $params['vision']  : '';
         $params['owner']   = isset($params['owner'])   ? $params['owner']   : '';
@@ -228,13 +236,14 @@ class settingModel extends model
     }
 
     /**
+     * 获取系统和用户的配置。
      * Get config of system and one user.
      *
      * @param  string $account
      * @access public
      * @return array
      */
-    public function getSysAndPersonalConfig($account = '')
+    public function getSysAndPersonalConfig(string $account = ''): array
     {
         $owner   = 'system,' . ($account ? $account : '');
         $records = $this->dao->select('*')->from(TABLE_CONFIG)
@@ -265,6 +274,7 @@ class settingModel extends model
     //-------------------------------- methods for version and sn. ----------------------------//
 
     /**
+     * 获取禅道版本号。
      * Get the version of current zentaopms.
      *
      * Since the version field not saved in db. So if empty, return 0.3 beta.
@@ -280,6 +290,7 @@ class settingModel extends model
     }
 
     /**
+     * 获取用需、软需的配置。
      * Get URSR.
      *
      * @access public
@@ -292,9 +303,10 @@ class settingModel extends model
     }
 
     /**
+     * 更新禅道版本号。
      * Update version
      *
-     * @param  string    $version
+     * @param  string  $version
      * @access public
      * @return void
      */
@@ -304,6 +316,7 @@ class settingModel extends model
     }
 
     /**
+     * 设置sn。
      * Set the sn of current zentaopms.
      *
      * @access public
@@ -331,13 +344,14 @@ class settingModel extends model
     }
 
     /**
+     * 判断是否需要更新sn。
      * Judge a sn needed update or not.
      *
      * @param  string    $sn
      * @access public
      * @return bool
      */
-    public function snNeededUpdate($sn)
+    public function snNeededUpdate(string $sn): bool
     {
         if($sn == '') return true;
         if($sn == '281602d8ff5ee7533eeafd26eda4e776') return true;
