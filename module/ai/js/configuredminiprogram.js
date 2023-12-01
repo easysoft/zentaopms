@@ -512,6 +512,11 @@ function getRequiredFields()
  */
 function saveMiniProgram(toPublish)
 {
+    if(!$('#autocomplete-textarea').text().trim())
+    {
+        alert(promptPlaceholder);
+        return;
+    }
     if(toPublish === '1')
     {
         const $modal = $('#publish-confirm-modal');

@@ -443,6 +443,7 @@ $lang->ai->miniPrograms->placeholder->name    = 'Please enter a small program na
 $lang->ai->miniPrograms->placeholder->desc    = 'Please enter a brief introduction to the miniprograms';
 $lang->ai->miniPrograms->placeholder->default = 'Please fill in the prompt, the default is "please enter"';
 $lang->ai->miniPrograms->placeholder->input   = 'Please enter';
+$lang->ai->miniPrograms->placeholder->prompt  = 'Please enter prompt design';
 
 $lang->ai->miniPrograms->deleteFieldTip = 'Are you sure to delete this field? ';
 

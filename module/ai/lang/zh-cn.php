@@ -443,6 +443,7 @@ $lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
 $lang->ai->miniPrograms->placeholder->desc    = '请输入小程序简介';
 $lang->ai->miniPrograms->placeholder->default = '请输入填写提示，默认为“请输入”';
 $lang->ai->miniPrograms->placeholder->input   = '请输入';
+$lang->ai->miniPrograms->placeholder->prompt  = '请输入提词设计';
 
 $lang->ai->miniPrograms->deleteFieldTip = '您确定删除该字段吗？';
 
