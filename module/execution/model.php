@@ -1353,7 +1353,7 @@ class executionModel extends model
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->beginIF(!$this->app->user->admin and isset($this->app->user->view))->andWhere('t2.id')->in($this->app->user->view->sprints)->fi() 
+                ->beginIF(!$this->app->user->admin and isset($this->app->user->view))->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF(!$withChildren)->andWhere('grade')->eq(1)->fi()
                 ->orderBy('order_desc')
                 ->page($pager)
@@ -5016,12 +5016,18 @@ class executionModel extends model
      * Get execution pairs by id list.
      *
      * @param  array  $executionIdList
+     * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPairsByList(array $executionIdList): array
+    public function getPairsByList(array $executionIdList, string $type = '', string $orderBy = 'id_asc'): array
     {
-        return $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_EXECUTION)
+            ->where('id')->in($executionIdList)
+            ->beginIF(!empty($type))->andWhere('type')->in($type)->fi()
+            ->orderBy($orderBy)
+            ->fetchPairs();
     }
 
     /**
