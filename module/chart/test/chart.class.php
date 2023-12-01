@@ -31,4 +31,19 @@ class chartTest
 
         return $this->objectModel->processChart($chart);
     }
+
+    /**
+     * 测试处理数据库查询结果。
+     * Test process rows.
+     *
+     * @param  string $date
+     * @access public
+     * @return array
+     */
+    public function processRowsTest(string $date, string $group, string $metric): array
+    {
+        $defaultSql = 'select * from zt_story';
+        $rows = $this->objectModel->getRows($defaultSql, array(), $date, $group, $metric, 'count');
+        return $this->objectModel->processRows($rows, $date, $group, $metric);
+    }
 }
