@@ -3636,4 +3636,20 @@ class docModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
+
+    /**
+     * 删除附件。
+     * Delete files.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return bool
+     */
+    public function deleteFiles(array $idList): bool
+    {
+        if(empty($idList)) return true;
+
+        $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in($idList)->exec();
+        return !dao::isError();
+    }
 }
