@@ -153,33 +153,6 @@ class reportTest
     }
 
     /**
-     * Test get bugs.
-     *
-     * @param  string $begin
-     * @param  string $end
-     * @param  int    $product
-     * @param  int    $execution
-     * @access public
-     * @return array
-     */
-    public function getBugsTest($begin, $end, $product, $execution)
-    {
-        $begin = date('Y-m-d', strtotime(date('Y-m-d') . $begin));
-        $end   = date('Y-m-d', strtotime(date('Y-m-d') . $end));
-        $objects = $this->objectModel->getBugs($begin, $end, $product, $execution);
-
-        if(dao::isError()) return dao::getError();
-
-        $count = array();
-        foreach($objects as $user => $types)
-        {
-            $count[$user] = '';
-            foreach($types as $type => $typeCount) $count[$user] .= "$type:$typeCount;";
-        }
-        return $count;
-    }
-
-    /**
      * Test get workload.
      *
      * @param  int    $dept
