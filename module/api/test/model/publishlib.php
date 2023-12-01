@@ -4,33 +4,35 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/api.class.php';
 su('admin');
 
+zdTable('doclib')->config('doclib')->gen(10);
+zdTable('module')->config('module')->gen(10);
+zdTable('api')->gen(10);
+zdTable('apistruct')->gen(10);
+zdTable('api_lib_release')->gen(0);
+zdTable('apispec')->gen(0);
+
 /**
 
 title=测试 apiModel->publishLib();
 cid=1
 pid=1
 
-没有版本名的发布 >> 『版本』不能为空。
-正常的发布 >> Version1
-
 */
 
 global $tester;
-$api = new apiTest();
+$tester->loadModel('api');
 
-$emptyBuildRelease = new stdclass();
-$emptyBuildRelease->version   = '';
-$emptyBuildRelease->desc      = '';
-$emptyBuildRelease->lib       = 910;
-$emptyBuildRelease->addedBy   = $tester->app->user->account;
-$emptyBuildRelease->addedDate = helper::now();
+$formData = new stdclass();
+$formData->lib     = '1';
+$formData->version = 'version1.0';
+$formData->desc    = '我是描述';
 
-$normalRelease = new stdclass();
-$normalRelease->version   = 'Version1';
-$normalRelease->desc      = '';
-$normalRelease->lib       = 910;
-$normalRelease->addedBy   = $tester->app->user->account;
-$normalRelease->addedDate = helper::now();
+r($tester->api->publishLib($formData)) && p() && e(1); // 测试所属模块为空。
 
-r($api->publishLibTest($emptyBuildRelease)) && p('version:0') && e('『版本号』不能为空。');  //没有版本名的发布
-r($api->publishLibTest($normalRelease)) && p('version') && e('Version1');                               //正常的发布
+$formData = new stdclass();
+$formData->lib     = '1';
+$formData->version = '';
+$formData->desc    = '我是描述';
+
+r($tester->api->publishLib($formData)) && p() && e(0);           // 测试版本号为空。
+r(dao::getError()) && p('version:0') && e('『版本号』不能为空。'); // 测试版本号为空的提示信息。
