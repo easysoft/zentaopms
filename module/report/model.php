@@ -563,13 +563,14 @@ class reportModel extends model
     }
 
     /**
+     * 测试获取项目状态总览。
      * Get project status overview.
      *
      * @param  array  $accounts
      * @access public
      * @return array
      */
-    public function getProjectStatusOverview($accounts = array())
+    public function getProjectStatusOverview(array $accounts = array()): array
     {
         $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root")
@@ -577,10 +578,10 @@ class reportModel extends model
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->fetchPairs('id', 'status');
+            ->fetchPairs();
 
         $statusOverview = array();
-        foreach($projectStatus as $projectID => $status)
+        foreach($projectStatus as $status)
         {
             if(!isset($statusOverview[$status])) $statusOverview[$status] = 0;
             $statusOverview[$status] ++;

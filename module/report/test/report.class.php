@@ -526,20 +526,21 @@ class reportTest
     }
 
     /**
+     * 测试获取项目状态总览。
      * Test get project status overview.
      *
-     * @param  array $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getProjectStatusOverviewTest($accounts = array())
+    public function getProjectStatusOverviewTest(array $accounts = array()): string|array
     {
         $objects = $this->objectModel->getProjectStatusOverview($accounts);
 
         if(dao::isError()) return dao::getError();
 
         $counts = '';
-        foreach($objects as $type => $count) $counts .= "$type:$count;";
+        foreach($objects as $type => $count) $counts .= "{$type}:{$count};";
         return $counts;
     }
 

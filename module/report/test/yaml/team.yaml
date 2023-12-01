@@ -1,0 +1,11 @@
+title: team.
+desc: team data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: account
+    fields:
+    - field: account1
+      range: admin,test{5},dev{5}
+    - field: account2
+      range: "[],15-20,14-19"
