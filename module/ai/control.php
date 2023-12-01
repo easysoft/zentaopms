@@ -144,9 +144,12 @@ class ai extends control
      */
     public function miniProgramChat($id)
     {
-        $this->view->miniProgram = $this->ai->getMiniProgramByID($id);
-        $this->view->fields = $this->ai->getMiniProgramFields($id);
+        $miniProgram  = $this->ai->getMiniProgramByID($id);
+
+        $this->view->miniProgram  = $miniProgram;
+        $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
+        $this->view->title        = "{$this->lang->ai->miniPrograms->common}#{$miniProgram->id} $miniProgram->name";
         $this->display();
     }
 
