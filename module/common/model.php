@@ -2190,69 +2190,6 @@ class commonModel extends model
     }
 
     /**
-     * Get all the fields of data type from MySQL.
-     *
-     * @param  string|array $type
-     * @param  string       $table
-     * @param  bool         $returnJson
-     * @access public
-     * @return array
-     */
-    public function getFieldsByType($type, $table = '', $returnJson = false)
-    {
-        $database = $this->config->db->name;
-        if(!empty($table)) $table = $this->config->db->prefix . $table;
-
-        $tableColumnList = $this->dao->select('TABLE_NAME as tableName,COLUMN_NAME as columnName')
-            ->from('information_schema.COLUMNS')
-            ->where('TABLE_SCHEMA')->eq($database)
-            ->beginIF(is_string($type))->andWhere('COLUMN_TYPE')->eq($type)->fi()
-            ->beginIF(is_array($type))->andWhere('COLUMN_TYPE')->in($type)->fi()
-            ->beginIF(!empty($table))->andWhere('TABLE_NAME')->eq($table)->fi()
-            ->fetchAll();
-
-        $fieldList = array();
-        if(!empty($table))
-        {
-            $fieldList = array_column($tableColumnList, 'columnName');
-        }
-        else
-        {
-            foreach($tableColumnList as $tableColumn)
-            {
-                $table  = $tableColumn->tableName;
-                $column = $tableColumn->columnName;
-
-                if(!isset($fieldList[$table])) $fieldList[$table] = array();
-                $fieldList[$table][] = $column;
-            }
-
-        }
-
-        return $returnJson ? json_encode($fieldList) : $fieldList;
-    }
-
-    /**
-     * Get DAO to access SQLite or MySQL.
-     *
-     * @param  object $params
-     * @access public
-     * @return object
-     */
-    public function getDAO($params = null)
-    {
-        if(!$this->config->db->enableSqlite) return $this->dao;
-
-        $dao = clone $this->dao;
-        $dao->reset();
-
-        $dao->dbh    = $this->app->connectSqlite($params);
-        $dao->driver = 'sqlite';
-
-        return $dao;
-    }
-
-    /**
      * 构建详情操作链接配置。
      * Build action item.
      *
