@@ -617,12 +617,12 @@ class searchModel extends model
         static $savedDict;
         if(empty($savedDict)) $savedDict = $this->dao->select("`key`")->from(TABLE_SEARCHDICT)->fetchPairs();
 
-        foreach($dict as $key)
+        foreach($dict as $key => $value)
         {
-            if(!is_numeric($key) || empty($key) || strlen($key) != 5 || $key < 0 || $key > 65535) continue;
+            if(!is_numeric($key) || empty($value) || strlen($key) != 5 || $key < 0 || $key > 65535) continue;
             if(isset($savedDict[$key])) continue;
 
-            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $key))->exec();
+            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
             $savedDict[$key] = $key;
         }
 
