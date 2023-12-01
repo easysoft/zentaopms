@@ -26,6 +26,8 @@ class input extends wg
     {
         $props    = $this->props->skip('required');
         $required = $this->prop('required');
+        if(!$this->hasProp('id') && isset($props['name'])) $props['id'] = $props['name'];
+        if(empty($props['id'])) unset($props['id']);
         if(is_bool($props['autocomplete'])) $props['autocomplete'] = $props['autocomplete'] ? 'on' : 'off';
         return h::input(set($props), $required ? setClass('is-required') : null);
     }
