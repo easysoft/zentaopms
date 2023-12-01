@@ -226,30 +226,25 @@ class apiModel extends model
     }
 
     /**
+     * 根据文档库ID获取数据结构列表。
      * Get struct list by api doc id.
      *
-     * @param int $id
+     * @param  int    $id
      * @access public
      * @return array
      */
-    public function getStructListByLibID($id)
+    public function getStructListByLibID(int $id): array
     {
-        $res = $this->dao->select('*')
-            ->from(TABLE_APISTRUCT)
-            ->where('lib')->eq($id)
-            ->fetchAll();
+        $structList = $this->dao->select('*')->from(TABLE_APISTRUCT)->where('lib')->eq($id)->fetchAll();
+        foreach($structList as $struct) $struct->attribute = json_decode($struct->attribute, true);
 
-        array_map(function ($item) {
-            $item->attribute = json_decode($item->attribute, true);
-            return $item;
-        }, $res);
-        return $res;
+        return $structList;
     }
 
     /**
      * Get a struct info.
      *
-     * @param int $id
+     * @param  int    $id
      * @access public
      * @return object
      */
