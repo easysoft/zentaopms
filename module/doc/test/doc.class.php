@@ -925,4 +925,22 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('deleted')->from(TABLE_FILE)->where('id')->in($idList)->fetchPairs();
     }
+
+    /**
+     * 获取文档的所有操作信息。
+     * Get action by doc ID.
+     *
+     * @param  int                $docID
+     * @param  string             $action  view|collect
+     * @param  string             $account
+     * @access public
+     * @return array|object|false
+     */
+    public function getActionByObjectTest(int $docID, string $action, string $account = ''): array|object|bool
+    {
+        $actions = $this->objectModel->getActionByObject($docID, $action, $account);
+
+        if(dao::isError()) return dao::getError();
+        return $actions;
+    }
 }
