@@ -396,77 +396,18 @@ class reportModel extends model
     }
 
     /**
-     * Get count of finished task, story and resolved bug by accounts every executions in this year.
+     * 获取用户某年内每次执行的已完成任务、故事和已解决的bug。
+     * Get count of finished task, story and resolved bug by accounts every executions in a year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return array
      */
-    public function getUserYearExecutions($accounts, $year)
+    public function getUserYearExecutions(array $accounts, string $year): array
     {
         /* Get changed executions in this year. */
-        $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
-            ->andwhere('type')->eq('sprint')
-            ->andwhere('multiple')->eq('1')
-            ->andWhere('LEFT(`begin`, 4)', true)->eq($year)
-            ->orWhere('LEFT(`end`, 4)')->eq($year)
-            ->markRight(1)
-            ->beginIF($accounts)
-            ->andWhere('openedBy', true)->in($accounts)
-            ->orWhere('PO')->in($accounts)
-            ->orWhere('PM')->in($accounts)
-            ->orWhere('QD')->in($accounts)
-            ->orWhere('RD')->in($accounts)
-            ->markRight(1)
-            ->fi()
-            ->orderBy('`order` desc')
-            ->fetchAll('id');
-
-        $teamExecutions = $this->dao->select('t1.root')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
-            ->where('t1.type')->eq('execution')
-            ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->andWhere('t2.multiple')->eq('1')
-            ->andWhere('LEFT(`join`, 4)')->eq($year)
-            ->fetchPairs('root', 'root');
-
-        $taskExecutions = $this->dao->select('t1.execution')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
-            ->where('LEFT(t1.finishedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
-            ->andWhere('t2.multiple')->eq('1')
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetchPairs('execution', 'execution');
-
-        if($teamExecutions or $taskExecutions)
-        {
-            $executions += $this->dao->select('id,name')->from(TABLE_EXECUTION)
-                ->where('id')->in($teamExecutions + $taskExecutions)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('type')->eq('sprint')
-                ->orderBy('`order` desc')
-                ->fetchAll('id');
-        }
-
-        /* Get count of finished task, story and resolved bug in this year. */
-        $taskStats = $this->dao->select('execution, count(*) as finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('finishedBy')->ne('')
-            ->andWhere('LEFT(finishedDate, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
-            ->groupBy('execution')
-            ->fetchAll('execution');
-        $resolvedBugs = $this->dao->select('t2.execution, count(*) as count')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
-            ->where('t2.execution')->in(array_keys($executions))
-            ->andWhere('t1.resolvedBy')->ne('')
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('LEFT(t1.resolvedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('t1.resolvedBy')->in($accounts)->fi()
-            ->groupBy('t2.execution')
-            ->fetchAll('execution');
+        list($executions, $taskStats, $resolvedBugs) = $this->reportTao->getAnnualExecutionStat($accounts, $year);
 
         foreach($executions as $executionID => $execution)
         {
