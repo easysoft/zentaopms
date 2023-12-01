@@ -386,13 +386,24 @@ class metricModel extends model
         return $excutableMetrics;
     }
 
-    public function clearMetricLib()
+    /**
+     * 删除度量数据中的重复数据。
+     * Delete duplication record in metric data.
+     *
+     * @param  string $code
+     * @access public
+     * @return bool
+     */
+    public function deduplication(string $code): bool
     {
-        $nowDate = date('Y-m-d');
+        $fields = $this->metricTao->getRecordFields($code);
 
-        $this->dao->delete()->from(TABLE_METRICLIB)
-            ->where('date')->like("$nowDate%")
-            ->exec();
+        if(empty($fields)) return false;
+
+        $this->metricTao->createDistinctTempTable();
+        $this->metricTao->insertDistinctId2TempTable($code, $fields);
+        $this->metricTao->deleteDuplicationRecord($code);
+        $this->metricTao->dropDistinctTempTable();
 
         return dao::isError();
     }
