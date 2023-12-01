@@ -104,33 +104,6 @@ class reportTest
     }
 
     /**
-     * Test get executions.
-     *
-     * @param int $begin
-     * @param int $end
-     * @access public
-     * @return void
-     */
-    public function getExecutionsTest($begin = 0, $end = 0)
-    {
-        global $tester;
-        $tester->dao->update(TABLE_EXECUTION)->set('`status`')->eq('closed')->where('`id`')->in('101,102,103,107,111,121,151,183')->exec();
-
-        $begin = $begin != 0 ? date('Y-m-d', strtotime(date('Y-m-d') . $begin)) : 0;
-        $end   = $end != 0 ? date('Y-m-d', strtotime(date('Y-m-d') . $end)) : 0;
-        $objects = $this->objectModel->getExecutions($begin, $end);
-
-        $tester->dao->update(TABLE_EXECUTION)->set('`status`')->eq('wait')->where('`id`')->in('101,103,107,111,121,151,183')->exec();
-        $tester->dao->update(TABLE_EXECUTION)->set('`status`')->eq('doing')->where('`id`')->in('102')->exec();
-
-        if(dao::isError()) return dao::getError();
-
-        $executions = '';
-        foreach($objects as $executionID => $execution) $executions .= "$executionID:$execution->estimate,$execution->consumed,$execution->projectName;";
-        return $executions;
-    }
-
-    /**
      * Test get products.
      *
      * @param  string $conditions
