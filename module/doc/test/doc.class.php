@@ -240,6 +240,30 @@ class docTest
     }
 
     /**
+     * 为更新文档处理数据。
+     * Process data for update a doc.
+     *
+     * @param  int    $docID
+     * @param  array  $param
+     * @access public
+     * @return object
+     */
+    public function processDocForUpdateTest(int $docID, array $param): object
+    {
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
+
+        $doc = new stdclass();
+        foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
+        foreach($param as $key => $value) $doc->{$key} = $value;
+
+        $oldDoc = $this->objectModel->getByID($docID);
+        $data   = $this->objectModel->processDocForUpdate($oldDoc, $doc);
+
+        if(dao::isError()) return dao::getError();
+        return $data[0];
+    }
+
+    /**
      * Function saveDraft test by doc
      *
      * @param mixed $docID
