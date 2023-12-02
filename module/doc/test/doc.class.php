@@ -130,35 +130,25 @@ class docTest
     }
 
     /**
-     * Function create test by doc
+     * 创建一个文档。
+     * Create a doc.
      *
-     * @param  array $param
+     * @param  array  $param
      * @access public
      * @return array
      */
-    public function createTest($param)
+    public function createTest(array $param): array
     {
-        global $tester;
-        $tester->loadModel('api');
-        $tester->app->loadLang('doclib');
-
         $labels = array();
-        $files  = array();
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
 
-        $createFields = array('lib' => '', 'module' => '', 'title' => '', 'keywords' => '', 'type' => '', 'content' => '', 'contentMarkdown' => '', 'contentType' => '',
-        'url' => '', 'labels' => $labels, 'files' => $files, 'contactListMenu' => '', 'acl' => '');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->create();
+        $doc = new stdclass();
+        foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
+        foreach($param as $key => $value) $doc->{$key} = $value;
+        $this->objectModel->create($doc, $labels);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $tester->dao->select('*')->from(TABLE_DOC)->where('title')->eq($_POST['title'])->andwhere('lib')->eq($_POST['lib'])->fetchAll();
-        unset($_POST);
-
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('title')->eq($doc->title)->andwhere('lib')->eq($doc->lib)->fetchAll('id');
     }
 
     /**
