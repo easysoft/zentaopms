@@ -539,16 +539,25 @@ class chartModel extends model
         return true;
     }
 
-    public function getFilterFormat($filters)
+    /**
+     * 格式化筛选器。
+     * Format filter.
+     *
+     * @param  array $filters
+     * @access public
+     * @return array
+     */
+    public function getFilterFormat(array $filters): array
     {
         $filterFormat = array();
         foreach($filters as $filter)
         {
             $field = $filter['field'];
-            if(!isset($filter['default'])) continue;
+            $type  = $filter['type'];
+            if($type != 'condition' && !isset($filter['default'])) continue;
 
-            $default = $filter['default'];
-            switch($filter['type'])
+            if($type != 'condition') $default = $filter['default'];
+            switch($type)
             {
                 case 'select':
                     if(empty($default)) break;
