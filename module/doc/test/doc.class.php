@@ -152,6 +152,45 @@ class docTest
     }
 
     /**
+     * 批量插入独立的文档。
+     * Insert seperate docs.
+     *
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function insertSeperateDocsTest(array $param): array
+    {
+        $files = array();
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
+
+        $doc = new stdclass();
+        foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
+        foreach($param as $key => $value)
+        {
+            if($key == 'title')
+            {
+                $files[0]['title'] = $value;
+                $files[0]['size']  = 0;
+            }
+            $doc->{$key} = $value;
+        }
+
+        $docContent          = new stdclass();
+        $docContent->title   = $doc->title;
+        $docContent->content = '';
+        $docContent->type    = $doc->contentType;
+        $docContent->digest  = '';
+        $docContent->version = 1;
+
+        unset($doc->contentType);
+        $this->objectModel->insertSeperateDocs($doc, $docContent, $files);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('title')->eq($doc->title)->andwhere('lib')->eq($doc->lib)->fetchAll('id');
+    }
+
+    /**
      * Function update test by doc
      *
      * @param  int $docID
