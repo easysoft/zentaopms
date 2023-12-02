@@ -74,16 +74,18 @@ class bugTest
      * 测试添加bug->delay字段，内容为延期的时长（天），不延期则为0
      * Test if the bug is delayed, add the bug->delay field to show the delay time (day).
      *
-     * @param  object       $bug
+     * @param  string       $deadline
+     * @param  string       $resolvedDate
      * @param  string       $status
      * @access public
      * @return object|array
      */
-    public function appendDelayedDaysTest($bug, $status): object|array
+    public function appendDelayedDaysTest(string $deadline, string $resolvedDate , string $status): object|array
     {
+        $bug = new stdclass();
         $bug->status       = $status;
-        $bug->deadline     = $bug->deadline     ? date('Y-m-d',strtotime("$bug->deadline day"))     : '0000-00-00';
-        $bug->resolvedDate = $bug->resolvedDate ? date('Y-m-d',strtotime("$bug->resolvedDate day")) : '0000-00-00';
+        $bug->deadline     = $deadline     ? date('Y-m-d', strtotime("{$deadline} day"))     : '0000-00-00';
+        $bug->resolvedDate = $resolvedDate ? date('Y-m-d', strtotime("{$resolvedDate} day")) : '0000-00-00';
 
         $object = $this->objectModel->appendDelayedDays($bug);
         if(!isset($object->delay)) $object->delay = 0;
