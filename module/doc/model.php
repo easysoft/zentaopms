@@ -1025,87 +1025,31 @@ class docModel extends model
     }
 
     /**
+     * 编辑一个文档。
      * Update a doc.
      *
-     * @param  int $docID
+     * @param  int               $docID
+     * @param  object            $doc
      * @access public
-     * @return void
+     * @return array|string|bool
      */
-    public function update($docID)
+    public function update(int $docID, object $doc): array|string|bool
     {
-        $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
+        $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        list($doc, $oldDocContent) = $this->processDocForUpdate($oldDoc, $doc);
+        if(dao::isError()) return false;
 
-        if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-        $account = $this->app->user->account;
-        $now     = helper::now();
-        $doc     = fixer::input('post')->setDefault('module', 0)
-            ->callFunc('title', 'trim')
-            ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('users', '')
-            ->setDefault('groups', '')
-            ->setDefault('product', 0)
-            ->setDefault('execution', 0)
-            ->setDefault('mailto', '')
-            ->add('editedBy', $account)
-            ->add('editedDate', $now)
-            ->setIF(strpos(",$oldDoc->editedList,", ",$account,") === false, 'editedList', $oldDoc->editedList . ",$account")
-            ->cleanInt('project,product,execution,lib,module')
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,contactListMenu')
-            ->get();
-
-        $editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
-        unset($editingDate[$account]);
-        $doc->editingDate = json_encode($editingDate);
-
-        if($doc->acl == 'open') $doc->users = $doc->groups = '';
-        if($doc->type == 'chapter' and $doc->parent)
-        {
-            $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
-            if(strpos($parentDoc->path, ",$docID,") !== false)
-            {
-                dao::$errors['parent'] = $this->lang->doc->errorParentChapter;
-                return false;
-            }
-        }
-
-        $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
-        if($oldDocContent)
-        {
-            $oldDoc->title       = $oldDocContent->title;
-            $oldDoc->digest      = $oldDocContent->digest;
-            $oldDoc->content     = $oldDocContent->content;
-            $oldDoc->contentType = $oldDocContent->type;
-        }
-
-        $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
-        if($doc->contentType == 'markdown') $doc->content = $this->post->content;
-
-        if(!empty($lib))
-        {
-            $doc->product   = $lib->product;
-            $doc->execution = $lib->execution;
-        }
-
-        $requiredFields = $this->config->doc->edit->requiredFields;
-        if($doc->status == 'draft') $requiredFields = 'title';
+        $requiredFields = $doc->status == 'draft' ? 'title' : $this->config->doc->edit->requiredFields;
         if(strpos(",$requiredFields,", ',content,') !== false)
         {
             $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
-            if(isset($doc->content) and empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
+            if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
         $files   = $this->file->saveUpload('doc', $docID);
         $changes = common::createChanges($oldDoc, $doc);
-        $changed = false;
-        if($files) $changed = true;
-        foreach($changes as $change)
-        {
-            if($change['field'] == 'content' or $change['field'] == 'title') $changed = true;
-        }
+        $changed = $files ? true : false;
+        foreach($changes as $change) if($change['field'] == 'content' || $change['field'] == 'title') $changed = true;
 
         if($changed)
         {
@@ -1117,11 +1061,9 @@ class docModel extends model
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
-            if($oldDoc->status == 'draft')
-            {
-                $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
-            }
-            else
+
+            if($oldDoc->status == 'draft') $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
+            if($oldDoc->status != 'draft')
             {
                 $doc->version        = $oldDoc->version + 1;
                 $docContent->version = $doc->version;
@@ -1129,20 +1071,61 @@ class docModel extends model
                 $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
             }
         }
-        unset($doc->contentType);
 
+        unset($doc->contentType);
         $doc->draft = isset($doc->content) ? $doc->content : '';
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
-            ->where('id')->eq((int)$docID)
+            ->where('id')->eq($docID)
             ->exec();
-        if(!dao::isError())
+
+        if(dao::isError()) return false;
+        $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+        return array('changes' => $changes, 'files' => $files);
+    }
+
+    /**
+     * 为更新文档处理数据。
+     * Process data for update a doc.
+     *
+     * @param  object $oldDoc
+     * @param  object $doc
+     * @access public
+     * @return array
+     */
+    public function processDocForUpdate(object $oldDoc, object $doc): array
+    {
+        $editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
+        unset($editingDate[$this->app->user->account]);
+        $doc->editingDate = json_encode($editingDate);
+
+        if($doc->acl == 'open') $doc->users = $doc->groups = '';
+        if($doc->type == 'chapter' && $doc->parent)
         {
-            unset($doc->draft);
-            $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-            return array('changes' => $changes, 'files' => $files);
+            $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
+            if(strpos($parentDoc->path, ",$oldDoc->id,") !== false) return dao::$errors['parent'] = $this->lang->doc->errorParentChapter;
         }
+
+        $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($oldDoc->id)->andWhere('version')->eq($oldDoc->version)->fetch();
+        if($oldDocContent)
+        {
+            $oldDoc->title       = $oldDocContent->title;
+            $oldDoc->digest      = $oldDocContent->digest;
+            $oldDoc->content     = $oldDocContent->content;
+            $oldDoc->contentType = $oldDocContent->type;
+        }
+
+        $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+
+        if(!empty($lib))
+        {
+            $doc->product   = $lib->product;
+            $doc->execution = $lib->execution;
+        }
+
+        return array($doc, $oldDocContent);
     }
 
     /**
@@ -2598,7 +2581,7 @@ class docModel extends model
                     if(common::hasPriv('doc', 'edit') or common::hasPriv('doc', 'updateOrder'))
                     {
                         $treeMenu[0] .= "<div class='tree-actions'>";
-                        if(common::hasPriv('doc', 'edit')) $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
+                        if(common::hasPriv('doc', 'edit')) $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
                         if(common::hasPriv('doc', 'updateOrder')) $treeMenu[0] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
                         $treeMenu[0] .= '</div></div>';
                     }
@@ -2675,7 +2658,7 @@ class docModel extends model
                         if(common::hasPriv('doc', 'edit') or common::hasPriv('doc', 'updateOrder'))
                         {
                             $treeMenu[$module->id] .= "<div class='tree-actions'>";
-                            if(common::hasPriv('doc', 'edit')) $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app={$this->app->tab}");
+                            if(common::hasPriv('doc', 'edit')) $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app={$this->app->tab}");
                             if(common::hasPriv('doc', 'updateOrder')) $treeMenu[$module->id] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
                             $treeMenu[$module->id] .= '</div>';
                         }

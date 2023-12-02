@@ -369,113 +369,49 @@ class doc extends control
     }
 
     /**
+     * 编辑一个文档。
      * Edit a doc.
      *
      * @param  int     $docID
      * @param  bool    $comment
-     * @param  string  $objectType
-     * @param  int     $objectID
-     * @param  int     $libID
-     * @param  string  $from
      * @access public
      * @return void
      */
-    public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0, $from = 'edit')
+    public function edit(int $docID, bool $comment = false)
     {
-        $doc = $this->doc->getById($docID);
-
+        $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
-            if($comment == false || $comment == 'false')
+            $changes = $files = array();
+            if($comment == false)
             {
-                $result = $this->doc->update($docID);
+                if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
+                $docData = form::data()->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")->get();
+                $result  = $this->doc->update($docID, $docData);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
                 $changes = $result['changes'];
                 $files   = $result['files'];
             }
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
-            {
-                $action = 'Commented';
-                if(!empty($changes))
-                {
-                    $newType = $_POST['status'];
-                    if($doc->status == 'draft' and $newType == 'normal') $action = 'releasedDoc';
-                    if($doc->status == $newType) $action = 'Edited';
-                }
 
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-                $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
-
-            $link     = $this->createLink('doc', 'view', "docID={$docID}");
-            $oldLib   = $doc->lib;
-            $doc      = $this->doc->getById($docID);
-            $lib      = $this->doc->getLibByID($doc->lib);
-            $objectID = zget($lib, $lib->type, 0);
-            if(!$this->doc->checkPrivDoc($doc))
-            {
-                $moduleName = 'doc';
-                if($this->app->tab == 'execution')
-                {
-                    $moduleName = 'execution';
-                    $methodName = 'doc';
-                }
-                else
-                {
-                    $methodName = zget($this->config->doc->spaceMethod, $lib->type);
-                }
-                $params = "objectID=$objectID&libID={$doc->lib}";
-                $link   = $this->createLink($moduleName, $methodName, $params);
-            }
-
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->docZen->responseAfterEdit($doc, $comment, $changes, $files);
         }
 
         /* Get doc and set menu. */
-        $libID = $doc->lib;
+        $lib      = $this->doc->getLibByID($doc->lib);
+        $objectID = zget($lib, $lib->type, 0);
+        $libs     = $this->doc->getLibs($lib->type, 'withObject', $doc->lib, $objectID);
 
-        if($doc->contentType == 'markdown') $this->config->doc->markdown->edit = array('id' => 'content', 'tools' => 'toolbar');
-
-        $lib        = $this->doc->getLibByID($libID);
-        $objectType = $lib->type;
-        $objectID   = zget($lib, $objectType, 0);
-
-        $libs    = $this->doc->getLibs($objectType, 'withObject', $libID, $objectID);
-        $objects = array();
-        if($objectType == 'project')
-        {
-            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
-        }
-        elseif($objectType == 'execution')
-        {
-            $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->resetExecutionSorts($objects, array(), array(), $execution->project);
-        }
-        elseif($objectType == 'product')
-        {
-            $objects = $this->loadModel('product')->getPairs();
-        }
-        elseif($objectType == 'mine')
-        {
-            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
-        }
-        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
-
-        $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
+        $this->docZen->setObjectsForEdit($lib->type);
 
         $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->doc              = $doc;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->type             = $objectType;
+        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+        $this->view->type             = $lib->type;
         $this->view->libs             = $libs;
-        $this->view->objects          = $objects;
         $this->view->lib              = $lib;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
-        $this->view->from             = $from;
         $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
         $this->view->objectID         = $objectID;
         $this->view->otherEditing     = $this->doc->checkOtherEditing($docID);

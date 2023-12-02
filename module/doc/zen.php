@@ -536,4 +536,90 @@ class docZen extends doc
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
     }
+
+    /**
+     * 为编辑文档设置所属对象下拉值。
+     * Set the dropdown values of object for creating document.
+     *
+     * @param  string    $objectType product|project|execution|custom
+     * @access protected
+     * @return void
+     */
+    protected function setObjectsForEdit(string $objectType): void
+    {
+        $objects = array();
+        if($objectType == 'project')
+        {
+            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
+        }
+        elseif($objectType == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            $objects   = $this->execution->resetExecutionSorts($objects, array(), array(), $execution->project);
+        }
+        elseif($objectType == 'product')
+        {
+            $objects = $this->loadModel('product')->getPairs();
+        }
+        elseif($objectType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+        }
+
+        $this->view->objects = $objects;
+    }
+
+    /**
+     * 在编辑文档后的返回。
+     * Return after edit a document.
+     *
+     * @param  object    $doc
+     * @param  bool      $comment
+     * @param  array     $changes
+     * @param  array     $files
+     * @access protected
+     * @return bool|int
+     */
+    protected function responseAfterEdit(object $doc, bool $comment = false, array $changes = array(), array $files = array()): bool|int
+    {
+        if($this->post->comment != '' || !empty($changes) || !empty($files))
+        {
+            $action = 'Commented';
+            if(!empty($changes))
+            {
+                $newType = $_POST['status'];
+                if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
+                if($doc->status == $newType) $action = 'Edited';
+            }
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
+
+        $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
+        $oldLib   = $doc->lib;
+        $doc      = $this->doc->getByID($doc->id);
+        $lib      = $this->doc->getLibByID((int)$doc->lib);
+        $objectID = zget($lib, $lib->type, 0);
+        if(!$this->doc->checkPrivDoc($doc))
+        {
+            $moduleName = 'doc';
+            if($this->app->tab == 'execution')
+            {
+                $moduleName = 'execution';
+                $methodName = 'doc';
+            }
+            else
+            {
+                $methodName = zget($this->config->doc->spaceMethod, $lib->type);
+            }
+            $params = "objectID={$objectID}&libID={$doc->lib}";
+            $link   = $this->createLink($moduleName, $methodName, $params);
+        }
+
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+    }
 }
