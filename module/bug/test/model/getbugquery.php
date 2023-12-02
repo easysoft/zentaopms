@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/bug.class.php';
 
 zdTable('user')->gen(2);
 zdTable('project')->gen(40);
-zdTable('product')->gen(20);
+zdTable('product')->gen(20, true, false);
 zdTable('story')->gen(30);
 
 su('admin');
@@ -29,7 +29,7 @@ $bugQuery[] = " `product` = '1' and `project` = '1' and `story` > 'abc'";
 
 $bug=new bugTest();
 
-r($bug->getBugQueryTest($bugQuery[0])) && p()  && e("1 AND `product` IN ('11','12','13','14','15','16','17','18','19','20','1','2','3','4','5','6','7','8','9','10')"); // 查询 `product` = 'all' 的bugQuery
+r($bug->getBugQueryTest($bugQuery[0])) && p()  && e("1 AND `product` IN ('1','2','3','4','5','6','7','8','9','10')"); // 查询 `product` = 'all' 的bugQuery
 r($bug->getBugQueryTest($bugQuery[1])) && p()  && e("1 AND `project` in (11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40)"); // 查询 `project` = 'all' 的bugQuery
 r($bug->getBugQueryTest($bugQuery[2])) && p()  && e(" `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` > '2022-01-01'");                                     // 查询 `resolvedDate` = '2022-01-01' 的bugQuery
 r($bug->getBugQueryTest($bugQuery[3])) && p()  && e(" `closedDate` != '0000-00-00 00:00:00' AND `closedDate` <= '2022-01-01'");                                        // 查询 `closedDate` = '2022-01-01' 的bugQuery
