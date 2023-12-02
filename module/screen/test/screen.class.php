@@ -196,4 +196,16 @@ class screenTest
         return $this->objectModel->getSysOptions($type, $object, $field, $sql);
     }
 
+    /**
+     * 测试buildComponentList。
+     * Test buildComponentList.
+     *
+     * @param  array|object $componentList
+     * @access public
+     * @return array
+     */
+    public function buildComponentListTest(array|object $componentList): array
+    {
+        return $this->objectModel->buildComponentList($componentList);
+    }
 }
