@@ -115,13 +115,14 @@ class holiday extends control
     }
 
     /**
-     * Delete holiday.
+     * 删除一个节假日。
+     * Delete a holiday.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $holidayInformation = $this->dao->select('begin, end')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
         $this->dao->delete()->from(TABLE_HOLIDAY)->where('id')->eq($id)->exec();
