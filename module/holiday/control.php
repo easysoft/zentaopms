@@ -140,13 +140,14 @@ class holiday extends control
     }
 
     /**
+     * 导入节假日。
      * Import holiday.
      *
      * @param  string $year
      * @access public
      * @return void
      */
-    public function import($year = '')
+    public function import(string $year = '')
     {
         if(empty($year)) $year = date('Y');
 
