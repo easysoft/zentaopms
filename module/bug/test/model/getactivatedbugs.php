@@ -25,12 +25,12 @@ $buildIdList   = array('1,0,trunk', '1,trunk', '0,trunk');
 
 $bug = new bugTest();
 
-r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[0])) && p() && e('2,5,6,9'); // 测试获取产品 1 2 3 类型 空 开始日期 上月 结束日期 下月 的bug
-r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[0])) && p() && e('0');       // 测试获取产品 1 2 3 类型 空 开始日期 上周 结束日期 下周 的bug
-r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[1])) && p() && e('5,6,9');   // 测试获取产品 1 2 3 类型 resolved 开始日期 上月 结束日期 下月 的bug
-r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[1])) && p() && e('0');       // 测试获取产品 1 2 3 类型 resolved 开始日期 上周 结束日期 下周 的bug
-r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[2])) && p() && e('2,5,6,9'); // 测试获取产品 1 2 3 类型 opened 开始日期 上月 结束日期 下月 的bug
-r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[2])) && p() && e('0');       // 测试获取产品 1 2 3 类型 opened 开始日期 上周 结束日期 下周 的bug
+r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[0])) && p() && e('1,2,5,6,9'); // 测试获取产品 1 2 3 类型 空 开始日期 上月 结束日期 下月 的bug
+r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[0])) && p() && e('0');         // 测试获取产品 1 2 3 类型 空 开始日期 上周 结束日期 下周 的bug
+r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[1])) && p() && e('1,5,6,9');   // 测试获取产品 1 2 3 类型 resolved 开始日期 上月 结束日期 下月 的bug
+r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[1])) && p() && e('0');         // 测试获取产品 1 2 3 类型 resolved 开始日期 上周 结束日期 下周 的bug
+r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[2])) && p() && e('2,5,6,9');   // 测试获取产品 1 2 3 类型 opened 开始日期 上月 结束日期 下月 的bug
+r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[2])) && p() && e('0');         // 测试获取产品 1 2 3 类型 opened 开始日期 上周 结束日期 下周 的bug
 
 r($bug->getActivatedBugsTest($productIdList[1], $beginList[0], $endList[0], $buildIdList[0])) && p() && e('10,13,14,17,18'); // 测试获取产品 4 5 6 类型 空 开始日期 上月 结束日期 下月 的bug
 r($bug->getActivatedBugsTest($productIdList[1], $beginList[1], $endList[1], $buildIdList[0])) && p() && e('0');              // 测试获取产品 4 5 6 类型 空 开始日期 上周 结束日期 下周 的bug
