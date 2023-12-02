@@ -1629,7 +1629,7 @@ class testcaseModel extends model
         /* Return scenes. */
         return $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
-            ->andWhere('path')->notlike("%,{$currentScene},%")
+            ->andWhere('path')->notlike("%,{$currentScene},")
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($moduleID > 0)->andWhere('module')->eq($moduleID)->fi()
             ->beginIF($startScenePath)->andWhere('path')->like($startScenePath)->fi()

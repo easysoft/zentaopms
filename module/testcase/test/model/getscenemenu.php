@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
 
 zdTable('scene')->config('moduletreescene')->gen('20');
+zdTable('branch')->gen('10');
+zdTable('product')->gen('50');
 zdTable('user')->gen('1');
 
 su('admin');
