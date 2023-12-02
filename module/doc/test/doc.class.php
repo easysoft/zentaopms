@@ -191,6 +191,32 @@ class docTest
     }
 
     /**
+     * 创建独立的文档。
+     * Create a seperate docs.
+     *
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function createSeperateDocsTest(array $param): array
+    {
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
+
+        $doc = new stdclass();
+        foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
+        foreach($param as $key => $value) $doc->{$key} = $value;
+
+        $_FILES['files']['error']    = 0;
+        $_FILES['files']['name']     = $doc->title;
+        $_FILES['files']['size']     = 0;
+        $_FILES['files']['tmp_name'] = 'txt';
+        $this->objectModel->createSeperateDocs($doc);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('title')->eq($doc->title)->andwhere('lib')->eq($doc->lib)->fetchAll('id');
+    }
+
+    /**
      * Function update test by doc
      *
      * @param  int $docID
