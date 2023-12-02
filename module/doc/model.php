@@ -3424,21 +3424,25 @@ class docModel extends model
     }
 
     /**
-     * Delete action.
+     * 删除一个动作。
+     * Delete an action.
      *
      * @param  int    $actionID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteAction($actionID)
+    public function deleteAction(int $actionID): bool
     {
         $action = $this->dao->select('*')->from(TABLE_DOCACTION)->where('id')->eq($actionID)->fetch();
+        if(!$action) return false;
+
         $this->dao->delete()->from(TABLE_DOCACTION)->where('id')->eq($actionID)->exec();
         if($action->action == 'collect')
         {
             $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
             $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($action->doc)->exec();
         }
+        return !dao::isError();
     }
 
     /**
