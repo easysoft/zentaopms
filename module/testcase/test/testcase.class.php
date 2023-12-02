@@ -96,7 +96,9 @@ class testcaseTest
      */
     public function updateSceneTest(array $scene): bool|array
     {
-        $result = $this->objectModel->updateScene((object)$scene);
+        $oldScene = $this->objectModel->getSceneById($scene['id']);
+        if(!$oldScene) return false;
+        $result   = $this->objectModel->updateScene((object)$scene, $oldScene);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
