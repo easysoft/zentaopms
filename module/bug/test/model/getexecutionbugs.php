@@ -33,20 +33,12 @@ title=bugModel->getExecutionBugs();
 cid=1
 pid=1
 
-测试获取执行ID为101的bug >> BUG3,BUG2,BUG1
-测试获取执行ID为102的bug >> BUG6,BUG5,BUG4
-测试获取执行ID为103的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-测试获取执行ID为104的bug >> BUG12,BUG11,BUG10
-测试获取执行ID为105的bug >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,BUG14,BUG13
-测试获取执行ID为106的bug >> BUG18,BUG17,bug16
-测试获取不存在的执行的bug >> 0
-
 */
 
 $executionIdList = array(2, 1, 1000001);
 $productIdList   = array(1, 2);
 $branchIdList    = array('1');
-$buildIdList     = array(1, 'trunk');
+$buildIdList     = array('1', 'trunk');
 $typeList        = array('unresolved', 'noclosed', 'assignedtome', 'openedbyme');
 $paramList       = array(1);
 $excludeBugs     = array(10);

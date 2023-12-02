@@ -640,13 +640,19 @@ class bugTest
      * 测试获取执行的 bug。
      * Test get bugs of a execution.
      *
-     * @param  int    $executionID
+     * @param  int          $executionID
+     * @param  int          $productID
+     * @param  string|int   $branchID
+     * @param  string|array $builds
+     * @param  string       $type
+     * @param  int          $param
+     * @param  string       $excludeBugs
      * @access public
      * @return string
      */
-    public function getExecutionBugsTest(int $executionID, int $productID = 0, string|int $branchID = 'all', int|array $builds = 0, string $type = '', int $param = 0, string $excludeBugs = ''): array
+    public function getExecutionBugsTest(int $executionID, int $productID = 0, string|int $branchID = 'all', string|array $builds = '0', string $type = '', int $param = 0, string $excludeBugs = ''): array
     {
-        $bugs = $this->objectModel->getExecutionBugs($executionID, $productID, $branchID, $builds, $type, $param, $orderBy = 'id_desc', $excludeBugs);
+        $bugs = $this->objectModel->getExecutionBugs($executionID, $productID, $branchID, $builds, $type, $param, 'id_desc', $excludeBugs);
 
         if(dao::isError()) return dao::getError();
 
