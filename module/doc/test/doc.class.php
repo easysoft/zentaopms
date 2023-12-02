@@ -943,4 +943,17 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $actions;
     }
+
+    /**
+     * 删除一个动作。
+     * Delete an action.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return bool
+     */
+    public function deleteActionTest(int $actionID): bool
+    {
+        return $this->objectModel->deleteAction($actionID);
+    }
 }
