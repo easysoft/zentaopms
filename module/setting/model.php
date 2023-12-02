@@ -10,8 +10,6 @@ declare(strict_types=1);
  * @version     $Id: model.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class settingModel extends model
 {
     //-------------------------------- methods for get, set and delete setting items. ----------------------------//
@@ -22,9 +20,9 @@ class settingModel extends model
      *
      * @param  string   $paramString    see parseItemParam();
      * @access public
-     * @return misc
+     * @return string
      */
-    public function getItem(string $paramString)
+    public function getItem(string $paramString): string
     {
         return $this->createDAO($this->parseItemParam($paramString), 'select')->fetch('value');
     }
@@ -36,7 +34,7 @@ class settingModel extends model
      * @access public
      * @return array
      */
-    public function getItems(string $paramString)
+    public function getItems(string $paramString): array
     {
         return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id');
     }
@@ -74,7 +72,7 @@ class settingModel extends model
      * @access public
      * @return bool
      */
-    public function setItems(string $path, array|object $items)
+    public function setItems(string $path, array|object $items): bool
     {
         /* Determine vision of config item. */
         $pathVision = explode('@', $path);
@@ -108,9 +106,9 @@ class settingModel extends model
      * @param  string     $path
      * @param  string|int $value
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateItem(string $path, string|int $value = '')
+    public function updateItem(string $path, string|int $value = ''):bool
     {
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
@@ -132,6 +130,7 @@ class settingModel extends model
 
         $item->value = $value;
         $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
+        return true;
     }
 
     /**
@@ -142,7 +141,7 @@ class settingModel extends model
      * @access public
      * @return void
      */
-    public function deleteItems(string $paramString)
+    public function deleteItems(string $paramString): void
     {
         $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
     }
@@ -219,7 +218,7 @@ class settingModel extends model
      * @access public
      * @return object
      */
-    public function createDAO($params, $method = 'select'): object
+    public function createDAO(array $params, string $method = 'select'): object
     {
         $params['vision']  = isset($params['vision'])  ? $params['vision']  : '';
         $params['owner']   = isset($params['owner'])   ? $params['owner']   : '';

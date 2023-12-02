@@ -8,39 +8,6 @@ class settingTest
     }
 
     /**
-     * Get value of an item.
-     *
-     * @param  string   $paramString    see parseItemParam();
-     * @access public
-     * @return bool
-     */
-    public function getItemTest($paramString)
-    {
-        $objects = $this->objectModel->getItem($paramString);
-
-        if(dao::isError()) return dao::getError();
-
-        if($objects or $objects === 0 or $objects === '0') return true;
-        return false;
-    }
-
-    /**
-     * Get some items.
-     *
-     * @param  string   $paramString    see parseItemParam();
-     * @access public
-     * @return array|string
-     */
-    public function getItemsTest($paramString)
-    {
-        $objects = $this->objectModel->getItems($paramString);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Set value of an item.
      *
      * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
@@ -92,6 +59,31 @@ class settingTest
     }
 
     /**
+     * Test updateItem method.
+     *
+     * @param  string $path
+     * @param  string $value
+     * @access public
+     * @return object
+     */
+    public function updateItemTest($path, $value = '')
+    {
+        $this->objectModel->updateItem($path, $value);
+
+        if(dao::isError()) return dao::getError();
+
+        /* Determine vision of config item. */
+        $item = $this->objectModel->parseItemPath($path);
+        if(empty($item)) return false;
+
+        $paramString = array();
+        foreach($item as $key => $value) $paramString[] = "{$key}={$value}";
+
+        $objects = $this->objectModel->getItems(implode('&', $paramString));
+        return array_pop($objects);
+    }
+
+    /**
      * Delete items.
      *
      * @param  string   $paramString    see parseItemParam();
@@ -104,8 +96,7 @@ class settingTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->getItemTest($paramString);
-        return $object;
+        return $this->objectModel->dao->select('count(*) as count')->from(TABLE_CONFIG)->fetch('count');
     }
 
     /**

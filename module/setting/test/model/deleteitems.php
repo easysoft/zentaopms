@@ -4,57 +4,32 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/setting.class.php';
 su('admin');
 
-zdTable('config')->gen(7);
+$config = zdTable('config');
+$config->vision->range('``,rnd,lite');
+$config->gen(20);
 
 /**
 
 title=测试 settingModel->deleteItems();
 timeout=0
 cid=1
-
-- 删除键是version的common模块下的系统数据 @0
-- 删除键是hourPoint的common模块下的系统数据 @0
-- 删除键是mode的common模块下的系统数据 @0
-- 删除键是CRProduct的common模块下的系统数据 @0
-- 删除键是sn的common模块下的数据 @0
-- 删除键是CRExection的common模块下的数据 @0
-- 删除键是mode、附件条件是safe的数据 @0
-- 删除键是URSR的数据 @0
-- 删除模块是story的数据 @0
-- 删除附加条件是xuanxuan的数据 @0
-- 删除所有者是admin的数据 @0
-- 删除视图是rnd的数据 @0
-- 删除所有的数据 @0
+pid=1
 
 */
 
 $setting = new settingTest();
 
 $params     = array();
-$params[0]  = "vision=rnd&owner=system&module=common&section=global&key=version";
-$params[1]  = "vision=rnd&owner=system&module=common&key=hourPoint";
-$params[2]  = "owner=system&module=common&section=global&key=mode";
-$params[3]  = "owner=system&module=common&key=CRProduct";
-$params[4]  = "module=common&section=global&key=sn";
-$params[5]  = "module=common&key=CRExection";
-$params[6]  = "section=safe&key=mode";
-$params[7]  = "key=URSR";
-$params[8]  = "module=story";
-$params[9]  = "section=xuanxuan";
-$params[10] = "owner=admin";
-$params[11] = "vision=rnd";
-$params[12] = "";
+$params[0]  = "key=key2";
+$params[1]  = "section=section3&key=key3";
+$params[2]  = "module=story&section=section4&key=key4";
+$params[3]  = "owner=system&module=task&section=section5&key=key5";
+$params[4]  = "vision=lite&owner=user&module=bug&section=section6&key=key6";
+$params[5]  = "owner=system";
 
-r($setting->deleteItemsTest($params[0]))  && p() && e('0'); // 删除键是version的common模块下的系统数据
-r($setting->deleteItemsTest($params[1]))  && p() && e('0'); // 删除键是hourPoint的common模块下的系统数据
-r($setting->deleteItemsTest($params[2]))  && p() && e('0'); // 删除键是mode的common模块下的系统数据
-r($setting->deleteItemsTest($params[3]))  && p() && e('0'); // 删除键是CRProduct的common模块下的系统数据
-r($setting->deleteItemsTest($params[4]))  && p() && e('0'); // 删除键是sn的common模块下的数据
-r($setting->deleteItemsTest($params[5]))  && p() && e('0'); // 删除键是CRExection的common模块下的数据
-r($setting->deleteItemsTest($params[6]))  && p() && e('0'); // 删除键是mode、附件条件是safe的数据
-r($setting->deleteItemsTest($params[7]))  && p() && e('0'); // 删除键是URSR的数据
-r($setting->deleteItemsTest($params[8]))  && p() && e('0'); // 删除模块是story的数据
-r($setting->deleteItemsTest($params[9]))  && p() && e('0'); // 删除附加条件是xuanxuan的数据
-r($setting->deleteItemsTest($params[10])) && p() && e('0'); // 删除所有者是admin的数据
-r($setting->deleteItemsTest($params[11])) && p() && e('0'); // 删除视图是rnd的数据
-r($setting->deleteItemsTest($params[12])) && p() && e('0'); // 删除所有的数据
+r($setting->deleteItemsTest($params[0]))  && p() && e('19');
+r($setting->deleteItemsTest($params[1]))  && p() && e('18');
+r($setting->deleteItemsTest($params[2]))  && p() && e('17');
+r($setting->deleteItemsTest($params[3]))  && p() && e('16');
+r($setting->deleteItemsTest($params[4]))  && p() && e('15');
+r($setting->deleteItemsTest($params[5]))  && p() && e('7');
