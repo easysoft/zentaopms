@@ -866,4 +866,59 @@ class searchTao extends searchModel
         $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
         return $record;
     }
+
+    /**
+     * Process data list for saving index.
+     * 处理要保存的索引数据。
+     *
+     * @param  string    $module
+     * @param  object    $field
+     * @param  array     $dataList
+     * @access protected
+     * @return array
+     */
+    protected function processDataList(string $module, object $field, array $dataList): array
+    {
+        if($module == 'case') $caseStep = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in(array_keys($dataList))->fetchGroup('case', 'id');
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('date asc')->fetchGroup('objectID', 'id');
+        $files   = $this->dao->select('id,objectID,title,extension')->from(TABLE_FILE)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('id asc')->fetchGroup('objectID', 'id');
+
+        foreach($dataList as $id => $data)
+        {
+            $data->comment = '';
+            if(isset($actions[$id]))
+            {
+                foreach($actions[$id] as $action)
+                {
+                    if($action->action == 'opened') $data->{$field->addedDate} = $action->date;
+                    $data->{$field->editedDate} = $action->date;
+                    if(!empty($action->comment)) $data->comment .= $action->comment . "\n";
+                }
+            }
+
+            if(isset($files[$id]))
+            {
+                foreach($files[$id] as $file)
+                {
+                    if(!empty($file->title)) $data->comment .= $file->title . '.' . $file->extension . "\n";
+                }
+            }
+
+            if($module == 'case')
+            {
+                $data->desc   = '';
+                $data->expect = '';
+                if(isset($caseStep[$id]))
+                {
+                    foreach($caseStep[$id] as $step)
+                    {
+                        if($step->version != $data->version) continue;
+                        $data->desc   .= $step->desc . "\n";
+                        $data->expect .= $step->expect . "\n";
+                    }
+                }
+            }
+        }
+        return $dataList;
+    }
 }
