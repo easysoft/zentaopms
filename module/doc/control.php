@@ -686,19 +686,15 @@ class doc extends control
     }
 
     /**
-     * Collect doc, doclib or module of doclib.
+     * 收藏一个文档。
+     * Collect a doc.
      *
-     * @param int $objectID
-     * @param int $objectType
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function collect($objectID, $objectType)
+    public function collect(int $objectID)
     {
-        $table = '';
-        if($objectType == 'doc') $table = TABLE_DOC;
-        if(empty($table)) return;
-
         $action = $this->doc->getActionByObject($objectID, 'collect');
         if($action)
         {

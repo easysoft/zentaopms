@@ -47,7 +47,7 @@ for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 }
 
 $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
-$collectLink = $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");
+$collectLink = $this->createLink('doc', 'collect', "objectID=$doc->id");
 $starBtn     = "<a data-url='$collectLink' title='{$lang->doc->collect}' class='ajax-submit btn btn-link'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
 
 /* 导入资产库的按钮. */
