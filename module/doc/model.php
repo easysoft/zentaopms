@@ -875,38 +875,22 @@ class docModel extends model
     }
 
     /**
+     * 创建独立的文档。
      * Create a seperate docs.
      *
+     * @param  object      $doc
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function createSeperateDocs()
+    public function createSeperateDocs(object $doc): array|bool
     {
-        if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-        $now = helper::now();
-        $doc = fixer::input('post')
-            ->setDefault('content,template,templateType,chapterType', '')
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', $now)
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->add('version', 1)
-            ->setDefault('product,execution,module', 0)
-            ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,lib')
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->join('mailto', ',')
-            ->remove('files,labels,uid,contactListMenu,uploadFormat')
-            ->get();
-
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
-        if(empty($doc->lib) and strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
+        if(empty($doc->lib) && strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
+
         $files = $this->loadModel('file')->getUpload();
         if(empty($files)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
-        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
 
@@ -920,50 +904,63 @@ class docModel extends model
         $docContent->type    = $doc->contentType;
         $docContent->digest  = '';
         $docContent->version = 1;
-        unset($doc->contentType, $doc->url);
+        unset($doc->contentType);
 
-        $requiredFields = $this->config->doc->create->requiredFields;
+        return $this->insertSeperateDocs($doc, $docContent, $files);
+    }
 
-        $doc->draft  = '';
-        $doc->vision = $this->config->vision;
+    /**
+     * 批量插入独立的文档。
+     * Insert seperate docs.
+     *
+     * @param  object     $doc
+     * @param  object     $docContent
+     * @param  array      $files
+     * @access public
+     * @return array|bool
+     */
+    public function insertSeperateDocs(object $doc, object $docContent, array $files): array|bool
+    {
+        $this->loadModel('file');
 
+        $doc->draft = '';
         $docsAction = array();
         foreach($files as $file)
         {
             $title    = $file['title'];
             $position = strrpos($title, '.');
-            if($position !== 'false') $title = substr($title, 0, $position);
+            if($position > 0) $title = substr($title, 0, $position);
 
             $doc->title = $title;
             $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
-                ->batchCheck($requiredFields, 'notempty')
+                ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
                 ->exec();
-            if(!dao::isError())
-            {
-                $docID = $this->dao->lastInsertID();
-                $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-                $fileTitle = $this->file->saveAFile($file, 'doc', $docID);
-                $docsAction[$docID] = $fileTitle;
-                if(empty($fileTitle)) continue;
-                if(dao::isError())
-                {
-                    dao::$errors['message'][] = 'doc#' . ($file->title) . dao::getError(true);
-                    continue;
-                }
+            if(dao::isError()) return false;
 
-                $docContent->doc     = $docID;
-                $docContent->files   = ',' . $fileTitle->id;
-                $docContent->title   = $title;
-                $docContent->content = '';
-                $docContent->type    = 'attachment';
-                $docContent->digest  = '';
-                $docContent->version = 1;
-                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
-                $this->loadModel('score')->create('doc', 'create', $docID);
+            $docID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+            $fileTitle = $this->file->saveAFile($file, 'doc', $docID);
+            $docsAction[$docID] = $fileTitle;
+            if(empty($fileTitle)) continue;
+            if(dao::isError())
+            {
+                dao::$errors['message'][] = 'doc#' . ($file->title) . dao::getError(true);
+                continue;
             }
+
+            $docContent->doc     = $docID;
+            $docContent->files   = ',' . $fileTitle->id;
+            $docContent->title   = $title;
+            $docContent->content = '';
+            $docContent->type    = 'attachment';
+            $docContent->digest  = '';
+            $docContent->version = 1;
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $this->loadModel('score')->create('doc', 'create', $docID);
         }
 
-        return dao::isError() ? false : array('status' => 'new', 'docsAction' => $docsAction, 'docType' => 'attachment', 'libID' => $doc->lib);
+        if(dao::isError()) return false;
+        return array('status' => 'new', 'docsAction' => $docsAction, 'docType' => 'attachment', 'libID' => $doc->lib);
     }
 
     /**

@@ -410,10 +410,11 @@ class docZen extends doc
      *
      * @param  string    $linkType product|project|execution|custom
      * @param  object    $lib
+     * @param  string    $unclosed
      * @access protected
      * @return void
      */
-    protected function setObjectsForCreate(string $linkType, object $lib): void
+    protected function setObjectsForCreate(string $linkType, object $lib, string $unclosed): void
     {
         $objects  = array();
         if($linkType == 'project')
@@ -424,9 +425,10 @@ class docZen extends doc
             $this->view->executions = array();
             if($lib->type == 'execution')
             {
-                $execution = $this->loadModel('execution')->getById($lib->execution);
+                $execution = $this->loadModel('execution')->getByID($lib->execution);
                 $objectID  = $execution->project;
-                $libs      = $this->doc->getLibs('execution', 'withObject,unclosed', $libID, $lib->execution);
+                $libs      = $this->doc->getLibs('execution', "withObject,{$unclosed}", $libID, $lib->execution);
+
                 $this->view->execution  = $execution;
                 $this->view->executions = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
             }
@@ -446,5 +448,92 @@ class docZen extends doc
         }
 
         $this->view->objects = $objects;
+    }
+
+    /**
+     * 在上传文件后的返回。
+     * Return after upload files.
+     *
+     * @param  array     $docResult
+     * @access protected
+     * @return bool|int
+     */
+    protected function responseAfterUploadDocs(array $docResult): bool|int
+    {
+        if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action');
+        if($this->post->uploadFormat == 'combinedDocs')
+        {
+            $docID = $docResult['id'];
+            $files = zget($docResult, 'files', '');
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+
+            $this->action->create('doc', $docID, 'created', $fileAction);
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+
+            $params   = "docID=" . $docResult['id'];
+            $link     = isInModal() ? true : $this->createLink('doc', 'view', $params);
+        }
+        else
+        {
+            $docsAction = zget($docResult, 'docsAction', '');
+            if(!empty($docsAction))
+            {
+                foreach($docsAction as $docID => $fileTitle)
+                {
+                    $fileAction = $this->lang->addFiles . $fileTitle->title . "\n";
+                    $this->action->create('doc', $docID, 'created', $fileAction);
+                }
+            }
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            $link = true;
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+    }
+
+    /**
+     * 展示上传文件的相关变量。
+     * Show the related variables of uploading files.
+     *
+     * @param  string    $objectType product|project|execution|custom
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @param  string    $docType    html|word|ppt|excel|attachment
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForUploadDocs(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): void
+    {
+        $lib = $libID ? $this->doc->getLibByID($libID) : '';
+        if(empty($objectID) && $lib) $objectID = zget($lib, $lib->type, 0);
+
+        /* Get libs and the default lib ID. */
+        $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs       = $this->doc->getLibs($objectType, "withObject,{$unclosed}", $libID, $objectID);
+        if(!$libID && !empty($libs)) $libID = key($libs);
+        if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
+
+        $this->setObjectsForCreate($objectType, $lib, $unclosed);
+
+        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->uploadDoc;
+        $this->view->linkType         = $objectType;
+        $this->view->objectType       = $objectType;
+        $this->view->objectID         = empty($lib) ? 0 : zget($lib, $lib->type, 0);
+        $this->view->libID            = $libID;
+        $this->view->lib              = $lib;
+        $this->view->libs             = $libs;
+        $this->view->libName          = zget($lib, 'name', '');
+        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+        $this->view->moduleID         =  $libID . '_' . $moduleID;
+        $this->view->docType          = $docType;
+        $this->view->groups           = $this->loadModel('group')->getPairs();
+        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
     }
 }
