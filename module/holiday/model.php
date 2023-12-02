@@ -57,19 +57,15 @@ class holidayModel extends model
     }
 
     /**
+     * 创建一个节假日。
      * Create a holiday.
      *
+     * @param  object  $holiday
      * @access public
-     * @return int
+     * @return int|bool
      */
-    public function create()
+    public function create(object $holiday): int|bool
     {
-        $holiday = fixer::input('post')->get();
-        $holiday->year = substr($holiday->begin, 0, 4);
-        if($holiday->year and helper::isZeroDate($holiday->year)) dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
-        if($holiday->end and helper::isZeroDate($holiday->end))  dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
-        if(dao::isError()) return false;
-
         $this->dao->insert(TABLE_HOLIDAY)->data($holiday)
             ->autoCheck()
             ->batchCheck($this->config->holiday->require->create, 'notempty')

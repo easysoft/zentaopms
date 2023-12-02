@@ -55,6 +55,7 @@ class holiday extends control
     }
 
     /**
+     * 创建一个节假日。
      * Create a holiday.
      *
      * @access public
@@ -64,9 +65,18 @@ class holiday extends control
     {
         if($_POST)
         {
-            $holidayID = $this->holiday->create();
+            $holiday = form::data($this->config->holiday->form->create)->get();
+            $holiday->year = substr($holiday->begin, 0, 4);
+
+            if($holiday->year && helper::isZeroDate($holiday->year)) dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
+            if($holiday->end && helper::isZeroDate($holiday->end))  dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
+            if($holiday->begin && $holiday->end && $holiday->begin > $holiday->end) dao::$errors['end'][] = sprintf($this->lang->error->ge, $this->lang->holiday->end, $this->lang->holiday->begin);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $actionID = $this->loadModel('action')->create('holiday', $holidayID, 'created');
+
+            $holidayID = $this->holiday->create($holiday);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action')->create('holiday', $holidayID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
