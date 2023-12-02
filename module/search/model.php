@@ -767,9 +767,9 @@ class searchModel extends model
      * @param  string $type
      * @param  bool   $testDelete
      * @access public
-     * @return string
+     * @return object
      */
-    public function buildIndexQuery(string $type, bool $testDeleted = true)
+    public function buildIndexQuery(string $type, bool $testDeleted = true): object
     {
         $table = $this->config->objectTables[$type];
         if($type == 'story' || $type == 'requirement')
@@ -800,6 +800,7 @@ class searchModel extends model
     }
 
     /**
+     * 构建索引。
      * Build all search index.
      *
      * @param  string $type
@@ -809,8 +810,8 @@ class searchModel extends model
      */
     public function buildAllIndex(string $type = '', int $lastID = 0): array
     {
-        $limit      = 100;
-        $nextObject = false;
+        /* 如果类型是空的，获取第一个类型，从第一个类型开始创建索引。*/
+        /* If the type is empty, get the first type and create index starting from the first type. */
         if(empty($type))
         {
             $this->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
@@ -823,11 +824,16 @@ class searchModel extends model
             $type = key((array)$this->config->search->fields);
         }
 
+        $limit      = 100;
+        $nextObject = false;
+        /* 获取某些字段值并且将其保存到索引。*/
+        /* Get some field value and save it to index. */
         foreach($this->config->search->fields as $module => $field)
         {
             if($module != $type && !$nextObject) continue;
-            if($module == $type) $nextObject = true;
             if(!isset($this->config->objectTables[$module])) continue;
+
+            if($module == $type) $nextObject = true;
 
             while(true)
             {
@@ -839,55 +845,7 @@ class searchModel extends model
                     break;
                 }
 
-                if($module == 'case') $caseStep = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in(array_keys($dataList))->fetchGroup('case', 'id');
-                $actions = $this->dao->select('*')->from(TABLE_ACTION)
-                    ->where('objectType')->eq($module)
-                    ->andWhere('objectID')->in(array_keys($dataList))
-                    ->orderBy('date asc')
-                    ->fetchGroup('objectID', 'id');
-
-                $files = $this->dao->select('id,objectID,title,extension')->from(TABLE_FILE)
-                    ->where('objectType')->eq($module)
-                    ->andWhere('objectID')->in(array_keys($dataList))
-                    ->orderBy('id asc')
-                    ->fetchGroup('objectID', 'id');
-
-                foreach($dataList as $id => $data)
-                {
-                    $data->comment = '';
-                    if(isset($actions[$id]))
-                    {
-                        foreach($actions[$id] as $action)
-                        {
-                            if($action->action == 'opened')$data->{$field->addedDate} = $action->date;
-                            $data->{$field->editedDate} = $action->date;
-                            if(!empty($action->comment)) $data->comment .= $action->comment . "\n";
-                        }
-                    }
-
-                    if(isset($files[$id]))
-                    {
-                        foreach($files[$id] as $file)
-                        {
-                            if(!empty($file->title)) $data->comment .= $file->title . '.' . $file->extension . "\n";
-                        }
-                    }
-
-                    if($module == 'case')
-                    {
-                        $data->desc   = '';
-                        $data->expect = '';
-                        if(isset($caseStep[$id]))
-                        {
-                            foreach($caseStep[$id] as $step)
-                            {
-                                if($step->version != $data->version) continue;
-                                $data->desc   .= $step->desc . "\n";
-                                $data->expect .= $step->expect . "\n";
-                            }
-                        }
-                    }
-                }
+                $dataList = $this->processDataList($module, $field, $dataList);
 
                 foreach($dataList as $data) $this->saveIndex($module, $data);
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
