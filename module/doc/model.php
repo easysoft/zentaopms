@@ -3365,7 +3365,8 @@ class docModel extends model
     }
 
     /**
-     * Create action.
+     * 创建一个操作。
+     * Create an action.
      *
      * @param  int    $docID
      * @param  string $action   view|collect
@@ -3373,10 +3374,10 @@ class docModel extends model
      * @access public
      * @return int|bool
      */
-    public function createAction($docID, $action, $account = '')
+    public function createAction(int $docID, string $action, string $account = ''): int|bool
     {
-        $docID = (int)$docID;
         if(empty($docID)) return false;
+
         $docStatus = $this->dao->select('status')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('status');
 
         if(empty($account))$account = $this->app->user->account;
@@ -3387,24 +3388,24 @@ class docModel extends model
             $lastView = $this->dao->select('date')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('view')->andWhere('actor')->eq($account)->orderBy('id_desc')->fetch('date');
             if($lastView and (time() - strtotime($lastView) < 4)) return false;
         }
+
         $data  = new stdclass();
         $data->doc    = $docID;
         $data->action = $action;
         $data->actor  = $account;
         $data->date   = helper::now();
         $this->dao->insert(TABLE_DOCACTION)->data($data)->autoCheck()->exec();
-        if(!dao::isError())
-        {
-            $actionID = $this->dao->lastInsertID();
-            if($action == 'view' && $docStatus == 'normal') $this->dao->update(TABLE_DOC)->set('views = views + 1')->where('id')->eq($docID)->exec();
-            if($action == 'collect')
-            {
-                $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
-                $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
-            }
+        if(dao::isError()) return false;
 
-            return $actionID;
+        $actionID = $this->dao->lastInsertID();
+        if($action == 'view' && $docStatus == 'normal') $this->dao->update(TABLE_DOC)->set('views = views + 1')->where('id')->eq($docID)->exec();
+        if($action == 'collect')
+        {
+            $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
+            $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
         }
+
+        return $actionID;
     }
 
     /**
