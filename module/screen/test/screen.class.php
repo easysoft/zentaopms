@@ -248,4 +248,38 @@ class screenTest
     {
         $this->objectModel->buildChart($component);
     }
+
+
+    /**
+     * 测试filterChart。
+     * Test filterChart.
+     *
+     * @param  object $chart
+     * @param  string $type
+     * @param  bool   $filters
+     * @access public
+     * @return void
+     */
+    public function setFilterSqlTest(object $chart, string $type, bool $inCharts = false)
+    {
+        if(!$inCharts)
+        {
+            return $this->objectModel->setFilterSql($chart);
+        }
+        else
+        {
+            $this->objectModel->filter->charts[1018] = array('year' => '2023', 'dept' => '1', 'account' => 'admin');
+            if($type !== 'account')
+            {
+                $this->objectModel->filter->year = '2023';
+                $this->objectModel->filter->dept = '1';
+                return $this->objectModel->setFilterSql($chart);
+            }
+            else
+            {
+                $this->objectModel->filter->account = 'admin';
+                return $this->objectModel->setFilterSql($chart);
+            }
+        }
+    }
 }
