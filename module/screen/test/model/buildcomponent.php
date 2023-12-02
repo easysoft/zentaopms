@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/screen.class.php';
+
+zdTable('bug')->gen(20);
+/**
+title=测试 screenModel->buildComponent();
+cid=1
+pid=1
+
+有图表id的元素判断是否正常生成了刻度和数据。 >> 1
+目前没有Select组件，所以这里应该是false。    >> 0
+非列表的组件判断是否给予了默认的属性。       >> 1
+列表的组件判断是否给予了默认的属性。         >> 1
+
+*/
+
+$screen = new screenTest();
+
+$components = $screen->getAllComponent();
+
+$component1 = null;
+$component2 = null;
+$component3 = null;
+$component4 = null;
+foreach($components as $component)
+{
+    if(isset($component->sourceID) && $component->sourceID)
+    {
+        $component1 = $component;
+    }
+    elseif(isset($component->key) && $component->key === 'Select')
+    {
+        $component2 = $component;
+    }
+    elseif(empty($component->isGroup))
+    {
+        $component3 = $component;
+    }
+    else
+    {
+        $component4 = $component;
+    }
+}
+
+if($component1) $screen->buildComponentTest($component1);
+r(isset($component1->option->dataset->dimensions) && is_array($component1->option->dataset->dimensions)) && p('') && e('1');  //有图表id的元素判断是否正常生成了刻度和数据。
+
+if($component2) $screen->buildComponentTest($component2);
+r(isset($component2) && is_object($component2)) && p('') && e('0');  //目前没有Select组件，所以这里应该是false。
+
+if($component3) $screen->buildComponentTest($component3);
+r($component3->styles && $component->status && $component->request) && p('') && e('1');  //非列表的组件判断是否给予了默认的属性。
+
+if($component4) $screen->buildComponentTest($component4);
+r($component3->styles && $component->status && $component->request) && p('') && e('1'); //列表的组件判断是否给予了默认的属性。

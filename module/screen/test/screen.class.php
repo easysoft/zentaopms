@@ -89,14 +89,14 @@ class screenTest
             $this->componentList = $componentList;
         }
 
-        return array_filter($componentList, function($component)use($filters){
+        return !empty($filters) ? array_filter($componentList, function($component)use($filters){
             foreach($filters as $field => $value)
             {
                 if(isset($component->$field) && $component->$field == $value) return true;
             }
 
             return false;
-        });
+        }) : $componentList;
     }
 
     /**
@@ -207,5 +207,18 @@ class screenTest
     public function buildComponentListTest(array|object $componentList): array
     {
         return $this->objectModel->buildComponentList($componentList);
+    }
+
+    /**
+     * 测试buildComponent。
+     * Test buildComponent.
+     *
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function buildComponentTest(object $component): void
+    {
+        $this->objectModel->buildComponent($component);
     }
 }

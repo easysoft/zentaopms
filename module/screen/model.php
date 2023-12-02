@@ -920,24 +920,27 @@ class screenModel extends model
         if(isset($component->sourceID) && $component->sourceID)
         {
             $this->buildChart($component);
+            return;
         }
+
         /* 如果是select图表，构建select相关图表。 */
         /* If chart is select, build select chart. */
-        elseif(isset($component->key) && $component->key === 'Select')
+        if(isset($component->key) && $component->key === 'Select')
         {
             $this->buildSelect($component);
+            return;
         }
+
         /* 如果当前组件不是组件集合，设置默认值。 */
         /* If current component is not group, set default value. */
-        elseif(empty($component->isGroup))
+        if(empty($component->isGroup))
         {
             $this->setComponentDefaults($component);
+            return;
         }
-        else
-        {
-            $component->groupList = $this->buildComponentList($component->groupList);
-            $this->buildGroup($component);
-        }
+
+        $component->groupList = $this->buildComponentList($component->groupList);
+        $this->buildGroup($component);
     }
 
     /**
