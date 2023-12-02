@@ -90,31 +90,27 @@ class holidayModel extends model
     }
 
     /**
+     * 编辑一个节假日。
      * Edit holiday.
      *
-     * @param  int    $id
+     * @param  object $holiday
      * @access public
      * @return bool
      */
-    public function update($id)
+    public function update(object $holiday): bool
     {
-        $holiday = fixer::input('post')->get();
-        $holiday->year = substr($holiday->begin, 0, 4);
-        if(helper::isZeroDate($holiday->year)) return dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
-        if(helper::isZeroDate($holiday->end))  return dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
-
         $this->dao->update(TABLE_HOLIDAY)
             ->data($holiday)
             ->autoCheck()
             ->batchCheck($this->config->holiday->require->edit, 'notempty')
             ->check('end', 'ge', $holiday->begin)
-            ->where('id')->eq($id)
+            ->where('id')->eq($holiday->id)
             ->exec();
 
         if(!dao::isError())
         {
-            $beginDate = $this->post->begin;
-            $endDate   = $this->post->end;
+            $beginDate = $holiday->begin;
+            $endDate   = $holiday->end;
 
             /* Update project. */
             $this->updateProgramPlanDuration($beginDate, $endDate);

@@ -85,24 +85,32 @@ class holiday extends control
     }
 
     /**
+     * 编辑一个节假日。
      * Edit holiday.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        $holiday = $this->holiday->getById($id);
         if($_POST)
         {
-            $this->holiday->update($id);
+            $holiday = form::data($this->config->holiday->form->edit)->add('id', $id)->get();
+            $holiday->year = substr($holiday->begin, 0, 4);
+
+            if($holiday->year && helper::isZeroDate($holiday->year)) dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
+            if($holiday->end && helper::isZeroDate($holiday->end))  dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
+            if($holiday->begin && $holiday->end && $holiday->begin > $holiday->end) dao::$errors['end'][] = sprintf($this->lang->error->ge, $this->lang->holiday->end, $this->lang->holiday->begin);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->holiday->update($holiday);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->title   = $this->lang->holiday->edit;
-        $this->view->holiday = $holiday;
+        $this->view->holiday = $this->holiday->getById($id);
         $this->display();
     }
 
