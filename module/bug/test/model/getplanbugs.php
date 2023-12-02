@@ -17,7 +17,7 @@ pid=1
 
 */
 
-$planIDList = array('1', '4', '7', '1000001');
+$planIDList = array(1, 4, 7, 1000001);
 $statusList = array('all', 'active', 'resolved', 'closed');
 
 $bug=new bugTest();

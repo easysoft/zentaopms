@@ -155,12 +155,12 @@ class bugTest
     /**
      * Test get bug list of a plan.
      *
-     * @param  string $productIDList
-     * @param  string $modules
+     * @param  int    $planID
+     * @param  string $status
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getPlanBugsTest($planID, $status)
+    public function getPlanBugsTest(int $planID, string $status): string|array
     {
         $bugs = $this->objectModel->getPlanBugs($planID, $status, 'id_desc', null);
 
