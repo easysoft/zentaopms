@@ -1391,7 +1391,9 @@ class testcaseTest
     {
         $scenes = $this->objectModel->getScenesForMenu($productID, $moduleID, $startScene, $branch, $currentScene);
         if(dao::isError()) return dao::getError();
-        return implode(',', array_keys($scenes));
+        $scenes = array_keys($scenes);
+        sort($scenes);
+        return implode(',', $scenes);
     }
 
     /**

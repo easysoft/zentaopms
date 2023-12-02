@@ -1625,14 +1625,20 @@ class testcaseModel extends model
             $startScene = $this->getSceneByID($startScene);
             if($startScene) $startScenePath = $startScene->path . '%';
         }
+        $currentScenePath = '';
+        if($currentScene > 0)
+        {
+            $currentScene = $this->getSceneByID($currentScene);
+            if($currentScene) $currentScenePath = $currentScene->path . '%';
+        }
 
         /* Return scenes. */
         return $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq(0)
-            ->andWhere('path')->notlike("%,{$currentScene},")
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($moduleID > 0)->andWhere('module')->eq($moduleID)->fi()
             ->beginIF($startScenePath)->andWhere('path')->like($startScenePath)->fi()
+            ->beginIF($currentScenePath)->andWhere('path')->notlike($currentScenePath)->fi()
             ->beginIF($branch !== 'all' && $branch !== '')->andWhere('branch')->eq((int)$branch)->fi()
             ->orderBy('grade desc, sort')
             ->fetchAll('id');
