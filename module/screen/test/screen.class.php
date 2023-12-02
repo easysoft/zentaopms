@@ -178,4 +178,22 @@ class screenTest
     {
         return $this->objectModel->processXlabel($xlabel, $type, $object, $field);
     }
+
+
+    /**
+     * 测试getSysOptions。
+     * Test getSysOptions.
+     *
+     * @param  string $type
+     * @param  string $object
+     * @param  string $field
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getSysOptionsTest(string $type, string $object, string $field, string $sql): array
+    {
+        return $this->objectModel->getSysOptions($type, $object, $field, $sql);
+    }
+
 }

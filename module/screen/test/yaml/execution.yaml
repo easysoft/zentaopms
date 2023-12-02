@@ -1,0 +1,19 @@
+title: table zt_execution
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 101-700
+  - field: type
+    range: sprint
+  - field: vision
+    range: 'rnd'
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 11-100
+      - field: path2
+        prefix: ","
+        range: 101-700
+        postfix: ","
