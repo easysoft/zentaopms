@@ -217,33 +217,26 @@ class docTest
     }
 
     /**
-     * Function update test by doc
+     * 编辑一个文档。
+     * Update a doc.
      *
-     * @param  int $docID
+     * @param  int   $docID
      * @param  array $param
      * @access public
      * @return array
      */
-    public function updateTest($docID, $param)
+    public function updateTest(int $docID, array $param): array
     {
-        global $tester;
-        $tester->app->loadConfig('api');
-        $tester->app->loadLang('doclib');
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
 
-        $labels = array();
-        $files  = array();
+        $doc = new stdclass();
+        foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
+        foreach($param as $key => $value) $doc->{$key} = $value;
 
-        $createFields = array('lib' => '', 'module' => '', 'title' => '', 'keywords' => '', 'type' => '', 'content' => '', 'contentType' => '',
-        'url' => '', 'labels' => $labels, 'files' => $files, 'contactListMenu' => '', 'acl' => '');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->update($docID);
+        $objects = $this->objectModel->update($docID, $doc);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects["changes"];
+        return $objects['changes'];
     }
 
     /**
