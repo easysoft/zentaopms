@@ -39,7 +39,7 @@ r($bug->getProductBugsTest($productIdList[2], $typeList[0], $beginList[1], $endL
 r($bug->getProductBugsTest($productIdList[2], $typeList[1], $beginList[0], $endList[0])) && p() && e('0');                          // 测试获取产品 7 8 9 类型 resolved 开始日期 今天 结束日期 今天 的bug
 r($bug->getProductBugsTest($productIdList[2], $typeList[1], $beginList[1], $endList[1])) && p() && e('22,23,24,25,26,27');          // 测试获取产品 7 8 9 类型 resolved 开始日期 上周 结束日期 下周 的bug
 r($bug->getProductBugsTest($productIdList[2], $typeList[2], $beginList[0], $endList[0])) && p() && e('0');                          // 测试获取产品 7 8 9 类型 opened 开始日期 今天 结束日期 今天 的bug
-r($bug->getProductBugsTest($productIdList[2], $typeList[2], $beginList[1], $endList[1])) && p() && e('25,26,27');                   // 测试获取产品 7 8 9 类型 opened 开始日期 上周 结束日期 下周 的bug
+r($bug->getProductBugsTest($productIdList[2], $typeList[2], $beginList[1], $endList[1])) && p() && e('24,25,26,27');                 // 测试获取产品 7 8 9 类型 opened 开始日期 上周 结束日期 下周 的bug
 
 r($bug->getProductBugsTest($productIdList[3], $typeList[0], $beginList[0], $endList[0])) && p() && e('0'); // 测试获取产品 空 类型 空 开始日期 今天 结束日期 今天 的bug
 r($bug->getProductBugsTest($productIdList[3], $typeList[0], $beginList[1], $endList[1])) && p() && e('0'); // 测试获取产品 空 类型 空 开始日期 上周 结束日期 下周 的bug
