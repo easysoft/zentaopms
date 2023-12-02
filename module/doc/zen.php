@@ -341,4 +341,110 @@ class docZen extends doc
 
         if(!empty($lib->main)) unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
     }
+
+    /**
+     * 检查创建文档库的权限。
+     * Check the privilege of creating document.
+     *
+     * @param  object    $doclib
+     * @param  string    $objectType   product|project|execution|custom
+     * @access protected
+     * @return bool
+     */
+    protected function checkPrivForCreate(object $doclib, string $objectType): bool
+    {
+        $canVisit = true;
+        if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
+        switch($objectType)
+        {
+            case 'custom':
+                $account = (string)$this->app->user->account;
+                if(($doclib->acl == 'custom' || $doclib->acl == 'private') && strpos($doclib->users, $account) === false && $doclib->addedBy !== $account && !(isset($groupAccounts) && in_array($account, $groupAccounts, true))) $canVisit = false;
+                break;
+            case 'product':
+                $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
+                break;
+            case 'project':
+                $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
+                break;
+            case 'execution':
+                $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
+                break;
+            default:
+            break;
+        }
+        return $canVisit;
+    }
+
+    /**
+     * 在创建文档后的返回。
+     * Return after create a document.
+     *
+     * @param  int       $libID
+     * @param  array     $docResult
+     * @access protected
+     * @return bool|int
+     */
+    protected function responseAfterCreate(int $libID, array $docResult): bool|int
+    {
+        $docID = $docResult['id'];
+        $files = zget($docResult, 'files', '');
+        $lib   = $this->doc->getLibByID($libID);
+
+        $fileAction = '';
+        if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+
+        $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
+        $this->action->create('doc', $docID, $actionType, $fileAction);
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+        $params   = "docID=" . $docResult['id'];
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params));
+
+        return $this->send($response);
+    }
+
+    /**
+     * 为创建文档设置所属对象下拉值。
+     * Set the dropdown values of object for creating document.
+     *
+     * @param  string    $linkType product|project|execution|custom
+     * @param  object    $lib
+     * @access protected
+     * @return void
+     */
+    protected function setObjectsForCreate(string $linkType, object $lib): void
+    {
+        $objects  = array();
+        if($linkType == 'project')
+        {
+            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
+            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
+
+            $this->view->executions = array();
+            if($lib->type == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getById($lib->execution);
+                $objectID  = $execution->project;
+                $libs      = $this->doc->getLibs('execution', 'withObject,unclosed', $libID, $lib->execution);
+                $this->view->execution  = $execution;
+                $this->view->executions = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
+            }
+        }
+        elseif($linkType == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getById($objectID);
+            $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
+        }
+        elseif($linkType == 'product')
+        {
+            $objects = $this->loadModel('product')->getPairs();
+        }
+        elseif($linkType == 'mine')
+        {
+            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+        }
+
+        $this->view->objects = $objects;
+    }
 }

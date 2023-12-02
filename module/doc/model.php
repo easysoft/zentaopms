@@ -967,85 +967,64 @@ class docModel extends model
     }
 
     /**
+     * 创建一个文档。
      * Create a doc.
      *
+     * @param  object     $doc
+     * @param  array|bool $labels
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function create()
+    public function create(object $doc, array|bool $labels = false): array|bool
     {
-        if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-        $now = helper::now();
-        $doc = fixer::input('post')
-            ->callFunc('title', 'trim')
-            ->setDefault('content,template,templateType,chapterType', '')
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', $now)
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->add('version', 1)
-            ->setDefault('product,execution,module', 0)
-            ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,lib')
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->join('mailto', ',')
-            ->remove('files,labels,uid,contactListMenu')
-            ->get();
-
-        $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
-        if(empty($doc->lib) and strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
+        if(empty($doc->lib) && strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
-        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
-
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
 
         $docContent          = new stdclass();
         $docContent->title   = $doc->title;
-        $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
+        $docContent->content = $doc->content;
         $docContent->type    = $doc->contentType;
         $docContent->digest  = '';
         $docContent->version = 1;
-        unset($doc->contentMarkdown, $doc->contentType, $doc->url);
+        unset($doc->contentType);
 
         $requiredFields = $this->config->doc->create->requiredFields;
         if($doc->status == 'draft') $requiredFields = 'title';
-        if(strpos("url|word|ppt|excel", $this->post->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+        if(strpos("url|word|ppt|excel", $lib->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
-        if($checkContent and strpos("url|word|ppt|excel|", $this->post->type) === false)
+        if($checkContent && strpos("url|word|ppt|excel|", $lib->type) === false)
         {
             $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
             if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
         $files = $this->loadModel('file')->getUpload();
-        if($_POST['type'] == 'attachment' && empty($_POST['labels'])) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if($lib->type == 'attachment' && empty($labels)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $doc->draft  = $docContent->content;
         $doc->vision = $this->config->vision;
         $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
-        if(!dao::isError())
-        {
-            $docID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-            $files = $this->file->saveUpload('doc', $docID);
+        if(dao::isError()) return false;
 
-            $docContent->doc   = $docID;
-            $docContent->files = join(',', array_keys($files));
-            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
-            $this->loadModel('score')->create('doc', 'create', $docID);
-            return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
-        }
-        return false;
+        $docID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+        $files = $this->file->saveUpload('doc', $docID);
+
+        $docContent->doc   = $docID;
+        $docContent->files = join(',', array_keys($files));
+        $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+        $this->loadModel('score')->create('doc', 'create', $docID);
+        return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
     }
 
     /**

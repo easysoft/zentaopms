@@ -418,118 +418,51 @@ class doc extends control
 
 
     /**
+     * 创建一个文档。
      * Create a doc.
      *
-     * @param  string     $objectType   product|project|execution|custom
+     * @param  string     $objectType product|project|execution|custom
      * @param  int        $objectID
      * @param  int|string $libID
      * @param  int        $moduleID
-     * @param  string     $docType       html|word|ppt|excel
-     * @param  string     $from
+     * @param  string     $docType    html|word|ppt|excel
      * @access public
      * @return void
      */
-    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $from = 'doc')
+    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
     {
         $linkType = $objectType;
-        if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
+        if($objectType == 'execution' && $this->app->tab != 'execution') $linkType = 'project';
 
         if(!empty($_POST))
         {
             $doclib   = $this->loadModel('doc')->getLibByID($libID);
-            $canVisit = true;
-
-            if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
-
-            switch($objectType)
-            {
-                case 'custom':
-                    $account = (string)$this->app->user->account;
-                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account and !(isset($groupAccounts) and in_array($account, $groupAccounts, true))) $canVisit = false;
-                    break;
-                case 'product':
-                    $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
-                    break;
-                case 'project':
-                    $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
-                    break;
-                case 'execution':
-                    $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
-                    break;
-                default:
-                break;
-            }
+            $canVisit = $this->docZen->checkPrivForCreate($doclib, $objectType);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
-            if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
+            if(empty($libID) && strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             helper::setcookie('lastDocModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-            $docResult = $this->doc->create();
-            if(!$docResult or dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $docID = $docResult['id'];
-            $files = zget($docResult, 'files', '');
-            $lib   = $this->doc->getLibByID($libID);
-
-            $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-            $this->action->create('doc', $docID, $actionType, $fileAction);
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-            $params   = "docID=" . $docResult['id'];
-            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params));
-
-            return $this->send($response);
+            if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
+            $docData   = form::data()->get();
+            $docResult = $this->doc->create($docData, $this->post->labels);
+            if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->docZen->responseAfterCreate($libID, $docResult);
         }
-
-        unset($_GET['onlybody']);
-        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
 
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
-        if(empty($objectID) and $lib) $objectID = zget($lib, $lib->type, 0);
+        if(empty($objectID) && $lib) $objectID = zget($lib, $lib->type, 0);
 
-        /* Get libs and the default lib id. */
-        $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$linkType") : '';
+        /* Get libs and the default lib ID. */
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
         $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
-        if(!$libID and !empty($libs)) $libID = key($libs);
-        if(empty($lib) and $libID) $lib = $this->doc->getLibByID($libID);
+        $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        if(!$libID && !empty($libs)) $libID = key($libs);
+        if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $objects  = array();
-        if($linkType == 'project')
-        {
-            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
-            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
-            $this->view->executions = array();
-            if($lib->type == 'execution')
-            {
-                $execution = $this->loadModel('execution')->getById($lib->execution);
-                $objectID  = $execution->project;
-                $libs      = $this->doc->getLibs('execution', $extra = "withObject,$unclosed", $libID, $lib->execution);
-                $this->view->execution  = $execution;
-                $this->view->executions = array(0 => '') + $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
-            }
-        }
-        elseif($linkType == 'execution')
-        {
-            $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
-        }
-        elseif($linkType == 'product')
-        {
-            $objects = $this->loadModel('product')->getPairs();
-        }
-        elseif($linkType == 'mine')
-        {
-            $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
-        }
-        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
-
-        $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        $moduleID = $libID . '_' . $moduleID;
+        $this->docZen->setObjectsForCreate($linkType, $lib);
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
         $this->view->linkType         = $linkType;
@@ -538,16 +471,12 @@ class doc extends control
         $this->view->libID            = $libID;
         $this->view->lib              = $lib;
         $this->view->libs             = $libs;
-        $this->view->objects          = $objects;
-        $this->view->gobackLink       = $gobackLink;
         $this->view->libName          = zget($lib, 'name', '');
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+        $this->view->moduleID         = $libID . '_' . $moduleID;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
-        $this->view->from             = $from;
-
         $this->display();
     }
 
