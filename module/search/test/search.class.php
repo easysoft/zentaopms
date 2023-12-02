@@ -322,6 +322,22 @@ class searchTest
     }
 
     /**
+     * Test build all index.
+     *
+     * @param  string $type
+     * @param  int    $lastID
+     * @access public
+     * @return array
+     */
+    public function buildAllIndexTest(string $type, int $lastID = 0): array
+    {
+        $this->objectModel->buildAllIndex($type, $lastID);
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($type)->fetchAll();
+    }
+
+    /**
      * Test decode.
      *
      * @param  int    $key
