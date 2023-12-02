@@ -73,17 +73,31 @@ class screenTest
             global $tester;
             $sql = "SELECT * FROM `zt_screen`";
             $screenList = $tester->dbh->query($sql)->fetchAll();
-            $componentList = [];
+            $componentList = array();
             foreach($screenList as $screen)
             {
+                $componentList_ = array();
                 if(!in_array($screen->id, array(5, 6, 8)))
                 {
-                    $componentList = array_merge($componentList, json_decode($screen->scheme));
+
+                    $componentList_ = json_decode($screen->scheme);
                 }
                 else
                 {
                     $scheme = json_decode($screen->scheme);
-                    if($scheme) $componentList = array_merge($componentList, $scheme->componentList);
+                    if($scheme) $componentList_ =  $scheme->componentList;
+                }
+
+                foreach($componentList_ as $component)
+                {
+                    if($component->isGroup)
+                    {
+                        $componentList = array_merge($componentList, $component->groupList);
+                    }
+                    else
+                    {
+                        $componentList[] = $component;
+                    }
                 }
             }
             $this->componentList = $componentList;
@@ -220,5 +234,18 @@ class screenTest
     public function buildComponentTest(object $component): void
     {
         $this->objectModel->buildComponent($component);
+    }
+
+    /**
+     * 测试buildChart。
+     * Test buildChart.
+     *
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function buildChartTest(object $component)
+    {
+        $this->objectModel->buildChart($component);
     }
 }

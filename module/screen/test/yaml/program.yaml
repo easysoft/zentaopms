@@ -4,3 +4,5 @@ version: "1.0"
 fields:
   - field: id
     range: 1-20
+  - field: grade
+    range: 1
