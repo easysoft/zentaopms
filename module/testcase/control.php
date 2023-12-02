@@ -1524,7 +1524,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function editScene($sceneID)
+    public function editScene(int $sceneID)
     {
         $oldScene = $this->testcase->getSceneByID($sceneID);
         if(!$oldScene)
