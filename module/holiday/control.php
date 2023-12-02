@@ -12,6 +12,7 @@
 class holiday extends control
 {
     /**
+     * 节假日主页，跳转至列表。
      * Holiday list.
      *
      * @access public
@@ -23,13 +24,14 @@ class holiday extends control
     }
 
     /**
+     * 节假日列表。
      * Holiday list.
      *
      * @param  string $year
      * @access public
      * @return void
      */
-    public function browse($year = '')
+    public function browse(string $year = '')
     {
         if(empty($year)) $year = date('Y');
 
