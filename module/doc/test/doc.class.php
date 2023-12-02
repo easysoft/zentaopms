@@ -956,4 +956,19 @@ class docTest
     {
         return $this->objectModel->deleteAction($actionID);
     }
+
+    /**
+     * 创建一个操作。
+     * Create an action.
+     *
+     * @param  int    $docID
+     * @param  string $action  collect|view
+     * @param  string $account
+     * @access public
+     * @return int|bool
+     */
+    public function createActionTest(int $docID, string $action, string $account = ''): int|bool
+    {
+        return $this->objectModel->createAction($docID, $action, $account);
+    }
 }
