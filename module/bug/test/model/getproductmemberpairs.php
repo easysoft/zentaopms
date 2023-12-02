@@ -43,7 +43,7 @@ cid=1
 
 */
 
-$productIDList = array('1', '2', '3', '4','5', '6', '1000001');
+$productIDList = array(1, 2, 3, 4, 5, 6, 1000001);
 
 $bug=new bugTest();
 r($bug->getProductMemberPairsTest($productIDList[0])) && p() && e('A:admin,U:用户12,U:用户22,U:用户32'); // 测试获取productID为1的bug的团队成员

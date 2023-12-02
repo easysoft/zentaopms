@@ -720,11 +720,11 @@ class bugTest
     /**
      * Test get bug member of a product.
      *
-     * @param  int    $productID
+     * @param  int          $productID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getProductMemberPairsTest($productID)
+    public function getProductMemberPairsTest(int $productID): string|array
     {
         $array = $this->objectModel->getProductMemberPairs($productID);
 
