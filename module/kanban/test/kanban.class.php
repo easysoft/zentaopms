@@ -778,33 +778,13 @@ class kanbanTest
      * @access public
      * @return array
      */
-    public function updateSpaceTest($spaceID, $type = '', $param = array())
+    public function updateSpaceTest($spaceID, $param)
     {
-        global $tester;
-        $object = $tester->dao->select('`type`,`name`,`owner`,`team`,`desc`,`whitelist`')->from(TABLE_KANBANSPACE)->where('`id`')->eq($spaceID)->fetch();
-        $object->team      = explode(',', $object->team);
-        $object->whitelist = explode(',', $object->whitelist);
-
-        foreach($object as $field => $value)
-        {
-            if(in_array($field, array_keys($param)))
-            {
-                $_POST[$field] = $param[$field];
-            }
-            else
-            {
-                $_POST[$field] = $value;
-            }
-        }
-
-        $change = $this->objectModel->updateSpace($spaceID, $type);
-        if($change == array()) $change = '没有数据更新';
-
-        unset($_POST);
+        $this->objectModel->updateSpace($param, $spaceID);
 
         if(dao::isError()) return dao::getError();
 
-        return $change;
+        return $this->objectModel->getSpaceByID($spaceID);
     }
 
     /**

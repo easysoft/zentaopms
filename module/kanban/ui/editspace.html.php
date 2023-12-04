@@ -77,7 +77,7 @@ formPanel
     ),
     formRow
     (
-        set::className('whitelistBox ' . ($type != 'private' ? 'hidden' : '')),
+        set::className('whitelistBox ' . ($space->type != 'private' ? 'hidden' : '')),
         formGroup
         (
             set::label($lang->whitelist),
