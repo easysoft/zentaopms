@@ -39,6 +39,16 @@ fields:
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
+  - field: realBegan
+    range: "(-6w)-(+1w):5D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: realEnd
+    range: "(-5w)-(+2w):5D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: grade
     range: 1{4},1{5},1{6},2{6},1{6},1{5}
   - field: parent

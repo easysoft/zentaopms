@@ -324,6 +324,7 @@ class holidayModel extends model
     }
 
     /**
+     * 测试更新项目实际工期。
      * Update project real duration.
      *
      * @param  string $beginDate
@@ -331,7 +332,7 @@ class holidayModel extends model
      * @access public
      * @return void
      */
-    public function updateProjectRealDuration($beginDate, $endDate)
+    public function updateProjectRealDuration(string $beginDate, string $endDate): void
     {
         $updateProjectList = $this->dao->select('id, realBegan, realEnd')
             ->from(TABLE_PROJECT)
@@ -339,7 +340,7 @@ class holidayModel extends model
             ->andWhere('type')->ne('program')
             ->andwhere('realBegan', true)->between($beginDate, $endDate)
             ->orWhere('realEnd')->between($beginDate, $endDate)
-            ->orWhere("(realBegan < '$beginDate' AND realEnd > '$endDate')")
+            ->orWhere("(realBegan < '{$beginDate}' AND realEnd > '{$endDate}')")
             ->markRight(1)
             ->fetchAll();
 

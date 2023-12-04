@@ -256,6 +256,7 @@ class holidayTest
      *
      * @param  int       $testProjectID
      * @param  int       $holidayID
+     * @param  bool      $updateDuration
      * @access public
      * @return int|array
      */
@@ -280,17 +281,20 @@ class holidayTest
      * Test updateProjectRealDuration method.
      *
      * @param  int       $testProjectID
-     * @param  object    $holiday
+     * @param  int       $holiday
+     * @param  bool      $updateDuration
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function updateProjectRealDurationTest($testProjectID, $holidayID)
+    public function updateProjectRealDurationTest(int $testProjectID, int $holidayID, bool $updateDuration): int|array
     {
         global $tester;
 
-        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
-
-        $this->objectModel->updateProjectRealDuration($holiday->begin, $holiday->end);
+        if($updateDuration)
+        {
+            $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+            $this->objectModel->updateProjectRealDuration($holiday->begin, $holiday->end);
+        }
 
         $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($testProjectID)->fetch();
 
