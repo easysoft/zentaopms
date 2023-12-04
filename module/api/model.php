@@ -512,13 +512,16 @@ class apiModel extends model
     }
 
     /**
-     * @param int $libID
-     * @param string $pager
-     * @param string $orderBy
+     * 获取指定文档库下的数据结构列表。
+     * Get release list by lib id.
+     *
+     * @param  int    $libID
+     * @param  object $pager
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getReleaseByQuery($libID, $pager = '', $orderBy = '')
+    public function getReleaseByQuery(int $libID, object $pager = null, string $orderBy = ''): array
     {
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
             ->where('lib')->in($libID)
