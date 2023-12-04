@@ -215,14 +215,16 @@ class holidayTest
     }
 
     /**
-     * Test isHoliday method.
+     * 测试某天是否是节假日.
+     * Test judge if is holiday.
      *
-     * @param  string    $date
+     * @param  string      $date
      * @access public
-     * @return object
+     * @return string|array
      */
-    public function isHolidayTest($date)
+    public function isHolidayTest(string $date): string|array
     {
+        $date = date('Y-m-d', strtotime($date));
         $objects = $this->objectModel->isHoliday($date);
 
         if(dao::isError()) return dao::getError();
