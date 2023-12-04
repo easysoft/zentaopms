@@ -28,7 +28,7 @@ class globalSearch extends wg
             set::searchHint($lang->searchAB),
             set::popPlacement('top-start'),
             set::popWidth(240),
-            set::searchBox(array('circle' => true, 'suffixClass' => 'text-primary opacity-100')),
+            set::searchBox(array('circle' => true, 'prefixClass' => 'text-primary opacity-100')),
             set::getSearchType(jsRaw('window.getGlobalSearchType')),
             set::onSearch(jsRaw('window.handleGlobalSearch')),
             inherit($this)
