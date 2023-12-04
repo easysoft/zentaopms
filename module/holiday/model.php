@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of holiday module of ZenTaoPMS.
  *
@@ -12,13 +13,14 @@
 class holidayModel extends model
 {
     /**
+     * 通过 ID 获取节假日。
      * Get holiday by id.
      *
-     * @param  int    $id
+     * @param  int         $id
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getById($id)
+    public function getById(int $id): object|bool
     {
         return $this->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($id)->fetch();
     }

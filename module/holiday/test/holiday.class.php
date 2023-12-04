@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class holidayTest
 {
     public function __construct()
@@ -8,13 +9,14 @@ class holidayTest
     }
 
     /**
-     * Test getById method.
+     * 测试通过 ID 获取节假日。
+     * Test get holiday by id.
      *
-     * @param  int     $id
+     * @param  int           $id
      * @access public
-     * @return object
+     * @return object|string|array
      */
-    public function getByIdTest($id)
+    public function getByIdTest(int $id): object|string|array
     {
         $objects = $this->objectModel->getById($id);
 
