@@ -2227,6 +2227,7 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANSPACE)->set('`order`')->eq($spaceID)->where('id')->eq($spaceID)->exec();
         $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
         $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+        $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
 
         return $spaceID;
     }
@@ -2234,27 +2235,16 @@ class kanbanModel extends model
     /**
      * Update a space.
      *
+     * @param  object $space
      * @param  int    $spaceID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function updateSpace($spaceID, $type = '')
+    public function updateSpace(object $space, int $spaceID): bool
     {
-        $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
-        $space    = fixer::input('post')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('whitelist', '')
-            ->setDefault('team', '')
-            ->join('whitelist', ',')
-            ->join('team', ',')
-            ->trim('name')
-            ->stripTags($this->config->kanban->editor->editspace['id'], $this->config->allowedTags)
-            ->remove('uid,contactListMenu')
-            ->get();
 
-        if($type == 'cooperation' or $type == 'public') $space->whitelist = '';
+        if($space->type == 'cooperation' or $space->type == 'public') $space->whitelist = '';
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
@@ -2262,21 +2252,24 @@ class kanbanModel extends model
             ->where('id')->eq($spaceID)
             ->exec();
 
-        if($oldSpace->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        if($oldSpace->type == 'private' and (in_array($space->type, array('cooperation', 'public'))))
         {
-            $kanbanList = $this->dao->select('id,team,whitelist')->from(TABLE_KANBAN)->where('space')->eq($spaceID)->andWhere('deleted')->eq('0')->fetchAll('id');
-            foreach($kanbanList as $id => $kanbanData)
-            {
-                $this->dao->update(TABLE_KANBAN)->set('team')->eq($kanbanData->whitelist)->set('whitelist')->eq('')->where('id')->eq($id)->andWhere('deleted')->eq('0')->exec();
-            }
+            $this->dao->update(TABLE_KANBAN)->set('team = whitelist')->set('whitelist')->eq('')->where('space')->eq($spaceID)->andWhere('deleted')->eq('0')->exec();
         }
 
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
+        $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+        $changes = common::createChanges($oldSpace, $space);
+
+        if($changes)
         {
-            $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
-            $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
-            return common::createChanges($oldSpace, $space);
+            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
+            $this->action->logHistory($actionID, $changes);
         }
+
+        return true;
     }
 
     /**
