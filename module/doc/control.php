@@ -575,6 +575,7 @@ class doc extends control
     }
 
     /**
+     * 附件库。
      * Show files.
      *
      * @param  string $type
@@ -585,11 +586,10 @@ class doc extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  string $searchTitle
-     *
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID, $viewType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $searchTitle = '')
+    public function showFiles(string $type, int $objectID, string $viewType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $searchTitle = '')
     {
         $this->loadModel('file');
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
@@ -601,7 +601,7 @@ class doc extends control
         $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-        if(empty($_POST) and !empty($searchTitle)) $this->post->title = $searchTitle;
+        if(empty($_POST) && !empty($searchTitle)) $this->post->title = $searchTitle;
 
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
