@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of entry module of ZenTaoPMS.
  *
@@ -12,42 +13,46 @@
 class entryModel extends model
 {
     /**
+     * 通过ID获取应用。
      * Get an entry by id.
      *
      * @param  int    $entryID
      * @access public
      * @return object
      */
-    public function getById($entryID)
+    public function getById(int $entryID): object
     {
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('id')->eq($entryID)->fetch();
     }
 
     /**
+     * 通过代号获取应用。
      * Get an entry by code.
      *
      * @param  string $code
      * @access public
      * @return object
      */
-    public function getByCode($code)
+    public function getByCode(string $code): object
     {
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('code')->eq($code)->fetch();
     }
 
     /**
+     * 通过密钥获取应用。
      * Get an entry by key.
      *
      * @param  string $key
      * @access public
      * @return object
      */
-    public function getByKey($key)
+    public function getByKey(string $key): object
     {
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('`key`')->eq($key)->fetch();
     }
 
     /**
+     * 获取应用列表。
      * Get entry list.
      *
      * @param  string $orderBy
@@ -55,13 +60,14 @@ class entryModel extends model
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
         if(strpos($orderBy, 'desc_') !== false) $orderBy = str_replace('desc_', '`desc`_', $orderBy);
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**
+     * 获取应用的日志列表。
      * Get log list of an entry .
      *
      * @param  int    $id
@@ -70,7 +76,7 @@ class entryModel extends model
      * @access public
      * @return array
      */
-    public function getLogs($id, $orderBy = 'date_desc', $pager = null)
+    public function getLogs(int $id, string $orderBy = 'date_desc', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_LOG)
             ->where('objectType')->eq('entry')
@@ -88,7 +94,7 @@ class entryModel extends model
      * @access public
      * @return bool|int
      */
-    public function create(object $entry): bool|int
+    public function create(object $entry): false|int
     {
         if($entry->freePasswd == 1) $this->config->entry->create->requiredFields = 'name, code, key';
 
@@ -112,7 +118,7 @@ class entryModel extends model
      * @access public
      * @return bool|array
      */
-    public function update(int $entryID, object $entry): bool|array
+    public function update(int $entryID, object $entry): false|array
     {
         $oldEntry = $this->getById($entryID);
 
@@ -131,6 +137,7 @@ class entryModel extends model
     }
 
     /**
+     * 更新调用时间。
      * Update called time.
      *
      * @param  string $code
@@ -138,22 +145,22 @@ class entryModel extends model
      * @access public
      * @return bool
      */
-    public function updateCalledTime($code, $time)
+    public function updateCalledTime(string $code, int $time): bool
     {
         $this->dao->update(TABLE_ENTRY)->set('calledTime')->eq($time)->where('code')->eq($code)->exec();
         return !dao::isError();
     }
 
     /**
+     * 保存日志。
      * Save log of an entry.
      *
      * @params int    $entryID
      * @params string $url
-     *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveLog($entryID, $url)
+    public function saveLog(int $entryID, string $url): bool
     {
         $log = new stdclass();
         $log->objectType = 'entry';
@@ -164,7 +171,6 @@ class entryModel extends model
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
     }
-
 
     /**
      * 判断操作是否可以点击。

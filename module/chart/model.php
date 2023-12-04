@@ -530,10 +530,11 @@ class chartModel extends model
      * Adjust the action is clickable.
      *
      * @param  object $chart
+     * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable(object $chart): bool
+    public static function isClickable(object $chart, string $action): bool
     {
         if($chart->builtin) return false;
         return true;
