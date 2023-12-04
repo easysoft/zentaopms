@@ -1,17 +1,18 @@
 <?php
+declare(strict_types=1);
 /**
- * The control file of git currentModule of ZenTaoPMS.
+ * The control file of git control of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yanyi Cao <caoyanyi@easycorp.com>
  * @package     git
- * @version     $Id$
  * @link        http://www.zentao.net
  */
 class git extends control
 {
     /**
+     * 定时任务：同步git。
      * Sync git.
      *
      * @access public
@@ -23,6 +24,7 @@ class git extends control
     }
 
     /**
+     * Git对比文件。
      * Diff a file.
      *
      * @param  string $path
@@ -30,7 +32,7 @@ class git extends control
      * @access public
      * @return void
      */
-    public function diff($path, $revision)
+    public function diff(string $path, string $revision)
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
@@ -39,10 +41,10 @@ class git extends control
         $currentRepo = null;
         foreach($repos as $repo)
         {
-            if(!empty($repo->path) and strpos($path, $repo->path) === 0) $currentRepo = $repo;
+            if(!empty($repo->path) && strpos($path, $repo->path) === 0) $currentRepo = $repo;
         }
 
-        if($currentRepo and common::hasPriv('repo', 'diff'))
+        if($currentRepo && common::hasPriv('repo', 'diff'))
         {
             $entry       = $this->repo->encodePath(str_replace($currentRepo->path, '', $path));
             $oldRevision = "$revision^";
@@ -58,11 +60,11 @@ class git extends control
         $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->diff     = $currentRepo ? $scm->diff($path, $revision) : '';
-
         $this->display();
     }
 
     /**
+     * Git查看文件。
      * Cat a file.
      *
      * @param  string $path
@@ -70,7 +72,7 @@ class git extends control
      * @access public
      * @return void
      */
-    public function cat($path, $revision)
+    public function cat(string $path, string $revision)
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
@@ -79,10 +81,10 @@ class git extends control
         $currentRepo = null;
         foreach($repos as $repo)
         {
-            if(!empty($repo->path) and strpos($path, $repo->path) === 0) $currentRepo = $repo;
+            if(!empty($repo->path) && strpos($path, $repo->path) === 0) $currentRepo = $repo;
         }
 
-        if($currentRepo and common::hasPriv('repo', 'view'))
+        if($currentRepo && common::hasPriv('repo', 'view'))
         {
             $entry = $this->repo->encodePath(str_replace($currentRepo->path, '', $path));
             return $this->locate($this->repo->createLink('view', "repoID=$currentRepo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
@@ -101,6 +103,7 @@ class git extends control
     }
 
     /**
+     * 通过api同步提交信息。
      * Sync from the syncer by api.
      *
      * @access public
@@ -152,6 +155,7 @@ class git extends control
     }
 
     /**
+     * 保存git提交日志。
      * Ajax save log.
      *
      * @access public
@@ -160,19 +164,19 @@ class git extends control
     public function ajaxSaveLog()
     {
         $repoUrl  = trim($this->post->repoUrl);
-        $repoRoot = str_replace('\\', '/', trim($this->post->repoRoot));
         $message  = trim($this->post->message);
         $revision = trim($this->post->revision);
         $files    = $this->post->files;
         if(empty($repoUrl)) return;
-        $repoUrl = rtrim($repoUrl, '/') . '/';
 
+        $repoUrl     = rtrim($repoUrl, '/') . '/';
         $parsedFiles = array();
         $repoDirs    = explode('/', trim($repoUrl, '/'));
         foreach($files as $file)
         {
             $file = trim($file);
             if(empty($file)) continue;
+
             $action = '';
             if(preg_match('/^[\w][ \t]/', $file))
             {
@@ -192,7 +196,6 @@ class git extends control
         }
 
         $objects = $this->loadModel('repo')->parseComment($message);
-
         if($objects)
         {
             $log = new stdclass();
@@ -206,6 +209,7 @@ class git extends control
     }
 
     /**
+     * 获取代码库列表。
      * Ajax get repos.
      *
      * @access public

@@ -1,16 +1,14 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of git module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yanyi Cao <caoyanyi@easycorp.com>
  * @package     git
- * @version     $Id$
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class gitModel extends model
 {
     /**
@@ -59,27 +57,27 @@ class gitModel extends model
     }
 
     /**
-     * Run.
+     * 执行定时任务同步提交信息。
+     * Sync commit info by cron.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function run()
+    public function run(): bool
     {
         /* Get repos and load module. */
         $this->setRepos();
-        $this->loadModel('job');
-        $this->loadModel('gitlab');
-        $this->loadModel('repo');
-
         if(empty($this->repos)) return false;
 
         /* Get commit triggerType jobs by repoIdList. */
-        $commentGroup = $this->job->getTriggerGroup('commit', array_keys($this->repos));
+        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array_keys($this->repos));
 
         /* Get tag triggerType jobs by repoIdList. */
         $tagGroup = $this->job->getTriggerGroup('tag', array_keys($this->repos));
 
+        $this->loadModel('compile');
+        $this->loadModel('gitlab');
+        $this->loadModel('repo');
         foreach($this->repos as $repoID => $repo)
         {
             $this->updateCommit($repo, $commentGroup, true);
@@ -100,7 +98,7 @@ class gitModel extends model
                 foreach($tags as $tag)
                 {
                     if(empty($tag)) continue;
-                    if(!$isNew and $tag == $job->lastTag)
+                    if(!$isNew && $tag == $job->lastTag)
                     {
                         $isNew = true;
                         continue;
@@ -108,55 +106,108 @@ class gitModel extends model
                     if(!$isNew) continue;
 
                     $lastTag = $tag;
-                    if($lastTag) $this->loadModel('compile')->createByJob($job->id, $lastTag, 'tag');
+                    if($lastTag) $this->compile->createByJob($job->id, $lastTag, 'tag');
                 }
                 if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
+
+        return !dao::isError();
     }
 
     /**
+     * 保存提交信息及更新关联对象。
+     * Save commit info and update related objects.
+     *
+     * @param  object $repo
+     * @param  string $branch
+     * @param  array  $logs
+     * @param  int    $version
+     * @param  array  $commentGroup
+     * @param  array  $accountPairs
+     * @param  bool   $printLog
+     * @access public
+     * @return int
+     */
+    public function saveCommits(object $repo, string $branch, array $logs, int $version, array $commentGroup, array $accountPairs, bool $printLog): int
+    {
+        if($printLog) $this->printLog("get " . count($logs) . " logs\n" . 'begin parsing logs');
+
+        $this->loadModel('repo');
+        foreach($logs as $log)
+        {
+            if($printLog) $this->printLog("parsing log {$log->revision}");
+            if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+
+            $objects     = $this->repo->parseComment($log->msg);
+            $lastVersion = $version;
+            $version     = $this->repo->saveOneCommit($repo->id, $log, $version, $branch);
+
+            if($objects)
+            {
+                if($printLog) $this->printLog('extract' . ' story:' . join(' ', $objects['stories']) . ' task:' . join(' ', $objects['tasks']) . ' bug:' . join(',', $objects['bugs']));
+                if($lastVersion != $version)
+                {
+                    $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
+
+                    /* Objects link commit. */
+                    foreach($objects as $objectType => $objectIDs)
+                    {
+                        $objectTypeMap = array('stories' => 'story', 'bugs' => 'bug', 'tasks' => 'task');
+                        if(empty($objectIDs) || !isset($objectTypeMap[$objectType])) continue;
+
+                        $this->post->$objectType = $objectIDs;
+                        $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType], 'commit');
+                    }
+                }
+            }
+            elseif($printLog)
+            {
+                $this->printLog('no objects found' . "\n");
+            }
+
+            /* Create compile by comment. */
+            $jobs = zget($commentGroup, $repo->id, array());
+            foreach($jobs as $job)
+            {
+                foreach(explode(',', $job->comment) as $comment)
+                {
+                    if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
+                }
+            }
+        }
+
+        return count($logs);
+    }
+
+    /**
+     * 更新提交信息。
      * Update commit.
      *
      * @param  object $repo
      * @param  array  $commentGroup
      * @param  bool   $printLog
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateCommit($repo, $commentGroup, $printLog = true)
+    public function updateCommit(object $repo, array $commentGroup, bool $printLog = true): bool
     {
         if($repo->SCM == 'Gitlab') return false;
 
         /* Load module and print log. */
-        $this->loadModel('repo');
         if($printLog) $this->printLog("begin repo $repo->id");
-
         if(!$this->setRepo($repo)) return false;
 
         /* Get branches and commits. */
-        $branches = $this->repo->getBranches($repo);
+        $branches = $this->loadModel('repo')->getBranches($repo);
         $commits  = $repo->commits;
 
+        $scm           = strtolower($repo->SCM);
+        $userList      = $this->loadModel($scm)->apiGetUsers($repo->gitService);
+        $acountIDPairs = $this->{$scm}->getUserAccountIdPairs($repo->gitService, 'openID,account');
+
         $accountPairs = array();
-        if($repo->SCM == 'Gitlab')
-        {
-            $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
-            $acountIDPairs = $this->gitlab->getUserIdAccountPairs($repo->gitService);
-            foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
-        }
-        elseif($repo->SCM == 'Gitea')
-        {
-            $userList      = $this->loadModel('gitea')->apiGetUsers($repo->gitService);
-            $acountIDPairs = $this->gitea->getUserAccountIdPairs($repo->gitService, 'openID,account');
-            foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
-        }
-        elseif($repo->SCM == 'Gogs')
-        {
-            $userList      = $this->loadModel('gogs')->apiGetUsers($repo->gitService);
-            $acountIDPairs = $this->gogs->getUserAccountIdPairs($repo->gitService, 'openID,account');
-            foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
-        }
+        foreach($userList as $user) $accountPairs[$user->realname] = zget($acountIDPairs, $user->id, '');
 
         /* Update code commit history. */
         foreach($branches as $branch)
@@ -166,8 +217,6 @@ class gitModel extends model
 
             if($printLog) $this->printLog("get this repo logs.");
 
-            $lastInDB = $this->repo->getLatestCommit($repo->id);
-
             /* Ignore unsynced branch. */
             if($repo->synced != 1)
             {
@@ -175,71 +224,23 @@ class gitModel extends model
                 continue;
             }
 
-            $version = isset($lastInDB->commit) ? (int)$lastInDB->commit + 1 : 1;
-            $logs    = $this->repo->getUnsyncedCommits($repo);
-            $objects = array();
-            if(!empty($logs))
-            {
-                if($printLog) $this->printLog("get " . count($logs) . " logs");
-                if($printLog) $this->printLog('begin parsing logs');
+            $logs = $this->repo->getUnsyncedCommits($repo);
+            if(empty($logs)) continue;
 
-                foreach($logs as $log)
-                {
-                    if($printLog) $this->printLog("parsing log {$log->revision}");
-                    if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-
-                    $objects     = $this->repo->parseComment($log->msg);
-                    $lastVersion = $version;
-                    $version     = $this->repo->saveOneCommit($repo->id, $log, $version, $branch);
-
-                    if($objects)
-                    {
-                        if($printLog) $this->printLog('extract' .
-                            ' story:' . join(' ', $objects['stories']) .
-                            ' task:' . join(' ', $objects['tasks']) .
-                            ' bug:'  . join(',', $objects['bugs']));
-
-                        if($lastVersion != $version)
-                        {
-                            $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
-
-                            /* Objects link commit. */
-                            foreach($objects as $objectType => $objectIDs)
-                            {
-                                $objectTypeMap = array('stories' => 'story', 'bugs' => 'bug', 'tasks' => 'task');
-                                if(empty($objectIDs) or !isset($objectTypeMap[$objectType])) continue;
-
-                                $this->post->$objectType = $objectIDs;
-                                $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType], 'commit');
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if($printLog) $this->printLog('no objects found' . "\n");
-                    }
-
-                    /* Create compile by comment. */
-                    $jobs = zget($commentGroup, $repo->id, array());
-                    foreach($jobs as $job)
-                    {
-                        foreach(explode(',', $job->comment) as $comment)
-                        {
-                            if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
-                        }
-                    }
-                    $commits += count($logs);
-                }
-            }
+            $lastInDB = $this->repo->getLatestCommit($repo->id);
+            $version  = isset($lastInDB->commit) ? (int)$lastInDB->commit + 1 : 1;
+            $commits += $this->saveCommits($repo, $branch, $logs, $version, $commentGroup, $accountPairs, $printLog);
         }
 
         $this->repo->updateCommitCount($repo->id, $commits);
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
         if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
+
         return !dao::isError();
     }
 
     /**
+     * 设置代码库列表。
      * Set the repos.
      *
      * @access public
@@ -268,12 +269,13 @@ class gitModel extends model
     }
 
     /**
+     * 获取代码库列表。
      * Get repos.
      *
      * @access public
      * @return array
      */
-    public function getRepos()
+    public function getRepos(): array
     {
         $this->setRepos();
         $repoPairs = array();
@@ -283,57 +285,33 @@ class gitModel extends model
     }
 
     /**
+     * 设置仓库属性。
      * Set repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
      * @access public
      * @return bool
      */
-    public function setRepo($repo)
-    {
-        $this->setClient($repo);
-        if(empty($this->client)) return false;
-
-        $this->setRepoRoot($repo);
-        return true;
-    }
-
-    /**
-     * Set the git binary client of a repo.
-     *
-     * @param  object    $repo
-     * @access public
-     * @return bool
-     */
-
-    public function setClient($repo)
+    public function setRepo(object $repo): bool
     {
         $this->client = $repo->client;
+        if(empty($this->client)) return false;
+
+        $this->repoRoot = $repo->path;
         return true;
     }
 
     /**
-     * set the root path of a repo.
-     *
-     * @param  object    $repo
-     * @access public
-     * @return void
-     */
-    public function setRepoRoot($repo)
-    {
-        $this->repoRoot = $repo->path;
-    }
-
-    /**
+     * 获取仓库的分支列表。
      * get tags histories for repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function getRepoTags($repo)
+    public function getRepoTags(object $repo): array
     {
-        if(empty($repo->client) or empty($repo->path) or !isset($repo->account) or !isset($repo->password) or !isset($repo->encoding)) return false;
+        if(in_array(true, array(empty($repo->client), empty($repo->path), !isset($repo->account), !isset($repo->password), !isset($repo->encoding)))) return false;
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -341,16 +319,17 @@ class gitModel extends model
     }
 
     /**
+     * 获取代码提交记录。
      * Get repo logs.
      *
-     * @param  object  $repo
-     * @param  int     $fromRevision
+     * @param  object $repo
+     * @param  string $fromRevision
      * @access public
      * @return array
      */
-    public function getRepoLogs($repo, $fromRevision)
+    public function getRepoLogs(object $repo, string $fromRevision): array
     {
-        if(empty($repo->client) or empty($repo->path) or !isset($repo->account) or !isset($repo->password) or !isset($repo->encoding)) return false;
+        if(in_array(true, array(empty($repo->client), empty($repo->path), !isset($repo->account), !isset($repo->password), !isset($repo->encoding)))) return false;
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -371,13 +350,14 @@ class gitModel extends model
     }
 
     /**
+     * 将日志从xml格式转换为对象。
      * Convert log from xml format to object.
      *
-     * @param  object    $log
+     * @param  object $log
      * @access public
      * @return object
      */
-    public function convertLog($log)
+    public function convertLog(object $log): object
     {
         list($hash, $account, $date) = $log;
 
@@ -413,13 +393,14 @@ class gitModel extends model
     }
 
     /**
+     * 输出日志信息.
      * Print log.
      *
      * @param  string $log
      * @access public
      * @return void
      */
-    public function printLog($log)
+    public function printLog(string $log)
     {
         echo helper::now() . " $log\n";
     }
