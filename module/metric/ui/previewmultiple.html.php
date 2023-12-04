@@ -320,6 +320,7 @@ sidebar
     )
 );
 
+$star = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 $metricBoxs = div
 (
     set::id('metricBox' . $current->id),
@@ -334,6 +335,17 @@ $metricBoxs = div
             (
                 setClass('metric-name-weight'),
                 isset($current) ? $current->name : null
+            ),
+            btn
+            (
+                setClass('metric-collect metric-collect-' . $current->id),
+                set::type('link'),
+                set::icon($star),
+                set::iconClass($star),
+                set::square(true),
+                set::size('sm'),
+                set::title($lang->metric->collectStar),
+                on::click('.metric-collect', "window.collectMetric({$current->id})")
             )
         ),
         div

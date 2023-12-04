@@ -63,8 +63,9 @@ class metric extends control
         $current = $this->metric->getByID($metricID);
         if(empty($current) and $groupMetrics) $current = current(current($groupMetrics));
 
-        $resultHeader = array();
-        $resultData   = array();
+        $resultHeader  = array();
+        $resultData    = array();
+        $allResultData = array();
         if(!empty($current))
         {
             $metric = $this->metric->getByID($current->id);
