@@ -538,27 +538,25 @@ class doc extends control
     }
 
     /**
-     * Ajax get whitelist.
+     * Ajax: 获取白名单。
+     * Ajax: Get whitelist.
      *
      * @param  int    $doclibID
-     * @param  string $acl open|custom|private
+     * @param  string $acl     open|custom|private
      * @param  string $control user|group
      * @param  int    $docID
      * @access public
      * @return string
      */
-    public function ajaxGetWhitelist($doclibID, $acl = '', $control = '', $docID = 0)
+    public function ajaxGetWhitelist(int $doclibID, string $acl = '', string $control = '', int $docID = 0)
     {
-        $doclib        = $this->doc->getLibByID($doclibID);
-        $doc           = $docID ? $this->doc->getById($docID) : null;
-        $users         = $this->user->getPairs('noletter|noempty|noclosed');
-        $selectedUser  = $docID ? $doc->users : $doclib->users;
-        $selectedGroup = $docID ? $doc->groups : $doclib->groups;
-        $dropDirection = "data-drop-direction='top'";
-
+        $doclib = $this->doc->getLibByID($doclibID);
+        $doc    = $docID ? $this->doc->getByID($docID) : null;
+        $users  = $this->user->getPairs('noletter|noempty|noclosed');
         if($control == 'group')
         {
             if($doclib->acl == 'private') return print('private');
+
             $groupItems = array();
             $groups     = $this->loadModel('group')->getPairs();
             foreach($groups as $groupID => $groupName) $groupItems[] = array('text' => $groupName, 'value' => $groupID, 'keys' => $groupName);
