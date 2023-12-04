@@ -608,19 +608,19 @@ class metricZen extends metric
         {
             if($dateType == 'year')
             {
-                $date = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
+                $date = substr($dataInfo->$dateField, 0, 4);
             }
             elseif($dateType == 'month')
             {
-                $year  = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
-                $month = substr($dataInfo->$dateField, 5, 2) . $this->lang->month;
-                $date  = "{$year}{$month}";
+                $year  = substr($dataInfo->$dateField, 0, 4);
+                $month = substr($dataInfo->$dateField, 5, 2);
+                $date  = "{$year}-{$month}";
             }
             elseif($dateType == 'week')
             {
-                $year = substr($dataInfo->$dateField, 0, 4) . $this->lang->year;
+                $year = substr($dataInfo->$dateField, 0, 4);
                 $week = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
-                $date = "{$year}{$week}";
+                $date = "{$year}-{$week}";
             }
             elseif($dateType == 'day')
             {

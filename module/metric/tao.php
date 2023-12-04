@@ -342,6 +342,8 @@ class metricTao extends metricModel
         $intersect = array_intersect($fields, array('year', 'month', 'week', 'day'));
         if(empty($intersect)) $fields[] = 'left(date, 10)';
 
+        foreach($fields as $key => $field) $fields[$key] = "`$field`";
+
         $sql  = "INSERT INTO `metriclib_distinct` (id) ";
         $sql .= "SELECT MAX(id) AS id ";
         $sql .= "FROM zt_metriclib WHERE metricCode = '{$code}' ";
