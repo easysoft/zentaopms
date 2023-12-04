@@ -212,6 +212,46 @@ class userZen extends user
     }
 
     /**
+     * 获取 FeatureBar 导航。
+     * Get featureBar menus.
+     *
+     * @param  object $user
+     * @access public
+     * @return array
+     */
+    public function getFeatureBarMenus(object $user): array
+    {
+        $moduleName = $this->app->moduleName;
+        $methodName = $this->app->methodName;
+        $storyType  = zget($this->app->params, 'storyType', '');
+        $params     = "userID={$user->id}";
+
+        $featureBarMenus = array();
+        if(common::hasPriv($moduleName, 'todo')) $featureBarMenus['todo'] = array('active' => false, 'url' => $this->createLink($moduleName, 'todo', "$params&type=all"), 'text' => $this->lang->user->schedule);
+        if(common::hasPriv($moduleName, 'task')) $featureBarMenus['task'] = array('active' => false, 'url' => $this->createLink($moduleName, 'task', $params), 'text' => $this->lang->user->task);
+
+        if($this->config->URAndSR) $featureBarMenus['requirement'] = array('active' => false, 'url' => $this->createLink($moduleName, 'story', "$params&storyType=requirement"), 'text' => $this->lang->URCommon);
+
+        if(common::hasPriv($moduleName, 'story'))    $featureBarMenus['story']    = array('active' => false, 'url' => $this->createLink($moduleName, 'story', "$params&storyType=story"), 'text' => $this->lang->SRCommon);
+        if(common::hasPriv($moduleName, 'bug'))      $featureBarMenus['bug']      = array('active' => false, 'url' => $this->createLink($moduleName, 'bug', $params), 'text' => $this->lang->user->bug);
+        if(common::hasPriv($moduleName, 'testtask')) $featureBarMenus['testtask'] = array('active' => false, 'url' => $this->createLink($moduleName, 'testtask', $params), 'text' => $this->lang->user->testTask);
+        if(common::hasPriv($moduleName, 'testcase')) $featureBarMenus['testcase'] = array('active' => false, 'url' => $this->createLink($moduleName, 'testcase', $params), 'text' => $this->lang->user->testCase);
+
+        if(common::hasPriv($moduleName, 'execution') && $this->config->systemMode == 'ALM') $featureBarMenus['execution'] = array('active' => false, 'url' => $this->createLink($moduleName, 'execution', $params), 'text' => $this->lang->user->execution);
+        if(common::hasPriv($moduleName, 'issue')     && $this->config->edition == 'max')    $featureBarMenus['issue']     = array('active' => false, 'url' => $this->createLink($moduleName, 'issue', $params), 'text' => $this->lang->user->issue);
+        if(common::hasPriv($moduleName, 'risk')      && $this->config->edition == 'max')    $featureBarMenus['risk']      = array('active' => false, 'url' => $this->createLink($moduleName, 'risk', $params), 'text' => $this->lang->user->risk);
+
+        if(common::hasPriv($moduleName, 'dynamic')) $featureBarMenus['dynamic'] = array('active' => false, 'url' => $this->createLink($moduleName, 'dynamic', "$params&type=today"), 'text' => $this->lang->user->dynamic);
+        if(common::hasPriv($moduleName, 'profile')) $featureBarMenus['profile'] = array('active' => false, 'url' => $this->createLink($moduleName, 'profile', $params), 'text' => $this->lang->user->profile);
+
+        if($methodName != 'story') $featureBarMenus[$methodName]['active'] = true;
+        if($methodName == 'story' && $storyType == 'story')       $featureBarMenus['story']['active']       = true;
+        if($methodName == 'story' && $storyType == 'requirement') $featureBarMenus['requirement']['active'] = true;
+
+        return $featureBarMenus;
+    }
+
+    /**
      * 登录。
      * Login.
      *
