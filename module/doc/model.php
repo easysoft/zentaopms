@@ -680,7 +680,7 @@ class docModel extends model
         list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
         foreach($docs as $docID => $doc)
         {
-            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu($doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
+            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu((int)$doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
             $doc->moduleName = zget($modules[$doc->lib], $doc->module);
             $doc->moduleName = ltrim($doc->moduleName, '/');
 
@@ -896,14 +896,14 @@ class docModel extends model
      * 创建独立的文档。
      * Create a seperate docs.
      *
-     * @param  object      $doc
+     * @param  object             $doc
      * @access public
-     * @return array|false
+     * @return array|false|string
      */
-    public function createSeperateDocs(object $doc): array|bool
+    public function createSeperateDocs(object $doc): array|bool|string
     {
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
-        if(empty($doc->lib) && strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
+        if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
         $files = $this->loadModel('file')->getUpload();
@@ -985,15 +985,15 @@ class docModel extends model
      * 创建一个文档。
      * Create a doc.
      *
-     * @param  object     $doc
-     * @param  array|bool $labels
+     * @param  object            $doc
+     * @param  array|bool        $labels
      * @access public
-     * @return array|bool
+     * @return array|bool|string
      */
-    public function create(object $doc, array|bool $labels = false): array|bool
+    public function create(object $doc, array|bool $labels = false): array|bool|string
     {
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
-        if(empty($doc->lib) && strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
+        if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
         $lib = $this->getLibByID($doc->lib);
@@ -1365,7 +1365,7 @@ class docModel extends model
         if($object->status == 'normal' and $this->app->user->admin) return true;
 
         static $libs = array();
-        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibByID($object->lib);
+        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibByID((int)$object->lib);
         if(!$this->checkPrivLib($libs[$object->lib])) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
@@ -3597,7 +3597,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+                $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs((int)$this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             }
             else
             {
