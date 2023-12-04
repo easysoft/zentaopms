@@ -68,43 +68,17 @@ class searchZen extends search
     }
 
     /**
-     * Set search form options.
+     * 设置搜索字段。
+     * Set option fields.
      *
-     * @param  array $fields
-     * @param  array $fieldParams
-     * @param  array $queries
-     * @access public
-     * @return object
+     * @param  array   $fields
+     * @param  array   $fieldParams
+     * @access private
+     * @return array
      */
-    protected function setOptions($fields, $fieldParams, $queries = array())
+    private function setOptionFields(array $fields, array $fieldParams): array
     {
-        $options = new stdclass();
-        $options->operators         = array();
-        $options->fields            = array();
-        $options->savedQueryTitle   = $this->lang->search->savedQuery;
-        $options->andOr             = array();
-        $options->groupName         = array($this->lang->search->group1, $this->lang->search->group2);
-        $options->searchBtnText     = $this->lang->search->common;
-        $options->resetBtnText      = $this->lang->search->reset;
-        $options->saveSearchBtnText = $this->lang->search->saveCondition;
-        foreach($this->lang->search->andor as $value => $title)
-        {
-            $andOr = new stdclass();
-            $andOr->value = $value;
-            $andOr->title = $title;
-
-            $options->andOr[] = $andOr;
-        }
-
-        foreach($this->lang->search->operators as $value => $title)
-        {
-            $operator = new stdclass();
-            $operator->value = $value;
-            $operator->title = $title;
-
-            $options->operators[] = $operator;
-        }
-
+        $optionFields = array();
         foreach($fieldParams as $field => $param)
         {
             $data = new stdclass();
@@ -114,10 +88,77 @@ class searchZen extends search
             $data->operator = $param['operator'];
 
             if($field == 'id') $data->placeholder = $this->lang->search->queryTips;
-            if(!empty($param['values']) and is_array($param['values'])) $data->values = $param['values'];
+            if(!empty($param['values']) && is_array($param['values'])) $data->values = $param['values'];
 
-            $options->fields[] = $data;
+            $opitonFields[] = $data;
         }
+
+        return $optionFields;
+    }
+
+    /**
+     * 设置搜索表单的操作符。
+     * Set option operators.
+     *
+     * @access private
+     * @return array
+     */
+    private function setOptionOperators(): array
+    {
+        $operators = array();
+        foreach($this->lang->search->operators as $value => $title)
+        {
+            $operator = new stdclass();
+            $operator->value = $value;
+            $operator->title = $title;
+
+            $operators[] = $operator;
+        }
+        return $operators;
+    }
+
+    /**
+     * 设置搜索表单组之间的逻辑关系。
+     * Set option andOr.
+     *
+     * @access private
+     * @return array
+     */
+    private function setOptionAndOr(): array
+    {
+        $andOrs = array();
+        foreach($this->lang->search->andor as $value => $title)
+        {
+            $andOr = new stdclass();
+            $andOr->value = $value;
+            $andOr->title = $title;
+
+            $andOrs[] = $andOr;
+        }
+        return $andOrs;
+    }
+
+    /**
+     * 设置搜索表单选项。
+     * Set search form options.
+     *
+     * @param  array $fields
+     * @param  array $fieldParams
+     * @param  array $queries
+     * @access public
+     * @return object
+     */
+    protected function setOptions(array $fields, array $fieldParams, array $queries = array()): object
+    {
+        $options = new stdclass();
+        $options->fields            = $this->setOptionFields($fields, $fieldParams);
+        $options->operators         = $this->setOptionOperators();
+        $options->andOr             = $this->setOptionAndOr();
+        $options->savedQueryTitle   = $this->lang->search->savedQuery;
+        $options->groupName         = array($this->lang->search->group1, $this->lang->search->group2);
+        $options->searchBtnText     = $this->lang->search->common;
+        $options->resetBtnText      = $this->lang->search->reset;
+        $options->saveSearchBtnText = $this->lang->search->saveCondition;
 
         $savedQuery = array();
         foreach($queries as $query)
@@ -138,5 +179,4 @@ class searchZen extends search
 
         return $options;
     }
-
 }
