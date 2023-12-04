@@ -45,12 +45,13 @@ class holidayTest
     }
 
     /**
-     * Test getYearPairs method.
+     * 测试获取年份。
+     * Test get year pairs.
      *
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getYearPairsTest()
+    public function getYearPairsTest(): int|array
     {
         $objects = $this->objectModel->getYearPairs();
 

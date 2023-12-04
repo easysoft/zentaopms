@@ -49,12 +49,13 @@ class holidayModel extends model
     }
 
     /**
+     * 获取年份列表。
      * Get year pairs.
      *
      * @access public
      * @return array
      */
-    public function getYearPairs()
+    public function getYearPairs(): array
     {
         return $this->dao->select('year,year')->from(TABLE_HOLIDAY)->groupBy('year')->orderBy('year_desc')->fetchPairs();
     }
