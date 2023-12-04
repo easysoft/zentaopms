@@ -1095,4 +1095,19 @@ class docTest
     {
         return $this->objectModel->getApiLibs($appendLib, $objectType, $objectID);
     }
+
+    /**
+     * 获取带库名称的模块数据。
+     * Get option menu for libs.
+     *
+     * @param  array  $libIdList
+     * @param  string $docType   doc|api
+     * @access public
+     * @return array
+     */
+    public function getLibsOptionMenuTest(array $libIdList, string $docType): array
+    {
+        $libs = $this->objectModel->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchPairs();
+        return $this->objectModel->getLibsOptionMenu($libs, $docType);
+    }
 }
