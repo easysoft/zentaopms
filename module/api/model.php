@@ -428,13 +428,14 @@ class apiModel extends model
     }
 
     /**
+     * 获取接口状态对应的语言项。
      * Get status text by status.
      *
-     * @param string $status
+     * @param  string $status
      * @access public
      * @return string
      */
-    public static function getApiStatusText($status)
+    public static function getApiStatusText(string $status): string
     {
         global $lang;
         switch($status)
@@ -448,6 +449,7 @@ class apiModel extends model
                 return $lang->api->done;
             }
         }
+        return $status;
     }
 
     /**
