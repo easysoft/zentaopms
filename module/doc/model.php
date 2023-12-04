@@ -796,31 +796,28 @@ class docModel extends model
     }
 
     /**
+     * 通过ID获取文档信息。
      * Get doc info by id.
      *
-     * @param  int  $docID
-     * @param  int  $version
-     * @param  bool $setImgSize
+     * @param  int          $docID
+     * @param  int          $version
+     * @param  bool         $setImgSize
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function getById($docID, $version = 0, $setImgSize = false)
+    public function getByID(int $docID, int $version = 0, bool $setImgSize = false): object|bool
     {
         $doc = $this->dao->select('*')->from(TABLE_DOC)
             ->where('id')->eq((int)$docID)
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch();
-
         if(!$doc) return false;
 
-        $docs = $this->processCollector(array($doc->id => $doc));
-        $doc  = $docs[$doc->id];
+        $docs    = $this->processCollector(array($doc->id => $doc));
+        $doc     = $docs[$doc->id];
+        $version = $version ? $version : $doc->version;
 
-        $version    = $version ? $version : $doc->version;
-        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
-
-        $doc->releasedBy   = '';
-        $doc->releasedDate = '';
+        $doc->releasedBy = $doc->releasedDate = '';
         if($doc->status == 'normal')
         {
             $releaseInfo = $this->dao->select('*')->from(TABLE_ACTION)
@@ -832,9 +829,24 @@ class docModel extends model
             $doc->releasedDate = $releaseInfo ? $releaseInfo->date : $doc->addedDate;
         }
 
+        return $this->processDoc($doc, (int)$version, $setImgSize);
+    }
+
+    /**
+     * 处理文档数据。
+     * Process doc data.
+     *
+     * @param  object $doc
+     * @param  bool   $setImgSize
+     * @access public
+     * @return object
+     */
+    public function processDoc(object $doc, int $version, bool $setImgSize = false): object
+    {
         /* When file change then version add one. */
-        $files    = $this->loadModel('file')->getByObject('doc', $docID);
-        $docFiles = array();
+        $files      = $this->loadModel('file')->getByObject('doc', $doc->id);
+        $docFiles   = array();
+        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
         if($docContent)
         {
             foreach($files as $file)
@@ -845,7 +857,7 @@ class docModel extends model
         }
 
         /* Check file change. */
-        if($version == $doc->version and ((empty($docContent->files) and $docFiles) or ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
+        if($version == $doc->version && ((empty($docContent->files) && $docFiles) || ($docContent->files && count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
             $doc->version       += 1;
@@ -860,19 +872,16 @@ class docModel extends model
         $doc->content        = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
         $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
-
-
-        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
+        if($doc->type != 'url' && $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
-        $doc->productName   = '';
-        $doc->executionName = '';
-        $doc->moduleName    = '';
-        if($doc->product) $doc->productName = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
+        $doc->productName = $doc->executionName = $doc->moduleName = '';
+        if($doc->product)   $doc->productName   = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
         if($doc->execution) $doc->executionName = $this->dao->findByID($doc->execution)->from(TABLE_EXECUTION)->fetch('name');
-        if($doc->module) $doc->moduleName = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
-        if(!$doc->module and $doc->type == 'article' and $doc->parent) $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
+        if($doc->module)    $doc->moduleName    = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
+        if(!$doc->module && $doc->type == 'article' && $doc->parent) $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
+
         return $doc;
     }
 
