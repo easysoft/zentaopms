@@ -78,21 +78,7 @@ $(function()
     if($.cookie.get('isFullScreen') == 1) fullScreen();
 
     /* Update doc content silently on switch doc version, story #40503 */
-    $('.panel').on('click', '#hisTrigger', function()
-    {
-        var $history = $('#history');
-        var $icon = $(this);
-        if($history.hasClass('hidden'))
-        {
-            $history.removeClass('hidden');
-            $icon.addClass('text-primary');
-        }
-        else
-        {
-            $history.addClass('hidden');
-            $icon.removeClass('text-primary');
-        }
-    }).on('click', '#closeBtn', function()
+    $('.panel').on('click', '#closeBtn', function()
     {
         $('#history').addClass('hidden');
         $('#hisTrigger').removeClass('text-primary');
@@ -100,3 +86,19 @@ $(function()
 
     $('#history').append('<a id="closeBtn" href="###" class="btn btn-link"><i class="icon icon-close"></i></a>');
 });
+
+window.showHistory = function()
+{
+    var $history = $('#history');
+    var $icon    = $('#hisTrigger');
+    if($history.hasClass('hidden'))
+    {
+        $history.removeClass('hidden');
+        $icon.addClass('text-primary');
+    }
+    else
+    {
+        $history.addClass('hidden');
+        $icon.removeClass('text-primary');
+    }
+}
