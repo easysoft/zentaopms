@@ -1,25 +1,43 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/api.class.php';
 su('admin');
+
+zdTable('module')->config('module')->gen(10);
+zdTable('api')->config('api')->gen(50);
+zdTable('apispec')->gen(100);
+zdTable('api_lib_release')->gen(10);
 
 /**
 
-title=测试 apiModel->getListByModuleId();
+title=测试 apiModel->getListByModuleID();
+timeout=0
 cid=1
-pid=1
 
-通过正常的libID、moduleID、releaseID查询api信息 >> 获取反馈列表
-通过正常的libID、moduleID,不传releaseID,查询api信息 >> 0
-通过正常的libID,不传moduleID、releaseID查询api信息 >> 0
-通过不存在的libID,moduleID,releaseID查询api信息 >> 0
+- 测试不传参数时获取的文档列表。 @0
+- 测试获取文档库ID为1的文档列表。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @BUG接口1
+ - 第0条的path属性 @bug-getList
+ - 第0条的status属性 @doing
+- 测试获取文档库ID为1并且模块ID为1的文档列表。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @BUG接口1
+ - 第0条的path属性 @bug-getList
+ - 第0条的status属性 @doing
+- 测试获取文档库ID为1并且发布ID为1的文档列表。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @BUG接口1
+ - 第0条的path属性 @bug-getList
+ - 第0条的status属性 @doing
 
 */
 
-$api = new apiTest();
+global $tester;
+$tester->loadModel('api');
 
-r($api->getListByModuleIdTest(1950, 6392, 1)) && p('title') && e('获取反馈列表');    //通过正常的libID、moduleID、releaseID查询api信息
-r($api->getListByModuleIdTest(1950, 6396, 0)) && p('title') && e('0');   //通过正常的libID、moduleID,不传releaseID,查询api信息
-r($api->getListByModuleIdTest(1, 0, 0)) && p('title') && e('0');          //通过正常的libID,不传moduleID、releaseID查询api信息
-r($api->getListByModuleIdTest(0, 0, 0)) && p('title') && e('0');                  //通过不存在的libID,moduleID,releaseID查询api信息
+$release = new stdclass();
+r($tester->api->getListByModuleID()) && p() && e('0');                                                           // 测试不传参数时获取的文档列表。
+r($tester->api->getListByModuleID(1)) && p('0:id,title,path,status') && e('1,BUG接口1,bug-getList,doing');       // 测试获取文档库ID为1的文档列表。
+r($tester->api->getListByModuleID(1, 1)) && p('0:id,title,path,status') && e('1,BUG接口1,bug-getList,doing');    // 测试获取文档库ID为1并且模块ID为1的文档列表。
+r($tester->api->getListByModuleID(1, 1, 1)) && p('0:id,title,path,status') && e('1,BUG接口1,bug-getList,doing'); // 测试获取文档库ID为1并且发布ID为1的文档列表。

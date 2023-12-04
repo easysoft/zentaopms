@@ -83,7 +83,7 @@ class api extends control
         $this->view->objectID          = $objectID;
         $this->view->moduleID          = $moduleID;
         $this->view->version           = $version;
-        $this->view->apiList           = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $release);
+        $this->view->apiList           = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs)) : $this->api->getListByModuleID($libID, $moduleID, $release);
         $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, (int)$param);
         $this->view->objectDropdown    = isset($libs[$libID]) ? $this->apiZen->generateLibsDropMenu($libs[$libID], $release) : '';
         $this->view->spaceType         = 'api';

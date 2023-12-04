@@ -1,0 +1,12 @@
+---
+title: zt_api
+author: Yuting Wang
+version: "1.0"
+fields:
+  - field: module
+    note: "所属模块"
+    range: 1{1}, 0{99}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

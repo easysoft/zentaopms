@@ -375,33 +375,35 @@ class apiModel extends model
     }
 
     /**
-     * Get api doc list by module id.
+     * 根据发布ID或者模块ID获取接口列表。
+     * Get api doc list by module id or release id.
      *
      * @param  int    $libID
      * @param  int    $moduleID
-     * @param  int    $release
+     * @param  int    $releaseID
      * @param  object $pager
-     * @return array $list
+     * @return array
      */
-    public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0, $pager = null)
+    public function getListByModuleID(int $libID = 0, int $moduleID = 0, int $releaseID = 0, object $pager = null): array
     {
         /* Get release info. */
-        if($release > 0)
+        if($releaseID > 0)
         {
-            $rel = $this->getRelease(0, 'byID', $release);
+            /* 根据发布ID获取发信息。 */
+            $release = $this->getRelease(0, 'byID', $releaseID);
 
-            $where = "1=1 and lib = $libID ";
-            if($moduleID > 0 and isset($rel->snap['modules']))
+            $where = "1 = 1 and lib = $libID ";
+            if($moduleID > 0 && isset($release->snap['modules']))
             {
                 $sub = array();
-                foreach($rel->snap['modules'] as $module)
+                foreach($release->snap['modules'] as $module)
                 {
                     $tmp = explode(',', $module['path']);
                     if(in_array($moduleID, $tmp)) $sub[] = $module['id'];
                 }
                 if($sub) $where .= 'and module in (' . implode(',', $sub) . ')';
             }
-            $list = $this->getApiListByRelease($rel, $where);
+            $apiList = $this->getApiListByRelease($release, $where);
         }
         else
         {
@@ -414,17 +416,15 @@ class apiModel extends model
             {
                 $where = 'lib = ' . $libID;
             }
-            $list = $this->dao->select('*')->from(TABLE_API)->where($where)
-                ->andWhere('deleted')->eq(0)
-                ->page($pager)
-                ->fetchAll();
+            $apiList = $this->dao->select('*')->from(TABLE_API)->where($where)->andWhere('deleted')->eq(0)->page($pager)->fetchAll();
         }
-        array_map(function ($item) {
-            $item->params   = json_decode($item->params, true);
-            $item->response = json_decode($item->response, true);
-            return $item;
-        }, $list);
-        return $list;
+
+        foreach($apiList as $api)
+        {
+            $api->params   = json_decode($api->params, true);
+            $api->response = json_decode($api->response, true);
+        }
+        return $apiList;
     }
 
     /**
