@@ -478,6 +478,7 @@ class apiModel extends model
     }
 
     /**
+     * 获取指定发布下的数据结构列表。
      * Get struct list by release.
      *
      * @param  object $release
@@ -487,7 +488,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getStructListByRelease(object $release, string $where = '1 = 1 ', $pager = null, string $orderBy = 'id'): array
+    public function getStructListByRelease(object $release, string $where = '1 = 1 ', object $pager = null, string $orderBy = 'id'): array
     {
         $strJoin = array();
         if(isset($release->snap['structs']))

@@ -1,0 +1,32 @@
+title: table zt_apistruct_spec
+desc: "数据结构版本"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    fields:
+      - field: name1
+        range: 数据接口,
+      - field: name2
+        range: 1-10000
+  - field: type
+    note: "接口类型"
+    range: formData,json,array,object
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: version
+    note: "版本"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
