@@ -137,7 +137,7 @@ class api extends control
         $this->view->apiID      = $apiID;
         $this->view->api        = $api;
         $this->view->linkParams = $linkParams;
-        $this->view->typeList   = $this->api->getTypeList($api->lib);
+        $this->view->typeList   = $this->apiZen->getTypeList($api->lib);
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
         $this->view->actions    = $apiID ? $this->action->getList('api', $apiID) : array();
         $this->display();

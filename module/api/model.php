@@ -142,8 +142,8 @@ class apiModel extends model
             ->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
-            ->check('title', 'unique', "id != $formData->id AND lib = $formData->lib AND module = $formData->module")
-            ->check('path',  'unique', "id != $formData->id AND lib = $formData->lib AND module = $formData->module AND method = '$formData->method'")
+            ->check('title', 'unique', "id != $oldApi->id AND lib = $oldApi->lib AND module = $formData->module")
+            ->check('path',  'unique', "id != $oldApi->id AND lib = $oldApi->lib AND module = $formData->module AND method = '$formData->method'")
             ->where('id')->eq($formData->id)
             ->exec();
 
@@ -575,31 +575,6 @@ class apiModel extends model
         }
 
         return $result;
-    }
-
-    /**
-     * Get Type list.
-     *
-     * @param  int   $libID
-     * @access public
-     * @return void
-     */
-    public function getTypeList($libID)
-    {
-        $typeList = array();
-        foreach($this->lang->api->paramsTypeOptions as $key => $item)
-        {
-            $typeList[$key] = $item;
-        }
-
-        /* Get all struct by libID. */
-        $structs = $this->getStructListByLibID($libID);
-        foreach($structs as $struct)
-        {
-            $typeList[$struct->id] = $struct->name;
-        }
-
-        return $typeList;
     }
 
     /**

@@ -65,4 +65,4 @@ $config->api->form->edit['paramsExample']   = array('type' => 'string', 'require
 $config->api->form->edit['response']        = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->api->form->edit['responseExample'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->api->form->edit['desc']            = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
-$config->api->form->edit['editedDate']      = array('type' => 'date',   'required' => true,  'default' => '');
+$config->api->form->edit['editedDate']      = array('type' => 'date',   'required' => false, 'default' => '');

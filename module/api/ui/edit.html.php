@@ -521,7 +521,7 @@ formPanel
         (
             set::name('type'),
             set::inline(true),
-            set::value($api->params['paramsType']),
+            set::value(!empty($api->params['paramsType']) ? $api->params['paramsType'] : ''),
             set::items($lang->struct->typeOptions)
         )
     ),

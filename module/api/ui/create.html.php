@@ -343,7 +343,7 @@ formPanel
             )
         )
     ),
-    formHidden('params', '{"header":[],"params":[],"paramsType":"fromData","query":[]}'),
+    formHidden('params', '{"header":[],"params":[],"paramsType":"formData","query":[]}'),
     formGroup
     (
         set::width('1/2'),

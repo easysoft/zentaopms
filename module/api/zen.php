@@ -197,4 +197,30 @@ class apiZen extends api
 
         return array('url' => $url, 'content' => $content);
     }
+
+    /**
+     * 获取接口类型数据。
+     * Get Type list.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return array
+     */
+    public function getTypeList(int $libID): array
+    {
+        $typeList = array();
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $typeList[$key] = $item;
+        }
+
+        /* Get all struct by libID. */
+        $structs = $this->api->getStructListByLibID($libID);
+        foreach($structs as $struct)
+        {
+            $typeList[$struct->id] = $struct->name;
+        }
+
+        return $typeList;
+    }
 }
