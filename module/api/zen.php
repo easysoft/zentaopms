@@ -32,6 +32,7 @@ class apiZen extends api
     }
 
     /**
+     * 解析cookie里的docSpaceParam值。
      * Parse docSpaceParam cookie.
      *
      * @param  array     $libs
@@ -78,6 +79,7 @@ class apiZen extends api
     }
 
     /**
+     * 组装页面左上角下拉菜单的数据。
      * Generate api doc index page dropMenu
      *
      * @param  object $lib

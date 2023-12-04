@@ -578,43 +578,77 @@ class apiModel extends model
     }
 
     /**
+     * 创建初始数据。
      * Create demo data.
      *
-     * @param  string  $name
-     * @param  string  $baseUrl
-     * @param  string  $version
+     * @param  string $name
+     * @param  string $baseUrl
+     * @param  string $version
      * @access public
      * @return int
      */
-    public function createDemoData($name, $baseUrl, $version = '16.0')
+    public function createDemoData(string $name, string $baseUrl, string $version = '16.0'): int
     {
         /* Replace the doc lib name to api lib name. */
+        $this->loadModel('action');
         $this->app->loadLang('doc');
         $this->lang->doclib->name = $this->lang->doclib->apiLibName;
 
+        /* 获取当前用户或者系统首位用户。 */
         $firstAccount   = $this->dao->select('account')->from(TABLE_USER)->orderBy('id_asc')->limit(1)->fetch('account');
         $currentAccount = isset($this->app->user->account) ? $this->app->user->account : $firstAccount;
 
-        /* Insert doclib. */
+        $libID     = $this->createDemoLib($name, $baseUrl, $currentAccount);
+        $moduleMap = $this->createDemoModule($libID, $version);
+        $apiMap    = $this->createDemoApi($libID, $version, $moduleMap, $currentAccount);
+
+        $this->createDemoStruct($libID, $version, $currentAccount);
+        $this->createDemoStructSpec($version, $currentAccount);
+        $this->createDemoApiSpec($version, $apiMap, $moduleMap, $currentAccount);
+
+        return $libID;
+    }
+
+    /**
+     * 创建文档库初始数据。
+     * Create lib demo data.
+     *
+     * @param  string  $name
+     * @param  string  $baseUrl
+     * @param  string  $currentAccount
+     * @access private
+     * @return int
+     */
+    private function createDemoLib(string $name, string $baseUrl, string $currentAccount): int
+    {
         $lib = new stdclass();
         $lib->type      = 'api';
         $lib->name      = $name;
         $lib->baseUrl   = $baseUrl;
         $lib->acl       = 'open';
         $lib->users     = ',' . $currentAccount . ',';
-        $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
-            ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
-            ->check('name', 'unique', "`type` = 'api'")
-            ->exec();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()->batchCheck($this->config->api->createlib->requiredFields, 'notempty')->check('name', 'unique', "`type` = 'api'")->exec();
 
         $libID = $this->dao->lastInsertID();
 
-        /* Insert struct. */
-        $structMap = array();
-        $structs   = $this->getDemoData('apistruct', $version);
+        return $libID;
+    }
+
+    /**
+     * 创建数据结构初始数据。
+     * Create struct demo data.
+     *
+     * @param  int     $libID
+     * @param  string  $version
+     * @param  string  $currentAccount
+     * @access private
+     * @return bool
+     */
+    private function createDemoStruct(int $libID, string $version, string $currentAccount): bool
+    {
+        $structs = $this->getDemoData('apistruct', $version);
         foreach($structs as $struct)
         {
-            $oldID = $struct->id;
             unset($struct->id);
 
             $struct->lib        = $libID;
@@ -624,12 +658,22 @@ class apiModel extends model
             $struct->editedDate = helper::now();
 
             $this->dao->insert(TABLE_APISTRUCT)->data($struct)->exec();
-            $newID = $this->dao->lastInsertID();
-
-            $structMap[$oldID] = $newID;
         }
 
-        /* Insert struct spec. */
+        return !dao::isError();
+    }
+
+    /**
+     * 创建多版本数据结构初始数据。
+     * Create struct spec demo data.
+     *
+     * @param  string  $version
+     * @param  string  $currentAccount
+     * @access private
+     * @return bool
+     */
+    private function createDemoStructSpec(string $version, string $currentAccount): bool
+    {
         $specs = $this->getDemoData('apistruct_spec', $version);
         foreach($specs as $spec)
         {
@@ -641,8 +685,22 @@ class apiModel extends model
             $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($spec)->exec();
         }
 
-        /* Insert module. */
-        $modules = $this->getDemoData('module', $version);
+        return !dao::isError();
+    }
+
+    /**
+     * 创建文档库模块初始数据。
+     * Create module demo data.
+     *
+     * @param  int     $libID
+     * @param  string  $version
+     * @access private
+     * @return array
+     */
+    private function createDemoModule(int $libID, string $version): array
+    {
+        $moduleMap = array();
+        $modules   = $this->getDemoData('module', $version);
         foreach($modules as $module)
         {
             if($module->type != 'api') continue;
@@ -654,13 +712,30 @@ class apiModel extends model
 
             $this->dao->insert(TABLE_MODULE)->data($module)->exec();
             $newID = $this->dao->lastInsertID();
+
             $this->dao->update(TABLE_MODULE)->set('path')->eq(",$newID,")->where('id')->eq($newID)->exec();
 
             $moduleMap[$oldID] = $newID;
         }
 
-        /* Insert api. */
+        return $moduleMap;
+    }
+
+    /**
+     * 创建接口文档初始数据。
+     * Create api demo data.
+     *
+     * @param  int     $libID
+     * @param  string  $version
+     * @param  array   $moduleMap
+     * @param  string  $currentAccount
+     * @access private
+     * @return array
+     */
+    private function createDemoApi(int $libID, string $version, array $moduleMap, string $currentAccount): array
+    {
         $this->loadModel('action');
+
         $apiMap = array();
         $apis   = $this->getDemoData('api', $version);
         foreach($apis as $api)
@@ -683,7 +758,22 @@ class apiModel extends model
             $apiMap[$oldID] = $newID;
         }
 
-        /* Insert api spec. */
+        return $apiMap;
+    }
+
+    /**
+     * 创建多版本接口文档初始化数据。
+     * Create api spec demo data.
+     *
+     * @param  string  $version
+     * @param  array   $apiMap
+     * @param  array   $moduleMap
+     * @param  string  $currentAccount
+     * @access private
+     * @return bool
+     */
+    private function createDemoApiSpec(string $version, array $apiMap, array $moduleMap, string $currentAccount): bool
+    {
         $specs = $this->getDemoData('apispec', $version);
         foreach($specs as $spec)
         {
@@ -698,18 +788,19 @@ class apiModel extends model
             $this->dao->insert(TABLE_API_SPEC)->data($spec)->exec();
         }
 
-        return $libID;
+        return !dao::isError();
     }
 
     /**
+     * 获取指定表的初始化数据。
      * Get demo data.
      *
-     * @param  string   $table
-     * @param  string   $version
-     * @access public
+     * @param  string  $table
+     * @param  string  $version
+     * @access private
      * @return array
      */
-    public function getDemoData($table, $version)
+    private function getDemoData(string $table, string $version): array
     {
         $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
         return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));
