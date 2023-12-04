@@ -626,6 +626,7 @@ class chartModel extends model
         /* Remove such as "left join|right join|join", "on (t1.id=t2.id)", result like t1, t2 as t3. */
         $tableSql .= ' ';
         if(stripos($tableSql, 'join') !== false) $tableSql = preg_replace(array('/join\s+([A-Z]+_\w+ .*)on/Ui', '/,\s*on\s+[^,]+/i'), array(',$1,on', ''), $tableSql);
+        $tableSql = str_replace(array('left', 'right'), '', $tableSql);
 
         /* Match t2 as t3 */
         preg_match_all('/(\w+) +as +(\w+)/i', $tableSql, $matchOut);
