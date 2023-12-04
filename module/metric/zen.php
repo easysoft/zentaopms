@@ -514,7 +514,7 @@ class metricZen extends metric
         $headerField = current($header)['name'];
         $headerTitle = current($header)['title'];
 
-        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle);
+        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'align' => 'center', 'width' => 160);
         $dateField     = ($dateType == 'day' and !isset(current($data)->dateString)) ? 'calcTime' : 'dateString';
         usort($data, function($a, $b) use($dateField)
         {
@@ -550,22 +550,22 @@ class metricZen extends metric
             if($dateType == 'year')
             {
                 $title = $year;
-                $groupHeader[] = array('name' => $time, 'title' => $title, 'align' => 'center');
+                $groupHeader[] = array('name' => $time, 'title' => $title, 'align' => 'center', 'width' => 64);
             }
             elseif($dateType == 'month')
             {
                 $month         = substr($time, 5, 2) . $this->lang->month;
-                $groupHeader[] = array('name' => $time, 'title' => $month, 'headerGroup' => $year, 'align' => 'center');
+                $groupHeader[] = array('name' => $time, 'title' => $month, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
             }
             elseif($dateType == 'week')
             {
                 $week          = sprintf($this->lang->metric->week, substr($time, 5, 2));
-                $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center');
+                $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
             }
             elseif($dateType == 'day')
             {
                 $day           = substr($time, 5, 5);
-                $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center');
+                $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
             }
         }
 
@@ -600,8 +600,8 @@ class metricZen extends metric
         });
 
         $groupHeader = array();
-        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->date, 'align' => 'center');
-        $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center');
+        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->date, 'align' => 'center', 'width' => 96);
+        $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 80);
         $groupData   = array();
 
         foreach($data as $dataInfo)
