@@ -17,6 +17,28 @@ class metricModel extends model
     public $errorInfo = '';
 
     /**
+     * Get scope pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getScopePairs()
+    {
+        $scopePairs = array();
+        foreach($this->config->metric->scopeList as $scope)
+        {
+            $scopePair = new stdclass();
+            $scopePair->value = $scope;
+            $scopePair->label = $this->lang->metric->scopeList[$scope];
+
+            $scopePairs[] = $scopePair;
+        }
+
+        return $scopePairs;
+    }
+
+
+    /**
      * 获取度量项数据列表。
      * Get metric data list.
      *
