@@ -1080,4 +1080,19 @@ class docTest
     {
         return $this->objectModel->getLibs($type, $extra, $appendLibs, $objectID, $excludeType);
     }
+
+    /**
+     * 获取api文档库。
+     * Get api libraries.
+     *
+     * @param  int    $appendLib
+     * @param  string $objectType nolink|product|project
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getApiLibsTest(int $appendLib = 0, string $objectType = '', int $objectID = 0): array
+    {
+        return $this->objectModel->getApiLibs($appendLib, $objectType, $objectID);
+    }
 }
