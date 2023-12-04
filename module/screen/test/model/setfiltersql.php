@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/screen.class.php';
 zdTable('dept')->gen(1);
 zdTable('user')->gen(1);
 /**
-title=测试 screenModel->getByID();
+title=测试 screenModel->setFilterSql();
 cid=1
 pid=1
 

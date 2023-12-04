@@ -1635,6 +1635,7 @@ class screenModel extends model
 
         if(isset($component->chartConfig))
         {
+            $componentType = '';
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
             {
                 $chartConfig = json_decode($chartConfig);

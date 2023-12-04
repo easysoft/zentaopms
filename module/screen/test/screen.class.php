@@ -323,4 +323,19 @@ class screenTest
     {
         return $this->objectModel->getBurnData();
     }
+
+    /**
+     * 测试initComponent。
+     * Test initComponent.
+     *
+     * @param  object $chart
+     * @param  string $type
+     * @param  object $compoent
+     * @access public
+     * @return void
+     */
+    public function initComponentTest(object $chart, string $type, object $compoent): void
+    {
+        $this->objectModel->initComponent($chart, $type, $compoent);
+    }
 }
