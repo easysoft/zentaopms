@@ -647,14 +647,7 @@ class productModel extends model
         $browseType = ($browseType == 'bymodule' and $this->session->storyBrowseType and $this->session->storyBrowseType != 'bysearch') ? $this->session->storyBrowseType : $browseType;
 
         /* Get stories by browseType. */
-        $stories = array();
         if(!isset($this->story)) $this->loadModel('story');
-
-        if($browseType == 'draftstory')     return $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
-        if($browseType == 'activestory')    return $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
-        if($browseType == 'changingstory')  return $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
-        if($browseType == 'reviewingstory') return $this->story->getByStatus($productID, $branch, $modules, 'reviewing', $type, $sort, $pager);
-        if($browseType == 'closedstory')    return $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
 
         if($browseType == 'assignedtome')   return $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'openedbyme')     return $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
@@ -666,11 +659,8 @@ class productModel extends model
         if($browseType == 'unplan')         return $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
         if($browseType == 'allstory')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
         if($browseType == 'bymodule')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', '', $pager);
+        if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', $pager);
         if($browseType == 'willclose')      return $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
-
-        if($browseType == 'developingstory') return $this->story->getByStatus($productID, $branch, $modules, 'developing', $type, $sort, $pager);
-        if($browseType == 'launchedstory')   return $this->story->getByStatus($productID, $branch, $modules, 'launched', $type, $sort, $pager);
 
         if($browseType == 'fromfeedback')   return $this->story->getFeedbackStories($productID, $branch, $modules, $type, $sort, $pager);
 
@@ -681,7 +671,8 @@ class productModel extends model
             return $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
         }
 
-        return $stories;
+        /* Set default function called, when browseType is (draftstory, activestory, changingstory, reviewingstory, closedstory, developingstory, launchedstory). */
+        return $this->story->getByStatus($productID, $branch, $modules, substr($browseType, 0, -5), $type, $sort, $pager);
     }
 
     /**
