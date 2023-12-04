@@ -118,12 +118,12 @@ class apiZen extends api
      * 解析请求地获得请求的详细信息。
      * Get the details of the method by file path.
      *
-     * @param  string $filePath
-     * @param  string $ext
-     * @access public
+     * @param  string    $filePath
+     * @param  string    $ext
+     * @access protected
      * @return object
      */
-    public function getMethod(string $filePath, string $ext = ''): object
+    protected function getMethod(string $filePath, string $ext = ''): object
     {
         $fileName   = dirname($filePath);
         $className  = basename(dirname(dirname($filePath)));
@@ -157,13 +157,13 @@ class apiZen extends api
      * 对指定模块下的指定方法进行调用并返回请求结果。
      * Request the api.
      *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  string $action     extendModel | extendControl
-     * @access public
+     * @param  string    $moduleName
+     * @param  string    $methodName
+     * @param  string    $action     extendModel | extendControl
+     * @access protected
      * @return array
      */
-    public function request(string $moduleName, string $methodName, string $action): array
+    protected function request(string $moduleName, string $methodName, string $action): array
     {
         $host  = common::getSysURL();
         $param = '';
@@ -204,11 +204,11 @@ class apiZen extends api
      * 获取接口类型数据。
      * Get Type list.
      *
-     * @param  int    $libID
-     * @access public
+     * @param  int       $libID
+     * @access protected
      * @return array
      */
-    public function getTypeList(int $libID): array
+    protected function getTypeList(int $libID): array
     {
         $typeList = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
@@ -224,5 +224,41 @@ class apiZen extends api
         }
 
         return $typeList;
+    }
+
+    /**
+     * 初始化搜索表单。
+     * Build search form.
+     *
+     * @param  object    $lib
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @param  array     $libs
+     * @param  string    $type      product|project
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(object $lib, int $queryID, string $actionURL, array $libs = array(), string $type = '')
+    {
+        if(empty($lib)) return;
+
+        $libPairs = array('' => '', $lib->id => $lib->name);
+        $this->config->api->search['module'] = 'api';
+        if(!empty($libs))
+        {
+            foreach($libs as $lib)
+            {
+                if(empty($lib)) continue;
+                if($lib->type != 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+            $this->config->api->search['module'] = !empty($type) ? $type . 'apiDoc' : 'api';
+        }
+
+        $this->config->api->search['queryID']                 = $queryID;
+        $this->config->api->search['actionURL']               = $actionURL;
+        $this->config->api->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->api->allLibs);
+
+        $this->loadModel('search')->setSearchParams($this->config->api->search);
     }
 }

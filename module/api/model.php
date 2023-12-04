@@ -806,40 +806,6 @@ class apiModel extends model
         return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));
     }
 
-     /**
-     * Build search form.
-     *
-     * @param  object $lib
-     * @param  string $queryID
-     * @param  string $actionURL
-     * @param  array  $libs
-     * @param  string $type product|project
-     * @access public
-     * @return void
-     */
-    public function buildSearchForm($lib, $queryID, $actionURL, $libs = array(), $type = '')
-    {
-        if(empty($lib)) return;
-        $libPairs = array('' => '', $lib->id => $lib->name);
-        $this->config->api->search['module'] = 'api';
-        if(!empty($libs))
-        {
-            foreach($libs as $lib)
-            {
-                if(empty($lib)) continue;
-                if($lib->type != 'api') continue;
-                $libPairs[$lib->id] = $lib->name;
-            }
-            $this->config->api->search['module'] = !empty($type) ? $type . 'apiDoc' : 'api';
-        }
-
-        $this->config->api->search['queryID']                 = $queryID;
-        $this->config->api->search['actionURL']               = $actionURL;
-        $this->config->api->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->api->allLibs);
-
-        $this->loadModel('search')->setSearchParams($this->config->api->search);
-    }
-
     /**
      * Get api by search.
      *
