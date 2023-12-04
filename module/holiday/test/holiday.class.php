@@ -197,14 +197,15 @@ class holidayTest
     }
 
     /**
-     * Test getDaysBetweenTest method.
+     * 测试获取开始和结束日期之间的日期。
+     * Test get the dates between the begin and end.
      *
      * @param  string    $begin
      * @param  string    $end
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getDaysBetweenTest($begin, $end)
+    public function getDaysBetweenTest(string $begin, string $end): int|array
     {
         $objects = $this->objectModel->getDaysBetween($begin, $end);
 

@@ -236,21 +236,22 @@ class holidayModel extends model
      }
 
     /**
-     * Get diff days.
+     * 获取开始和结束日期间的日期。
+     * Get the dates between the begin and end.
      *
      * @param  string  $begin
      * @param  string  $end
      * @access public
-     * @return bool
+     * @return array
      */
-     public function getDaysBetween($begin, $end)
+     public function getDaysBetween(string $begin, string $end): array
      {
          $beginTime = strtotime($begin);
          $endTime   = strtotime($end);
          $days      = ($endTime - $beginTime) / 86400;
 
          $dateList  = array();
-         for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+$i days", $beginTime));
+         for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+{$i} days", $beginTime));
 
          return $dateList;
      }
