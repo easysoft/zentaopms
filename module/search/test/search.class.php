@@ -338,6 +338,23 @@ class searchTest
     }
 
     /**
+     * 测试删除搜索索引。
+     * Delete index test.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return int
+     */
+    public function deleteIndexTest(string $objectType, int $objectID): int
+    {
+        $this->objectModel->deleteIndex($objectType, $objectID);
+
+        global $tester;
+        return $tester->dao->select('count(*) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
+    }
+
+    /**
      * Test decode.
      *
      * @param  int    $key
