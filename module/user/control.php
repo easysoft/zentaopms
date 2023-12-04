@@ -485,7 +485,7 @@ class user extends control
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand      = $this->user->updateSessionRandom();
-        $this->view->visions   = $this->user->getVisionList();
+        $this->view->visions   = getVisions();
         $this->view->deptID    = $deptID;
         $this->view->type      = $type;
 
@@ -523,7 +523,7 @@ class user extends control
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand      = $this->user->updateSessionRandom();
-        $this->view->visions   = $this->user->getVisionList();
+        $this->view->visions   = getVisions();
         $this->view->deptID    = $deptID;
         $this->view->type      = $type;
 
@@ -564,7 +564,7 @@ class user extends control
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->groups     = $this->user->getGroupsByVisions($user->visions);
         $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visions    = $this->user->getVisionList();
+        $this->view->visions    = getVisions();
         $this->view->userGroups = array_keys($userGroups);
         $this->view->user       = $user;
 
@@ -608,7 +608,7 @@ class user extends control
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->users     = $this->user->getByIdList($this->post->userIdList);
         $this->view->rand      = $this->user->updateSessionRandom();
-        $this->view->visions   = $this->user->getVisionList();
+        $this->view->visions   = getVisions();
         $this->view->type      = $type;
 
         $this->display();

@@ -648,7 +648,7 @@ class metricModel extends model
         $this->config->metric->browse->search['actionURL'] = $actionURL;
         $this->config->metric->browse->search['queryID']   = $queryID;
         $this->config->metric->browse->search['params']['dept']['values']    = $this->loadModel('dept')->getOptionMenu();
-        $this->config->metric->browse->search['params']['visions']['values'] = $this->loadModel('user')->getVisionList();
+        $this->config->metric->browse->search['params']['visions']['values'] = getVisions();
 
         $this->loadModel('search')->setSearchParams($this->config->metric->browse->search);
     }

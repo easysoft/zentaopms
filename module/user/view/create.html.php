@@ -17,7 +17,7 @@
 <?php js::set('holders', $lang->user->placeholder);?>
 <?php js::set('roleGroup', $roleGroup);?>
 <?php
-$visionList     = $this->user->getVisionList();
+$visionList     = getVisions();
 $showVisionList = count($visionList) > 1;
 ?>
 <div id="mainContent" class="main-content">

@@ -987,17 +987,6 @@ class userTest
     }
 
     /**
-     * Test get vision list.
-     *
-     * @access public
-     * @return void
-     */
-    public function getVisionListTest()
-    {
-        return $this->objectModel->getVisionList();
-    }
-
-    /**
      * Get users who have authority to create stories.
      *
      * @access public

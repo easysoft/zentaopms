@@ -83,7 +83,7 @@
         </td>
       </tr>
     </table>
-    <?php echo html::select('visions[]', $this->user->getVisionList(), $user->visions, "class='form-control chosen' multiple");?>
+    <?php echo html::select('visions[]', getVisions(), $user->visions, "class='form-control chosen' multiple");?>
     <div class='text-center form-actions'><?php echo html::hidden('passwordLength', 0) . html::submitButton() . html::backButton();?></div>
   </form>
   <?php echo html::hidden('verifyRand', $rand);?>

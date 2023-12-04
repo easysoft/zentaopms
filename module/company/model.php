@@ -125,7 +125,7 @@ class companyModel extends model
         $this->config->company->browse->search['actionURL'] = $actionURL;
         $this->config->company->browse->search['queryID']   = $queryID;
         $this->config->company->browse->search['params']['dept']['values']    = $this->loadModel('dept')->getOptionMenu();
-        $this->config->company->browse->search['params']['visions']['values'] = $this->loadModel('user')->getVisionList();
+        $this->config->company->browse->search['params']['visions']['values'] = getVisions();
 
         $this->loadModel('search')->setSearchParams($this->config->company->browse->search);
     }

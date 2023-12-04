@@ -715,3 +715,19 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
     return $isClickable;
 }
+
+
+/**
+ * 获取可用的界面列表。
+ * Get available vision list.
+ *
+ * @access public
+ * @return array
+ */
+function getVisions(): array
+{
+    global $config, $lang;
+    $visions    = array_flip(array_unique(array_filter(explode(',', trim($config->visions, ',')))));
+    $visionList = $lang->visionList;
+    return array_intersect_key($visionList, $visions);
+}

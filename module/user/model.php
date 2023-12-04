@@ -1030,7 +1030,7 @@ class userModel extends model
             ->fetchAll('id');
 
         $visionCount = count($visions);
-        $visionList  = $this->getVisionList();
+        $visionList  = getVisions();
 
         foreach($groups as $id => $group)
         {
@@ -2667,20 +2667,6 @@ class userModel extends model
             $userDetails[$user->account] = $user;
         }
         return $userDetails;
-    }
-
-    /**
-     * 获取可用的界面列表。
-     * Get available vision list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getVisionList(): array
-    {
-        $visions    = array_flip(array_unique(array_filter(explode(',', trim($this->config->visions, ',')))));
-        $visionList = $this->lang->visionList;
-        return array_intersect_key($visionList, $visions);
     }
 
     /**
