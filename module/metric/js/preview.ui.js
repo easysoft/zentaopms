@@ -14,7 +14,8 @@ window.afterPageUpdate = function($target, info, options)
         window.renderCheckedLabel();
         $(window).on('resize', window.renderCheckedLabel);
     }
-    if(viewType == 'single') window.addTitle2Star();
+
+    window.addTitle2Star();
     window.initFilterPanel();
 }
 
@@ -470,7 +471,7 @@ window.collectMetric = function(id)
     $.get($.createLink('metric', 'ajaxCollectMetric', 'metricID=' + id), function(resp)
     {
         var result = JSON.parse(resp);
-        $('.metric-collect').find('i').attr('class', result.collect ? 'icon icon-star star' : 'icon icon-star-empty star-empty');
+        $('.metric-collect-' + id).find('i').attr('class', result.collect ? 'icon icon-star star' : 'icon icon-star-empty star-empty');
     });
 }
 

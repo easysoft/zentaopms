@@ -302,7 +302,7 @@ div
                 ),
                 btn
                 (
-                    setClass('metric-collect'),
+                    setClass('metric-collect metric-collect-' . $current->id),
                     set::type('link'),
                     set::icon($star),
                     set::iconClass($star),

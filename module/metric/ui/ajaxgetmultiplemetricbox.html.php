@@ -128,6 +128,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID, $da
     );
 };
 
+$star = (!empty($metric->collector) and strpos($metric->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 div
 (
     setClass('metric-name metric-name-notfirst flex flex-between items-center'),
@@ -137,6 +138,17 @@ div
         (
             setClass('metric-name-weight'),
             $metric->name
+        ),
+        btn
+        (
+            setClass('metric-collect metric-collect-' . $metricID),
+            set::type('link'),
+            set::icon($star),
+            set::iconClass($star),
+            set::square(true),
+            set::size('sm'),
+            set::title($lang->metric->collectStar),
+            on::click('.metric-collect', "window.collectMetric({$metricID})")
         )
     ),
     div
