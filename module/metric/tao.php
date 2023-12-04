@@ -339,10 +339,9 @@ class metricTao extends metricModel
         /**
          * 判断fields中的字段是否与array('year', 'month', 'week', 'day')存在交集
          */
+        foreach($fields as $key => $field) $fields[$key] = "`$field`";
         $intersect = array_intersect($fields, array('year', 'month', 'week', 'day'));
         if(empty($intersect)) $fields[] = 'left(date, 10)';
-
-        foreach($fields as $key => $field) $fields[$key] = "`$field`";
 
         $sql  = "INSERT INTO `metriclib_distinct` (id) ";
         $sql .= "SELECT MAX(id) AS id ";
