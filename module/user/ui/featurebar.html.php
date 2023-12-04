@@ -18,5 +18,5 @@ featureBar
             set::onChange(jsRaw("(value) => switchAccount(value)"))
         )
     ),
-    set::items($this->user->getFeatureBarMenus($user))
+    set::items($this->userZen->getFeatureBarMenus($user))
 );
