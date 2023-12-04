@@ -50,7 +50,7 @@ window.handleCheckboxChange = function($el)
 window.handleNavMenuClick = function($el)
 {
     var scope = $el.attr('id');
-    window.ajaxGetMetrics(scope, '', function(metrics, total){
+    window.ajaxGetMetrics(scope, '', function(total){
         window.deactiveNavMenu();
         window.hideFilterPanel();
         window.resetFilterPanel();
@@ -102,7 +102,7 @@ window.handleFilterClick = function()
 
     if(viewType == 'multiple')
     {
-        window.ajaxGetMetrics('filter', filterBase64, function(_, total)
+        window.ajaxGetMetrics('filter', filterBase64, function(total)
         {
             window.deactiveNavMenu();
             $('.side-title').text(filterLang.filterTotal.replace('%s', total));
@@ -209,14 +209,13 @@ window.ajaxGetMetrics = function(scope, filters = '', callback)
         var metrics = JSON.parse(resp);
         var total   = metrics.length;
 
-        $('.side .metric-tree').empty();
-        var ids     = metrics.map(obj => obj.id).join(',');
         var checked = window.checkedList.map(obj => obj.id).join(',');
-        var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'scope=' + scope + '&metricIDList=' + ids + '&checkedList=' + checked);
+        var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'scope=' + scope + '&checkedList=' + checked);
 
+        $('.side .metric-tree').empty();
         loadTarget(url, '.side .metric-tree');
 
-        if(typeof callback == 'function') callback(metrics, total);
+        if(typeof callback == 'function') callback(total);
     });
 }
 
