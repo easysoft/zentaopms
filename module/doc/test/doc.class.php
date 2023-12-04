@@ -1154,4 +1154,17 @@ class docTest
     {
         return $this->objectModel->getOrderedProducts($append);
     }
+
+    /**
+     * 获取已排序的项目数据。
+     * Get ordered projects.
+     *
+     * @param  int    $append
+     * @access public
+     * @return array
+     */
+    public function getOrderedProjectsTest(int $append): array
+    {
+        return $this->objectModel->getOrderedProjects($append);
+    }
 }
