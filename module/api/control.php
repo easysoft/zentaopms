@@ -158,7 +158,7 @@ class api extends control
 
         /* Append id for second sort. */
         $sort     = common::appendOrder($orderBy);
-        $releases = $this->api->getReleaseByQuery(array($libID), '', $sort);
+        $releases = $this->api->getReleaseByQuery(array($libID), null, $sort);
 
         $this->view->title    = $this->lang->api->managePublish;
         $this->view->releases = $releases;
