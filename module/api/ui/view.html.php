@@ -48,7 +48,7 @@ $parseTree = function($data, $typeList, $level = 0) use(&$parseTree)
     return $tbody;
 };
 
-if($api->params['header'])
+if(!empty($api->params['header']))
 {
     $tbody = array();
     foreach($api->params['header'] as $param)
@@ -77,7 +77,7 @@ if($api->params['header'])
     );
 }
 
-if($api->params['query'])
+if(!empty($api->params['query']))
 {
     $tbody = array();
     foreach($api->params['query'] as $param)
@@ -106,7 +106,7 @@ if($api->params['query'])
     );
 }
 
-if($api->params['params'])
+if(!empty($api->params['params']))
 {
     $tbody = array();
     foreach($api->params['params'] as $param) $tbody = array_merge($tbody, $parseTree($param, $typeList));

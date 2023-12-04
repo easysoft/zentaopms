@@ -82,7 +82,7 @@ foreach($apiList as $api)
             setClass("heading {$api->method}"),
             a
             (
-                set::href(createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0")),
+                set::href(createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version={$api->version}")),
                 span
                 (
                     setClass('method'),

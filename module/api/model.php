@@ -395,6 +395,7 @@ class apiModel extends model
             $where = "1 = 1 and lib = $libID ";
             if($moduleID > 0 && isset($release->snap['modules']))
             {
+                /* 根据发布中的modules生成查询条件。 */
                 $sub = array();
                 foreach($release->snap['modules'] as $module)
                 {
@@ -407,6 +408,7 @@ class apiModel extends model
         }
         else
         {
+            /* 根据模块ID获取发布信息。 */
             if($moduleID > 0)
             {
                 $sub   = $this->dao->select('id')->from(TABLE_MODULE)->where('FIND_IN_SET(' . $moduleID . ', path)')->processSQL();
@@ -414,6 +416,7 @@ class apiModel extends model
             }
             else
             {
+                /* 没有模块ID的根据libID来获取发布信息。 */
                 $where = 'lib = ' . $libID;
             }
             $apiList = $this->dao->select('*')->from(TABLE_API)->where($where)->andWhere('deleted')->eq(0)->page($pager)->fetchAll();
@@ -438,6 +441,7 @@ class apiModel extends model
     public static function getApiStatusText(string $status): string
     {
         global $lang;
+
         switch($status)
         {
             case static::STATUS_DOING:
@@ -453,13 +457,16 @@ class apiModel extends model
     }
 
     /**
-     * @param int $libID
-     * @param string $pager
-     * @param string $orderBy
+     * 获取指定文档库下的数据结构列表。
+     * Get struct list by lib id.
+     *
+     * @param  int    $libID
+     * @param  object $pager
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getStructByQuery($libID, $pager = '', $orderBy = '')
+    public function getStructByQuery(int $libID, object $pager = null, string $orderBy = ''): array
     {
         return $this->dao->select('t1.*,t2.realname as addedName')->from(TABLE_APISTRUCT)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.addedBy')
@@ -475,29 +482,32 @@ class apiModel extends model
      *
      * @param  object $release
      * @param  string $where
+     * @param  object $pager
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id')
+    public function getStructListByRelease(object $release, string $where = '1 = 1 ', $pager = null, string $orderBy = 'id'): array
     {
         $strJoin = array();
         if(isset($release->snap['structs']))
         {
+            /* 根据发布中的structs生成查询条件。 */
             foreach($release->snap['structs'] as $struct)
             {
                 $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
             }
         }
-
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
-        $list = $this->dao->select('object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.addedBy,spec.addedDate,object.id,user.realname as addedName')->from(TABLE_APISTRUCT)->alias('object')
+
+        return $this->dao->select('object.id,object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.addedBy,spec.addedDate,user.realname as addedName')
+            ->from(TABLE_APISTRUCT)->alias('object')
             ->leftJoin(TABLE_APISTRUCT_SPEC)->alias('spec')->on('object.name = spec.name')
             ->leftJoin(TABLE_USER)->alias('user')->on('user.account = spec.addedBy')
             ->where($where)
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll();
-        return $list;
     }
 
     /**

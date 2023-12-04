@@ -237,7 +237,7 @@ class api extends control
         if($releaseID)
         {
             $release = $this->api->getRelease($libID, 'byID', $releaseID);
-            $structs = $this->api->getStructListByRelease($release, '1 = 1 ', $sort);
+            $structs = $this->api->getStructListByRelease($release, '1 = 1 ', $pager, $sort);
         }
         else
         {
@@ -498,7 +498,7 @@ class api extends control
      */
     public function edit(int $apiID)
     {
-        $api = $this->api->getLibByID($apiID);
+        $api = $this->api->getByID($apiID);
         if(!empty($_POST))
         {
             $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->get();
