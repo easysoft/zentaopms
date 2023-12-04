@@ -111,3 +111,8 @@ INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `pur
 INSERT INTO `zt_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES ('拆分一个子计划', 0, 'productplan', ',productplan.title,productplan.desc,productplan.begin,productplan.end,', 'productplan.create', '根据给定计划名称、描述、计划开始时间和计划结束时间，将给定计划明确为其小范围的子计划。拆分出来的子计划可以更专注于给定计划中的某一类工作。	', '要求子计划的时间不能超出计划开始时间和计划结束时间，并且名称不能与原计划名称相同。润色子计划的描述。', '请你扮演一名资深的产品经理。', '负责产品计划、设计、用户体验等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active');
 ALTER TABLE `zt_review` MODIFY `doc` varchar(255) DEFAULT '';
 ALTER TABLE `zt_review` MODIFY `docVersion` varchar(255) DEFAULT '';
+
+ALTER TABLE `zt_history`
+CHANGE `old` `old` text NULL AFTER `field`,
+CHANGE `new` `new` text NULL AFTER `old`,
+CHANGE `diff` `diff` mediumtext NULL AFTER `new`;
