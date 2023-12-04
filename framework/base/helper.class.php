@@ -1083,6 +1083,8 @@ function isLocalIP()
  */
 function getWebRoot($full = false)
 {
+    if(getenv('APP_WEB_ROOT') !== false) return '/' . trim(getenv('APP_WEB_ROOT'), '/') . '/';
+
     $path = $_SERVER['SCRIPT_NAME'];
 
     if(PHP_SAPI == 'cli')
