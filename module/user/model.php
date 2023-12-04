@@ -14,24 +14,6 @@
 class userModel extends model
 {
     /**
-     * Set users list.
-     *
-     * @param  array    $users
-     * @param  string   $account
-     * @access public
-     * @return string
-     */
-    public function setUserList($users, $account)
-    {
-        if(!isset($users[$account]))
-        {
-            $user = $this->getById($account);
-            if($user and $user->deleted) $users[$account] = zget($user, 'realname', $account);
-        }
-        return $users;
-    }
-
-    /**
      * 根据用户 id 列表获取用户。
      * Get users by id list.
      *

@@ -1021,20 +1021,6 @@ class userTest
     }
 
     /**
-     * Set users list.
-     *
-     * @param  array    $users
-     * @param  string   $account
-     * @access public
-     * @return string
-     */
-    public function setUserListTest($users, $account)
-    {
-        $accounts = $this->objectModel->setUserList($users, $account);
-        return isset($accounts[$account]) ? 1 : 0;
-    }
-
-    /**
      * Update session random.
      *
      * @access public
