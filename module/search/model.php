@@ -855,14 +855,15 @@ class searchModel extends model
     }
 
     /**
+     * 删除索引。
      * Delete index of an object.
      *
-     * @param  string    $objectType
-     * @param  int       $objectID
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteIndex($objectType, $objectID)
+    public function deleteIndex(string $objectType, int $objectID): bool
     {
         $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->exec();
         return !dao::isError();
