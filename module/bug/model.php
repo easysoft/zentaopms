@@ -534,7 +534,7 @@ class bugModel extends model
 
         $changes = common::createChanges($oldBug, $bug);
         $files   = $this->loadModel('file')->saveUpload('bug', $bug->id);
-        if($changes or $files)
+        if($changes || $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $bug->comment);

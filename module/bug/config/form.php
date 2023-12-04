@@ -122,10 +122,8 @@ $config->bug->form->activate['activatedDate']  = array('required' => false, 'typ
 $config->bug->form->activate['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->activate['status']         = array('required' => false, 'type' => 'string', 'default' => 'active');
 $config->bug->form->activate['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->activate['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->activate['resolvedBuild']  = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->activate['closedBy']       = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->activate['closedDate']     = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->activate['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->activate['toTask']         = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->activate['toStory']        = array('required' => false, 'type' => 'int',    'default' => 0);

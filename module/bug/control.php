@@ -495,7 +495,7 @@ class bug extends control
 
             /* 获取bug信息。 */
             /* Build bug data. */
-            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->get();
+            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->add('resolvedDate', null)->add('closedDate', null)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
             /* 解析看板信息。 */
