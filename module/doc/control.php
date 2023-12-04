@@ -537,54 +537,6 @@ class doc extends control
     }
 
     /**
-     * Ajax get all child module.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetChild($libID, $type = 'module')
-    {
-        $childModules = $this->tree->getOptionMenu($libID, 'doc');
-        $select       = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
-        return print($select);
-    }
-
-    /**
-     * Ajax get docs by lib.
-     *
-     * @param  int    $libID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetDocs($libID)
-    {
-        if(!$libID) return print(html::select('doc', '', '', "class='form-control chosen'"));
-
-        $docIdList = $this->doc->getPrivDocs($libID, 0);
-        $docs = $this->dao->select('id, title')->from(TABLE_DOC)
-            ->where('lib')->eq($libID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->eq('normal')
-            ->andWhere('id')->in($docIdList)
-            ->orderBy('order_asc,id_desc')
-            ->fetchPairs();
-
-        return print(html::select('doc', $docs, '', "class='form-control chosen'"));
-    }
-
-    /**
-     * Ajax save draft.
-     *
-     * @param int $docID
-     * @access public
-     * @return void
-     */
-    public function ajaxSaveDraft($docID)
-    {
-        $this->doc->saveDraft($docID);
-    }
-
-    /**
      * Ajax get whitelist.
      *
      * @param  int    $doclibID
