@@ -1,24 +1,33 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
 /**
 
-title=测试 docModel->getById();
+title=测试 docModel->getByID();
+timeout=0
 cid=1
-pid=1
-
-
 
 */
-global $tester;
-$doc = $tester->loadModel('doc');
 
-$docIDList   = array('0', '17', '1');
-$versionList = array('0', '1', '2');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-r($doc->getById($docIDList[1], $versionList[0])) && p('product;title')   && e('17;文档标题17'); //正常根据id查询doc
-r($doc->getById($docIDList[0], $versionList[0])) && p()                  && e('0');             //查询不存在的doc
-r($doc->getById($docIDList[2], $versionList[1])) && p('version;content') && e('2;文档正文1');   //查询版本为1的文档内容
-r($doc->getById($docIDList[2], $versionList[2])) && p('version;content') && e('2;文档正文901'); //查询版本为2的文档内容
+zdTable('doc')->config('doc')->gen(5);
+zdTable('doccontent')->config('doccontent')->gen(5);
+zdTable('user')->gen(5);
+su('admin');
+
+$docIds     = range(0, 5);
+$setImgSize = array(false, true);
+
+$docTester = new docTest();
+r($docTester->getByIDTest($docIds[0], $setImgSize[0])) && p()             && e('0');              // 测试空数据
+r($docTester->getByIDTest($docIds[1], $setImgSize[0])) && p('type,title') && e('text,文档标题1'); // 测试docID=1的数据
+r($docTester->getByIDTest($docIds[2], $setImgSize[0])) && p('type,title') && e('text,文档标题2'); // 测试docID=2的数据
+r($docTester->getByIDTest($docIds[3], $setImgSize[0])) && p('type,title') && e('text,文档标题3'); // 测试docID=3的数据
+r($docTester->getByIDTest($docIds[4], $setImgSize[0])) && p('type,title') && e('text,文档标题4'); // 测试docID=4的数据
+r($docTester->getByIDTest($docIds[5], $setImgSize[0])) && p('type,title') && e('text,文档标题5'); // 测试docID=5的数据
+r($docTester->getByIDTest($docIds[1], $setImgSize[1])) && p('type,title') && e('text,文档标题1'); // 测试docID=1的数据，并且设置图片大小
+r($docTester->getByIDTest($docIds[2], $setImgSize[1])) && p('type,title') && e('text,文档标题2'); // 测试docID=2的数据，并且设置图片大小
+r($docTester->getByIDTest($docIds[3], $setImgSize[1])) && p('type,title') && e('text,文档标题3'); // 测试docID=3的数据，并且设置图片大小
+r($docTester->getByIDTest($docIds[4], $setImgSize[1])) && p('type,title') && e('text,文档标题4'); // 测试docID=4的数据，并且设置图片大小
+r($docTester->getByIDTest($docIds[5], $setImgSize[1])) && p('type,title') && e('text,文档标题5'); // 测试docID=5的数据，并且设置图片大小

@@ -1127,4 +1127,18 @@ class docTest
         if(!$doc) return false;
         return $this->objectModel->processDoc($doc, 1, $setImgSize);
     }
+
+    /**
+     * 通过ID获取文档信息。
+     * Get doc info by id.
+     *
+     * @param  int          $docID
+     * @param  bool         $setImgSize
+     * @access public
+     * @return object|false
+     */
+    public function getByIDTest(int $docID, bool $setImgSize = false): object|bool
+    {
+        return $this->objectModel->getByID($docID, 1, $setImgSize);
+    }
 }
