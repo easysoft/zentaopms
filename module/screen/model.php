@@ -201,12 +201,12 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    public function genComponentData(object $chart, object $component, string $type = 'chart', array $filters = array()): void
+    public function genComponentData(object $chart, object $component, string $type = 'chart', array $filters = array(), $unit = false): void
     {
-        $chart = clone($chart);
+        if(!$unit) $chart = clone($chart);
         if($type == 'pivot' && $chart)
         {
-            $chart = $this->loadModel('pivot')->processPivot($chart);
+            $this->loadModel('pivot')->processPivot($chart);
             $chart->settings = json_encode($chart->settings);
         }
 

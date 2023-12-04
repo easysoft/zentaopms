@@ -62,7 +62,7 @@ class screenTest
      * @access public
      * @return array
      */
-    public function getAllComponent(array $filters = array())
+    public function getAllComponent(array $filters = array(), bool $bultion = false)
     {
         if(!empty($this->componentList))
         {
@@ -80,7 +80,7 @@ class screenTest
                 if(!in_array($screen->id, array(5, 6, 8)))
                 {
 
-                    $componentList_ = json_decode($screen->scheme);
+                    if(!$bultion) $componentList_ = json_decode($screen->scheme);
                 }
                 else
                 {
@@ -294,5 +294,21 @@ class screenTest
     public function getLatestChartTest(object $component): void
     {
         $this->objectModel->getLatestChart($component);
+    }
+
+    /**
+     * 测试genComponentData。
+     * Test genComponentData.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @param  string $type
+     * @param  array  $filter
+     * @access public
+     * @return void
+     */
+    public function genComponentDataTest(object $chart, object $component, string $type, array $filter): void
+    {
+        $this->objectModel->genComponentData($chart, $component, $type, $filter, true);
     }
 }

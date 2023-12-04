@@ -93,7 +93,7 @@ class pivotModel extends model
         $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
         foreach($pivots as $pivot) $this->completePivot($pivot, $screenList);
 
-        if($isObject && $pivot->stage == 'published') $this->processFieldSettings($pivot);
+        if($isObject && isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
 
         return $isObject ? $pivot : $pivots;
     }
