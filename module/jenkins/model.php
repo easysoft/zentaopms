@@ -111,4 +111,21 @@ class jenkinsModel extends model
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
     }
+
+    /**
+     * 获取jenkins api 密码串。
+     * Get jenkins api userpwd string.
+     *
+     * @param  object $jenkins
+     * @access public
+     * @return string
+     */
+    public function getApiUserPWD(object $jenkins): string
+    {
+            $jenkinsUser     = $jenkins->account;
+            $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+            $userPWD         = "$jenkinsUser:$jenkinsPassword";
+
+            return $userPWD;
+    }
 }

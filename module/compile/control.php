@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of compile of ZenTaoPMS.
  *
@@ -19,7 +20,7 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
         if(!in_array($this->app->rawMethod, array('browse', 'logs'))) $this->loadModel('ci')->setMenu();
@@ -37,9 +38,11 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $jobID = 0, $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $repoID = 0, int $jobID = 0, string $orderBy = 'createdDate_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('ci');
+        $this->app->loadLang('job');
+
         if($jobID)
         {
             $job    = $this->loadModel('job')->getById($jobID);
@@ -50,7 +53,6 @@ class compile extends control
 
         if($repoID || $jobID) $this->compile->syncCompile($repoID, $jobID);
 
-        $this->app->loadLang('job');
         if($repoID)
         {
             $this->ci->setMenu($repoID);
@@ -83,11 +85,12 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function logs($buildID)
+    public function logs(int $buildID)
     {
+        $this->loadModel('ci');
         if($this->session->repoID)
         {
-            $this->loadModel('ci')->setMenu();
+            $this->ci->setMenu();
             $this->view->repoID = $this->session->repoID;
         }
 
@@ -95,17 +98,11 @@ class compile extends control
         $job   = $this->loadModel('job')->getByID($build->job);
 
         if(empty($build->logs) and !in_array($build->status, array('created', 'pending'))) $build->logs = $this->compile->getLogs($job, $build);
-        $logs        = '';
-        if($build->logs)
-        {
-            $logs = str_replace("\r\n", "<br />", $build->logs);
-            $logs = str_replace("\n", "<br />", $logs);
-        }
+        $logs = $build->logs ? str_replace(array("\r\n", "\n"), "<br />", $build->logs) : '';
 
         $this->view->logs  = $logs;
         $this->view->build = $build;
         $this->view->job   = $job;
-
         $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
         $this->display();
     }

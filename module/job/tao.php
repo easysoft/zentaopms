@@ -149,19 +149,5 @@ class jobTao extends jobModel
 
         return true;
     }
-
-    /**
-     * 更新流水线最新tag。
-     * Update job last tag.
-     *
-     * @param  int       $jobID
-     * @param  string    $lastTag
-     * @access protected
-     * @return void
-     */
-    protected function updateLastTag(int $jobID, string $lastTag): void
-    {
-        $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($jobID)->exec();
-    }
 }
 

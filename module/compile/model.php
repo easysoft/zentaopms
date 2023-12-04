@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of compile module of ZenTaoCMS.
  *
@@ -18,7 +19,7 @@ class compileModel extends model
      * @access public
      * @return object
      */
-    public function getByID($buildID)
+    public function getByID(int $buildID): object
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
     }
@@ -28,9 +29,9 @@ class compileModel extends model
      *
      * @param  int    $queue
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function getByQueue($queue)
+    public function getByQueue(int $queue): object|false
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('queue')->eq($queue)->fetch();
     }
@@ -45,7 +46,7 @@ class compileModel extends model
      * @access public
      * @return array
      */
-    public function getList($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
+    public function getList(int $repoID, int $jobID, string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
@@ -66,7 +67,7 @@ class compileModel extends model
      * @param  int $jobID
      * @return array
      */
-    public function getListByJobID($jobID)
+    public function getListByJobID(int $jobID): array
     {
         return $this->dao->select('id, name, status')->from(TABLE_COMPILE)
             ->where('deleted')->eq('0')
@@ -82,7 +83,7 @@ class compileModel extends model
      * @access public
      * @return array
      */
-    public function getUnexecutedList()
+    public function getUnexecutedList(): array
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('status')->eq('')->andWhere('deleted')->eq('0')->fetchAll();
     }
@@ -94,7 +95,7 @@ class compileModel extends model
      * @access public
      * @return object
      */
-    public function getLastResult($jobID)
+    public function getLastResult(int $jobID): object
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($jobID)->andWhere('status')->ne('')->orderBy('createdDate_desc')->limit(1)->fetch();
     }
@@ -106,7 +107,7 @@ class compileModel extends model
      * @access public
      * @return array
      */
-    public function getSuccessJobs($jobIDList)
+    public function getSuccessJobs(array $jobIDList): array
     {
         return $this->dao->select('job')->from(TABLE_COMPILE)
             ->where('job')->in($jobIDList)
@@ -121,28 +122,18 @@ class compileModel extends model
      * @access public
      * @return object
      */
-    public function getBuildUrl($jenkins)
+    public function getBuildUrl(object $jenkins): object
     {
-        $jenkinsServer   = $jenkins->url;
-        $jenkinsUser     = $jenkins->account;
-        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
-
         $url = new stdclass();
-        $url->userPWD = "$jenkinsUser:$jenkinsPassword";
+        $url->userPWD = $this->loadModel('jenkins')->getApiUserPWD($jenkins);
 
-        $detailUrl             = strpos($jenkins->pipeline, '/job/') !== false ? sprintf('%s%s/api/json', $jenkinsServer, $jenkins->pipeline) : sprintf('%s/job/%s/api/json', $jenkinsServer, $jenkins->pipeline);
+        $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($jenkins->url, $jenkins->pipeline);
+
+        $detailUrl             = $urlPrefix . 'api/json';
         $hasParameterizedBuild = $this->loadModel('job')->checkParameterizedBuild($detailUrl, $url->userPWD);
         $buildInterface        = $hasParameterizedBuild ? 'buildWithParameters' : 'build';
 
-        if(strpos($jenkins->pipeline, '/job/') !== false)
-        {
-            $url->url = sprintf("%s%s{$buildInterface}/api/json", $jenkinsServer, $jenkins->pipeline);
-        }
-        else
-        {
-            $url->url = sprintf("%s/job/%s/{$buildInterface}/api/json", $jenkinsServer, $jenkins->pipeline);
-        }
-
+        $url->url = "{$urlPrefix}{$buildInterface}/api/json";
         return $url;
     }
 
@@ -154,29 +145,31 @@ class compileModel extends model
      * @access public
      * @return string
      */
-    public function getLogs($job, $compile)
+    public function getLogs(object $job, object $compile): string
     {
         $logs = '';
 
         if($job->engine == 'jenkins')
         {
-            $jenkins         = $this->loadModel('pipeline')->getByID($job->server);
-            $jenkinsUser     = $jenkins->account;
-            $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
-            $userPWD         = "$jenkinsUser:$jenkinsPassword";
+            $jenkins = $this->loadModel('pipeline')->getByID($job->server);
+            $userPWD = $this->loadModel('jenkins')->getApiUserPWD($jenkins);
 
-            $infoUrl  = sprintf('%s/job/%s/api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $jenkins->url, $job->pipeline, $compile->queue);
-            $result   = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD), array(), 'data', 'POST', 30, true);
-            $response = $result['body'];
+            $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
+            $infoUrl   = sprintf($urlPrefix . 'api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $compile->queue);
+            $result    = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD), array(), 'data', 'POST', 30, true);
+
+            /* Check error. */
             $httpCode = $result[1];
             if($httpCode == 404) return '';
+
+            $response = $result['body'];
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
                 $buildNumber = $buildInfo->number;
                 if(empty($buildNumber)) return '';
 
-                $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkins->url, $job->pipeline, $buildNumber);
+                $logUrl = sprintf($urlPrefix . '%s/consoleText', $buildNumber);
                 $logs   = common::http($logUrl, '', array(CURLOPT_USERPWD => $userPWD));
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($logs)->where('id')->eq($compile->id)->exec();
             }
@@ -220,7 +213,7 @@ class compileModel extends model
         $build = new stdClass();
         $build->job         = $job->id;
         $build->name        = $job->name;
-        $build->$type       = $data;
+        if($type) $build->$type = $data;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
 
@@ -236,7 +229,7 @@ class compileModel extends model
      * @access public
      * @return void
      */
-    public function syncCompile($repoID = 0, $jobID = 0)
+    public function syncCompile(int $repoID = 0, int $jobID = 0): void
     {
         if($jobID)
         {
@@ -273,49 +266,32 @@ class compileModel extends model
      * @access public
      * @return void
      */
-    public function syncJenkinsBuildList($jenkins, $job)
+    public function syncJenkinsBuildList(object $jenkins, object $job): void
     {
         if(empty($jenkins->account)) return;
-
-        $jenkinsUser     = $jenkins->account;
-        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+        $userPWD = $this->loadModel('jenkins')->getApiUserPWD($jenkins);
 
         /* Get build list by API. */
-        if(strpos($job->pipeline, '/job/') !== false)
-        {
-            $url = sprintf('%s%sapi/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
-        }
-        else
-        {
-            $url = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
-        }
-        $response = common::http($url, '', array(CURLOPT_USERPWD => "$jenkinsUser:$jenkinsPassword"));
-        if(!$response) return false;
+        $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
+        $url       = $urlPrefix . 'api/json?tree=builds[id,number,result,queueId,timestamp]';
+        $response  = common::http($url, '', array(CURLOPT_USERPWD => $userPWD));
+        if(!$response) return;
 
-        $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
         $jobInfo      = json_decode($response);
         if(empty($jobInfo)) return;
 
+        $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
         foreach($jobInfo->builds as $build)
         {
             $lastSyncTime = strtotime($job->lastSyncDate);
             if($build->timestamp < $lastSyncTime * 1000) break;
             if(isset($compilePairs[$build->queueId])) continue;
 
-            $data = new stdclass();
-            $data->name        = $job->name;
-            $data->job         = $job->id;
-            $data->queue       = $build->queueId;
-            $data->status      = $build->result == 'SUCCESS' ? 'success' : 'failure';
-            $data->createdBy   = 'guest';
-            $data->createdDate = date('Y-m-d H:i:s', $build->timestamp / 1000);
-            $data->updateDate  = $data->createdDate;
-
-            $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+            $this->compileTao->createByBuildInfo($job->name, $job->id, $build, 'jenkins');
         }
 
         $now = helper::now();
-        $this->dao->update(TABLE_JOB)->set('lastSyncDate')->eq($now)->where('id')->eq($job->id)->exec();
+        $this->compileTao->updateJobLastSyncDate($job->id, $now);
     }
 
     /**
@@ -326,7 +302,7 @@ class compileModel extends model
      * @access public
      * @return void
      */
-    public function syncGitlabBuildList($gitlab, $job)
+    public function syncGitlabBuildList(object $gitlab, object $job): void
     {
         if(empty($gitlab->id)) return;
 
@@ -352,16 +328,7 @@ class compileModel extends model
                 {
                     if(isset($compilePairs[$build->id])) continue;
 
-                    $data = new stdclass();
-                    $data->name        = $job->name;
-                    $data->job         = $job->id;
-                    $data->queue       = $build->id;
-                    $data->status      = $build->status;
-                    $data->createdBy   = 'guest';
-                    $data->createdDate = date('Y-m-d H:i:s', strtotime($build->created_at));
-                    $data->updateDate  = date('Y-m-d H:i:s', strtotime($build->updated_at));
-
-                    $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+                    $this->compileTao->createByBuildInfo($job->name, $job->id, $build, 'gitlab');
                 }
             }
 
@@ -369,7 +336,7 @@ class compileModel extends model
         }
 
         $now = helper::now();
-        $this->dao->update(TABLE_JOB)->set('lastSyncDate')->eq($now)->where('id')->eq($job->id)->exec();
+        $this->compileTao->updateJobLastSyncDate($job->id, $now);
     }
 
     /**
@@ -379,7 +346,7 @@ class compileModel extends model
      * @access public
      * @return bool
      */
-    public function exec($compile)
+    public function exec(object $compile): bool
     {
         $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server')
             ->from(TABLE_JOB)->alias('t1')
@@ -398,7 +365,7 @@ class compileModel extends model
             if($lastTag)
             {
                 $job->lastTag = $lastTag;
-                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
+                $this->job->updateLastTag($job->id, $lastTag);
             }
 
             $this->dao->update(TABLE_COMPILE)->set('tag')->eq($lastTag)->where('id')->eq($compile->id)->exec();

@@ -275,7 +275,7 @@ class jobModel extends model
         {
             $repo    = $this->loadModel('repo')->getByID($job->repo);
             $lastTag = $this->getLastTagByRepo($repo, $job);
-            $this->jobTao->updateLastTag($id, $lastTag);
+            $this->updateLastTag($id, $lastTag);
         }
 
         return true;
@@ -313,10 +313,14 @@ class jobModel extends model
             if($job->lastTag)
             {
                 $tag = $job->lastTag;
-                $this->jobTao->updateLastTag($job->id, $job->lastTag);
+                $this->updateLastTag($job->id, $job->lastTag);
             }
 
             $compileID = $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
+        }
+        else
+        {
+            $compileID = $this->loadModel('compile')->createByJob($job->id);
         }
 
         if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID, $extraParam);
@@ -540,5 +544,19 @@ class jobModel extends model
         $response = common::http($url, null, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
 
         return strpos($response, 'hudson.model.ParametersDefinitionProperty') !== false;
+    }
+
+    /**
+     * 更新流水线最新tag。
+     * Update job last tag.
+     *
+     * @param  int       $jobID
+     * @param  string    $lastTag
+     * @access protected
+     * @return void
+     */
+    public function updateLastTag(int $jobID, string $lastTag): void
+    {
+        $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($jobID)->exec();
     }
 }

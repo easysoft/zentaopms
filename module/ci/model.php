@@ -363,9 +363,9 @@ class ciModel extends model
      * @param  object $data
      * @param  string $userPWD
      * @access public
-     * @return int
+     * @return string|int
      */
-    public function sendRequest(string $url, object $data, string $userPWD = ''): int
+    public function sendRequest(string $url, object $data, string $userPWD = ''): string|int
     {
         if(!empty($data->PARAM_TAG)) $data->PARAM_REVISION = '';
         $response = common::http($url, $data, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
