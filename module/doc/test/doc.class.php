@@ -1141,4 +1141,17 @@ class docTest
     {
         return $this->objectModel->getByID($docID, 1, $setImgSize);
     }
+
+    /**
+     * 获取已排序的产品数据。
+     * Get ordered products.
+     *
+     * @param  int    $append
+     * @access public
+     * @return array
+     */
+    public function getOrderedProductsTest(int $append): array
+    {
+        return $this->objectModel->getOrderedProducts($append);
+    }
 }
