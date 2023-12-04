@@ -34,6 +34,6 @@ cid=1
 
 global $tester;
 $tester->loadModel('api');
-r($tester->api->getReleaseByQuery(1))                  && p('0:id,lib,version;1:id,lib,version') && e('1,1,version1.0,101,1,version5.0'); // 测试获取文档库ID为1的发布列表。
-r($tester->api->getReleaseByQuery(1, null, 'id_desc')) && p('0:id,lib,version;1:id,lib,version') && e('101,1,version5.0,1,1,version1.0'); // 测试获取文档库ID为1，排序条件为ID倒序的发布列表。
-r($tester->api->getReleaseByQuery(999))                && p('0:id,lib,version') && e('0,0,0'); // 测试获取文档库ID不存在的的发布列表。
+r($tester->api->getReleaseByQuery(array(1)))                  && p('0:id,lib,version;1:id,lib,version') && e('1,1,version1.0,101,1,version5.0'); // 测试获取文档库ID为1的发布列表。
+r($tester->api->getReleaseByQuery(array(1), null, 'id_desc')) && p('0:id,lib,version;1:id,lib,version') && e('101,1,version5.0,1,1,version1.0'); // 测试获取文档库ID为1，排序条件为ID倒序的发布列表。
+r($tester->api->getReleaseByQuery(array(999)))                && p('0:id,lib,version') && e('0,0,0'); // 测试获取文档库ID不存在的的发布列表。

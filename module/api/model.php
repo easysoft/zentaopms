@@ -125,6 +125,7 @@ class apiModel extends model
     public function update(object $formData): bool
     {
         $oldApi = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
+        if(empty($formData->lib)) $formData->lib = $oldApi->lib;
 
         if(!empty($formData->editedDate) && $oldApi->editedDate != $formData->editedDate)
         {
@@ -142,8 +143,8 @@ class apiModel extends model
             ->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
-            ->check('title', 'unique', "id != $oldApi->id AND lib = $oldApi->lib AND module = $formData->module")
-            ->check('path',  'unique', "id != $oldApi->id AND lib = $oldApi->lib AND module = $formData->module AND method = '$formData->method'")
+            ->check('title', 'unique', "id != $formData->id AND lib = $formData->lib AND module = $formData->module")
+            ->check('path',  'unique', "id != $formData->id AND lib = $formData->lib AND module = $formData->module AND method = '$formData->method'")
             ->where('id')->eq($formData->id)
             ->exec();
 
@@ -542,7 +543,7 @@ class apiModel extends model
     public function sql(string $sql, string $keyField = ''): array
     {
         /* 检查允许接口调用SQL的配置项是否打开。 */
-        if(!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
+        if(!$this->config->features->apiSQL) return array('status' => 'fail', 'message' => sprintf($this->lang->api->error->disabled, '$config->features->apiSQL'));
 
         $sql = trim($sql);
         if(strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
@@ -819,7 +820,7 @@ class apiModel extends model
     public function getApiListBySearch($libID, $queryID, $objectType = '', $libs = array())
     {
         $queryName = $objectType ? $objectType . 'apiDocQuery' : 'apiQuery';
-        $queryForm = $objectType ? $objectType . 'apiDocForm' : 'apiForm';
+        $queryForm = $objectType ? $objectType . 'apiDocForm'  : 'apiForm';
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
