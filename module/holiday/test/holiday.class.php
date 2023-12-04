@@ -233,19 +233,21 @@ class holidayTest
     }
 
     /**
-     * Test isWorkingDay method.
+     * 测试某天是否是工作日。
+     * Test judge if is a working day.
      *
-     * @param  string    $date
+     * @param  string       $date
      * @access public
-     * @return object
+     * @return string|array
      */
-    public function isWorkingDayTest($date)
+    public function isWorkingDayTest(string $date): string|array
     {
+        $date = !empty($date) ? date('Y-m-d', strtotime($date)) : '0000-00-00';
         $objects = $this->objectModel->isWorkingDay($date);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $objects === true ? 'It is a working day' : 'It is not a working day';
     }
 
     /**

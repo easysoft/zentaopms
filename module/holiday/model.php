@@ -275,13 +275,14 @@ class holidayModel extends model
     }
 
     /**
+     * 判断一天是否是工作日。
      * Judge if is working days.
      *
      * @param  string $date
      * @access public
      * @return bool
      */
-    public function isWorkingDay($date)
+    public function isWorkingDay(string $date): bool
     {
         $record = $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('type')->eq('working')

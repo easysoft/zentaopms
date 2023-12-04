@@ -1,7 +1,12 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/holiday.class.php';
+
+zdTable('holiday')->gen(10);
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
@@ -17,8 +22,8 @@ pid=1
 */
 
 $holiday = new holidayTest();
-$date    = array('2022-03-01', '2022-04-09', '2002-2-2');
+$date    = array('-1 month', '-1 month +3 day', '');
 
-r($holiday->isWorkingDayTest($date[0])) && p() && e('0'); // 测试不是工作日
-r($holiday->isWorkingDayTest($date[1])) && p() && e('1'); // 测试是工作日
-r($holiday->isWorkingDayTest($date[2])) && p() && e('0'); // 测试日期格式不对
+r($holiday->isWorkingDayTest($date[0])) && p() && e('It is not a working day'); // 测试不是工作日
+r($holiday->isWorkingDayTest($date[1])) && p() && e('It is a working day');     // 测试是工作日
+r($holiday->isWorkingDayTest($date[2])) && p() && e('It is not a working day'); // 测试日期格式不对
