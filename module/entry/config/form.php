@@ -9,9 +9,8 @@ $config->entry->form->create['account']    = array('type' => 'string', 'required
 $config->entry->form->create['ip']         = array('type' => 'string', 'required' => true,  'filter'  => 'trim', 'default' => '*');
 $config->entry->form->create['key']        = array('type' => 'string', 'required' => true,  'filter'  => 'trim', 'default' => '');
 $config->entry->form->create['allIP']      = array('type' => 'string', 'required' => true,  'filter'  => 'trim', 'default' => 'off');
-$config->entry->form->create['freePasswd'] = array('type' => 'int',    'required' => true);
+$config->entry->form->create['freePasswd'] = array('type' => 'int',    'required' => false);
 $config->entry->form->create['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
-
 
 $config->entry->form->edit['name']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
 $config->entry->form->edit['code']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');

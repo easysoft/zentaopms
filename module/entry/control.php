@@ -35,6 +35,7 @@ class entry extends control
     }
 
     /**
+     * 添加应用接入禅道。
      * Create an entry.
      *
      * @access public
@@ -60,8 +61,8 @@ class entry extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title      = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->create;
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->title = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->create;
+        $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->display();
     }
 
