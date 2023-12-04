@@ -278,7 +278,8 @@ class holidayTest
     }
 
     /**
-     * Test updateProjectRealDuration method.
+     * 测试更新项目的实际工期。
+     * Test update project real duration.
      *
      * @param  int       $testProjectID
      * @param  int       $holiday
