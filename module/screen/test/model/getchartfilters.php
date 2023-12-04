@@ -79,7 +79,8 @@ $chart5->filters = json_encode(array($filters));
 $chart5->fields  = json_encode(array());
 
 $time = date('Y-m-d', time() - (date('N') - 1) * 24 * 3600);
-r($screen->getChartFiltersTest($chart)) && p('0:default') && e('1701014400000');  //当from为query时，type为date时，default应该为当前周一的日期，检查是否生成了正确的时间。
+$result = $screen->getChartFiltersTest($chart);
+r(date('Y-m-d', $result[0]['default'] / 1000) == $time) && p('') && e('1');  //当from为query时，type为date时，default应该为当前周一的日期，检查是否生成了正确的时间。
 
 $result = $screen->getChartFiltersTest($chart1);
 r($result[0]['options']) && p('0:value') && e('admin');  //当from为query时，type为select时，options应该为用户列表，检查是否生成了正确的用户列表。

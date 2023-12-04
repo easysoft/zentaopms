@@ -9,6 +9,13 @@ title=测试 screenModel->completeComponent(), $screeModel->getChartFilters();
 cid=1
 pid=1
 
+当chart为空时，使用默认配置。                                     >> transparent,1
+当chart->stge为draft时，使用默认配置。                            >> 暂时没有数据,center
+测试组件类型为chart并且chart->stage为chart时option的配置项。      >> 1,2
+测试组件类型为chart并且chart->stage为chart时chartConfig的配置项。 >> 1,2
+测试组件类型为chart并且chart->stage为chart时组件的类型。          >> chart
+测试雷达组件是否能正常生成。                                      >> radar
+
 */
 
 $chart = new stdclass();

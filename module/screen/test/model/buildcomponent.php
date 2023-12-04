@@ -10,7 +10,7 @@ cid=1
 pid=1
 
 有图表id的元素判断是否正常生成了刻度和数据。 >> 1
-目前没有Select组件，所以这里应该是false。    >> 0
+判断是否正常生成了Select组件                 >> 1
 非列表的组件判断是否给予了默认的属性。       >> 1
 列表的组件判断是否给予了默认的属性。         >> 1
 
@@ -48,7 +48,7 @@ if($component1) $screen->buildComponentTest($component1);
 r(isset($component1->option->dataset->dimensions) && is_array($component1->option->dataset->dimensions)) && p('') && e('1');  //有图表id的元素判断是否正常生成了刻度和数据。
 
 if($component2) $screen->buildComponentTest($component2);
-r(isset($component2) && $component2->option->dataset[0]['label'] == '2023') && p('') && e('0');  //判断是否正常生成了Select组件。
+r(isset($component2) && $component2->option->dataset[0]['label'] == '2023') && p('') && e('1');  //判断是否正常生成了Select组件。
 
 if($component3) $screen->buildComponentTest($component3);
 r($component3->styles && $component->status && $component->request) && p('') && e('1');  //非列表的组件判断是否给予了默认的属性。
