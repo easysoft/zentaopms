@@ -1167,4 +1167,17 @@ class docTest
     {
         return $this->objectModel->getOrderedProjects($append);
     }
+
+    /**
+     * 获取已排序的执行数据。
+     * Get ordered executions.
+     *
+     * @param  int    $append
+     * @access public
+     * @return array
+     */
+    public function getOrderedExecutionsTest(int $append): array
+    {
+        return $this->objectModel->getOrderedExecutions($append);
+    }
 }
