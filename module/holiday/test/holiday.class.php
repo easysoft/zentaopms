@@ -137,7 +137,8 @@ class holidayTest
     }
 
     /**
-     * Test getHolidays method.
+     * 测试通过开始和结束日期获取节假日。
+     * Test get holidays by begin and end.
      *
      * @param  string       $begin
      * @param  string       $end
@@ -161,10 +162,12 @@ class holidayTest
      * @param  string    $begin
      * @param  string    $end
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getWorkingDaysTest($begin = '', $end = '')
+    public function getWorkingDaysTest(string $begin = '', string $end = ''): int|array
     {
+        $begin = date('Y-m-d', strtotime($begin));
+        $end   = date('Y-m-d', strtotime($end));
         $objects = $this->objectModel->getWorkingDays($begin, $end);
 
         if(dao::isError()) return dao::getError();

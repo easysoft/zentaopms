@@ -157,6 +157,7 @@ class holidayModel extends model
     }
 
     /**
+     * 获取工作日。
      * Get working days.
      *
      * @param  string $begin
@@ -164,18 +165,18 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-     public function getWorkingDays($begin = '', $end = '')
+     public function getWorkingDays(string $begin = '', string $end = ''): array
      {
          $records = $this->dao->select('*')->from(TABLE_HOLIDAY)
              ->where('type')->eq('working')
-             ->andWhere('begin')->le($end)
-             ->andWhere('end')->ge($begin)
+             ->andWhere('begin')->ge($begin)
+             ->andWhere('end')->le($end)
              ->fetchAll('id');
 
          $workingDays = array();
          foreach($records as $record)
          {
-             $dates = $this->getDaysBetween($record->begin, $record->end);
+             $dates       = $this->getDaysBetween($record->begin, $record->end);
              $workingDays = array_merge($workingDays, $dates);
          }
 
