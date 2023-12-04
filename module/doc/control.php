@@ -502,20 +502,21 @@ class doc extends control
     }
 
     /**
+     * AJAX: 通过空间类型获取文档库。
      * AJAX: Get libs by type.
      *
-     * @param  string $space       mine|product|project|nolink|custom
-     * @param  string $docType     doc|api
+     * @param  string $type    mine|product|project|nolink|custom
+     * @param  string $docType doc|api
      * @access public
      * @return void
      */
-    public function ajaxGetLibsByType($space, $docType = 'doc')
+    public function ajaxGetLibsByType(string $type, string $docType = 'doc')
     {
         $libPairs = array();
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-            $libPairs = $this->doc->getLibs($space, "withObject,$unclosed");
+            $libPairs = $this->doc->getLibs($type, "withObject,$unclosed");
         }
         elseif($docType == 'api')
         {
@@ -524,14 +525,14 @@ class doc extends control
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }
 
-        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
-
         $items = array();
+        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
         foreach($moduleOptionMenu as $id => $name)
         {
             if(empty($id)) continue;
             $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
+
         return print(json_encode($items));
     }
 
