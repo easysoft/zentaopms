@@ -140,8 +140,8 @@ class holidayModel extends model
     {
         $records = $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('type')->eq('holiday')
-            ->andWhere('begin')->le($end)
-            ->andWhere('end')->ge($begin)
+            ->andWhere('begin')->ge($begin)
+            ->andWhere('end')->le($end)
             ->fetchAll('id');
 
         $naturalDays = $this->getDaysBetween($begin, $end);
