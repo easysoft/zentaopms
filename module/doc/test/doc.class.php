@@ -1063,4 +1063,21 @@ class docTest
 
         return $this->objectModel->getLibPairs($type, $extra, $objectID, $excludeType, $products, $projects, $executions);
     }
+
+    /**
+     * 获取文档库。
+     * Get libraries.
+     *
+     * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
+     * @param  string $extra       withObject|notdoc
+     * @param  string $appendLibs
+     * @param  int    $objectID
+     * @param  string $excludeType product|project|execution|custom|mine
+     * @access public
+     * @return array
+     */
+    public function getLibsTest(string $type = '', string $extra = '', string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
+    {
+        return $this->objectModel->getLibs($type, $extra, $appendLibs, $objectID, $excludeType);
+    }
 }
