@@ -64,7 +64,7 @@ class holidayModel extends model
      * 创建一个节假日。
      * Create a holiday.
      *
-     * @param  object  $holiday
+     * @param  object   $holiday
      * @access public
      * @return int|bool
      */
@@ -79,8 +79,8 @@ class holidayModel extends model
 
         if(dao::isError()) return false;
 
-        $beginDate = $this->post->begin;
-        $endDate   = $this->post->end;
+        $beginDate = $holiday->begin;
+        $endDate   = $holiday->end;
 
         /* Update project. */
         $this->updateProgramPlanDuration($beginDate, $endDate);

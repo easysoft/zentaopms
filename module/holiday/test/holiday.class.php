@@ -61,13 +61,14 @@ class holidayTest
     }
 
     /**
-     * Test create method.
+     * 测试创建一个家假日。
+     * Test create a holiday.
      *
-     * @param  array  $param
+     * @param  array             $param
      * @access public
-     * @return object
+     * @return object|bool|array
      */
-    public function createTest($param = array())
+    public function createTest(array $param = array()): object|bool|array
     {
         $defaultParam['type']  = 'holiday';
         $defaultParam['begin'] = '2022-01-01';
@@ -75,11 +76,12 @@ class holidayTest
         $defaultParam['name']  = '测试创建holiday';
         $defaultParam['desc']  = '默认的holiday';
 
-        foreach($defaultParam as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        $holiday = new stdclass();
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $lastInsertID = $this->objectModel->create();
-        unset($_POST);
+        foreach($defaultParam as $field => $defaultValue) $holiday->{$field} = $defaultValue;
+        foreach($param as $key => $value) $holiday->{$key} = $value;
+
+        $lastInsertID = $this->objectModel->create($holiday);
 
         if(dao::isError())
         {
