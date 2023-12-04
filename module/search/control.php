@@ -58,7 +58,7 @@ class search extends control
         $this->view->formSession  = $_SESSION[$module . 'Form'];
         $this->view->formName     = $formName;
 
-        if($module == 'program') $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
+        if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
 
         $this->app->loadModuleConfig('action');
         $this->display();
