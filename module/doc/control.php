@@ -502,62 +502,6 @@ class doc extends control
     }
 
     /**
-     * Ajax fixed menu.
-     *
-     * @param int $libID
-     * @param string $type
-     * @access public
-     * @return void
-     */
-    public function ajaxFixedMenu($libID, $type = 'fixed')
-    {
-        $customMenuKey = $this->config->global->flow . '_doc';
-        $customMenus   = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=customMenu&key={$customMenuKey}");
-        if($customMenus) $customMenus = json_decode($customMenus);
-        if(empty($customMenus))
-        {
-            if($type == 'remove') return print(js::reload('parent'));
-            $customMenus = array();
-            $i           = 0;
-            foreach($this->lang->doc->menu as $name => $item)
-            {
-                if($name == 'list') continue;
-                $customMenu        = new stdclass();
-                $customMenu->name  = $name;
-                $customMenu->order = $i;
-                $customMenus[]     = $customMenu;
-                $i++;
-            }
-        }
-
-        $customMenus = (array)$customMenus;
-        foreach($customMenus as $i => $customMenu)
-        {
-            if(isset($customMenu->name) and $customMenu->name == "custom{$libID}") unset($customMenus[$i]);
-        }
-
-        $lib               = $this->doc->getLibByID($libID);
-        $customMenu        = new stdclass();
-        $customMenu->name  = "custom{$libID}";
-        $customMenu->order = count($customMenus);
-        $customMenu->float = 'right';
-        if($type == 'fixed') $customMenus[] = $customMenu;
-        $this->setting->setItem("{$this->app->user->account}.common.customMenu.{$customMenuKey}", json_encode($customMenus));
-        return print(js::reload('parent'));
-    }
-
-    /**
-     * Ajax get all libs
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetAllLibs()
-    {
-        return print(json_encode($this->doc->getAllLibGroups()));
-    }
-
-    /**
      * AJAX: Get libs by type.
      *
      * @param  string $space       mine|product|project|nolink|custom
