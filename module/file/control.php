@@ -21,18 +21,10 @@ class file extends control
      * @access public
      * @return void
      */
-    public function buildForm($fileCount = 1, $percent = 0.9, $filesName = "files", $labelsName = "labels")
+    public function buildForm(int $fileCount = 1, float $percent = 0.9, string $filesName = "files", string $labelsName = "labels")
     {
-        if(!file_exists($this->file->savePath))
-        {
-            printf($this->lang->file->errorNotExists, $this->file->savePath);
-            return false;
-        }
-        elseif(!is_writable($this->file->savePath))
-        {
-            printf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath);
-            return false;
-        }
+        if(!file_exists($this->file->savePath)) return printf($this->lang->file->errorNotExists, $this->file->savePath);
+        if(!is_writable($this->file->savePath)) return printf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath);
 
         $this->view->filesName  = $filesName;
         $this->view->labelsName = $labelsName;
@@ -46,36 +38,28 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxUpload($uid = '')
+    public function ajaxUpload(string $uid = '')
     {
         $file = $this->file->getUpload('imgFile');
 
-        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions))
-        {
-            return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
-        }
+        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
 
         $file = $file[0];
         if($file)
         {
             if($file['size'] == 0)
             {
-                if(defined('RUN_MODE') && RUN_MODE == 'api')
-                {
-                    return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
-                }
-                else
-                {
-                    return print(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
-                }
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+                return print(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
             }
+
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
             {
                 /* Compress image for jpg and bmp. */
                 $file = $this->file->compressImage($file);
 
-                $file['addedBy']    = $this->app->user->account;
-                $file['addedDate']  = helper::today();
+                $file['addedBy']   = $this->app->user->account;
+                $file['addedDate'] = helper::today();
                 unset($file['tmpname']);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
@@ -88,22 +72,13 @@ class file extends control
                     $_SERVER['SCRIPT_NAME'] = 'index.php';
                     return $this->send(array('status' => 'success', 'id' => $fileID, 'url' => $url));
                 }
-                else
-                {
-                    return print(json_encode(array('error' => 0, 'url' => $url)));
-                }
+                return print(json_encode(array('error' => 0, 'url' => $url)));
             }
             else
             {
                 $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
-                if(defined('RUN_MODE') && RUN_MODE == 'api')
-                {
-                    return $this->send(array('status' => 'error', 'message' => $error));
-                }
-                else
-                {
-                    return print(json_encode(array('error' => 1, 'message' => $error)));
-                }
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'error', 'message' => $error));
+                return print(json_encode(array('error' => 1, 'message' => $error)));
             }
         }
         return $this->send(array('status' => 'error', 'message' => $this->lang->file->uploadImagesExplain));
@@ -117,7 +92,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function preview($fileID, $mouse = '')
+    public function preview(int $fileID, string $mouse = '')
     {
         return print($this->fetch('file', 'download', "fileID=$fileID&mouse=$mouse"));
     }
@@ -130,7 +105,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function download($fileID, $mouse = '')
+    public function download(int $fileID, string $mouse = '')
     {
         if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
         $file = $this->file->getById($fileID);
@@ -142,17 +117,13 @@ class file extends control
                 $this->view->error = $this->lang->file->fileNotFound;
                 return $this->display();
             }
-            else
-            {
-                return print($this->lang->file->fileNotFound);
-            }
+            return print($this->lang->file->fileNotFound);
         }
 
         if(!$this->file->checkPriv($file))
         {
-            echo js::alert($this->lang->file->accessDenied);
-            if(isInModal()) return print(js::reload('parent.parent'));
-            return print(js::locate(helper::createLink('my', 'index'), 'parent.parent'));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->file->accessDenied, 'closeModal' => true, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->file->accessDenied, 'load' => helper::createLink('my', 'index')));
         }
 
         /* Judge the mode, down or open. */
@@ -200,10 +171,7 @@ class file extends control
                 $this->view->error = $this->lang->file->fileNotFound;
                 return $this->display();
             }
-            else
-            {
-                return print($this->lang->file->fileNotFound);
-            }
+            return print($this->lang->file->fileNotFound);
         }
     }
 
@@ -353,7 +321,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function sendDownHeader($fileName, $fileType, $content, $type = 'content')
+    public function sendDownHeader(string $fileName, string $fileType, string $content, string $type = 'content')
     {
         $this->file->sendDownHeader($fileName, $fileType, $content, $type);
     }
@@ -366,7 +334,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function delete($fileID, $confirm = 'no')
+    public function delete(int $fileID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -402,7 +370,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function printFiles($files, $fieldset, $object = null, $method = 'view', $showDelete = true, $showEdit = true)
+    public function printFiles(array $files, string $fieldset, object|null $object = null, string $method = 'view', bool $showDelete = true, bool $showEdit = true)
     {
         $this->view->files      = $files;
         $this->view->fieldset   = $fieldset;
@@ -423,7 +391,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function edit($fileID)
+    public function edit(int $fileID)
     {
         if($_POST)
         {
@@ -475,7 +443,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxPasteImg($uid = '')
+    public function ajaxPasteImg(string $uid = '')
     {
         if($_POST) return print($this->file->pasteImage($this->post->editor, $uid, true));
     }
@@ -488,7 +456,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function uploadImages($module, $params, $uid = '', $locate = false)
+    public function uploadImages(string $module, string $params, string $uid = '', string $locate = '')
     {
         if($locate)
         {
@@ -534,7 +502,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function buildExportTPL($module, $templateID = 0)
+    public function buildExportTPL(string $module, int $templateID = 0)
     {
         $templates       = $this->file->getExportTemplate($module);
         $templatePairs[] = $this->lang->file->defaultTPL;
@@ -553,7 +521,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxSaveTemplate($module)
+    public function ajaxSaveTemplate(string $module)
     {
         $templateID = $this->file->saveExportTemplate($module);
         if(dao::isError())
@@ -571,7 +539,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxDeleteTemplate($templateID)
+    public function ajaxDeleteTemplate(int $templateID)
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
     }
@@ -583,7 +551,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function read($fileID)
+    public function read(int $fileID)
     {
         if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
         $file = $this->file->getById($fileID);
@@ -619,7 +587,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxcloseBizGuide(string $moduleName)
+    public function ajaxCloseBizGuide(string $moduleName)
     {
         $path = "{$this->app->user->account}.{$moduleName}.closeBizGuide@rnd";
         $this->loadModel('setting')->setItem($path, 1);

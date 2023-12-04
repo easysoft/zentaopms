@@ -40,7 +40,7 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function getByObject($objectType, $objectID, $extra = '')
+    public function getByObject(string $objectType, string $objectID, string $extra = ''): array
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
@@ -51,18 +51,7 @@ class fileModel extends model
             ->orderBy('id')
             ->fetchAll('id');
 
-        foreach($files as $file)
-        {
-            if($objectType == 'traincourse' or  $objectType == 'traincontents')
-            {
-                $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-                $file->webPath  = 'data/course/' . $file->pathname;
-                continue;
-            }
-
-            $this->setFileWebAndRealPaths($file);
-        }
-
+        foreach($files as $file) $this->setFileWebAndRealPaths($file);
         return $files;
     }
 
@@ -71,49 +60,30 @@ class fileModel extends model
      *
      * @param  int    $fileID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getById($fileID)
+    public function getById(int $fileID): object|false
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         if(empty($file)) return false;
 
-        if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
-        {
-            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-            $file->webPath  = 'data/course/' . $file->pathname;
-
-            return $file;
-        }
-
         $this->setFileWebAndRealPaths($file);
-
         return $file;
     }
 
     /**
      * Get files by ID list.
      *
-     * @param  string $fileIdList
+     * @param  string|array $fileIdList
      * @access public
      * @return array
      */
-    public function getByIdList(string $fileIdList): array
+    public function getByIdList(string|array $fileIdList): array
     {
         if(empty($fileIdList)) return array();
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIdList)->orderBy('id')->fetchAll('id');
-        foreach($files as $file)
-        {
-            if($file->objectType == 'traincourse' || $file->objectType == 'traincontents')
-            {
-                $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-                $file->webPath  = 'data/course/' . $file->pathname;
-                continue;
-            }
-
-            $this->setFileWebAndRealPaths($file);
-        }
+        foreach($files as $file) $this->setFileWebAndRealPaths($file);
 
         return $files;
     }
@@ -129,7 +99,7 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function saveUpload($objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
+    public function saveUpload(string $objectType = '', int $objectID = 0, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): array
     {
         $fileTitles = array();
         $now        = helper::today();
@@ -164,14 +134,13 @@ class fileModel extends model
      * @param  string $filesName
      * @param  string $labelsName
      * @access public
-     * @return array
+     * @return object
      */
-    public function saveAFile($file, $objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
+    public function saveAFile(object $file, string $objectType = '', int $objectID = 0, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): object|false
     {
-        $fileTitle  = new stdclass();
-        $now        = helper::today();
+        $now = helper::today();
 
-        if($file['size'] == 0) return array();
+        if($file['size'] == 0) return false;
         if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
 
         $file = $this->compressImage($file);
@@ -183,6 +152,8 @@ class fileModel extends model
         $file['extra']      = $extra;
         unset($file['tmpname']);
         $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+        $fileTitle        = new stdclass();
         $fileTitle->id    = $this->dao->lastInsertId();
         $fileTitle->title = $file['title'];
 
@@ -208,11 +179,10 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function getUpload($htmlTagName = 'files', $labelsName = 'labels')
+    public function getUpload(string $htmlTagName = 'files', string $labelsName = 'labels'): array
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
-
         if(!is_array($_FILES[$htmlTagName]['error']) and $_FILES[$htmlTagName]['error'] != 0) return $files;
 
         $this->app->loadClass('purifier', true);
@@ -236,7 +206,7 @@ class fileModel extends model
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
-                $files[] = $file;
+                $files[]           = $file;
             }
         }
         else
@@ -470,9 +440,17 @@ class fileModel extends model
      */
     public function setFileWebAndRealPaths(object $file): void
     {
-        $pathName       = $this->getRealPathName($file->pathname);
-        $file->realPath = $this->savePath . $pathName;
-        $file->webPath  = $this->webPath . $pathName;
+        if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
+        {
+            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+            $file->webPath  = $this->config->webRoot . 'data/course/' . $file->pathname;
+        }
+        else
+        {
+            $pathName       = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $pathName;
+            $file->webPath  = $this->webPath . $pathName;
+        }
     }
 
     /**
@@ -583,7 +561,7 @@ class fileModel extends model
 
         if(isset($objectGroup[$objectType]))
         {
-            $groupName = $objectGroup[$objectType]; 
+            $groupName = $objectGroup[$objectType];
             $groupID   = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
             return $this->loadModel($groupName)->checkPriv($groupID);
         }
