@@ -178,7 +178,7 @@ class bug extends control
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
         $this->view->projects    = $projects;
-        $this->view->executions  = $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, (int)$projectID, 'noclosed');
+        $this->view->executions  = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$projectID, 'noclosed');
         $this->view->bug         = $bug;
         $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getByID($bug->module);
         $this->view->modulePath  = $this->loadModel('tree')->getParents($bug->module);
@@ -461,7 +461,7 @@ class bug extends control
         $this->view->bug        = $oldBug;
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : 0, (int)$oldBug->project, 'stagefilter');
+        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : '0', (int)$oldBug->project, 'stagefilter');
         $this->view->builds     = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
