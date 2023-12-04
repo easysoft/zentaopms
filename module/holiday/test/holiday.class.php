@@ -37,6 +37,8 @@ class holidayTest
      */
     public function getListTest(string $year = '', string $type = 'all'): string|array
     {
+        if($year == 'thisyear') $year = date('Y');
+        if($year == 'lastyear') $year = date('Y', strtotime('-1 year'));
         $objects = $this->objectModel->getList($year, $type);
 
         if(dao::isError()) return dao::getError();

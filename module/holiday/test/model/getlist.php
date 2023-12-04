@@ -26,7 +26,7 @@ pid=1
 */
 
 $holiday = new holidayTest();
-$t_numyear = array('2022', '2002', '');
+$t_numyear = array('thisyear', 'lastyear', '');
 $t_type    = array('all', 'holiday', 'working', '');
 
 r($holiday->getListTest($t_numyear[0]))             && p() && e('1,2,3,4,5,6,7,8,9,10'); // 返回2022年的holiday list

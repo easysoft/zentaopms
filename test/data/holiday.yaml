@@ -33,11 +33,9 @@ fields:
     format: ""
   - field: year
     note: "年份"
-    range: 2022
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: begin
     note: "开始日期"
     range: "(-1M)-(+1w):1D"
