@@ -282,4 +282,17 @@ class screenTest
             }
         }
     }
+
+    /**
+     * 测试getLatestChart。
+     * Test getLatestChart.
+     *
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function getLatestChartTest(object $component): void
+    {
+        $this->objectModel->getLatestChart($component);
+    }
 }

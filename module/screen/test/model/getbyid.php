@@ -21,7 +21,6 @@ pid=1
 
 $screen = new screenTest();
 
-
 $screenIDList = array(0, 1, 2, 3, 4, 5, 6, 7, 8);
 $yearList     = array(0, 2019);
 $deptList     = array(0, 1, 2);
@@ -29,6 +28,7 @@ $accountList  = array('', 'admin', 'user');
 
 r($screen->getByIDTest($screenIDList[0], $yearList[0], $deptList[0], $accountList[0])) && p('')   && e(0);  //测试不存在的screenID
 r($screen->getByIDTest($screenIDList[1], $yearList[0], $deptList[0], $accountList[0])) && p('id') && e(1);  //测试存在的screenID
+
 $res = $screen->getByIDTest($screenIDList[2], $yearList[1], $deptList[0], $accountList[0]);
 $chart = null;
 foreach($res->chartData->componentList as $item){
@@ -74,9 +74,9 @@ r($chart1 && $chart1->option->value == 'admin' && strpos($chart1->option->onChan
 r($maxHeight + 50 == $res->chartData->editCanvasConfig->height) && p('') && e(1);                                           //测试生成的图表高度是否正确
 r($res->chartData->requestGlobalConfig->requestInterval == 30) && p('') && e(1);                                            //测试生成的图表请求间隔是否正确
 
-$res = $screen->getByIDTest($screenIDList[6], $yearList[0], $deptList[0], $accountList[0]);
+$result = $screen->getByIDTest($screenIDList[6], $yearList[0], $deptList[0], $accountList[0]);
 $chart2 = null;
-foreach($res->chartData->componentList as $component)
+foreach($result->chartData->componentList as $component)
 {
     if(isset($component->chartConfig->package) && $component->chartConfig->package == 'Tables')
     {
