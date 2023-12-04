@@ -2308,31 +2308,28 @@ class kanbanModel extends model
      * Activate a space.
      *
      * @param  int    $spaceID
+     * @param  object $space
      * @access public
-     * @return array
+     * @return bool
      */
-    function activateSpace($spaceID)
+    function activateSpace(int $spaceID, object $space): bool
     {
-        $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
-        $now      = helper::now();
-        $space    = fixer::input('post')
-            ->setDefault('status', 'active')
-            ->setDefault('activatedBy', $this->app->user->account)
-            ->setDefault('activatedDate', $now)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEDitedDate', $now)
-            ->setDefault('closedBy', '')
-            ->setDefault('closedDate', '0000-00-00 00:00:00')
-            ->remove('comment')
-            ->get();
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
             ->where('id')->eq($spaceID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldSpace, $space);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+        return true;
     }
 
     /**

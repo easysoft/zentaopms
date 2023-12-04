@@ -79,7 +79,6 @@ class kanban extends control
      * Edit a space.
      *
      * @param  int    $spaceID
-     * @param  string $type
      * @access public
      * @return void
      */
@@ -126,12 +125,14 @@ class kanban extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->kanban->activateSpace($spaceID);
+            $space = form::data($this->config->kanban->form->activateSpace)
+                ->add('closedBy', '')
+                ->add('closedDate', null)
+                ->get();
+
+            $this->kanban->activateSpace($spaceID, $space);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanbanSpace', $spaceID, 'activated', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
