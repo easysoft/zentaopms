@@ -278,10 +278,7 @@ class gitModel extends model
     public function getRepos(): array
     {
         $this->setRepos();
-        $repoPairs = array();
-        foreach($this->repos as $repo) $repoPairs[] = $repo->path;
-
-        return $repoPairs;
+        return helper::arrayColumn($this->repos, 'path');
     }
 
     /**
@@ -294,11 +291,37 @@ class gitModel extends model
      */
     public function setRepo(object $repo): bool
     {
-        $this->client = $repo->client;
+        $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->repoRoot = $repo->path;
+        $this->setRepoRoot($repo);
         return true;
+    }
+
+    /**
+     * 设置仓库客户端。
+     * Set client.
+     *
+     * @param  object $repo
+     * @access public
+     * @return void
+     */
+    public function setClient(object $repo)
+    {
+        $this->client = $repo->client;
+    }
+
+    /**
+     * 设置仓库根目录。
+     * Set repo root.
+     *
+     * @param  object $repo
+     * @access public
+     * @return void
+     */
+    public function setRepoRoot(object $repo)
+    {
+        $this->repoRoot = $repo->path;
     }
 
     /**

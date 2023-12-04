@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The control file of git control of ZenTaoPMS.
+ * The control file of git module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -111,47 +111,46 @@ class git extends control
      */
     public function apiSync()
     {
-        if($this->post->logs)
+        if($this->post->logs) return;
+
+        $repoRoot = $this->post->repoRoot;
+        $list     = json_decode($this->post->logs);
+
+        $logs = array();
+        $i    = 0;
+        foreach($list as $line)
         {
-            $repoRoot = $this->post->repoRoot;
-            $list     = json_decode($this->post->logs);
-
-            $logs = array();
-            $i    = 0;
-            foreach($list as $line)
+            if(!$line)
             {
-                if(!$line)
-                {
-                    $i++;
-                    continue;
-                }
-                $logs[$i][] = $line;
+                $i++;
+                continue;
             }
-            foreach($logs as $log)
-            {
-                $parsedLogs[] = $this->git->convertLog($log);
-            }
-
-            $this->loadModel('repo');
-            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
-            foreach($parsedLogs as $log)
-            {
-                $objects = $this->repo->parseComment($log->msg);
-
-                if($objects)
-                {
-                    $this->git->saveAction2PMS($objects, $log, $repoRoot);
-                    if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
-                    if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
-                    if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
-                }
-            }
-            $parsedObjects['stories'] = array_unique($parsedObjects['stories']);
-            $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
-            $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
-            $this->view->parsedObjects = $parsedObjects;
-            return $this->display();
+            $logs[$i][] = $line;
         }
+        foreach($logs as $log)
+        {
+            $parsedLogs[] = $this->git->convertLog($log);
+        }
+
+        $this->loadModel('repo');
+        $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
+        foreach($parsedLogs as $log)
+        {
+            $objects = $this->repo->parseComment($log->msg);
+
+            if($objects)
+            {
+                $this->git->saveAction2PMS($objects, $log, $repoRoot);
+                if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
+                if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
+                if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
+            }
+        }
+        $parsedObjects['stories'] = array_unique($parsedObjects['stories']);
+        $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
+        $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
+        $this->view->parsedObjects = $parsedObjects;
+        return $this->display();
     }
 
     /**
