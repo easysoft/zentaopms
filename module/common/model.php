@@ -2621,8 +2621,11 @@ EOF;
          * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
          * If none of the above conditions are missed, then the current page must be opened in iframe, using 302 jump to achieve.
          */
-        $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
+        $url = $_SERVER['REQUEST_URI'];
+        $url = str_replace('&onlybody=yes', '', str_replace('?onlybody=yes', '', $url)); // Remove onlybody param from origin open url.
+        $url = helper::safe64Encode($url);
         $redirectUrl  = helper::createLink('index', 'index');
+        $redirectUrl  = str_replace('&onlybody=yes', '', str_replace('?onlybody=yes', '', $redirectUrl)); //Remove onlybody param.
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
         helper::header('location', $redirectUrl);
         return false;
