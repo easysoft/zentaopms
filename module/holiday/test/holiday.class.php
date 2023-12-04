@@ -157,7 +157,8 @@ class holidayTest
     }
 
     /**
-     * Test getWorkingDays method.
+     * 测试获取工作日。
+     * Test get working days.
      *
      * @param  string    $begin
      * @param  string    $end
