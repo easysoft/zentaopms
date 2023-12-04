@@ -3,6 +3,9 @@
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/holiday.class.php';
+
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
