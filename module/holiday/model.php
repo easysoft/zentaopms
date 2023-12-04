@@ -111,19 +111,19 @@ class holidayModel extends model
             ->where('id')->eq($holiday->id)
             ->exec();
 
-        if(!dao::isError())
-        {
-            $beginDate = $holiday->begin;
-            $endDate   = $holiday->end;
+        if(dao::isError()) return false;
 
-            /* Update project. */
-            $this->updateProgramPlanDuration($beginDate, $endDate);
-            $this->updateProjectRealDuration($beginDate, $endDate);
+        $beginDate = $holiday->begin;
+        $endDate   = $holiday->end;
 
-            /* Update task. */
-            $this->updateTaskPlanDuration($beginDate, $endDate);
-            $this->updateTaskRealDuration($beginDate, $endDate);
-        }
+        /* Update project. */
+        $this->updateProgramPlanDuration($beginDate, $endDate);
+        $this->updateProjectRealDuration($beginDate, $endDate);
+
+        /* Update task. */
+        $this->updateTaskPlanDuration($beginDate, $endDate);
+        $this->updateTaskRealDuration($beginDate, $endDate);
+
         return !dao::isError();
     }
 

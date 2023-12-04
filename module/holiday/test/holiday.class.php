@@ -95,31 +95,33 @@ class holidayTest
     }
 
     /**
-     * Test update method.
+     * 测试更新一个节假日。
+     * Test update a holiday.
      *
      * @param  int    $holidayID
      * @param  array  $param
      * @access public
      * @return object
      */
-    public function updateTest($holidayID, $param = array())
+    public function updateTest(int $holidayID, array $param = array()): string|array
     {
         global $tester;
-        $object = $tester->dbh->query("SELECT * FROM " . TABLE_HOLIDAY  ." WHERE id = $holidayID")->fetch();
+        $object = $tester->dbh->query("SELECT * FROM " . TABLE_HOLIDAY  ." WHERE id = {$holidayID}")->fetch();
 
+        $holiday = new stdclass();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
             {
-                $_POST[$field] = $param[$field];
+                $holiday->{$field} = $param[$field];
             }
             else
             {
-                $_POST[$field] = $value;
+                $holiday->{$field} = $value;
             }
         }
 
-        $noError = $this->objectModel->update($bugID);
+        $this->objectModel->update($holiday);
         unset($_POST);
 
         if(dao::isError())
