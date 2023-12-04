@@ -136,7 +136,7 @@ window.handleChartTypeChange = function(metricID, viewType = 'single')
         }
         else
         {
-            var options = window.genLineBarOption(chartType, datas);
+            var options = datas;
         }
 
         window.renderChart(metricID, viewType, options);
