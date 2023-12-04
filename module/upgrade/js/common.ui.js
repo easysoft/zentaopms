@@ -19,7 +19,7 @@ function updateProgress()
 
             let progress = parseInt(result.progress);
             $("#progress .progress-bar").css('width', progress + '%');
-            $('.title').text(progress + '%');
+            $('#progress .modal-title').text(progress + '%');
 
             if(result.log) $('#logBox').append(result.log);
 
