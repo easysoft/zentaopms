@@ -465,22 +465,24 @@ class doc extends control
     }
 
     /**
+     *
+     * AJAX: 获取对象的目录。
      * Ajax get modules by object.
      *
-     * @param string $objectType project|product|custom|mine
-     * @param int    $objectID
-     * @param string $docType     doc|api
+     * @param  string $objectType project|product|custom|mine
+     * @param  int    $objectID
+     * @param  string $docType    doc|api
      * @access public
      * @return void
      */
-    public function ajaxGetModules($objectType, $objectID, $docType = 'doc')
+    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc')
     {
-        if(empty($objectID)) return print(html::select('module', array(), '', "class='form-control'"));
+        if(empty($objectID)) return print(array());
 
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-            $libPairs = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", '', $objectID);
+            $libPairs = $this->doc->getLibs($objectType, "withObject,{$unclosed}", '', $objectID);
         }
         elseif($docType == 'api')
         {
@@ -489,9 +491,8 @@ class doc extends control
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }
 
+        $items            = array();
         $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
-
-        $items = array();
         foreach($moduleOptionMenu as $id => $name)
         {
             $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
