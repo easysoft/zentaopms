@@ -76,6 +76,7 @@ i.star {color: var(--color-warning-300);}
 .dropdown-icon.rotate {transform: rotate(270deg); }
 
 .filter-panel {margin-bottom: 1rem;}
+.filter-panel .divider {opacity: unset;}
 .filter-panel>.panel-body {display: flex;}
 .filter-panel>.panel-body .panel {position: relative; border: none; box-shadow: none;}
 .filter-panel>.panel-body .panel.divider:after {content: ""; position: absolute; right: 0px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
