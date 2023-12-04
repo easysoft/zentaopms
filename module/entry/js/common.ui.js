@@ -27,12 +27,12 @@ function toggleAllIP(event)
     if($(event.target).prop('checked'))
     {
         $('#ip').attr('disabled', 'disabled');
-        $('input[name=ip][type=hidden]').removeAttr('disabled');
+        $('#ip').after("<input class='form-group hidden' type='text' id='ip' name='ip'>");
     }
     else
     {
-        $('input[name=ip][type=hidden]').attr('disabled', 'disabled');
         $('#ip').removeAttr('disabled');
+        $('input.hidden#ip').remove();
     }
 }
 

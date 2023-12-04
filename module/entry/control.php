@@ -24,7 +24,7 @@ class entry extends control
      */
     public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        $pager = $this->app->loadClass('pager', true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title   = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->list;
@@ -67,21 +67,22 @@ class entry extends control
     }
 
     /**
+     * 编辑应用。
      * Edit an entry.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         if($_POST)
         {
-            $entry = form::data($this->config->entry->form->create)
+            $entry = form::data($this->config->entry->form->edit)
                 ->setIF($this->post->allIP === 'on', 'ip', '*')
                 ->setIF($this->post->freePasswd == '1', 'account', '')
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
+                ->add('editedBy', $this->app->user->account)
+                ->add('editedDate', helper::now())
                 ->remove('allIP')
                 ->get();
 
@@ -97,20 +98,21 @@ class entry extends control
         }
 
         $entry = $this->entry->getById($id);
-        $this->view->title      = $this->lang->entry->edit . $this->lang->colon . $entry->name;
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->entry      = $entry;
+        $this->view->title = $this->lang->entry->edit . $this->lang->colon . $entry->name;
+        $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->entry = $entry;
         $this->display();
     }
 
     /**
+     * 删除应用。
      * Delete an entry.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->entry->delete(TABLE_ENTRY, $id);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -119,6 +121,7 @@ class entry extends control
     }
 
     /**
+     * 浏览日志。
      * Browse logs of an entry.
      *
      * @param  int    $id
@@ -129,17 +132,17 @@ class entry extends control
      * @access public
      * @return void
      */
-    public function log($id, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function log(int $id, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $entry = $this->entry->getByID($id);
-        $this->view->title      = $this->lang->entry->log . $this->lang->colon . $entry->name;
-        $this->view->logs       = $this->entry->getLogs($id, $orderBy, $pager);
-        $this->view->entry      = $entry;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->entry->log . $this->lang->colon . $entry->name;
+        $this->view->logs    = $this->entry->getLogs($id, $orderBy, $pager);
+        $this->view->entry   = $entry;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
         $this->display();
     }
 }

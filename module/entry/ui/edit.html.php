@@ -127,7 +127,7 @@ formPanel
             set::title($lang->entry->note->ip),
             set::placeholder($lang->entry->note->ip),
             set::name('ip'),
-            set::value($entry->ip),
+            set::value($entry->ip == '*' ? '' : $entry->ip),
             set::disabled($entry->ip == '*')
         ),
         formGroup
