@@ -465,51 +465,6 @@ class doc extends control
     }
 
     /**
-     * Sort doc lib.
-     *
-     * @param string $type
-     * @access protected
-     * @return void
-     */
-    protected function sort($type = '')
-    {
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
-            if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEmptyLib));
-            foreach($_POST as $id => $order) $this->dao->update(TABLE_DOCLIB)->set('order')->eq($order)->where('id')->eq($id)->exec();
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success'));
-        }
-
-        if($type)
-        {
-            $this->view->libs = $this->doc->getLibs($type);
-            $this->display();
-        }
-    }
-
-    /**
-     * Update order.
-     *
-     * @access public
-     * @return void
-     */
-    public function updateOrder()
-    {
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
-            foreach($_POST['orders'] as $id => $order)
-            {
-                $this->dao->update(TABLE_DOC)->set('`order`')->eq($order)->where('id')->eq($id)->exec();
-            }
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success'));
-        }
-    }
-
-    /**
      * Ajax get modules by object.
      *
      * @param string $objectType project|product|custom|mine
