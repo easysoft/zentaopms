@@ -171,6 +171,6 @@ class chartTao extends chartModel
             $fields[$fieldName] = $field;
             unset($fields[$i]);
         }
-        return array('fields' => $fields, 'sql' => $sql);
+        return array($fields, $sql);
     }
 }
