@@ -60,11 +60,10 @@ class kanban extends control
                 ->setDefault('createdDate', helper::now())
                 ->get();
 
-            $spaceID = $this->kanban->createSpace($space);
+            $this->kanban->createSpace($space);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
@@ -84,16 +83,18 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function editSpace(int $spaceID, string $type = '')
+    public function editSpace(int $spaceID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->kanban->updateSpace($spaceID, $type);
+            $space = form::data($this->config->kanban->form->editSpace)
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->setDefault('lastEditedDate', helper::now())
+                ->get();
+
+            $this->kanban->updateSpace($space, $spaceID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
-            $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
@@ -105,9 +106,8 @@ class kanban extends control
         $this->view->space       = $space;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->typeList    = $this->lang->kanbanspace->typeList;
-        $this->view->type        = $type;
-        $this->view->team        = ($space->type == 'private' && in_array($type, array('cooperation', 'public'))) ? $space->whitelist : $space->team;
-        $this->view->defaultType = $type == '' ? $space->type : $type;
+        $this->view->team        = ($space->type == 'private') ? $space->whitelist : $space->team;
+        $this->view->defaultType = $space->type;
 
         $this->display();
     }
@@ -221,7 +221,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function edit($kanbanID = 0)
+    public function edit(int $kanbanID = 0)
     {
         $this->loadModel('action');
         if(!empty($_POST))
