@@ -311,4 +311,16 @@ class screenTest
     {
         $this->objectModel->genComponentData($chart, $component, $type, $filter, true);
     }
+
+    /**
+     * 测试getBurnData。
+     * Test getBurnData.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBurnDataTest(): array
+    {
+        return $this->objectModel->getBurnData();
+    }
 }
