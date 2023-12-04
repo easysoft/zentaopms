@@ -1043,4 +1043,24 @@ class docTest
     {
         return $this->objectModel->createAction($docID, $action, $account);
     }
+
+    /**
+     * 获取文档库键值对。
+     * Get doc liberary pairs.
+     *
+     * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
+     * @param  string $extra
+     * @param  int    $objectID
+     * @param  string $excludeType product|project|execution|custom|mine
+     * @access public
+     * @return array
+     */
+    public function getLibPairsTest(string $type, string $extra = '', int $objectID = 0, string $excludeType = ''): array
+    {
+        $products   = $this->objectModel->loadModel('product')->getPairs();
+        $projects   = $this->objectModel->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
+        $executions = $this->objectModel->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
+
+        return $this->objectModel->getLibPairs($type, $extra, $objectID, $excludeType, $products, $projects, $executions);
+    }
 }
