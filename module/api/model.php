@@ -345,6 +345,7 @@ class apiModel extends model
     }
 
     /**
+     * 获取发布下的所有接口文档。
      * Get api list by release.
      *
      * @param  object $release
@@ -352,8 +353,9 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getApiListByRelease($release, $where = '1 = 1 ')
+    public function getApiListByRelease(object $release, string $where = '1 = 1 '): array
     {
+        /* 根据发布中的apis生成查询条件。 */
         $strJoin = array();
         if(isset($release->snap['apis']))
         {
@@ -362,13 +364,14 @@ class apiModel extends model
                 $strJoin[] = "(spec.doc = {$api['id']} and spec.version = {$api['version']} )";
             }
         }
-
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
-        $list = $this->dao->select('api.lib,spec.*,api.id')->from(TABLE_API)->alias('api')
+
+        $apiList = $this->dao->select('api.lib,spec.*,api.id')->from(TABLE_API)->alias('api')
             ->leftJoin(TABLE_API_SPEC)->alias('spec')->on('api.id = spec.doc')
             ->where($where)
             ->fetchAll();
-        return $list;
+
+        return $apiList;
     }
 
     /**

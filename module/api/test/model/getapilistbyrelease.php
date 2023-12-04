@@ -1,49 +1,54 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/api.class.php';
 su('admin');
+
+zdTable('api')->gen(50);
+zdTable('apispec')->gen(100);
 
 /**
 
 title=测试 apiModel->getApiListByRelease();
+timeout=0
 cid=1
-pid=1
 
-创建api后创建发布，使用发布查找api >> 910
+- 测试获取空发布的文档列表。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @BUG接口1
+ - 第0条的path属性 @bug-getList
+ - 第0条的status属性 @doing
+ - 第10条的id属性 @2
+ - 第10条的title属性 @BUG接口2
+ - 第10条的path属性 @bug-getList
+ - 第10条的status属性 @done
+- 测试获取指定发布的文档列表。
+ - 第1条的id属性 @1
+ - 第1条的title属性 @BUG接口1
+ - 第1条的path属性 @bug-getList
+ - 第1条的status属性 @done
+ - 第3条的id属性 @2
+ - 第3条的title属性 @BUG接口2
+ - 第3条的path属性 @bug-getList
+ - 第3条的status属性 @hidden
+- 测试获取指定发布的文档列表并且按照指定where条件查询。
+ - 第0条的id属性 @2
+ - 第0条的title属性 @BUG接口2
+ - 第0条的path属性 @bug-getList
+ - 第0条的status属性 @done
 
 */
 
 global $tester;
-$api = new apiTest();
+$tester->loadModel('api');
 
-$data = array(
-    'lib'             => 910,
-    'module'          => 0,
-    'title'           => 'testapi',
-    'protocol'        => 'HTTP',
-    'method'          => 'GET',
-    'path'            => '/api/test/id',
-    'requestType'     => 'application/json',
-    'status'          => 'done',
-    'owner'           => 'admin',
-    'type'            => 'formData',
-    'params'          => '{"header":[],"params":[],"paramsType":"","query":[]}',
-    'desc'            => '',
-    'paramsExample'   => '',
-    'response'        => '[]',
-    'responseExample' => ''
-);
-$normalApi = $data;
+$release = new stdclass();
+r($tester->api->getApiListByRelease($release)) && p('0:id,title,path,status;10:id,title,path,status') && e('1,BUG接口1,bug-getList,doing,2,BUG接口2,bug-getList,done'); // 测试获取空发布的文档列表。
 
-$normalRelease = new stdclass();
-$normalRelease->version   = 'Version1';
-$normalRelease->desc      = '';
-$normalRelease->lib       = 910;
-$normalRelease->addedBy   = $tester->app->user->account;
-$normalRelease->addedDate = helper::now();
+$release->snap['apis'][] = array('id' => 1, 'version' => 1);
+$release->snap['apis'][] = array('id' => 1, 'version' => 2);
+$release->snap['apis'][] = array('id' => 2, 'version' => 1);
+$release->snap['apis'][] = array('id' => 2, 'version' => 2);
 
-$apiInfo = $api->createTest($normalApi, false);
-$release = $api->publishLibTest($normalRelease, false);
+r($tester->api->getApiListByRelease($release)) && p('1:id,title,path,status;3:id,title,path,status') && e('1,BUG接口1,bug-getList,done,2,BUG接口2,bug-getList,hidden'); // 测试获取指定发布的文档列表。
 
-r($api->getApiListByReleaseTest($release)) && p('0:lib') && e('910'); //创建api后创建发布，使用发布查找api
+r($tester->api->getApiListByRelease($release, ' spec.id = 11 ')) && p('0:id,title,path,status') && e('2,BUG接口2,bug-getList,done'); // 测试获取指定发布的文档列表并且按照指定where条件查询。

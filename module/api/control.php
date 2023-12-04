@@ -884,7 +884,7 @@ class api extends control
     public function ajaxGetList(int $objectID, string $objectType)
     {
         helper::setcookie('objectType', $objectType);
-        helper::setcookie('objectID', $objectID);
+        helper::setcookie('objectID',   (string)$objectID);
 
         $this->objectType = $objectType;
         $this->objectID   = $objectID;
