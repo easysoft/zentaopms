@@ -55,7 +55,12 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $spaceID = $this->kanban->createSpace();
+            $space = form::data($this->config->kanban->form->createSpace)
+                ->setDefault('createdBy', $this->app->user->account)
+                ->setDefault('createdDate', helper::now())
+                ->get();
+
+            $spaceID = $this->kanban->createSpace($space);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -108,13 +113,14 @@ class kanban extends control
     }
 
     /**
+     * 激活看板空间。
      * Activate a space.
      *
      * @param  int    $spaceID
      * @access public
-     * @return array
+     * @return void
      */
-    public function activateSpace($spaceID)
+    public function activateSpace(int $spaceID)
     {
         $this->loadModel('action');
 
@@ -132,19 +138,20 @@ class kanban extends control
 
         $this->view->space   = $this->kanban->getSpaceById($spaceID);
         $this->view->actions = $this->action->getList('kanbanSpace', $spaceID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
 
         $this->display();
     }
 
     /*
+     * 关闭看板空间。
      * Close a space.
      *
      * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function closeSpace($spaceID)
+    public function closeSpace(int $spaceID)
     {
         $this->loadModel('action');
 
@@ -168,19 +175,21 @@ class kanban extends control
     }
 
     /**
+     * 删除看板空间。
      * Delete a space.
      *
      * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function deleteSpace($spaceID)
+    public function deleteSpace(int $spaceID)
     {
         $this->kanban->delete(TABLE_KANBANSPACE, $spaceID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
+     * 创建看板。
      * Create a kanban.
      *
      * @param  int    $spaceID
@@ -190,11 +199,8 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function create($spaceID = 0, $type = 'private', $copyKanbanID = 0, $extra = '')
+    public function create(int $spaceID = 0, string $type = 'private', int $copyKanbanID = 0, string $extra = '')
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
         if(!empty($_POST))
         {
             $kanbanID = $this->kanban->create();
@@ -205,38 +211,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $enableImport  = 'on';
-        $importObjects = array_keys($this->lang->kanban->importObjectList);
-        if($copyKanbanID)
-        {
-            $copyKanban    = $this->kanban->getByID($copyKanbanID);
-            $enableImport  = empty($copyKanban->object) ? 'off' : 'on';
-            $importObjects = empty($copyKanban->object) ? array() : explode(',', $copyKanban->object);
-            $spaceID       = $copyKanban->space;
-        }
-
-        unset($this->lang->kanban->featureBar['space']['involved']);
-
-        $space      = $this->kanban->getSpaceById($spaceID);
-        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
-        $spacePairs = $this->kanban->getSpacePairs($type);
-        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $ownerPairs = (isset($spacePairs[$spaceID])) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : $users;
-
-        $this->view->users         = $users;
-        $this->view->ownerPairs    = $ownerPairs;
-        $this->view->spaceID       = $spaceID;
-        $this->view->spacePairs    = $spacePairs;
-        $this->view->type          = $type;
-        $this->view->typeList      = $this->lang->kanban->featureBar['space'];
-        $this->view->kanbans       = $this->kanban->getPairs();
-        $this->view->copyKanbanID  = $copyKanbanID;
-        $this->view->copyKanban    = $copyKanbanID ? $copyKanban : '';
-        $this->view->enableImport  = $enableImport;
-        $this->view->importObjects = $importObjects;
-        $this->view->copyRegion    = isset($output['copyRegion']) ? 1 : 0;
-
-        $this->display();
+        $this->kanbanZen->assignCreateVars($spaceID, $type, $copyKanbanID, $extra);
     }
 
     /**
