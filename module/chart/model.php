@@ -651,7 +651,7 @@ class chartModel extends model
      * @access public
      * @return string
      */
-    public function parseSqlVars($sql, $filters)
+    public function parseSqlVars(string $sql, array $filters): string
     {
         if($filters)
         {
