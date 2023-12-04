@@ -12,6 +12,7 @@
 class entry extends control
 {
     /**
+     * 接入禅道列表页面。
      * Browse entries.
      *
      * @param  string $orderBy
@@ -21,15 +22,15 @@ class entry extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        $pager = $this->app->loadClass('pager', $static = true);
+        $pager = $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->list;
-        $this->view->entries    = $this->entry->getList($orderBy, $pager);
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->list;
+        $this->view->entries = $this->entry->getList($orderBy, $pager);
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
         $this->display();
     }
 
