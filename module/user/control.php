@@ -960,7 +960,7 @@ class user extends control
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date       = $date ? date('Y-m-d', $date) : '';
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamic($user->account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
