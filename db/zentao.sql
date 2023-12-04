@@ -15941,10 +15941,10 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `day`        char(2)      NOT NULL DEFAULT '0',
   `value`      varchar(100) NOT NULL DEFAULT '0',
   `date`       datetime              DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `metricCode`(`metricCode`) USING BTREE,
-  INDEX `metricID`(`metricID`) USING BTREE
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
+CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
 
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `collector`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `implementedBy`, `implementedDate`, `delistedBy`, `delistedDate`, `builtin`, `fromID`, `order`, `deleted`) VALUES ('scale', 'system', 'program', 'released', 'php', '按系统统计的所有层级的项目集总数', 'count_of_program', 'count', NULL, '按系统统计的所有层级的项目集总数表示在整个组织范围内的项目集数量。此度量项反映了整个组织所管理的项目集数量。可以作为评估组织规模和复杂度的指标。', '所有项目集的个数求和\r\n过滤已删除的项目集', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, '', NULL, '', NULL, '1', 0, 0, '0');
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `collector`, `desc`, `definition`, `when`, `event`, `cronCFG`, `time`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `implementedBy`, `implementedDate`, `delistedBy`, `delistedDate`, `builtin`, `fromID`, `order`, `deleted`) VALUES ('scale', 'system', 'program', 'released', 'php', '按系统统计的所有层级进行中项目集数', 'count_of_doing_program', 'count', NULL, '按系统统计的所有层级进行中项目集数表示当前正在进行中的项目集数量。此度量项反映了组织当前正在进行中的项目集数量，可以用于评估组织的项目集管理进展和资源分配情况。', '所有项目集的个数求和\r\n状态为进行中\r\n过滤已删除的项目集', 'realtime', '', '', '', 'system', '2023-08-22 08:00:00', '', NULL, '', NULL, '', NULL, '1', 0, 0, '0');
