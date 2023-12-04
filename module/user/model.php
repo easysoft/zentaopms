@@ -2731,7 +2731,8 @@ class userModel extends model
     }
 
     /**
-     * Switch admin of ZenTao.
+     * 把第一个超级管理员设置为当前用户。
+     * Set the first super admin as current user.
      *
      * @access public
      * @return void
@@ -2740,7 +2741,9 @@ class userModel extends model
     {
         $company = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch();
         $admins  = explode(',', trim($company->admins, ','));
-        $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($admins[0])->fetch();
+        if(empty($admins[0])) helper::end('No admin users.');
+
+        $this->app->user = $this->getById($admins[0]);
     }
 
     /**
