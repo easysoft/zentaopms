@@ -293,14 +293,15 @@ class holidayModel extends model
     }
 
     /**
-     * Update project plan duration.
+     * 更新项目的工期。
+     * Update project duration.
      *
      * @param  string $beginDate
      * @param  string $endDate
      * @access public
      * @return void
      */
-    public function updateProgramPlanDuration($beginDate, $endDate)
+    public function updateProgramPlanDuration(string $beginDate, string $endDate): void
     {
         $updateProjectList = $this->dao->select('id, begin, end')
             ->from(TABLE_PROJECT)
@@ -309,7 +310,7 @@ class holidayModel extends model
             ->andWhere('end')->ne(LONG_TIME)
             ->andWhere('begin', true)->between($beginDate, $endDate)
             ->orWhere('end')->between($beginDate, $endDate)
-            ->orWhere("(begin < '$beginDate' AND end > '$endDate')")
+            ->orWhere("(begin < '{$beginDate}' AND end > '{$endDate}')")
             ->markRight(1)
             ->fetchAll();
 

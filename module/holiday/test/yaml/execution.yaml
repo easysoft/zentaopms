@@ -1,0 +1,63 @@
+title: execution.
+desc: execution data.
+author: Wang Yidong
+version: "1.0"
+fields:
+  - field: id
+    range: 11,60,61,100,101-700
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 敏捷项目,瀑布项目{2},看板项目,迭代{5},阶段{18},看板{5}
+    - field: name2
+      range: 1-10000
+  - field: project
+    range: 0{4},11{5},60{12},61{6},100{5}
+  - field: model
+    range: scrum,waterfall{2},kanban,[]{28}
+  - field: attribute
+    range: "[]{4},[]{5},request,design,dev,qa,release,review,request,design,dev,qa,release,review,request,design,dev,qa,release,review,[]{5}"
+  - field: type
+    range: project{4},sprint{5},stage{18},kanban{5}
+  - field: budget
+    range: 800000-1:100
+  - field: status
+    range: doing{4},wait{2},doing{2},suspended{2},closed{2}
+  - field: auth
+    range: "extend"
+  - field: desc
+    range: 1-10000
+    prefix: "迭代描述"
+  - field: begin
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: grade
+    range: 1{4},1{5},1{6},2{6},1{6},1{5}
+  - field: parent
+    range: 0{4},11{5},60{6},106-111,61{6},100{5}
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 11,60,61,100,11{5},60{12},61{6},100{5}
+      - field: path2
+        prefix: ","
+        range: "[]{4},101-105,106-111,106-111,118-700"
+        postfix: ","
+      - field: path3
+        range: "[]{4},[]{5},[]{6},112-117,[]{50}"
+        postfix: ","
+  - field: acl
+    range: open{4},private{4}
+  - field: multiple
+    range: 1{4},1{3},0{2},1{18},1{5}
+  - field: deleted
+    range: 0{30},1

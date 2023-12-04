@@ -251,20 +251,23 @@ class holidayTest
     }
 
     /**
-     * Test updateProgramPlanDuration method.
+     * 测试更新项目工期。
+     * Test update project duration.
      *
      * @param  int       $testProjectID
-     * @param  object    $holiday
+     * @param  int       $holidayID
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function updateProgramPlanDurationTest($testProjectID, $holidayID)
+    public function updateProgramPlanDurationTest(int $testProjectID, int $holidayID, bool $updateDuration): int|array
     {
         global $tester;
 
-        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
-
-        $this->objectModel->updateProgramPlanDuration($holiday->begin, $holiday->end);
+        if($updateDuration)
+        {
+            $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+            $this->objectModel->updateProgramPlanDuration($holiday->begin, $holiday->end);
+        }
 
         $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($testProjectID)->fetch();
 
