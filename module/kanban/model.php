@@ -2204,27 +2204,16 @@ class kanbanModel extends model
     /**
      * Create a space.
      *
+     * @param  object $space
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function createSpace()
+    public function createSpace(object $space): int|false
     {
         $account = $this->app->user->account;
-        $space   = fixer::input('post')
-            ->setDefault('createdBy', $account)
-            ->setDefault('createdDate', helper::now())
-            ->setdefault('team', '')
-            ->setdefault('whitelist', '')
-            ->join('whitelist', ',')
-            ->join('team', ',')
-            ->trim('name')
-            ->stripTags($this->config->kanban->editor->createspace['id'], $this->config->allowedTags)
-            ->remove('uid,contactListMenu')
-            ->get();
 
         if($space->type == 'private') $space->owner = $account;
-
-        if(strpos(",{$space->team},", ",$account,") === false) $space->team .= ",$account";
+        if(strpos(",{$space->team},", ",$account,") === false)      $space->team .= ",$account";
         if(strpos(",{$space->team},", ",$space->owner,") === false) $space->team .= ",$space->owner";
 
         $this->dao->insert(TABLE_KANBANSPACE)->data($space)
@@ -2232,15 +2221,14 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
             ->exec();
 
-        if(!dao::isError())
-        {
-            $spaceID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_KANBANSPACE)->set('`order`')->eq($spaceID)->where('id')->eq($spaceID)->exec();
-            $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
-            $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+        if(dao::isError()) return false;
 
-            return $spaceID;
-        }
+        $spaceID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_KANBANSPACE)->set('`order`')->eq($spaceID)->where('id')->eq($spaceID)->exec();
+        $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
+        $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+
+        return $spaceID;
     }
 
     /**
