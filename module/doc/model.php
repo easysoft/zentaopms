@@ -36,19 +36,20 @@ class docModel extends model
     }
 
     /**
-     * Get api Libraries.
+     * 获取api文档库。
+     * Get api libraries.
      *
      * @param  int    $appendLib
-     * @param  string $objectType
+     * @param  string $objectType nolink|product|project
      * @param  int    $objectID
      * @return array
      */
-    public function getApiLibs($appendLib = 0, $objectType = '', $objectID = 0)
+    public function getApiLibs(int $appendLib = 0, string $objectType = '', int $objectID = 0): array
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
-            ->beginIF(!empty($objectType) and $objectID > 0 and $objectType != 'nolink')->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF(!empty($objectType) && $objectID > 0 && $objectType != 'nolink')->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($objectType == 'nolink')
             ->andWhere('product')->eq(0)
             ->andWhere('project')->eq(0)
@@ -58,8 +59,7 @@ class docModel extends model
             ->orderBy('order_asc, id_asc')
             ->fetchAll('id');
 
-        $libs = array_filter($libs, array($this, 'checkPrivLib'));
-        return $libs;
+        return array_filter($libs, array($this, 'checkPrivLib'));
     }
 
     /**
