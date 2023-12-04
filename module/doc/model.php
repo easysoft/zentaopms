@@ -3290,16 +3290,18 @@ class docModel extends model
     }
 
     /**
-     * Get option menu  for libs.
+     * 获取带库名称的模块数据。
+     * Get option menu for libs.
      *
      * @param  array  $libs
-     * @param  string $docType
+     * @param  string $docType doc|api
      * @access public
      * @return array
      */
-    public function getLibsOptionMenu($libs, $docType = 'doc')
+    public function getLibsOptionMenu(array $libs, string $docType = 'doc'): array
     {
         $this->loadModel('tree');
+
         $modules = array();
         foreach($libs as $libID => $libName)
         {
@@ -3309,10 +3311,12 @@ class docModel extends model
                 $libName       = array_pop($pausedLibName);
                 $objectName    = array_pop($pausedLibName);
             }
+
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, $docType, $startModuleID = 0);
             foreach($moduleOptionMenu as $moduleID => $moduleName) $modules["{$libID}_{$moduleID}"] = $libName . $moduleName;
             if(empty($moduleOptionMenu)) $modules["{$libID}_0"] = $libName . $moduleName;
         }
+
         return $modules;
     }
 
