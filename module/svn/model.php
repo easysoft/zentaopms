@@ -1,16 +1,14 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of svn module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yanyi Cao <caoyanyi@easycorp.com>
  * @package     svn
- * @version     $Id$
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class svnModel extends model
 {
     /**
@@ -59,24 +57,25 @@ class svnModel extends model
     }
 
     /**
-     * Run.
+     * 执行定时任务同步提交信息。
+     * Sync commit info by cron.
      *
      * @access public
-     * @return void
+     * @return boo;
      */
-    public function run()
+    public function run(): bool
     {
         $this->setRepos();
-        $this->loadModel('job');
         if(empty($this->repos)) return false;
 
         /* Get commit triggerType jobs by repoIdList. */
-        $commentGroup = $this->job->getTriggerGroup('commit', array_keys($this->repos));
+        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array_keys($this->repos));
 
         /* Get tag triggerType jobs by repoIdList. */
         $tagGroup = $this->job->getTriggerGroup('tag', array_keys($this->repos));
 
         $_COOKIE['repoBranch'] = '';
+        $this->loadModel('compile');
         foreach($this->repos as $repoID => $repo)
         {
             $this->updateCommit($repo, $commentGroup, true);
@@ -90,7 +89,7 @@ class svnModel extends model
                 $lastTag = '';
                 foreach($dirs as $dir)
                 {
-                    if(!$isNew and $dir == $job->lastTag)
+                    if(!$isNew && $dir == $job->lastTag)
                     {
                         $isNew = true;
                         continue;
@@ -99,11 +98,13 @@ class svnModel extends model
 
                     $lastTag = $dir;
                     $tag     = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
-                    $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
+                    $this->compile->createByJob($job->id, $tag, 'tag');
                 }
                 if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
+
+        return !dao::isError();
     }
 
     /**
@@ -136,57 +137,55 @@ class svnModel extends model
 
         $version = (int)$lastInDB->commit + 1;
         $logs    = $this->repo->getUnsyncedCommits($repo);
+        if(empty($logs)) return true;
 
         /* Update code commit history. */
-        $objects = array();
-        if(!empty($logs))
+        if($printLog) $this->printLog("get " . count($logs) . " logs");
+        if($printLog) $this->printLog('begin parsing logs');
+
+        foreach($logs as $log)
         {
-            if($printLog) $this->printLog("get " . count($logs) . " logs");
-            if($printLog) $this->printLog('begin parsing logs');
+            if($printLog) $this->printLog("parsing log {$log->revision}");
+            if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
-            foreach($logs as $log)
+            $objects = $this->repo->parseComment($log->msg);
+            if($objects)
             {
-                if($printLog) $this->printLog("parsing log {$log->revision}");
-                if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-
-                $objects = $this->repo->parseComment($log->msg);
-                if($objects)
-                {
-                    if($printLog) $this->printLog('extract' .
-                        ' story:' . join(' ', $objects['stories']) .
-                        ' task:' . join(' ', $objects['tasks']) .
-                        ' bug:'  . join(',', $objects['bugs']));
-                    $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');
-                }
-                else
-                {
-                    if($printLog) $this->printLog('no objects found' . "\n");
-                }
-
-                /* Create compile by comment. */
-                $jobs = zget($commentGroup, $repo->id, array());
-                foreach($jobs as $job)
-                {
-                    foreach(explode(',', $job->comment) as $comment)
-                    {
-                        if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
-                    }
-                }
-
-                $version = $this->repo->saveOneCommit($repo->id, $log, $version);
+                if($printLog) $this->printLog('extract' .
+                    ' story:' . join(' ', $objects['stories']) .
+                    ' task:' . join(' ', $objects['tasks']) .
+                    ' bug:'  . join(',', $objects['bugs']));
+                $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');
             }
-            $this->repo->updateCommitCount($repo->id, $lastInDB->commit + count($logs));
-            $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
+            else
+            {
+                if($printLog) $this->printLog('no objects found' . "\n");
+            }
 
-            if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
+            /* Create compile by comment. */
+            $jobs = zget($commentGroup, $repo->id, array());
+            foreach($jobs as $job)
+            {
+                foreach(explode(',', $job->comment) as $comment)
+                {
+                    if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
+                }
+            }
+
+            $version = $this->repo->saveOneCommit($repo->id, $log, $version);
         }
+        $this->repo->updateCommitCount($repo->id, $lastInDB->commit + count($logs));
+        $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
+
+        if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
     }
 
     /**
+     * 设置代码库列表。
      * Set the repos.
      *
      * @access public
-     * @return bool
+     * @return void
      */
     public function setRepos()
     {
@@ -206,33 +205,32 @@ class svnModel extends model
         }
 
         if(empty($svnRepos)) echo "You must set one svn repo.\n";
+
         $this->repos = $svnRepos;
-        return true;
     }
 
     /**
+     * 获取代码库列表。
      * Get repos.
      *
      * @access public
      * @return array
      */
-    public function getRepos()
+    public function getRepos(): array
     {
-        if($this->repos) $this->setRepos();
-
-        $repos = array();
-        foreach($this->repos as $repo) $repos[] = $repo->path;
-        return $repos;
+        $this->setRepos();
+        return helper::arrayColumn($this->repos, 'path');
     }
 
     /**
+     * 设置仓库属性。
      * Set repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
      * @access public
      * @return bool
      */
-    public function setRepo($repo)
+    public function setRepo(object $repo): bool
     {
         $this->setClient($repo);
         if(empty($this->client)) return false;
@@ -242,13 +240,14 @@ class svnModel extends model
     }
 
     /**
+     * 设置svn客户端。
      * Set the svn binary client of a repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
      * @access public
      * @return bool
      */
-    public function setClient($repo)
+    public function setClient(object $repo): bool
     {
         $this->client = $repo->client . " --non-interactive";
         if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
@@ -265,28 +264,32 @@ class svnModel extends model
     }
 
     /**
+     * 设置仓库根目录。
      * set the root path of a repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function setRepoRoot($repo)
+    public function setRepoRoot(object $repo)
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $info = $scm->info('');
+
         $this->repoRoot = $info->root;
     }
 
     /**
-     * get tags histories for repo.
+     * 获取仓库目录信息。
+     * Get tags histories for repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
+     * @param  string $path
      * @access public
      * @return void
      */
-    public function getRepoTags($repo, $path)
+    public function getRepoTags(object $repo, string $path)
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -294,6 +297,7 @@ class svnModel extends model
     }
 
     /**
+     * 获取代码提交记录。
      * Get repo logs.
      *
      * @param  object  $repo
@@ -301,7 +305,7 @@ class svnModel extends model
      * @access public
      * @return array
      */
-    public function getRepoLogs($repo, $fromRevision)
+    public function getRepoLogs(object $repo, int $fromRevision): array
     {
         /* The svn log command. */
         $scm = $this->app->loadClass('scm');
@@ -324,14 +328,15 @@ class svnModel extends model
     }
 
     /**
-     * Diff a url.
+     * 根据URL获取对比信息。
+     * Get diff by url.
      *
      * @param  string $url
      * @param  int    $revision
      * @access public
-     * @return string|bool
+     * @return string|false
      */
-    public function diff($url, $revision)
+    public function diff(string $url, int $revision): string|false
     {
         $repo = $this->getRepoByURL($url);
         if(!$repo) return false;
@@ -355,14 +360,15 @@ class svnModel extends model
     }
 
     /**
+     * 根据URL获取文件内容。
      * Cat a url.
      *
      * @param  string $url
      * @param  int    $revision
      * @access public
-     * @return string|bool
+     * @return string|false
      */
-    public function cat($url, $revision)
+    public function cat(string $url, int $revision): string|false
     {
         $repo = $this->getRepoByURL($url);
         if(!$repo) return false;
@@ -385,13 +391,14 @@ class svnModel extends model
     }
 
     /**
+     * 根据URL获取代码库信息。
      * Get repo by url.
      *
-     * @param  string    $url
+     * @param  string $url
      * @access public
-     * @return object|bool
+     * @return object|false
      */
-    public function getRepoByURL($url)
+    public function getRepoByURL(string $url): object|false
     {
         if(empty($this->repos)) $this->setRepos();
         foreach($this->repos as $repo)
@@ -402,13 +409,14 @@ class svnModel extends model
     }
 
     /**
+     * 输出日志。
      * Print log.
      *
      * @param  string $log
      * @access public
      * @return void
      */
-    public function printLog($log)
+    public function printLog(string $log)
     {
         echo helper::now() . " $log\n";
     }

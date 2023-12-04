@@ -1,17 +1,18 @@
 <?php
+declare(strict_types=1);
 /**
- * The control file of svn currentModule of ZenTaoPMS.
+ * The control file of svn module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yanyi Cao <caoyanyi@easycorp.com>
  * @package     svn
- * @version     $Id$
  * @link        http://www.zentao.net
  */
 class svn extends control
 {
     /**
+     * 定时任务，同步SVN.
      * Sync svn.
      *
      * @access public
@@ -24,6 +25,7 @@ class svn extends control
     }
 
     /**
+     * 对比文件.
      * Diff a file.
      *
      * @param  string $url
@@ -31,7 +33,7 @@ class svn extends control
      * @access public
      * @return void
      */
-    public function diff($url, $revision)
+    public function diff(string $url, int $revision)
     {
         if(isset($_GET['repoUrl'])) $url = $this->get->repoUrl;
 
@@ -43,7 +45,7 @@ class svn extends control
             {
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
-                    $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
+                    $entry       = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
                     $oldRevision = $revision - 1;
                     $this->locate($this->repo->createLink('diff', "repoID=$repo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', true));
                 }
@@ -58,6 +60,7 @@ class svn extends control
     }
 
     /**
+     * 查看文件.
      * Cat a file.
      *
      * @param  string $url
@@ -65,7 +68,7 @@ class svn extends control
      * @access public
      * @return void
      */
-    public function cat($url, $revision)
+    public function cat(string $url, int $revision)
     {
         if(isset($_GET['repoUrl'])) $url = $this->get->repoUrl;
 
@@ -91,6 +94,7 @@ class svn extends control
     }
 
     /**
+     * 通过api同步提交信息。
      * Sync from the syncer by api.
      *
      * @access public
@@ -98,38 +102,40 @@ class svn extends control
      */
     public function apiSync()
     {
-        if($this->post->logs)
-        {
-            $repoRoot = $this->post->repoRoot;
-            $logs = stripslashes($this->post->logs);
-            $logs = simplexml_load_string($logs);
-            foreach($logs->logentry as $entry)
-            {
-                $parsedLogs[] = $this->svn->convertLog($entry);
-            }
-            $this->loadModel('repo');
-            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
-            foreach($parsedLogs as $log)
-            {
-                $objects = $this->repo->parseComment($log->msg);
+        if(!$this->post->logs) return;
 
-                if($objects)
-                {
-                    $this->repo->saveAction2PMS($objects, $log, $repoRoot);
-                    if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
-                    if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
-                    if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
-                }
-            }
-            $parsedObjects['stories'] = array_unique($parsedObjects['stories']);
-            $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
-            $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
-            $this->view->parsedObjects = $parsedObjects;
-            return $this->display();
+        $repoRoot = $this->post->repoRoot;
+        $logs = stripslashes($this->post->logs);
+        $logs = simplexml_load_string($logs);
+        foreach($logs->logentry as $entry)
+        {
+            $parsedLogs[] = $this->svn->convertLog($entry);
         }
+
+        $this->loadModel('repo');
+        $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
+        foreach($parsedLogs as $log)
+        {
+            $objects = $this->repo->parseComment($log->msg);
+
+            if($objects)
+            {
+                $this->repo->saveAction2PMS($objects, $log, $repoRoot);
+                if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
+                if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
+                if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
+            }
+        }
+        $parsedObjects['stories'] = array_unique($parsedObjects['stories']);
+        $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
+        $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
+
+        $this->view->parsedObjects = $parsedObjects;
+        return $this->display();
     }
 
     /**
+     * 保存提交日志。
      * Ajax save log.
      *
      * @access public
@@ -138,7 +144,6 @@ class svn extends control
     public function ajaxSaveLog()
     {
         $repoUrl  = trim($this->post->repoUrl);
-        $repoRoot = str_replace('\\', '/', trim($this->post->repoRoot));
         $message  = trim($this->post->message);
         $revision = trim($this->post->revision);
         $files    = $this->post->files;
@@ -152,6 +157,7 @@ class svn extends control
         {
             $file = trim($file);
             if(empty($file)) continue;
+
             $action = '';
             if(preg_match('/^[\w][ \t]/', $file))
             {
@@ -171,7 +177,6 @@ class svn extends control
         }
 
         $objects = $this->loadModel('repo')->parseComment($message);
-
         if($objects)
         {
             $log = new stdclass();
@@ -185,6 +190,7 @@ class svn extends control
     }
 
     /**
+     * 获取代码库列表。
      * Ajax get repos.
      *
      * @access public
