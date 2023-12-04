@@ -184,6 +184,7 @@ class holidayModel extends model
      }
 
     /**
+     * 获取实际工作日。
      * Get actual working days.
      *
      * @param  string $begin
@@ -191,40 +192,32 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-     public function getActualWorkingDays($begin, $end)
+     public function getActualWorkingDays(string $begin, string $end): array
      {
-         if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
+         if(empty($begin) || empty($end) || $begin == '0000-00-00' || $end == '0000-00-00') return array();
 
-         $actualDays = array();
-         $currentDay = $begin;
-
+         /* Get holidays, working days and weekend days .*/
          $holidays    = $this->getHolidays($begin, $end);
          $workingDays = $this->getWorkingDays($begin, $end);
          $weekend     = isset($this->config->project->weekend) ? $this->config->project->weekend : 2;
 
          /* When the start date and end date are the same. */
+         $actualDays = array();
          if($begin == $end)
          {
-             if(in_array($begin, $workingDays)) return $actualDays[] = $begin;
-             if(in_array($begin, $holidays))    return $actualDays;
+             if(in_array($begin, $workingDays)) return array($begin);
+             if(in_array($begin, $holidays))    return array();
 
              $w = date('w', strtotime($begin));
-             if($weekend == 2)
-             {
-                 if($w == 0 or $w == 6) return $actualDays;
-             }
-             else
-             {
-                 if($w == 0) return $actualDays;
-             }
+             if($w == 0 || ($weekend == 2 && $w == 6)) return array();
 
-             $actualDays[] = $begin;
-             return $actualDays;
+             return array($begin);
          }
 
-         for($i = 0; $currentDay < $end; $i ++)
+         /* Process actual working days. */
+         for($i = 0, $currentDay = $begin; $currentDay < $end; $i ++)
          {
-             $currentDay = date('Y-m-d', strtotime("$begin + $i days"));
+             $currentDay = date('Y-m-d', strtotime("{$begin} + {$i} days"));
              $w          = date('w', strtotime($currentDay));
 
              if(in_array($currentDay, $workingDays))
@@ -234,14 +227,8 @@ class holidayModel extends model
              }
 
              if(in_array($currentDay, $holidays)) continue;
-             if($weekend == 2)
-             {
-                 if($w == 0 or $w == 6) continue;
-             }
-             else
-             {
-                 if($w == 0) continue;
-             }
+             if($w == 0 || ($weekend == 2 && $w == 6)) continue;
+
              $actualDays[] = $currentDay;
          }
 

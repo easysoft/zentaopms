@@ -177,15 +177,18 @@ class holidayTest
     }
 
     /**
-     * Test getActualWorkingDays method.
+     * 测试获取实际工作日。
+     * Test get actual working days.
      *
      * @param  string    $begin
      * @param  string    $end
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getActualWorkingDaysTest($begin, $end)
+    public function getActualWorkingDaysTest(string $begin, string $end): int|array
     {
+        $begin = $begin ? date('Y-m-d', strtotime($begin)) : '0000-00-00';
+        $end   = $end ? date('Y-m-d', strtotime($end)) : '';
         $objects = $this->objectModel->getActualWorkingDays($begin, $end);
 
         if(dao::isError()) return dao::getError();
