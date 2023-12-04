@@ -5,7 +5,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/holiday.class.php';
 
 zdTable('holiday')->gen(0);
-zdTable('project')->gen(10);
 zdTable('user')->gen(1);
 
 su('admin');
