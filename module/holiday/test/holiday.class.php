@@ -139,13 +139,15 @@ class holidayTest
     /**
      * Test getHolidays method.
      *
-     * @param  string    $begin
-     * @param  string    $end
+     * @param  string       $begin
+     * @param  string       $end
      * @access public
-     * @return object
+     * @return int|array
      */
-    public function getHolidaysTest($begin, $end)
+    public function getHolidaysTest(string $begin, string $end): int|array
     {
+        $begin = date('Y-m-d', strtotime($begin));
+        $end   = date('Y-m-d', strtotime($end));
         $objects = $this->objectModel->getHolidays($begin, $end);
 
         if(dao::isError()) return dao::getError();

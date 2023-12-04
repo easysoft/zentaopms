@@ -128,6 +128,7 @@ class holidayModel extends model
     }
 
     /**
+     * 通过开始和结束日期获取节假日。
      * Get holidays by begin and end.
      *
      * @param  string $begin
@@ -135,7 +136,7 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-    public function getHolidays($begin, $end)
+    public function getHolidays(string $begin, string $end): array
     {
         $records = $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('type')->eq('holiday')
