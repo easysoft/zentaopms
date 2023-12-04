@@ -119,7 +119,7 @@ class screen extends control
             $chartID   = $this->post->sourceID;
             $type      = $this->post->type;
             $queryType = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
-            $type      = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
+            $type      = ($type == 'Tables' || $type == 'pivot') ? 'pivot' : 'chart';
             $table     = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
             $chart     = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
@@ -134,7 +134,7 @@ class screen extends control
                     $default = $filterParams[$index]['default'] ?? null;
                     if(in_array($filter['type'], array('date', 'datetime')))
                     {
-                        if(isset($filter['from']) and $filter['from'] == 'query')
+                        if(isset($filter['from']) && $filter['from'] == 'query')
                         {
                             if(is_numeric($default)) $default = date('Y-m-d H:i:s', $default / 1000);
                         }

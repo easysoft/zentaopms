@@ -121,6 +121,7 @@ class screenModel extends model
         $componentList = json_decode($screen->scheme);
         if(empty($componentList)) $componentList = array();
 
+        /* 重置容器的高度。 */
         /* Reset height of canvas. */
         foreach($componentList as $component)
         {
@@ -1549,6 +1550,7 @@ class screenModel extends model
     public function getBurnData(): array
     {
         $type = 'withdelay';
+
         /* 获取所有正在进行的执行和阶段。 */
         /* Get all sprint and stage which are doing. */
         $executions = $this->loadModel('execution')->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
