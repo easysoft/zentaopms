@@ -35,14 +35,24 @@ class bugZen extends bug
     {
         if($bug->execution && !$this->loadModel('execution')->checkPriv($bug->execution))
         {
-            echo js::alert($this->lang->bug->notice->executionAccessDenied);
+            if(isInModal())
+            {
+                echo js::alert($this->lang->bug->notice->executionAccessDenied);
 
-            $loginLink = $this->createLink('user', 'login');
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate($this->createLink('bug', 'index', '')));
+                $loginLink = $this->createLink('user', 'login');
+                if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate($this->createLink('bug', 'index', '')));
 
-            if($this->app->tab == 'my') return print(js::reload('parent'));
+                if($this->app->tab == 'my') return print(js::reload('parent'));
 
-            return print(js::locate('back'));
+                return print(js::locate('back'));
+            }
+            else
+            {
+                $locate    = array('load' => true);
+                $loginLink = $this->createLink('user', 'login');
+                if(strpos($this->server->http_referer, $loginLink) !== false) $locate = $this->createLink('bug', 'index');
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->notice->executionAccessDenied, 'load' => array('alert' => $this->lang->bug->notice->executionAccessDenied, 'locate' => $locate)));
+            }
         }
 
         return true;
