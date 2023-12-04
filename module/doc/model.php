@@ -63,18 +63,64 @@ class docModel extends model
     }
 
     /**
+     * 获取文档库。
      * Get libraries.
      *
-     * @param  string $type all|includeDeleted|hasApi|mine|product|project|execution|custom
-     * @param  string $extra
+     * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
+     * @param  string $extra       withObject|notdoc
      * @param  string $appendLibs
      * @param  int    $objectID
-     * @param  string $excludeType
-     *
+     * @param  string $excludeType product|project|execution|custom|mine
      * @access public
      * @return array
      */
-    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
+    public function getLibs(string $type = '', string $extra = '', string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
+    {
+        $products   = $this->loadModel('product')->getPairs();
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
+        $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
+        $waterfalls = array();
+        if(empty($objectID) && $type == 'execution')
+        {
+            $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.type')->eq('stage')
+                ->andWhere('t2.type')->eq('project')
+                ->andWhere('t2.model')->eq('waterfall')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->fetchPairs('id', 'name');
+        }
+
+        $libPairs = $this->getLibPairs($type, $extra, $objectID, $excludeType, $products, $projects, $executions, $waterfalls);
+        if(!empty($appendLibs))
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order`_asc, id_asc")->query();
+            while($lib = $stmt->fetch())
+            {
+                if(!isset($libPairs[$lib->id]) && $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
+            }
+        }
+
+        return $libPairs;
+    }
+
+    /**
+     * 获取文档库键值对。
+     * Get doc liberary pairs.
+     *
+     * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
+     * @param  string $extra       withObject|notdoc
+     * @param  int    $objectID
+     * @param  string $excludeType product|project|execution|custom|mine
+     * @param  array  $products
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  array  $waterfalls
+     * @access public
+     * @return array
+     */
+    public function getLibPairs(string $type, string $extra = '', int $objectID = 0, string $excludeType = '', array $products = array(), array $projects = array(), array $executions = array(), array $waterfalls = array()): array
     {
         if(in_array($type, array('all', 'includeDeleted', 'hasApi')))
         {
@@ -93,34 +139,17 @@ class docModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
-                ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
+                ->beginIF($objectID && strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('id_asc')
                 ->query();
-        }
-
-        $products   = $this->loadModel('product')->getPairs();
-        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
-        $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
-        $waterfalls = array();
-        if(empty($objectID) and $type == 'execution')
-        {
-            $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.type')->eq('stage')
-                ->andWhere('t2.type')->eq('project')
-                ->andWhere('t2.model')->eq('waterfall')
-                ->andWhere('t1.deleted')->eq('0')
-                ->andWhere('t2.deleted')->eq('0')
-                ->fetchPairs('id', 'name');
         }
 
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
-            if($lib->product != 0 and !isset($products[$lib->product])) continue;
-            if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
-            if($lib->project != 0 and !isset($projects[$lib->project]) and $lib->type == 'project') continue;
-
+            if($lib->product != 0 && !isset($products[$lib->product])) continue;
+            if($lib->execution != 0 && !isset($executions[$lib->execution])) continue;
+            if($lib->project != 0 && !isset($projects[$lib->project]) && $lib->type == 'project') continue;
             if($this->checkPrivLib($lib, $extra))
             {
                 if(strpos($extra, 'withObject') !== false)
@@ -133,25 +162,13 @@ class docModel extends model
                         if(!empty($waterfalls[$lib->execution])) $lib->name = $waterfalls[$lib->execution] . ' / ' . $lib->name;
                         $lib->name = trim($lib->name, '/');
                     }
-
                     if($lib->project != 0)     $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                     if($lib->type == 'mine')   $lib->name = $this->lang->doc->person . ' / ' . $lib->name;
                     if($lib->type == 'custom') $lib->name = $this->lang->doc->team . ' / ' . $lib->name;
                 }
-
                 $libPairs[$lib->id] = $lib->name;
             }
         }
-
-        if(!empty($appendLibs))
-        {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order`_asc, id_asc")->query();
-            while($lib = $stmt->fetch())
-            {
-                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
-            }
-        }
-
         return $libPairs;
     }
 
