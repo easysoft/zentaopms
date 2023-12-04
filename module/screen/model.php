@@ -347,7 +347,8 @@ class screenModel extends model
             case 'card':
                 return $this->buildCardChart($component, $chart);
             case 'waterpolo':
-                return $this->buildWaterPolo($component, $chart);
+                if(strpos($chart->settings, 'waterpolo') === false) return $this->buildWaterPolo($component, $chart);
+                return $this->getWaterPoloOption($component, $chart, $filters);
             default:
                 return '';
         }
