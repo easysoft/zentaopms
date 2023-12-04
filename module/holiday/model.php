@@ -26,14 +26,15 @@ class holidayModel extends model
     }
 
     /**
+     * 获取节假日列表。
      * Get holiday list.
      *
      * @param  string $year
      * @param  string $type
      * @access public
-     * @return object
+     * @return array
      */
-    public function getList($year = '', $type = 'all')
+    public function getList(string $year = '', string $type = 'all'): array
     {
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('1=1')

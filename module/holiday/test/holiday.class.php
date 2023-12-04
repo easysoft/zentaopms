@@ -27,20 +27,21 @@ class holidayTest
     }
 
     /**
-     * Test getList method.
+     * 测试获取节假日列表
+     * Test get holiday list.
      *
      * @param  string $year
      * @param  string $type
      * @access public
-     * @return object
+     * @return string|array
      */
-    public function getListTest($year = '', $type = 'all')
+    public function getListTest(string $year = '', string $type = 'all'): string|array
     {
         $objects = $this->objectModel->getList($year, $type);
 
         if(dao::isError()) return dao::getError();
 
-        return count($objects);
+        return implode(',', array_keys($objects));
     }
 
     /**
