@@ -515,13 +515,13 @@ class apiModel extends model
      * 获取指定文档库下的数据结构列表。
      * Get release list by lib id.
      *
-     * @param  int    $libID
+     * @param  array  $libID
      * @param  object $pager
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getReleaseByQuery(int $libID, object $pager = null, string $orderBy = ''): array
+    public function getReleaseByQuery(array $libID, object $pager = null, string $orderBy = ''): array
     {
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
             ->where('lib')->in($libID)
@@ -531,151 +531,31 @@ class apiModel extends model
     }
 
     /**
-     * Get struct tree by lib id
-     *
-     * @param int $libID
-     * @param int $structID
-     * @access public
-     * @return string
-     */
-    public function getStructTreeByLib($libID = 0, $structID = 0)
-    {
-        $list = $this->getStructListByLibID($libID);
-
-        $html = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>";
-        foreach($list as $item)
-        {
-            $class = array('catalog');
-            if($structID && $structID == $item->id)
-            {
-                $class[] = 'active';
-            }
-            else
-            {
-                $class[] = 'doc';
-            }
-
-            $html .= '<li class="' . implode(' ', $class) . '">';
-            $html .= html::a(helper::createLink('api', 'struct', "libID=$libID&structID=$item->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $item->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$item->name}'");
-            $html .= "</li>";
-        }
-        $html .= "</ul>";
-
-        return $html;
-    }
-
-    /**
-     * Get the details of the method by file path.
-     *
-     * @param string $filePath
-     * @param string $ext
-     * @access public
-     * @return object
-     */
-    public function getMethod($filePath, $ext = '')
-    {
-        $fileName  = dirname($filePath);
-        $className = basename(dirname(dirname($filePath)));
-        if(!class_exists($className)) helper::import($fileName);
-        $methodName = basename($filePath);
-
-        $method           = new ReflectionMethod($className . $ext, $methodName);
-        $data             = new stdClass();
-        $data->startLine  = $method->getStartLine();
-        $data->endLine    = $method->getEndLine();
-        $data->comment    = $method->getDocComment();
-        $data->parameters = $method->getParameters();
-        $data->className  = $className;
-        $data->methodName = $methodName;
-        $data->fileName   = $fileName;
-        $data->post       = false;
-
-        $file = file($fileName);
-        for($i = $data->startLine - 1; $i <= $data->endLine; $i++)
-        {
-            if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
-            {
-                $data->post = true;
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Request the api.
-     *
-     * @param string $moduleName
-     * @param string $methodName
-     * @param string $action
-     * @access public
-     * @return array
-     */
-    public function request($moduleName, $methodName, $action)
-    {
-        $host  = common::getSysURL();
-        $param = '';
-        if($action == 'extendModel')
-        {
-            if(!isset($_POST['noparam']))
-            {
-                foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
-                $param = ltrim($param, ',');
-            }
-            $url  = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= $this->config->sessionVar . '=' . session_id();
-        }
-        else
-        {
-            if(!isset($_POST['noparam']))
-            {
-                foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
-                $param = ltrim($param, '&');
-            }
-            $url  = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= $this->config->sessionVar . '=' . session_id();
-        }
-
-        /* Unlock session. After new request, restart session. */
-        session_write_close();
-        $content = file_get_contents($url);
-        session_start();
-
-        return array('url' => $url, 'content' => $content);
-    }
-
-    /**
+     * 查询SQL语句并返回结果。
      * Query sql.
      *
-     * @param string $sql
-     * @param string $keyField
+     * @param  string $sql
+     * @param  string $keyField
      * @access public
      * @return array
      */
-    public function sql($sql, $keyField = '')
+    public function sql(string $sql, string $keyField = '')
     {
+        /* 检查允许接口调用SQL的配置项是否打开。 */
         if(!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
         $sql = trim($sql);
         if(strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
 
-        $result            = array();
-        $result['status']  = 'fail';
-        $result['message'] = '';
+        /* 如果没传SQL参数，则无法进行下一步。 */
+        if(empty($sql)) return array('status' => 'fail', 'message' => '');
 
-        if(empty($sql)) return $result;
-
-        if(stripos($sql, 'select ') !== 0)
-        {
-            $result['message'] = $this->lang->api->error->onlySelect;
-            return $result;
-        }
+        /* 如果SQL语句中没有select单词，则无法进行下一步。 */
+        if(stripos($sql, 'select ') !== 0) return array('status' => 'fail', 'message' => $this->lang->api->error->onlySelect);
 
         try
         {
             $stmt = $this->dbh->query($sql);
-
             $rows = array();
             if(empty($keyField))
             {
@@ -683,16 +563,15 @@ class apiModel extends model
             }
             else
             {
+                /* 用keyFiled作为键展示查询结果。 */
                 while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
             }
 
-            $result['status'] = 'success';
-            $result['data']   = $rows;
+            $result = array('status' => 'success', 'data' => $rows);
         }
         catch(PDOException $e)
         {
-            $result['status']  = 'fail';
-            $result['message'] = $e->getMessage();
+            $result = array('status' => 'fail', 'message' => $e->getMessage());
         }
 
         return $result;

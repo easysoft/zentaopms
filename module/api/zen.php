@@ -111,4 +111,90 @@ class apiZen extends api
         $objectDropdown['link'] = helper::createLink('api', 'ajaxGetDropMenu', "objectType=$objectType&objectID=$objectID&libID=$lib->id&version=$version");
         return $objectDropdown;
     }
+
+    /**
+     * 解析请求地获得请求的详细信息。
+     * Get the details of the method by file path.
+     *
+     * @param  string $filePath
+     * @param  string $ext
+     * @access public
+     * @return object
+     */
+    public function getMethod(string $filePath, string $ext = ''): object
+    {
+        $fileName   = dirname($filePath);
+        $className  = basename(dirname(dirname($filePath)));
+        $methodName = basename($filePath);
+
+        if(!class_exists($className)) helper::import($fileName);
+        $method = new ReflectionMethod($className . $ext, $methodName);
+        $data   = new stdClass();
+
+        $data->startLine  = $method->getStartLine();
+        $data->endLine    = $method->getEndLine();
+        $data->comment    = $method->getDocComment();
+        $data->parameters = $method->getParameters();
+        $data->className  = $className;
+        $data->methodName = $methodName;
+        $data->fileName   = $fileName;
+        $data->post       = false;
+
+        $file = file($fileName);
+        for($i = $data->startLine - 1; $i <= $data->endLine; $i++)
+        {
+            if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
+            {
+                $data->post = true;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 对指定模块下的指定方法进行调用并返回请求结果。
+     * Request the api.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $action     extendModel | extendControl
+     * @access public
+     * @return array
+     */
+    public function request(string $moduleName, string $methodName, string $action): array
+    {
+        $host  = common::getSysURL();
+        $param = '';
+        if($action == 'extendModel')
+        {
+            /* 对model的函数进行调用。 */
+            if(!isset($_POST['noparam']))
+            {
+                foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
+                $param = ltrim($param, ',');
+            }
+            $url  = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
+            $url .= strpos($url, '?') === false ? '?' : '&';
+            $url .= $this->config->sessionVar . '=' . session_id();
+        }
+        else
+        {
+            /* 对control的函数进行调用。 */
+            if(!isset($_POST['noparam']))
+            {
+                foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
+                $param = ltrim($param, '&');
+            }
+            $url  = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
+            $url .= strpos($url, '?') === false ? '?' : '&';
+            $url .= $this->config->sessionVar . '=' . session_id();
+        }
+
+        /* Unlock session. After new request, restart session. */
+        session_write_close();
+        $content = file_get_contents($url);
+        session_start();
+
+        return array('url' => $url, 'content' => $content);
+    }
 }

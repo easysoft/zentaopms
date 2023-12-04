@@ -9,7 +9,7 @@ zdTable('api_lib_release')->gen(10);
 
 /**
 
-title=测试 apiModel->getById();
+title=测试 apiModel->getByID();
 timeout=0
 cid=1
 

@@ -158,7 +158,7 @@ class api extends control
 
         /* Append id for second sort. */
         $sort     = common::appendOrder($orderBy);
-        $releases = $this->api->getReleaseByQuery($libID, '', $sort);
+        $releases = $this->api->getReleaseByQuery(array($libID), '', $sort);
 
         $this->view->title    = $this->lang->api->managePublish;
         $this->view->releases = $releases;
@@ -719,16 +719,16 @@ class api extends control
         if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 && strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
         if($action == 'extendModel')
         {
-            $method = $this->api->getMethod($filePath, 'Model');
+            $method = $this->apiZen->getMethod($filePath, 'Model');
         }
         elseif($action == 'extendControl')
         {
-            $method = $this->api->getMethod($filePath);
+            $method = $this->apiZen->getMethod($filePath);
         }
 
         if(!empty($_POST))
         {
-            $result  = $this->api->request($method->className, $method->methodName, $action);
+            $result  = $this->apiZen->request($method->className, $method->methodName, $action);
             $content = json_decode($result['content']);
             $status  = zget($content, 'status', '');
             $data    = isset($content->data) ? json_decode($content->data) : '';
