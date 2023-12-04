@@ -1110,4 +1110,21 @@ class docTest
         $libs = $this->objectModel->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchPairs();
         return $this->objectModel->getLibsOptionMenu($libs, $docType);
     }
+
+    /**
+     * 处理文档数据。
+     * Process doc data.
+     *
+     * @param  int          $docID
+     * @param  bool         $setImgSize
+     * @access public
+     * @return object|false
+     */
+    public function processDocTest(int $docID, bool $setImgSize = false): object|bool
+    {
+        $doc = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+
+        if(!$doc) return false;
+        return $this->objectModel->processDoc($doc, 1, $setImgSize);
+    }
 }
