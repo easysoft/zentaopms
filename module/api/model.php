@@ -539,7 +539,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function sql(string $sql, string $keyField = '')
+    public function sql(string $sql, string $keyField = ''): array
     {
         /* 检查允许接口调用SQL的配置项是否打开。 */
         if(!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
@@ -575,57 +575,6 @@ class apiModel extends model
         }
 
         return $result;
-    }
-
-    /**
-     * Get spec of api.
-     *
-     * @param  object  $data
-     * @access private
-     * @return array
-     */
-    private function getApiSpecByData($data)
-    {
-        return array(
-            'doc'             => $data->id,
-            'module'          => !empty($data->module) ? $data->module : 0,
-            'title'           => $data->title,
-            'path'            => $data->path,
-            'protocol'        => !empty($data->protocol) ? $data->protocol : 'HTTP',
-            'method'          => !empty($data->method) ? $data->method : 'GET',
-            'requestType'     => !empty($data->requestType) ? $data->requestType : '',
-            'responseType'    => !empty($data->responseType) ? $data->responseType : '',
-            'status'          => !empty($data->status) ? $data->status : 'done',
-            'owner'           => !empty($data->owner) ? $data->owner : '',
-            'desc'            => !empty($data->desc) ? $data->desc : '',
-            'version'         => !empty($data->version) ? $data->version : 1,
-            'params'          => !empty($data->params) ? $data->params : '',
-            'paramsExample'   => !empty($data->paramsExample) ? $data->paramsExample : '',
-            'responseExample' => !empty($data->responseExample) ? $data->responseExample : '',
-            'response'        => !empty($data->response) ? $data->response : '',
-            'addedBy'         => $this->app->user->account,
-            'addedDate'       => helper::now(),
-        );
-    }
-
-    /**
-     * Get struct spec of api
-     *
-     * @param  object  $data
-     * @access private
-     * @return void
-     */
-    private function getApiStructSpecByData($data)
-    {
-        return array(
-            'name'      => $data->name,
-            'type'      => !empty($data->type) ? $data->type : '',
-            'desc'      => !empty($data->desc) ? $data->desc : '',
-            'version'   => !empty($data->version) ? $data->version : 1,
-            'attribute' => !empty($data->attribute) ? $data->attribute : '',
-            'addedBy'   => !empty($data->addedBy) ? $data->addedBy : $this->app->user->account,
-            'addedDate' => !empty($data->addedDate) ? $data->addedDate : helper::now()
-        );
     }
 
     /**
@@ -951,5 +900,58 @@ class apiModel extends model
             ->where('lib')->in(array_keys($libs))
             ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
             ->fetchAll('id');
+    }
+
+    /**
+     * 获取创建接口版本时所需的数据。
+     * Get spec of api.
+     *
+     * @param  object  $data
+     * @access private
+     * @return array
+     */
+    private function getApiSpecByData(object $data): array
+    {
+        return array(
+            'doc'             => $data->id,
+            'title'           => $data->title,
+            'path'            => $data->path,
+            'module'          => !empty($data->module)          ? $data->module          : 0,
+            'protocol'        => !empty($data->protocol)        ? $data->protocol        : 'HTTP',
+            'method'          => !empty($data->method)          ? $data->method          : 'GET',
+            'requestType'     => !empty($data->requestType)     ? $data->requestType     : '',
+            'responseType'    => !empty($data->responseType)    ? $data->responseType    : '',
+            'status'          => !empty($data->status)          ? $data->status          : 'done',
+            'owner'           => !empty($data->owner)           ? $data->owner           : '',
+            'desc'            => !empty($data->desc)            ? $data->desc            : '',
+            'version'         => !empty($data->version)         ? $data->version         : 1,
+            'params'          => !empty($data->params)          ? $data->params          : '',
+            'paramsExample'   => !empty($data->paramsExample)   ? $data->paramsExample   : '',
+            'responseExample' => !empty($data->responseExample) ? $data->responseExample : '',
+            'response'        => !empty($data->response)        ? $data->response        : '',
+            'addedBy'         => $this->app->user->account,
+            'addedDate'       => helper::now(),
+        );
+    }
+
+    /**
+     * 获取创建数据结构版本时所需的数据。
+     * Get struct spec of api.
+     *
+     * @param  object  $data
+     * @access private
+     * @return array
+     */
+    private function getApiStructSpecByData(object $data): array
+    {
+        return array(
+            'name'      => $data->name,
+            'type'      => !empty($data->type)      ? $data->type      : '',
+            'desc'      => !empty($data->desc)      ? $data->desc      : '',
+            'version'   => !empty($data->version)   ? $data->version   : 1,
+            'attribute' => !empty($data->attribute) ? $data->attribute : '',
+            'addedBy'   => !empty($data->addedBy)   ? $data->addedBy   : $this->app->user->account,
+            'addedDate' => !empty($data->addedDate) ? $data->addedDate : helper::now()
+        );
     }
 }
