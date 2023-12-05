@@ -12,11 +12,6 @@
 <?php
 class miscModel extends model
 {
-    public function hello()
-    {
-        return 'hello world from hello()<br />';
-    }
-
     /**
      * Get table and status.
      *

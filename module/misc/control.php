@@ -12,6 +12,7 @@
 class misc extends control
 {
     /**
+     * 保持心跳防止session过期。
      * Ping the server every 5 minutes to keep the session.
      *
      * @access public
@@ -19,10 +20,11 @@ class misc extends control
      */
     public function ping()
     {
-        if(empty($this->config->global->sn) and mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
+        if(empty($this->config->global->sn) && mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
     }
 
     /**
+     * 展示php服务器的配置信息。
      * Show php info.
      *
      * @access public
@@ -34,6 +36,7 @@ class misc extends control
     }
 
     /**
+     * 展示关于禅道页面。
      * Show about info of zentao.
      *
      * @access public
@@ -45,26 +48,17 @@ class misc extends control
     }
 
     /**
-     * Update nl.
-     *
-     * @access public
-     * @return void
-     */
-    public function updateNL()
-    {
-        $this->loadModel('upgrade')->updateNL();
-    }
-
-    /**
+     * 检查是否存在更新的禅道版本。
      * Check current version is latest or not.
      *
-     * @param  string    $sn
-     * @param  string    $force
+     * @param  string $sn
+     * @param  string $force
      * @access public
      * @return void
      */
-    public function checkUpdate($sn = '', $force = '')
+    public function checkUpdate(string $sn = '', string $force = '')
     {
+        /* 检查服务端是否联网。 */
         $hasInternet = $this->session->hasInternet;
         if(empty($hasInternet))
         {
@@ -74,8 +68,9 @@ class misc extends control
         }
         if($this->session->isSlowNetwork) return;
 
+        /* 检查距离上一次调用函数是否已超过1小时。 */
         $startTime = microtime(true);
-        if(empty($force) && !empty($this->config->checkUpdate->lastTime) &&  $startTime - (float)$this->config->checkUpdate->lastTime < 3600) return;
+        if(empty($force) && !empty($this->config->checkUpdate->lastTime) && $startTime - (float)$this->config->checkUpdate->lastTime < 3600) return;
         $this->loadModel('setting')->setItem('system.common.checkUpdate.lastTime',  $startTime);
 
         if(empty($sn)) $sn = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=sn');
@@ -85,29 +80,32 @@ class misc extends control
         if(isset($this->config->qcVersion)) $website = $this->config->misc->qucheng;
         if(isset($this->config->isINT))     $website = $this->config->misc->enApi;
 
+        /* 获取禅道或者渠成的最新版本。 */
         $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
         $lang   = str_replace('-', '_', $this->app->getClientLang());
         $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
         $latestVersionList = common::http($link);
 
-        if(!isset($this->config->global->latestVersionList) or $this->config->global->latestVersionList != $latestVersionList)
+        if(!isset($this->config->global->latestVersionList) || $this->config->global->latestVersionList != $latestVersionList)
         {
             $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
         }
 
+        /* 请求超过一定时间后判断为网络请求缓慢。 */
         if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
     }
 
     /**
-     * Check model extension logic
+     * 打印 hello world。
+     * Check model extension logic.
      *
      * @access public
      * @return void
      */
     public function checkExtension()
     {
-        echo $this->misc->hello();
+        echo $this->miscZen->hello();
     }
 
     /**
