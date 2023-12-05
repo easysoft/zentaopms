@@ -354,6 +354,7 @@ class holidayModel extends model
     }
 
     /**
+     * 更新任务的计划工期。
      * Update task plan duration.
      *
      * @param  string $beginDate
@@ -361,13 +362,13 @@ class holidayModel extends model
      * @access public
      * @return void
      */
-    public function updateTaskPlanDuration($beginDate, $endDate)
+    public function updateTaskPlanDuration(string $beginDate, string $endDate): void
     {
         $updateTaskList = $this->dao->select('id, estStarted, deadline')
             ->from(TABLE_TASK)
             ->where('estStarted')->between($beginDate, $endDate)
             ->orWhere('deadline')->between($beginDate, $endDate)
-            ->orWhere("(estStarted < '$beginDate' AND deadline > '$endDate')")
+            ->orWhere("(estStarted < '{$beginDate}' AND deadline > '{$endDate}')")
             ->andWhere('status') ->ne('done')
             ->fetchAll();
 

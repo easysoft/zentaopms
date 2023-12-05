@@ -1,0 +1,15 @@
+title: execution.
+desc: execution data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: estStarted
+    range: "(-6w)-(+1w):5D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: deadline
+    range: "(-5w)-(+2w):5D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"

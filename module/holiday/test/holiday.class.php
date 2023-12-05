@@ -305,20 +305,24 @@ class holidayTest
     }
 
     /**
-     * Test updateTaskPlanDuration method.
+     * 测试更新任务计划工期。
+     * Test update task plan duration.
      *
      * @param  int       $testTaskID
-     * @param  object    $holiday
+     * @param  int       $holiday
+     * @param  bool      $updateDuration
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function updateTaskPlanDurationTest($testTaskID, $holidayID)
+    public function updateTaskPlanDurationTest(int $testTaskID, int $holidayID, bool $updateDuration): int|array
     {
         global $tester;
 
-        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
-
-        $this->objectModel->updateTaskPlanDuration($holiday->begin, $holiday->end);
+        if($updateDuration)
+        {
+            $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+            $this->objectModel->updateTaskPlanDuration($holiday->begin, $holiday->end);
+        }
 
         $task = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($testTaskID)->fetch();
 
