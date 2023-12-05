@@ -410,26 +410,29 @@ class holidayModel extends model
     }
 
     /**
+     * API: 获取节假日。
      * Get holidays by api.
      *
      * @param  string $year
      * @access public
      * @return array
      */
-    public function getHolidayByAPI($year = '')
+    public function getHolidayByAPI(string $year = ''): array
     {
+        /* Get holidays by api. */
         if(empty($year)) $year = date('Y');
         $apiRoot = sprintf($this->config->holiday->apiRoot, $year);
         $data    = json_decode(common::http($apiRoot));
         $days    = isset($data->days) ? (array)$data->days : array();
 
+        /* Build holiday data. */
         $holidays   = array();
         $privDay    = 0;
         $prevDayOff = true;
         $daysIndex  = count($days) - 1;
         foreach($days as $index => $day)
         {
-            if($index < $daysIndex and (strtotime($day->date) - $privDay > 86400 or $day->isOffDay != $prevDayOff))
+            if($index < $daysIndex && (strtotime($day->date) - $privDay > 86400 || $day->isOffDay != $prevDayOff))
             {
                 $holiday = new stdClass();
                 $holiday->type  = $day->isOffDay ? 'holiday' : 'working';
@@ -439,7 +442,7 @@ class holidayModel extends model
                 $holidays[] = $holiday;
             }
 
-            if(isset($holiday) or $index == $daysIndex)
+            if(isset($holiday) || $index == $daysIndex)
             {
                 $holidayNum = count($holidays);
                 if($holidayNum > 1)

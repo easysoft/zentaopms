@@ -357,4 +357,24 @@ class holidayTest
 
         return $task->realDuration;
     }
+
+    /**
+     * 测试通过 API 获取节假日。
+     * Test get holidays by api.
+     *
+     * @param  string       $year
+     * @access public
+     * @return int|array
+     */
+    public function getHolidayByAPITest(string $year): int|array
+    {
+        if($year == 'this year') $year = date('Y');
+        if($year == 'last year') $year = date('Y', strtotime('-1 year'));
+        if($year == 'next year') $year = date('Y', strtotime('+1 year'));
+        $objects = $this->objectModel->getHolidayByAPI($year);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
 }
