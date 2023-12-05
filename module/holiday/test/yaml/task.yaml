@@ -13,3 +13,13 @@ fields:
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
+  - field: realStarted
+    range: "(-5w)-(+1w):5D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: finishedDate
+    range: "(-4w)-(+2w):5D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"

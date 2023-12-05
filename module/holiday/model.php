@@ -382,6 +382,7 @@ class holidayModel extends model
     }
 
     /**
+     * 更新任务的实际工期。
      * Update task real duration.
      *
      * @param  string $beginDate
@@ -389,7 +390,7 @@ class holidayModel extends model
      * @access public
      * @return void
      */
-    public function updateTaskRealDuration($beginDate, $endDate)
+    public function updateTaskRealDuration(string $beginDate, string $endDate): void
     {
         $updateTaskList = $this->dao->select('id, realStarted, finishedDate')
             ->from(TABLE_TASK)
@@ -401,7 +402,7 @@ class holidayModel extends model
 
         foreach($updateTaskList as $task)
         {
-            $realDuration = $this->getActualWorkingDays($task->realStarted, date('Y-m-d',strtotime($task->finishedDate)));
+            $realDuration = $this->getActualWorkingDays($task->realStarted, date('Y-m-d', $task->finishedDate ? strtotime($task->finishedDate) : time()));
             $realDuration = count($realDuration);
 
             $this->dao->update(TABLE_TASK)->set('realDuration')->eq($realDuration)->where('id')->eq($task->id)->exec();
