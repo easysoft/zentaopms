@@ -2096,29 +2096,55 @@ class docModel extends model
     }
 
     /**
+     * 获取文件图标。
      * Get file icon.
      *
-     * @param  array $files
+     * @param  array  $files
      * @access public
      * @return array
      */
-    public function getFileIcon($files)
+    public function getFileIcon(array $files): array
     {
+        $this->app->loadConfig('file');
+
         $fileIcon = array();
         foreach($files as $file)
         {
             if(in_array($file->extension, $this->config->file->imageExtensions)) continue;
 
-            $iconClass = 'icon-file';
-            if(strpos('zip,tar,gz,bz2,rar', $file->extension) !== false) $iconClass = 'icon-file-archive';
-            elseif(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
-            elseif(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
-            elseif(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
-            elseif(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
-            elseif(strpos('mp3,ogg,wav', $file->extension) !== false) $iconClass = 'icon-file-audio';
-            elseif(strpos('avi,mp4,mov', $file->extension) !== false) $iconClass = 'icon-file-video';
-            elseif(strpos('txt,md', $file->extension) !== false) $iconClass = 'icon-file-text';
-            elseif(strpos('html,htm', $file->extension) !== false) $iconClass = 'icon-globe';
+            switch($file->extension)
+            {
+                case in_array($file->extension, array('zip', 'tar', 'gz', 'bz2', 'rar')):
+                    $iconClass = 'icon-file-archive';
+                    break;
+                case in_array($file->extension, array('csv', 'xls', 'xlsx')):
+                    $iconClass = 'icon-file-excel';
+                    break;
+                case in_array($file->extension, array('doc', 'docx')):
+                    $iconClass = 'icon-file-word';
+                    break;
+                case in_array($file->extension, array('ppt', 'pptx')):
+                    $iconClass = 'icon-file-powerpoint';
+                    break;
+                case in_array($file->extension, array('pdf')):
+                    $iconClass = 'icon-file-pdf';
+                    break;
+                case in_array($file->extension, array('mp3', 'ogg', 'wav')):
+                    $iconClass = 'icon-file-audio';
+                    break;
+                case in_array($file->extension, array('avi', 'mp4', 'mov')):
+                    $iconClass = 'icon-file-video';
+                    break;
+                case in_array($file->extension, array('txt', 'md')):
+                    $iconClass = 'icon-file-text';
+                    break;
+                case in_array($file->extension, array('html', 'htm')):
+                    $iconClass = 'icon-file-globe';
+                    break;
+                default:
+                    $iconClass = 'icon-file';
+                    break;
+            }
 
             $fileIcon[$file->id] = "<i class='file-icon icon $iconClass'></i>";
         }
