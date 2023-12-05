@@ -1697,7 +1697,8 @@ class docModel extends model
     }
 
     /**
-     * Get ordered objects for dic.
+     * 获取已排序的对象数据。
+     * Get ordered objects for doc.
      *
      * @param  string $objectType
      * @param  string $returnType nomerge|merge
@@ -1705,123 +1706,116 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getOrderedObjects($objectType = 'product', $returnType = 'merge', $append = 0)
+    public function getOrderedObjects(string $objectType = 'product', string $returnType = 'merge', int $append = 0): array
     {
         $myObjects = $normalObjects = $closedObjects = array();
         if($objectType == 'product')
         {
-            $products = $this->loadModel('product')->getList();
-            if($append and !isset($products[$append])) $products[$append] = $this->product->getByID($append);
-            foreach($products as $id => $product)
-            {
-                if($product->status != 'closed' and $product->PO == $this->app->user->account)
-                {
-                    $myObjects[$id] = $product->name;
-                }
-                elseif($product->status != 'closed' and !($product->PO == $this->app->user->account))
-                {
-                    $normalObjects[$id] = $product->name;
-                }
-                elseif($product->status == 'closed')
-                {
-                    $closedObjects[$id] = $product->name;
-                }
-            }
+            list($myObjects, $normalObjects, $closedObjects) = $this->getOrderedProducts($append);
         }
         elseif($objectType == 'project')
         {
-            /* Load module. */
-            $this->loadModel('program');
-
-            /* Sort project. */
-            $orderedProjects = array();
-
-            /* Project permissions for DocLib whitelist. */
-            if($this->app->tab == 'doc')
-            {
-                $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
-                    ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
-                    ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
-                    ->andWhere('t1.vision')->eq($this->config->vision)
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
-                    ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-                    ->fetchPairs();
-            }
-
-            $objects = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('type')->eq('project')
-                ->andWhere('vision')->eq($this->config->vision)
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-                ->beginIF($append)->orWhere('id')->eq($append)->fi()
-                ->orderBy('order_asc')
-                ->fetchAll('id');
-
-            foreach($objects as $objectID => $object)
-            {
-                $object->parent             = $this->program->getTopByID($object->parent);
-                $orderedProjects[$objectID] = $object;
-                unset($objects[$object->id]);
-            }
-
-            foreach($orderedProjects as $id => $project)
-            {
-                if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
-                {
-                    $myObjects[$id] = $project->name;
-                }
-                elseif($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
-                {
-                    $normalObjects[$id] = $project->name;
-                }
-                elseif($project->status == 'done' or $project->status == 'closed')
-                {
-                    $closedObjects[$id] = $project->name;
-                }
-            }
+            list($myObjects, $normalObjects, $closedObjects) = $this->getOrderedProjects($append);
         }
         elseif($objectType == 'execution')
         {
-            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id');
-
-            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->in('sprint,stage')
-                ->andWhere('multiple')->eq('1')
-                ->andWhere('vision')->eq($this->config->vision)
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-                ->beginIF($append)->orWhere('id')->eq($append)->fi()
-                ->orderBy('order_asc')
-                ->fetchAll('id');
-
-            foreach($executions as $id => $execution)
-            {
-                if($execution->type == 'stage' and $execution->grade != 1)
-                {
-                    $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,sprint')->orderBy('grade')->fetchPairs();
-                    $execution->name  = implode('/', $parentExecutions);
-                }
-                $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
-
-                if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
-                {
-                    $myObjects[$id] = $execution->name;
-                }
-                elseif($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
-                {
-                    $normalObjects[$id] = $execution->name;
-                }
-                elseif($execution->status == 'done' or $execution->status == 'closed')
-                {
-                    $closedObjects[$id] = $execution->name;
-                }
-            }
+            list($myObjects, $normalObjects, $closedObjects) = $this->docTao->getOrderedExecutions($append);
         }
 
         if($returnType == 'nomerge') return array($myObjects, $normalObjects, $closedObjects);
         return $myObjects + $normalObjects + $closedObjects;
+    }
+
+    /**
+     * 获取已排序的产品数据。
+     * Get ordered products.
+     *
+     * @param  int    $append
+     * @access public
+     * @return array
+     */
+    public function getOrderedProducts(int $append = 0): array
+    {
+        $myObjects = $normalObjects = $closedObjects = array();
+        $products  = $this->loadModel('product')->getList();
+        if($append && !isset($products[$append])) $products[$append] = $this->product->getByID($append);
+        foreach($products as $id => $product)
+        {
+            if($product->status != 'closed' && $product->PO == $this->app->user->account)
+            {
+                $myObjects[$id] = $product->name;
+            }
+            elseif($product->status != 'closed' && !($product->PO == $this->app->user->account))
+            {
+                $normalObjects[$id] = $product->name;
+            }
+            elseif($product->status == 'closed')
+            {
+                $closedObjects[$id] = $product->name;
+            }
+        }
+
+        return array($myObjects, $normalObjects, $closedObjects);
+    }
+
+    /**
+     * 获取已排序的项目数据。
+     * Get ordered projects.
+     *
+     * @param  int    $append
+     * @access public
+     * @return array
+     */
+    public function getOrderedProjects(int $append = 0): array
+    {
+        $this->loadModel('program');
+
+        /* Project permissions for DocLib whitelist. */
+        $myObjects       = $normalObjects = $closedObjects = array();
+        $orderedProjects = array();
+        if($this->app->tab == 'doc')
+        {
+            $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+                ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t1.deleted')->eq(0)
+                ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+                ->fetchPairs();
+        }
+        $objects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($append)->orWhere('id')->eq($append)->fi()
+            ->orderBy('order_asc')
+            ->fetchAll('id');
+        foreach($objects as $objectID => $object)
+        {
+            $object->parent             = $this->program->getTopByID($object->parent);
+            $orderedProjects[$objectID] = $object;
+            unset($objects[$object->id]);
+        }
+
+        foreach($orderedProjects as $id => $project)
+        {
+            if($project->status != 'done' && $project->status != 'closed' && $project->PM == $this->app->user->account)
+            {
+                $myObjects[$id] = $project->name;
+            }
+            elseif($project->status != 'done' && $project->status != 'closed' && !($project->PM == $this->app->user->account))
+            {
+                $normalObjects[$id] = $project->name;
+            }
+            elseif($project->status == 'done' || $project->status == 'closed')
+            {
+                $closedObjects[$id] = $project->name;
+            }
+        }
+        return array($myObjects, $normalObjects, $closedObjects);
     }
 
     /**
