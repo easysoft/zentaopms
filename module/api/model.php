@@ -808,16 +808,17 @@ class apiModel extends model
     }
 
     /**
+     * 根据搜索条件查询并返回接口文档列表。
      * Get api by search.
      *
-     * @param  string $libID
+     * @param  int    $libID
      * @param  int    $queryID
      * @param  string $objectType product|project
      * @param  array  $libs
      * @access public
      * @return array
      */
-    public function getApiListBySearch($libID, $queryID, $objectType = '', $libs = array())
+    public function getApiListBySearch(int $libID, int $queryID, string $objectType = '', array $libs = array()): array
     {
         $queryName = $objectType ? $objectType . 'apiDocQuery' : 'apiQuery';
         $queryForm = $objectType ? $objectType . 'apiDocForm'  : 'apiForm';
@@ -842,26 +843,28 @@ class apiModel extends model
         $apiQuery = $this->session->$queryName;
         if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
 
-        $list = $this->dao->select('*')
-            ->from(TABLE_API)
+        $apiList = $this->dao->select('*')->from(TABLE_API)
             ->where('deleted')->eq(0)
             ->andWhere($apiQuery)
+            ->beginIF($libID)->andWhere('`lib`')->eq($libID)->fi()
             ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
             ->fetchAll();
 
-        return $list;
+        return $apiList;
     }
 
     /**
+     * 获取文档库所属产品或者项目的下拉菜单。
      * Get ordered objects for dic.
      *
      * @access public
      * @return array
      */
-    public function getOrderedObjects()
+    public function getOrderedObjects(): array
     {
         $normalObjects = $closedObjects = array();
 
+        /* 获取接口库所属产品的产品列表。 */
         $libs     = $this->loadModel('doc')->getApiLibs();
         $products = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
@@ -874,16 +877,12 @@ class apiModel extends model
 
         foreach($products as $id => $product)
         {
-            if($product->status == 'normal')
-            {
-                $normalObjects['product'][$id] = $product->name;
-            }
-            elseif($product->status == 'closed')
-            {
-                $closedObjects['product'][$id] = $product->name;
-            }
+            /* 筛选出正常的和关闭产品名称。 */
+            if($product->status == 'normal') $normalObjects['product'][$id] = $product->name;
+            if($product->status == 'closed') $closedObjects['product'][$id] = $product->name;
         }
 
+        /* 获取接口库所属项目的项目列表。 */
         $projects = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
             ->where('t2.id')->gt(0)
@@ -896,33 +895,30 @@ class apiModel extends model
 
         foreach($projects as $id => $project)
         {
-            if($project->status != 'done' and $project->status != 'closed')
-            {
-                $normalObjects['project'][$id] = $project->name;
-            }
-            elseif($project->status == 'done' or $project->status == 'closed')
-            {
-                $closedObjects['project'][$id] = $project->name;
-            }
+            /* 筛选出正常的和关闭项目名称。 */
+            if($project->status != 'done' && $project->status != 'closed') $normalObjects['project'][$id] = $project->name;
+            if($project->status == 'done' || $project->status == 'closed') $closedObjects['project'][$id] = $project->name;
         }
 
         return array($normalObjects, $closedObjects);
     }
 
     /**
-     * Get priv Apis..
+     * 获取有权限的接口文档列表。
+     * Get priv Apis.
      *
-     * @param  string $mode all
+     * @param  string $mode
      * @access public
      * @return array
      */
-    public function getPrivApis($mode = '')
+    public function getPrivApis(string $mode = ''): array
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('type')->eq('api')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetchAll('id');
 
+        /* 过滤掉没有权限的文档库。 */
         $this->loadModel('doc');
         foreach($libs as $libID => $lib)
         {
