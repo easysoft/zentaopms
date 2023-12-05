@@ -170,15 +170,17 @@ class personnelModel extends model
     }
 
     /**
+     * 获取用户参与的项目风险。
      * Get user project risk invest.
      *
-     * @param  array     $accounts
-     * @param  object    $projects
+     * @param  array  $accounts
+     * @param  array  $projects
      * @access public
      * @return array
      */
-    public function getRiskInvest($accounts, $projects)
+    public function getRiskInvest(array $accounts, array $projects): array
     {
+        /* Get the risks in projects. */
         $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
@@ -193,11 +195,12 @@ class personnelModel extends model
             $invest[$account]['pendingRisk']  = 0;
         }
 
+        /* Build invest risks. */
         foreach($risks as $risk)
         {
-            if($risk->createdBy && isset($invest[$risk->createdBy])) $invest[$risk->createdBy]['createdRisk'] += 1;
-            if($risk->resolvedBy && isset($invest[$risk->resolvedBy])) $invest[$risk->resolvedBy]['resolvedRisk'] += 1;
-            if($risk->assignedTo && $risk->status == 'active' && isset($invest[$risk->assignedTo])) $invest[$risk->assignedTo]['pendingRisk'] += 1;
+            if($risk->createdBy  && isset($invest[$risk->createdBy]))                               $invest[$risk->createdBy]['createdRisk']   += 1;
+            if($risk->resolvedBy && isset($invest[$risk->resolvedBy]))                              $invest[$risk->resolvedBy]['resolvedRisk'] += 1;
+            if($risk->assignedTo && isset($invest[$risk->assignedTo]) && $risk->status == 'active') $invest[$risk->assignedTo]['pendingRisk']  += 1;
         }
 
         return $invest;
