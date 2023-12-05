@@ -75,4 +75,42 @@ class docTao extends docModel
 
         return array($myObjects, $normalObjects, $closedObjects);
     }
+
+    /**
+     * 获取关联产品的数据。
+     * Get the data of the linked product.
+     *
+     * @param  int       $productID
+     * @param  string    $userView
+     * @access protected
+     * @return array
+     */
+    protected function getLinkedProductData(int $productID, string $userView = ''): array
+    {
+        $storyIdList = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
+            ->get();
+
+        $planIdList = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
+            ->get();
+
+        $releasePairs = $this->dao->select('id')->from(TABLE_RELEASE)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
+            ->fetchPairs('id');
+
+        $casePairs = $this->dao->select('id')->from(TABLE_CASE)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
+            ->fetchPairs('id');
+
+        return array($storyIdList, $planIdList, $releasePairs, $casePairs);
+    }
 }

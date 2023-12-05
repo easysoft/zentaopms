@@ -1860,100 +1860,22 @@ class docModel extends model
     }
 
     /**
+     * 获取文档库的附件。
      * Get lib files.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  string      $type        product|project|execution
+     * @param  int         $objectID
+     * @param  string|bool $searchTitle
+     * @param  string      $orderBy
+     * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getLibFiles($type, $objectID, $orderBy, $pager = null)
+    public function getLibFiles(string $type, int $objectID, string|bool $searchTitle = false, string $orderBy = 'id_desc', object $pager = null): array
     {
-        if($type != 'execution' and $type != 'project' and $type != 'product') return true;
+        if(!in_array($type, array('execution', 'project', 'product'))) return array();
 
-        $this->loadModel('file');
-        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id');
-        foreach($docs as $id => $doc)
-        {
-            if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
-        }
-
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
-
-        $userView = $this->app->user->view->products;
-        if($type == 'project') $userView = $this->app->user->view->projects;
-        if($type == 'execution') $userView = $this->app->user->view->sprints;
-
-        $bugPairs = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
-        if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
-
-        $testReportPairs = $this->dao->select('id')->from(TABLE_TESTREPORT)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
-        if(!empty($testReportPairs)) $testReportIdList = implode(',', $testReportPairs);
-
-        $field     = $type == 'execution' ? 'project' : $type;
-        $casePairs = $this->dao->select('`case`')->from(TABLE_PROJECTCASE)->where($field)->eq($objectID)->andWhere($field)->in($userView)->fetchPairs('case');
-        if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
-
-        $idList      = array_keys($docs);
-        $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
-        $searchTitle = $this->post->title;
-        $storyIDList = '';
-        if($type == 'product')
-        {
-            $storyIdList = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->get();
-            $planIdList  = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->get();
-
-            $releasePairs = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->fetchPairs('id');
-            if(!empty($releasePairs)) $releaseIdList = implode(',', $releasePairs);
-
-            $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
-            if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
-        }
-        elseif($type == 'project')
-        {
-            $project     = $this->loadModel('project')->getByID($objectID);
-            $storyIDList = '';
-            if(!$project->hasProduct)
-            {
-                $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->orWhere('project')->eq($objectID)->fetchPairs('id', 'id');
-                $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
-            }
-
-            if(in_array($this->config->edition, array('max', 'ipd')))
-            {
-                $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
-                $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
-                $reviewIdList  = $this->dao->select('id')->from(TABLE_REVIEW)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
-            }
-
-            $designIdList    = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
-            $executionIdList = $this->loadModel('execution')->getIdList($objectID);
-            $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
-
-            $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
-
-            $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
-            $storyIDList     = $storyIDList ? join(',', $storyIDList) : 0;
-        }
-        elseif($type == 'execution')
-        {
-            $execution   = $this->loadModel('execution')->getByID($objectID);
-            $project     = $this->loadModel('project')->getByID($execution->project);
-            $storyIDList = '';
-
-            if(!$project->hasProduct) $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectID)->fetchPairs('story', 'story');
-            $storyIDList = join(',', $storyIDList);
-
-            $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
-            if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
-
-            $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
-            if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
-        }
+        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList) = $this->getLinkedObjectData($type, $objectID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
             ->where('size')->gt('0')
@@ -1974,7 +1896,7 @@ class docModel extends model
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
             ->fi()
-            ->beginIF($type == 'project' or $type == 'execution')
+            ->beginIF($type == 'project' || $type == 'execution')
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
             ->beginIF($storyIDList)->orWhere("(objectType = 'story' and objectID in ($storyIDList))")->fi()
@@ -1985,12 +1907,160 @@ class docModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        foreach($files as $fileID => $file)
-        {
-            $this->file->setFileWebAndRealPaths($file);
-        }
+        $this->loadModel('file');
+        foreach($files as $fileID => $file) $this->file->setFileWebAndRealPaths($file);
 
         return $files;
+    }
+
+    /**
+     * 获取关联产品/项目/执行的数据。
+     * Get linked product/project/execution data.
+     *
+     * @param  string $type     product|project|execution
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getLinkedObjectData(string $type, int $objectID): array
+    {
+        if(!in_array($type, array('execution', 'project', 'product'))) return array();
+
+        $userView = $this->app->user->view->products;
+        if($type == 'project')   $userView = $this->app->user->view->projects;
+        if($type == 'execution') $userView = $this->app->user->view->sprints;
+
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = $storyIDList = 0;
+        $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->beginIF(!$this->app->user->admin)->andWhere($type)->in($userView)->fi()->fetchPairs('id');
+        if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
+
+        $testReportPairs = $this->dao->select('id')->from(TABLE_TESTREPORT)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->beginIF(!$this->app->user->admin)->andWhere($type)->in($userView)->fi()->fetchPairs('id');
+        if(!empty($testReportPairs)) $testReportIdList = implode(',', $testReportPairs);
+
+        $field     = $type == 'execution' ? 'project' : $type;
+        $casePairs = $this->dao->select('`case`')->from(TABLE_PROJECTCASE)->where($field)->eq($objectID)->beginIF(!$this->app->user->admin)->andWhere($field)->in($userView)->fi()->fetchPairs('case');
+        if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
+
+        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id');
+        foreach($docs as $id => $doc)
+        {
+            if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
+        }
+        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
+
+        if($type == 'product')
+        {
+            list($storyIdList, $planIdList, $releasePairs, $casePairs) = $this->docTao->getLinkedProductData($objectID, $userView);
+            if(!empty($releasePairs)) $releaseIdList = implode(',', $releasePairs);
+            if(!empty($casePairs))    $caseIdList    = implode(',', $casePairs);
+        }
+        elseif($type == 'project')
+        {
+            list($storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList) = $this->getLinkedProjectData($objectID);
+        }
+        elseif($type == 'execution')
+        {
+            list($storyIDList, $taskIdList, $buildIdList) = $this->getLinkedExecutionData($objectID);
+        }
+
+        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList);
+    }
+
+    /**
+     * 获取关联项目的数据。
+     * Get linked project data.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getLinkedProjectData(int $projectID): array
+    {
+        $project     = $this->loadModel('project')->getByID($projectID);
+        $storyIDList = $issueIdList = $meetingIdList = $reviewIdList = $designIdList = $executionIdList = $taskIdList = $buildIdList = 0;
+        if($project && !$project->hasProduct)
+        {
+            $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->fetchPairs('id', 'id');
+            $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
+        }
+
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $issueIdList = $this->dao->select('id')->from(TABLE_ISSUE)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq('0')
+                ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
+                ->get();
+            $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq('0')
+                ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
+                ->get();
+            $reviewIdList = $this->dao->select('id')->from(TABLE_REVIEW)
+                ->where('project')->eq($projectID)
+                ->andWhere('deleted')->eq('0')
+                ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
+                ->get();
+        }
+
+        $designIdList = $this->dao->select('id')->from(TABLE_DESIGN)
+            ->where('project')->eq($projectID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
+            ->get();
+
+        $executionIdList = $this->loadModel('execution')->getIdList($projectID);
+        $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs('id');
+        if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
+
+        $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)
+            ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs('id');
+        if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
+
+        $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
+        $storyIDList     = $storyIDList ? join(',', $storyIDList) : 0;
+        return array($storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList);
+    }
+
+    /**
+     * 获取关联执行的数据。
+     * Get linked execution data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getLinkedExecutionData(int $executionID): array
+    {
+        $storyIDList = $taskIdList = $buildIdList = 0;
+        $execution   = $this->loadModel('execution')->getByID($executionID);
+        $project     = $execution ? $this->loadModel('project')->getByID((int)$execution->project) : '';
+
+        if($project && !$project->hasProduct) $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchPairs('story', 'story');
+        $storyIDList = $storyIDList ? join(',', $storyIDList) : '';
+
+        $taskPairs = $this->dao->select('id')->from(TABLE_TASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs('id');
+        if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
+
+        $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs('id');
+        if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
+
+        return array($storyIDList, $taskIdList, $buildIdList);
     }
 
     /**
@@ -3641,5 +3711,22 @@ class docModel extends model
 
         $this->dao->update(TABLE_FILE)->set('deleted')->eq('1')->where('id')->in($idList)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 通过ID获取产品/项目/执行的信息。
+     * Get product/project/execution by ID.
+     *
+     * @param  string       $type     product|project|execution
+     * @param  int          $objectID
+     * @access public
+     * @return object|false
+     */
+    public function getObjectByID(string $type, int $objectID): object|bool
+    {
+        $table = zget($this->config->objectTables, $type, '');
+        if(!$table) return false;
+
+        return $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
     }
 }

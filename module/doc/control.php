@@ -598,9 +598,7 @@ class doc extends control
         $objects = $this->doc->getOrderedObjects($type, 'nomerge', $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
 
-        $table  = $this->config->objectTables[$type];
-        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-
+        $object = $this->doc->getObjectByID($type, $objectID);
         if(empty($_POST) && !empty($searchTitle)) $this->post->title = $searchTitle;
 
         /* Load pager. */
@@ -610,7 +608,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $files       = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $files       = $this->doc->getLibFiles($type, $objectID, $this->post->title, $orderBy, $pager);
         $fileIcon    = $this->doc->getFileIcon($files);
         $sourcePairs = $this->doc->getFileSourcePairs($files);
 
