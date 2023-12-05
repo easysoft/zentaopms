@@ -39,6 +39,7 @@ class convert extends control
     }
 
     /**
+     * 生成配置文件。
      * Set configs of converter.
      *
      * This is the extrance of every system. It will call the set function of corresponding module.
@@ -48,14 +49,11 @@ class convert extends control
      */
     public function setConfig()
     {
-        if(!$this->post->source)
-        {
-            echo js::alert($this->lang->convert->mustSelectSource);
-            return print(js::locate('back'));
-        }
+        if(!$this->post->source) return $this->sendError($this->lang->convert->mustSelectSource, 'back');
+
         list($sourceName, $version) = explode('_', $this->post->source);
         $setFunc = "set$sourceName";
-        $this->view->title      = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->setting;
+        $this->view->title   = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->setting;
         $this->view->source  = $sourceName;
         $this->view->version = $version;
         $this->view->setting = $this->fetch('convert', $setFunc, "version=$version");
