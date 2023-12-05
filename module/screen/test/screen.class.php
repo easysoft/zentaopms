@@ -352,4 +352,9 @@ class screenTest
     {
         $this->objectModel->setChartDefault($type, $component);
     }
+
+    public function __call($method, $args)
+    {
+        return call_user_func_array(array($this->objectModel, $method), $args);
+    }
 }

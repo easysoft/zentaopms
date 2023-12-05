@@ -56,6 +56,8 @@ $filter7  = array('type' => 'piecircle');
 $filter8  = array('type' => 'pie');
 $filter9  = array('type' => 'table');
 $filter10 = array('type' => 'waterpolo');
+$filter11 = array('type' => 'radar');
+$filter12 = array('type' => 'card');
 
 list($component1, $chart1) = getComponetAndChart($screen, $filter1);
 $screen->getChartOptionTest($chart1, $component1);
@@ -121,3 +123,10 @@ $component11 = current($component11_all);
 $chart11 = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component11->sourceID)->fetch();
 $screen->getChartOptionTest($chart11, $component11);
 r($component11->option->dataset == "0.000") && p('') && e(1);                                       //测试配置正确的水球图是否能正常生成，生成的比例为0.000。
+
+list($component12, $chart12) = getComponetAndChart($screen, $filter11);
+r($component12 && $chart12) && p('') && e(0);                                                        //测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
+
+list($component13, $chart13) = getComponetAndChart($screen, $filter12); 
+$screen->getChartOptionTest($chart13, $component13);
+r($component13->option->dataset === '0') && p('') && e(1);                                                   //测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。
