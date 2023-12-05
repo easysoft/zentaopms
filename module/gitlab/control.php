@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of gitlab module of ZenTaoPMS.
  *
@@ -16,7 +17,7 @@ class gitlab extends control
      * @param string $moduleName
      * @param string $methodName
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
@@ -35,6 +36,7 @@ class gitlab extends control
     }
 
     /**
+     * Gitlab列表。
      * Browse gitlab.
      *
      * @param  string $orderBy
@@ -44,7 +46,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
 
         $this->app->loadClass('pager', true);
@@ -62,6 +64,7 @@ class gitlab extends control
     }
 
     /**
+     * 创建一个gitlab。
      * Create a gitlab.
      *
      * @access public
@@ -95,40 +98,42 @@ class gitlab extends control
     }
 
     /**
+     * Gitlab详情页。
      * View a gitlab.
-     * @param  int    $id
+     * @param  int    $gitlabID
      * @access public
      * @return void
      */
-    public function view($id)
+    public function view(int $gitlabID)
     {
-        $gitlab = $this->gitlab->getByID($id);
+        $gitlab = $this->gitlab->getByID($gitlabID);
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->view;
         $this->view->gitlab     = $gitlab;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->actions    = $this->loadModel('action')->getList('gitlab', $id);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $id);
+        $this->view->actions    = $this->loadModel('action')->getList('gitlab', $gitlabID);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $gitlabID);
         $this->display();
     }
 
     /**
+     * 编辑gitlab。
      * Edit a gitlab.
      *
-     * @param  int    $id
+     * @param  int    $gitlabID
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $gitlabID)
     {
-        $oldGitLab = $this->gitlab->getByID($id);
+        $oldGitLab = $this->gitlab->getByID($gitlabID);
 
         if($_POST)
         {
             $gitlab = fixer::input('post')->trim('url,token')->get();
-            $this->checkToken($gitlab, $id);
-            $this->gitlab->update($id);
-            $gitLab = $this->gitlab->getByID($id);
+            $this->checkToken($gitlab, $gitlabID);
+            $this->gitlab->update($gitlabID);
+            $gitLab = $this->gitlab->getByID($gitlabID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
@@ -148,10 +153,11 @@ class gitlab extends control
      * Bind gitlab user to zentao users.
      *
      * @param  int     $gitlabID
+     * @param  string  $type
      * @access public
      * @return void
      */
-    public function bindUser($gitlabID, $type = 'all')
+    public function bindUser(int $gitlabID, string $type = 'all')
     {
         $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
 
@@ -254,14 +260,14 @@ class gitlab extends control
      * 删除一条gitlab记录。
      * Delete a gitlab.
      *
-     * @param  int    $id
+     * @param  int    $gitlabID
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $gitlabID)
     {
-        $oldGitLab = $this->loadModel('pipeline')->getByID($id);
-        $actionID  = $this->pipeline->deleteByObject($id, 'gitlab');
+        $oldGitLab = $this->loadModel('pipeline')->getByID($gitlabID);
+        $actionID  = $this->pipeline->deleteByObject($gitlabID, 'gitlab');
         if(!$actionID)
         {
             $response['result']   = 'fail';
@@ -270,7 +276,7 @@ class gitlab extends control
             return $this->send($response);
         }
 
-        $gitLab   = $this->gitlab->getByID($id);
+        $gitLab   = $this->gitlab->getByID($gitlabID);
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->loadModel('action')->logHistory($actionID, $changes);
 
@@ -282,6 +288,8 @@ class gitlab extends control
     /**
      * Check post token has admin permissions.
      *
+     * @param  object    $gitlab
+     * @param  int       $gitlabID
      * @access protected
      * @return void
      */
@@ -354,7 +362,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseGroup($gitlabID, $orderBy = 'name_asc')
+    public function browseGroup(int $gitlabID, string $orderBy = 'name_asc')
     {
         if(!$this->app->user->admin)
         {
@@ -387,7 +395,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function createGroup($gitlabID)
+    public function createGroup(int $gitlabID)
     {
         if(!$this->app->user->admin)
         {
@@ -419,7 +427,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function editGroup($gitlabID, $groupID)
+    public function editGroup(int $gitlabID, int $groupID)
     {
         if(!$this->app->user->admin)
         {
@@ -453,10 +461,11 @@ class gitlab extends control
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteGroup($gitlabID, $groupID, $confirm = 'no')
+    public function deleteGroup(int $gitlabID, int $groupID, string $confirm = 'no')
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
 
@@ -483,7 +492,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function manageGroupMembers($gitlabID, $groupID)
+    public function manageGroupMembers(int $gitlabID, int $groupID)
     {
         if($_POST)
         {
@@ -585,10 +594,11 @@ class gitlab extends control
      * Browse gitlab user.
      *
      * @param  int     $gitlabID
+     * @param  string  $orderBy
      * @access public
      * @return void
      */
-    public function browseUser($gitlabID, $orderBy = 'id_desc')
+    public function browseUser(int $gitlabID, string $orderBy = 'id_desc')
     {
         $isAdmin = true;
         if(!$this->app->user->admin)
@@ -618,13 +628,14 @@ class gitlab extends control
     }
 
     /**
+     * 创建一个gitlab用户。
      * Creat a gitlab user.
      *
-     * @param  int     $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return void
      */
-    public function createUser($gitlabID)
+    public function createUser(int $gitlabID)
     {
         if($_POST)
         {
@@ -660,14 +671,15 @@ class gitlab extends control
     }
 
     /**
+     * 编辑一个gitlab用户。
      * Edit a gitlab user.
      *
-     * @param  int     $gitlabID
-     * @param  int     $userID
+     * @param  int    $gitlabID
+     * @param  int    $userID
      * @access public
      * @return void
      */
-    public function editUser($gitlabID, $userID)
+    public function editUser(int $gitlabID, int $userID)
     {
         if($_POST)
         {
@@ -697,14 +709,16 @@ class gitlab extends control
     }
 
     /**
+     * 删除一个gitlab用户。
      * Delete a gitlab user.
      *
      * @param  int    $gitlabID
      * @param  int    $userID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteUser($gitlabID, $userID, $confirm = 'no')
+    public function deleteUser(int $gitlabID, int $userID, string $confirm = 'no')
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->user->confirmDelete , inlink('deleteUser', "gitlabID=$gitlabID&userID=$userID&confirm=yes")));
 
@@ -726,17 +740,18 @@ class gitlab extends control
     }
 
     /**
+     * gitlab项目列表页。
      * Browse gitlab project.
      *
      * @param  int    $gitlabID
-     * @param  string $keyword
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseProject($gitlabID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browseProject(int $gitlabID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $openID = 0;
         if(!$this->app->user->admin)
@@ -782,13 +797,14 @@ class gitlab extends control
     }
 
     /**
+     * 创建一个gitlab项目。
      * Creat a gitlab project.
      *
      * @param  int     $gitlabID
      * @access public
      * @return void
      */
-    public function createProject($gitlabID)
+    public function createProject(int $gitlabID)
     {
         if($_POST)
         {
@@ -823,6 +839,7 @@ class gitlab extends control
     }
 
     /**
+     * 编辑一个gitlab项目。
      * Edit a gitlab project.
      *
      * @param  int     $gitlabID
@@ -830,7 +847,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function editProject($gitlabID, $projectID)
+    public function editProject(int $gitlabID, int $projectID)
     {
         if($_POST)
         {
@@ -849,14 +866,16 @@ class gitlab extends control
     }
 
     /**
+     * 删除一个gitlab项目。
      * Delete a gitlab project.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteProject($gitlabID, $projectID, $confirm = 'no')
+    public function deleteProject(int $gitlabID, int $projectID, string $confirm = 'no')
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->project->confirmDelete , inlink('deleteProject', "gitlabID=$gitlabID&projectID=$projectID&confirm=yes")));
 
@@ -874,6 +893,7 @@ class gitlab extends control
     }
 
     /**
+     * Gitlab分支列表。
      * Browse gitlab branch.
      *
      * @param  int    $gitlabID
@@ -885,7 +905,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseBranch($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseBranch(int $gitlabID, int $projectID, string $orderBy = 'name_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('gitlabBranchList', $this->app->getURI(true));
 
@@ -927,14 +947,15 @@ class gitlab extends control
     }
 
     /**
+     * 创建一个gitlab分支。
      * Creat a gitlab branch.
      *
-     * @param  int     $gitlabID
-     * @param  int     $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function createBranch($gitlabID, $projectID)
+    public function createBranch(int $gitlabID, int $projectID)
     {
         if($_POST)
         {
@@ -960,6 +981,7 @@ class gitlab extends control
     }
 
     /**
+     * Gitlab tag列表。
      * Browse gitlab tag.
      *
      * @param  int    $gitlabID
@@ -971,7 +993,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseTag($gitlabID, $projectID, $orderBy = 'updated_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseTag(int $gitlabID, int $projectID, string $orderBy = 'updated_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
 
@@ -1017,6 +1039,7 @@ class gitlab extends control
     }
 
     /**
+     * 导入gitlab issue 到禅道。
      * Import gitlab issue to zentaopms.
      *
      * @param  int    $gitlabID
@@ -1024,7 +1047,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function importIssue($gitlabID, $projectID)
+    public function importIssue(int $gitlabID, int $projectID)
     {
         $gitlab = $this->gitlab->getByID($gitlabID);
         if($gitlab) $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
@@ -1116,6 +1139,7 @@ class gitlab extends control
     }
 
     /**
+     * 根据版本库创建webhook。
      * Create Webhook by repoID.
      *
      * @param  int    $repoID
@@ -1123,7 +1147,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function createWebhook($repoID, $confirm = 'no')
+    public function createWebhook(int $repoID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -1146,13 +1170,14 @@ class gitlab extends control
     }
 
     /**
+     * 管理gitlab项目成员。
      * Manage a gitlab project members.
      *
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function manageProjectMembers($repoID)
+    public function manageProjectMembers(int $repoID)
     {
         if($_POST)
         {
@@ -1245,17 +1270,17 @@ class gitlab extends control
 
             foreach($addedMembers as $addedMember)
             {
-                $this->gitlab->apiCreateProjectMember($repo->gitService, $repo->project, $addedMember);
+                $this->gitlab->apiCreateProjectMember((int)$repo->gitService, (int)$repo->project, $addedMember);
             }
 
             foreach($updatedMembers as $updatedMember)
             {
-                $this->gitlab->apiUpdateProjectMember($repo->gitService, $repo->project, $updatedMember);
+                $this->gitlab->apiUpdateProjectMember((int)$repo->gitService, (int)$repo->project, $updatedMember);
             }
 
             foreach($deletedMembers as $deletedMemberID)
             {
-                $this->gitlab->apiDeleteProjectMember($repo->gitService, $repo->project, $deletedMemberID);
+                $this->gitlab->apiDeleteProjectMember((int)$repo->gitService, (int)$repo->project, (int)$deletedMemberID);
             }
 
             $repo->acl->users = array_values($accounts);
@@ -1294,13 +1319,14 @@ class gitlab extends control
     }
 
     /**
+     * Ajax方式获取执行根据产品id。
      * AJAX: Get executions by productID.
      *
      * @param  int    $productID
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionsByProduct($productID)
+    public function ajaxGetExecutionsByProduct(int $productID)
     {
         if(!$productID) return $this->send(array('message' => array()));
 
@@ -1316,6 +1342,7 @@ class gitlab extends control
     }
 
     /**
+     * Ajax方式获取项目分支。
      * AJAX: Get project branches.
      *
      * @param  int    $gitlabID
@@ -1323,7 +1350,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjectBranches($gitlabID, $projectID)
+    public function ajaxGetProjectBranches(int $gitlabID, int $projectID)
     {
         if(!$gitlabID or !$projectID) return $this->send(array('message' => array()));
 
@@ -1339,6 +1366,7 @@ class gitlab extends control
     }
 
     /**
+     * Ajax方式获取合并请求用户键值对。
      * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
      * Attention: The user must be a member of the GitLab project.
      *
@@ -1347,7 +1375,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMRUserPairs($gitlabID, $projectID)
+    public function ajaxGetMRUserPairs(int $gitlabID, int $projectID)
     {
         if(!$gitlabID) return $this->send(array('message' => array()));
 
@@ -1368,6 +1396,7 @@ class gitlab extends control
     }
 
     /**
+     * 创建一个gitlab标签。
      * Create a gitlab tag.
      *
      * @param  int $gitlabID
@@ -1375,7 +1404,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function createTag($gitlabID, $projectID)
+    public function createTag(int $gitlabID, int $projectID)
     {
         if($_POST)
         {
@@ -1400,6 +1429,7 @@ class gitlab extends control
     }
 
     /**
+     * 删除一个gitlab标签。
      * Delete a gitlab tag.
      *
      * @param  int    $gitlabID
@@ -1408,7 +1438,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function deleteTag($gitlabID, $projectID, $tagName = '')
+    public function deleteTag(int $gitlabID, int $projectID, string $tagName = '')
     {
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $tagName = urldecode(helper::safe64Decode($tagName));
@@ -1425,6 +1455,7 @@ class gitlab extends control
     }
 
     /**
+     * 管理gitlab分支保护策略。
      * Manage a gitlab branch protected.
      *
      * @param  int    $repoID
@@ -1432,7 +1463,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function manageBranchPriv($gitlabID, $projectID)
+    public function manageBranchPriv(int $gitlabID, int $projectID)
     {
         if(!$this->app->user->admin)
         {
@@ -1470,6 +1501,7 @@ class gitlab extends control
     }
 
     /**
+     * 管理gitlab 标签保护策略。
      * Manage a gitlab tag protected.
      *
      * @param  int    $repoID
@@ -1477,7 +1509,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function manageTagPriv($gitlabID, $projectID)
+    public function manageTagPriv(int $gitlabID, int $projectID)
     {
         if(!$this->app->user->admin)
         {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of gitlab module of ZenTaoPMS.
  *
@@ -23,18 +24,20 @@ class gitlabModel extends model
     protected $projects = array();
 
     /**
+     * 获取gitlab根据id。
      * Get a gitlab by id.
      *
      * @param  int $id
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID(int $id): object
     {
         return $this->loadModel('pipeline')->getByID($id);
     }
 
     /**
+     * 获取gitlab列表。
      * Get gitlab list.
      *
      * @param  string $orderBy
@@ -42,7 +45,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
         $gitlabList = $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
 
@@ -50,17 +53,19 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab id name 键值对。
      * Get gitlab pairs.
      *
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs(): array
     {
         return $this->loadModel('pipeline')->getPairs('gitlab');
     }
 
     /**
+     * 获取gitlab api 基础url 根据gitlab id。
      * Get gitlab api base url by gitlab id.
      *
      * @param  int    $gitlabID
@@ -68,7 +73,7 @@ class gitlabModel extends model
      * @access public
      * @return string
      */
-    public function getApiRoot($gitlabID, $sudo = true)
+    public function getApiRoot(int $gitlabID, bool $sudo = true): string
     {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return '';
@@ -84,13 +89,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab的用户id和真实名字的键值对。
      * Get gitlab user id and realname pairs of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return array
      */
-    public function getUserIdRealnamePairs($gitlabID)
+    public function getUserIdRealnamePairs(int $gitlabID): array
     {
         return $this->dao->select('oauth.openID as openID,user.realname as realname')
             ->from(TABLE_OAUTH)->alias('oauth')
@@ -102,13 +108,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab的用户id和禅道的账号 键值对。
      * Get gitlab user id and zentao account pairs of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return array
      */
-    public function getUserIdAccountPairs($gitlabID)
+    public function getUserIdAccountPairs(int $gitlabID): array
     {
         return $this->dao->select('openID,account')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
@@ -117,13 +124,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab的禅道账号和gitlab用户id的 键值对。
      * Get zentao account gitlab user id pairs of one gitlab.
      *
      * @param  int $gitlabID
      * @access public
      * @return array
      */
-    public function getUserAccountIdPairs($gitlabID)
+    public function getUserAccountIdPairs(int $gitlabID): array
     {
         return $this->dao->select('account,openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
@@ -132,13 +140,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab用户id根据禅道账号。
      * Get gitlab user id by zentao account.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
+     * @param  string $zentaoAccount
      * @access public
      * @return array
      */
-    public function getUserIDByZentaoAccount($gitlabID, $zentaoAccount)
+    public function getUserIDByZentaoAccount(int $gitlabID, string $zentaoAccount): array
     {
         return $this->dao->select('openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
@@ -148,13 +158,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab列表根据禅道账号。
      * Get GitLab id list by user account.
      *
      * @param  string $account
      * @access public
      * @return array
      */
-    public function getListByAccount($account = '')
+    public function getListByAccount(string $account = ''): array
     {
         if(!$account) $account = $this->app->user->account;
 
@@ -165,13 +176,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab的 项目id和名称 键值对。
      * Get project pairs of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return array
      */
-    public function getProjectPairs($gitlabID)
+    public function getProjectPairs(int $gitlabID): array
     {
         $projects = $this->apiGetProjects($gitlabID);
 
@@ -182,14 +194,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取匹配的gitlab用户列表。
      * Get matched gitlab users.
      *
-     * @param  array $gitlabUsers
-     * @param  array $zentaoUsers
+     * @param  int    $gitlabID
+     * @param  array  $gitlabUsers
+     * @param  array  $zentaoUsers
      * @access public
      * @return array
      */
-    public function getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers)
+    public function getMatchedUsers(int $gitlabID, array $gitlabUsers, array $zentaoUsers): array
     {
         $matches = new stdclass;
         foreach($gitlabUsers as $gitlabUser)
@@ -235,13 +249,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab项目根据执行id。
      * Get gitlab projects by executionID.
      *
-     * @param  int $executionID
+     * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getProjectsByExecution($executionID)
+    public function getProjectsByExecution(int $executionID): array
     {
         $products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         $productIdList = array_keys($products);
@@ -256,13 +271,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab模块的执行列表根据产品id。
      * Get executions by one product for gitlab module.
      *
-     * @param  int $productID
+     * @param  int    $productID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getExecutionsByProduct($productID)
+    public function getExecutionsByProduct(int $productID): array
     {
         return $this->dao->select('distinct execution')->from(TABLE_RELATION)
             ->where('relation')->eq('interrated')
@@ -273,6 +289,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 根据关联信息获取gitlab id和gitlab项目id。
      * Get gitlabID and projectID.
      *
      * @param  string $objectType
@@ -280,7 +297,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function getRelationByObject($objectType, $objectID)
+    public function getRelationByObject(string $objectType, int $objectID): object
     {
         return $this->dao->select('*, extra as gitlabID, BVersion as projectID, BID as issueID')->from(TABLE_RELATION)
             ->where('relation')->eq('gitlab')
@@ -290,14 +307,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取问题id列表根据关联信息。
      * Get issue id list group by object.
      *
      * @param  string $objectType
-     * @param  int    $objectID
+     * @param  array  $objects
      * @access public
-     * @return object
+     * @return array
      */
-    public function getIssueListByObjects($objectType, $objects)
+    public function getIssueListByObjects(string $objectType, array $objects): array
     {
         return $this->dao->select('*, extra as gitlabID, BVersion as projectID, BID as issueID')->from(TABLE_RELATION)
             ->where('relation')->eq('gitlab')
@@ -308,14 +326,15 @@ class gitlabModel extends model
 
 
     /**
+     * 获取gitlab用户id根据账号。
      * Get gitlab userID by account.
      *
      * @param  int    $gitlabID
      * @param  string $account
      * @access public
-     * @return object
+     * @return string
      */
-    public function getGitlabUserID($gitlabID, $account)
+    public function getGitlabUserID(int $gitlabID, string $account): string
     {
         return $this->dao->select('openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
@@ -325,14 +344,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab项目名称根据项目id。
      * Get gitlab project name of one gitlab project.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return string|false
      */
-    public function getProjectName($gitlabID, $projectID)
+    public function getProjectName(int $gitlabID, int $projectID): string|false
     {
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
         if(is_object($project) and isset($project->name)) return $project->name;
@@ -340,14 +360,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取分支和标签列表。
      * Get reference option menus.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getReferenceOptions($gitlabID, $projectID)
+    public function getReferenceOptions(int $gitlabID, int $projectID): array
     {
         $refList = array();
 
@@ -368,14 +389,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取分支名称列表。
      * Get branches.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getBranches($gitlabID, $projectID)
+    public function getBranches(int $gitlabID, int $projectID): array
     {
         $rawBranches = $this->apiGetBranches($gitlabID, $projectID);
 
@@ -388,6 +410,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab 提交列表。
      * Get Gitlab commits.
      *
      * @param  object $repo
@@ -400,7 +423,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = '', $end = '')
+    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object $pager = null, string $begin = '', string $end = ''): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -430,15 +453,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 更新gitlab。
      * Update a gitlab.
      *
-     * @param  int $id
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function update($id)
+    public function update(int $gitlabID): bool
     {
-        return $this->loadModel('pipeline')->update($id);
+        return $this->loadModel('pipeline')->update($gitlabID);
     }
 
     /**
@@ -457,16 +481,17 @@ class gitlabModel extends model
     }
 
     /**
+     * 发送一个get api请求。
      * Send an api get request.
      *
      * @param  int|string $host gitlab server ID | gitlab host url.
-     * @param  int        $api
-     * @param  int        $data
-     * @param  int        $options
+     * @param  string     $api
+     * @param  array      $data
+     * @param  array      $options
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGet($host, $api, $data = array(), $options = array())
+    public function apiGet(int|string $host, string $api, array $data = array(), array $options = array()): object|array|null
     {
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
@@ -476,16 +501,17 @@ class gitlabModel extends model
     }
 
     /**
+     * 发送一个post api请求。
      * Send an api post request.
      *
      * @param  int|string $host gitlab server ID | gitlab host url.
-     * @param  int        $api
-     * @param  int        $data
-     * @param  int        $options
+     * @param  string     $api
+     * @param  array      $data
+     * @param  array      $options
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiPost($host, $api, $data = array(), $options = array())
+    public function apiPost(int|string $host, string $api, array $data = array(), array $options = array()): object|array|null
     {
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
@@ -495,16 +521,17 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取代表列表通过api。
      * Get a list of to-do items by API.
      *
      * @link   https://docs.gitlab.com/ee/api/todos.html
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $sudo
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $sudo
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetTodoList($gitlabID, $projectID, $sudo)
+    public function apiGetTodoList(int $gitlabID, int $projectID, int $sudo): object|array|null
     {
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
@@ -513,29 +540,31 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取最新用户。
      * Get current user.
      *
      * @param  string $host
      * @param  string $token
-     * @param  bool   $rootCheck
      * @access public
      * @return array
      */
-    public function apiGetCurrentUser($host, $token)
+    public function apiGetCurrentUser(string $host, string $token): object|array|null
     {
         $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
         return $this->apiGet($host, '/user');
     }
 
     /**
+     * 获取gitlab用户列表。
      * Get gitlab user list.
      *
      * @param  int    $gitlabID
      * @param  bool   $onlyLinked
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function apiGetUsers($gitlabID, $onlyLinked = false, $orderBy = 'id_desc')
+    public function apiGetUsers(int $gitlabID, bool $onlyLinked = false, string $orderBy = 'id_desc'): array
     {
         /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
         $page     = 1;
@@ -593,6 +622,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab群组成员列表。
      * Get group members of one gitlab.
      *
      * @param  int    $gitlabID
@@ -601,7 +631,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetGroupMembers($gitlabID, $groupID, $userID = 0)
+    public function apiGetGroupMembers(int $gitlabID, int $groupID, int $userID = 0): array
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/$groupID/members/all");
@@ -620,13 +650,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab命名空间列表。
      * Get namespaces of one gitlab.
      *
-     * @param  int     $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return object
      */
-    public function apiGetNamespaces($gitlabID)
+    public function apiGetNamespaces(int $gitlabID): array
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/namespaces");
@@ -644,6 +675,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab的群组列表。
      * Get groups of one gitlab.
      *
      * @param  int     $gitlabID
@@ -651,9 +683,9 @@ class gitlabModel extends model
      * @param  string  $minRole
      * @param  string  $keyword
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '', $keyword = '')
+    public function apiGetGroups(int $gitlabID, string $orderBy = 'id_desc', string $minRole = '', string $keyword = ''): array
     {
         $apiRoot = $this->getApiRoot($gitlabID, $minRole == 'owner' ? true : false);
         $url     = sprintf($apiRoot, "/groups");
@@ -686,14 +718,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建gitlab群组。
      * Create a gitab group by api.
      *
-     * @param  int      $gitlabID
-     * @param  object   $group
+     * @param  int    $gitlabID
+     * @param  object $group
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateGroup($gitlabID, $group)
+    public function apiCreateGroup(int $gitlabID, object $group): object|array|null
     {
         if(empty($group->name) or empty($group->path)) return false;
 
@@ -703,6 +736,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab项目列表根据分页。
      * Get projects of one gitlab.
      *
      * @param  int    $gitlabID
@@ -712,7 +746,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy = 'id_desc', $pager = null)
+    public function apiGetProjectsPager(int $gitlabID, string $keyword = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         if(!$apiRoot) return array();
@@ -735,6 +769,7 @@ class gitlabModel extends model
 
 
     /**
+     * 获取gitlab的项目列表。
      * Get projects of one gitlab.
      *
      * @param  int    $gitlabID
@@ -745,7 +780,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID, $simple = 'true', $minID = 0, $maxID = 0, $sudo = true)
+    public function apiGetProjects(int $gitlabID, string $simple = 'true', int $minID = 0, int $maxID = 0, bool $sudo = true): array
     {
         $apiRoot = $this->getApiRoot($gitlabID, $sudo);
         if(!$apiRoot) return array();
@@ -768,14 +803,15 @@ class gitlabModel extends model
 
 
     /**
+     * 通过api创建gitlab项目。
      * Create a gitab project by api.
      *
-     * @param  int      $gitlabID
-     * @param  object   $project
+     * @param  int    $gitlabID
+     * @param  object $project
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateProject($gitlabID, $project)
+    public function apiCreateProject(int $gitlabID, object $project): object|array|null
     {
         if(empty($project->name) and empty($project->path)) return false;
 
@@ -785,15 +821,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建项目成员。
      * Add a gitab project member by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @param  object   $member
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $member
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateProjectMember($gitlabID, $projectID, $member)
+    public function apiCreateProjectMember(int $gitlabID, int $projectID, object $member): object|array|null
     {
         if(empty($member->user_id) or empty($member->access_level)) return false;
 
@@ -803,15 +840,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新一个项目成员。
      * Update a gitab project member by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @param  object   $member
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $member
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiUpdateProjectMember($gitlabID, $projectID, $member)
+    public function apiUpdateProjectMember(int $gitlabID, int $projectID, object $member): object|array|null
     {
         if(empty($member->user_id) or empty($member->access_level)) return false;
 
@@ -821,15 +859,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个项目成员
      * Delete a gitab project member by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $groupID
-     * @param  int      $memberID
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  int    $memberID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteProjectMember($gitlabID, $groupID, $memberID)
+    public function apiDeleteProjectMember(int $gitlabID, int $groupID, int $memberID): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$groupID}/members/{$memberID}");
@@ -837,15 +876,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建一个群组成员。
      * Add a gitab group member by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $groupID
-     * @param  object   $member
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  object $member
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function apiCreateGroupMember($gitlabID, $groupID, $member)
+    public function apiCreateGroupMember(int $gitlabID, int $groupID, object $member): object|array|null|false
     {
         if(empty($member->user_id) or empty($member->access_level)) return false;
 
@@ -855,15 +895,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新一个gitlab群组成员。
      * Update a gitab group member by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $groupID
-     * @param  object   $member
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  object $member
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function apiUpdateGroupMember($gitlabID, $groupID, $member)
+    public function apiUpdateGroupMember(int $gitlabID, int $groupID, object $member): object|array|null|false
     {
         if(empty($member->user_id) or empty($member->access_level)) return false;
 
@@ -873,15 +914,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个gitlab群组成员。
      * Delete a gitab group member by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $groupID
-     * @param  int      $memberID
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  int    $memberID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteGroupMember($gitlabID, $groupID, $memberID)
+    public function apiDeleteGroupMember(int $gitlabID, int $groupID, int $memberID): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/{$groupID}/members/{$memberID}");
@@ -889,14 +931,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建一个gitlab用户.
      * Create a gitab user by api.
      *
-     * @param  int      $gitlabID
-     * @param  object   $user
+     * @param  int    $gitlabID
+     * @param  object $user
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateUser($gitlabID, $user)
+    public function apiCreateUser(int $gitlabID, object $user): object|array|null
     {
         if(empty($user->name) or empty($user->username) or empty($user->email) or empty($user->password)) return false;
 
@@ -906,14 +949,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新一个gitlab用户。
      * Update a gitab user by api.
      *
-     * @param  int      $gitlabID
-     * @param  object   $user
+     * @param  int    $gitlabID
+     * @param  object $user
      * @access public
      * @return object
      */
-    public function apiUpdateUser($gitlabID, $user)
+    public function apiUpdateUser(int $gitlabID, object $user): object|array|null
     {
         if(empty($user->id)) return false;
 
@@ -923,14 +967,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新一个gitlab群组。
      * Update a gitab group by api.
      *
-     * @param  int      $gitlabID
-     * @param  object   $group
+     * @param  int    $gitlabID
+     * @param  object $group
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiUpdateGroup($gitlabID, $group)
+    public function apiUpdateGroup(int $gitlabID, object $group): object|array|null
     {
         if(empty($group->id)) return false;
 
@@ -940,14 +985,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个gitlab群组。
      * Delete a gitab group by api.
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteGroup($gitlabID, $groupID)
+    public function apiDeleteGroup(int $gitlabID, int $groupID): object|array|null
     {
         if(empty($groupID)) return false;
 
@@ -957,14 +1003,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新一个gitlab项目。
      * Update a gitab project by api.
      *
-     * @param  int      $gitlabID
-     * @param  object   $project
+     * @param  int    $gitlabID
+     * @param  object $project
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiUpdateProject($gitlabID, $project)
+    public function apiUpdateProject(int $gitlabID, object $project): object|array|null
     {
         if(empty($project->id)) return false;
 
@@ -974,14 +1021,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个gitlab项目。
      * Delete a gitab project by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteProject($gitlabID, $projectID)
+    public function apiDeleteProject(int $gitlabID, int $projectID): object|array|null
     {
         if(empty($projectID)) return false;
 
@@ -991,14 +1039,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个gitlab用户。
      * Delete a gitab user by api.
      *
      * @param  int    $gitlabID
      * @param  int    $userID
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function apiDeleteUser($gitlabID, $userID)
+    public function apiDeleteUser(int $gitlabID, int $userID): object|array|null|false
     {
         if(empty($userID)) return false;
 
@@ -1008,15 +1057,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建一个gitlab用户。
      * Create a gitab user by api.
      *
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @param  object   $branch
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $branch
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateBranch($gitlabID, $projectID, $branch)
+    public function apiCreateBranch(int $gitlabID, int $projectID, object $branch): object|array|null
     {
         if(empty($branch->branch) or empty($branch->ref)) return false;
 
@@ -1026,15 +1076,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取一个项目信息。
      * Get single project by API.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  bool   $useUser
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetSingleProject($gitlabID, $projectID, $useUser = true)
+    public function apiGetSingleProject(int $gitlabID, int $projectID, bool $useUser = true): object|array|null
     {
         if(isset($this->projects[$gitlabID][$projectID])) return $this->projects[$gitlabID][$projectID];
 
@@ -1044,13 +1095,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 根据多个版本库多线程获取项目列表。
      * Multi get projects by repos.
      *
-     * @param object $repos
+     * @param  array $repos
      * @access public
      * @return void
      */
-    public function apiMultiGetProjects($repos)
+    public function apiMultiGetProjects(array $repos): void
     {
         $requests = array();
         foreach($repos as $id => $repo)
@@ -1066,115 +1118,123 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取一个用户。
      * Get single user by API.
      *
-     * @param  int $gitlabID
-     * @param  int $userID
+     * @param  int    $gitlabID
+     * @param  int    $userID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetSingleUser($gitlabID, $userID)
+    public function apiGetSingleUser(int $gitlabID, int $userID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID, false), "/users/$userID");
         return json_decode(commonModel::http($url));
     }
 
      /**
+      * 通过api获取一个gitlab群组。
      * Get single group by API.
      *
-     * @param  int $gitlabID
-     * @param  int $groupID
+     * @param  int    $gitlabID
+     * @param  int    $groupID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetSingleGroup($gitlabID, $groupID)
+    public function apiGetSingleGroup(int $gitlabID, int $groupID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/groups/$groupID");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 获取gitlab项目最新用户。
      * Get project users.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetProjectUsers($gitlabID, $projectID)
+    public function apiGetProjectUsers(int $gitlabID, int $projectID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/users");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 获取gitlab项目最新成员。
      * Get project all members(users and users in groups).
      *
      * @param  int $gitlabID
      * @param  int $projectID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetProjectMembers($gitlabID, $projectID)
+    public function apiGetProjectMembers(int $gitlabID, int $projectID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 获取gitlab项目某个成员信息。
      * Get the member detail in project.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $userID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $userID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetProjectMember($gitlabID, $projectID, $userID)
+    public function apiGetProjectMember(int $gitlabID, int $projectID, int $userID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all/$userID");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过api获取项目一个分支。
      * Get single branch by API.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetSingleBranch($gitlabID, $projectID, $branch)
+    public function apiGetSingleBranch(int $gitlabID, int $projectID, string $branch): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/branches/$branch");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过API获取项目的分叉。
      * Get Forks of a project by API.
      *
      * @link   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
      * @param  int $gitlabID
      * @param  int $projectID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetForks($gitlabID, $projectID)
+    public function apiGetForks(int $gitlabID, int $projectID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/forks");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 获取项目是否fork别的项目而来。
      * Get upstream project by API.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function apiGetUpstream($gitlabID, $projectID)
+    public function apiGetUpstream(int $gitlabID, int $projectID): string|array
     {
         $currentProject = $this->apiGetSingleProject($gitlabID, $projectID);
         if(isset($currentProject->forked_from_project)) return $currentProject->forked_from_project;
@@ -1182,15 +1242,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取项目 hooks。
      * Get hooks.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @link   https://docs.gitlab.com/ee/api/projects.html#list-project-hooks
-     * @return mixed
+     * @return object|array|null
      */
-    public function apiGetHooks($gitlabID, $projectID)
+    public function apiGetHooks(int $gitlabID, int $projectID): object|array|null
     {
         $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/{$projectID}/hooks";
@@ -1200,16 +1261,17 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取指定hook。
      * Get specific hook by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $hookID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $hookID
      * @access public
      * @link   https://docs.gitlab.com/ee/api/projects.html#get-project-hook
-     * @return mixed
+     * @return object|array|null
      */
-    public function apiGetHook($gitlabID, $projectID, $hookID)
+    public function apiGetHook(int $gitlabID, int $projectID, int $hookID): object|array|null
     {
         $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/$projectID/hooks/$hookID)";
@@ -1219,6 +1281,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建hook。
      * Create hook by api.
      *
      * @param  int    $gitlabID
@@ -1226,9 +1289,9 @@ class gitlabModel extends model
      * @param  object $hook
      * @access public
      * @link   https://docs.gitlab.com/ee/api/projects.html#add-project-hook
-     * @return mixed
+     * @return object|array|null
      */
-    public function apiCreateHook($gitlabID, $projectID, $hook)
+    public function apiCreateHook(int $gitlabID, int $projectID, object $hooka): object|array|null
     {
         if(!isset($hook->url)) return false;
 
@@ -1244,16 +1307,17 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除hook。
      * Delete hook by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $hookID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $hookID
      * @access public
      * @link   https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
-     * @return mixed
+     * @return object|array|null
      */
-    public function apiDeleteHook($gitlabID, $projectID, $hookID)
+    public function apiDeleteHook(int $gitlabID, int $projectID, int $hookID): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
@@ -1262,13 +1326,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 添加一个推送和合并请求事件的webhook到gitlab项目。
      * Add webhook with push and merge request events to GitLab project.
      *
      * @param  object $repo
+     * @param  string $token
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function addPushWebhook($repo, $token = '')
+    public function addPushWebhook(object $repo, string $token = ''): bool|array
     {
         $systemURL = dirname(common::getSysURL() . $_SERVER['REQUEST_URI']);
 
@@ -1288,13 +1354,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 检查webhook是否存在。
      * Check if Webhook exists.
      *
      * @param  object $repo
      * @param  string $url
      * @return bool
      */
-    public function isWebhookExists($repo, $url = '')
+    public function isWebhookExists(object $repo, string $url = ''): bool
     {
         $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
         foreach($hookList as $hook)
@@ -1306,6 +1373,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新hook。
      * Update hook by api.
      *
      * @param  int    $gitlabID
@@ -1314,9 +1382,9 @@ class gitlabModel extends model
      * @param  object $hook
      * @access public
      * @link   https://docs.gitlab.com/ee/api/projects.html#edit-project-hook
-     * @return object
+     * @return string|false
      */
-    public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)
+    public function apiUpdateHook(int $gitlabID, int $projectID, int $hookID, object $hook): string|false
     {
         $apiRoot = $this->getApiRoot($gitlabID, false);
 
@@ -1332,15 +1400,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建gitlab项目的项目标签。
      * Create Label for gitlab project.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $label
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function apiCreateLabel($gitlabID, $projectID, $label)
+    public function apiCreateLabel(int $gitlabID, int $projectID, object $label): object|array|null|false
     {
         if(empty($label->name) or empty($label->color)) return false;
 
@@ -1350,14 +1419,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取项目的项目标签。
      * Get labels of project by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
-     * @return array
+     * @return object|array|null
      */
-    public function apiGetLabels($gitlabID, $projectID)
+    public function apiGetLabels(int $gitlabID, int $projectID): object|array|null
     {
         $apiRoot  = $this->getApiRoot($gitlabID);
         $url      = sprintf($apiRoot, "/projects/{$projectID}/labels/");
@@ -1367,15 +1437,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个项目标签。
      * Delete a Label with labelName by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $labelName
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteLabel($gitlabID, $projectID, $labelName)
+    public function apiDeleteLabel(int $gitlabID, int $projectID, string $labelName): object|array|null
     {
         $labels = $this->apiGetLabels($gitlabID, $projectID);
         foreach($labels as $label)
@@ -1392,30 +1463,32 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取一个issue。
      * Get single issue by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $issueID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $issueID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
+    public function apiGetSingleIssue(int $gitlabID, int $projectID, int $issueID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/issues/{$issueID}");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过api获取issue列表。
      * Get gitlab issues by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $options
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetIssues($gitlabID, $projectID, $options = null)
+    public function apiGetIssues(int $gitlabID, int $projectID, string $options = ''): object|array|null
     {
         if($options)
         {
@@ -1430,6 +1503,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建issue。
      * Create issue by api.
      *
      * @param  int    $gitlabID
@@ -1438,9 +1512,9 @@ class gitlabModel extends model
      * @param  int    $objectID
      * @param  object $object
      * @access public
-     * @return object
+     * @return bool
      */
-    public function apiCreateIssue($gitlabID, $projectID, $objectType, $objectID, $object)
+    public function apiCreateIssue(int $gitlabID, int $projectID, string $objectType, int $objectID, object $object): bool
     {
         if(!isset($object->id)) $object->id = $objectID;
 
@@ -1463,6 +1537,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api更新issue。
      * Update issue by gitlab API.
      *
      * @param  int    $gitlabID
@@ -1472,9 +1547,9 @@ class gitlabModel extends model
      * @param  object $object
      * @param  int    $objectID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object, $objectID = null)
+    public function apiUpdateIssue(int $gitlabID, int $projectID, int $issueID, string $objectType, object $object, int $objectID = 0): object|array|null
     {
         $oldObject = clone $object;
 
@@ -1493,15 +1568,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个issue。
      * Delete an issue by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $issueID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $issueID
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteIssue($gitlabID, $projectID, $issueID)
+    public function apiDeleteIssue(int $gitlabID, int $projectID, int $issueID): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
@@ -1509,6 +1585,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建一个流水线。
      * Create a new pipeline by api.
      *
      * @param  int    $gitlabID
@@ -1518,7 +1595,7 @@ class gitlabModel extends model
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
      */
-    public function apiCreatePipeline($gitlabID, $projectID, $params)
+    public function apiCreatePipeline(int $gitlabID, int $projectID, object $params): object|array|null
     {
         if(!is_string($params)) $params = json_encode($params);
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
@@ -1526,75 +1603,81 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取一个流水线。
      * Get single pipline by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $pipelineID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $pipelineID
      * @access public
-     * @return object
+     * @return object|array|null
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#get-a-single-pipeline
      */
-    public function apiGetSinglePipeline($gitlabID, $projectID, $pipelineID)
+    public function apiGetSinglePipeline(int $gitlabID, int $projectID, int $pipelineID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过api获取流水线jobs。
      * List pipeline jobs by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $pipelineID
-     * @return object
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $pipelineID
+     * @access public
+     * @return object|array|null
      * @docment https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
      */
-    public function apiGetJobs($gitlabID, $projectID, $pipelineID)
+    public function apiGetJobs(int $gitlabID, int $projectID, int $pipelineID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}/jobs");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过api获取一个job。
      * Get a single job by api.
      *
      * @param  int $gitlabID
      * @param  int $projectID
      * @param  int $jobID
-     * @return object
+     * @return object|array|null
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
      */
-    public function apiGetSingleJob($gitlabID, $projectID, $jobID)
+    public function apiGetSingleJob(int $gitlabID, int $projectID, int $jobID): object|array|null
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
         return json_decode(commonModel::http($url));
     }
 
     /**
+     * 通过api获取日志。
      * Get a log file by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $jobID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $jobID
      * @return string
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
      */
-    public function apiGetJobLog($gitlabID, $projectID, $jobID)
+    public function apiGetJobLog(int $gitlabID, int $projectID, int $jobID): string
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
         return commonModel::http($url);
     }
 
     /**
+     * 通过api获取代码库分支列表。
      * Get project repository branches by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetBranches($gitlabID, $projectID, $pager = null)
+    public function apiGetBranches(int $gitlabID, int $projectID, object $pager = null): array
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
         $allResults = array();
@@ -1610,6 +1693,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取代码库标签列表。
      * Get project repository tags by api.
      *
      * @param  int    $gitlabID
@@ -1618,9 +1702,9 @@ class gitlabModel extends model
      * @param  string $keyword
      * @param  object $pager
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetTags($gitlabID, $projectID, $orderBy = '', $keyword = '', $pager = null)
+    public function apiGetTags(int $gitlabID, int $projectID, string $orderBy = '', string $keyword = '', object $pager = null): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
 
@@ -1663,15 +1747,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个标签。
      * Delete a gitab tag by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $tagName
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteTag($gitlabID, $projectID, $tagName = '')
+    public function apiDeleteTag(int $gitlabID, int $projectID, string $tagName = ''): object|array|null
     {
         if(!(int)$gitlabID or !(int)$projectID or empty($tagName)) return false;
 
@@ -1682,14 +1767,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取一个项目的标签策略。
      * Get protect tags of one project.
      *
-     * @param int $gitlabID
-     * @param int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function apiGetTagPrivs($gitlabID, $projectID)
+    public function apiGetTagPrivs(int $gitlabID, int $projectID): array
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_tags");
@@ -1710,15 +1796,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个gitlab项目tag。
      * Delete a gitab protect tag by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $tag
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiDeleteTagPriv($gitlabID, $projectID, $tag)
+    public function apiDeleteTagPriv(int $gitlabID, int $projectID, string $tag): object|array|null
     {
         if(empty($gitlabID)) return false;
         $apiRoot = $this->getApiRoot($gitlabID);
@@ -1728,18 +1815,20 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过HTTP_X_GITLAB_TOKEN检查webhook token。
      * Check webhook token by HTTP_X_GITLAB_TOKEN.
      *
      * @access public
      * @return void
      */
-    public function webhookCheckToken()
+    public function webhookCheckToken(): void
     {
         $gitlab = $this->getByID($this->get->gitlab);
         if($gitlab->private != $_SERVER["HTTP_X_GITLAB_TOKEN"]) echo 'Token error.';
     }
 
     /**
+     * 解析webhook事件。
      * Parse webhook body function.
      *
      * @param  object $body
@@ -1747,7 +1836,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function webhookParseBody($body, $gitlabID)
+    public function webhookParseBody(object $body, int $gitlabID): object
     {
         $type = zget($body, 'object_kind', '');
         if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
@@ -1757,6 +1846,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 解析webhook触发的issue。
      * Parse Webhook issue.
      *
      * @param  object $body
@@ -1764,7 +1854,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function webhookParseIssue($body, $gitlabID)
+    public function webhookParseIssue(object $body, int $gitlabID): object
     {
         $object = $this->webhookParseObject($body->labels);
         if(empty($object)) return null;
@@ -1794,21 +1884,21 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function webhookParseNote($body)
+    public function webhookParseNote(object $body): void
     {
         //@todo
     }
 
     /**
+     * 通过webhook同步issue。
      * Webhook sync issue.
      *
+     * @param  int    $gitlabID
      * @param  object $issue
-     * @param  int    $objectType
-     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function webhookSyncIssue($gitlabID, $issue)
+    public function webhookSyncIssue(int $gitlabID, object $issue): bool
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
@@ -1816,13 +1906,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过标签解析禅道对象。
      * Parse zentao object from labels.
      *
      * @param  array $labels
      * @access public
      * @return object
      */
-    public function webhookParseObject($labels)
+    public function webhookParseObject(array $labels): object
     {
         $object     = null;
         $objectType = '';
@@ -1845,13 +1936,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过issue webhook指派禅道任务、需求、bug。
      * Process webhook issue assign option.
      *
      * @param  object $issue
      * @access public
      * @return bool
      */
-    public function webhookAssignIssue($issue)
+    public function webhookAssignIssue(object $issue): bool
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if(!$tableName) return false;
@@ -1872,13 +1964,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过issue webhook关闭禅道任务、需求、bug。
      * Process issue close option.
      *
      * @param  object $issue
      * @access public
      * @return bool
      */
-    public function webhookCloseIssue($issue)
+    public function webhookCloseIssue(object $issue): bool
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if(!$tableName) return false;
@@ -1901,6 +1994,7 @@ class gitlabModel extends model
 
 
     /**
+     * 创建一个gitlab项目标签。
      * Create zentao object label for gitlab project.
      *
      * @param  int    $gitlabID
@@ -1908,9 +2002,9 @@ class gitlabModel extends model
      * @param  string $objectType
      * @param  string $objectID
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID)
+    public function createZentaoObjectLabel(int $gitlabID, int $projectID, string $objectType, string $objectID): object|array|null|false
     {
         $label              = new stdclass;
         $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
@@ -1921,15 +2015,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建一条gitlab项目和禅道产品的关联信息。
      * Create relationship between zentao product and  gitlab project.
      *
      * @param  array $products
      * @param  int   $gitlabID
      * @param  int   $gitlabProjectID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveProjectRelation($products, $gitlabID, $gitlabProjectID)
+    public function saveProjectRelation(array $products, int $gitlabID, int $gitlabProjectID): bool
     {
         $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
 
@@ -1954,15 +2049,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 删除一个gitlab项目关联信息。
      * Delete project relation.
      *
      * condition: when user deleting a repo.
      *
-     * @param  int $repoID
+     * @param  int    $repoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteProjectRelation($repoID)
+    public function deleteProjectRelation(int $repoID): bool
     {
         $repo = $this->dao->select('product,path as gitlabProjectID,client as gitlabID')->from(TABLE_REPO)
             ->where('id')->eq($repoID)
@@ -1982,9 +2078,11 @@ class gitlabModel extends model
                 ->andWhere('BID')->eq($repo->gitlabProjectID)
                 ->exec();
         }
+        return true;
     }
 
     /**
+     * 创建webhook。
      * Create webhook for zentao.
      *
      * @param  array $products
@@ -1993,7 +2091,7 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function initWebhooks($products, $gitlabID, $projectID)
+    public function initWebhooks(array $products, int $gitlabID, int $projectID): bool
     {
         $gitlab   = $this->getByID($gitlabID);
         $webhooks = $this->apiGetHooks($gitlabID, $projectID);
@@ -2008,6 +2106,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 从禅道和gtilab上删除一个issue。
      * Delete an issue from zentao and gitlab.
      *
      * @param  string $objectType
@@ -2016,7 +2115,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function deleteIssue($objectType, $objectID, $issueID)
+    public function deleteIssue(string $objectType, int $objectID, int $issueID): void
     {
         $object   = $this->loadModel($objectType)->getByID($objectID);
         $relation = $this->getRelationByObject($objectType, $objectID);
@@ -2025,6 +2124,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 保存同步的issut到关联表。
      * Save synced issue to relation table.
      *
      * @param  string $objectType
@@ -2032,9 +2132,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $issue
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveIssueRelation($objectType, $object, $gitlabID, $issue)
+    public function saveIssueRelation(string $objectType, object $object, int $gitlabID, object $issue): bool
     {
         if(empty($issue->iid) or empty($issue->project_id)) return false;
 
@@ -2050,9 +2150,12 @@ class gitlabModel extends model
         $relation->BVersion  = $issue->project_id;
         $relation->extra     = $gitlabID;
         $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+        return true;
     }
 
     /**
+     * 保存导入issue。
      * Save imported issue.
      *
      * @param  int    $gitlabID
@@ -2063,7 +2166,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object)
+    public function saveImportedIssue(int $gitlabID, int $projectID, string $objectType, int $objectID, object $issue, object $object): void
     {
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
         $data  = new stdclass;
@@ -2076,6 +2179,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 解析任务为gitlab issue。
      * Parse task to issue.
      *
      * @param  int    $gitlabID
@@ -2084,7 +2188,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function taskToIssue($gitlabID, $gitlabProjectID, $task)
+    public function taskToIssue(int $gitlabID, int $gitlabProjectID, object $task): object
     {
         $map         = $this->config->gitlab->maps->task;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
@@ -2116,6 +2220,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 解析需求为gitlab issue。
      * Parse story to issue.
      *
      * @param  int    $gitlabID
@@ -2124,7 +2229,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function storyToIssue($gitlabID, $gitlabProjectID, $story)
+    public function storyToIssue(int $gitlabID, int $gitlabProjectID, object $story): object
     {
         $map         = $this->config->gitlab->maps->story;
         $issue       = new stdclass;
@@ -2162,6 +2267,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 解析bug为gitlab issue。
      * Parse bug to issue.
      *
      * @param  int    $gitlabID
@@ -2170,7 +2276,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function bugToIssue($gitlabID, $projectID, $bug)
+    public function bugToIssue(int $gitlabID, int $projectID, object $bug): object
     {
         $map         = $this->config->gitlab->maps->bug;
         $issue       = new stdclass;
@@ -2208,6 +2314,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 解析禅道任务、bug、需求为gitlab issue。
      * Parse zentao object to issue. object can be task, bug and story.
      *
      * @param  int    $gitlabID
@@ -2217,7 +2324,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function parseObjectToIssue($gitlabID, $projectID, $objectType, $object)
+    public function parseObjectToIssue(int $gitlabID, int $projectID, string $objectType, object $object): object
     {
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
@@ -2253,6 +2360,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 解析gitlab issue为禅道任务、bug、需求。
      * Parse issue to zentao object.
      *
      * @param  object $issue
@@ -2261,7 +2369,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function issueToZentaoObject($issue, $gitlabID, $changes = null)
+    public function issueToZentaoObject(object $issue, int $gitlabID, object $changes = null): object
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
@@ -2291,13 +2399,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建一个gitlab项目。
      * Create gitlab project.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function createProject($gitlabID)
+    public function createProject($gitlabID): bool
     {
         $project = fixer::input('post')->get();
         if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
@@ -2316,13 +2425,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 编辑一个gitlab项目。
      * Edit gitlab project.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function editProject($gitlabID)
+    public function editProject(int $gitlabID): bool
     {
         $project = fixer::input('post')->get();
         if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
@@ -2340,13 +2450,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建一个gitlab用户。
      * Create a gitlab user.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function createUser($gitlabID)
+    public function createUser(int $gitlabID): bool
     {
         $user = fixer::input('post')->remove('avatar')->get();
         if(!empty($_FILES['avatar'])) $user->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
@@ -2396,13 +2507,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 编辑一个gitlab用户。
      * Edit a gitlab user.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function editUser($gitlabID)
+    public function editUser(int $gitlabID): bool
     {
         $user = fixer::input('post')
             ->setDefault('can_create_group', 0)
@@ -2458,13 +2570,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建一个gitlab群组。
      * Create a gitlab group.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function createGroup($gitlabID)
+    public function createGroup(int $gitlabID): bool
     {
         $group = fixer::input('post')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
 
@@ -2484,13 +2597,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 编辑一个gitlab群组。
      * Edit a gitlab group.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
      * @access public
      * @return bool
      */
-    public function editGroup($gitlabID)
+    public function editGroup(int $gitlabID): bool
     {
         $group = fixer::input('post')->remove('path')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
 
@@ -2509,14 +2623,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建一个项目分支。
      * Create a gitlab branch.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return bool
      */
-    public function createBranch($gitlabID, $projectID)
+    public function createBranch(int $gitlabID, int $projectID): bool
     {
         $branch = fixer::input('post')->get();
 
@@ -2536,13 +2651,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 错误处理。
      * Api error handling.
      *
      * @param  object $response
      * @access public
      * @return bool
      */
-    public function apiErrorHandling($response)
+    public function apiErrorHandling(object $response): bool
     {
         if(!empty($response->error))
         {
@@ -2582,12 +2698,13 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取项目类型是gitlab的产品。
      * Get products which scm is GitLab by projects.
      *
      * @param  array $projectIDs
      * @return array
      */
-    public function getProductsByProjects($projectIDs)
+    public function getProductsByProjects(array $projectIDs): array
     {
         return $this->dao->select('path,product')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('SCM')->eq('Gitlab')
@@ -2596,6 +2713,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取项目保护分支。
      * Get protect branches of one project.
      *
      * @param  int    $gitlabID
@@ -2605,7 +2723,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetBranchPrivs($gitlabID, $projectID, $keyword = '', $orderBy = 'id_desc')
+    public function apiGetBranchPrivs(int $gitlabID, int $projectID, string $keyword = '', string $orderBy = 'id_desc'): array
     {
         $keyword  = urlencode($keyword);
         $url      = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches");
@@ -2628,6 +2746,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 管理分支策略。
      * Manage branch privs.
      *
      * @param  int    $gitlabID
@@ -2636,7 +2755,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function manageBranchPrivs($gitlabID, $projectID, $protected = array())
+    public function manageBranchPrivs(int $gitlabID, int $projectID, array $protected = array()): array
     {
         $data        = fixer::input('post')->get();
         $branches    = $data->name;
@@ -2676,15 +2795,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建一个分支策略。
      * Create a gitab protect branch by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $priv
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
+    public function apiCreateBranchPriv(int $gitlabID, int $projectID, object $priv): object|array|null
     {
         if(empty($gitlabID))   return false;
         if(empty($projectID))  return false;
@@ -2695,15 +2815,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api删除一个保护分支。
      * Delete a gitab protect branch by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return array
+     * @return object|array|null
      */
-    public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
+    public function apiDeleteBranchPriv(int $gitlabID, int $projectID, string $branch): object|array|null
     {
         if(empty($gitlabID)) return false;
         $branch  = urlencode($branch);
@@ -2713,6 +2834,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 管理标签策略。
      * Manage tag privs.
      *
      * @param  int    $gitlabID
@@ -2721,7 +2843,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function manageTagPrivs($gitlabID, $projectID, $protected = array())
+    public function manageTagPrivs(int $gitlabID, int $projectID, array $protected = array()): array
     {
         $data         = fixer::input('post')->get();
         $tags         = $data->name;
@@ -2763,15 +2885,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api创建一个保护分支。
      * Create a gitab protect tag by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $priv
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiCreateTagPriv($gitlabID, $projectID, $priv)
+    public function apiCreateTagPriv(int $gitlabID, int $projectID, object $priv): object|array|null
     {
         if(empty($gitlabID) or empty($projectID)) return false;
         if(empty($priv->name)) return false;
@@ -2780,13 +2903,14 @@ class gitlabModel extends model
     }
 
     /**
+     * 检查权限等级。
      * Check access level.
      *
      * @param  array $accessLevels
      * @access public
      * @return int
      */
-    public function checkAccessLevel($accessLevels)
+    public function checkAccessLevel(array $accessLevels): int
     {
         if(is_array($accessLevels))
         {
@@ -2809,9 +2933,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $tag
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetSingleTag($gitlabID, $projectID, $tag)
+    public function apiGetSingleTag(int $gitlabID, int $projectID, string $tag): object|array|null
     {
         if(empty($gitlabID)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/tags/$tag");
@@ -2819,6 +2943,7 @@ class gitlabModel extends model
     }
 
     /**
+     * 创建一个gitlab标签。
      * Create gitlab tag.
      *
      * @param  int $gitlabID
@@ -2826,7 +2951,7 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function createTag($gitlabID, $projectID)
+    public function createTag(int $gitlabID, int $projectID): bool
     {
         if(empty($gitlabID)) return false;
 
@@ -2852,16 +2977,18 @@ class gitlabModel extends model
     }
 
     /**
+     * 检查用户权限。
      * Check user access.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $project
+     * @param  array  $groupIDList
      * @param  string $maxRole
      * @access public
      * @return bool
      */
-    public function checkUserAccess($gitlabID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    public function checkUserAccess(int $gitlabID, int $projectID = 0, object $project = null, array $groupIDList = array(), string $maxRole = 'maintainer'): bool
     {
         if($this->app->user->admin) return true;
 
@@ -2891,28 +3018,30 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab版本。
      * Get gitlab version.
      *
      * @param  string $host
      * @param  string $token
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function getVersion($host, $token)
+    public function getVersion(string $host, string $token): object|array|null
     {
         $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
         return $this->apiGet($host, '/version');
     }
 
     /**
+     * 检查token。
      * Check token access.
      *
      * @param  string $url
      * @param  string $token
      * @access public
-     * @return void
+     * @return object|array|null|false
      */
-    public function checkTokenAccess($url = '', $token = '')
+    public function checkTokenAccess(string $url = '', string $token = ''): object|array|null|false
     {
         $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
         $url      = sprintf($apiRoot, "/users") . "&per_page=5&active=true";
@@ -2926,14 +3055,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 获取gitlab菜单。
      * Get gitlab menu.
      *
      * @param  int    $gitlabID
      * @param  string $type
      * @access public
-     * @return void
+     * @return string
      */
-    public function getGitlabMenu($gitlabID = 0, $type = 'project')
+    public function getGitlabMenu(int $gitlabID = 0, string $type = 'project'): string
     {
         $html = '<div class="btn-toolbar pull-left">';
 
@@ -2965,15 +3095,16 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过api获取流水线。
      * Get pipeline with api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return object|array
+     * @return object|array|null
      */
-    public function apiGetPipeline($gitlabID, $projectID, $branch)
+    public function apiGetPipeline(int $gitlabID, int $projectID, string $branch): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/$projectID/pipelines") . "&ref=$branch";
@@ -3057,14 +3188,15 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过graphql的api获取数据。
      * Get data by api graphql.
      *
      * @param  int    $gitlabID
-     * @param  int    $query
+     * @param  array    $query
      * @access public
-     * @return object|null
+     * @return object|array|null
      */
-    public function apiGetByGraphql(int $gitlabID, array $query): object|null
+    public function apiGetByGraphql(int $gitlabID, array $query): object|array|null
     {
         static $gitlab;
         if(empty($gitlab)) $gitlab = $this->getByID($gitlabID);
@@ -3082,9 +3214,9 @@ class gitlabModel extends model
      * @param  int    $path
      * @param  string $branch
      * @access public
-     * @return object|null
+     * @return object|array|null
      */
-    public function getFileLastCommit(object $repo, string $path, string $branch = 'HEAD'): object|null
+    public function getFileLastCommit(object $repo, string $path, string $branch = 'HEAD'): object|array|null
     {
         $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
         $query    = array('query' => 'query {project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {lastCommit {sha message author {name username} authorName authoredDate}}}}}');
