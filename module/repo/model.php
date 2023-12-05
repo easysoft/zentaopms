@@ -371,15 +371,13 @@ class repoModel extends model
      * Update a repo.
      *
      * @param  object $data
-     * @param  int    $id
+     * @param  object $repo
      * @param  bool   $isPipelineServer
      * @access public
      * @return bool
      */
-    public function update(object $data, int $id, bool $isPipelineServer): bool
+    public function update(object $data, object $repo, bool $isPipelineServer): bool
     {
-        $repo = $this->getByID($id);
-
         if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $data->SCM == 'Gitlab')
         {
             $repo->gitService = $data->serviceHost;
@@ -398,29 +396,36 @@ class repoModel extends model
             }
         }
 
+        if($data->SCM == 'Subversion' && $data->path != $repo->path)
+        {
+            $data->synced     = 0;
+            $data->lastSync   = null;
+            $data->lastCommit = null;
+        }
+
         if($data->encrypt == 'base64') $data->password = base64_encode((string)$data->password);
         $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $id")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $id")
+            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $repo->id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $repo->id")
             ->autoCheck()
-            ->where('id')->eq($id)->exec();
+            ->where('id')->eq($repo->id)->exec();
 
         $this->rmClientVersionFile();
 
         if($data->SCM == 'Gitlab')
         {
             $this->loadModel('gitlab')->updateCodePath($data->serviceHost, (int)$data->serviceProject, $repo->id);
-            $data->path = $this->getByID($id)->path;
+            $data->path = $this->getByID($repo->id)->path;
             $this->updateCommitDate($repo->id);
         }
 
         if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $repo->path != $data->path)
         {
-            $this->repoTao->deleteInfoByID($id);
+            $this->repoTao->deleteInfoByID($repo->id);
             return false;
         }
 

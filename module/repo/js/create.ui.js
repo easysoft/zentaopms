@@ -87,12 +87,14 @@ function onScmChange()
         $('.account-fields').addClass('hidden');
         $('#path').attr('placeholder', pathGitTip);
         $('#client').attr('placeholder', clientGitTip);
+        $('#client').val('/usr/bin/git');
     }
     else
     {
         $('.account-fields').removeClass('hidden');
         $('#path').attr('placeholder', pathSvnTip);
         $('#client').attr('placeholder', clientSvnTip);
+        $('#client').val('/usr/bin/svn');
     }
 
     if(scm == 'Git' || scm == 'Subversion')

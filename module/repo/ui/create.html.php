@@ -153,6 +153,7 @@ formPanel
             set::width('1/2'),
             set::name("account"),
             set::label($lang->user->account),
+            set::required(true),
             set::control("text")
         )
     ),
@@ -163,6 +164,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->password),
+            set::required(true),
             inputGroup
             (
                 control(set(array
