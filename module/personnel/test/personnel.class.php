@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class personnelTest
 {
     public function __construct($user)
@@ -8,17 +9,19 @@ class personnelTest
         $this->objectModel = $tester->loadModel('personnel');
         $tester->app->loadClass('dao');
     }
+
     /**
-     * Get accessible personnel test
+     * 测试获取项目集的可访问人员。
+     * Test get accessible personnel.
      *
-     * @param int $programID
-     * @param int $deptID
-     * @param string $browseType
-     * @param int $queryID
+     * @param  int    $programID
+     * @param  int    $deptID
+     * @param  string $browseType
+     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getAccessiblePersonnelTest($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0)
+    public function getAccessiblePersonnelTest(int $programID = 0, int $deptID = 0, string $browseType = 'all', int $queryID = 0): array
     {
         $objects = $this->objectModel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID);
 

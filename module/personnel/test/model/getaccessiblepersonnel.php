@@ -1,24 +1,21 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/personnel.class.php';
-su('admin');
 
 zdTable('project')->config('program')->gen(1);
 zdTable('user')->gen(51);
 zdTable('userview')->config('userview')->gen(50);
 zdTable('userquery')->config('userquery')->gen(1);
 
+su('admin');
+
 /**
 
 title=测试 personnelModel->getAccessiblePersonnel();
 cid=1
 pid=1
-
-测试取出结果集中的一个对象里的名字programID=1 >> 测试1
-测试取出匹配的数量 >> 10
-测试取出结果集中的一个对象里的名字programID=2 >> 开发11
-测试取出匹配的数量 >> 10
 
 */
 
@@ -54,4 +51,3 @@ r($result5) && p('2:account') && e('user1');    //测试programID为1，部门ID
 
 r(count($result6)) && p() && e(1);              //测试programID为1，部门ID为0，浏览类型为bysearch，查询ID为1的结果集的数量
 r($result6) && p('11:account') && e('user10');    //测试programID为1，部门ID为0，浏览类型为bysearch，查询ID为1的结果集内id为2的account
-

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of personnel of ZenTaoPMS.
  *
@@ -12,17 +13,17 @@
 class personnelModel extends model
 {
     /**
+     * 获取项目集可访问人员。
      * Access to program set invest staff.
      *
      * @param  int       $programID
      * @param  int       $deptID
      * @param  string    $browseType
-     * @param  string    $orderBy
      * @param  int       $queryID
      * @access public
      * @return array
      */
-    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0)
+    public function getAccessiblePersonnel(int $programID = 0, int $deptID = 0, string $browseType = 'all', int $queryID = 0)
     {
         $accessibleQuery = '';
         if($browseType == 'bysearch')
@@ -38,9 +39,10 @@ class personnelModel extends model
         }
 
         /* Determine who can be accessed based on access control. */
-        $program       = $this->loadModel('program')->getByID($programID);
+        $program = $this->loadModel('program')->getByID($programID);
         if(!$program) return array();
 
+        /* Get accessible account of program. */
         $accessibleQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $accessibleQuery);
         $personnelList   = array();
         $personnelList   = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
@@ -51,6 +53,7 @@ class personnelModel extends model
             ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
             ->fetchAll('id');
 
+        /* If the program's acl is open and the user cannot access this program, remove it. */
         if($program->acl == 'open')
         {
             foreach($personnelList as $personnel)
