@@ -179,7 +179,7 @@ $config->charsets['es']['GBK']      = 'GBK';
 $config->charsets['pt']['utf-8']    = 'UTF-8';
 $config->charsets['pt']['GBK']      = 'GBK';
 
-$config->openMethods = array();
+if(!isset($config->openMethods) || !is_array($config->openMethods)) $config->openMethods = array();
 $config->openMethods[] = 'gitlab.webhook';
 $config->openMethods[] = 'upgrade.ajaxupdatefile';
 $config->openMethods[] = 'user.login';
