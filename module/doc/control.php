@@ -983,15 +983,16 @@ class doc extends control
     }
 
     /**
+     * 删除一个目录。
      * Delete a catalog.
      *
      * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function deleteCatalog($moduleID)
+    public function deleteCatalog(int $moduleID)
     {
-        echo $this->fetch('tree', 'delete', "moduleID=$moduleID&confirm=yes");
+        echo $this->fetch('tree', 'delete', "moduleID={$moduleID}&confirm=yes");
     }
 
     /**
