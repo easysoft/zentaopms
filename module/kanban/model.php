@@ -2481,29 +2481,19 @@ class kanbanModel extends model
     }
 
     /**
+     * 编辑看板。
      * Update a kanban.
      *
      * @param  int    $kanbanID
+     * @param  object $kanban
      * @access public
-     * @return array
+     * @return bool
      */
-    public function update($kanbanID)
+    public function update(int $kanbanID, object $kanban)
     {
-        $kanbanID  = (int)$kanbanID;
-        $account   = $this->app->user->account;
         $oldKanban = $this->getByID($kanbanID);
-        $kanban    = fixer::input('post')
-            ->setDefault('lastEditedBy', $account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('whitelist', '')
-            ->setDefault('team', '')
-            ->cleanINT('space')
-            ->join('whitelist', ',')
-            ->join('team', ',')
-            ->trim('name')
-            ->stripTags($this->config->kanban->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,contactListMenu')
-            ->get();
+
+        if(strpos(",{$kanban->team},", ",$kanban->owner,") === false) $kanban->team .= ",$kanban->owner";
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -2511,20 +2501,23 @@ class kanbanModel extends model
             ->where('id')->eq($kanbanID)
             ->exec();
 
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $this->loadModel('file')->saveUpload('kanban', $kanbanID);
+        $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+        if(!empty($kanban->team) or !empty($kanban->whitelist))
         {
-            $this->loadModel('file')->saveUpload('kanban', $kanbanID);
-            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
-
-            if(isset($_POST['team']) or isset($_POST['whitelist']))
-            {
-                $type = isset($_POST['team']) ? 'team' : 'whitelist';
-                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
-                $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
-            }
-
-            return common::createChanges($oldKanban, $kanban);
+            $type = !empty($kanban->team) ? 'team' : 'whitelist';
+            $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
+            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
         }
+
+        $changes  = common::createChanges($oldKanban, $kanban);
+        $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
+        $this->action->logHistory($actionID, $changes);
+
+        return true;
     }
 
     /**
