@@ -1,7 +1,10 @@
 if(!window.aiSquare) window.aiSquare = {};
 
-window.aiSquare.handleStarBtnClick = function()
+window.aiSquare.handleStarBtnClick = function(e)
 {
+    e.preventDefault();
+    e.stopPropagation();
+
     const $btn = $(this);
     const url = $btn.attr('data-url');
     $.get(url, function(response)

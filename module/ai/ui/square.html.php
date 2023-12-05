@@ -107,6 +107,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs)
                 $categoryList[$miniProgram->category]
             ),
             btn(
+                set::size('md'),
                 setClass('ghost btn-star'),
                 setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
                 on::click('window.aiSquare.handleStarBtnClick'),
