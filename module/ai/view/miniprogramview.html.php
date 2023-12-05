@@ -183,7 +183,7 @@
                 <th class="w-90px"><?= $lang->ai->miniPrograms->icon; ?></th>
                 <td>
                   <?php list($iconName, $iconTheme) = explode('-', $miniProgram->icon); ?>
-                  <button class="btn btn-icon" style="width: 46px; height: 46px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid <?= $config->ai->miniPrograms->themeList[$iconTheme][1]; ?>; background-color: <?= $config->ai->miniPrograms->themeList[$iconTheme][0]; ?>">
+                  <button class="btn btn-icon" style="width: 46px; height: 46px; display: flex; justify-content: center; align-items: center; border: 1px solid <?= $config->ai->miniPrograms->themeList[$iconTheme][1]; ?>; background-color: <?= $config->ai->miniPrograms->themeList[$iconTheme][0]; ?>">
                     <?= $config->ai->miniPrograms->iconList[$iconName]; ?>
                   </button>
                 </td>
