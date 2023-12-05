@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of convert module of ZenTaoPMS.
  *
@@ -14,6 +15,7 @@
 class convertModel extends model
 {
     /**
+     * 连接数据库。
      * Connect to db.
      *
      * @param  string $dbName
@@ -43,6 +45,7 @@ class convertModel extends model
     }
 
     /**
+     * 检查数据库是否存在。
      * Check database exits or not.
      *
      * @param  string $dbName
@@ -57,13 +60,14 @@ class convertModel extends model
     }
 
     /**
+     * 检查数据表是否存在。
      * Check table exits or not.
      *
      * @param  string  $table
      * @access public
-     * @return bool
+     * @return object|false
      */
-    public function tableExists($table)
+    public function tableExists(string $table): object|false
     {
         $sql = "SHOW tables like '$table'";
         return $this->dbh->query($sql)->fetch();
