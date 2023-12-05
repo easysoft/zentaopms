@@ -225,7 +225,7 @@ foreach($tables as $table => $fields)
     foreach(array_values($fields) as $key => $field)
     {
         $sql .= '"' . $field['name'] . '" ' . $field['type'] . ($field['null'] ? ' NULL ' : ' NOT NULL ');
-        if($field['default'] !== NULL) $sql .= " DEFAULT '{$field['default']}' ";
+        if($field['default'] !== NULL && $field['default'] != 'CURRENT_TIMESTAMP') $sql .= " DEFAULT '{$field['default']}' ";
 
         if($field['autoIncrement'])
         {
@@ -292,6 +292,7 @@ foreach($views as $view => $info)
 echo "开始插入数据，请耐心等待...";
 foreach($tables as $table => $fields)
 {
+    $dm->rawQuery("DELETE FROM `$table`");
     $rows = $mysql->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
     if(empty($rows)) continue;
 
