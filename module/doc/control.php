@@ -970,16 +970,17 @@ class doc extends control
     }
 
     /**
+     * 编辑一个目录。
      * Edit a catalog.
      *
      * @param  int    $moduleID
-     * @param  string $type doc|api
+     * @param  string $type     doc|api
      * @access public
      * @return void
      */
-    public function editCatalog($moduleID, $type)
+    public function editCatalog(int $moduleID, string $type)
     {
-        echo $this->fetch('tree', 'edit', "moduleID=$moduleID&type=$type");
+        echo $this->fetch('tree', 'edit', "moduleID={$moduleID}&type={$type}");
     }
 
     /**
