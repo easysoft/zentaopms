@@ -639,6 +639,7 @@ class doc extends control
     }
 
     /**
+     * 文档详情页面。
      * Document details page.
      *
      * @param  int    $docID
@@ -649,29 +650,23 @@ class doc extends control
      */
     public function view(int $docID = 0, int $version = 0, int $appendLib = 0)
     {
-        $doc = $this->doc->getById($docID, $version, true);
-        if(!$this->doc->checkPrivDoc($doc))
-        {
-            echo(js::alert($this->lang->doc->accessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            helper::end(print(js::locate(inlink('index'))));
-        }
+        $doc = $this->doc->getByID($docID, $version, true);
+        if(!$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
 
-        if(!$doc or !isset($doc->id))
+        if(!$doc || !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->inlink('index')));
+            return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
 
-        $lib = $this->doc->getLibByID($doc->lib);
-        if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
+        $lib = $this->doc->getLibByID((int)$doc->lib);
+        if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->id;
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
         $objectID   = zget($doc, $type, 0);
         if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, (int)$doc->lib, $appendLib);
 
         /* Get doc. */
         if($docID)
@@ -685,74 +680,10 @@ class doc extends control
             }
         }
 
-        if(isset($doc) and $doc->type == 'text')
-        {
-            /* Split content into an array. */
-            $content = preg_replace('/(<(h[1-6])[\S\s]*?\>[\S\s]*?<\/\2>)/', "\$1\n", $doc->content);
-            $content = explode("\n", $content);
+        if(isset($doc) && $doc->type == 'text') $doc = $this->docZen->processOutline($doc);
+        if($this->app->tab != 'execution' && !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
 
-            /* Get the head element, for example h1,h2,etc. */
-            $includeHeadElement = array();
-            foreach($content as $index => $element)
-            {
-                preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
-
-                if(isset($headElement[1]) and !in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[3]) != '') $includeHeadElement[] = $headElement[1];
-            }
-
-            /* Get the two elements with the highest rank. */
-            sort($includeHeadElement);
-
-            if($includeHeadElement)
-            {
-                $topLevel    = (int)ltrim($includeHeadElement[0], 'h');
-                $outlineList = $this->docZen->buildOutlineList($topLevel, $content, $includeHeadElement);
-                $outlineTree = $this->docZen->buildOutlineTree($outlineList);
-                $this->view->outlineTree = $outlineTree;
-
-                foreach($content as $index => $element)
-                {
-                    preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
-
-                    /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
-                    if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
-                    {
-                        $content[$index] = str_replace('<' . $headElement[1] . $headElement[2] . '>', '<' . $headElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                    }
-                }
-
-                $doc->content = implode("\n", $content);
-            }
-        }
-
-        if($this->app->tab != 'execution' and !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
-
-        $this->view->title             = $this->lang->doc->common . $this->lang->colon . $doc->title;
-        $this->view->docID             = $docID;
-        $this->view->doc               = $doc;
-        $this->view->version           = $version;
-        $this->view->object            = $object;
-        $this->view->objectID          = $objectID;
-        $this->view->objectType        = $objectType;
-        $this->view->type              = $type;
-        $this->view->libID             = $libID;
-        $this->view->lib               = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs              = $this->doc->getLibsByObject($type, (int)$objectID);
-        $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions           = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users             = $this->user->getPairs('noclosed,noletter');
-        $this->view->autoloadPage      = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree           = $this->doc->getLibTree((int)$libID, (array)$libs, $type, $doc->module, (int)$objectID, '', 0, $docID);
-        $this->view->preAndNext        = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
-        $this->view->moduleID          = $doc->module;
-        $this->view->objectDropdown    = $objectDropdown;
-        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
-        $this->view->exportMethod      = $type . '2export';
-        $this->view->editors           = $this->doc->getEditors($docID);
-        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
-        $this->view->spaceType         = $objectType;
-        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $doc->module);
-
+        $this->docZen->assignVarsForView($docID, $version, $type, $objectID, $libID, $doc, $object, $objectType, $libs, $objectDropdown);
         $this->display();
     }
 

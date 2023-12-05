@@ -622,4 +622,98 @@ class docZen extends doc
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
     }
+
+    /**
+     * 处理文档大纲。
+     *
+     * @param  object    $doc
+     * @access protected
+     * @return object
+     */
+    protected function processOutline(object $doc): object
+    {
+        /* Split content into an array. */
+        $content = preg_replace('/(<(h[1-6])[\S\s]*?\>[\S\s]*?<\/\2>)/', "\$1\n", $doc->content);
+        $content = explode("\n", $content);
+
+        /* Get the head element, for example h1,h2,etc. */
+        $includeHeadElement = array();
+        foreach($content as $index => $element)
+        {
+            preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+            if(isset($headElement[1]) && !in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '') $includeHeadElement[] = $headElement[1];
+        }
+
+        /* Get the two elements with the highest rank. */
+        sort($includeHeadElement);
+
+        if($includeHeadElement)
+        {
+            $topLevel    = (int)ltrim($includeHeadElement[0], 'h');
+            $outlineList = $this->buildOutlineList($topLevel, $content, $includeHeadElement);
+            $outlineTree = $this->buildOutlineTree($outlineList);
+            $this->view->outlineTree = $outlineTree;
+
+            foreach($content as $index => $element)
+            {
+                preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+                /* The current element is existed, the element is in the includeHeadElement, && the text in the element is not null. */
+                if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
+                {
+                    $content[$index] = str_replace('<' . $headElement[1] . $headElement[2] . '>', '<' . $headElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
+                }
+            }
+
+            $doc->content = implode("\n", $content);
+        }
+
+        return $doc;
+    }
+
+    /**
+     * 展示文档详情相关变量。
+     *
+     * @param  int       $docID
+     * @param  int       $version
+     * @param  string    $type
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @param  object    $doc
+     * @param  object    $object
+     * @param  string    $objectType
+     * @param  array     $libs
+     * @param  array     $objectDropdown
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForView(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown): void
+    {
+        $this->view->title             = $this->lang->doc->common . $this->lang->colon . $doc->title;
+        $this->view->docID             = $docID;
+        $this->view->type              = $type;
+        $this->view->objectID          = $objectID;
+        $this->view->libID             = $libID;
+        $this->view->doc               = $doc;
+        $this->view->version           = $version;
+        $this->view->object            = $object;
+        $this->view->objectType        = $objectType;
+        $this->view->lib               = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs              = $this->doc->getLibsByObject($type, (int)$objectID);
+        $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions           = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users             = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->autoloadPage      = $this->doc->checkAutoloadPage($doc);
+        $this->view->libTree           = $this->doc->getLibTree((int)$libID, (array)$libs, $type, (int)$doc->module, (int)$objectID, '', 0, $docID);
+        $this->view->preAndNext        = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->moduleID          = $doc->module;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
+        $this->view->exportMethod      = $type . '2export';
+        $this->view->editors           = $this->doc->getEditors($docID);
+        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->spaceType         = $objectType;
+        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, (int)$doc->module);
+    }
 }
