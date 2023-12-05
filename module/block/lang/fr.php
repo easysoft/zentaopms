@@ -521,7 +521,7 @@ $lang->block->honorary['task']   = 'Task King';
 $lang->block->honorary['review'] = 'Review King';
 
 $lang->block->welcome = new stdclass();
-$lang->block->welcome->common     = 'Willkommen';
+$lang->block->welcome->common     = 'Welcome';
 $lang->block->welcome->reviewByMe = 'ReviewByMe';
 $lang->block->welcome->assignToMe = 'AssignToMe';
 
