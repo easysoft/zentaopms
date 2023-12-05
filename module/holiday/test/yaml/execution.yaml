@@ -30,22 +30,22 @@ fields:
     range: 1-10000
     prefix: "迭代描述"
   - field: begin
-    range: "(-2M)-(+M):1D"
+    range: "(-2M)-(+M):1w"
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
   - field: end
-    range: "(+1w)-(+2M):1D"
+    range: "(+1w)-(+2M):2w"
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
   - field: realBegan
-    range: "(-6w)-(+1w):5D"
+    range: "(-6w)-(+1w):1w"
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
   - field: realEnd
-    range: "(-5w)-(+2w):5D"
+    range: "(-4w)-(+10w):2w"
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
