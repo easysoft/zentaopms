@@ -73,9 +73,9 @@ class metric extends control
             $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
             $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
 
-            $resultHeader  = $this->metricZen->getViewTableHeader($metric);
-            $resultData    = $this->metricZen->getViewTableData($metric, $result);
-            $allResultData = $this->metricZen->getViewTableData($metric, $allResult);
+            $resultHeader  = $this->metric->getViewTableHeader($metric);
+            $resultData    = $this->metric->getViewTableData($metric, $result);
+            $allResultData = $this->metric->getViewTableData($metric, $allResult);
         }
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
@@ -285,9 +285,9 @@ class metric extends control
         $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
         $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
 
-        $resultHeader  = $this->metricZen->getViewTableHeader($metric);
-        $resultData    = $this->metricZen->getViewTableData($metric, $result);
-        $allResultData = $this->metricZen->getViewTableData($metric, $allResult);
+        $resultHeader  = $this->metric->getViewTableHeader($metric);
+        $resultData    = $this->metric->getViewTableData($metric, $result);
+        $allResultData = $this->metric->getViewTableData($metric, $allResult);
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
@@ -317,9 +317,9 @@ class metric extends control
         $result    = $this->metric->getResultByCode($metric->code, $_POST, 'cron', $usePager ? $pager : null);
         $allResult = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
 
-        $resultHeader  = $this->metricZen->getViewTableHeader($metric);
-        $resultData    = $this->metricZen->getViewTableData($metric, $result);
-        $allResultData = $this->metricZen->getViewTableData($metric, $allResult);
+        $resultHeader  = $this->metric->getViewTableHeader($metric);
+        $resultData    = $this->metric->getViewTableData($metric, $result);
+        $allResultData = $this->metric->getViewTableData($metric, $allResult);
         if($usePager) $this->view->dtablePager = $pager;
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
@@ -350,8 +350,8 @@ class metric extends control
         $metric = $this->metric->getByID($metricID);
         $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
 
-        $resultHeader = $this->metricZen->getViewTableHeader($metric);
-        $resultData   = $this->metricZen->getViewTableData($metric, $result);
+        $resultHeader = $this->metric->getViewTableHeader($metric);
+        $resultData   = $this->metric->getViewTableData($metric, $result);
 
         $echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData, $chartType);
 

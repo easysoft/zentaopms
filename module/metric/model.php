@@ -17,6 +17,87 @@ class metricModel extends model
     public $errorInfo = '';
 
     /**
+     * 获取度量数据表的表头。
+     * Get header of result table in view.
+     *
+     * @param  array $result
+     * @access public
+     * @return array|false
+     */
+    public function getViewTableHeader($metric)
+    {
+        $dataFields = $this->getMetricRecordDateField($metric->code);
+        if($metric->scope != 'system') $dataFields[] = $metric->scope;
+
+        $dataFieldStr = implode(', ', $dataFields);
+        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
+
+        $result = $this->dao->select("id, {$dataFieldStr} value, date")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($metric->code)
+            ->limit(1)
+            ->fetch();
+
+        if(!$result) return array
+        (
+            array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96),
+            array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150)
+        );
+
+        $fieldList = array_keys((array)$result);
+        $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
+        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+        $scope     = current($scopeList);
+
+        $header = array();
+        if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->metric->name, 'width' => 160);
+        if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date, 'width' => 96);
+        $header[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96);
+        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
+
+        return $header;
+    }
+
+    /**
+     * 获取度量数据表的数据。
+     * Get data of result table.
+     *
+     * @param  object    $metric
+     * @param  array     $result
+     * @access public
+     * @return array|false
+     */
+    public function getViewTableData($metric, $result)
+    {
+        $scope = $metric->scope;
+        if(empty($result)) return array();
+
+        if($metric->scope != 'system') $objectPairs = $this->getPairsByScope($scope);
+
+        $tableData = array();
+        foreach($result as $record)
+        {
+            $record = (array)$record;
+            $fieldList = array_keys($record);
+            $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+
+            $row = new stdclass();
+            if(!empty($dateList)) $row = $this->buildDateCell($row, $record);
+            if($scope != 'system')
+            {
+                $row->scope   = isset($objectPairs[$record[$scope]]) ? $objectPairs[$record[$scope]] : $record[$scope];
+                $row->scopeID = $record[$scope];
+            }
+            $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
+            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:i", strtotime($record['date']));
+
+            $tableData[] = $row;
+        }
+
+        return $tableData;
+    }
+
+    /**
      * Get scope pairs.
      *
      * @access public
