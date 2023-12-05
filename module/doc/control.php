@@ -639,24 +639,6 @@ class doc extends control
     }
 
     /**
-     * Show accessDenied response.
-     *
-     * @access private
-     * @return void
-     */
-    private function accessDenied()
-    {
-        echo(js::alert($this->lang->doc->accessDenied));
-
-        if(!$this->server->http_referer) return print(js::locate(inlink('index')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-
-        return print(js::locate('back'));
-    }
-
-    /**
      * Document details page.
      *
      * @param  int    $docID
