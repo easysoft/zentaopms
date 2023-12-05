@@ -176,7 +176,14 @@ class screen extends control
                 }
             }
 
-            $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
+            if($type == 'metric')
+            {
+                $chartData = $this->screen->genMetricComponent($chart);
+            }
+            else
+            {
+                $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
+            }
             print(json_encode($chartData));
         }
     }
