@@ -251,6 +251,7 @@ class convert extends control
     }
 
     /**
+     * 选择数据导入方式。
      * Import jira index.
      *
      * @access public
@@ -263,6 +264,7 @@ class convert extends control
     }
 
     /**
+     * 数据导入提示。
      * Import jira notice.
      *
      * @param  string $mehotd db|file
@@ -282,7 +284,6 @@ class convert extends control
 
                 $this->session->set('jiraDB', $dbName);
                 $link = $this->createLink('convert', 'mapJira2Zentao', "method=db&dbName={$this->post->dbName}");
-
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
             }
 
@@ -303,6 +304,7 @@ class convert extends control
     }
 
     /**
+     * 将jira对象映射到zentao。
      * Map jira objects to zentao.
      *
      * @param  string $method db|file
@@ -311,7 +313,7 @@ class convert extends control
      * @access public
      * @return void
      */
-    public function mapJira2Zentao($method = 'db', $dbName = '', $step = 1)
+    public function mapJira2Zentao(string $method = 'db', string $dbName = '', int $step = 1)
     {
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
@@ -354,13 +356,14 @@ class convert extends control
     }
 
     /**
+     * 初始化jira用户。
      * Init jira user.
      *
      * @param  string $method db|file
      * @access public
      * @return void
      */
-    public function initJiraUser($method = 'db')
+    public function initJiraUser(string $method = 'db')
     {
         $this->app->loadLang('user');
 
@@ -387,6 +390,7 @@ class convert extends control
     }
 
     /**
+     * 导入jira数据。
      * Import jira main logic.
      *
      * @param  string $method db|file
@@ -397,7 +401,7 @@ class convert extends control
      * @access public
      * @return void
      */
-    public function importJira($method = 'db', $mode = 'show', $type = 'user', $lastID = 0, $createTable = false)
+    public function importJira(string $method = 'db', string $mode = 'show', string $type = 'user', int $lastID = 0, bool $createTable = false)
     {
         set_time_limit(0);
 
