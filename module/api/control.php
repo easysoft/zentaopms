@@ -61,7 +61,7 @@ class api extends control
         $objectID   = $this->objectID;
 
         /* 获取文档目录列表和当前选中的文档目录. */
-        $libs       = $this->doc->getApiLibs($libID, $objectType, $objectID);
+        $libs       = $this->doc->getApiLibs($libID, $objectType, (int)$objectID);
         $lib        = $libID ? zget($libs, $libID) : current($libs);
         $libID      = $lib ? $lib->id : 0;
         $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
@@ -112,7 +112,7 @@ class api extends control
         }
 
         /* 获取文档目录列表和当前选中的文档目录. */
-        $libs      = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
+        $libs      = $this->doc->getApiLibs($libID, $this->objectType, (int)$this->objectID);
         $api       = $this->api->getByID($apiID, $version, $release);
         $libID     = $api->lib;
         $lib       = zget($libs, $libID);
