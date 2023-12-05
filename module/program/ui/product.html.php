@@ -23,10 +23,11 @@ toolbar
 (
     item(set
     (array(
-        'text' => $lang->product->create,
-        'icon' => 'plus',
-        'class'=> 'btn primary',
-        'url'  => $this->createLink('product', 'create', "programID={$programID}")
+        'text'     => $lang->product->create,
+        'icon'     => 'plus',
+        'class'    => 'btn primary',
+        'data-app' => 'product',
+        'url'      => $this->createLink('product', 'create', "programID={$programID}")
     )))
 );
 
