@@ -154,22 +154,22 @@ class kanban extends control
      */
     public function closeSpace(int $spaceID)
     {
-        $this->loadModel('action');
-
         if(!empty($_POST))
         {
-            $changes = $this->kanban->closeSpace($spaceID);
+            $space = form::data($this->config->kanban->form->closeSpace)
+                ->add('activatedBy', '')
+                ->add('activatedDate', null)
+                ->get();
+
+            $this->kanban->closeSpace($spaceID, $space);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanbanSpace', $spaceID, 'closed', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->space   = $this->kanban->getSpaceById($spaceID);
-        $this->view->actions = $this->action->getList('kanbanSpace', $spaceID);
+        $this->view->actions = $this->loadModel('action')->getList('kanbanSpace', $spaceID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();

@@ -18,3 +18,9 @@ $config->kanban->form->activateSpace['activatedBy']    = array('type' => 'string
 $config->kanban->form->activateSpace['activatedDate']  = array('type' => 'datetime', 'required' => true,  'default' => $now);
 $config->kanban->form->activateSpace['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
 $config->kanban->form->activateSpace['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
+
+$config->kanban->form->closeSpace['status']         = array('type' => 'string',   'required' => true,  'default' => 'closed');
+$config->kanban->form->closeSpace['closedBy']       = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->closeSpace['closedDate']     = array('type' => 'datetime', 'required' => true,  'default' => $now);
+$config->kanban->form->closeSpace['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->closeSpace['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);

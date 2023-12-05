@@ -2276,32 +2276,28 @@ class kanbanModel extends model
      * Close a space.
      *
      * @param  int    $spaceID
+     * @param  object $space
      * @access public
-     * @return array
+     * @return bool
      */
-    function closeSpace($spaceID)
+    function closeSpace(int $spaceID, object $space): bool
     {
-        $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
-        $now      = helper::now();
-        $account  = $this->app->user->account;
-        $space    = fixer::input('post')
-            ->setDefault('status', 'closed')
-            ->setDefault('closedBy', $account)
-            ->setDefault('closedDate', $now)
-            ->setDefault('lastEditedBy', $account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('activatedBy', '')
-            ->setDefault('activatedDate', '0000-00-00 00:00:00')
-            ->remove('comment')
-            ->get();
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
             ->where('id')->eq($spaceID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+        if(dao::isError()) return false;
+        $changes = common::createChanges($oldSpace, $space);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'closed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
