@@ -1,5 +1,5 @@
 <?php
-public function getRemind()
+public function getRemind(): string
 {
     $remind = parent::getRemind();
 

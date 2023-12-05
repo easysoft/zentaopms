@@ -294,19 +294,6 @@ class misc extends control
     }
 
     /**
-     * 获取新增年度总结功能的通知。
-     * Get annual remind.
-     *
-     * @access public
-     * @return void
-     */
-    public function getRemind()
-    {
-        $data = array('content' => $this->miscZen->getRemind(), 'title' => $this->lang->misc->remind);
-        $this->send(array('result' => 'success', 'data' => $data));
-    }
-
-    /**
      * 获取15版本之后的最新特性。
      * Features dialog.
      *

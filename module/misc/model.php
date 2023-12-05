@@ -40,6 +40,25 @@ class miscModel extends model
     }
 
     /**
+     * 获取新增年度总结功能的通知。
+     * Get remind.
+     *
+     * @access public
+     * @return string
+     */
+    public function getRemind(): string
+    {
+        $remind = '';
+        if(!empty($this->config->global->showAnnual) and empty($this->config->global->annualShowed))
+        {
+            $remind  = '<h4>' . $this->lang->misc->showAnnual . '</h4>';
+            $remind .= '<p>' . sprintf($this->lang->misc->annualDesc, helper::createLink('report', 'annualData')) . '</p>';
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.annualShowed", 1);
+        }
+        return $remind;
+    }
+
+    /**
      * 获取插件到期通知。
      * Get the notification information about plugin expiration.
      *
@@ -55,10 +74,9 @@ class miscModel extends model
         $showPluginRemind = (empty($this->config->global->showPluginRemind) || $this->config->global->showPluginRemind != $today) ? true : false;
         if(!empty($plugins) && $this->app->user->admin && $showPluginRemind)
         {
-            $pluginButton = html::a(helper::createLink('extension', 'browse'), $this->lang->misc->view, '', "id='pluginButton' class='btn btn-primary btn-wide' data-app='admin'");
-            $cancelButton = html::a('javascript: void(0);', $this->lang->misc->cancel, '', "id='cancelButton' class='btn btn-back btn-wide'");
+            $pluginButton = html::a(helper::createLink('extension', 'browse'), $this->lang->misc->view, '', "id='pluginButton' class='btn primary wide mr-2' data-app='admin'");
             $remind  = '<p>' . sprintf($this->lang->misc->expiredTipsForAdmin, count($plugins)) . '</p>';
-            $remind .= '<p class="text-right">' . $pluginButton . $cancelButton . '</p>';
+            $remind .= '<p class="text-center mt-4">' . $pluginButton . '</p>';
 
             $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showPluginRemind", $today);
         }

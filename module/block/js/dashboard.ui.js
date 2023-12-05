@@ -1,3 +1,9 @@
+$(function()
+{
+    if($('#expiredModal').length) zui.Modal.open({id: 'expiredModal'});
+    if($('#annualModal').length)  zui.Modal.open({id: 'annualModal'});
+});
+
 function deleteBlock(dashboard, data, block)
 {
     zui.Modal.confirm(data.confirm).then(result =>

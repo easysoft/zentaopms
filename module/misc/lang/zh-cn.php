@@ -67,7 +67,7 @@ $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "状态";
 $lang->misc->novice      = "您可能初次使用禅道，是否进入新手模式？";
 $lang->misc->showAnnual  = '新增年度总结功能';
-$lang->misc->annualDesc  = '12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
+$lang->misc->annualDesc  = '12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="%s" target="_blank" id="showAnnual" class="btn mini primary">查看</a>';
 $lang->misc->remind      = '新功能提醒';
 
 $lang->misc->expiredTipsTitle    = '尊敬的系统管理员，您好：';
