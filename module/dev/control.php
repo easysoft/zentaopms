@@ -2,7 +2,7 @@
 /**
  * The control file of dev module of ZenTaoPMS.
  *
- * @copyright Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright Copyright 2009-2023 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @author    chunsheng wang <chunsheng@cnezsoft.com>
  * @package
  * @uses      control

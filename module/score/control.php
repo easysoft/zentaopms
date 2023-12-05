@@ -1,7 +1,7 @@
 <?php
 /**
  * The control file of score module of ZenTaoPMS.
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Memory <lvtao@cnezsoft.com>
  * @package     score
  * @version     $Id: control.php $

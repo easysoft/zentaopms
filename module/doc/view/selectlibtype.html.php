@@ -2,7 +2,7 @@
 /**
  * The select lib type view file of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     doc

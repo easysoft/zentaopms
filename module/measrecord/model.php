@@ -2,7 +2,7 @@
 /**
  * The model file of measrecord module of ChanzhiEPS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Xiying Guan <guanxiying@xirangit.com>
  * @package     measrecord

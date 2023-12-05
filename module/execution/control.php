@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $

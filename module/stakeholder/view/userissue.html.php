@@ -2,7 +2,7 @@
 /**
  * The view view of stakeholder module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(QingDao Nature Easy Soft Network Technology C
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(QingDao Nature Easy Soft Network Technology C
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     company

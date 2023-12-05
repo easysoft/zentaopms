@@ -2,7 +2,7 @@
 /**
  * The head switcher view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     repo
