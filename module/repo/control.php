@@ -343,6 +343,7 @@ class repo extends control
         $this->view->file        = $file;
         $this->view->entry       = $entry;
         $this->view->pathInfo    = $pathInfo;
+        $this->view->tree        = $this->repoZen->getViewTree($repo, '', $revision);
 
         $this->display();
     }
@@ -1997,6 +1998,8 @@ class repo extends control
     {
         $repo = $this->repo->getByID($repoID);
         if($path) $path = helper::safe64Decode($path);
-        echo json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch));
+
+        if($repo->SCM == 'gitlab') return print(json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch)));
+        return print(json_encode($this->repoZen->getViewTree($repo, $path, $branch)));
     }
 }

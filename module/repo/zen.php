@@ -640,19 +640,33 @@ class repoZen extends repo
             $infos = $this->repo->getFileCommits($repo, $branchID, $path);
         }
 
+        $filePath = $path;
+        if($repo->SCM == 'Subversion')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $info = $scm->info('', $revision);
+            if(!empty($info->root))
+            {
+                $prefixPath = str_replace($info->root . '/', '', $repo->path);
+                $filePath   = trim(str_replace($prefixPath, '', $path), '/');
+            }
+        }
+
         foreach($infos as $info)
         {
             $info->originalComment = $info->comment;
             $info->comment         = $this->repo->replaceCommentLink($info->comment);
-            $info->revision        = $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);
+            if($repo->SCM != 'Subversion') $info->revision = substr($info->revision, 0, 10);
 
-            $infoPath       = trim(urldecode($path) . '/' . $info->name, '/');
+            $infoPath = trim(urldecode($path) . '/' . $info->name, '/');
             if($info->kind == 'dir')
             {
                 $info->link = $this->repo->createLink('browse', "repoID={$repo->id}&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath));
             }
             else
             {
+                if($repo->SCM == 'Subversion') $infoPath = $filePath . '/' . $info->name;
                 $info->link = $this->repo->createLink('view', "repoID={$repo->id}&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
             }
         }
@@ -1211,11 +1225,44 @@ class repoZen extends repo
             ->where('extra')->eq($repoID)
             ->andWhere('AType')->eq('design')
             ->fetch();
-        $error      = $relationID ? $this->lang->repo->error->deleted : '';
+        $error = $relationID ? $this->lang->repo->error->deleted : '';
 
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
 
         return $error;
+    }
+
+    /**
+     * 获取详情页面目录树。
+     * Get view tree.
+     *
+     * @param  object    $repo
+     * @param  string    $entry
+     * @param  string    $revision
+     * @access protected
+     * @return array
+     */
+    protected function getViewTree(object $repo, string $entry, string $revision): array
+    {
+        if($repo->SCM == 'Gitlab') return $this->repo->getGitlabFilesByPath($repo, '', (string)$this->cookie->repoBranch);
+
+        if($repo->SCM != 'Subversion') return $this->repo->getFileTree($repo);
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $tree = $scm->ls($entry, (string)$revision);
+        foreach($tree as &$file)
+        {
+            $base64Name = base64_encode($file->path);
+
+            $file->path = trim($file->path, '/');
+            if(!isset($file->id))    $file->id    = $base64Name;
+            if(!isset($file->key))   $file->key   = $base64Name;
+            if(!isset($file->text))  $file->text  = trim($file->name, '/');
+            if($file->kind == 'dir') $file->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$revision}&path=" . helper::safe64Encode($file->path)));
+        }
+
+        return $tree;
     }
 }
