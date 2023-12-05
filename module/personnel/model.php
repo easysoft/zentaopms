@@ -110,62 +110,62 @@ class personnelModel extends model
     }
 
     /**
+     * 获取参与项目集的人员列表。
      * Get invest person list.
      *
      * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getInvest($programID = 0)
+    public function getInvest(int $programID = 0): array
     {
-        $personnelList = array();
-
         /* Get all projects under the current program. */
         $projects = $this->dao->select('id,model,type,parent,path,name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->andWhere('path')->like("%,$programID,%")
+            ->andWhere('path')->like("%,{$programID},%")
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll('id');
-        if(empty($projects)) return $personnelList;
+        if(empty($projects)) return array();
+
+        /* Get account pairs. */
         $accountPairs = $this->getInvolvedProjects($projects);
+        if(empty($accountPairs)) return array();
 
-        if(empty($accountPairs)) return $personnelList;
-
+        /* Get execution, task, bug, story, issue and risk pairs, and get user list. */
         $executionPairs    = $this->getInvolvedExecutions($projects);
         $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
         $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
-        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
+        if($this->config->edition == 'max' || $this->config->edition == 'ipd')
         {
             $issueInvest = $this->getIssueInvest($accountPairs, $projects);
             $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
         }
-
         $users = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
 
+        /* Build personnel list. */
+        $personnelList = array();
         foreach($accountPairs as $account => $projects)
         {
             $user = zget($users, $account, '');
-
             if(empty($user)) continue;
-            if(!empty($user) and !isset($personnelList[$user->role])) $personnelList[$user->role] = array();
 
+            if(!isset($personnelList[$user->role])) $personnelList[$user->role] = array();
             $personnelList[$user->role][$account]['realname']   = $user ? $user->realname : $account;
             $personnelList[$user->role][$account]['account']    = $account;
-            $personnelList[$user->role][$account]['role']       = $user ? zget($this->lang->user->roleList, $user->role, $user->role) : '';
+            $personnelList[$user->role][$account]['role']       = $user ? zget($this->lang->user->roleList, $user->role) : '';
             $personnelList[$user->role][$account]['projects']   = $projects;
             $personnelList[$user->role][$account]['executions'] = zget($executionPairs, $account, 0);
 
             $personnelList[$user->role][$account] += $taskInvest[$account];
             $personnelList[$user->role][$account] += $bugAndStoryInvest[$account];
-            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition == 'max' || $this->config->edition == 'ipd')
             {
                 $personnelList[$user->role][$account] += $issueInvest[$account];
                 $personnelList[$user->role][$account] += $riskInvest[$account];
             }
         }
         krsort($personnelList);
-
         return $personnelList;
     }
 

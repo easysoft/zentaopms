@@ -50,13 +50,14 @@ class personnelTest
     }
 
     /**
-     * Get invest test
+     * 测试获取参与项目集的人员列表。
+     * Test get invest person list.
      *
-     * @param int $programID
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getInvestTest($programID = 0)
+    public function getInvestTest(int $programID = 0): array
     {
         $objects = $this->objectModel->getInvest($programID);
 
