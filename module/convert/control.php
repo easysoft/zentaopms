@@ -61,13 +61,14 @@ class convert extends control
     }
 
     /**
+     * 设置bugfree页面。
      * The setting page of bugfree.
      *
-     * @param  string    $version
+     * @param  int    $version
      * @access public
      * @return void
      */
-    public function setBugFree($version)
+    public function setBugFree(int $version)
     {
         $this->view->source      = 'BugFree';
         $this->view->version     = $version;
@@ -78,22 +79,24 @@ class convert extends control
     }
 
     /**
+     * 设置Redmine页面。
      * The setting page of Redmine.
      *
      * @param  string    $version
      * @access public
      * @return void
      */
-    public function setRedmine($version)
+    public function setRedmine(string $version)
     {
-        $this->view->source      = 'Redmine';
-        $this->view->version     = $version;
-        $this->view->dbName      = 'redmine';
-        $this->view->dbCharset   = 'utf8';
+        $this->view->source    = 'Redmine';
+        $this->view->version   = $version;
+        $this->view->dbName    = 'redmine';
+        $this->view->dbCharset = 'utf8';
         $this->display();
     }
 
     /**
+     * 检查配置。
      * Check config. Same as setConfig.
      *
      * @access public
@@ -109,20 +112,20 @@ class convert extends control
     }
 
     /**
+     * 检查bugfree设置。
      * Check settings of bugfree.
      *
      * @param  int    $version
      * @access public
      * @return void
      */
-    public function checkBugFree($version)
+    public function checkBugFree(int $version)
     {
         helper::import('./converter/bugfree.php');
         $converter = new bugfreeConvertModel();
 
         /* Check it. */
-        $checkInfo['db'] = $converter->connectDB();
-        //if(is_object($checkInfo['db'])) $checkInfo['table'] = $converter->checkTables();
+        $checkInfo['db']   = $converter->connectDB();
         $checkInfo['path'] = $converter->checkPath();
 
         /* Compute the checking result. */
@@ -138,24 +141,26 @@ class convert extends control
     }
 
     /**
+     * 检查Redmine的设置。
      * Check settings of Redmine.
      *
      * @param  int    $version
      * @access public
      * @return void
      */
-    public function checkRedmine($version)
+    public function checkRedmine(int $version)
     {
         helper::import('./converter/redmine.php');
         $converter = new redmineConvertModel();
 
         /* Check it. */
-        $checkInfo['db'] = $converter->connectDB();
+        $checkInfo['db']   = $converter->connectDB();
         $checkInfo['path'] = $converter->checkPath();
 
         $this->view->trackers = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('trackers')->fetchAll('id');
         $this->view->statuses = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('issue_statuses')->fetchAll('id');
         $this->view->pries    = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('enumerations')->where('type')->eq('IssuePriority')->fetchAll('id');
+
         /* Compute the checking result. */
         $result = 'pass';
         if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
@@ -163,6 +168,7 @@ class convert extends control
         $this->app->loadLang('bug');
         $this->app->loadLang('story');
         $this->app->loadLang('task');
+
         $this->view->aimTypeList['bug']   = 'bug';
         $this->view->aimTypeList['task']  = 'task';
         $this->view->aimTypeList['story'] = 'story';
@@ -176,6 +182,7 @@ class convert extends control
     }
 
    /**
+     * 执行数据导入。
      * Execute the converting.
      *
      * @access public
@@ -184,27 +191,29 @@ class convert extends control
     public function execute()
     {
         $convertFunc = 'convert' . $this->post->source;
-        $this->view->title      = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->execute;
-        $this->view->source     = $this->post->source;
-        $this->view->version    = $this->post->version;
-
+        $this->view->title         = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->execute;
+        $this->view->source        = $this->post->source;
+        $this->view->version       = $this->post->version;
         $this->view->executeResult = $this->fetch('convert', $convertFunc, "version={$this->post->version}");
         $this->display();
     }
 
     /**
+     * 导入bugfree。
      * Convert bugfree.
      *
      * @param  int    $version
      * @access public
      * @return void
      */
-    public function convertBugFree($version)
+    public function convertBugFree(int $version)
     {
         helper::import('./converter/bugfree.php');
         helper::import("./converter/bugfree$version.php");
+
         $className = "bugfree{$version}ConvertModel";
         $converter = new $className();
+
         $this->view->version = $version;
         $this->view->result  = $converter->execute($version);
         $this->view->info    = bugfreeConvertModel::$info;
@@ -212,17 +221,18 @@ class convert extends control
     }
 
     /**
-     * convert redmine
+     * 导入redmine。
+     * convert redmine.
      *
      * @param  int    $version
      * @access public
      * @return void
      */
-    public function convertRedmine($version)
+    public function convertRedmine(int $version)
     {
         helper::import('./converter/redmine.php');
         helper::import("./converter/redmine$version.php");
-        $className = "redmine11ConvertModel";
+
         $redmine = new stdclass();
         $redmine->aimTypes             = $this->post->aimTypes;
         $redmine->statusTypes['bug']   = $this->post->statusTypesOfBug;
@@ -232,6 +242,7 @@ class convert extends control
         $redmine->priTypes['story']    = $this->post->priTypesOfStory;
         $redmine->priTypes['task']     = $this->post->priTypesOfTask;
 
+        $className = "redmine11ConvertModel";
         $converter = new $className($redmine);
         $this->view->version = $version;
         $this->view->result  = $converter->execute($version);
