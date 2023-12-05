@@ -204,11 +204,10 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $kanbanID = $this->kanban->create();
+            $kanban = form::data($this->config->kanban->form->create)->get();
+            $this->kanban->create($kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->loadModel('action')->create('kanban', $kanbanID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
