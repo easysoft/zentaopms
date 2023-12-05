@@ -5,6 +5,10 @@ version: "1.0"
 fields:
   - field: acl
     note: "权限"
-    range: '`{"program": [1000]}`'
-    loop: 0
-    format: ""
+    fields:
+    - field: acl1
+      range: '`{"programs":`'
+    - field: acl2
+      prefix: "["
+      range: "1,2"
+      postfix: "]}"

@@ -11,3 +11,5 @@ fields:
       range: 1-10000
   - field: type
     range: program
+  - field: acl
+    range: open,private

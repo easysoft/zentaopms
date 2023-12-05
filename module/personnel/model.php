@@ -66,17 +66,19 @@ class personnelModel extends model
     }
 
     /**
+     * 检查你是否有权限查看项目集。
      * Check if you have permission to view the program.
      *
      * @param  int    $programID
      * @param  string $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function canViewProgram($programID, $account)
+    public function canViewProgram(int $programID, string $account): bool
     {
         if($this->app->user->admin) return true;
 
+        /* Get group acl and group info. */
         static $groupAcl  = array();
         static $groupInfo = array();
         if(empty($groupAcl))
@@ -85,9 +87,11 @@ class personnelModel extends model
             foreach($groupAcl as $groupID => $group) $groupInfo[$groupID] = json_decode($groupAcl[$groupID]);
         }
 
+        /* Get user groups. */
         static $userGroups = array();
         if(empty($userGroups)) $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('account', 'group');
 
+        /* Check permission. */
         $programRight = false;
         if(isset($userGroups[$account]))
         {
@@ -95,15 +99,10 @@ class personnelModel extends model
             {
                 $group = isset($groupInfo[$groupID]) ? $groupInfo[$groupID] : '';
 
-                if(!isset($group->programs))
+                if(!isset($group->programs) || in_array($programID, $group->programs))
                 {
                     $programRight = true;
-                    continue;
-                }
-                elseif(in_array($programID, $group->programs))
-                {
-                    $programRight = true;
-                    continue;
+                    break;
                 }
             }
         }

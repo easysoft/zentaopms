@@ -2,10 +2,10 @@
 declare(strict_types=1);
 class personnelTest
 {
-    public function __construct($user)
+    public function __construct(string $user = '')
     {
         global $tester;
-        su($user);
+        if($user) su($user);
         $this->objectModel = $tester->loadModel('personnel');
         $tester->app->loadClass('dao');
     }
@@ -31,20 +31,22 @@ class personnelTest
     }
 
     /**
-     * Check if you have permission to view the program
+     * 测试检查你是否有权限查看项目集。
+     * Test check if you have permission to view the program
      *
-     * @param  int    $programID
-     * @param  string $account
+     * @param  int        $programID
+     * @param  string     $account
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function canViewProgramTest($programID, $account)
+    public function canViewProgramTest(int $programID, string $account): bool|array
     {
-        $objects = $this->objectModel->canViewProgram($programID, $account);
+        su($account);
+        $canView = $this->objectModel->canViewProgram($programID, $account);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $canView;
     }
 
     /**
