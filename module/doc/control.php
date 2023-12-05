@@ -950,13 +950,14 @@ class doc extends control
     }
 
     /**
-     * Ajax Get the execution drop down by the projectID.
+     * Ajax: 获取执行下拉数据。
+     * Ajax: Get the execution drop down by the projectID.
      *
      * @param  int    $projectID
      * @access public
      * @return string
      */
-    public function ajaxGetExecution($projectID)
+    public function ajaxGetExecution(int $projectID)
     {
         $json  = array();
         $items = array();
@@ -965,7 +966,7 @@ class doc extends control
         foreach($executionPairs as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
 
         $json['items']   = $items;
-        $json['project'] = $this->project->getById($projectID);
+        $json['project'] = $this->project->getByID($projectID);
         return print(json_encode($json));
     }
 
