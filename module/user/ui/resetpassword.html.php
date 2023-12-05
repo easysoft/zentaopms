@@ -21,6 +21,7 @@ $content = $expired ? div
 (
     setStyle(array('width' => '500px', 'margin-top' => '100px')),
     set::title($lang->user->resetPWD),
+    set::actions(array()),
     on::change('#password1,#password2', 'changePassword'),
     on::click('button[type=submit]', 'encryptPassword'),
     formRow
