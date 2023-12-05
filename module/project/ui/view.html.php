@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('confirmDeleteTip', $lang->project->confirmDelete);
+
 $programDom = null;
 if($project->grade > 1)
 {
