@@ -190,14 +190,10 @@ class pivotModel extends model
         $this->loadModel('dataview');
 
         $sql        = isset($pivot->sql)     ? $pivot->sql     : '';
-        $filters    = isset($pivot->filters) ? (is_array($pivot->filters) ? $pivot->filters : json_decode($pivot->filters, true)) : array();
-        $recPerPage = 20;
-        $pageID     = 1;
+        $filters    = isset($pivot->filters) && !empty($pivot->filters) ? (is_array($pivot->filters) ? $pivot->filters : json_decode($pivot->filters, true)) : array();
 
-        if(!empty($filters))
-        {
-            $this->pivotTao->setFilterDefault($filters);
-        }
+        if(!empty($filters)) $this->pivotTao->setFilterDefault($filters);
+
         $querySQL = $this->chart->parseSqlVars($sql, $filters);
 
         $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
