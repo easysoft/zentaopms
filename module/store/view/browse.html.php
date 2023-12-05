@@ -1,8 +1,8 @@
 <?php
 /**
- * The browse view file of store module of QuCheng.
+ * The browse view file of store module of ZenTaoPMS.
  *
- * @copyright Copyright 2021-2022 北京渠成软件有限公司(BeiJing QuCheng Software Co,LTD, www.qucheng.com)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   store

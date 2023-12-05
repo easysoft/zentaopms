@@ -303,7 +303,7 @@ class mr extends control
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) return $this->display();
 
-        /* Sync MR from GitLab to ZentaoPMS. */
+        /* Sync MR from GitLab to ZenTaoPMS. */
         $MR   = $this->mr->apiSyncMR($MR);
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
 
