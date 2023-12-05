@@ -75,14 +75,17 @@ class Subversion
         foreach($listObject as $list)
         {
             $info = new stdclass();
+            $info->size     = 0;
             $info->name     = (string)$list->name;
+            $info->path     = $resourcePath . '/' . $list->name;
             $info->kind     = (string)$list['kind'];
             $info->revision = (int)$list->commit['revision'];
             $info->account  = (string)$list->commit->author;
             $info->date     = date('Y-m-d H:i:s', strtotime($list->commit->date));
-            $info->size     = $info->kind == 'file' ? (int)$list->size > 1024 ? round((int)$list->size / 1024, 2) . "KB" : (int)$list->size . 'Bytes' : 0;
             $info->comment  = '';
-            $infos[]        = $info;
+
+            if($info->kind == 'file') $info->size = (int)$list->size > 1024 ? round((int)$list->size / 1024, 2) . "KB" : (int)$list->size . 'Bytes';
+            $infos[] = $info;
         }
 
         /* Sort by kind */

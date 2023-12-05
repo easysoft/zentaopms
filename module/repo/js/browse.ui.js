@@ -59,7 +59,7 @@ window.afterRender = function()
         // 合并行数据和提交信息
         oldData[nextCommitRowIndex].date     = commit.authoredDate;
         oldData[nextCommitRowIndex].account  = commit.author ? commit.author.username : commit.authorName;
-        oldData[nextCommitRowIndex].comment  = commit.message;
+        oldData[nextCommitRowIndex].comment  = commit.comment;
         oldData[nextCommitRowIndex].revision = commit.sha;
 
         // 重新渲染表格
