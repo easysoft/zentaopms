@@ -26,6 +26,8 @@ pid=1
 测试type为table的图表是否显示正确，生成的dataset数据项数量是否正确。                    >> 1
 测试配置错误的水球图是否能正常生成，此为默认配置。                                      >> 1
 测试配置正确的水球图是否能正常生成，生成的比例为0.000。                                 >> 1
+测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。       >> 0
+测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。                        >> 1
 
 */
 
@@ -129,4 +131,4 @@ r($component12 && $chart12) && p('') && e(0);                                   
 
 list($component13, $chart13) = getComponetAndChart($screen, $filter12); 
 $screen->getChartOptionTest($chart13, $component13);
-r($component13->option->dataset === '0') && p('') && e(1);                                                   //测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。
+r($component13->option->dataset === '0') && p('') && e(1);                                           //测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。
