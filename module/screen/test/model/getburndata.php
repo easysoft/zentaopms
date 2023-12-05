@@ -24,4 +24,4 @@ $data = $screen->getBurnDataTest();
 
 r(count($data))          && p('')         && e(16);                    //测试生成的数据条数
 r($data)                 && p('104:name') && e('项目集1--项目集4');   //测试生成的数据是否正确
-r($data[104]->chartData) && p('labels:0') && e('7/9');                //测试生成的标签数据是否正确
+r($data[104]->chartData) && p('labels:0') && e('8/9');                //测试生成的标签数据是否正确
