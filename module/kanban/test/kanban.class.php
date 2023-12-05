@@ -871,38 +871,21 @@ class kanbanTest
     }
 
     /**
+     * 测试编辑看板。
      * Test update a kanban.
      *
      * @param  int    $kanbanID
-     * @param  array  $param
+     * @param  object $param
      * @access public
-     * @return array
+     * @return object
      */
-    public function updateTest($kanbanID, $param)
+    public function updateTest($kanbanID, $kanban)
     {
-        global $tester;
-        $object = $tester->dao->select('`space`,`name`,`owner`,`team`,`desc`')->from(TABLE_KANBAN)->where('`id`')->eq($kanbanID)->fetch();
-        $object->team = explode(',', $object->team);
-
-        foreach($object as $field => $value)
-        {
-            if(in_array($field, array_keys($param)))
-            {
-                $_POST[$field] = $param[$field];
-            }
-            else
-            {
-                $_POST[$field] = $value;
-            }
-        }
-
-        $change = $this->objectModel->update($kanbanID);
-        if($change == array()) $change = '没有数据更新';
-        unset($_POST);
+        $this->objectModel->update($kanbanID, $kanban);
 
         if(dao::isError()) return dao::getError();
 
-        return $change;
+        return $this->objectModel->getByID($kanbanID);
     }
 
     /**

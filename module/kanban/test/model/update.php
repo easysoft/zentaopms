@@ -4,40 +4,64 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanban')->gen(5);
+
 /**
 
 title=测试 kanbanModel->update();
+timeout=0
 cid=1
-pid=1
 
-测试修改看板名称 >> name,通用看板1,修改名字
-测试修改看板空间 >> space,1,2
-测试修改看板备注 >> desc,看板详情,修改注释
-测试修改看板负责人 >> owner,po16,user4
-测试修改看板团队成员 >> team,,user5,po17,,user5,po17,user3
-测试重复修改看板名称 >> 没有数据更新
-测试修改看板名称为空 >> 『看板名称』不能为空。
-测试修改看板名称为空格 >> 『看板名称』不能为空。
-测试修改看板空间为空 >> 『所属空间』不能为空。
+- 正常编辑看板，查看编辑后的数据
+ - 属性name @测试编辑看板1
+ - 属性space @1
+ - 属性owner @po15
+ - 属性whitelist @,user3,po15
+- 正常编辑看板，查看编辑后的数据
+ - 属性name @测试编辑看板2
+ - 属性space @2
+ - 属性owner @po16
+ - 属性whitelist @user4
+- 正常编辑看板，查看编辑后的数据
+ - 属性name @测试编辑看板3
+ - 属性space @3
+ - 属性owner @po17
+ - 属性whitelist @,user4,po16
+- 编辑名字为空的看板，查看错误信息第name条的0属性 @『看板名称』不能为空。
 
 */
 
-$kanbanIDList = array('1', '2', '3', '4', '5');
+$kanban1 = new stdclass();
+$kanban1->space = 1;
+$kanban1->name  = '测试编辑看板1';
+$kanban1->owner = 'po15';
+$kanban1->team  = 'user3';
+$kanban1->desc  = '测试编辑看板1的描述';
 
-$names = array('修改名字', '', '   ');
-$space = array('2', '');
-$desc  = '修改注释';
-$owner = 'user4';
-$team  = array('user5', 'po17', 'user3');
+$kanban2 = new stdclass();
+$kanban2->space     = 2;
+$kanban2->name      = '测试编辑看板2';
+$kanban2->owner     = 'po16';
+$kanban2->whitelist = 'user4';
+$kanban2->desc      = '测试编辑看板2的描述';
+
+$kanban3 = new stdclass();
+$kanban3->space = 3;
+$kanban3->name  = '测试编辑看板3';
+$kanban3->owner = 'po17';
+$kanban3->team  = 'user5';
+$kanban3->desc  = '测试编辑看板3的描述';
+
+$kanban4 = new stdclass();
+$kanban4->space = 3;
+$kanban4->name  = '';
+$kanban4->owner = 'po17';
+$kanban4->team  = 'user5';
+$kanban4->desc  = '测试编辑没有名字的看板的描述';
 
 $kanban = new kanbanTest();
 
-r($kanban->updateTest($kanbanIDList[0], array('name' => $names[0])))  && p('0:field,old,new') && e('name,通用看板1,修改名字');            // 测试修改看板名称
-r($kanban->updateTest($kanbanIDList[1], array('space' => $space[0]))) && p('0:field,old,new') && e('space,1,2');                          // 测试修改看板空间
-r($kanban->updateTest($kanbanIDList[2], array('desc' => $desc)))      && p('0:field,old,new') && e('desc,看板详情,修改注释');             // 测试修改看板备注
-r($kanban->updateTest($kanbanIDList[3], array('owner' => $owner)))    && p('0:field,old,new') && e('owner,po16,user4');                   // 测试修改看板负责人
-r($kanban->updateTest($kanbanIDList[4], array('team' => $team)))      && p('0:field,old,new') && e('team,,user5,po17,,user5,po17,user3'); // 测试修改看板团队成员
-r($kanban->updateTest($kanbanIDList[0], array('name' => $names[0])))  && p()                  && e('没有数据更新');                       // 测试重复修改看板名称
-r($kanban->updateTest($kanbanIDList[0], array('name' => $names[1])))  && p('name:0')          && e('『看板名称』不能为空。');             // 测试修改看板名称为空
-r($kanban->updateTest($kanbanIDList[0], array('name' => $names[2])))  && p('name:0')          && e('『看板名称』不能为空。');             // 测试修改看板名称为空格
-r($kanban->updateTest($kanbanIDList[0], array('space' => $space[1]))) && p('space:0')         && e('『所属空间』不能为空。');             // 测试修改看板空间为空
+r($kanban->updateTest(1, $kanban1)) && p('name|space|owner|whitelist', '|') && e('测试编辑看板1|1|po15|,user3,po15'); // 正常编辑看板，查看编辑后的数据
+r($kanban->updateTest(2, $kanban2)) && p('name|space|owner|whitelist', '|') && e('测试编辑看板2|2|po16|user4');       // 正常编辑看板，查看编辑后的数据
+r($kanban->updateTest(3, $kanban3)) && p('name|space|owner|whitelist', '|') && e('测试编辑看板3|3|po17|,user4,po16'); // 正常编辑看板，查看编辑后的数据
+r($kanban->updateTest(4, $kanban4)) && p('name:0')                          && e('『看板名称』不能为空。');           // 编辑名字为空的看板，查看错误信息
