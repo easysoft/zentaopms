@@ -1234,12 +1234,13 @@ EOF;
 
         if(!empty($_POST))
         {
-            $_POST['account'] = $this->app->user->account;
-            $_POST['role']    = $this->app->user->role;
-            $_POST['visions'] = $this->app->user->visions;
-            $_POST['group']   = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
+            $user = form::data($this->config->user->form->edit)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->add('id', $this->app->user->id)
+                ->get();
 
-            $this->user->update($this->app->user->id);
+            $this->user->update($user);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
