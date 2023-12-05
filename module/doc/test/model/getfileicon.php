@@ -2,31 +2,27 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/doc.class.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getFileIcon();
+timeout=0
 cid=1
-pid=1
-
-测试获取 产品 1 的文件icon >> icon-file icon-file-word icon-file-word
-测试获取 产品 2 的文件icon >> 0
-测试获取 项目 11 的文件icon >> icon-file-word icon-file-word icon-file-text
-测试获取 项目 12 的文件icon >> 0
-测试获取 执行 101 的文件icon >> icon-file icon-file-word icon-file-text
-测试获取 执行 102 的文件icon >> 0
 
 */
 
-$type     = array('product', 'project', 'execution');
-$objectID = array(1, 2, 11, 12, 101, 102);
+zdTable('file')->gen(45);
+zdTable('user')->gen(5);
+su('admin');
 
-$doc = new docTest();
+$docTester = new docTest();
+$files     = $docTester->getFileIconTest();
 
-r($doc->getFileIconTest($type[0], $objectID[0])) && p() && e('icon-file icon-file-word icon-file-word');      // 测试获取 产品 1 的文件icon
-r($doc->getFileIconTest($type[0], $objectID[1])) && p() && e('0');                                            // 测试获取 产品 2 的文件icon
-r($doc->getFileIconTest($type[1], $objectID[2])) && p() && e('icon-file-word icon-file-word icon-file-text'); // 测试获取 项目 11 的文件icon
-r($doc->getFileIconTest($type[1], $objectID[3])) && p() && e('0');                                            // 测试获取 项目 12 的文件icon
-r($doc->getFileIconTest($type[2], $objectID[4])) && p() && e('icon-file icon-file-word icon-file-text');      // 测试获取 执行 101 的文件icon
-r($doc->getFileIconTest($type[2], $objectID[5])) && p() && e('0');                                            // 测试获取 执行 102 的文件icon
+r($files[1])  && p() && e("<i class='file-icon icon icon-file-text'></i>");       // 获取txt类型文件的图标
+r($files[2])  && p() && e("<i class='file-icon icon icon-file-word'></i>");       // 获取doc类型文件的图标
+r($files[4])  && p() && e("<i class='file-icon icon icon-file'></i>");            // 获取wps类型文件的图标
+r($files[7])  && p() && e("<i class='file-icon icon icon-file-pdf'></i>");        // 获取pdf类型文件的图标
+r($files[8])  && p() && e("<i class='file-icon icon icon-file-powerpoint'></i>"); // 获取ppt类型文件的图标
+r($files[10]) && p() && e("<i class='file-icon icon icon-file-excel'></i>");      // 获取xls类型文件的图标
+r($files[24]) && p() && e("<i class='file-icon icon icon-file-video'></i>");      // 获取avi类型文件的图标
+r($files[27]) && p() && e("<i class='file-icon icon icon-file-audio'></i>");      // 获取mp3类型文件的图标
+r($files[33]) && p() && e("<i class='file-icon icon icon-file-archive'></i>");    // 获取rar类型文件的图标

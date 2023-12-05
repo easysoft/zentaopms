@@ -367,32 +367,6 @@ class docTest
     }
 
     /**
-     * Test get file icon.
-     *
-     * @param  string $type
-     * @param  int    $objectID
-     * @access public
-     * @return string
-     */
-    public function getFileIconTest($type, $objectID)
-    {
-        $files = $this->objectModel->getLibFiles($type, $objectID, 't1.id_desc', $pager = null);
-
-        $objects = $this->objectModel->getFileIcon($files);
-
-        if(dao::isError()) return dao::getError();
-
-        $icons = '';
-        foreach($objects as $object)
-        {
-            preg_match("/icon-[^']*/", $object, $matches);
-            $icons .= "$matches[0] ";
-        }
-        $icons = trim($icons);
-        return $icons;
-    }
-
-    /**
      * Test get doc tree.
      *
      * @param  int $libID
@@ -1269,5 +1243,18 @@ class docTest
 
         if(dao::isError()) return dao::getError();
         return $data;
+    }
+
+    /**
+     * 获取文件图标。
+     * Get file icon.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFileIconTest(): array
+    {
+        $files = $this->objectModel->dao->select('*')->from(TABLE_FILE)->fetchAll();
+        return $this->objectModel->getFileIcon($files);
     }
 }
