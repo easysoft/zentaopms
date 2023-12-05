@@ -112,6 +112,7 @@ class pivotModel extends model
         if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
 
+        /* 是否使用存疑，先注释掉。
         if(empty($pivot->type))
         {
             $pivot->names = array();
@@ -132,6 +133,7 @@ class pivotModel extends model
 
             $pivot->used = $this->checkIFChartInUse($pivot->id, $screenList, 'pivot');
         }
+        */
     }
 
     /**
