@@ -338,4 +338,18 @@ class screenTest
     {
         $this->objectModel->initComponent($chart, $type, $compoent);
     }
+
+    /**
+     * 测试setChartDefault。
+     * Test setChartDefault.
+     *
+     * @param  string $type
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function setChartDefaultTest(string $type, object $component): void
+    {
+        $this->objectModel->setChartDefault($type, $component);
+    }
 }
