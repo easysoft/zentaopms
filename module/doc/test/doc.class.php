@@ -1258,4 +1258,23 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $data;
     }
+
+    /**
+     * 获取关联产品/项目/执行的数据。
+     * Get linked product/project/execution data.
+     *
+     * @param  string $type     product|project|execution
+     * @param  int    $objectID
+     * @param  string $edition
+     * @access public
+     * @return array
+     */
+    public function getLinkedObjectDataTest(string $type, int $objectID, string $edition = ''): array
+    {
+        $this->objectModel->config->edition = $edition;
+        $data = $this->objectModel->getLinkedObjectData($type, $objectID);
+
+        if(dao::isError()) return dao::getError();
+        return $data;
+    }
 }
