@@ -200,6 +200,8 @@ class screen extends control
         $data->treeData    = $this->screen->getTreeData($dimensions);
         $data->dimensions  = $dimensions;
         $data->dimension   = $screen->dimension;
+        $data->scopeList   = $this->loadModel('metric')->getScopePairs();
+        $data->scope       = 'system';
         $data->fieldConfig = $this->screen->getTreeSelectOptions();
 
         echo(json_encode($data));
