@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of personnel of ZenTaoPMS.
  *
@@ -137,6 +138,7 @@ class personnel extends control
     }
 
     /**
+     * 增加人员到白名单。
      * Adding users to the white list.
      *
      * @param  int     $objectID
@@ -149,53 +151,41 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function addWhitelist($objectID = 0, $deptID = 0, $copyID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
+    public function addWhitelist(int $objectID = 0, int $deptID = 0, int $copyID = 0, string $objectType = 'program', string $module = 'personnel', int $programID = 0, string $from = '')
     {
         if($this->app->tab == 'program') common::setMenuVars('program', $objectID);
 
-        $this->app->loadLang('execution');
-
         if($_POST)
         {
-            $this->personnel->addWhitelist($objectType, $objectID);
+            $formData  = form::batchData($this->config->personnel->form->addWhitelist)->get();
+            $whitelist = array();
+            foreach($formData as $object) $whitelist[] = $object->account;
+            $this->personnel->updateWhitelist($whitelist, $objectType, $objectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
             $this->loadModel('action')->create('whitelist', $objectID, 'managedWhitelist', '', $objectType);
 
             $locateLink = $this->session->whitelistList ? $this->session->whitelistList : $this->createLink($module, 'whitelist', "objectID=$objectID");
-            $tab = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
+            $tab        = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $tab));
         }
 
         $this->loadModel('dept');
-        $deptUsers = empty($deptID) ? array() : $this->dept->getDeptUserPairs($deptID);
-
+        $deptUsers      = empty($deptID) ? array() : $this->dept->getDeptUserPairs($deptID);
         $copyObjectType = $objectType;
         if($copyObjectType == 'sprint')
         {
             $object = $this->loadModel('project')->getByID($copyID);
-            if(!empty($object->type) and $object->type == 'project') $copyObjectType = 'project';
+            if(!empty($object->type) && $object->type == 'project') $copyObjectType = 'project';
         }
         $copyUsers   = empty($copyID) ? array() : $this->personnel->getWhitelistAccount($copyID, $copyObjectType);
         $appendUsers = array_unique($deptUsers + $copyUsers);
 
-        $objectName = $this->lang->projectCommon . $this->lang->execution->or . $this->lang->execution->common;;
-        if($objectType == 'program') $objectName = $this->lang->program->common;
-        if($objectType == 'product') $objectName = $this->lang->productCommon;
-        if($objectType == 'project') $objectName = $this->lang->projectCommon;
-        $this->lang->personnel->selectObjectTips = sprintf($this->lang->personnel->selectObjectTips, $objectName);
+        $this->personnelZen->setSelectObjectTips($objectID, $objectType, $module);
 
-        if($objectType == 'sprint' and $module == 'execution')
-        {
-            $execution = $this->loadModel('execution')->getByID($objectID);
-            $this->lang->personnel->selectObjectTips = (!empty($execution) and $execution->type == 'kanban') ? str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->personnel->selectObjectTips) : $this->lang->personnel->selectObjectTips;
-        }
-
-        $this->view->title      = $this->lang->personnel->addWhitelist;
-
+        $this->view->title       = $this->lang->personnel->addWhitelist;
         $this->view->objectID    = $objectID;
         $this->view->objectType  = $objectType;
-        $this->view->objectName  = $objectName;
         $this->view->objects     = $this->personnel->getCopiedObjects($objectID, $objectType);
         $this->view->module      = $module;
         $this->view->deptID      = $deptID;
@@ -207,7 +197,6 @@ class personnel extends control
         $this->view->programID   = $programID;
         $this->view->from        = $from;
         $this->view->copyID      = $copyID;
-
         $this->display();
     }
 
