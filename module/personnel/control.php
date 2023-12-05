@@ -66,14 +66,14 @@ class personnel extends control
     }
 
     /**
+     * 投入人员列表。
      * Access to investable personnel.
      *
      * @param  int    $browseType
-     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function invest($programID = 0)
+    public function invest(int $programID = 0)
     {
         common::setMenuVars('program', $programID);
         $this->app->loadLang('user');
@@ -81,7 +81,6 @@ class personnel extends control
         $this->view->title      = $this->lang->personnel->invest;
         $this->view->investList = $this->personnel->getInvest($programID);
         $this->view->programID  = $programID;
-
         $this->display();
     }
 
