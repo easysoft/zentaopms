@@ -2064,17 +2064,17 @@ class docModel extends model
     }
 
     /**
+     * 获取附件的来源。
      * Get file source pairs.
      *
-     * @param  array $files
+     * @param  array  $files
      * @access public
      * @return array
      */
-    public function getFileSourcePairs($files)
+    public function getFileSourcePairs(array $files): array
     {
         $sourceList  = array();
         $sourcePairs = array();
-
         foreach($files as $file)
         {
             if(!isset($sourceList[$file->objectType])) $sourceList[$file->objectType] = array();
@@ -2086,10 +2086,9 @@ class docModel extends model
         {
             $table = zget($this->config->objectTables, $type, '');
             $field = zget($this->config->action->objectNameFields, $type, '');
-            if(empty($table) or empty($field)) continue;
+            if(empty($table) || empty($field)) continue;
 
-            $name = $this->dao->select('id,' . $field)->from($table)->where('id')->in($idList)->fetchPairs('id', $field);
-            $sourcePairs[$type] = $name;
+            $sourcePairs[$type] = $this->dao->select('id,' . $field)->from($table)->where('id')->in($idList)->fetchPairs('id', $field);
         }
 
         return $sourcePairs;
