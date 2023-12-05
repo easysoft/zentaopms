@@ -1209,4 +1209,20 @@ class docTest
     {
         return $this->objectModel->getObjectByID($type, $objectID);
     }
+
+    /**
+     * 获取关联产品的数据。
+     * Get the data of the linked product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getLinkedProductDataTest(int $productID): array
+    {
+        $data = $this->objectModel->getLinkedProductData($productID);
+
+        if(dao::isError()) return dao::getError();
+        return $data;
+    }
 }
