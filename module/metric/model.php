@@ -22,11 +22,16 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getScopePairs()
+    public function getScopePairs($all = true)
     {
         $scopePairs = array();
         foreach($this->config->metric->scopeList as $scope)
         {
+            if(!$all)
+            {
+                $metrics = $this->metricTao->fetchMetricsByScope($scope, 1);
+                if(empty($metrics)) continue;
+            }
             $scopePair = new stdclass();
             $scopePair->value = $scope;
             $scopePair->label = $this->lang->metric->scopeList[$scope];
@@ -832,7 +837,7 @@ class metricModel extends model
     {
         foreach($this->lang->metric->scopeList as $scope => $name)
         {
-            $metrics = $this->metricTao->fetchMetrics($scope, $stage);
+            $metrics = $this->metricTao->fetchMetricsByScope($scope, 1);
             if(empty($metrics))
             {
                 unset($this->lang->metric->scopeList[$scope]);
