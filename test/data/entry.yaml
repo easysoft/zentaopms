@@ -20,10 +20,6 @@ fields:
   - field: account
     note: "账号"
     range: admin
-    prefix: "account"
-    postfix: ""
-    loop: 0
-    format: ""
   - field: code
     note: "代号"
     range: 1-10000
@@ -40,14 +36,14 @@ fields:
     format: ""
   - field: freePasswd
     note: "免密登录"
-    range: 0
+    range: 0{5},1{5}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: ip
     note: "IP"
-    range: "*"
+    range: "*,127.0.0.1,192.168.1.1"
     prefix: ""
     postfix: ""
     loop: 0
@@ -83,7 +79,7 @@ fields:
     format: ""
   - field: editedBy
     note: "编辑者"
-    range: ""
+    range: "admin"
     prefix: ""
     postfix: ""
     loop: 0

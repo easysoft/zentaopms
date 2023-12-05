@@ -1,26 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
-su('admin');
-
-zdTable('log')->gen(10);
 /**
 
-title=entryModel->getLogs();
+title=测试 entryModel::getLogs();
 cid=1
 pid=1
 
-测试获取列表的个数，ID为1的日志数为1 >> 1
-测试获取列表个数，ID为100001的日志数为0 >> 0
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('log')->gen(10);
+zdTable('user')->gen(5);
+su('admin');
+
+global $tester;
+$entry = $tester->loadModel('entry');
 
 $entryIDList = array('1', '100001');
 
-$entry = new entryTest();
-
-$list_1       = $entry->getLogsTest($entryIDList[0]);
-$list_1000001 = $entry->getLogsTest($entryIDList[1]);
-r(count($list_1))       && p() && e('1'); //测试获取列表的个数，ID为1的日志数为1
-r(count($list_1000001)) && p() && e('0'); //测试获取列表个数，ID为100001的日志数为0
+r(count($entry->getLogs($entryIDList[0]))) && p() && e('1'); //测试获取ID为1的entry日志列表的个数
+r(count($entry->getLogs($entryIDList[1]))) && p() && e('0'); //测试获取ID为不存在的entry日志列表的个数

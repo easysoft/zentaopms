@@ -1,22 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
-su('admin');
-
 /**
 
-title=entryModel->getList();
+title=测试 entryModel::getList();
 cid=1
 pid=1
 
-测试获取列表的个数，目前只有一个 >> 1
-测试获取列表某个应用的名称信息 >> 这是应用名称1
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$entry = new entryTest();
-$list  = $entry->getListTest();
+zdTable('entry')->gen(10);
+zdTable('user')->gen(5);
+su('admin');
 
-r(count($list)) && p()         && e('1');               //测试获取列表的个数，目前只有一个
-r($list)        && p('1:name') && e('这是应用名称1');   //测试获取列表某个应用的名称信息
+global $tester;
+$entry = $tester->loadModel('entry');
+
+$entryList = $entry->getList();
+
+r(count($entryList)) && p()         && e('10');            //测试获取列表的个数
+r($entryList)        && p('1:name') && e('这是应用名称1'); //测试获取列表某个应用的名称信息

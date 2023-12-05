@@ -8,106 +8,30 @@ class entryTest
     }
 
     /**
-     * Test get entry by id.
-     *
-     * @param  int    $entryID
-     * @access public
-     * @return object
-     */
-    public function getByIdTest($entryID)
-    {
-        $object = $this->objectModel->getById($entryID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
-     * Test get entry by code.
-     *
-     * @param  int    $code
-     * @access public
-     * @return object
-     */
-    public function getByCodeTest($code)
-    {
-        $object = $this->objectModel->getByCode($code);
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
-     * Test get entry by key.
-     *
-     * @param  int    $key
-     * @access public
-     * @return object
-     */
-    public function getByKeyTest($key)
-    {
-        $object = $this->objectModel->getByKey($key);
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
-     * Get list test.
-     *
-     * @param  string $orderBy
-     * @param  int    $pager
-     * @access public
-     * @return object
-     */
-    public function getListTest($orderBy = 'id_desc', $pager = null)
-    {
-        $objects = $this->objectModel->getList($orderBy, $pager);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get logs test.
-     *
-     * @param  int    $id
-     * @param  string $orderBy
-     * @param  int    $pager
-     * @access public
-     * @return object
-     */
-    public function getLogsTest($id, $orderBy = 'date_desc', $pager = null)
-    {
-        $object = $this->objectModel->getLogs($id, $orderBy, $pager);
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
+     * 测试创建应用。
      * Test create a object.
      *
-     * @param  array  $params
+     * @param  array $params
      * @access public
-     * @return object|array|string
+     * @return object|array
      */
-    public function createObject(string $name, string $code, string $account, int $freePasswd = 0): object|array|string
+    public function createObject(array $params): object|array
     {
         $createFields = new stdclass();
-        $createFields->name       = $name;
-        $createFields->code       = $code;
-        $createFields->freePasswd = $freePasswd;
-        $createFields->key        = md5(time());
+        foreach($params as $key => $value)
+        {
+            if($key == 'allIP' and $value == 'on')
+            {
+                $createFields->ip = '*';
+                continue;
+            }
 
-        if($account) $createFields->account = $account;
+            if($key == 'freePasswd' and $value == '1') $createFields->account = '';
+
+            $createFields->$key = $value;
+        }
+
         $objectID = $this->objectModel->create($createFields);
-
         if(dao::isError()) return dao::getError();
 
         $object = $this->objectModel->getById($objectID);
@@ -115,51 +39,48 @@ class entryTest
     }
 
     /**
+     * 测试更新应用。
      * Test update a entry.
      *
      * @param  int    $entryID
      * @param  int    $params
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function updateObject($entryID, $params)
+    public function updateObject(int $entryID, array $params): object|array
     {
-        global $tester;
-
-        $object = $tester->dbh->query("SELECT * FROM " . TABLE_ENTRY  ." WHERE id = $entryID")->fetch();
-
-        foreach($object as $field => $value)
+        $editFields = new stdclass();
+        foreach($params as $key => $value)
         {
-            if(in_array($field, array_keys($params)))
+            if($key == 'allIP' and $value == 'on')
             {
-                $object->$field = $params[$field];
+                $editFields->ip = '*';
+                continue;
             }
-            else
-            {
-                $object->$field = $value;
-            }
+
+            if($key == 'freePasswd' and $value == '1') $editFields->account = '';
+
+            $editFields->$key = $value;
         }
 
-        $change = $this->objectModel->update($entryID, $object);
-        if($change == array()) $change = '没有数据更新';
-        unset($_POST);
-
+        $change = $this->objectModel->update($entryID, $editFields);
         if(dao::isError()) return dao::getError();
+
         return $change;
     }
 
     /**
+     * 测试更新调用时间。
      * Test update calledTime.
      *
      * @param  int    $code
      * @param  int    $time
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function updateCalledTimeTest($code, $time)
+    public function updateCalledTimeTest(string $code, int $time): object|false
     {
         $this->objectModel->updateCalledTime($code, $time);
-
         if(dao::isError()) return dao::getError();
 
         $object = $this->objectModel->getByCode($code);
@@ -167,17 +88,17 @@ class entryTest
     }
 
     /**
+     * 测试保存日志。
      * Test save a log.
      *
      * @param  int    $entryID
-     * @param  int    $url
+     * @param  string $url
      * @access public
      * @return object
      */
-    public function saveLogTest($entryID, $url)
+    public function saveLogTest(int $entryID, string $url): object
     {
         $this->objectModel->saveLog($entryID, $url);
-
         if(dao::isError()) return dao::getError();
 
         global $tester;

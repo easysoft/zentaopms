@@ -1,33 +1,35 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
-su('admin');
-
-zdTable('entry')->gen(2);
 /**
 
-title=entryModel->update();
+title=测试 entryModel::update();
 cid=1
 pid=1
 
-测试更新entry名称 >> name,这是应用名称1,这是应用名称2
-测试更新entry代号 >> code,code1,code2
-测试更新entry名称和代号 >> name,这是应用名称2,这是应用名称1;code,code2,code1
-测试不更新name >> 没有数据更新
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/entry.class.php';
 
-$entryID = 1;
+zdTable('entry')->gen(2);
+zdTable('user')->gen(5);
+su('admin');
 
-$e_upName        = array('name' => '这是应用名称2');
-$e_upCode        = array('code' => 'code2');
-$e_upNameAndCode = array('name' => '这是应用名称1', 'code' => 'code1');
-$e_unName        = array('name' => '这是应用名称1');
+$nameEmptyTest  = array('name' => '',              'code' => 'code1', 'account' => 'admin', 'ip' => '*', 'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 0, 'desc' => '这是应用描述1');
+$codeEmptyTest  = array('name' => '这是应用名称1', 'code' => '',      'account' => 'admin', 'ip' => '*', 'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 0, 'desc' => '这是应用描述1');
+$codeRepeatTest = array('name' => '这是应用名称1', 'code' => 'code2', 'account' => 'admin', 'ip' => '*', 'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 0, 'desc' => '这是应用描述1');
+$keyEmptyTest   = array('name' => '这是应用名称1', 'code' => 'code1', 'account' => 'admin', 'ip' => '*', 'key' => '',                                 'freePasswd' => 0, 'desc' => '这是应用描述1');
+
+$allIPTest      = array('name' => '这是应用名称2', 'code' => 'code2',      'account' => 'admin', 'allIP' => 'on', 'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 0, 'desc' => '这是应用描述2');
+$freePasswdTest = array('name' => '这是应用名称2', 'code' => 'code2',      'account' => 'admin', 'ip' => '*',     'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 1, 'desc' => '这是应用描述2');
+$normalTest     = array('name' => 'normalTest',    'code' => 'normalTest', 'account' => 'admin', 'ip' => '*',     'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 1, 'desc' => '这是应用描述2');
 
 $entry = new entryTest();
+r($entry->updateObject(1, $nameEmptyTest))  && p('name:0') && e('『名称』不能为空。'); //测试修改名称为空
+r($entry->updateObject(1, $codeEmptyTest))  && p('code:0') && e('『代号』不能为空。'); //测试修改代号为空
+r($entry->updateObject(1, $codeRepeatTest)) && p('code:0') && e('『代号』已经有『code2』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); //测试修改为已存在的代号
+r($entry->updateObject(1, $keyEmptyTest))   && p('key:0')  && e('『密钥』不能为空。'); //测试修改密钥为空
 
-r($entry->updateObject($entryID, $e_upName))        && p('0:field,old,new')                 && e('name,这是应用名称1,这是应用名称2');                   //测试更新entry名称
-r($entry->updateObject($entryID, $e_upCode))        && p('0')                               && e('~~');                                                 //测试更新entry代号
-r($entry->updateObject($entryID, $e_upNameAndCode)) && p('0:field,old,new')                 && e('name,这是应用名称2,这是应用名称1');                   //测试更新entry名称和代号
-r($entry->updateObject($entryID, $e_unName))        && p()                                  && e('没有数据更新');                                       //测试不更新name
+r($entry->updateObject(2, $allIPTest))      && p('0:field,old,new')                 && e('ip,127.0.0.1,*');                  //测试修改为IP不限制
+r($entry->updateObject(2, $freePasswdTest)) && p('0:field,old,new;1:field,old,new') && e('account,admin,~~,freePasswd,0,1'); //测试修改freePasswd
+
+r($entry->updateObject(2, $normalTest))     && p('0:field,old,new;1:field,old,new') && e('name,这是应用名称2,normalTest,code,code2,normalTest'); //测试正常修改名称和代号

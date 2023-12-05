@@ -1,22 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
-su('admin');
-
 /**
 
-title=entryModel->saveLog();
+title=测试 entryModel::saveLog();
 cid=1
 pid=1
 
-测试插入一条日志 >> entry
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/entry.class.php';
 
-$e_id  = 1;
-$e_url = 'http://qcmmi.com';
+zdTable('user')->gen(5);
+su('admin');
+
+$entryID = 1;
+$url     = 'http://qcmmi.com';
 
 $entry = new entryTest();
-
-r($entry->saveLogTest($e_id, $e_url)) && p('objectType') && e('entry'); //测试插入一条日志
+r($entry->saveLogTest($entryID, $url)) && p('objectID,objectType') && e('1,entry'); //测试插入一条日志

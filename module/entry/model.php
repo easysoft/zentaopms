@@ -18,9 +18,9 @@ class entryModel extends model
      *
      * @param  int    $entryID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getById(int $entryID): object
+    public function getById(int $entryID): object|false
     {
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('id')->eq($entryID)->fetch();
     }
@@ -31,9 +31,9 @@ class entryModel extends model
      *
      * @param  string $code
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByCode(string $code): object
+    public function getByCode(string $code): object|false
     {
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('code')->eq($code)->fetch();
     }
@@ -44,9 +44,9 @@ class entryModel extends model
      *
      * @param  string $key
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByKey(string $key): object
+    public function getByKey(string $key): object|false
     {
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('`key`')->eq($key)->fetch();
     }
@@ -92,7 +92,7 @@ class entryModel extends model
      *
      * @param  object   $entry
      * @access public
-     * @return bool|int
+     * @return false|int
      */
     public function create(object $entry): false|int
     {
@@ -116,7 +116,7 @@ class entryModel extends model
      * @param  int        $entryID
      * @param  object     $entry
      * @access public
-     * @return bool|array
+     * @return false|array
      */
     public function update(int $entryID, object $entry): false|array
     {

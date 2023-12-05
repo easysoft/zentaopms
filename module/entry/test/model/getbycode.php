@@ -1,28 +1,25 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
-su('admin');
-zdTable('entry')->gen(1);
-
 /**
 
-title=entryModel->getByCode();
+title=测试 entryModel::getByCode();
 cid=1
 pid=1
 
-查询code为code1的entry的name >> 这是应用名称1
-查询code为code1的entry的account >> accountadmin
-查询code为code2的entry的name >> 0
-查询code为code2的entry的account >> 0
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$entryCodeList = array('code1', 'code2');
+zdTable('entry')->gen(100);
+zdTable('user')->gen(5);
+su('admin');
 
-$entry = new entryTest();
+global $tester;
+$entry = $tester->loadModel('entry');
 
-r($entry->getByCodeTest($entryCodeList[0])) && p('name') && e('这是应用名称1');   // 查询code为code1的entry的name
-r($entry->getByCodeTest($entryCodeList[0])) && p('account') && e('accountadmin'); // 查询code为code1的entry的account
-r($entry->getByCodeTest($entryCodeList[1])) && p('name') && e('0');               // 查询code为code2的entry的name
-r($entry->getByCodeTest($entryCodeList[1])) && p('account') && e('0');            // 查询code为code2的entry的account
+$entryCodeList = array('code1', 'code2', '');
+
+r($entry->getByCode($entryCodeList[0])) && p('name')    && e('这是应用名称1'); // 查询code为code1的entry的name
+r($entry->getByCode($entryCodeList[0])) && p('account') && e('admin');         // 查询code为code1的entry的account
+r($entry->getByCode($entryCodeList[1])) && p('name')    && e('这是应用名称2'); // 查询code为code2的entry的name
+r($entry->getByCode($entryCodeList[1])) && p('account') && e('admin');         // 查询code为code2的entry的account
+r($entry->getByCode($entryCodeList[2])) && p()          && e('0');             // 查询code为空的entry
