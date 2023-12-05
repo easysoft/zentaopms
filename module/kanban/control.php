@@ -215,6 +215,7 @@ class kanban extends control
     }
 
     /**
+     * 编辑看板。
      * Edit a kanban.
      *
      * @param  int    $kanbanID
@@ -223,15 +224,12 @@ class kanban extends control
      */
     public function edit(int $kanbanID = 0)
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
-            $changes = $this->kanban->update($kanbanID);
+            $kanban = form::data($this->config->kanban->form->edit)->get();
+            $this->kanban->update($kanbanID, $kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanban', $kanbanID, 'edited');
-            $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
