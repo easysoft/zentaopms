@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/pivot.class.php';
 
 /**
-title=测试 actionModel->getDynamic();
+title=测试 pivotModel->getByID();
 cid=1
 pid=1
 

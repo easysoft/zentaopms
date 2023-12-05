@@ -20,4 +20,9 @@ class pivotTest
     {
         return $this->objectModel->getByID($id);
     }
+
+    public function __call(string $name, array $arguments)
+    {
+        return call_user_func_array([$this->objectModel, $name], $arguments);
+    }
 }
