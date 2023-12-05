@@ -1195,4 +1195,18 @@ class docTest
     {
         return $this->objectModel->getOrderedObjects($objectType, $returnType, $append);
     }
+
+    /**
+     * 通过ID获取产品/项目/执行的信息。
+     * Get product/project/execution by ID.
+     *
+     * @param  string       $type
+     * @param  int          $objectID
+     * @access public
+     * @return object|false
+     */
+    public function getObjectByIDTest(string $type, int $objectID): object|bool
+    {
+        return $this->objectModel->getObjectByID($type, $objectID);
+    }
 }
