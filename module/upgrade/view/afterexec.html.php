@@ -20,6 +20,7 @@
         <div class='col-md-6'>
           <div class='message mgb-10 text-center'>
             <strong><?php echo $lang->upgrade->success?></strong>
+            <p class="priv-tips"><?php echo $lang->upgrade->addTraincoursePrivTips;?></p>
             <div><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-primary btn-wide' id='tohome'")?></div>
           </div>
         </div>

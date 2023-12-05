@@ -91,6 +91,7 @@ $config->upgrade->execFlow['18_5']        = array('functions' => 'installIPD,upd
 $config->upgrade->execFlow['18_6']        = array('functions' => 'removeProductLineRequired');
 $config->upgrade->execFlow['18_7']        = array('functions' => 'processHistoryDataForMetric,metric-updateMetricDate');
 $config->upgrade->execFlow['18_8']        = array('functions' => 'upgradeTesttaskMembers,deleteGeneralReportBlock,stopOldCron');
+$config->upgrade->execFlow['18_9']        = array('functions' => 'addDefaultTraincoursePriv');
 
 if(!empty($config->isINT))
 {

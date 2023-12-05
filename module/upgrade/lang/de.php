@@ -161,3 +161,5 @@ $lang->upgrade->remark           = 'Remark';
 $lang->upgrade->remarkDesc       = 'You can also switch the mode in the Admin-System-Mode page of the system.';
 
 $lang->upgrade->upgradingTip = 'The system is being upgraded, please wait patiently...';
+
+$lang->upgrade->addTraincoursePrivTips = "In order to facilitate everyone's learning of project management-related knowledge, we have made the courses and practical repositories of the academy accessible to all permission groups by default. This ensures that everyone can easily access the resources. However, if you do not require this feature, you can disable it in the backend feature switch.";

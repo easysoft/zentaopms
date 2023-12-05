@@ -120,3 +120,4 @@ $lang->upgrade->createProgramTip  = 'At the same time, the system will automatic
 $lang->upgrade->mergeManuallyTip  = 'You can manually select the data merging method.';
 
 include dirname(__FILE__) . '/version.php';
+

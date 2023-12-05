@@ -9181,4 +9181,26 @@ class upgradeModel extends model
     {
         touch($this->app->getCacheRoot() . 'restartcron');
     }
+
+    /**
+     * Add default traincourse priv to each group. 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addDefaultTraincoursePriv()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups      = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('vision')->eq('rnd')->fetchPairs();
+        $sqlTemplate = 'REPLACE INTO ' . TABLE_GROUPPRIV . " (`group`, `module`, `method`) VALUES ('%s', 'traincourse', 'browse'), ('%s', 'traincourse', 'viewCourse'), ('%s', 'traincourse', 'viewChapter'), ('%s', 'traincourse', 'practice'), ('%s', 'traincourse', 'practiceBrowse'), ('%s', 'traincourse', 'practiceView'), ('%s', 'traincourse', 'updatePractice');"; 
+
+        foreach($groups as $groupID)
+        {
+            $sql = str_replace('%s', $groupID, $sqlTemplate);
+            $this->dbh->exec($sql);
+        }
+
+        return true;
+    }
 }
