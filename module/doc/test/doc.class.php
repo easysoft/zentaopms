@@ -1230,7 +1230,7 @@ class docTest
      * 获取关联项目的数据。
      * Get the data of the linked project.
      *
-     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -1238,6 +1238,22 @@ class docTest
     {
         $this->objectModel->config->edition = $edition;
         $data = $this->objectModel->getLinkedProjectData($projectID);
+
+        if(dao::isError()) return dao::getError();
+        return $data;
+    }
+
+    /**
+     * 获取关联执行的数据。
+     * Get the data of the linked execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getLinkedExecutionDataTest(int $executionID): array
+    {
+        $data = $this->objectModel->getLinkedExecutionData($executionID);
 
         if(dao::isError()) return dao::getError();
         return $data;
