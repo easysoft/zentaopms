@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
-title=测试 miscModel->checkOneClickPackage();
+title=测试 miscModel->getPluginRemind();
 timeout=0
 cid=1
 
@@ -14,5 +14,5 @@ cid=1
 global $tester;
 $tester->loadModel('misc');
 
-r($tester->misc->checkOneClickPackage()) && p() && e('0'); //调用方法返回值
+r($tester->misc->getPluginRemind()) && p() && e('0'); //调用方法返回值
 ?>

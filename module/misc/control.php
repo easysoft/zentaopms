@@ -302,7 +302,7 @@ class misc extends control
      */
     public function getRemind()
     {
-        $data = array('content' => $this->misc->getRemind(), 'title' => $this->lang->misc->remind);
+        $data = array('content' => $this->miscZen->getRemind(), 'title' => $this->lang->misc->remind);
         $this->send(array('result' => 'success', 'data' => $data));
     }
 
