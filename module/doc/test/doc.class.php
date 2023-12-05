@@ -1180,4 +1180,19 @@ class docTest
     {
         return $this->objectModel->getOrderedExecutions($append);
     }
+
+    /**
+     * 获取已排序的对象数据。
+     *  Get ordered objects for doc.
+     *
+     * @param  string $objectType
+     * @param  string $returnType nomerge|merge
+     * @param  int    $append
+     * @access public
+     * @return array
+     */
+    public function getOrderedObjectsTest(string $objectType = 'product', string $returnType = 'merge', int $append = 0): array
+    {
+        return $this->objectModel->getOrderedObjects($objectType, $returnType, $append);
+    }
 }

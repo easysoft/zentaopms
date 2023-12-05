@@ -1,35 +1,36 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getOrderedObjects();
+timeout=0
 cid=1
-pid=1
-
-all类型查询 >> 0
-api类型查询 >> 0
-product类型查询 >> 已关闭的多分支产品70
-project类型查询 >> 项目87
-execution类型查询 >> 项目60 / 阶段600
-product类型查询统计 >> 120
-project类型查询统计 >> 110
-execution类型查询统计 >> 630
 
 */
-global $tester;
-$doc = $tester->loadModel('doc');
 
-$types = array('all', 'api', 'product', 'project', 'execution');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-r($doc->getOrderedObjects($types[0]))        && p()      && e('0');                    //all类型查询
-r($doc->getOrderedObjects($types[1]))        && p()      && e('0');                    //api类型查询
-r($doc->getOrderedObjects($types[2]))        && p('70')  && e('已关闭的多分支产品70'); //product类型查询
-r($doc->getOrderedObjects($types[3]))        && p('97')  && e('项目87');               //project类型查询
-r($doc->getOrderedObjects($types[4]))        && p('700') && e('项目60 / 阶段600');     //execution类型查询
-r(count($doc->getOrderedObjects($types[2]))) && p('70')  && e('120');                  //product类型查询统计
-r(count($doc->getOrderedObjects($types[3]))) && p('97')  && e('110');                  //project类型查询统计
-r(count($doc->getOrderedObjects($types[4]))) && p('700') && e('630');                  //execution类型查询统计
+zdTable('project')->config('execution')->gen(30);
+zdTable('product')->config('product')->gen(20);
+zdTable('user')->gen(5);
+su('admin');
+
+$types       = array('', 'product', 'project', 'execution');
+$returnTypes = array('', 'merge');
+$appends     = array(0, 1, 11, 101);
+
+$docTester = new docTest();
+r($docTester->getOrderedObjectsTest($types[0], $returnTypes[0], $appends[0])) && p()      && e('0');                 // 测试空数据
+r($docTester->getOrderedObjectsTest($types[1], $returnTypes[0], $appends[0])) && p('1')   && e('产品1');             // 获取已排序的产品数据
+r($docTester->getOrderedObjectsTest($types[1], $returnTypes[1], $appends[0])) && p('1')   && e('产品1');             // 获取已排序的产品数据
+r($docTester->getOrderedObjectsTest($types[1], $returnTypes[0], $appends[1])) && p('1')   && e('产品1');             // 获取已排序包括id=1的产品数据
+r($docTester->getOrderedObjectsTest($types[1], $returnTypes[1], $appends[1])) && p('1')   && e('产品1');             // 获取已排序包括id=1的产品数据
+r($docTester->getOrderedObjectsTest($types[2], $returnTypes[0], $appends[0])) && p('11')  && e('敏捷项目1');         // 获取已排序的项目数据
+r($docTester->getOrderedObjectsTest($types[2], $returnTypes[1], $appends[0])) && p('11')  && e('敏捷项目1');         // 获取已排序的项目数据
+r($docTester->getOrderedObjectsTest($types[2], $returnTypes[0], $appends[1])) && p('11')  && e('敏捷项目1');         // 获取已排序包括id=11的项目数据
+r($docTester->getOrderedObjectsTest($types[2], $returnTypes[1], $appends[1])) && p('11')  && e('敏捷项目1');         // 获取已排序包括id=11的项目数据
+r($docTester->getOrderedObjectsTest($types[3], $returnTypes[0], $appends[0])) && p('102') && e('敏捷项目1 / 迭代6'); // 获取已排序的执行数据
+r($docTester->getOrderedObjectsTest($types[3], $returnTypes[1], $appends[0])) && p('102') && e('敏捷项目1 / 迭代6'); // 获取已排序的执行数据
+r($docTester->getOrderedObjectsTest($types[3], $returnTypes[0], $appends[1])) && p('101') && e('敏捷项目1 / 迭代5'); // 获取已排序包括id=101的执行数据
+r($docTester->getOrderedObjectsTest($types[3], $returnTypes[1], $appends[1])) && p('101') && e('敏捷项目1 / 迭代5'); // 获取已排序包括id=101的执行数据
