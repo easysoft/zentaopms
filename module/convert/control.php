@@ -26,6 +26,7 @@ class convert extends control
     }
 
     /**
+     * 选择来源系统。
      * Select the source system.
      *
      * @access public
@@ -33,7 +34,7 @@ class convert extends control
      */
     public function selectSource()
     {
-        $this->view->title      = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->start;
+        $this->view->title = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->start;
         $this->display();
     }
 
