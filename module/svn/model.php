@@ -44,19 +44,6 @@ class svnModel extends model
     public $users = array();
 
     /**
-     * Construct function.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->loadModel('action');
-        $this->loadModel('repo');
-    }
-
-    /**
      * 执行定时任务同步提交信息。
      * Sync commit info by cron.
      *
@@ -108,41 +95,21 @@ class svnModel extends model
     }
 
     /**
-     * Update commit.
+     * 保存提交信息。
+     * Save commits.
      *
-     * @param  object $repo
-     * @param  array  $commentGroup
-     * @param  bool   $printLog
-     * @access public
-     * @return void
+     * @param  object    $repo
+     * @param  array     $logs
+     * @param  object    $lastInDB
+     * @param  array     $commentGroup
+     * @param  bool      $printLog
+     * @access protected
+     * @return bool
      */
-    public function updateCommit($repo, $commentGroup, $printLog = true)
+    protected function saveCommits(object $repo, array $logs, object $lastInDB, array $commentGroup, bool $printLog): bool
     {
-        /* Load mudule and print log. */
         $this->loadModel('repo');
-        if($printLog) $this->printLog("begin repo {$repo->name}");
-
-        if(!$this->setRepo($repo)) return false;
-
-        /* Print log and get lastInDB. */
-        if($printLog) $this->printLog("get this repo logs.");
-        $lastInDB = $this->repo->getLatestCommit($repo->id);
-
-        /* Ignore unsynced repo. */
-        if(empty($lastInDB))
-        {
-            if($printLog) $this->printLog("Please init repo {$repo->name}");
-            return false;
-        }
-
         $version = (int)$lastInDB->commit + 1;
-        $logs    = $this->repo->getUnsyncedCommits($repo);
-        if(empty($logs)) return true;
-
-        /* Update code commit history. */
-        if($printLog) $this->printLog("get " . count($logs) . " logs");
-        if($printLog) $this->printLog('begin parsing logs');
-
         foreach($logs as $log)
         {
             if($printLog) $this->printLog("parsing log {$log->revision}");
@@ -174,8 +141,48 @@ class svnModel extends model
 
             $version = $this->repo->saveOneCommit($repo->id, $log, $version);
         }
+
         $this->repo->updateCommitCount($repo->id, $lastInDB->commit + count($logs));
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update commit.
+     *
+     * @param  object $repo
+     * @param  array  $commentGroup
+     * @param  bool   $printLog
+     * @access public
+     * @return void
+     */
+    public function updateCommit($repo, $commentGroup, $printLog = true)
+    {
+        /* Load mudule and print log. */
+        if($printLog) $this->printLog("begin repo {$repo->name}");
+
+        if(!$this->setRepo($repo)) return false;
+
+        /* Print log and get lastInDB. */
+        if($printLog) $this->printLog("get this repo logs.");
+        $lastInDB = $this->loadModel('repo')->getLatestCommit($repo->id);
+
+        /* Ignore unsynced repo. */
+        if(empty($lastInDB))
+        {
+            if($printLog) $this->printLog("Please init repo {$repo->name}");
+            return false;
+        }
+
+        $logs = $this->repo->getUnsyncedCommits($repo);
+        if(empty($logs)) return true;
+
+        /* Update code commit history. */
+        if($printLog) $this->printLog("get " . count($logs) . " logs");
+        if($printLog) $this->printLog('begin parsing logs');
+
+        $this->saveCommits($repo, $logs, $lastInDB, $commentGroup, $printLog);
 
         if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
     }
