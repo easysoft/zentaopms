@@ -101,14 +101,15 @@ class misc extends control
      * Check model extension logic.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function checkExtension()
+    public function checkExtension(): string
     {
         echo $this->miscZen->hello();
     }
 
     /**
+     * 下载桌面提醒。
      * Down notify.
      *
      * @access public
@@ -124,7 +125,6 @@ class misc extends control
         $loginFile   = $notifyDir . 'config.json';
 
         /* write login info into tmp file. */
-        $loginInfo = new stdclass();
         $userInfo  = new stdclass();
         $userInfo->Account        = $account;
         $userInfo->Url            = common::getSysURL() . $this->config->webRoot;
@@ -132,6 +132,8 @@ class misc extends control
         $userInfo->Role           = $this->app->user->role;
         $userInfo->AutoSignIn     = true;
         $userInfo->Lang           = $this->cookie->lang;
+
+        $loginInfo = new stdclass();
         $loginInfo->User          = $userInfo;
         $loginInfo->LastLoginTime = time() / 86400 + 25569;
         $loginInfo = json_encode($loginInfo);
@@ -153,10 +155,12 @@ class misc extends control
         $zipContent = file_get_contents($packageFile);
         unlink($loginFile);
         unlink($packageFile);
+
         $this->fetch('file', 'sendDownHeader', array('fileName' => 'notify.zip', 'zip', $zipContent));
     }
 
     /**
+     * 忽略浏览器通知。
      * Ajax ignore browser.
      *
      * @access public
@@ -168,7 +172,9 @@ class misc extends control
     }
 
     /**
-     * Show version changelog
+     * 显示当前版本的变更日志。
+     * Show version changelog.
+     *
      * @access public
      * @return void
      */
@@ -199,12 +205,13 @@ class misc extends control
     }
 
     /**
+     * 检查是否能访问禅道官网插件接口。
      * Check net connect.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function checkNetConnect()
+    public function checkNetConnect(): string
     {
         $this->app->loadConfig('extension');
         $check = @fopen(dirname($this->config->extension->apiRoot), "r");
@@ -212,13 +219,14 @@ class misc extends control
     }
 
     /**
+     * 展示验证码图片。
      * Show captcha and save to session.
      *
      * @param  string $sessionVar
      * @access public
      * @return void
      */
-    public function captcha($sessionVar = 'captcha')
+    public function captcha(string $sessionVar = 'captcha')
     {
         if(in_array(strtolower($sessionVar), $this->config->misc->disabledSessionVar)) die("The string {$sessionVar} is not allowed to be defined as a session field.");
 
@@ -232,16 +240,20 @@ class misc extends control
     }
 
     /**
+     * 记录被展开的对象ID。
      * Ajax set unfoldID.
      *
      * @param  int    $objectID
      * @param  string $objectType
      * @param  string $action       add|delete
      * @access public
-     * @return void
+     * @return string
      */
-    public function ajaxSetUnfoldID($objectID, $objectType, $action = 'add')
+    public function ajaxSetUnfoldID(int $objectID, string $objectType, string $action = 'add'): string
     {
+        $newUnfoldID = $this->post->newUnfoldID;
+        if(empty($newUnfoldID)) return '';
+
         $account = $this->app->user->account;
         if($objectType == 'execution')
         {
@@ -260,30 +272,29 @@ class misc extends control
         }
 
         $this->loadModel('setting');
-        $setting     = $this->setting->createDAO($this->setting->parseItemParam($condition), 'select')->fetch();
-        $newUnfoldID = $this->post->newUnfoldID;
-        if(empty($newUnfoldID)) return;
-
-        $newUnfoldID  = json_decode($newUnfoldID);
+        $setting      = $this->setting->createDAO($this->setting->parseItemParam($condition), 'select')->fetch();
         $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
+        $newUnfoldID  = json_decode($newUnfoldID);
         foreach($newUnfoldID as $unfoldID)
         {
             unset($unfoldIdList[$objectID][$unfoldID]);
             if($action == 'add') $unfoldIdList[$objectID][$unfoldID] = $unfoldID;
         }
 
-        if(empty($setting))
-        {
-            $this->setting->setItem($settingPath, json_encode($unfoldIdList));
-        }
-        else
+        if(!empty($setting))
         {
             $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
         }
+        else
+        {
+            $this->setting->setItem($settingPath, json_encode($unfoldIdList));
+        }
+
         echo 'success';
     }
 
     /**
+     * 获取新增年度总结功能的通知。
      * Get annual remind.
      *
      * @access public
@@ -296,6 +307,7 @@ class misc extends control
     }
 
     /**
+     * 获取15版本之后的最新特性。
      * Features dialog.
      *
      * @access public
@@ -317,13 +329,14 @@ class misc extends control
     }
 
     /**
+     * 保存已看过最新特性的记录。
      * Save viewed feature.
      *
      * @param  string $feature
      * @access public
      * @return void
      */
-    public function ajaxSaveViewed($feature)
+    public function ajaxSaveViewed(string $feature)
     {
         $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
         if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
