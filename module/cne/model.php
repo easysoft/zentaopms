@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 /**
- * The model file of CNE(Cloud Native Engine) module of QuCheng.
+ * The model file of CNE(Cloud Native Engine) module of ZenTaoPMS.
  *
- * @copyright Copyright 2021-2022 北京渠成软件有限公司(BeiJing QuCheng Software Co,LTD, www.qucheng.com)
+ * @copyright Copyright 2021-2023 北京渠成软件有限公司(BeiJing QuCheng Software Co,LTD, www.qucheng.com)
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   CNE
- * @version   $Id$
  * @link      https://www.qucheng.com
  */
 class cneModel extends model
@@ -38,12 +38,13 @@ class cneModel extends model
     }
 
     /**
+     * 获取集群中应用程序的所有实例。
      * Get all instance of app in cluster.
      *
      * @access public
      * @return array
      */
-    public function instanceList()
+    public function instanceList(): array
     {
         $apiUrl = "/api/cne/system/app-full-list";
         $result = $this->apiGet($apiUrl, array(), $this->config->CNE->api->headers);
@@ -54,13 +55,14 @@ class cneModel extends model
     }
 
     /**
+     * 更新平台域名。
      * Update platform domain.
      *
      * @param  string $domain
      * @access public
      * @return bool
      */
-    public function updatePlatformDomain($domain)
+    public function updatePlatformDomain(string $domain): bool
     {
         $instance = new stdclass;
         $instance->k8name = 'qucheng';
@@ -78,13 +80,14 @@ class cneModel extends model
     }
 
     /**
+     * 平台系统升级。
      * Upgrade platform.
      *
      * @param  string $toVersion
      * @access public
      * @return bool
      */
-    public function upgradePlatform($toVersion)
+    public function upgradePlatform(string $toVersion): bool
     {
         $apiUrl = "/api/cne/system/update";
         $result = $this->apiPost($apiUrl, array('version' => $toVersion, 'channel' => $this->config->CNE->api->channel), $this->config->CNE->api->headers);
@@ -94,13 +97,14 @@ class cneModel extends model
     }
 
     /**
+     * 升级或降级平台版本。
      * Upgrade or degrade platform version.
      *
      * @param  string $version
      * @access public
      * @return bool
      */
-    public function setPlatformVersion($version)
+    public function setPlatformVersion(string $version): bool
     {
         $instance = new stdclass;
         $instance->k8name = 'qucheng';
@@ -113,6 +117,7 @@ class cneModel extends model
     }
 
     /**
+     * 升级平台实例倒指定版本。
      * Upgrade app instance to version.
      *
      * @param  object $instance
@@ -120,7 +125,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function upgradeToVersion($instance, $toVersion = '')
+    public function upgradeToVersion(object $instance, string $toVersion = ''): bool
     {
         $setting = array();
         $setting['cluster']   = '';
@@ -138,6 +143,7 @@ class cneModel extends model
     }
 
     /**
+     * 更新实例配置。例如：cpu、内存大小、LDAP设置...
      * Update instance config. For example: cpu, memory size, LDAP settings...
      *
      * @param  object $instance
@@ -145,7 +151,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function updateConfig($instance, $settings)
+    public function updateConfig(object $instance, object $settings): bool
     {
         $apiParams = array();
         $apiParams['cluster']   = '';
@@ -167,6 +173,7 @@ class cneModel extends model
     }
 
     /**
+     * 设置负载均衡。
      * Config QLB (Server Load Balancing).
      *
      * @param  object $settings
@@ -174,7 +181,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function configQLB($settings, $channel = '')
+    public function configQLB(object $settings, string $channel = ''): bool
     {
         $apiParams = array();
         $apiParams['cluster']   = '';
@@ -191,14 +198,16 @@ class cneModel extends model
     }
 
     /**
+     * 获取负载均衡信息。
      * Get Qucheng Load Balancer Info
      *
      * @param  string $name
      * @param  string $namespace
+     * @param  string $channel
      * @access public
      * @return object
      */
-    public function getQLBInfo($name, $namespace, $channel = '')
+    public function getQLBInfo(string $name, string $namespace, string $channel = ''): ?object
     {
         $apiParams = array();
         $apiParams['cluster']   = '';
@@ -214,6 +223,7 @@ class cneModel extends model
     }
 
     /**
+     * 校验证书。
      * Valid Certificate.
      *
      * @param  string $certName
@@ -223,7 +233,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function validateCert($certName, $pem, $key, $domain)
+    public function validateCert(string $certName, string $pem, string $key, string $domain): bool
     {
         $apiParams = array();
         $apiParams['name'] = $certName;
@@ -253,14 +263,15 @@ class cneModel extends model
     }
 
     /**
-     * Upload cert
+     * 更新证书。
+     * Upload cert.
      *
      * @param  object $cert
      * @param  string $channel
      * @access public
      * @return object
      */
-    public function uploadCert($cert, $channel = '')
+    public function uploadCert(object $cert, string $channel = ''): ?object
     {
         $apiParams = array();
         $apiParams['cluster']         = '';
@@ -269,22 +280,19 @@ class cneModel extends model
         $apiParams['certificate_pem'] = $cert->certificate_pem;
         $apiParams['private_key_pem'] = $cert->private_key_pem;
 
-        $apiUrl = "/api/cne/system/tls/upload";
-        // $result = $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
-        //if($result && $result->code == 200) return $result->data;
-
-        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        return $this->apiPost('/api/cne/system/tls/upload', $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
-     * Upload cert
+     * 获取证书信息。
+     * Get cert info.
      *
      * @param  string $certName
      * @param  string $channel
      * @access public
      * @return object|null success: return cert info, fail: return null.
      */
-    public function certInfo($certName, $channel = '')
+    public function certInfo(string $certName, string $channel = ''): ?object
     {
         $apiParams = array();
         $apiParams['cluster'] = '';
@@ -299,6 +307,7 @@ class cneModel extends model
     }
 
     /**
+     * 获取实例的默认账号密码。
      * Get default username and password of app.
      *
      * @param  object $instance
@@ -306,7 +315,7 @@ class cneModel extends model
      * @access public
      * @return object|null
      */
-    public function getDefaultAccount($instance, $cluster = '', $component = '')
+    public function getDefaultAccount(object $instance, string $cluster = '', string $component = ''): ?object
     {
         $apiUrl = '/api/cne/app/account?channel='. (empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel);
         $apiParams = array();
@@ -325,12 +334,13 @@ class cneModel extends model
     }
 
     /**
+     * 获取域名后缀。
      * Get suffix domain.
      *
      * @access public
      * @return string
      */
-    public function sysDomain()
+    public function sysDomain(): string
     {
         $customDomain = $this->loadModel('setting')->getItem('owner=system&module=common&section=domain&key=customDomain');
         if($customDomain) return $customDomain;
@@ -341,6 +351,7 @@ class cneModel extends model
     }
 
     /**
+     * 获取实例的域名。
      * Get domain.
      *
      * @param  object $instance
@@ -349,7 +360,7 @@ class cneModel extends model
      * @access public
      * @return object|null
      */
-    public function getDomain($instance, $cluster = '', $component = '')
+    public function getDomain(object $instance, string $cluster = '', string $component = ''): ?object
     {
         $apiUrl = '/api/cne/app/domain?channel='. (empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel);
         $apiParams = array();
@@ -365,13 +376,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取CNE平台的集群度量。
      * Get cluster metrics of CNE platform.
      *
      * @param  string $cluster
      * @access public
      * @return object
      */
-    public function cneMetrics($cluster = '')
+    public function cneMetrics(string $cluster = ''): object
     {
         $metrics = new stdclass;
         $metrics->cpu = new stdclass;
@@ -391,12 +403,10 @@ class cneModel extends model
         $statistics->node_count = 0;
         $statistics->metrics    = $metrics;
 
-        $apiUrl = "/api/cne/statistics/cluster";
-        $result = $this->apiGet($apiUrl, array('cluster' => $cluster), $this->config->CNE->api->headers);
+        $result = $this->apiGet('/api/cne/statistics/cluster', array('cluster' => $cluster), $this->config->CNE->api->headers);
         if($result->code != 200) return $statistics;
 
         $statistics = $result->data;
-
         $statistics->metrics->cpu->usage       = max(round($statistics->metrics->cpu->usage, 4), 0);
         $statistics->metrics->cpu->capacity    = max(round($statistics->metrics->cpu->capacity, 4), $statistics->metrics->cpu->usage);
         $statistics->metrics->cpu->allocatable = round($statistics->metrics->cpu->allocatable, 4);
@@ -411,13 +421,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取平台实例的度量。
      * Get instance metrics.
      *
      * @param  array  $instances
      * @access public
      * @return object
      */
-    public function instancesMetrics($instances)
+    public function instancesMetrics(array $instances): object
     {
         $instancesMetrics = array();
 
@@ -449,8 +460,7 @@ class cneModel extends model
             $instancesMetrics[$instance->k8name] = $instanceMetric;
         }
 
-        $apiUrl = "/api/cne/statistics/app";
-        $result = $this->apiPost($apiUrl, $apiData, $this->config->CNE->api->headers);
+        $result = $this->apiPost('/api/cne/statistics/app', $apiData, $this->config->CNE->api->headers);
         if(!isset($result->code) || $result->code != 200)return array_combine(helper::arrayColumn($instancesMetrics, 'id'), $instancesMetrics);
 
         foreach($result->data as $k8sMetric)
@@ -474,14 +484,15 @@ class cneModel extends model
     }
 
     /**
-     * Print CPU usage.
+     * 获取CPU使用率。
+     * Get CPU usage.
      *
      * @param  object  $metrics
      * @static
      * @access public
      * @return array
      */
-    public static function getCpuUsage($metrics)
+    public static function getCpuUsage(object $metrics): array
     {
         $rate = $metrics->rate;
         $tip  = "{$rate}% = {$metrics->usage} / {$metrics->capacity}";
@@ -496,14 +507,15 @@ class cneModel extends model
     }
 
     /**
-     * Print memory usage.
+     * 获取内存使用率。
+     * Get memory usage.
      *
      * @param  object  $metrics
      * @static
      * @access public
      * @return array
      */
-    public static function getMemUsage($metrics)
+    public static function getMemUsage(object $metrics): array
     {
         $rate = $metrics->rate;
         $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->capacity);
@@ -518,13 +530,15 @@ class cneModel extends model
     }
 
     /**
+     * 备份k8s集群中的服务。
      * Backup service in k8s cluster.
      *
      * @param  object $instance
+     * @param  string $account
      * @access public
      * @return object
      */
-    public function backup($instance, $account)
+    public function backup(object $instance, string $account): object
     {
         $apiParams = new stdclass;
         $apiParams->username  = $account;
@@ -538,6 +552,7 @@ class cneModel extends model
     }
 
     /**
+     * 获取备份进度。
      * Stauts of backup progress.
      *
      * @param  object $instance
@@ -545,7 +560,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function backupStatus($instance, $backup)
+    public function backupStatus(object $instance, object $backup): ?object
     {
         $apiParams = new stdclass;
         $apiParams->cluster     = '';
@@ -559,13 +574,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取备份列表。
      * Backup list.
      *
      * @param  object $instance
      * @access public
      * @return object
      */
-    public function backupList($instance)
+    public function backupList(object $instance): ?object
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
@@ -578,6 +594,7 @@ class cneModel extends model
     }
 
     /**
+     * 删除备份。
      * (not Finish: waiting cne api) Delete backup.
      *
      * @param  object $instance
@@ -585,7 +602,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function deleteBackup($instance, $backupName)
+    public function deleteBackup(object $instance, string $backupName): bool
     {
         $apiParams = new stdclass;
         $apiParams->cluster     = '';
@@ -602,15 +619,16 @@ class cneModel extends model
     }
 
     /**
-     * Backup service in k8s cluster.
+     * 恢复k8s集群中的服务。
+     * Restroe service in k8s cluster.
      *
      * @param  object $instance
-     * @param  object $backupName
+     * @param  string $backupName
      * @param  string $account
      * @access public
      * @return object
      */
-    public function restore($instance, $backupName, $account)
+    public function restore(object $instance, string $backupName, string $account): ?object
     {
         $apiParams = new stdclass;
         $apiParams->username    = $account;
@@ -625,6 +643,7 @@ class cneModel extends model
     }
 
     /**
+     * 获取恢复进度。
      * Stauts of restore progress.
      *
      * @param  object $instance
@@ -632,7 +651,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function restorestatus($instance, $restore)
+    public function restoreStatus(object $instance, object $restore): ?object
     {
         $apiparams = new stdclass;
         $apiparams->cluster      = '';
@@ -646,13 +665,14 @@ class cneModel extends model
     }
 
     /**
+     * 启动一个应用实例。
      * Start an app instance.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function startApp($apiParams)
+    public function startApp(object $apiParams): ?object
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -661,13 +681,14 @@ class cneModel extends model
     }
 
     /**
+     * 停止一个应用实例。
      * Stop an app instance.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function stopApp($apiParams)
+    public function stopApp(object $apiParams): ?object
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -676,13 +697,14 @@ class cneModel extends model
     }
 
     /**
+     * 创建快照。
      * Create snippet.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function addSnippet($apiParams)
+    public function addSnippet(object $apiParams): ?object
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -691,13 +713,14 @@ class cneModel extends model
     }
 
     /**
+     * 更新快照。
      * Update snippet.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function updateSnippet($apiParams)
+    public function updateSnippet(object $apiParams): ?object
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -706,13 +729,14 @@ class cneModel extends model
     }
 
     /**
-     * Remove snippet
+     * 删除快照。
+     * Remove snippet.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function removeSnippet($apiParams)
+    public function removeSnippet(object $apiParams): ?object
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -721,16 +745,15 @@ class cneModel extends model
     }
 
     /**
+     * 安装应用。
      * Install app.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function installApp($apiParams)
+    public function installApp(object $apiParams): ?object
     {
-        //if(!empty($apiParams->settings)) $apiParams->settings = $this->transformSettings($apiParams->settings);
-
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
         $apiUrl = "/api/cne/app/install";
@@ -738,13 +761,14 @@ class cneModel extends model
     }
 
     /**
-     * uninstall an app instance.
+     * 卸载应用。
+     * Uninstall an app instance.
      *
      * @param  object $apiParams
      * @access public
      * @return object
      */
-    public function uninstallApp($apiParams)
+    public function uninstallApp(object $apiParams): ?object
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -753,34 +777,36 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用的安装日志。
      * Get app install logs.
      *
-     * @param object $instance
+     * @param  object $instance
      * @access public
      * @return object
      */
-    public function getAppLogs($instance)
+    public function getAppLogs(object $instance): ?object
     {
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
         $apiparams = new stdclass;
-        $apiparams->cluster      = '';
-        $apiparams->namespace    = !empty($instance->spacedata->k8space) ? $instance->spacedata->k8space : $defaultSpace->k8space;
-        $apiparams->name         = $instance->k8name;
-        $apiparams->tail         = 500;
+        $apiparams->cluster   = '';
+        $apiparams->namespace = !empty($instance->spacedata->k8space) ? $instance->spacedata->k8space : $defaultSpace->k8space;
+        $apiparams->name      = $instance->k8name;
+        $apiparams->tail      = 500;
 
         $apiurl = "/api/cne/app/logs";
         return $this->apiget($apiurl, $apiparams, $this->config->CNE->api->headers);
     }
 
     /**
+     * 校验SMTP配置。
      * Validate SMTP settings.
      *
      * @param  object $apiParams
      * @access public
      * @return bool
      */
-    public function validateSMTP($apiParams)
+    public function validateSMTP(object $apiParams): bool
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -792,14 +818,15 @@ class cneModel extends model
     }
 
     /**
+     * 配置应用实例。
      * Config app instance.
      *
      * @param  object $apiParams
-     * @param  object $settings
+     * @param  array  $settings
      * @access public
-     * @return true
+     * @return bool
      */
-    public function configApp($apiParams, $settings)
+    public function configApp(object $apiParams, array $settings): bool
     {
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
@@ -812,13 +839,14 @@ class cneModel extends model
     }
 
     /**
+     * 格式化配置。
      * Transform setting format.
      *
      * @param  array  $settings
      * @access private
      * @return aray
      */
-    private function transformSettings($settings)
+    private function transformSettings(array $settings): array
     {
         $transformedSettings = array();
         foreach($settings as $key => $value)
@@ -830,14 +858,15 @@ class cneModel extends model
     }
 
     /**
+     * 按实例获取设置映射。
      * Get settings mapping by instance.
      *
      * @param  object      $instance
-     * @param  object      $mappings
+     * @param  array       $mappings
      * @access public
      * @return object|null
      */
-    public function getSettingsMapping($instance, $mappings = array())
+    public function getSettingsMapping(object $instance, array $mappings = array()): ?object
     {
         if(empty($mappings)) $mappings = array(
             array(
@@ -876,13 +905,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用配置和资源。
      * Get app config and resource.
      *
-     * @param  object      $instance
+     * @param  object       $instance
      * @access public
-     * @return bool|object
+     * @return object|false
      */
-    public function getAppConfig($instance)
+    public function getAppConfig(object $instance): object|false
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
@@ -901,13 +931,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用自定义配置。
      * Get custom items of app.
      *
-     * @param  object      $instance
+     * @param  object       $instance
      * @access public
-     * @return bool|object
+     * @return object|false
      */
-    public function getCustomItems($instance)
+    public function getCustomItems(object $instance): object|false
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
@@ -924,13 +955,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用实例状态。
      * Query status of an app instance.
      *
      * @param  object $instance
      * @access public
-     * @return object|null
+     * @return object
      */
-    public function queryStatus($instance)
+    public function queryStatus(object $instance): ?object
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
@@ -947,13 +979,14 @@ class cneModel extends model
     }
 
     /**
+     * 批量获取应用实例状态。
      * Query status of instance list.
      *
-     * @param  object $instanceList
+     * @param  array  $instanceList
      * @access public
-     * @return object|null
+     * @return array
      */
-    public function batchQueryStatus($instanceList)
+    public function batchQueryStatus(array $instanceList): array
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
@@ -981,13 +1014,14 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用的数据库列表。
      * Get all database list of app.
      *
      * @param  object  $instance
      * @access public
-     * @return object
+     * @return array
      */
-    public function appDBList($instance)
+    public function appDBList(object $instance): array
     {
         $apiUrl    = "/api/cne/app/dbs";
         $apiParams =  array();
@@ -1004,14 +1038,15 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用数据库的详细信息。
      * Get detail of app database.
      *
-     * @param  object $instance
-     * @param  string $dbName
+     * @param  object       $instance
+     * @param  string       $dbName
      * @access public
-     * @return null|object
+     * @return object|false
      */
-    public function appDBDetail($instance, $dbName)
+    public function appDBDetail(object $instance, string $dbName): object|false
     {
         $apiParams =  array();
         $apiParams['cluster']   = '';
@@ -1020,42 +1055,43 @@ class cneModel extends model
         $apiParams['db']        = $dbName;
         $apiParams['channel']   = $this->config->CNE->api->channel;
 
-        $apiUrl    = "/api/cne/app/dbs/detail";
-
+        $apiUrl = "/api/cne/app/dbs/detail";
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
-        if(empty($result) || $result->code != 200 || empty($result->data)) return;
+        if(empty($result) || $result->code != 200 || empty($result->data)) return false;
 
         return $result->data;
     }
 
     /**
+     * 获取数据库配置。
      * Get database detail.
      *
-     * @param  string $dbService
-     * @param  string $namespace
+     * @param  string       $dbService
+     * @param  string       $namespace
      * @access public
-     * @return null|object
+     * @return object|false
      */
-    public function dbDetail($dbService, $namespace)
+    public function dbDetail(string $dbService, string $namespace): object|false
     {
         $apiUrl    = "/api/cne/component/dbservice/detail";
         $apiParams =  array('name' => $dbService, 'namespace' => $namespace, 'channel' => $this->config->CNE->api->channel);
 
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
-        if(empty($result) || $result->code != 200 || empty($result->data)) return;
+        if(empty($result) || $result->code != 200 || empty($result->data)) return false;
 
         return $result->data;
     }
 
     /**
+     * 获取数据库列表。
      * Get all database list.
      *
-     * @param  string  $namespace
      * @param  boolean $global true: global database
+     * @param  string  $namespace
      * @access public
-     * @return object
+     * @return array
      */
-    public function allDBList($global = true, $namespace = 'quickon-system')
+    public function allDBList(bool $global = true, string $namespace = 'quickon-system'): array
     {
         $apiUrl    = "/api/cne/component/dbservice";
         $apiParams =  array( 'global' => ($global ? 'true' : 'false'), 'namespace' => $namespace, 'channel' => $this->config->CNE->api->channel);
@@ -1068,6 +1104,7 @@ class cneModel extends model
     }
 
     /**
+     * 获取共享数据库列表。
      * Get shared database list.
      *
      * @param  string $dbType    database type.
@@ -1075,7 +1112,7 @@ class cneModel extends model
      * @access public
      * @return array
      */
-    public function sharedDBList($dbType = 'mysql', $namespace = 'default')
+    public function sharedDBList(string $dbType = 'mysql', string $namespace = 'default'): array
     {
         $apiUrl    = "/api/cne/component/gdb";
         $apiParams =  array('kind' => $dbType, 'namespace' => $namespace, 'channel' => $this->config->CNE->api->channel);
@@ -1088,6 +1125,7 @@ class cneModel extends model
     }
 
     /**
+     * 校验数据库名称和用户是否可用。
      * Validate database name and user.
      *
      * @param  string $dbService
@@ -1097,7 +1135,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function validateDB($dbService, $dbUser, $dbName, $namespace)
+    public function validateDB(string $dbService, string $dbUser, string $dbName, string $namespace): object
     {
         $apiParams = array();
         $apiParams['name']      = $dbService;
@@ -1117,6 +1155,7 @@ class cneModel extends model
     }
 
     /**
+     * 通过Get方式调用API。
      * Get method of API.
      *
      * @param  string       $url
@@ -1126,11 +1165,11 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function apiGet($url, $data, $header = array(), $host = '')
+    public function apiGet(string $url, array|object $data, array $header = array(), string $host = ''): object
     {
         $requestUri  = ($host ? $host : $this->config->CNE->api->host) . $url;
         $requestUri .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
-        $result      = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $header, 'json', 20));
+        $result      = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $header, 'json', 'GET', 20));
 
         if($result && $result->code == 200) return $result;
         if($result) return $this->translateError($result);
@@ -1139,6 +1178,7 @@ class cneModel extends model
     }
 
     /**
+     * 通过Post方式调用API。
      * Post method of API.
      *
      * @param  string       $url
@@ -1148,7 +1188,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function apiPost($url, $data, $header = array(), $host = '')
+    public function apiPost(string $url, array|object $data, array $header = array(), string $host = ''): object
     {
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
         $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'json', 'POST', 20));
@@ -1157,12 +1197,13 @@ class cneModel extends model
             $result->code = 200;
             return $result;
         }
-        if($result) return $this->translateError($result);
 
+        if($result) return $this->translateError($result);
         return $this->cneServerError();
     }
 
     /**
+     * 通过Put方式调用API。
      * Put method of API.
      *
      * @param  string        $url
@@ -1172,10 +1213,10 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function apiPut($url, $data, $header = array(), $host = '')
+    public function apiPut(string $url, array|object $data, array $header = array(), string $host = ''): object
     {
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
-        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $header, 'json', 20));
+        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $header, 'json', 'PUT', 20));
         if($result && $result->code == 200) return $result;
         if($result) return $this->translateError($result);
 
@@ -1183,6 +1224,7 @@ class cneModel extends model
     }
 
     /**
+     * 通过Delete方式调用API。
      * Delete method of API.
      *
      * @param  string        $url
@@ -1192,10 +1234,10 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function apiDelete($url, $data, $header = array(), $host = '')
+    public function apiDelete(string $url, array|object $data, array $header = array(), string $host = ''): object
     {
         $requestUri = ($host ? $host : $this->config->CNE->api->host) . $url;
-        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $header, 'json', 20));
+        $result     = json_decode(commonModel::http($requestUri, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $header, 'json', 'DELETE', 20));
         if($result && $result->code == 200) return $result;
         if($result) return $this->translateError($result);
 
@@ -1203,12 +1245,13 @@ class cneModel extends model
     }
 
     /**
+     * 返回API服务器错误对象。
      * Return error object of api server.
      *
      * @access protected
      * @return object
      */
-    protected function cneServerError()
+    protected function cneServerError(): object
     {
         $error = new stdclass;
         $error->code    = 600;
@@ -1217,24 +1260,26 @@ class cneModel extends model
     }
 
     /**
-     * Get error
+     * 返回错误信息。
+     * Get error message.
      *
      * @access public
      * @return object
      */
-    public function getError()
+    public function getError(): object
     {
         return $this->error;
     }
 
     /**
+     * 翻译错误信息。
      * Translate error message for multi language.
      *
      * @param  object    $apiResult
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function translateError(&$apiResult)
+    protected function translateError(object &$apiResult): object
     {
         $this->error->code    = $apiResult->code;
         $this->error->message = zget($this->lang->CNE->errorList, $apiResult->code, $this->lang->CNE->serverError); // Translate CNE api error message to multi language.
