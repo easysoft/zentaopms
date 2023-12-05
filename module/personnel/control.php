@@ -12,6 +12,7 @@
 class personnel extends control
 {
     /**
+     * 获取可访问人员列表。
      * Get a list of people who can be accessed.
      *
      * @param  int    $programID
@@ -24,7 +25,7 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function accessible($programID = 0, $deptID = 0, $browseType = 'browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function accessible(int $programID = 0, int $deptID = 0, string $browseType = 'browse', int $param = 0, int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         common::setMenuVars('program', $programID);
         $this->app->loadLang('user');
@@ -33,7 +34,12 @@ class personnel extends control
 
         /* Build the search form. */
         $queryID       = $browseType == 'bysearch' ? (int)$param : 0;
-        $actionURL     = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
+        $actionURL     = $this->createLink('personnel', 'accessible', "pargramID={$programID}&deptID={$deptID}&browseType=bysearch&quertID=myQueryID");
+        $this->config->personnel->accessible->search['params']['role']['values']   = $this->lang->user->roleList;
+        $this->config->personnel->accessible->search['params']['gender']['values'] = $this->lang->user->genderList;
+        $this->personnel->buildSearchForm($queryID, $actionURL);
+
+        /* Get personnel list. */
         $personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID);
 
         /* Set the pager. */
@@ -42,12 +48,7 @@ class personnel extends control
         $pager         = new pager($recTotal, $recPerPage, $pageID);
         $personnelList = array_chunk($personnelList, $pager->recPerPage);
 
-        $this->config->personnel->accessible->search['params']['role']['values']   = $this->lang->user->roleList;
-        $this->config->personnel->accessible->search['params']['gender']['values'] = $this->lang->user->genderList;
-        $this->personnel->buildSearchForm($queryID, $actionURL);
-
-        $this->view->title      = $this->lang->personnel->accessible;
-
+        $this->view->title         = $this->lang->personnel->accessible;
         $this->view->deptID        = $deptID;
         $this->view->programID     = $programID;
         $this->view->acl           = $program->acl;
@@ -61,7 +62,6 @@ class personnel extends control
         $this->view->deptList      = $this->loadModel('dept')->getOptionMenu();
         $this->view->dept          = $this->dept->getByID($deptID);
         $this->view->deptTree      = $this->dept->getTreeMenu(0, array(new personnelModel, 'createMemberLink'), $programID);
-
         $this->display();
     }
 
