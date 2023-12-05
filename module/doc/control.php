@@ -995,7 +995,8 @@ class doc extends control
     }
 
     /**
-     * Display setting.
+     * 设置左侧树中是否显示文档。
+     * Set documents are show or hidden in the left tree.
      *
      * @access public
      * @return void
