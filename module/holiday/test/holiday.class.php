@@ -377,4 +377,43 @@ class holidayTest
 
         return count($objects);
     }
+
+    /**
+     * 测试创建一个家假日。
+     * Test create a holiday.
+     *
+     * @param  array             $holidayParams
+     * @access public
+     * @return object|bool|array
+     */
+    public function batchCreateTest(array $holidayParams = array()): object|bool|array
+    {
+        $defaultParam['type']  = 'holiday';
+        $defaultParam['begin'] = '2022-01-01';
+        $defaultParam['end']   = '2022-02-01';
+        $defaultParam['name']  = '测试创建holiday';
+        $defaultParam['desc']  = '默认的holiday';
+
+
+        $holidays = array();
+        foreach($holidayParams as $holidayParam)
+        {
+            $holiday = new stdclass();
+            foreach($defaultParam as $field => $defaultValue) $holiday->{$field} = $defaultValue;
+            foreach($holidayParam as $key => $value) $holiday->{$key} = $value;
+            $holidays[] = $holiday;
+        }
+
+        $lastInsertID = $this->objectModel->batchCreate($holidays);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getByID($lastInsertID);
+            return $object;
+        }
+    }
 }

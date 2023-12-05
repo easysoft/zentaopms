@@ -466,13 +466,14 @@ class holidayModel extends model
     }
 
     /**
+     * 批量创建节假日。
      * Batch create holiday.
      *
-     * @param  array  $holidays
+     * @param  array    $holidays
      * @access public
      * @return int|bool
      */
-    public function batchCreate($holidays)
+    public function batchCreate(array $holidays): int|bool
     {
         foreach($holidays as $holiday)
         {
