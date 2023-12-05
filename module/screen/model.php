@@ -349,6 +349,8 @@ class screenModel extends model
             case 'waterpolo':
                 if(strpos($chart->settings, 'waterpolo') === false) return $this->buildWaterPolo($component, $chart);
                 return $this->getWaterPoloOption($component, $chart, $filters);
+            case 'metric':
+                return $this->getMetricOption($component, $chart, $filters);
             default:
                 return '';
         }
@@ -1560,6 +1562,20 @@ class screenModel extends model
     }
 
     /**
+     * Get waterpolo option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @param  object $filters
+     * @access public
+     * @return object
+     */
+    public function getMetricOption($component, $chart, $filters)
+    {
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Build radar chart.
      *
      * @param  object $component
@@ -1731,8 +1747,9 @@ class screenModel extends model
         if(!isset($component->sourceID)) $component->sourceID = $chart->id;
         if(!isset($component->title))    $component->title    = $chart->name;
 
-        if($type == 'chart') $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
-        if($type == 'pivot') $chartType = 'table';
+        if($type == 'chart')  $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'pivot')  $chartType = 'table';
+        if($type == 'metric') $chartType = 'metric';
         $component->type = $chartType;
 
         $typeChanged = false;
@@ -1815,6 +1832,20 @@ class screenModel extends model
             }
         }
         return false;
+    }
+
+    /**
+     * Get chart type.
+     *
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getChartType($type)
+    {
+        if($type == 'Tables' || $type == 'pivot') return 'pivot';
+        if($type == 'Metrics') return 'metric';
+        return 'chart';
     }
 
     /**

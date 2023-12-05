@@ -120,9 +120,9 @@ class screen extends control
             $type         = $this->post->type;
             $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
 
-            $type = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
+            $type = $this->screen->getChartType($type);
 
-            $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+            $table = $this->config->objectTables[$type];
             $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
             $filterFormat = '';
