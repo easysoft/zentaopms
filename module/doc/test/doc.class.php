@@ -326,28 +326,21 @@ class docTest
     }
 
     /**
-     * Test get lib files.
+     * 获取文档库的附件。
+     * Get lib files.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  string      $type        product|project|execution
+     * @param  int         $objectID
+     * @param  string|bool $searchTitle
      * @access public
-     * @return string
+     * @return array
      */
-    public function getLibFilesTest($type, $objectID, $orderBy, $pager = null)
+    public function getLibFilesTest(string $type, int $objectID, string|bool $searchTitle = false): array
     {
-        $objects = $this->objectModel->getLibFiles($type, $objectID, $orderBy, $pager = null);
-
+        $files = $this->objectModel->getLibFiles($type, $objectID, $searchTitle);
         if(dao::isError()) return dao::getError();
 
-        $titles = '';
-        foreach($objects as $object)
-        {
-            $titles .= "$object->title,";
-        }
-        $titles = trim($titles, ',');
-        return $titles;
+        return $files;
     }
 
     /**
