@@ -856,17 +856,13 @@ class kanbanTest
     /**
      * Test create a kanban.
      *
-     * @param  array  $param
+     * @param  object $param
      * @access public
      * @return object
      */
-    public function createTest($param = array())
+    public function createTest($param)
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create();
-
-        unset($_POST);
+        $objectID = $this->objectModel->create($param);
 
         if(dao::isError()) return dao::getError();
 
