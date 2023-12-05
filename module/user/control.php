@@ -470,8 +470,6 @@ class user extends control
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
 
-            $this->userZen->checkBeforeCreateOrEdit($user);
-
             $userID = $this->user->create($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -506,10 +504,8 @@ class user extends control
         if(!empty($_POST))
         {
             $users = form::batchData($this->config->user->form->batchCreate)->get();
-            $this->userZen->checkBeforeBatchCreate($users, $this->post->verifyPassword);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $userIdList = $this->user->batchCreate($users);
+            $userIdList = $this->user->batchCreate($users, $this->post->verifyPassword);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIdList));
@@ -547,8 +543,6 @@ class user extends control
                 ->add('id', $userID)
                 ->get();
 
-            $this->userZen->checkBeforeCreateOrEdit($user, true);
-
             $this->user->update($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -585,10 +579,8 @@ class user extends control
         if($this->post->account)
         {
             $users = form::batchData($this->config->user->form->batchEdit)->get();
-            $this->userZen->checkBeforeBatchEdit($users, $this->post->verifyPassword);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->user->batchUpdate($users, $type);
+            $this->user->batchUpdate($users, $this->post->verifyPassword);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $locate = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID={$deptID}&browseType={$type}");
@@ -822,7 +814,7 @@ class user extends control
             $user = form::data($this->config->user->form->reset)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
-            $this->userZen->checkPassword($user);
+            $this->user->checkPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $result = $this->user->resetPassword($user);
@@ -906,7 +898,7 @@ class user extends control
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
 
-            $this->userZen->checkPassword($user);
+            $this->user->checkPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->user->resetPassword($user);

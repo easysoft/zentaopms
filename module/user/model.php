@@ -14,6 +14,165 @@
 class userModel extends model
 {
     /**
+     * 创建用户前的检查。
+     * Check before creating a user.
+     *
+     * @param  object $user
+     * @param  bool   $canNoPassword
+     * @access public
+     * @return bool
+     */
+    public function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
+    {
+        if(strtolower($user->account) == 'guest') dao::$errors['account'][] = sprintf($this->lang->user->error->reserved, $user->account);
+
+        $this->checkPassword($user, $canNoPassword);
+        $this->checkVerifyPassword($user->verifyPassword);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 批量创建用户前的检查。
+     * Check before batch creating users.
+     *
+     * @param  array  $users
+     * @param  string $verifyPassword
+     * @access public
+     * @return bool
+     */
+    public function checkBeforeBatchCreate(array $users, string $verifyPassword): bool
+    {
+        if(!$users) return true;
+
+        $accounts = array_map(function($user){return $user->account;}, $users);
+        $accounts = $this->dao->select('account')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs();
+
+        foreach($users as $key => $user)
+        {
+            if(empty($user->account))
+            {
+                unset($users[$key]);
+                continue;
+            }
+
+            if(strtolower($user->account) == 'guest') dao::$errors["account[{$key}]"][] = $this->lang->user->error->reserved;
+            if(isset($accounts[$user->account])) dao::$errors["account[{$key}]"][] = sprintf($this->lang->error->unique, $this->lang->user->account, $user->account);
+            if(!validater::checkAccount($user->account)) dao::$errors["account[{$key}]"][] = sprintf($this->lang->error->account, $this->lang->user->account);
+            if(!validater::checkReg($user->password, '|(.){6,}|')) dao::$errors["password[{$key}]"][] = $this->lang->user->error->password;
+            if($user->email and !validater::checkEmail($user->email)) dao::$errors["email[{$key}]"][] = sprintf($this->lang->error->email, $this->lang->user->email);
+            if($user->phone and !validater::checkPhone($user->phone)) dao::$errors["phone[{$key}]"][] = sprintf($this->lang->error->phone, $this->lang->user->phone);
+            if($user->mobile and !validater::checkMobile($user->mobile)) dao::$errors["mobile[{$key}]"][] = sprintf($this->lang->error->mobile, $this->lang->user->mobile);
+
+            /* 检查密码强度是否符合安全设置。*/
+            /* Check if the password strength meets the security settings. */
+            if(isset($this->config->safe->mode) && $this->computePasswordStrength($user->password) < $this->config->safe->mode) dao::$errors["password[{$key}]"][] = $this->lang->user->error->weakPassword;
+
+            /* 检查明文的弱密码。*/
+            /* Check the weak password in clear text. */
+            if(!empty($this->config->safe->changeWeak))
+            {
+                if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+                if(strpos(",{$this->config->safe->weak},", ",{$user->password},") !== false) dao::$errors["password[{$key}]"][] = sprintf($this->lang->user->error->dangerPassword, $this->config->safe->weak);
+            }
+
+            $accounts[$user->account] = $user->account;
+        }
+
+        $this->checkVerifyPassword($verifyPassword);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 批量编辑用户前的检查。
+     * Check before batch editing users.
+     *
+     * @param  array  $users
+     * @param  string $verifyPassword
+     * @access public
+     * @return bool
+     */
+    public function checkBeforeBatchEdit(array $users, string $verifyPassword): bool
+    {
+        if(!$users) return true;
+
+        foreach($users as $key => $user)
+        {
+            if($user->email and !validater::checkEmail($user->email)) dao::$errors["email[{$key}]"][] = sprintf($this->lang->error->email, $this->lang->user->email);
+            if($user->phone and !validater::checkPhone($user->phone)) dao::$errors["phone[{$key}]"][] = sprintf($this->lang->error->phone, $this->lang->user->phone);
+            if($user->mobile and !validater::checkMobile($user->mobile)) dao::$errors["mobile[{$key}]"][] = sprintf($this->lang->error->mobile, $this->lang->user->mobile);
+        }
+
+        $this->checkVerifyPassword($verifyPassword);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 检查密码强度。
+     * Check the posted password.
+     *
+     * @param  object $user
+     * @param  bool   $canNoPassword
+     * @access public
+     * @return bool
+     */
+    public function checkPassword(object $user, bool $canNoPassword = false): bool
+    {
+        if(empty($user->password1))
+        {
+            if(!$canNoPassword) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+            return !dao::isError();
+        }
+
+        /* 检查密码强度是否符合安全设置。*/
+        /* Check if the password strength meets the security settings. */
+        if(isset($this->config->safe->mode) && ($user->passwordStrength < $this->config->safe->mode))
+        {
+            dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword);
+        }
+        else if($user->passwordLength < 6)
+        {
+            dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword);
+        }
+
+        if($user->password1 != $user->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame;
+
+        if(!empty($this->config->safe->changeWeak))
+        {
+            if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+
+            /* 检查明文的弱密码。*/
+            /* Check the weak password in clear text. */
+            if(strpos(",{$this->config->safe->weak},", ",{$user->password1},") !== false) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+
+            /* 检查加密后的弱密码。*/
+            /* Check for encrypted weak password. */
+            $weaks = array();
+            foreach(explode(',', $this->config->safe->weak) as $weak) $weaks[$weak] = md5(trim($weak));
+            if(isset($weaks[substr($user->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 检查当前用户密码是否正确。
+     * Check if the current user password is correct.
+     *
+     * @param  string $verifyPassword
+     * @access public
+     * @return bool
+     */
+    public function checkVerifyPassword(string $verifyPassword): bool
+    {
+        if(empty($verifyPassword) || $verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
+
+        return !dao::isError();
+    }
+
+    /**
      * 根据用户 id 列表获取用户。
      * Get users by id list.
      *
@@ -317,6 +476,8 @@ class userModel extends model
      */
     public function create(object $user): bool|int
     {
+        $this->checkBeforeCreateOrEdit($user);
+
         $this->dao->begin();
 
         $requiredFields = $this->config->user->create->requiredFields;
@@ -403,11 +564,15 @@ class userModel extends model
      * Batch create users.
      *
      * @param  array  $users
+     * @param  string $verifyPassword
      * @access public
      * @return bool|array
      */
-    public function batchCreate(array $users): bool|array
+    public function batchCreate(array $users, string $verifyPassword): bool|array
     {
+        $this->checkBeforeBatchCreate($users, $verifyPassword);
+        if(dao::isError()) return false;
+
         $this->loadModel('action');
 
         $this->dao->begin();
@@ -453,6 +618,8 @@ class userModel extends model
      */
     public function update(object $user): bool
     {
+        $this->checkBeforeCreateOrEdit($user, true);
+
         $this->dao->begin();
 
         if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
@@ -591,11 +758,15 @@ class userModel extends model
      * Batch update user.
      *
      * @param  array  $users
+     * @param  string $verifyPassword
      * @access public
      * @return bool
      */
-    public function batchUpdate(array $users): bool
+    public function batchUpdate(array $users, string $verifyPassword): bool
     {
+        $this->checkBeforeBatchEdit($users, $verifyPassword);
+        if(dao::isError()) return false;
+
         $this->loadModel('action');
 
         $accounts = array_map(function($user){return $user->account;}, $users);
