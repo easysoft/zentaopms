@@ -141,6 +141,7 @@ formPanel
         setClass('account-fields hide-service'),
         formGroup
         (
+            set::required(true),
             set::width('1/2'),
             set::name("account"),
             set::label($lang->user->account),
@@ -153,6 +154,7 @@ formPanel
         setClass('account-fields hide-service'),
         formGroup
         (
+            set::required(true),
             set::width('1/2'),
             set::label($lang->user->password),
             inputGroup

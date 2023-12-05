@@ -264,7 +264,7 @@ class repo extends control
             $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
             $editData         = $this->repoZen->prepareEdit($formData, $repo, $isPipelineServer);
 
-            if($editData) $noNeedSync = $this->repo->update($editData, $repoID, $isPipelineServer);
+            if($editData) $noNeedSync = $this->repo->update($editData, $repo, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newRepo  = $this->repo->getByID($repoID);
