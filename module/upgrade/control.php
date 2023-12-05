@@ -907,12 +907,21 @@ class upgrade extends control
         if($processed == 'no')
         {
             $this->app->loadLang('install');
+
+            $showPrivTips = false;
+            if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.9', '<='))               $showPrivTips = true;
+            if(strpos($fromVersion, 'pro') !== false)                                                     $showPrivTips = true;
+            if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.9',   '<=')) $showPrivTips = true;
+            if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.9',   '<=')) $showPrivTips = true;
+            if(strpos($fromVersion, 'ipd') !== false and version_compare($fromVersion, 'ipd1.1.1', '<=')) $showPrivTips = true;
+
             $this->view->title      = $this->lang->upgrade->result;
             $this->view->position[] = $this->lang->upgrade->common;
 
             $needProcess = $this->upgrade->checkProcess();
-            $this->view->needProcess = $needProcess;
-            $this->view->fromVersion = $fromVersion;
+            $this->view->needProcess  = $needProcess;
+            $this->view->fromVersion  = $fromVersion;
+            $this->view->showPrivTips = $showPrivTips;
             $this->display();
         }
         if(empty($needProcess) or $processed == 'yes')
