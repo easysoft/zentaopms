@@ -41,3 +41,11 @@ $config->kanban->form->create['desc']        = array('type' => 'string',   'requ
 $config->kanban->form->create['whitelist']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter'  => 'join');
 $config->kanban->form->create['createdBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
 $config->kanban->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
+$config->kanban->form->edit['name']           = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->edit['space']          = array('type' => 'int',      'required' => true,  'default' => '');
+$config->kanban->form->edit['owner']          = array('type' => 'string',   'required' => false, 'default' => '');
+$config->kanban->form->edit['team']           = array('type' => 'array',    'required' => false, 'default' => '', 'filter'  => 'join');
+$config->kanban->form->edit['desc']           = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->kanban->form->edit['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->edit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
