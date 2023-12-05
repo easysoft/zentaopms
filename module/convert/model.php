@@ -74,14 +74,15 @@ class convertModel extends model
     }
 
     /**
+     * 检查jira数据库表是否存在。
      * Check table of jira databases exits or not.
      *
      * @param  string  $dbName
      * @param  string  $table
      * @access public
-     * @return bool
+     * @return object|false
      */
-    public function tableExistsOfJira($dbName, $table)
+    public function tableExistsOfJira(string $dbName, string $table): object|false
     {
         $this->connectDB($dbName);
         $sql = "SHOW tables like '$table'";
@@ -89,6 +90,7 @@ class convertModel extends model
     }
 
     /**
+     * 保存每个表的最大ID。
      * Save the max id of every table. Thus when we convert again, when can delete id larger then the saved max id.
      *
      * @access public
@@ -122,17 +124,19 @@ class convertModel extends model
     }
 
     /**
+     * 从数据库获取jira数据。
      * Get jira data from db.
      *
      * @param  string $module
      * @param  int    $lastID
      * @param  int    $limit
      * @access public
-     * @return void
+     * @return array
      */
-    public function getJiraDataFromDB($module = '', $lastID = 0, $limit = 0)
+    public function getJiraDataFromDB(string $module = '', int $lastID = 0, int $limit = 0): array
     {
         $dataList = array();
+        $table    = zget($this->config->convert->objectTables, $module, '');
         if($module == 'user')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
@@ -142,49 +146,9 @@ class convertModel extends model
                 ->orderBy('t1.ID asc')->limit($limit)
                 ->fetchAll('ID');
         }
-        elseif($module == 'project')
+        elseif(!empty($table))
         {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_PROJECT)
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'issue')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUE)
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'build')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_BUILD)
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'issuelink')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUELINK)
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'action')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ACTION)
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'file')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_FILE)
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)
                 ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
