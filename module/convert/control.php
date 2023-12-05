@@ -12,6 +12,7 @@
 class convert extends control
 {
     /**
+     * 数据导入首页。
      * Index page of convert.
      *
      * @access public
@@ -20,7 +21,7 @@ class convert extends control
     public function index()
     {
         $this->convert->saveState();
-        $this->view->title      = $this->lang->convert->common;
+        $this->view->title = $this->lang->convert->common;
         $this->display();
     }
 
