@@ -96,7 +96,7 @@ class kanbanModel extends model
      * @param  object $kanban
      * @param  object $region
      * @param  int    $copyRegionID
-     * @param  string $from kanban|execution
+     * @param  string $from         kanban|execution
      * @param  string $param
      * @access public
      * @return int
@@ -373,7 +373,7 @@ class kanbanModel extends model
         /* Add kanban cell. */
         $lanes    = $this->dao->select('id,type')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
         $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
-        foreach($lanes as $laneID => $laneType) $this->addKanbanCell($kanbanID, $laneID, $columnID, $laneType);
+        foreach($lanes as $laneID => $laneType) $this->addKanbanCell((int)$kanbanID, $laneID, $columnID, $laneType);
 
         return $columnID;
     }
@@ -2432,32 +2432,17 @@ class kanbanModel extends model
     /*
      * Create a kanban.
      *
+     * @param  object $kanban
      * @access public
      * @return int
      */
-    public function create()
+    public function create($kanban)
     {
         $account = $this->app->user->account;
-        $kanban  = fixer::input('post')
-            ->setDefault('createdBy', $account)
-            ->setDefault('createdDate', helper::now())
-            ->setDefault('owner', '')
-            ->setDefault('team', '')
-            ->setDefault('whitelist', '')
-            ->setDefault('displayCards', 0)
-            ->setIF(!$this->post->fluidBoard, 'minColWidth', 0)
-            ->setIF($this->post->import == 'off', 'object', '')
-            ->cleanINT('space')
-            ->join('whitelist', ',')
-            ->join('team', ',')
-            ->trim('name')
-            ->stripTags($this->config->kanban->editor->create['id'], $this->config->allowedTags)
-            ->remove('contactListMenu,type,import,importObjectList,uid,copyKanbanID,copyRegion')
-            ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
 
-        if(strpos(",{$kanban->team},", ",$account,") === false) $kanban->team .= ",$account";
+        if(strpos(",{$kanban->team},", ",$account,") === false)       $kanban->team .= ",$account";
         if(strpos(",{$kanban->team},", ",$kanban->owner,") === false) $kanban->team .= ",$kanban->owner";
 
         if(!empty($kanban->space))
@@ -2465,41 +2450,28 @@ class kanbanModel extends model
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBAN)
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
-            $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+            $kanban->order = $maxOrder ? $maxOrder + 1 : 1;
 
             $space = $this->getSpaceById($kanban->space);
             if($space->type == 'private') $kanban->owner = $account;
         }
 
-        $this->dao->insert(TABLE_KANBAN)->data($kanban)
-            ->autoCheck()
-            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
-            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
-            ->batchCheckIF($kanban->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
-            ->checkIF($kanban->fluidBoard && $kanban->minColWidth >= $this->config->minColWidth, 'maxColWidth', 'gt', $kanban->minColWidth)
-            ->check('name', 'unique', "space = {$kanban->space}")
-            ->exec();
+        $this->kanbanTao->createKanban($kanban);
 
         if(!dao::isError())
         {
             $kanbanID = $this->dao->lastInsertID();
             $kanban   = $this->getByID($kanbanID);
 
-            if($this->post->copyRegion)
-            {
-                $this->copyRegions($kanban, $this->post->copyKanbanID);
-            }
-            else
-            {
-                $this->createDefaultRegion($kanban);
-            }
-
+            $this->loadModel('action')->create('kanban', $kanbanID, 'created');
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
-            if(isset($_POST['team']) or isset($_POST['whitelist']))
+            $this->post->copyRegion ? $this->copyRegions($kanban, $this->post->copyKanbanID): $this->createDefaultRegion($kanban);
+
+            if(!empty($kanban->team) or !empty($kanban->whitelist))
             {
-                $type = isset($_POST['team']) ? 'team' : 'whitelist';
+                $type = !empty($kanban->team) ? 'team' : 'whitelist';
                 $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
                 $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
             }
