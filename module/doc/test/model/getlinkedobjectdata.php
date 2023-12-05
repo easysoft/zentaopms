@@ -86,12 +86,12 @@ r($docTester->getLinkedObjectDataTest($types[2], $projects[2], $editions[1]))   
 r($docTester->getLinkedObjectDataTest($types[2], $projects[0], $editions[2]))   && p('11')      && e("SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'");  // 获取IPD版关联项目ID=0的数据
 r($docTester->getLinkedObjectDataTest($types[2], $projects[1], $editions[2]))   && p('11')      && e("SELECT id FROM `zt_design` WHERE `project`  = '11' AND  `deleted`  = '0'"); // 获取IPD版关联项目ID=11的数据
 r($docTester->getLinkedObjectDataTest($types[2], $projects[2], $editions[2]))   && p('11')      && e("SELECT id FROM `zt_design` WHERE `project`  = '60' AND  `deleted`  = '0'"); // 获取IPD版关联项目ID=60的数据
-r($docTester->getLinkedObjectDataTest($types[3], $executions[0], $editions[0])) && p('0')       && e("~~");                                                                       // 获取开源版关联执行ID=0的数据
+r($docTester->getLinkedObjectDataTest($types[3], $executions[0], $editions[0])) && p('0')       && e("0");                                                                       // 获取开源版关联执行ID=0的数据
 r($docTester->getLinkedObjectDataTest($types[3], $executions[1], $editions[0])) && p('13', ';') && e('1,11');                                                                     // 获取开源版关联执行ID=101的数据
 r($docTester->getLinkedObjectDataTest($types[3], $executions[2], $editions[0])) && p('13', ';') && e('6,16');                                                                     // 获取开源版关联执行ID=106的数据
-r($docTester->getLinkedObjectDataTest($types[3], $executions[0], $editions[1])) && p('0')       && e("~~");                                                                       // 获取旗舰版关联执行ID=0的数据
+r($docTester->getLinkedObjectDataTest($types[3], $executions[0], $editions[1])) && p('0')       && e("0");                                                                       // 获取旗舰版关联执行ID=0的数据
 r($docTester->getLinkedObjectDataTest($types[3], $executions[1], $editions[1])) && p('13', ';') && e('1,11');                                                                     // 获取旗舰版关联执行ID=101的数据
 r($docTester->getLinkedObjectDataTest($types[3], $executions[2], $editions[1])) && p('13', ';') && e('6,16');                                                                     // 获取旗舰版关联执行ID=106的数据
-r($docTester->getLinkedObjectDataTest($types[3], $executions[0], $editions[2])) && p('0')       && e("~~");                                                                       // 获取IPD版关联执行ID=0的数据
+r($docTester->getLinkedObjectDataTest($types[3], $executions[0], $editions[2])) && p('0')       && e("0");                                                                       // 获取IPD版关联执行ID=0的数据
 r($docTester->getLinkedObjectDataTest($types[3], $executions[1], $editions[2])) && p('13', ';') && e('1,11');                                                                     // 获取IPD版关联执行ID=101的数据
 r($docTester->getLinkedObjectDataTest($types[3], $executions[2], $editions[2])) && p('13', ';') && e('6,16');                                                                     // 获取IPD版关联执行ID=106的数据
