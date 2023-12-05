@@ -29,7 +29,7 @@ $userItems = array();
 foreach($members as $member)
 {
     $userItems[] = array('value' => $member->account, 'text' => $member->realname);
-    unset($users[$user->account]);
+    unset($users[$member->account]);
 }
 jsVar('userItems', $userItems);
 

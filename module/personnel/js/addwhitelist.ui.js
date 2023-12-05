@@ -7,7 +7,7 @@ window.renderRowData = function($row, index, row)
             let $account = info[0];
             $account.render({items: userItems});
             $account.$.setValue(row.account);
-            $account.render({required: true, disabled: true});
+            $account.render({required: true, readonly: true});
         });
     }
 }
