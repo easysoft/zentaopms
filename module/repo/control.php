@@ -322,28 +322,31 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         $file     = $entry;
-        $repo     = $this->repo->getByID($repoID);
         $entry    = $this->repo->decodePath($entry);
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
+        $repo = $this->repo->getByID($repoID);
         if($repo->SCM == 'Gitlab') $repo = $this->repo->processGitService($repo, true);
 
+        $dropMenus = array();
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList)) $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
+
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
-        $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
-        $this->view->type        = 'view';
-        $this->view->branchID    = $this->cookie->repoBranch;
-        $this->view->showBug     = $showBug;
-        $this->view->encoding    = $encoding;
-        $this->view->repoID      = $repoID;
-        $this->view->objectID    = $objectID;
-        $this->view->repo        = $repo;
-        $this->view->revision    = $revision;
-        $this->view->file        = $file;
-        $this->view->entry       = $entry;
-        $this->view->pathInfo    = $pathInfo;
-        $this->view->tree        = $this->repoZen->getViewTree($repo, '', $revision);
+        $this->view->title     = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->dropMenus = $dropMenus;
+        $this->view->type      = 'view';
+        $this->view->branchID  = $this->cookie->repoBranch;
+        $this->view->showBug   = $showBug;
+        $this->view->encoding  = $encoding;
+        $this->view->repoID    = $repoID;
+        $this->view->objectID  = $objectID;
+        $this->view->repo      = $repo;
+        $this->view->revision  = $revision;
+        $this->view->file      = $file;
+        $this->view->entry     = $entry;
+        $this->view->pathInfo  = $pathInfo;
+        $this->view->tree      = $this->repoZen->getViewTree($repo, '', $revision);
 
         $this->display();
     }
