@@ -716,6 +716,19 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
     return $isClickable;
 }
 
+/**
+ * 生成随机数。
+ * Generate random number.
+ *
+ * @access public
+ * @return int
+ */
+function updateSessionRandom(): int
+{
+    $random = mt_rand();
+    $_SESSION['rand'] = $random;
+    return $random;
+}
 
 /**
  * 获取可用的界面列表。
