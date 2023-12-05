@@ -344,26 +344,19 @@ class docTest
     }
 
     /**
-     * Test get file source pairs.
+     * 获取附件的来源。
+     * Get file source pairs.
      *
-     * @param  array $files
      * @access public
-     * @return void
+     * @return array
      */
-    public function getFileSourcePairsTest($type, $objectID)
+    public function getFileSourcePairsTest(): array
     {
-        $files = $this->objectModel->getLibFiles($type, $objectID, 't1.id_desc', $pager = null);
-
-        $objects = $this->objectModel->getFileSourcePairs($files);
+        $files = $this->objectModel->dao->select('*')->from(TABLE_FILE)->fetchAll();
+        $files = $this->objectModel->getFileSourcePairs($files);
 
         if(dao::isError()) return dao::getError();
-
-        $counts = '';
-        foreach($objects as $type => $items)
-        {
-            $counts .= "$type:" . count($items) .';';
-        }
-        return $counts;
+        return $files;
     }
 
     /**

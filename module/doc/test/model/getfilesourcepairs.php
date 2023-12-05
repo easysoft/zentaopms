@@ -1,32 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getFileSourcePairs();
+timeout=0
 cid=1
-pid=1
-
-测试获取 产品 1 的文件类型分组 >> testcase:1;story:1;bug:1;
-测试获取 产品 2 的文件类型分组 >> 0
-测试获取 项目 11 的文件类型分组 >> task:2;bug:1;
-测试获取 项目 12 的文件类型分组 >> 0
-测试获取 执行 101 的文件类型分组 >> testcase:1;bug:1;task:1;
-测试获取 执行 102 的文件类型分组 >> 0
 
 */
 
-$type     = array('product', 'project', 'execution');
-$objectID = array(1, 2, 11, 12, 101, 102);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-$doc = new docTest();
+zdTable('file')->gen(45);
+zdTable('user')->gen(5);
+su('admin');
 
-r($doc->getFileSourcePairsTest($type[0], $objectID[0])) && p() && e('testcase:1;story:1;bug:1;'); // 测试获取 产品 1 的文件类型分组
-r($doc->getFileSourcePairsTest($type[0], $objectID[1])) && p() && e('0');                         // 测试获取 产品 2 的文件类型分组
-r($doc->getFileSourcePairsTest($type[1], $objectID[2])) && p() && e('task:2;bug:1;');             // 测试获取 项目 11 的文件类型分组
-r($doc->getFileSourcePairsTest($type[1], $objectID[3])) && p() && e('0');                         // 测试获取 项目 12 的文件类型分组
-r($doc->getFileSourcePairsTest($type[2], $objectID[4])) && p() && e('testcase:1;bug:1;task:1;');  // 测试获取 执行 101 的文件类型分组
-r($doc->getFileSourcePairsTest($type[2], $objectID[5])) && p() && e('0');                         // 测试获取 执行 102 的文件类型分组
+$docTester = new docTest();
+$files     = $docTester->getFileSourcePairsTest();
+
+r($files['task'])     && p('1') && e('开发任务11');      // 获取有附件的任务
+r($files['bug'])      && p('2') && e('BUG2');            // 获取有附件的Bug
+r($files['story'])    && p('3') && e('用户需求3');       // 获取有附件的需求
+r($files['testcase']) && p('4') && e('这个是测试用例4'); // 获取有附件的用例
+
+r(count($files['task']))     && p() && e('4'); // 获取有附件的任务数量
+r(count($files['bug']))      && p() && e('8'); // 获取有附件的Bug数量
+r(count($files['story']))    && p() && e('3'); // 获取有附件的需求数量
+r(count($files['testcase'])) && p() && e('3'); // 获取有附件的用例数量
