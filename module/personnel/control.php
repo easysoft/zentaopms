@@ -85,7 +85,8 @@ class personnel extends control
     }
 
     /**
-     * Get white list personnel.
+     * 白名单人员列表。
+     * White list personnel.
      *
      * @param  int    $objectID
      * @param  string $module     personnel|program|project|product
@@ -99,7 +100,7 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
+    public function whitelist(int $objectID = 0, string $module = 'personnel', string $objectType = 'program', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $programID = 0, string $from = '')
     {
         if($this->app->tab == 'program') common::setMenuVars('program', $objectID);
 
@@ -113,11 +114,10 @@ class personnel extends control
 
         /* Set back link. */
         $goback = $this->session->projectList ? $this->session->projectList : $this->createLink('program', 'whitelist', "projectID=$objectID");
-        if($from == 'program')  $goback = $this->createLink('program', 'browse');
-        if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
+        if($from == 'program')        $goback = $this->createLink('program', 'browse');
+        if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID={$programID}");
 
-        $this->view->title = $this->lang->personnel->whitelist;
-
+        $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->pager      = $pager;
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
@@ -127,6 +127,7 @@ class personnel extends control
         $this->view->goback     = $goback;
         $this->view->from       = $from;
 
+        /* Set object. */
         if($this->app->tab == 'execution') $objectType = 'execution';
         $dropMenuObjectID = $objectType . 'ID';
         $this->view->{$dropMenuObjectID} = $objectID;
