@@ -44,19 +44,6 @@ class gitModel extends model
     public $users = array();
 
     /**
-     * Construct function.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->loadModel('action');
-        $this->loadModel('repo');
-    }
-
-    /**
      * 执行定时任务同步提交信息。
      * Sync commit info by cron.
      *

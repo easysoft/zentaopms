@@ -1259,7 +1259,7 @@ class repoModel extends model
         $scm->setEngine($repo);
 
         $logs = $scm->log('', $lastInDB ? $lastInDB->revision : 0);
-        if(empty($logs)) return false;
+        if(empty($logs)) return array();
 
         /* Process logs. */
         $logs = array_reverse($logs, true);
@@ -1656,6 +1656,7 @@ class repoModel extends model
         $this->saveObjectToPms($objects, $action, $changes);
 
         if(isset($this->app->user)) $this->app->user->account = $account;
+        return !dao::isError();
     }
 
     /**
@@ -1793,7 +1794,7 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function buildURL(string $methodName, string $url, int $revision, string $scm = 'svn'): string
+    public function buildURL(string $methodName, string $url, string $revision, string $scm = 'svn'): string
     {
         $buildedURL  = helper::createLink($scm, $methodName, "url=&revision=$revision", 'html');
         $buildedURL .= strpos($buildedURL, '?') === false ? '?' : '&';
