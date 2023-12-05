@@ -201,42 +201,37 @@ class personnel extends control
     }
 
     /*
+     * 从白名单中移除人员。
      * Removing users from the white list.
      *
      * @param  int     $id
-     * @param  string  $confirm
      * @access public
      * @return void
      */
-    public function unbindWhitelist($id = 0, $confirm = 'no')
+    public function unbindWhitelist(int $id = 0)
     {
-        if($confirm == 'no')
+        $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
+        if(empty($acl)) return $this->send(array('result' => 'success', 'load' => true));
+
+        /* Update whitelist and delete acl. */
+        $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
+        $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
+        $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
+        $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
+
+        /* Delete program and project white list. */
+        if($acl->objectType == 'product')
         {
-            $confirmURL = inlink('unbindWhitelist',"id=$id&confirm=yes");
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->personnel->confirmDelete}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
+            $product = $this->loadModel('product')->getByID($acl->objectID);
+            if($product->program) $this->personnel->deleteProgramWhitelist($product->program, $acl->account);
         }
-        else
-        {
-            $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
-            if(empty($acl)) return $this->send(array('result' => 'success', 'load' => true));
+        if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
 
-            $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
-            $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
-            $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
-            $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
+        /* Update user view, and log actions. */
+        $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
+        $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
 
-            if($acl->objectType == 'product')
-            {
-                $product = $this->loadModel('product')->getByID($acl->objectID);
-                if($product->program) $this->personnel->deleteProgramWhitelist($product->program, $acl->account);
-            }
-            if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
-
-            $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
-            $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
-        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 }
