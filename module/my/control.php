@@ -1250,7 +1250,7 @@ EOF;
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $this->view->user       = $this->user->getById($this->app->user->account);
-        $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->rand       = updateSessionRandom();
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
         $this->display();
@@ -1283,7 +1283,7 @@ EOF;
         $this->view->isonlybody = $isonlybody;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
         $this->view->user       = $this->user->getById($this->app->user->account);
-        $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->rand       = updateSessionRandom();
         $this->display();
     }
 

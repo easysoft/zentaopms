@@ -1010,21 +1010,6 @@ class userTest
     }
 
     /**
-     * Update session random.
-     *
-     * @access public
-     * @return int
-     */
-    public function updateSessionRandomTest()
-    {
-        global $tester;
-        $oldRandom = $tester->session->rand;
-        $newRandom = $this->objectModel->updateSessionRandom();
-
-        return $oldRandom != $newRandom ? 1 : 0;
-    }
-
-    /**
      * Judge a user is logon or not.
      *
      * @access public

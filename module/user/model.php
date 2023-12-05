@@ -740,20 +740,6 @@ class userModel extends model
     }
 
     /**
-     * update session random.
-     *
-     * @access public
-     * @return void
-     */
-    public function updateSessionRandom()
-    {
-        $random = mt_rand();
-        $this->session->set('rand', $random);
-
-        return $random;
-    }
-
-    /**
      * 批量编辑用户。
      * Batch update user.
      *

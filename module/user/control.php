@@ -482,7 +482,7 @@ class user extends control
         $this->view->title     = $this->lang->user->create;
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
-        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->rand      = updateSessionRandom();
         $this->view->visions   = getVisions();
         $this->view->deptID    = $deptID;
         $this->view->type      = $type;
@@ -518,7 +518,7 @@ class user extends control
         $this->view->title     = $this->lang->user->batchCreate;
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
-        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->rand      = updateSessionRandom();
         $this->view->visions   = getVisions();
         $this->view->deptID    = $deptID;
         $this->view->type      = $type;
@@ -557,7 +557,7 @@ class user extends control
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->groups     = $this->user->getGroupsByVisions($user->visions);
-        $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->rand       = updateSessionRandom();
         $this->view->visions    = getVisions();
         $this->view->userGroups = array_keys($userGroups);
         $this->view->user       = $user;
@@ -599,7 +599,7 @@ class user extends control
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->users     = $this->user->getByIdList($this->post->userIdList);
-        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->rand      = updateSessionRandom();
         $this->view->visions   = getVisions();
         $this->view->type      = $type;
 
@@ -631,7 +631,7 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->rand = $this->user->updateSessionRandom();
+        $this->view->rand = updateSessionRandom();
         $this->view->user = $user;
         $this->display();
     }
@@ -713,7 +713,7 @@ class user extends control
         $this->view->title        = $this->lang->user->login;
         $this->view->plugins      = $this->loadModel('extension')->getExpiringPlugins(true);
         $this->view->unsafeSites  = $this->loadModel('misc')->checkOneClickPackage();
-        $this->view->rand         = $this->user->updateSessionRandom();
+        $this->view->rand         = updateSessionRandom();
         $this->view->keepLogin    = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
         $this->view->sn           = zget($this->config->global, 'sn', '');
         $this->view->referer      = $this->referer;
@@ -830,7 +830,7 @@ class user extends control
         $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
         $this->view->title          = $this->lang->user->resetPwdByAdmin;
-        $this->view->rand           = $this->user->updateSessionRandom();
+        $this->view->rand           = updateSessionRandom();
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
 
@@ -910,7 +910,7 @@ class user extends control
         }
 
         $this->view->title   = $this->lang->user->resetPWD;
-        $this->view->rand    = $this->user->updateSessionRandom();
+        $this->view->rand    = updateSessionRandom();
         $this->view->expired = $expired;
 
         $this->display();
@@ -1135,7 +1135,7 @@ class user extends control
      */
     public function refreshRandom()
     {
-        $rand = $this->user->updateSessionRandom();
+        $rand = updateSessionRandom();
         echo (string)$rand;
     }
 }
