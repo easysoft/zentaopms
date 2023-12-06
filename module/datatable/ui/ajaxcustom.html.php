@@ -26,7 +26,7 @@ function buildItem(array $item): wg
     $value      = $isPercent ? strval(round((float)$item['width'] * 100)) : $item['width'];
     return li
     (
-        setClass('row', 'items-center', 'border', 'px-5', 'h-9', 'cursor-move'),
+        setClass('row items-center ring px-5 h-9 cursor-move mt-px'),
         set('data-key', $item['name']),
         set('data-value', $item['width']),
         $isRequired ? setClass('required-col') : null,
@@ -106,7 +106,11 @@ function buildBody(array $cols): form
     {
         if(empty($items)) continue;
 
-        $ul = dragUl(setClass("{$key}-cols"));
+        $ul = zui::sortable
+        (
+            set::_tag('ul'),
+            set::_class("{$key}-cols")
+        );
         foreach($items as $item) $ul->add(buildItem($item));
         $body->add($ul);
     }
