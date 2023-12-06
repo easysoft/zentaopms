@@ -287,4 +287,21 @@ class fileTest
 
         return $objects;
     }
+
+    /**
+     * 测试 setFileWebAndRealPaths 方法。
+     * Test setFileWebAndRealPaths method.
+     *
+     * @param  int    $fileID
+     * @access public
+     * @return object
+     */
+    public function setFileWebAndRealPathsTest(int $fileID): object
+    {
+        $this->objectModel->config->webRoot = '/';
+
+        $file = $this->objectModel->getById($fileID);
+        $this->objectModel->setFileWebAndRealPaths($file);
+        return $file;
+    }
 }

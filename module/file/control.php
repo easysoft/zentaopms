@@ -108,16 +108,14 @@ class file extends control
     public function download(int $fileID, string $mouse = '')
     {
         if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
+
         $file = $this->file->getById($fileID);
-        if(empty($file))
+        if(empty($file) || !$this->file->fileExists($file))
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound));
-            if(isInModal())
-            {
-                $this->view->error = $this->lang->file->fileNotFound;
-                return $this->display();
-            }
-            return print($this->lang->file->fileNotFound);
+            $this->view->error = $this->lang->file->fileNotFound;
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->view->error));
+            if(isInModal()) return $this->display();
+            return print($this->view->error);
         }
 
         if(!$this->file->checkPriv($file))
@@ -127,52 +125,21 @@ class file extends control
         }
 
         /* Judge the mode, down or open. */
-        $mode      = 'down';
-        $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html|mp4';
-        if(stripos($fileTypes, $file->extension) !== false && $mouse == 'left') $mode = 'open';
-        if($file->extension == 'txt')
+        $mode = $this->fileZen->getDownloadMode($file, $mouse);
+
+        /* Down the file. */
+        if($mode != 'open')
         {
-            $extension = 'txt';
-            if(($position = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $position + 1);
-            if($extension != 'txt') $mode = 'down';
-            $file->extension = $extension;
+            $fileName = $file->title;
+            if(!preg_match("/\.{$file->extension}$/", $fileName)) $fileName .= '.' . $file->extension;
+            return $this->sendDownHeader($fileName, $file->extension, $file->realPath, 'file');
         }
 
-        if($this->file->fileExists($file))
-        {
-            /* If the mode is open, locate directly. */
-            if($mode == 'open')
-            {
-                if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false)
-                {
-                    $this->view->file     = $file;
-                    $this->view->charset  = $this->get->charset ? $this->get->charset : $this->config->charset;
-                    $this->view->fileType = ($file->extension == 'txt') ? 'txt' : ($file->extension == 'mp4' ? 'video' : 'image');
-                    $this->display();
-                }
-                else
-                {
-                    $this->locate($file->webPath);
-                }
-            }
-            else
-            {
-                /* Down the file. */
-                $fileName = $file->title;
-                if(!preg_match("/\.{$file->extension}$/", $fileName)) $fileName .= '.' . $file->extension;
-                $this->sendDownHeader($fileName, $file->extension, $file->realPath, 'file');
-            }
-        }
-        else
-        {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound));
-            if(isInModal())
-            {
-                $this->view->error = $this->lang->file->fileNotFound;
-                return $this->display();
-            }
-            return print($this->lang->file->fileNotFound);
-        }
+        /* If the mode is open, locate directly. */
+        $this->view->file     = $file;
+        $this->view->charset  = $this->get->charset ? $this->get->charset : $this->config->charset;
+        $this->view->fileType = ($file->extension == 'txt') ? 'txt' : ($file->extension == 'mp4' ? 'video' : 'image');
+        $this->display();
     }
 
     /**
@@ -252,7 +219,6 @@ class file extends control
         $rows     = $this->post->rows;
         $rowspans = $this->post->rowspan ? $this->post->rowspan : array();
         $colspans = $this->post->colspan ? $this->post->colspan : array();
-        $host     = common::getSysURL();
         $kind     = $this->post->kind;
         $fileName = $this->post->fileName;
 
@@ -264,51 +230,10 @@ class file extends control
         $output .= "</head>";
 
         $output .= "<body>";
-        if($this->post->kind == 'task') $output .=  "<div style='color:red'>" . $this->lang->file->childTaskTips . '</div>';
+        if($kind == 'task') $output .=  "<div style='color:red'>" . $this->lang->file->childTaskTips . '</div>';
 
-        $output .= "<table>";
-        $output .= "<tr>";
-        $output .= implode("\n", array_map(function($fieldLabel){return "<th><nobr>$fieldLabel</nobr></th>";}, $fields));
-        $output .= "</tr>";
-
-        $i = 0;
-        foreach($rows as $row)
-        {
-            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
-            if($kind == 'task') $row->name = html::a($host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
-
-            $output    .= "<tr valign='top'>\n";
-            $col        = 0;
-            $endColspan = 0;
-            foreach($fields as $fieldName => $fieldLabel)
-            {
-                $col ++;
-                if(!empty($endColspan) && $col < $endColspan) continue;
-                if(isset($endRowspan[$fieldName]) && $i < $endRowspan[$fieldName]) continue;
-
-                $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-
-                $rowspan = '';
-                if(isset($rowspans[$i]) && isset($rowspans[$i]['rows'][$fieldName]))
-                {
-                    $rowspan = "rowspan='{$rowspans[$i]['rows'][$fieldName]}'";
-                    $endRowspan[$fieldName] = $i + $rowspans[$i]['rows'][$fieldName];
-                }
-
-                $colspan = '';
-                if(isset($colspans[$i]) && isset($colspans[$i]['cols'][$fieldName]))
-                {
-                    $colspan    = "colspan='{$colspans[$i]['cols'][$fieldName]}'";
-                    $endColspan = $col + $colspans[$i]['cols'][$fieldName];
-                }
-
-                if($fieldValue) $fieldValue = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $fieldValue);
-                $output .= "<td $rowspan $colspan><nobr>$fieldValue</nobr></td>\n";
-            }
-            $output .= "</tr>\n";
-            $i++;
-        }
-        $output .= "</table></body></html>";
+        $output .= $this->fileZen->buildDownloadTable($fields, $rows, $kind, $rowspans, $colspans);
+        $output .= "</body></html>";
 
         $this->sendDownHeader($this->post->fileName, 'html', $output);
     }

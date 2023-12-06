@@ -311,7 +311,7 @@ class fileModel extends model
      */
     public function getSaveName(string $pathName): string
     {
-        $position = strpos($pathName, '.');
+        $position = strrpos($pathName, '.');
         return $position === false ? $pathName : substr($pathName, 0, $position);
     }
 

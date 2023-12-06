@@ -57,7 +57,7 @@ else
 
     if($fileType == 'image')
     {
-        div 
+        div
         (
             setID('imageFile'),
             h::img(set::src($this->createLink('file', 'read', "fileID={$file->id}")))
