@@ -31,7 +31,7 @@ window.afterPageUpdate = function()
 
         /* Load default tab content. */
         var height = getIframeHeight();
-        $.cookie.set('repoCodePath', file);
+        $.cookie.set('repoCodePath', file, {expires:config.cookieLife, path:config.webRoot});
         $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
 
         /* Select default tree item. */
@@ -55,7 +55,7 @@ window.afterPageUpdate = function()
 
             if(url != 'javascript:;') return;
 
-            if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
+            if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag, {expires:config.cookieLife, path:config.webRoot});
 
             openUrl(currentLink, {app: appTab});
         })
@@ -116,7 +116,7 @@ function openTab(entry, name)
     $('#monacoTabs .nav-tabs').append(newTab);
 
     var height = getIframeHeight();
-    $.cookie.set('repoCodePath', entry);
+    $.cookie.set('repoCodePath', entry, {expires:config.cookieLife, path:config.webRoot});
     $('#monacoTabs .tab-content').append("<div id='" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
 
     if($('.monaco-dropmenu').attr('class').indexOf('hidden')) $('.monaco-dropmenu').removeClass('hidden');
