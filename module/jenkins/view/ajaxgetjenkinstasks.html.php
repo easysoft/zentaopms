@@ -2,7 +2,7 @@
 /**
  * The jenkins task view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Gang Zeng <zenggang@cnezsoft.com>
  * @package     repo
