@@ -367,10 +367,10 @@ class convertTao extends convertModel
      *
      * @param  array $dataList
      * @param  string $method db|file
-     * @access public
+     * @access protected
      * @return void
      */
-    public function importJiraIssue(array $dataList, string $method = 'db')
+    protected function importJiraIssue(array $dataList, string $method = 'db')
     {
         $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
             ->where('AType')->eq('jproject')
