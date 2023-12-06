@@ -36,31 +36,25 @@ class docTest
     }
 
     /**
-     * Function createApiLib test by doc
+     * 创建一个API文档库。
+     * Creat a api doc library.
      *
-     * @param  array $param
+     * @param  array              $param
      * @access public
-     * @return object
+     * @return array|object|false
      */
-    public function createApiLibTest($param)
+    public function createApiLibTest(array $param): array|object|bool
     {
-        global $tester;
-        $tester->loadModel('api');
-        $tester->app->loadLang('doclib');
+        $this->objectModel->loadModel('api');
 
-        $createFields = array('name' => '', 'baseUrl' => '', 'acl' => '', 'desc' => '测试详情');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $objectID = $this->objectModel->createApiLib();
-
-        unset($_POST);
+        $apiLib = new stdclass();
+        $createFields = array('name' => '', 'baseUrl' => '', 'acl' => '', 'desc' => '测试详情', 'libType' => 'product', 'product' => 1, 'project' => 0);
+        foreach($createFields as $field => $defaultValue) $apiLib->{$field} = $defaultValue;
+        foreach($param as $key => $value) $apiLib->{$key} = $value;
+        $objectID = $this->objectModel->createApiLib($apiLib);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getLibById($objectID);
-
-        return $objects;
+        return $this->objectModel->getLibByID($objectID);
     }
 
     /**
