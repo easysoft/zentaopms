@@ -98,6 +98,172 @@ class metricModel extends model
     }
 
     /**
+     * 对 headers 进行分组满足表头合并单元格, 返回经过分组的 headers 和 data。
+     * Return grouped headers and data for table headers merges cell.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return array
+     */
+    public function getGroupTable($header, $data, $withCalcTime = true)
+    {
+        if(!$header or !$data) return array(array(), array());
+
+        $headerLength = count($header);
+
+        if($headerLength == 2)
+        {
+            return $this->getTimeTable($data, '', $withCalcTime);
+        }
+        elseif($headerLength == 3)
+        {
+            if($this->isObjectMetric($header))
+            {
+                return $this->getObjectTable($header, $data, '', $withCalcTime);
+            }
+            else
+            {
+                $dateType = current($data)->dateType;
+                return $this->getTimeTable($data, $dateType, $withCalcTime);
+            }
+        }
+        elseif($headerLength == 4)
+        {
+            $dateType = current($data)->dateType;
+            return $this->getObjectTable($header, $data, $dateType, $withCalcTime);
+        }
+
+        return array($header, $data);
+    }
+
+    public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
+    {
+        // 没有时间属性的度量项，也加上天的属性，此度量项数据的 year month week day 字段均为0， 此时使用 calcTime 来做计算
+        $dateField = ($dateType == 'day' and !isset(current($data)->dateString)) ? 'calcTime' : 'dateString';
+        usort($data, function($a, $b) use ($dateField)
+        {
+            $dateA = strtotime($a->$dateField);
+            $dateB = strtotime($b->$dateField);
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            return ($dateA > $dateB) ? -1 : 1;
+        });
+
+        $groupHeader = array();
+        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->date, 'align' => 'center', 'width' => 96);
+        $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 80);
+        $groupData   = array();
+
+        foreach($data as $dataInfo)
+        {
+            if($dateType == 'year')
+            {
+                $date = substr($dataInfo->$dateField, 0, 4);
+            }
+            elseif($dateType == 'month')
+            {
+                $year  = substr($dataInfo->$dateField, 0, 4);
+                $month = substr($dataInfo->$dateField, 5, 2);
+                $date  = "{$year}-{$month}";
+            }
+            elseif($dateType == 'week')
+            {
+                $year = substr($dataInfo->$dateField, 0, 4);
+                $week = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
+                $date = "{$year}-{$week}";
+            }
+            elseif($dateType == 'day')
+            {
+                $date = substr($dataInfo->$dateField, 0, 10);
+            }
+
+            $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime) : $dataInfo->value;
+            $dataSeries  = array('date' => $date, 'value' => $value);
+            $groupData[] = $dataSeries;
+        }
+
+        return array($groupHeader, $groupData);
+    }
+
+    public function getObjectTable($header, $data, $dateType = 'day', $withCalcTime = true)
+    {
+        $groupHeader = array();
+        $groupData   = array();
+
+        $headerField = current($header)['name'];
+        $headerTitle = current($header)['title'];
+
+        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'align' => 'center', 'width' => 160);
+        $dateField     = ($dateType == 'day' and !isset(current($data)->dateString)) ? 'calcTime' : 'dateString';
+        usort($data, function($a, $b) use($dateField)
+        {
+            $dateA = strtotime($a->$dateField);
+            $dateB = strtotime($b->$dateField);
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            return ($dateA > $dateB) ? -1 : 1;
+        });
+
+        $times     = array();
+        $objects   = array();
+        foreach($data as $dataInfo)
+        {
+            $time     = substr($dataInfo->$dateField, 0, 10);
+            $calcTime = $dataInfo->calcTime;
+            $object = $dataInfo->scope;
+            $value  = $dataInfo->value;
+
+            if(!isset($times[$time]))     $times[$time]     = $time;
+            if(!isset($objects[$object])) $objects[$object] = array();
+            $objects[$object][$time] = $withCalcTime ? array($value, $calcTime) : $value;
+        }
+        /* e.g $times = array('2023-10-14', '2023-10-15'), $objects = array('object1' => array('2023-10-14' => 2, '2023-10-15 => 3)) */
+
+        foreach($times as $time)
+        {
+            $year = substr($time, 0, 4) . $this->lang->year;
+
+            if($dateType == 'year')
+            {
+                $title = $year;
+                $groupHeader[] = array('name' => $time, 'title' => $title, 'align' => 'center', 'width' => 64);
+            }
+            elseif($dateType == 'month')
+            {
+                $month         = substr($time, 5, 2) . $this->lang->month;
+                $groupHeader[] = array('name' => $time, 'title' => $month, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
+            }
+            elseif($dateType == 'week')
+            {
+                $week          = sprintf($this->lang->metric->week, substr($time, 5, 2));
+                $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
+            }
+            elseif($dateType == 'day')
+            {
+                $day           = substr($time, 5, 5);
+                $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
+            }
+        }
+
+        foreach($objects as $object => $datas)
+        {
+            $objectData = array($headerField => $object);
+            foreach($times as $time) $objectData[$time] = isset($datas[$time]) ? $datas[$time] : 0;
+            $groupData[] = $objectData;
+        }
+
+        return array($groupHeader, $groupData);
+    }
+
+    /**
      * Get scope pairs.
      *
      * @access public

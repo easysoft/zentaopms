@@ -202,7 +202,7 @@ class metricTao extends metricModel
                 ->where('deleted')->eq(0)
                 ->andWhere('shadow')->eq(0)
                 ->andWhere('id')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
         elseif($scope == 'project')
@@ -211,7 +211,7 @@ class metricTao extends metricModel
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->eq('project')
                 ->andWhere('id')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
         elseif($scope == 'execution')
@@ -220,7 +220,7 @@ class metricTao extends metricModel
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
                 ->andWhere('id')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
         elseif($scope == 'user')
@@ -228,7 +228,7 @@ class metricTao extends metricModel
             $objects = $this->dao->select('account')->from(TABLE_USER)
                 ->where('deleted')->eq('0')
                 ->andWhere('account')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
 

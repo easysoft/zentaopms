@@ -78,7 +78,7 @@ class metric extends control
             $allResultData = $this->metric->getViewTableData($metric, $allResult);
         }
 
-        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->dateType      = $current ? $this->metric->getDateTypeByCode($current->code) : 'nodate';
@@ -289,7 +289,7 @@ class metric extends control
         $resultData    = $this->metric->getViewTableData($metric, $result);
         $allResultData = $this->metric->getViewTableData($metric, $allResult);
 
-        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
@@ -322,7 +322,7 @@ class metric extends control
         $allResultData = $this->metric->getViewTableData($metric, $allResult);
         if($usePager) $this->view->dtablePager = $pager;
 
-        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
