@@ -331,7 +331,8 @@ class screenModel extends model
         $component->type        = 'metric';
         $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
 
-        $component->chartConfig->chartOption = $this->getMetricOption($metric);
+        $component->chartConfig->chartOption = $this->getMetricChartOption($metric);
+        $component->chartConfig->tableOption = $this->getMetricTableOption($metric);
         return $component;
     }
 
@@ -1580,13 +1581,13 @@ class screenModel extends model
     }
 
     /**
-     * Get waterpolo option.
+     * Get option of metric chart.
      *
      * @param  object $metric
      * @access public
      * @return object
      */
-    public function getMetricOption($metric)
+    public function getMetricChartOption($metric)
     {
         $this->loadModel('metric');
 
@@ -1597,7 +1598,31 @@ class screenModel extends model
         $resultData    = $this->metric->getViewTableData($metric, $result);
         $allResultData = $this->metric->getViewTableData($metric, $allResult);
 
-        return $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        $chartOption = $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        return $chartOption;
+    }
+
+    /**
+     * Get option of metric table.
+     *
+     * @param  object $metric
+     * @access public
+     * @return object
+     */
+    public function getMetricTableOption($metric)
+    {
+        $this->loadModel('metric');
+
+        $resultHeader  = $this->metric->getViewTableHeader($metric);
+
+        $result     = $this->metric->getResultByCode($metric->code, array(), 'cron');
+        $resultData = $this->metric->getViewTableData($metric, $result);
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, false);
+
+        $tableOption = new stdclass();
+        $tableOption->header = $groupHeader;
+        $tableOption->data   = $groupData;
+        return $tableOption;
     }
 
     /**
