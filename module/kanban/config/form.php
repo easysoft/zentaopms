@@ -58,3 +58,9 @@ $config->kanban->form->setting['maxColWidth'] = array('type' => 'int',      'req
 $config->kanban->form->setting['archived']    = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->setting['performable'] = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->setting['alignment']   = array('type' => 'string',   'required' => false, 'default' => '');
+
+$config->kanban->form->activate['status']         = array('type' => 'string',   'required' => true,  'default' => 'active');
+$config->kanban->form->activate['activatedBy']    = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->activate['activatedDate']  = array('type' => 'datetime', 'required' => true,  'default' => $now);
+$config->kanban->form->activate['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->activate['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
