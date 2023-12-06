@@ -20,7 +20,7 @@ class kanbanTao extends kanbanModel
      * @access public
      * @return int
      */
-    public function createKanban($kanban)
+    protected function createKanban($kanban)
     {
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
              ->autoCheck()
@@ -30,5 +30,65 @@ class kanbanTao extends kanbanModel
              ->checkIF($kanban->fluidBoard && $kanban->minColWidth >= $this->config->minColWidth, 'maxColWidth', 'gt', $kanban->minColWidth)
              ->check('name', 'unique', "space = {$kanban->space}")
              ->exec();
+    }
+
+    /**
+     * 构造看板区域的数据结构。
+     * Update a kanban.
+     *
+     * @param  array  $regionData
+     * @param  array  $groups
+     * @param  array  $laneGroup
+     * @param  array  $columnGroup
+     * @param  array  $cardGroup
+     * @access public
+     * @return array
+     */
+    protected function buildRegionData(array $regionData, array $groups, array $laneGroup, array $columnGroup, array $cardGroup): array
+    {
+        $laneCount  = 0;
+        $groupData  = array();
+        foreach($groups as $group)
+        {
+            $lanes = zget($laneGroup, $group->id, array());
+            if(!$lanes) continue;
+
+            $cols  = zget($columnGroup, $group->id, array());
+            $items = zget($cardGroup, $group->id, array());
+
+            /* 计算各个列上的卡片数量。 */
+            $columnCount = array();
+            $parentCols  = array();
+            foreach($cols as $col) $parentCols[$col['id']] = $col['parent'];
+            foreach($items as $colGroup)
+            {
+                foreach($colGroup as $colID => $cards)
+                {
+                    if(!isset($columnCount[$colID])) $columnCount[$colID] = 0;
+                    $columnCount[$colID] += count($cards);
+
+                    if(isset($parentCols[$colID]) && $parentCols[$colID] > 0)
+                    {
+                        if(!isset($columnCount[$parentCols[$colID]])) $columnCount[$parentCols[$colID]] = 0;
+                        $columnCount[$parentCols[$colID]] += count($cards);
+                    }
+                }
+            }
+
+            foreach($cols as $colIndex => $col) $cols[$colIndex]['cards'] = isset($columnCount[$col['id']]) ? $columnCount[$col['id']] : 0;
+
+            $laneCount += count($lanes);
+
+            $groupData['id']            = $group->id;
+            $groupData['key']           = "group{$group->id}";
+            $groupData['data']['lanes'] = $lanes;
+            $groupData['data']['cols']  = $cols;
+            $groupData['data']['items'] = $items;
+
+            $regionData['items'][] = $groupData;
+        }
+        $regionData['laneCount']  = $laneCount;
+
+        return $regionData;
     }
 }
