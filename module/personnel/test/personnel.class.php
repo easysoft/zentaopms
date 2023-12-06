@@ -170,17 +170,18 @@ class personnelTest
     }
 
     /**
-     * Get project task invest test
+     * 测试获取投入项目的任务。
+     * test get project task invest.
      *
      * @param  array  $projects
      * @param  array  $accounts
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProjectTaskInvestTest($projectID, $accounts)
+    public function getProjectTaskInvestTest(array $projects, array $accounts): array
     {
         global $tester;
-        $project = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchAll('id');
+        $project = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
         $objects = $this->objectModel->getProjectTaskInvest($project, $accounts);
 
         if(dao::isError()) return dao::getError();
