@@ -788,12 +788,13 @@ class doc extends control
     }
 
     /**
-     * Show project space.
+     * 项目空间。
+     * Project space.
      *
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
-     * @param  string $browseType    all|draft|bysearch
+     * @param  string $browseType  all|draft|bysearch
      * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
@@ -802,12 +803,12 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $projects = $this->project->getPairsByProgram();
         $objectID = $this->project->checkAccess($objectID, $projects);
 
-        echo $this->fetch('doc', 'tableContents', "type=project&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('doc', 'tableContents', "type=project&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
