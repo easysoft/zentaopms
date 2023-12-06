@@ -320,9 +320,24 @@ class blockZen extends block
     {
         $this->app->loadModuleConfig('admin');
 
+        /* 检查服务端是否联网。 */
+        $hasInternet = $this->session->hasInternet;
+        if(empty($hasInternet))
+        {
+            $hasInternet = $this->loadModel('admin')->checkInternet();
+            $this->session->set('hasInternet', $hasInternet);
+            if(!$hasInternet) return;
+        }
+        if($this->session->isSlowNetwork) return;
+
         /* 调取接口获取数据。 */
+        $startTime = microtime(true);
+        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
+
+        /* 请求超过一定时间后判断为网络请求缓慢。 */
+        if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
+
         $dynamics = array();
-        $result = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
         if(!empty($result->data))
         {
             $data = $result->data;
