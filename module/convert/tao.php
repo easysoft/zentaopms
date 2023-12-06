@@ -233,6 +233,50 @@ class convertTao extends convertModel
     }
 
     /**
+     * 转换需求阶段。
+     * Convert stage.
+     *
+     * @param  string $jiraStatus
+     * @access protected
+     * @return string
+     */
+    protected function convertStage(string $jiraStatus): string
+    {
+        $stage     = 'wait';
+        $relations = $this->session->jiraRelation;
+
+        $jiraStatusList = array_flip($relations['jiraStatus']);
+        $stageID        = $jiraStatusList[$jiraStatus];
+
+        if(!empty($relations['storyStage'][$stageID])) $stage = $relations['storyStage'][$stageID];
+
+        return $stage;
+    }
+
+    /**
+     * 转换状态。
+     * Convert jira status.
+     *
+     * @param  string $objectType
+     * @param  string $jiraStatus
+     * @access protected
+     * @return string
+     */
+    protected function convertStatus(string $objectType, string $jiraStatus): string
+    {
+        $status    = $objectType == 'task' ? 'wait' : 'active';
+        $relations = $this->session->jiraRelation;
+
+        $arrayKey       = "{$objectType}Status";
+        $jiraStatusList = array_flip($relations['jiraStatus']);
+        $statusID       = $jiraStatusList[$jiraStatus];
+
+        if(!empty($relations[$arrayKey][$statusID])) $status = $relations[$arrayKey][$statusID];
+
+        return $status;
+    }
+
+    /**
      * 导入user数据。
      * Import jira user.
      *
@@ -314,6 +358,82 @@ class convertTao extends convertModel
             $keyRelation['BID']   = $data->pkey;
             $keyRelation['extra'] = $data->ID;
             $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($keyRelation)->exec();
+        }
+    }
+
+    /**
+     * 导入issue数据。
+     * Import jira issue.
+     *
+     * @param  array $dataList
+     * @param  string $method db|file
+     * @access public
+     * @return void
+     */
+    public function importJiraIssue(array $dataList, string $method = 'db')
+    {
+        $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jproject')
+            ->andWhere('BType')->eq('zproject')
+            ->fetchPairs();
+
+        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in(array_values($projectRelation))
+            ->fetchPairs();
+
+        $projectKeys = $this->dao->dbh($this->dbh)->select('extra as ID, AID as oldKey, BID as newKey')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('joldkey')
+            ->andWhere('BType')->eq('jnewkey')
+            ->fetchAll('ID');
+
+        $projectExecution = $this->dao->dbh($this->dbh)->select('project,id')->from(TABLE_PROJECT)
+            ->where('project')->in(array_values($projectRelation))
+            ->fetchPairs();
+
+        $relations      = $this->session->jiraRelation;
+        $issueTypeList  = array();
+        $reasonList     = array();
+        $resolutionList = array();
+        foreach($relations['jiraObject'] as $id => $jiraCode) $issueTypeList[$jiraCode] = $relations['zentaoObject'][$id];
+        foreach($relations['jiraResolution'] as $id => $jiraCode)
+        {
+            if(!empty($relations['zentaoReason'][$id]))     $reasonList[$jiraCode]     = $relations['zentaoReason'][$id];
+            if(!empty($relations['zentaoResolution'][$id])) $resolutionList[$jiraCode] = $relations['zentaoResolution'][$id];
+        }
+
+        foreach($dataList as $id => $data)
+        {
+            $issueType    = isset($issueTypeList[$data->issuetype]) ? $issueTypeList[$data->issuetype] : 'task';
+            $issueProject = $data->PROJECT;
+
+            if(!isset($projectRelation[$issueProject])) continue;
+
+            $projectID   = $projectRelation[$issueProject];
+            $productID   = $projectProduct[$projectID];
+            $executionID = $projectExecution[$projectID];
+
+            if($issueType == 'requirement' or $issueType == 'story')
+            {
+                $this->createStory($productID, $projectID, $executionID, $issueType, $data, $method, $reasonList);
+            }
+            elseif($issueType == 'task' or $issueType == 'subTask')
+            {
+                $this->createTask($projectID, $executionID, $data, $method, $reasonList);
+            }
+            elseif($issueType == 'bug')
+            {
+                $this->createBug($productID, $projectID, $data, $method, $resolutionList);
+            }
+
+            $oldKey   = zget($projectKeys[$issueProject], 'oldKey', '');
+            $newKey   = zget($projectKeys[$issueProject], 'newKey', '');
+            $issueKey = $oldKey ? $oldKey . '-' . $data->issuenum : $newKey . '-' . $data->issuenum;
+
+            $fileRelation['AType'] = 'jissueid';
+            $fileRelation['BType'] = 'jfilepath';
+            $fileRelation['AID']   = $data->ID;
+            $fileRelation['extra'] = "{$oldKey}/10000/{$issueKey}/";
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($fileRelation)->exec();
         }
     }
 
@@ -464,5 +584,206 @@ class convertTao extends convertModel
         $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->exec();
         $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->exec();
+    }
+
+    /**
+     * 创建需求。
+     * Create story.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  object $data
+     * @param  string $method
+     * @param  array  $reasonList
+     * @access protected
+     * @return void
+     */
+    protected function createStory(int $productID, int $projectID, int $executionID, string $type, object $data, string $method, array $reasonList)
+    {
+        $this->app->loadLang('story');
+
+        $story             = new stdclass();
+        $story->product    = $productID;
+        $story->title      = $data->SUMMARY;
+        $story->type       = $type;
+        $story->pri        = $data->PRIORITY;
+        $story->version    = 1;
+        $story->stage      = $this->convertStage($data->issuestatus);
+        $story->status     = $this->convertStatus('story', $data->issuestatus);
+        $story->openedBy   = $this->getJiraAccount($data->CREATOR, $method);
+        $story->openedDate = substr($data->CREATED, 0, 19);
+        $story->assignedTo = $this->getJiraAccount($data->ASSIGNEE, $method);
+
+        if($data->RESOLUTION)
+        {
+            $story->closedReason = zget($reasonList, $data->RESOLUTION, '');
+            if($story->closedReason and !isset($this->lang->story->reasonList[$story->closedReason])) $story->closedReason = 'done';
+        }
+
+        $this->dao->dbh($this->dbh)->insert(TABLE_STORY)->data($story)->exec();
+
+        if(!dao::isError())
+        {
+            $storyID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+            $storyDesc = new stdclass();
+            $storyDesc->story   = $storyID;
+            $storyDesc->version = 1;
+            $storyDesc->title   = $story->title;
+            $storyDesc->spec    = $data->DESCRIPTION;
+            $this->dao->dbh($this->dbh)->replace(TABLE_STORYSPEC)->data($storyDesc)->exec();
+            $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTSTORY)->set('project')->eq($projectID)
+                ->set('product')->eq($productID)
+                ->set('story')->eq($storyID)
+                ->set('version')->eq('1')
+                ->exec();
+
+            $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTSTORY)->set('project')->eq($executionID)
+                ->set('product')->eq($productID)
+                ->set('story')->eq($storyID)
+                ->set('version')->eq('1')
+                ->exec();
+
+            /* Create opened action from openedDate. */
+            $action = new stdclass();
+            $action->objectType = 'story';
+            $action->objectID   = $storyID;
+            $action->actor      = $story->openedBy;
+            $action->action     = 'Opened';
+            $action->date       = $story->openedDate;
+            $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+
+            /* Record relation. */
+            $storyRelation['AType'] = 'jstory';
+            $storyRelation['BType'] = 'zstory';
+            $storyRelation['AID']   = $data->ID;
+            $storyRelation['BID']   = $storyID;
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($storyRelation)->exec();
+
+            $issueRelation['AType'] = 'jissueid';
+            $issueRelation['BType'] = 'zissuetype';
+            $issueRelation['AID']   = $data->ID;
+            $issueRelation['extra'] = 'story';
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($issueRelation)->exec();
+        }
+    }
+
+    /**
+     * 创建任务。
+     * Create task.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  object $data
+     * @param  string $method
+     * @param  array  $reasonList
+     * @access protected
+     * @return void
+     */
+    protected function createTask(int $projectID, int $executionID, object $data, string $method, array $reasonList)
+    {
+        $this->app->loadLang('task');
+
+        $task = new stdclass();
+        $task->project    = $projectID;
+        $task->execution  = $executionID;
+        $task->name       = $data->SUMMARY;
+        $task->type       = 'devel';
+        $task->pri        = $data->PRIORITY;
+        $task->status     = $this->convertStatus('task', $data->issuestatus);
+        $task->desc       = $data->DESCRIPTION;
+        $task->openedBy   = $this->getJiraAccount($data->CREATOR, $method);
+        $task->openedDate = substr($data->CREATED, 0, 19);
+        $task->assignedTo = $this->getJiraAccount($data->ASSIGNEE, $method);
+        if($data->RESOLUTION)
+        {
+            $task->closedReason = zget($reasonList, $data->RESOLUTION, '');
+            if($task->closedReason and !isset($this->lang->task->reasonList[$task->closedReason])) $task->closedReason = 'cancel';
+        }
+
+        $this->dao->dbh($this->dbh)->insert(TABLE_TASK)->data($task)->exec();
+        $taskID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+        /* Create opened action from openedDate. */
+        $action = new stdclass();
+        $action->objectType = 'task';
+        $action->objectID   = $taskID;
+        $action->actor      = $task->openedBy;
+        $action->action     = 'Opened';
+        $action->date       = $task->openedDate;
+        $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+
+        $taskRelation['AType'] = 'jtask';
+        $taskRelation['BType'] = 'ztask';
+        $taskRelation['AID']   = $data->ID;
+        $taskRelation['BID']   = $taskID;
+        $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($taskRelation)->exec();
+
+        $issueRelation['AType'] = 'jissueid';
+        $issueRelation['BType'] = 'zissuetype';
+        $issueRelation['AID']   = $data->ID;
+        $issueRelation['extra'] = 'task';
+        $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($issueRelation)->exec();
+    }
+
+    /**
+     * 创建BUG。
+     * Create bug.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  object $data
+     * @param  string $method
+     * @param  array  $resolutionList
+     * @access protected
+     * @return void
+     */
+    protected function createBug(int $productID, int $projectID, object $data, string $method, array $resolutionList)
+    {
+        $this->app->loadLang('bug');
+
+        $bug = new stdclass();
+        $bug->product     = $productID;
+        $bug->project     = $projectID;
+        $bug->title       = $data->SUMMARY;
+        $bug->pri         = $data->PRIORITY;
+        $bug->status      = $this->convertStatus('bug', $data->issuestatus);
+        $bug->steps       = $data->DESCRIPTION;
+        $bug->openedBy    = $this->getJiraAccount($data->CREATOR, $method);
+        $bug->openedDate  = substr($data->CREATED, 0, 19);
+        $bug->openedBuild = 'trunk';
+        $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount($data->ASSIGNEE, $method);
+
+        if($data->RESOLUTION)
+        {
+            $bug->resolution = zget($resolutionList, $data->RESOLUTION, '');
+            if($bug->resolution and !isset($this->lang->bug->resolutionList[$bug->resolution])) $bug->resolution = 'fixed';
+        }
+
+        $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec();
+        $bugID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+        /* Create opened action from openedDate. */
+        $action = new stdclass();
+        $action->objectType = 'bug';
+        $action->objectID   = $bugID;
+        $action->actor      = $bug->openedBy;
+        $action->action     = 'Opened';
+        $action->date       = $bug->openedDate;
+        $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+
+        $bugRelation['AType'] = 'jbug';
+        $bugRelation['BType'] = 'zbug';
+        $bugRelation['AID']   = $data->ID;
+        $bugRelation['BID']   = $bugID;
+        $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($bugRelation)->exec();
+
+        $issueRelation['AType'] = 'jissueid';
+        $issueRelation['BType'] = 'zissuetype';
+        $issueRelation['AID']   = $data->ID;
+        $issueRelation['extra'] = 'bug';
+        $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($issueRelation)->exec();
     }
 }
