@@ -187,4 +187,198 @@ class convertTao extends convertModel
             }
         }
     }
+
+    /**
+     * 导入project数据。
+     * Import jira project.
+     *
+     * @param  array  $dataList
+     * @param  string $method db|file
+     * @access protected
+     * @return void
+     */
+    protected function importJiraProject(array $dataList, string $method = 'db')
+    {
+        global $app;
+        $app->loadConfig('execution');
+        $app->loadLang('doc');
+
+        foreach($dataList as $id => $data)
+        {
+            $project     = $this->createProject($data, $method);
+            $executionID = $this->createExecution($project);
+            $this->createProduct($project, $executionID);
+
+            $projectRelation = array();
+            $projectRelation['AType'] = 'jproject';
+            $projectRelation['BType'] = 'zproject';
+            $projectRelation['AID']   = $id;
+            $projectRelation['BID']   = $project->id;
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($projectRelation)->exec();
+
+            $executionRelation = array();
+            $executionRelation['AType'] = 'jproject';
+            $executionRelation['BType'] = 'zexecution';
+            $executionRelation['AID']   = $id;
+            $executionRelation['BID']   = $executionID;
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($executionRelation)->exec();
+
+            $keyRelation = array();
+            $keyRelation['AType'] = 'joldkey';
+            $keyRelation['BType'] = 'jnewkey';
+            $keyRelation['AID']   = $data->ORIGINALKEY;
+            $keyRelation['BID']   = $data->pkey;
+            $keyRelation['extra'] = $data->ID;
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($keyRelation)->exec();
+        }
+    }
+
+    /**
+     * 创建项目。
+     * Create project.
+     *
+     * @param  object $data
+     * @param  string $method db|file
+     * @access protected
+     * @return object
+     */
+    protected function createProject(object $data, string $method): object
+    {
+        /* Create project. */
+        $project = new stdclass();
+        $project->name          = $data->pname;
+        $project->code          = $data->pkey;
+        $project->desc          = $data->DESCRIPTION;
+        $project->status        = 'wait';
+        $project->type          = 'project';
+        $project->model         = 'scrum';
+        $project->grade         = 1;
+        $project->acl           = 'open';
+        $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
+        $project->PM            = $this->getJiraAccount($data->LEAD, $method);
+        $project->openedBy      = $this->getJiraAccount($data->LEAD, $method);
+        $project->openedDate    = helper::now();
+        $project->openedVersion = $this->config->version;
+
+        $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($project)->exec();
+        $projectID = $this->dao->dbh($this->dbh)->lastInsertID();
+        $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->set('path')->eq(",$projectID,")->where('id')->eq($projectID)->exec();
+
+        /* Create member. */
+        $member = new stdclass();
+        $member->root    = $projectID;
+        $member->account = $project->openedBy;
+        $member->role    = '';
+        $member->join    = '';
+        $member->type    = 'project';
+        $member->days    = 0;
+        $member->hours   = $this->config->execution->defaultWorkhours;
+        $this->dao->dbh($this->dbh)->insert(TABLE_TEAM)->data($member)->exec();
+
+        /* Create doc lib. */
+        $lib = new stdclass();
+        $lib->project = $projectID;
+        $lib->name    = $this->lang->doclib->main['project'];
+        $lib->type    = 'project';
+        $lib->main    = '1';
+        $lib->acl     = 'default';
+        $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        $project->id = $projectID;
+        return $project;
+    }
+
+    /**
+     * 创建执行。
+     * Create execution.
+     *
+     * @param  object $project
+     * @access protected
+     * @return int
+     */
+    protected function createExecution(object $project): int
+    {
+        /* Create execution. */
+        $execution = new stdclass();
+        $execution->name          = $project->name;
+        $execution->code          = $project->code;
+        $execution->desc          = $project->desc;
+        $execution->status        = 'wait';
+        $execution->project       = $project->id;
+        $execution->parent        = $project->id;
+        $execution->grade         = 1;
+        $execution->type          = 'sprint';
+        $execution->acl           = 'open';
+        $execution->end           = date('Y-m-d', time() + 24 * 3600);
+        $execution->PM            = $project->PM;
+        $execution->openedBy      = $project->openedBy;
+        $execution->openedDate    = helper::now();
+        $execution->openedVersion = $this->config->version;
+
+        $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($execution)->exec();
+        $executionID = $this->dao->dbh($this->dbh)->lastInsertID();
+        $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('`order`')->eq($executionID * 5)->set('path')->eq(",{$project->id},$executionID,")->where('id')->eq($executionID)->exec();
+
+        /* Create member. */
+        $member = new stdclass();
+        $member->root    = $executionID;
+        $member->account = $execution->openedBy;
+        $member->role    = '';
+        $member->join    = '';
+        $member->type    = 'execution';
+        $member->days    = 0;
+        $member->hours   = $this->config->execution->defaultWorkhours;
+        $this->dao->dbh($this->dbh)->insert(TABLE_TEAM)->data($member)->exec();
+
+        /* Create doc lib. */
+        $lib = new stdclass();
+        $lib->project   = $project->id;
+        $lib->execution = $executionID;
+        $lib->name      = $this->lang->doclib->main['execution'];
+        $lib->type      = 'execution';
+        $lib->main      = '1';
+        $lib->acl       = 'default';
+        $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        return $executionID;
+    }
+
+    /**
+     * 创建产品。
+     * Create product.
+     *
+     * @param  object $project
+     * @param  int    $executionID
+     * @access protected
+     * @return void
+     */
+    protected function createProduct(object $project, int $executionID)
+    {
+        /* Create product. */
+        $product = new stdclass();
+        $product->name           = $project->name;
+        $product->code           = $project->code;
+        $product->type           = 'normal';
+        $product->status         = 'normal';
+        $product->acl            = 'open';
+        $product->createdBy      = $project->openedBy;
+        $product->createdDate    = helper::now();
+        $product->createdVersion = $this->config->version;
+
+        $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($product)->exec();
+        $productID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+        /* Create doc lib. */
+        $lib = new stdclass();
+        $lib->product = $productID;
+        $lib->name    = $this->lang->doclib->main['product'];
+        $lib->type    = 'product';
+        $lib->main    = '1';
+        $lib->acl     = 'default';
+        $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->exec();
+        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->exec();
+    }
 }
