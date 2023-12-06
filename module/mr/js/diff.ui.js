@@ -343,7 +343,7 @@ function openTab(entry, name)
 
 function updateEditorInline(eleId)
 {
-    $.cookie.set('renderSideBySide', diffAppose);
+    $.cookie.set('renderSideBySide', diffAppose, {expires:config.cookieLife, path:config.webRoot});
     if(typeof  $(eleId + ' iframe')[0].contentWindow.updateEditorInline == 'function')
     {
         $(eleId + ' iframe')[0].contentWindow.updateEditorInline(diffAppose);

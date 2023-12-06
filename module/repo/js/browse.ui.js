@@ -101,7 +101,7 @@ window.diffClick = function()
     var newDiffLink = diffLink.replace('{oldRevision}', revisionMap[checkedIds[1]]);
     newDiffLink     = newDiffLink.replace('{newRevision}', revisionMap[checkedIds[0]]);
 
-    $.cookie.set('sideRepoSelected', checkedIds.join(','))
+    $.cookie.set('sideRepoSelected', checkedIds.join(','), {expires:config.cookieLife, path:config.webRoot})
 
     openUrl(newDiffLink, {app: appTab});
 }

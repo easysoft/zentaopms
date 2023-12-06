@@ -31,7 +31,7 @@ window.afterPageUpdate = function()
 
         /* Load default tab content. */
         var height = getIframeHeight();
-        $.cookie.set('repoCodePath', file);
+        $.cookie.set('repoCodePath', file, {expires:config.cookieLife, path:config.webRoot});
         $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
 
         /* Select default tree item. */
@@ -169,7 +169,7 @@ function openTab(entry, name)
     $('#monacoTabs .nav-tabs').append(newTab);
 
     var height = getIframeHeight();
-    $.cookie.set('repoCodePath', entry);
+    $.cookie.set('repoCodePath', entry, {expires:config.cookieLife, path:config.webRoot});
     $('#monacoTabs .tab-content').append("<div id='" + eleId + "' class='tab-pane active in'><iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe></div>")
 
     if($('.monaco-dropmenu').attr('class').indexOf('hidden')) $('.monaco-dropmenu').removeClass('hidden');
@@ -181,7 +181,7 @@ function openTab(entry, name)
 
 function updateEditorInline(eleId)
 {
-    $.cookie.set('renderSideBySide', diffAppose);
+    $.cookie.set('renderSideBySide', diffAppose, {expires:config.cookieLife, path:config.webRoot});
     if(typeof  $(eleId + ' iframe')[0].contentWindow.updateEditorInline == 'function')
     {
         $(eleId + ' iframe')[0].contentWindow.updateEditorInline(diffAppose);
