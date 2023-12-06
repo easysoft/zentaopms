@@ -35,7 +35,7 @@ class count_of_merged_pull_requests_in_codebase extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('codebase', 'value'));
+        $records = $this->getRecords(array('code', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
