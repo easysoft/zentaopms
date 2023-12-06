@@ -749,12 +749,12 @@ class kanbanModel extends model
     /**
      * Get kanban data.
      *
-     * @param  int          $kanbanID
-     * @param  array|string $regionIDList
+     * @param  int     $kanbanID
+     * @param  mixed   $regionIDList
      * @access public
      * @return array
      */
-    public function getKanbanData($kanbanID, $regionIDList = '', $groupID = 0)
+    public function getKanbanData(int $kanbanID, mixed $regionIDList = ''): array
     {
         $regions = $this->getRegionPairs($kanbanID);
 
@@ -775,9 +775,7 @@ class kanbanModel extends model
         $kanbanList = array();
         foreach($regionIDList as $regionID)
         {
-            $laneCount  = 0;
             $regionData = array();
-            $groupData  = array();
 
             $heading = new stdclass();
             $heading->title   = zget($regions, $regionID, '');
@@ -789,48 +787,7 @@ class kanbanModel extends model
             $regionData['toggleFromHeading'] = true;
 
             $groups = zget($groupGroup, $regionID, array());
-            foreach($groups as $group)
-            {
-                $lanes = zget($laneGroup, $group->id, array());
-                if(!$lanes) continue;
-
-                $cols  = zget($columnGroup, $group->id, array());
-                $items = zget($cardGroup, $group->id, array());
-
-                /* 计算各个列上的卡片数量。 */
-                $columnCount = array();
-                $parentCols  = array();
-                foreach($cols as $col) $parentCols[$col['id']] = $col['parent'];
-                foreach($items as $colGroup)
-                {
-                    foreach($colGroup as $colID => $cards)
-                    {
-                        if(!isset($columnCount[$colID])) $columnCount[$colID] = 0;
-                        $columnCount[$colID] += count($cards);
-
-                        if(isset($parentCols[$colID]) && $parentCols[$colID] > 0)
-                        {
-                            if(!isset($columnCount[$parentCols[$colID]])) $columnCount[$parentCols[$colID]] = 0;
-                            $columnCount[$parentCols[$colID]] += count($cards);
-                        }
-                    }
-                }
-
-                foreach($cols as $colIndex => $col) $cols[$colIndex]['cards'] = isset($columnCount[$col['id']]) ? $columnCount[$col['id']] : 0;
-
-                $laneCount += count($lanes);
-
-                $groupData['id']            = $group->id;
-                $groupData['key']           = "group{$group->id}";
-                $groupData['data']['lanes'] = $lanes;
-                $groupData['data']['cols']  = $cols;
-                $groupData['data']['items'] = $items;
-
-                $regionData['items'][] = $groupData;
-            }
-
-            $regionData['laneCount']  = $laneCount;
-            $kanbanList[] = $regionData;
+            $kanbanList[] = $this->kanbanTao->buildRegionData($regionData, $groups, $laneGroup, $columnGroup, $cardGroup);
         }
 
         return $kanbanList;
