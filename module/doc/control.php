@@ -891,7 +891,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(string $objectType, object $objectID, string $module, string $method)
+    public function ajaxGetDropMenu(string $objectType, int $objectID, string $module, string $method)
     {
         list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge', $objectID);
 
