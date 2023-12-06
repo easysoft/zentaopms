@@ -112,7 +112,6 @@ class pivotModel extends model
         if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
 
-        /* 是否使用存疑，先注释掉。
         if(empty($pivot->type))
         {
             $pivot->names = array();
@@ -133,7 +132,6 @@ class pivotModel extends model
 
             $pivot->used = $this->checkIFChartInUse($pivot->id, $screenList, 'pivot');
         }
-        */
     }
 
     /**
@@ -170,98 +168,58 @@ class pivotModel extends model
     }
 
     /**
+     * 构建透视表字段的配置信息，类似于dataview/js/basequery.js getFieldSettings()。
      * Process pivot field settings, function like dataview/js/basequery.js getFieldSettings().
      *
      * @param  object $pivot
      * @access public
-     * @return object
+     * @return void
      */
-    public function processFieldSettings($pivot)
+    public function processFieldSettings(object $pivot)
     {
-        if(isset($pivot->fieldSettings))
-        {
-            $fieldSettings = $pivot->fieldSettings;
-        }
-        else
-        {
-            $fieldSettings = (!empty($pivot->fields) and $pivot->fields != 'null') ? json_decode($pivot->fields) : array();
-        }
-        if(empty($fieldSettings)) return $pivot;
+        /* 获取$fieldSettings。 */
+        /* Get $fieldSettings. */
+        $fieldSettings = $pivot->fieldSettings ?? $this->pivotTao->getFieldsFromPivot($pivot, 'fields', array(), true);
+        if(empty($fieldSettings)) return;
 
-        $this->loadModel('chart');
-        $this->loadModel('dataview');
-
-        $sql        = isset($pivot->sql)     ? $pivot->sql     : '';
-        $filters    = isset($pivot->filters) && !empty($pivot->filters) ? (is_array($pivot->filters) ? $pivot->filters : json_decode($pivot->filters, true)) : array();
-
+        /* 获取$filters。 */
+        /* Get $filters. */
+        $sql     = isset($pivot->sql)     ? $pivot->sql     : '';
+        $filters = $this->pivotTao->getFieldsFromPivot($pivot, 'filters', array(), !is_array($pivot->filters), true);
         if(!empty($filters)) $this->pivotTao->setFilterDefault($filters);
 
-        $querySQL = $this->chart->parseSqlVars($sql, $filters);
-
+        /* 检测sql是否有效。 */
+        /* Check if the sql is valid. */
+        $querySQL = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
         $stmt = $this->dbh->query($querySQL);
-        if(!$stmt) return $pivot;
+        if(!$stmt) return;
 
-        $columns      = $this->dataview->getColumns($querySQL);
+        /* 获取$columnFields。 */
+        /* Get $columnFields. */
+        $columns      = $this->loadModel('dataview')->getColumns($querySQL);
         $columnFields = array();
-        foreach($columns as $column => $type) $columnFields[$column] = $column;
+        foreach(array_keys(get_object_vars($columns)) as $type) $columnFields[$type] = $type;
 
-        $tableAndFields = $this->chart->getTables($querySQL);
-        $tables   = $tableAndFields['tables'];
-        $fields   = $tableAndFields['fields'];
-        $querySQL = $tableAndFields['sql'];
+        /* 获取$tables和$fields。 */
+        /* Get $tables and $fields. */
+        extract($this->chart->getTables($querySQL));
 
-        $moduleNames = array();
-        if($tables) $moduleNames = $this->dataview->getModuleNames($tables);
-
+        /* 获取field的键值对以及相关联的对象。 */
+        /* Get field key value pairs and related objects. */
+        $moduleNames = $tables ? $this->dataview->getModuleNames($tables) : array();
         list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
 
+        /* 使用fieldPairs, columns, relatedObject, objectFields刷新pivot的fieldSettings。 */
         /* Use fieldPairs, columns, relatedObject, objectFields refresh pivot fieldSettings .*/
-
         $objectFields = array();
-        foreach($this->lang->dataview->objects as $object => $objectName) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+        foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->dataview->getTypeOptions($object);
 
-        $fieldSettingsNew = new stdclass();
-
-        foreach($fieldPairs as $index => $field)
-        {
-            $defaultType   = $columns->$index;
-            $defaultObject = $relatedObject[$index];
-
-            if(!empty($objectFields) and isset($objectFields[$defaultObject]) and isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
-
-            if(!isset($fieldSettings->$index))
-            {
-                $fieldItem = new stdclass();
-                $fieldItem->name   = $field;
-                $fieldItem->object = $defaultObject;
-                $fieldItem->field  = $index;
-                $fieldItem->type   = $defaultType;
-
-                $fieldSettingsNew->$index = $fieldItem;
-            }
-            else
-            {
-                if(!isset($fieldSettings->$index->object) or strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
-
-                if(!isset($fieldSettings->$index->field) or strlen($fieldSettings->$index->field) == 0)
-                {
-                    $fieldSettings->$index->field  = $index;
-                    $fieldSettings->$index->object = $defaultObject;
-                    $fieldSettings->$index->type   = 'string';
-                }
-
-                $object = $fieldSettings->$index->object;
-                $type   = $fieldSettings->$index->type;
-                if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
-
-                $fieldSettingsNew->$index = $fieldSettings->$index;
-            }
-        }
-        $pivot->fieldSettings = $fieldSettingsNew;
-
-        return $pivot;
+        /* 重建fieldSettings。 */
+        /* Rebuild fieldSettings. */
+        $this->pivotTao->rebuildFieldSetting($pivot, $fieldPairs, $columns, $relatedObject, $fieldSettings);
     }
+
 
     /**
      * Compute percent of every item.

@@ -13,7 +13,7 @@ pid=1
 
 $pivot = new pivotTest();
 
-$pivotIDList = array(1001, 1001, 1002);
+$pivotIDList = array(1001, 1001, 1002, 1003);
 $pivotList   = array();
 
 global $tester;
