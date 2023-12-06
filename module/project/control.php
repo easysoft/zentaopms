@@ -1092,7 +1092,6 @@ class project extends control
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles        = $this->user->getUserRoles(array_keys($users));
         $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-        $userInfoList = $this->user->getUserDisplayInfos(array_keys($users), $dept);
 
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
@@ -1100,7 +1099,6 @@ class project extends control
         $this->view->title          = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $this->view->project        = $project;
         $this->view->users          = $users;
-        $this->view->userInfoList   = $userInfoList;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = $this->dept->getOptionMenu();

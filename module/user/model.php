@@ -389,39 +389,6 @@ class userModel extends model
     }
 
     /**
-     * Get users info list for displaying
-     *
-     * @param  array    $accounts
-     * @param  int      $deptID
-     * @param  string   $type
-     * @access public
-     * @return array
-     */
-    public function getUserDisplayInfos($accounts, $deptID = 0, $type = 'inside')
-    {
-        $users = $this->dao->select('account, realname, avatar, dept, role')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
-            ->beginIF($type)->andWhere('type')->eq($type)->fi()
-            ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->fetchAll('account');
-
-        $depts = $this->loadModel('dept')->getDeptPairs($deptID);
-
-        $infos = array();
-        foreach($users as $info)
-        {
-            $info->roleName = zget($this->lang->user->roleList, $info->role, '');
-            if(isset($depts[$info->dept])) $info->deptName = $depts[$info->dept];
-            if(empty($info->avatar))   unset($info->avatar);
-            if(empty($info->realname)) unset($info->realname);
-            if(empty($info->role))     unset($info->role);
-            if(empty($info->roleName)) unset($info->roleName);
-            $infos[$info->account] = $info;
-        }
-        return $infos;
-    }
-
-    /**
      * Get user info by ID.
      *
      * @param  string  $userID
