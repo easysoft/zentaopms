@@ -1,2 +1,3 @@
 .fast-menu{border-bottom-left-radius: unset; border-bottom-right-radius: unset;}
 .module-menu{border-top-left-radius: unset; border-top-right-radius: unset; padding-bottom: 20px;}
+.btn-group > .btn.disabled, .btn-group > .btn:disabled {z-index: 1}

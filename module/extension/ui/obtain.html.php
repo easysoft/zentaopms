@@ -156,7 +156,7 @@ foreach($extensions as $extension)
                 }
                 else
                 {
-                    $btnItems[] = array('url' => 'javascript', 'text' => icon('ok') . $lang->extension->upgrade, 'disabled' => 'disabled', 'class' => 'text-success');
+                    $btnItems[] = array('url' => 'javascript', 'text' => $lang->extension->upgrade, 'disabled' => 'disabled', 'class' => 'text-success');
                 }
             }
         }
