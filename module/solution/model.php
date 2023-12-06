@@ -499,7 +499,7 @@ class solutionModel extends model
     public function saveLog(string $message)
     {
         $errorFile = $this->app->logRoot . 'php.' . date('Ymd') . '.log.php';
-        if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?>\n");
+        if(!is_file($errorFile)) file_put_contents($errorFile, "<\x3fphp\n die();\n\x3f>\n");
 
         file_put_contents($errorFile, $message . "\n", FILE_APPEND);
     }
