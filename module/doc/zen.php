@@ -716,4 +716,88 @@ class docZen extends doc
         $this->view->spaceType         = $objectType;
         $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, (int)$doc->module);
     }
+
+    /**
+     * 设置空间页面的Cookie和Session。
+     * Set the cookie and session of the space page.
+     *
+     * @param  string    $type       custom|product|project|execution
+     * @param  string    $browseType all|draft|bysearch
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @param  int       $param
+     * @access protected
+     * @return void
+     */
+    protected function setSpacePageStorage(string $type, string $browseType, int $objectID, int $libID, int $moduleID, int $param): void
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('createProjectLocate', $uri, 'doc');
+        $this->session->set('structList', $uri, 'doc');
+        $this->session->set('spaceType', $type, 'doc');
+        $this->session->set('docList', $uri, 'doc');
+
+        $docSpaceParam = new stdclass();
+        $docSpaceParam->type       = $type;
+        $docSpaceParam->objectID   = $objectID;
+        $docSpaceParam->libID      = $libID;
+        $docSpaceParam->moduleID   = $moduleID;
+        $docSpaceParam->browseType = $browseType;
+        $docSpaceParam->param      = $param;
+        setCookie("docSpaceParam", json_encode($docSpaceParam), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+    }
+
+    /**
+     * 展示空间相关api变量。
+     * Show space related api variables.
+     *
+     * @param  string    $type       custom|product|project|execution
+     * @param  string    $browseType all|draft|bysearch
+     * @param  string    $libType
+     * @param  int       $libID
+     * @param  array     $libs
+     * @param  int       $objectID
+     * @param  int       $moduleID
+     * @param  int       $queryID
+     * @param  string    $orderBy
+     * @param  int       $recTotal
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @access protected
+     * @return void
+     */
+    protected function assignApiVarForSpace(string $type, string $browseType, string $libType, int $libID, array $libs, int $objectID, int $moduleID, int $queryID, string $orderBy, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        if($libType == 'api')
+        {
+            $this->loadModel('api');
+            $this->session->set('objectName', $this->lang->doc->api, 'doc');
+
+            $this->view->libs    = $libs;
+            $this->view->apiID   = 0;
+            $this->view->release = 0;
+            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $param, $pager);
+        }
+        else
+        {
+            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'doc');
+            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+        }
+
+        $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';
+        $apiObjectID   = $apiObjectType ? $objectID : 0;
+        $apiLibs       = $apiObjectType ? $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID) : array();
+
+        $canExport = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
+        if($this->config->edition == 'open') $canExport = false;
+
+        $this->view->canExport         = $canExport;
+        $this->view->apiLibID          = key($apiLibs);
+        $this->view->pager             = $pager;
+    }
 }

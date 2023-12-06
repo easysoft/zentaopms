@@ -688,13 +688,14 @@ class doc extends control
     }
 
     /**
-     * Show team Space.
+     * 产品/项目/执行/团队空间。
+     * ProductSpace/ProjectSpace/ExecutionSpace/TeamSpace.
      *
-     * @param  string $type custom|product|project|execution
+     * @param  string $type        custom|product|project|execution
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
-     * @param  string $browseType    all|draft|bysearch
+     * @param  string $browseType  all|draft|bysearch
      * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
@@ -703,77 +704,31 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function tableContents($type = 'custom', $objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function tableContents(string $type = 'custom', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('createProjectLocate', $uri, 'doc');
-        $this->session->set('structList', $uri, 'doc');
-        $this->session->set('spaceType', $type, 'doc');
-        $this->session->set('docList', $uri, 'doc');
-
-        $docSpaceParam = new stdclass();
-        $docSpaceParam->type       = $type;
-        $docSpaceParam->objectID   = $objectID;
-        $docSpaceParam->libID      = $libID;
-        $docSpaceParam->moduleID   = $moduleID;
-        $docSpaceParam->browseType = $browseType;
-        $docSpaceParam->param      = $param;
-        setCookie("docSpaceParam", json_encode($docSpaceParam), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        $this->docZen->setSpacePageStorage($type, $browseType, $objectID, $libID, $moduleID, $param);
 
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         $isFirstLoad = $libID == 0 ? true : false;
         if(empty($browseType)) $browseType = 'all';
 
         $libData = $this->doc->setMenuByType($type, $objectID, $libID);
-        if(is_string($libData)) $this->locate($libData);
-
+        if(is_string($libData)) return $this->locate($libData);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
 
         $libID   = (int)$libID;
-        $title   = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
         $lib     = $this->doc->getLibByID($libID);
         $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
 
         /* Build the search form. */
-        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
-        $params  = "objectID=$objectID&libID=$libID&moduleID=0&browseType=bySearch&orderBy=$orderBy&param=myQueryID";
-        if($this->app->rawMethod == 'tablecontents') $params = "type=$type&" . $params;
+        $queryID = $browseType == 'bySearch' ? $param : 0;
+        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=myQueryID";
+        if($this->app->rawMethod == 'tablecontents') $params = "type={$type}&" . $params;
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params);
-        if($libType == 'api')
-        {
-            $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
-        }
-        else
-        {
-            $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
-        }
+        if($libType == 'api') $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
+        if($libType != 'api') $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        if($libType == 'api')
-        {
-            $this->loadModel('api');
-            $this->session->set('objectName', $this->lang->doc->api, 'doc');
-
-            $this->view->libs    = $libs;
-            $this->view->apiID   = 0;
-            $this->view->release = 0;
-            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $param, $pager);
-        }
-        else
-        {
-            if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'doc');
-            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
-        }
-
-        $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';
-        $apiObjectID   = $apiObjectType ? $objectID : 0;
-        $apiLibs       = $apiObjectType ? $this->doc->getApiLibs(0, $apiObjectType, $apiObjectID) : array();
-
-        $canExport = $libType == 'api' ? common::hasPriv('api', 'export') : common::hasPriv('doc', $type . '2export');
-        if($this->config->edition == 'open') $canExport = false;
+        $this->assignApiVarForSpace($type, $browseType, $libType, $libID, $libs, $objectID, $moduleID, $queryID, $orderBy, $recTotal, $recPerPage, $pageID);
 
         /* For product drop menu. */
         if(in_array($type, array('product', 'project', 'execution')))
@@ -784,9 +739,10 @@ class doc extends control
 
         $executionID = $type == 'project' && $lib->type == 'execution' ? $lib->execution : 0;
 
-        $this->view->title             = $title;
+        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
         $this->view->type              = $type;
         $this->view->objectType        = $type;
+        $this->view->spaceType         = $type;
         $this->view->browseType        = $browseType;
         $this->view->isFirstLoad       = $isFirstLoad;
         $this->view->param             = $queryID;
@@ -797,15 +753,11 @@ class doc extends control
         $this->view->objectDropdown    = $objectDropdown;
         $this->view->lib               = $lib;
         $this->view->libType           = $libType;
-        $this->view->pager             = $pager;
         $this->view->objectID          = $objectID;
         $this->view->orderBy           = $orderBy;
         $this->view->release           = $browseType == 'byrelease' ? $param : 0;
-        $this->view->canExport         = $canExport;
         $this->view->exportMethod      = $libType == 'api' ? 'export' : $type . '2export';
-        $this->view->apiLibID          = key($apiLibs);
-        $this->view->spaceType         = $type;
-        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
+        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
         $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type, $executionID);
 
         $this->display();
