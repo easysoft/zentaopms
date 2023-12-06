@@ -6,7 +6,7 @@
     },
     "zentaoext": {
       "gitVersion": "18.x",
-      "gitRepo": "https://git.zcorp.cc/easycorp/zentaoext.git"
+      "gitRepo": "easycorp/zentaoext"
     },
     "zdoo": {
       "gitVersion": "master"
@@ -15,10 +15,11 @@
       "gitVersion": "master"
     },
     "downgrade": {
-      "gitRepo": "https://git.zcorp.cc/devops/zentaopms-downgrade.git"
+      "gitRepo": "devops/zentaopms-downgrade"
     }
   },
   "image": {
+    "phpversion": "7.4.x",
     "public": {
       "namespace": {
         "release": "app",
@@ -33,7 +34,6 @@
     }
   },
   "downgrade": {
-    "enabled": true,
     "versions": "7.2,7.1,7.0,5.4"
   },
   "upload": {

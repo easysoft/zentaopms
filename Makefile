@@ -8,9 +8,6 @@ BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
 
-DOWNGRADE_ENABLED := $(or $(DOWNGRADE_ENABLED),$(shell jq -r .downgrade.enabled < ci.json))
-DOWNGRADE_VERSIONS := $(or $(DOWNGRADE_VERSIONS),$(shell jq -r .downgrade.versions < ci.json))
-
 all:
 	make clean
 	make ci
@@ -287,9 +284,6 @@ ciCommon:
 	cd zentaoalm/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
 	cd zentaoalm/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
 	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
-
-	# downgrade
-	@test "$(DOWNGRADE_ENABLED)" != "true" && echo "skip downgrade" || ./misc/downgrade.sh -p "$(DOWNGRADE_VERSIONS)" -i -r zentaopms -o "$(RELEASE_PATH)" framework/ lib/ module/*
 
 	rm -fr zentaopms zentaoalm
 

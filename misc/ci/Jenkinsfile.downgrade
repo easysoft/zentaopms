@@ -1,5 +1,5 @@
-library 'z-common@master'
-library 'z-zentaopms@feat-231116'
+library 'z-common@feat-231130'
+library 'z-zentaopms@feat-231204'
 
 pipeline {
   agent {
@@ -18,8 +18,6 @@ pipeline {
 
     ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
 
-    // DOWNGRADE_VERSIONS = "7.2"
-    DOWNGRADE_VERSIONS = "7.2,7.1,7.0,5.4"
   }
 
   stages {
@@ -43,13 +41,21 @@ pipeline {
         stage("Setup Global Env") {
           steps {
             script {
+
+              env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
+              env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+              
+              def j = job.newJob()
+
+              env.GIT_HOST = "git.zcorp.cc"
+              env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
+
               zentaopms.setupStaticEnv()
+              zentaopms.setupEnvAfterCheckout()
+
             //   def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = "qishiyao"
             //   env.XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
-              
-              env.GIT_BRANCH = "18.x"
-              env.DOWNGRADE_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.downgrade.gitRepo < ci.json').trim()
             }
             
           }
@@ -58,23 +64,24 @@ pipeline {
         stage("Downgrade") {
           stages {
 
-            stage("test downgrade") {
+            stage("执行降级") {
               steps {
                 sh 'env'
-                replayCheckout([
-                  [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branch: "downgrade/blank"]
+                zCheckout([
+                  [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branchs: ["downgrade/${env.GIT_BRANCH}/src"] ]
                 ])
 
                 container('package') {
                   sh 'echo ${GIT_BRANCH}'
                   sh '''find module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +'''
                   
-                  withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http', gitToolName: 'Default')]) {
+                  withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" framework lib module/*'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
                 }
+
               }
 
               post {
@@ -92,7 +99,7 @@ pipeline {
                     reportName: 'DowngradeReport'
                   ])
 
-                  ximNotify(title: "禅道全量降级失败", content: "${GIT_BRANCH} [PHP语法错误报告]($BUILD_URL/DowngradeReport/)")
+                  ximNotify(title: "禅道全量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)", contentHeaderFile: job.headerFileName())
                 }
               }
 
@@ -106,3 +113,5 @@ pipeline {
   }
 
 }
+
+
