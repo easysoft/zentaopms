@@ -925,16 +925,17 @@ class doc extends control
     }
 
     /**
-     * Ajax get objectType drop menu.
+     * Ajax: 根据对象类型设置下拉菜单。
+     * Ajax: Set the drop-down menu according to the object type.
      *
-     * @param  string $objectType
+     * @param  string $objectType product|project
      * @param  int    $objectID
      * @param  string $module
      * @param  string $method
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
+    public function ajaxGetDropMenu(string $objectType, object $objectID, string $module, string $method)
     {
         list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge', $objectID);
 
