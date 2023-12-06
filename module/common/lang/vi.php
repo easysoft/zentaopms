@@ -275,6 +275,7 @@ $lang->searchObjects['project']     = 'Project';
 $lang->searchObjects['execution']   = $lang->executionCommon;
 $lang->searchObjects['user']        = 'User';
 $lang->searchTips                   = 'ID (ctrl+g)';
+$lang->searchObjects['ai']          = 'AI';
 
 /* Code formats for import. */
 $lang->importEncodeList['gbk']   = 'GBK';

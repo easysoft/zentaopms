@@ -425,6 +425,7 @@ $lang->searchObjects['project']     = $lang->projectCommon;
 $lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = '用户';
 $lang->searchTips                   = '编号(ctrl+g)';
+$lang->searchObjects['ai']          = 'AI';
 
 /* 导入支持的编码格式。*/
 $lang->importEncodeList['gbk']   = 'GBK';

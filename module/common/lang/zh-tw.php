@@ -329,6 +329,7 @@ $lang->searchObjects['project']     = '項目';
 $lang->searchObjects['execution']   = $lang->executionCommon;
 $lang->searchObjects['user']        = '用戶';
 $lang->searchTips                   = '編號(ctrl+g)';
+$lang->searchObjects['ai']          = 'AI';
 
 /* 導入支持的編碼格式。*/
 $lang->importEncodeList['gbk']   = 'GBK';

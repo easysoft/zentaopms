@@ -135,6 +135,11 @@ class ai extends control
         $this->display();
     }
 
+    public function view($id)
+    {
+        $this->locate($this->createLink('ai', 'miniProgramChat', "id=$id"));
+    }
+
     /**
      * Mini program chat.
      *

@@ -145,6 +145,13 @@ $config->search->fields->execution->content    = 'code,desc';
 $config->search->fields->execution->addedDate  = 'openedDate';
 $config->search->fields->execution->editedDate = 'lastEditedDate';
 
+$config->search->fields->ai = new stdclass();
+$config->search->fields->ai->id         = 'id';
+$config->search->fields->ai->title      = 'name';
+$config->search->fields->ai->content    = 'desc';
+$config->search->fields->ai->addedDate  = 'createdBy';
+$config->search->fields->ai->editedDate = 'editedDate';
+
 /* Set the recPerPage of search. */
 $config->search->recPerPage = 10;
 
