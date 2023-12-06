@@ -244,23 +244,25 @@ class personnelModel extends model
     }
 
     /**
+     * 获取用户参与的 bug 和需求。
      * Get user bug and story invest.
      *
-     * @param  array     $accounts
-     * @param  int       $programID
+     * @param  array  $accounts
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getBugAndStoryInvest($accounts, $programID)
+    public function getBugAndStoryInvest(array $accounts, int $programID): array
     {
+        /* Get invest products. */
         $productPairs = $this->loadModel('product')->getPairs('', $programID);
         $productKeys  = array_keys($productPairs);
 
+        /* Get invest bugs, requirements and stories. */
         $bugs = $this->dao->select('id,status,openedBy,assignedTo,resolvedBy')->from(TABLE_BUG)
             ->where('product')->in($productKeys)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-
         $requirement = $this->dao->select('openedBy, count(id) as number')->from(TABLE_STORY)
             ->where('product')->in($productKeys)
             ->andWhere('openedBy')->in(array_keys($accounts))
@@ -268,7 +270,6 @@ class personnelModel extends model
             ->andWhere('deleted')->eq(0)
             ->groupBy('openedBy')
             ->fetchPairs('openedBy');
-
         $story = $this->dao->select('openedBy, count(id) as number')->from(TABLE_STORY)
             ->where('product')->in($productKeys)
             ->andWhere('openedBy')->in(array_keys($accounts))
@@ -279,24 +280,18 @@ class personnelModel extends model
 
         /* Initialize bugs and requirements related to personnel. */
         $invest = array();
-        foreach($accounts as $account => $project)
-        {
-            $invest[$account]['createdBug']  = 0;
-            $invest[$account]['resolvedBug'] = 0;
-            $invest[$account]['pendingBug']  = 0;
-            $invest[$account]['UR']          = 0;
-            $invest[$account]['SR']          = 0;
-        }
+        foreach($accounts as $account => $project) $invest[$account]['createdBug'] = $invest[$account]['resolvedBug'] = $invest[$account]['pendingBug'] = $invest[$account]['UR'] = $invest[$account]['SR'] = 0;
 
+        /* Calculate the number of user invest bugs, requirements and stories. */
         foreach($requirement as $account => $number) $invest[$account]['UR'] = $number;
         foreach($story as $account => $number)       $invest[$account]['SR'] = $number;
-
         foreach($bugs as $bug)
         {
             if($bug->openedBy && isset($invest[$bug->openedBy])) $invest[$bug->openedBy]['createdBug'] += 1;
             if($bug->resolvedBy && isset($invest[$bug->resolvedBy])) $invest[$bug->resolvedBy]['resolvedBug'] += 1;
             if($bug->assignedTo && $bug->status == 'active' && isset($invest[$bug->assignedTo])) $invest[$bug->assignedTo]['pendingBug'] += 1;
         }
+
         return $invest;
     }
 
