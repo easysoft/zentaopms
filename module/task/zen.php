@@ -1096,12 +1096,13 @@ class taskZen extends task
      * Format export task.
      *
      * @param  object    $task
+     * @param  array     $projects
      * @param  array     $executions
      * @param  array     $users
      * @access protected
      * @return object
      */
-    protected function formatExportTask(object $task, array $executions, array $users): object
+    protected function formatExportTask(object $task, array $projects, array $executions, array $users): object
     {
         $taskLang = $this->lang->task;
         if($this->post->fileType == 'csv')
@@ -1112,6 +1113,7 @@ class taskZen extends task
             $task->desc = str_replace('&nbsp;', ' ', $task->desc);
         }
 
+        if(isset($projects[$task->project]))                  $task->project      = $projects[$task->project] . "(#$task->project)";
         if(isset($executions[$task->execution]))              $task->execution    = $executions[$task->execution] . "(#$task->execution)";
         if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
         if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
@@ -1285,7 +1287,8 @@ class taskZen extends task
     {
         /* Get users and executions. */
         $users      = $this->loadModel('user')->getPairs('noletter');
-        $executions = $this->loadModel('execution')->fetchPairs($projectID, 'all', true, true);
+        $projects   = $this->loadModel('project')->getPairs();
+        $executions = $this->loadModel('execution')->fetchPairs(0, 'all', true, true);
 
         /* Get related objects id lists. */
         $relatedStoryIdList  = array();
@@ -1327,7 +1330,7 @@ class taskZen extends task
                 unset($task->team);
             }
 
-            $task = $this->formatExportTask($task, $executions, $users);
+            $task = $this->formatExportTask($task, $projects, $executions, $users);
 
             /* Set related files. */
             $task->files = '';
