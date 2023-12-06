@@ -19,10 +19,8 @@
       </div>
       <div class='modal-body'>
         <h4><?php echo $lang->upgrade->noticeSQL;?></h4>
-        <p class='text-danger code'>
-          SET @@sql_mode= '';<br />
-          <?php echo nl2br($alterSQL);?>
-        </p>
+        <?php $alterSQL = "SET @@sql_mode= '';\n{$alterSQL}";?>
+        <textarea rows='20' class='form-control' style='max-height:200px' readonly='readonly'><?php echo $alterSQL;?></textarea>
       </div>
       <div class='modal-footer'><?php echo html::a('#', $this->lang->refresh, '', "class='btn btn-wide' onclick='location.reload()'");?></div>
     </div>

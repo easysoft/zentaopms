@@ -311,7 +311,7 @@ class baseDAO
      */
     public function inTransaction()
     {
-        $this->dbh->inTransaction();
+        return $this->dbh->inTransaction();
     }
 
     /**

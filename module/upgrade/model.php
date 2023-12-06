@@ -908,75 +908,116 @@ class upgradeModel extends model
         $openVersion  = str_replace('_', '.', $openVersion);
         $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
 
-        $alterSQL    = '';
+        $alterSQL    = array();
         $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
-        if(!file_exists($standardSQL)) return $alterSQL;
+        if(!file_exists($standardSQL)) return '';
 
-        $lines = file($standardSQL);
+        $sqls = file_get_contents($standardSQL);
         if(empty($this->config->isINT))
         {
             $xVersion     = $openVersion;
             $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
-            if(file_exists($xStandardSQL))
-            {
-                $xLines = file($xStandardSQL);
-                $lines  = array_merge($lines, $xLines);
-            }
+            if(file_exists($xStandardSQL)) $sqls .= "\n" . file_get_contents($xStandardSQL);
         }
 
         $tableExists = true;
-        foreach($lines as $line)
+        foreach(explode(';', $sqls) as $sql)
         {
-            $line = trim($line);
-            if(strpos($line, 'DROP TABLE ') !== false) continue;
-            if(strpos($line, 'CREATE TABLE ') !== false)
+            $sql = trim($sql);
+            if(strpos($sql, 'CREATE TABLE ') !== 0) continue;
+
+            $lines      = explode("\n", $sql);
+            $createHead = array_shift($lines);
+            $createFoot = array_pop($lines);
+
+            preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
+            $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
+
+            preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+            if(!isset($out[1][0])) continue;
+
+            $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+            $fields = array();
+            try
             {
-                preg_match_all('/`([^`]*)`/', $line, $out);
-                if(isset($out[1][0]))
+                $tableExists = true;
+                $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
+                $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
+                $dbSQLHead   = array_shift($dbSQLLines);
+                $dbSQLFoot   = array_pop($dbSQLLines);
+
+                preg_match_all('/ENGINE=(\w+) /', $dbSQLFoot, $out);
+                $dbEengine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
+
+                foreach($dbSQLLines as $dbSQLLine)
                 {
-                    $fields = array();
-                    $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
-                    try
-                    {
-                        $tableExists = true;
-                        $stmt        = $this->dbh->query("show fields from `$table`");
-                        while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
-                    }
-                    catch(PDOException $e)
-                    {
-                        $errorInfo = $e->errorInfo;
-                        $errorCode = $errorInfo[1];
-                        $line      = str_replace('zt_', $this->config->db->prefix, $line);
-                        if($errorCode == '1146') $tableExists = false;
-                    }
+                    $dbSQLLine = trim($dbSQLLine);
+                    if(!preg_match('/^`([^`]*)` /', $dbSQLLine)) continue;   // Skip no describe field line.
+
+                    $dbSQLLine = rtrim($dbSQLLine, ',');
+                    $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
+                    $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
+
+                    list($field) = explode(' ', $dbSQLLine);
+                    $fields[$field] = rtrim($dbSQLLine, ',');
                 }
             }
-            if(!$tableExists) $alterSQL .= $line . "\n";
-
-            if(!empty($fields))
+            catch(PDOException $e)
             {
-                if(preg_match('/^`([^`]*)` /', $line))
+                $errorInfo = $e->errorInfo;
+                $errorCode = $errorInfo[1];
+                if($errorCode == '1146') $tableExists = false;
+            }
+
+            /* If table is not extists, try create this table by create sql. */
+            if(!$tableExists)
+            {
+                $alterSQL[] = $sql;
+                continue;
+            }
+
+            if($stdEngine != $dbEengine) $alterSQL[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
+            foreach($lines as $line)
+            {
+                $line = trim($line);
+                if(!preg_match('/^`([^`]*)` /', $line)) continue;   // Skip no describe field line.
+
+                $line = rtrim($line, ',');
+                $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
+                $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
+
+                list($field) = explode(' ', $line);
+
+                $execSQL = '';
+                if(!isset($fields[$field]))
                 {
-                    list($field) = explode(' ', $line);
-                    $field = trim($field, '`');
-                    if(!isset($fields[$field]))
-                    {
-                        $line = rtrim($line, ',');
-                        if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
-                        try
-                        {
-                            $this->dbh->exec("ALTER TABLE `$table` ADD $line");
-                        }
-                        catch(PDOException $e)
-                        {
-                            $alterSQL .= "ALTER TABLE `$table` ADD $line;\n";
-                        }
-                    }
+                    $execSQL = "ALTER TABLE `$table` ADD $line";
+                }
+                elseif($line != $fields[$field])
+                {
+                    $execSQL = "ALTER TABLE `$table` CHANGE $field $line";
+                }
+
+                if($execSQL)
+                {
+                    if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' primary key';
+                    $alterSQL[] = "$execSQL";
                 }
             }
         }
 
-        return $alterSQL;
+        if(count($alterSQL) > 100) return implode(";\n", $alterSQL);
+        foreach($alterSQL as $i => $execSQL)
+        {
+            try
+            {
+                $this->dbh->exec($execSQL);
+                unset($alterSQL[$i]);
+            }
+            catch(PDOException $e){}
+        }
+
+        return implode(";\n", $alterSQL);
     }
 
     /**
@@ -1477,7 +1518,7 @@ class upgradeModel extends model
         static $mysqlVersion;
         if($mysqlVersion === null) $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
 
-        $ignoreCode = '|1050|1054|1060|1091|1061|';
+        $ignoreCode = '|1050|1054|1060|1091|1061|1062|';
         $sqls       = $this->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {

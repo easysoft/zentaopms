@@ -253,7 +253,7 @@ CREATE TABLE `zt_config` (
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`owner`,`module`,`section`,`key`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_cron` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `m` varchar(20) NOT NULL,
@@ -269,7 +269,7 @@ CREATE TABLE `zt_cron` (
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_dept` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(60) NOT NULL,
@@ -430,7 +430,7 @@ CREATE TABLE `zt_group` (
   `desc` char(255) NOT NULL DEFAULT '',
   `acl` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_grouppriv` (
   `group` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `module` char(30) NOT NULL DEFAULT '',
@@ -482,7 +482,7 @@ CREATE TABLE `zt_lang` (
   `system` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_log` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL,
@@ -810,7 +810,7 @@ CREATE TABLE `zt_searchdict` (
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_searchindex` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` char(20) NOT NULL,
   `objectID` mediumint(9) NOT NULL,
   `title` text NOT NULL,
