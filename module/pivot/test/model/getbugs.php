@@ -29,7 +29,7 @@ $productList   = array(0, 1);
 $executionList = array(0, 101);
 
 r($pivot->getBugs($date1_start, $date1_end, $productList[0], $executionList[0])) && p('0:openedBy,total,tostory;1:openedBy,total,tostory') && e('admin,10,1;user1,10,1');  //测试获取一个月内的bug数据统计
-r($pivot->getBugs($date2_start, $date2_end, $productList[0], $executionList[0])) && p('0:openedBy,total,tostory') && e('0,0,0,0');                                                              //测试获取六个月前到四个月前的bug统计数据
-r($pivot->getBugs($date1_start, $date1_end, $productList[1], $executionList[0])) && p('0:openedBy,total,tostory') && e('admin,3,0');                                                         //测试获取id为1的产品下的bug统计数据
-r($pivot->getBugs($date1_start, $date1_end, $productList[0], $executionList[1])) && p('0:openedBy,total,tostory') && e('admin,3,0');                                                         //测试获取执行id为101的执行下的bug统计数据
-r($pivot->getBugs($date1_start, $date1_end, $productList[1], $executionList[1])) && p('0:openedBy,total,tostory') && e('admin,3,0');                                                         //测试获取id为1的产品以及id为101的执行下的bug统计数据
+r($pivot->getBugs($date2_start, $date2_end, $productList[0], $executionList[0])) && p('0:openedBy,total,tostory') && e('0,0,0,0');                                         //测试获取六个月前到四个月前的bug统计数据
+r($pivot->getBugs($date1_start, $date1_end, $productList[1], $executionList[0])) && p('0:openedBy,total,tostory') && e('admin,3,0');                                       //测试获取id为1的产品下的bug统计数据
+r($pivot->getBugs($date1_start, $date1_end, $productList[0], $executionList[1])) && p('0:openedBy,total,tostory') && e('admin,3,0');                                       //测试获取执行id为101的执行下的bug统计数据
+r($pivot->getBugs($date1_start, $date1_end, $productList[1], $executionList[1])) && p('0:openedBy,total,tostory') && e('admin,3,0');                                       //测试获取id为1的产品以及id为101的执行下的bug统计数据
