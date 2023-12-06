@@ -7,7 +7,7 @@
  * @author      Ke Zhao <zhaoke@easycorp.ltd>
  * @package     entries
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class hostSubmitEntry extends baseEntry
 {

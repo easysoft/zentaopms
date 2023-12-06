@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 /* Module order. */

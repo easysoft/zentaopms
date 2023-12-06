@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 include(dirname(__FILE__) . '/common.php');

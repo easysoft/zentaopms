@@ -7,7 +7,7 @@
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     user
  * @version     $Id: editprofile.html.php 2605 2012-02-21 07:22:58Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <style>

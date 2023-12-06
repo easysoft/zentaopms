@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: view.html.php 4386 2013-02-19 07:37:45Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

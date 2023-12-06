@@ -7,7 +7,7 @@
  * @author      liyuchun <liyuchun@easysoft.ltd>
  * @package     repo
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class mrEntry extends baseEntry
 {

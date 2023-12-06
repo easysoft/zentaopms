@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  admin
  * @version  $Id: vi.php 4460 2013-02-26 02:28:02Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->admin->index         = 'Trang quản trị';
 $lang->admin->checkDB       = 'Kiểm tra CSDL';

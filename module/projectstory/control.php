@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     projectStory
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class projectStory extends control
 {

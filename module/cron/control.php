@@ -7,7 +7,7 @@
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     cron
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class cron extends control
 {

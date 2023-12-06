@@ -7,7 +7,7 @@
  * @author      Jianhua Wang<wangjianhua@easycorp.ltd>
  * @package     solution
  * @version     $Id$
- * @link        https://www.qucheng.com
+ * @link        https://www.zentao.net
  */
 class solutionModel extends model
 {

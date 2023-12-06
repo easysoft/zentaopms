@@ -7,7 +7,7 @@
  * @author      dave.li  <lichengjun@cnezsoft.com>
  * @package     GitLab
  * @version     $Id: view.html.php 4728 2013-05-03 06:14:34Z david18810279601@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  * */
 ?>
 <?php include '../../common/view/header.html.php';?>

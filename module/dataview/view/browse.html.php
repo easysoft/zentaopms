@@ -7,7 +7,7 @@
  * @author      Chenxuan Song <1097180981@qq.com>
  * @package     dataview
  * @version     $Id: browse.html.php 4129 2022-11-14 14:42:12 $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>

@@ -7,7 +7,7 @@
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->testsuite->create           = "Créer un Cahier";
 $lang->testsuite->delete           = "Supprimer un Cahier";

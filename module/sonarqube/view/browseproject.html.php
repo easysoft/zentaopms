@@ -7,7 +7,7 @@
  * @author      Gang Zeng <liugang@cnezsoft.com>
  * @package     sonarqube
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

@@ -7,7 +7,7 @@
  * @author      Gang Zeng <zenggang@cnezsoft.com>
  * @package     repo
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <style>

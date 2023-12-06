@@ -7,7 +7,7 @@
  * @author      Congzhi Chen<congzhi@cnezsoft.com>
  * @package     task
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../file/view/export.html.php';?>

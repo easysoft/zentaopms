@@ -7,7 +7,7 @@
  * @author      Yuting Wang <wangyuting@cnezsoft.com>
  * @package     admin
  * @version     $Id: setmodule.html.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

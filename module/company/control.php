@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
  * @version     $Id: control.php 5100 2013-07-12 00:25:23Z zhujinyonging@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class company extends control
 {

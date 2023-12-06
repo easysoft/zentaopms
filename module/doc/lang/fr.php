@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     doc
  * @version     $Id: en.php 824 2010-05-02 15:32:06Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->doclib = new stdclass();
 $lang->doclib->name       = 'Nom';

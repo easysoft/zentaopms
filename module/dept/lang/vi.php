@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  dept
  * @version  $Id: vi.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->dept->common      = 'Phòng/Ban';
 $lang->dept->manageChild = "Phòng/Ban con";

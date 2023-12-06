@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      dingguodong <dingguodong@easycorp.ltd>
  * @package     mr
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class mrModel extends model
 {

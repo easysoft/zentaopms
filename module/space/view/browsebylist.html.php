@@ -7,7 +7,7 @@
  * @author      Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package     space
  * @version     $Id$
- * @link        https://www.qucheng.net
+ * @link        https://www.zentao.net
  */
 ?>
 <div class='main-col'>

@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  productplan
  * @version  $Id: vi.php 4659 2013-04-17 06:45:08Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->productplan->common     = 'Kế hoạch '.$lang->productCommon;
 $lang->productplan->browse     = "Danh sách kế hoạch";

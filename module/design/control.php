@@ -7,7 +7,7 @@
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: control.php 5107 2020-09-02 09:46:12Z tianshujie@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class design extends control
 {

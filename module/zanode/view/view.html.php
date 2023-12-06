@@ -8,7 +8,7 @@
  * @author      Ke Zhao <zhaoke@cnezsoft.com>
  * @package     zanode
  * @version     $Id: view.html.php $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php'; ?>

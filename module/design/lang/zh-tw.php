@@ -7,7 +7,7 @@
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: zh-tw.php 4729 2020-09-01 07:53:55Z tianshujie@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 /* 欄位列表. */
 $lang->design->id            = '編號';

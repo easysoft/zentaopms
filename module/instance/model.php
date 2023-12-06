@@ -7,7 +7,7 @@
  * @author    Jianhua Wang <wangjianhua@easycrop.ltd>
  * @package   instance
  * @version   $Id$
- * @link      https://www.qucheng.com
+ * @link      https://www.zentao.net
  */
 class InstanceModel extends model
 {

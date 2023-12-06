@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     mr
  * @version     $Id: linktask.html.php$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <div id='queryBox' data-module='task' class='show no-margin'></div>

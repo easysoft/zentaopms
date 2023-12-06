@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: en.php 5045 2013-07-06 07:04:40Z zhujinyonging@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->tree = new stdclass();
 $lang->tree->common               = 'Modul';

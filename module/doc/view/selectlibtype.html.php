@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     doc
  * @version     $Id: selectlibtype.html.php 958 2021-09-3 17:09:42Z liyuchun $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

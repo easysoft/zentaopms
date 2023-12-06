@@ -7,7 +7,7 @@
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
  * @version     $Id: createlib.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

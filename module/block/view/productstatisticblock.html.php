@@ -7,7 +7,7 @@
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     block
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <style>

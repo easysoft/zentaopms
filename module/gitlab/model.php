@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 class gitlabModel extends model

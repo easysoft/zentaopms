@@ -7,7 +7,7 @@
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 class giteaModel extends model

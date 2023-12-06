@@ -7,7 +7,7 @@
  * @author      Fei Chen <chenfei@cnezsoft.com>
  * @package     story
  * @version     $Id: linkstory.html.php 4129 2016-03-09 08:58:13Z chenfei $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include './header.html.php';?>

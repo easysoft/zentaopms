@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     weekly
  * @version     $Id
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->weekly->common   = $lang->projectCommon . ' Weekly';
 $lang->weekly->index    = 'Weekly Overview';

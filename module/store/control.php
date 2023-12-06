@@ -7,7 +7,7 @@
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   store
  * @version   $Id$
- * @link      https://www.qucheng.com
+ * @link      https://www.zentao.net
  */
 class store extends control
 {

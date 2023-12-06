@@ -7,7 +7,7 @@
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
  * @package     host
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>

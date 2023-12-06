@@ -7,7 +7,7 @@
  * @author      Chenxuan Song <songchenxuan@easycorp.ltd>
  * @package     dimension
  * @version     $Id: model.php 5086 2022-11-1 10:26:23Z $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class dimensionModel extends model
 {

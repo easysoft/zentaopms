@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: zh-tw.php 4719 2013-05-03 02:20:28Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->group->common             = '權限分組';
 $lang->group->browse             = '瀏覽分組';

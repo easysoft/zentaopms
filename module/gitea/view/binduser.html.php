@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     gitea
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

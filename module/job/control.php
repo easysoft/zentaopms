@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     job
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class job extends control
 {

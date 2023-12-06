@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  story
  * @version  $Id: vi.php 5141 2013-07-15 05:57:15Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 global $config;
 $lang->story->create            = "Create Story";

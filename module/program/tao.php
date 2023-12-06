@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      chen.tao<chentao@easycorp.ltd>
  * @package     program
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 class programTao extends programModel

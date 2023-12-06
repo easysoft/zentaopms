@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  company
  * @version  $Id: vi.php 4714 2013-05-02 08:10:58Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->company->common   = 'Doanh nghiệp';
 $lang->company->index    = "Trang doanh nghiệp";

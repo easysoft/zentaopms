@@ -7,7 +7,7 @@
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     sonarqube
  * @version     $Id: ${FILE_NAME} 5144 2022/1/11 8:55 上午 caoyanyi@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class sonarqube extends control
 {

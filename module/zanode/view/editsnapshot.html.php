@@ -7,7 +7,7 @@
  * @author      chunsheng wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

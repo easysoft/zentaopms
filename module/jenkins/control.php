@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: ${FILE_NAME} 5144 2020/1/8 8:10 下午 chenqi@cnezsoft.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class jenkins extends control
 {

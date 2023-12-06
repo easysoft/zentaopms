@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang<wwccss@gmail.com>
  * @package     product
  * @version     $Id: close.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

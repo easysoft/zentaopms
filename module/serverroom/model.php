@@ -7,7 +7,7 @@
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
  * @package     ops
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class serverroomModel extends model
 {

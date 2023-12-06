@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: zh-tw.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->task->index               = "任務一覽";
 $lang->task->create              = "建任務";

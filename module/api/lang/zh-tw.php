@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: zh-tw.php 5129 2013-07-15 00:16:07Z zhujinyonging@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->api->common   = 'API介面';
 $lang->api->getModel = '超級model調用介面';

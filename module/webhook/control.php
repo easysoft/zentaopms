@@ -7,7 +7,7 @@
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     webhook
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class webhook extends control
 {

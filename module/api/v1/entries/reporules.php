@@ -7,7 +7,7 @@
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     entries
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class repoRulesEntry extends entry
 {

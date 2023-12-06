@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <wwccss@cnezsoft.com>
  * @package     mail
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>

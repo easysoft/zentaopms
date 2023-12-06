@@ -7,7 +7,7 @@
  * @author      wenjie<wenjie@cnezsoft.com>
  * @package     execution
  * @version     $Id: report.html.php 1594 2011-04-10 11:00:00Z wj $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

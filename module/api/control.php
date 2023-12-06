@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: control.php 5143 2013-07-15 06:11:59Z thanatos thanatos915@163.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class api extends control
 {

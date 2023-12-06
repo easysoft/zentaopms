@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: zh-cn.php 4536 2013-03-02 13:39:37Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 /* 字段列表。*/
 $lang->bug->common           = 'Bug';

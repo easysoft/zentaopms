@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: zh-tw.php 4767 2013-05-05 06:10:13Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->admin->index         = '後台管理首頁';
 $lang->admin->checkDB       = '檢查資料庫';

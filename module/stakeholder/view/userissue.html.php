@@ -7,7 +7,7 @@
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     company
  * @version     $Id: edit.html.php 4488 2013-02-27 02:54:49Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

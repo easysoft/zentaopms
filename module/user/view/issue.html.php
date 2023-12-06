@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: risk.html.php 4771 2021-01-13 14:18:02Z $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

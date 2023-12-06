@@ -7,7 +7,7 @@
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   artifactrepo
  * @version   $Id$
- * @link      https://www.qucheng.com
+ * @link      https://www.zentao.net
  */
 class artifactrepo extends control
 {

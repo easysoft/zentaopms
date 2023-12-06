@@ -7,7 +7,7 @@
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testcase
  * @version     $Id: review.html.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

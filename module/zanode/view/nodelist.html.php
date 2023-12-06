@@ -8,7 +8,7 @@
  * @author      xiawenlong <xiawenlong@cnezsoft.com>
  * @package     zanode
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php js::set('showFeature', false);?>

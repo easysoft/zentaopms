@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->qa->index       = 'QA Home';
 $lang->qa->indexAction = 'QA Index';

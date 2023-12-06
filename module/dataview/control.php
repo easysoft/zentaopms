@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
  * @version     $Id: control.php 4157 2013-01-20 07:09:42Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class dataview extends control
 {

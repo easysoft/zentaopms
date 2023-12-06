@@ -7,7 +7,7 @@
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     file
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>

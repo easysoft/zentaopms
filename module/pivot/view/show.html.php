@@ -7,7 +7,7 @@
  * @author      Gang Liu <liugang@easycorp.ltd>
  * @package     pivot
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php js::set('groupID', isset($group->id) ? $group->id : 0);?>

@@ -7,7 +7,7 @@
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
  * @version     $Id: sendmail.html.php 867 2010-06-17 09:32:58Z yuren_@126.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php $mailTitle = 'TASK #' . $object->id . ' ' . $object->name;?>

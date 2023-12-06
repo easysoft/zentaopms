@@ -7,7 +7,7 @@
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     log
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include 'header.html.php';?>

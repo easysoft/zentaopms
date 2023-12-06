@@ -7,7 +7,7 @@
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: browse.html.php 5102 2020-09-03 10:59:54Z tianshujie@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     mr
  * @version     $Id: linkbug.html.php$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <div id='queryBox' data-module='bug' class='show no-margin'></div>

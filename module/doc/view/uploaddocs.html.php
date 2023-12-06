@@ -7,7 +7,7 @@
  * @author      Deqing Chai <chaideqing@easycorp.ltd>
  * @package     doc
  * @version     $Id: uploaddocs.html.php 975 2023-10-31 13:49:25Z $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

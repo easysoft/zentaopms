@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     task
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 namespace zin;

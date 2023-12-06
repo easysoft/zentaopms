@@ -12,7 +12,7 @@ use function zin\isAjaxRequest;
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
  * @package     ops
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class host extends control
 {

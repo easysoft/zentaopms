@@ -7,7 +7,7 @@
  * @author      Guangming Sun<sunguangming@cnezsoft.com>
  * @package     bug
  * @version     $Id: notify.html.php 4129 2021-12-01 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

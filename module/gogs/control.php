@@ -7,7 +7,7 @@
  * @author      Liyuchun <liyuchun@easycorp.ltd>
  * @package     product
  * @version     $Id: ${FILE_NAME} 5144 2022-08-01 liyuchun@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class gogs extends control
 {

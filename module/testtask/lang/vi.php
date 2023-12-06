@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  testtask
  * @version  $Id: vi.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->testtask->index            = "Trang yêu cầu";
 $lang->testtask->create           = "Gửi yêu cầu";

@@ -7,7 +7,7 @@
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     sonarqube
  * @version     $Id: $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 class sonarqubeModel extends model

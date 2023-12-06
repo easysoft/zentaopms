@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  install
  * @version  $Id: vi.php 4972 2013-07-02 06:50:10Z zhujinyonging@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->install = new stdclass();
 

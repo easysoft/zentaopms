@@ -7,7 +7,7 @@
  * @author      xiawenlong <xiawenlong@cnezsoft.com>
  * @package     repo
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class gitlabWebhookEntry extends baseEntry
 {

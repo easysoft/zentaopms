@@ -7,7 +7,7 @@
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     release
  * @version     $Id: sendmail.html.php 867 2021-08-12 13:37:58Z $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php $mailTitle = 'RELEASE #' . $release->id . ' ' . $release->name;?>

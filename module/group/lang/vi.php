@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  group
  * @version  $Id: vi.php 4719 2013-05-03 02:20:28Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->group->common             = 'Phân quyền';
 $lang->group->browse             = 'Nhóm quyền';

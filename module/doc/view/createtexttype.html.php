@@ -7,7 +7,7 @@
  * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
  * @package     doc
  * @version     $Id: createtext.html.php 975 2022-07-14 13:49:25Z $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

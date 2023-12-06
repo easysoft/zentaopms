@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     testcase
  * @version     $Id: showscript.html.php 4723 2022-07-28 08:47:29Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php

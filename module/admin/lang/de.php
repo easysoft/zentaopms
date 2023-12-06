@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->admin->index           = 'Admin Home';
 $lang->admin->sso             = 'SSO';

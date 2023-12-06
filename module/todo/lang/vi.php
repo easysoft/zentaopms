@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  todo
  * @version  $Id: vi.php 4676 2020-04-06 06:08:23Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->todo->index        = 'Home';
 $lang->todo->create       = 'Thêm việc';

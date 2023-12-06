@@ -7,7 +7,7 @@
  * @author      yuchun li
  * @package     repo
  * @version     $Id: linkstory.html.php 5096 2022-07-25 07:02:43Z liycuhun@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

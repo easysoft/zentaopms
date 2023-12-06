@@ -5,7 +5,7 @@
  * @author      Memory <lvtao@cnezsoft.com>
  * @package     score
  * @version     $Id: model.php $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class scoreModel extends model
 {

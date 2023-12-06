@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  task
  * @version  $Id: vi.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->task->index               = "Home";
 $lang->task->create              = "Tạo nhiệm vụ";

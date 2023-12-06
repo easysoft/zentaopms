@@ -7,7 +7,7 @@
  * @author      Chenxuan Song <1097180981@qq.com>
  * @package     dimension
  * @version     $Id: control.php 4157 2022-11-1 10:24:12Z $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class dimension extends control
 {

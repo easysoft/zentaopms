@@ -7,7 +7,7 @@
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     convert
  * @version     $Id $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class redmineConvertModel extends convertModel
 {

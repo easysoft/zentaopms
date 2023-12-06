@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  misc
  * @version  $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->misc = new stdclass();
 $lang->misc->common  = 'Khác';

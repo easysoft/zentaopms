@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  project
  * @version  $Id: vi.php 5094 2013-07-10 08:46:15Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 /* Fields. */
 $lang->execution->allExecutions   = 'Tất cả ' . $lang->execution->common;

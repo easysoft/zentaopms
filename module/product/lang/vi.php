@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  product
  * @version  $Id: vi.php 5091 2013-07-10 06:06:46Z quocnho@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->product->index         = 'Trang '.$lang->productCommon;
 $lang->product->browse        = 'Danh sách câu chuyện';

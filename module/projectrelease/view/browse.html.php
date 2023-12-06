@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     release
  * @version     $Id: browse.html.php 4129 2020-11-25 11:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

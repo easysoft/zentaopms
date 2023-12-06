@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     release
  * @version     $Id: zh-tw.php 4129 2020-11-27 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->projectrelease->common           = '項目發佈';
 $lang->projectrelease->create           = "創建發佈";

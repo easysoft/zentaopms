@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     doc
  * @version     $Id: model.php 881 2010-06-22 06:50:32Z chencongzhi520 $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 class docModel extends model

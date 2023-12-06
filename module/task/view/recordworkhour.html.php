@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang<wwccss@gmail.com>
  * @package     task
  * @version     $Id: record.html.php 935 2013-01-08 07:49:24Z wwccss@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

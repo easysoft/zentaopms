@@ -7,7 +7,7 @@
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   space
  * @version   $Id$
- * @link      https://www.qucheng.com
+ * @link      https://www.zentao.net
  */
 class spaceModel extends model
 {

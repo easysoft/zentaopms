@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  testcase
  * @version  $Id: vi.php 4966 2013-07-02 02:59:25Z wyd621@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;

@@ -7,7 +7,7 @@
  * @author      Gang Liu <liugang@easycorp.ltd>
  * @package     chart
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>

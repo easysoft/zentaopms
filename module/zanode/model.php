@@ -7,7 +7,7 @@
  * @author      xiawenlong <xiawenlong@cnezsoft.com>
  * @package     ops
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class zanodemodel extends model
 {

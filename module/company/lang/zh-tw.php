@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
  * @version     $Id: zh-tw.php 4714 2013-05-02 08:10:58Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->company->common   = '組織視圖';
 $lang->company->index    = "組織視圖首頁";

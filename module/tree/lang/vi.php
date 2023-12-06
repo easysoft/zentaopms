@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  tree
  * @version  $Id: vi.php 5045 2020-04-06 07:04:40Z quocnho@gmail.com$
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->tree = new stdclass();
 $lang->tree->common               = 'Module';

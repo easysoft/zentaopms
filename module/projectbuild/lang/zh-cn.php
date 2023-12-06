@@ -7,7 +7,7 @@
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     projectrelease
  * @version     $Id: zh-cn.php 4129 2020-11-27 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->projectbuild->common           = $lang->projectCommon . '版本';
 $lang->projectbuild->browse           = '版本列表';

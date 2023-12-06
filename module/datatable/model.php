@@ -7,7 +7,7 @@
  * @author      Hao sun <sunhao@cnezsoft.com>
  * @package     datatable
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php

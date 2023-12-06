@@ -7,7 +7,7 @@
  * @author      Wang Jianhua <wangjiahua@easycorp.ltd>
  * @package     zahost
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class zahostModel extends model
 {

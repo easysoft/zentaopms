@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  svn
  * @version  $Id$
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 /* Methods. */
 $lang->svn->common  = 'Subversion';

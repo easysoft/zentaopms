@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  api
  * @version  $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';

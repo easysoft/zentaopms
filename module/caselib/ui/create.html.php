@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chenxuan Song <songchenxuan@easycorp.ltd>
  * @package     caselib
  * @version     $Id: create.html.php 4728 2023-05-09 06:14:34Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 
 namespace zin;

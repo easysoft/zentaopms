@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     pivot
  * @version     $Id: fr.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->pivot->index        = 'Home';
 $lang->pivot->list         = 'Liste';

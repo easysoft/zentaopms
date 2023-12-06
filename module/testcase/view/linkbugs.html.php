@@ -7,7 +7,7 @@
  * @author      Fei Chen <chenfei@cnezsoft.com>
  * @package     testcase
  * @version     $Id: linkbugs.html.php 4411 2016-03-09 11:02:04Z Chen Fei $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

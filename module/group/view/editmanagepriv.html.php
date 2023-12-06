@@ -7,7 +7,7 @@
  * @author      Feilong Guo <guofeilong@cnezsoft.com>
  * @package     group
  * @version     $id editManagePriv.html.php 4769 2023-03-07 07:24:21Z guofeilong $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

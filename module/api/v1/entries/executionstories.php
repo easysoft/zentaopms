@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class executionStoriesEntry extends entry
 {

@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   CNE
- * @link      https://www.qucheng.com
+ * @link      https://www.zentao.net
  */
 class cneModel extends model
 {

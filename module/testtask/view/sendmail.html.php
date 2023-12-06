@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: sendmail.html.php 3717 2012-12-10 00:37:07Z zhujinyonging@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php $mailTitle = 'TESTTASK #' . $object->id . ' ' . $object->name;?>

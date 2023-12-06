@@ -8,7 +8,7 @@
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     pipeline
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class pipelinesEntry extends entry
 {

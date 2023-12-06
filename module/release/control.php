@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: control.php 4178 2013-01-20 09:32:11Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class release extends control
 {

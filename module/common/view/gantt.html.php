@@ -7,7 +7,7 @@
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     fullcalendar
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 css::import($jsRoot . 'dhtmlxgantt/min.css');
 js::import($jsRoot . 'dhtmlxgantt/min.js');

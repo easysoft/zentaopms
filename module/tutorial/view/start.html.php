@@ -7,7 +7,7 @@
  * @author      Hao Sun <sunhao@cnezsoft.com>
  * @package     tutorial
  * @version     $Id: browse.html.php 4728 2013-05-03 06:14:34Z sunhao@cnezsoft.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

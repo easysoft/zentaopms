@@ -8,7 +8,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class productIssuesEntry extends entry
 {

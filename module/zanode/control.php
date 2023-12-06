@@ -7,7 +7,7 @@
  * @author      liyuchun <liyuchun@easycorp.ltd>
  * @package     qa
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class zanode extends control
 {

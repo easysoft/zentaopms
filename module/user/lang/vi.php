@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  user
  * @version  $Id: vi.php 5053 2013-07-06 08:17:37Z wyd621@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->user->common           = 'Người dùng';
 $lang->user->id               = 'ID';

@@ -7,7 +7,7 @@
  * @author      zhouxin <zhouxin@easycorp.ltd>
  * @package     metric
  * @version     $Id: control.php 5145 2013-07-15 06:47:26Z zhouxin@easycorp.ltd $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class metric extends control
 {

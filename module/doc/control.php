@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     doc
  * @version     $Id: control.php 933 2010-07-06 06:53:40Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class doc extends control
 {

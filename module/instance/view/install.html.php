@@ -7,7 +7,7 @@
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   instance
  * @version   $Id$
- * @link      https://www.qucheng.cn
+ * @link      https://www.zentao.net
  */
 ?>
 <?php include $this->app->getModuleRoot() . '/common/view/header.html.php';?>

@@ -7,7 +7,7 @@
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     entries
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class jobsEntry extends entry
 {

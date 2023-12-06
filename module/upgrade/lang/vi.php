@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  upgrade
  * @version  $Id: vi.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->upgrade->common          = 'Cập nhật';
 $lang->upgrade->start           = 'Start';

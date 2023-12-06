@@ -7,7 +7,7 @@
  * @author      Hao Sun <sunhao@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z sunhao@cnezsoft.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = '新手教程';

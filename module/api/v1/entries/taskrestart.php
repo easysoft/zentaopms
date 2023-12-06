@@ -7,7 +7,7 @@
  * @author      Lu Fei <lufei@easycorp.ltd>
  * @package     entries
  * @version     1
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class taskRestartEntry extends entry
 {

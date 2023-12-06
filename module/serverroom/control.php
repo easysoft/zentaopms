@@ -10,7 +10,7 @@ use function zin\createLink;
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
  * @package     serverroom
  * @version     $Id$
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class serverroom extends control
 {

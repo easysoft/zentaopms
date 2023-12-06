@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  extension
  * @version  $Id$
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 $lang->extension->common           = 'Extension';
 $lang->extension->browse           = 'Extensions';

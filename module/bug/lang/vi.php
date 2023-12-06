@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  bug
  * @version  $Id: vi.php 4536 2013-03-02 13:39:37Z wwccss $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 /* Fieldlist. */
 $lang->bug->common           = 'Bug';

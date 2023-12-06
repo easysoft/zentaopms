@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: zh-cn.php 4767 2013-05-05 06:10:13Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->admin->index           = '后台管理首页';
 $lang->admin->sso             = 'ZDOO集成';

@@ -7,7 +7,7 @@
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  doc
  * @version  $Id: vi.php 824 2010-05-02 15:32:06Z wwccss $
- * @link  http://www.zentao.net
+ * @link  https://www.zentao.net
  */
 /* Fields. */
 $lang->doc->common       = 'Tài liệu';

@@ -7,7 +7,7 @@
  * @author      gang zeng
  * @package     mr
  * @version     $Id: linkstory.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 ?>
 <div id='queryBox' data-module='story' class='show no-margin'></div>
