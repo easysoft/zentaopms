@@ -14,28 +14,28 @@ cid=1
 
 - 查看关闭前的字段
  - 属性status @active
- - 属性closedby @~~
- - 属性closeddate @0000-00-00 00:00:00
+ - 属性closedBy @~~
+ - 属性closedDate @0000-00-00 00:00:00
 - 查看关闭前的字段
  - 属性status @active
- - 属性closedby @~~
- - 属性closeddate @0000-00-00 00:00:00
+ - 属性closedBy @~~
+ - 属性closedDate @0000-00-00 00:00:00
 - 查看关闭前的字段
  - 属性status @active
- - 属性closedby @~~
- - 属性closeddate @0000-00-00 00:00:00
+ - 属性closedBy @~~
+ - 属性closedDate @0000-00-00 00:00:00
 - 查看关闭后的字段
  - 属性status @closed
- - 属性closedby @admin
- - 属性closeddate @2023-01-01 00:00:00
+ - 属性closedBy @admin
+ - 属性closedDate @2023-01-01 00:00:00
 - 查看关闭后的字段
  - 属性status @closed
- - 属性closedby @user10
- - 属性closeddate @2023-01-02 00:00:00
+ - 属性closedBy @user10
+ - 属性closedDate @2023-01-02 00:00:00
 - 查看关闭后的字段
  - 属性status @closed
- - 属性closedby @admin
- - 属性closeddate @2023-01-01 00:00:00
+ - 属性closedBy @admin
+ - 属性closedDate @2023-01-01 00:00:00
 
 */
 
@@ -46,9 +46,9 @@ $space1 = $tester->kanban->getSpaceById(1);
 $space2 = $tester->kanban->getSpaceById(2);
 $space3 = $tester->kanban->getSpaceById(3);
 
-r($space1) && p('status,closedby,closeddate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
-r($space2) && p('status,closedby,closeddate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
-r($space3) && p('status,closedby,closeddate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
+r($space1) && p('status,closedBy,closedDate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
+r($space2) && p('status,closedBy,closedDate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
+r($space3) && p('status,closedBy,closedDate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
 
 $param1 = new stdclass();
 $param1->status     = 'closed';
@@ -73,6 +73,6 @@ $space1 = $tester->kanban->getSpaceById(1);
 $space2 = $tester->kanban->getSpaceById(2);
 $space3 = $tester->kanban->getSpaceById(3);
 
-r($space1) && p('status,closedby,closeddate') && e('closed,admin,2023-01-01 00:00:00');  // 查看关闭后的字段
-r($space2) && p('status,closedby,closeddate') && e('closed,user10,2023-01-02 00:00:00'); // 查看关闭后的字段
-r($space3) && p('status,closedby,closeddate') && e('closed,admin,2023-01-01 00:00:00');  // 查看关闭后的字段
+r($space1) && p('status,closedBy,closedDate') && e('closed,admin,2023-01-01 00:00:00');  // 查看关闭后的字段
+r($space2) && p('status,closedBy,closedDate') && e('closed,user10,2023-01-02 00:00:00'); // 查看关闭后的字段
+r($space3) && p('status,closedBy,closedDate') && e('closed,admin,2023-01-01 00:00:00');  // 查看关闭后的字段
