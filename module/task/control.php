@@ -2169,7 +2169,8 @@ class task extends control
 
             /* Get users and executions. */
             $users      = $this->loadModel('user')->getPairs('noletter');
-            $executions = $this->execution->getPairs($execution->project, 'all', 'all|nocode');
+            $projects   = $this->loadModel('project')->getPairs();
+            $executions = $this->execution->getPairs(0, 'all', 'all|nocode');
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();
@@ -2297,6 +2298,7 @@ class task extends control
 
                 $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
 
+                if(isset($projects[$task->project]))                  $task->project      = $projects[$task->project] . "(#$task->project)";
                 if(isset($executions[$task->execution]))              $task->execution    = $executions[$task->execution] . "(#$task->execution)";
                 if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
                 if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];

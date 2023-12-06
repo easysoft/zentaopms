@@ -28,7 +28,7 @@ $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleToo
 
 $config->task->removeFields = 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID,product';
 $config->task->exportFields = '
-    id, execution, module, story, fromBug,
+    id, project, execution, module, story, fromBug,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
     mailto, progress, mode,
