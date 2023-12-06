@@ -1160,6 +1160,23 @@ class kanbanTest
     }
 
     /**
+     * Test activate a kanban.
+     *
+     * @param  int    $kanbanID
+     * @param  object $kanban
+     * @access public
+     * @return object|array
+     */
+    public function activateTest($kanbanID, $kanban)
+    {
+        $this->objectModel->activate($kanbanID, $kanban);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getByID($kanbanID);
+    }
+
+    /**
      * Test activate a card.
      *
      * @param  int    $cardID

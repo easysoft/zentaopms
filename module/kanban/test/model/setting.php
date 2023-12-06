@@ -11,12 +11,18 @@ title=测试 kanbanModel->setting();
 timeout=0
 cid=1
 
-- 执行$kanban
+- 查看设置后的看板信息
+ - 属性showWIP @1
+ - 属性fluidBoard @0
+ - 属性colWidth @400
  - 属性archived @1
  - 属性performable @1
  - 属性alignment @center
  - 属性object @plans,releases
-- 执行$kanban
+- 查看设置后的看板信息
+ - 属性showWIP @0
+ - 属性fluidBoard @1
+ - 属性colWidth @264
  - 属性archived @0
  - 属性performable @0
  - 属性alignment @left
@@ -49,11 +55,11 @@ $tester->loadModel('kanban');
 $tester->kanban->setting(1, $kanban1);
 
 $kanban = $tester->kanban->getById(1);
-r($kanban) && p('archived|performable|alignment|object', '|') && e('1|1|center|plans,releases');
+r($kanban) && p('showWIP|fluidBoard|colWidth|archived|performable|alignment|object', '|') && e('1|0|400|1|1|center|plans,releases'); // 查看设置后的看板信息
 
 $_POST['import'] = 'off';
 $_POST['importObjectList'] = array();
 
 $tester->kanban->setting(2, $kanban2);
 $kanban = $tester->kanban->getById(2);
-r($kanban) && p('archived|performable|alignment|object', '|') && e('0|0|left|~~');
+r($kanban) && p('showWIP|fluidBoard|colWidth|archived|performable|alignment|object', '|') && e('0|1|264|0|0|left|~~'); // 查看设置后的看板信息
