@@ -193,7 +193,7 @@ class misc extends control
             while($line = fgets($handle))
             {
                 $line = trim($line);
-                if($tag and empty($line)) break;
+                if($tag && empty($line)) break;
                 if($tag) $detailed .= $line . '<br />';
 
                 if(preg_match("/{$version}$/", $line) > 0) $tag = true;

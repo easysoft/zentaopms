@@ -49,7 +49,7 @@ class miscModel extends model
     public function getRemind(): string
     {
         $remind = '';
-        if(!empty($this->config->global->showAnnual) and empty($this->config->global->annualShowed))
+        if(!empty($this->config->global->showAnnual) && empty($this->config->global->annualShowed))
         {
             $remind  = '<h4>' . $this->lang->misc->showAnnual . '</h4>';
             $remind .= '<p>' . sprintf($this->lang->misc->annualDesc, helper::createLink('report', 'annualData')) . '</p>';

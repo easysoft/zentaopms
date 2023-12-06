@@ -210,13 +210,14 @@ class extension extends control
     }
 
     /**
+     * 激活插件。
      * Activate an extension;
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return void
      */
-    public function activate($extension, $ignore = 'no')
+    public function activate(string $extension, string $ignore = 'no')
     {
         $this->checkSafe();
 
@@ -235,18 +236,20 @@ class extension extends control
         $this->extension->togglePackageDisable($extension, 'active');
         $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
+
         $this->view->title = $this->lang->extension->activateFinished;
         $this->display();
     }
 
     /**
+     * 禁用插件。
      * Deactivate an extension
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return void
      */
-    public function deactivate($extension)
+    public function deactivate(string $extension)
     {
         $this->checkSafe();
 
