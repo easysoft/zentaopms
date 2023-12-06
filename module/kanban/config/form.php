@@ -64,3 +64,9 @@ $config->kanban->form->activate['activatedBy']    = array('type' => 'string',   
 $config->kanban->form->activate['activatedDate']  = array('type' => 'datetime', 'required' => true,  'default' => $now);
 $config->kanban->form->activate['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
 $config->kanban->form->activate['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
+
+$config->kanban->form->close['status']         = array('type' => 'string',   'required' => true,  'default' => 'closed');
+$config->kanban->form->close['closedBy']       = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->close['closedDate']     = array('type' => 'datetime', 'required' => true,  'default' => $now);
+$config->kanban->form->close['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
