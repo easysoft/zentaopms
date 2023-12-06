@@ -54,7 +54,7 @@ class moduleMenu extends wg
             if($items) $item['items'] = $items;
             if($child->id == $activeKey)
             {
-                $itemKey = $this->prop('checkbox') ? 'checked' : 'active';
+                $itemKey = $this->prop('checkbox') ? 'checked' : 'selected';
                 $item[$itemKey] = true;
             }
             $treeItems[] = $item;
