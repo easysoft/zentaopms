@@ -321,9 +321,10 @@ class extension extends control
     }
 
     /**
+     * 清除插件。
      * Erase an extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return void
      */
@@ -332,11 +333,12 @@ class extension extends control
         $this->checkSafe();
 
         $this->view->removeCommands = $this->extension->erasePackage($extension);
-        $this->view->title      = $this->lang->extension->eraseFinished;
+        $this->view->title          = $this->lang->extension->eraseFinished;
         $this->display();
     }
 
     /**
+     * 升级插件。
      * Update extension.
      *
      * @param  string $extension
@@ -346,7 +348,7 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function upgrade($extension, $downLink = '', $md5 = '', $type = '')
+    public function upgrade(string $extension, string $downLink = '', string $md5 = '', string $type = '')
     {
         $this->checkSafe();
 
@@ -355,13 +357,14 @@ class extension extends control
     }
 
     /**
+     * 查看插件的目录结构。
      * Browse the structure of extension.
      *
-     * @param  int    $extension
+     * @param  string $extension
      * @access public
      * @return void
      */
-    public function structure($extension)
+    public function structure(string $extension)
     {
         $this->checkSafe();
 

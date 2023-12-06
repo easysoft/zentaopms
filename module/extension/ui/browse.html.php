@@ -28,7 +28,7 @@ foreach($extensions as $extension)
     }
 
     $btnItems = array();
-    if(isset($extension->viewLink))       $btnItems[] = array('text' => $lang->extension->view,  'url' => $extension->viewLink);
+    if(isset($extension->viewLink))       $btnItems[] = array('text' => $lang->extension->view,  'url' => $extension->viewLink, 'data-toggle' => 'modal', 'data-type' => 'iframe', 'data-size' => array('width' => 1024, 'height' => 600));
     if($extension->status == 'installed') $btnItems[] = array('text' => $lang->extension->structure,  'url' => createLink('extension', 'structure', "extension={$extension->code}"),  'data-toggle' => 'modal');
     if($extension->status == 'installed' && !empty($extension->upgradeLink)) $btnItems[] = array('text' => $lang->extension->upgrade,  'url' => $extension->upgradeLink, 'data-toggle' => 'modal');
     if($extension->type != 'patch')
