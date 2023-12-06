@@ -19,11 +19,10 @@ panel
     ),
     btn
     (
-        on::click('loadCurrentPage'),
+        on::click(isInModal() ? "loadModal('', '', {loadingClass: ''})" : "loadCurrentPage"),
         set::type('primary'),
         $lang->extension->refreshPage
     )
 );
 
-render('page');
-
+render();

@@ -162,19 +162,21 @@ class extension extends control
     }
 
     /**
+     * 卸载插件流程。
      * Uninstall an extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function uninstall($extension, $confirm = 'no')
+    public function uninstall(string $extension, string $confirm = 'no')
     {
         $this->checkSafe();
 
         /* Determine whether need to back up. */
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
-        if($confirm == 'no' and file_exists($dbFile))
+        if($confirm == 'no' && file_exists($dbFile))
         {
             $this->view->title   = $this->lang->extension->waring;
             $this->view->confirm = 'no';
@@ -182,6 +184,7 @@ class extension extends control
             return $this->display();
         }
 
+        /* 相关依赖插件检查。 */
         $dependsExts = $this->extension->checkDepends($extension);
         if($dependsExts)
         {
@@ -189,6 +192,7 @@ class extension extends control
             return $this->display();
         }
 
+        /* 卸载前的钩子加载。 */
         if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
 
         if(file_exists($dbFile)) $this->view->backupFile = $this->extension->backupDB($extension);
@@ -200,6 +204,7 @@ class extension extends control
         $this->view->title          = $this->lang->extension->uninstallFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
 
+        /* 卸载后的钩子加载。 */
         if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
         $this->display();
     }

@@ -45,7 +45,7 @@ elseif(!empty($error))
         ),
         div
         (
-            div 
+            div
             (
                 setClass('alert-heading'),
                 $lang->extension->uninstallFailed
