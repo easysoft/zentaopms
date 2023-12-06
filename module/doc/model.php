@@ -245,7 +245,7 @@ class docModel extends model
     }
 
     /**
-     * 创建一个API文档库。
+     * 创建一个API接口库。
      * Creat a api doc library.
      *
      * @param  object $formData
@@ -282,39 +282,26 @@ class docModel extends model
     }
 
     /**
-     * Update api lib.
+     * 更新一个API接口库。
+     * Update an api lib.
      *
-     * @param  int       $id
-     * @param  object    $formData
+     * @param  int         $id
+     * @param  object      $formData
      * @access public
-     * @return array|int
+     * @return array|false
      */
-    public function updateApiLib($id, $formData = null)
+    public function updateApiLib(int $id, object $formData = null): array|bool
     {
         $oldLib = $this->getLibByID($id);
 
-        if(!$formData)
-        {
-            $formData = fixer::input('post')
-                ->trim('name')
-                ->add('product', $oldLib->product)
-                ->add('project', $oldLib->project)
-                ->join('groups', ',')
-                ->join('users', ',')
-                ->remove('uid,contactListMenu')
-                ->get();
-        }
-
-        $this->app->loadLang('api');
-
         /* Replace doc library name. */
+        $this->app->loadLang('api');
         $this->lang->doclib->name    = $this->lang->doclib->apiLibName;
         $this->lang->doclib->baseUrl = $this->lang->api->baseUrl;
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
         $this->checkApiLibName($formData, $formData->type, $id);
-
         if(dao::isError()) return false;
 
         $formData->type = static::DOC_TYPE_API;
@@ -322,10 +309,9 @@ class docModel extends model
             ->batchCheck($this->config->api->editlib->requiredFields, 'notempty')
             ->where('id')->eq($id)
             ->exec();
-
         if(dao::isError()) return false;
 
-        $changes  = common::createChanges($oldLib, $formData);
+        $changes = common::createChanges($oldLib, $formData);
         if($changes)
         {
             $actionID = $this->loadModel('action')->create('docLib', $id, 'Edited');
