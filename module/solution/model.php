@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of solution module of ZenTaoPMS.
  *
@@ -12,64 +13,70 @@
 class solutionModel extends model
 {
     /**
+     * 根据ID获取解决方案。
      * Get solution by id.
      *
-     * @param  int         $id
+     * @param  int    $solutionID
      * @access public
-     * @return object|null
+     * @return object
      */
-    public function getByID($id)
+    public function getByID(int $solutionID): ?object
     {
-        $solution  = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($id)->fetch();
+        $solution  = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($solutionID)->fetch();
         if(!$solution) return null;
 
-        $instanceIDList = $this->dao->select('id')->from(TABLE_INSTANCE)->where('solution')->eq($id)->fetchAll('id');
-
         $solution->instances = array();
+        $instanceIDList = $this->dao->select('id')->from(TABLE_INSTANCE)->where('solution')->eq($solutionID)->fetchAll('id');
         if($instanceIDList) $solution->instances = $this->loadModel('instance')->getByIDList(array_keys($instanceIDList));
 
         return $solution;
     }
 
     /**
-     * Search
+     * 根据名称获取解决方案。
+     * Get solution by name.
      *
      * @param  string $keyword
      * @access public
      * @return array
      */
-    public function search($keyword = '')
+    public function search(string $keyword = ''): array
     {
         return $this->dao->select('*')->from(TABLE_SOLUTION)
             ->where('deleted')->eq(0)
             ->beginIF($keyword)->andWhere('name')->like($keyword)->fi()
-            ->orderBy('createdAt desc')->fetchAll();
+            ->orderBy('createdAt desc')
+            ->fetchAll();
     }
 
     /**
+     * 更新解决方案名称。
      * Update solution name.
      *
      * @param  int    $solutionID
      * @access public
-     * @return int
+     * @return bool
      */
-    public function updateName($solutionID)
+    public function updateName(int $solutionID): bool
     {
         $newSolution = fixer::input('post')->trim('name')->get();
+        $this->dao->update(TABLE_SOLUTION)->data($newSolution)->autoCheck()->where('id')->eq($solutionID)->exec();
 
-        return $this->dao->update(TABLE_SOLUTION)->data($newSolution)->autoCheck()->where('id')->eq($solutionID)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 根据应用市场的解决方案创建本地解决方案。
      * Create by solution of cloud market.
      *
      * @param  object $cloudSolution
+     * @param  object $components
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function create($cloudSolution, $components)
+    public function create(object $cloudSolution, object $components): object|null
     {
-        $postedCharts = $this->session->solutionCharts == '' ? fixer::input('post')->get() : $this->session->solutionCharts;
+        $postedCharts = $this->session->solutionCharts ? $this->session->solutionCharts : fixer::input('post')->get();
 
         /* Sort selected apps. */
         $orderedCategories = $components->order;
@@ -104,19 +111,16 @@ class solutionModel extends model
         $solution->components   = json_encode($selectedApps);
         $solution->createdBy    = $this->app->user->account;
         $solution->createdAt    = date('Y-m-d H:i:s');
-
-        $channel = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
-
-        $solution->channel = $channel;
+        $solution->channel      = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
 
         $this->dao->insert(TABLE_SOLUTION)->data($solution)->exec();
-
         if(dao::isError()) return null;
 
         return $this->getByID($this->dao->lastInsertID());
     }
 
     /**
+     * 按类别和图表从架构信息中选择应用程序。
      * Pick App from schema info by category and chart.
      *
      * @param  object $schema
@@ -126,10 +130,10 @@ class solutionModel extends model
      * @access public
      * @return object|null
      */
-    public function pickAppFromSchema($schema, $category, $chart, $cloudSolution)
+    public function pickAppFromSchema(object $schema, string $category, string $chart, object $cloudSolution): object|null
     {
         $categoryList = helper::arrayColumn($schema->category, null, 'name');
-        $appGroup = zget($categoryList, $category, array());
+        $appGroup     = zget($categoryList, $category, array());
 
         foreach($appGroup->choices as $appInSchema)
         {
@@ -137,25 +141,108 @@ class solutionModel extends model
             if($appInSchema->name != $chart) continue;
 
             $appInfo = zget($cloudSolution->apps, $chart);
-
             $appInfo->version     = $appInSchema->version;
             $appInfo->app_version = $appInSchema->app_version;
             $appInfo->status      = 'waiting';
 
             return $appInfo;
         }
-
-        return;
+        return null;
     }
 
     /**
+     * 如果实例未安装，则安装实例。
+     * Install instance if instance not installed.
+     *
+     * @param  object  $solution
+     * @param  object  $componentApp
+     * @param  object  $solutionSchema
+     * @param  array   $allMappings
+     * @access private
+     * @return bool
+     */
+    private function installInstance(object $solution, object $componentApp, object $solutionSchema, array $allMappings): bool
+    {
+        static $apps, $components, $channel;
+        if(empty($apps))       $apps       = helper::arrayColumn(json_decode($solution->components, true), 'chart');
+        if(empty($channel))    $channel    = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
+        if(empty($components)) $components = json_decode($solution->components);
+
+        $cloudApp = $this->loadModel('store')->getAppInfo($componentApp->id, false, '', $componentApp->version, $channel);
+        if(!$cloudApp)
+        {
+            $this->saveStatus($solution->id, 'notFoundApp');
+            dao::$errors[] = sprintf($this->lang->solution->errors->notFoundAppByVersion, $componentApp->version, $componentApp->alias);
+            return false;
+        }
+        /* Must install the defineded version in solution schema. */
+        $cloudApp->version     = $componentApp->version;
+        $cloudApp->app_version = $componentApp->app_version;
+
+        if($componentApp->external)
+        {
+            $instance = $this->installExternalApp($cloudApp, $componentApp->external);
+        }
+        else
+        {
+            /* Check enough memory to install app, or not.*/
+            if(!$this->loadModel('instance')->enoughMemory($cloudApp))
+            {
+                $this->saveStatus($solution->id, 'notEnoughResource');
+                dao::$errors[] = $this->lang->solution->errors->notEnoughResource;
+                return false;
+            }
+
+            if(!$this->checkInstallStatus($solution->id)) return false;
+            $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
+            $instance = $this->installApp($cloudApp, $settings);
+        }
+
+        if(!$instance)
+        {
+            $this->saveStatus($solution->id, 'cneError');
+            dao::$errors[] = sprintf($this->lang->solution->errors->failToInstallApp, $cloudApp->name);
+            return false;
+        }
+        $this->dao->update(TABLE_INSTANCE)->set('solution')->eq($solution->id)->where('id')->eq($instance->id)->exec();
+
+        $componentApp->status = 'installing';
+        $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
+
+        return !dao::isError();
+    }
+
+    private function checkSarted(object $instance, int $solutionID, object $solutionSchema, string $category): bool
+    {
+        $instance = $this->waitInstanceStart($instance, $solutionID);
+        if($instance)
+        {
+            $mappingKeys = zget($solutionSchema->mappings, $instance->chart, '');
+            if($mappingKeys)
+            {
+                /* Load settings mapping of installed app for next app. */
+                $tempMappings = $this->cne->getSettingsMapping($instance, $mappingKeys);
+                if($tempMappings) $allMappings[$category] = $tempMappings;
+            }
+
+            $this->instance->saveAuthInfo($instance);
+            return true;
+        }
+
+        $this->saveStatus($solutionID, 'timeout');
+        dao::$errors[] = $this->lang->solution->errors->timeout;
+        return false;
+    }
+
+    /**
+     * 安装解决方案。
      * Install solution.
      *
      * @param  int    $solutionID
      * @access public
      * @return bool
      */
-    public function install($solutionID)
+    public function install(int $solutionID): bool
     {
         set_time_limit(0);
         session_write_close();
@@ -166,19 +253,17 @@ class solutionModel extends model
             dao::$errors[] = $this->lang->solution->errors->notFound;
             return false;
         }
+
         if(in_array($solution->status, array('installing', 'installed', 'uninstalled'))) return false;
         $this->saveStatus($solutionID, 'installing');
 
         $this->loadModel('cne');
         $this->loadModel('instance');
-        $this->loadModel('store');
         $this->loadModel('common');
         $allMappings    = array();
         $solutionSchema = $this->loadModel('store')->solutionConfig('id', $solution->appID);
-        $channel        = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
         $components     = json_decode($solution->components);
-        $apps           = helper::arrayColumn(json_decode($solution->components, true), 'chart');
-        foreach($components as $categorty => $componentApp)
+        foreach($components as $category => $componentApp)
         {
             $solutionStatus = $this->dao->select('status')->from(TABLE_SOLUTION)->where('id')->eq($solutionID)->fetch();
             if($solutionStatus->status !='installing')
@@ -189,55 +274,12 @@ class solutionModel extends model
             }
 
             $instance = $this->instance->instanceOfSolution($solution, $componentApp->chart);
-            /* If not install. */
-            if(!$instance)
-            {
-                $cloudApp = $this->store->getAppInfo($componentApp->id, false, '', $componentApp->version, $channel);
-                if(!$cloudApp)
-                {
-                    $this->saveStatus($solutionID, 'notFoundApp');
-                    dao::$errors[] = sprintf($this->lang->solution->errors->notFoundAppByVersion, $componentApp->version, $componentApp->alias);
-                    return false;
-                }
-                /* Must install the defineded version in solution schema. */
-                $cloudApp->version     = $componentApp->version;
-                $cloudApp->app_version = $componentApp->app_version;
-
-                if($componentApp->external)
-                {
-                    $instance = $this->installExternalApp($cloudApp, $componentApp->external);
-                }
-                else
-                {
-                    /* Check enough memory to install app, or not.*/
-                    if(!$this->instance->enoughMemory($cloudApp))
-                    {
-                        $this->saveStatus($solutionID, 'notEnoughResource');
-                        dao::$errors[] = $this->lang->solution->errors->notEnoughResource;
-                        return false;
-                    }
-
-                    if(!$this->checkInstallStatus($solutionID)) return false;
-                    $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
-                    $instance = $this->installApp($cloudApp, $settings);
-                }
-
-                if(!$instance)
-                {
-                    $this->saveStatus($solutionID, 'cneError');
-                    dao::$errors[] = sprintf($this->lang->solution->errors->failToInstallApp, $cloudApp->name);
-                    return false;
-                }
-                $this->dao->update(TABLE_INSTANCE)->set('solution')->eq($solutionID)->where('id')->eq($instance->id)->exec();
-
-                $componentApp->status = 'installing';
-                $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
-            }
+            if(!$instance && !$this->installInstance($solution, $componentApp, $solutionSchema, $allMappings)) return false;
 
             if($componentApp->external)
             {
                 $tempMappings = $this->getExternalMapping($solutionSchema, $componentApp);
-                if($tempMappings) $allMappings[$categorty] = $tempMappings;
+                if($tempMappings) $allMappings[$category] = $tempMappings;
 
                 $componentApp->status = 'configured';
                 $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
@@ -245,26 +287,10 @@ class solutionModel extends model
             }
 
             /* Wait instanlled app started. */
-            $instance = $this->waitInstanceStart($instance, $solutionID);
-            if($instance)
-            {
-                $mappingKeys = zget($solutionSchema->mappings, $instance->chart, '');
-                if($mappingKeys)
-                {
-                    /* Load settings mapping of installed app for next app. */
-                    $tempMappings = $this->cne->getSettingsMapping($instance, $mappingKeys);
-                    if($tempMappings) $allMappings[$categorty] = $tempMappings;
-                }
-                $componentApp->status = 'installed';
-                $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
-                $this->instance->saveAuthInfo($instance);
-            }
-            else
-            {
-                $this->saveStatus($solutionID, 'timeout');
-                dao::$errors[] = $this->lang->solution->errors->timeout;
-                return false;
-            }
+            if(!$this->checkSarted($instance, $solutionID, $solutionSchema, $category)) return false;
+
+            $componentApp->status = 'installed';
+            $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
         }
 
         $this->saveStatus($solutionID, 'installed');
@@ -272,29 +298,33 @@ class solutionModel extends model
     }
 
     /**
-     * Save status.
+     * 更新解决方案的状态。
+     * Update status of solution.
      *
      * @param  int    $solutionID
      * @param  string $status
      * @access public
-     * @return int
+     * @return bool
      */
-    public function saveStatus($solutionID, $status)
+    public function saveStatus(int $solutionID, string $status): bool
     {
-        return $this->dao->update(TABLE_SOLUTION)->set('status')->eq($status)->set('updatedDate')->eq(date("Y-m-d H:i:s"))->where('id')->eq($solutionID)->exec();
+        $this->dao->update(TABLE_SOLUTION)->set('status')->eq($status)->set('updatedDate')->eq(date("Y-m-d H:i:s"))->where('id')->eq($solutionID)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 获取安装应用的配置信息。
      * Mount settings for installing app.
      *
      * @param  object  $solutionSchema
      * @param  string  $chart
      * @param  object  $components
      * @param  array   $mappings  example: ['git' => ['env.GIT_USERNAME' => 'admin', ...], ...]
+     * @param  boolean $isInstallSonar
      * @access private
      * @return array
      */
-    private function mountSettings($solutionSchema, $chart, $components, $mappings, $isInstallSonar = true)
+    private function mountSettings(object $solutionSchema, string $chart, object $components, array $mappings, bool $isInstallSonar = true): array
     {
         $settings = array();
 
@@ -328,14 +358,15 @@ class solutionModel extends model
     }
 
     /**
-     * installApp
+     * 安装应用。
+     * Install app.
      *
      * @param  object  $cloudApp
-     * @param  int     $settings
+     * @param  array   $settings
      * @access private
-     * @return mixed
+     * @return object|false
      */
-    private function installApp($cloudApp, $settings)
+    private function installApp(object $cloudApp, array $settings): object|false
     {
         /* Fake parameters for installation. */
 
@@ -358,16 +389,19 @@ class solutionModel extends model
     }
 
     /**
+     * 等待应用启动完成。
      * Wait instance started.
      *
-     * @param  object      $instance
+     * @param  object       $instance
+     * @param  int          $solutionID
      * @access private
-     * @return object|bool
+     * @return object|false
      */
-    private function waitInstanceStart($instance, $solutionID)
+    private function waitInstanceStart(object $instance, int $solutionID): object|false
     {
         /* Query status of the installed instance. */
         $times = 0;
+        $this->loadModel('instance');
         for($times = 0; $times < 50; $times++)
         {
             if(!$this->checkInstallStatus($solutionID)) return false;
@@ -376,6 +410,7 @@ class solutionModel extends model
             sleep(12);
             $instance = $this->instance->freshStatus($instance);
             $this->saveLog(date('Y-m-d H:i:s').' installing ' . $instance->name . ':' . $instance->status . '#' . $instance->solution); // Code for debug.
+
             if($instance->status == 'running') return $instance;
         }
 
@@ -383,29 +418,30 @@ class solutionModel extends model
     }
 
     /**
+     * 检查解决方案安装状态。
      * Check solution status.
      *
-     * @param  int $solutionID
+     * @param  int    $solutionID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkInstallStatus($solutionID)
+    public function checkInstallStatus(int $solutionID): bool
     {
         $solution = $this->getByID($solutionID);
-        if($solution->status != 'installing') return false;
-        return true;
+        if($solution && $solution->status == 'installing') return true;
+        return false;
     }
 
     /**
+     * 移除解决方案环境。
      * Uninstall solution and all included instances .
      *
      * @param  int    $solutionID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function uninstall($solutionID)
+    public function uninstall(int $solutionID): bool
     {
-        $this->loadModel('instance');
         /* Firstly change the status to 'unintalling' for abort installing process. */
         $this->dao->update(TABLE_SOLUTION)->set('status')->eq('uninstalling')->where('id')->eq($solutionID)->exec();
 
@@ -413,23 +449,26 @@ class solutionModel extends model
         if(empty($solution))
         {
             dao::$errors[] = $this->lang->solution->notFound;
-            return;
+            return false;
         }
 
+        $this->loadModel('instance');
         foreach($solution->instances as $instance)
         {
             $success = $this->instance->uninstall($instance);
             if(!$success)
             {
                 dao::$errors[] = sprintf($this->lang->solution->errors->failToUninstallApp, $instance->name);
-                return;
+                return false;
             }
         }
 
         $this->dao->update(TABLE_SOLUTION)->set('status')->eq('uninstalled')->set('deleted')->eq(1)->where('id')->eq($solutionID)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 转化方案的配置信息为选择项的参数。
      * Convert schema choices to select options.
      *
      * @param  object $schemaChoices
@@ -437,7 +476,7 @@ class solutionModel extends model
      * @access public
      * @return array
      */
-    public function createSelectOptions($schemaChoices, $cloudSolution)
+    public function createSelectOptions(object $schemaChoices, object $cloudSolution): array
     {
         $options = array();
         foreach($schemaChoices as $cloudApp)
@@ -450,13 +489,14 @@ class solutionModel extends model
     }
 
     /**
+     * 保存安装日志。
      * Save message to error log file.
      *
      * @param  string $message
      * @access public
      * @return void
      */
-    public function saveLog($message)
+    public function saveLog(string $message)
     {
         $errorFile = $this->app->logRoot . 'php.' . date('Ymd') . '.log.php';
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?>\n");
@@ -465,12 +505,13 @@ class solutionModel extends model
     }
 
     /**
+     * 获取最后一次安装的方案。
      * Get last solution.
      *
      * @access public
      * @return object
      */
-    public function getLastSolution()
+    public function getLastSolution(): object|null
     {
         return $this->dao->select('*')->from(TABLE_SOLUTION)
             ->where('deleted')->eq(0)
