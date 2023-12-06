@@ -7,7 +7,7 @@ class convertTao extends convertModel
      * Build user data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildUserData(array $data): object
@@ -26,7 +26,7 @@ class convertTao extends convertModel
      * Build project data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildProjectData(array $data): object
@@ -47,7 +47,7 @@ class convertTao extends convertModel
      * Build issue data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildIssueData(array $data): object
@@ -74,7 +74,7 @@ class convertTao extends convertModel
      * Build build data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildBuildData(array $data): object
@@ -94,7 +94,7 @@ class convertTao extends convertModel
      * Build issuelink data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildIssuelinkData(array $data): object
@@ -112,7 +112,7 @@ class convertTao extends convertModel
      * Build action data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildActionData(array $data): object
@@ -131,7 +131,7 @@ class convertTao extends convertModel
      * Build file data.
      *
      * @param  array $data
-     * @access public
+     * @access protected
      * @return object
      */
     protected function buildFileData(array $data): object
@@ -146,5 +146,45 @@ class convertTao extends convertModel
         $file->AUTHOR   = $data['author'];
 
         return $file;
+    }
+
+    /**
+     * 导入user数据。
+     * Import jira user.
+     *
+     * @param  array $dataList
+     * @access protected
+     * @return void
+     */
+    protected function importJiraUser(array $dataList)
+    {
+        $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
+        $userConfig = $this->session->jiraUser;
+
+        foreach($dataList as $id => $data)
+        {
+            if(isset($localUsers[$data->account])) continue;
+
+            $user = new stdclass();
+            $user->account  = $data->account;
+            $user->realname = $data->realname;
+            $user->password = $userConfig['password'];
+            $user->group    = $userConfig['group'];
+            $user->email    = $data->email;
+            $user->gender   = 'm';
+            $user->type     = 'inside';
+            $user->join     = $data->join;
+
+            $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
+
+            if(!dao::isError())
+            {
+                $data = new stdclass();
+                $data->account = $user->account;
+                $data->group   = $user->group;
+
+                $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->set('account')->eq($user->account)->set('`group`')->eq($user->group)->exec();
+            }
+        }
     }
 }

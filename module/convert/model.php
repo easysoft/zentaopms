@@ -316,7 +316,7 @@ class convertModel extends model
                     break;
                 }
 
-                if($module == 'user')      $this->importJiraUser($dataList);
+                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
                 if($module == 'project')   $this->importJiraProject($dataList);
                 if($module == 'issue')     $this->importJiraIssue($dataList);
                 if($module == 'build')     $this->importJiraBuild($dataList);
@@ -365,7 +365,7 @@ class convertModel extends model
                     break;
                 }
 
-                if($module == 'user')      $this->importJiraUser($dataList, 'file');
+                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
                 if($module == 'project')   $this->importJiraProject($dataList, 'file');
                 if($module == 'issue')     $this->importJiraIssue($dataList, 'file');
                 if($module == 'build')     $this->importJiraBuild($dataList, 'file');
@@ -382,45 +382,6 @@ class convertModel extends model
         return array('finished' => true);
     }
 
-    /**
-     * Import jira user.
-     *
-     * @param  object $dataList
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function importJiraUser($dataList, $method = 'db')
-    {
-        $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
-        $userConfig = $this->session->jiraUser;
-
-        foreach($dataList as $id => $data)
-        {
-            if(isset($localUsers[$data->account])) continue;
-
-            $user = new stdclass();
-            $user->account  = $data->account;
-            $user->realname = $data->realname;
-            $user->password = $userConfig['password'];
-            $user->group    = $userConfig['group'];
-            $user->email    = $data->email;
-            $user->gender   = 'm';
-            $user->type     = 'inside';
-            $user->join     = $data->join;
-
-            $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
-
-            if(!dao::isError())
-            {
-                $data = new stdclass();
-                $data->account = $user->account;
-                $data->group   = $user->group;
-
-                $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->set('account')->eq($user->account)->set('`group`')->eq($user->group)->exec();
-            }
-        }
-    }
 
     /**
      * Import jira project.
