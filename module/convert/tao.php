@@ -149,6 +149,90 @@ class convertTao extends convertModel
     }
 
     /**
+     * 获取jira用户。
+     * Get jira account.
+     *
+     * @param  string $userKey
+     * @param  string $method db|file
+     * @access protected
+     * @return string
+     */
+    protected function getJiraAccount(string $userKey, string $method = 'db'): string
+    {
+        if(strpos($userKey, 'JIRAUSER') === false) return $userKey;
+
+        if($method == 'db')
+        {
+            return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name');
+        }
+
+        $appUsers = $this->getJiraAppUser();
+        return zget($appUsers, $userKey, $userKey);
+    }
+
+    /**
+     * 获取jira用户键值对。
+     * Get jira app user pairs.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getJiraAppUser(): array
+    {
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/applicationuser.xml');
+        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
+        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        $pairs = array();
+        $parsedXML = $this->object2Array($parsedXML);
+        foreach($parsedXML as $key => $xmlArray)
+        {
+            if(strtolower($key) != 'applicationuser') continue;
+            foreach($xmlArray as $key => $attributes)
+            {
+                if(is_numeric($key))
+                {
+                    foreach($attributes as $value)
+                    {
+                        if(!is_array($value)) continue;
+                        if(!isset($value['userKey'])) continue;
+                        $pairs[$value['userKey']] = $value['lowerUserName'];
+                    }
+                }
+                else
+                {
+                    $pairs[$attributes['userKey']] = $attributes['lowerUserName'];
+                }
+            }
+        }
+
+        return $pairs;
+    }
+
+    /**
+     * 将对象转换为数组。
+     * Convert object to array.
+     *
+     * @param  object|array $parsedXML
+     * @access protected
+     * @return array
+     */
+    protected function object2Array(object|array $parsedXML): array
+    {
+        if(is_object($parsedXML))
+        {
+            $parsedXML = (array)$parsedXML;
+        }
+
+        if(is_array($parsedXML))
+        {
+            foreach($parsedXML as $key => $value) $parsedXML[$key] = $this->object2Array($value);
+        }
+
+        return $parsedXML;
+    }
+
+    /**
      * 导入user数据。
      * Import jira user.
      *

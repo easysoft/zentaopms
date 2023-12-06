@@ -182,7 +182,7 @@ class convertModel extends model
         $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $dataList  = array();
-        $parsedXML = $this->object2Array($parsedXML);
+        $parsedXML = $this->convertTao->object2Array($parsedXML);
         foreach($parsedXML as $key => $xmlArray)
         {
             if(strtolower($key) != strtolower($fileName)) continue;
@@ -239,7 +239,7 @@ class convertModel extends model
         $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $dataList  = array();
-        $parsedXML = $this->object2Array($parsedXML);
+        $parsedXML = $this->convertTao->object2Array($parsedXML);
         foreach($parsedXML as $key => $xmlArray)
         {
             if(strtolower($key) != 'nodeassociation') continue;
@@ -256,29 +256,6 @@ class convertModel extends model
         }
 
         return $dataList;
-    }
-
-    /**
-     * 将对象转换为数组。
-     * Convert object to array.
-     *
-     * @param  object|array $parsedXML
-     * @access public
-     * @return array
-     */
-    public function object2Array(object|array $parsedXML): array
-    {
-        if(is_object($parsedXML))
-        {
-            $parsedXML = (array)$parsedXML;
-        }
-
-        if(is_array($parsedXML))
-        {
-            foreach($parsedXML as $key => $value) $parsedXML[$key] = $this->object2Array($value);
-        }
-
-        return $parsedXML;
     }
 
     /**
@@ -385,12 +362,12 @@ class convertModel extends model
     /**
      * Import jira issue.
      *
-     * @param  object $dataList
-     * @param  string $method
+     * @param  array $dataList
+     * @param  string $method db|file
      * @access public
      * @return void
      */
-    public function importJiraIssue($dataList, $method = 'db')
+    public function importJiraIssue(array $dataList, string $method = 'db')
     {
         $relations = $this->session->jiraRelation;
 
@@ -1036,67 +1013,6 @@ class convertModel extends model
         if(!empty($relations['storyStage'][$stageID])) $stage = $relations['storyStage'][$stageID];
 
         return $stage;
-    }
-
-    /**
-     * Get jira account.
-     *
-     * @param  string $userKey
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function getJiraAccount($userKey, $method = 'db')
-    {
-        if(strpos($userKey, 'JIRAUSER') === false) return $userKey;
-
-        if($method == 'db')
-        {
-            return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name');
-        }
-        else
-        {
-            $appUsers = $this->getJiraAppUser();
-            return zget($appUsers, $userKey, $userKey);
-        }
-    }
-
-    /**
-     * Get jira app user pairs.
-     *
-     * @access public
-     * @return void
-     */
-    public function getJiraAppUser()
-    {
-        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/applicationuser.xml');
-        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
-        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        $pairs = array();
-        $parsedXML = $this->object2Array($parsedXML);
-        foreach($parsedXML as $key => $xmlArray)
-        {
-            if(strtolower($key) != 'applicationuser') continue;
-            foreach($xmlArray as $key => $attributes)
-            {
-                if(is_numeric($key))
-                {
-                    foreach($attributes as $value)
-                    {
-                        if(!is_array($value)) continue;
-                        if(!isset($value['userKey'])) continue;
-                        $pairs[$value['userKey']] = $value['lowerUserName'];
-                    }
-                }
-                else
-                {
-                    $pairs[$attributes['userKey']] = $attributes['lowerUserName'];
-                }
-            }
-        }
-
-        return $pairs;
     }
 
     /**
