@@ -226,12 +226,13 @@ class convertModel extends model
     }
 
     /**
+     * 从jira文件中获取版本信息。
      * Get version group from jira file.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getVersionGroup()
+    public function getVersionGroup(): array
     {
         $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
@@ -258,13 +259,14 @@ class convertModel extends model
     }
 
     /**
+     * 将对象转换为数组。
      * Convert object to array.
      *
-     * @param  object $parsedXML
+     * @param  object|array $parsedXML
      * @access public
-     * @return void
+     * @return array
      */
-    public function object2Array($parsedXML)
+    public function object2Array(object|array $parsedXML): array
     {
         if(is_object($parsedXML))
         {
@@ -280,14 +282,16 @@ class convertModel extends model
     }
 
     /**
+     * 从DB文件中导入jira数据。
      * Import jira from db.
      *
-     * @param  string $type
+     * @param  string $type user|project|issue|build|issuelink|action|file
      * @param  int    $lastID
+     * @param  bool   $createTable
      * @access public
-     * @return void
+     * @return array
      */
-    public function importJiraFromDB($type = '', $lastID = 0, $createTable = false)
+    public function importJiraFromDB(string $type = '', int $lastID = 0, bool $createTable = false): array
     {
         if($createTable) $this->createTmpTable4Jira();
 
@@ -297,7 +301,7 @@ class convertModel extends model
         $nextObject = false;
         if(empty($type)) $type = key($this->lang->convert->jira->objectList);
 
-        foreach($this->lang->convert->jira->objectList as $module => $moduleName)
+        foreach(array_keys($this->lang->convert->jira->objectList) as $module)
         {
             if($module != $type and !$nextObject) continue;
             if($module == $type) $nextObject = true;
@@ -329,15 +333,16 @@ class convertModel extends model
     }
 
     /**
+     * 从文件中导入jira数据。
      * Import jira from file.
      *
-     * @param  string   $type
-     * @param  int      $lastID
-     * @param  bool     $createTable
+     * @param  string  $type user|project|issue|build|issuelink|action|file
+     * @param  int     $lastID
+     * @param  bool    $createTable
      * @access public
-     * @return void
+     * @return array
      */
-    public function importJiraFromFile($type = '', $lastID = 0, $createTable = false)
+    public function importJiraFromFile(string $type = '', int $lastID = 0, bool $createTable = false): array
     {
         if($createTable) $this->createTmpTable4Jira();
 
@@ -345,7 +350,7 @@ class convertModel extends model
         $nextObject = false;
         if(empty($type)) $type = key($this->lang->convert->jira->objectList);
 
-        foreach($this->lang->convert->jira->objectList as $module => $moduleName)
+        foreach(array_keys($this->lang->convert->jira->objectList) as $module)
         {
             if($module != $type and !$nextObject) continue;
             if($module == $type) $nextObject = true;
