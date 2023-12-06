@@ -78,18 +78,19 @@ class metricModel extends model
         foreach($result as $record)
         {
             $record = (array)$record;
+            if(isset($record['date'])) $record['calcTime'] = date("Y-m-d H:i", strtotime($record['date']));
+
             $fieldList = array_keys($record);
             $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+            $dateType  = $this->getDateType($dateList);
 
-            $row = new stdclass();
-            if(!empty($dateList)) $row = $this->buildDateCell($row, $record);
+            $row = $this->buildDateCell($record, $dateType);
             if($scope != 'system')
             {
                 $row->scope   = isset($objectPairs[$record[$scope]]) ? $objectPairs[$record[$scope]] : $record[$scope];
                 $row->scopeID = $record[$scope];
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
-            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:i", strtotime($record['date']));
 
             $tableData[] = $row;
         }
@@ -115,13 +116,13 @@ class metricModel extends model
 
         if($headerLength == 2)
         {
-            return $this->getTimeTable($data, '', $withCalcTime);
+            return $this->getTimeTable($data, 'nodate', $withCalcTime);
         }
         elseif($headerLength == 3)
         {
             if($this->isObjectMetric($header))
             {
-                return $this->getObjectTable($header, $data, '', $withCalcTime);
+                return $this->getObjectTable($header, $data, 'nodate', $withCalcTime);
             }
             else
             {
@@ -140,8 +141,7 @@ class metricModel extends model
 
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
-        // 没有时间属性的度量项，也加上天的属性，此度量项数据的 year month week day 字段均为0， 此时使用 calcTime 来做计算
-        $dateField = ($dateType == 'day' and !isset(current($data)->dateString)) ? 'calcTime' : 'dateString';
+        $dateField = 'dateString';
         usort($data, function($a, $b) use ($dateField)
         {
             $dateA = strtotime($a->$dateField);
@@ -177,7 +177,7 @@ class metricModel extends model
                 $week = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
                 $date = "{$year}-{$week}";
             }
-            elseif($dateType == 'day')
+            elseif($dateType == 'day' or $dateType == 'nodate')
             {
                 $date = substr($dataInfo->$dateField, 0, 10);
             }
@@ -199,7 +199,7 @@ class metricModel extends model
         $headerTitle = current($header)['title'];
 
         $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'align' => 'center', 'width' => 160);
-        $dateField     = ($dateType == 'day' and !isset(current($data)->dateString)) ? 'calcTime' : 'dateString';
+        $dateField     = 'dateString';
         usort($data, function($a, $b) use($dateField)
         {
             $dateA = strtotime($a->$dateField);
@@ -246,7 +246,7 @@ class metricModel extends model
                 $week          = sprintf($this->lang->metric->week, substr($time, 5, 2));
                 $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
             }
-            elseif($dateType == 'day')
+            elseif($dateType == 'day' or $dateType == 'nodate')
             {
                 $day           = substr($time, 5, 5);
                 $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
@@ -1025,44 +1025,49 @@ class metricModel extends model
      * 获取度量项的日期字符串。
      * Build date cell.
      *
-     * @param  object $row
-     * @param  array  $object
+     * @param  array  $record
+     * @param  string $dateType
      * @access public
      * @return string
      */
-    public function buildDateCell($row, $record)
+    public function buildDateCell($record, $dateType)
     {
-        extract($record);
+        $row      = new stdclass();
+        $year     = isset($record['year'])     ? $record['year']     : '';
+        $month    = isset($record['month'])    ? $record['month']    : '';
+        $week     = isset($record['week'])     ? $record['week']     : '';
+        $day      = isset($record['day'])      ? $record['day']      : '';
+        $calcTime = isset($record['calcTime']) ? $record['calcTime'] : '';
 
-        $date = $dateString =  false;
-        $dateType = 'day';
-        if(isset($year, $month, $day))
+        $date = $dateString = false;
+        if($dateType == 'nodate')
         {
-            $date     = $dateString = "{$year}-{$month}-{$day}";
-            $dateType = 'day';
+            $date = $dateString = substr($calcTime, 0, 10);
         }
-        elseif(isset($year, $week))
+        elseif($dateType == 'day')
+        {
+            $date = $dateString = "{$year}-{$month}-{$day}";
+        }
+        elseif($dateType == 'week')
         {
             $date       = sprintf($this->lang->metric->weekCell, $year, $week);
             $dateString = "{$year}-{$week}";
-            $dateType   = 'week';
         }
-        elseif(isset($year, $month))
+        elseif($dateType == 'month')
         {
             $date       = $year . $this->lang->year . $month . $this->lang->month;
             $dateString = "{$year}-{$month}";
-            $dateType   = 'month';
         }
-        elseif(isset($year))
+        elseif($dateType == 'year')
         {
             $date       = $year . $this->lang->year;
             $dateString = $year;
-            $dateType   = 'year';
         }
 
         $row->date       = $date;
         $row->dateString = $dateString;
         $row->dateType   = $dateType;
+        $row->calcTime   = $calcTime;
         return $row;
     }
 
