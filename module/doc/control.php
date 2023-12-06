@@ -764,12 +764,13 @@ class doc extends control
     }
 
     /**
-     * Show product space.
+     * 产品空间。
+     * Product space.
      *
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
-     * @param  string $browseType    all|draft|bysearch
+     * @param  string $browseType   all|draft|bysearch
      * @param  string $orderBy
      * @param  int    $param
      * @param  int    $recTotal
@@ -783,7 +784,7 @@ class doc extends control
         $products = $this->product->getPairs('nocode');
         $objectID = $this->product->checkAccess($objectID, $products);
 
-        echo $this->fetch('doc', 'tableContents', "type=product&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('doc', 'tableContents', "type=product&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
