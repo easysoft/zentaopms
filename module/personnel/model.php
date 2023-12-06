@@ -296,13 +296,14 @@ class personnelModel extends model
     }
 
     /**
+     * 获取项目成员帐户和参与项目的数量。
      * Get the project member accounts and the number of participating projects.
      *
-     * @param  object    $projects
+     * @param  array  $projects
      * @access public
      * @return array
      */
-    public function getInvolvedProjects($projects)
+    public function getInvolvedProjects(array $projects): array
     {
         return $this->dao->select('account, count(root) as projects')->from(TABLE_TEAM)
             ->where('root')->in(array_keys($projects))

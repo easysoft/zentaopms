@@ -130,10 +130,19 @@ class personnelTest
         return $return;
     }
 
-    public function getInvolvedProjectsTest($projects)
+    /**
+     * 测试获取项目成员帐户和参与项目的数量。
+     * Test get the project member accounts and the number of participating projects.
+     *
+     * @param  array  $projects
+     * @access public
+     * @return array
+     */
+    public function getInvolvedProjectsTest(array $projects): array
     {
         global $tester;
         $projectID = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchall('id');
+
         $objects = $this->objectModel->getInvolvedProjects($projectID);
 
         if(dao::isError()) return dao::getError();
