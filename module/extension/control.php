@@ -403,6 +403,7 @@ class extension extends control
     }
 
     /**
+     * 上传插件并读取插件信息。
      * Upload an extension
      *
      * @access public
@@ -410,27 +411,26 @@ class extension extends control
      */
     public function upload()
     {
-        $this->app->loadLang('file');
         if($_FILES)
         {
-            $statusFile = $this->loadModel('common')->checkSafeFile();
-            if($statusFile) return $this->send(array('result' => 'fail', 'message' => strip_tags(sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile))));
-
             /* 检查上传附件的错误信息。 */
-            if($_FILES['files']['error'] == UPLOAD_ERR_NO_FILE) return $this->send(array('result' => 'fail', 'message' => $this->lang->extension->errorFileNotEmpty));
+            if(!array_filter($_FILES['files']['name'])) return $this->send(array('result' => 'fail', 'message' => $this->lang->extension->errorFileNotEmpty));
 
             $tmpName   = $_FILES['files']['tmp_name'][0];
             $fileName  = $_FILES['files']['name'][0];
             $dest      = $this->app->getTmpRoot() . "extension/$fileName";
 
+            /* 创建目录并将上传的插件包移动到该目录下。 */
             if(!is_dir(dirname($dest))) mkdir(dirname($dest));
             if(!move_uploaded_file($tmpName, $dest))
             {
+                /* 如果文件移动失败则返回错误信息。 */
                 $downloadPath = $this->app->getTmpRoot() . 'extension/';
                 $errorMessage = strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $downloadPath, $downloadPath));
                 return $this->send(array('result' => 'fail', 'message' => $errorMessage));
             }
 
+            /* 解压插件包, 失败则删除插件包并返回错误信息。 */
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);
             if($return->result != 'ok')
@@ -440,26 +440,24 @@ class extension extends control
             }
 
             $info = $this->extension->parseExtensionCFG($extension);
-            if(isset($info->code) and $info->code != $extension)
+            if(isset($info->code) && $info->code != $extension)
             {
+                /* 如果插件包的插件代号和插件包名字不一致，则删除解压文件并将上传的插件包改名为插件代号。 */
                 $classFile = $this->app->loadClass('zfile');
-                $classFile->removeDir($this->extension->pkgRoot . $extension);
+                $classFile->removeDir($this->extension->pkgRoot . $extension); // 这里删掉也没事，后续安装升级的时候会再次解压。
                 rename($this->app->getTmpRoot() . "/extension/$fileName", $this->app->getTmpRoot() . "/extension/{$info->code}.zip");
                 $extension = $info->code;
             }
 
+            /* 判断是否已经安装过此插件，安装过做升级操作，否则做安装操作。 */
             $info = $this->extension->getInfoFromDB($extension);
-            $type = (!empty($info) and ($info->status == 'installed' or $info->status == 'deactivated')) ? 'upgrade' : 'install';
+            $type = (!empty($info) && ($info->status == 'installed' || $info->status == 'deactivated')) ? 'upgrade' : 'install';
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
             return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
         }
 
         $this->checkSafe();
-        $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
-
-        $this->view->maxUploadSize  = $maxUploadSize;
-        $this->view->exceedLimitMsg = sprintf($this->lang->file->errorFileSize, $maxUploadSize);
-
+        $this->view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));;
         $this->display();
     }
 

@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadLang('file');
 if(!empty($error))
 {
     div
@@ -38,8 +39,9 @@ else
         (
             upload
             (
+                set::multiple(false),
                 set::limitSize($maxUploadSize . 'B'),
-                set::exceededSizeHint($exceedLimitMsg)
+                set::exceededSizeHint(sprintf($lang->file->errorFileSize, $maxUploadSize))
             )
         ),
         set::submitBtnText($lang->extension->install)
