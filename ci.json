@@ -44,9 +44,8 @@
     }
   },
   "notice": {
-    "users": "qishiyao",
-    "usersX": "qishiyao,hufangzhou,zhujinyong",
-    "groupsX": "38a4e39b-df5d-4606-a988-e22673bdc358",
-    "groups2X": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
+    "users": "qishiyao,hufangzhou,zhujinyong",
+    "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",
+    "groups2": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
   }
 }
