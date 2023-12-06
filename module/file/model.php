@@ -40,7 +40,7 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function getByObject(string $objectType, string $objectID, string $extra = ''): array
+    public function getByObject(string $objectType, int $objectID, string $extra = ''): array
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
@@ -538,7 +538,7 @@ class fileModel extends model
      * @access public
      * @return bool
      */
-    public function checkPriv($file): bool
+    public function checkPriv(object $file): bool
     {
         $objectType = $file->objectType;
         $objectID   = $file->objectID;
@@ -546,33 +546,19 @@ class fileModel extends model
 
         if(!$table) return true;
 
-        $objectGroup = array(
-            'design'      => 'project',
-            'issue'       => 'project',
-            'risk'        => 'project',
-            'story'       => 'product',
-            'requirement' => 'product',
-            'bug'         => 'product',
-            'testcase'    => 'product',
-            'testtask'    => 'product',
-            'task'        => 'execution',
-            'build'       => 'execution'
-        );
-
-        if(isset($objectGroup[$objectType]))
+        $groupName = zget($this->config->file->objectGroup, $objectType, '');
+        if(!empty($groupName))
         {
-            $groupName = $objectGroup[$objectType];
-            $groupID   = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
+            $groupID = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
             return $this->loadModel($groupName)->checkPriv($groupID);
         }
 
         if($objectType == 'release')
         {
-            $projectID = $this->dao->findByID($objectID)->from($table)->fetch('project');
-            if((isset($projectID) and $projectID   > 0)) return $this->loadModel('project')->checkPriv($projectID);
+            $release = $this->dao->select('project,product')->from(TABLE_RELEASE)->where('id')->eq($objectID)->fetch();
 
-            $productID= $this->dao->findByID($objectID)->from(TABLE_RELEASE)->fetch('product');
-            return $this->loadModel('product')->checkPriv($productID);
+            if(!empty($release->project)) return $this->loadModel('project')->checkPriv($release->project);
+            return $this->loadModel('product')->checkPriv($release->product);
         }
 
         if($objectType == 'doc')

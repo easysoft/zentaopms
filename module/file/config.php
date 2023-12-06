@@ -16,3 +16,15 @@ $config->file->objectType['requirement'] = 'story';
 $config->file->convertURL['common']['view']       = '1';
 $config->file->convertURL['story']['edit']        = '1';
 $config->file->convertURL['testsuite']['libview'] = '1';
+
+$config->file->objectGroup = array();
+$config->file->objectGroup['design']      = 'project';
+$config->file->objectGroup['issue']       = 'project';
+$config->file->objectGroup['risk']        = 'project';
+$config->file->objectGroup['story']       = 'product';
+$config->file->objectGroup['requirement'] = 'product';
+$config->file->objectGroup['bug']         = 'product';
+$config->file->objectGroup['testcase']    = 'product';
+$config->file->objectGroup['testtask']    = 'product';
+$config->file->objectGroup['task']        = 'execution';
+$config->file->objectGroup['build']       = 'execution';
