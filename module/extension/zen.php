@@ -12,6 +12,20 @@ declare(strict_types=1);
 class extensionZen extends extension
 {
     /**
+     * 安全性校验。
+     * Check safe.
+     *
+     * @access public
+     * @return void
+     */
+    protected function checkSafe()
+    {
+        /* 判断是否要跳转到安全校验页面。 */
+        $statusFile = $this->loadModel('common')->checkSafeFile();
+        if($statusFile) die($this->fetch('extension', 'safe', "statusFile=$statusFile"));
+    }
+
+    /**
      * 插件安装前的合规校验。
      * Check before installation.
      *

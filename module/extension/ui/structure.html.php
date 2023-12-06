@@ -13,14 +13,14 @@ namespace zin;
 $appRoot = $this->app->getAppRoot();
 $files   = json_decode($extension->files);
 $fileItems = array();
-foreach($files as $file => $md5) $fileItems[] = $appRoot . $file . "\n";
+foreach($files as $file => $md5) $fileItems[] = $appRoot . $file . "</br>";
 
 set::title($extension->name . '[' . $extension->code . ']' . $lang->extension->structure . ':');
 
 div
 (
     setClass('border bg-surface p-2'),
-    $fileItems
+    html($fileItems)
 );
 
 render();

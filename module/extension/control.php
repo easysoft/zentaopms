@@ -21,7 +21,7 @@ class extension extends control
      */
     public function browse(string $status = 'installed')
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         $versions   = array();
         $extensions = $this->extension->getLocalExtensions($status);
@@ -70,7 +70,7 @@ class extension extends control
      */
     public function obtain(string $type = 'byUpdatedTime', string $param = '', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         /* Init vars. */
         $type       = strtolower($type);
@@ -119,7 +119,7 @@ class extension extends control
      */
     public function install(string $extension, string $downLink = '', string $md5 = '', string $type = '', string $overridePackage = 'no', string $ignoreCompatible = 'no', string $overrideFile = 'no', string $agreeLicense = 'no', string $upgrade = 'no')
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
         set_time_limit(0);
 
         $installTitle = $upgrade == 'no' ? $this->lang->extension->install : $this->lang->extension->upgrade;
@@ -132,7 +132,7 @@ class extension extends control
         /* 插件安装前的合规校验。 */
         $ignoreLink   = inlink('install', "extension=$extension&downLink=&md5=$md5&type=$type&overridePackage=$overridePackage&ignoreCompatible=yes&overrideFile=$overrideFile&agreeLicense=$agreeLicense&upgrade=$upgrade");
         $overrideLink = inlink('install', "extension=$extension&downLink=&md5=$md5&type=$type&overridePackage=$overridePackage&ignoreCompatible=$ignoreCompatible&overrideFile=yes&agreeLicense=$agreeLicense&upgrade=$upgrade");
-        $this->checkExtension($extension, $ignoreCompatible, $ignoreLink, $overrideFile, $overrideLink, $installType);
+        $this->extensionZen->checkExtension($extension, $ignoreCompatible, $ignoreLink, $overrideFile, $overrideLink, $installType);
         if($this->view->error) return $this->display();
 
         if($upgrade == 'yes')
@@ -157,7 +157,7 @@ class extension extends control
         }
 
         /* 安装插件。 */
-        $this->installExtension($extension, $type, $upgrade);
+        $this->extensionZen->installExtension($extension, $type, $upgrade);
         $this->display();
     }
 
@@ -172,7 +172,7 @@ class extension extends control
      */
     public function uninstall(string $extension, string $confirm = 'no')
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         /* Determine whether need to back up. */
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
@@ -219,7 +219,7 @@ class extension extends control
      */
     public function activate(string $extension, string $ignore = 'no')
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         if($ignore == 'no')
         {
@@ -251,7 +251,7 @@ class extension extends control
      */
     public function deactivate(string $extension)
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
         $this->extension->togglePackageDisable($extension, 'disabled');
@@ -315,7 +315,7 @@ class extension extends control
             return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
         }
 
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
         $this->view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));;
         $this->display();
     }
@@ -330,7 +330,7 @@ class extension extends control
      */
     public function erase($extension)
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         $this->view->removeCommands = $this->extension->erasePackage($extension);
         $this->view->title          = $this->lang->extension->eraseFinished;
@@ -350,7 +350,7 @@ class extension extends control
      */
     public function upgrade(string $extension, string $downLink = '', string $md5 = '', string $type = '')
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         $this->extension->removePackage($extension);
         $this->locate(inlink('install', "extension=$extension&downLink=&md5=$md5&type=$type&overridePackage=no&ignoreCompatible=yes&overrideFile=no&agreeLicense=no&upgrade=yes"));
@@ -366,24 +366,10 @@ class extension extends control
      */
     public function structure(string $extension)
     {
-        $this->checkSafe();
+        $this->extensionZen->checkSafe();
 
         $this->view->extension = $this->extension->getInfoFromDB($extension);
         $this->display();
-    }
-
-    /**
-     * 安全性校验。
-     * Check safe.
-     *
-     * @access public
-     * @return void
-     */
-    protected function checkSafe()
-    {
-        /* 判断是否要跳转到安全校验页面。 */
-        $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile) die($this->fetch('extension', 'safe', "statusFile=$statusFile"));
     }
 
     /**
