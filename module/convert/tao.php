@@ -365,7 +365,7 @@ class convertTao extends convertModel
      * 导入issue数据。
      * Import jira issue.
      *
-     * @param  array $dataList
+     * @param  array  $dataList
      * @param  string $method db|file
      * @access protected
      * @return void
@@ -434,6 +434,55 @@ class convertTao extends convertModel
             $fileRelation['AID']   = $data->ID;
             $fileRelation['extra'] = "{$oldKey}/10000/{$issueKey}/";
             $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($fileRelation)->exec();
+        }
+    }
+
+    /**
+     * 导入版本数据。
+     * Import jira build.
+     *
+     * @param  array  $dataList
+     * @param  string $method db|file
+     * @access protected
+     * @return void
+     */
+    protected function importJiraBuild(array $dataList, string $method = 'db')
+    {
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jproject')
+            ->andWhere('BType')->eq('zproject')
+            ->fetchPairs();
+
+        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in(array_values($projectRelation))
+            ->fetchPairs();
+
+        $versionGroup = $method == 'db' ? $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID, ASSOCIATION_TYPE as relation')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID') : $this->getVersionGroup();
+
+        foreach($dataList as $data)
+        {
+            $buildProject = $data->PROJECT;
+            $projectID    = $projectRelation[$buildProject];
+            $productID    = $projectProduct[$projectID];
+            $build        = $this->createBuild($productID, $projectID, $data, $versionGroup, $method, $issueObjectType, $issueBugs, $issueStories);
+            if(empty($data->RELEASEDATE)) continue;
+
+            $this->createRelease($build, $data, $versionGroup, $method, $issueObjectType, $issueBugs, $issueStories);
         }
     }
 
@@ -785,5 +834,124 @@ class convertTao extends convertModel
         $issueRelation['AID']   = $data->ID;
         $issueRelation['extra'] = 'bug';
         $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($issueRelation)->exec();
+    }
+
+    /**
+     * 创建版本。
+     * Create build.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  object $data
+     * @param  array  $versionGroup
+     * @param  string $method
+     * @param  array  $issueObjectType
+     * @param  array  $issueBugs
+     * @param  array  $issueStories
+     * @access protected
+     * @return object
+     */
+    protected function createBuild(int $productID, int $projectID, object $data, array $versionGroup, string $method, array $issueObjectType, array $issueBugs, array $issueStories): object
+    {
+        /* Create build. */
+        $build = new stdclass();
+        $build->product     = $productID;
+        $build->project     = $projectID;
+        $build->name        = $data->vname;
+        $build->date        = substr($data->RELEASEDATE, 0, 10);
+        $build->builder     = $this->app->user->account;
+        $build->createdBy   = $this->app->user->account;
+        $build->createdDate = helper::now();
+        $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($build)->exec();
+
+        $buildID   = $this->dao->dbh($this->dbh)->lastInsertID();
+        $versionID = $data->ID;
+
+        /* Process build data. */
+        if(isset($versionGroup[$versionID]))
+        {
+            foreach($versionGroup[$versionID] as $issue)
+            {
+                $issueID   = $method == 'db' ? $issue->issueID : $issue;
+                $issueType = zget($issueObjectType, $issueID, '');
+                if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
+
+                if($issueType == 'story')
+                {
+                    $objectID = zget($issueStories, $issueID);
+                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("stories = CONCAT(stories, ',$objectID')")->where('id')->eq($buildID)->exec();
+                }
+                else
+                {
+                    $objectID = zget($issueBugs, $issueID);
+                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($buildID)->exec();
+                    if($issue->relation == 'IssueVersion')
+                    {
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('openedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
+                    }
+                    elseif($issue->relation == 'IssueFixVersion')
+                    {
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('resolvedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
+                    }
+                }
+            }
+        }
+
+        $build->id = $buildID;
+        return $build;
+    }
+
+    /**
+     * 创建发布。
+     * Create release.
+     *
+     * @param  object $build
+     * @param  object $data
+     * @param  array  $versionGroup
+     * @param  string $method
+     * @param  array  $issueObjectType
+     * @param  array  $issueBugs
+     * @param  array  $issueStories
+     * @access protected
+     * @return void
+     */
+    protected function createRelease(object $build, object $data, array $versionGroup, string $method, array $issueObjectType, array $issueBugs, array $issueStories)
+    {
+        /* Create release. */
+        $release = new stdclass();
+        $release->product     = $build->product;
+        $release->build       = $build->id;
+        $release->name        = $build->name;
+        $release->date        = $build->date;
+        $release->desc        = $data->DESCRIPTION;
+        $release->status      = 'normal';
+        $release->createdBy   = $this->app->user->account;
+        $release->createdDate = helper::now();
+        $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
+
+        $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();
+        $versionID = $data->ID;
+
+        /* Process release data. */
+        if(isset($versionGroup[$versionID]))
+        {
+            foreach($versionGroup[$versionID] as $issue)
+            {
+                $issueID   = $method == 'db' ? $issue->issueID : $issue;
+                $issueType = zget($issueObjectType, $issueID, '');
+                if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
+
+                if($issueType == 'story')
+                {
+                    $objectID = zget($issueStories, $issueID);
+                    $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("stories = CONCAT(stories, ',$objectID')")->where('id')->eq($releaseID)->exec();
+                }
+                else
+                {
+                    $objectID = zget($issueBugs, $issueID);
+                    $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($releaseID)->exec();
+                }
+            }
+        }
     }
 }
