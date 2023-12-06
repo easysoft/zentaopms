@@ -2461,6 +2461,7 @@ class pivotModel extends model
 
         $columnSQL = "select * from ($sql) tt" . $connectSQL;
         $rows = $this->dao->query($columnSQL)->fetchAll();
+        $rows = json_decode(json_encode($rows), true);
 
         $cols = array();
         $clientLang = $this->app->getClientLang();
@@ -2489,9 +2490,26 @@ class pivotModel extends model
             $cols[0][] = $col;
         }
 
+        /* Get field optionList. */
+        foreach($fields as $key => $field)
+        {
+            $fields[$key]['optionList'] = $this->getSysOptions($field['type'], $field['object'], $field['field'], $sql);
+        }
+        /* Use filed optionList. */
+        foreach($rows as $key => $row)
+        {
+            foreach($row as $field => $value)
+            {
+                $optionList  = isset($fields[$field]['optionList']) ? $fields[$field]['optionList'] : array();
+                $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
+            }
+
+            $rows[$key] = $row;
+        }
+
         $data = new stdclass();
-        $data->cols = $cols;
-        $data->array = json_decode(json_encode($rows), true);
+        $data->cols  = $cols;
+        $data->array = $rows;
 
         $configs = array_fill(0, count($rows), array_fill(0, count($fields), 1));
 
