@@ -298,7 +298,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getBugs(string $begin, string $end, int $product, int $execution): array
+    public function getBugs(string $begin, string $end, int $product = 0, int $execution = 0): array
     {
         /* 获取符合条件的bug。 */
         /* Get bugs. */
@@ -311,6 +311,8 @@ class pivotModel extends model
             ->beginIF($execution)->andWhere('execution')->eq($execution)->fi()
             ->fetchGroup('openedBy');
 
+        /* 为bug生成统计数据。 */
+        /* Generate statistics data for bugs. */
         $bugs = $this->pivotTao->getBugStatistics($bugGroups);
 
         uasort($bugs, 'sortSummary');

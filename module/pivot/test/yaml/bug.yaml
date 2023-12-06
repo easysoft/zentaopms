@@ -1,0 +1,11 @@
+title: zt_bug
+desc: "Bug表"
+author: automated export
+version: "1.0"
+fields:
+  - field: openedBy
+    range: admin{10},user1{10}
+  - field: status
+    range: active{2},resolved{2}
+  - field: resolution
+    range: bydesign,duplicate,external,willnotfix,notrepro,tostory,fixed,postponed
