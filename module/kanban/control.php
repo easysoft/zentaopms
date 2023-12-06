@@ -282,43 +282,44 @@ class kanban extends control
     }
 
     /*
+     * 激活看板。
      * Activate a kanban.
      *
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function activate($kanbanID)
+    public function activate(int $kanbanID)
     {
-        $this->loadModel('action');
-
         if(!empty($_POST))
         {
-            $changes = $this->kanban->activate($kanbanID);
+            $kanban = form::data($this->config->kanban->form->activate)
+                ->setDefault('closedBy', '')
+                ->setDefault('closedDate', null)
+                ->get();
+            $this->kanban->activate($kanbanID, $kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanban', $kanbanID, 'activated', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->kanban  = $this->kanban->getByID($kanbanID);
-        $this->view->actions = $this->action->getList('kanban', $kanbanID);
+        $this->view->actions = $this->loadModel('action')->getList('kanban', $kanbanID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
 
     /*
+     * 关闭看板。
      * Close a kanban.
      *
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function close($kanbanID)
+    public function close(int $kanbanID)
     {
         $this->loadModel('action');
 
