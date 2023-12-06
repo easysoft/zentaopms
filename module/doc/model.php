@@ -245,30 +245,15 @@ class docModel extends model
     }
 
     /**
+     * 创建一个API文档库。
      * Creat a api doc library.
      *
      * @param  object $formData
      * @access public
-     * @return void
+     * @return bool
      */
-    public function createApiLib(object $formData = null)
+    public function createApiLib(object $formData = null): bool
     {
-        if(!$formData)
-        {
-            $libType = $this->post->libType;
-            $formData = fixer::input('post')
-                ->trim('name')
-                ->join('groups', ',')
-                ->join('users', ',')
-                ->setForce('product', ($libType == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
-                ->setForce('project', ($libType == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
-                ->setForce('execution', ($libType == 'project' and !empty($_POST['execution'])) ? $this->post->execution : 0)
-                ->add('addedBy', $this->app->user->account)
-                ->add('addedDate', helper::now())
-                ->remove('uid,contactListMenu')
-                ->get();
-        }
-
         $this->app->loadLang('api');
 
         /* Replace doc library name. */
@@ -281,13 +266,14 @@ class docModel extends model
         if($formData->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
         $this->checkApiLibName($formData, $formData->libType);
-
         if(dao::isError()) return false;
 
         $formData->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($formData, 'libType')->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->exec();
+
+        if(dao::isError()) return false;
 
         $libID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('doclib', $libID, 'created');
