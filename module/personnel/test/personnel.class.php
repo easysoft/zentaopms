@@ -326,27 +326,6 @@ class personnelTest
     }
 
     /**
-     * Add whitelist test
-     *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  array  $user
-     * @access public
-     * @return void
-     */
-    public function addWhitelistTest($objectType = '', $objectID = 0, $user = '')
-    {
-        $users = array('accounts' => $user);
-        foreach($users as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->addWhitelist($objectType, $objectID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Delete product whitelist Test
      *
      * @param  int    $productID

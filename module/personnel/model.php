@@ -637,21 +637,6 @@ class personnelModel extends model
     }
 
     /**
-     * Adding users to access control lists.
-     *
-     * @param  string  $objectType  program|project|product|sprint
-     * @param  int     $objectID
-     * @access public
-     * @return void
-     */
-    public function addWhitelist($objectType = '', $objectID = 0)
-    {
-        $users = $this->post->account;
-        if(empty($users)) $users = array();
-        $this->updateWhitelist($users, $objectType, (int)$objectID);
-    }
-
-    /**
      * Delete product whitelist.
      *
      * @param  int    $productID
