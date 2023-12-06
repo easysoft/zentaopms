@@ -257,6 +257,7 @@ class pivotModel extends model
     }
 
     /**
+     * 获取产品透视表。
      * Get products.
      *
      * @param  string $conditions
@@ -266,6 +267,8 @@ class pivotModel extends model
      */
     public function getProducts(string $conditions, string $storyType = 'story'): array
     {
+        /* 获取符合条件的产品。 */
+        /* Get products. */
         $permission = common::hasPriv('pivot', 'showProduct') || $this->app->user->admin;
         $products   = $this->dao->select('t1.id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
@@ -276,83 +279,9 @@ class pivotModel extends model
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->fetchAll('id');
 
-        $plans = $this->dao->select('id, product, branch, parent, title, begin, end')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq('0')
-            ->andWhere('product')->in(array_keys($products))
-            ->beginIF(strpos($conditions, 'overduePlan') === false)->andWhere('end')->gt(date('Y-m-d'))->fi()
-            ->orderBy('product, parent_desc, begin')
-            ->fetchAll('id');
-        foreach($plans as $plan)
-        {
-            if($plan->parent > 0)
-            {
-                $parentPlan = zget($plans, $plan->parent, null);
-                if($parentPlan)
-                {
-                    $products[$plan->product]->plans[$parentPlan->id] = $parentPlan;
-                    unset($plans[$parentPlan->id]);
-                }
-                $plan->title = '>>' . $plan->title;
-            }
-            $products[$plan->product]->plans[$plan->id] = $plan;
-        }
-
-        $planStories      = array();
-        $unplannedStories = array();
-        $stmt = $this->dao->select('id, plan, product, status')->from(TABLE_STORY)
-            ->where('deleted')->eq('0')
-            ->andWhere('parent')->ge(0)
-            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
-            ->query();
-        while($story = $stmt->fetch())
-        {
-            if(empty($story->plan))
-            {
-                $unplannedStories[$story->id] = $story;
-                continue;
-            }
-
-            $storyPlans   = array();
-            $storyPlans[] = $story->plan;
-            if(strpos($story->plan, ',') !== false) $storyPlans = explode(',', trim($story->plan, ','));
-            foreach($storyPlans as $planID)
-            {
-                if(isset($plans[$planID]))
-                {
-                    $planStories[$story->id] = $story;
-                    break;
-                }
-            }
-        }
-
-        foreach($planStories as $story)
-        {
-            $storyPlans = array();
-            $storyPlans[] = $story->plan;
-            if(strpos($story->plan, ',') !== false) $storyPlans = explode(',', trim($story->plan, ','));
-            foreach($storyPlans as $planID)
-            {
-                if(!isset($plans[$planID])) continue;
-                $plan = $plans[$planID];
-                $products[$plan->product]->plans[$planID]->status[$story->status] = isset($products[$plan->product]->plans[$planID]->status[$story->status]) ? $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
-            }
-        }
-
-        foreach($unplannedStories as $story)
-        {
-            $product = $story->product;
-            if(isset($products[$product]))
-            {
-                if(!isset($products[$product]->plans[0]))
-                {
-                    $products[$product]->plans[0] = new stdClass();
-                    $products[$product]->plans[0]->title = $this->lang->pivot->unplanned;
-                    $products[$product]->plans[0]->begin = '';
-                    $products[$product]->plans[0]->end   = '';
-                }
-                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
-            }
-        }
+        /* 为产品生成计划数据和相关的需求数据。 */
+        /* Generate plan data and related story data for products. */
+        $this->pivotTao->processPlanStories($products, $storyType, $this->pivotTao->processProductPlan($products, $conditions));
 
         unset($products['']);
         return $products;

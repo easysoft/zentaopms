@@ -96,4 +96,136 @@ class pivotTao extends pivotModel
 
         $pivot->fieldSettings = $fieldSettingsNew;
     }
+
+    /**
+     * 补充产品的计划信息。
+     * Supplement product plan information.
+     *
+     * @param  array  $products
+     * @access public
+     * @return array
+     */
+    public function processProductPlan(array &$products, string $conditions): array
+    {
+        /* 获取产品的计划信息，并且根据产品id进行分组。 */
+        /* Get the plan information of the product and group it by product id. */
+        $plans = $this->dao->select('id, product, branch, parent, title, begin, end')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in(array_keys($products))
+            ->beginIF(strpos($conditions, 'overduePlan') === false)->andWhere('end')->gt(date('Y-m-d'))->fi()
+            ->orderBy('product, parent_desc, begin')
+            ->fetchAll('id');
+        foreach($plans as $plan)
+        {
+            if($plan->parent > 0)
+            {
+                $parentPlan = zget($plans, $plan->parent, null);
+                if($parentPlan)
+                {
+                    $products[$plan->product]->plans[$parentPlan->id] = $parentPlan;
+                    unset($plans[$parentPlan->id]);
+                }
+                $plan->title = '>>' . $plan->title;
+            }
+            $products[$plan->product]->plans[$plan->id] = $plan;
+        }
+
+        return $plans;
+    }
+
+    /**
+     * 获取产品的需求信息。
+     * Get product demand information.
+     *
+     * @param  string $storyType
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function processPlanStories(array &$products, string $storyType, array $plans): array
+    {
+        /* 获取所有符合条件的需求。 */
+        /* Get all the requirements that meet the conditions. */
+        $plannedStories      = array();
+        $unplannedStories = array();
+        $stmt = $this->dao->select('id, plan, product, status')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('parent')->ge(0)
+            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->query();
+
+        /* 根据需求的计划信息，将需求分组到不同的计划中。 */
+        /* According to the plan information of the demand, the demand is grouped into different plans. */
+        while($story = $stmt->fetch())
+        {
+            if(empty($story->plan))
+            {
+                $unplannedStories[$story->id] = $story;
+                continue;
+            }
+
+            $storyPlans   = array();
+            $storyPlans[] = $story->plan;
+            if(strpos($story->plan, ',') !== false) $storyPlans = explode(',', trim($story->plan, ','));
+            foreach($storyPlans as $planID)
+            {
+                if(isset($plans[$planID]))
+                {
+                    $plannedStories[$story->id] = $story;
+                    break;
+                }
+            }
+        }
+
+
+        /* 将需求统计信息添加到产品中。 */
+        /* Add demand statistics information to the product. */
+        $this->getPlanStatusStatistics($products, $plans, $plannedStories, $unplannedStories);
+
+        return $products;
+    }
+
+    /**
+     * 获取产品计划的需求统计信息。
+     * Get product demand statistics information.
+     *
+     * @param  array  $products
+     * @param  array  $plannedStories
+     * @param  array  $unplannedStories
+     * @access public
+     * @return void
+     */
+    public function getPlanStatusStatistics(array &$products, array $plans, array $plannedStories, array $unplannedStories): void
+    {
+        /* 统计已经计划过的产品计划的需求状态信息。 */
+        /* Statistics of demand status information for planned product plans. */
+        foreach($plannedStories as $story)
+        {
+            $storyPlans = strpos($story->plan, ',') !== false ? $storyPlans = explode(',', trim($story->plan, ',')) : array($story->plan);
+            foreach($storyPlans as $planID)
+            {
+                if(!isset($plans[$planID])) continue;
+                $plan = $plans[$planID];
+                $products[$plan->product]->plans[$planID]->status[$story->status] = isset($products[$plan->product]->plans[$planID]->status[$story->status]) ? $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
+            }
+        }
+
+        /* 统计还未计划的产品计划的需求状态信息。 */
+        /* Statistics of demand status information for unplanned product plans. */
+        foreach($unplannedStories as $story)
+        {
+            $product = $story->product;
+            if(isset($products[$product]))
+            {
+                if(!isset($products[$product]->plans[0]))
+                {
+                    $products[$product]->plans[0] = new stdClass();
+                    $products[$product]->plans[0]->title = $this->lang->pivot->unplanned;
+                    $products[$product]->plans[0]->begin = '';
+                    $products[$product]->plans[0]->end   = '';
+                }
+                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
+            }
+        }
+    }
 }

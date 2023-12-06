@@ -1,0 +1,9 @@
+title: table zt_story
+desc: "需求"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: plan
+    range: 0{3},5{2},6{2},7{2}
