@@ -159,15 +159,16 @@ class convertModel extends model
     }
 
     /**
+     * 从文件中获取jira数据。
      * Get jira data from file.
      *
      * @param  string $module
      * @param  int    $lastID
      * @param  int    $limit
      * @access public
-     * @return void
+     * @return array
      */
-    public function getJiraDataFromFile($module, $lastID = 0, $limit = 0)
+    public function getJiraDataFromFile(string $module, int $lastID = 0, int $limit = 0): array
     {
         $fileName = $module;
         if($module == 'build') $fileName = 'version';
@@ -217,89 +218,8 @@ class convertModel extends model
 
         foreach($dataList as $key => $data)
         {
-            if($module == 'user')
-            {
-                $user = new stdclass();
-                $user->account  = $data['lowerUserName'];
-                $user->realname = $data['lowerDisplayName'];
-                $user->email    = $data['emailAddress'];
-                $user->join     = $data['createdDate'];
-
-                $dataList[$key] = $user;
-            }
-            elseif($module == 'project')
-            {
-                $project = new stdclass();
-                $project->ID          = $data['id'];
-                $project->pname       = $data['name'];
-                $project->pkey        = $data['key'];
-                $project->ORIGINALKEY = $data['originalkey'];
-                $project->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
-                $project->LEAD        = $data['lead'];
-
-                $dataList[$key] = $project;
-            }
-            elseif($module == 'issue')
-            {
-                $issue = new stdclass();
-                $issue->ID          = $data['id'];
-                $issue->SUMMARY     = $data['summary'];
-                $issue->PRIORITY    = $data['priority'];
-                $issue->PROJECT     = $data['project'];
-                $issue->issuestatus = $data['status'];
-                $issue->CREATED     = $data['created'];
-                $issue->CREATOR     = $data['creator'];
-                $issue->issuetype   = $data['type'];
-                $issue->ASSIGNEE    = isset($data['assignee']) ? $data['assignee'] : '';
-                $issue->RESOLUTION  = isset($data['resolution']) ? $data['resolution'] : '';
-                $issue->issuenum    = $data['number'];
-                $issue->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
-
-                $dataList[$key] = $issue;
-            }
-            elseif($module == 'build')
-            {
-                $build = new stdclass();
-                $build->ID          = $data['id'];
-                $build->PROJECT     = $data['project'];
-                $build->vname       = $data['name'];
-                $build->RELEASEDATE = isset($data['releasedate']) ? $data['releasedate'] : '';
-                $build->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
-
-                $dataList[$key] = $build;
-            }
-            elseif($module == 'issuelink')
-            {
-                $issueLink = new stdclass();
-                $issueLink->LINKTYPE    = $data['linktype'];
-                $issueLink->SOURCE      = $data['source'];
-                $issueLink->DESTINATION = $data['destination'];
-
-                $dataList[$key] = $issueLink;
-            }
-            elseif($module == 'action')
-            {
-                $action = new stdclass();
-                $action->issueid    = $data['issue'];
-                $action->actionbody = $data['body'];
-                $action->AUTHOR     = $data['author'];
-                $action->CREATED    = $data['created'];
-
-                $dataList[$key] = $action;
-            }
-            elseif($module == 'file')
-            {
-                $file = new stdclass();
-                $file->issueid  = $data['issue'];
-                $file->ID       = $data['id'];
-                $file->FILENAME = $data['filename'];
-                $file->MIMETYPE = $data['mimetype'];
-                $file->FILESIZE = $data['filesize'];
-                $file->CREATED  = $data['created'];
-                $file->AUTHOR   = $data['author'];
-
-                $dataList[$key] = $file;
-            }
+            $buildFunction  = 'build' . ucfirst($module) . 'Data';
+            $dataList[$key] = $this->convertTao->$buildFunction($data);
         }
 
         return $dataList;
