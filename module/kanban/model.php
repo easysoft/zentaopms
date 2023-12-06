@@ -2589,34 +2589,33 @@ class kanbanModel extends model
     }
 
     /**
+     * 关闭看板。
      * Close a kanban.
      *
      * @param  int    $kanbanID
+     * @param  object $kanban
      * @access public
      * @return array
      */
-    function close($kanbanID)
+    function close(int $kanbanID, object $kanban)
     {
-        $kanbanID  = (int)$kanbanID;
         $oldKanban = $this->getByID($kanbanID);
-        $now       = helper::now();
-        $kanban    = fixer::input('post')
-            ->setDefault('status', 'closed')
-            ->setDefault('closedBy', $this->app->user->account)
-            ->setDefault('closedDate', $now)
-            ->setDefault('activatedBy', '')
-            ->setDefault('activatedDate', '0000-00-00 00:00:00')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->remove('comment')
-            ->get();
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->where('id')->eq($kanbanID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldKanban, $kanban);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'closed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
