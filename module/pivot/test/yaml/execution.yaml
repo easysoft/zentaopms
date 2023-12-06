@@ -1,0 +1,8 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 101-700
+  - field: status
+    range: closed

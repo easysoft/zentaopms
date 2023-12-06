@@ -221,6 +221,7 @@ class pivotModel extends model
     }
 
     /**
+     * 获取执行。
      * Get executions.
      *
      * @param  string $begin
@@ -230,7 +231,7 @@ class pivotModel extends model
      */
     public function getExecutions(string $begin = '', string $end = ''): array
     {
-        $permission = common::hasPriv('pivot', 'showProject') or $this->app->user->admin;
+        $permission = common::hasPriv('pivot', 'showProject') || $this->app->user->admin;
         $executions = $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
