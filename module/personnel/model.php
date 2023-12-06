@@ -437,27 +437,25 @@ class personnelModel extends model
     }
 
     /**
+     * 获取要复制的对象。
      * Get objects to copy.
      *
      * @param  int    $objectID
-     * @param  int    $objectType
+     * @param  string $objectType
      * @param  bool   $addCount
      * @access public
      * @return array
      */
-    public function getCopiedObjects($objectID, $objectType, $addCount = false)
+    public function getCopiedObjects(int $objectID, string $objectType, bool $addCount = false): array
     {
+        /* Get objects. */
         $objects = array();
-
         if($objectType == 'sprint')
         {
-            $parentID = 0;
-            $this->loadModel('execution');
-            $execution = $this->execution->getByID($objectID);
+            $execution = $this->loadModel('execution')->getByID($objectID);
             $parentID  = $execution->project;
             $project   = $this->execution->getByID($parentID);
             $objects   = array($project->id => $project->name);
-
             $objects += $this->dao->select('id,name')->from(TABLE_EXECUTION)
                 ->where('project')->eq($parentID)
                 ->andWhere('id')->in($this->app->user->view->sprints)
@@ -482,30 +480,23 @@ class personnelModel extends model
         {
             $objects = $this->loadModel('program')->getPairs();
         }
-
         unset($objects[$objectID]);
+        if(!$addCount) return $objects;
 
-        if($addCount)
+        /* Append object count. */
+        if($objectType == 'sprint') $objectType = 'execution';
+        $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+            ->where('type')->eq($objectType)
+            ->andWhere('root')->in(array_keys($objects))
+            ->beginIF($objectType == 'execution')->orWhere('(type')->eq('project')->andWhere('root')->eq($parentID)->markRight(1)->fi()
+            ->groupBy('root')
+            ->fetchPairs('root');
+        foreach($objects as $objectID => $objectName)
         {
-            $objectType = $objectType == 'sprint' ? 'execution' : $objectType;
-            $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
-                ->where('type')->eq($objectType)
-                ->andWhere('root')->in(array_keys($objects))
-                ->beginIF($objectType == 'execution')
-                ->orWhere('( type')->eq('project')
-                ->andWhere('root')->eq($parentID)->markRight(1)
-                ->fi()
-                ->groupBy('root')
-                ->fetchPairs('root');
-
-            foreach($objects as $objectID => $objectName)
-            {
-                $memberCount = zget($countPairs, $objectID, 0);
-                $countTip    = $memberCount > 1 ? str_replace('member', 'members', $this->lang->personnel->countTip) : $this->lang->personnel->countTip;
-                $objects[$objectID] = $objectName . sprintf($countTip, $memberCount);
-            }
+            $memberCount        = zget($countPairs, $objectID, 0);
+            $countTip           = $memberCount > 1 ? str_replace('member', 'members', $this->lang->personnel->countTip) : $this->lang->personnel->countTip;
+            $objects[$objectID] = $objectName . sprintf($countTip, $memberCount);
         }
-
         return $objects;
     }
 
