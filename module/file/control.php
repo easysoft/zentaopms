@@ -272,9 +272,7 @@ class file extends control
             $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
             $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
 
-            /* Fix Bug #1518. */
-            $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
-            if(empty($fileRecord)) $this->file->unlinkFile($file);
+            $this->fileZen->unlinkRealFile($file);
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
@@ -320,26 +318,10 @@ class file extends control
     {
         if($_POST)
         {
-            $this->app->loadLang('action');
-            $file = $this->file->getByID($fileID);
-            $data = fixer::input('post')->get();
-            if(validater::checkLength($data->fileName, 80, 1) == false)
-            {
-                $errTip = $this->lang->error->length;
-                return print(js::alert(sprintf($errTip[1], $this->lang->file->title, 80, 1)));
-            }
-            $fileName = $data->fileName . '.' . $data->extension;
-            $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)->where('id')->eq($fileID)->exec();
+            $result = $this->fileZen->updateFileName($fileID);
+            if($result['result'] == 'fail') return $this->send($result);
 
-            $extension = "." . $file->extension;
-            $actionID  = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $fileName);
-            $changes[] = array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName, 'diff' => '');
-            $this->action->logHistory($actionID, $changes);
-
-            /* Update test case version for test case synchronization. */
-            if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
             $newFile = $this->file->getByID($fileID);
-
             if($this->app->clientDevice == 'mobile') return $this->send(array('load' => true));
             return print(json_encode($newFile));
         }

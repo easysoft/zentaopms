@@ -493,7 +493,7 @@ class fileModel extends model
      * @access public
      * @return bool|null
      */
-    public function unlinkFile($file)
+    public function unlinkFile(object $file): bool|null
     {
         return @unlink($file->realPath);
     }
@@ -612,7 +612,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function pasteImage($data, $uid = '', $safe = false)
+    public function pasteImage(string $data, string $uid = '', bool $safe = false): string
     {
         if(empty($data)) return '';
 
@@ -1014,7 +1014,7 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function sendDownHeader($fileName, $fileType, $content, $type = 'content')
+    public function sendDownHeader(string $fileName, string $fileType, string $content, string $type = 'content'): void
     {
         /* Clean the ob content to make sure no space or utf-8 bom output. */
         $obLevel = ob_get_level();
@@ -1022,9 +1022,6 @@ class fileModel extends model
 
         /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
         helper::setcookie('downloading', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-
-        /* Only download upload file that is in zentao. */
-        if($type == 'file' and stripos($content, $this->savePath) !== 0) helper::end();
 
         /* Append the extension name auto. */
         $extension = $fileType ? ('.' . $fileType) : '';
@@ -1034,7 +1031,7 @@ class fileModel extends model
         if(strpos($this->server->http_user_agent, 'MSIE') !== false or strpos($this->server->http_user_agent, 'Trident') !== false or strpos($this->server->http_user_agent, 'Edge') !== false) $fileName = urlencode($fileName);
 
         /* Judge the content type. */
-        $mimes = $this->config->file->mimes;
+        $mimes       = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
 
         helper::header('Content-type', $contentType);
@@ -1102,10 +1099,12 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function updateTestcaseVersion($file)
+    public function updateTestcaseVersion(object $file): void
     {
-        $oldCase   = $this->loadModel('testcase')->getByID($file->objectID);
-        $isLibCase = ($oldCase->lib and empty($oldCase->product));
+        $oldCase = $this->loadModel('testcase')->getByID($file->objectID);
+        if(empty($oldCase)) return;
+
+        $isLibCase = ($oldCase->lib && empty($oldCase->product));
         if($isLibCase)
         {
             $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch('fromCaseVersion');

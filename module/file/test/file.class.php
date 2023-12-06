@@ -304,4 +304,27 @@ class fileTest
         $this->objectModel->setFileWebAndRealPaths($file);
         return $file;
     }
+
+    /**
+     * 测试 updateTestcaseVersion 方法。
+     * Test updateTestcaseVersion method.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function updateTestcaseVersionTest(int $objectID): bool
+    {
+        $file = new stdclass();
+        $file->objectID = $objectID;
+
+        $oldCase = $this->objectModel->dao->select('*')->from(TABLE_CASE)->where('`fromCaseID`')->eq($objectID)->fetch();
+        if(empty($oldCase)) return false;
+
+        $this->objectModel->updateTestcaseVersion($file);
+
+        $case = $this->objectModel->dao->select('*')->from(TABLE_CASE)->where('`fromCaseID`')->eq($objectID)->fetch();
+
+        return $oldCase->fromCaseVersion != $case->fromCaseVersion;
+    }
 }
