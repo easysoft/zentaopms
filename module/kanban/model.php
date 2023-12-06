@@ -2524,25 +2524,20 @@ class kanbanModel extends model
      * Setting kanban.
      *
      * @param  int    $kanbanID
+     * @param  object $kanban
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setting($kanbanID)
+    public function setting(int $kanbanID, object $kanban): bool
     {
-        $kanbanID  = (int)$kanbanID;
-        $account   = $this->app->user->account;
         $oldKanban = $this->getByID($kanbanID);
-        $kanban    = fixer::input('post')
-            ->setDefault('lastEditedBy', $account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('displayCards', 0)
-            ->setIF($this->post->import == 'off', 'object', '')
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
-            ->remove('import,importObjectList,heightType')
-            ->get();
 
-        if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->checkDisplayCards($kanban->displayCards)) return;
+        if($this->post->import == 'off')      $kanban->object = '';
+        if($this->post->heightType == 'auto') $kanban->displayCards = 0;
+        if(empty($kanban->displayCards))      $kanban->displayCards = 0;
+
+        if($this->post->import == 'on') $kanban->object = $this->post->importObjectList ? implode(',', $this->post->importObjectList) : '';
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->checkDisplayCards($kanban->displayCards)) return false;
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -2555,7 +2550,15 @@ class kanbanModel extends model
 
         if(dao::isError()) return false;
 
-        return common::createChanges($oldKanban, $kanban);
+        $changes = common::createChanges($oldKanban, $kanban);
+
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
