@@ -1,6 +1,6 @@
 <?php
 /**
- * The control file of measrecord of ChanzhiEPS.
+ * The control file of measrecord of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The model file of account module of ChanzhiEPS.
+ * The model file of account module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
