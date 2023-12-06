@@ -7,6 +7,7 @@ include dirname(__FILE__, 2) . '/personnel.class.php';
 zdTable('project')->gen(50);
 zdTable('user')->gen(20);
 zdTable('risk')->gen(50);
+zdTable('team')->gen(50);
 
 su('admin');
 

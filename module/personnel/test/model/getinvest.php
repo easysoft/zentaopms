@@ -9,6 +9,7 @@ zdTable('user')->gen(20);
 zdTable('product')->gen(10);
 zdTable('bug')->gen(50);
 zdTable('task')->gen(50);
+zdTable('team')->gen(50);
 
 su('admin');
 
