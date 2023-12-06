@@ -355,9 +355,10 @@ div
                     (
                         set::bordered(true),
                         set::height(jsRaw('window.getTableHeight')),
+                        set::rowHeight(32),
                         set::cols($groupHeader),
                         set::data(array_values($groupData)),
-                        ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
+                        set::footPager(usePager('dtablePager')),
                         $headerGroup ? set::plugins(array('header-group')) : null,
                         set::onRenderCell(jsRaw('window.renderDTableCell'))
                     ) : null

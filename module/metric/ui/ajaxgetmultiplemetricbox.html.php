@@ -199,10 +199,11 @@ div
             $groupData ? dtable
             (
                 set::height(310),
+                set::rowHeight(32),
                 set::bordered(true),
                 set::cols($groupHeader),
                 set::data(array_values($groupData)),
-                ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
+                set::footPager(usePager('dtablePager')),
                 $headerGroup ? set::plugins(array('header-group')) : null,
                 set::onRenderCell(jsRaw('window.renderDTableCell')),
                 set::loadPartial(true)
