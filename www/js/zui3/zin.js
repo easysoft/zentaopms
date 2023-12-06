@@ -457,40 +457,44 @@
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
                 }
-                else if(data.open)
+                else
                 {
-                    openUrl(data.open);
-                }
-                else if(data.load)
-                {
-                    if(data.load === 'table') loadTable();
-                    if(data.load === 'login') window.top.location.href = $.createLink('user', 'login', 'referer=' + btoa(url));
-                    else if(typeof data.load === 'string') loadPage(data.load);
-                    else if(data.load === true) loadCurrentPage();
-                    else if(typeof data.load === 'object')
+                    if(data.closeModal) zui.Modal.hide(typeof data.closeModal === 'string' ? data.closeModal : undefined);
+                    if(data.open)
                     {
-                        if('back' in data.load)
+                        openUrl(data.open);
+                    }
+                    else if(data.load)
+                    {
+                        if(data.load === 'table') loadTable();
+                        if(data.load === 'login') window.top.location.href = $.createLink('user', 'login', 'referer=' + btoa(url));
+                        else if(typeof data.load === 'string') loadPage(data.load);
+                        else if(data.load === true) loadCurrentPage();
+                        else if(typeof data.load === 'object')
                         {
-                            openUrl(data.load);
-                        }
-                        else if('confirm' in data.load)
-                        {
-                            zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
+                            if('back' in data.load)
                             {
-                                loadPage(result ? data.load.confirmed : data.load.canceled);
-                            }});
-                        }
-                        else if('alert' in data.load)
-                        {
-                            zui.Modal.alert(data.load.alert);
-                            if(data.load.locate)
-                            {
-                                setTimeout(function(){openUrl(data.load.locate);}, 1500);
+                                openUrl(data.load);
                             }
-                        }
-                        else
-                        {
-                            loadPage(data.load);
+                            else if('confirm' in data.load)
+                            {
+                                zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
+                                {
+                                    loadPage(result ? data.load.confirmed : data.load.canceled);
+                                }});
+                            }
+                            else if('alert' in data.load)
+                            {
+                                zui.Modal.alert(data.load.alert);
+                                if(data.load.locate)
+                                {
+                                    setTimeout(function(){openUrl(data.load.locate);}, 1500);
+                                }
+                            }
+                            else
+                            {
+                                loadPage(data.load);
+                            }
                         }
                     }
                 }
@@ -730,11 +734,7 @@
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-
-        $.ajaxSubmit({url: options.url, 'method': 'get', headers: {'X-ZIN-MODAL': true}, onComplete: (data, error) =>
-        {
-            if(error) modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
-        }})
+        modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
     function loadTarget(url, target, options)
@@ -1191,7 +1191,7 @@
                 options.partial = true;
                 if(!options.url) options.url = $modal.data('zui.Modal').options.url;
             }
-            if(options.closeModal) zui.Modal.query(typeof options.closeModal === 'string' ? options.closeModal : $modal).hide();
+            if(options.closeModal) zui.Modal.hide(typeof options.closeModal === 'string' ? options.closeModal : $modal);
         }
         else
         {
