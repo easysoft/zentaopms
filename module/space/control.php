@@ -7,16 +7,16 @@ declare(strict_types=1);
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   space
- * @version   $Id$
  * @link      https://www.zentao.net
  */
 class space extends control
 {
     /**
+     * DevOps应用列表。
      * Browse departments and users of a space.
      *
-     * @param  int    $param
-     * @param  string $type
+     * @param  int    $spaceID
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -24,59 +24,14 @@ class space extends control
        @access public
      * @return void
      */
-    public function browse($spaceID = null, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $spaceID = 0, string $browseType = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-        $this->app->loadLang('instance');
-        $this->loadModel('instance');
-        $this->loadModel('store');
-
-        $spaceType = $this->cookie->spaceType ? $this->cookie->spaceType : 'bycard';
 
         $space = null;
         if($spaceID)      $space = $this->space->getByID($spaceID);
         if(empty($space)) $space = $this->space->defaultSpace($this->app->user->account);
-
-        $search = '';
-        if(!empty($_POST))
-        {
-            $conditions = fixer::input('post')
-                ->trim('search')
-                ->setDefault('search', '')
-                ->get();
-            $search = $conditions->search;
-        }
-
-        $instances = $this->space->getSpaceInstances(0, $browseType, $search);
-        foreach($instances as $instance)
-        {
-            $instance->externalID = 0;
-            $instance->orgID      = $instance->id;
-            $instance->type       = 'store';
-
-            if(in_array($instance->appName, $this->config->space->zentaoApps))
-            {
-                $externalApp = $this->space->getExternalAppByApp($instance);
-                if($externalApp) $instance->externalID = $externalApp->id;
-            }
-        }
-        $maxID     = 0;
-        $pipelines = array();
-        if($browseType == 'all' || $browseType == 'running') $pipelines = $this->loadModel('pipeline')->getList('', 'id_desc');
-        if(!empty($instances)) $maxID = max(array_keys($instances));
-        foreach($pipelines as $key => $pipeline)
-        {
-            if($pipeline->createdBy == 'system') unset($pipelines[$key]);
-
-            $pipeline->createdAt  = $pipeline->createdDate;
-            $pipeline->appName    = $this->lang->space->appType[$pipeline->type];
-            $pipeline->status     = 'running';
-            $pipeline->type       = 'external';
-            $pipeline->externalID = $pipeline->id;
-            $pipeline->orgID      = $pipeline->id;
-            $pipeline->id         = ++ $maxID;
-        }
-        $allInstances = array_merge($instances, $pipelines);
+        $allInstances = $this->spaceZen->getSpaceInstances($browseType);
 
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
@@ -93,17 +48,13 @@ class space extends control
         $solution   = $this->loadModel('solution')->getLastSolution();
         if($solution && $solution->status == 'installing') $solutionID = $solution->id;
 
-        $this->view->title        = $this->lang->space->common;
-        $this->view->position[]   = $this->lang->space->common;
-        $this->view->pager        = $pager;
-        $this->view->orderBy      = $orderBy;
-        $this->view->solutionID   = $solutionID;
-        $this->view->browseType   = $browseType;
-        $this->view->spaceType    = $spaceType;
-        $this->view->instances    = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];
-        $this->view->currentSpace = $space;
-        $this->view->searchName   = $search;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->title      = $this->lang->space->common;
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->solutionID = $solutionID;
+        $this->view->browseType = $browseType;
+        $this->view->instances  = (empty($allInstances) or empty($allInstances[$pageID - 1])) ? array() : $allInstances[$pageID - 1];
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed,noletter');
 
         $this->display();
     }
@@ -112,11 +63,11 @@ class space extends control
      * 创建一个应用。
      * Create a application.
      *
-     * @param int     $appID
+     * @param  int    $appID
      * @access public
      * @return void
      */
-    public function createApplication($appID = 0)
+    public function createApplication(int $appID = 0)
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
@@ -127,8 +78,7 @@ class space extends control
         $defaultApp = '';
         if($this->config->inQuickon)
         {
-            $this->loadModel('cne');
-            $pagedApps  = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
+            $pagedApps = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
             foreach($pagedApps->apps as $app)
             {
                 if(strpos($app->name, 'zentao') === 0 || strpos($app->name, 'zdoo') === 0 || strpos($app->name, 'xuanxuan') === 0) continue;
@@ -137,7 +87,7 @@ class space extends control
                 $apps[$app->id] = $app->alias;
             }
 
-            $mysqlList   = $this->cne->sharedDBList('mysql');
+            $mysqlList   = $this->loadModel('cne')->sharedDBList('mysql');
             $pgList      = $this->cne->sharedDBList('postgresql');
             $versionList = $this->store->getVersionPairs($appID);
             $cloudApp    = $this->loadModel('store')->getAppInfo($appID);
@@ -154,7 +104,6 @@ class space extends control
         $this->view->defaultApp = $defaultApp;
         $this->view->title      = $this->lang->space->install;
         $this->view->appID      = $appID;
-        $this->view->addType    = empty($appID) ? 'external' : 'store';
         $this->display();
     }
 
@@ -169,12 +118,14 @@ class space extends control
     public function getStoreAppInfo(int $appID)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
         $cloudApp     = $this->loadModel('store')->getAppInfo($appID);
         $versionPairs = $this->store->getVersionPairs($appID);
+
         $versionItems = array();
-        foreach($versionPairs as $k => $v) $versionItems[] = array('text' => $v, 'value' => $k);
+        foreach($versionPairs as $code => $version) $versionItems[] = array('text' => $version, 'value' => $code);
         $cloudApp->versionList = $versionItems;
 
-        return print(json_encode($cloudApp));
+        echo json_encode($cloudApp);
     }
 }

@@ -20,6 +20,7 @@ foreach($instances as $instance) if('store' === $instance->type) $statusMap[$ins
 jsVar('statusMap', $statusMap);
 jsVar('idList',    array_keys($statusMap));
 
+$this->loadModel('instance');
 $instances = initTableData($instances, $config->space->dtable->fieldList, $this->instance);
 
 featureBar

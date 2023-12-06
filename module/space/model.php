@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of space module of ZenTaoPMS.
  *
@@ -6,72 +7,83 @@
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   space
- * @version   $Id$
  * @link      https://www.zentao.net
  */
 class spaceModel extends model
 {
     /**
+     * 获取用户的空间列表。
      * Get space list by user account.
      *
      * @param  string $account
      * @access public
      * @return array
      */
-    public function getSpacesByAccount($account)
+    public function getSpacesByAccount(string $account): array
     {
-        return $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('owner')->eq($account)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_SPACE)
+            ->where('deleted')->eq(0)
+            ->andWhere('owner')->eq($account)
+            ->fetchAll();
     }
 
     /**
+     * 获取用户的默认空间。
      * Get user's default space by user account.
      *
      * @param  string $account
      * @access public
      * @return object
      */
-    public function defaultSpace($account)
+    public function defaultSpace(string $account): ?object
     {
-        $default = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('owner')->eq($account)->orderBy('default desc')->limit(1)->fetch();
+        $default = $this->dao->select('*')->from(TABLE_SPACE)
+            ->where('deleted')->eq(0)
+            ->andWhere('owner')->eq($account)
+            ->orderBy('default desc')
+            ->fetch();
 
         if(empty($default)) return $this->createDefaultSpace($account);
         return $default;
     }
 
     /**
+     * 获取用户的系统空间。
      * Get system space.
      *
      * @param  string $account
      * @access public
      * @return object
      */
-    public function getSystemSpace($account)
+    public function getSystemSpace(string $account): ?object
     {
-        $k8space = $this->config->k8space;
-
-        $sysSpace = $this->dao->select('*')->from(TABLE_SPACE)->where('k8space')->eq($k8space)->andWhere('owner')->eq($account)->fetch();
+        $sysSpace = $this->dao->select('*')->from(TABLE_SPACE)
+            ->where('k8space')->eq($this->config->k8space)
+            ->andWhere('owner')->eq($account)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
         if($sysSpace) return $sysSpace;
 
         $spaceData = new stdClass;
         $spaceData->name      = $this->lang->space->systemSpace;
         $spaceData->owner     = $account;
-        $spaceData->k8space   = $k8space;
+        $spaceData->k8space   = $this->config->k8space;
         $spaceData->default   = 0;
         $spaceData->createdAt = date('Y-m-d H:i:s');
-
         $this->dao->insert(TABLE_SPACE)->data($spaceData)->autoCheck()->exec();
 
-        return $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($this->dao->lastInsertId())->fetch();
+        return $this->fetchByID($this->dao->lastInsertId());
     }
 
     /**
+     * 创建默认空间。
      * Create default space by account
      *
      * @param  string $account
      * @access public
      * @return object
      */
-    public function createDefaultSpace($account)
+    public function createDefaultSpace(string $account): ?object
     {
         $default = new stdclass;
         $default->name      = $this->lang->space->defaultSpace;
@@ -79,24 +91,24 @@ class spaceModel extends model
         $default->owner     = $account;
         $default->default   = true;
         $default->createdAt = date('Y-m-d H:i:s');
-
         $this->dao->insert(TABLE_SPACE)->data($default)->autoCheck()->exec();
 
-        return $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($this->dao->lastInsertId())->fetch();
+        return $this->fetchByID($this->dao->lastInsertId());
     }
 
     /**
-     * Get app list in space
+     * 获取用户空间的应用列表。
+     * Get app list in space by space id.
      *
      * @param  int    $spaceID
+     * @param  string $status
+     * @param  string $searchName
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getSpaceInstances($spaceID, $status = 'all', $searchName = '', $pager = null)
+    public function getSpaceInstances(int $spaceID, string $status = 'all', string $searchName = '', object $pager = null): array
     {
-        $space = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->eq($spaceID)->fetch();
-
         $instances = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('deleted')->eq(0)
             ->beginIF($spaceID)->andWhere('space')->eq($spaceID)->fi()
@@ -110,22 +122,22 @@ class spaceModel extends model
         $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
-
         return $instances;
     }
 
     /**
+     * 根据ID获取空间。
      * Get space by id.
      *
-     * @param  int $id
+     * @param  int    $spaceID
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID(int $spaceID): ?object
     {
-        return  $this->dao->select('*')->from(TABLE_SPACE)
+        return $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->eq($id)
+            ->andWhere('id')->eq($spaceID)
             ->andWhere('owner')->eq($this->app->user->account)
             ->fetch();
     }
@@ -136,9 +148,9 @@ class spaceModel extends model
      *
      * @param  object $instance
      * @access public
-     * @return object|false
+     * @return object
      */
-    public function getExternalAppByApp(object $instance): object|false
+    public function getExternalAppByApp(object $instance): ?object
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
