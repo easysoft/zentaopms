@@ -1499,9 +1499,7 @@ class metricModel extends model
      */
     public function updateMetricDate()
     {
-        $now = helper::now();
-        $metricIDList = $this->dao->select('id')->from(TABLE_METRIC)->where('deleted')->eq('0')->fetchPairs();
-        foreach($metricIDList as $metricID) $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->exec();
+        $this->dao->update(TABLE_METRIC)->set('createdDate')->eq(helper::now())->where('createdDate is null')->exec();
     }
 
     /**

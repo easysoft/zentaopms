@@ -12,6 +12,7 @@ namespace zin;
 
 set::zui(true);
 
+$alterSQL = "SET @@sql_mode= '';\n{$alterSQL}";
 div
 (
     setID('main'),
@@ -32,11 +33,11 @@ div
                     setClass('article-h3 mb-2'),
                     $lang->upgrade->noticeSQL
                 ),
-                div
+                h::textarea
                 (
-                    setClass('text-danger leading-loose'),
-                    html("SET @@sql_mode= '';<br />"),
-                    html(nl2br($alterSQL))
+                    set::style(array('height' => '200px', 'width' => '100%')),
+                    set::readonly(true),
+                    html($alterSQL)
                 )
             ),
             div

@@ -27,95 +27,90 @@ CREATE TABLE `zt_action` (
   KEY `action` (`action`),
   KEY `objectID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_api_lib_release`
-(
-    `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `lib`    int UNSIGNED NOT NULL DEFAULT 0,
-    `desc`      varchar(255) NOT NULL DEFAULT '',
-    `version`   varchar(255) NOT NULL DEFAULT '',
-    `snap`      mediumtext   NOT NULL,
-    `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate` datetime     NOT NULL,
-    PRIMARY KEY (`id`)
+CREATE TABLE `zt_api` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `lib` int(10) unsigned NOT NULL DEFAULT 0,
+  `module` int(10) unsigned NOT NULL DEFAULT 0,
+  `title` varchar(100) NOT NULL DEFAULT '',
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `protocol` varchar(10) NOT NULL DEFAULT '',
+  `method` varchar(10) NOT NULL DEFAULT '',
+  `requestType` varchar(100) NOT NULL DEFAULT '',
+  `responseType` varchar(100) NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `owner` varchar(30) NOT NULL DEFAULT '0',
+  `desc` text DEFAULT NULL,
+  `version` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `params` text DEFAULT NULL,
+  `paramsExample` text DEFAULT NULL,
+  `responseExample` text DEFAULT NULL,
+  `response` text DEFAULT NULL,
+  `commonParams` text DEFAULT NULL,
+  `addedBy` varchar(30) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '0',
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_api`
-(
-    `id`              int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `product`         varchar(255) NOT NULL DEFAULT '',
-    `lib`             int UNSIGNED NOT NULL DEFAULT 0,
-    `module`          int UNSIGNED NOT NULL DEFAULT 0,
-    `title`           varchar(100) NOT NULL DEFAULT '',
-    `path`            varchar(255) NOT NULL DEFAULT '',
-    `protocol`        varchar(10)  NOT NULL DEFAULT '',
-    `method`          varchar(10)  NOT NULL DEFAULT '',
-    `requestType`     varchar(100) NOT NULL DEFAULT '',
-    `responseType`    varchar(100) NOT NULL DEFAULT '',
-    `status`          varchar(20)  NOT NULL DEFAULT '',
-    `owner`           varchar(30)  NOT NULl DEFAULT 0,
-    `desc`            text NULL,
-    `version`         smallint UNSIGNED NOT NULL DEFAULT 0,
-    `params`          text NULL,
-    `paramsExample`   text NUll,
-    `responseExample` text NUll,
-    `response`        text NULL,
-    `commonParams`    text NULL,
-    `addedBy`         varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`       datetime     NOT NULL,
-    `editedBy`        varchar(30)  NOT NULL DEFAULT 0,
-    `editedDate`      datetime     NOT NULL,
-    `deleted`         enum ('0', '1') NOT NULL DEFAULT '0',
-    PRIMARY KEY (`id`)
+CREATE TABLE `zt_apispec` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` int(10) unsigned NOT NULL DEFAULT 0,
+  `module` int(10) unsigned NOT NULL DEFAULT 0,
+  `title` varchar(100) NOT NULL DEFAULT '',
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `protocol` varchar(10) NOT NULL DEFAULT '',
+  `method` varchar(10) NOT NULL DEFAULT '',
+  `requestType` varchar(100) NOT NULL DEFAULT '',
+  `responseType` varchar(100) NOT NULL DEFAULT '',
+  `status` varchar(20) NOT NULL DEFAULT '',
+  `owner` varchar(255) NOT NULL DEFAULT '0',
+  `desc` text DEFAULT NULL,
+  `version` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `params` text DEFAULT NULL,
+  `paramsExample` text DEFAULT NULL,
+  `responseExample` text DEFAULT NULL,
+  `response` text DEFAULT NULL,
+  `addedBy` varchar(30) NOT NULL DEFAULT '0',
+  `addedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_apispec`
-(
-    `id`              int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `doc`             int UNSIGNED NOT NULL DEFAULT 0,
-    `module`          int UNSIGNED NOT NULL DEFAULT 0,
-    `title`           varchar(100) NOT NULL DEFAULT '',
-    `path`            varchar(255) NOT NULL DEFAULT '',
-    `protocol`        varchar(10)  NOT NULL DEFAULT '',
-    `method`          varchar(10)  NOT NULL DEFAULT '',
-    `requestType`     varchar(100) NOT NULL DEFAULT '',
-    `responseType`    varchar(100) NOT NULL DEFAULT '',
-    `status`          varchar(20)  NOT NULL DEFAULT '',
-    `owner`           varchar(255) NOT NULl DEFAULT 0,
-    `desc`            text NULL,
-    `version`         smallint UNSIGNED NOT NULL DEFAULT 0,
-    `params`          text NULL,
-    `paramsExample`   text NUll,
-    `responseExample` text NUll,
-    `response`        text NULL,
-    `addedBy`         varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`       datetime NULL,
-    PRIMARY KEY (`id`)
+CREATE TABLE `zt_apistruct` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lib` int(10) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  `version` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `attribute` text DEFAULT NULL,
+  `addedBy` varchar(30) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL,
+  `editEdBy` varchar(30) NOT NULL DEFAULT '0',
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_apistruct`
-(
-    `id`         int unsigned NOT NULL AUTO_INCREMENT,
-    `lib`        int UNSIGNED NOT NULL DEFAULT 0,
-    `name`       varchar(30)  NOT NULL DEFAULT '',
-    `type`       varchar(50)  NOT NULL DEFAULT '',
-    `desc`       varchar(255) NOT NULL DEFAULT '',
-    `version`    smallint unsigned NOT NULL DEFAULT 0,
-    `attribute`  text NULL,
-    `addedBy`    varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`  datetime     NOT NULL,
-    `editEdBy`   varchar(30)  NOT NULL DEFAULT 0,
-    `editedDate` datetime     NOT NULL,
-    `deleted`    enum ('0', '1') NOT NULL DEFAULT '0',
-    primary key (`id`)
+CREATE TABLE `zt_apistruct_spec` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  `attribute` text DEFAULT NULL,
+  `version` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `addedBy` varchar(30) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_apistruct_spec`
-(
-    `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name`      varchar(255) NOT NULL DEFAULT '',
-    `type`      varchar(50)  NOT NULL DEFAULT '',
-    `desc`      varchar(255) NOT NULL DEFAULT '',
-    `attribute` text NULL,
-    `version`   smallint unsigned NOT NULL DEFAULT 0,
-    `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate` datetime     NOT NULL,
-    primary key (`id`)
+CREATE TABLE `zt_api_lib_release` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lib` int(10) unsigned NOT NULL DEFAULT 0,
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  `version` varchar(255) NOT NULL DEFAULT '',
+  `snap` mediumtext NOT NULL,
+  `addedBy` varchar(30) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_block` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -343,7 +338,7 @@ CREATE TABLE `zt_config` (
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`owner`,`module`,`section`,`key`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_cron` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `m` varchar(20) NOT NULL,
@@ -359,7 +354,7 @@ CREATE TABLE `zt_cron` (
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_dept` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(60) NOT NULL,
@@ -421,7 +416,7 @@ CREATE TABLE `zt_doclib` (
   `project` mediumint(8) unsigned NOT NULL,
   `execution` mediumint(8) unsigned NOT NULL,
   `name` varchar(60) NOT NULL,
-  `baseUrl` varchar(255) NOT NULL,
+  `baseUrl` varchar(255) NOT NULL DEFAULT '',
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL,
   `users` text NOT NULL,
@@ -523,7 +518,7 @@ CREATE TABLE `zt_group` (
   `desc` char(255) NOT NULL DEFAULT '',
   `acl` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_grouppriv` (
   `group` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `module` char(30) NOT NULL DEFAULT '',
@@ -575,7 +570,7 @@ CREATE TABLE `zt_lang` (
   `system` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_log` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL,
@@ -612,11 +607,11 @@ CREATE TABLE `zt_module` (
 CREATE TABLE `zt_mr` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `gitlabID` mediumint(8) unsigned NOT NULL,
-  `sourceProject` int unsigned NOT NULL,
+  `sourceProject` int(10) unsigned NOT NULL,
   `sourceBranch` varchar(100) NOT NULL,
-  `targetProject` int unsigned NOT NULL,
+  `targetProject` int(10) unsigned NOT NULL,
   `targetBranch` varchar(100) NOT NULL,
-  `mriid` int unsigned NOT NULL,
+  `mriid` int(10) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `assignee` varchar(255) NOT NULL,
@@ -837,8 +832,8 @@ CREATE TABLE `zt_release` (
   `bugs` text NOT NULL,
   `leftBugs` text NOT NULL,
   `desc` text NOT NULL,
-  `mailto` text,
-  `notify` varchar(255),
+  `mailto` text DEFAULT NULL,
+  `notify` varchar(255) DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'normal',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -922,7 +917,7 @@ CREATE TABLE `zt_searchdict` (
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_searchindex` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` char(20) NOT NULL,
   `objectID` mediumint(9) NOT NULL,
   `title` text NOT NULL,

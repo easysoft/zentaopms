@@ -161,13 +161,12 @@ class upgrade extends control
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
-        $this->dao->begin();
-        $this->upgrade->execute($rawFromVersion);
+        $installedVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+        if($this->config->version != $installedVersion) $this->upgrade->execute($rawFromVersion);
 
         if(!$this->upgrade->isError())
         {
-            $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->dao->commit();
+            $this->setting->updateVersion($this->config->version);
 
             $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
 
@@ -195,7 +194,7 @@ class upgrade extends control
                 $this->upgrade->setDefaultPriv();
                 $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
 
-                $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
+                $hourPoint = $this->setting->getItem('owner=system&module=custom&key=hourPoint');
                 if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
 
                 $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
