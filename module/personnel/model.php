@@ -392,31 +392,31 @@ class personnelModel extends model
     }
 
     /**
+     * 获取用户工时。
      * Get user hours.
      *
-     * @param  object    $userTasks
+     * @param  array  $userTasks
      * @access public
-     * @return object
+     * @return array
      */
-    public function getUserHours($userTasks)
+    public function getUserHours(array $userTasks): array
     {
         $accounts   = array();
-        $taskIDList = array();
+        $taskIdList = array();
         foreach($userTasks as $account => $taskID)
         {
             $accounts[] = $account;
-            $taskIDList = array_merge($taskIDList, $taskID);
+            $taskIdList = array_merge($taskIdList, $taskID);
         }
 
+        $userHours  = array();
         $effortList = $this->dao->select('id, account, objectID , `left`, consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('objectID')->in($taskIDList)
+            ->andWhere('objectID')->in($taskIdList)
             ->andWhere('objectType')->eq('task')
             ->orderBy('id_asc')
             ->fetchGroup('account', 'id');
-
-        $userHours = array();
         foreach($effortList as $account => $efforts)
         {
             $latestLeft = array();

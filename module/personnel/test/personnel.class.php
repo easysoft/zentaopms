@@ -190,14 +190,15 @@ class personnelTest
     }
 
     /**
-     * GetUserHoursTest
+     * 测试获取用户工时。
+     * Test get user hours.
      *
-     * @param  int   $projectID
-     * @param  array $accounts
+     * @param  int    $projectID
+     * @param  array  $accounts
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserHoursTest($projectID, $accounts)
+    public function getUserHoursTest(int $projectID, array $accounts): array
     {
         global $tester;
         $projects = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchAll('id');
@@ -210,11 +211,7 @@ class personnelTest
         $invest = array();
         foreach($accounts as $account)
         {
-            $invest[$account]['createdTask']  = 0;
-            $invest[$account]['finishedTask'] = 0;
-            $invest[$account]['pendingTask']  = 0;
-            $invest[$account]['consumedTask'] = 0;
-            $invest[$account]['leftTask']     = 0;
+            $invest[$account]['createdTask'] = $invest[$account]['finishedTask'] = $invest[$account]['pendingTask'] = $invest[$account]['consumedTask'] = $invest[$account]['leftTask'] = 0;
         }
 
         $userTasks = array();
