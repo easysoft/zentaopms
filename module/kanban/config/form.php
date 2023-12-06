@@ -49,3 +49,12 @@ $config->kanban->form->edit['team']           = array('type' => 'array',    'req
 $config->kanban->form->edit['desc']           = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 $config->kanban->form->edit['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
 $config->kanban->form->edit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
+$config->kanban->form->setting['showWIP']     = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->setting['fluidBoard']  = array('type' => 'string',   'required' => false, 'default' => '');
+$config->kanban->form->setting['colWidth']    = array('type' => 'int',      'required' => false, 'default' => '');
+$config->kanban->form->setting['minColWidth'] = array('type' => 'int',      'required' => false, 'default' => '');
+$config->kanban->form->setting['maxColWidth'] = array('type' => 'int',      'required' => false, 'default' => '');
+$config->kanban->form->setting['archived']    = array('type' => 'string',   'required' => false, 'default' => '');
+$config->kanban->form->setting['performable'] = array('type' => 'string',   'required' => false, 'default' => '');
+$config->kanban->form->setting['alignment']   = array('type' => 'string',   'required' => false, 'default' => '');

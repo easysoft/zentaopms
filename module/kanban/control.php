@@ -257,16 +257,14 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function setting($kanbanID = 0)
+    public function setting(int $kanbanID = 0)
     {
         if(!empty($_POST))
         {
-            $changes = $this->kanban->setting($kanbanID);
+            $kanban = form::data($this->config->kanban->form->setting)->get();
+            $this->kanban->setting($kanbanID, $kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
-            $this->action->logHistory($actionID, $changes);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
