@@ -1459,14 +1459,6 @@ function popovers(): popovers
 }
 
 /**
- * Draggable ul widget.
- */
-function dragUl(): dragUl
-{
-    return createWg('dragUl', func_get_args());
-}
-
-/**
  * Back btn widget.
  *
  * ?string back
