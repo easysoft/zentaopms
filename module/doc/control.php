@@ -878,7 +878,8 @@ class doc extends control
     }
 
     /**
-     * Select lib type.
+     * 设置选择文档库类型的范围。
+     * Set the scope of the document library type to be selected.
      *
      * @access public
      * @return void
@@ -916,10 +917,10 @@ class doc extends control
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
 
-        $this->view->spaceList  = $spaceList;
-        $this->view->typeList   = $typeList;
-        $this->view->products   = $products;
-        $this->view->projects   = $projects;
+        $this->view->spaceList = $spaceList;
+        $this->view->typeList  = $typeList;
+        $this->view->products  = $products;
+        $this->view->projects  = $projects;
 
         $this->display();
     }
