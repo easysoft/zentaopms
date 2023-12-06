@@ -1712,13 +1712,13 @@ class commonModel extends model
     /**
      * Check object can modify.
      *
-     * @param  string $type    product|Execution
-     * @param  object $object
+     * @param  string      $type    product|Execution
+     * @param  object|null $object
      * @static
      * @access public
      * @return bool
      */
-    public static function canModify(string $type, object $object): bool
+    public static function canModify(string $type, object|null $object): bool
     {
         global $config;
 
