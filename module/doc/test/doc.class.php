@@ -48,7 +48,7 @@ class docTest
         $this->objectModel->loadModel('api');
 
         $apiLib = new stdclass();
-        $createFields = array('name' => '', 'baseUrl' => '', 'acl' => '', 'desc' => '测试详情', 'libType' => 'product', 'product' => 1, 'project' => 0);
+        $createFields = array('name' => '', 'baseUrl' => '', 'acl' => 'open', 'desc' => '测试详情', 'libType' => 'product', 'product' => 1, 'project' => 0);
         foreach($createFields as $field => $defaultValue) $apiLib->{$field} = $defaultValue;
         foreach($param as $key => $value) $apiLib->{$key} = $value;
         $objectID = $this->objectModel->createApiLib($apiLib);

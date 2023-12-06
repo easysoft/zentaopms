@@ -25,9 +25,9 @@ $noName        = array('name' => '',                    'acl' => $acl[0], 'baseU
 $noBaseUrl     = array('name' => 'noBaseUrl',           'acl' => $acl[0], 'baseUrl' => '');
 
 $docTester = new docTest();
-r($docTester->createApiLibTest($openApilib))    && p('type;name')   && e('api;新建api文档库');                                                                                                                 // 新建公有接口库
-r($docTester->createApiLibTest($privateApilib)) && p('acl;baseUrl') && e('private;www.zentaopms.com');                                                                                                         // 新建私有接口库
-r($docTester->createApiLibTest($customApilib))  && p('acl')         && e('custom');                                                                                                                            // 新建自定义接口库
-r($docTester->createApiLibTest($noName))        && p('name:0')      && e('『库名称』不能为空。');                                                                                                              // 接口库名称为空
-r($docTester->createApiLibTest($noBaseUrl))     && p('baseUrl')     && e('www.zentaopms.com');                                                                                                                 // 接口库地址为空
-r($docTester->createApiLibTest($openApilib))    && p('name')        && e('[name] => 同一产品下的接口库中『库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 重复创建接口库
+r($docTester->createApiLibTest($openApilib))    && p('type;name')   && e('api;新建api文档库');                                                                                                       // 新建公有接口库
+r($docTester->createApiLibTest($privateApilib)) && p('acl;baseUrl') && e('private;www.zentaopms.com');                                                                                               // 新建私有接口库
+r($docTester->createApiLibTest($customApilib))  && p('acl')         && e('custom');                                                                                                                  // 新建自定义接口库
+r($docTester->createApiLibTest($noName))        && p('name:0')      && e('『库名称』不能为空。');                                                                                                    // 接口库名称为空
+r($docTester->createApiLibTest($noBaseUrl))     && p('baseUrl')     && e('~~');                                                                                                                      // 接口库地址为空
+r($docTester->createApiLibTest($openApilib))    && p('name')        && e('同一产品下的接口库中『库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 重复创建接口库
