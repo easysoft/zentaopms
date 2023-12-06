@@ -207,15 +207,17 @@ class personnelModel extends model
     }
 
     /**
+     * 获取用户参与的项目问题。
      * Get user project issue invest.
      *
-     * @param  array     $accounts
-     * @param  object    $projects
+     * @param  array  $accounts
+     * @param  array  $projects
      * @access public
      * @return array
      */
-    public function getIssueInvest($accounts, $projects)
+    public function getIssueInvest(array $accounts, array $projects): array
     {
+        /* Get issues in the projects. */
         $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
@@ -230,11 +232,12 @@ class personnelModel extends model
             $invest[$account]['pendingIssue']  = 0;
         }
 
+        /* Build invest issues. */
         foreach($issues as $issue)
         {
-            if($issue->createdBy && isset($invest[$issue->createdBy])) $invest[$issue->createdBy]['createdIssue'] += 1;
+            if($issue->createdBy  && isset($invest[$issue->createdBy]))  $invest[$issue->createdBy]['createdIssue']   += 1;
             if($issue->resolvedBy && isset($invest[$issue->resolvedBy])) $invest[$issue->resolvedBy]['resolvedIssue'] += 1;
-            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($invest[$issue->assignedTo])) $invest[$issue->assignedTo]['pendingIssue'] += 1;
+            if($issue->assignedTo && isset($invest[$issue->assignedTo]) && in_array($issue->status, array('unconfirmed', 'confirmed', 'active'))) $invest[$issue->assignedTo]['pendingIssue'] += 1;
         }
 
         return $invest;

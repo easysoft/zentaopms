@@ -1,0 +1,10 @@
+title: table zt_issue
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: createdBy
+    range: admin,user5,user15,user25,user35
+  - field: resolvedBy
+    range: admin,user33,user23,user13,user3
+  - field: assignedTo
+    range: admin,user4,user24,user34,user14

@@ -67,7 +67,7 @@ class personnelTest
     }
 
     /**
-     * 测试获取用户参与的项目风险。。
+     * 测试获取用户参与的项目风险。
      * Test get user project risk invest.
      *
      * @param  int          $programID
@@ -94,6 +94,38 @@ class personnelTest
         foreach($objects as $account => $invest)
         {
             $return .= "{$account}:{$invest['createdRisk']},{$invest['resolvedRisk']},{$invest['pendingRisk']};";
+        }
+        return $return;
+    }
+
+    /**
+     * 测试获取用户参与的项目问题。
+     * Test get user project issue invest.
+     *
+     * @param  int          $programID
+     * @access public
+     * @return string|array
+     */
+    public function getIssueInvestTest(int $programID = 0): string|array
+    {
+        /* Get all projects under the current program. */
+        global $tester;
+        $projects = $tester->dao->select('id,model,type,parent,path,name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('path')->like("%,{$programID},%")
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+        $accountPairs = $this->objectModel->getInvolvedProjects($projects);
+
+        $objects = $this->objectModel->getIssueInvest($accountPairs, $projects);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($objects as $account => $invest)
+        {
+            $return .= "{$account}:{$invest['createdIssue']},{$invest['resolvedIssue']},{$invest['pendingIssue']};";
         }
         return $return;
     }
