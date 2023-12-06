@@ -76,7 +76,7 @@ class gitlab extends control
         {
             $gitlab = form::data($this->config->gitlab->form->create)
                 ->add('type', 'gitlab')
-                ->add('private',md5(rand(10,113450)))
+                ->add('private',md5((string)rand(10,113450)))
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->trim('url,token')
@@ -130,14 +130,14 @@ class gitlab extends control
 
         if($_POST)
         {
-            $gitlab = fixer::input('post')->trim('url,token')->get();
+            $gitlab = form::data($this->config->gitlab->form->edit)->trim('url,token')->get();
             $this->checkToken($gitlab, $gitlabID);
             $this->gitlab->update($gitlabID);
             $gitLab = $this->gitlab->getByID($gitlabID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
-            $actionID = $this->action->create('gitlab', $id, 'edited');
+            $actionID = $this->action->create('gitlab', $gitlabID, 'edited');
             $changes  = common::createChanges($oldGitLab, $gitLab);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
@@ -171,45 +171,11 @@ class gitlab extends control
         {
             $users       = $this->post->zentaoUsers;
             $gitlabNames = $this->post->gitlabUserNames;
-            $accountList = array();
-            $repeatUsers = array();
-            foreach($users as $openID => $user)
-            {
-                if(empty($user)) continue;
-                if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
-                $accountList[$user] = $openID;
-            }
 
-            if(count($repeatUsers)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', array_unique($repeatUsers)))));
+            $result = $this->gitlabZen->checkUserRepeat($users);
+            if($result['result'] != 'success') return $this->send($result);
 
-            $user = new stdclass;
-            $user->providerID   = $gitlabID;
-            $user->providerType = 'gitlab';
-
-            $oldUsers = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq($user->providerType)->andWhere('providerID')->eq($user->providerID)->fetchAll('openID');
-            foreach($users as $openID => $account)
-            {
-                $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
-
-                if($existAccount and $existAccount->account != $account)
-                {
-                    $this->dao->delete()
-                        ->from(TABLE_OAUTH)
-                        ->where('openID')->eq($openID)
-                        ->andWhere('providerType')->eq($user->providerType)
-                        ->andWhere('providerID')->eq($user->providerID)
-                        ->exec();
-                    $this->loadModel('action')->create('gitlabuser', $openID, 'unbind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$existAccount->account]->realname));
-                }
-                if(!$existAccount or $existAccount->account != $account)
-                {
-                    if(!$account) continue;
-                    $user->account = $account;
-                    $user->openID  = $openID;
-                    $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
-                    $this->loadModel('action')->create('gitlabuser', $openID, 'bind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$account]->realname));
-                }
-            }
+            $this->gitlabZen->bindUsers($gitlabID, $users, $gitlabNames, $zentaoUsers);
 
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
@@ -286,6 +252,7 @@ class gitlab extends control
     }
 
     /**
+     * 检查post的token是否有管理员权限。
      * Check post token has admin permissions.
      *
      * @param  object    $gitlab
@@ -328,17 +295,7 @@ class gitlab extends control
         $requestBody = json_decode($input);
         $result      = $this->gitlab->webhookParseBody($requestBody, $gitlab);
 
-        $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';
-        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
-
-        $fh = @fopen($logFile, 'a');
-        if($fh)
-        {
-            fwrite($fh, date('Ymd H:i:s') . ": " . $this->app->getURI() . "\n");
-            fwrite($fh, "JSON: \n  " . $input . "\n");
-            fwrite($fh, "Parsed object: {$result->issue->objectType} :\n  " . print_r($result->object, true) . "\n");
-            fclose($fh);
-        }
+        $this->gitlabZen->recordWebhookLogs($input, $result);
 
         if($result->action == 'updateissue' and isset($result->changes->assignees)) $this->gitlab->webhookAssignIssue($result);
 
@@ -355,6 +312,7 @@ class gitlab extends control
     }
 
     /**
+     * Gitlab群组列表。
      * Browse gitlab group.
      *
      * @param  int     $gitlabID
@@ -389,6 +347,7 @@ class gitlab extends control
     }
 
     /**
+     * 创建一个gitlab群组。
      * Creat a gitlab group.
      *
      * @param  int     $gitlabID
@@ -420,6 +379,7 @@ class gitlab extends control
     }
 
     /**
+     * 编辑一个gitlab群组。
      * Edit a gitlab group.
      *
      * @param  int     $gitlabID
@@ -457,6 +417,7 @@ class gitlab extends control
     }
 
     /**
+     * 删除一个gitlab群组。
      * Delete a gitlab group.
      *
      * @param  int    $gitlabID
@@ -485,6 +446,7 @@ class gitlab extends control
     }
 
     /**
+     * 管理gitlba群组成员。
      * Manage a gitlab group members.
      *
      * @param  int    $gitlabID
@@ -511,48 +473,7 @@ class gitlab extends control
 
             $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);
 
-            /* Get the updated,deleted data. */
-            $addedMembers = $deletedMembers = $updatedMembers = array();
-            foreach($currentMembers as $currentMember)
-            {
-                $memberID = $currentMember->id;
-                if(empty($newMembers[$memberID]))
-                {
-                    $deletedMembers[] = $memberID;
-                }
-                else
-                {
-                    if($newMembers[$memberID]->access_level != $currentMember->access_level or $newMembers[$memberID]->expires_at != $currentMember->expires_at)
-                    {
-                        $updatedData = new stdClass();
-                        $updatedData->user_id      = $memberID;
-                        $updatedData->access_level = $newMembers[$memberID]->access_level;
-                        $updatedData->expires_at   = $newMembers[$memberID]->expires_at;
-                        $updatedMembers[] = $updatedData;
-                    }
-                }
-            }
-            /* Get the added data. */
-            foreach($newMembers as $id => $newMember)
-            {
-                $exist = false;
-                foreach($currentMembers as $currentMember)
-                {
-                    if($currentMember->id == $id)
-                    {
-                        $exist = true;
-                        break;
-                    }
-                }
-                if($exist == false)
-                {
-                    $addedData = new stdClass();
-                    $addedData->user_id      = $id;
-                    $addedData->access_level = $newMembers[$id]->access_level;
-                    $addedData->expires_at   = $newMembers[$id]->expires_at;
-                    $addedMembers[] = $addedData;
-                }
-            }
+            list($addedMembers, $deletedMembers, $updatedMembers) = $this->gitlabZen->getGroupMemberData($currentMembers, $newMembers);
 
             foreach($addedMembers as $addedMember)
             {
@@ -591,6 +512,7 @@ class gitlab extends control
     }
 
     /**
+     * Gitlab用户列表。
      * Browse gitlab user.
      *
      * @param  int     $gitlabID
@@ -639,7 +561,10 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->gitlab->createUser($gitlabID);
+            $gitlabUser = form::data($this->config->gitlab->form->user->create)->get();
+            if(!empty($_FILES['avatar'])) $gitlabUser->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
+
+            $this->gitlab->createUser($gitlabID, $gitlabUser);
 
             if(dao::isError())
             {
@@ -683,10 +608,15 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->gitlab->editUser($gitlabID);
+            $gitlabUser = form::data($this->config->gitlab->form->user->edit)
+                ->removeIF(!$this->post->password, 'password,password_repeat')
+                ->get();
+            if(!empty($_FILES['avatar']['name'])) $gitlabUser->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
+
+            $this->gitlab->editUser($gitlabID, $gitlabUser);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'reload' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
         $gitlabUser        = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
@@ -1188,11 +1118,7 @@ class gitlab extends control
 
             $repo        = $this->loadModel('repo')->getByID($repoID);
             $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-            $bindedUsers = $this->dao->select('account,openID')
-                ->from(TABLE_OAUTH)
-                ->where('providerType')->eq('gitlab')
-                ->andWhere('providerID')->eq($repo->gitService)
-                ->fetchPairs();
+            $bindedUsers = $this->gitlab->getUserAccountIdPairs($repo->gitService);
 
             if(empty($repo->acl))
             {
@@ -1213,74 +1139,21 @@ class gitlab extends control
 
             $gitlabCurrentMembers = $this->gitlab->apiGetProjectMembers($repo->gitService, $repo->project);
 
-            $addedMembers = $updatedMembers = $deletedMembers = array();
-            /* Get the updated data. */
-            foreach($gitlabCurrentMembers as $gitlabCurrentMember)
-            {
-                $memberID = isset($gitlabCurrentMember->id) ? $gitlabCurrentMember->id : 0;
-                if(!isset($newGitlabMembers[$memberID])) continue;
-                if($newGitlabMembers[$memberID]->access_level != $gitlabCurrentMember->access_level or $newGitlabMembers[$memberID]->expires_at != $gitlabCurrentMember->expires_at)
-                {
-                    $updatedData = new stdClass();
-                    $updatedData->user_id      = $memberID;
-                    $updatedData->access_level = $newGitlabMembers[$memberID]->access_level;
-                    $updatedData->expires_at   = $newGitlabMembers[$memberID]->expires_at;
-                    $updatedMembers[] = $updatedData;
-                }
-            }
-            /* Get the added data. */
-            foreach($newGitlabMembers as $id => $newMember)
-            {
-                $exist = false;
-                foreach($gitlabCurrentMembers as $gitlabCurrentMember)
-                {
-                    if($gitlabCurrentMember->id == $id)
-                    {
-                        $exist = true;
-                        break;
-                    }
-                }
-                if($exist == false)
-                {
-                    $addedData = new stdClass();
-                    $addedData->user_id      = $id;
-                    $addedData->access_level = $newGitlabMembers[$id]->access_level;
-                    $addedData->expires_at   = $newGitlabMembers[$id]->expires_at;
-                    $addedMembers[] = $addedData;
-                }
-            }
-            /* Get the deleted data. */
-            $originalUsers = $repo->acl->users;
-            foreach($originalUsers as $user)
-            {
-                if(!in_array($user, $accounts) and isset($bindedUsers[$user]))
-                {
-                    $exist = false;
-                    foreach($gitlabCurrentMembers as $gitlabCurrentMember)
-                    {
-                        if($gitlabCurrentMember->id == $bindedUsers[$user])
-                        {
-                            $exist            = true;
-                            $deletedMembers[] = $gitlabCurrentMember->id;
-                            break;
-                        }
-                    }
-                }
-            }
+            list($addedMembers, $deletedMembers, $updatedMembers) = $this->gitlabZen->getProjectMemberData($gitlabCurrentMembers, $newGitlabMembers, $bindedUsers, $accounts, !empty($repo->acl->users) ? $repo->acl->users : array());
 
             foreach($addedMembers as $addedMember)
             {
-                $this->gitlab->apiCreateProjectMember((int)$repo->gitService, (int)$repo->project, $addedMember);
+                $this->gitlab->apiCreateProjectMember($repo->gitService, $repo->project, $addedMember);
             }
 
             foreach($updatedMembers as $updatedMember)
             {
-                $this->gitlab->apiUpdateProjectMember((int)$repo->gitService, (int)$repo->project, $updatedMember);
+                $this->gitlab->apiUpdateProjectMember($repo->gitService, $repo->project, $updatedMember);
             }
 
             foreach($deletedMembers as $deletedMemberID)
             {
-                $this->gitlab->apiDeleteProjectMember((int)$repo->gitService, (int)$repo->project, (int)$deletedMemberID);
+                $this->gitlab->apiDeleteProjectMember($repo->gitService, $repo->project, (int)$deletedMemberID);
             }
 
             $repo->acl->users = array_values($accounts);
@@ -1295,11 +1168,7 @@ class gitlab extends control
 
         /* Get users accesslevel. */
         $userAccessData = array();
-        $bindedUsers    = $this->dao->select('openID,account')
-            ->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($repo->gitService)
-            ->fetchPairs();
+        $bindedUsers    = $this->gitlab->getUserIdAccountPairs($repo->gitService);
 
         foreach($projectMembers as $projectMember)
         {

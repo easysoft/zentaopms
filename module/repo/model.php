@@ -1834,8 +1834,8 @@ class repoModel extends model
         {
             $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
         }
-        $repo->gitService = $repo->serviceHost;
-        $repo->project    = $repo->serviceProject;
+        $repo->gitService = (int)$repo->serviceHost;
+        $repo->project    = (int)$repo->serviceProject;
         return $repo;
     }
 
@@ -2295,7 +2295,7 @@ class repoModel extends model
         $showAll = ($filter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
         if($this->app->user->admin or $showAll)
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, true, 0, 0, false);
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, 'true', 0, 0, false);
         }
         else
         {

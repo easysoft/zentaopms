@@ -216,11 +216,7 @@ class gitlabModel extends model
             }
         }
 
-        $bindedUsers = $this->dao->select('openID,account')
-            ->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->fetchPairs();
+        $bindedUsers = $this->getUserIdAccountPairs($gitlabID);
 
         $matchedUsers = array();
         foreach($gitlabUsers as $gitlabUser)
@@ -2454,29 +2450,27 @@ class gitlabModel extends model
      * Create a gitlab user.
      *
      * @param  int    $gitlabID
+     * @param  object $gitlabUser
      * @access public
      * @return bool
      */
-    public function createUser(int $gitlabID): bool
+    public function createUser(int $gitlabID, object $gitlabUser): bool
     {
-        $user = fixer::input('post')->remove('avatar')->get();
-        if(!empty($_FILES['avatar'])) $user->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
-
-        if(empty($user->account))  dao::$errors['account'][] = $this->lang->gitlab->user->bind . $this->lang->gitlab->user->emptyError;
-        if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
-        if(empty($user->username)) dao::$errors['username'][] = $this->lang->gitlab->user->username . $this->lang->gitlab->user->emptyError;
-        if(empty($user->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
-        if(empty($user->password)) dao::$errors['password'][] = $this->lang->gitlab->user->password . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->account))  dao::$errors['account'][] = $this->lang->gitlab->user->bind . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->username)) dao::$errors['username'][] = $this->lang->gitlab->user->username . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->password)) dao::$errors['password'][] = $this->lang->gitlab->user->password . $this->lang->gitlab->user->emptyError;
         if(dao::isError()) return false;
-        if($user->password != $user->password_repeat)
+        if($gitlabUser->password != $gitlabUser->password_repeat)
         {
             dao::$errors[] = $this->lang->gitlab->user->passwordError;
             return false;
         }
         /* Check whether the user has been bind. */
-        if($user->account)
+        if($gitlabUser->account)
         {
-            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
+            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($gitlabUser->account)->fetch();
             if($zentaoBindUser)
             {
                 dao::$errors['account'][] = $this->lang->gitlab->user->bindError;
@@ -2484,21 +2478,21 @@ class gitlabModel extends model
             }
         }
 
-        $response = $this->apiCreateUser($gitlabID, $user);
+        $response = $this->apiCreateUser($gitlabID, $gitlabUser);
 
         if(!empty($response->id))
         {
             $this->loadModel('action')->create('gitlabuser', $response->id, 'created', '', $response->name);
 
             /* Bind user. */
-            if($user->account)
+            if($gitlabUser->account)
             {
-                $userBind = new stdclass;
-                $userBind->providerID   = $gitlabID;
-                $userBind->providerType = 'gitlab';
-                $userBind->account      = $user->account;
-                $userBind->openID       = $response->id;
-                $this->dao->insert(TABLE_OAUTH)->data($userBind)->exec();
+                $gitlabUserBind = new stdclass;
+                $gitlabUserBind->providerID   = $gitlabID;
+                $gitlabUserBind->providerType = 'gitlab';
+                $gitlabUserBind->account      = $gitlabUser->account;
+                $gitlabUserBind->openID       = $response->id;
+                $this->dao->insert(TABLE_OAUTH)->data($gitlabUserBind)->exec();
             }
             return true;
         }
@@ -2514,30 +2508,22 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function editUser(int $gitlabID): bool
+    public function editUser(int $gitlabID, object $gitlabUser): bool
     {
-        $user = fixer::input('post')
-            ->setDefault('can_create_group', 0)
-            ->setDefault('external', 0)
-            ->remove('username,avatar')
-            ->removeIF(!$this->post->password, 'password,password_repeat')
-            ->get();
-        if(!empty($_FILES['avatar']['name'])) $user->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
-
-        if(empty($user->account))  dao::$errors['account'][] = $this->lang->gitlab->user->bind . $this->lang->gitlab->user->emptyError;
-        if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
-        if(empty($user->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->account))  dao::$errors['account'][] = $this->lang->gitlab->user->bind . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
+        if(empty($gitlabUser->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
         if(dao::isError()) return false;
-        if(!empty($user->password) and $user->password != $user->password_repeat)
+        if(!empty($gitlabUser->password) and $gitlabUser->password != $gitlabUser->password_repeat)
         {
             dao::$errors[] = $this->lang->gitlab->user->passwordError;
             return false;
         }
         /* Check whether the user has been bind. */
-        if($user->account)
+        if($gitlabUser->account)
         {
-            $zentaoBindUser = $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
-            $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $user->id) ? true : false;
+            $zentaoBindUser = $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($gitlabUser->account)->fetch();
+            $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $gitlabUser->id) ? true : false;
             if($zentaoBindUser && $changeBind)
             {
                 dao::$errors['bind'][] = $this->lang->gitlab->user->bindError;
@@ -2545,23 +2531,23 @@ class gitlabModel extends model
             }
         }
 
-        $response = $this->apiUpdateUser($gitlabID, $user);
+        $response = $this->apiUpdateUser($gitlabID, $gitlabUser);
 
         if(!empty($response->id))
         {
             $this->loadModel('action')->create('gitlabuser', $response->id, 'edited', '', $response->name);
 
             /* Delete old bind. */
-            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($response->id)->andWhere('account')->ne($user->account)->exec();
+            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($response->id)->andWhere('account')->ne($gitlabUser->account)->exec();
             /* Bind user. */
-            if($user->account && $changeBind)
+            if($gitlabUser->account && $changeBind)
             {
-                $userBind = new stdclass;
-                $userBind->providerID   = $gitlabID;
-                $userBind->providerType = 'gitlab';
-                $userBind->account      = $user->account;
-                $userBind->openID       = $response->id;
-                $this->dao->replace(TABLE_OAUTH)->data($userBind)->exec();
+                $gitlabUserBind = new stdclass;
+                $gitlabUserBind->providerID   = $gitlabID;
+                $gitlabUserBind->providerType = 'gitlab';
+                $gitlabUserBind->account      = $gitlabUser->account;
+                $gitlabUserBind->openID       = $response->id;
+                $this->dao->replace(TABLE_OAUTH)->data($gitlabUserBind)->exec();
             }
             return true;
         }
@@ -3052,46 +3038,6 @@ class gitlabModel extends model
 
         $apiRoot .= '&sudo=' . $users[0]->id;
         return $this->apiGet($apiRoot, '/user');
-    }
-
-    /**
-     * 获取gitlab菜单。
-     * Get gitlab menu.
-     *
-     * @param  int    $gitlabID
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function getGitlabMenu(int $gitlabID = 0, string $type = 'project'): string
-    {
-        $html = '<div class="btn-toolbar pull-left">';
-
-        /* Gitlab server list. */
-        $gitlabs = $this->getPairs();
-        $html   .= "<div class='btn-group'>";
-        $tips    = $gitlabID >0 ? zget($gitlabs, $gitlabID, $this->lang->gitlab->server) : $this->lang->gitlab->server;
-        $html   .=  html::a('javascript:;', $tips . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
-        $html   .= "<ul class='dropdown-menu'>";
-        foreach($gitlabs as $id => $gitlab)
-        {
-            $html .= '<li' . ($gitlabID == $id ? " class='active'" : '') . '>';
-            $html .= html::a(helper::createLink('gitlab', zget($this->config->gitlab->menus, $type, 'project'), "gitlabID=$id"), $gitlab);
-        }
-        $html .= '</ul></div>';
-
-        /* Other route. */
-        foreach($this->config->gitlab->menus as $key => $method)
-        {
-            $lang   = 'browse' . ucwords($key);
-            $title  = $this->lang->gitlab->$lang;
-            $label  = "<span class='text'>$title</span>";
-            $active = $key == $type ? 'btn-active-text' : '';
-            $html  .= html::a(inlink($method, "gitlabID=$gitlabID"), $label, '', "id='{$key}' class='btn btn-link $active' title='$title'");
-        }
-
-        $html .= '</div>';
-        return $html;
     }
 
     /**
