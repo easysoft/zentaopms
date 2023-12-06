@@ -501,16 +501,17 @@ class personnelModel extends model
     }
 
     /**
-     * Access to program set invest staff.
+     * 获取项目集的白名单。
+     * Get whitelist.
      *
-     * @param  int       $objectID
-     * @param  string    $objectType  program|project|product|sprint
-     * @param  string    $orderBy
-     * @param  object    $pager
+     * @param  int    $objectID
+     * @param  string $objectType  program|project|product|sprint
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getWhitelist($objectID = 0, $objectType = '', $orderBy = 'id_desc', $pager = '')
+    public function getWhitelist(int $objectID = 0, string $objectType = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('t1.id,t1.account,t2.realname,t2.dept,t2.role,t2.phone,t2.qq,t2.weixin,t2.email')->from(TABLE_ACL)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
@@ -519,7 +520,7 @@ class personnelModel extends model
             ->andWhere('t1.objectType')->eq($objectType)
             ->andWhere('t2.realname')->ne('')
             ->orderBy($orderBy)
-            ->beginIF(!empty($pager))->page($pager)->fi()
+            ->page($pager)
             ->fetchAll();
     }
 

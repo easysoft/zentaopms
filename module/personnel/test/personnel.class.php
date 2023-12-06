@@ -245,22 +245,23 @@ class personnelTest
     }
 
     /**
-     * Get whitelist test
+     * 测试获取对象的白名单。
+     * Test get object whitelist.
      *
-     * @param  int    $objectID
-     * @param  string $objectType
-     * @param  string $orderBy
-     * @param  string $pager
+     * @param  int          $objectID
+     * @param  string       $objectType
+     * @param  string       $orderBy
+     * @param  object       $pager
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function getWhitelistTest($objectID = 0, $objectType = '', $orderBy = 'id_desc', $pager = '')
+    public function getWhitelistTest(int $objectID = 0, string $objectType = '', string $orderBy = 'id_desc', object $pager = null): string|array
     {
         $objects = $this->objectModel->getWhitelist($objectID, $objectType, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_column($objects, 'account'));
     }
 
     /**
