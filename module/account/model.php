@@ -7,24 +7,12 @@ declare(strict_types=1);
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Xiying Guan <guanxiying@xirangit.com>
  * @package     account
- * @version     $Id$
  * @link        https://www.zentao.net
  */
 class accountModel extends model
 {
     /**
-     * Get account by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID(int $id): object|false
-    {
-        return $this->dao->select('*')->from(TABLE_ACCOUNT)->where('id')->eq($id)->fetch();
-    }
-
-    /**
+     * 获取账号列表。
      * Get account list.
      *
      * @param  string $browseType
@@ -34,7 +22,7 @@ class accountModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $browseType = 'all', string $param = '', string $orderBy = 'id_desc', object|null $pager = null)
+    public function getList(string $browseType = 'all', string $param = '', string $orderBy = 'id_desc', object|null $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -67,7 +55,8 @@ class accountModel extends model
     }
 
     /**
-     * Get account pairs
+     * 获取账号的id:name键值对。
+     * Get account pairs.
      *
      * @access public
      * @return array
@@ -78,7 +67,8 @@ class accountModel extends model
     }
 
     /**
-     * Create account
+     * 创建一个账号。
+     * Create account.
      *
      * @param  object $account
      * @access public
@@ -99,6 +89,7 @@ class accountModel extends model
     }
 
     /**
+     * 更新一个账号。
      * Update one account.
      *
      * @param  int    $id
@@ -108,7 +99,7 @@ class accountModel extends model
      */
     public function update(int $id, object $account): bool
     {
-        $oldAccount = $this->getByID($id);
+        $oldAccount = $this->fetchByID($id);
         $this->dao->update(TABLE_ACCOUNT)->data($account)->autoCheck()
             ->batchCheck($this->config->account->edit->requiredFields, 'notempty')
             ->checkIf($account->email, 'email', 'email')

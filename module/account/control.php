@@ -7,12 +7,12 @@ declare(strict_types=1);
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Xiying Guan <guanxiying@xirangit.com>
  * @package     account
- * @version     $Id$
  * @link        https://www.zentao.net
  */
 class account extends control
 {
     /**
+     * 查看账号列表。
      * Browse accouts page.
      *
      * @param  string $browseType
@@ -53,6 +53,7 @@ class account extends control
     }
 
     /**
+     * 创建一个账号。
      * Create account.
      *
      * @access public
@@ -62,7 +63,7 @@ class account extends control
     {
         if($_POST)
         {
-            $account = $this->accountZen->buildDataForCreate();
+            $account = form::data($this->config->account->form->create)->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->account->create($account);
@@ -78,61 +79,63 @@ class account extends control
     }
 
     /**
+     * 编辑一个账号。
      * Edit one account.
      *
-     * @param  int    $id
-     * @param  string $from parent|self
+     * @param  int    $accountID
      * @access public
      * @return void
      */
-    public function edit(int $id, string $from = 'parent')
+    public function edit(int $accountID)
     {
         if($_POST)
         {
-            $account = $this->accountZen->buildDataForEdit();
+            $account = form::data($this->config->account->form->edit)->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $changes = $this->account->update($id, $account);
+            $this->account->update($accountID, $account);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'), 'closeModal' => true));
         }
 
         $this->view->title   = $this->lang->account->edit;
-        $this->view->account = $this->account->getById($id);
+        $this->view->account = $this->account->fetchByID($accountID);
         $this->view->rooms   = $this->loadModel('serverroom')->getPairs();
 
         $this->display();
     }
 
     /**
+     * 查看账号信息。
      * View account.
      *
-     * @param  int    $id
+     * @param  int    $accountID
      * @access public
      * @return void
      */
-    public function view(int $id)
+    public function view(int $accountID)
     {
         $this->view->title      = $this->lang->account->view;
-        $this->view->account    = $this->account->getById($id);
+        $this->view->account    = $this->account->fetchByID($accountID);
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
-        $this->view->actions    = $this->loadModel('action')->getList('account', $id);
+        $this->view->actions    = $this->loadModel('action')->getList('account', $accountID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'account');
         $this->display();
     }
 
     /**
+     * 删除一个账号。
      * Delete Account.
      *
-     * @param  int    $id
+     * @param  int    $accountID
      * @access public
      * @return void
      */
-    public function delete(int $id)
+    public function delete(int $accountID)
     {
-        $this->account->delete(TABLE_ACCOUNT, $id);
+        $this->account->delete(TABLE_ACCOUNT, $accountID);
 
         if(dao::isError())
         {
