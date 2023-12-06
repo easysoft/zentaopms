@@ -282,13 +282,47 @@ class personnelTest
         return implode(',', $objects);
     }
 
-    public function updateWhitelistTest($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $updateType = 'replace')
+    /**
+     * 测试更新白名单。
+     * Test update whitelist.
+     *
+     * @param  array  $user数
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $type
+     * @param  string $source
+     * @param  string $updateType
+     * @access public
+     * @return string|array
+     */
+    public function updateWhitelistTest(array $users = array(), string $objectType = '', int $objectID = 0, string $type = 'whitelist', string $source = 'add', string $updateType = 'replace'): string|array
     {
-        $objects = $this->objectModel->updateWhitelist($users, $objectType, $objectID, $type, $source, $updateType);
+        $this->objectModel->updateWhitelist($users, $objectType, $objectID, $type, $source, $updateType);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $return = '';
+
+        $acls = $tester->dao->select('account,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs();
+        if($acls)
+        {
+            $return = 'acls: ';
+            foreach($acls as $account => $source) $return .= "{$account}:{$source},";
+            $return = trim($return, ',');
+            $return .= ';';
+
+            $userViews = $tester->dao->select("account,{$objectType}s")->from(TABLE_USERVIEW)->where('account')->in(array_keys($acls))->fetchPairs();
+            if($userViews)
+            {
+                $return   .= 'views: ';
+                foreach($userViews as $account => $views) $return .="{$account}:{$views},";
+                $return = trim($return, ',');
+                $return .= ';';
+            }
+        }
+
+        return $return;
     }
 
     /**

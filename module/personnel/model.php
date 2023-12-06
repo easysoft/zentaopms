@@ -539,7 +539,8 @@ class personnelModel extends model
     }
 
     /**
-     * Adding users to access control lists.
+     * 更新白名单人员。
+     * Update users from access control lists.
      *
      * @param  array   $users
      * @param  string  $objectType  program|project|product|sprint
@@ -548,9 +549,9 @@ class personnelModel extends model
      * @param  string  $source      upgrade|add|sync
      * @param  string  $updateType  increase|replace
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateWhitelist(array $users = array(), string $objectType = '', int $objectID = 0, string $type = 'whitelist', string $source = 'add', string $updateType = 'replace')
+    public function updateWhitelist(array $users = array(), string $objectType = '', int $objectID = 0, string $type = 'whitelist', string $source = 'add', string $updateType = 'replace'): bool
     {
         $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
         if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
@@ -560,14 +561,12 @@ class personnelModel extends model
         foreach($users as $account)
         {
             $accounts[$account] = $account;
-
             if(isset($oldWhitelist[$account]))
             {
                 if($updateType == 'replace') $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
                 continue;
             }
-
-            $acl             = new stdClass();
+            $acl = new stdClass();
             $acl->account    = $account;
             $acl->objectType = $objectType;
             $acl->objectID   = $objectID;
@@ -577,71 +576,64 @@ class personnelModel extends model
             if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
         }
 
-        /* Update whitelist field. */
+        /* Update whitelist field of the object. */
         $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         if($updateType == 'increase')
         {
             $oldWhitelist = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($objectID)->fetch('whitelist');
-
-            $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('id')->in($oldWhitelist)->fetchPairs('id', 'id');
-            if($groups)
-            {
-                $oldWhitelist = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account', 'account');
-                if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
-            }
-            else
-            {
-                $oldWhitelist = $this->dao->select('account')->from(TABLE_USER)->where('account')->in($oldWhitelist)->fetchPairs('account', 'account');
-                if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
-            }
+            $groups       = $this->dao->select('id')->from(TABLE_GROUP)->where('id')->in($oldWhitelist)->fetchPairs('id', 'id');
+            $oldWhitelist = $groups ? $this->dao->select('account,account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs() : $this->dao->select('account,account')->from(TABLE_USER)->where('account')->in($oldWhitelist)->fetchPairs();
+            if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
         }
         $whitelist = !empty($accounts) ? ',' . implode(',', $accounts) : '';
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
-        $deletedAccounts = array();
-        foreach($oldWhitelist as $account => $whitelist)
-        {
-            if(!isset($accounts[$account])) $deletedAccounts[] = $account;
-        }
+        /* Get the accounts that have been deleted from the whitelist. */
+        $deletedAccounts = array_diff(array_keys($oldWhitelist), $accounts);
 
         /* Synchronization of people from the product whitelist to the program set. */
-        if($objectType == 'product')
-        {
-            $product = $this->loadModel('product')->getById($objectID);
-            if(empty($product)) return false;
-
-            $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
-            $newWhitelist     = array_merge($programWhitelist, $accounts);
-            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
-
-            /* Removal of persons from centralized program whitelisting. */
-            if($updateType == 'replace')
-            {
-                foreach($deletedAccounts as $account) $this->deleteProgramWhitelist($objectID, $account);
-            }
-        }
-
-        /* Synchronization of people from the sprint white list to the project. */
-        if($objectType == 'sprint')
-        {
-            $sprint = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-            if(empty($sprint)) return false;
-
-            $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
-            $newWhitelist     = array_merge($projectWhitelist, $accounts);
-            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
-
-            /* Removal of whitelisted persons from projects. */
-            if($updateType == 'replace')
-            {
-                foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
-            }
-        }
+        $this->updateParentWhitelist($objectType, $objectID, $accounts, $source, $updateType, $deletedAccounts, $objectTable);
 
         /* Update user view. */
         $this->loadModel('user')->updateUserView($objectID, $objectType, $deletedAccounts);
+        return !dao::isError();
+    }
+
+    /**
+     * 更新对象的父级白名单。
+     * Update parent whitelist of the object.
+     *
+     * @param  string  $objectType
+     * @param  int     $objectID
+     * @param  array   $accounts
+     * @param  string  $source
+     * @param  string  $updateType
+     * @param  array   $deletedAccounts
+     * @param  string  $objectTable
+     * @access private
+     * @return bool
+     */
+    private function updateParentWhitelist(string $objectType, int $objectID, array $accounts, string $source, string $updateType, array $deletedAccounts, string $objectTable): bool
+    {
+        if($objectType != 'product' && $objectType != 'sprint') return false;
+
+        $field  = $objectType == 'product' ? 'program' : 'project';
+        $object = $this->dao->select('id,' . $field)->from($objectTable)->where('id')->eq($objectID)->fetch();
+        if(empty($object)) return false;
+
+        /* Update parent whitelist. */
+        $parentWhitelist  = $this->getWhitelistAccount($object->{$field}, $field);
+        $newWhitelist     = array_merge($parentWhitelist, $accounts);
+        $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+        $this->updateWhitelist($newWhitelist, $field, $object->{$field}, 'whitelist', $source, $updateType);
+
+        /* Removal of persons from centralized parent whitelisting. */
+        if($updateType == 'replace')
+        {
+            foreach($deletedAccounts as $account) $this->deleteProgramWhitelist($objectID, $account);
+        }
+
+        return !dao::isError();
     }
 
     /**

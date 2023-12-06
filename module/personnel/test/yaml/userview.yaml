@@ -1,0 +1,10 @@
+title: userview
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: account
+    fields:
+    - field: account1
+      range: admin,user{100}
+    - field: account2
+      range: "[],1-50"

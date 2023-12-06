@@ -1,0 +1,23 @@
+title: project
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: project
+    range: 0{100},11-100
+  - field: name
+    range: "项目集{10},项目{90},[迭代,阶段,看板]{400!}"
+  - field: type
+    range: "program{10},project{90},[sprint,stage,kanban]{400!}"
+  - field: model
+    range: "[]{10},[scrum,waterfall,kanban,agileplus,waterfallplus]{18!},[]{1000}"
+  - field: whitelist
+    fields:
+    - field: whitelist1
+      prefix: ",user"
+      range: 1-50
+      postfix: ","
+    - field: whitelist2
+      prefix: test
+      range: "26-50,1-25"
