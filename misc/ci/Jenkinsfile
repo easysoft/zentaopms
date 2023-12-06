@@ -1,5 +1,5 @@
-library 'z-common@feat-231024'
-library 'z-zentaopms@feat-231116'
+library 'z-common@feat-231130'
+library 'z-zentaopms@feat-231204'
 
 pipeline {
   agent {
@@ -17,12 +17,24 @@ pipeline {
   }
 
   parameters {
+    separator(name: "action", sectionHeader: "构建动作")
     choice choices: ['auto', 'snapshot', 'release'], description: '构建包类型（快照或发版）', name: 'build_kind'
-    booleanParam defaultValue: true, description: '制作源码包', name: 'publish_zip'
+    booleanParam defaultValue: true, description: '制作开源版', name: 'publish_open'
+    booleanParam defaultValue: true, description: '制作企业版', name: 'publish_biz'
+    booleanParam defaultValue: false, description: '制作SAFe插件', name: 'publish_plugin_safe'
     booleanParam defaultValue: true, description: '制作镜像', name: 'publish_image'
     booleanParam defaultValue: true, description: '制作一键安装包', name: 'publish_zbox'
-    // booleanParam defaultValue: true, description: '开启代码降级', name: 'DOWNGRADE_ENABLED'
-    string description: '指定一个构建Id用于回放，适用于tag类型的job', name: 'REPLAY_ID', trim: true
+
+    separator(name: "replay", sectionHeader: "仓库切换")
+    string description: '指定一个构建Id用于回放', name: 'REPLAY_ID', trim: true
+    string description: '指定 zentaoext 分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
+    string description: '指定 xuanxuan 分支', name: 'xuanxuan_version', trim: true
+    string description: '指定 zdoo 分支', name: 'zdoo_version', trim: true
+    string description: '指定 zdooext 分支', name: 'zdooext_version', trim: true
+    string description: '指定全量降级 revision', name: 'fulldown_version', trim: true
+
+    separator(name: "other", sectionHeader: "其它")
+    booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
   }
 
   environment {
@@ -34,12 +46,6 @@ pipeline {
     SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
 
-    MIDDLE_IMAGE_REPO = "hub.qc.oop.cc/zentao-package-ext"
-    MIDDLE_IMAGE_TAG = """${sh(
-                        returnStdout: true,
-                        script: 'date +%Y%m%d%H%M-${BUILD_ID}'
-    ).trim()}"""
-
     MIRROR = "true"
 
     // 默认从job参数里读取，打开后覆盖
@@ -47,9 +53,6 @@ pipeline {
     PUBLISH_IMAGE = "${params.publish_image}"
     PUBLISH_ZBOX = "${params.publish_zbox}"
 
-    // set to blank for auto-detect from ci.json
-    DOWNGRADE_ENABLED = "false"
-    DOWNGRADE_VERSIONS = "7.2,7.1,7.0"
   }
 
   stages {
@@ -72,42 +75,34 @@ pipeline {
       }
 
       stages {
-        stage("Pull") {
+        stage("Pull pms") {
           steps {
             checkout scm
             script {
               def triggeredBy = currentBuild.getBuildCauses()
               println "Build triggered by: ${triggeredBy}"              
 
-              job.DetectTrigger()
-              env.XUANVERSION = sh(returnStdout: true,script: 'jq -r .pkg.xuanxuan.gitVersion < ci.json').trim()
-              env.ZENTAOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitVersion < ci.json').trim()
-              env.ZENTAOEXT_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitRepo < ci.json').trim()
-              env.ZDOO_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdoo.gitVersion < ci.json').trim()
-              env.ZDOOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdooext.gitVersion < ci.json').trim()
-              env.DOWNGRADE_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.downgrade.gitRepo < ci.json').trim()
+              env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
+              env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
               
-              if (params.build_kind=='auto') {
-                env.BUILD_KIND = "snapshot"
-                if (env.TAG_NAME) {
-                  def testStr = env.TAG_NAME
-                  def count = testStr.count(/_/)
-                  if (count==1) {
-                    env.BUILD_KIND = "release"
-                  }
-                }
-              } else {
-                env.BUILD_KIND = params.build_kind
-              }
-              
-            }
+              def j = job.newJob()
 
-            replayCheckout([
-              [name: "xuansrc", subDir: true, url: "https://git.zcorp.cc/easycorp/xuanxuan.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.XUANVERSION}", depth: 0],
-              [name: "zdoo", subDir: true, url: "https://git.zcorp.cc/easycorp/zdoo.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.ZDOO_VERSION}", depth: 2],
-              [name: "zdooext", subDir: true, url: "https://git.zcorp.cc/easycorp/zdooext.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.ZDOOEXT_VERSION}", depth: 2],
-              [name: "zentaoext", subDir: true, url: "${env.ZENTAOEXT_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.ZENTAOEXT_VERSION}", depth: 2]
-            ])
+              env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
+
+              zentaopms.setupStaticEnv()
+              zentaopms.setupEnvAfterCheckout()
+
+              zCheckout([
+                [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
+                [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
+                [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
+                [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}"] ],
+                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
+              ])
+
+              zentaopms.setupEnvAfterCheckoutExt()
+
+            }
           
           }
         }
@@ -116,93 +111,38 @@ pipeline {
           steps {
             sh 'env'
             script {
-              // GIT_URL GIT_COMMIT isn't export to env by jenkins. fetch by self
-              env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
-              env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+              def j = job.newJob()
+              j.SaveHeadReport('./.head.md')
 
-              job.BuildHeader()
-              env.GIT_BRANCH = job.getBranchById(env.GIT_COMMIT)
-              // env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)').trim()
+              // update custom envoronment here
 
-              env.CI_PUBLIC_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.public.namespace.' + env.BUILD_KIND + ' < ci.json').trim()
-              env.CI_INTERNAL_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.internal.namespace.' + env.BUILD_KIND + ' < ci.json').trim()
-
-              def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
-              env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
-              if (env.BUILD_KIND=='release') {
-                env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups2 < ci.json').trim()
-              } else {
-                env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
-              }
-
-              env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
-              env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
-              env.MAX_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION').trim()
-              env.IPD_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/IPDVERSION').trim()
-
-              env.DOCKER_CREDENTIALS_ID = 'hub-qucheng-push'
-              
-              env.CI_DOWNGRADE_ENABLED = sh(returnStdout: true, script: 'test -n "${DOWNGRADE_ENABLED}" && echo ${DOWNGRADE_ENABLED} || (jq -r .downgrade.enabled < ci.json)').trim()
-              env.QINIU_BUCKET = sh(returnStdout: true, script: 'jq -r .upload.bucket < ci.json').trim()
-              
-              if (env.BUILD_KIND=='release') {
-                env.ARTIFACT_SUBGROUP='release'
-              } else {
-                currentDate = sh(returnStdout: true, script: 'date +%Y%m%d').trim()
-                env.ARTIFACT_SUBGROUP = currentDate + '.' + env.GIT_COMMIT[0..6]
-              }
-              env.ARTIFACT_REPOSITORY = sh(returnStdout: true,script: 'jq -r .upload.nexus.' + env.BUILD_KIND + ' < ci.json').trim()
-              env.ARTIFACT_HOST = "nexus.qc.oop.cc"
-              env.ARTIFACT_PROTOCOL = "https"
-              env.ARTIFACT_CRED_ID = "nexus-jenkins"
-
+              // send start msg
               def mdPath = "start.md"
-              job.BuildChangeSetMd(mdPath)
-              job.unStashMsgHeader()
-              ximNotify(title: "开始构建禅道", contentFile: mdPath, contentHeaderFile: job.headerFileName())
+              j.SaveStartReport(mdPath)
+              ximNotify(title: "开始构建禅道", contentFile: mdPath, contentHeaderFile: './.head.md')
             }
 
           }
         }
 
         stage("Build") {
-          when {
-            environment name:'PUBLISH_ZIP', value:'true'
-          }
+          when { expression { return params.publish_open || params.publish_biz } }
           stages {
-            stage("increase downgrade") {
+            stage("增量降级") {
               steps {
-                replayCheckout([
-                  [name: "downRepo", subDir: true, url: "${env.DOWNGRADE_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "downgrade/${env.GIT_BRANCH}/src"]
-                ])
-                container('package') {
-                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/increaseDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" framework lib module'
-                  sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
-                }
+                echo "GIT_BRANCH in jenkinsfile is ${env.GIT_BRANCH}"
+                script { downgrade.increase() }
               }
-
               post {
                 failure {
-                  container('package') {
-                    sh 'mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report'
-                  }
-
-                  publishHTML([
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: './report',
-                    reportFiles: 'downgradeReport.html',
-                    reportName: 'DowngradeReport'
-                  ])
-
-                  ximNotify(title: "禅道增量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)", contentHeaderFile: job.headerFileName())
+                  script { downgrade.increaseErrReport() }
                 }
               }
             }
+
             stage("make ciCommon") {
               steps {
-                withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
+                withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
                     sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
@@ -215,6 +155,7 @@ pipeline {
             }
 
             stage("zentaoext") {
+              when { expression { return params.publish_biz } }
               steps {
                 container('package') {
                   sh 'cd $SRC_ZENTAOEXT_PATH && make'
@@ -227,6 +168,31 @@ pipeline {
                 }
                 script {
                   buildPkg.uploadSource()
+                  env.PLUGIN_SAFE_EXIST = sh(returnStatus: true, script: 'test -d $SRC_ZENTAOEXT_PATH/zentaopro/safe')
+                }
+
+              }
+            }
+
+            stage("SAFe") {
+              when { 
+                allOf {
+                  expression { return params.publish_biz || params.publish_plugin_safe }
+                  environment name: 'PLUGIN_SAFE_EXIST', value: '0'
+                }
+              }
+              steps {
+                container('package') {
+                    sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n safe -s -i \
+                      -p 8.1,7.2,7.1,7.0,5.4 \
+                      -c ${PWD}/misc -r $SRC_ZENTAOEXT_PATH/zentaopro -o ${ZENTAO_BUILD_PATH} \
+                      safe '''
+                    sh 'cp -v ${ZENTAO_BUILD_PATH}/safe-*.zip ${ZENTAO_RELEASE_PATH}/'
+                    sh 'cd $SRC_ZENTAOEXT_PATH && make safeDown'
+                }
+                script {
+                  env.UPLOADED_PLUGIN_SAFE = 'true'
+                  buildPkg.uploadSAFe(["php5.4_5.6", "php7.0", "php7.1", "php7.2_7.4", "php8.1"])
                 }
 
               }
@@ -240,13 +206,13 @@ pipeline {
     stage("Publish") {
       environment {
         OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
+        QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+        QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
       }
 
       stages {
         stage("Merge and Upload") {
-          when {
-            environment name:'PUBLISH_ZIP', value:'true'
-          }
+          when { expression { return params.publish_biz } }
           matrix {
             agent {
               kubernetes {
@@ -347,12 +313,6 @@ pipeline {
                       environment name: 'BUILD_KIND', value: 'release'
                     }
 
-                    environment {
-                      OBJECT_KEY_PREFIX = "zentao/"
-                      QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-                      QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
-                    }
-
                     steps {
                       sh 'ls -l ${OUTPUT_PKG_PATH}'
                       container('jnlp') {
@@ -371,24 +331,25 @@ pipeline {
         } // End Merge and Upload Max
 
         stage("Notice ZIP") {
-          when { environment name:'PUBLISH_ZIP', value:'true' }
+          when { expression { return params.publish_biz } }
           steps {
             checkout scmGit(branches: [[name: "master"]],
               extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-              userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zentao-package.git']]
+              userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
             )
             container('xuanimbot') {
               sh './gen_build_report.sh > success.md'
             }
             script {
-              job.unStashMsgHeader()
-              ximNotify(title: "禅道源码包构建成功", contentFile: "success.md", contentHeaderFile: job.headerFileName())
+              def j = job.newJob()
+              j.SaveHeadReport('./.head.md')
+              ximNotify(title: "禅道源码包构建成功", contentFile: "success.md", contentHeaderFile: './.head.md')
             }
           }
         }
 
         stage("Zbox") {
-          when { environment name:'PUBLISH_ZBOX', value:'true' }
+          when { expression { return params.publish_zbox } }
 
           environment {
             // printf "$PKG_URL_FORMATTER" pmsPack ZenTaoPMS 18.5 ZenTaoPMS-18.5-php8.1.zip
@@ -396,9 +357,6 @@ pipeline {
                         returnStdout: true,
                         script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/%s/`echo ${ARTIFACT_SUBGROUP} | tr . /`/%s/%s/%s"
               ).trim()}"""
-            OBJECT_KEY_PREFIX = "zentao/"
-            QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-            QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
           }
 
           stages {
@@ -416,7 +374,7 @@ pipeline {
                       steps {
                         checkout scmGit(branches: [[name: "main"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                          userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zbox-builder.git']]
+                          userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
                         )
                       }
                     }
@@ -464,7 +422,7 @@ pipeline {
                       steps {
                         checkout scmGit(branches: [[name: "main"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                          userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zbox-builder.git']]
+                          userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
                         )
                       }
                     }
@@ -507,12 +465,13 @@ pipeline {
               steps {
                 checkout scmGit(branches: [[name: "main"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zbox-builder.git']]
+                  userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
                 )
                 sh 'script/lib/gen_report.sh > zbox-success.md'
                 script {
-                  job.unStashMsgHeader()
-                  ximNotify(title: "禅道一键安装包构建成功", contentFile: "zbox-success.md", contentHeaderFile: job.headerFileName())
+                  def j = job.newJob()
+                  j.SaveHeadReport('./.head.md')
+                  ximNotify(title: "禅道一键安装包构建成功", contentFile: "zbox-success.md", contentHeaderFile: './.head.md')
                 }
               }
             }
@@ -521,9 +480,7 @@ pipeline {
         } // End Zbox
 
         stage("Docker Image") {
-          when {
-            environment name:'PUBLISH_IMAGE', value:'true'
-          }
+          when { expression { return params.publish_image } }
 
           agent {
             kubernetes {
@@ -533,7 +490,6 @@ pipeline {
           }
 
           environment {
-            REGISTRY_HOST="hub.zentao.net"
             CI_BUILD_PUBLIC_IMAGE="true"
             PKG_URL_FORMATTER = """${sh(
                         returnStdout: true,
@@ -544,7 +500,7 @@ pipeline {
           steps {
             checkout scmGit(branches: [[name: "master"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/app/zentao.git']]
+                  userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/app/zentao.git"]]
                 )
             script {
               dockerBuildx(host=env.REGISTRY_HOST, credentialsId=env.DOCKER_CREDENTIALS_ID) {
@@ -552,27 +508,32 @@ pipeline {
                   sh "apk --no-cache add make bash jq git tzdata"
                   sh "make markdown-init"
                 }
-                stage("docker pms") {
+                stage("docker build") {
                   sh 'make build'
-                }
-                stage("docker biz") {
+
                   sh 'make build-biz'
                   sh 'make build-biz-k8s'
-                }
-                stage("docker max") {
+
                   sh 'make build-max'
                   sh 'make build-max-k8s'
-                }
-                stage("docker ipd") {
+
                   sh 'make build-ipd'
                   sh 'make build-ipd-k8s'
+
+                  sh 'make markdown-render > ./report.md'
                 }
-                sh 'make markdown-render > ./report.md'
               }
             }
             script {
-              job.unStashMsgHeader()
-              ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: job.headerFileName())
+              if (env.BUILD_KIND=='release') {
+                stage("离线镜像包") {
+                  offlineImage.save()
+                  offlineImage.release()
+                }
+              }
+              def j = job.newJob()
+              j.SaveHeadReport('./.head.md')
+              ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: './.head.md')
             }
           }
 
@@ -587,24 +548,18 @@ pipeline {
           }
           when {
             allOf {
-              environment name:'PUBLISH_ZIP', value:'true'
+              expression { return params.publish_biz }
               environment name:'BUILD_KIND', value:'release'
             }
             
             beforeAgent true
           }
 
-          environment {
-            OBJECT_KEY_PREFIX = "zentao/"
-            QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-            QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
-          }
-
           steps {
             script {
               checkout scmGit(branches: [[name: "master"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/web/rongpm.git']]
+                userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/web/rongpm.git"]]
               )
 
               container('package') {
@@ -634,5 +589,3 @@ pipeline {
   }
 
 }
-
-
