@@ -573,12 +573,12 @@ class bug extends control
      * 删除 bug。
      * Delete a bug.
      *
-     * @param  string $bugID
+     * @param  int    $bugID
      * @param  string $from    taskkanban
      * @access public
      * @return void
      */
-    public function delete(string $bugID, string $from = '')
+    public function delete(int $bugID, string $from = '')
     {
         /* 删除 bug。 */
         /* Delete bug. */
