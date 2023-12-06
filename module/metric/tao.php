@@ -195,6 +195,7 @@ class metricTao extends metricModel
         if($scope == 'system') return false;
 
         $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetchPairs();
+        $objects = array();
         if($scope == 'product')
         {
             $objects = $this->dao->select('id')->from(TABLE_PRODUCT)
