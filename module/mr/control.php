@@ -63,7 +63,7 @@ class mr extends control
 
         if($this->app->tab == 'execution' && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
-        $repoList = $this->loadModel('repo')->getListBySCM('Gitlab,Gitea,Gogs');
+        $repoList = $this->loadModel('repo')->getListBySCM($this->config->repo->gitServiceTypeList);
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
         if(!isset($repoList[$repoID])) $repoID = key($repoList);
@@ -195,6 +195,13 @@ class mr extends control
 
         $repoID = $this->loadModel('repo')->saveState($repoID);
         $repo   = $this->repo->getByID($repoID);
+        if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
+        {
+            $repoList = $this->repo->getListBySCM($this->config->repo->gitServiceTypeList);
+            $repoID   = key($repoList);
+            $repoID   = $this->loadModel('repo')->saveState($repoID);
+            $repo     = $repoList[$repoID];
+        }
 
         $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
 
