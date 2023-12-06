@@ -64,32 +64,13 @@ fields:
     format: ""
   - field: createdDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: deadline
-    note: "计划完成时间"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: lastReviewedBy
     note: "最后评审者"
     from: common.user.v1.yaml
     use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: lastReviewedDate
-    note: "最后评审日期"
-    from: common.date.v1.yaml
-    use: dateB
     prefix: ""
     postfix: ""
     loop: 0
@@ -102,26 +83,10 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: lastAuditedDate
-    note: "最后审计日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: lastEditedBy
     note: "最后编辑者"
     from: common.user.v1.yaml
     use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: lastEditedDate
-    note: "最后编辑日期"
-    from: common.date.v1.yaml
-    use: dateB
     prefix: ""
     postfix: ""
     loop: 0

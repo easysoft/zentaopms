@@ -248,11 +248,11 @@ class docModel extends model
      * 创建一个API接口库。
      * Creat a api doc library.
      *
-     * @param  object $formData
+     * @param  object   $formData
      * @access public
-     * @return bool
+     * @return bool|int
      */
-    public function createApiLib(object $formData = null): bool
+    public function createApiLib(object $formData = null): bool|int
     {
         $this->app->loadLang('api');
 
@@ -278,7 +278,7 @@ class docModel extends model
         $libID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('doclib', $libID, 'created');
 
-        return !dao::isError();
+        return $libID;
     }
 
     /**
@@ -1279,12 +1279,12 @@ class docModel extends model
      * 检查是否有权限访问文档库/文档。
      * Check priv for lib.
      *
-     * @param  object $object
-     * @param  string $extra
+     * @param  object|false $object
+     * @param  string       $extra
      * @access public
      * @return bool
      */
-    public function checkPrivLib(object $object, string $extra = ''): bool
+    public function checkPrivLib(object|bool $object, string $extra = ''): bool
     {
         if(empty($object)) return false;
 
