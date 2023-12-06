@@ -1274,8 +1274,17 @@ EOF;
 
         if(!empty($_POST))
         {
-            $this->user->updatePassword($this->app->user->id);
+            /* 确保必填项提示信息能显示正确的字段名。*/
+            $this->lang->my->originalPassword = $this->lang->user->originalPassword;
+            $this->lang->my->password1        = $this->lang->user->password1;
+            $this->lang->my->password2        = $this->lang->user->password2;
+
+            $user = form::data($this->config->my->form->changePassword)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
+            $this->user->updatePassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($isonlybody) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('index', 'index')));
         }
