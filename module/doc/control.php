@@ -812,7 +812,8 @@ class doc extends control
     }
 
     /**
-     * Show team space.
+     * 团队空间。
+     * Team space.
      *
      * @param  int    $objectID
      * @param  int    $libID
@@ -826,9 +827,9 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace($objectID = 0, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('doc', 'tableContents', "type=custom&objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('doc', 'tableContents', "type=custom&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
