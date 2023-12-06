@@ -511,7 +511,7 @@ class solutionModel extends model
      * @access public
      * @return object
      */
-    public function getLastSolution(): object|null
+    public function getLastSolution(): object|false
     {
         return $this->dao->select('*')->from(TABLE_SOLUTION)
             ->where('deleted')->eq(0)
