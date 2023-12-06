@@ -1713,6 +1713,7 @@ class baseRouter
                 if(method_exists($paramType, 'getName')) $type = $paramType->getName();
             }
 
+            $type = strpos($type, '|') ? 'string' : $type;
             $defaultParams[$name] = array('default' => $default, 'type' => $type);
         }
         return $defaultParams;
