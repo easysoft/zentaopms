@@ -7,8 +7,8 @@
  */
 function loadBugCreate()
 {
-    const begin     = $('#conditions').find('#begin').val().replaceAll('-', '');
-    const end       = $('#conditions').find('#end').val().replaceAll('-', '');
+    const begin     = $('#conditions').find('[name="begin"]').val().replaceAll('-', '');
+    const end       = $('#conditions').find('[name="end"]').val().replaceAll('-', '');
     const product   = $('#conditions').find('[name=product]').val();
     const execution = $('#conditions').find('[name=execution]').val();
     const params    = window.btoa('begin=' + begin + '&end=' + end + '&product=' + product + '&execution=' + execution);

@@ -341,7 +341,7 @@ class pivotZen extends pivot
         $end   = $end == 0   ? date('Y-m-d', strtotime('now')) : $end = date('Y-m-d', strtotime($end));
 
         $this->view->title       = $this->lang->pivot->bugCreate;
-        $this->view->bugs        = $this->pivot->getBugs($begin, $end, $product, $execution);
+        $this->view->bugs        = $this->pivot->getBugs($begin, $end, $product ? $product : 0, $execution ? $execution : 0);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->executions  = $this->pivot->getProjectExecutions();
         $this->view->products    = $this->loadModel('product')->getPairs('', 0, '', 'all');

@@ -288,17 +288,20 @@ class pivotModel extends model
     }
 
     /**
-     * Get bugs
+     * 获取bug相关透视表信息。
+     * Get bug related pivot information.
      *
-     * @param  int    $begin
-     * @param  int    $end
+     * @param  string $begin
+     * @param  string $end
      * @param  int    $product
      * @param  int    $execution
      * @access public
      * @return array
      */
-    public function getBugs($begin, $end, $product, $execution)
+    public function getBugs(string $begin, string $end, int $product, int $execution): array
     {
+        /* 获取符合条件的bug。 */
+        /* Get bugs. */
         $end       = date('Y-m-d', strtotime("{$end} +1 day"));
         $bugGroups = $this->dao->select("IF(resolution = '', 'unResolved', resolution) AS resolution, openedBy, status")->from(TABLE_BUG)
             ->where('deleted')->eq('0')
@@ -308,39 +311,7 @@ class pivotModel extends model
             ->beginIF($execution)->andWhere('execution')->eq($execution)->fi()
             ->fetchGroup('openedBy');
 
-        $bugs = array();
-        foreach($bugGroups as $account => $userBugs)
-        {
-            $bug = array();
-            $bug['openedBy']   = $account;
-            $bug['unResolved'] = 0;
-            $bug['validRate']  = 0;
-            $bug['total']      = 0;
-
-            foreach(array_keys($this->lang->bug->resolutionList) as $resolution)
-            {
-                if($resolution) $bug[$resolution] = 0;
-            }
-
-            $resolvedCount = 0;
-            $validCount    = 0;
-            foreach($userBugs as $userBug)
-            {
-                if(!isset($bug[$userBug->resolution])) continue;
-
-                $bug[$userBug->resolution]++;
-                $bug['total']++;
-
-                if($userBug->status == 'resolved' || $userBug->status == 'closed') $resolvedCount++;
-                if($userBug->resolution == 'fixed' || $userBug->resolution == 'postponed') $validCount++;
-            }
-
-            if(!$bug['total']) continue;
-
-            $bug['validRate'] = $resolvedCount ? round($validCount / $resolvedCount * 100, 2) . '%' : '0%';
-
-            $bugs[] = $bug;
-        }
+        $bugs = $this->pivotTao->getBugStatistics($bugGroups);
 
         uasort($bugs, 'sortSummary');
 
