@@ -265,20 +265,21 @@ class personnelTest
     }
 
     /**
-     * Get whitelist account test
+     * 测试获取对象的白名单账号。
+     * Test get whitelist account.
      *
-     * @param  int    $objectID
-     * @param  string $objectType
+     * @param  int         $objectID
+     * @param  string      $objectType
      * @access public
-     * @return array
+     * @return array|array
      */
-    public function getWhitelistAccountTest($objectID = 0, $objectType = '')
+    public function getWhitelistAccountTest(int $objectID = 0, string $objectType = ''): string|array
     {
         $objects = $this->objectModel->getWhitelistAccount($objectID, $objectType);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', $objects);
     }
 
     public function updateWhitelistTest($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $updateType = 'replace')

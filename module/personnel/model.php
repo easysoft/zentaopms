@@ -525,6 +525,7 @@ class personnelModel extends model
     }
 
     /**
+     * 测试获取对象白名单人员账号。
      * Get whitelisted accounts.
      *
      * @param  int    $objectID
@@ -532,9 +533,9 @@ class personnelModel extends model
      * @access public
      * @return array
      */
-    public function getWhitelistAccount(int $objectID = 0, string $objectType = '')
+    public function getWhitelistAccount(int $objectID = 0, string $objectType = ''): array
     {
-        return $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs('account', 'account');
+        return $this->dao->select('account,account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs();
     }
 
     /**

@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/personnel.class.php';
 
-zdTable('acl')->gen(100);
+zdTable('acl')->gen(50);
 
 /**
 
@@ -11,34 +12,26 @@ title=测试 personnelModel->getWhitelistAccount();
 cid=1
 pid=1
 
-这是一个正常测试，统计关联白名单人员数量 >> 3
-取出其中一个数据admin >> admin
-取出另一个数据dev10 >> dev10
-取出objectid2的白名单数量 >> 0
-当objectID不存在时，统计匹配数量 >> 0
-当传入参数为空时，统计匹配人员数量 >> 0
-
 */
 
 $personnel = new personnelTest('admin');
 
-$objectID = array();
-$objectID[0] = 1;
-$objectID[1] = 2;
-$objectID[2] = 1111;
+$objectIdList   = array(1, 2, 3, 4);
+$objectTypeList = array('program', 'project', 'product', 'sprint');
 
-$objectType = array();
-$objectType[0] = 'project';
-$objectType[1] = 'program';
-$objectType[2] = 'product';
-$objectType[3] = 'sprint';
-
-$result1 = $personnel->getWhitelistAccountTest($objectID[0], $objectType[1]);
-$result2 = $personnel->getWhitelistAccountTest($objectID[1], $objectType[2]);
-$result3 = $personnel->getWhitelistAccountTest($objectID[2], $objectType[3]);
-
-r(count($result1)) && p()        && e('5');       //这是一个正常测试，统计关联白名单人员数量
-r($result1)        && p('admin') && e('admin');   //取出其中一个数据admin
-r($result1)        && p('user20') && e('user20'); //取出另一个数据dev10
-r(count($result2)) && p()        && e('5');       //取出objectid2的白名单数量
-r(count($result3)) && p()        && e('0');       //当objectID不存在时，统计匹配数量
+r($personnel->getWhitelistAccountTest($objectIdList[0], $objectTypeList[0])) && p()  && e('admin,user20,user40'); // 测试获取 项目集 1 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[0], $objectTypeList[1])) && p()  && e('user10,user30');       // 测试获取 项目   1 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[0], $objectTypeList[2])) && p()  && e('0');                   // 测试获取 产品   1 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[0], $objectTypeList[3])) && p()  && e('0');                   // 测试获取 执行   1 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[1], $objectTypeList[0])) && p()  && e('0');                   // 测试获取 项目集 2 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[1], $objectTypeList[1])) && p()  && e('0');                   // 测试获取 项目   2 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[1], $objectTypeList[2])) && p()  && e('user1,user21,user41'); // 测试获取 产品   2 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[1], $objectTypeList[3])) && p()  && e('user11,user31');       // 测试获取 执行   2 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[2], $objectTypeList[0])) && p()  && e('user12,user32');       // 测试获取 项目集 3 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[2], $objectTypeList[1])) && p()  && e('user2,user22,user42'); // 测试获取 项目   3 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[2], $objectTypeList[2])) && p()  && e('0');                   // 测试获取 产品   3 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[2], $objectTypeList[3])) && p()  && e('0');                   // 测试获取 执行   3 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[3], $objectTypeList[0])) && p()  && e('0');                   // 测试获取 项目集 4 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[3], $objectTypeList[1])) && p()  && e('0');                   // 测试获取 项目   4 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[3], $objectTypeList[2])) && p()  && e('user13,user33');       // 测试获取 产品   4 的白名单人员
+r($personnel->getWhitelistAccountTest($objectIdList[3], $objectTypeList[3])) && p()  && e('user3,user23,user43'); // 测试获取 执行   4 的白名单人员
