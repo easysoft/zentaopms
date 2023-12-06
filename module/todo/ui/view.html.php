@@ -240,16 +240,16 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
     !$isInModal && $actionList['prefix'][] = array('icon' => 'back', 'url' => $fnGenerateGoBackUrl(), 'hint' => $lang->goback . $lang->backShortcutKey, 'text' => $lang->goback);
 
     /* Common action buttons. */
-    $canStart    && $status == 'wait'                          ? $actionList['main'][] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'data-load' => $isInModal ? 'modal' : null, 'text' => $lang->todo->abbr->start) : null;
-    $canActivate && ($status == 'done' || $status == 'closed') ? $actionList['main'][] = array('icon' => 'magic', 'url' => createLink('todo', 'activate', "todoID={$todo->id}"), 'data-load' => $isInModal ? 'modal' : null, 'text' => $lang->activate) : null;
-    $canClose    && $status == 'done'                          ? $actionList['main'][] = array('icon' => 'off',   'url' => createLink('todo', 'close',    "todoID={$todo->id}"), 'data-load' => $isInModal ? 'modal' : null, 'text' => $lang->close) : null;
+    $canStart    && $status == 'wait'                          ? $actionList['main'][] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'text' => $lang->todo->abbr->start) : null;
+    $canActivate && ($status == 'done' || $status == 'closed') ? $actionList['main'][] = array('icon' => 'magic', 'url' => createLink('todo', 'activate', "todoID={$todo->id}"), 'text' => $lang->activate) : null;
+    $canClose    && $status == 'done'                          ? $actionList['main'][] = array('icon' => 'off',   'url' => createLink('todo', 'close',    "todoID={$todo->id}"), 'text' => $lang->close) : null;
     $canEdit                                                   ? $actionList['main'][] = array('icon' => 'edit',  'url' => createLink('todo', 'edit',     "todoID={$todo->id}"), 'data-load' => $isInModal ? 'modal' : null, 'text' => $lang->edit) : null;
     $canDelete                                                 ? $actionList['main'][] = array('icon' => 'trash', 'url' => createLink('todo', 'delete',   "todoID={$todo->id}&confirm=yes"), 'text' => $lang->delete, 'class' => 'ajax-submit', 'data-confirm' => $lang->todo->confirmDelete) : null;
 
     /* The status is 'done' or 'closed' without more action buttons. */
     if($status == 'done' || $status == 'closed') return $actionList;
 
-    $actionList['main'][] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'data-load' => $isInModal ? 'modal' : null, 'text' => $lang->todo->abbr->finish);
+    $actionList['main'][] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'text' => $lang->todo->abbr->finish);
 
     $canCreateStory = hasPriv('story', 'create');
     $canCreateTask  = hasPriv('task',  'create');
