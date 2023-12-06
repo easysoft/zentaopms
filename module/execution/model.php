@@ -1243,8 +1243,8 @@ class executionModel extends model
         {
             $this->app->loadLang('programplan');
             $parent = $this->getByID($parentID);
-            if($begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
-            if($end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
+            if($parent && $begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
+            if($parent && $end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
         }
     }
 
