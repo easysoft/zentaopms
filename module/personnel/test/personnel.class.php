@@ -141,7 +141,7 @@ class personnelTest
     public function getInvolvedProjectsTest(array $projects): array
     {
         global $tester;
-        $projectID = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchall('id');
+        $projectID = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
 
         $objects = $this->objectModel->getInvolvedProjects($projectID);
 
@@ -180,7 +180,7 @@ class personnelTest
     public function getProjectTaskInvestTest($projectID, $accounts)
     {
         global $tester;
-        $project = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchall('id');
+        $project = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchAll('id');
         $objects = $this->objectModel->getProjectTaskInvest($project, $accounts);
 
         if(dao::isError()) return dao::getError();
@@ -199,7 +199,7 @@ class personnelTest
     public function getUserHoursTest($projectID, $accounts)
     {
         global $tester;
-        $projects = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchall('id');
+        $projects = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchAll('id');
         $tasks = $tester->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
