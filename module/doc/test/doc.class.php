@@ -58,28 +58,27 @@ class docTest
     }
 
     /**
-     * Function updateApiLib test by doc
+     * 更新一个API接口库。
+     * Update an api lib.
      *
-     * @param  int $id
-     * @param  array $param
+     * @param  int        $id
+     * @param  array      $param
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function updateApiLibTest($id, $param)
+    public function updateApiLibTest(int $id, array $param): array|bool
     {
-        global $tester;
-        $tester->app->loadConfig('api');
-        $tester->app->loadLang('doclib');
+        $this->objectModel->loadModel('api');
 
-        $oldDoc = $this->objectModel->getLibById($id);
+        $oldDoc = $this->objectModel->getLibByID($id);
+
         $data = new stdClass;
-        foreach($param as $key => $value) $data->$key = $value;
+        foreach($param as $key => $value) $data->{$key} = $value;
 
-        $objects = $this->objectModel->updateApiLib($id, $oldDoc, $data);
+        $changes = $this->objectModel->updateApiLib($id, $data);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $changes;
     }
 
     /**
