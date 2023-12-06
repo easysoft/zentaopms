@@ -21,10 +21,14 @@ function buildItem(array $item): wg
     global $lang;
 
     $isRequired = $item['required'];
+    $isPercent  = $item['width'] < 1;
+    $unitTypes  = array('px' => 'px', '%' => '%');
+    $value      = $isPercent ? strval(round((float)$item['width'] * 100)) : $item['width'];
     return li
     (
         setClass('row', 'items-center', 'border', 'px-5', 'h-9', 'cursor-move'),
         set('data-key', $item['name']),
+        set('data-value', $item['width']),
         $isRequired ? setClass('required-col') : null,
         checkbox
         (
@@ -40,14 +44,22 @@ function buildItem(array $item): wg
         ),
         div
         (
-            setClass('row', 'items-center', 'gap-1'),
-            span($lang->datatable->width),
-            input
+            setClass('row items-center gap-1'),
+            span($lang->datatable->width, setClass('muted')),
+            inputGroup
             (
-                setClass('w-8', 'h-5', 'shadow-none', 'px-1', 'text-center'),
-                set::value($item['width'])
-            ),
-            span('px')
+                input
+                (
+                    setClass('size-sm text-center w-14'),
+                    set::value($value === '0' ? '' : $value)
+                ),
+                select
+                (
+                    setClass('size-sm w-12'),
+                    set::items($unitTypes),
+                    set::value($isPercent ? '%' : 'px')
+                )
+            )
         )
     );
 }
@@ -116,7 +128,6 @@ to::footer
         btn
         (
             setClass('toolbar-item w-28'),
-            setID('ajax-save'),
             set::type('primary'),
             on::click('handleEditColsSubmit'),
             $lang->save

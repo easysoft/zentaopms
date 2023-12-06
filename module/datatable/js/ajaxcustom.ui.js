@@ -17,11 +17,12 @@ function handleEditColsSubmit()
             const li = children[j];
             const checkbox = li.querySelector('input[type="checkbox"]');
             const input = li.querySelector('input[type="text"]');
+            const unit = li.querySelector('select');
             formData.push({
                 id: li.dataset.key,
                 order: ++index,
                 show: checkbox.checked,
-                width: input.value,
+                width: unit.value === '%' ? String(input.value / 100) : input.value,
                 fixed: types[i],
             });
         }
