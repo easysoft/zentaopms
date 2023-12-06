@@ -167,7 +167,7 @@ h::script
 
         window.setMaxImport = function()
         {
-            $.cookie.set('maxImport', $('#maxImport').val());
+            $.cookie.set('maxImport', $('#maxImport').val(), {expires:config.cookieLife, path:config.webRoot});
             loadCurrentPage();
         };
 

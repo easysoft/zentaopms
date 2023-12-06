@@ -382,7 +382,7 @@ window.fullScreen = function()
         {
             $('#kanbanList').addClass('fullscreen').css('background', '#fff');
             window.hideAllAction();
-            $.cookie.set('isFullScreen', 1);
+            $.cookie.set('isFullScreen', 1, {expires:config.cookieLife, path:config.webRoot});
         };
 
         var whenFailEnterFullscreen = function()
@@ -418,7 +418,7 @@ window.fullScreen = function()
 function exitFullScreen()
 {
     $('.btn').show();
-    $.cookie.set('isFullScreen', 0);
+    $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
 }
 
 document.addEventListener('fullscreenchange', function (e)

@@ -14,12 +14,12 @@ window.fullScreen = function()
         {
             $('#content').addClass('scrollbar-hover');
             $('#content').css('background', '#fff');
-            $.cookie.set('isFullScreen', 1);
+            $.cookie.set('isFullScreen', 1, {expires:config.cookieLife, path:config.webRoot});
         };
 
         var whenFailEnterFullscreen = function(error)
         {
-            $.cookie.set('isFullScreen', 0);
+            $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
         };
 
         try
@@ -50,7 +50,7 @@ window.fullScreen = function()
 function exitFullScreen()
 {
     $('#content').removeClass('scrollbar-hover');
-    $.cookie.set('isFullScreen', 0);
+    $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
 }
 
 document.addEventListener('fullscreenchange', function (e)

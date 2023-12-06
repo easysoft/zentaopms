@@ -2,7 +2,7 @@ function setDownloading(event)
 {
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
 
-    $.cookie.set('downloading', 0);
+    $.cookie.set('downloading', 0, {expires:config.cookieLife, path:config.webRoot});
 
     time = setInterval(function()
     {
@@ -10,7 +10,7 @@ function setDownloading(event)
         {
             $(event.target).closest('div.modal')[0].classList.remove('show');
 
-            $.cookie.set('downloading', null);
+            $.cookie.set('downloading', null, {expires:config.cookieLife, path:config.webRoot});
 
             clearInterval(time);
         }

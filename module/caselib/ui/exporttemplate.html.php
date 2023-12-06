@@ -41,7 +41,7 @@ js
     {
         if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
 
-        $.cookie.set('downloading', 0);
+        $.cookie.set('downloading', 0, {expires:config.cookieLife, path:config.webRoot});
 
         time = setInterval(function()
         {
@@ -49,7 +49,7 @@ js
             {
                 $('.modal .modal-actions .close')[0].click();
 
-                $.cookie.set('downloading', null);
+                $.cookie.set('downloading', null, {expires:config.cookieLife, path:config.webRoot});
 
                 clearInterval(time);
             }

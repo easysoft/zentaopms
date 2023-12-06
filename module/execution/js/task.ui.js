@@ -22,7 +22,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    $.cookie.set('checkedItem', checkedList);
+    $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
 });
 
 /**

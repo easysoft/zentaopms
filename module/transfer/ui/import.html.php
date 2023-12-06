@@ -23,4 +23,4 @@ panel
         span(setClass('label secondary'), $lang->transfer->importNotice)
     )
 );
-h::js('$.cookie.set("maxImport", 0);');
+h::js('$.cookie.set("maxImport", 0, {expires:config.cookieLife, path:config.webRoot});');

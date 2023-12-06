@@ -189,7 +189,7 @@ window.renderCell = function(result, info)
 $(document).on('click', '.switchButton', function()
 {
     const type = $(this).data('type');
-    $.cookie.set('viewType', type);
+    $.cookie.set('viewType', type, {expires:config.cookieLife, path:config.webRoot});
     loadCurrentPage();
 })
 

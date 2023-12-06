@@ -543,7 +543,7 @@ window.fullScreen = function()
             $('#kanbanList').addClass('fullscreen').css('background', '#fff');
             $('#kanbanList .kanban-list').css('height', '100%');
             window.hideAllAction();
-            $.cookie.set('isFullScreen', 1);
+            $.cookie.set('isFullScreen', 1, {expires:config.cookieLife, path:config.webRoot});
         };
 
         var whenFailEnterFullscreen = function()
@@ -580,7 +580,7 @@ function exitFullScreen()
 {
     $('.btn').show();
     $('#kanbanList .kanban-list').css('height', 'calc(100vh - 120px)');
-    $.cookie.set('isFullScreen', 0);
+    $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
 }
 
 document.addEventListener('fullscreenchange', function (e)

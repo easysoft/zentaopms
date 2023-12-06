@@ -228,14 +228,14 @@ window.setDownloading = function(event)
     /* Doesn't support Opera, omit it. */
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;
 
-    $.cookie.set('downloading', 0);
+    $.cookie.set('downloading', 0, {expires:config.cookieLife, path:config.webRoot});
 
     var time = setInterval(function()
     {
         if($.cookie.get('downloading') == 1)
         {
             $(event.target).closest('div.modal')[0].classList.remove('show');
-            $.cookie.set('downloading', null);
+            $.cookie.set('downloading', null, {expires:config.cookieLife, path:config.webRoot});
             clearInterval(time);
         }
     }, 300);
@@ -335,7 +335,7 @@ if($('.dtable .dtable-header .has-checkbox').length > 0)
         if(window.config.currentModule == 'testcase') checkedList.forEach(function(item, index){ checkedList[index] = item.replace('case_', '');});
 
         $('#exportType').val('selected');
-        $.cookie.set('checkedItem', checkedList.join(','));
+        $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
     }
 }
 
