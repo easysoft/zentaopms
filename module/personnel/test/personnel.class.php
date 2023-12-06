@@ -151,16 +151,17 @@ class personnelTest
     }
 
     /**
-     * Get involved executions test
+     * 测试获取项目下的迭代或阶段。
+     * Test get the iteration or phase under the project.
      *
-     * @param  array  $projectID
+     * @param  array  $projects
      * @access public
      * @return array
      */
-    public function getInvolvedExecutionsTest($projectID)
+    public function getInvolvedExecutionsTest(array $projects): array
     {
         global $tester;
-        $project = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchall('id');
+        $project = $tester->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
         $objects = $this->objectModel->getInvolvedExecutions($project);
 
         if(dao::isError()) return dao::getError();

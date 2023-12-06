@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/personnel.class.php';
 
@@ -20,7 +21,7 @@ pid=1
 
 $personnel = new personnelTest('admin');
 
-$project = array(array(11, 12), 10000);
+$project = array(array(11, 12), array(10000));
 
 $result1 = count($personnel->getInvolvedExecutionsTest($project[0]));
 $result2 = $personnel->getInvolvedExecutionsTest($project[0]);

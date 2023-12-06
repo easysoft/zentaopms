@@ -313,19 +313,20 @@ class personnelModel extends model
     }
 
     /**
+     * 获取项目下的迭代或阶段。
      * Gets the iteration or phase under the project.
      *
-     * @param  object    $projects
+     * @param  array  $projects
      * @access public
      * @return array
      */
-    public function getInvolvedExecutions($projects)
+    public function getInvolvedExecutions(array $projects): array
     {
-        $executions = $this->dao->select('id')->from(TABLE_PROJECT)
+        $executions = $this->dao->select('id,id')->from(TABLE_PROJECT)
             ->where('type')->in('stage,sprint')
             ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
-            ->fetchPairs('id');
+            ->fetchPairs();
 
         return $this->dao->select('account, count(root) as executions')->from(TABLE_TEAM)
             ->where('root')->in(array_keys($executions))
