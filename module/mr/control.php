@@ -65,9 +65,6 @@ class mr extends control
             ->count();
         if($repoCount == 0) $this->locate($this->loadModel('repo')->createLink('create'));
 
-        $repoList = $this->loadModel('repo')->getListBySCM($this->config->repo->gitServiceTypeList);
-        if(!isset($repoList[$repoID]) && $repoID != 0) $repoID = key($repoList);
-
         $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
         $repo   = $this->repo->getByID($repoID);
         if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
@@ -245,6 +242,13 @@ class mr extends control
 
         $repoID = $this->loadModel('repo')->saveState($repoID);
         $repo   = $this->repo->getByID($repoID);
+        if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
+        {
+            $repoList = $this->repo->getListBySCM($this->config->repo->gitServiceTypeList);
+            $repoID   = key($repoList);
+            $repoID   = $this->loadModel('repo')->saveState($repoID);
+            $repo     = $repoList[$repoID];
+        }
 
         $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
 
