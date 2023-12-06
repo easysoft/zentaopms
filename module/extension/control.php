@@ -12,45 +12,20 @@
 class extension extends control
 {
     /**
-     * Construct function.
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        $statusFile = $this->loadModel('common')->checkSafeFile();
-
-        if($statusFile) $this->fetch('extension', 'safe', "statusFile=$statusFile");
-    }
-
-    public function safe($statusFile)
-    {
-        $this->view->title = $this->lang->extension->browse;
-
-        $statusFile = str_replace('\\', '/', $statusFile);
-        $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
-
-        $this->display();
-        helper::end();
-    }
-
-    /**
+     * 插件列表页面。
      * Browse extensions.
      *
-     * @param  string   $status
+     * @param  string $status
      * @access public
      * @return void
      */
-    public function browse($status = 'installed')
+    public function browse(string $status = 'installed')
     {
-        $extensions = $this->extension->getLocalExtensions($status);
+        $this->checkSafe();
+
         $versions   = array();
-        if($extensions and $status == 'installed')
+        $extensions = $this->extension->getLocalExtensions($status);
+        if($extensions && $status == 'installed')
         {
             /* Get latest release from remote. */
             $extCodes = helper::safe64Encode(join(',', array_keys($extensions)));
@@ -64,10 +39,10 @@ class extension extends control
 
                     $extension = $extensions[$release->code];
                     $extension->viewLink = $release->viewLink;
-                    if(isset($release->latestRelease) and $extension->version != $release->latestRelease->releaseVersion and $this->extension->checkVersion($release->latestRelease->zentaoCompatible))
+                    if(isset($release->latestRelease) && $extension->version != $release->latestRelease->releaseVersion && $this->extension->checkVersion($release->latestRelease->zentaoCompatible))
                     {
                         $upgradeLink = inlink('upgrade', "extension=$release->code&downLink=&md5=&type=$release->type");
-                        $upgradeLink = ($release->latestRelease->charge or !$release->latestRelease->public) ? $release->latestRelease->downLink : $upgradeLink;
+                        $upgradeLink = ($release->latestRelease->charge || !$release->latestRelease->public) ? $release->latestRelease->downLink : $upgradeLink;
                         $extension->upgradeLink = $upgradeLink;
                     }
                 }
@@ -82,15 +57,21 @@ class extension extends control
     }
 
     /**
+     * 从禅道官网的插件市场获得插件。
      * Obtain extensions from the community.
      *
      * @param  string $type
      * @param  string $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function obtain($type = 'byUpdatedTime', $param = '', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function obtain(string $type = 'byUpdatedTime', string $param = '', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
+        $this->checkSafe();
+
         /* Init vars. */
         $type       = strtolower($type);
         $moduleID   = $type == 'bymodule' ? (int)base64_decode($param) : 0;
@@ -98,7 +79,7 @@ class extension extends control
         $pager      = null;
 
         /* Set the key. */
-        if($type == 'bysearch') $param = helper::safe64Encode($this->post->key);
+        if($type == 'bysearch') $param = helper::safe64Encode($this->post->key ? $this->post->key : '');
 
         /* Get results from the api. */
         $results = $this->extension->getExtensionsByAPI($type, $param, $recTotal, $recPerPage, $pageID);
@@ -137,6 +118,7 @@ class extension extends control
      */
     public function install($extension, $downLink = '', $md5 = '', $type = '', $overridePackage = 'no', $ignoreCompatible = 'no', $overrideFile = 'no', $agreeLicense = 'no', $upgrade = 'no')
     {
+        $this->checkSafe();
         set_time_limit(0);
 
         $this->view->error = '';
@@ -337,6 +319,8 @@ class extension extends control
      */
     public function uninstall($extension, $confirm = 'no')
     {
+        $this->checkSafe();
+
         /* Determine whether need to back up. */
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
         if($confirm == 'no' and file_exists($dbFile))
@@ -378,6 +362,8 @@ class extension extends control
      */
     public function activate($extension, $ignore = 'no')
     {
+        $this->checkSafe();
+
         if($ignore == 'no')
         {
             $return = $this->extension->checkFile($extension);
@@ -406,6 +392,8 @@ class extension extends control
      */
     public function deactivate($extension)
     {
+        $this->checkSafe();
+
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
         $this->extension->togglePackageDisable($extension, 'disabled');
 
@@ -423,16 +411,12 @@ class extension extends control
     public function upload()
     {
         $this->app->loadLang('file');
-
-        $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile)
-        {
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
-            return $this->display();
-        }
-
         if($_FILES)
         {
+            $statusFile = $this->loadModel('common')->checkSafeFile();
+            if($statusFile) return $this->send(array('result' => 'fail', 'message' => strip_tags(sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile))));
+
+            /* 检查上传附件的错误信息。 */
             if($_FILES['files']['error'] == UPLOAD_ERR_NO_FILE) return $this->send(array('result' => 'fail', 'message' => $this->lang->extension->errorFileNotEmpty));
 
             $tmpName   = $_FILES['files']['tmp_name'][0];
@@ -470,6 +454,7 @@ class extension extends control
             return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
         }
 
+        $this->checkSafe();
         $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
 
         $this->view->maxUploadSize  = $maxUploadSize;
@@ -487,6 +472,8 @@ class extension extends control
      */
     public function erase($extension)
     {
+        $this->checkSafe();
+
         $this->view->removeCommands = $this->extension->erasePackage($extension);
         $this->view->title      = $this->lang->extension->eraseFinished;
         $this->display();
@@ -504,6 +491,8 @@ class extension extends control
      */
     public function upgrade($extension, $downLink = '', $md5 = '', $type = '')
     {
+        $this->checkSafe();
+
         $this->extension->removePackage($extension);
         $this->locate(inlink('install', "extension=$extension&downLink=&md5=$md5&type=$type&overridePackage=no&ignoreCompatible=yes&overrideFile=no&agreeLicense=no&upgrade=yes"));
     }
@@ -517,7 +506,39 @@ class extension extends control
      */
     public function structure($extension)
     {
+        $this->checkSafe();
+
         $this->view->extension = $this->extension->getInfoFromDB($extension);
+        $this->display();
+    }
+
+    /**
+     * 安全性校验。
+     * Check safe.
+     *
+     * @access public
+     * @return void
+     */
+    protected function checkSafe()
+    {
+        /* 判断是否要跳转到安全校验页面。 */
+        $statusFile = $this->loadModel('common')->checkSafeFile();
+        if($statusFile) die($this->fetch('extension', 'safe', "statusFile=$statusFile"));
+    }
+
+    /**
+     * 安全验证页面。
+     * Security verification.
+     *
+     * @param  string $statusFile
+     * @access public
+     * @return void
+     */
+    public function safe(string $statusFile)
+    {
+        $statusFile = str_replace('\\', '/', $statusFile);
+        $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+        $this->view->title = $this->lang->extension->browse;
         $this->display();
     }
 }

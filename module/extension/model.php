@@ -540,6 +540,12 @@ class extensionModel extends model
         $return->result = 'ok';
         $return->error  = '';
 
+        $extensionRoot = $this->app->getExtensionRoot();
+        if(is_dir($extensionRoot) && !is_writable($extensionRoot))
+        {
+            return (object)array('result' => 'fail', 'error' => strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $extensionRoot, $extensionRoot)));
+        }
+
         /* try remove pre extracted files. */
         $extensionPath = $this->pkgRoot . $extension;
         if(is_dir($extensionPath)) $this->classFile->removeDir($extensionPath);

@@ -106,8 +106,7 @@ sidebar
         set::title($lang->extension->byCategory),
         set::modules($moduleTree),
         set::activeKey($moduleID),
-        set::closeLink(null),
-        set::settingLink(null),
+        set::closeLink(createLink('extension', 'obtain')),
         set::showDisplay(false)
     )
 );
@@ -135,7 +134,7 @@ foreach($extensions as $extension)
         {
             $extensionInfo[] .= $code;
             if($limit != 'all')
-            { 
+            {
                 $extensionInfo[] .= '(' . !empty($limit['min']) . '>= v' . $limit['min'];
                 $extensionInfo[] .= !empty($limit['max']) . '<= v' . $limit['max'] . ') ';
             }
@@ -221,7 +220,7 @@ if($pager->recTotal)
     (
         set::style(array('float' => 'right')),
         set::type('full'),
-        set::page($pager->page),
+        set::page($pager->pageID),
         set::recTotal($pager->recTotal),
         set::recPerPage($pager->recPerPage)
     );
