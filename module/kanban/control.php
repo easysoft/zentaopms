@@ -342,25 +342,26 @@ class kanban extends control
     }
 
      /**
-     * View a kanban.
-     *
-     * @param  int        $kanbanID
-     * @param  string|int $regionID
-     * @access public
-     * @return void
-     */
-    public function view($kanbanID, $regionID = '')
+      * 看板视图页面。
+      * View a kanban.
+      *
+      * @param  int        $kanbanID
+      * @param  string|int $regionID
+      * @access public
+      * @return void
+      */
+    public function view(int $kanbanID, string|int $regionID = '')
     {
         $kanban = $this->kanban->getByID($kanbanID);
 
         if(!$kanban)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('kanban', 'space')));
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('kanban', 'space'))));
         }
 
         $kanbanIdList = $this->kanban->getCanViewObjects();
-        if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return print(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->kanban->accessDenied, 'locate' => $this->createLink('kanban', 'space'))));
 
         $regions = $this->kanban->getRegionPairs($kanbanID);
         if(!$regionID) $regionID = $this->session->regionID ? $this->session->regionID : 'all';
