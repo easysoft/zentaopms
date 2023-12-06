@@ -433,7 +433,7 @@ class metricZen extends metric
         $headerField = current($header)['name'];
         $headerTitle = current($header)['title'];
 
-        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'align' => 'center', 'width' => 160);
+        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'width' => 160);
         $dateField     = ($dateType == 'day' and !isset(current($data)->dateString)) ? 'calcTime' : 'dateString';
         usort($data, function($a, $b) use($dateField)
         {
