@@ -637,18 +637,20 @@ class personnelModel extends model
     }
 
     /**
+     * 从产品的白名单内删除用户。
      * Delete product whitelist.
      *
      * @param  int    $productID
      * @param  string $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteProductWhitelist($productID, $account = '')
+    public function deleteProductWhitelist(int $productID, string $account = ''): bool
     {
         $product = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
         if(empty($product)) return false;
 
+        /* Delete the account's acl in the product. */
         $result = $this->dao->delete()->from(TABLE_ACL)
              ->where('objectID')->eq($productID)
              ->andWhere('account')->eq($account)
@@ -663,9 +665,11 @@ class personnelModel extends model
             $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($productID)->exec();
 
             $viewProducts    = $this->dao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
-            $newViewProducts = trim(str_replace(",$productID,", '', ",$viewProducts,"), ',');
+            $newViewProducts = trim(str_replace(",{$productID},", '', ",{$viewProducts},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('products')->eq($newViewProducts)->where('account')->eq($account)->exec();
         }
+
+        return !dao::isError();
     }
 
     /**

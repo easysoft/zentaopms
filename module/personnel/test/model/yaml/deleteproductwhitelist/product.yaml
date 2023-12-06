@@ -1,0 +1,13 @@
+title: table zt_product
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: whitelist
+    fields:
+    - field: whitelist1
+      prefix: ",user"
+      range: 1-50
+      postfix: ","
+    - field: whitelist2
+      prefix: test
+      range: "26-50,1-25"

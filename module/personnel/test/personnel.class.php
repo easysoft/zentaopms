@@ -326,24 +326,24 @@ class personnelTest
     }
 
     /**
-     * Delete product whitelist Test
+     * 测试从产品的白名单内删除用户。
+     * Test delete user from product whitelist.
      *
-     * @param  int    $productID
-     * @param  string $account
+     * @param  int          $productID
+     * @param  string       $account
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function deleteProductWhitelistTest($productID, $account = '')
+    public function deleteProductWhitelistTest(int $productID, string $account = ''): string|array
     {
-        global $tester;
-        $this->addWhitelistTest('product', $productID, array('admin'));
-        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($productID)->andWhere('objectType')->eq('product')->exec();
-
-        $objects = $this->objectModel->deleteProductWhitelist($productID, $account);
+        $this->objectModel->deleteProductWhitelist($productID, $account);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $productViews = $tester->dao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
+
+        return $productViews;
     }
 
     /**
