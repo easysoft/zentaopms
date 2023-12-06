@@ -2,7 +2,7 @@
 /**
  * The ajaxgetdropmenu view file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     kanban
  * @version     $Id
