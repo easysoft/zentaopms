@@ -136,16 +136,18 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件的当前版本号返回插件的当前兼容版本。
      * Check incompatible extension
      *
-     * @param  array    $versions
+     * @param  array  $versions
      * @access public
      * @return array
      */
-    public function checkIncompatible($versions)
+    public function checkIncompatible(array $versions): array
     {
         $apiURL = $this->apiRoot . 'apiCheckIncompatible' . '.json?versions=' . helper::safe64Encode(json_encode($versions));
-        $data = $this->fetchAPI($apiURL);
+        $data   = $this->fetchAPI($apiURL);
+
         if(isset($data->incompatibleExts)) return (array)$data->incompatibleExts;
         return array();
 
