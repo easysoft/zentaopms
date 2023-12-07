@@ -432,6 +432,24 @@ class personnelTest
     }
 
     /**
+     * 测试构建搜索表单。
+     * Test build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest(int $queryID, string $actionURL): array
+    {
+        $this->objectModel->buildSearchForm($queryID, $actionURL);
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        return $tester->config->personnel->accessible->search;
+    }
+
+    /**
      * 测试判断操作是否可以点击。
      * Test judge an action is clickable or not.
      *

@@ -810,6 +810,7 @@ class personnelModel extends model
     }
 
     /**
+     * 构建搜索表单。
      * Build search form.
      *
      * @param  int    $queryID
@@ -817,7 +818,7 @@ class personnelModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($queryID = 0, $actionURL = '')
+    public function buildSearchForm(int $queryID = 0, string $actionURL = ''): void
     {
         $this->config->personnel->accessible->search['actionURL'] = $actionURL;
         $this->config->personnel->accessible->search['queryID']   = $queryID;
