@@ -57,7 +57,7 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
 
-        $queryForm = $this->initSession($module, $searchFields, $fieldParams);
+        $queryForm = $this->searchTao->initSession($module, $searchFields, $fieldParams);
 
         $scoreNum = 0;
         $where    = '';
@@ -100,37 +100,6 @@ class searchModel extends model
         $this->session->set($querySessionName, $where);
         $this->session->set($formSessionName,  $queryForm);
         if($scoreNum > 2 && !dao::isError()) $this->loadModel('score')->create('search', 'saveQueryAdvanced');
-    }
-
-    /**
-     * 初始化搜索表单，并且保存到 session。
-     * Init the search session for the first time search.
-     *
-     * @param  string       $module
-     * @param  object|array $fields
-     * @param  object|array $fieldParams
-     * @access public
-     * @return array
-     */
-    public function initSession(string $module, object|array $fields, object|array $fieldParams): array
-    {
-        if(is_object($fields)) $fields = get_object_vars($fields);
-        $formSessionName = $module . 'Form';
-
-        $queryForm = array();
-        for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
-        {
-            $currentField  = key($fields);
-            $currentParams = zget($fieldParams, $currentField, array());
-            $operator      = zget($currentParams, 'operator', '=');
-            $queryForm[]   = array('field' => $currentField, 'andOr' => 'and', 'operator' => $operator, 'value' => '');
-
-            if(!next($fields)) reset($fields);
-        }
-        $queryForm[] = array('groupAndOr' => 'and');
-        $this->session->set($formSessionName, $queryForm);
-
-        return $queryForm;
     }
 
     /**
