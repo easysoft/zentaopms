@@ -68,7 +68,7 @@ class searchTao extends searchModel
      * @param  string       $module
      * @param  object|array $fields
      * @param  object|array $fieldParams
-     * @access public
+     * @access protected
      * @return array
      */
     protected function initSession(string $module, object|array $fields, object|array $fieldParams): array
@@ -247,14 +247,44 @@ class searchTao extends searchModel
     }
 
     /**
+     * 替换日期和用户变量。
+     * Replace dynamic account and date.
+     *
+     * @param  string $query
+     * @access protected
+     * @return string
+     */
+    protected function replaceDynamic(string $query): string
+    {
+        $this->app->loadClass('date');
+        $lastWeek  = date::getLastWeek();
+        $thisWeek  = date::getThisWeek();
+        $lastMonth = date::getLastMonth();
+        $thisMonth = date::getThisMonth();
+        $yesterday = date::yesterday();
+        $today     = date(DT_DATE1);
+        if(strpos($query, '$') !== false)
+        {
+            $query = str_replace('$@me', $this->app->user->account, $query);
+            $query = str_replace("'\$lastMonth'", "'" . $lastMonth['begin']      . "' and '" . $lastMonth['end']        . "'", $query);
+            $query = str_replace("'\$thisMonth'", "'" . $thisMonth['begin']      . "' and '" . $thisMonth['end']        . "'", $query);
+            $query = str_replace("'\$lastWeek'",  "'" . $lastWeek['begin']       . "' and '" . $lastWeek['end']         . "'", $query);
+            $query = str_replace("'\$thisWeek'",  "'" . $thisWeek['begin']       . "' and '" . $thisWeek['end']         . "'", $query);
+            $query = str_replace("'\$yesterday'", "'" . $yesterday . ' 00:00:00' . "' and '" . $yesterday . ' 23:59:59' . "'", $query);
+            $query = str_replace("'\$today'",     "'" . $today     . ' 00:00:00' . "' and '" . $today     . ' 23:59:59' . "'", $query);
+        }
+        return $query;
+    }
+
+    /**
      * 如果搜索框的选项是users，products, executions, 获取相对应的列表。
      * Get user, product and execution value of the param.
      *
      * @param  array $fields
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getParamValues(array $fields, array $params): array
+    protected function getParamValues(array $fields, array $params): array
     {
         $hasProduct   = false;
         $hasExecution = false;
@@ -959,7 +989,7 @@ class searchTao extends searchModel
      *
      * @param  string $string
      * @param  string $to
-     * @access public
+     * @access private
      * @return string
      */
     private static function unify(string $string, string $to = ','): string
