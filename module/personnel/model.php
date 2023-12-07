@@ -673,7 +673,7 @@ class personnelModel extends model
     }
 
     /**
-     * 从项目的白名单内删除用户。
+     * 从项目集的白名单内删除用户。
      * Delete project whitelist.
      *
      * @param  int     $programID
@@ -717,18 +717,20 @@ class personnelModel extends model
     }
 
     /**
-     * Determine if the user is on a whitelist for multiple sprints
+     * 从项目的白名单内删除用户。
+     * Delete project whitelist.
      *
      * @param  int     $objectID
      * @param  string  $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteProjectWhitelist(int $objectID = 0, string $account = ''): void
+    public function deleteProjectWhitelist(int $objectID = 0, string $account = ''): bool
     {
         $project = $this->dao->select('id,project,whitelist')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-        if(empty($project)) return;
+        if(empty($project)) return false;
 
+        /* Get project's whitelist. */
         $projectID = $project->project ? $project->project : $objectID;
         $sprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetchPairs('id');
         $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($sprints)->andWhere('account')->eq($account)->andWhere('objectType')->eq('sprint')->fetch();
@@ -750,11 +752,12 @@ class personnelModel extends model
                 $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
 
                 $viewProjects    = $this->dao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
-                $newViewProjects = trim(str_replace(",$projectID,", '', ",$viewProjects,"), ',');
+                $newViewProjects = trim(str_replace(",{$projectID},", '', ",{$viewProjects},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($newViewProjects)->where('account')->eq($account)->exec();
             }
         }
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
+        return !dao::isError();
     }
 
     /**

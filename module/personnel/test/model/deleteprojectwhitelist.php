@@ -1,7 +1,14 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/personnel.class.php';
+
+zdTable('acl')->config('acl')->gen(100);
+zdTable('project')->config('project')->gen(50);
+zdTable('userview')->gen(50);
+zdTable('user')->gen(20);
+
 
 /**
 
@@ -9,23 +16,25 @@ title=测试 personnelModel->deleteProjectWhitelist();
 cid=1
 pid=1
 
-通过add方法创建一个白名单，这里判断了objectType为sprint的情况，正常传入无法删除 >> 0
-传入空的情况时，删除为objectID为0的数据，如果空，则跳过 >> 0
-
 */
 
 $personnel = new personnelTest('admin');
 
-$projectID = array();
-$projectID[0] = 15;
-$projectID[1] = 0;
+$projectIdList = array(0, 11, 16, 1000);
+$account       = array('admin', 'user11', 'user12');
 
-$account   = array();
-$account[0]   = 'dev15';
-$account[1]   = '';
+r($personnel->deleteProjectWhitelistTest($projectIdList[0], $account[0])) && p() && e('0'); // 从项目 0 删除账号 admin 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[0], $account[1])) && p() && e('0'); // 从项目 0 删除账号 user11 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[0], $account[2])) && p() && e('0'); // 从项目 0 删除账号 user12 的白名单
 
-$result1 = $personnel->deleteProjectWhitelistTest($projectID[0], $account[0]);
-$result2 = $personnel->deleteProjectWhitelistTest($projectID[1], $account[1]);
+r($personnel->deleteProjectWhitelistTest($projectIdList[1], $account[0])) && p() && e(',user11,test36'); // 从项目 11 删除账号 admin 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[1], $account[1])) && p() && e(',test36');        // 从项目 11 删除账号 user11 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[1], $account[2])) && p() && e(',test36');        // 从项目 11 删除账号 user12 的白名单
 
-r($result1) && p() && e('0'); //通过add方法创建一个白名单，这里判断了objectType为sprint的情况，正常传入无法删除
-r($result2) && p() && e('0'); //传入空的情况时，删除为objectID为0的数据，如果空，则跳过
+r($personnel->deleteProjectWhitelistTest($projectIdList[2], $account[0])) && p() && e(',user12,test37'); // 从项目 16 删除账号 admin 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[2], $account[1])) && p() && e(',user12,test37'); // 从项目 16 删除账号 user11 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[2], $account[2])) && p() && e(',user16,test41'); // 从项目 16 删除账号 user12 的白名单
+
+r($personnel->deleteProjectWhitelistTest($projectIdList[3], $account[0])) && p() && e('0'); // 从项目 1000 删除账号 admin 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[3], $account[1])) && p() && e('0'); // 从项目 1000 删除账号 user11 的白名单
+r($personnel->deleteProjectWhitelistTest($projectIdList[3], $account[2])) && p() && e('0'); // 从项目 1000 删除账号 user12 的白名单

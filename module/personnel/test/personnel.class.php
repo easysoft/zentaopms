@@ -350,42 +350,45 @@ class personnelTest
      * 测试从项目集删除白名单。
      * Test delete whitelist from program.
      *
-     * @param  int    $programID
-     * @param  string $account
+     * @param  int          $programID
+     * @param  string       $account
      * @access public
      * @return string|array
      */
     public function deleteProgramWhitelistTest(int $programID, string $account): string|array
     {
-        global $tester;
         $this->objectModel->deleteProgramWhitelist($programID, $account);
 
         if(dao::isError()) return -1;
 
         unset(dao::$cache[TABLE_ACL]);
-        $programViews = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch('whitelist');
+        global $tester;
+        $whitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch('whitelist');
 
-        return $programViews;
+        return $whitelist;
     }
 
     /**
-     * Delete project whitelist Test
+     * 测试从项目删除白名单。
+     * Test delete whitelist from project.
      *
-     * @param  int    $objectID
-     * @param  string $account
+     * @param  int          $objectID
+     * @param  string       $account
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function deleteProjectWhitelistTest($objectID, $account)
+    public function deleteProjectWhitelistTest(int $objectID, string $account): string|array
     {
-        global $tester;
-        $this->addWhitelistTest('project', $objectID, array($account));
-        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->exec();
-        $objects = $this->objectModel->deleteProjectWhitelist($objectID, $account);
+        $this->objectModel->deleteProjectWhitelist($objectID, $account);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $project   = $tester->dao->select('id,project,whitelist')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+        if(!$project) return '0';
+        $projectID = $project->project ? $project->project : $objectID;
+        $whitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('whitelist');
+        return $whitelist;
     }
 
     /**
