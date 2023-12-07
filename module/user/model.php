@@ -93,7 +93,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function checkBeforeBatchEdit(array $users, string $verifyPassword): bool
+    private function checkBeforeBatchUpdate(array $users, string $verifyPassword): bool
     {
         if(!$users) return true;
 
@@ -717,7 +717,7 @@ class userModel extends model
      */
     public function batchUpdate(array $users, string $verifyPassword): bool
     {
-        $this->checkBeforeBatchEdit($users, $verifyPassword);
+        $this->checkBeforeBatchUpdate($users, $verifyPassword);
         if(dao::isError()) return false;
 
         $this->loadModel('action');
