@@ -662,63 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get year object stat, include status and action stat
-     *
-     * @param  array  $accounts
-     * @param  string $year
-     * @param  string $objectType   story|task|bug
-     * @access public
-     * @return array
-     */
-    public function getYearObjectStat($accounts, $year, $objectType)
-    {
-        $table = '';
-        if($objectType == 'story') $table = TABLE_STORY;
-        if($objectType == 'task')  $table = TABLE_TASK;
-        if($objectType == 'bug')   $table = TABLE_BUG;
-        if(empty($table)) return array();
-
-        $months = $this->getYearMonths($year);
-        $stmt   = $this->dao->select('t1.*, t2.status')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq($objectType)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t1.action')->in($this->config->pivot->annualData['monthAction'][$objectType])
-            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
-            ->query();
-
-        /* Build object action stat and get status group. */
-        $statuses   = array();
-        $actionStat = array();
-        while($action = $stmt->fetch())
-        {
-            $statuses[$action->objectID] = $action->status;
-
-            $lowerAction = strtolower($action->action);
-            /* Story,bug can from feedback and ticket, task can from feedback, boil this action down to opened. */
-            if(in_array($lowerAction, array('fromfeedback', 'fromticket'))) $lowerAction = 'opened';
-            if(!isset($actionStat[$lowerAction]))
-            {
-                foreach($months as $month) $actionStat[$lowerAction][$month] = 0;
-            }
-
-            $month = substr($action->date, 0, 7);
-            $actionStat[$lowerAction][$month] += 1;
-        }
-
-        /* Build status stat. */
-        $statusStat = array();
-        foreach($statuses as $status)
-        {
-            if(!isset($statusStat[$status])) $statusStat[$status] = 0;
-            $statusStat[$status] += 1;
-        }
-
-        return array('statusStat' => $statusStat, 'actionStat' => $actionStat);
-    }
-
-    /**
      * Get year case stat, include result and action stat.
      *
      * @param  array  $accounts
