@@ -398,46 +398,6 @@ class extensionModel extends model
     }
 
     /**
-     * Extract an extension.
-     *
-     * @param  string    $extension
-     * @access public
-     * @return object
-     */
-    public function extractPackage($extension)
-    {
-        $return = new stdclass();
-        $return->result = 'ok';
-        $return->error  = '';
-
-        $extensionRoot = $this->app->getExtensionRoot();
-        if(is_dir($extensionRoot) && !is_writable($extensionRoot))
-        {
-            return (object)array('result' => 'fail', 'error' => strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $extensionRoot, $extensionRoot)));
-        }
-
-        /* try remove pre extracted files. */
-        $extensionPath = $this->pkgRoot . $extension;
-        if(is_dir($extensionPath)) $this->classFile->removeDir($extensionPath);
-
-        /* Extract files. */
-        $packageFile = $this->getPackageFile($extension);
-        $this->app->loadClass('pclzip', true);
-        $zip        = new pclzip($packageFile);
-        $files      = $zip->listContent();
-        $pathinfo   = pathinfo($files[0]['filename']);
-        $removePath = isset($pathinfo['dirname']) && $pathinfo['dirname'] != '.' ? $pathinfo['dirname'] : $pathinfo['basename'];
-
-        if($zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
-        {
-            $return->result = 'fail';
-            $return->error  = $zip->errorInfo(true);
-        }
-
-        return $return;
-    }
-
-    /**
      * Copy package files.
      *
      * @param  int    $extension

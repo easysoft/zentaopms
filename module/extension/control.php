@@ -292,7 +292,7 @@ class extension extends control
 
             /* 解压插件包, 失败则删除插件包并返回错误信息。 */
             $extension = basename($fileName, '.zip');
-            $return    = $this->extension->extractPackage($extension);
+            $return    = $this->extensionZen->extractPackage($extension);
             if($return->result != 'ok')
             {
                 unlink($dest);
