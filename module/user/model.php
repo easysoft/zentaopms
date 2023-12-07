@@ -1124,7 +1124,7 @@ class userModel extends model
      * @access public
      * @return false|object
      */
-    public function login($user, $addAction = true, $keepLogin = false)
+    public function login(object $user, bool $addAction = true, bool $keepLogin = false): bool|object
     {
         if(!$user) return false;
 
