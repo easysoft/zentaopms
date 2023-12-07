@@ -411,21 +411,21 @@ class userModel extends model
     }
 
     /**
-     * Get roles for some users.
+     * 获取用户名和角色名的键值对。
+     * Get account and role pairs.
      *
-     * @param  string    $users
-     * @param  bool      $needRole
+     * @param  string|array $users
      * @access public
      * @return array
      */
-    public function getUserRoles($users, $needRole = false)
+    public function getUserRoles(string|array $users): array
     {
-        $this->app->loadLang('user');
+        if(!$users) return array();
+
         $users = $this->dao->select('account, role')->from(TABLE_USER)->where('account')->in($users)->fetchPairs();
         if(!$users) return array();
-        if($needRole) return $users;
 
-        foreach($users as $account => $role) $users[$account] = zget($this->lang->user->roleList, $role, $role);
+        foreach($users as $account => $role) $users[$account] = zget($this->lang->user->roleList, $role);
         return $users;
     }
 
