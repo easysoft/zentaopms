@@ -289,7 +289,7 @@ class pivotModel extends model
     public function getExecutions(string $begin = '', string $end = ''): array
     {
         $permission = common::hasPriv('pivot', 'showProject') || $this->app->user->admin;
-        $IDList = !$permission ? $this->app->user->view->sprints : array();
+        $IDList     = !$permission ? $this->app->user->view->sprints : array();
         $executions = $this->pivotTao->getExecutionList($begin, $end, $IDList);
 
         foreach($executions as $execution)
@@ -315,14 +315,8 @@ class pivotModel extends model
         /* 获取符合条件的产品。 */
         /* Get products. */
         $permission = common::hasPriv('pivot', 'showProduct') || $this->app->user->admin;
-        $products   = $this->dao->select('t1.id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.shadow')->eq('0')
-            ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$permission)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-            ->fetchAll('id');
+        $IDList     = !$permission ? $this->app->user->view->products : array();
+        $products   = $this->pivotTao->getProductList($conditions, $IDList);
 
         /* 为产品生成计划数据和相关的需求数据。 */
         /* Generate plan data and related story data for products. */
