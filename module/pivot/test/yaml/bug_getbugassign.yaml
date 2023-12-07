@@ -1,0 +1,7 @@
+title: zt_bug
+desc: "Bug表"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: product
+    range: 1-10

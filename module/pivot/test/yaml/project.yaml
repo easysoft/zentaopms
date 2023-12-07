@@ -1,0 +1,12 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 11-100
+  - field: project
+    range: 1
+  - field: type
+    range: project{100}
+  - field: hasProduct
+    range: 0{5},{1}

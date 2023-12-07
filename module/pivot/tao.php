@@ -6,12 +6,12 @@ class pivotTao extends pivotModel
      * 获取产品列表。
      * Get product list.
      *
-     * @param  string $conditions
-     * @param  array  $IDList
+     * @param  string       $conditions
+     * @param  array|string $IDList
      * @access public
      * @return array
      */
-    protected function getProductList(string $conditions, array $IDList = array()): array
+    protected function getProductList(string $conditions, array|string $IDList = array()): array
     {
         return $this->dao->select('t1.id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
