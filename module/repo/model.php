@@ -944,9 +944,9 @@ class repoModel extends model
      * @param  int    $repoID
      * @param  bool   $checkCount
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getLatestCommit(int $repoID, bool $checkCount = true): object
+    public function getLatestCommit(int $repoID, bool $checkCount = true): object|false
     {
         $repo        = $this->fetchByID($repoID);
         $branchID    = (string)$this->cookie->repoBranch;
@@ -956,7 +956,7 @@ class repoModel extends model
             ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->orderBy('t1.time desc')
             ->fetch();
-        if(empty($lastComment)) return new stdclass();
+        if(empty($lastComment)) return false;
         if(!$checkCount) return $lastComment;
 
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')

@@ -1149,7 +1149,7 @@ class repo extends control
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
-        echo $this->repoZen->checkSyncResult($repo, $branches, $branchID, $commitCount);
+        echo $this->repoZen->checkSyncResult($repo, $branches, $branchID, $commitCount, $type);
     }
 
     /**

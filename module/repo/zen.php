@@ -1372,10 +1372,11 @@ class repoZen extends repo
      * @param  array     $branches
      * @param  string    $branchID
      * @param  int       $commitCount
+     * @param  string    $type
      * @access protected
      * @return string
      */
-    protected function checkSyncResult(object $repo, array $branches, string $branchID, int $commitCount): string
+    protected function checkSyncResult(object $repo, array $branches, string $branchID, int $commitCount, string $type): string
     {
         if(empty($commitCount) && !$repo->synced)
         {
