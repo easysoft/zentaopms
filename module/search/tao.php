@@ -904,7 +904,7 @@ class searchTao extends searchModel
      */
     private function processRecord(object $record, array $objectList): object
     {
-        $module = $record->objecttype == 'case' ? 'testcase' : $record->objecttype;
+        $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
         $method = 'view';
         if($module == 'deploystep')
         {
@@ -913,7 +913,7 @@ class searchTao extends searchModel
         }
 
         $linkProjectModules = ',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,';
-        if(strpos($linkProjectModules, ",$module,") !== false && !isset($this->config->objectTables[$record->objecttype])) return $record;
+        if(strpos($linkProjectModules, ",$module,") !== false && !isset($this->config->objectTables[$record->objectType])) return $record;
 
         if($module == 'issue')     return $this->processIssueRecord($record, $objectList);
         if($module == 'project')   return $this->processProjectRecord($record, $objectList);
