@@ -299,7 +299,7 @@ class convertModel extends model
                 if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
                 if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
                 if($module == 'action')    $this->convertTao->importJiraAction($dataList);
-                if($module == 'file')      $this->importJiraFile($dataList);
+                if($module == 'file')      $this->convertTao->importJiraFile($dataList);
 
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
@@ -348,7 +348,7 @@ class convertModel extends model
                 if($module == 'build')     $this->convertTao->importJiraBuild($dataList, 'file');
                 if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList, 'file');
                 if($module == 'action')    $this->convertTao->importJiraAction($dataList, 'file');
-                if($module == 'file')      $this->importJiraFile($dataList, 'file');
+                if($module == 'file')      $this->convertTao->importJiraFile($dataList, 'file');
 
                 $offset = $lastID + $limit;
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => $offset);
@@ -357,76 +357,6 @@ class convertModel extends model
 
         $this->afterExec('file');
         return array('finished' => true);
-    }
-
-    /**
-     * Import jira file.
-     *
-     * @param  object $dataList
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function importJiraFile($dataList, $method = 'db')
-    {
-        $this->loadModel('file');
-
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
-
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
-
-        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jtask')
-            ->andWhere('BType')->eq('ztask')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
-
-        $filePaths = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('jfilepath')
-            ->fetchPairs();
-
-        foreach($dataList as $fileAttachment)
-        {
-            $issueID    = $fileAttachment->issueid;
-            if(!isset($issueObjectType[$issueID])) continue;
-
-            $objectType = $issueObjectType[$issueID];
-            if($objectType != 'bug' and $objectType != 'task' and $objectType != 'story') continue;
-
-            $fileID     = $fileAttachment->ID;
-            $fileName   = $fileAttachment->FILENAME;
-            list($mime, $extension) = explode('/', $fileAttachment->MIMETYPE);
-
-            if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
-            if($objectType == 'task')  $objectID = $issueTasks[$issueID];
-            if($objectType == 'story') $objectID = $issueStories[$issueID];
-            if(empty($objectID)) continue;
-
-            $file = new stdclass();
-            $file->pathname   = $this->file->setPathName($fileID, $extension);
-            $file->title      = str_ireplace(".{$extension}", '', $fileName);
-            $file->extension  = $extension;
-            $file->size       = $fileAttachment->FILESIZE;
-            $file->objectType = $objectType;
-            $file->objectID   = $objectID;
-            $file->addedBy    = $this->getJiraAccount($fileAttachment->AUTHOR, $method);
-            $file->addedDate  = substr($fileAttachment->CREATED, 0, 19);
-            $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
-
-            $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
-            if(is_file($jiraFile)) copy($jiraFile, $this->file->savePath . $file->pathname);
-        }
     }
 
     /**
