@@ -279,7 +279,7 @@ class searchTao extends searchModel
     protected function getSqlParams(string $keywords, string|array $type): array
     {
         $spliter = $this->app->loadClass('spliter');
-        $words   = explode(' ', self::unify($keywords, ' '));
+        $words   = explode(' ', $this->unify($keywords, ' '));
 
         $against     = '';
         $againstCond = '';
@@ -920,5 +920,21 @@ class searchTao extends searchModel
             }
         }
         return $dataList;
+    }
+
+    /**
+     * 将特殊符号替换成统一的符号。
+     * Unified processing of search keywords.
+     *
+     * @param  string $string
+     * @param  string $to
+     * @access public
+     * @return string
+     */
+    private static function unify(string $string, string $to = ','): string
+    {
+        $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
+        $string = str_replace($labels, $to, $string);
+        return preg_replace("/[{$to}]+/", $to, trim($string, $to));
     }
 }

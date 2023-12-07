@@ -870,22 +870,6 @@ class searchModel extends model
     }
 
     /**
-     * 将特殊符号替换成统一的符号。
-     * Unified processing of search keywords.
-     *
-     * @param  string $string
-     * @param  string $to
-     * @access public
-     * @return string
-     */
-    public static function unify(string $string, string $to = ','): string
-    {
-        $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
-        $string = str_replace($labels, $to, $string);
-        return preg_replace("/[{$to}]+/", $to, trim($string, $to));
-    }
-
-    /**
      * 将文档的内容追加到文档的索引备注中。
      * Append document content to the document.
      *
