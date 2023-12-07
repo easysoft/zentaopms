@@ -1,1 +1,0 @@
-import{L as s}from"./index-9144e12b.js";import{d as o,o as n,c as a,w as r,n as t,f as l}from"./index.js";const m=o({__name:"index",setup(i){return(e,f)=>(n(),a(l(s),null,{left:r(()=>[t(e.$slots,"left")]),center:r(()=>[t(e.$slots,"center")]),"ri-left":r(()=>[t(e.$slots,"ri-left")]),"ri-right":r(()=>[t(e.$slots,"ri-right")]),_:3}))}});export{m as _};
