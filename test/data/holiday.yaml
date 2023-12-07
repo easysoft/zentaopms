@@ -35,7 +35,7 @@ fields:
     note: "年份"
     range: "(-1M)-(+1w):1D"
     type: timestamp
-    format: "YYYY-MM-DD"
+    format: "YYYY"
   - field: begin
     note: "开始日期"
     range: "(-1M)-(+1w):1D"
