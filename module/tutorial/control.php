@@ -97,7 +97,7 @@ class tutorial extends control
     }
 
     /**
-     * 导向页面。
+     * 想到页面。
      * Wizard.
      *
      * @param  string $module
@@ -106,7 +106,7 @@ class tutorial extends control
      * @access public
      * @return void
      */
-    public function wizard($module, $method, $params = '')
+    public function wizard(string $module, string $method, string $params = '')
     {
         if(!commonModel::isTutorialMode()) $_SESSION['tutorialMode'] = true;
         define('WIZARD_MODULE', $module);
@@ -119,25 +119,28 @@ class tutorial extends control
         {
             $taskModule     = strtolower($task['nav']['module']);
             $taskMenuModule = strtolower($task['nav']['menuModule']);
-            if($taskModule == $moduleLower or $taskMenuModule == $moduleLower)
+            if($taskModule == $moduleLower || $taskMenuModule == $moduleLower)
             {
                 $hasPriv = true;
                 break;
             }
         }
-        if(!$hasPriv and $module == 'my' and $method == 'index') $hasPriv = true;
-        if(!$hasPriv) return print(js::locate('back'));
+        if(!$hasPriv && $module == 'my' && $method == 'index') $hasPriv = true;
+        if(!$hasPriv)
+        {
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('back' => true)));
+            return print(js::locate('back'));
+        }
 
         $params = helper::safe64Decode($params);
         if($_POST)
         {
             $target = 'parent';
-            if(($module == 'story' or $module == 'task' or $module == 'bug') and $method == 'create') $target = 'self';
-            if($module == 'execution' and $method == 'linkStory') $target = 'self';
-            if($module == 'execution' and $method == 'managemembers') $target = 'self';
+            if(($module == 'story' || $module == 'task' || $module == 'bug') && $method == 'create') $target = 'self';
+            if($module == 'execution' && ($method == 'linkStory' || $method == 'managemembers')) $target = 'self';
 
-            if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params))));
-            return print(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('tutorial', 'wizard', "module={$module}&method={$method}&params=" . helper::safe64Encode($params))));
+            return print(js::locate(helper::createLink('tutorial', 'wizard', "module={$module}&method={$method}&params=" . helper::safe64Encode($params)), $target));
         }
         echo $this->fetch($module, $method, $params);
     }
