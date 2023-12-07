@@ -72,11 +72,10 @@ class tutorial extends control
      * 退出新手教程模式。
      * Exit tutorial mode.
      *
-     * @param  string $referer
      * @access public
      * @return void
      */
-    public function quit($referer = '')
+    public function quit()
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
