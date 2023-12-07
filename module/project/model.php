@@ -1027,19 +1027,17 @@ class projectModel extends model
         $roles       = $this->loadModel('user')->getUserRoles(array_values($members));
         $teamMembers = array();
 
-        $member = new stdClass();
-        $member->root    = $projectID;
-        $member->type    = 'project';
-        $member->join    = helper::now();
-        $member->days    = zget($project, 'days', 0);
-
         $this->loadModel('execution');
-        $member->hours = $this->config->execution->defaultWorkhours;
-
         foreach($members as $account)
         {
             if(empty($account)) continue;
 
+            $member = new stdClass();
+            $member->root    = $projectID;
+            $member->type    = 'project';
+            $member->join    = helper::now();
+            $member->days    = zget($project, 'days', 0);
+            $member->hours   = $this->config->execution->defaultWorkhours;
             $member->account = $account;
             $member->role    = zget($roles, $account, '');
             $teamMembers[$account] = $member;
