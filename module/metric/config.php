@@ -1,6 +1,7 @@
 <?php
 $config->metric = new stdclass();
 $config->metric->scopeList     = array('system', 'program', 'project', 'execution', 'product', 'user', 'dept');
+$config->metric->objectList    = array('program', 'line', 'product', 'project', 'productplan', 'execution', 'release', 'story', 'requirement', 'task', 'bug', 'case', 'user', 'effort', 'doc', 'feedback', 'risk', 'issue', 'review');
 $config->metric->purposeList   = array('scale', 'qc', 'hour', 'cost', 'rate', 'time');
 $config->metric->dateList      = array('year', 'month', 'week', 'day');
 $config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user', 'dept');
