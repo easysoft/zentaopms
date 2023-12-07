@@ -368,11 +368,11 @@ class kanban extends control
         $regionID = !isset($regions[$regionID]) ? 'all' : $regionID;
         $this->session->set('regionID', $regionID, 'kanban');
 
-        $this->view->title         = $this->lang->kanban->view;
-        $this->view->kanban        = $kanban;
-        $this->view->regions       = $regions;
-        $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID, $regionID == 'all' ? '' : array($regionID));
-        $this->view->regionID      = $regionID;
+        $this->view->title       = $this->lang->kanban->view;
+        $this->view->kanban      = $kanban;
+        $this->view->regions     = $regions;
+        $this->view->kanbanList  = $this->kanban->getKanbanData($kanbanID, $regionID == 'all' ? '' : array($regionID));
+        $this->view->regionID    = $regionID;
         $this->view->pageToolbar = $this->kanban->getHeaderActions($kanban);
 
         $this->display();
