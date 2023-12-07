@@ -347,26 +347,25 @@ class personnelTest
     }
 
     /**
-     * Delete program whitelist Test
+     * 测试从项目集删除白名单。
+     * Test delete whitelist from program.
      *
      * @param  int    $programID
      * @param  string $account
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function deleteProgramWhitelistTest($programID, $account)
+    public function deleteProgramWhitelistTest(int $programID, string $account): string|array
     {
         global $tester;
-        $list1 = $tester->dao->select('*')->from(TABLE_ACL)->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->andWhere('account')->eq($account)->andWhere('source')->eq('sync')->fetchAll();
-
         $this->objectModel->deleteProgramWhitelist($programID, $account);
 
-        if(dao::isError() || count($list1) < 1) return -1;
+        if(dao::isError()) return -1;
 
         unset(dao::$cache[TABLE_ACL]);
-        $list2 = $tester->dao->select('*')->from(TABLE_ACL)->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->andWhere('account')->eq($account)->andWhere('source')->eq('sync')->fetchAll();
+        $programViews = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch('whitelist');
 
-        return count($list1) == count($list2);
+        return $programViews;
     }
 
     /**

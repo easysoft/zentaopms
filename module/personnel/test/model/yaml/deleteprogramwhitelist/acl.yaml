@@ -7,14 +7,18 @@ fields:
     range: 1-10000
   - field: account
     note: "用户名"
-    range: admin,user1{100}
+    fields:
+    - field: account1
+      range: user{25},test{25}
+    - field: account2
+      range: 1-50
   - field: objectType
     note: "对象类型"
-    range: program
+    range: program{50},product{50}
   - field: objectID
     note: "对象ID"
-    range: 1
+    range: 1{10},2{10}
   - field: type
     range: "whitelist"
   - field: source
-    range: add,sync{100}
+    range: sync{2},add

@@ -673,18 +673,20 @@ class personnelModel extends model
     }
 
     /**
-     * Determine whether the user exists in the white list of multiple products.
+     * 从项目的白名单内删除用户。
+     * Delete project whitelist.
      *
      * @param  int     $programID
      * @param  string  $account
      * @access public
      * @return void
      */
-    public function deleteProgramWhitelist(int $programID = 0, string $account = '')
+    public function deleteProgramWhitelist(int $programID = 0, string $account = ''): bool
     {
         $program = $this->loadModel('program')->getByID($programID);
         if(empty($program)) return false;
 
+        /* Get the product's whitelist in the program. */
         $products  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs('id');
         $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($products)->andWhere('account')->eq($account)->andWhere('objectType')->eq('product')->fetch();
 
@@ -705,11 +707,13 @@ class personnelModel extends model
                 $this->dao->update(TABLE_PROGRAM)->set('whitelist')->eq($newWhitelist)->where('id')->eq($programID)->exec();
 
                 $viewPrograms    = $this->dao->select('programs')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('programs');
-                $newViewPrograms = trim(str_replace(",$programID,", '', ",$viewPrograms,"), ',');
+                $newViewPrograms = trim(str_replace(",{$programID},", '', ",{$viewPrograms},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($newViewPrograms)->where('account')->eq($account)->exec();
             }
         }
+
         $this->loadModel('user')->updateUserView($programID, 'program', array($account));
+        return !dao::isError();
     }
 
     /**
