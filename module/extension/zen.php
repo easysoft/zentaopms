@@ -238,7 +238,7 @@ class extensionZen extends extension
     {
         /* The preInstall hook file. */
         $hook = $upgrade == 'yes' ? 'preupgrade' : 'preinstall';
-        if($preHookFile = $this->extension->getHookFile($extension, $hook)) include $preHookFile;
+        if($preHookFile = $this->getHookFile($extension, $hook)) include $preHookFile;
 
         /* Save to database. */
         $this->extension->saveExtension($extension, $type);
@@ -271,8 +271,24 @@ class extensionZen extends extension
 
         /* The postInstall hook file. */
         $hook = $upgrade == 'yes' ? 'postupgrade' : 'postinstall';
-        if($postHookFile = $this->extension->getHookFile($extension, $hook)) include $postHookFile;
+        if($postHookFile = $this->getHookFile($extension, $hook)) include $postHookFile;
 
         return true;
+    }
+
+    /**
+     * 根据插件代号获取指定的钩子文件地址。
+     * Get hook file for install or uninstall.
+     *
+     * @param  string       $extension
+     * @param  string       $hook      preinstall|postinstall|preuninstall|postuninstall
+     * @access public
+     * @return string|false
+     */
+    public function getHookFile(string $extension, string $hook): string|false
+    {
+        $hookFile = $this->pkgRoot . "$extension/hook/$hook.php";
+        if(file_exists($hookFile)) return $hookFile;
+        return false;
     }
 }

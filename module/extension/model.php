@@ -367,29 +367,15 @@ class extensionModel extends model
     }
 
     /**
-     * Get hook file for install or uninstall.
-     *
-     * @param  string    $extension
-     * @param  string    $hook      preinstall|postinstall|preuninstall|postuninstall
-     * @access public
-     * @return string|bool
-     */
-    public function getHookFile($extension, $hook)
-    {
-        $hookFile = $this->pkgRoot . "$extension/hook/$hook.php";
-        if(file_exists($hookFile)) return $hookFile;
-        return false;
-    }
-
-    /**
+     * 根据插件代号获取数据库执行文件。
      * Get the install db file.
      *
-     * @param  string    $extension
-     * @param  string    $method
+     * @param  string $extension
+     * @param  string $method    install|upgrade
      * @access public
      * @return string
      */
-    public function getDBFile($extension, $method = 'install')
+    public function getDBFile(string $extension, string $method = 'install'): string
     {
         return $this->pkgRoot . "$extension/db/$method.sql";
     }

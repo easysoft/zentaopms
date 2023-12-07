@@ -194,7 +194,7 @@ class extension extends control
         }
 
         /* 卸载前的钩子加载。 */
-        if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
+        if($preUninstallHook = $this->extensionZen->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
 
         if(file_exists($dbFile)) $this->view->backupFile = $this->extension->backupDB($extension);
 
@@ -206,7 +206,7 @@ class extension extends control
         $this->view->removeCommands = $this->extension->removePackage($extension);
 
         /* 卸载后的钩子加载。 */
-        if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
+        if($postUninstallHook = $this->extensionZen->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
         $this->display();
     }
 
