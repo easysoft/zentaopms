@@ -50,7 +50,7 @@ class search extends control
         $this->view->module       = $module;
         $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $this->view->fields       = $fields;
-        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
+        $this->view->fieldParams  = $this->searchZen->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
         $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
         $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';

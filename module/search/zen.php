@@ -179,4 +179,55 @@ class searchZen extends search
 
         return $options;
     }
+
+    /**
+     * 设置默认的搜索参数。
+     * Set default params for selection.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    protected function setDefaultParams(array $fields, array $params): array
+    {
+        $fields = array_keys($fields);
+
+        list($users, $products, $executions) = $this->search->getParamValues($fields, $params);
+
+        foreach($fields as $fieldName)
+        {
+            if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
+
+            if($params[$fieldName]['values'] == 'users')
+            {
+                if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
+                $params[$fieldName]['values'] = $users;
+            }
+
+            if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
+            if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
+
+            /* 处理数组。*/
+            /* Process array value. */
+            if(is_array($params[$fieldName]['values']))
+            {
+                /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */
+                if(isset($params[$fieldName]['values'][0]) and $params[$fieldName]['values'][0] !== '')
+                {
+                    $params[$fieldName]['values'] = array('ZERO' => $params[$fieldName]['values'][0]) + $params[$fieldName]['values'];
+                    unset($params[$fieldName]['values'][0]);
+                }
+                elseif(empty($params[$fieldName]['values']))
+                {
+                    $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
+                }
+                elseif(empty($params[$fieldName]['nonull']))
+                {
+                    $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
+                }
+            }
+        }
+        return $params;
+    }
 }
