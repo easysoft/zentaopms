@@ -97,7 +97,7 @@ class tutorial extends control
     }
 
     /**
-     * 想到页面。
+     * 向导页面。
      * Wizard.
      *
      * @param  string $module
