@@ -762,6 +762,109 @@ class searchTao extends searchModel
     }
 
     /**
+     * 将 unicode 转换为对应的字。
+     * Transfer unicode to words.
+     *
+     * @param  string $string
+     * @access private
+     * @return string
+     */
+    private function decode(string $string): string
+    {
+        static $dict;
+        if(empty($dict))
+        {
+            $dict = $this->dao->select("concat(`key`, ' ') AS `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
+            $dict['|'] = '';
+        }
+        if(strpos($string, ' ') === false) return zget($dict, $string . ' ');
+        return trim(str_replace(array_keys($dict), array_values($dict), $string . ' '));
+    }
+
+    /**
+     * 获取结果显示的摘要。
+     * Get summary of results.
+     *
+     * @param  string $content
+     * @param  string $words
+     * @access private
+     * @return string
+     */
+    private function getSummary(string $content, string $words): string
+    {
+        $length = $this->config->search->summaryLength;
+        if(strlen($content) <= $length) return $this->decode($this->markKeywords($content, $words));
+
+        $content = $this->markKeywords($content, $words);
+        preg_match_all("/\<span class='text-danger'\>.*\<\/span\>/U", $content, $matches);
+
+        if(empty($matches[0])) return $this->decode($this->markKeywords(substr($content, 0, $length), $words));
+
+        $matches = $matches[0];
+        $score   = 0;
+        $needle  = '';
+        foreach($matches as $matched)
+        {
+            if(strlen($matched) > $score)
+            {
+                $content = str_replace($needle, strip_tags($needle), $content);
+                $needle  = $matched;
+                $score   = strlen($matched);
+            }
+        }
+
+        $content = str_replace('<span class', ' <spanclass', $content);
+        $content = explode(' ', $content);
+        $pos     = array_search(str_replace('<span class', '<spanclass', $needle), $content);
+        $start   = max(0, $pos - ($length / 2));
+        $summary = join(' ', array_slice($content, $start, $length));
+        $summary = str_replace(' <spanclass', '<span class', $summary);
+
+        return $this->decode($summary);
+    }
+
+    /**
+     * 在文中标记关键词。
+     * Mark keywords in content.
+     *
+     * @param  string $content
+     * @param  string $keywords
+     * @access private
+     * @return string
+     */
+    private function markKeywords(string $content, string $keywords): string
+    {
+        $words = explode(' ', trim($keywords, ' '));
+        $leftMark  = '|0000';
+        $rightMark = '0000|';
+
+        $markedWords = array();
+        foreach($words as $key => $word)
+        {
+            if(preg_match('/^\|[0-9]+\|$/', $word))
+            {
+                $words[$key] = trim($word, '|');
+            }
+            elseif(is_numeric($word))
+            {
+                $words[$key] = $word . ' ';
+            }
+            else
+            {
+                $words[$key] = strlen($word) == 5 ? str_replace('_', '', $word) : $word;
+            }
+            $markedWords[] = $leftMark . $this->decode($word) . $rightMark;
+        }
+
+        $content = str_replace($words, $markedWords, $content . ' ');
+        $content = str_replace(array($leftMark, $rightMark), array("<span class='text-danger'>", "</span > "), $content);
+        $content = str_replace("</span > <span class='text-danger'>", '', $content);
+        $content = str_replace("</span >", '</span>', $content);
+
+        return $content;
+    }
+
+    /**
      * 处理搜索的记录。
      * Process record.
      *
