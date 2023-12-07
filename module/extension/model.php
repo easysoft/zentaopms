@@ -150,22 +150,22 @@ class extensionModel extends model
 
         if(isset($data->incompatibleExts)) return (array)$data->incompatibleExts;
         return array();
-
     }
 
     /**
+     * 根据状态获取本地安装的插件。
      * Get extensions by status.
      *
-     * @param  string    $status
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getLocalExtensions($status)
+    public function getLocalExtensions(string $status): array
     {
         $extensions = $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->in($status)->fi()->fetchAll('code');
         foreach($extensions as $extension)
         {
-            if($extension->site and stripos(strtolower($extension->site), 'http') === false) $extension->site = 'http://' . $extension->site;
+            if($extension->site && stripos(strtolower($extension->site), 'http') === false) $extension->site = 'http://' . $extension->site;
         }
         return $extensions;
     }
