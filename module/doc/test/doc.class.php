@@ -1279,4 +1279,20 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 获取我编辑过的文档。
+     * Get the docs that I have edited.
+     *
+     * @param  string $sort
+     * @access public
+     * @return array
+     */
+    public function getEditedDocsTest(string $sort): array
+    {
+        $docs = $this->objectModel->getEditedDocs($sort);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
