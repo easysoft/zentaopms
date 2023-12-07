@@ -46,6 +46,7 @@ formBatchPanel
     ),
     formBatchItem
     (
+        set::label(''),
         set::name('type'),
         set::value($type),
         set::hidden(true)
