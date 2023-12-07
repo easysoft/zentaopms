@@ -1036,13 +1036,14 @@ class userModel extends model
     }
 
     /**
-     * Authorize a user.
+     * 获取某个用户的权限。
+     * Get user's rights.
      *
      * @param   string $account
      * @access  public
      * @return  array the user rights.
      */
-    public function authorize($account)
+    public function authorize(string $account): array
     {
         $account = filter_var($account, FILTER_UNSAFE_RAW);
         if(!$account) return false;
@@ -2958,21 +2959,18 @@ class userModel extends model
     }
 
     /**
+     * 把当前用户排到最前面。
      * Put the current user first.
      *
      * @param  array  $users
      * @access public
      * @return array
      */
-    public function processAccountSort(array $users = array()): array
+    public function processAccountSort(array $users): array
     {
-        if(isset($this->app->user->account) and isset($users[$this->app->user->account]))
-        {
-            $currentUser = array();
-            $currentUser[$this->app->user->account] = $users[$this->app->user->account];
-            unset($users[$this->app->user->account]);
-            $users = $currentUser + $users;
-        }
-        return $users;
+        $account = $this->app->user->account;
+        if(!$users || !$account || !isset($users[$account])) return $users;
+
+        return array($account => $users[$account]) + $users;
     }
 }
