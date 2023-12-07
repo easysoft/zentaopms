@@ -1120,10 +1120,11 @@ class userModel extends model
      *
      * @param  object $user
      * @param  bool   $addAction
+     * @param  bool   $keepLogin
      * @access public
      * @return false|object
      */
-    public function login($user, $addAction = true)
+    public function login($user, $addAction = true, $keepLogin = false)
     {
         if(!$user) return false;
 
@@ -1146,7 +1147,7 @@ class userModel extends model
 
         /* 保持登录状态。*/
         /* Keep login. */
-        if($this->post->keepLogin) $this->keepLogin($user);
+        if($keepLogin) $this->keepLogin($user);
 
         return $user;
     }
