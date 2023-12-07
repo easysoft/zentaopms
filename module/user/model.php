@@ -229,84 +229,51 @@ class userModel extends model
     }
 
     /**
-     * Get the account=>realname pairs.
+     * 获取用户名和真实姓名的键值对。
+     * Get account and realname pairs.
      *
-     * @param  string       $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
-     * @param  string       $usersToAppended  account1,account2
+     * @param  string       $params           noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
+     * @param  string|array $usersToAppended  account1,account2
      * @param  int          $maxCount
      * @param  string|array $accounts
      * @access public
      * @return array
      */
-    public function getPairs($params = '', $usersToAppended = '', $maxCount = 0, $accounts = '')
+    public function getPairs(string $params = '', string|array $usersToAppended = '', int $maxCount = 0, string|array $accounts = '')
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getUserPairs();
-        /* Set the query fields and orderBy condition.
+
+        /* 设置查询字段、条件字段、排序字段和索引字段。
+         * Set query fields, condition fields, order fields and index field.
          *
+         * 如果参数中有 xxfirst，使用 INSTR 函数获取角色字段在排序字符串中的位置，以确保用户在角色排序中排在前面。
          * If there's xxfirst in the params, use INSTR function to get the position of role fields in a order string,
          * thus to make sure users of this role at first.
          */
         $fields = 'id, account, realname, deleted';
-        $type   = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
         if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',pd,po,', role) AS roleOrder";
         if(strpos($params, 'pdfirst') !== false) $fields .= ", INSTR(',po,pd,', role) AS roleOrder";
         if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qd,qa,', role) AS roleOrder";
         if(strpos($params, 'qdfirst') !== false) $fields .= ", INSTR(',qa,qd,', role) AS roleOrder";
         if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',td,pm,', role) AS roleOrder";
         if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,qd,qa,dev,', role) AS roleOrder";
-        $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
-
-        $keyField = (strpos($params, 'useid')!== false) ? 'id' : "account";
-
-        /* Get raw records. */
-        $this->app->loadConfig('user');
-        unset($this->config->user->moreLink);
+        $type     = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
+        $orderBy  = (strpos($params, 'first')   !== false) ? 'roleOrder DESC, account' : 'account';
+        $keyField = (strpos($params, 'useid')   !== false) ? 'id' : "account";
 
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1=1')
-            ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
+            ->beginIF(strpos($params, 'nodeleted') !== false || empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->beginIF($this->config->vision and $this->app->rawModule !== 'kanban')->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
+            ->beginIF($this->config->vision && $this->app->rawModule !== 'kanban')->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);
 
-        if($maxCount and $maxCount == count($users))
-        {
-            if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
-            $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
-
-            $moreLink  = helper::createLink('user', 'ajaxGetMore');
-            $moreLink .= strpos($moreLink, '?') === false ? '?' : '&';
-            $moreLink .= "params=" . base64_encode($moreLinkParams);
-            $this->config->user->moreLink = $moreLink;
-        }
-
-        if($usersToAppended)
-        {
-            $users += $this->dao->select($fields)->from(TABLE_USER)
-                ->where('account')->in($usersToAppended)
-                ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq('0')->fi()
-                ->fetchAll($keyField);
-        }
-
-        /* Cycle the user records to append the first letter of his account. */
-        foreach($users as $account => $user)
-        {
-            if(strpos($params, 'showid') !== false)
-            {
-                $users[$account] = $user->id;
-            }
-            else
-            {
-                $firstLetter = ucfirst(mb_substr($user->account, 0, 1)) . ':';
-                if(strpos($params, 'noletter') !== false or !empty($this->config->isINT)) $firstLetter = '';
-                $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $user->account : ($user->realname ? $user->realname : $user->account));
-            }
-        }
-
-        /* Put the current user first. */
+        $this->processMoreLink($params, $usersToAppended, $maxCount, count($users));
+        if($usersToAppended) $users += $this->fetchExtraUsers($params, $usersToAppended, $users, $fields, $keyField);
+        $users = $this->processDisplayValue($users, $params);
         $users = $this->processAccountSort($users);
 
         /* Append empty, closed, and guest users. */
@@ -317,13 +284,87 @@ class userModel extends model
     }
 
     /**
-     * Get user's avatar pairs.
+     * 处理获取更多用户的链接。
+     * Process the more link.
+     *
+     * @param  string       $params
+     * @param  string|array $usersToAppended
+     * @param  int          $maxCount
+     * @param  int          $userCount
+     * @access private
+     * @return void
+     */
+    private function processMoreLink(string $params, string|array $usersToAppended, int $maxCount, int $userCount): void
+    {
+        unset($this->config->user->moreLink);
+        if($maxCount && $maxCount == $userCount)
+        {
+            if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
+            $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
+
+            $moreLink = helper::createLink('user', 'ajaxGetMore');
+            $this->config->user->moreLink = $moreLink . (strpos($moreLink, '?') === false ? '?' : '&') . "params=" . base64_encode($moreLinkParams);
+        }
+    }
+
+    /**
+     * 获取额外的用户。
+     * Get extra users.
+     *
+     * @param  string       $params
+     * @param  string|array $usersToAppended
+     * @param  array        $users
+     * @param  string       $fields
+     * @param  string       $keyField
+     * @access private
+     * @return array
+     */
+    private function fetchExtraUsers(string $params, string|array $usersToAppended, array $users, string $fields, string $keyField): array
+    {
+        if($usersToAppended) return $users;
+
+        return $this->dao->select($fields)->from(TABLE_USER)
+            ->where('account')->in($usersToAppended)
+            ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq('0')->fi()
+            ->fetchAll($keyField);
+    }
+
+    /**
+     * 处理用户的显示名称。
+     * Process the display value of users.
+     *
+     * @param  array  $users
+     * @param  string $params
+     * @access private
+     * @return array
+     */
+    private function processDisplayValue(array $users, string $params): array
+    {
+        foreach($users as $account => $user)
+        {
+            if(strpos($params, 'showid') !== false)
+            {
+                $users[$account] = $user->id;
+                continue;
+            }
+
+            $firstLetter = ucfirst(mb_substr($user->account, 0, 1)) . ':';
+            if(strpos($params, 'noletter') !== false || !empty($this->config->isINT)) $firstLetter = '';
+            $users[$account] =  $firstLetter . (($user->deleted && strpos($params, 'realname') === false) ? $user->account : ($user->realname ?: $user->account));
+        }
+
+        return $users;
+    }
+
+    /**
+     * 获取用户名和头像的键值对。
+     * Get account and avatar pairs.
      *
      * @param  string $params
      * @access public
      * @return array
      */
-    public function getAvatarPairs($params = 'nodeleted')
+    public function getAvatarPairs(string $params = 'nodeleted')
     {
         $avatarPairs = array();
         $userList    = $this->getList($params, 'account,avatar');
