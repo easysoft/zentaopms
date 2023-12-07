@@ -374,13 +374,14 @@ class userModel extends model
     }
 
     /**
-     * Get commiters from the user table.
+     * 获取源代码账号和真实姓名/用户名的键值对。
+     * Get account and realname pairs.
      *
      * @param  string  $field
      * @access public
      * @return array
      */
-    public function getCommiters($field = 'realname')
+    public function getCommiters(string $field = 'realname')
     {
         $rawCommiters = $this->dao->select('commiter, account, realname')->from(TABLE_USER)->where('commiter')->ne('')->fetchAll();
         if(!$rawCommiters) return array();
@@ -389,10 +390,7 @@ class userModel extends model
         foreach($rawCommiters as $commiter)
         {
             $userCommiters = explode(',', $commiter->commiter);
-            foreach($userCommiters as $userCommiter)
-            {
-                $commiters[$userCommiter] = $commiter->$field ? $commiter->$field : $commiter->account;
-            }
+            foreach($userCommiters as $userCommiter) $commiters[$userCommiter] = $commiter->$field ?: $commiter->account;
         }
 
         return $commiters;
