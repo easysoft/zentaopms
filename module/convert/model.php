@@ -245,7 +245,7 @@ class convertModel extends model
 
         foreach(array_keys($this->lang->convert->jira->objectList) as $module)
         {
-            if($module != $type and !$nextObject) continue;
+            if($module != $type && !$nextObject) continue;
             if($module == $type) $nextObject = true;
 
             while(true)
@@ -294,7 +294,7 @@ class convertModel extends model
 
         foreach(array_keys($this->lang->convert->jira->objectList) as $module)
         {
-            if($module != $type and !$nextObject) continue;
+            if($module != $type && !$nextObject) continue;
             if($module == $type) $nextObject = true;
 
             while(true)
@@ -325,6 +325,7 @@ class convertModel extends model
     }
 
     /**
+     * 分割jira文件。
      * Split jira file.
      *
      * @access public
@@ -337,7 +338,6 @@ class convertModel extends model
         $file     = $filePath . $fileName;
         $handle   = fopen($file, "r");
 
-        $usingData  = array();
         $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType', '<NodeAssociation', '<ApplicationUser');
         $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>');
 
@@ -382,6 +382,7 @@ class convertModel extends model
     }
 
     /**
+     * 创建jira数据表。
      * Create tmp table for import jira.
      *
      * @access public
@@ -410,13 +411,14 @@ EOT;
     }
 
     /**
+     * 执行。
      * After exec.
      *
-     * @param  string $method
+     * @param  string $method db|file
      * @access public
      * @return void
      */
-    public function afterExec($method = 'db')
+    public function afterExec(string $method = 'db')
     {
         /* Set project min start date. */
         $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
@@ -437,6 +439,7 @@ EOT;
     }
 
     /**
+     * 删除jira文件。
      * Delete jira backip file.
      *
      * @access public
@@ -453,13 +456,14 @@ EOT;
     }
 
     /**
+     * 检查数据库名称。
      * Check dbName is valide.
      *
      * @param  string $dbName
      * @access public
      * @return bool
      */
-    public function checkDBName($dbName)
+    public function checkDBName(string $dbName): bool
     {
         if(preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $dbName)) return true;
         return false;

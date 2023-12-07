@@ -356,7 +356,7 @@ class convertTao extends convertModel
         $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
         $userConfig = $this->session->jiraUser;
 
-        foreach($dataList as $id => $data)
+        foreach($dataList as $data)
         {
             if(isset($localUsers[$data->account])) continue;
 
@@ -470,20 +470,19 @@ class convertTao extends convertModel
 
         foreach($dataList as $id => $data)
         {
-            $issueType    = isset($issueTypeList[$data->issuetype]) ? $issueTypeList[$data->issuetype] : 'task';
             $issueProject = $data->PROJECT;
-
             if(!isset($projectRelation[$issueProject])) continue;
 
             $projectID   = $projectRelation[$issueProject];
             $productID   = $projectProduct[$projectID];
             $executionID = $projectExecution[$projectID];
 
-            if($issueType == 'requirement' or $issueType == 'story')
+            $issueType = isset($issueTypeList[$data->issuetype]) ? $issueTypeList[$data->issuetype] : 'task';
+            if($issueType == 'requirement' || $issueType == 'story')
             {
                 $this->createStory($productID, $projectID, $executionID, $issueType, $data, $method, $reasonList);
             }
-            elseif($issueType == 'task' or $issueType == 'subTask')
+            elseif($issueType == 'task' || $issueType == 'subTask')
             {
                 $this->createTask($projectID, $executionID, $data, $method, $reasonList);
             }
@@ -637,7 +636,7 @@ class convertTao extends convertModel
             if(!isset($issueObjectType[$issueID])) continue;
 
             $objectType = $issueObjectType[$issueID];
-            if($objectType != 'bug' and $objectType != 'task' and $objectType != 'story') continue;
+            if($objectType != 'bug' && $objectType != 'task' && $objectType != 'story') continue;
 
             if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
             if($objectType == 'task')  $objectID = $issueTasks[$issueID];
@@ -846,7 +845,7 @@ class convertTao extends convertModel
         if($data->RESOLUTION)
         {
             $story->closedReason = zget($reasonList, $data->RESOLUTION, '');
-            if($story->closedReason and !isset($this->lang->story->reasonList[$story->closedReason])) $story->closedReason = 'done';
+            if($story->closedReason && !isset($this->lang->story->reasonList[$story->closedReason])) $story->closedReason = 'done';
         }
 
         $this->dao->dbh($this->dbh)->insert(TABLE_STORY)->data($story)->exec();
@@ -927,7 +926,7 @@ class convertTao extends convertModel
         if($data->RESOLUTION)
         {
             $task->closedReason = zget($reasonList, $data->RESOLUTION, '');
-            if($task->closedReason and !isset($this->lang->task->reasonList[$task->closedReason])) $task->closedReason = 'cancel';
+            if($task->closedReason && !isset($this->lang->task->reasonList[$task->closedReason])) $task->closedReason = 'cancel';
         }
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TASK)->data($task)->exec();
@@ -986,7 +985,7 @@ class convertTao extends convertModel
         if($data->RESOLUTION)
         {
             $bug->resolution = zget($resolutionList, $data->RESOLUTION, '');
-            if($bug->resolution and !isset($this->lang->bug->resolutionList[$bug->resolution])) $bug->resolution = 'fixed';
+            if($bug->resolution && !isset($this->lang->bug->resolutionList[$bug->resolution])) $bug->resolution = 'fixed';
         }
 
         $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec();
@@ -1052,7 +1051,7 @@ class convertTao extends convertModel
             {
                 $issueID   = $method == 'db' ? $issue->issueID : $issue;
                 $issueType = zget($issueObjectType, $issueID, '');
-                if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
+                if(!$issueType || ($issueType != 'story' && $issueType != 'bug')) continue;
 
                 if($issueType == 'story')
                 {
@@ -1117,7 +1116,7 @@ class convertTao extends convertModel
             {
                 $issueID   = $method == 'db' ? $issue->issueID : $issue;
                 $issueType = zget($issueObjectType, $issueID, '');
-                if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
+                if(!$issueType || ($issueType != 'story' && $issueType != 'bug')) continue;
 
                 if($issueType == 'story')
                 {
@@ -1202,17 +1201,17 @@ class convertTao extends convertModel
         {
             $objectType = $issueObjectType[$source];
 
-            if($objectType != 'story' and $objectType != 'bug') continue;
+            if($objectType != 'story' && $objectType != 'bug') continue;
             if($issueObjectType[$source] != $issueObjectType[$dest]) continue;
 
             if($objectType == 'story')
             {
-                if(empty($issueStories[$dest]) or empty($issueStories[$source])) continue;
+                if(empty($issueStories[$dest]) || empty($issueStories[$source])) continue;
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($$issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
             }
             elseif($objectType == 'bug')
             {
-                if(empty($issueBugs[$dest]) or empty($issueBugs[$source])) continue;
+                if(empty($issueBugs[$dest]) || empty($issueBugs[$source])) continue;
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($issueBugs[$dest])->where('id')->eq($issueBugs[$source])->exec();
             }
         }
@@ -1234,32 +1233,32 @@ class convertTao extends convertModel
     {
         foreach($relatesLink as $source => $dest)
         {
-            if(empty($issueObjectType[$source]) or empty($issueObjectType[$dest])) continue;
+            if(empty($issueObjectType[$source]) || empty($issueObjectType[$dest])) continue;
 
             $sourceObjectType = $issueObjectType[$source];
             $destObjectType   = $issueObjectType[$dest];
 
-            if($sourceObjectType == 'task' and $destObjectType == 'story')
+            if($sourceObjectType == 'task' && $destObjectType == 'story')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$dest])->where('id')->eq($issueTasks[$source])->exec();
             }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'task')
+            elseif($sourceObjectType == 'story' && $destObjectType == 'task')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$source])->where('id')->eq($issueTasks[$dest])->exec();
             }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'bug')
+            elseif($sourceObjectType == 'story' && $destObjectType == 'bug')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$source])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$dest])->exec();
             }
-            elseif($sourceObjectType == 'bug' and $destObjectType == 'story')
+            elseif($sourceObjectType == 'bug' && $destObjectType == 'story')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$dest])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$source])->exec();
             }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'story')
+            elseif($sourceObjectType == 'story' && $destObjectType == 'story')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("linkStories=concat(linkStories, ',{$issueStories[$dest]}')")->where('id')->eq($issueStories[$source])->exec();
             }
-            elseif($sourceObjectType == 'bug' and $destObjectType == 'bug')
+            elseif($sourceObjectType == 'bug' && $destObjectType == 'bug')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("relatedBug=concat(relatedBug, ',{$issueBugs[$dest]}')")->where('id')->eq($issueBugs[$source])->exec();
             }

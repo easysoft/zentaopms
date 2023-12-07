@@ -131,7 +131,7 @@ class convert extends control
 
         /* Compute the checking result. */
         $result = 'pass';
-        if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
+        if(!is_object($checkInfo['db']) || !$checkInfo['path']) $result = 'fail';
 
         /* Assign. */
         $this->view->version   = $version;
@@ -164,7 +164,7 @@ class convert extends control
 
         /* Compute the checking result. */
         $result = 'pass';
-        if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
+        if(!is_object($checkInfo['db']) || !$checkInfo['path']) $result = 'fail';
 
         $this->app->loadLang('bug');
         $this->app->loadLang('story');
