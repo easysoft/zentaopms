@@ -9,6 +9,26 @@ class tutorialTest
     }
 
     /**
+     * 测试检查新手模式配置。
+     * Test check novice mode config.
+     *
+     * @param  int       $modifyPassword
+     * @access public
+     * @return int|array
+     */
+    public function checkNoviceTest(int $modifyPassword): int|array
+    {
+        global $tester;
+        if($tester->app->user->account != 'guest') $tester->app->user->modifyPassword = $modifyPassword;
+
+        $return = $this->objectModel->checkNovice();
+
+        if(dao::isError()) return dao::getError();
+
+        return $return ? 1 : 0;
+    }
+
+    /**
      * Get tutorial product pairs.
      * 
      * @access public

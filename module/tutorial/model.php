@@ -13,6 +13,25 @@ declare(strict_types=1);
 class tutorialModel extends model
 {
     /**
+     * 检查新手模式配置。
+     * Check novice mode config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkNovice(): bool
+    {
+        $account = $this->app->user->account;
+        if($account == 'guest') return false;
+        if(!empty($this->app->user->modifyPassword)) return false;
+
+        $count = $this->dao->select('count(*) AS count')->from(TABLE_ACTION)->where('actor')->eq($account)->fetch('count');
+        if($count < 10) return true;
+
+        $this->loadModel('setting')->setItem($account . '.common.global.novice', 0);
+        return false;
+    }
+    /**
      * 获取新手模式产品键值对。
      * Get tutorial product pairs.
      *
