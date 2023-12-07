@@ -857,83 +857,45 @@ class userModel extends model
     }
 
     /**
-     * Identify a user.
+     * 验证用户并设置相关属性。
+     * Identify user and set related properties.
      *
-     * @param   string $account     the user account
-     * @param   string $password    the user password or auth hash
-     * @access  public
-     * @return  object
+     * @param  string    $account              the user account
+     * @param  string    $password             the user password or auth hash
+     * @param  int|false $passwordStrength     the user password strength
+     * @access public
+     * @return bool|object
      */
-    public function identify($account, $password)
+    public function identify(string $account, string $password, int|false $passwordStrength = false): bool|object
     {
-        if(!$account or !$password) return false;
-        /* Check account rule in login.  */
+        if(!$account || !$password) return false;
         if(!validater::checkAccount($account)) return false;
 
-        /* Get the user first. If $password length is 32, don't add the password condition.  */
-        $record = $this->dao->select('*')->from(TABLE_USER)
-            ->where('account')->eq($account)
-            ->beginIF(strlen($password) < 32)->andWhere('password')->eq(md5($password))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
+        $user = $this->identifyUser($account, $password);
+        if(!$user) return false;
 
-        /* If the length of $password is 32 or 40, checking by the auth hash. */
-        $user = false;
-        if($record)
+        $ip   = helper::getRemoteIp();
+        $last = $this->server->request_time;
+        $user = $this->checkNeedModifyPassword($user, $passwordStrength);
+
+        $user->lastTime = $user->last;
+        $user->last     = date(DT_DATETIME1, $last);
+        $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
+
+        if($this->app->isServing())
         {
-            $passwordLength = strlen($password);
-            if($passwordLength < 32)
-            {
-                $user = $record;
-            }
-            elseif($passwordLength == 32)
-            {
-                $hash = $this->session->rand ? md5($record->password . $this->session->rand) : $record->password;
-                $user = $password == $hash ? $record : '';
-            }
-            elseif($passwordLength == 40)
-            {
-                $hash = sha1($record->account . $record->password . $record->last);
-                $user = $password == $hash ? $record : '';
-            }
-            if(!$user and md5($password) == $record->password) $user = $record;
-        }
+            $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
 
-        if($user)
-        {
-            $ip   = helper::getRemoteIp();
-            $last = $this->server->request_time;
-
-            $user->lastTime       = $user->last;
-            $user->last           = date(DT_DATETIME1, $last);
-            $user->admin          = strpos($this->app->company->admins, ",{$user->account},") !== false;
-            $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
-            if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
-            if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))
-            {
-                $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
-                if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
-            }
-            /* Check weak password when login. */
-            if(!$user->modifyPassword and $this->app->moduleName == 'user' and $this->app->methodName == 'login' and isset($_POST['passwordStrength']))
-            {
-                $user->modifyPassword = (isset($this->config->safe->mode) and $this->post->passwordStrength < $this->config->safe->mode);
-                if($user->modifyPassword) $user->modifyPasswordReason = 'passwordStrengthWeak';
-            }
-
-            /* code for bug #2729. */
-            if($this->app->isServing()) $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
-
-            /* Create cycle todo in login. */
+            /* 登录后创建周期性待办。*/
+            /* Create cycle todo after login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq('0')->andWhere('account')->eq($user->account)->fetchAll('id');
             $this->loadModel('todo')->createByCycle($todoList);
+        }
 
-            /* Fix bug #17082. */
-            if($user->avatar)
-            {
-                $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
-                if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
-            }
+        if($user->avatar)
+        {
+            $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
+            if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
         }
         return $user;
     }
