@@ -397,18 +397,17 @@ class userModel extends model
     }
 
     /**
-     * Get user list with email and real name.
+     * 获取用户名、真实姓名和邮箱组成的用户列表。
+     * Get user list with account, realname and email.
      *
      * @param  string|array $users
      * @access public
      * @return array
      */
-    public function getRealNameAndEmails($users)
+    public function getRealNameAndEmails(string|array $users): array
     {
-        $users = $this->dao->select('account, email, realname')->from(TABLE_USER)->where('account')->in($users)->fetchAll('account');
         if(!$users) return array();
-        foreach($users as $account => $user) if($user->realname == '') $user->realname = $account;
-        return $users;
+        return $this->dao->select("account, email, IF(realname = '', account, realname) AS realname")->from(TABLE_USER)->where('account')->in($users)->fetchAll('account');
     }
 
     /**
