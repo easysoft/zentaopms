@@ -662,28 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get user bugs.
-     *
-     * @access public
-     * @return void
-     */
-    public function getUserBugs()
-    {
-        return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
-            ->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.assignedTo = t2.account')
-            ->where('t1.assignedTo')->ne('')
-            ->andWhere('t1.assignedTo')->ne('closed')
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deadline', true)->eq('0000-00-00')
-            ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
-            ->markRight(1)
-            ->fetchGroup('user');
-    }
-
-    /**
      * Get user tasks.
      *
      * @access public
