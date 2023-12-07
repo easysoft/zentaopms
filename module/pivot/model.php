@@ -46,7 +46,7 @@ class pivotModel extends model
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            $this->pivotTao->setFilterDefault($filters);
+            $this->setFilterDefault($filters);
             $pivot->filters = $filters;
         }
 
@@ -177,16 +177,14 @@ class pivotModel extends model
      */
     public function processFieldSettings(object $pivot)
     {
-        /* 获取$fieldSettings。 */
-        /* Get $fieldSettings. */
-        $fieldSettings = $pivot->fieldSettings ?? $this->pivotTao->getFieldsFromPivot($pivot, 'fields', array(), true);
+        $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
         if(empty($fieldSettings)) return;
 
         /* 获取$filters。 */
         /* Get $filters. */
         $sql     = isset($pivot->sql)     ? $pivot->sql     : '';
-        $filters = $this->pivotTao->getFieldsFromPivot($pivot, 'filters', array(), !is_array($pivot->filters), true);
-        if(!empty($filters)) $this->pivotTao->setFilterDefault($filters);
+        $filters = $this->getFieldsFromPivot($pivot, 'filters', array(), !is_array($pivot->filters), true);
+        if(!empty($filters)) $this->setFilterDefault($filters);
 
         /* 检测sql是否有效。 */
         /* Check if the sql is valid. */
@@ -195,8 +193,6 @@ class pivotModel extends model
         $stmt = $this->dbh->query($querySQL);
         if(!$stmt) return;
 
-        /* 获取$columnFields。 */
-        /* Get $columnFields. */
         $columns      = $this->loadModel('dataview')->getColumns($querySQL);
         $columnFields = array();
         foreach(array_keys(get_object_vars($columns)) as $type) $columnFields[$type] = $type;
@@ -217,7 +213,68 @@ class pivotModel extends model
 
         /* 重建fieldSettings。 */
         /* Rebuild fieldSettings. */
-        $this->pivotTao->rebuildFieldSetting($pivot, $fieldPairs, $columns, $relatedObject, $fieldSettings);
+        $this->rebuildFieldSetting($pivot, $fieldPairs, $columns, $relatedObject, $fieldSettings);
+    }
+
+    /**
+     * 重建透视表filedSettings字段
+     * Rebuild fieldSettings field of pivot.
+     *
+     * @param  object  $pivot
+     * @param  array   $fieldPairs
+     * @param  object  $columns
+     * @param  array   $relatedObject
+     * @param  object  $fieldSettings
+     * @access private
+     * @return void
+     */
+    private function rebuildFieldSetting(object $pivot, array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings): void
+    {
+        $fieldSettingsNew = new stdclass();
+
+        foreach($fieldPairs as $index => $field)
+        {
+            $defaultType   = $columns->$index;
+            $defaultObject = $relatedObject[$index];
+
+            if(isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
+
+            if(!isset($fieldSettings->$index))
+            {
+                /* 如果字段设置中没有该字段，则使用默认值 */
+                /* If the field is not set in the field settings, use the default value. */
+                $fieldItem = new stdclass();
+                $fieldItem->name   = $field;
+                $fieldItem->object = $defaultObject;
+                $fieldItem->field  = $index;
+                $fieldItem->type   = $defaultType;
+
+                $fieldSettingsNew->$index = $fieldItem;
+            }
+            else
+            {
+                /* 兼容旧版本的字段设置，当为空或者为布尔值时，使用默认值 */
+                /* Compatible with old version of field settings, use default value when empty or boolean. */
+                if(!isset($fieldSettings->$index->object) || is_bool($fieldSettings->$index->object) || strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
+
+                /* 当字段设置中没有字段名时，使用默认的字段名配置。 */
+                /* When there is no field name in the field settings, use the default field name configuration. */
+                if(!isset($fieldSettings->$index->field) || strlen($fieldSettings->$index->field) == 0)
+                {
+                    $fieldSettings->$index->field  = $index;
+                    $fieldSettings->$index->object = $defaultObject;
+                    $fieldSettings->$index->type   = 'string';
+                }
+
+                $object = $fieldSettings->$index->object;
+                $type   = $fieldSettings->$index->type;
+                if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
+
+                $fieldSettingsNew->$index = $fieldSettings->$index;
+            }
+        }
+
+        $pivot->fieldSettings = $fieldSettingsNew;
     }
 
     /**
@@ -322,7 +379,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    protected function getBugStatistics(array $bugGroups): array
+    private function getBugStatistics(array $bugGroups): array
     {
         $bugs = array();
         foreach($bugGroups as $account => $userBugs)
@@ -2149,6 +2206,40 @@ class pivotModel extends model
         }
         $sql = preg_replace("/= *'\!/U", "!='", $sql);
         return $sql;
+    }
+
+    /**
+     * 设置默认的过滤器。
+     * Set default filter.
+     *
+     * @param  array   $filters
+     * @access private
+     * @return void
+     */
+    private function setFilterDefault(array &$filters): void
+    {
+        foreach($filters as &$filter)
+        {
+            if(empty($filter['default'])) continue;
+            if(is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
+        }
+    }
+
+    /**
+     * 从透视表对象中获取字段。
+     * Get fields from pivot object.
+     *
+     * @param  object  $pivot
+     * @param  string  $key
+     * @param  mixed   $default
+     * @param  bool    $jsonDecode
+     * @param  bool    $needArray
+     * @access private
+     * @return mixed
+     */
+    private function getFieldsFromPivot(object $pivot, string $key, mixed $default, bool $jsonDecode = false, bool $needArray = false)
+    {
+        return isset($pivot->{$key}) && !empty($pivot->{$key}) ? ($jsonDecode ? json_decode($pivot->{$key}, $needArray) : $pivot->{$key}) : $default;
     }
 }
 
