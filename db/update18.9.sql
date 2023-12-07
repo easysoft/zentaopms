@@ -10,5 +10,7 @@ ALTER TABLE `zt_review` MODIFY `lastEditedDate` date NULL;
 ALTER TABLE `zt_meeting` MODIFY `minutedDate` datetime NULL;
 ALTER TABLE `zt_meeting` MODIFY `editedDate` datetime NULL;
 
+ALTER TABLE `zt_productplan` MODIFY `mailto` text NULL;
+
 CREATE INDEX `metricCode` ON zt_metriclib (metricCode) USING BTREE;
 CREATE INDEX `metricID` ON zt_metriclib (metricID) USING BTREE;
