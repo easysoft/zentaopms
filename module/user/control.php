@@ -814,8 +814,6 @@ class user extends control
             $user = form::data($this->config->user->form->reset)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
-            $this->user->checkPassword($user);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $result = $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -897,9 +895,6 @@ class user extends control
                 ->add('account', $user->account)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
-
-            $this->user->checkPassword($user);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
