@@ -1,0 +1,18 @@
+title: table zt_task
+desc: "任务"
+author: automated export
+version: "1.0"
+fields:
+  - field: assignedTo
+    fields:
+      - field: account1
+        range: admin,user{100}
+      - field: account2
+        range: "[],11-100"
+    note: "指派给"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: left
+    range: 1-5

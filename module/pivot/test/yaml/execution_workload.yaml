@@ -1,0 +1,12 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 101-700
+  - field: project
+    range: 1-10
+  - field: status
+    range: waiting,doing
+  - field: multiple
+    range: 0{5},1{5}

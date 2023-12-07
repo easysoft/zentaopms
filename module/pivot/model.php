@@ -478,9 +478,7 @@ class pivotModel extends model
                     $execution->totalTasks     = 0;
                     $execution->totalHours     = 0;
                     $execution->workload       = '0%';
-                    $execution->executionName  = $this->lang->null;
-
-                    if($execution->multiple) $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
+                    $this->setExecutionName($execution, $canViewExecution);
 
                     if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
                     if($projectFirstRow) $execution->projectRowspan = count($executions);
@@ -544,9 +542,7 @@ class pivotModel extends model
                     $execution->totalTasks     = $totalTasks;
                     $execution->totalHours     = $totalHours;
                     $execution->workload       = $userWorkload;
-                    $execution->executionName  = $this->lang->null;
-
-                    if($execution->multiple) $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
+                    $this->setExecutionName($execution, $canViewExecution);
 
                     if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
                     if($projectFirstRow) $execution->projectRowspan = count($executions);
@@ -559,6 +555,27 @@ class pivotModel extends model
         }
 
         return $workload;
+    }
+
+    /**
+     * 设置执行名称。
+     * Set execution name.
+     *
+     * @param  object $execution
+     * @param  bool   $canViewExecution
+     * @access public
+     * @return void
+     */
+    public function setExecutionName(object &$execution, bool $canViewExecution): void
+    {
+        if($execution->multiple)
+        {
+            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
+        }
+        else
+        {
+            $execution->executionName = $this->lang->null;
+        }
     }
 
     /**
