@@ -223,6 +223,8 @@ class kanbanModel extends model
             if(is_array($copyLane)) $copyLane = (object)$copyLane;
 
             $laneID = $copyLane->id;
+            $copyLane->name = $copyLane->title;
+
             unset($copyLane->id);
             unset($copyLane->actionList);
             unset($copyLane->title);
@@ -256,6 +258,8 @@ class kanbanModel extends model
             if(is_array($copyColumn)) $copyColumn = (object)$copyColumn;
 
             $copyColumnID = $copyColumn->id;
+            $copyColumn->name = $copyColumn->title;
+
             unset($copyColumn->id);
             unset($copyColumn->title);
             unset($copyColumn->actionList);
