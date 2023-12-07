@@ -20,8 +20,8 @@ function computeEndDate(e)
     let currentBeginDate = window.zui.formatDate(beginDate, 'yyyy-MM-dd');
     let endDate          = formatDate(beginDate, delta - 1);
 
-    $('#begin').zui('datePicker').$.changeState({value: currentBeginDate});
-    $('#end').zui('datePicker').$.changeState({value: endDate});
+    $('[name=begin]').zui('datePicker').$.setValue(currentBeginDate);
+    $('[name=end]').zui('datePicker').$.setValue(endDate);
     setTimeout(function(){$('[name=delta]').val(`${currentDelta}`)}, 0);
 }
 
