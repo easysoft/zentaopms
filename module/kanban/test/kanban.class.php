@@ -56,20 +56,12 @@ class kanbanTest
     {
         if(!is_null($region))
         {
-            if(empty($copyRegionID))
-            {
-                foreach($region as $key => $value) $_POST[$key] = $value;
-                $region = null;
-            }
-
             $objectID = $this->objectModel->createRegion($kanban, $region, $copyRegionID);
         }
         else
         {
             $objectID = $this->objectModel->createDefaultRegion($kanban);
         }
-
-        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
