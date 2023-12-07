@@ -398,36 +398,6 @@ class extensionModel extends model
     }
 
     /**
-     * Copy package files.
-     *
-     * @param  int    $extension
-     * @access public
-     * @return array
-     */
-    public function copyPackageFiles($extension)
-    {
-        $appRoot      = $this->app->getAppRoot();
-        $extensionDir = $this->pkgRoot . $extension . DS;
-        $paths        = scandir($extensionDir);
-        $copiedFiles  = array();
-
-        foreach($paths as $path)
-        {
-            if($path == 'db' or $path == 'doc' or $path == 'hook' or $path == '..' or $path == '.') continue;
-
-            $result      = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path, true);
-            $copiedFiles = zget($result, 'copiedFiles', array());
-        }
-
-        foreach($copiedFiles as $key => $copiedFile)
-        {
-            $copiedFiles[$copiedFile] = md5_file($copiedFile);
-            unset($copiedFiles[$key]);
-        }
-        return $copiedFiles;
-    }
-
-    /**
      * Remove an extension.
      *
      * @param  string    $extension

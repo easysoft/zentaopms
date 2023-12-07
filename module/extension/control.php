@@ -235,7 +235,7 @@ class extension extends control
         }
 
         $this->extension->togglePackageDisable($extension, 'active');
-        $this->extension->copyPackageFiles($extension);
+        $this->extensionZen->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
 
         $this->view->title = $this->lang->extension->activateFinished;

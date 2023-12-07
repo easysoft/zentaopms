@@ -244,7 +244,7 @@ class extensionZen extends extension
         $this->extension->saveExtension($extension, $type);
 
         /* Copy files to target directory. */
-        $this->view->files = $this->extension->copyPackageFiles($extension);
+        $this->view->files = $this->copyPackageFiles($extension);
 
         /* Judge need execute db install or not. */
         $data = new stdclass();
@@ -456,5 +456,35 @@ class extensionZen extends extension
         }
 
         return $return;
+    }
+
+    /**
+     * 复制插件包文件到禅道目录。
+     * Copy package files.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function copyPackageFiles(string $extension): array
+    {
+        $appRoot      = $this->app->getAppRoot();
+        $extensionDir = $this->extension->pkgRoot . $extension . DS;
+        $paths        = scandir($extensionDir);
+        $copiedFiles  = array();
+        foreach($paths as $path)
+        {
+            if($path == 'db' || $path == 'doc' || $path == 'hook' || $path == '..' || $path == '.') continue;
+
+            $result      = $this->extension->classFile->copyDir($extensionDir . $path, $appRoot . $path, true);
+            $copiedFiles = zget($result, 'copiedFiles', array());
+        }
+
+        foreach($copiedFiles as $key => $copiedFile)
+        {
+            $copiedFiles[$copiedFile] = md5_file($copiedFile);
+            unset($copiedFiles[$key]);
+        }
+        return $copiedFiles;
     }
 }
