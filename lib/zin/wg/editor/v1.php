@@ -7,7 +7,6 @@ require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 class editor extends wg
 {
     protected static array $defineProps = array(
-        'createInput?: bool=true',        // 是否创建一个隐藏的 input 存储编辑器内容
         'uploadUrl?: string',             // 图片上传链接
         'placeholder?: string=""',        // 占位文本
         'fullscreenable?: bool=true',     // 是否可全屏
@@ -21,6 +20,17 @@ class editor extends wg
         'uid?: string'                    // 图片上传uid
     );
 
+    protected static string $css = <<<EOT
+        .editor {border: unset; border-radius: unset;}
+        zen-editor-menu-item > .menu-item {color: #9ea3b0!important;}
+        zen-editor-menu-item > .menu-item:hover, zen-editor-menu-item > .menu-item.is-active {color: #fff!important; background-color: #2e7fffee!important;}
+        zen-editor-menu-item > .menu-item:has(.color):hover, zen-editor-menu-item > .menu-item:has(.color).is-active {background-color: transparent!important; box-shadow: inset 0 0 0 1px #9ea3b0!important;}
+        .menubar {border-bottom: 1px solid #d8dbde!important;}
+        .tippy-content > div {border: 1px solid #d8dbde!important;}
+        .tippy-content zen-editor-menu-item {line-height: normal;}
+        .tippy-content zen-editor-menu-item .label {all:unset;}
+    EOT;
+
     public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
@@ -30,7 +40,7 @@ class editor extends wg
     {
         // global $app;
         // $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
-        $jsFile = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
+        $jsFile = 'https://zui-dist.oop.cc/zen-editor/zen-editor.esm.js';
         return '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
     }
 
@@ -44,7 +54,7 @@ class editor extends wg
     {
         $editor = new h
         (
-            setTag('tiptap-editor'),
+            setTag('zen-editor'),
             setClass('form-control', 'p-0'),
             $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto')
         );
@@ -56,10 +66,10 @@ class editor extends wg
         }
 
         $customProps = $this->getRestProps();
-        if(!isset($customProps['id']))    $customProps['id'] = $customProps['name'];
         if(!isset($customProps['class'])) $customProps['class'] = 'w-full';
 
         $editor->add(set($customProps));
+        $editor->add(set('css', self::$css)); // Inject CSS into editor.
         $editor->add($this->prop('value'));
         $editor->add($this->children());
 
@@ -67,6 +77,7 @@ class editor extends wg
         (
             setClass('editor-container p-px mt-px rounded'),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
+            h::css(self::$css), // Inject CSS on page, for tippy menus.
             $editor,
             textarea
             (
