@@ -412,28 +412,6 @@ class personnelTest
     }
 
     /**
-     * Delete whitelist Test
-     *
-     * @param array $users
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function deleteWhitelistTest($users = array(), $objectType = 'program', $objectID = 0, $groupID = 0)
-    {
-        global $tester;
-        $this->addWhitelistTest($objectType, $objectID, $users);
-        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
-        $objects = $this->objectModel->deleteWhitelist($users, $objectType, $objectID, $groupID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * 测试判断操作是否可以点击。
      * Test judge an action is clickable or not.
      *

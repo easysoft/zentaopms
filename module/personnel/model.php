@@ -796,40 +796,6 @@ class personnelModel extends model
     }
 
     /**
-     * Delete users in whitelist.
-     *
-     * @param  array  $users
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function deleteWhitelist($users = array(), $objectType = 'program', $objectID = 0, $groupID = 0)
-    {
-        $userGroups = $this->loadModel('group')->getByAccounts($users);
-
-        /* Determine whether to delete the whitelist. */
-        foreach($users as $account)
-        {
-            $groups = zget($userGroups, $account, array());
-            foreach($groups as $group)
-            {
-                if($group->id == $groupID) continue;
-
-                $acl     = json_decode($group->acl);
-                $keyName = $objectType . 's';
-                if(isset($acl->$keyName) and in_array($objectID, $acl->$keyName)) return false;
-            }
-
-            if($objectType == 'program') $this->deleteProgramWhitelist($objectID, $account);
-            if($objectType == 'project') $this->deleteProjectWhitelist($objectID, $account);
-            if($objectType == 'product') $this->deleteProductWhitelist($objectID, $account);
-            if($objectType == 'sprint')  $this->deleteExecutionWhitelist($objectID, $account);
-        }
-    }
-
-    /**
      * Create access links by department.
      *
      * @param  object  $dept
