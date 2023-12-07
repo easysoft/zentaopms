@@ -180,8 +180,6 @@ class pivotModel extends model
         $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
         if(empty($fieldSettings)) return;
 
-        /* 获取$filters。 */
-        /* Get $filters. */
         $sql     = isset($pivot->sql)     ? $pivot->sql     : '';
         $filters = $this->getFieldsFromPivot($pivot, 'filters', array(), !is_array($pivot->filters), true);
         if(!empty($filters)) $this->setFilterDefault($filters);
@@ -197,8 +195,6 @@ class pivotModel extends model
         $columnFields = array();
         foreach(array_keys(get_object_vars($columns)) as $type) $columnFields[$type] = $type;
 
-        /* 获取$tables和$fields。 */
-        /* Get $tables and $fields. */
         extract($this->chart->getTables($querySQL));
 
         /* 获取field的键值对以及相关联的对象。 */
@@ -312,8 +308,6 @@ class pivotModel extends model
      */
     public function getProducts(string $conditions, string $storyType = 'story'): array
     {
-        /* 获取符合条件的产品。 */
-        /* Get products. */
         $permission = common::hasPriv('pivot', 'showProduct') || $this->app->user->admin;
         $IDList     = !$permission ? $this->app->user->view->products : array();
         $products   = $this->pivotTao->getProductList($conditions, $IDList);
@@ -327,7 +321,7 @@ class pivotModel extends model
     }
 
     /**
-     * 获取bug相关透视表信息。
+     * 获取Bug创建表的数据。
      * Get bug related pivot information.
      *
      * @param  string $begin
@@ -339,8 +333,6 @@ class pivotModel extends model
      */
     public function getBugs(string $begin, string $end, int $product = 0, int $execution = 0): array
     {
-        /* 获取符合条件的bug。 */
-        /* Get bugs. */
         $end       = date('Y-m-d', strtotime("{$end} +1 day"));
         $bugGroups = $this->pivotTao->getBugGroup($begin, $end, $product, $execution);
 
@@ -372,8 +364,8 @@ class pivotModel extends model
             $bug['validRate']  = 0;
             $bug['total']      = 0;
 
-            /* 初始化bug状态数据。 */
-            /* Initialize bug status data. */
+            /* 已解决状态bug数据初始化。 */
+            /* Initialize the status data of resolved bugs. */
             foreach(array_keys($this->lang->bug->resolutionList) as $resolution)
             {
                 if($resolution) $bug[$resolution] = 0;
@@ -396,8 +388,8 @@ class pivotModel extends model
 
             if(!$bug['total']) continue;
 
-            /* 计算已解决bug的百分比。 */
-            /* Calculate the percentage of resolved bugs. */
+            /* 获取有效率。*/
+            /* Get valid rate. */
             $bug['validRate'] = $resolvedCount ? round($validCount / $resolvedCount * 100, 2) . '%' : '0%';
 
             $bugs[] = $bug;
@@ -407,10 +399,11 @@ class pivotModel extends model
     }
 
     /**
+     * 获取员工负载表的数据。
      * Get workload.
      *
      * @param  int    $dept
-     * @param  string $assign   assign|noassign
+     * @param  string $assign  assign|noassign
      * @param  array  $users
      * @param  float  $allHour
      * @access public
@@ -579,8 +572,8 @@ class pivotModel extends model
     }
 
     /**
-     * 获取用户的工作负载。
-     * Get user's workload.
+     * 获取用户的工作负载相关信息。
+     * Get user's workload related information.
      *
      * @param  array   $projects
      * @param  array   $teamTasks
@@ -616,8 +609,8 @@ class pivotModel extends model
     }
 
     /**
-     * 获取指派过的未解决bug。
-     * Get assigned unresolved bugs.
+     * 获取未解决bug指派表相关数据。
+     * Get bug assign.
      *
      * @access public
      * @return array
