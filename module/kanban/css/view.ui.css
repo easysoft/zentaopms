@@ -30,3 +30,7 @@
 .label-closed    {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity));    color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity));    --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
 .label-normal    {background-color: rgba(var(--color-success-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-success-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-success-500-rgb),var(--tw-ring-opacity));}
 .label-deleted   {background-color: rgba(var(--color-danger-100-rgb),var(--tw-bg-opacity));  color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity));  --tw-ring-color: rgba(var(--color-danger-500-rgb),var(--tw-ring-opacity));}
+
+#kanbanList.is-in-fullscreen {background: var(--color-canvas);}
+#kanbanList.is-in-fullscreen .kanban-list {height: 100%}
+#kanbanList.is-in-fullscreen .btn {display: none;}
