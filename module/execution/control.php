@@ -158,7 +158,7 @@ class execution extends control
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
-        $memberPairs = $this->loadModel('user')->processAccountSort($memberPairs);
+        $memberPairs = $this->loadModel('user')->setCurrentUserFirst($memberPairs);
 
         /* Append branches to task. */
         $this->loadModel('task');

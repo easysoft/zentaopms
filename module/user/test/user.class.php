@@ -1004,9 +1004,9 @@ class userTest
      * @access public
      * @return array
      */
-    public function processAccountSortTest($users = array())
+    public function setCurrentUserFirstTest($users = array())
     {
-        return $this->objectModel->processAccountSort($users);
+        return $this->objectModel->setCurrentUserFirst($users);
     }
 
     /**

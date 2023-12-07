@@ -7,7 +7,7 @@ su('admin');
 
 /**
 
-title=测试 userModel->processAccountSort();
+title=测试 userModel->setCurrentUserFirst();
 cid=1
 pid=1
 
@@ -21,4 +21,4 @@ $admin = array(
     'role'     => 'qa',
     'realname' => 'admin'
 );
-r($user->processAccountSortTest(array('admin'=>$admin))) && p('admin:account,role') && e('admin,qa'); //获取当前用户信息
+r($user->setCurrentUserFirstTest(array('admin'=>$admin))) && p('admin:account,role') && e('admin,qa'); //获取当前用户信息

@@ -274,7 +274,7 @@ class userModel extends model
         $this->processMoreLink($params, $usersToAppended, $maxCount, count($users));
         if($usersToAppended) $users += $this->fetchExtraUsers($params, $usersToAppended, $users, $fields, $keyField);
         $users = $this->processDisplayValue($users, $params);
-        $users = $this->processAccountSort($users);
+        $users = $this->setCurrentUserFirst($users);
 
         /* Append empty, closed, and guest users. */
         if(strpos($params, 'noclosed')  === false) $users = $users + array('closed' => 'Closed');
@@ -2760,7 +2760,7 @@ class userModel extends model
         }
 
         /* Put the current user first. */
-        return $this->processAccountSort($users);
+        return $this->setCurrentUserFirst($users);
     }
 
     /**
@@ -2966,7 +2966,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function processAccountSort(array $users): array
+    public function setCurrentUserFirst(array $users): array
     {
         $account = $this->app->user->account;
         if(!$users || !$account || !isset($users[$account])) return $users;
