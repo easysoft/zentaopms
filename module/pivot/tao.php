@@ -207,43 +207,6 @@ class pivotTao extends pivotModel
     }
 
     /**
-     * 获取用户的工作负载。
-     * Get user's workload.
-     *
-     * @param  array  $projects
-     * @param  array  $teamTasks
-     * @param  float  $allHour
-     * @access public
-     * @return array
-     */
-    protected function getUserWorkLoad(array $projects, array $teamTasks, float $allHour): array
-    {
-        /* 计算用户的任务数，剩余工时和总任务数。 */
-        /* Calculate user's task count, left hours and total task count. */
-        $totalTasks = $totalHours = $totalExecutions = 0;
-        foreach($projects as $executions)
-        {
-            $totalExecutions += count($executions);
-            foreach($executions as $tasks)
-            {
-                $totalTasks += count($tasks);
-                foreach($tasks as $task)
-                {
-                    if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
-
-                    $totalHours += $task->left;
-                }
-            }
-        }
-
-        /* 计算用户的工作负载。 */
-        /* Calculate user's workload. */
-        $userWorkload = $allHour ? round($totalHours / $allHour * 100, 2) . '%' : '0%';
-
-        return array($totalTasks, $totalHours, $totalExecutions, $userWorkload);
-    }
-
-    /**
      * 获取任务相关的团队信息。
      * Get team information related to tasks.
      *

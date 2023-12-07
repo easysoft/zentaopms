@@ -445,8 +445,6 @@ class pivotModel extends model
      */
     private function getWorkloadNoAssign(array $deptUsers, array $users, bool $canViewExecution): array
     {
-        /* 获取未指派执行。 */
-        /* Get no assign execution. */
         $executions = $this->pivotTao->getNoAssignExecution(array_keys($deptUsers));
         if(empty($executions)) return array();
 
@@ -511,8 +509,6 @@ class pivotModel extends model
      */
     private function getWorkLoadAssign(array $deptUsers, array $users, bool $canViewExecution, float $allHour): array
     {
-        /* 获取指派的任务。 */
-        /* Get assign tasks. */
         $tasks = $this->pivotTao->getAssignTask(array_keys($deptUsers));
         if(empty($tasks)) return array();
 
@@ -532,7 +528,7 @@ class pivotModel extends model
         $workload = array();
         foreach($taskGroups as $projects)
         {
-            list($totalTasks, $totalHours, $totalExecutions, $userWorkload) = $this->pivotTao->getUserWorkLoad($projects, $teamTasks, $allHour);
+            list($totalTasks, $totalHours, $totalExecutions, $userWorkload) = $this->getUserWorkLoad($projects, $teamTasks, $allHour);
 
             /* 计算用户的执行统计数据。 */
             /* Calculate user's execution statistics data. */
@@ -563,6 +559,43 @@ class pivotModel extends model
         }
 
         return $workload;
+    }
+
+    /**
+     * 获取用户的工作负载。
+     * Get user's workload.
+     *
+     * @param  array   $projects
+     * @param  array   $teamTasks
+     * @param  float   $allHour
+     * @access private
+     * @return array
+     */
+    private function getUserWorkLoad(array $projects, array $teamTasks, float $allHour): array
+    {
+        /* 计算用户的任务数，剩余工时和总任务数。 */
+        /* Calculate user's task count, left hours and total task count. */
+        $totalTasks = $totalHours = $totalExecutions = 0;
+        foreach($projects as $executions)
+        {
+            $totalExecutions += count($executions);
+            foreach($executions as $tasks)
+            {
+                $totalTasks += count($tasks);
+                foreach($tasks as $task)
+                {
+                    if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
+
+                    $totalHours += $task->left;
+                }
+            }
+        }
+
+        /* 计算用户的工作负载。 */
+        /* Calculate user's workload. */
+        $userWorkload = $allHour ? round($totalHours / $allHour * 100, 2) . '%' : '0%';
+
+        return array($totalTasks, $totalHours, $totalExecutions, $userWorkload);
     }
 
     /**
