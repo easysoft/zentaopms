@@ -307,7 +307,7 @@ class extensionModel extends model
     }
 
     /**
-     * 根据插件代号获取插件包里db和doc目录下的文件列表。
+     * 根据插件代号获取插件包里除db和doc目录外的文件列表。
      * Get all files from a package.
      *
      * @param  string $extension
@@ -395,34 +395,6 @@ class extensionModel extends model
         $version = explode(',', $version);
         if(in_array($this->config->version, $version)) return true;
         return false;
-    }
-
-    /**
-     * Check files in the package conflicts with exists files or not.
-     *
-     * @param  string    $extension
-     * @param  string    $type
-     * @param  bool      $isCheck
-     * @access public
-     * @return object
-     */
-    public function checkFile($extension)
-    {
-        $return = new stdclass();
-        $return->result = 'ok';
-        $return->error  = '';
-
-        $extensionFiles = $this->getFilesFromPackage($extension);
-        $appRoot = $this->app->getAppRoot();
-        foreach($extensionFiles as $extensionFile)
-        {
-            $compareFile = $appRoot . str_replace($this->pkgRoot . $extension . DS, '', $extensionFile);
-            if(!file_exists($compareFile)) continue;
-            if(md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
-        }
-
-        if($return->error != '') $return->result = 'fail';
-        return $return;
     }
 
     /**

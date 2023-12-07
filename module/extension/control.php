@@ -224,7 +224,7 @@ class extension extends control
 
         if($ignore == 'no')
         {
-            $return = $this->extension->checkFile($extension);
+            $return = $this->extensionZen->checkFileConflict($extension);
             if($return->result != 'ok')
             {
                 $ignoreLink = inlink('activate', "extension=$extension&ignore=yes");

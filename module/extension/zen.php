@@ -213,7 +213,7 @@ class extensionZen extends extension
     {
         if($overrideFile == 'no')
         {
-            $return = $this->extension->checkFile($extension);
+            $return = $this->checkFileConflict($extension);
             if($return->result != 'ok')
             {
                 $this->view->error = sprintf($this->lang->extension->errorFileConflicted, $return->error, $overrideLink, inlink('obtain'));
@@ -385,5 +385,33 @@ class extensionZen extends extension
         }
 
         return $checkResult;
+    }
+
+    /**
+     * 检查插件包的目录结构是否禅道目录结构冲突。
+     * Check files in the package conflicts with exists files or not.
+     *
+     * @param  string $extension
+     * @access public
+     * @return object
+     */
+    public function checkFileConflict(string $extension): object
+    {
+        $return = new stdclass();
+        $return->result = 'ok';
+        $return->error  = '';
+
+        $appRoot        = $this->app->getAppRoot();
+        $extensionFiles = $this->extension->getFilesFromPackage($extension);
+        foreach($extensionFiles as $extensionFile)
+        {
+            $compareFile = $appRoot . str_replace($this->extension->pkgRoot . $extension . DS, '', $extensionFile);
+            if(!file_exists($compareFile)) continue;
+
+            if(md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
+        }
+
+        if($return->error != '') $return->result = 'fail';
+        return $return;
     }
 }
