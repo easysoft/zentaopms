@@ -19,10 +19,10 @@ class userModel extends model
      *
      * @param  object $user
      * @param  bool   $canNoPassword
-     * @access public
+     * @access private
      * @return bool
      */
-    public function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
+    private function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
     {
         if(strtolower($user->account) == 'guest') dao::$errors['account'][] = sprintf($this->lang->user->error->reserved, $user->account);
 
@@ -38,10 +38,10 @@ class userModel extends model
      *
      * @param  array  $users
      * @param  string $verifyPassword
-     * @access public
+     * @access private
      * @return bool
      */
-    public function checkBeforeBatchCreate(array $users, string $verifyPassword): bool
+    private function checkBeforeBatchCreate(array $users, string $verifyPassword): bool
     {
         if(!$users) return true;
 
@@ -90,10 +90,10 @@ class userModel extends model
      *
      * @param  array  $users
      * @param  string $verifyPassword
-     * @access public
+     * @access private
      * @return bool
      */
-    public function checkBeforeBatchEdit(array $users, string $verifyPassword): bool
+    private function checkBeforeBatchEdit(array $users, string $verifyPassword): bool
     {
         if(!$users) return true;
 
@@ -115,10 +115,10 @@ class userModel extends model
      *
      * @param  object $user
      * @param  bool   $canNoPassword
-     * @access public
+     * @access private
      * @return bool
      */
-    public function checkPassword(object $user, bool $canNoPassword = false): bool
+    private function checkPassword(object $user, bool $canNoPassword = false): bool
     {
         if(empty($user->password1))
         {
@@ -162,10 +162,10 @@ class userModel extends model
      * Check if the current user password is correct.
      *
      * @param  string $verifyPassword
-     * @access public
+     * @access private
      * @return bool
      */
-    public function checkVerifyPassword(string $verifyPassword): bool
+    private function checkVerifyPassword(string $verifyPassword): bool
     {
         if(empty($verifyPassword) || $verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
