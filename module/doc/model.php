@@ -68,14 +68,14 @@ class docModel extends model
      * Get libraries.
      *
      * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
-     * @param  string $extra       withObject|notdoc
-     * @param  string $appendLibs
-     * @param  int    $objectID
-     * @param  string $excludeType product|project|execution|custom|mine
+     * @param  string     $extra       withObject|notdoc
+     * @param  int|string $appendLibs
+     * @param  int        $objectID
+     * @param  string     $excludeType product|project|execution|custom|mine
      * @access public
      * @return array
      */
-    public function getLibs(string $type = '', string $extra = '', string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
+    public function getLibs(string $type = '', string $extra = '', int|string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
     {
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
@@ -361,9 +361,10 @@ class docModel extends model
     }
 
     /**
-     * Get docs by browse type.
+     * 通过类型获取文档列表数据。
+     * Get doc list data by browse type.
      *
-     * @param  string $browseType
+     * @param  string $browseType all|bySearch|openedbyme|editedbyme|byediteddate|collectedbyme
      * @param  int    $queryID
      * @param  int    $moduleID
      * @param  string $sort
@@ -371,150 +372,112 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsByBrowseType($browseType, $queryID, $moduleID, $sort, $pager)
+    public function getDocsByBrowseType(string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null)
     {
-        if($browseType == 'all')
-        {
-            $docs = $this->getDocs(0, 0, $browseType, $sort, $pager);
-        }
-        else
-        {
-            $allLibs          = $this->getLibs('all');
-            $allLibIDList     = array_keys($allLibs);
-            $hasPrivDocIdList = $this->getPrivDocs($allLibIDList, $moduleID);
-        }
+        if($browseType == 'all') return $this->getDocs(0, 0, $browseType, $sort, $pager);
 
+        $allLibs          = $this->getLibs('all');
+        $allLibIDList     = array_keys($allLibs);
+        $hasPrivDocIdList = $this->getPrivDocs($allLibIDList, $moduleID);
         if($browseType == 'bySearch')
         {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('contributeDocQuery', $query->sql);
-                    $this->session->set('contributeDocForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('contributeDocQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->contributeDocQuery == false) $this->session->set('contributeDocQuery', ' 1 = 1');
-            }
-
-            $query     = $this->getDocQuery($this->session->contributeDocQuery);
-            $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
-            $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
-                ->where('objectType')->eq('doc')
-                ->andWhere('objectID')->in($hasPrivDocIdList)
-                ->andWhere('templateType')->eq('')
-                ->andWhere('actor')->eq($this->app->user->account)
-                ->andWhere('action')->eq('edited')
-                ->fetchAll('objectID');
-            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
-                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere($query)
-                ->andWhere('t1.lib')->in($allLibIDList)
-                ->andWhere('t1.templateType')->eq('')
-                ->andWhere('t1.vision')->in($this->config->vision)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
-                ->orWhere('t1.id')->in(array_keys($docIDList))
-                ->markRight(1)
-                ->orderBy($sort)
-                ->page($pager)
-                ->fetchAll('id');
+            $docs = $this->getMyDocListBySearch($queryID, $hasPrivDocIdList, $allLibIDList, $sort, $pager);
         }
         elseif($browseType == "openedbyme")
         {
-            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
-                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.id')->in($hasPrivDocIdList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('t1.addedBy')->eq($this->app->user->account)
-                ->andWhere('t1.vision')->in($this->config->vision)
-                ->andWhere('t1.templateType')->eq('')
-                ->orderBy($sort)
-                ->page($pager)
-                ->fetchAll('id');
+            $docs = $this->docTao->getOpenedDocs($hasPrivDocIdList, $sort, $pager);
         }
         elseif($browseType == 'editedbyme')
         {
-            $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
-                ->where('objectType')->eq('doc')
-                ->andWhere('actor')->eq($this->app->user->account)
-                ->andWhere('action')->eq('edited')
-                ->andWhere('vision')->eq($this->config->vision)
-                ->fetchAll('objectID');
-
-            $docs = $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
-                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.id')->in(array_keys($docIdList))
-                ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.vision')->in($this->config->vision)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-                ->orderBy($sort)
-                ->page($pager)
-                ->fetchAll('id');
+            $docs = $this->docTao->getEditedDocs($sort, $pager);
         }
         elseif($browseType == 'byediteddate')
         {
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in($hasPrivDocIdList)
-                ->andWhere('templateType')->eq('')
-                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('lib')->in($allLibIDList)
-                ->andWhere('vision')->in($this->config->vision)
-                ->orderBy('editedDate_desc')
-                ->page($pager)
-                ->fetchAll('id');
+            $docs = $this->docTao->getOrderedDocsByEditedDate($hasPrivDocIdList, $allLibIDList, $pager);
         }
         elseif($browseType == "collectedbyme")
         {
-            $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
-                ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.templateType')->eq('')
-                ->andWhere('t1.id')->in($hasPrivDocIdList)
-                ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-                ->andWhere('t2.actor')->eq($this->app->user->account)
-                ->andWhere('t1.vision')->in($this->config->vision)
-                ->orderBy($sort)
-                ->page($pager)
-                ->fetchAll('id');
+            $docs = $this->docTao->getCollectedDocs($hasPrivDocIdList, $sort, $pager);
         }
 
         if(empty($docs)) return array();
+        if(!in_array($browseType, array('bySearch', 'openedbyme', 'editedbyme'))) return $this->processCollector($docs);
 
-        if(in_array($browseType, array('bySearch', 'openedbyme', 'editedbyme')))
+        $objects = array();
+        list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
+        foreach($docs as $docID => $doc)
         {
-            $objects = array();
-            list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
-            foreach($docs as $docID => $doc)
+            $doc->objectID   = zget($doc, $doc->objectType, 0);
+            $doc->objectName = '';
+            if(isset($objects[$doc->objectType]))
             {
-                $doc->objectID   = zget($doc, $doc->objectType, 0);
-                $doc->objectName = '';
-                if(isset($objects[$doc->objectType]))
-                {
-                    $doc->objectName = $objects[$doc->objectType][$doc->objectID];
-                }
-                else
-                {
-                    if($doc->objectType == 'mine')   $doc->objectName = $this->lang->doc->person;
-                    if($doc->objectType == 'custom') $doc->objectName = $this->lang->doc->team;
-                }
+                $doc->objectName = $objects[$doc->objectType][$doc->objectID];
+            }
+            else
+            {
+                if($doc->objectType == 'mine')   $doc->objectName = $this->lang->doc->person;
+                if($doc->objectType == 'custom') $doc->objectName = $this->lang->doc->team;
             }
         }
 
         return $this->processCollector($docs);
+    }
+
+    /**
+     * 获取搜索后的文档列表。
+     * Get doc list by search.
+     *
+     * @param  int    $queryID
+     * @param  array  $hasPrivDocIdList
+     * @param  array  $allLibIDList
+     * @param  string $sort
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getMyDocListBySearch(int $queryID, array $hasPrivDocIdList, array $allLibIDList, string $sort, object $pager = null): array
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('contributeDocQuery', $query->sql);
+                $this->session->set('contributeDocForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('contributeDocQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->contributeDocQuery == false) $this->session->set('contributeDocQuery', ' 1 = 1');
+        }
+
+        $query     = $this->getDocQuery($this->session->contributeDocQuery);
+        $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
+        $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('objectID')->in($hasPrivDocIdList)
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->andWhere('action')->eq('edited')
+            ->fetchAll('objectID');
+
+        return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+            ->where('t1.deleted')->eq(0)
+            ->andWhere($query)
+            ->andWhere('t1.lib')->in($allLibIDList)
+            ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.vision')->in($this->config->vision)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
+            ->orWhere('t1.id')->in(array_keys($docIDList))
+            ->markRight(1)
+            ->orderBy($sort)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -609,7 +572,7 @@ class docModel extends model
     {
         if(empty($libID) && $browseType != 'all') return array();
 
-        $docIdList = $this->getPrivDocs(array($libID), $moduleID, 'children');
+        $docIdList = $this->getPrivDocs($libID ? array($libID) : array(), $moduleID, 'children');
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)

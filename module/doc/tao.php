@@ -113,4 +113,110 @@ class docTao extends docModel
 
         return array($storyIdList, $planIdList, $releasePairs, $casePairs);
     }
+
+    /**
+     * 获取我创建的文档。
+     * Get docs created by me.
+     *
+     * @param  array     $hasPrivDocIdList
+     * @param  string    $sort
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getOpenedDocs(array $hasPrivDocIdList, string $sort, object $pager = null): array
+    {
+        return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->ne('')
+            ->andWhere('t1.id')->in($hasPrivDocIdList)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('t1.addedBy')->eq($this->app->user->account)
+            ->andWhere('t1.vision')->in($this->config->vision)
+            ->andWhere('t1.templateType')->eq('')
+            ->orderBy($sort)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取我编辑过的文档。
+     * Get the docs that I have edited.
+     *
+     * @param  string    $sort
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getEditedDocs(string $sort, object $pager = null): array
+    {
+        $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('objectType')->eq('doc')
+            ->andWhere('actor')->eq($this->app->user->account)
+            ->andWhere('action')->eq('edited')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll('objectID');
+
+        return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.id')->in(array_keys($docIdList))
+            ->andWhere('t1.lib')->ne('')
+            ->andWhere('t1.vision')->in($this->config->vision)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+            ->orderBy($sort)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取按照编辑时间倒序排序的文档。
+     * Get the docs ordered by edited date.
+     *
+     * @param  array     $hasPrivDocIdList
+     * @param  array     $allLibIDList
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getOrderedDocsByEditedDate(array $hasPrivDocIdList, array $allLibIDList, object $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($hasPrivDocIdList)
+            ->andWhere('templateType')->eq('')
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('lib')->in($allLibIDList)
+            ->andWhere('vision')->in($this->config->vision)
+            ->orderBy('editedDate_desc')
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取我收藏的文档。
+     * Get the docs that I have collected.
+     *
+     * @param  array     $hasPrivDocIdList
+     * @param  string    $sort
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getCollectedDocs(array $hasPrivDocIdList, string $sort, object $pager = null): array
+    {
+        return $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->ne('')
+            ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.id')->in($hasPrivDocIdList)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('t2.actor')->eq($this->app->user->account)
+            ->andWhere('t1.vision')->in($this->config->vision)
+            ->orderBy($sort)
+            ->page($pager)
+            ->fetchAll('id');
+    }
 }
