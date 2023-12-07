@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of misc module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of extension module of ZenTaoPMS.
  *

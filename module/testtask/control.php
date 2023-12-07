@@ -111,6 +111,8 @@ class testtask extends control
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($testtasks as $testtask)
         {
+            if(empty($testtask->members)) continue;
+
             $members = array();
             foreach(explode(',', $testtask->members) as $member) $members[] = zget($users, $member);
             $testtask->members = implode(',', array_unique($members));
@@ -1150,9 +1152,9 @@ class testtask extends control
     }
 
     /**
-     * AJAX: Get executionID by buildID. 
-     * 
-     * @param  int    $buildID 
+    * AJAX: Get executionID by buildID.
+     *
+     * @param  int    $buildID
      * @access public
      * @return int
      */

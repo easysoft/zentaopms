@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of extension module of ZenTaoCMS.
  *
@@ -184,13 +185,14 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件代号从插件包获取插件信息。
      * Get info of an extension from the package file.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
-    public function getInfoFromPackage($extension)
+    public function getInfoFromPackage(string $extension): object
     {
         /* Init the data. */
         $data = new stdclass();
@@ -206,7 +208,11 @@ class extensionModel extends model
         $data->depends          = '';
 
         $info = $this->parseExtensionCFG($extension);
-        foreach($info as $key => $value) if(isset($data->$key)) $data->$key = is_null($value) ? '' : $value;
+        foreach($info as $key => $value)
+        {
+            if(isset($data->$key)) $data->$key = is_null($value) ? '' : $value;
+        }
+
         if(isset($info->zentaoversion))        $data->zentaoCompatible = $info->zentaoversion;
         if(isset($info->zentao['compatible'])) $data->zentaoCompatible = $info->zentao['compatible'];
         if(isset($info->depends))              $data->depends          = json_encode($info->depends);
@@ -215,6 +221,7 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件代号从插件包获取配置信息。
      * Parse extension's config file.
      *
      * @param  string    $extension
