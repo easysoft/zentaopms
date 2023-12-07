@@ -72,12 +72,3 @@ window.handleClickBlockMenu = function(info, block)
     if(type === 'create') return createBlock(this, data, block);
     if(type === 'reset')  return resetBlocks(this, data, block);
 };
-
-/**
- * Handle block load.
- * @param {object} block
- */
-window.handleLoadBlock = function(block)
-{
-    $('#dashboard').find(`.dashboard-block[data-id="${block.id}"]`).zuiInit();
-};

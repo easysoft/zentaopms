@@ -36,8 +36,7 @@ dashboard
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
     set::onClickMenu(jsRaw('handleClickBlockMenu')),
-    set::onLayoutChange(jsRaw('handleLayoutChange')),
-    set::onLoad(jsRaw('handleLoadBlock'))
+    set::onLayoutChange(jsRaw('handleLayoutChange'))
 );
 
 $remind = $this->loadModel('misc')->getPluginRemind();
