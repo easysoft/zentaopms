@@ -1262,4 +1262,21 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 获取我创建的文档。
+     * Get docs created by me.
+     *
+     * @param  array  $hasPrivDocIdList
+     * @param  string $sort
+     * @access public
+     * @return array
+     */
+    public function getOpenedDocsTest(array $hasPrivDocIdList, string $sort): array
+    {
+        $docs = $this->objectModel->getOpenedDocs($hasPrivDocIdList, $sort);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
