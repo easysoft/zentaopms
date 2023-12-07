@@ -412,6 +412,26 @@ class personnelTest
     }
 
     /**
+     * 测试根据部门创建访问连接。
+     * Test access link by department.
+     *
+     * @param  int     $programID
+     * @param  int     $deptID
+     * @access public
+     * @return int|array
+     */
+    public function createMemberLinkTest(int $programID, int $deptID): int|array
+    {
+        $dept = new stdclass();
+        $dept->id = $deptID;
+        $link = $this->objectModel->createMemberLink($dept, $programID);
+        if(dao::isError()) return dao::getError();
+
+        $isCorrect = preg_match("/personnel.*accessible.*{$programID}.*{$deptID}/", $link);
+        return $isCorrect;
+    }
+
+    /**
      * 测试判断操作是否可以点击。
      * Test judge an action is clickable or not.
      *

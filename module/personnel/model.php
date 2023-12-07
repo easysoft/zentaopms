@@ -796,6 +796,7 @@ class personnelModel extends model
     }
 
     /**
+     * 根据部门创建访问链接。
      * Create access links by department.
      *
      * @param  object  $dept
@@ -803,7 +804,7 @@ class personnelModel extends model
      * @access public
      * @return string
      */
-    public function createMemberLink($dept = 0, $programID = 0)
+    public function createMemberLink(object $dept = null, int $programID = 0): string
     {
         return helper::createLink('personnel', 'accessible', "program={$programID}&deptID={$dept->id}");
     }
