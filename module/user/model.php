@@ -939,6 +939,56 @@ class userModel extends model
     }
 
     /**
+     * 检查是否需要修改密码。
+     * Check if need to modify password.
+     *
+     * @param  object $user
+     * @param  int    $passwordStrength
+     * @access private
+     * @return object
+     */
+    private function checkNeedModifyPassword(object $user, int $passwordStrength): object
+    {
+        /* 如果开启了首次登录修改密码功能，检查是否是首次登录。*/
+        /* If the modify password on first login feature is enabled, check if it's the first login. */
+        if(!empty($this->config->safe->modifyPasswordFirstLogin))
+        {
+            $user->modifyPassword = $user->visits == 0;
+            if($user->modifyPassword)
+            {
+                $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
+                return $user;
+            }
+        }
+
+        /* 如果开启了修改弱口令密码功能，检查是否是弱口令。*/
+        /* If the modify weak password feature is enabled, check if it's a weak password. */
+        if(!empty($this->config->safe->changeWeak))
+        {
+            $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
+            if($user->modifyPassword)
+            {
+                $user->modifyPasswordReason = 'weak';
+                return $user;
+            }
+        }
+
+        /* 如果开启了密码强度检查功能，检查密码是否满足强度要求。*/
+        /* If the password strength feature is enabled, check if the password is strong enough. */
+        if(!empty($this->config->safe->mode) && $this->app->moduleName == 'user' && $this->app->methodName == 'login' && $passwordStrength)
+        {
+            $user->modifyPassword = $passwordStrength < $this->config->safe->mode;
+            if($user->modifyPassword)
+            {
+                $user->modifyPasswordReason = 'passwordStrengthWeak';
+                return $user;
+            }
+        }
+
+        return $user;
+    }
+
+    /**
      * 根据 PHP 的 HTTP 认证验证用户。
      * Identify user by PHP HTTP auth.
      *
