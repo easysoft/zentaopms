@@ -1,26 +1,11 @@
 <?php
+declare(strict_types=1);
 class tutorialTest
 {
     public function __construct()
     {
          global $tester;
          $this->objectModel = $tester->loadModel('tutorial');
-    }
-
-    /**
-     * Check novice.
-     * 
-     * @access public
-     * @return void
-     */
-    public function checkNoviceTest()
-    {
-        $this->app->user->modifyPassword = 1;
-        $objects = $this->objectModel->checkNovice();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
