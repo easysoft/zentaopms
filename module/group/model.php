@@ -9,6 +9,9 @@
  * @version     $Id: model.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
+
+use function zin\set;
+
 ?>
 <?php
 class groupModel extends model
@@ -365,12 +368,23 @@ class groupModel extends model
         $admins = $this->dao->select('*')->from(TABLE_PROJECTADMIN)->fetchGroup('group', 'account');
 
         $projectAdmins = array();
-        foreach($admins as $groupID => $adminGroup)
+        foreach($admins as $adminGroup)
         {
             if(!empty($adminGroup))
             {
                 $accounts = implode(',', array_keys($adminGroup));
-                $projectAdmins[$accounts] = current($adminGroup);
+                if(isset($projectAdmins[$accounts]))
+                {
+                    $adminGroup = current($adminGroup);
+                    $projectAdmins[$accounts]->programs   .= ',' . $adminGroup->programs;
+                    $projectAdmins[$accounts]->projects   .= ',' . $adminGroup->projects;
+                    $projectAdmins[$accounts]->products   .= ',' . $adminGroup->products;
+                    $projectAdmins[$accounts]->executions .= ',' . $adminGroup->executions;
+                }
+                else
+                {
+                    $projectAdmins[$accounts] = current($adminGroup);
+                }
             }
         }
 
@@ -726,7 +740,7 @@ class groupModel extends model
                 }
             }
 
-            if($executionAll[$lineID] or $projectAll[$lineID]) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
+            if(isset($executionAll[$lineID]) or isset($projectAll[$lineID])) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
 
             if(empty($accounts)) continue;
             foreach($accounts as $account)
