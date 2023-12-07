@@ -101,25 +101,22 @@ class docTest
     }
 
     /**
-     * Function getDocsByBrowseType test by doc
+     * 通过类型获取文档列表数据。
+     * Get doc list data by browse type.
      *
-     * @param  string $browseType
-     * @param  array  $moduleID
+     * @param  string $browseType all|bySearch|openedbyme|editedbyme|byediteddate|collectedbyme
+     * @param  int    $queryID
+     * @param  int    $moduleID
      * @param  string $sort
-     * @param  mixed $pager
      * @access public
      * @return array
      */
-    public function getDocsByBrowseTypeTest($browseType, $moduleID, $sort = 'id_desc', $pager = null)
+    public function getDocsByBrowseTypeTest(string $browseType, int $queryID, int $moduleID, string $sort): array
     {
-        global $tester;
-        $tester->app->loadConfig('doc');
-
-        $objects = $this->objectModel->getDocsByBrowseType($browseType, $queryID = '', $moduleID, $sort, $pager);
+        $docs = $this->objectModel->getDocsByBrowseType($browseType, $queryID, $moduleID, $sort);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $docs;
     }
 
     /**
