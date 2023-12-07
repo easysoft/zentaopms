@@ -662,30 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get System URL.
-     *
-     * @access public
-     * @return void
-     */
-    public function getSysURL()
-    {
-        if(isset($this->config->mail->domain)) return $this->config->mail->domain;
-
-        /* Ger URL when run in shell. */
-        if(PHP_SAPI == 'cli')
-        {
-            $url = parse_url(trim($this->server->argv[1]));
-            $port = (empty($url['port']) or $url['port'] == 80) ? '' : $url['port'];
-            $host = empty($port) ? $url['host'] : $url['host'] . ':' . $port;
-            return $url['scheme'] . '://' . $host;
-        }
-        else
-        {
-            return common::getSysURL();
-        }
-    }
-
-    /**
      * Get user bugs.
      *
      * @access public
