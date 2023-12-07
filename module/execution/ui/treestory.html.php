@@ -186,7 +186,7 @@ div
                 empty($story->planTitle) ? null : array_values(array_map(function($planID, $planTitle)
                 {
                     $items   = array();
-                    $items[] = common::hasPriv('productplan', 'view') ? a(set::href(helper::createLink('productplan', 'view', "planID={$planID}"), $planTitle)) : $planTitle;
+                    $items[] = common::hasPriv('productplan', 'view') ? a(set::href(helper::createLink('productplan', 'view', "planID={$planID}")), $planTitle) : $planTitle;
                     $items[] = h::br();
                     return $items;
                 }, array_keys($story->planTitle), array_values($story->planTitle)))
