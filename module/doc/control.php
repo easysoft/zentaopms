@@ -346,7 +346,7 @@ class doc extends control
 
         /* Get libs and the default lib ID. */
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs       = $this->doc->getLibs($objectType, $extra = "withObject,{$unclosed}", $libID, $objectID);
+        $libs       = $this->doc->getLibs($objectType, "withObject,{$unclosed}", $libID, $objectID);
         $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         if(!$libID && !empty($libs)) $libID = key($libs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
@@ -399,7 +399,7 @@ class doc extends control
         }
 
         /* Get doc and set menu. */
-        $lib      = $this->doc->getLibByID($doc->lib);
+        $lib      = $this->doc->getLibByID((int)$doc->lib);
         $objectID = zget($lib, $lib->type, 0);
         $libs     = $this->doc->getLibs($lib->type, 'withObject', $doc->lib, $objectID);
 
