@@ -101,7 +101,7 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban', $param = '')
+    public function createRegion(object $kanban, object $region = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -113,13 +113,12 @@ class kanbanModel extends model
                 ->fetch('maxOrder');
 
             $order  = $maxOrder ? $maxOrder + 1 : 1;
-            $region = fixer::input('post')
-                ->add('kanban', $kanban->id)
-                ->add('createdBy', $account)
-                ->add('createdDate', helper::now())
-                ->trim('name')
-                ->get();
-            $region->space = $from == 'kanban' ? $kanban->space : 0;
+            $region = new stdclass();
+            $region->kanban      = $kanban->id;
+            $region->space       = $from == 'kanban' ? $kanban->space : 0;
+            $region->name        = $this->post->name;
+            $region->createdBy   = $account;
+            $region->createdDate = helper::now();
         }
 
         $region->order = isset($region->order) ? $region->order : $order;
@@ -136,73 +135,7 @@ class kanbanModel extends model
 
         if($copyRegionID)
         {
-            /* Gets the groups, lanes and columns of the replication region. */
-            $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
-            $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
-            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc', $param);
-
-            /* Create groups, lanes, and columns. */
-            if(empty($copyGroups)) return $regionID;
-
-            foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
-            {
-                $newGroupID = $this->createGroup($kanban->id, $regionID);
-                if(dao::isError()) return false;
-
-                $copyLanes     = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
-                $copyColumns   = isset($copyColumnGroup[$copyGroupID]) ? $copyColumnGroup[$copyGroupID] : array();
-                $parentColumns = array();
-                $lanePairs     = array();
-                foreach($copyLanes as $copyLane)
-                {
-                    $laneID = $copyLane->id;
-                    unset($copyLane->id);
-                    unset($copyLane->actions);
-                    $copyLane->region         = $regionID;
-                    $copyLane->group          = $newGroupID;
-                    $copyLane->lastEditedTime = helper::now();
-                    $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane);
-                    if(dao::isError()) return false;
-                }
-
-                foreach($copyColumns as $copyColumn)
-                {
-                    $copyColumnID = $copyColumn->id;
-                    unset($copyColumn->id);
-                    unset($copyColumn->actions);
-                    unset($copyColumn->asParent);
-                    unset($copyColumn->parentType);
-
-                    $copyColumn->region = $regionID;
-                    $copyColumn->group  = $newGroupID;
-
-                    if($copyColumn->parent > 0 and isset($parentColumns[$copyColumn->parent]))
-                    {
-                        $copyColumn->parent = $parentColumns[$copyColumn->parent];
-                    }
-
-                    $parentColumnID = $this->createColumn($regionID, $copyColumn, 0, 0, $from);
-
-                    if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
-                    if(dao::isError()) return false;
-                }
-
-                if($param == 'updateTaskCell')
-                {
-                    foreach($lanePairs as $oldLaneID => $newLaneID)
-                    {
-                        $cards = $this->dao->select('id,cards')->from(TABLE_KANBANCELL)->where('lane')->eq($oldLaneID)->andWhere('type')->eq('task')->fetchPairs();
-                        $cards = implode(',', $cards);
-                        $cards = preg_replace('/[,]+/', ',',$cards);
-                        $cards = trim($cards, ',');
-
-                        $group      = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($newLaneID)->fetch();
-                        $waitColumn = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('type')->eq('wait')->andWhere('`group`')->eq($group->group)->fetch();
-
-                        if(!empty($waitColumn)) $this->addKanbanCell($kanban->id, $newLaneID, $waitColumn->id, 'task', $cards);
-                    }
-                }
-            }
+            $this->copyRegion($kanban, $regionID, $copyRegionID, $from, $param);
         }
         elseif($from == 'kanban')
         {
@@ -218,6 +151,132 @@ class kanbanModel extends model
 
         return $regionID;
     }
+
+    /**
+     * 复制区域。
+     * Copy a region.
+     *
+     * @param  object $kanban
+     * @param  int    $regionID
+     * @param  int    $copyRegionID
+     * @param  string $from
+     * @param  string $param
+     * @access public
+     * @return void
+     */
+    public function copyRegion(object $kanban, int $regionID, int $copyRegionID, string $from = 'kanban', string $param = '')
+    {
+        /* Gets the groups, lanes and columns of the replication region. */
+        $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
+        $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
+        $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc', $param);
+
+        /* Create groups, lanes, and columns. */
+        if(empty($copyGroups)) return $regionID;
+
+        foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
+        {
+            $newGroupID = $this->createGroup($kanban->id, $regionID);
+            if(dao::isError()) return false;
+
+            $copyLanes     = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
+            $copyColumns   = isset($copyColumnGroup[$copyGroupID]) ? $copyColumnGroup[$copyGroupID] : array();
+
+            $this->copyColumns($copyColumns, $regionID, $newGroupID, $from);
+            $lanePairs = $this->copyLanes($kanban, $copyLanes, $regionID, $newGroupID);
+            if(dao::isError()) return false;
+
+            if($param == 'updateTaskCell')
+            {
+                foreach($lanePairs as $oldLaneID => $newLaneID)
+                {
+                    $cards = $this->dao->select('id,cards')->from(TABLE_KANBANCELL)->where('lane')->eq($oldLaneID)->andWhere('type')->eq('task')->fetchPairs();
+                    $cards = implode(',', $cards);
+                    $cards = preg_replace('/[,]+/', ',',$cards);
+                    $cards = trim($cards, ',');
+
+                    $group      = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($newLaneID)->fetch();
+                    $waitColumn = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('type')->eq('wait')->andWhere('`group`')->eq($group->group)->fetch();
+
+                    if(!empty($waitColumn)) $this->addKanbanCell($kanban->id, $newLaneID, $waitColumn->id, 'task', $cards);
+                }
+            }
+        }
+    }
+
+    /**
+     * 复制区域中的泳道。
+     * Copy lanes.
+     *
+     * @param  object       $kanban
+     * @param  array        $copyLanes
+     * @param  int          $regionID
+     * @param  int          $newGroupID
+     * @access public
+     * @return array|false
+     */
+    public function copyLanes(object $kanban, array $copyLanes, int $regionID, int $newGroupID): array|false
+    {
+        $lanePairs = array();
+        foreach($copyLanes as $copyLane)
+        {
+            if(is_array($copyLane)) $copyLane = (object)$copyLane;
+
+            $laneID = $copyLane->id;
+            unset($copyLane->id);
+            unset($copyLane->actionList);
+            unset($copyLane->title);
+
+            $copyLane->region         = $regionID;
+            $copyLane->group          = $newGroupID;
+            $copyLane->lastEditedTime = helper::now();
+            $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane);
+            if(dao::isError()) return false;
+        }
+
+        return $lanePairs;
+    }
+
+    /**
+     * 复制区域中的列。
+     * Copy columns.
+     *
+     * @param  array  $copyColumns
+     * @param  int    $regionID
+     * @param  int    $newGroupID
+     * @param  string $from
+     * @access public
+     * @return void
+     */
+    public function copyColumns(array $copyColumns, int $regionID, int $newGroupID, string $from = 'kanban')
+    {
+        $parentColumns = array();
+        foreach($copyColumns as $copyColumn)
+        {
+            if(is_array($copyColumn)) $copyColumn = (object)$copyColumn;
+
+            $copyColumnID = $copyColumn->id;
+            unset($copyColumn->id);
+            unset($copyColumn->title);
+            unset($copyColumn->actionList);
+            unset($copyColumn->asParent);
+            unset($copyColumn->parentName);
+
+            $copyColumn->region = $regionID;
+            $copyColumn->group  = $newGroupID;
+
+            if($copyColumn->parent > 0 and isset($parentColumns[$copyColumn->parent]))
+            {
+                $copyColumn->parent = $parentColumns[$copyColumn->parent];
+            }
+
+            $parentColumnID = $this->createColumn($regionID, $copyColumn, 0, 0, $from);
+
+            if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
+            if(dao::isError()) return false;
+        }
+    }
+
 
     /**
      * Create default lane.
