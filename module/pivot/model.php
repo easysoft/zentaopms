@@ -662,19 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get user login count in this year.
-     *
-     * @param  array  $accounts
-     * @param  int    $year
-     * @access public
-     * @return int
-     */
-    public function getUserYearLogins($accounts, $year)
-    {
-        return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->in($accounts)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
-    }
-
-    /**
      * Get user action count in this year.
      *
      * @param  array  $accounts
