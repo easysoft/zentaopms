@@ -1374,9 +1374,9 @@ class repoZen extends repo
      * @param  int       $commitCount
      * @param  string    $type
      * @access protected
-     * @return string
+     * @return string|int
      */
-    protected function checkSyncResult(object $repo, array $branches, string $branchID, int $commitCount, string $type): string
+    protected function checkSyncResult(object $repo, array $branches, string $branchID, int $commitCount, string $type): string|int
     {
         if(empty($commitCount) && !$repo->synced)
         {
@@ -1396,7 +1396,7 @@ class repoZen extends repo
         }
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
-        return $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
+        return $type == 'batch' ? $commitCount : $this->config->repo->repoSyncLog->finish;
     }
 
     /**
