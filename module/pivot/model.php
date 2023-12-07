@@ -289,20 +289,8 @@ class pivotModel extends model
     public function getExecutions(string $begin = '', string $end = ''): array
     {
         $permission = common::hasPriv('pivot', 'showProject') || $this->app->user->admin;
-        $executions = $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
-            ->where('t1.status')->ne('cancel')
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.parent')->lt(1)
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.status')->eq('closed')
-            ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
-            ->beginIF(!$permission)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->groupBy('t1.project, t1.execution, t2.multiple')
-            ->orderBy('t2.end_desc')
-            ->fetchAll();
+        $IDList = !$permission ? $this->app->user->view->sprints : array();
+        $executions = $this->pivotTao->getExecutionList($begin, $end, $IDList);
 
         foreach($executions as $execution)
         {
