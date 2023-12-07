@@ -1,0 +1,18 @@
+title: userquery
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: account
+    range: admin
+  - field: module
+    range: serverroom
+  - field: title
+    range: 机房
+  - field: form
+    range: '`a:7:{i:0;a:4:{s:5:"field";s:4:"name";s:5:"andOr";s:3:"and";s:8:"operator";s:7:"include";s:5:"value";s:1:"1";}i:1;a:4:{s:5:"field";s:2:"id";s:5:"andOr";s:3:"and";s:8:"operator";s:1:"=";s:5:"value";s:0:"";}i:2;a:4:{s:5:"field";s:4:"city";s:5:"andOr";s:3:"and";s:8:"operator";s:1:"=";s:5:"value";s:0:"";}i:3;a:4:{s:5:"field";s:4:"line";s:5:"andOr";s:3:"and";s:8:"operator";s:1:"=";s:5:"value";s:0:"";}i:4;a:4:{s:5:"field";s:9:"bandwidth";s:5:"andOr";s:3:"and";s:8:"operator";s:7:"include";s:5:"value";s:0:"";}i:5;a:4:{s:5:"field";s:8:"provider";s:5:"andOr";s:3:"and";s:8:"operator";s:1:"=";s:5:"value";s:0:"";}i:6;a:1:{s:10:"groupAndOr";s:3:"and";}}`'
+  - field: sql
+    prefix: ((
+    range: "(( 1   AND `name`  LIKE '%1%' ) AND ( 1  ))"
+    postfix: ))

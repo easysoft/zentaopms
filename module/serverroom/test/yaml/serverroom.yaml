@@ -1,0 +1,25 @@
+title: serverroom
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    prefix: 机房
+    range: 1-100
+  - field: city
+    range: beijing,hangzhou,guangdong
+  - field: line
+    range: telecom,unicom,mobile,double,bgp
+  - field: bandwidth
+    range: 1-100:2
+  - field: provider
+    range: aliyun,qingyun
+  - field: owner
+    range:
+  - field: createdBy
+    range: admin
+  - field: editedBy
+    range: admin
+  - field: deleted
+    range: 0{5},1
