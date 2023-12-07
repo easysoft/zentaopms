@@ -71,7 +71,7 @@ class editor extends wg
         $editor->add(set($customProps));
         $editor->add(set('css', self::$css)); // Inject CSS into editor.
         $editor->add($this->prop('value'));
-        $editor->add($this->children());
+        $editor->add(h('article', set('slot', 'content'), $this->children())); // Set initial content.
 
         return div
         (
