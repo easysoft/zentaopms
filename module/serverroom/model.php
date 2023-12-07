@@ -1,29 +1,18 @@
 <?php
+declare(strict_types=1);
 /**
- * The model file of ops module of ZenTaoCMS.
+ * The model file of serverroom module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
- * @package     ops
- * @version     $Id$
+ * @package     serverroom
  * @link        https://www.zentao.net
  */
 class serverroomModel extends model
 {
     /**
-     * Get by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getById($id)
-    {
-        return $this->dao->select('*')->from(TABLE_SERVERROOM)->where('id')->eq($id)->fetch();
-    }
-
-    /**
+     * 获取机房列表。
      * Get room list.
      *
      * @param  string $browseType
@@ -33,14 +22,14 @@ class serverroomModel extends model
      * @access public
      * @return array
      */
-    public function getList($browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
         {
             if($param)
             {
-                $query = $this->loadModel('search')->getZinQuery($param);
+                $query = $this->loadModel('search')->getQuery($param);
                 if($query)
                 {
                     $this->session->set('serverroomQuery', $query->sql);
@@ -55,19 +44,20 @@ class serverroomModel extends model
             {
                 if($this->session->serverroomQuery == false) $this->session->set('serverroomQuery', ' 1 = 1');
             }
+
             $query = $this->session->serverroomQuery;
         }
 
-        $serverRooms = $this->dao->select('*')->from(TABLE_SERVERROOM)
+        return $this->dao->select('*')->from(TABLE_SERVERROOM)
             ->where('deleted')->eq('0')
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
-        return $serverRooms;
+            ->fetchAll('id');
     }
 
     /**
+     * 获取机房键值对信息。
      * Get server room pairs
      *
      * @access public
@@ -75,70 +65,62 @@ class serverroomModel extends model
      */
     public function getPairs(): array
     {
-        $stmt = $this->dao->select('*')->from(TABLE_SERVERROOM)
+        $rooms = $this->dao->select('id, city, provider, name')->from(TABLE_SERVERROOM)
             ->where('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->query();
+            ->fetchAll('id');
+
+        foreach($rooms as $roomID => $room)
+        {
+            $city     = zget($this->lang->serverroom->cityList, $room->city, '');
+            $provider = zget($this->lang->serverroom->providerList, $room->provider, '');
+
+            $name  = $city ? $city . ' - ' : '';
+            $name .= $provider ? $provider . ' - ' : '';
+            $name .= $room->name;
+            $rooms[$roomID] = $name;
+        }
 
         $rooms[0] = '';
-        while($room = $stmt->fetch())
-        {
-            $name  = zget($this->lang->serverroom->cityList, $room->city) == '' ? '' : zget($this->lang->serverroom->cityList, $room->city) . ' - ';
-            $name .= zget($this->lang->serverroom->providerList, $room->provider) == '' ? '' : zget($this->lang->serverroom->providerList, $room->provider) . ' - ';
-            $name .= $room->name;
-            $rooms[$room->id] = $name;
-        }
         return $rooms;
     }
 
     /**
-     * Create.
+     * 创建机房信息。
+     * Create serverroom.
      *
+     * @param  object $room
      * @access public
      * @return int
      */
-    public function create()
+    public function create(object $room)
     {
-        $now  = helper::now();
-        $room = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', $now)
-            ->get();
-
         $this->dao->insert(TABLE_SERVERROOM)->data($room)->autoCheck()
             ->batchCheck($this->config->serverroom->create->requiredFields, 'notempty')
             ->exec();
 
-        if(!dao::isError())
-        {
-            $roomID = $this->dao->lastInsertID();
-            return $roomID;
-        }
-        return false;
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
     }
 
     /**
-     * Update
+     * 更新机房信息。
+     * Update serverroom.
      *
-     * @param  int    $id
+     * @param  int    $roomID
      * @access public
      * @return array
      */
-    public function update($id)
+    public function update(int $roomID, object $room): array|false
     {
-        $oldRoom = $this->getById($id);
-        $now     = helper::now();
-        $room    = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->get();
-
+        $oldRoom = $this->fetchByID($roomID);
         $this->dao->update(TABLE_SERVERROOM)->data($room)->autoCheck()
             ->batchCheck($this->config->serverroom->edit->requiredFields, 'notempty')
-            ->where('id')->eq($id)
+            ->where('id')->eq($roomID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldRoom, $room);
-        return false;
+        if(dao::isError()) return false;
+        return common::createChanges($oldRoom, $room);
     }
 }

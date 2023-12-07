@@ -1,20 +1,18 @@
 <?php
-
-use function zin\createLink;
-
+declare(strict_types=1);
 /**
- * The control file of server room of ZenTaoPMS.
+ * The control file of serverroom of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
  * @package     serverroom
- * @version     $Id$
  * @link        https://www.zentao.net
  */
 class serverroom extends control
 {
     /**
+     * 机房列表。
      * Server room.
      *
      * @param  string $browseType
@@ -26,7 +24,7 @@ class serverroom extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $browseType = strtolower($browseType);
         $param      = (int)$param;
@@ -43,20 +41,18 @@ class serverroom extends control
         $this->config->serverroom->search['onMenuBar'] = 'no';
         $this->loadModel('search')->setSearchParams($this->config->serverroom->search);
 
-        $this->view->title      = $this->lang->serverroom->common;
-        $this->view->position[] = $this->lang->serverroom->common;
-
-        $this->view->pager   = $pager;
-        $this->view->param   = $param;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->orderBy = $orderBy;
-
+        $this->view->title          = $this->lang->serverroom->common;
+        $this->view->pager          = $pager;
+        $this->view->param          = $param;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->orderBy        = $orderBy;
         $this->view->browseType     = $browseType;
         $this->view->serverRoomList = $serverRoomList;
         $this->display();
     }
 
     /**
+     * 添加机房。
      * Create server room.
      *
      * @access public
@@ -66,7 +62,8 @@ class serverroom extends control
     {
         if($_POST)
         {
-            $createID = $this->serverroom->create();
+            $room = form::data($this->config->serverroom->form->create)->get();
+            $createID = $this->serverroom->create($room);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('serverRoom', $createID, 'created');
@@ -74,38 +71,37 @@ class serverroom extends control
         }
 
         $this->view->title = $this->lang->serverroom->create;
-        $this->view->position[] = html::a($this->createLink('serverroom', 'browse'), $this->lang->serverroom->common);
-        $this->view->position[] = $this->lang->serverroom->create;
-
         $this->view->users = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->display();
     }
 
     /**
+     * 编辑机房。
      * Edit server room.
      *
-     * @param  int     $id
+     * @param  int     $roomID
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $roomID)
     {
         if($_POST)
         {
-            $changes = $this->serverroom->update($id);
+            $room = form::data($this->config->serverroom->form->edit)->get();
+            $changes = $this->serverroom->update($roomID, $room);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('serverRoom', $id, 'Edited');
+                $actionID = $this->loadModel('action')->create('serverRoom', $roomID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('serverroom', 'view', "room=$id")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('serverroom', 'view', "room=$roomID")));
         }
 
         $this->view->title      = $this->lang->serverroom->edit;
-        $this->view->serverRoom = $this->serverroom->getById($id);
+        $this->view->serverRoom = $this->serverroom->fetchByID($roomID);
         $this->view->position[] = html::a($this->createLink('serverroom', 'browse'), $this->lang->serverroom->common);
         $this->view->position[] = $this->lang->serverroom->edit;
 
@@ -113,29 +109,35 @@ class serverroom extends control
         $this->display();
     }
 
-    public function view($id)
+    /**
+     * 查看机房信息。
+     * View server room.
+     *
+     * @param  int    $roomID
+     * @access public
+     * @return void
+     */
+    public function view(int $roomID)
     {
         $this->view->title      = $this->lang->serverroom->view;
-        $this->view->serverRoom = $this->serverroom->getById($id);
+        $this->view->serverRoom = $this->serverroom->fetchByID($roomID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->actions    = $this->loadModel('action')->getList('serverroom', $id);
-
-        $this->view->position[] = html::a($this->createLink('serverroom', 'browse'), $this->lang->serverroom->common);
-        $this->view->position[] = $this->lang->serverroom->view;
+        $this->view->actions    = $this->loadModel('action')->getList('serverroom', $roomID);
 
         $this->display();
     }
 
     /**
+     * 删除机房。
      * Delete server room.
      *
-     * @param  int     $id
+     * @param  int     $roomID
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $roomID)
     {
-        $this->serverroom->delete(TABLE_SERVERROOM, $id);
+        $this->serverroom->delete(TABLE_SERVERROOM, $roomID);
 
         if(dao::isError())
         {
