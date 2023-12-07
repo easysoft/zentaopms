@@ -802,8 +802,14 @@ class userModel extends model
      */
     public function resetPassword(object $user): bool
     {
-        $user = $this->getById($user->account);
-        if(!$user) return false;
+        $oldUser = $this->getById($user->account);
+        if(!$oldUser)
+        {
+            dao::$errors[] = sprintf($this->lang->user->error->notExists, $user->account);
+            return false;
+        }
+
+        $this->checkPassword($user);
 
         $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('account')->eq($user->account)->exec();
 
