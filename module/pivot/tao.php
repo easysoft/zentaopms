@@ -48,7 +48,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return void
      */
-    public function rebuildFieldSetting(object $pivot, array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings): void
+    protected function rebuildFieldSetting(object $pivot, array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings): void
     {
         $fieldSettingsNew = new stdclass();
 
@@ -105,7 +105,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return array
      */
-    public function processProductPlan(array &$products, string $conditions): array
+    protected function processProductPlan(array &$products, string $conditions): array
     {
         /* 获取产品的计划信息，并且根据产品id进行分组。 */
         /* Get the plan information of the product and group it by product id. */
@@ -142,7 +142,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return array
      */
-    public function processPlanStories(array &$products, string $storyType, array $plans): array
+    protected function processPlanStories(array &$products, string $storyType, array $plans): array
     {
         /* 获取所有符合条件的需求。 */
         /* Get all the requirements that meet the conditions. */
@@ -195,7 +195,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return void
      */
-    public function getPlanStatusStatistics(array &$products, array $plans, array $plannedStories, array $unplannedStories): void
+    protected function getPlanStatusStatistics(array &$products, array $plans, array $plannedStories, array $unplannedStories): void
     {
         /* 统计已经计划过的产品计划的需求状态信息。 */
         /* Statistics of demand status information for planned product plans. */
@@ -237,7 +237,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return array
      */
-    public function getBugStatistics(array $bugGroups): array
+    protected function getBugStatistics(array $bugGroups): array
     {
         /* 为bug生成透视表数据。 */
         /* Generate pivot data for bugs. */
@@ -284,5 +284,102 @@ class pivotTao extends pivotModel
         }
 
         return $bugs;
+    }
+
+    /**
+     * 获取未指派的执行。
+     * Get unassigned executions.
+     *
+     * @param  array  $deptUsers
+     * @access public
+     * @return array
+     */
+    protected function getNoAssignExecution(array $deptUsers): array
+    {
+        return $this->dao->select('t1.account AS user, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
+            ->where('t1.type')->eq('execution')
+            ->andWhere('t1.account NOT IN (SELECT DISTINCT `assignedTo` FROM ' . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN ('cancel', 'closed', 'done', 'pause') AND assignedTo != '')")
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
+            ->beginIF($deptUsers)->andWhere('t1.account')->in($deptUsers)->fi()
+            ->fetchAll();
+    }
+
+    /**
+     * 获取已指派的执行。
+     * Get assigned executions.
+     *
+     * @param  array  $deptUsers
+     * @access public
+     * @return array
+     */
+    protected function getAssignTask(array $deptUsers): array
+    {
+        return $this->dao->select('t1.id, t1.assignedTo AS user, t1.left, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.parent')->ge(0)
+            ->andWhere('t1.status')->in('wait,pause,doing')
+            ->andWhere('t1.assignedTo')->ne('')
+            ->beginIF($deptUsers)->andWhere('t1.assignedTo')->in($deptUsers)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.status')->in('wait,suspended,doing')
+            ->fetchAll();
+    }
+
+    /**
+     * 获取用户的工作负载。
+     * Get user's workload.
+     *
+     * @param  array  $projects
+     * @param  array  $teamTasks
+     * @param  float  $allHour
+     * @access public
+     * @return array
+     */
+    protected function getUserWorkLoad(array $projects, array $teamTasks, float $allHour): array
+    {
+        /* 计算用户的任务数，剩余工时和总任务数。 */
+        /* Calculate user's task count, left hours and total task count. */
+        $totalTasks = $totalHours = $totalExecutions = 0;
+        foreach($projects as $executions)
+        {
+            $totalExecutions += count($executions);
+            foreach($executions as $tasks)
+            {
+                $totalTasks += count($tasks);
+                foreach($tasks as $task)
+                {
+                    if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
+
+                    $totalHours += $task->left;
+                }
+            }
+        }
+
+        /* 计算用户的工作负载。 */
+        /* Calculate user's workload. */
+        $userWorkload = $allHour ? round($totalHours / $allHour * 100, 2) . '%' : '0%';
+
+        return array($totalTasks, $totalHours, $totalExecutions, $userWorkload);
+    }
+
+    /**
+     * 获取任务相关的团队信息。
+     * Get team information related to tasks.
+     *
+     * @param  array  $taskIDList
+     * @access public
+     * @return array
+     */
+    protected function getTeamTasks(array $taskIDList): array
+    {
+        return $this->dao->select('task, SUM(`left`) AS `left`')->from(TABLE_TASKTEAM)
+            ->where('task')->in($taskIDList)
+            ->groupBy('task')
+            ->fetchPairs('task');
     }
 }

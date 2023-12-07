@@ -46,8 +46,8 @@ function loadProductSummary()
  */
 function loadProjectDeviation()
 {
-    const begin  = $('#conditions').find('#begin').val().replaceAll('-', '');
-    const end    = $('#conditions').find('#end').val().replaceAll('-', '');
+    const begin  = $('#conditions').find('[name="begin"]').val().replaceAll('-', '');
+    const end    = $('#conditions').find('[name="end"]').val().replaceAll('-', '');
     const params = window.btoa('begin=' + begin + '&end=' + end);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=projectdeviation&params=' + params);
     loadPage(link, '#table-pivot-preview,#pivotChart');
@@ -62,8 +62,8 @@ function loadProjectDeviation()
  */
 function loadWorkload()
 {
-    const begin    = $('#conditions').find('#begin').val();
-    const end      = $('#conditions').find('#end').val();
+    const begin    = $('#conditions').find('[name="begin"]').val();
+    const end      = $('#conditions').find('[name="end"]').val();
     const workhour = $('#conditions').find('#workhour').val();
     const dept     = $('#conditions').find('[name=dept]').val();
     const assign   = $('#conditions').find('[name=assign]').val();

@@ -332,6 +332,8 @@ class pivotModel extends model
      */
     public function getWorkload(int $dept, string $assign, array $users, float $allHour): array
     {
+        /* 判断是否需要查询部门用户。 */
+        /* Check if need to query department users. */
         $deptUsers = array();
         if($dept)
         {
@@ -341,81 +343,95 @@ class pivotModel extends model
 
         $canViewExecution = common::hasPriv('execution', 'view');
 
-        if($assign == 'noassign')
+        return $assign == 'noassign' ? $this->getWorkloadNoAssign($deptUsers, $users, $canViewExecution) : $this->getWorkLoadAssign($deptUsers, $users, $canViewExecution, $allHour);
+
+    }
+
+    /**
+     * 获取未指派的员工负载表。
+     * Get workload no assign.
+     *
+     * @param  array  $deptUsers
+     * @param  array  $users
+     * @param  bool   $canViewExecution
+     * @access public
+     * @return array
+     */
+    private function getWorkloadNoAssign(array $deptUsers, array $users, bool $canViewExecution): array
+    {
+        /* 获取未指派执行。 */
+        /* Get no assign execution. */
+        $executions = $this->pivotTao->getNoAssignExecution(array_keys($deptUsers));
+        if(empty($executions)) return array();
+
+        /* 构建需要的用户-项目-执行数据结构。 */
+        /* Build user-project-execution data structure. */
+        $executionGroups = array();
+        foreach($executions as $execution)
         {
-            $executions = $this->dao->select('t1.account AS user, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
-                ->where('t1.type')->eq('execution')
-                ->andWhere('t1.account NOT IN (SELECT DISTINCT `assignedTo` FROM ' . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN ('cancel', 'closed', 'done', 'pause') AND assignedTo != '')")
-                ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
-                ->beginIF($deptUsers)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
-                ->fetchAll();
-            if(empty($executions)) return array();
-
-            $executionGroups = array();
-            foreach($executions as $execution)
-            {
-                if(!isset($users[$execution->user])) continue;
-                $executionGroups[$execution->user][$execution->projectID][$execution->executionID] = $execution;
-            }
-
-            $workload = array();
-            foreach($executionGroups as $account => $projects)
-            {
-                if(!isset($users[$account])) continue;
-
-                $totalExecutions = 0;
-                foreach($projects as $executions) $totalExecutions += count($executions);
-
-                $userFirstRow = true;
-                foreach($projects as $executions)
-                {
-                    $projectFirstRow = true;
-                    foreach($executions as $execution)
-                    {
-                        $execution->executionTasks = 0;
-                        $execution->executionHours = 0;
-                        $execution->totalTasks     = 0;
-                        $execution->totalHours     = 0;
-                        $execution->workload       = '0%';
-
-                        if($execution->multiple)
-                        {
-                            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
-                        }
-                        else
-                        {
-                            $execution->executionName = $this->lang->null;
-                        }
-
-                        if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
-                        if($projectFirstRow) $execution->projectRowspan = count($executions);
-
-                        $workload[] = $execution;
-
-                        $userFirstRow    = false;
-                        $projectFirstRow = false;
-                    }
-                }
-            }
-            return $workload;
+            if(!isset($users[$execution->user])) continue;
+            $executionGroups[$execution->user][$execution->projectID][$execution->executionID] = $execution;
         }
 
-        $tasks = $this->dao->select('t1.id, t1.assignedTo AS user, t1.left, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.parent')->ge(0)
-            ->andWhere('t1.status')->in('wait,pause,doing')
-            ->andWhere('t1.assignedTo')->ne('')
-            ->beginIF($deptUsers)->andWhere('t1.assignedTo')->in(array_keys($deptUsers))->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.status')->in('wait,suspended,doing')
-            ->fetchAll();
+        /* 计算未指派的执行统计数据。 */
+        /* Calculate statistics data for no assign execution. */
+        $workload = array();
+        foreach($executionGroups as $account => $projects)
+        {
+            if(!isset($users[$account])) continue;
+
+            $totalExecutions = 0;
+            foreach($projects as $executions) $totalExecutions += count($executions);
+
+            $userFirstRow = true;
+            foreach($projects as $executions)
+            {
+                $projectFirstRow = true;
+                foreach($executions as $execution)
+                {
+                    $execution->executionTasks = 0;
+                    $execution->executionHours = 0;
+                    $execution->totalTasks     = 0;
+                    $execution->totalHours     = 0;
+                    $execution->workload       = '0%';
+                    $execution->executionName  = $this->lang->null;
+
+                    if($execution->multiple) $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
+
+                    if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
+                    if($projectFirstRow) $execution->projectRowspan = count($executions);
+
+                    $workload[] = $execution;
+
+                    $userFirstRow    = false;
+                    $projectFirstRow = false;
+                }
+            }
+        }
+
+        return $workload;
+    }
+
+    /**
+     * 获取指派的员工负载表。
+     * Get workload assign.
+     *
+     * @param  array  $deptUsers
+     * @param  array  $users
+     * @param  bool   $canViewExecution
+     * @param  float  $allHour
+     * @access public
+     * @return array
+     */
+    private function getWorkLoadAssign(array $deptUsers, array $users, bool $canViewExecution, float $allHour): array
+    {
+        /* 获取指派的任务。 */
+        /* Get assign tasks. */
+        $tasks = $this->pivotTao->getAssignTask(array_keys($deptUsers));
         if(empty($tasks)) return array();
 
+        /* 构建需要的用户-项目-执行-任务数据结构。 */
+        /* Build user-project-execution-task data structure. */
         $taskGroups = array();
         foreach($tasks as $task)
         {
@@ -423,35 +439,17 @@ class pivotModel extends model
             $taskGroups[$task->user][$task->projectID][$task->executionID][$task->id] = $task;
         }
 
-        $teamTasks = $this->dao->select('task, SUM(`left`) AS `left`')->from(TABLE_TASKTEAM)
-            ->where('task')->in(array_keys($tasks))
-            ->groupBy('task')
-            ->fetchPairs('task');
+        /* 获取团队任务的剩余工时。 */
+        /* Get team task left hours. */
+        $teamTasks = $this->pivotTao->getTeamTasks(array_keys($deptUsers));
 
         $workload = array();
         foreach($taskGroups as $projects)
         {
-            $totalTasks      = 0;
-            $totalHours      = 0;
-            $totalExecutions = 0;
-            foreach($projects as $executions)
-            {
-                $totalExecutions += count($executions);
+            list($totalTasks, $totalHours, $totalExecutions, $userWorkload) = $this->pivotTao->getUserWorkLoad($projects, $teamTasks, $allHour);
 
-                foreach($executions as $tasks)
-                {
-                    $totalTasks += count($tasks);
-                    foreach($tasks as $task)
-                    {
-                        if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
-
-                        $totalHours += $task->left;
-                    }
-                }
-            }
-
-            $userWorkload = $allHour ? round($totalHours / $allHour * 100, 2) . '%' : '0%';
-
+            /* 计算用户的执行统计数据。 */
+            /* Calculate user's execution statistics data. */
             $userFirstRow = true;
             foreach($projects as $executions)
             {
@@ -464,26 +462,20 @@ class pivotModel extends model
                     $execution->totalTasks     = $totalTasks;
                     $execution->totalHours     = $totalHours;
                     $execution->workload       = $userWorkload;
+                    $execution->executionName  = $this->lang->null;
 
-                    if($execution->multiple)
-                    {
-                        $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
-                    }
-                    else
-                    {
-                        $execution->executionName = $this->lang->null;
-                    }
+                    if($execution->multiple) $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
 
                     if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
                     if($projectFirstRow) $execution->projectRowspan = count($executions);
 
                     $workload[] = $execution;
 
-                    $userFirstRow    = false;
-                    $projectFirstRow = false;
+                    $userFirstRow = $projectFirstRow = false;
                 }
             }
         }
+
         return $workload;
     }
 

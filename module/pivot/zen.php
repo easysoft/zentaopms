@@ -470,6 +470,7 @@ class pivotZen extends pivot
     }
 
     /**
+     * 组织透视表。
      * Workload pivot.
      *
      * @param  string $begin
@@ -483,26 +484,15 @@ class pivotZen extends pivot
      */
     public function workload(string $begin = '', string $end = '', int $days = 0, float $workhour= 0, int $dept = 0, string $assign = 'assign'): void
     {
-        if($_POST)
-        {
-            $data     = fixer::input('post')->get();
-            $begin    = $data->begin;
-            $end      = $data->end;
-            $dept     = $data->dept;
-            $days     = $data->days;
-            $assign   = $data->assign;
-            $workhour = $data->workhour;
-        }
-
         $this->app->loadConfig('execution');
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
         $begin  = $begin ? strtotime($begin) : time();
         $end    = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
         $end   += 24 * 3600;
-        $beginWeekDay = date('w', $begin);
-        $begin  = date('Y-m-d', $begin);
-        $end    = date('Y-m-d', $end);
+        $beginWeekDay = date('w',     $begin);
+        $begin        = date('Y-m-d', $begin);
+        $end          = date('Y-m-d', $end);
 
         if(empty($workhour)) $workhour = $this->config->execution->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);

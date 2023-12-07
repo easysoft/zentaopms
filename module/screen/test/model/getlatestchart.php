@@ -46,4 +46,4 @@ foreach($screen->componentList as $component)
 }
 $component3_ = clone($component3);
 $screen->getLatestChartTest($component3);
-r($component3 == $component3_) && p('') && e(1);  //当component的sourceID存在时，有可!能会修改component
+r($component3 == $component3_) && p('') && e(1);  //当component的sourceID存在时，有可能会修改component
