@@ -430,23 +430,26 @@ class userModel extends model
     }
 
     /**
-     * Get user info by ID.
+     * 根据指定字段的值获取一个用户。
+     * Get a user by the value of the specified field.
      *
      * @param  string  $userID
      * @param  string  $field id|account
      * @access public
      * @return object|bool
      */
-    public function getById($userID, $field = 'account')
+    public function getById(string|int $userID, string $field = 'account'): object|bool
     {
-        /* Return current user when user is guest or empty to make sure pages in dashboard work fine. */
+        /* 如果 userID 参数为空并且当前用户是游客，返回当前用户，以确保仪表盘页面正常工作。*/
+        /* If the userID param is empty and the current user is guest, return the current user to make sure the dashboard page works well. */
         if(empty($userID) && $this->app->user->account == 'guest') return $this->app->user;
 
-        if($field == 'id') $userID = (int)$userID;
-        if($field == 'account') $userID = str_replace(' ', '', trim($userID));
+        if($field == 'id')      $userID = (int)$userID;
+        if($field == 'account') $userID = trim($userID);
 
         $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;
+
         $user->last = date(DT_DATETIME1, $user->last);
         return $user;
     }
