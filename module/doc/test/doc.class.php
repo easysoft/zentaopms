@@ -1295,4 +1295,21 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 获取按照编辑时间倒序排序的文档。
+     * Get the docs ordered by edited date.
+     *
+     * @param  array $hasPrivDocIdList
+     * @param  array $allLibIDList
+     * @access public
+     * @return array
+     */
+    public function getOrderedDocsByEditedDateTest(array $hasPrivDocIdList, array $allLibIDList): array
+    {
+        $docs = $this->objectModel->getOrderedDocsByEditedDate($hasPrivDocIdList, $allLibIDList);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
