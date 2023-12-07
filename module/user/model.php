@@ -939,12 +939,13 @@ class userModel extends model
     }
 
     /**
-     * Identify user by PHP_AUTH_USER.
+     * 根据 PHP 的 HTTP 认证验证用户。
+     * Identify user by PHP HTTP auth.
      *
      * @access public
      * @return bool
      */
-    public function identifyByPhpAuth()
+    public function identifyByPhpAuth(): bool
     {
         $account  = $this->server->php_auth_user;
         $password = $this->server->php_auth_pw;
