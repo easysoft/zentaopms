@@ -15,5 +15,9 @@ zdTable('user')->gen(5);
 su('admin');
 
 $chart = new chartTest();
-r($chart->isClickableTest(1001)) && p() && e('false'); //测试内置报表的操作按钮是否不可点击
-r($chart->isClickableTest(1077)) && p() && e('true'); //测试非内置报表的操作按钮是否可点击
+r($chart->isClickableTest(1001, 'design')) && p() && e('false'); //测试内置报表的设计按钮是否不可点击
+r($chart->isClickableTest(1001, 'edit'))   && p() && e('false'); //测试内置报表的编辑按钮是否不可点击
+r($chart->isClickableTest(1001, 'delete')) && p() && e('false'); //测试内置报表的删除按钮是否不可点击
+r($chart->isClickableTest(1077, 'design')) && p() && e('true');  //测试非内置报表的设计按钮是否可点击
+r($chart->isClickableTest(1077, 'edit'))   && p() && e('true');  //测试非内置报表的编辑按钮是否可点击
+r($chart->isClickableTest(1077, 'delete')) && p() && e('true');  //测试非内置报表的删除按钮是否可点击

@@ -55,9 +55,9 @@ class chartTest
      * @access public
      * @return string
      */
-    public function isClickableTest(int $chartID): string
+    public function isClickableTest(int $chartID, string $action): string
     {
         $chart = $this->objectModel->getByID($chartID);
-        return $this->objectModel->isClickable($chart) ? 'true' : 'false';
+        return $this->objectModel->isClickable($chart, $action) ? 'true' : 'false';
     }
 }

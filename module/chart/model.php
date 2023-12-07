@@ -608,9 +608,9 @@ class chartModel extends model
      *
      * @param  string $sql
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getTables(string $sql): array
+    public function getTables(string $sql): array|false
     {
         $processedSql = trim($sql, ';');
         $processedSql = str_replace(array("\r\n", "\n"), ' ', $processedSql);
@@ -674,4 +674,3 @@ class chartModel extends model
         return $sql;
     }
 }
-
