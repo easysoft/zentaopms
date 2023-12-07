@@ -98,7 +98,7 @@ class storyModel extends model
     {
         return $this->dao->select("id, {$field}")->from(TABLE_STORY)
             ->where('deleted')->eq('0')
-            ->beginIF($productID)->andWhere('product')->eq($productID)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($planID)->andWhere("CONCAT(',', plan, ',')")->like("%,{$planID},%")->fi()
             ->fetchPairs();
     }
