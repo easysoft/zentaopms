@@ -90,6 +90,24 @@ class extensionModel extends model
     }
 
     /**
+     * 调用禅道官网接口获取插件的版本。
+     * Get versions for some extensions.
+     *
+     * @param  string     $extensions
+     * @access public
+     * @return array|bool
+     */
+    public function getVersionsByAPI(string $extensions): array|bool
+    {
+        $extensions = helper::safe64Encode($extensions);
+        $apiURL     = $this->apiRoot . 'apiGetVersions-' . $extensions . '.json';
+        $data       = $this->fetchAPI($apiURL);
+
+        if(isset($data->versions)) return (array)$data->versions;
+        return false;
+    }
+
+    /**
      * 调用禅道官网接口获取插件的列表。
      * Get extensions by some condition.
      *
@@ -114,22 +132,6 @@ class extensionModel extends model
             }
             return $data;
         }
-        return false;
-    }
-
-    /**
-     * Get versions for some extensions.
-     *
-     * @param  string    $extensions
-     * @access public
-     * @return array|bool
-     */
-    public function getVersionsByAPI($extensions)
-    {
-        $extensions = helper::safe64Encode($extensions);
-        $apiURL = $this->apiRoot . 'apiGetVersions-' . $extensions . '.json';
-        $data = $this->fetchAPI($apiURL);
-        if(isset($data->versions)) return (array)$data->versions;
         return false;
     }
 
