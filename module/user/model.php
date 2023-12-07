@@ -1160,7 +1160,8 @@ class userModel extends model
     }
 
     /**
-     * Judge a user is logon or not.
+     * 判断用户是否已经登录。
+     * Check if the user has logged in.
      *
      * @access public
      * @return bool
@@ -1168,7 +1169,7 @@ class userModel extends model
     public function isLogon()
     {
         $user = $this->session->user;
-        return ($user and !empty($user->account) and $user->account != 'guest');
+        return ($user && !empty($user->account) && $user->account != 'guest');
     }
 
     /**
