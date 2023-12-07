@@ -56,15 +56,14 @@ class tutorial extends control
      * @access public
      * @return string
      */
-    public function ajaxSetTasks($finish = 'keepAll')
+    public function ajaxSetTasks(string $finish = 'keepAll')
     {
         if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
 
         if($finish == 'keepAll') return $this->send(array('result' => 'fail', 'alert' => $this->lang->tutorial->ajaxSetError));
 
-        $account = $this->app->user->account;
         $this->session->set('tutorialMode', false);
-        $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $finish);
+        $this->loadModel('setting')->setItem("{$this->app->user->account}.tutorial.tasks.setting", $finish);
         $this->session->set('tutorialMode', true);
         return $this->send(array('result' => 'success'));
     }
