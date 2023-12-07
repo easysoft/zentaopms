@@ -1613,16 +1613,55 @@ class screenModel extends model
     {
         $this->loadModel('metric');
 
-        $resultHeader  = $this->metric->getViewTableHeader($metric);
+        $resultHeader   = $this->metric->getViewTableHeader($metric);
+        $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
 
         $result     = $this->metric->getResultByCode($metric->code, array(), 'cron');
         $resultData = $this->metric->getViewTableData($metric, $result);
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, false);
 
         $tableOption = new stdclass();
-        $tableOption->header = $groupHeader;
-        $tableOption->data   = $groupData;
+        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader) : array($groupHeader);
+        $tableOption->data    = $groupData;
         return $tableOption;
+    }
+
+    /**
+     * Get table headers of metric in screen designer.
+     *
+     * @param  array  $resultHeaders
+     * @access public
+     * @return object
+     */
+    public function getMetricHeaders($resultHeader)
+    {
+        $headers = array_fill(0, 2, array());
+
+        foreach($resultHeader as $head)
+        {
+            if($head['name'] == 'scope')
+            {
+                $head['rowspan'] = 2;
+                $headers[0][] = $head;
+            }
+            else
+            {
+                $headers[1][] = $head;
+            }
+        }
+
+        $dateGroups = array_count_values(array_column($resultHeader, 'headerGroup'));
+        foreach($dateGroups as $date => $count)
+        {
+            $dateGroup = array();
+            $dateGroup['colspan'] = $count;
+            $dateGroup['title']   = $date;
+            $dateGroup['name']    = $date;
+
+            $headers[0][] = $dateGroup;
+        }
+
+        return $headers;
     }
 
     /**
