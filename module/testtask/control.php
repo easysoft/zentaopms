@@ -871,7 +871,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $stepResults = form::batchData($this->config->testtask->form->runCase)->get();
-            $caseResult  = $this->testtask->createResult($runID, $this->post->case, $this->post->version, $stepResults);
+            $caseResult  = $this->testtask->createResult($runID, (int)$this->post->case, (int)$this->post->version, $stepResults);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', 0));
