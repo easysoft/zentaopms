@@ -238,14 +238,15 @@ class searchTest
     }
 
     /**
+     * 测试获取搜索索引列表。
      * Test get list.
      *
      * @param  string $keywords
      * @param  string $type
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getListTest($keywords, $type)
+    public function getListTest(string $keywords, string $type): int|array
     {
         $result = array();
         while(!isset($result['finished']))
