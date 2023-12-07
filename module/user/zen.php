@@ -130,15 +130,15 @@ class userZen extends user
 
         /* 验证账号和密码。*/
         /* Verify account and password. */
-        $user = $this->user->identify($account, $password);
+        $user = $this->user->identify($account, $password, $this->post->passwordStrength);
 
         /* 登录失败返回错误信息。*/
         /* Return error message if login failed. */
         if(!$user) return $this->responseForLoginfail($viewType, $account);
 
-        /* 获取用户所属权限组、权限和视图，并发放登录积分。*/
-        /* Get user's group, privilege and view, and give login points. */
-        $user = $this->user->login($user);
+        /* 获取用户所属权限组、权限和视图，记录日志并发放登录积分。*/
+        /* Get user's group, priv and view, save log and give login score. */
+        $user = $this->user->login($user, true, $this->post->keepLogin);
 
         /* 以 json 格式返回用户数据。*/
         /* Return user data in json format. */
