@@ -70,6 +70,27 @@ class kanbanTest
     }
 
     /**
+     * Test copy a region.
+     *
+     * @param  object $kanban
+     * @param  int    $regionID
+     * @param  int    $copyRegionID
+     * @param  string $from
+     * @param  string $param
+     * @access public
+     * @return object
+     */
+    public function copyRegionTest($kanban, $regionID, $copyRegionID, $from, $param)
+    {
+        $this->objectModel->copyRegion($kanban, $regionID, $copyRegionID, $from, $param);
+
+        if(dao::isError()) return dao::getError();
+
+        $object = $this->objectModel->getRegionByID($regionID);
+        return $object;
+    }
+
+    /**
      * Test create default kanban lanes.
      *
      * @param  int    $regionID
