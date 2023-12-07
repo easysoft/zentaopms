@@ -59,7 +59,7 @@ class editor extends wg
             $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto')
         );
 
-        $props = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
+        $props = $this->props->pick(array('uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
         foreach($props as $key => $value)
         {
             if($value === true || (is_string($value) && !empty($value))) $editor->add(set(uncamelize($key), $value));
