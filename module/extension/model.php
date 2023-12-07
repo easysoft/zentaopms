@@ -321,27 +321,29 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件代号获取插件包的配置信息。
      * Get the extension's condition.
      *
-     * @param  string    $extenstion
+     * @param  string $extenstion
      * @access public
      * @return object
      */
-    public function getCondition($extension)
+    public function getCondition(string $extension): object
     {
-        $info      = $this->parseExtensionCFG($extension);
-        $condition = new stdclass();
+        $info = $this->parseExtensionCFG($extension);
 
+        $condition = new stdclass();
         $condition->zentao    = array('compatible' => '', 'incompatible' => '');
         $condition->depends   = '';
         $condition->conflicts = '';
 
-        if(isset($info->zentao))        $condition->zentao    = $info->zentao;
-        if(isset($info->depends))       $condition->depends   = $info->depends;
-        if(isset($info->conflicts))     $condition->conflicts = $info->conflicts;
+        if(isset($info->zentao))    $condition->zentao    = $info->zentao;
+        if(isset($info->depends))   $condition->depends   = $info->depends;
+        if(isset($info->conflicts)) $condition->conflicts = $info->conflicts;
 
+        /* zentaoversion和zentaoVersion哪个有值取那个。 */
         if(isset($info->zentaoVersion)) $condition->zentao['compatible'] = $info->zentaoVersion;
-        if(isset($info->zentaoversion)) $condition->zentao['compatible'] =  $info->zentaoversion;
+        if(isset($info->zentaoversion)) $condition->zentao['compatible'] = $info->zentaoversion;
 
         return $condition;
     }
