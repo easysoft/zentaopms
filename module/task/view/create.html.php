@@ -255,7 +255,15 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
         </tr>
         <tr>
           <th><?php echo $lang->files;?></th>
-          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='3'>
+            <?php
+            if(isset($sourceFiles))
+            {
+                echo $this->fetch('file', 'printFiles', array('files' => $sourceFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
+            }
+            echo $this->fetch('file', 'buildform');
+            ?>
+          </td>
         </tr>
         <?php
         $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false ? 'hidden' : '';

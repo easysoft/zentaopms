@@ -343,6 +343,11 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                   echo $this->fetch('file', 'printFiles', array('files' => $resultFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
                   echo html::hidden('resultFiles', implode(',', array_keys($resultFiles)));
               }
+              if(isset($sourceFiles))
+              {
+                  echo $this->fetch('file', 'printFiles', array('files' => $sourceFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
+              }
+
               echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');
               ?>
             </td>

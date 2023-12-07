@@ -642,7 +642,7 @@ class fileModel extends model
 
         if(isset($objectGroup[$objectType]))
         {
-            $groupName = $objectGroup[$objectType]; 
+            $groupName = $objectGroup[$objectType];
             $groupID   = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
             return $this->loadModel($groupName)->checkPriv($groupID);
         }

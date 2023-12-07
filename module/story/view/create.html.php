@@ -358,7 +358,15 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php $this->printExtendFields('', 'table', 'columns=4');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
-            <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td colspan='4'>
+              <?php
+              if(isset($sourceFiles))
+              {
+                  echo $this->fetch('file', 'printFiles', array('files' => $sourceFiles, 'fieldset' => 'false', 'object' => null, 'method' => 'edit', 'showDelete' => true, 'showEdit' => false));
+              }
+              echo $this->fetch('file', 'buildform');
+              ?>
+            </td>
           </tr>
           <?php $hiddenMailto = strpos(",$showFields,", ',mailto,') !== false ? '' : 'hidden';?>
           <tr class="<?php echo $hiddenMailto?> mailtoBox">
