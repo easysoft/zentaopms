@@ -1158,7 +1158,7 @@ class bugZen extends bug
         $this->view->bug                   = $bug;
         $this->view->executions            = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
-        $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
+        $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->projectID             = isset($projectID) ? $projectID : $bug->projectID;
