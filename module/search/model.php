@@ -65,7 +65,7 @@ class searchModel extends model
         {
             /* The and or between two groups. */
             $formIndex = $i - 1;
-            if($i == 1) $where .= '(( 1  ';
+            if($i == 1) $where .= '(( 1 ';
             if($i == $groupItems + 1) $where .= " ) $groupAndOr ( 1 ";
 
             /* Set var names. */
@@ -75,8 +75,7 @@ class searchModel extends model
             $valueName    = "value$i";
 
             $field = $this->post->$fieldName;
-            if(empty($field)) continue;
-            if($this->post->$valueName == false) continue;
+            if(empty($field) || $this->post->$valueName == false) continue;
 
             /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
             if(isset($fieldParams->$field) && $fieldParams->$field->control == 'input' && $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
