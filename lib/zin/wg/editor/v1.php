@@ -10,14 +10,15 @@ class editor extends wg
         'uploadUrl?: string',             // 图片上传链接
         'placeholder?: string=""',        // 占位文本
         'fullscreenable?: bool=true',     // 是否可全屏
-        'resizable?: bool=true',          // 是否可自适应
-        'exposeEditor?: bool=true',       // 是否将编辑器实例挂载到 window
-        'size?: string="sm"',             // 尺寸
-        'hideMenubar?: bool=false',       // 是否隐藏 menubar
-        'bubbleMenu?: bool=false',        // 是否启用菜单冒泡
-        'menubarMode?: string="compact"', // 菜单栏模式
-        'value?: string',                 // 内容
-        'uid?: string'                    // 图片上传uid
+        'resizable?: bool=true',          // 是否可拖拽调整大小
+        'exposeEditor?: bool=true',       // 是否将编辑器实例挂载到 `window.$zenEditors`
+        'size?: string="sm"',             // 尺寸，可选值 'sm', 'lg', 'full'
+        'hideMenubar?: bool=false',       // 是否隐藏菜单栏
+        'bubbleMenu?: bool=false',        // 是否启用浮动菜单
+        'menubarMode?: string="compact"', // 菜单栏模式，可选值 'compact', 'full'
+        'locale?: string',                // 语言，可选值 'zh', 'en'，默认跟随浏览器，也可以是自定义的语言项 JSON，详见 ZenEditor 文档
+        'value?: string',                 // 初始内容
+        'uid?: string'                    // 图片上传 uid
     );
 
     protected static string $css = <<<EOT
@@ -28,7 +29,7 @@ class editor extends wg
         .menubar {border-bottom: 1px solid #d8dbde!important;}
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
-        .tippy-content zen-editor-menu-item .label {all:unset;}
+        .tippy-content zen-editor-menu-item .label {all: unset;}
     EOT;
 
     public static function getPageCSS(): string|false
