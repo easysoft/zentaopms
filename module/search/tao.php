@@ -403,11 +403,11 @@ class searchTao extends searchModel
      *
      * @param  array   $results
      * @param  array   $objectIdList
-     * @param  array   $products
+     * @param  string  $products
      * @access private
      * @return array
      */
-    private function checkProductPriv(array $results, array $objectIdList, array $products): array
+    private function checkProductPriv(array $results, array $objectIdList, string $products): array
     {
         $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs('id');
         foreach($objectIdList as $productID => $recordID)
@@ -602,12 +602,12 @@ class searchTao extends searchModel
      * @param  string    $table
      * @param  array     $results
      * @param  array     $objectIdList
-     * @param  array     $products
+     * @param  string    $products
      * @param  array     $executions
      * @access protected
      * @return array
      */
-    protected function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, array $products, array $executions): array
+    protected function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, string $products, array $executions): array
     {
         if($objectType == 'product')   return $this->checkProductPriv($results, $objectIdList, $products);
         if($objectType == 'program')   return $this->checkProgramPriv($results, $objectIdList);
@@ -735,6 +735,35 @@ class searchTao extends searchModel
         }
         return $objectList;
     }
+
+    /**
+     * 检查查询到的结果的权限。
+     * Check product and project priv.
+     *
+     * @param  array     $results
+     * @param  array     $objectPairs
+     * @access protected
+     * @return array
+     */
+    protected function checkPriv(array $results, array $objectPairs = array()): array
+    {
+        if($this->app->user->admin) return $results;
+
+        $products   = $this->app->user->view->products;
+        $executions = $this->app->user->view->sprints;
+
+        if(empty($objectPairs)) foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
+        foreach($objectPairs as $objectType => $objectIdList)
+        {
+            if(!isset($this->config->objectTables[$objectType])) continue;
+
+            $table = $this->config->objectTables[$objectType];
+            $results = $this->checkObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
+            $results = $this->checkRelatedObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
+        }
+        return $results;
+    }
+
 
     /**
      * 处理搜索结果。

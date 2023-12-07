@@ -434,7 +434,7 @@ class searchModel extends model
             $idListGroup[$module][$record->objectID] = $record->objectID;
         }
 
-        $results = $this->checkPriv($results, $idListGroup);
+        $results = $this->searchTao->checkPriv($results, $idListGroup);
         if(empty($results)) return $results;
 
         /* Reset pager total and get this page data. */
@@ -514,34 +514,6 @@ class searchModel extends model
         }
 
         return !dao::isError();
-    }
-
-    /**
-     * 检查查询到的结果的权限。
-     * Check product and project priv.
-     *
-     * @param  array  $results
-     * @param  array  $objectPairs
-     * @access public
-     * @return array
-     */
-    public function checkPriv(array $results, array $objectPairs = array()): array
-    {
-        if($this->app->user->admin) return $results;
-
-        $products   = $this->app->user->view->products;
-        $executions = $this->app->user->view->sprints;
-
-        if(empty($objectPairs)) foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
-        foreach($objectPairs as $objectType => $objectIdList)
-        {
-            if(!isset($this->config->objectTables[$objectType])) continue;
-
-            $table = $this->config->objectTables[$objectType];
-            $results = $this->searchTao->checkObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
-            $results = $this->searchTao->checkRelatedObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
-        }
-        return $results;
     }
 
     /**
