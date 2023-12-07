@@ -275,14 +275,14 @@ class extensionModel extends model
     }
 
     /**
-     * 根据插件代号获取插件包里的文件内容。
+     * 根据插件代号获取插件包里的文件夹列表。
      * Get paths from an extension package.
      *
      * @param  string $extension
      * @access public
      * @return array
      */
-    public function getPathsFromPackage(string $extension)
+    public function getPathsFromPackage(string $extension): array
     {
         $paths = array();
         $packageFile = $this->getPackageFile($extension);
@@ -307,17 +307,17 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件代号获取插件包里db和doc目录下的文件列表。
      * Get all files from a package.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return array
      */
-    public function getFilesFromPackage($extension)
+    public function getFilesFromPackage(string $extension): array
     {
         $extensionDir = $this->pkgRoot . $extension;
-        $files = $this->classFile->readDir($extensionDir, array('db', 'doc'));
-        return $files;
+        return $this->classFile->readDir($extensionDir, array('db', 'doc'));
     }
 
     /**

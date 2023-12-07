@@ -9,11 +9,11 @@ title=测试 extensionModel->getPathsFromPackage();
 timeout=0
 cid=1
 
-- 获取代号为code1的插件包配置信息 @0
+- 获取代号为code1的插件包文件夹列表。 @0
 
 */
 
 global $tester;
 $tester->loadModel('extension');
 
-r($tester->extension->getPathsFromPackage('code1'))  && p() && e(0);   // 获取代号为code1的插件包配置信息
+r($tester->extension->getPathsFromPackage('code1'))  && p() && e(0);   // 获取代号为code1的插件包文件夹列表。
