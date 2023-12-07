@@ -662,21 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get year months.
-     *
-     * @param  string $year
-     * @access public
-     * @return array
-     */
-    public function getYearMonths($year)
-    {
-        $months = array();
-        for($i = 1; $i <= 12; $i ++) $months[] = $year . '-' . sprintf('%02d', $i);
-
-        return $months;
-    }
-
-    /**
      * Get project and execution name.
      *
      * @access public
