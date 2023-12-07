@@ -14,8 +14,8 @@
 class userModel extends model
 {
     /**
-     * 创建用户前的检查。
-     * Check before creating a user.
+     * 创建或编辑用户前的检查。
+     * Check before create or edit a user.
      *
      * @param  object $user
      * @param  bool   $canNoPassword
@@ -209,10 +209,11 @@ class userModel extends model
     }
 
     /**
-     * Get user information by accounts.
+     * 根据用户名列表获取用户信息。
+     * Get user info by account list.
      *
-     * @param  array    $accounts
-     * @param  string   $keyField
+     * @param  array  $accounts
+     * @param  string $keyField
      * @access public
      * @return array
      */
