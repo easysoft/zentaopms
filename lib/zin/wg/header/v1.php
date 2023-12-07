@@ -46,11 +46,16 @@ class header extends wg
                 static::visionSwitcher()
             );
         }
-        $appendToolbar = data('appendToolbar');
+        $pageToolbar = data('pageToolbar');
         return h::div
         (
             set::id('toolbar'),
-            $appendToolbar ? html($appendToolbar) : null,
+            div
+            (
+                setID('pageToolbar'),
+                setClass('btn-group mr-2'),
+                $pageToolbar ? html($pageToolbar) : null
+            ),
             $toolbar
         );
     }

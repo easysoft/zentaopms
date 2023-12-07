@@ -37,6 +37,8 @@
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
     let historyState  = parent.window.history.state;
+    const loadRules   = {};
+    let pageLoadRules = {};
 
     $.apps = $.extend(
     {
@@ -596,7 +598,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*' : 'body>*,title>*,#configJS';
+        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*,#pageToolbar>*' : 'body>*,title>*,#configJS';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }

@@ -373,7 +373,7 @@ class kanban extends control
         $this->view->regions       = $regions;
         $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID, $regionID == 'all' ? '' : array($regionID));
         $this->view->regionID      = $regionID;
-        $this->view->appendToolbar = $this->kanban->getHeaderActions($kanban);
+        $this->view->pageToolbar = $this->kanban->getHeaderActions($kanban);
 
         $this->display();
     }

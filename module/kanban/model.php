@@ -3343,7 +3343,6 @@ class kanbanModel extends model
     public function getHeaderActions($kanban)
     {
         $actions  = '';
-        $actions .= "<div class='btn-group' id='appendToolbar'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='toolbar-item ghost btn btn-default'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or ($kanban->status == 'active' and common::hasPriv('kanban', 'close')) or common::hasPriv('kanban', 'delete') or ($kanban->status == 'closed' and common::hasPriv('kanban', 'activate')));
@@ -3383,8 +3382,6 @@ class kanbanModel extends model
         {
             $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='toolbar-item ghost btn btn-default' data-toggle='modal'");
         }
-
-        $actions .= "</div>";
 
         return $actions;
     }
