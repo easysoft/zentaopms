@@ -262,7 +262,7 @@ class extensionModel extends model
     }
 
     /**
-     * 获取上传的插件包路径。
+     * 根据插件代号获取上传的插件包路径。
      * Get the full path of the zip file of a extension.
      *
      * @param  string $extension
@@ -275,13 +275,14 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件代号获取插件包里的文件内容。
      * Get paths from an extension package.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return array
      */
-    public function getPathsFromPackage($extension)
+    public function getPathsFromPackage(string $extension)
     {
         $paths = array();
         $packageFile = $this->getPackageFile($extension);
@@ -296,6 +297,7 @@ class extensionModel extends model
             {
                 $file = (object)$file;
                 if($file->folder) continue;
+
                 $file->filename = substr($file->filename, strpos($file->filename, '/') + 1);
                 $paths[] = dirname($file->filename);
             }
