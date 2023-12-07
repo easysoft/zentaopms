@@ -1326,4 +1326,20 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 替换查询语句中的all。
+     * Replace all in query.
+     *
+     * @param  string       $query
+     * @access public
+     * @return string|array
+     */
+    public function getDocQueryTest(string $query): string|array
+    {
+        $query = $this->objectModel->getDocQuery($query);
+
+        if(dao::isError()) return dao::getError();
+        return $query;
+    }
 }
