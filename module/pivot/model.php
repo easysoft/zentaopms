@@ -1622,20 +1622,24 @@ class pivotModel extends model
             $this->getColumnConfig($groupRows, $configs, $groups, $index, $haveNext);
         }
 
-        /* Get group field lang */
-        foreach($groups as $group)
+
+        $groupRows    = json_decode(json_encode($groupsRow), true);
+        $fieldOptions = $this->getFieldsOptions($fields, $sql);
+        foreach($groupRows as $key => $row)
         {
-            $options = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field'], $sql);
-            foreach($groupsRow as $row)
+            foreach($row as $field => $value)
             {
-                if(isset($row->$group)) $row->$group = zget($options, $row->$group);
+                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+                $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
             }
+
+            $groupRows[$key] = $row;
         }
 
         $data              = new stdclass();
         $data->groups      = $groups;
         $data->cols        = $cols;
-        $data->array       = json_decode(json_encode($groupsRow), true);
+        $data->array       = $groupRows;
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
 
         /* $data->groups  array 代表分组，最多三个
@@ -2411,6 +2415,17 @@ class pivotModel extends model
         return $sql;
     }
 
+    public function getFieldsOptions($fields, $sql)
+    {
+        $options = array();
+        foreach($fields as $key => $field)
+        {
+            $options[$key] = $this->getSysOptions($field['type'], $field['object'], $field['field'], $sql);
+        }
+
+        return $options;
+    }
+
     /**
      * Gen sheet by origin sql.
      *
@@ -2490,17 +2505,12 @@ class pivotModel extends model
             $cols[0][] = $col;
         }
 
-        /* Get field optionList. */
-        foreach($fields as $key => $field)
-        {
-            $fields[$key]['optionList'] = $this->getSysOptions($field['type'], $field['object'], $field['field'], $sql);
-        }
-        /* Use filed optionList. */
+        $fieldOptions = $this->getFieldsOptions($fields, $sql);
         foreach($rows as $key => $row)
         {
             foreach($row as $field => $value)
             {
-                $optionList  = isset($fields[$field]['optionList']) ? $fields[$field]['optionList'] : array();
+                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
                 $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
             }
 
