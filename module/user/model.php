@@ -455,23 +455,24 @@ class userModel extends model
     }
 
     /**
-     * Get users by sql.
+     * 根据自定义查询语句获取用户。
+     * Get users by custom query.
      *
-     * @param  string  $browseType inside|outside|all
-     * @param  string  $query
-     * @param  object  $pager
-     * @param  string  $orderBy
+     * @param  string $browseType inside|outside|all
+     * @param  string $query
+     * @param  object $pager
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getByQuery($browseType = 'inside', $query = '', $pager = null, $orderBy = 'id')
+    public function getByQuery(string $browseType = 'inside', string $query = '', object $pager = null, string $orderBy = 'id'): array
     {
         return $this->dao->select('*')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
+            ->where('deleted')->eq('0')
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
-            ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
+            ->beginIF($this->config->vision)->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
