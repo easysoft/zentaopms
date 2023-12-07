@@ -303,19 +303,66 @@ class pivotModel extends model
         /* 获取符合条件的bug。 */
         /* Get bugs. */
         $end       = date('Y-m-d', strtotime("{$end} +1 day"));
-        $bugGroups = $this->dao->select("IF(resolution = '', 'unResolved', resolution) AS resolution, openedBy, status")->from(TABLE_BUG)
-            ->where('deleted')->eq('0')
-            ->andWhere('openedDate')->ge($begin)
-            ->andWhere('openedDate')->le($end)
-            ->beginIF($product)->andWhere('product')->eq($product)->fi()
-            ->beginIF($execution)->andWhere('execution')->eq($execution)->fi()
-            ->fetchGroup('openedBy');
+        $bugGroups = $this->pivotTao->getBugGroup($begin, $end, $product, $execution);
 
         /* 为bug生成统计数据。 */
         /* Generate statistics data for bugs. */
-        $bugs = $this->pivotTao->getBugStatistics($bugGroups);
+        $bugs = $this->getBugStatistics($bugGroups);
 
         uasort($bugs, 'sortSummary');
+
+        return $bugs;
+    }
+
+    /**
+     * 获取bug的统计信息。
+     * Get bug statistics information.
+     *
+     * @param  array  $bugGroups
+     * @access public
+     * @return array
+     */
+    protected function getBugStatistics(array $bugGroups): array
+    {
+        $bugs = array();
+        foreach($bugGroups as $account => $userBugs)
+        {
+            $bug = array();
+            $bug['openedBy']   = $account;
+            $bug['unResolved'] = 0;
+            $bug['validRate']  = 0;
+            $bug['total']      = 0;
+
+            /* 初始化bug状态数据。 */
+            /* Initialize bug status data. */
+            foreach(array_keys($this->lang->bug->resolutionList) as $resolution)
+            {
+                if($resolution) $bug[$resolution] = 0;
+            }
+
+            /* 获取bug各个状态的统计数据。 */
+            /* Get statistics data for each status of bugs. */
+            $resolvedCount = 0;
+            $validCount    = 0;
+            foreach($userBugs as $userBug)
+            {
+                if(!isset($bug[$userBug->resolution])) continue;
+
+                $bug[$userBug->resolution]++;
+                $bug['total']++;
+
+                if($userBug->status == 'resolved' || $userBug->status == 'closed') $resolvedCount++;
+                if($userBug->resolution == 'fixed' || $userBug->resolution == 'postponed') $validCount++;
+            }
+
+            if(!$bug['total']) continue;
+
+            /* 计算已解决bug的百分比。 */
+            /* Calculate the percentage of resolved bugs. */
+            $bug['validRate'] = $resolvedCount ? round($validCount / $resolvedCount * 100, 2) . '%' : '0%';
+
+            $bugs[] = $bug;
+        }
 
         return $bugs;
     }

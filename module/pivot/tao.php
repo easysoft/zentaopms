@@ -230,60 +230,25 @@ class pivotTao extends pivotModel
     }
 
     /**
-     * 获取bug的统计信息。
-     * Get bug statistics information.
+     * 获取bug分组信息。
+     * Get bug group information.
      *
-     * @param  array  $bugGroups
+     * @param  string $begin
+     * @param  string $end
+     * @param  int    $product
+     * @param  int    $execution
      * @access public
      * @return array
      */
-    protected function getBugStatistics(array $bugGroups): array
+    protected function getBugGroup(string $begin, string $end, int $product, int $execution): array
     {
-        /* 为bug生成透视表数据。 */
-        /* Generate pivot data for bugs. */
-        $bugs = array();
-        foreach($bugGroups as $account => $userBugs)
-        {
-            $bug = array();
-            $bug['openedBy']   = $account;
-            $bug['unResolved'] = 0;
-            $bug['validRate']  = 0;
-            $bug['total']      = 0;
-
-            /* 初始化bug状态数据。 */
-            /* Initialize bug status data. */
-            foreach(array_keys($this->lang->bug->resolutionList) as $resolution)
-            {
-                if($resolution) $bug[$resolution] = 0;
-            }
-
-            /* 获取bug各个状态的统计数据。 */
-            /* Get statistics data for each status of bugs. */
-            $resolvedCount = 0;
-            $validCount    = 0;
-            foreach($userBugs as $userBug)
-            {
-                if(!isset($bug[$userBug->resolution])) continue;
-
-                $bug[$userBug->resolution]++;
-                $bug['total']++;
-
-                if($userBug->status == 'resolved' || $userBug->status == 'closed') $resolvedCount++;
-                if($userBug->resolution == 'fixed' || $userBug->resolution == 'postponed') $validCount++;
-            }
-
-            /* 如果bug总数为0，则不显示。 */
-            /* If the total number of bugs is 0, it will not be displayed. */
-            if(!$bug['total']) continue;
-
-            /* 计算已解决bug的百分比。 */
-            /* Calculate the percentage of resolved bugs. */
-            $bug['validRate'] = $resolvedCount ? round($validCount / $resolvedCount * 100, 2) . '%' : '0%';
-
-            $bugs[] = $bug;
-        }
-
-        return $bugs;
+        return $this->dao->select("IF(resolution = '', 'unResolved', resolution) AS resolution, openedBy, status")->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
+            ->andWhere('openedDate')->ge($begin)
+            ->andWhere('openedDate')->le($end)
+            ->beginIF($product)->andWhere('product')->eq($product)->fi()
+            ->beginIF($execution)->andWhere('execution')->eq($execution)->fi()
+            ->fetchGroup('openedBy');
     }
 
     /**
