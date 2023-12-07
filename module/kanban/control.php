@@ -379,20 +379,21 @@ class kanban extends control
     }
 
     /**
+     * 删除看板。
      * Delete a kanban.
      *
      * @param  int    $kanbanID
-     * @param  string $browseType involved|cooperation|public|private
      * @access public
      * @return void
      */
-    public function delete($kanbanID, $browseType = 'involved')
+    public function delete(int $kanbanID)
     {
         $this->kanban->delete(TABLE_KANBAN, $kanbanID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
+     * 创建看板区域。
      * Create a region.
      *
      * @param  int    $kanbanID
@@ -400,30 +401,25 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function createRegion($kanbanID, $from = 'kanban')
+    public function createRegion(int $kanbanID, string $from = 'kanban')
     {
         if(!empty($_POST))
         {
             $kanban       = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
-            $copyRegionID = (int)$_POST['region'];
-            unset($_POST['region']);
+            $copyRegionID = $this->post->region == 'custom' ? 0 : $this->post->region;
 
-            $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID, $from);
+            $regionID = $this->kanban->createRegion($kanban, null, (int)$copyRegionID, $from);
 
             $this->session->set('regionID', $regionID, 'kanban');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $regions     = $this->kanban->getRegionPairs($kanbanID, 0, $from);
         $regionPairs = array();
+        $regions     = $this->kanban->getRegionPairs($kanbanID, 0, $from);
         foreach($regions as $regionID => $region)
         {
-            $max_length = 20;
-            if (mb_strlen($region, 'UTF-8') > $max_length) {
-                $region = mb_substr($region, 0, $max_length, 'UTF-8') . '...';
-            }
-
+            if(mb_strlen($region, 'UTF-8') > 20) $region = mb_substr($region, 0, 20, 'UTF-8') . '...';
             $regionPairs[$regionID] = $this->lang->kanban->copy . '"' . $region . '"' . $this->lang->kanban->styleCommon;
         }
 
