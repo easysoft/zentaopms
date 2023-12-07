@@ -2,6 +2,15 @@
 declare(strict_types=1);
 class searchTao extends searchModel
 {
+    /**
+     * 设置内置字段的搜索参数。
+     * Process buildin fields.
+     *
+     * @param  string    $module
+     * @param  array     $searchConfig
+     * @access protected
+     * @return array
+     */
     protected function processBuildinFields(string $module, array $searchConfig): array
     {
         $flowModule = $module;
@@ -135,7 +144,7 @@ class searchTao extends searchModel
      * @access protected
      * @return string
      */
-    protected function setCondition(string $field, string $operator, string $value): string
+    protected function setCondition(string $field, string $operator, string|int $value): string
     {
         $condition = '';
         if($operator == 'include')

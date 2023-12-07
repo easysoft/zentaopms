@@ -465,4 +465,19 @@ class searchTest
 
         return $objects;
     }
+
+    /**
+     * 测试设置搜索条件。
+     * Set condition test.
+     *
+     * @param  string     $field
+     * @param  string     $operator
+     * @param  string|int $value
+     * @access public
+     * @return string
+     */
+    public function setConditionTest(string $field, string $operator, string|int $value): string
+    {
+        return $this->objectModel->setCondition($field, $operator, $value);
+    }
 }
