@@ -68,23 +68,23 @@ if(is_array($queries))
 
 /* Build search form setting. */
 $setting = new stdClass();
-$setting->actionURL             = $actionURL;
-$setting->operators             = $operators;
-$setting->conditions            = $conditions;
-$setting->defaultData           = $defaultData;
-$setting->groupTitles           = array($lang->search->group1, $lang->search->group2);
-$setting->andText               = $lang->search->andor['and'];
-$setting->orText                = $lang->search->andor['or'];
-$setting->searchBtnText         = $lang->search->common;
-$setting->resetBtnText          = $lang->search->reset;
-$setting->canSaveQuery          = $canSaveQuery;
-$setting->canDeleteQuery        = $canDeleteQuery;
-$setting->savedQueryList        = $savedQueryList;
-$setting->deleteQueryConfirm    = $deleteQueryConfirm;
-$setting->saveQueryPanelTitle   = $lang->search->savedQuery;
-$setting->saveQueryBtnText      = $lang->search->saveCondition;
-$setting->onMenuBar             = $onMenuBar;
-$setting->formName              = $formName;
+$setting->actionURL           = $actionURL;
+$setting->operators           = $operators;
+$setting->conditions          = $conditions;
+$setting->defaultData         = $defaultData;
+$setting->groupTitles         = array($lang->search->group1, $lang->search->group2);
+$setting->andText             = $lang->search->andor['and'];
+$setting->orText              = $lang->search->andor['or'];
+$setting->searchBtnText       = $lang->search->common;
+$setting->resetBtnText        = $lang->search->reset;
+$setting->canSaveQuery        = $canSaveQuery;
+$setting->canDeleteQuery      = $canDeleteQuery;
+$setting->savedQueryList      = $savedQueryList;
+$setting->deleteQueryConfirm  = $deleteQueryConfirm;
+$setting->saveQueryPanelTitle = $lang->search->savedQuery;
+$setting->saveQueryBtnText    = $lang->search->saveCondition;
+$setting->onMenuBar           = $onMenuBar;
+$setting->formName            = $formName;
 
 /**
  * 渲染 JSON 字符串并发送到客户端。
