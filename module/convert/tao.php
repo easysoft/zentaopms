@@ -537,6 +537,63 @@ class convertTao extends convertModel
     }
 
     /**
+     * 导入action数据。
+     * Import jira action.
+     *
+     * @param  array  $dataList
+     * @param  string $method db|file
+     * @access public
+     * @return void
+     */
+    public function importJiraAction(array $dataList, string $method = 'db')
+    {
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jtask')
+            ->andWhere('BType')->eq('ztask')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        foreach($dataList as $data)
+        {
+            $issueID = $data->issueid;
+            $comment = $data->actionbody;
+            if(empty($comment)) continue;
+
+            if(!isset($issueObjectType[$issueID])) continue;
+
+            $objectType = $issueObjectType[$issueID];
+            if($objectType == 'task')  $objectID = $issueTasks[$issueID];
+            if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
+            if($objectType == 'story') $objectID = $issueStories[$issueID];
+
+            if(empty($objectID)) continue;
+
+            $action = new stdclass();
+            $action->objectType = $objectType;
+            $action->objectID   = $objectID;
+            $action->actor      = $this->getJiraAccount($data->AUTHOR, $method);
+            $action->action     = 'commented';
+            $action->date       = substr($data->CREATED, 0, 19);
+            $action->comment    = $comment;
+            $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        }
+    }
+
+    /**
      * 创建项目。
      * Create project.
      *

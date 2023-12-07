@@ -298,7 +298,7 @@ class convertModel extends model
                 if($module == 'issue')     $this->convertTao->importJiraIssue($dataList);
                 if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
                 if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
-                if($module == 'action')    $this->importJiraAction($dataList);
+                if($module == 'action')    $this->convertTao->importJiraAction($dataList);
                 if($module == 'file')      $this->importJiraFile($dataList);
 
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
@@ -347,7 +347,7 @@ class convertModel extends model
                 if($module == 'issue')     $this->convertTao->importJiraIssue($dataList, 'file');
                 if($module == 'build')     $this->convertTao->importJiraBuild($dataList, 'file');
                 if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList, 'file');
-                if($module == 'action')    $this->importJiraAction($dataList, 'file');
+                if($module == 'action')    $this->convertTao->importJiraAction($dataList, 'file');
                 if($module == 'file')      $this->importJiraFile($dataList, 'file');
 
                 $offset = $lastID + $limit;
@@ -357,73 +357,6 @@ class convertModel extends model
 
         $this->afterExec('file');
         return array('finished' => true);
-    }
-
-    /**
-     * Import jira action.
-     *
-     * @param  object $dataList
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function importJiraAction($dataList, $method = 'db')
-    {
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
-
-        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jtask')
-            ->andWhere('BType')->eq('ztask')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
-
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
-
-        $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jproject')
-            ->andWhere('BType')->eq('zproject')
-            ->fetchPairs();
-
-        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in(array_values($projectRelation))
-            ->fetchPairs();
-
-        foreach($dataList as $data)
-        {
-            $action = new stdclass();
-
-            $issueID = $data->issueid;
-            $comment = $data->actionbody;
-            if(empty($comment)) continue;
-
-            if(!isset($issueObjectType[$issueID])) continue;
-
-            $objectType = $issueObjectType[$issueID];
-            if($objectType == 'task')  $objectID = $issueTasks[$issueID];
-            if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
-            if($objectType == 'story') $objectID = $issueStories[$issueID];
-
-            if(empty($objectID)) continue;
-
-            $action = new stdclass();
-            $action->objectType = $objectType;
-            $action->objectID   = $objectID;
-            $action->actor      = $this->getJiraAccount($data->AUTHOR, $method);
-            $action->action     = 'commented';
-            $action->date       = substr($data->CREATED, 0, 19);
-            $action->comment    = $comment;
-            $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
-        }
     }
 
     /**
