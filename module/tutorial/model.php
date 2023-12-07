@@ -31,6 +31,7 @@ class tutorialModel extends model
         $this->loadModel('setting')->setItem($account . '.common.global.novice', 0);
         return false;
     }
+
     /**
      * 获取新手模式产品键值对。
      * Get tutorial product pairs.
