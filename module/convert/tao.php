@@ -487,6 +487,56 @@ class convertTao extends convertModel
     }
 
     /**
+     * 导入issue link数据。
+     * Import jira issue link.
+     *
+     * @param  array $dataList
+     * @access protected
+     * @return void
+     */
+    protected function importJiraIssueLink(array $dataList)
+    {
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jtask')
+            ->andWhere('BType')->eq('ztask')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        $issueLinkTypeList = array();
+        $relations = $this->session->jiraRelation;
+        foreach($relations['jiraLinkType'] as $id => $jiraCode) $issueLinkTypeList[$jiraCode] = $relations['zentaoLinkType'][$id];
+
+        $storyLink = $taskLink = $duplicateLink = $relatesLink = array();
+        foreach($dataList as $issueLink)
+        {
+            $linkType = $issueLink->LINKTYPE;
+            if($issueLinkTypeList[$linkType] == 'subStoryLink') $storyLink[$issueLink->SOURCE][]   = $issueLink->DESTINATION;
+            if($issueLinkTypeList[$linkType] == 'subTaskLink')  $taskLink[$issueLink->SOURCE][]    = $issueLink->DESTINATION;
+            if($issueLinkTypeList[$linkType] == 'duplicate')    $duplicateLink[$issueLink->SOURCE] = $issueLink->DESTINATION;
+            if($issueLinkTypeList[$linkType] == 'relates')      $relatesLink[$issueLink->SOURCE]   = $issueLink->DESTINATION;
+        }
+
+        $this->updateSubStory($storyLink, $issueStories);
+        $this->updateSubTask($taskLink, $issueTasks);
+        $this->updateDuplicateStoryAndBug($duplicateLink, $issueObjectType, $issueStories, $issueBugs);
+        $this->updateRelatesObject($relatesLink, $issueObjectType, $issueStories, $issueTasks, $issueBugs);
+    }
+
+    /**
      * 创建项目。
      * Create project.
      *
@@ -951,6 +1001,139 @@ class convertTao extends convertModel
                     $objectID = zget($issueBugs, $issueID);
                     $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($releaseID)->exec();
                 }
+            }
+        }
+    }
+
+    /**
+     * 更新子需求。
+     * Update sub story.
+     *
+     * @param  array  $storyLink
+     * @param  array  $issueStories
+     * @access protected
+     * @return void
+     */
+    protected function updateSubStory(array $storyLink, array $issueStories)
+    {
+        foreach($storyLink as $source => $dest)
+        {
+            if(!isset($issueStories[$source])) continue;
+
+            $parentID = $issueStories[$source];
+            $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+
+            foreach($dest as $childID)
+            {
+                if(!isset($issueStories[$childID])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq($parentID)->where('id')->eq($issueStories[$childID])->exec();
+            }
+        }
+    }
+
+    /**
+     * 更新子任务。
+     * Update sub task.
+     *
+     * @param  array  $taskLink
+     * @param  array  $issueTasks
+     * @access protected
+     * @return void
+     */
+    protected function updateSubTask(array $taskLink, array $issueTasks)
+    {
+        foreach($taskLink as $source => $dest)
+        {
+            if(!isset($issueTasks[$source])) continue;
+
+            $parentID = $issueTasks[$source];
+            $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+
+            foreach($dest as $childID)
+            {
+                if(!isset($issueTasks[$childID])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq($parentID)->where('id')->eq($issueTasks[$childID])->exec();
+            }
+        }
+    }
+
+    /**
+     * 更新重复的需求和bug。
+     * Update duplicate story and bug.
+     *
+     * @param  array  $duplicateLink
+     * @param  array  $issueObjectType
+     * @param  array  $issueStories
+     * @param  array  $issueBugs
+     * @access protected
+     * @return void
+     */
+    protected function updateDuplicateStoryAndBug(array $duplicateLink, array $issueObjectType, array $issueStories, array $issueBugs)
+    {
+        foreach($duplicateLink as $source => $dest)
+        {
+            $objectType = $issueObjectType[$source];
+
+            if($objectType != 'story' and $objectType != 'bug') continue;
+            if($issueObjectType[$source] != $issueObjectType[$dest]) continue;
+
+            if($objectType == 'story')
+            {
+                if(empty($issueStories[$dest]) or empty($issueStories[$source])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($$issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
+            }
+            elseif($objectType == 'bug')
+            {
+                if(empty($issueBugs[$dest]) or empty($issueBugs[$source])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($issueBugs[$dest])->where('id')->eq($issueBugs[$source])->exec();
+            }
+        }
+    }
+
+    /**
+     * 更新相关对象数据。
+     * Update relates object.
+     *
+     * @param  array  $relatesLink
+     * @param  array  $issueObjectType
+     * @param  array  $issueStories
+     * @param  array  $issueTasks
+     * @param  array  $issueBugs
+     * @access protected
+     * @return void
+     */
+    protected function updateRelatesObject(array $relatesLink, array $issueObjectType, array $issueStories, array $issueTasks, array $issueBugs)
+    {
+        foreach($relatesLink as $source => $dest)
+        {
+            if(empty($issueObjectType[$source]) or empty($issueObjectType[$dest])) continue;
+
+            $sourceObjectType = $issueObjectType[$source];
+            $destObjectType   = $issueObjectType[$dest];
+
+            if($sourceObjectType == 'task' and $destObjectType == 'story')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$dest])->where('id')->eq($issueTasks[$source])->exec();
+            }
+            elseif($sourceObjectType == 'story' and $destObjectType == 'task')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$source])->where('id')->eq($issueTasks[$dest])->exec();
+            }
+            elseif($sourceObjectType == 'story' and $destObjectType == 'bug')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$source])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$dest])->exec();
+            }
+            elseif($sourceObjectType == 'bug' and $destObjectType == 'story')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$dest])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$source])->exec();
+            }
+            elseif($sourceObjectType == 'story' and $destObjectType == 'story')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("linkStories=concat(linkStories, ',{$issueStories[$dest]}')")->where('id')->eq($issueStories[$source])->exec();
+            }
+            elseif($sourceObjectType == 'bug' and $destObjectType == 'bug')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("relatedBug=concat(relatedBug, ',{$issueBugs[$dest]}')")->where('id')->eq($issueBugs[$source])->exec();
             }
         }
     }

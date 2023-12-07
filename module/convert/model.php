@@ -297,7 +297,7 @@ class convertModel extends model
                 if($module == 'project')   $this->convertTao->importJiraProject($dataList);
                 if($module == 'issue')     $this->convertTao->importJiraIssue($dataList);
                 if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
-                if($module == 'issuelink') $this->importJiraIssueLink($dataList);
+                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
                 if($module == 'action')    $this->importJiraAction($dataList);
                 if($module == 'file')      $this->importJiraFile($dataList);
 
@@ -346,7 +346,7 @@ class convertModel extends model
                 if($module == 'project')   $this->convertTao->importJiraProject($dataList, 'file');
                 if($module == 'issue')     $this->convertTao->importJiraIssue($dataList, 'file');
                 if($module == 'build')     $this->convertTao->importJiraBuild($dataList, 'file');
-                if($module == 'issuelink') $this->importJiraIssueLink($dataList, 'file');
+                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList, 'file');
                 if($module == 'action')    $this->importJiraAction($dataList, 'file');
                 if($module == 'file')      $this->importJiraFile($dataList, 'file');
 
@@ -357,130 +357,6 @@ class convertModel extends model
 
         $this->afterExec('file');
         return array('finished' => true);
-    }
-
-    /**
-     * Import jira issue link.
-     *
-     * @param  object $dataList
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function importJiraIssueLink($dataList, $method = 'db')
-    {
-        $issueLinkTypeList = array();
-        $relations = $this->session->jiraRelation;
-
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
-
-        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jtask')
-            ->andWhere('BType')->eq('ztask')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
-
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
-
-        foreach($relations['jiraLinkType'] as $id => $jiraCode) $issueLinkTypeList[$jiraCode] = $relations['zentaoLinkType'][$id];
-
-        $storyLink = $taskLink = $duplicateLink = $relatesLink = array();
-        foreach($dataList as $issueLink)
-        {
-            $linkType = $issueLink->LINKTYPE;
-            if($issueLinkTypeList[$linkType] == 'subStoryLink') $storyLink[$issueLink->SOURCE][]   = $issueLink->DESTINATION;
-            if($issueLinkTypeList[$linkType] == 'subTaskLink')  $taskLink[$issueLink->SOURCE][]    = $issueLink->DESTINATION;
-            if($issueLinkTypeList[$linkType] == 'duplicate')    $duplicateLink[$issueLink->SOURCE] = $issueLink->DESTINATION;
-            if($issueLinkTypeList[$linkType] == 'relates')      $relatesLink[$issueLink->SOURCE]   = $issueLink->DESTINATION;
-        }
-
-        foreach($storyLink as $source => $dest)
-        {
-            if(!isset($issueStories[$source])) continue;
-            $parentID = $issueStories[$source];
-            $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
-            foreach($dest as $childID)
-            {
-                if(!isset($issueStories[$childID])) continue;
-                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq($parentID)->where('id')->eq($issueStories[$childID])->exec();
-            }
-        }
-
-        foreach($taskLink as $source => $dest)
-        {
-            if(!isset($issueTasks[$source])) continue;
-            $parentID = $issueTasks[$source];
-            $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
-            foreach($dest as $childID)
-            {
-                if(!isset($issueTasks[$childID])) continue;
-                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq($parentID)->where('id')->eq($issueTasks[$childID])->exec();
-            }
-        }
-
-        foreach($duplicateLink as $source => $dest)
-        {
-            $objectType = $issueObjectType[$source];
-
-            if($objectType != 'story' and $objectType != 'bug') continue;
-            if($issueObjectType[$source] != $issueObjectType[$dest]) continue;
-
-            if(!isset($relation[$objectType][$source]) or !isset($relation[$objectType][$dest])) continue;
-
-            if($objectType == 'story')
-            {
-                if(empty($issueStories[$dest]) or empty($issueStories[$source])) continue;
-                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($$issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
-            }
-            elseif($objectType == 'bug')
-            {
-                if(empty($issueBugs[$dest]) or empty($issueBugs[$source])) continue;
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($issueBugs[$dest])->where('id')->eq($issueBugs[$source])->exec();
-            }
-        }
-
-        foreach($relatesLink as $source => $dest)
-        {
-            if(empty($issueObjectType[$source]) or empty($issueObjectType[$dest])) continue;
-
-            $sourceObjectType = $issueObjectType[$source];
-            $destObjectType   = $issueObjectType[$dest];
-
-            if($sourceObjectType == 'task' and $destObjectType == 'story')
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$dest])->where('id')->eq($issueTasks[$source])->exec();
-            }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'task')
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$source])->where('id')->eq($issueTasks[$dest])->exec();
-            }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'bug')
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$source])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$dest])->exec();
-            }
-            elseif($sourceObjectType == 'bug' and $destObjectType == 'story')
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$dest])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$source])->exec();
-            }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'story')
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("linkStories=concat(linkStories, ',{$issueStories[$dest]}')")->where('id')->eq($issueStories[$source])->exec();
-            }
-            elseif($sourceObjectType == 'bug' and $destObjectType == 'bug')
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("relatedBug=concat(relatedBug, ',{$issueBugs[$dest]}')")->where('id')->eq($issueBugs[$source])->exec();
-            }
-        }
     }
 
     /**
