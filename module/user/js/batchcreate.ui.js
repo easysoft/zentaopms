@@ -62,3 +62,26 @@ function batchTogglePasswordStrength(event)
     $strength.toggleClass('hidden', password == '');
     $strength.html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
 }
+
+/**
+ * 切换界面类型。
+ * When the visions is changed.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
+function batchChangeVision(event)
+{
+    const $target = $(event.target);
+    const visions = $target.val();
+    const link = $.createLink('user', 'ajaxGetGroups', 'visions=' + visions);
+    $.getJSON(link, function(data)
+    {
+        const $currentRow = $(event.target).closest('tr');
+        const group  = $currentRow.find('[name^="group"]').val();
+        const $group = $currentRow.find('[name^="group"]').zui('picker');
+        $group.render({items: data});
+        $group.$.setValue(group);
+    });
+}

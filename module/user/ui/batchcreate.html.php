@@ -20,6 +20,7 @@ formBatchPanel
     set::customFields(array('list' => $listFields, 'show' => $showFields, 'key' => 'batchCreateFields')),
     on::change('input[name^=role]', 'batchChangeRole'),
     on::change('[data-name="new"]', 'batchToggleNew'),
+    on::change('[data-name^=vision]', 'batchChangeVision'),
     on::keyup('[data-name="password"]', 'batchTogglePasswordStrength'),
     on::click('button[type=submit]', 'encryptPassword'),
     to::titleSuffix
