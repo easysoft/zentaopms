@@ -761,18 +761,20 @@ class personnelModel extends model
     }
 
     /**
+     * 删除执行的白名单。
      * Delete execution whitelist.
      *
      * @param  int    $executionID
      * @param  string $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteExecutionWhitelist($executionID, $account = '')
+    public function deleteExecutionWhitelist(int $executionID, string $account = ''): bool
     {
         $execution = $this->dao->select('id,whitelist')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
         if(empty($execution)) return false;
 
+        /* Delete account's acl in the execution. */
         $result = $this->dao->delete()->from(TABLE_ACL)
              ->where('objectID')->eq($executionID)
              ->andWhere('account')->eq($account)
@@ -787,9 +789,10 @@ class personnelModel extends model
             $this->dao->update(TABLE_EXECUTION)->set('whitelist')->eq($newWhitelist)->where('id')->eq($executionID)->exec();
 
             $viewExecutions    = $this->dao->select('sprints')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('sprints');
-            $newViewExecutions = trim(str_replace(",$executionID,", '', ",$viewExecutions,"), ',');
+            $newViewExecutions = trim(str_replace(",{$executionID},", '', ",{$viewExecutions},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($newViewExecutions)->where('account')->eq($account)->exec();
         }
+        return !dao::isError();
     }
 
     /**

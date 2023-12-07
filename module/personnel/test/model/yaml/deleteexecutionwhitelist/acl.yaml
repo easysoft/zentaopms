@@ -1,0 +1,24 @@
+title: table zt_acl
+desc: "联系人"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: account
+    note: "用户名"
+    fields:
+    - field: account1
+      range: user{25},test{25}
+    - field: account2
+      range: 1-50
+  - field: objectType
+    note: "对象类型"
+    range: sprint
+  - field: objectID
+    note: "对象ID"
+    range: 101-150
+  - field: type
+    range: "whitelist"
+  - field: source
+    range: sync{2},add

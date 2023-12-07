@@ -392,23 +392,23 @@ class personnelTest
     }
 
     /**
-     * Delete execution whitelist Test
+     * 测试从执行删除白名单。
+     * Test delete whitelist from execution.
      *
-     * @param  int    $executionID
-     * @param  string $account
+     * @param  int          $executionID
+     * @param  string       $account
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function deleteExecutionWhitelistTest($executionID, $account = '')
+    public function deleteExecutionWhitelistTest(int $executionID, string $account = ''): string|array
     {
-        global $tester;
-        $this->addWhitelistTest('sprint', $executionID, array($account));
-        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($executionID)->andWhere('objectType')->eq('sprint')->exec();
-        $objects = $this->objectModel->deleteExecutionWhitelist($executionID, $account);
+        $this->objectModel->deleteExecutionWhitelist($executionID, $account);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $whitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('whitelist');
+        return $whitelist;
     }
 
     /**
