@@ -349,13 +349,14 @@ class extensionModel extends model
     }
 
     /**
+     * 处理授权协议内容。
      * Process license. If is opensource return the full text of it.
      *
-     * @param  string    $license
+     * @param  string $license
      * @access public
      * @return string
      */
-    public function processLicense($license)
+    public function processLicense(string $license): string
     {
         if(strlen($license) > 10) return $license;    // more then 10 letters, not gpl, lgpl, apache, bsd or mit.
 
