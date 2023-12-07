@@ -210,6 +210,41 @@ class convertTao extends convertModel
     }
 
     /**
+     * 从数据库获取jira数据。
+     * Get jira data from db.
+     *
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access protected
+     * @return array
+     */
+    protected function getJiraDataFromDB(string $module = '', int $lastID = 0, int $limit = 0): array
+    {
+        $dataList = array();
+        $table    = zget($this->config->convert->objectTables, $module, '');
+        if($module == 'user')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
+                ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
+                ->where('1 = 1')
+                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
+                ->orderBy('t1.ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif(!empty($table))
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)
+                ->where('1 = 1')
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+
+        return $dataList;
+    }
+
+    /**
      * 获取需求、任务、bug、对象类型。
      * Get stories and tasks and bugs and objectType.
      *
@@ -543,10 +578,10 @@ class convertTao extends convertModel
      *
      * @param  array  $dataList
      * @param  string $method db|file
-     * @access public
+     * @access protected
      * @return void
      */
-    public function importJiraAction(array $dataList, string $method = 'db')
+    protected function importJiraAction(array $dataList, string $method = 'db')
     {
         list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
@@ -582,10 +617,10 @@ class convertTao extends convertModel
      *
      * @param  array  $dataList
      * @param  string $method db|file
-     * @access public
+     * @access protected
      * @return void
      */
-    public function importJiraFile(array $dataList, string $method = 'db')
+    protected function importJiraFile(array $dataList, string $method = 'db')
     {
         $this->loadModel('file');
 

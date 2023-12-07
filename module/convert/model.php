@@ -124,41 +124,6 @@ class convertModel extends model
     }
 
     /**
-     * 从数据库获取jira数据。
-     * Get jira data from db.
-     *
-     * @param  string $module
-     * @param  int    $lastID
-     * @param  int    $limit
-     * @access public
-     * @return array
-     */
-    public function getJiraDataFromDB(string $module = '', int $lastID = 0, int $limit = 0): array
-    {
-        $dataList = array();
-        $table    = zget($this->config->convert->objectTables, $module, '');
-        if($module == 'user')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
-                ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
-                ->orderBy('t1.ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif(!empty($table))
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)
-                ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-
-        return $dataList;
-    }
-
-    /**
      * 从文件中获取jira数据。
      * Get jira data from file.
      *
@@ -285,7 +250,7 @@ class convertModel extends model
 
             while(true)
             {
-                $dataList = $this->getJiraDataFromDB($module, $lastID, $limit);
+                $dataList = $this->convertTao->getJiraDataFromDB($module, $lastID, $limit);
 
                 if(empty($dataList))
                 {
