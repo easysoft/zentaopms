@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of tutorial module of ZenTaoPMS.
  *
@@ -31,11 +32,11 @@ class tutorial extends control
      * @access public
      * @return void
      */
-    public function index($referer = '', $task = '')
+    public function index(string $referer = '', string $task = '')
     {
         $setting = isset($this->config->tutorial->tasks->setting) ? $this->config->tutorial->tasks->setting : '';
 
-        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', true);
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
         $this->session->set('tutorialMode', true);
 
         $this->view->title   = $this->lang->tutorial->common;
