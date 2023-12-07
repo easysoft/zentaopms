@@ -919,13 +919,13 @@ class userModel extends model
         if($passwordLength == 32)
         {
             $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
-            return $password == $hash ? $user : false;
+            if($password == $hash) return $user;
         }
 
         if($passwordLength == 40)
         {
             $hash = sha1($user->account . $user->password . $user->last);
-            return $password == $hash ? $user : false;
+            if($password == $hash) return $user;
         }
 
         return md5($password) == $user->password ? $user : false;
