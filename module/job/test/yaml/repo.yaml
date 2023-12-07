@@ -1,0 +1,29 @@
+title: repo.
+desc: repo data.
+author: Zeng Gang
+version: "1.0"
+fields:
+- field: id
+  range: 1
+- field: product
+  range: 1
+- field: name
+  range: zentaopms
+- field: path
+  range: "http://10.0.7.242:9980/root/zentaopms"
+- field: SCM
+  range: Gitlab
+- field: client
+  range: git
+- field: serviceHost
+  range: 1
+- field: serviceProject
+  range: 9
+- field: extra
+  range: 9
+- field: preMerge
+  range: 0
+- field: job
+  range: 0
+- field: deleted
+  range: 0

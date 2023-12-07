@@ -137,17 +137,15 @@ class jobTest
     {
         $createFields['name']        = '这是一个JOB3';
         $createFields['engine']      = 'gitlab';
-        $createFields['repo']        = '1';
-        $createFields['reference']   = 'test_case';
-        $createFields['product']     = '1';
+        $createFields['repo']        =  1;
+        $createFields['product']     =  1;
         $createFields['frame']       = 'phpunit';
         $createFields['triggerType'] = 'commit';
+        $createFields['paramName']   = array();
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($params as $key => $value) $createFields[$key] = $value;
 
-        foreach($params as $key => $value) $_POST[$key] = $value;
-
-        $objectID   = $this->objectModel->create();
+        $objectID   = $this->objectModel->create((object)$createFields);
         unset($_POST);
         if(dao::isError()) return dao::getError();
 

@@ -146,9 +146,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  string $zentaoAccount
      * @access public
-     * @return array
+     * @return string
      */
-    public function getUserIDByZentaoAccount(int $gitlabID, string $zentaoAccount): array
+    public function getUserIDByZentaoAccount(int $gitlabID, string $zentaoAccount): string
     {
         return $this->dao->select('openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
@@ -1285,9 +1285,9 @@ class gitlabModel extends model
      * @param  object $hook
      * @access public
      * @link   https://docs.gitlab.com/ee/api/projects.html#add-project-hook
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateHook(int $gitlabID, int $projectID, object $hooka): object|array|null
+    public function apiCreateHook(int $gitlabID, int $projectID, object $hook): object|array|null|false
     {
         if(!isset($hook->url)) return false;
 

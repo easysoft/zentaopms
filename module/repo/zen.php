@@ -1388,7 +1388,7 @@ class repoZen extends repo
                 if($branchID) $this->repo->fixCommit($repo->id);
             }
 
-            if(empty($branchID))
+            if(empty($branchID) || $repo->SCM == 'Gitlab')
             {
                 $this->repo->markSynced($repo->id);
                 return $this->config->repo->repoSyncLog->finish;

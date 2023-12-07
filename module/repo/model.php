@@ -690,6 +690,8 @@ class repoModel extends model
         $repo->acl = json_decode($repo->acl);
         if(empty($repo->acl)) $repo->acl = new stdclass();
         if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
+        $repo->serviceHost    = (int)$repo->serviceHost;
+        $repo->serviceProject = (int)$repo->serviceProject;
         return $repo;
     }
 
