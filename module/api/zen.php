@@ -20,7 +20,7 @@ class apiZen extends api
      * @access protected
      * @return array
      */
-    protected function getDefacultNestedShow(int $libID, int $moduleID): array
+    protected function getDefaultNestedShow(int $libID, int $moduleID): array
     {
         if(!$libID && !$moduleID) return array();
         if($libID && !$moduleID) return array("{$libID}" => true);
@@ -75,7 +75,7 @@ class apiZen extends api
         $this->view->libTree           = $libTree;
         $this->view->objectDropdown    = $objectDropdown;
         $this->view->spaceType         = $spaceType;
-        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID);
+        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID);
     }
 
     /**

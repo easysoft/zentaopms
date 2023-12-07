@@ -88,7 +88,7 @@ class api extends control
         $this->view->objectDropdown    = isset($libs[$libID]) ? $this->apiZen->generateLibsDropMenu($libs[$libID], $release) : '';
         $this->view->spaceType         = 'api';
         $this->view->linkParams        = '%s';
-        $this->view->defaultNestedShow = $this->apiZen->getDefacultNestedShow($libID, $moduleID);
+        $this->view->defaultNestedShow = $this->apiZen->getDefaultNestedShow($libID, $moduleID);
         $this->display();
     }
 

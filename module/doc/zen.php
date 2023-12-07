@@ -169,7 +169,7 @@ class docZen extends doc
      * @access protected
      * @return array
      */
-    protected function getDefacultNestedShow(int $libID, int $moduleID, string $objectType = '', int $executionID = 0): array
+    protected function getDefaultNestedShow(int $libID, int $moduleID, string $objectType = '', int $executionID = 0): array
     {
         if(!$libID && !$moduleID) return array();
 
@@ -221,7 +221,7 @@ class docZen extends doc
         $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
         $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', 'mine2export') && $type == 'mine');
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
-        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID, $type);
+        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID, $type);
     }
 
     /**
@@ -714,7 +714,7 @@ class docZen extends doc
         $this->view->editors           = $this->doc->getEditors($docID);
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->spaceType         = $objectType;
-        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, (int)$doc->module);
+        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, (int)$doc->module);
     }
 
     /**

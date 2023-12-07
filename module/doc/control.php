@@ -633,7 +633,7 @@ class doc extends control
         $this->view->objectType        = $type;
         $this->view->libID             = 0;
         $this->view->moduleID          = 0;
-        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow(0, 0, $type);
+        $this->view->defaultNestedShow = $this->docZen->getDefaultNestedShow(0, 0, $type);
 
         $this->display();
     }
@@ -758,7 +758,7 @@ class doc extends control
         $this->view->release           = $browseType == 'byrelease' ? $param : 0;
         $this->view->exportMethod      = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
-        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type, $executionID);
+        $this->view->defaultNestedShow = $this->docZen->getDefaultNestedShow($libID, $moduleID, $type, $executionID);
 
         $this->display();
     }
