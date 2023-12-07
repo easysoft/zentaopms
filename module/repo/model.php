@@ -193,7 +193,7 @@ class repoModel extends model
         $repo = $this->getByID($repoID);
         if($repo->SCM == 'Gitlab')
         {
-            $token = time();
+            $token = uniqid();
             $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
             if($res === false)
             {
