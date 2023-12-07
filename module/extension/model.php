@@ -224,14 +224,12 @@ class extensionModel extends model
      * 根据插件代号从插件包获取配置信息。
      * Parse extension's config file.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
-    public function parseExtensionCFG($extension)
+    public function parseExtensionCFG(string $extension): object
     {
-        $info = new stdclass();
-
         /* First, try ini file. before 2.5 version. */
         $infoFile = $this->pkgRoot . "$extension/doc/copyright.txt";
         if(file_exists($infoFile)) return (object)parse_ini_file($infoFile);
@@ -241,6 +239,7 @@ class extensionModel extends model
          */
 
         /* Try the yaml of current lang, then try en. */
+        $info = new stdclass();
         $lang = $this->app->getClientLang();
         $infoFile = $this->pkgRoot . "$extension/doc/$lang.yaml";
         if(!file_exists($infoFile)) $infoFile = $this->pkgRoot . "$extension/doc/en.yaml";
@@ -263,13 +262,14 @@ class extensionModel extends model
     }
 
     /**
+     * 获取上传的插件包路径。
      * Get the full path of the zip file of a extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return string
      */
-    public function getPackageFile($extension)
+    public function getPackageFile(string $extension): string
     {
         return $this->app->getTmpRoot() . 'extension/' . $extension . '.zip';
     }
