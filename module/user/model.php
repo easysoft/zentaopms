@@ -965,12 +965,13 @@ class userModel extends model
     }
 
     /**
+     * 根据 Cookie 验证用户。
      * Identify user by cookie.
      *
      * @access public
      * @return bool
      */
-    public function identifyByCookie()
+    public function identifyByCookie(): bool
     {
         $account  = $this->cookie->za;
         $authHash = $this->cookie->zp;
