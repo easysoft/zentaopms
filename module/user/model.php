@@ -1115,7 +1115,8 @@ class userModel extends model
     }
 
     /**
-     * login function.
+     * 获取用户所属权限组、权限和视图，记录日志并发放登录积分。
+     * Get user's groups, rights and views, save log and give login score.
      *
      * @param  object $user
      * @param  bool   $addAction
@@ -1128,7 +1129,8 @@ class userModel extends model
 
         $this->cleanLocked($user->account);
 
-        /* Authorize him and save to session. */
+        /* 获取用户所属权限组、权限和视图，判断用户是否是管理员。*/
+        /* Get user's groups, rights and views, and judge if the user is admin. */
         $user->rights = $this->authorize($user->account);
         $user->groups = $this->getGroups($user->account);
         $user->view   = $this->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
@@ -1136,9 +1138,13 @@ class userModel extends model
 
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
+
+        /* 记录登录日志并发放积分。*/
+        /* Save log and give login score. */
         if(isset($user->id) and $addAction) $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
+        /* 保持登录状态。*/
         /* Keep login. */
         if($this->post->keepLogin) $this->keepLogin($user);
 
