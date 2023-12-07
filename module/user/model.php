@@ -192,13 +192,15 @@ class userModel extends model
     }
 
     /**
-     * Get inside users list of current company.
+     * 获取用户列表。
+     * Get user list.
      *
      * @param  string $params
+     * @param  string $fields
      * @access public
      * @return array
      */
-    public function getList($params = 'nodeleted', $fields = '*')
+    public function getList(string $params = 'nodeleted', string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_USER)
             ->where('1 = 1')
