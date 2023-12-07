@@ -171,13 +171,14 @@ class extensionModel extends model
     }
 
     /**
+     * 根据插件代号从数据库获取插件信息。
      * Get extension info from database.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
-    public function getInfoFromDB($extension)
+    public function getInfoFromDB(string $extension): object|false
     {
         return $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fetch();
     }
