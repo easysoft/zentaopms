@@ -210,6 +210,38 @@ class convertTao extends convertModel
     }
 
     /**
+     * 获取需求、任务、bug、对象类型。
+     * Get stories and tasks and bugs and objectType.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getIssueData(): array
+    {
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jtask')
+            ->andWhere('BType')->eq('ztask')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        return array($issueStories, $issueTasks, $issueBugs, $issueObjectType);
+    }
+
+    /**
      * 将对象转换为数组。
      * Convert object to array.
      *
@@ -448,20 +480,7 @@ class convertTao extends convertModel
      */
     protected function importJiraBuild(array $dataList, string $method = 'db')
     {
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
-
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
+        list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
         $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
             ->where('AType')->eq('jproject')
@@ -496,25 +515,7 @@ class convertTao extends convertModel
      */
     protected function importJiraIssueLink(array $dataList)
     {
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
-
-        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jtask')
-            ->andWhere('BType')->eq('ztask')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
-
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
+        list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
         $issueLinkTypeList = array();
         $relations = $this->session->jiraRelation;
@@ -547,25 +548,7 @@ class convertTao extends convertModel
      */
     public function importJiraAction(array $dataList, string $method = 'db')
     {
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
-
-        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jtask')
-            ->andWhere('BType')->eq('ztask')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
-
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
+        list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
         foreach($dataList as $data)
         {
@@ -606,25 +589,7 @@ class convertTao extends convertModel
     {
         $this->loadModel('file');
 
-        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jissueid')
-            ->andWhere('BType')->eq('zissuetype')
-            ->fetchPairs();
-
-        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jstory')
-            ->andWhere('BType')->eq('zstory')
-            ->fetchPairs();
-
-        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jtask')
-            ->andWhere('BType')->eq('ztask')
-            ->fetchPairs();
-
-        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
-            ->where('AType')->eq('jbug')
-            ->andWhere('BType')->eq('zbug')
-            ->fetchPairs();
+        list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
         $filePaths = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
             ->where('AType')->eq('jissueid')
