@@ -1312,4 +1312,21 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 获取我收藏的文档。
+     * Get the docs that I have collected.
+     *
+     * @param  array  $hasPrivDocIdList
+     * @param  string $sort
+     * @access public
+     * @return array
+     */
+    public function getCollectedDocsTest(array $hasPrivDocIdList, string $sort): array
+    {
+        $docs = $this->objectModel->getCollectedDocs($hasPrivDocIdList, $sort);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
