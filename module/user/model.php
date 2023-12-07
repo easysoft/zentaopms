@@ -1172,13 +1172,14 @@ class userModel extends model
     }
 
     /**
+     * 获取用户所属的权限组。
      * Get groups a user belongs to.
      *
      * @param  string $account
      * @access public
      * @return array
      */
-    public function getGroups($account)
+    public function getGroups(string $account): array
     {
         return $this->dao->findByAccount($account)->from(TABLE_USERGROUP)->fields('`group`')->fetchPairs();
     }
