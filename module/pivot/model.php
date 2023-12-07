@@ -662,33 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get user todos.
-     *
-     * @access public
-     * @return array
-     */
-    public function getUserTodos()
-    {
-        $stmt = $this->dao->select('t1.*, t2.account as user')
-            ->from(TABLE_TODO)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.account = t2.account')
-            ->where('t1.cycle')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->in('wait,doing')
-            ->query();
-
-        $todos = array();
-        while($todo = $stmt->fetch())
-        {
-            if($todo->type == 'task') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
-            if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
-            $todos[$todo->user][] = $todo;
-        }
-        return $todos;
-    }
-
-    /**
      * Get user testTasks.
      *
      * @access public
