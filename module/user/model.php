@@ -1146,17 +1146,18 @@ class userModel extends model
     }
 
     /**
-     * Keep the user in login state.
+     * 保持用户的登录状态。
+     * Keep user's login state.
      *
-     * @param  object    $user
+     * @param  object $user
      * @access public
      * @return void
      */
-    public function keepLogin($user)
+    public function keepLogin(object $user): void
     {
-        helper::setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        helper::setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        helper::setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('keepLogin', 'on');
+        helper::setcookie('za', $user->account);
+        helper::setcookie('zp', sha1($user->account . $user->password . $this->server->request_time));
     }
 
     /**
