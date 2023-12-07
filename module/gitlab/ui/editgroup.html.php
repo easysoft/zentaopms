@@ -18,6 +18,12 @@ formPanel
 (
     set::title($lang->gitlab->group->edit),
     set::labelWidth($app->clientLang == 'zh-cn' ? '8em' : '13em'),
+    input
+    (
+        set::type('hidden'),
+        set::name('id'),
+        set::value($group->id)
+    ),
     formGroup
     (
         set::name('name'),

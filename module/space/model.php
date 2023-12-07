@@ -148,9 +148,9 @@ class spaceModel extends model
      *
      * @param  object $instance
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getExternalAppByApp(object $instance): ?object
+    public function getExternalAppByApp(object $instance): object|false
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')

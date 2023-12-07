@@ -364,7 +364,8 @@ class gitlab extends control
 
         if($_POST)
         {
-            $this->gitlab->createGroup($gitlabID);
+            $gitlabGroup = form::data($this->config->gitlab->form->group->create)->get();
+            $this->gitlab->createGroup($gitlabID, $gitlabGroup);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseGroup', "gitlabID=$gitlabID")));
@@ -400,7 +401,8 @@ class gitlab extends control
 
         if($_POST)
         {
-            $this->gitlab->editGroup($gitlabID);
+            $gitlabGroup = form::data($this->config->gitlab->form->group->edit)->get();
+            $this->gitlab->editGroup($gitlabID, $gitlabGroup);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseGroup', "gitlabID=$gitlabID")));
@@ -437,12 +439,12 @@ class gitlab extends control
         if(!$response or substr($response->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabgroup', $groupID, 'deleted', '', $group->name);
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'reload' => true));
         }
 
         $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
         $result   = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
-        return print(js::alert($result));
+        return $this->send(array('result' => 'fail', 'message' => $result));
     }
 
     /**
@@ -738,7 +740,8 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->gitlab->createProject($gitlabID);
+            $gitlabProject = form::data($this->config->gitlab->form->project->create)->get();
+            $this->gitlab->createProject($gitlabID, $gitlabProject);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
@@ -781,7 +784,8 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->gitlab->editProject($gitlabID);
+            $gitlabProject = form::data($this->config->gitlab->form->project->edit)->get();
+            $this->gitlab->editProject($gitlabID, $gitlabProject);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
@@ -889,7 +893,8 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->gitlab->createBranch($gitlabID, $projectID);
+            $gitlabBranch = form::data($this->config->gitlab->form->branch->create)->get();
+            $this->gitlab->createBranch($gitlabID, $projectID, $gitlabBranch);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $locate = $this->session->gitlabBranchList ? $this->session->gitlabBranchList : inlink('browseBranch', "gitlibID=$gitlabID&projectID=$projectID");
@@ -1277,7 +1282,8 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $this->gitlab->createTag($gitlabID, $projectID);
+            $gitlabTag = form::data($this->config->gitlab->form->tag->create)->get();
+            $this->gitlab->createTag($gitlabID, $projectID, $gitlabTag);
 
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => inlink('browseTag', "gitlabID=$gitlabID&projectID=$projectID")));

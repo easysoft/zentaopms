@@ -38,3 +38,54 @@ $config->gitlab->form->user->edit['password_repeat']  = array('type' => 'string'
 $config->gitlab->form->user->edit['projects_limit']   = array('type' => 'int', 'required' => false, 'default' => '100000');
 $config->gitlab->form->user->edit['can_create_group'] = array('type' => 'string', 'required' => false, 'default' => '0');
 $config->gitlab->form->user->edit['external']         = array('type' => 'string', 'required' => false, 'default' => '0');
+
+$config->gitlab->form->group = new stdclass();
+
+$config->gitlab->form->group->create = common::formConfig('gitlab', 'createGroup');
+$config->gitlab->form->group->create['name']                    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->create['path']                    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->create['description']             = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->create['visibility']              = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->create['request_access_enabled']  = array('type' => 'string', 'required' => false, 'default' => '0');
+$config->gitlab->form->group->create['lfs_enabled']             = array('type' => 'string', 'required' => false, 'default' => '0');
+$config->gitlab->form->group->create['project_creation_level']  = array('type' => 'string', 'required' => false, 'default' => 'developer');
+$config->gitlab->form->group->create['subgroup_creation_level'] = array('type' => 'string', 'required' => false, 'default' => 'maintainer');
+
+$config->gitlab->form->group->edit = common::formConfig('gitlab', 'editGroup');
+$config->gitlab->form->group->edit['id']                      = array('type' => 'int', 'required' => true);
+$config->gitlab->form->group->edit['name']                    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->edit['path']                    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->edit['description']             = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->edit['visibility']              = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->edit['request_access_enabled']  = array('type' => 'string', 'required' => false, 'default' => '0');
+$config->gitlab->form->group->edit['lfs_enabled']             = array('type' => 'string', 'required' => false, 'default' => '0');
+$config->gitlab->form->group->edit['project_creation_level']  = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->group->edit['subgroup_creation_level'] = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->gitlab->form->project = new stdclass();
+
+$config->gitlab->form->project->create = common::formConfig('gitlab', 'createProject');
+$config->gitlab->form->project->create['name']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->project->create['namespace_id'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->project->create['path']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->project->create['description']  = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->project->create['visibility']   = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->gitlab->form->project->edit = common::formConfig('gitlab', 'editProject');
+$config->gitlab->form->project->edit['id']           = array('type' => 'int', 'required' => true);
+$config->gitlab->form->project->edit['name']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->project->edit['description']  = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->project->edit['visibility']   = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->gitlab->form->branch = new stdclass();
+
+$config->gitlab->form->branch->create = common::formConfig('gitlab', 'createBranch');
+$config->gitlab->form->branch->create['branch'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->branch->create['ref']    = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->gitlab->form->tag = new stdclass();
+
+$config->gitlab->form->tag->create = common::formConfig('gitlab', 'createTag');
+$config->gitlab->form->tag->create['tag_name'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->tag->create['ref']      = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->tag->create['message']  = array('type' => 'string', 'required' => false, 'default' => '');

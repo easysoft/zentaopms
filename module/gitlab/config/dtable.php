@@ -164,8 +164,9 @@ $config->gitlab->dtable->group->fieldList['actions']['list']['editGroup']['url']
 
 $config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['icon']      = 'trash';
 $config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['hint']      = $lang->gitlab->deleteGroup;
-$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['url']       = helper::createLink('gitlab', 'deleteGroup', 'gitlabID={gitlabID}&groupID={id}');
+$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['url']       = helper::createLink('gitlab', 'deleteGroup', 'gitlabID={gitlabID}&groupID={id}&confirm=yes');
 $config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['className'] = 'ajax-submit';
+$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['data-confirm'] = $lang->gitlab->group->confirmDelete;
 
 $config->gitlab->dtable->user = new stdclass();
 

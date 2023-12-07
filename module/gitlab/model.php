@@ -969,9 +969,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $group
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiUpdateGroup(int $gitlabID, object $group): object|array|null
+    public function apiUpdateGroup(int $gitlabID, object $group): object|array|null|false
     {
         if(empty($group->id)) return false;
 
@@ -2399,12 +2399,12 @@ class gitlabModel extends model
      * Create gitlab project.
      *
      * @param  int    $gitlabID
+     * @param  object $project
      * @access public
      * @return bool
      */
-    public function createProject($gitlabID): bool
+    public function createProject(int $gitlabID, object $project): bool
     {
-        $project = fixer::input('post')->get();
         if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
         if(empty($project->path)) dao::$errors['path'][] = $this->lang->gitlab->project->emptyPathError;
         if(dao::isError()) return false;
@@ -2428,9 +2428,8 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function editProject(int $gitlabID): bool
+    public function editProject(int $gitlabID, object $project): bool
     {
-        $project = fixer::input('post')->get();
         if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
         if(dao::isError()) return false;
 
@@ -2560,13 +2559,12 @@ class gitlabModel extends model
      * Create a gitlab group.
      *
      * @param  int    $gitlabID
+     * @param  object $group
      * @access public
      * @return bool
      */
-    public function createGroup(int $gitlabID): bool
+    public function createGroup(int $gitlabID, object $group): bool
     {
-        $group = fixer::input('post')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
-
         if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
         if(empty($group->path)) dao::$errors['path'][] = $this->lang->gitlab->group->path . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
@@ -2587,13 +2585,12 @@ class gitlabModel extends model
      * Edit a gitlab group.
      *
      * @param  int    $gitlabID
+     * @param  object $group
      * @access public
      * @return bool
      */
-    public function editGroup(int $gitlabID): bool
+    public function editGroup(int $gitlabID, object $group): bool
     {
-        $group = fixer::input('post')->remove('path')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
-
         if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
 
@@ -2614,13 +2611,12 @@ class gitlabModel extends model
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
+     * @param  object $branch
      * @access public
      * @return bool
      */
-    public function createBranch(int $gitlabID, int $projectID): bool
+    public function createBranch(int $gitlabID, int $projectID, object $branch): bool
     {
-        $branch = fixer::input('post')->get();
-
         if(empty($branch->branch)) dao::$errors['branch'][] = $this->lang->gitlab->branch->name . $this->lang->gitlab->emptyError;
         if(empty($branch->ref))    dao::$errors['ref'][]    = $this->lang->gitlab->branch->from . $this->lang->gitlab->emptyError;
         if(dao::isError()) return false;
@@ -2932,16 +2928,16 @@ class gitlabModel extends model
      * 创建一个gitlab标签。
      * Create gitlab tag.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $tag
      * @access public
      * @return bool
      */
-    public function createTag(int $gitlabID, int $projectID): bool
+    public function createTag(int $gitlabID, int $projectID, object $tag): bool
     {
         if(empty($gitlabID)) return false;
 
-        $tag = fixer::input('post')->get();
         if(empty($tag->tag_name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->emptyNameError;
         if(empty($tag->ref))  dao::$errors['ref'][] = $this->lang->gitlab->tag->emptyRefError;
         if(dao::isError()) return false;
