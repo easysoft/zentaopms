@@ -1243,4 +1243,23 @@ class docTest
         $files = $this->objectModel->dao->select('*')->from(TABLE_FILE)->fetchAll();
         return $this->objectModel->getFileIcon($files);
     }
+
+    /**
+     * 获取搜索后的文档列表。
+     * Get doc list by search.
+     *
+     * @param  int    $queryID
+     * @param  array  $hasPrivDocIdList
+     * @param  array  $allLibIDList
+     * @param  string $sort
+     * @access public
+     * @return array
+     */
+    public function getMyDocListBySearchTest(int $queryID, array $hasPrivDocIdList, array $allLibIDList, string $sort): array
+    {
+        $docs = $this->objectModel->getMyDocListBySearch($queryID, $hasPrivDocIdList, $allLibIDList, $sort);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
