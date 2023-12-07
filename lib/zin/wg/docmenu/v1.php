@@ -129,7 +129,7 @@ class docMenu extends wg
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $moduleName,
-                'active'      => zget($setting, 'active', $itemID == $activeKey),
+                'selected'    => zget($setting, 'active', $itemID == $activeKey),
                 'actions'     => $this->getActions($setting)
             );
 
