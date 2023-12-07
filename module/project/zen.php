@@ -1084,7 +1084,7 @@ class projectZen extends project
         $linkedBranches      = array();
         $linkedBranchIdList  = array();
         $branches            = $this->project->getBranchesByProject($projectID);
-        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
         $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', implode(',', $linkedProductIdList));
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
         $projectStories      = $this->project->getStoriesByProject($projectID);
