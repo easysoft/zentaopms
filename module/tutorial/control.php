@@ -155,10 +155,14 @@ class tutorial extends control
      * @access public
      * @return void
      */
-    public function ajaxSaveNovice($novice = 'true', $reload = 'false')
+    public function ajaxSaveNovice(string $novice = 'true', string $reload = 'false')
     {
-        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == true ? 1 : 0);
-        if($reload == 'true') return print(js::reload('parent'));
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == 'true' ? 1 : 0);
+        if($reload == 'true')
+        {
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return print(js::reload('parent'));
+        }
     }
 
     /**
