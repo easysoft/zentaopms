@@ -6,24 +6,21 @@ su('admin');
 /**
 
 title=测试 extensionModel->getModulesByAPI();
+timeout=0
 cid=1
-pid=1
 
-判断返回的API中是否包含个人相关 >> 1
-判断返回的API中是否包含项目相关 >> 1
-判断返回的API中是否包含地盘相关 >> 0
+- 判断返回的数据是否是数组。 @1
+- 判断返回的数据是否包含id,name,parent,url字段。
+ -  @id
+ - 属性1 @name
+ - 属性2 @parent
+ - 属性3 @url
 
 */
 
 global $tester;
+$tester->loadModel('extension');
+$apiModules = $tester->extension->getModulesByAPI();
 
-$apiModules = $tester->loadModel('extension')->getModulesByAPI();
-$modules    = array_column($apiModules, 'name');
-
-$includeUser    = in_array('个人相关', $modules);
-$includeProject = in_array('项目相关' ,$modules);
-$includeMy      = in_array('地盘相关', $modules);
-
-r($includeUser)    && p() && e('1'); // 判断返回的API中是否包含个人相关
-r($includeProject) && p() && e('1'); // 判断返回的API中是否包含项目相关
-r($includeMy)      && p() && e('0'); // 判断返回的API中是否包含地盘相关
+r(is_array($apiModules)) && p() && e('1');                                       // 判断返回的数据是否是数组。
+r(array_keys((array)$apiModules[0])) && p('0,1,2,3') && e('id,name,parent,url'); // 判断返回的数据是否包含id,name,parent,url字段。

@@ -33,6 +33,7 @@ class extensionModel extends model
     public $pkgRoot;
 
     /**
+     * 构造函数。
      * The construct function.
      *
      * @access public
@@ -41,68 +42,66 @@ class extensionModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->setApiRoot();
+        $this->apiRoot   = $this->config->extension->apiRoot;
         $this->classFile = $this->app->loadClass('zfile');
         $this->pkgRoot   = $this->app->getExtensionRoot() . 'pkg' . DS;
     }
 
     /**
-     * Set the apiRoot.
-     *
-     * @access public
-     * @return void
-     */
-    public function setApiRoot()
-    {
-        $this->apiRoot = $this->config->extension->apiRoot;
-    }
-
-    /**
+     * 调用接口并返回结果中的data。
      * Fetch data from an api.
      *
-     * @param  string    $url
+     * @param  string $url
      * @access public
      * @return mixed
      */
-    public function fetchAPI($url)
+    private function fetchAPI(string $url)
     {
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
 
-        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
+        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION;
+        $url .= '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
         $result = json_decode(common::http($url));
 
-        if(!isset($result->status)) return false;
+        if(!isset($result->status))      return false;
         if($result->status != 'success') return false;
-        if(isset($result->data) and md5($result->data) != $result->md5) return false;
+        if(isset($result->data) && md5($result->data) != $result->md5) return false;
         if(isset($result->data)) return json_decode($result->data);
+        return false;
     }
 
     /**
+     * 调用禅道官网接口获取插件的分类。
      * Get extension modules from the api.
      *
      * @access public
-     * @return string|bool
+     * @return array|bool
      */
-    public function getModulesByAPI()
+    public function getModulesByAPI(): array|bool
     {
         $requestType = $this->config->requestType;
         $webRoot     = helper::safe64Encode($this->config->webRoot, '', false, true);
         $apiURL      = $this->apiRoot . 'apiGetmodules-' . helper::safe64Encode($requestType) . '-' . $webRoot . '.json';
-        $data = $this->fetchAPI($apiURL);
+        $data        = $this->fetchAPI($apiURL);
+
         if(isset($data->newmodules)) return $data->newmodules;
         return false;
     }
 
     /**
+     * 调用禅道官网接口获取插件的列表。
      * Get extensions by some condition.
      *
-     * @param  string    $type
-     * @param  mixed     $param
+     * @param  string      $type
+     * @param  string      $param
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
      * @access public
-     * @return array|bool
+     * @return object|bool
      */
-    public function getExtensionsByAPI($type, $param, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function getExtensionsByAPI(string $type, string $param, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): object|false
     {
         $apiURL = $this->apiRoot . "apiGetExtensions-$type-$param-$recTotal-$recPerPage-$pageID.json";
         $data   = $this->fetchAPI($apiURL);
