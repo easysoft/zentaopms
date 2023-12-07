@@ -804,36 +804,31 @@ class userModel extends model
     }
 
     /**
-     * Update password.
+     * 更新当前用户的密码。
+     * Update current user's password.
      *
-     * @param  string $userID
+     * @param  object $user
      * @access public
      * @return bool
      */
-    public function updatePassword($userID)
+    public function updatePassword(object $user): bool
     {
-        if(!$this->checkPassword()) return false;
+        $this->checkPassword($user);
 
-        $user = fixer::input('post')
-            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->remove('account, password1, password2, originalPassword, passwordStrength,passwordLength')
-            ->get();
+        if($user->originalPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['originalPassword'][] = $this->lang->user->error->originalPassword;
+        if(dao::isError()) return false;
 
-        if(empty($_POST['originalPassword']) or $this->post->originalPassword != md5($this->app->user->password . $this->session->rand))
-        {
-            dao::$errors['originalPassword'][] = $this->lang->user->error->originalPassword;
-            return false;
-        }
+        $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('id')->eq($this->app->user->id)->exec();
+        if(dao::isError()) return false;
 
-        $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
-        $_SESSION['user']->password      = $user->password;
-        $this->app->user->password       = $user->password;
-        $this->app->user->modifyPassword = false;
-        if(!dao::isError())
-        {
-            if(!empty($this->app->user->modifyPasswordReason)) $this->app->user->modifyPasswordReason = '';
-            $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($this->post->password1));
-        }
+        $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($user->password1));
+
+        $this->app->user->password             = $user->password;
+        $this->app->user->modifyPassword       = false;
+        $this->app->user->modifyPasswordReason = '';
+
+        $_SESSION['user'] = $this->app->user;
+
         return true;
     }
 
