@@ -856,13 +856,14 @@ class productplanModel extends model
             /* Update the plan linked with the story and the order of the story in the plan. */
             $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->exec();
 
-            $this->story->updateStoryOrderOfPlan($storyID, $planID, $story->plan);
+            $this->story->updateStoryOrderOfPlan((int)$storyID, (string)$planID, $story->plan);
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
         }
 
-        $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $storyIdList));
+        $this->productplanTao->syncLinkedStories($planID, $storyIdList);
+        $this->action->create('productplan', (int)$planID, 'linkstory', '', implode(',', $storyIdList));
 
         return !dao::isError();
     }
