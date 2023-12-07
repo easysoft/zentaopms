@@ -599,28 +599,17 @@ class pivotModel extends model
     }
 
     /**
-     * Get bug assign.
+     * 获取指派过的未解决bug。
+     * Get assigned unresolved bugs.
      *
      * @access public
      * @return array
      */
-    public function getBugAssign()
+    public function getBugAssign(): array
     {
-        $bugGroups = $this->dao->select('product, assignedTo, COUNT(*) AS bugCount')->from(TABLE_BUG)
-            ->where('deleted')->eq('0')
-            ->andWhere('status')->eq('active')
-            ->andWhere('assignedTo')->ne('')
-            ->andWhere('assignedTo')->ne('closed')
-            ->groupBy('product, assignedTo')
-            ->fetchGroup('assignedTo');
-
-        $products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs();
-
-        $productProjects = $this->dao->select('t2.product, t2.project')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.type')->eq('project')
-            ->andWhere('t1.hasProduct')->eq(0)
-            ->fetchPairs();
+        $bugGroups       = $this->pivotTao->getAssignBugGroup();
+        $products        = $this->pivotTao->getAllProductsIDAndName();
+        $productProjects = $this->pivotTao->getProductProjects();
 
         $canViewProduct = common::hasPriv('product', 'view');
         $canViewProject = common::hasPriv('project', 'view');
@@ -638,6 +627,8 @@ class pivotModel extends model
                 $bug->productName = $products[$bug->product];
                 if($bug->productName)
                 {
+                    /* 用户有访问权限的情况下，允许用户点击。 */
+                    /* Allow users to click if they have access. */
                     if($canViewProject && !empty($productProjects[$bug->product]))
                     {
                         $bug->productName = html::a(helper::createLink('project', 'view', "projectID={$productProjects[$bug->product]}"), $bug->productName);
@@ -647,7 +638,6 @@ class pivotModel extends model
                         $bug->productName = html::a(helper::createLink('product', 'view', "product={$bug->product}"), $bug->productName);
                     }
                 }
-
                 $bug->total = $totalBugs;
 
                 if($first) $bug->rowspan = count($userBugs);
@@ -657,6 +647,7 @@ class pivotModel extends model
                 $first = false;
             }
         }
+
         return $bugs;
     }
 

@@ -221,4 +221,52 @@ class pivotTao extends pivotModel
             ->groupBy('task')
             ->fetchPairs('task');
     }
+
+    /**
+     * 获取指派的bug。
+     * Get assigned bugs.
+     *
+     * @access public
+     * @return array
+     */
+    protected function getAssignBugGroup(): array
+    {
+        return $this->dao->select('product, assignedTo, COUNT(*) AS bugCount')->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('active')
+            ->andWhere('assignedTo')->ne('')
+            ->andWhere('assignedTo')->ne('closed')
+            ->groupBy('product, assignedTo')
+            ->fetchGroup('assignedTo');
+    }
+
+    /**
+     * 获取产品项目关联关系。
+     * Get product project association.
+     *
+     * @access public
+     * @return array
+     */
+    protected function getProductProjects(): array
+    {
+        return $this->dao->select('t2.product, t2.project')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.hasProduct')->eq(0)
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取所有产品的id和name。
+     * Get the id and name of all products.
+     *
+     * @access public
+     * @return array
+     */
+    protected function getAllProductsIDAndName(): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->fetchPairs();
+    }
 }
