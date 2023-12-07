@@ -380,18 +380,18 @@ class extensionModel extends model
         return $this->pkgRoot . "$extension/db/$method.sql";
     }
 
-
-
     /**
+     * 检查当前禅道版本是否包含在指定版本号中。
      * Check the extension's version is compatibility for zentao version
      *
-     * @param  string    $version
+     * @param  string $version
      * @access public
      * @return bool
      */
-    public function checkVersion($version)
+    public function checkVersion($version): bool
     {
         if($version == 'all') return true;
+
         $version = explode(',', $version);
         if(in_array($this->config->version, $version)) return true;
         return false;
