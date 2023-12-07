@@ -662,26 +662,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get user effort stat in this error.
-     *
-     * @param  array  $accounts
-     * @param  int    $year
-     * @access public
-     * @return object
-     */
-    public function getUserYearEfforts($accounts, $year)
-    {
-        $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_EFFORT)
-            ->where('LEFT(date, 4)')->eq($year)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
-            ->fetch();
-
-        $effort->consumed = !empty($effort->consumed) ? round($effort->consumed, 2) : 0;
-        return $effort;
-    }
-
-    /**
      * Get count of created story,plan and closed story by accounts every product in this year.
      *
      * @param  array  $accounts
