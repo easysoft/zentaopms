@@ -939,6 +939,37 @@ class userModel extends model
     }
 
     /**
+     * 根据用户名和密码验证用户。
+     * Identify user by account and password.
+     *
+     * @param  string $account      the user account
+     * @param  string $password     the user password or auth hash
+     * @access public
+     * @return bool|object
+     */
+    private function identifyUser(string $account, string $password): bool|object
+    {
+        $user = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->andWhere('account')->eq($account)->fetch();
+        if(!$user) return false;
+
+        $passwordLength = strlen($password);
+
+        if($passwordLength == 32)
+        {
+            $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
+            return $password == $hash ? $user : false;
+        }
+
+        if($passwordLength == 40)
+        {
+            $hash = sha1($user->account . $user->password . $user->last);
+            return $password == $hash ? $user : false;
+        }
+
+        return md5($password) == $user->password ? $user : false;
+    }
+
+    /**
      * 检查是否需要修改密码。
      * Check if need to modify password.
      *
