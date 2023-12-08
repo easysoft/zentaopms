@@ -255,7 +255,8 @@ class extensionZen extends extension
         $this->session->set('dirs2Created', array(), 'admin');   // clean the session.
 
         /* Execute the install.sql. */
-        if($upgrade == 'no' && $this->extension->needExecuteDB($extension, 'install'))
+        $needExecuteDB = file_exists($this->execution->getDBFile($extension, 'install'));
+        if($upgrade == 'no' && $needExecuteDB)
         {
             $return = $this->extension->executeDB($extension, 'install');
             if($return->result != 'ok')

@@ -554,18 +554,7 @@ class extensionModel extends model
         return $removeCommands;
     }
 
-    /**
-     * Judge need execute db install or not.
-     *
-     * @param  string    $extension
-     * @param  string    $method
-     * @access public
-     * @return bool
-     */
-    public function needExecuteDB($extension, $method = 'install')
-    {
-        return file_exists($this->getDBFile($extension, $method));
-    }
+
 
     /**
      * Install the db.
