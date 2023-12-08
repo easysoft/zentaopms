@@ -203,9 +203,9 @@
         const $navbar = $('#navbar');
         if(!$navbar.length) return;
 
-        const $nav = $navbar.children('.nav');
-        let layout = $nav.data('_layout');
-        let itemPadding = 12;
+        const $nav        = $navbar.children('.nav');
+        let layout        = $nav.data('_layout');
+        let itemPadding   = 12;
         let dividerMargin = 8;
         if(!layout)
         {
@@ -226,13 +226,17 @@
             $nav.data('_layout', layout);
         }
 
+        const $heading   = $('#heading');
         const totalWidth = $navbar.width();
-        const maxWidth = totalWidth - (2 * itemPadding) - (2 * Math.max($('#heading').outerWidth() || 0, $('#toolbar').outerWidth() || 0));
+        const maxWidth   = totalWidth - (2 * itemPadding) - (2 * Math.max($heading.outerWidth() || 0, $('#toolbar').outerWidth() || 0));
         let width = Math.ceil((layout.itemCount * 2 * itemPadding) + layout.contentWidth + layout.dividerCount + (layout.dividerCount * dividerMargin * 2));
         const fixSize = width > maxWidth ? Math.ceil((width - maxWidth) / (2 * (layout.itemCount + layout.dividerCount))) : 0;
         itemPadding -= Math.min(7, fixSize);
         dividerMargin -= Math.min(7, fixSize);
-        $nav.css({'--nav-item-padding': itemPadding + 'px', '--nav-divider-margin': dividerMargin + 'px'}).toggleClass('compact', fixSize > 6).toggleClass('compact-extra', fixSize > 8);
+        $nav.css({'--nav-item-padding': itemPadding + 'px', '--nav-divider-margin': dividerMargin + 'px', '--nav-offset-left': 0}).toggleClass('compact', fixSize > 6).toggleClass('compact-extra', fixSize > 8);
+        const navLeft      = $nav[0].getBoundingClientRect().left;
+        const headingRight = $heading[0].getBoundingClientRect().right;
+        $nav.css('--nav-offset-left', Math.max(0, 20 + 2 * Math.ceil(headingRight - navLeft)) + 'px');
     }
 
     function updateNavbar(data)
