@@ -554,34 +554,33 @@ class extensionModel extends model
         return $removeCommands;
     }
 
-
-
     /**
-     * Install the db.
+     * 执行插件包中安装或者卸载时的SQL语句。
+     * Execute the extension db.
      *
-     * @param  int    $extension
+     * @param  string $extension
+     * @param  string $method     install|uninstall
      * @access public
      * @return object
      */
-    public function executeDB($extension, $method = 'install')
+    public function executeDB(string $extension, string $method = 'install'): object
     {
-        $return = new stdclass();
-        $return->result = 'ok';
-        $return->error  = '';
-        $ignoreCode     = '|1050|1060|1062|1091|1169|';
+        $result = new stdclass();
+        $result->result = 'ok';
+        $result->error  = '';
 
         $dbFile = $this->getDBFile($extension, $method);
-        if(!file_exists($dbFile)) return $return;
+        if(!file_exists($dbFile)) return $result;
 
-        $sqls = file_get_contents($this->getDBFile($extension, $method));
-        $sqls = explode(';', $sqls);
-
+        $ignoreCode = '|1050|1060|1062|1091|1169|';
+        $sqls       = file_get_contents($this->getDBFile($extension, $method));
+        $sqls       = explode(';', $sqls);
         foreach($sqls as $sql)
         {
             $sql = trim($sql);
             if(empty($sql)) continue;
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
 
+            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
             try
             {
                 $this->dbh->query($sql);
@@ -590,11 +589,12 @@ class extensionModel extends model
             {
                 $errorInfo = $e->errorInfo;
                 $errorCode = $errorInfo[1];
-                if(strpos($ignoreCode, "|$errorCode|") === false) $return->error .= '<p>' . $e->getMessage() . "<br />THE SQL IS: $sql</p>";
+                if(strpos($ignoreCode, "|$errorCode|") === false) $result->error .= '<p>' . $e->getMessage() . "<br />THE SQL IS: $sql</p>";
             }
         }
-        if($return->error) $return->result = 'fail';
-        return $return;
+
+        if($result->error) $result->result = 'fail';
+        return $result;
     }
 
     /**
