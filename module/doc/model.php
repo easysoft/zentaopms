@@ -1839,36 +1839,6 @@ class docModel extends model
     }
 
     /**
-     * Set lib users.
-     *
-     * @param  string $type
-     * @param  int    $objectID
-     * @access public
-     * @return bool
-     */
-    public function setLibUsers($type, $objectID)
-    {
-        if($type != 'execution' and $type != 'product') return array();
-        if($type == 'product')
-        {
-            $teams = $this->dao->select('t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.root=t2.project')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.root=t3.id')
-                ->where('t2.product')->eq($objectID)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t3.status')->notin('done,closed')->fi()
-                ->andWhere('t1.type')->eq('execution')
-                ->andWhere('t3.deleted')->eq('0')
-                ->fetchPairs('account', 'account');
-        }
-        elseif($type == 'execution')
-        {
-            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($objectID)->andWhere('type')->eq('execution')->fetchPairs('account', 'account');
-        }
-
-        return $teams;
-    }
-
-    /**
      * Get project-related document library IDs.
      *
      * @param  int    $projectID
