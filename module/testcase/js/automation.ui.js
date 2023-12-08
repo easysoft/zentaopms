@@ -1,8 +1,3 @@
-$(function()
-{
-    new zui.Tooltip('#automationTip', {title: automationTip, trigger: 'hover', placement: 'bottom', type: 'black', 'className': 'border border-light'});
-});
-
 function loadProduct()
 {
     $('#shell').val('');

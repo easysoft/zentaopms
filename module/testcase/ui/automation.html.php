@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('automationTip', $lang->zanode->automationTips);
-
 to::header
 (
    span
@@ -23,9 +21,16 @@ to::header
    (
        'help',
        setClass('text-gray'),
-       setID('automationTip'),
-       setData(array('toggle' => 'tooltip')),
-       set('title', 'tooltip')
+       toggle::tooltip
+       (
+           array
+           (
+               'title'     => $lang->zanode->automationTips,
+               'placement' => 'right',
+               'type'      => 'white',
+               'className' => 'text-dark border border-light'
+           )
+       )
    )
 );
 
