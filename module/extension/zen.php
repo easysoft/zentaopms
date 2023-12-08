@@ -139,7 +139,7 @@ class extensionZen extends extension
             {
                 if(isset($installedExts[$code]))
                 {
-                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit)) $conflictsExt .= $installedExts[$code]->name . " ";
+                    if($this->compareForLimit($installedExts[$code]->version, $limit)) $conflictsExt .= $installedExts[$code]->name . " ";
                 }
             }
 
@@ -172,7 +172,7 @@ class extensionZen extends extension
                 $noDepends = false;
                 if(isset($installedExts[$code]))
                 {
-                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit, 'noBetween')) $noDepends = true;
+                    if($this->compareForLimit($installedExts[$code]->version, $limit, 'noBetween')) $noDepends = true;
                 }
                 else
                 {
@@ -523,5 +523,58 @@ class extensionZen extends extension
             if($result->result) return $backupFile;
         }
         return false;
+    }
+
+    /**
+     * 根据数据库数据获取依赖当前插件的其他插件。
+     * Get depends extension by database.
+     *
+     * @param  string    $extension
+     * @access protected
+     * @return array
+     */
+    protected function getDependsByDB(string $extension): array
+    {
+        $extensionInfo = $this->extension->getInfoFromDB($extension);
+        $dependsList   = $this->extension->getDependsExtension($extension);
+
+        $result = array();
+        if($dependsList)
+        {
+            foreach($dependsList as $dependsExtension)
+            {
+                $depends = json_decode($dependsExtension->depends, true);
+                if(empty($depends[$extension])) continue;
+
+                if($this->compareForLimit($extensionInfo->version, $depends[$extension])) $result[] = $dependsExtension->name;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Compare for limit data.
+     *
+     * @param  string       $version
+     * @param  array|string $limit
+     * @param  string       $type
+     * @access private
+     * @return bool
+     */
+    private function compareForLimit(string $version, array|string $limit, string $type = 'between'): bool
+    {
+        $result = false;
+        if(empty($limit))   return true;
+        if($limit == 'all') return true;
+
+        if(!empty($limit['min']) && $version >= $limit['min'])           $result = true;
+        if(!empty($limit['max']) && $version <= $limit['max'])           $result = true;
+        if(!empty($limit['max']) && $version > $limit['max'] && $result) $result = false;
+
+        /* 如果取的不是被包含则返回取反的布尔值。 */
+        if($type != 'between') return !$result;
+
+        return $result;
     }
 }

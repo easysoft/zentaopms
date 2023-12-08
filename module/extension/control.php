@@ -186,7 +186,7 @@ class extension extends control
         }
 
         /* 相关依赖插件检查。 */
-        $dependsExts = $this->extension->checkDepends($extension);
+        $dependsExts = $this->extensionZen->getDependsByDB($extension);
         if($dependsExts)
         {
             $this->view->error = sprintf($this->lang->extension->errorUninstallDepends, join(' ', $dependsExts));

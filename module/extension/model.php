@@ -659,55 +659,16 @@ class extensionModel extends model
     }
 
     /**
-     * Check depends extension.
+     * 获取可能依赖此插件的其他插件。
+     * Get other extensions that may depend on this extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return array
      */
-    public function checkDepends($extension)
+    public function getDependsExtension(string $extension): array
     {
-        $result        = array();
-        $extensionInfo = $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fetch();
-        $dependsExts   = $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->andWhere('status')->ne('available')->fetchAll();
-        if($dependsExts)
-        {
-            foreach($dependsExts as $dependsExt)
-            {
-                $depends = json_decode($dependsExt->depends, true);
-                if($this->compare4Limit($extensionInfo->version, $depends[$extension])) $result[] = $dependsExt->name;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Compare for limit data.
-     *
-     * @param  string $version
-     * @param  array  $limit
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function compare4Limit($version, $limit, $type = 'between')
-    {
-        $result = false;
-        if(empty($limit)) return true;
-
-        if($limit == 'all')
-        {
-            $result = true;
-        }
-        else
-        {
-            if(!empty($limit['min']) and $version >= $limit['min']) $result = true;
-            if(!empty($limit['max']) and $version <= $limit['max']) $result = true;
-            if(!empty($limit['max']) and $version > $limit['max'] and $result) $result = false;
-        }
-
-        if($type != 'between') return !$result;
-        return $result;
+        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->andWhere('status')->ne('available')->fetchAll();
     }
 
     /**
