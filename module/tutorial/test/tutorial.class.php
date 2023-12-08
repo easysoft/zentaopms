@@ -97,18 +97,15 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式项目键值对。
      * Get tutorial project pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProjectPairsTest()
+    public function getProjectPairsTest(): array
     {
-        $objects = $this->objectModel->getProjectPairs();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getProjectPairs();
     }
 
     /**
