@@ -499,7 +499,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function batchCreate(int $deptID = 0, $type = 'inside')
+    public function batchCreate(int $deptID = 0, string $type = 'inside')
     {
         if(!empty($_POST))
         {
