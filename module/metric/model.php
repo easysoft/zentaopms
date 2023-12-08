@@ -198,7 +198,7 @@ class metricModel extends model
         $headerField = current($header)['name'];
         $headerTitle = current($header)['title'];
 
-        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'fixed' => 'left', 'align' => 'center', 'width' => 160);
+        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'fixed' => 'left', 'width' => 160);
         $dateField     = 'dateString';
         usort($data, function($a, $b) use($dateField)
         {
