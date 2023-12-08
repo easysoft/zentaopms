@@ -395,7 +395,7 @@ $metricBoxs = div
             (
                 $groupData ? dtable
                 (
-                    set::height(310),
+                    set::height(328),
                     set::rowHeight(32),
                     set::bordered(true),
                     set::cols($groupHeader),
