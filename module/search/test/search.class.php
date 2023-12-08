@@ -62,6 +62,37 @@ class searchTest
     }
 
     /**
+     * 测试生成查询表单数据。
+     * Process query form datas test.
+     *
+     * @param  object $fieldParams
+     * @param  string $field
+     * @param  string $andOrName
+     * @param  string $operatorName
+     * @param  string $valueName
+     * @access public
+     * @return object
+     */
+    public function processQueryFormDatasTest(object $postData, string $field, string $andOrName, string $operatorName, string $valueName): object
+    {
+        $_POST = (array)$postData;
+
+        global $tester;
+        $tester->loadModel('bug');
+
+        $fieldParams = json_decode(json_encode($tester->config->bug->search['params']));
+
+        list($andOr, $operator, $value) = $this->objectModel->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
+
+        $queryFormData = new stdclass();
+        $queryFormData->andOr    = $andOr;
+        $queryFormData->operator = $operator;
+        $queryFormData->value    = $value;
+
+        return $queryFormData;
+    }
+
+    /**
      * 设置默认参数的测试用例。
      * Set default params test.
      *
