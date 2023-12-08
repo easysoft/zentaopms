@@ -62,13 +62,11 @@
         <span class='progress-message'></span>
       </div>
       <div class='error-message text-red text-center'></div>
-      <?php if(!isonlybody()):?>
       <div class='form-actions text-center'>
-        <?php echo html::a(inlink('step6'), $lang->solution->background, '', "class='btn btn-install btn-primary btn-wide' id='skipInstallBtn'");?>
+        <?php if(!isonlybody()) echo html::a(inlink('step6'), $lang->solution->background, '', "class='btn btn-install btn-primary btn-wide' id='skipInstallBtn'");?>
         <?php echo html::commonButton($lang->solution->retryInstall, "id='retryInstallBtn' class='hide'", 'btn btn-primary btn-wide');?>
-        <?php echo html::commonButton($lang->solution->cancelInstall, "id='cancelInstallBtn'", 'btn btn-wide');?>
+        <?php if(!isonlybody()) echo html::commonButton($lang->solution->cancelInstall, "id='cancelInstallBtn'", 'btn btn-wide');?>
       </div>
-      <?php endif;?>
     </div>
     </div>
   </div>
