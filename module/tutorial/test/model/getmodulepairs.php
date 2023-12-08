@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/tutorial.class.php';
+
+zdTable('user')->gen(5);
+
 su('admin');
 
 /**
