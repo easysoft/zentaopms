@@ -1427,14 +1427,17 @@ class docModel extends model
     }
 
     /**
+     * 统计文档库下的模块和文档数量。
      * Stat module and document counts of lib.
      *
      * @param  array $idList
      * @access public
      * @return array
      */
-    public function statLibCounts($idList)
+    public function statLibCounts(array $idList): array
     {
+        if(empty($idList)) return array();
+
         $moduleCounts = $this->dao->select("`root`, count(id) as moduleCount")->from(TABLE_MODULE)
             ->where('type')->eq('doc')
             ->andWhere('root')->in($idList)
@@ -1452,8 +1455,9 @@ class docModel extends model
         foreach($docs as $doc)
         {
             if(!$this->checkPrivDoc($doc)) continue;
+
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
-            $docCounts[$doc->lib]++;
+            $docCounts[$doc->lib] ++;
         }
 
         $itemCounts = array();
