@@ -1301,4 +1301,21 @@ class docTest
 
         return $this->objectModel->checkPrivDoc($doc);
     }
+
+    /**
+     * 构造文档节点。
+     * Build doc node.
+     *
+     * @param  object       $node
+     * @param  int          $libID
+     * @access public
+     * @return object|array
+     */
+    public function buildDocNodeTest(object $node, int $libID): object|array
+    {
+        $node = $this->objectModel->buildDocNode($node, $libID);
+
+        if(dao::isError()) return dao::getError();
+        return $node;
+    }
 }
