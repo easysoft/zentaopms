@@ -109,19 +109,16 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式项目统计数据。
      * Get project stats for tutorial.
      *
      * @param  string $browseType
      * @access public
      * @return void
      */
-    public function getProjectStatsTest($browseType = '')
+    public function getProjectStatsTest(string $browseType = ''): array
     {
-        $objects = $this->objectModel->getProjectStats($browseType = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getProjectStats($browseType);
     }
 
     /**

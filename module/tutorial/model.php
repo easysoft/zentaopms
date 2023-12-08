@@ -189,7 +189,7 @@ class tutorialModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats($browseType = ''): array
+    public function getProjectStats(string $browseType = ''): array
     {
         $project = $this->getProject();
 
@@ -201,7 +201,7 @@ class tutorialModel extends model
         $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
 
-        if($browseType and $browseType != 'all') $project->name .= '-' . $browseType; // Fix bug #21096
+        if($browseType && $browseType != 'all') $project->name .= '-' . $browseType; // Fix bug #21096
 
         $projectStat[$project->id] = $project;
         return $projectStat;
