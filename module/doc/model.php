@@ -530,13 +530,14 @@ class docModel extends model
     }
 
     /**
+     * 通过文档ID获取文档所属产品、项目、执行。
      * Get projects, executions and products by docIdList.
      *
      * @param  array $docIdList
      * @access public
      * @return array
      */
-    public function getObjectsByDoc($docIdList = array())
+    public function getObjectsByDoc(array $docIdList = array()): array
     {
         $projects = $executions = $products = array();
         if(empty($docIdList)) return array($projects, $executions, $products);
