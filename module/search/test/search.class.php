@@ -520,4 +520,17 @@ class searchTest
     {
         return $this->objectModel->setCondition($field, $operator, $value);
     }
+
+    /**
+     * 测试设置搜索条件。
+     * Set where test.
+     *
+     * @access public
+     * @return string
+     */
+    public function setWhereTest(string $field, string $operator, string $value, string $andOr): string
+    {
+        $where = '';
+        return $this->objectModel->setWhere($where, $field, $operator, $value, $andOr);
+    }
 }
