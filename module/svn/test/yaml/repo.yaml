@@ -1,0 +1,33 @@
+title: zt_repo
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: product
+    range: 1-10
+  - field: name
+    prefix: svn-
+    range: 1-10
+  - field: path
+    range: '`http://10.0.7.237/svn/repo/unit_test`'
+  - field: prefix
+    range: /unit_test
+  - field: encoding
+    range: "`utf-8`"
+  - field: SCM
+    range: Subversion
+  - field: client
+    range: /usr/bin/svn
+  - field: commits
+    range: 10
+  - field: account
+    range: user
+  - field: password
+    range: MTIzNDU2
+  - field: encrypt
+    range: base64
+  - field: synced
+    range: 1{3},0
+  - field: deleted
+    range: 0{5},1

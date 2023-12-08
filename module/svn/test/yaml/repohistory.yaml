@@ -1,0 +1,18 @@
+title: zt_repohistory
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: repo
+    range: 1
+  - field: revision
+    range: 23
+  - field: commit
+    range: 1
+  - field: comment
+    range: '+ Add unit_test dir.'
+  - field: committer
+    range: user
+  - field: time
+    range: '`2023-12-07 13:52:00`'

@@ -149,15 +149,16 @@ class svnModel extends model
     }
 
     /**
+     * 更新提交信息。
      * Update commit.
      *
-     * @param  object $repo
-     * @param  array  $commentGroup
-     * @param  bool   $printLog
-     * @access public
+     * @param  object  $repo
+     * @param  array   $commentGroup
+     * @param  bool    $printLog
+     * @access private
      * @return void
      */
-    public function updateCommit($repo, $commentGroup, $printLog = true)
+    private function updateCommit(object $repo, array $commentGroup, bool $printLog = true)
     {
         /* Load mudule and print log. */
         if($printLog) $this->printLog("begin repo {$repo->name}");

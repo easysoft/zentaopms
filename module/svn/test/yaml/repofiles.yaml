@@ -1,0 +1,16 @@
+title: zt_repofiles
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: revision
+    range: 1
+  - field: path
+    range: /unit_test/README
+  - field: parent
+    range: /unit_test
+  - field: type
+    range: file
+  - field: action
+    range: A
