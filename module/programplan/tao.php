@@ -368,11 +368,10 @@ class programplanTao extends programplanModel
      * @param  string  $selectCustom
      * @param  array   $datas
      * @param  array   $stageIndex
-     * @param  array   $reviewDeadline
      * @access protected
      * @return void
      */
-    protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex, array $reviewDeadline): void
+    protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex): void
     {
         $this->app->loadLang('task');
         $taskPri   = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
@@ -390,17 +389,6 @@ class programplanTao extends programplanModel
             $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
             $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
             $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
-
-            /* Get lastest task deadline. */
-            $taskExecutionID = $execution->parent ? $execution->parent : $execution->id;
-            if(isset($reviewDeadline[$taskExecutionID]['taskEnd']))
-            {
-                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline > $reviewDeadline[$taskExecutionID]['taskEnd'] ? $task->deadline : $reviewDeadline[$taskExecutionID]['taskEnd'];
-            }
-            else
-            {
-                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline;
-            }
 
             $start = $estStart;
             $end   = $estEnd;

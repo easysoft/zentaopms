@@ -145,7 +145,8 @@ class programplanModel extends model
      */
     public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
     {
-        $plans = $this->getStage($projectID, $productID, 'all', 'order');
+        $plans   = $this->getStage($projectID, $productID, 'all', 'order');
+        $project = $this->loadModel('project')->getById($projectID);
 
         /* Set plan baseline data. */
         if($baselineID)
