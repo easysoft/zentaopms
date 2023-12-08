@@ -598,43 +598,6 @@ class extensionModel extends model
     }
 
     /**
-     * Backup db when uninstall extension.
-     *
-     * @param  string    $extension
-     * @access public
-     * @return bool|string
-     */
-    public function backupDB($extension)
-    {
-        $zdb = $this->app->loadClass('zdb');
-
-        $sqls = file_get_contents($this->getDBFile($extension, 'uninstall'));
-        $sqls = explode(';', $sqls);
-
-        /* Get tables for backup. */
-        $backupTables = array();
-        foreach($sqls as $sql)
-        {
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
-            $sql = preg_replace('/IF EXISTS /i', '', trim($sql));
-            if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
-            {
-                if(!empty($out[1])) $backupTables[$out[1]] = $out[1];
-            }
-        }
-
-        /* Back up database. */
-        if($backupTables)
-        {
-            $backupFile = $this->app->getTmpRoot() . $extension . '.' . date('Ymd') . '.sql';
-            $result     = $zdb->dump($backupFile, $backupTables);
-            if($result->result) return $backupFile;
-            return false;
-        }
-        return false;
-    }
-
-    /**
      * Save the extension to database.
      *
      * @param  string    $extension     the extension code

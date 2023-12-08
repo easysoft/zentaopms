@@ -255,7 +255,7 @@ class extensionZen extends extension
         $this->session->set('dirs2Created', array(), 'admin');   // clean the session.
 
         /* Execute the install.sql. */
-        $needExecuteDB = file_exists($this->execution->getDBFile($extension, 'install'));
+        $needExecuteDB = file_exists($this->extension->getDBFile($extension, 'install'));
         if($upgrade == 'no' && $needExecuteDB)
         {
             $return = $this->extension->executeDB($extension, 'install');
@@ -487,5 +487,41 @@ class extensionZen extends extension
             unset($copiedFiles[$key]);
         }
         return $copiedFiles;
+    }
+
+    /**
+     * 卸载插件前备份即将删除的表。
+     * Backup db when uninstall extension.
+     *
+     * @param  string       $extension
+     * @access public
+     * @return string|false
+     */
+    public function backupDB(string $extension): string|false
+    {
+        $sqls = file_get_contents($this->extension->getDBFile($extension, 'uninstall'));
+        $sqls = explode(';', $sqls);
+
+        /* Get tables for backup. */
+        $backupTables = array();
+        foreach($sqls as $sql)
+        {
+            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = preg_replace('/IF EXISTS /i', '', trim($sql));
+            if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
+            {
+                if(!empty($out[1])) $backupTables[$out[1]] = $out[1];
+            }
+        }
+
+        /* Back up database. */
+        $zdb = $this->app->loadClass('zdb');
+        if($backupTables)
+        {
+            $backupFile = $this->app->getTmpRoot() . $extension . '.' . date('Ymd') . '.sql';
+            $result     = $zdb->dump($backupFile, $backupTables);
+            if($result->result) return $backupFile;
+        }
+        return false;
     }
 }

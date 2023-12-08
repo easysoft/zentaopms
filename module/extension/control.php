@@ -196,7 +196,7 @@ class extension extends control
         /* 卸载前的钩子加载。 */
         if($preUninstallHook = $this->extensionZen->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
 
-        if(file_exists($dbFile)) $this->view->backupFile = $this->extension->backupDB($extension);
+        if(file_exists($dbFile)) $this->view->backupFile = $this->extensionZen->backupDB($extension);
 
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
