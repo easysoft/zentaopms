@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 /* Flag variable for hiding product code. */
-$hiddenCode    = (!isset($config->setCode) || $config->setCode == 0);
+$hiddenCode    = (!isset($config->setCode) || $config->setCode == 0 || empty($product->code));
 $allStoryCount = array_sum($product->stories);
 
 $membersDom = array();

@@ -317,7 +317,7 @@ div
                     set::title($project->name),
                     $project->name
                 ),
-                !empty($config->setCode) ? label
+                !empty($config->setCode) && !empty($project->code) ? label
                 (
                     setClass('label lighter-pale ml-2 flex-none'),
                     $project->code
