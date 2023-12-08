@@ -29,12 +29,13 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式产品键值对。
      * Get tutorial product pairs.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProductPairsTest()
+    public function getProductPairsTest(): array
     {
         $objects = $this->objectModel->getProductPairs();
 
@@ -44,12 +45,13 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式模块键值对。
      * Get module pairs for tutorial.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getModulePairsTest()
+    public function getModulePairsTest(): array
     {
         $objects = $this->objectModel->getModulePairs();
 
@@ -60,7 +62,7 @@ class tutorialTest
 
     /**
      * Get tutorial product.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -75,7 +77,7 @@ class tutorialTest
 
     /**
      * Get product stats for tutorial.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -90,7 +92,7 @@ class tutorialTest
 
     /**
      * Get project for tutorial.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -105,7 +107,7 @@ class tutorialTest
 
     /**
      * Get tutorial project pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -120,8 +122,8 @@ class tutorialTest
 
     /**
      * Get project stats for tutorial.
-     * 
-     * @param  string $browseType 
+     *
+     * @param  string $browseType
      * @access public
      * @return void
      */
@@ -136,7 +138,7 @@ class tutorialTest
 
     /**
      * Get tutorial stories.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -151,7 +153,7 @@ class tutorialTest
 
     /**
      * Get tutorial Execution pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -166,7 +168,7 @@ class tutorialTest
 
     /**
      * Get tutorial execution.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -181,7 +183,7 @@ class tutorialTest
 
     /**
      * Get tutorial execution products.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -196,7 +198,7 @@ class tutorialTest
 
     /**
      * Get tutorial execution stories.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -211,7 +213,7 @@ class tutorialTest
 
     /**
      * Get tutorial execution story pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -226,7 +228,7 @@ class tutorialTest
 
     /**
      * Get tutorial team members.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -241,7 +243,7 @@ class tutorialTest
 
     /**
      * Get team members pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -256,7 +258,7 @@ class tutorialTest
 
     /**
      * Get tutorial user pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -271,7 +273,7 @@ class tutorialTest
 
     /**
      * Get tutorialed.
-     * 
+     *
      * @access public
      * @return void
      */
