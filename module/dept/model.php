@@ -251,7 +251,7 @@ class deptModel extends model
      * @access public
      * @return bool
      */
-    public function updateOrder($orders): bool
+    public function updateOrder(array $orders): bool
     {
         $order = 1;
         foreach($orders as $deptID)

@@ -58,13 +58,14 @@ class extensionModel extends model
      */
     private function fetchAPI(string $url)
     {
+        /* 拼接URL并调用接口。 */
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
+        $url    .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION;
+        $url    .= '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
+        $result  = json_decode(common::http($url));
 
-        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION;
-        $url .= '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
-        $result = json_decode(common::http($url));
-
+        /* 返回接口结果。 */
         if(!isset($result->status))      return false;
         if($result->status != 'success') return false;
         if(isset($result->data) && md5($result->data) != $result->md5) return false;
@@ -81,9 +82,9 @@ class extensionModel extends model
      */
     public function getModulesByAPI(): array|bool
     {
-        $requestType = $this->config->requestType;
+        $requestType = helper::safe64Encode($this->config->requestType);
         $webRoot     = helper::safe64Encode($this->config->webRoot, '', false, true);
-        $apiURL      = $this->apiRoot . 'apiGetmodules-' . helper::safe64Encode($requestType) . '-' . $webRoot . '.json';
+        $apiURL      = "{$this->apiRoot}apiGetmodules-{$requestType}-{$webRoot}.json";
         $data        = $this->fetchAPI($apiURL);
 
         if(isset($data->newmodules)) return $data->newmodules;
@@ -101,7 +102,7 @@ class extensionModel extends model
     public function getVersionsByAPI(string $extensions): array|bool
     {
         $extensions = helper::safe64Encode($extensions);
-        $apiURL     = $this->apiRoot . 'apiGetVersions-' . $extensions . '.json';
+        $apiURL     = "{$this->apiRoot}apiGetVersions-{$extensions}.json";
         $data       = $this->fetchAPI($apiURL);
 
         if(isset($data->versions)) return (array)$data->versions;
@@ -388,7 +389,7 @@ class extensionModel extends model
      * @access public
      * @return bool
      */
-    public function checkVersion($version): bool
+    public function checkVersion(string $version): bool
     {
         if($version == 'all') return true;
 
@@ -398,22 +399,24 @@ class extensionModel extends model
     }
 
     /**
+     * 删除安装的插件文件并返回错误提示。
      * Remove an extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
-     * @return array     the remove commands need executed manually.
+     * @return array
      */
-    public function removePackage($extension)
+    public function removePackage(string $extension)
     {
         $extension = $this->getInfoFromDB($extension);
-        if($extension->type == 'patch') return true;
-        $dirs  = json_decode($extension->dirs);
-        $files = json_decode($extension->files);
-        $appRoot = $this->app->getAppRoot();
-        $commandTips = array();
+        if($extension->type == 'patch') return true;   // 无法删除补丁类型的插件包。
 
-        /* Remove files first. */
+        $commandTips = array();
+        $appRoot     = $this->app->getAppRoot();
+        $dirs        = json_decode($extension->dirs);
+        $files       = json_decode($extension->files);
+
+        /* 删除安装插件时拷贝到禅道目录的插件文件， 如果没有权限或者删除失败则返回提示信息。*/
         if($files)
         {
             foreach($files as $file => $savedMD5)
@@ -430,10 +433,14 @@ class extensionModel extends model
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
                 }
+                elseif(!@unlink($file))
+                {
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
+                }
             }
         }
 
-        /* Then remove dirs. */
+        /* 删除安装插件时在禅道目录新增的文件夹， 如果没有权限或者删除失败则返回提示信息。*/
         if($dirs)
         {
             rsort($dirs);    // remove from the lower level directory.

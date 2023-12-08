@@ -179,7 +179,7 @@ class misc extends control
      * @access public
      * @return void
      */
-    public function changeLog($version = '')
+    public function changeLog(string $version = '')
     {
         if(empty($version)) $version  = key($this->lang->misc->feature->all);
         $this->view->version  = $version;

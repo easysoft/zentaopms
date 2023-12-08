@@ -329,7 +329,7 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function erase($extension)
+    public function erase(string $extension)
     {
         $this->extensionZen->checkSafe();
 

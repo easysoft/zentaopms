@@ -242,7 +242,7 @@ class dataviewModel extends model
      * @access public
      * @return bool|array
      */
-    public function checkUniColumn($sql, $repeat = false): bool|array
+    public function checkUniColumn(string $sql, bool $repeat = false): bool|array
     {
         $columns = $this->dao->getColumns($sql);
 
