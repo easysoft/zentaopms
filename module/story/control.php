@@ -338,7 +338,8 @@ class story extends control
             $showFields = str_replace(array('plan', 'stage'),  '', $showFields);
         }
 
-        if(!$branchProduct) unset($customFields['branch']);
+        $product = $this->product->getByID($productID);
+        if($product->type == 'normal') unset($customFields['branch']);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
