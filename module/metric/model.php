@@ -155,7 +155,8 @@ class metricModel extends model
         });
 
         $groupHeader = array();
-        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->date, 'align' => 'center', 'width' => 96);
+
+        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->$dateType, 'align' => 'center', 'width' => 96);
         $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 68);
         $groupData   = array();
 
