@@ -1,14 +1,16 @@
 <?php
 class docTest
 {
-    public function __construct()
+    public function __construct($account = 'admin')
     {
-         global $tester, $app;
-         $this->objectModel = $tester->loadModel('doc');
-         $this->objectModel->config->global->syncProduct = '';
+        global $tester, $app;
+        $this->objectModel = $tester->loadModel('doc');
+        $this->objectModel->config->global->syncProduct = '';
 
-         $app->rawModule = 'doc';
-         $app->rawMethod = 'index';
+        su($account);
+
+        $app->rawModule = 'doc';
+        $app->rawMethod = 'index';
     }
 
     /**
@@ -1345,5 +1347,27 @@ class docTest
 
         if(dao::isError()) return dao::getError();
         return $docs;
+    }
+
+    /**
+     * 获取执行文档库的所属模块的键值对。
+     * Gets the key-value pair of the module by execution ID.
+     *
+     * @param  string $type normal|noData
+     * @access public
+     * @return array
+     */
+    public function getExecutionModulePairsTest(string $type): array
+    {
+        if($type == 'noData')
+        {
+            $this->objectModel->dao->delete()->from(TABLE_DOCLIB)->exec();
+            $this->objectModel->dao->delete()->from(TABLE_MODULE)->exec();
+        }
+
+        $modulePairs = $this->objectModel->getExecutionModulePairs();
+
+        if(dao::isError()) return dao::getError();
+        return $modulePairs;
     }
 }
