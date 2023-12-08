@@ -763,7 +763,7 @@ EOF;
 
         /* Get PM id list. */
         $accounts = array();
-        $projects = $this->user->getObjects($this->app->user->account, 'project', $status, $orderBy, $pager);
+        $projects = $this->user->getProjects($this->app->user->account, $status, $orderBy, $pager);
         foreach($projects as $project)
         {
             if(!empty($project->PM) && !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -804,7 +804,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $executions  = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
+        $executions  = $this->user->getExecutions($this->app->user->account, $type, $orderBy, $pager);
 
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->tabID       = 'project';
