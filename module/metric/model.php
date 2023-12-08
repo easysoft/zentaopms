@@ -156,7 +156,7 @@ class metricModel extends model
 
         $groupHeader = array();
         $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->date, 'align' => 'center', 'width' => 96);
-        $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 80);
+        $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 68);
         $groupData   = array();
 
         foreach($data as $dataInfo)
@@ -198,7 +198,7 @@ class metricModel extends model
         $headerField = current($header)['name'];
         $headerTitle = current($header)['title'];
 
-        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'fixed' => 'left', 'width' => 160);
+        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle, 'fixed' => 'left', 'width' => 128);
         $dateField     = 'dateString';
         usort($data, function($a, $b) use($dateField)
         {
@@ -227,6 +227,7 @@ class metricModel extends model
         }
         /* e.g $times = array('2023-10-14', '2023-10-15'), $objects = array('object1' => array('2023-10-14' => 2, '2023-10-15 => 3)) */
 
+        $numberHeaderWidth = 68;
         foreach($times as $time)
         {
             $year = substr($time, 0, 4) . $this->lang->year;
@@ -234,22 +235,22 @@ class metricModel extends model
             if($dateType == 'year')
             {
                 $title = $year;
-                $groupHeader[] = array('name' => $time, 'title' => $title, 'align' => 'center', 'width' => 64);
+                $groupHeader[] = array('name' => $time, 'title' => $title, 'align' => 'center', 'width' => $numberHeaderWidth);
             }
             elseif($dateType == 'month')
             {
                 $month         = substr($time, 5, 2) . $this->lang->month;
-                $groupHeader[] = array('name' => $time, 'title' => $month, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
+                $groupHeader[] = array('name' => $time, 'title' => $month, 'headerGroup' => $year, 'align' => 'center', 'width' => $numberHeaderWidth);
             }
             elseif($dateType == 'week')
             {
                 $week          = sprintf($this->lang->metric->week, substr($time, 5, 2));
-                $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
+                $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center', 'width' => $numberHeaderWidth);
             }
             elseif($dateType == 'day' or $dateType == 'nodate')
             {
                 $day           = substr($time, 5, 5);
-                $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center', 'width' => 64);
+                $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center', 'width' => $numberHeaderWidth);
             }
         }
 

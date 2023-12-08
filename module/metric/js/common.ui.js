@@ -25,7 +25,7 @@ window.renderDTableCell = function(result, {row, col})
     {
          var title = value = row.data[col.name];
     }
-    var html  = `<span class="cell-ellipsis" title="${title}">${value}</span>`;
+    var html  = `<span class="cell-ellipsis" style="font-size: 12px" title="${title}">${value}</span>`;
     result[0] = {html: html};
 
     return result;
