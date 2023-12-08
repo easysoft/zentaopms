@@ -63,7 +63,7 @@ class mr extends control
 
         if($this->app->tab == 'execution' && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
-        $repoList = $this->loadModel('repo')->getListBySCM($this->config->repo->gitServiceTypeList);
+        $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
         if(!isset($repoList[$repoID])) $repoID = key($repoList);

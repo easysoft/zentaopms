@@ -148,7 +148,7 @@ class mrModel extends model
             $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
         }
 
-        $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
+        $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', (int)$minProject, (int)$maxProject);
         if($projectIds)
         {
             foreach($allProjects[$hostID] as $index => $project)
