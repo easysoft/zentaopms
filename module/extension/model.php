@@ -406,17 +406,34 @@ class extensionModel extends model
      * @access public
      * @return array
      */
-    public function removePackage(string $extension)
+    public function removePackage(string $extension): array
     {
         $extension = $this->getInfoFromDB($extension);
-        if($extension->type == 'patch') return true;   // 无法删除补丁类型的插件包。
+        if(empty($extension))           return array();
+        if($extension->type == 'patch') return array();   // 无法删除补丁类型的插件包。
 
+        $removeFilesTips = $this->removeExtensionFiles($extension->files);
+        $removeDirsTips  = $this->removeExtensionDirs($extension->dirs);
+
+        /* Clean model cache files. */
+        $this->cleanModelCache();
+
+        return array_merge($removeFilesTips, $removeDirsTips);
+    }
+
+    /**
+     * 删除安装插件时拷贝到禅道目录的插件文件。
+     * Remove extension files.
+     *
+     * @param  string  $files
+     * @access private
+     * @return array
+     */
+    private function removeExtensionFiles(string $files): array
+    {
         $commandTips = array();
         $appRoot     = $this->app->getAppRoot();
-        $dirs        = json_decode($extension->dirs);
-        $files       = json_decode($extension->files);
-
-        /* 删除安装插件时拷贝到禅道目录的插件文件， 如果没有权限或者删除失败则返回提示信息。*/
+        $files       = json_decode($files);
         if($files)
         {
             foreach($files as $file => $savedMD5)
@@ -424,6 +441,7 @@ class extensionModel extends model
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
+                /* 如果没有权限或者删除失败则返回提示信息。 */
                 $parentDir = mb_substr($file, 0, strripos($file, '/'));
                 if(!is_writable($file) || !is_writable($parentDir))
                 {
@@ -440,7 +458,22 @@ class extensionModel extends model
             }
         }
 
-        /* 删除安装插件时在禅道目录新增的文件夹， 如果没有权限或者删除失败则返回提示信息。*/
+        return $commandTips;
+    }
+
+    /**
+     * 删除安装插件时在禅道目录新增的文件夹。
+     * Remove extension dirs.
+     *
+     * @param  string  $dirs
+     * @access private
+     * @return array
+     */
+    private function removeExtensionDirs(string $dirs): array
+    {
+        $commandTips = array();
+        $appRoot     = $this->app->getAppRoot();
+        $dirs        = json_decode($dirs);
         if($dirs)
         {
             rsort($dirs);    // remove from the lower level directory.
@@ -449,6 +482,7 @@ class extensionModel extends model
                 $path = rtrim($appRoot . $dir, '/');
                 if(!is_dir($path)) continue;
 
+                /* 如果没有权限或者删除失败则返回提示信息。*/
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
                 if(!is_writable($path) || !is_writable($parentDir))
                 {
@@ -460,9 +494,6 @@ class extensionModel extends model
                 }
             }
         }
-
-        /* Clean model cache files. */
-        $this->cleanModelCache();
 
         return $commandTips;
     }

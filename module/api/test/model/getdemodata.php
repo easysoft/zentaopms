@@ -27,6 +27,5 @@ cid=1
 global $tester;
 $tester->loadModel('api');
 
-$app->setAppRoot('', dirname(__FILE__, 5));
 r($tester->api->getDemoData('apistruct', '16.0')) && p('0:id,lib,name,type')            && e('1,853,user,json');             //获取数据结构表的初始化数据。
 r($tester->api->getDemoData('module', '16.0'))    && p('0:id,root,name;3:id,root,name') && e('2964,853,工单,2961,853,项目'); //获取模块表的初始化数据。
