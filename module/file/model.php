@@ -127,7 +127,7 @@ class fileModel extends model
     /**
      * Save a file.
      *
-     * @param  object $file
+     * @param  array  $file
      * @param  string $objectType
      * @param  int    $objectID
      * @param  string $extra
@@ -136,7 +136,7 @@ class fileModel extends model
      * @access public
      * @return object
      */
-    public function saveAFile(object $file, string $objectType = '', int $objectID = 0, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): object|false
+    public function saveAFile(array $file, string $objectType = '', int $objectID = 0, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): object|false
     {
         $now = helper::today();
 
