@@ -26,7 +26,6 @@ foreach($testtasks as $testtask)
     $item['url']       = sprintf($link, $testtask->id);
     $item['type']      = 'item';
     $item['data-app']  = $app->tab;
-    $item['data-load'] = '#main, #testtask-dropmenu';
     $data[] = $item;
 }
 
