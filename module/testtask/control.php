@@ -212,7 +212,7 @@ class testtask extends control
 
             if($formData->build && empty($formData->execution))
             {
-                $build = $this->loadModel('build')->getById($this->post->build);
+                $build = $this->loadModel('build')->getById((int)$this->post->build);
                 $formData->project = $build->project;
             }
 
