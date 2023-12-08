@@ -3,8 +3,10 @@
 /**
 
 title=测试 adminModel->getApiConfig();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取禅道官网配置信息是否成功 @Success
 
 */
 

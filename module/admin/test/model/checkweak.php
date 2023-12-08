@@ -3,8 +3,15 @@
 /**
 
 title=测试 adminModel->checkWeak();
+timeout=0
 cid=1
-pid=1
+
+- 测试密码使用123456 @1
+- 测试密码与用户名相同 @1
+- 测试密码与手机相同 @1
+- 测试密码与电话相同 @1
+- 测试密码与生日相同 @1
+- 测试使用复杂密码 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

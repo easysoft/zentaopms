@@ -3,8 +3,27 @@
 /**
 
 title=测试 adminModel->getHasPrivLink();
+timeout=0
 cid=1
-pid=1
+
+- 获取功能配置第一个有权限访问的链接
+ -  @custom
+ - 属性1 @mode
+- 获取人员管理第一个有权限访问的链接
+ -  @dept
+ - 属性1 @browse
+- 获取模型配置第一个有权限访问的链接
+ -  @custom
+ - 属性1 @required
+- 获取功能配置第一个有权限访问的链接
+ -  @custom
+ - 属性1 @set
+- 获取通知设置第一个有权限访问的链接
+ -  @mail
+ - 属性1 @edit
+- 获取二次开发第一个有权限访问的链接
+ -  @dev
+ - 属性1 @api
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
