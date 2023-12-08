@@ -387,13 +387,13 @@ $metricBoxs = div
     div
     (
         setClass('table-and-chart table-and-chart-multiple'),
-        div
+        $groupData ? div
         (
             setClass('table-side'),
             setStyle(array('flex-basis' => $tableWidth . 'px')),
             div
             (
-                $groupData ? dtable
+                dtable
                 (
                     set::height(328),
                     set::rowHeight(32),
@@ -404,28 +404,28 @@ $metricBoxs = div
                     $headerGroup ? set::plugins(array('header-group')) : null,
                     set::onRenderCell(jsRaw('window.renderDTableCell')),
                     set::loadPartial(true)
-                ) : null
+                )
             )
-        ),
-        div
+        ) : null,
+        $echartOptions ? div
         (
             setClass('chart-side'),
             div
             (
                 setClass('chart-type'),
-                $echartOptions ? picker
+                picker
                 (
                     set::name('chartType'),
                     set::items($chartTypeList),
                     set::value('line'),
                     set::required(true),
                     set::onchange("window.handleChartTypeChange($current->id, 'multiple')")
-                ) : null
+                )
             ),
             div
             (
                 setClass('chart chart-multiple'),
-                $echartOptions ? echarts
+                echarts
                 (
                     set::xAxis($echartOptions['xAxis']),
                     set::yAxis($echartOptions['yAxis']),
@@ -434,9 +434,9 @@ $metricBoxs = div
                     isset($echartOptions['dataZoom']) ? set::dataZoom($echartOptions['dataZoom']) : null,
                     set::grid($echartOptions['grid']),
                     set::tooltip($echartOptions['tooltip'])
-                )->size('100%', '100%') : null
+                )->size('100%', '100%')
             )
-        )
+        ) : null
     )
 );
 

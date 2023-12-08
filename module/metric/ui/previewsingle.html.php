@@ -345,13 +345,13 @@ div
         div
         (
             setClass('table-and-chart table-and-chart-single'),
-            div
+            $groupData ? div
             (
                 setClass('table-side'),
                 setStyle(array('flex-basis' => $tableWidth . 'px')),
                 div
                 (
-                    $groupData ? dtable
+                    dtable
                     (
                         set::bordered(true),
                         set::height(jsRaw('window.getTableHeight')),
@@ -361,28 +361,28 @@ div
                         set::footPager(usePager('dtablePager')),
                         $headerGroup ? set::plugins(array('header-group')) : null,
                         set::onRenderCell(jsRaw('window.renderDTableCell'))
-                    ) : null
+                    )
                 )
-            ),
-            div
+            ) : null,
+            $echartOptions ? div
             (
                 setClass('chart-side'),
                 div
                 (
                     setClass('chart-type'),
-                    $echartOptions ? picker
+                    picker
                     (
                         set::name('chartType'),
                         set::items($chartTypeList),
                         set::value('line'),
                         set::required(true),
                         set::onchange("window.handleChartTypeChange($current->id, 'single')")
-                    ) : null
+                    )
                 ),
                 div
                 (
                     setClass('chart chart-single'),
-                    $echartOptions ? echarts
+                    echarts
                     (
                         set::xAxis($echartOptions['xAxis']),
                         set::yAxis($echartOptions['yAxis']),
@@ -391,9 +391,9 @@ div
                         isset($echartOptions['dataZoom']) ? set::dataZoom($echartOptions['dataZoom']) : null,
                         set::grid($echartOptions['grid']),
                         set::tooltip($echartOptions['tooltip'])
-                    )->size('100%', '100%') : null
+                    )->size('100%', '100%')
                 )
-            )
+            ) : null
         )
     )
 );
