@@ -446,15 +446,6 @@ class docTest
         return $objects;
     }
 
-    public function getApiModuleTreeTest($rootID, $docID = 0, $release = 0)
-    {
-        $objects = $this->objectModel->getApiModuleTree($rootID, $docID = 0, $release = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function getTreeMenuTest($type, $objectID, $rootID, $startModule = 0, $docID = 0)
     {
         $objects = $this->objectModel->getTreeMenu($type, $objectID, $rootID, $startModule = 0, $docID = 0);
