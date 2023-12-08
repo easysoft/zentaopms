@@ -91,22 +91,24 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建区域。
      * Create a new region.
      *
      * @param  object $kanban
-     * @param  object $region
+     * @param  object $fromRegion
      * @param  int    $copyRegionID
      * @param  string $from         kanban|execution
      * @param  string $param
      * @access public
      * @return int
      */
-    public function createRegion(object $kanban, object $region = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
+    public function createRegion(object $kanban, object $fromRegion = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
     {
         $account = $this->app->user->account;
         $order   = 1;
+        $region  = $fromRegion;
 
-        if(!$region)
+        if(empty($region))
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANREGION)
                 ->where('kanban')->eq($kanban->id)
