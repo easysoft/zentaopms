@@ -85,18 +85,15 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式项目信息。
      * Get project for tutorial.
      *
      * @access public
-     * @return void
+     * @return object
      */
-    public function getProjectTest()
+    public function getProjectTest(): object
     {
-        $objects = $this->objectModel->getProject();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getProject();
     }
 
     /**
