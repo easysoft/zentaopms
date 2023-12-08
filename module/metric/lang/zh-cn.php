@@ -55,7 +55,7 @@ $lang->metric->year          = '年份';
 $lang->metric->month         = '月份';
 $lang->metric->week          = '周';
 $lang->metric->day           = '日期';
-$lang->metric->nodate        = '日期';
+$lang->metric->nodate        = '采集日期';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
