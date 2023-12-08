@@ -1629,8 +1629,10 @@ class screenModel extends model
         if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
         $tableOption->scope   = $metric->scope;
 
-        $tableOption->oddBGC  = '#173250FF';
-        $tableOption->evenBGC = '#0B1727FF';
+        $tableOption->oddBGC        = '#173250FF';
+        $tableOption->evenBGC       = '#0B1727FF';
+        $tableOption->borderBGC     = '#285A8EFF';
+        $tableOption->borderSpacing = 1;
         return $tableOption;
     }
 
