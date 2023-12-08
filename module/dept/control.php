@@ -115,7 +115,7 @@ class dept extends control
         }
 
         /* 部门下有人员的无法被删除。 */
-        $users = $this->dept->getUsers('all', $deptID);
+        $users = $this->dept->getUsers('all', array($deptID));
         if($users)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
