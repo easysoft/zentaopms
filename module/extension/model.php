@@ -499,22 +499,23 @@ class extensionModel extends model
     }
 
     /**
+     * 删除禅道model的缓存文件。
      * Clean model cache files.
      *
      * @access public
-     * @return void
+     * @return private
      */
-    public function cleanModelCache()
+    private function cleanModelCache()
     {
+        $zfile           = $this->app->loadClass('zfile');
         $modelCacheFiles = glob($this->app->getTmpRoot() . 'model/*');
-        $zfile = $this->app->loadClass('zfile');
         foreach($modelCacheFiles as $cacheFile)
         {
             if(is_dir($cacheFile))
             {
                 $zfile->removeDir($cacheFile);
             }
-            elseif(is_writable($cacheFile) and !is_dir($cacheFile))
+            elseif(is_writable($cacheFile) && !is_dir($cacheFile))
             {
                 @unlink($cacheFile);
             }
@@ -522,22 +523,23 @@ class extensionModel extends model
     }
 
     /**
+     * 清除插件并删除文件。
      * Erase an extension's package file.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
-     * @return array     the remove commands need executed manually.
+     * @return array
      */
-    public function erasePackage($extension)
+    public function erasePackage(string $extension): array
     {
-        $removeCommands = array();
-
         $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->eq($extension)->exec();
 
-        /* Remove the zip file. */
         $packageFile = $this->getPackageFile($extension);
-        if(!file_exists($packageFile)) return false;
-        if(file_exists($packageFile) and !@unlink($packageFile))
+        if(!file_exists($packageFile)) return array();
+
+        /* Remove the zip file. */
+        $removeCommands = array();
+        if(file_exists($packageFile) && !@unlink($packageFile))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $packageFile" : "del $packageFile";
         }
