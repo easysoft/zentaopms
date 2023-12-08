@@ -496,13 +496,14 @@ class kanban extends control
     }
 
     /**
+     * 删除区域。
      * Delete a region
      *
      * @param  int    $regionID
      * @access public
      * @return void
      */
-    public function deleteRegion($regionID)
+    public function deleteRegion(int $regionID)
     {
         $this->kanban->delete(TABLE_KANBANREGION, $regionID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
