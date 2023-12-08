@@ -1890,63 +1890,6 @@ class docModel extends model
     }
 
     /**
-     * Get the previous and next doc.
-     *
-     * @param  int $docID
-     * @param  int $libID
-     * @access public
-     * @return object
-     */
-    public function getPreAndNextDoc($docID, $libID)
-    {
-        $sortedModules = 0;
-        $modules       = $this->dao->select('id')->from(TABLE_MODULE)
-            ->where('root')->eq($libID)
-            ->andWhere('type')->eq('doc')
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('grade desc, `order`')
-            ->fetchPairs();
-        if(!empty($modules)) $sortedModules = implode(',', array_keys($modules)) . ',0';
-
-        $query = $this->dao->select('t1.id,t1.title,t1.acl,t1.groups,t1.users,t1.addedBy,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.lib')->eq($libID)
-            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-            ->get();
-        $query .= " order by field(module, $sortedModules)";
-        $stmt  = $this->dbh->query($query);
-        $docs  = $stmt->fetchAll();
-
-        $preAndNextDoc       = new stdClass();
-        $preAndNextDoc->pre  = '';
-        $preAndNextDoc->next = '';
-
-        $preDoc = false;
-        foreach($docs as $doc)
-        {
-            $doc->objectType = 'doc';
-
-            /* Get next object. */
-            if($preDoc === true and $this->checkPrivDoc($doc))
-            {
-                $preAndNextDoc->next = $doc;
-                break;
-            }
-
-            /* Get pre object. */
-            if($doc->id == $docID)
-            {
-                if($preDoc) $preAndNextDoc->pre = $preDoc;
-                $preDoc = true;
-            }
-            if($preDoc !== true and $this->checkPrivDoc($doc)) $preDoc = $doc;
-        }
-
-        return $preAndNextDoc;
-    }
-
-    /**
      * Print doc child module.
      *
      * @access public
