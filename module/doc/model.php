@@ -1839,28 +1839,6 @@ class docModel extends model
     }
 
     /**
-     * Get project-related document library IDs.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getLibIdListByProject($projectID = 0)
-    {
-        $products   = $this->loadModel('product')->getProductIDByProject($projectID, false);
-        $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'noclosed,leaf');
-
-        $executionLibs = array();
-        $productLibs   = array();
-        if($executions) $executionLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('execution')->in(array_keys($executions))->fetchPairs();
-        if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
-        $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
-
-        $libIdList = array_merge($customLibs, $executionLibs, $productLibs);
-        return $libIdList;
-    }
-
-    /**
      * Get statistic information.
      *
      * @access public
