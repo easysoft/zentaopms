@@ -1890,29 +1890,6 @@ class docModel extends model
     }
 
     /**
-     * Set past menu.
-     *
-     * @param  string $fastLib
-     * @access public
-     * @return string
-     */
-    public function setFastMenu($fastLib)
-    {
-        $actions = '';
-        $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->doc->search . '</a>';
-        $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
-        $actions .= "<ul class='dropdown-menu'>";
-        foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
-        {
-            $link    = helper::createLink('doc', 'browse', "libID=0&browseType={$key}");
-            $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
-        }
-        $actions .= '</ul>';
-
-        return $actions;
-    }
-
-    /**
      * Get toList and ccList.
      *
      * @param  object $doc

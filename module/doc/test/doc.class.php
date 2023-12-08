@@ -420,15 +420,6 @@ class docTest
         return $objects;
     }
 
-    public function setFastMenuTest($fastLib)
-    {
-        $objects = $this->objectModel->setFastMenu($fastLib);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Get toList and ccList.
      *
