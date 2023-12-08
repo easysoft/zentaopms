@@ -797,7 +797,7 @@ class docModel extends model
         }
 
         /* Check file change. */
-        if($version == $doc->version && ((empty($docContent->files) && $docFiles) || ($docContent->files && count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
+        if($version == $doc->version && ((empty($docContent->files) && $docFiles) || (!empty($docContent->files) && count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
             $doc->version       += 1;

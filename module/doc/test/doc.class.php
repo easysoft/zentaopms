@@ -594,6 +594,7 @@ class docTest
      */
     public function checkPrivLibTest(string $type, int $objectID, string $extra = ''): bool
     {
+        $this->objectModel->app->user->rights['acls']['products'] = $this->objectModel->app->user->rights['acls']['projects'] = $this->objectModel->app->user->rights['acls']['sprint'] = '';
         $object = $type == 'lib' ? $this->objectModel->getLibByID($objectID) : $this->objectModel->getByID($objectID);
         return $this->objectModel->checkPrivLib($object, $extra);
     }
