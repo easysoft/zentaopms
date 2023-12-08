@@ -1370,4 +1370,23 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $modulePairs;
     }
+
+    /**
+     * 检查文档权限。
+     * Check privilege for the document.
+     *
+     * @param  string $account
+     * @param  int    $docID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivDocTest(string $account = 'admin', int $docID = 0): bool
+    {
+        if($account != $this->objectModel->app->user->account) su($account);
+
+        if($docID) $doc = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        if(!$docID) $doc = new stdclass();
+
+        return $this->objectModel->checkPrivDoc($doc);
+    }
 }
