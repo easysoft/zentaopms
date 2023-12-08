@@ -151,6 +151,28 @@ class ai extends control
     {
         $miniProgram  = $this->ai->getMiniProgramByID($id);
 
+        $messages = array();
+        if(!empty($_POST))
+        {
+            $history = $this->post->history;
+            $message = $this->post->message;
+            $isRetry = $this->post->retry == 'true';
+
+            $messages = json_decode($history);
+            if(!$isRetry) $messages[] = (object)array('role' => 'user', 'content' => $message);
+            if($this->ai->isModelConfigured())
+            {
+                $response = $this->ai->converse($messages);
+                if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->chatNoResponse, 'reason' => 'no response'));
+
+                return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/m/d H:m:s"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
+            }
+            else
+            {
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'reason' => 'no model'));
+            }
+        }
+
         $this->view->miniProgram  = $miniProgram;
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);

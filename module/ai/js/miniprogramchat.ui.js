@@ -1,6 +1,7 @@
 if(!window.aiMiniProgramChat) window.aiMiniProgramChat = {};
 
 let firstGenerate = true;
+const messageList = [];
 
 function getFormValue()
 {
@@ -74,6 +75,40 @@ function clearErrorTip()
     $('.form-container').find('.form-tip').remove();
 }
 
+function sendMessagesToAI(message)
+{
+    const curMsgObj = {
+        role: 'user',
+        content: message,
+        time: (new Date()).toLocaleString()
+    };
+
+    const formData = new FormData();
+    formData.set('message', message);
+    if(messageList.length) formData.set('messages', messageList);
+
+    const $messageList = $('.chat-history .message-list');
+    $.post(
+        postLink,
+        formData,
+        function(response) {
+            console.log(JSON.parse(response));
+            response = JSON.parse(response);
+            const {content, time} = response.message;
+            const $message = createMessage('ai', content, time);
+            $messageList.append($message);
+            $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
+
+            messageList.append(curMsgObj);
+            messageList.append(response.message);
+        }
+    );
+
+    const $message = createMessage('user', message);
+    $messageList.append($message);
+    $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
+}
+
 window.aiMiniProgramChat.startAIChat = function()
 {
     clearErrorTip();
@@ -90,12 +125,12 @@ window.aiMiniProgramChat.startAIChat = function()
     }
 
     const promptStr = generatePrompt(fields);
-    console.log(promptStr);
     if(firstGenerate)
     {
         $(this).text(regenerateLang);
         firstGenerate = false;
     }
+    sendMessagesToAI(promptStr);
 };
 
 window.aiMiniProgramChat.handleStarBtnClick = function()
@@ -129,4 +164,92 @@ window.aiMiniProgramChat.handleRestBtnClick = function()
         $('.form-container .form-group > textarea[data-name]').val('');
     }
     catch (error) {}
+}
+
+/**
+ *
+ * @param {KeyboardEvent} event
+ */
+window.aiMiniProgramChat.handleInputEnter = (event) =>
+{
+    console.log(event.code);
+    if (event.code === 'Enter') {
+        event.preventDefault();
+        window.aiMiniProgramChat.clearInputAndChat();
+    }
+};
+
+window.aiMiniProgramChat.clearInputAndChat = () =>
+{
+    const $inputBox = $('.chat-input-box');
+    const message = $inputBox.val()
+    $inputBox.val('');
+    sendMessagesToAI(message);
+}
+
+/**
+ *
+ * @param {'ai'|'user'} type
+ * @returns {jQuery}
+ */
+function createAvatar(type)
+{
+    const $avatar = type === 'user'
+        ? $('#userMenu-toggle > div.avatar').clone()
+        : $('#program-avatar').clone().removeAttr('id');
+    $avatar.addClass('message-avatar');
+    return $avatar;
+}
+
+/**
+ *
+ * @param {string} time
+ * @returns {jQuery}
+ */
+function createMessageTime(time)
+{
+    return $(`<div class="message-time">${time}</div>`);
+}
+
+/**
+ *
+ * @param {'user'|'ai'} type
+ * @param {string} content
+ * @returns {jQuery}
+ */
+function createMessageContent(type, content)
+{
+    return $(`<div class="message-content ${type}-message-content">${content}</div>`);
+}
+
+/**
+ *
+ * @param {'user'|'ai'} type
+ * @param {string} content
+ * @param {string} time
+ * @returns {jQuery}
+ */
+function createMessageBody(type, content, time)
+{
+    const $time = createMessageTime(time);
+    const $content = createMessageContent(type, content);
+    return $(`<div class="message-body"></div>`)
+        .append($time)
+        .append($content);
+}
+
+/**
+ *
+ * @param {'user'|'ai'} type
+ * @param {string} content
+ * @param {string} time
+ * @returns {jQuery}
+ */
+function createMessage(type, content, time = (new Date).toLocaleString())
+{
+    const $avatar = createAvatar(type);
+    const $body = createMessageBody(type, content, time);
+    return $(`<div class="message ${type}-message"></div>`)
+        .append($avatar)
+        .append($body);
 }
