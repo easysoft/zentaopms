@@ -237,7 +237,7 @@ class screenModel extends model
      */
     public function completeComponent(object $chart, string $type, array $filters, object $component): void
     {
-        /* 处理图表为空，stage值为draft和被删除的情况。 */
+        /* 处理图表为空，图表stage值为draft和图表被删除的情况。 */
         /* Process chart is empty, stage is draft or deleted. */
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
@@ -253,8 +253,8 @@ class screenModel extends model
         $component->chartConfig->fields   = json_decode($chart->fields);
         $component->chartConfig->filters  = $this->getChartFilters($chart);
 
-        /* 处理非内置图表。 */
-        /* Process non-builtin chart. */
+        /* 当type类型为chart并且图表不是内置图表的时候，需要填充series数组的长度或者修改雷达图的部分配置。 */
+        /* When type is chart or chart is not builtin, need to fill length of series array or modify part of radar chart config. */
         if($type == 'chart' && (!$chart->builtin || in_array($chart->id, $this->config->screen->builtinChart)))
         {
             if(!empty($component->option->series))
@@ -571,6 +571,8 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
+        /* 设置组件默认属性。 */
+        /* Set component default attributes. */
         $this->setComponentDefaults($component);
     }
 
@@ -635,6 +637,8 @@ class screenModel extends model
             $component->option->dataset->seriesData     = $seriesData;
         }
 
+        /* 设置组件默认属性。 */
+        /* Set component default attributes. */
         $this->setComponentDefaults($component);
     }
 
@@ -683,8 +687,8 @@ class screenModel extends model
 
             $dataset = array_map(function($data){return array_values($data);}, $options->array);
 
-            /* 处理单元格合并后的数据。 */
-            /* Process data after merge cells. */
+            /* 处理合并单元格。 */
+            /* Process merge cells. */
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
@@ -696,6 +700,8 @@ class screenModel extends model
             $this->setComponentTableInfo($component, $options->cols, $dataset, $config, $colspan);
         }
 
+        /* 设置组件默认属性。 */
+        /* Set component default attributes. */
         $this->setComponentDefaults($component);
     }
 
@@ -725,8 +731,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取组件的过滤条件。
-     * Get chart filters
+     * 获取图表的过滤条件。
+     * Get chart filters.
      *
      * @param object $chart
      * @access public
@@ -753,8 +759,8 @@ class screenModel extends model
     }
 
     /**
-     * 当查询的时候设置过滤条件。
-     * Set screen filters when is query.
+     * 设置组件的查询过滤条件。
+     * Set component query filters.
      *
      * @param  array  $filter
      * @access public
@@ -800,8 +806,8 @@ class screenModel extends model
     }
 
     /**
-     * 根据语言处理横坐标。
-     * Process xLabel with lang
+     * 根据语言处理横坐标的值。
+     * Process xLabel value with lang.
      *
      * @param  array  $xLabel
      * @param  string $type
@@ -901,7 +907,7 @@ class screenModel extends model
      */
     public function buildComponentList(array|object $componentList): array
     {
-        /* 清楚空数据并且为重构每个组件。 */
+        /* 清除空数据并且重构每个组件。 */
         /* Clear empty data and rebuild each component. */
         return array_map(function($component){$this->buildComponent($component);return $component;}, array_filter($componentList));
     }
@@ -945,8 +951,8 @@ class screenModel extends model
     }
 
     /**
-     * 构建图表组。
-     * Build chart group.
+     * 构建图表组的默认属性。
+     * Build group default attributes.
      *
      * @param  object $component
      * @access public
@@ -1028,8 +1034,8 @@ class screenModel extends model
 
         if(isset($url)) $component->option->onChange = "window.location.href = {$url}";
 
-        /* 设置全区图表类型数据。 */
-        /* Set filter chart type data. */
+        /* 设置全局图表过滤条件。 */
+        /* Set global chart filter. */
         foreach($component->filterCharts as $chart)
         {
             if(!isset($this->filter->charts[$chart->chart])) $this->filter->charts[$chart->chart] = array();
@@ -1225,6 +1231,7 @@ class screenModel extends model
                     $component->option->dataset->source     = $sourceData;
                 }
             }
+
             $this->setComponentDefaults($component);
         }
     }
@@ -1561,16 +1568,11 @@ class screenModel extends model
         {
             $execution = $this->execution->getByID($executionID);
 
-            /* 如果执行的项目不存在，跳过。 */
             $project = $this->loadModel('project')->getByID($execution->project);
             if(!$project) continue;
 
-            /* 更新执行的名称格式为"{执行所属的项目名称}-{执行名称}"。 */
-            /* Update execution name format to "{project name}-{execution name}". */
             $execution->name = $project->name . '--' . $execution->name;
 
-            /* 过滤数据。 */
-            /* Filter data. */
             if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
                 || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
                 || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
@@ -1610,8 +1612,6 @@ class screenModel extends model
      */
     public function initComponent(object $chart, string $type, object $component): void
     {
-        /* 如果组件或者图表配置不存在，返回空对象。 */
-        /* If component or chart config is not exist, return empty object. */
         if(!$component)
         {
             $component = new stdclass();
@@ -1621,8 +1621,8 @@ class screenModel extends model
 
         $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
 
-        /* 设置组件的默认值。 */
-        /* Set component defaults. */
+        /* 设置组件部分属性的默认值。 */
+        /* Set default value of component. */
         if(!isset($component->id))       $component->id       = $chart->id;
         if(!isset($component->sourceID)) $component->sourceID = $chart->id;
         if(!isset($component->title))    $component->title    = $chart->name;
@@ -1635,6 +1635,8 @@ class screenModel extends model
 
         $typeChanged = false;
 
+        /* 判断图表类型是否改变。 */
+        /* Judge whether chart type is changed. */
         if(isset($component->chartConfig))
         {
             $componentType = '';
@@ -1646,8 +1648,8 @@ class screenModel extends model
             $typeChanged = $chartType != $componentType;
         }
 
-        /* 修改图表配置。 */
-        /* Modify chart config. */
+        /* 如果没有设置图表配置，使用系统的图表配置默认值。 */
+        /* Use system default value if chart settings is empty. */
         if(!isset($component->chartConfig) || $typeChanged)
         {
             $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
@@ -1656,6 +1658,8 @@ class screenModel extends model
             $component->chartConfig = $chartConfig;
         }
 
+        /* 如果组件没有配置，则使用系统的组件配置默认值。 */
+        /* Use system default value if component settings is empty. */
         if(!isset($component->option) || $typeChanged)
         {
             $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
