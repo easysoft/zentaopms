@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'sidebar' . DS . 'v1.php';
 
 class moduleMenu extends wg
 {
@@ -156,47 +157,58 @@ class moduleMenu extends wg
         $activeKey = $this->prop('activeKey');
         if(empty($activeKey)) return null;
 
-        return a
+        return btn
         (
-            set('href', $closeLink),
-            $titleAttrs ? setData($titleAttrs) : null,
-            icon('close', setStyle('color', 'var(--color-gray-600)'))
+            setClass('btn-close rounded-full'),
+            set::icon('close'),
+            set::url($closeLink),
+            set::size('sm'),
+            set::type('ghost'),
+            $titleAttrs ? setData($titleAttrs) : null
         );
     }
 
-    protected function build(): wg
+    protected function build(): array
     {
         global $app;
         $this->setMenuTreeProps();
 
-        $title     = $this->getTitle();
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
-        $preserve  = $app->getModuleName() . '-' . $app->getMethodName();
+        $title       = $this->getTitle();
+        $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
+        $preserve    = $app->getModuleName() . '-' . $app->getMethodName();
+        $isInSidebar = $this->parent instanceof sidebar;
 
-        return div
+        $header = h::header
         (
-            setID('moduleMenu'),
-            setClass('shadow-sm rounded bg-canvas col rounded-sm'),
-            h::header
+            setClass('module-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
+            span
             (
-                setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-                span
-                (
-                    setClass('module-title text-lg font-semibold clip'),
-                    $title
-                ),
-                $this->buildCloseBtn()
+                setClass('module-title text-lg font-semibold clip'),
+                $title
             ),
-            zui::tree
-            (
-                set::_tag('menu'),
-                set::_class('col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
-                set::defaultNestedShow(true),
-                set::hover(true),
-                set::preserve($preserve),
-                set($treeProps)
-            ),
-            $this->buildActions()
+            $this->buildCloseBtn()
         );
+
+        return array
+        (
+            $isInSidebar ? $header : null,
+            div
+            (
+                setID('moduleMenu'),
+                setClass('shadow-sm rounded bg-canvas col rounded-sm'),
+                $isInSidebar ? null : $header,
+                zui::tree
+                (
+                    set::_tag('menu'),
+                    set::_class('tree col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
+                    set::defaultNestedShow(true),
+                    set::hover(true),
+                    set::preserve($preserve),
+                    set($treeProps)
+                ),
+                $this->buildActions()
+            ),
+            $isInSidebar ? h::js("$('#mainContainer').addClass('has-module-menu-header')") : null
+       );
     }
 }
