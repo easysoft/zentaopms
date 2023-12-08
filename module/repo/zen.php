@@ -994,7 +994,7 @@ class repoZen extends repo
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), '', $pager);
+            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
         }
         else
         {
