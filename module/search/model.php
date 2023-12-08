@@ -400,7 +400,7 @@ class searchModel extends model
      */
     public function getList(string $keywords, array|string $type, object $pager = null): array
     {
-        list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords, $type);
+        list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords);
         $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
         $filterObjects = array();

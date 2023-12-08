@@ -128,7 +128,7 @@ class searchTao extends searchModel
         /* 设置字段的值。*/
         /* Skip empty values. */
         if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-        if(isset($fieldParams->$field) && $fieldParams->$field->control == 'select' && $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
+        if(isset($fieldParams->$field) && $fieldParams->$field->control == 'select' && $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select.
         $value = addcslashes(trim((string)$this->post->{$valueName}), '%');
 
         return array($andOr, $operator, $value);
@@ -342,11 +342,10 @@ class searchTao extends searchModel
      * Get list sql params.
      *
      * @param  string    $keywords
-     * @param  string    $type
      * @access protected
      * @return array
      */
-    protected function getSqlParams(string $keywords, string|array $type): array
+    protected function getSqlParams(string $keywords): array
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', $this->unify($keywords, ' '));
