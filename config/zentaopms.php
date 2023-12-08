@@ -580,27 +580,6 @@ define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
-define('TABLE_DEMANDPOOL',     '`' . $config->db->prefix . 'demandpool`');
-define('TABLE_DEMAND',         '`' . $config->db->prefix . 'demand`');
-define('TABLE_DEMANDSPEC',     '`' . $config->db->prefix . 'demandspec`');
-define('TABLE_DEMANDREVIEW',   '`' . $config->db->prefix . 'demandreview`');
-define('TABLE_ROADMAP',        '`' . $config->db->prefix . 'roadmap`');
-define('TABLE_ROADMAPSTORY',   '`' . $config->db->prefix . 'roadmapstory`');
-define('TABLE_CHARTER',        '`' . $config->db->prefix . 'charter`');
-define('TABLE_MARKET',         '`' . $config->db->prefix . 'market`');
-define('TABLE_MARKETREPORT',   '`' . $config->db->prefix . 'marketreport`');
-define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');
-
-$config->objectTables['demand']         = TABLE_DEMAND;
-$config->objectTables['demandpool']     = TABLE_DEMANDPOOL;
-$config->objectTables['demandspec']     = TABLE_DEMANDSPEC;
-$config->objectTables['demandreview']   = TABLE_DEMANDREVIEW;
-$config->objectTables['roadmap']        = TABLE_ROADMAP;
-$config->objectTables['charter']        = TABLE_CHARTER;
-$config->objectTables['market']         = TABLE_MARKET;
-$config->objectTables['marketreport']   = TABLE_MARKETREPORT;
-$config->objectTables['marketresearch'] = TABLE_PROJECT;
-$config->objectTables['researchstage']  = TABLE_PROJECT;
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;
