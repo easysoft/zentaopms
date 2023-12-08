@@ -15,7 +15,7 @@ class extensionZen extends extension
      * 安全性校验。
      * Check safe.
      *
-     * @access public
+     * @access protected
      * @return void
      */
     protected function checkSafe()
@@ -283,10 +283,10 @@ class extensionZen extends extension
      *
      * @param  string       $extension
      * @param  string       $hook      preinstall|postinstall|preuninstall|postuninstall
-     * @access public
+     * @access protected
      * @return string|false
      */
-    public function getHookFile(string $extension, string $hook): string|false
+    protected function getHookFile(string $extension, string $hook): string|false
     {
         $hookFile = $this->extension->pkgRoot . "$extension/hook/$hook.php";
         if(file_exists($hookFile)) return $hookFile;
@@ -297,11 +297,11 @@ class extensionZen extends extension
      * 检查安装前的文件夹权限。
      * Check extension files.
      *
-     * @param  string $extension
-     * @access public
+     * @param  string  $extension
+     * @access private
      * @return object
      */
-    public function checkExtensionPaths(string $extension): object
+    private function checkExtensionPaths(string $extension): object
     {
         $checkResult = new stdclass();
         $checkResult->result        = 'ok';
@@ -326,7 +326,7 @@ class extensionZen extends extension
         }
 
         /* 检查插件目录对应的禅道目录权限。 */
-        $checkResult = $this->checkExtensionPath($extension, $checkResult);
+        $checkResult = $this->checkExtractPath($extension, $checkResult);
 
         if($checkResult->errors) $checkResult->result = 'fail';
 
@@ -346,7 +346,7 @@ class extensionZen extends extension
      * @access private
      * @return object
      */
-    private function checkExtensionPath(string $extension, object $checkResult): object
+    private function checkExtractPath(string $extension, object $checkResult): object
     {
         $appRoot = $this->app->getAppRoot();
         $paths   = $this->extension->getPathsFromPackage($extension);
@@ -392,11 +392,11 @@ class extensionZen extends extension
      * 检查插件包的目录结构是否禅道目录结构冲突。
      * Check files in the package conflicts with exists files or not.
      *
-     * @param  string $extension
-     * @access public
+     * @param  string    $extension
+     * @access protected
      * @return object
      */
-    public function checkFileConflict(string $extension): object
+    protected function checkFileConflict(string $extension): object
     {
         $return = new stdclass();
         $return->result = 'ok';
@@ -420,11 +420,11 @@ class extensionZen extends extension
      * 解压插件包到pkg目录。
      * Extract an extension.
      *
-     * @param  string $extension
-     * @access public
+     * @param  string    $extension
+     * @access protected
      * @return object
      */
-    public function extractPackage(string $extension): object
+    protected function extractPackage(string $extension): object
     {
         $return = new stdclass();
         $return->result = 'ok';
@@ -463,11 +463,11 @@ class extensionZen extends extension
      * 复制插件包文件到禅道目录。
      * Copy package files.
      *
-     * @param  string $extension
-     * @access public
+     * @param  string    $extension
+     * @access protected
      * @return array
      */
-    public function copyPackageFiles(string $extension): array
+    protected function copyPackageFiles(string $extension): array
     {
         $appRoot      = $this->app->getAppRoot();
         $extensionDir = $this->extension->pkgRoot . $extension . DS;
@@ -494,10 +494,10 @@ class extensionZen extends extension
      * Backup db when uninstall extension.
      *
      * @param  string       $extension
-     * @access public
+     * @access protected
      * @return string|false
      */
-    public function backupDB(string $extension): string|false
+    protected function backupDB(string $extension): string|false
     {
         $sqls = file_get_contents($this->extension->getDBFile($extension, 'uninstall'));
         $sqls = explode(';', $sqls);

@@ -52,8 +52,8 @@ class extensionModel extends model
      * 调用接口并返回结果中的data。
      * Fetch data from an api.
      *
-     * @param  string $url
-     * @access public
+     * @param  string  $url
+     * @access private
      * @return mixed
      */
     private function fetchAPI(string $url)
@@ -611,7 +611,7 @@ class extensionModel extends model
         //从插件包中获取配置信息。
         $extension = $this->getInfoFromPackage($code);
 
-        $extension->status        = 'available';
+        $extension->status        = 'available'; // 安装时的默认状态是已下载，后续安装完成后会变更。
         $extension->code          = $code;
         $extension->type          = empty($type) ? $extension->type : $type;
         $extension->installedTime = helper::now();
