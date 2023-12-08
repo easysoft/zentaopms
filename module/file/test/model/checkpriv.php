@@ -1,7 +1,13 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 fileModel->checkPriv();
+cid=
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
 su('admin');
 
 $file = zdTable('file');
@@ -24,14 +30,6 @@ $release->gen(1);
 
 $doc = zdTable('doc');
 $doc->gen(1);
-
-/**
-
-title=测试 fileModel->checkPriv();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('file');

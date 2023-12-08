@@ -2234,7 +2234,7 @@ class testcaseZen extends testcase
 
         if($this->post->isEndPage)
         {
-            unlink($tmpFile);
+            if(file_exists($_SESSION['fileImport'])) unlink($tmpFile);
             unset($_SESSION['fileImport']);
             $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
         }

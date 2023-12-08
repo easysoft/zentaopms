@@ -651,104 +651,20 @@ class fileModel extends model
     /**
      * Parse CSV.
      *
-     * @param  string    $fileName
+     * @param  string $csvFile
      * @access public
      * @return array
      */
-    public function parseCSV(string $fileName): array
+    public function parseCSV(string $csvFile): array
     {
         /* Parse file only in zentao. */
-        if(strpos($fileName, $this->app->getBasePath()) !== 0) return array();
+        if(strpos($csvFile, $this->app->getBasePath()) !== 0) return array();
+        if(!file_exists($csvFile)) return array();
 
-        $content = file_get_contents($fileName);
-        /* Fix bug #890. */
-        $content = str_replace(array("\r\n", "\r"), "\n", $content);
-        $lines   = explode("\n", $content);
-
-        $col  = -1;
-        $row  = 0;
+        $fh   = fopen($csvFile, "r");
         $data = array();
-        foreach($lines as $line)
-        {
-            $markNum = substr_count($line, '"') - substr_count($line, '\"');
-            if(substr($line, -1) != ',' and (($markNum % 2 == 1 and $col != -1) or ($markNum % 2 == 0 and substr($line, -2) != ',"' and $col == -1))) $line .= ',';
-            $line = str_replace(',"",', ',,', $line);
-            $line = str_replace(',"",', ',,', $line);
-            $line = preg_replace_callback('/(\"{2,})(\,+)/U', array($this, 'removeInterference'), $line);
-            $line = str_replace('""', '"', $line);
-
-            /* if only one column then line is the data. */
-            if(strpos($line, ',') === false and isset($line[0]) and $line[0] != '"' and $col == -1)
-            {
-                $data[$row][0] = trim($line, '"');
-            }
-            else
-            {
-                /* if col is not -1, then the data of column is not end. */
-                if($col != -1)
-                {
-                    $pos = strpos($line, '",');
-                    if($pos === false)
-                    {
-                        $data[$row][$col] .= "\n" . $line;
-                        $data[$row][$col] = str_replace('&comma;', ',', $data[$row][$col]);
-                        continue;
-                    }
-                    else
-                    {
-                        $data[$row][$col] .= "\n" . substr($line, 0, $pos);
-                        $data[$row][$col] = trim(str_replace('&comma;', ',', $data[$row][$col]));
-                        $line = substr($line, $pos + 2);
-                        $col++;
-                    }
-                }
-
-                if($col == -1) $col = 0;
-                /* explode cols with delimiter. */
-                while($line)
-                {
-                    /* the cell has '"', the delimiter is '",'. */
-                    if($line[0] == '"')
-                    {
-                        $pos  = strpos($line, '",');
-                        if($pos === false)
-                        {
-                            $data[$row][$col] = substr($line, 1);
-                            /* if line is not empty, then the data of cell is not end. */
-                            if(strlen($line) >= 1) continue 2;
-                            $line = '';
-                        }
-                        else
-                        {
-                            $data[$row][$col] = substr($line, 1, $pos - 1);
-                            $line = substr($line, $pos + 2);
-                        }
-                        $data[$row][$col] = str_replace('&comma;', ',', $data[$row][$col]);
-                    }
-                    else
-                    {
-                        /* the delimiter default is ','. */
-                        $pos = strpos($line, ',');
-                        /* if line is not delimiter, then line is the data of cell. */
-                        if($pos === false)
-                        {
-                            $data[$row][$col] = $line;
-                            $line = '';
-                        }
-                        else
-                        {
-                            $data[$row][$col] = substr($line, 0, $pos);
-                            $line = substr($line, $pos + 1);
-                        }
-                    }
-
-                    $data[$row][$col] = trim(str_replace('&comma;', ',', $data[$row][$col]));
-                    $col++;
-                }
-            }
-            $row ++;
-            $col = -1;
-        }
+        while(($row = fgetcsv($fh)) !== false) $data[] = $row;
+        fclose($fh);
 
         return $data;
     }
@@ -760,7 +676,7 @@ class fileModel extends model
      * @access private
      * @return string
      */
-    private function removeInterference($matches)
+    private function removeInterference(array $matches): string
     {
         if(strlen($matches[1]) % 2 == 1) return $matches[1] . $matches[2];
         return str_replace('""', '"', $matches[1]) . str_replace(',', '&comma;', $matches[2]);
