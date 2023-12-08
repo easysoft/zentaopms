@@ -433,11 +433,16 @@ $lang->ai->models->statusList['off'] = 'Disable';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
+$lang->ai->models->typeList['openai-gpt4']  = 'OpenAI / GPT-4';
 $lang->ai->models->typeList['baidu-ernie']  = 'Baidu / ERNIE';
 
 $lang->ai->models->vendorList = new stdclass();
 $lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'openai-gpt4'}  = array('openai' => 'OpenAI', 'azure' => 'Azure');
 $lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => 'Baidu Qianfan LLM Platform');
+
+$lang->ai->models->vendorTips = new stdclass();
+$lang->ai->models->vendorTips->azure = 'OpenAI GPT version is specified during model deployment creation on Azure.';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';

@@ -4,7 +4,7 @@ $config->ai->vendorList['openai']['requiredFields'] = array('key');
 $config->ai->vendorList['azure']['requiredFields']  = array('key', 'resource', 'deployment');
 $config->ai->vendorList['baidu']['requiredFields']  = array('key', 'secret');
 
-$config->ai->models = array('openai-gpt35' => 'openai', 'baidu-ernie' => 'ernie');
+$config->ai->models = array('openai-gpt35' => 'openai', 'openai-gpt4' => 'openai', 'baidu-ernie' => 'ernie');
 
 /* OpenAI GPT configurations. */
 $config->ai->openai = new stdclass();
@@ -34,8 +34,8 @@ $config->ai->openai->params->completion->required = array('prompt', 'max_tokens'
 $config->ai->openai->params->completion->optional = array('suffix', 'temperature', 'top_p', 'n', 'stream', 'logprobs', 'echo', 'stop', 'presence_penalty', 'frequency_penalty', 'best_of', 'logit_bias', 'user');
 
 $config->ai->openai->model = new stdclass();
-$config->ai->openai->model->chat       = 'gpt-3.5-turbo';
-$config->ai->openai->model->function   = 'gpt-3.5-turbo';
+$config->ai->openai->model->chat       = array('openai-gpt35' => 'gpt-3.5-turbo', 'openai-gpt4' => 'gpt-4-1106-preview');
+$config->ai->openai->model->function   = array('openai-gpt35' => 'gpt-3.5-turbo', 'openai-gpt4' => 'gpt-4-1106-preview');
 $config->ai->openai->model->completion = 'gpt-3.5-turbo-instruct';
 
 $config->ai->openai->contentTypeMapping = array('Content-Type: application/json' => array('', 'function', 'chat', 'completion'), 'Content-Type: multipart/form-data' => array());

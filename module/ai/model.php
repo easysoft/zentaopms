@@ -238,8 +238,12 @@ class aiModel extends model
     {
         $modelType = $this->config->ai->models[$this->modelConfig->type];
 
+        /* Models of the same type may differ in version, in which case they are stored as an array. */
+        $modelName = $this->config->ai->$modelType->model->$type;
+        if(is_array($modelName)) $modelName = $modelName[$this->modelConfig->type];
+
         $postData = new stdclass();
-        $postData->model = $this->config->ai->$modelType->model->$type;
+        $postData->model = $modelName;
 
         $data = static::standardizeParams($data);
 

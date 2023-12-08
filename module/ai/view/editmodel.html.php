@@ -16,36 +16,43 @@ $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
 if(empty($requiredFields)) $requiredFields = array();
 js::set('vendorList', $config->ai->vendorList);
 js::set('vendorListLang', $lang->ai->models->vendorList);
+js::set('vendorTipsLang', $lang->ai->models->vendorTips);
 ?>
 <style>
   .required:after {right: -12px;}
 </style>
 <div id='mainContent' class='main-content'>
   <form id='mainForm' class='load-indicator main-form form-ajax' method='post'>
-    <table class='table table-form mw-800px'>
+    <table class='table table-form'>
       <tr>
         <th><?php echo $lang->ai->models->type;?></th>
         <td><?php echo html::select('type', $lang->ai->models->typeList, $modelConfig->type, "class='form-control chosen' required");?></td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->vendor;?></th>
         <td><?php echo html::select('vendor', $lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}, $currentVendor, "class='form-control chosen' required");?></td>
+        <td id='vendor-tips' class='text-gray' style='display: none;'></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('key', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="key">
         <th><?php echo $lang->ai->models->key;?></th>
         <td><?php echo html::input('key', $modelConfig->key, "class='form-control' required");?></td>
+        <td></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('secret', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="secret">
         <th><?php echo $lang->ai->models->secret;?></th>
         <td><?php echo html::input('secret', $modelConfig->secret, "class='form-control' required");?></td>
+        <td></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('resource', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="resource">
         <th><?php echo $lang->ai->models->resource;?></th>
         <td><?php echo html::input('resource', empty($modelConfig->resource) ? '' : $modelConfig->resource, "class='form-control' required");?></td>
+        <td></td>
       </tr>
       <tr class="vendor-row <?php echo in_array('deployment', $requiredFields) ? '' : ' hidden'; ?>" data-vendor-field="deployment">
         <th><?php echo $lang->ai->models->deployment;?></th>
         <td><?php echo html::input('deployment', empty($modelConfig->deployment) ? '' : $modelConfig->deployment, "class='form-control' required");?></td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->proxyType;?></th>
@@ -62,14 +69,17 @@ js::set('vendorListLang', $lang->ai->models->vendorList);
             </div>
           </div>
         </td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->ai->models->description;?></th>
         <td><?php echo html::textarea('description', $modelConfig->description, "class='form-control'");?></td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->statusAB;?></th>
         <td><?php echo html::radio('status', $lang->ai->models->statusList, empty($modelConfig->status) ? 'on' : $modelConfig->status);?></td>
+        <td></td>
       </tr>
       <tr>
         <td colspan='2' class='text-center'>
@@ -77,6 +87,7 @@ js::set('vendorListLang', $lang->ai->models->vendorList);
           <?php echo html::commonButton($lang->ai->models->testConnection, 'id="testConn"', 'btn btn-secondary btn-wide');?>
           <?php echo html::a(inlink('models', ""), $lang->goback, '', 'class="btn btn-wide"');?>
         </td>
+        <td></td>
       </tr>
     </table>
   </form>
@@ -96,6 +107,8 @@ $(function() {
     {
         var vendor = $(this).val();
         var requiredFields = vendorList[vendor]['requiredFields'];
+        const vendorTip = vendorTipsLang[vendor];
+        $('#vendor-tips').html(vendorTip ? vendorTip : '').toggle(!!vendorTip);
         $('.vendor-row').each(function()
         {
             var name = $(this).data('vendor-field');

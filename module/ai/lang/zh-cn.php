@@ -433,11 +433,16 @@ $lang->ai->models->statusList['off'] = '停用';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
+$lang->ai->models->typeList['openai-gpt4']  = 'OpenAI / GPT-4';
 $lang->ai->models->typeList['baidu-ernie']  = '百度 / 文心一言';
 
 $lang->ai->models->vendorList = new stdclass();
 $lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'openai-gpt4'}  = array('openai' => 'OpenAI', 'azure' => 'Azure');
 $lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => '百度千帆大模型平台');
+
+$lang->ai->models->vendorTips = new stdclass();
+$lang->ai->models->vendorTips->azure = 'Azure 中 OpenAI GPT 版本 (3.5 或 4) 需要在创建资源时指定。';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';

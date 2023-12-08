@@ -145,7 +145,7 @@ class ai extends control
 
         $this->ai->setConfig($modelConfig);
 
-        if($this->config->ai->models[$modelConfig->type] == 'ernie' || $currentVendor == 'azure')
+        if($this->config->ai->models[$modelConfig->type] == 'ernie' || $currentVendor == 'azure' || $modelConfig->type == 'openai-gpt4')
         {
             $messages = array((object)array('role' => 'user', 'content' => 'test'));
             $result = $this->ai->converse($messages, array('maxTokens' => 1));
