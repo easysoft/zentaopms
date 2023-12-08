@@ -1097,33 +1097,6 @@ class docModel extends model
     }
 
     /**
-     * Save draft.
-     *
-     * @param  int $docID
-     * @access public
-     * @return void
-     */
-    public function saveDraft($docID)
-    {
-        $docID   = (int)$docID;
-        $oldDoc  = $this->dao->select('id,editingDate')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
-        $account = $this->app->user->account;
-
-        $data = fixer::input('post')->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)->get();
-        $doc  = new stdclass();
-        $doc->draft = $data->content;
-
-        $doc->editingDate = $oldDoc->editingDate ? json_decode($oldDoc->editingDate, true) : array();
-        $doc->editingDate[$account] = time();
-        $doc->editingDate = json_encode($doc->editingDate);
-
-        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->orderBy('version_desc')->fetch();
-        if($docType == 'markdown') $doc->draft = $this->post->content;
-
-        $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
-    }
-
-    /**
      * 构造搜索条件。
      * Build search query.
      *

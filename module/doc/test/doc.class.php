@@ -254,34 +254,6 @@ class docTest
     }
 
     /**
-     * Function saveDraft test by doc
-     *
-     * @param mixed $docID
-     * @param array $param
-     * @access public
-     * @return void
-     */
-    public function saveDraftTest($docID, $param = array())
-    {
-        global $tester;
-        $tester->app->loadConfig('doc');
-        $tester->app->loadConfig('allowedTags');
-        $createFields = array('content' => '');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->saveDraft($docID);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $tester->dao->select('id,draft')->from(TABLE_DOC)->where('id')->eq($docID)->fetchAll('id');
-        unset($_POST);
-
-        return $objects;
-    }
-
-    /**
      * Function getAllLibsByType test by doc
      *
      * @param mixed $type
