@@ -269,4 +269,21 @@ class pivotTao extends pivotModel
             ->where('deleted')->eq('0')
             ->fetchPairs();
     }
+
+    /**
+     * 获取产品和执行名称。
+     * Get product and execution name.
+     *
+     * @access public
+     * @return array
+     */
+    protected function getProjectAndExecutionNameQuery(): array
+    {
+        return $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status, t1.multiple')
+            ->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->in('stage,sprint')
+            ->fetchAll();
+    }
 }

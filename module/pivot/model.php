@@ -662,19 +662,15 @@ class pivotModel extends model
     }
 
     /**
-     * Get project and execution name.
+     * 获取执行的下拉菜单相关数据。
+     * Get execution dropdown menu related data.
      *
      * @access public
      * @return array
      */
-    public function getProjectExecutions()
+    public function getProjectExecutions(): array
     {
-        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status, t1.multiple')
-            ->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.type')->in('stage,sprint')
-            ->fetchAll();
+        $executions = $this->pivotTao->getProjectAndExecutionNameQuery();
 
         $pairs = array();
         foreach($executions as $execution)
