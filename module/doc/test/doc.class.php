@@ -1342,4 +1342,20 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $query;
     }
+
+    /**
+     * 通过文档ID获取文档所属产品、项目、执行。
+     * Get projects, executions and products by docIdList.
+     *
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function getObjectsByDocTest(array $docIdList): array
+    {
+        $data = $this->objectModel->getObjectsByDoc($docIdList);
+
+        if(dao::isError()) return dao::getError();
+        return $data;
+    }
 }
