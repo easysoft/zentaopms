@@ -420,15 +420,6 @@ class docTest
         return $objects;
     }
 
-    public function buildBrowseSwitchTest($type, $objectID, $viewType)
-    {
-        $objects = $this->objectModel->buildBrowseSwitch($type, $objectID, $viewType);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function setFastMenuTest($fastLib)
     {
         $objects = $this->objectModel->setFastMenu($fastLib);

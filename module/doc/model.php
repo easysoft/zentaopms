@@ -1890,31 +1890,6 @@ class docModel extends model
     }
 
     /**
-     * Build browse switch button.
-     *
-     * @param  int    $type
-     * @param  int    $objectID
-     * @param  int    $viewType
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @param  string $searchTitle
-     *
-     * @access public
-     * @return void
-     */
-    public function buildBrowseSwitch($type, $objectID, $viewType, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $searchTitle = '')
-    {
-        $html = "<div class='btn-group'>";
-        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&searchTitle=$searchTitle"), "<i class='icon icon-cards-view'></i>", '', "title={$this->lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
-        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&searchTitle=$searchTitle"), "<i class='icon icon-bars'></i>", '', "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
-        $html .= "</div>";
-
-        return $html;
-    }
-
-    /**
      * Set past menu.
      *
      * @param  string $fastLib
