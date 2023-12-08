@@ -402,32 +402,6 @@ class docTest
         return $objects;
     }
 
-    /**
-     * Get the previous and next doc.
-     *
-     * @param  int $docID
-     * @param  int $libID
-     * @access public
-     * @return object
-     */
-    public function getPreAndNextDocTest($docID, $libID)
-    {
-        $objects = $this->objectModel->getPreAndNextDoc($docID, $libID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function printChildModuleTest($module, $libID, $methodName, $browseType, $moduleID)
-    {
-        $objects = $this->objectModel->printChildModule($module, $libID, $methodName, $browseType, $moduleID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function buildCrumbTitleTest($libID = 0, $param = 0, $title = '')
     {
         $objects = $this->objectModel->buildCrumbTitle($libID = 0, $param = 0, $title = '');
