@@ -3,8 +3,11 @@
 /**
 
 title=测试 chartModel::parseSqlVars();
+timeout=0
 cid=1
-pid=1
+
+- 测试设置了默认值的情况 @select id,name from zt_project where deleted=0 and id='1'
+- 测试没有默认值时是否替换为空 @select id,name from zt_project where deleted=0 and id=''
 
 */
 

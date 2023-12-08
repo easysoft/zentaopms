@@ -3,8 +3,17 @@
 /**
 
 title=测试 chartModel::getFieldOptions();
+timeout=0
 cid=1
-pid=1
+
+- 测试参数全部为空 @0
+- 测试查询用户属性admin @A:admin
+- 测试查询产品属性1 @正常产品1
+- 测试查询项目属性11 @项目11
+- 测试查询部门属性1 @/产品部1
+- 测试查询bug状态属性active @激活
+- 测试查询bug名称属性1 @BUG1
+- 测试使用sql查询属性BUG1 @BUG1
 
 */
 

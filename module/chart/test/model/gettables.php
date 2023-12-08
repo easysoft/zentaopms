@@ -3,8 +3,41 @@
 /**
 
 title=测试 chartModel::getTables();
+timeout=0
 cid=1
-pid=1
+
+- 测试普通SQL语句获取表是否正确第tables条的0属性 @zt_story
+- 测试普通SQL语句获取字段是否正确第fields条的*属性 @*
+- 测试普通SQL语句获取sql是否正确属性sql @select * from zt_story;
+- 测试普通SQL语句获取表是否正确第tables条的0属性 @zt_story
+- 测试普通SQL语句获取查询字段是否正确
+ - 第fields条的id属性 @id
+ - 第fields条的name属性 @name
+- 测试普通SQL语句获取sql是否正确属性sql @select id,name from zt_story;
+- 测试联表SQL语句获取表是否正确
+ - 第tables条的0属性 @zt_story
+ - 第tables条的1属性 @zt_product
+- 测试联表SQL语句获取字段是否正确
+ - 第fields条的id属性 @t1.id
+ - 第fields条的name属性 @t2.name
+- 测试联表SQL语句获取sql是否正确属性sql @select t1.id,t2.name from zt_story as t1 left join zt_product as t2 on t1.product = t2.id;
+- 测试联表SQL语句获取重定义字段是否正确
+ - 第tables条的0属性 @zt_story
+ - 第tables条的1属性 @zt_product
+- 测试联表SQL语句获取重定义字段是否正确
+ - 第fields条的storyID属性 @t1.id
+ - 第fields条的productName属性 @t2.name
+- 测试联表SQL语句获取sql是否正确属性sql @select t1.id as storyID,t2.name as productName from zt_story as t1 left join zt_product as t2 on t1.product = t2.id;
+- 测试sql中有where获取表是否正确第tables条的0属性 @zt_story
+- 测试sql中有where获取字段是否正确第fields条的*属性 @*
+- 测试sql中有where获取sql是否正确属性sql @select * from zt_story where id = 1;
+- 测试sql中有limit获取表是否正确第tables条的0属性 @zt_story
+- 测试sql中有limit获取字段是否正确第fields条的*属性 @*
+- 测试sql中有limit获取sql是否正确属性sql @select * from zt_story limit 10;
+- 测试sql中有group by获取表是否正确第tables条的0属性 @zt_story
+- 测试sql中有group by获取字段是否正确第fields条的*属性 @*
+- 测试sql中有group by获取sql是否正确属性sql @select * from zt_story group by product;
+- 测试异常sql语句 @0
 
 */
 

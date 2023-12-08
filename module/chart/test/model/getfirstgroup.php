@@ -3,8 +3,11 @@
 /**
 
 title=测试 chartModel::getFirstGroup();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取宏观管理维度下的第一个分组ID @32
+- 测试获取一个不存在的维度的分组ID @0
 
 */
 

@@ -3,8 +3,14 @@
 /**
 
 title=测试 chartModel::processChart();
+timeout=0
 cid=1
-pid=1
+
+- 测试解密langs字段第langs[name]条的zh-cn属性 @项目名称
+- 测试解密filters字段第filters[0]条的field属性 @closedDate
+- 测试解密settings字段第settings[0]条的type属性 @cluBarY
+- 测试sql字段为null的情况属性sql @~~
+- 测试sql字段为null的情况属性sql @SELECT id FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'
 
 */
 

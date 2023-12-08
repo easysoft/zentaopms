@@ -3,8 +3,27 @@
 /**
 
 title=测试 chartModel::getFilterFormat();
+timeout=0
 cid=1
-pid=1
+
+- 测试没有default的情况 @0
+- 测试default为空的情况 @0
+- 测试select
+ - 第year条的operator属性 @IN
+ - 第year条的value属性 @('2023')
+- 测试input
+ - 第project条的operator属性 @like
+ - 第project条的value属性 @'%1%'
+- 测试date没有begin和end @0
+- 测试input
+ - 第openedDate条的operator属性 @BETWEEN
+ - 第openedDate条的value属性 @'2023-01-01' and '2023-02-01'
+- 测试in
+ - 第id条的operator属性 @IN
+ - 第id条的value属性 @("1","2","3")
+- 测试is not null
+ - 第id条的operator属性 @IS NOT NULL
+ - 第id条的value属性 @N/A
 
 */
 
