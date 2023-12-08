@@ -1156,17 +1156,21 @@ class repoModel extends model
      */
     public function saveOneCommit(int $repoID, object $commit, int $version, string $branch = ''): int
     {
-        $existsRevision  = $this->dao->select('id,revision')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($commit->revision)->fetch();
+        $existsRevision = $this->dao->select('id,revision')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($commit->revision)->fetch();
         if($existsRevision)
         {
             if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($existsRevision->id)->set('branch')->eq($branch)->exec();
             return $version;
         }
 
-        $commit->repo    = $repoID;
-        $commit->commit  = $version;
-        $commit->comment = htmlSpecialString($commit->comment);
-        $this->dao->insert(TABLE_REPOHISTORY)->data($commit)->exec();
+        $history = new stdclass();
+        $history->repo      = $repoID;
+        $history->commit    = $version;
+        $history->revision  = $commit->revision;
+        $history->comment   = htmlSpecialString($commit->comment);
+        $history->committer = $commit->committer;
+        $history->time      = $commit->time;
+        $this->dao->insert(TABLE_REPOHISTORY)->data($history)->exec();
         if(!dao::isError())
         {
             $commitID = $this->dao->lastInsertID();
@@ -1732,8 +1736,8 @@ class repoModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, $log->revision, $scm), 'view', '', "class='iframe' data-width='960'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision, $scm), 'diff', '', "class='iframe' data-width='960'"));
+                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, (string) $log->revision, $scm), 'view', '', "class='iframe' data-width='960'"));
+                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, (string) $log->revision, $scm), 'diff', '', "class='iframe' data-width='960'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
