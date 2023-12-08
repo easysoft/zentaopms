@@ -56,6 +56,7 @@ function buildItem(array $item): wg
                 select
                 (
                     setClass('size-sm w-12'),
+                    set::required(true),
                     set::items($unitTypes),
                     set::value($isPercent ? '%' : 'px')
                 )
