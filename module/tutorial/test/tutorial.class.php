@@ -61,18 +61,16 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式产品信息。
      * Get tutorial product.
      *
      * @access public
-     * @return void
+     * @return object
      */
-    public function getProductTest()
+    public function getProductTest(): object
     {
-        $objects = $this->objectModel->getProduct();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        $object = $this->objectModel->getProduct();
+        return $object;
     }
 
     /**
