@@ -1205,32 +1205,38 @@ class docModel extends model
     }
 
     /**
-     * Check priv for doc.
+     * 检查文档权限。
+     * Check privilege for the document.
      *
-     * @param  object $object
+     * @param  object $doc
      * @access public
      * @return bool
      */
-    public function checkPrivDoc($object)
+    public function checkPrivDoc(object $doc): bool
     {
-        if(!isset($object->lib)) return false;
-        if(isset($object->assetLibType) and $object->assetLibType) return true;
-        if($object->status == 'draft' and $object->addedBy != $this->app->user->account) return false;
-        if($object->status == 'normal' and $this->app->user->admin) return true;
+        if(!isset($doc->lib)) return false;
+
+        /* Asset document don't check privilege. */
+        if(isset($doc->assetLibType) && $doc->assetLibType) return true;
+
+        /* My document are accessible only to the creator. */
+        if($doc->status == 'draft' && $doc->addedBy != $this->app->user->account) return false;
+        if($doc->status == 'normal' && $this->app->user->admin) return true;
 
         static $libs = array();
-        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibByID((int)$object->lib);
-        if(!$this->checkPrivLib($libs[$object->lib])) return false;
-        if(in_array($object->acl, array('open', 'public'))) return true;
+        if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
+        if(!$this->checkPrivLib($libs[$doc->lib])) return false;
+        if(in_array($doc->acl, array('open', 'public'))) return true;
 
+        /* Whitelist users can access private document. */
         $account = ",{$this->app->user->account},";
-        if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(strpos(",$object->users,", $account) !== false) return true;
-        if($object->groups)
+        if(isset($doc->addedBy) && $doc->addedBy == $this->app->user->account) return true;
+        if(strpos(",$doc->users,", $account) !== false) return true;
+        if($doc->groups)
         {
             foreach($this->app->user->groups as $groupID)
             {
-                if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
+                if(strpos(",$doc->groups,", ",$groupID,") !== false) return true;
             }
         }
 
