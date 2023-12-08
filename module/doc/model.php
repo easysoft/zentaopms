@@ -1777,27 +1777,28 @@ class docModel extends model
         foreach($fullTrees as $i => $tree)
         {
             $tree          = (object)$tree;
-            $fullTrees[$i] = $this->fillDocsInTree($tree, $libID);
+            $fullTrees[$i] = $this->buildDocNode($tree, $libID);
         }
         if(empty($fullTrees[0]->children)) array_shift($fullTrees);
         return $fullTrees;
     }
 
     /**
-     * Fill docs in tree.
+     * 构造文档节点。
+     * Build doc node.
      *
      * @param  object $node
      * @param  int    $libID
      * @access public
-     * @return array
+     * @return object
      */
-    public function fillDocsInTree($node, $libID)
+    public function buildDocNode(object $node, int $libID): object
     {
         $node = (object)$node;
         static $docGroups;
         if(empty($docGroups))
         {
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq((int)$libID)->andWhere('deleted')->eq(0)->fetchAll();
+            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll();
             $docGroups = array();
             foreach($docs as $doc)
             {
@@ -1805,7 +1806,7 @@ class docModel extends model
             }
         }
 
-        if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillDocsInTree($child, $libID);
+        if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->buildDocNode($child, $libID);
         if(!isset($node->id)) $node->id = 0;
 
         $node->type = 'module';
@@ -1824,8 +1825,8 @@ class docModel extends model
                 $docItem->url   = helper::createLink('doc', 'view', "doc=$doc->id");
 
                 $buttons = '';
-                $buttons .= common::buildIconButton('doc', 'edit', "docID=$doc->id", '', 'list');
-                if(common::hasPriv('doc', 'delete')) $buttons .= html::a(helper::createLink('doc', 'delete', "docID=$doc->id"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
+                if(common::hasPriv('doc', 'edit'))   $buttons .= html::a(helper::createLink('doc', 'edit',   "docID={$doc->id}"), "<i class='icon icon-edit'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->edit}'");
+                if(common::hasPriv('doc', 'delete')) $buttons .= html::a(helper::createLink('doc', 'delete', "docID={$doc->id}"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
                 $docItem->buttons = $buttons;
                 $docItem->actions = false;
                 $docItems[]       = $docItem;
@@ -1833,7 +1834,6 @@ class docModel extends model
 
             /* Reorder children. The doc is top of menu. */
             if($menu) $docItems = array_merge($docItems, $menu);
-
             $node->children = $docItems;
         }
 
