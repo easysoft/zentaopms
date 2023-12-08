@@ -5,7 +5,7 @@ var backupName;
  * Start backup.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function startBackup()
 {
@@ -34,7 +34,7 @@ function startBackup()
  * Check backup progress.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function checkBackup()
 {

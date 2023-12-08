@@ -457,7 +457,7 @@ class solutionModel extends model
      * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
-     * @return viod
+     * @return void
      */
     public function printCpuUsage($solution, $type = 'bar')
     {
@@ -490,7 +490,7 @@ class solutionModel extends model
      * @param  string $type    'bar' is progress bar, 'pie' is progress pie.
      * @static
      * @access public
-     * @return viod
+     * @return void
      */
     public function printMemUsage($solution, $type = 'bar')
     {

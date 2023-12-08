@@ -585,7 +585,7 @@ class system extends control
      * Browse platform backup.
      *
      * @access public
-     * @return viod
+     * @return void
      */
     public function browseBackup()
     {
@@ -632,7 +632,7 @@ class system extends control
      * Backup platform and apps.
      *
      * @access public
-     * @return viod
+     * @return void
      */
     public function backupPlatform()
     {
@@ -673,7 +673,7 @@ class system extends control
      *
      * @param  string    $backupName
      * @access public
-     * @return viod
+     * @return void
      */
     public function restoreBackup(string $backupName)
     {
@@ -701,7 +701,7 @@ class system extends control
      * Ajax get backup progress.
      *
      * @access public
-     * @return viod
+     * @return void
      */
     public function ajaxGetBackupProgress()
     {
@@ -726,7 +726,7 @@ class system extends control
      * Ajax get restore progress.
      *
      * @access public
-     * @return viod
+     * @return void
      */
     public function ajaxGetRestoreProgress()
     {
