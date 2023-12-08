@@ -20,9 +20,9 @@ $modules     = array(0, 1);
 $browseTypes = array('all', 'draft');
 
 $docTester = new docTest();
-r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[0])) && p()                     && e('0');                  // 获取libID=0、moduleID=0、browseType=all的文档列表
-r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[1])) && p()                     && e('0');                  // 获取libID=0、moduleID=0、browseType=draft的文档列表
-r($docTester->getDocsTest($libIdList[0], $modules[1], $browseTypes[0])) && p()                     && e('0');                  // 获取libID=0、moduleID=1、browseType=all的文档列表
+r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[0])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=0、moduleID=0、browseType=all的文档列表
+r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[1])) && p() && e('0');                                      // 获取libID=0、moduleID=0、browseType=draft的文档列表
+r($docTester->getDocsTest($libIdList[0], $modules[1], $browseTypes[0])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=0、moduleID=1、browseType=all的文档列表
 r($docTester->getDocsTest($libIdList[0], $modules[1], $browseTypes[1])) && p()                     && e('0');                  // 获取libID=0、moduleID=1、browseType=draft的文档列表
 r($docTester->getDocsTest($libIdList[1], $modules[0], $browseTypes[0])) && p('1:lib,module,title') && e('11,0,我的文档1');     // 获取libID=11、moduleID=0、browseType=all的文档列表
 r($docTester->getDocsTest($libIdList[1], $modules[0], $browseTypes[1])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=11、moduleID=0、browseType=draft的文档列表
