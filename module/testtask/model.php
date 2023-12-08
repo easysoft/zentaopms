@@ -198,13 +198,13 @@ class testtaskModel extends model
      * 获取测试单键值对。
      * Get key-value pairs of testtask.
      *
-     * @param  int          $productID
-     * @param  int          $executionID
-     * @param  string|array $appendIdList
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  int    $appendTaskID
      * @access public
      * @return array
      */
-    public function getPairs(int $productID, int $executionID = 0, string|array $appendIdList = ''): array
+    public function getPairs(int $productID, int $executionID = 0, int $appendTaskID = 0): array
     {
         $pairs = $this->dao->select('id, name')->from(TABLE_TESTTASK)
             ->where('deleted')->eq('0')
@@ -214,7 +214,7 @@ class testtaskModel extends model
             ->orderBy('id_desc')
             ->fetchPairs();
 
-        if($appendIdList) $pairs += $this->dao->select('id, name')->from(TABLE_TESTTASK)->where('id')->in($appendIdList)->andWhere('auto')->ne('unit')->fetchPairs();
+        if($appendTaskID) $pairs += $this->dao->select('id, name')->from(TABLE_TESTTASK)->where('id')->eq($appendTaskID)->andWhere('auto')->ne('unit')->fetchPairs();
 
         return $pairs;
     }
