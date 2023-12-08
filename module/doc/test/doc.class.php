@@ -256,19 +256,19 @@ class docTest
     }
 
     /**
-     * Test stat module and document counts of lib.
+     * 统计文档库下的模块和文档数量。
+     * Stat module and document counts of lib.
      *
      * @param  array  $idList
      * @access public
      * @return array
      */
-    public function statLibCountsTest($idList)
+    public function statLibCountsTest(array $idList): array
     {
-        $objects = $this->objectModel->statLibCounts($idList);
+        $itemCounts = $this->objectModel->statLibCounts($idList);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $itemCounts;
     }
 
     /**
