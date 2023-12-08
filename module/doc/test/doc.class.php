@@ -256,24 +256,6 @@ class docTest
     }
 
     /**
-     * Function getAllLibsByType test by doc
-     *
-     * @param mixed $type
-     * @param mixed $product
-     * @param mixed $pager
-     * @access public
-     * @return void
-     */
-    public function getAllLibsByTypeTest($type, $product, $pager = null)
-    {
-        $objects = $this->objectModel->getAllLibsByType($type, $pager, $product);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Test stat module and document counts of lib.
      *
      * @param  array  $idList

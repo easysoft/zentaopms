@@ -1244,64 +1244,6 @@ class docModel extends model
     }
 
     /**
-     * Get all libs by type.
-     *
-     * @param  string $type
-     * @param  int    $pager
-     * @param  string $extra
-     * @access public
-     * @return array
-     */
-    public function getAllLibsByType($type, $pager = null, $product = '')
-    {
-        if($product and $type == 'execution') $executions = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->fetchPairs('project', 'project');
-
-        $libs = $this->getLibs($type == 'collector' ? 'all' : $type);
-        $key  = ($type == 'product' or $type == 'execution') ? $type : 'id';
-        $stmt = $this->dao->select("DISTINCT $key")->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision);
-        if($type == 'product' or $type == 'execution')
-        {
-            $stmt = $stmt->andWhere($type)->ne(0);
-        }
-        elseif($type == 'collector')
-        {
-            $stmt = $stmt->andWhere('collector')->like("%,{$this->app->user->account},%");
-        }
-        else
-        {
-            $stmt = $stmt->andWhere('type')->eq($type);
-        }
-        if(isset($executions)) $stmt = $stmt->andWhere('execution')->in($executions);
-
-        $idList = $stmt->andWhere('id')->in(array_keys($libs))->orderBy("{$key}_desc")->fetchPairs($key, $key);
-
-        if($type == 'product' or $type == 'execution')
-        {
-            $orderBy = '`order` desc, id desc';
-            if($type == 'execution')
-            {
-                $project = $this->loadModel('project')->getByID($this->session->project);
-                $orderBy = (isset($project->model) and $project->model) == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
-            }
-
-            $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $fields = $type == 'product' ? "createdBy, createdDate" : "openedBy AS createdBy, openedDate AS createdDate";
-            $libs   = $this->dao->select("id, name, `order`, {$fields}")->from($table)
-                ->where('id')->in($idList)
-                ->beginIF($type == 'execution' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
-                ->orderBy($orderBy)
-                ->page($pager, 'id')
-                ->fetchAll('id');
-        }
-        else
-        {
-            $libs = $this->dao->select('id, name, collector')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->page($pager, 'id')->fetchAll('id');
-        }
-
-        return $libs;
-    }
-
-    /**
      * Get all lib groups.
      *
      * @param  string $appendLibs
