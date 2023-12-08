@@ -96,7 +96,7 @@ class convertModel extends model
      * @access public
      * @return void
      */
-    public function saveState()
+    public function saveState(): void
     {
         /* Get user defined tables. */
         $constants     = get_defined_constants(true);
@@ -331,7 +331,7 @@ class convertModel extends model
      * @access public
      * @return void
      */
-    public function splitFile()
+    public function splitFile(): void
     {
         $filePath = $this->app->getTmpRoot() . 'jirafile/';
         $fileName = 'entities.xml';
@@ -388,7 +388,7 @@ class convertModel extends model
      * @access public
      * @return void
      */
-    public function createTmpTable4Jira()
+    public function createTmpTable4Jira(): void
     {
 $sql = <<<EOT
 CREATE TABLE `jiratmprelation`(
@@ -418,7 +418,7 @@ EOT;
      * @access public
      * @return void
      */
-    public function afterExec(string $method = 'db')
+    public function afterExec(string $method = 'db'): void
     {
         /* Set project min start date. */
         $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
@@ -445,7 +445,7 @@ EOT;
      * @access public
      * @return void
      */
-    public function deleteJiraFile()
+    public function deleteJiraFile(): void
     {
         $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser');
         foreach($fileList as $fileName)

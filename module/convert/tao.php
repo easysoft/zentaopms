@@ -351,7 +351,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraUser(array $dataList)
+    protected function importJiraUser(array $dataList): void
     {
         $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
         $userConfig = $this->session->jiraUser;
@@ -392,7 +392,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraProject(array $dataList, string $method = 'db')
+    protected function importJiraProject(array $dataList, string $method = 'db'): void
     {
         global $app;
         $app->loadConfig('execution');
@@ -437,7 +437,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraIssue(array $dataList, string $method = 'db')
+    protected function importJiraIssue(array $dataList, string $method = 'db'): void
     {
         $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
             ->where('AType')->eq('jproject')
@@ -512,7 +512,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraBuild(array $dataList, string $method = 'db')
+    protected function importJiraBuild(array $dataList, string $method = 'db'): void
     {
         list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
@@ -547,7 +547,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraIssueLink(array $dataList)
+    protected function importJiraIssueLink(array $dataList): void
     {
         list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
@@ -580,7 +580,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraAction(array $dataList, string $method = 'db')
+    protected function importJiraAction(array $dataList, string $method = 'db'): void
     {
         list($issueStories, $issueTasks, $issueBugs, $issueObjectType) = $this->getIssueData();
 
@@ -619,7 +619,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function importJiraFile(array $dataList, string $method = 'db')
+    protected function importJiraFile(array $dataList, string $method = 'db'): void
     {
         $this->loadModel('file');
 
@@ -782,7 +782,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function createProduct(object $project, int $executionID)
+    protected function createProduct(object $project, int $executionID): void
     {
         /* Create product. */
         $product = new stdclass();
@@ -826,7 +826,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function createStory(int $productID, int $projectID, int $executionID, string $type, object $data, string $method, array $reasonList)
+    protected function createStory(int $productID, int $projectID, int $executionID, string $type, object $data, string $method, array $reasonList): void
     {
         $this->app->loadLang('story');
 
@@ -908,7 +908,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function createTask(int $projectID, int $executionID, object $data, string $method, array $reasonList)
+    protected function createTask(int $projectID, int $executionID, object $data, string $method, array $reasonList): void
     {
         $this->app->loadLang('task');
 
@@ -966,7 +966,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function createBug(int $productID, int $projectID, object $data, string $method, array $resolutionList)
+    protected function createBug(int $productID, int $projectID, object $data, string $method, array $resolutionList): void
     {
         $this->app->loadLang('bug');
 
@@ -1092,7 +1092,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function createRelease(object $build, object $data, array $versionGroup, string $method, array $issueObjectType, array $issueBugs, array $issueStories)
+    protected function createRelease(object $build, object $data, array $versionGroup, string $method, array $issueObjectType, array $issueBugs, array $issueStories): void
     {
         /* Create release. */
         $release = new stdclass();
@@ -1141,7 +1141,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function updateSubStory(array $storyLink, array $issueStories)
+    protected function updateSubStory(array $storyLink, array $issueStories): void
     {
         foreach($storyLink as $source => $dest)
         {
@@ -1167,7 +1167,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function updateSubTask(array $taskLink, array $issueTasks)
+    protected function updateSubTask(array $taskLink, array $issueTasks): void
     {
         foreach($taskLink as $source => $dest)
         {
@@ -1195,7 +1195,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function updateDuplicateStoryAndBug(array $duplicateLink, array $issueObjectType, array $issueStories, array $issueBugs)
+    protected function updateDuplicateStoryAndBug(array $duplicateLink, array $issueObjectType, array $issueStories, array $issueBugs): void
     {
         foreach($duplicateLink as $source => $dest)
         {
@@ -1229,7 +1229,7 @@ class convertTao extends convertModel
      * @access protected
      * @return void
      */
-    protected function updateRelatesObject(array $relatesLink, array $issueObjectType, array $issueStories, array $issueTasks, array $issueBugs)
+    protected function updateRelatesObject(array $relatesLink, array $issueObjectType, array $issueStories, array $issueTasks, array $issueBugs): void
     {
         foreach($relatesLink as $source => $dest)
         {
