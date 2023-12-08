@@ -69,23 +69,19 @@ class tutorialTest
      */
     public function getProductTest(): object
     {
-        $object = $this->objectModel->getProduct();
-        return $object;
+        return $this->objectModel->getProduct();
     }
 
     /**
+     * 测试获取新手模式产品统计数据。
      * Get product stats for tutorial.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProductStatsTest()
+    public function getProductStatsTest(): array
     {
-        $objects = $this->objectModel->getProductStats();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getProductStats();
     }
 
     /**
