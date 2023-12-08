@@ -279,7 +279,8 @@ class programplanModel extends model
         foreach($tasks as $task)
         {
             $execution = zget($plans, $task->execution, array());
-            $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
+            $pri       = zget($this->lang->task->priList, $task->pri);
+            $priIcon   = sprintf($taskPri, $task->pri, $pri, $pri);
 
             $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
             $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
