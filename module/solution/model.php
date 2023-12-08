@@ -7,7 +7,6 @@ declare(strict_types=1);
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Jianhua Wang<wangjianhua@easycorp.ltd>
  * @package     solution
- * @version     $Id$
  * @link        https://www.zentao.net
  */
 class solutionModel extends model
@@ -212,6 +211,17 @@ class solutionModel extends model
         return !dao::isError();
     }
 
+    /**
+     * 检查启动结果。
+     * Check start result.
+     *
+     * @param  object  $instance
+     * @param  int     $solutionID
+     * @param  object  $solutionSchema
+     * @param  string  $category
+     * @access private
+     * @return bool
+     */
     private function checkSarted(object $instance, int $solutionID, object $solutionSchema, string $category): bool
     {
         $instance = $this->waitInstanceStart($instance, $solutionID);
