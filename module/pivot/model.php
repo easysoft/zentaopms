@@ -683,14 +683,15 @@ class pivotModel extends model
     }
 
     /**
-     * Get filter format.
+     * 格式化sql和过滤条件。
+     * Format sql and filter.
      *
      * @param  string $sql
      * @param  array  $filters
      * @access public
-     * @return string
+     * @return array
      */
-    public function getFilterFormat($sql, $filters)
+    public function getFilterFormat(string $sql, array $filters): array
     {
         $filterFormat = array();
         if(empty($filters)) return array($sql, $filterFormat);
@@ -699,7 +700,7 @@ class pivotModel extends model
         {
             $field = $filter['field'];
 
-            if(isset($filter['from']) and $filter['from'] == 'query')
+            if(isset($filter['from']) && $filter['from'] == 'query')
             {
                 $queryDefault = isset($filter['default']) ? $this->processDateVar($filter['default']) : '';
                 $sql          = str_replace('$' . $filter['field'], "'{$queryDefault}'", $sql);
@@ -713,25 +714,26 @@ class pivotModel extends model
                 {
                     case 'select':
                         if(empty($default)) break;
-                        if(is_array($default)) $default = array_filter($default, function($val){return trim($val) != '';});
-                        $value = "('" . implode("', '", $default) . "')";
+                        if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
+                        $value = "('" . $default . "')";
                         $filterFormat[$field] = array('operator' => 'IN', 'value' => $value);
                         break;
                     case 'input':
-                        $filterFormat[$field] = array('operator' => 'like', 'value' => "'%$default%'");
+                        $filterFormat[$field] = array('operator' => 'LIKE', 'value' => "'%$default%'");
                         break;
                     case 'date':
                     case 'datetime':
                         $begin = $default['begin'];
                         $end   = $default['end'];
 
-                        if(!empty($begin) and empty($end))  $filterFormat[$field] = array('operator' => '>', 'value' => "'$begin'");
-                        if(empty($begin) and !empty($end))  $filterFormat[$field] = array('operator' => '<', 'value' => "'$end'");
-                        if(!empty($begin) and !empty($end)) $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => "'$begin' and '$end'");
+                        if(!empty($begin) &&  empty($end)) $filterFormat[$field] = array('operator' => '>',       'value' => "'{$begin}'");
+                        if( empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => '<',       'value' => "'{$end}'");
+                        if(!empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => "'{$begin}' AND '{$end}'");
                         break;
                 }
             }
         }
+
         return array($sql, $filterFormat);
     }
 
