@@ -282,7 +282,7 @@ $('body').on('click', '.dropmenu-tree .dropmenu-item', function()
  * Trigger diff.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function goDiff()
 {

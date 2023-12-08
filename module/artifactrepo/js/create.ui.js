@@ -5,7 +5,7 @@ var repoData;
  *
  * @param  event $event
  * @access public
- * @return viod
+ * @return void
  */
 function getArtifactRepo(event)
 {
@@ -40,7 +40,7 @@ function getArtifactRepo(event)
  * Repo change event.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function onRepoChange()
 {

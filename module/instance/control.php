@@ -418,7 +418,7 @@ class instance extends control
      *
      * @param  string $type
      * @access public
-     * @return viod
+     * @return void
      */
     public function createExternalApp(string $type)
     {
@@ -452,7 +452,7 @@ class instance extends control
      *
      * @param  int    $externalID
      * @access public
-     * @return viod
+     * @return void
      */
     public function editExternalApp(int $externalID)
     {
@@ -486,7 +486,7 @@ class instance extends control
      *
      * @param  int    $externalID
      * @access public
-     * @return viod
+     * @return void
      */
     public function deleteExternalApp(int $externalID)
     {

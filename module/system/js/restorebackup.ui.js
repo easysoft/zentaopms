@@ -2,7 +2,7 @@
  * Check restore progress.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function checkRestore()
 {

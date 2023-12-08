@@ -109,7 +109,7 @@ class artifactrepoModel extends model
      * @param  object $artifactRepo
      * @param  int    $artifactRepoID
      * @access public
-     * @return viod
+     * @return void
      */
     public function update(object $artifactRepo, $artifactRepoID): array|false
     {

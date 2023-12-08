@@ -119,7 +119,7 @@ function loadLastBuild()
  *
  * @param  event $event
  * @access public
- * @return viod
+ * @return void
  */
 function loadArtifactrepo(event)
 {
@@ -146,7 +146,7 @@ function loadArtifactrepo(event)
  * Artifact repo show change event.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function onShowArtifactRepo()
 {
@@ -184,7 +184,7 @@ function onShowArtifactRepo()
  * Artifact repo change event.
  *
  * @access public
- * @return viod
+ * @return void
  */
 function onChangeArtifactRepo(event)
 {
