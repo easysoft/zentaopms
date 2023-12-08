@@ -47,29 +47,6 @@ class fileTest
     }
 
     /**
-     * Test get counts of uploaded files.
-     *
-     * @param  array  $files
-     * @param  array  $labels
-     * @access public
-     * @return int
-     */
-    public function getCountTest($files, $labels)
-    {
-        $_FILES['files'] = $files;
-        $_POST['labels'] = $labels;
-
-        $count = $this->objectModel->getCount();
-
-        unset($_FILES['files']);
-        unset($_POST['labels']);
-
-        if(dao::isError()) return dao::getError();
-
-        return $count;
-    }
-
-    /**
      * Test get info of uploaded files.
      *
      * @param  array $files
@@ -77,7 +54,7 @@ class fileTest
      * @access public
      * @return array
      */
-    public function getUploadTest($files, $labels)
+    public function getUploadTest(array $files, array $labels): array
     {
         $_FILES['files'] = $files;
         $_POST['labels'] = $labels;
@@ -90,6 +67,51 @@ class fileTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 测试 replaceFile 方法。
+     * Test replaceFile method.
+     *
+     * @param  int   $fileID
+     * @param  array $files
+     * @param  array $labels
+     * @access public
+     * @return array
+     */
+    public function replaceFileTest(int $fileID, array $files, array $labels): array
+    {
+        $_FILES['upFile'] = $files;
+        $_POST['labels'] = $labels;
+
+        $objects = $this->objectModel->replaceFile($fileID);
+
+        unset($_FILES['files']);
+        unset($_POST['labels']);
+
+        $file = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
+        return empty($file) ? array() : (array)$file;
+    }
+
+    /**
+     * Test get counts of uploaded files.
+     *
+     * @param  array  $files
+     * @param  array  $labels
+     * @access public
+     * @return int
+     */
+    public function getCountTest(array $files, array $labels): int
+    {
+        $_FILES['files'] = $files;
+        $_POST['labels'] = $labels;
+
+        $count = $this->objectModel->getCount();
+
+        unset($_FILES['files']);
+        unset($_POST['labels']);
+
+        return $count;
     }
 
     /**
@@ -170,6 +192,25 @@ class fileTest
         if(dao::isError()) return dao::getError();
 
         return $path;
+    }
+
+    /**
+     * 测试 setPathName 方法。
+     * Test setPathName method.
+     *
+     * @param  int    $fileID
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function setPathNameTest(int $fileID, string $extension): array
+    {
+        $pathName = $this->objectModel->setPathName($fileID, $extension);
+        $reg = date('Ym\\\/dHis', $this->objectModel->now) . $fileID . '\w+' . '\.' . $extension;
+
+        $result['name'] = $pathName;
+        $result['reg']  = preg_match("/{$reg}/", $pathName);
+        return $result;
     }
 
     /**

@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/file.class.php';
 su('admin');
 
+zdTable('usertpl')->gen(0);
+
 /**
 
 title=测试 fileModel->saveExportTemplate();

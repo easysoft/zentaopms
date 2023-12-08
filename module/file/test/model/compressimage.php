@@ -54,8 +54,8 @@ $pptFile->tmpname   = '/tmp/php7bhfki';
 
 $file = new fileTest();
 
-r($file->compressImageTest($pngFile)) && p('extension,title,size') && e('png,file.png,2038');               // 测试上传 png 文件
-r($file->compressImageTest($jpgFile)) && p('extension,title,size') && e('jpg,file.jpg,1888573');            // 测试上传 jpg 文件
-r($file->compressImageTest($wriFile)) && p('extension,title,size') && e('wri,这是一个文件名称6.wri,38624'); // 测试上传 wri 文件
-r($file->compressImageTest($pdfFile)) && p('extension,title,size') && e('pdf,这是一个文件名称7.pdf,25964'); // 测试上传 pdf 文件
-r($file->compressImageTest($pptFile)) && p('extension,title,size') && e('ppt,这是一个文件名称8.ppt,37248'); // 测试上传 ppt 文件
+r($file->compressImageTest((array)$pngFile)) && p('extension,title,size') && e('png,file.png,2038');               // 测试上传 png 文件
+r($file->compressImageTest((array)$jpgFile)) && p('extension,title,size') && e('jpg,file.jpg,1888573');            // 测试上传 jpg 文件
+r($file->compressImageTest((array)$wriFile)) && p('extension,title,size') && e('wri,这是一个文件名称6.wri,38624'); // 测试上传 wri 文件
+r($file->compressImageTest((array)$pdfFile)) && p('extension,title,size') && e('pdf,这是一个文件名称7.pdf,25964'); // 测试上传 pdf 文件
+r($file->compressImageTest((array)$pptFile)) && p('extension,title,size') && e('ppt,这是一个文件名称8.ppt,37248'); // 测试上传 ppt 文件

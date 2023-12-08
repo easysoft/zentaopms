@@ -99,7 +99,7 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function saveUpload(string $objectType = '', int $objectID = 0, int|string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): array
+    public function saveUpload(string $objectType = '', int $objectID = 0, int|string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): array|false
     {
         $fileTitles = array();
         $now        = helper::today();
@@ -166,7 +166,7 @@ class fileModel extends model
      * @access public
      * @return int
      */
-    public function getCount()
+    public function getCount(): int
     {
         return count($this->getUpload());
     }
@@ -291,7 +291,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function getExtension($filename)
+    public function getExtension(string $filename): string
     {
         $extension = trim(strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
         if($extension and strpos($extension, '::') !== false) $extension = substr($extension, 0, strpos($extension, '::'));
@@ -335,9 +335,9 @@ class fileModel extends model
      *
      * @param  string $module
      * @access public
-     * @return object
+     * @return array
      */
-    public function getExportTemplate($module)
+    public function getExportTemplate(string $module): array
     {
         return $this->dao->select('id,title,content,public')->from(TABLE_USERTPL)
             ->where('type')->eq("export$module")
@@ -367,9 +367,9 @@ class fileModel extends model
      *
      * @param  string $module
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function saveExportTemplate($module)
+    public function saveExportTemplate(string $module): int|false
     {
         $template = fixer::input('post')
             ->add('account', $this->app->user->account)
@@ -396,7 +396,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function setPathName($fileID, $extension)
+    public function setPathName(int $fileID, string $extension): string
     {
         $sessionID  = session_id();
         $randString = substr($sessionID, mt_rand(0, strlen($sessionID) - 5), 3);
@@ -409,7 +409,7 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function setSavePath()
+    public function setSavePath(): void
     {
         $savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . date('Ym/', $this->now);
         if(!file_exists($savePath))
@@ -426,7 +426,7 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function setWebPath()
+    public function setWebPath(): void
     {
         $this->webPath = $this->app->getWebRoot() . "data/upload/{$this->app->company->id}/";
     }
@@ -481,7 +481,7 @@ class fileModel extends model
      * @access public
      * @return bool
      */
-    public function fileExists($file)
+    public function fileExists(object $file): bool
     {
         return file_exists($file->realPath);
     }
@@ -504,31 +504,28 @@ class fileModel extends model
      * @access public
      * @return bool
      */
-    public function replaceFile($fileID, $postName = 'upFile')
+    public function replaceFile(int $fileID, string $postName = 'upFile'): bool
     {
-        if($files = $this->getUpload($postName))
-        {
-            $file = $files[0];
-            $filePath = $this->dao->select('pathname')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
-            $pathName = $filePath->pathname;
-            $realPathName = $this->savePath . $this->getRealPathName($pathName);
-            if(!is_dir(dirname($realPathName))) mkdir(dirname($realPathName));
-            move_uploaded_file($file['tmpname'], $realPathName);
+        $files = $this->getUpload($postName);
+        if(empty($files)) return false;
 
-            $file['pathname'] = $pathName;
-            $file = $this->compressImage($file);
+        $pathName = $this->dao->select('pathname')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch('pathname');
+        if(empty($pathName)) return false;
 
-            $fileInfo = new stdclass();
-            $fileInfo->addedBy   = $this->app->user->account;
-            $fileInfo->addedDate = helper::now();
-            $fileInfo->size      = $file['size'];
-            $this->dao->update(TABLE_FILE)->data($fileInfo)->where('id')->eq($fileID)->exec();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $file = $files[0];
+        $realPathName = $this->savePath . $this->getRealPathName($pathName);
+        if(!is_dir(dirname($realPathName))) mkdir(dirname($realPathName));
+        move_uploaded_file($file['tmpname'], $realPathName);
+
+        $file['pathname'] = $pathName;
+        $file = $this->compressImage($file);
+
+        $fileInfo = new stdclass();
+        $fileInfo->addedBy   = $this->app->user->account;
+        $fileInfo->addedDate = helper::now();
+        $fileInfo->size      = $file['size'];
+        $this->dao->update(TABLE_FILE)->data($fileInfo)->where('id')->eq($fileID)->exec();
+        return true;
     }
 
     /**
@@ -658,7 +655,7 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function parseCSV($fileName)
+    public function parseCSV(string $fileName): array
     {
         /* Parse file only in zentao. */
         if(strpos($fileName, $this->app->getBasePath()) !== 0) return array();

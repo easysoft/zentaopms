@@ -430,13 +430,11 @@ class file extends control
      */
     public function ajaxSaveTemplate(string $module)
     {
-        $templateID = $this->file->saveExportTemplate($module);
-        if(dao::isError())
-        {
-            echo js::error(dao::getError(), false);
-            $templateID = 0;
-        }
-        return print($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));
+        $templateID = (int)$this->file->saveExportTemplate($module);
+        $message    = $this->lang->saveSuccess;
+        if(dao::isError()) $message = dao::getError();
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('file', 'buildExportTPL', "module=$module&templateID=$templateID")));
     }
 
     /**
@@ -461,9 +459,10 @@ class file extends control
     public function read(int $fileID)
     {
         if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
+
         $file = $this->file->getById($fileID);
+        if(empty($file) or !$this->file->fileExists($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
         if(!$this->file->checkPriv($file)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->file->accessDenied, 'locate' => helper::createLink('my', 'index')), 'closeModal' => true));
-        if(empty($file) or !$this->file->fileExists($file)) return false;
 
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
