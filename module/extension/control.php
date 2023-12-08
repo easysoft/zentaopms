@@ -199,7 +199,7 @@ class extension extends control
         if(file_exists($dbFile)) $this->view->backupFile = $this->extensionZen->backupDB($extension);
 
         $this->extension->executeDB($extension, 'uninstall');
-        $this->extension->updateExtension($extension, array('status' => 'available'));
+        $this->extension->updateExtension(array('code' => $extension, 'status' => 'available'));
         $this->extension->togglePackageDisable($extension, 'disabled');
 
         $this->view->title          = $this->lang->extension->uninstallFinished;
@@ -237,7 +237,7 @@ class extension extends control
 
         $this->extension->togglePackageDisable($extension, 'active');
         $this->extensionZen->copyPackageFiles($extension);
-        $this->extension->updateExtension($extension, array('status' => 'installed'));
+        $this->extension->updateExtension(array('code' => $extension, 'status' => 'installed'));
 
         $this->view->title = $this->lang->extension->activateFinished;
         $this->display();
@@ -255,7 +255,7 @@ class extension extends control
     {
         $this->extensionZen->checkSafe();
 
-        $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+        $this->extension->updateExtension(array('code' => $extension, 'status' => 'deactivated'));
         $this->extension->togglePackageDisable($extension, 'disabled');
 
         $this->view->title          = $this->lang->extension->deactivateFinished;

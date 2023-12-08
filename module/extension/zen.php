@@ -246,14 +246,6 @@ class extensionZen extends extension
         /* Copy files to target directory. */
         $this->view->files = $this->copyPackageFiles($extension);
 
-        /* Judge need execute db install or not. */
-        $data = new stdclass();
-        $data->status = 'installed';
-        $data->dirs   = $this->session->dirs2Created;
-        $data->files  = $this->view->files;
-        $data->installedTime = helper::now();
-        $this->session->set('dirs2Created', array(), 'admin');   // clean the session.
-
         /* Execute the install.sql. */
         $needExecuteDB = file_exists($this->extension->getDBFile($extension, 'install'));
         if($upgrade == 'no' && $needExecuteDB)
@@ -267,7 +259,15 @@ class extensionZen extends extension
         }
 
         /* Update status, dirs, files and installed time. */
-        $this->extension->updateExtension($extension, $data);
+        $data = array();
+        $data['code']          = $extension;
+        $data['status']        = 'installed';
+        $data['dirs']          = $this->session->dirs2Created;
+        $data['files']         = $this->view->files;
+        $data['installedTime'] = helper::now();
+        $this->extension->updateExtension($data);
+
+        $this->session->set('dirs2Created', array(), 'admin');   // clean the session.
         $this->view->downloadedPackage = false;
 
         /* The postInstall hook file. */

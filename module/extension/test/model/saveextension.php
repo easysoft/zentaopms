@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 extensionModel->updateExtension();
+title=测试 extensionModel->saveExtension();
 timeout=0
 cid=1
 

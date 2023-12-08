@@ -622,41 +622,40 @@ class extensionModel extends model
     }
 
     /**
+     * 更新插件信息到数据库。
      * Update an extension.
      *
-     * @param  string        $extension
-     * @param  array|object  $data
+     * @param  array  $extension
      * @access public
-     * @return int
+     * @return bool
      */
-    public function updateExtension($extension, $data)
+    public function updateExtension(array $extension): bool
     {
-        $data = (object)$data;
-        $appRoot = $this->app->getAppRoot();
+        if(empty($extension['code'])) return false;
 
-        if(isset($data->dirs))
+        $appRoot = $this->app->getAppRoot();
+        if(isset($extension['dirs']))
         {
-            if($data->dirs)
+            if($extension['dirs'])
             {
-                foreach($data->dirs as $key => $dir)
-                {
-                    $data->dirs[$key] = str_replace($appRoot, '', $dir);
-                }
+                foreach($extension['dirs'] as $key => $dir) $extension['dirs'][$key] = str_replace($appRoot, '', $dir);
             }
-            $data->dirs = json_encode($data->dirs);
+            $extension['dirs'] = json_encode($extension['dirs']);
         }
 
-        if(isset($data->files))
+        if(isset($extension['files']))
         {
-            foreach($data->files as $fullFilePath => $md5)
+            foreach($extension['files'] as $fullFilePath => $md5)
             {
                 $relativeFilePath = str_replace($appRoot, '', $fullFilePath);
-                $data->files[$relativeFilePath] = $md5;
-                unset($data->files[$fullFilePath]);
+                $extension['files'][$relativeFilePath] = $md5;
+                unset($extension['files'][$fullFilePath]);
             }
-            $data->files = json_encode($data->files);
+            $extension['files'] = json_encode($extension['files']);
         }
-        return $this->dao->update(TABLE_EXTENSION)->data($data)->where('code')->eq($extension)->exec();
+        $this->dao->update(TABLE_EXTENSION)->data($extension)->where('code')->eq($extension['code'])->exec();
+
+        return !dao::isError();
     }
 
     /**

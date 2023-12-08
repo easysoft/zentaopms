@@ -989,7 +989,7 @@ class upgrade extends control
         $removeCommands = array();
         foreach($incompatibleExts as $extension)
         {
-            $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+            $this->extension->updateExtension(array('code' => $extension, 'status' => 'deactivated'));
             $removeCommands[$extension] = $this->extension->removePackage($extension);
             $extensionsName[$extension] = $extensions[$extension]->name;
         }
