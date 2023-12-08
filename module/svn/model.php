@@ -98,15 +98,15 @@ class svnModel extends model
      * 保存提交信息。
      * Save commits.
      *
-     * @param  object    $repo
-     * @param  array     $logs
-     * @param  object    $lastInDB
-     * @param  array     $commentGroup
-     * @param  bool      $printLog
-     * @access protected
+     * @param  object  $repo
+     * @param  array   $logs
+     * @param  object  $lastInDB
+     * @param  array   $commentGroup
+     * @param  bool    $printLog
+     * @access private
      * @return bool
      */
-    protected function saveCommits(object $repo, array $logs, object $lastInDB, array $commentGroup, bool $printLog): bool
+    private function saveCommits(object $repo, array $logs, object $lastInDB, array $commentGroup, bool $printLog): bool
     {
         $this->loadModel('repo');
         $version = (int)$lastInDB->commit + 1;
@@ -294,9 +294,9 @@ class svnModel extends model
      * @param  object $repo
      * @param  string $path
      * @access public
-     * @return void
+     * @return array
      */
-    public function getRepoTags(object $repo, string $path)
+    public function getRepoTags(object $repo, string $path): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -312,7 +312,7 @@ class svnModel extends model
      * @access public
      * @return array
      */
-    public function getRepoLogs(object $repo, int $fromRevision): array
+    public function getRepoLogs(object $repo, int $fromRevision): array|false
     {
         /* The svn log command. */
         $scm = $this->app->loadClass('scm');
