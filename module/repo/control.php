@@ -51,7 +51,7 @@ class repo extends control
         if($tab == 'project')
         {
             $project = $this->loadModel('project')->getByID($objectID);
-            if($project->model === 'kanban') return print($this->locate($this->createLink('project', 'index', "projectID=$objectID")));
+            if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
 
             $this->loadModel('project')->setMenu($objectID);
             $this->view->projectID = $objectID;
