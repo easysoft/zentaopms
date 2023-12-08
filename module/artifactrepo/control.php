@@ -85,7 +85,7 @@ class artifactrepo extends control
      *
      * @param  int    $artifactRepoID
      * @access public
-     * @return viod
+     * @return void
      */
     public function edit(int $artifactRepoID)
     {
