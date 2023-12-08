@@ -61,6 +61,15 @@ class searchTest
         return $_SESSION[$querySessionName];
     }
 
+    /**
+     * 设置默认参数的测试用例。
+     * Set default params test.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
     public function setDefaultParamsTest(array $fields, array $params): array
     {
         global $tester;
