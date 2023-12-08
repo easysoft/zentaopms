@@ -1325,7 +1325,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserBugs(int $userID = 0, string $id = '' , int $appendID = 0): string
+    public function ajaxGetUserBugs(int $userID = 0, string $id = '' , int $appendID = 0)
     {
         /* 如果user id是0，把它设置为当前用户的id。 */
         /* If user id is zero, set it to current user id. */
@@ -1357,7 +1357,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetModuleOwner(int $moduleID, int $productID = 0): string
+    public function ajaxGetModuleOwner(int $moduleID, int $productID = 0)
     {
         /* 获取bug模块负责人。 */
         /* Get module owner. */
@@ -1373,7 +1373,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxLoadAssignedTo(int $executionID): string
+    public function ajaxLoadAssignedTo(int $executionID)
     {
         /* 获取执行团队成员，并将它转为picker组件需要的数据。 */
         /* Get execution team members, and convert it to picker items. */
@@ -1477,7 +1477,7 @@ class bug extends control
      * @access public
      * @return int
      */
-    public function ajaxGetProductBugs($productID, $bugID, $type = 'html'): int
+    public function ajaxGetProductBugs($productID, $bugID, $type = 'html')
     {
         /* 获取除了这个 bugID 的产品 bugs。 */
         /* Get product bugs exclude this bugID. */
@@ -1553,7 +1553,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetReleasedBuilds(int $productID, int|string $branch = 'all'): string
+    public function ajaxGetReleasedBuilds(int $productID, int|string $branch = 'all')
     {
         /* 获取已发布的版本。 */
         /* Get released builds. */
