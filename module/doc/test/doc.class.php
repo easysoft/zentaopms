@@ -1358,4 +1358,20 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $data;
     }
+
+    /**
+     * 通过ID列表获取文档信息。
+     * Get docs info by id list.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getByIdListTest(array $idList): array
+    {
+        $docs = $this->objectModel->getByIdList($idList);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
