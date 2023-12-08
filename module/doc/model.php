@@ -826,13 +826,14 @@ class docModel extends model
     }
 
     /**
+     * 通过ID列表获取文档信息。
      * Get docs info by id list.
      *
-     * @param  array $docIdList
+     * @param  array  $docIdList
      * @access public
      * @return array
      */
-    public function getByIdList($docIdList = array())
+    public function getByIdList(array $docIdList = array()): array
     {
         return $this->dao->select('*,t1.id as docID,t1.type as docType,t1.version as docVersion,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
