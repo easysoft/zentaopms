@@ -2123,28 +2123,6 @@ class docModel extends model
     }
 
     /**
-     * Update Lib orders.
-     *
-     * @access public
-     * @return void
-     */
-    public function updateLibOrder()
-    {
-        $libIdList = $this->post->libIdList;
-        $libIdList = explode(',', $libIdList);
-
-        $order = 1;
-        foreach($libIdList as $libID)
-        {
-            if(!$libID) continue;
-
-            $this->dao->update(TABLE_DOCLIB)->set('`order`')->eq($order * 10)->where('id')->eq($libID)->exec();
-
-            $order++;
-        }
-    }
-
-    /**
      * Get module tree.
      *
      * @param  int    $rootID
