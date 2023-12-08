@@ -1244,33 +1244,6 @@ class docModel extends model
     }
 
     /**
-     * Get execution or product libs groups.
-     *
-     * @param  string $type
-     * @param  array  $idList
-     * @access public
-     * @return array
-     */
-    public function getSubLibGroups($type, $idList)
-    {
-        if($type != 'product' and $type != 'execution') return false;
-        $libGroups = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('`order`, id')->fetchGroup($type, 'id');
-
-        $buildGroups = array();
-        foreach($libGroups as $objectID => $libs)
-        {
-            foreach($libs as $lib)
-            {
-                if($this->checkPrivLib($lib)) $buildGroups[$objectID][$lib->id] = $lib->name;
-            }
-
-            if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;
-        }
-
-        return $buildGroups;
-    }
-
-    /**
      * 通过对象ID获取文档库。
      * Get libs by object.
      *
