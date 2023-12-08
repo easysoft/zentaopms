@@ -1133,18 +1133,19 @@ class docModel extends model
     }
 
     /**
-     * Get pairs of execution modules.
+     * 获取执行文档库的所属模块的键值对。
+     * Gets the key-value pair of the module by execution ID.
      *
      * @access public
      * @return array
      */
-    public function getExecutionModulePairs()
+    public function getExecutionModulePairs(): array
     {
         return $this->dao->select('t1.id,t1.name')->from(TABLE_MODULE)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.root = t2.id')
-            ->andWhere('t1.type')->eq('doc')
+            ->where('t1.type')->eq('doc')
             ->andWhere('t2.execution')->ne('0')
-            ->fetchPairs('id', 'name');
+            ->fetchPairs();
     }
 
     /**
