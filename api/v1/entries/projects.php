@@ -75,7 +75,7 @@ class projectsEntry extends entry
      */
     public function post()
     {
-        $fields = 'name,begin,end,products,hasProduct';
+        $fields = 'name,begin,end,products,desc,hasProduct';
         $this->batchSetPost($fields);
         if(isset($_POST['products']) and !isset($_POST['hasProduct'])) $_POST['hasProduct'] = true;
 
