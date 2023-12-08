@@ -9,11 +9,6 @@
  * @version     $Id: model.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
-
-use function zin\set;
-
-?>
-<?php
 class groupModel extends model
 {
     /**
