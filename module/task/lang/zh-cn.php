@@ -166,6 +166,7 @@ $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = "测试{$lang->SRCommon}";
 $lang->task->teamMember        = '团队成员';
+$lang->task->update            = '更新';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
@@ -265,6 +266,7 @@ $lang->task->noModule                  = '<div>您现在还没有模块信息</d
 $lang->task->createDenied              = "你不能在该{$lang->projectCommon}添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
+$lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"总计消耗"必须为数字';

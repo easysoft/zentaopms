@@ -166,6 +166,7 @@ $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
 $lang->task->teamMember        = 'Team Member';
+$lang->task->update            = 'Update';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';
@@ -264,6 +265,7 @@ $lang->task->noTask                    = 'Keine Aufagben. ';
 $lang->task->createDenied              = "Aufgben erstellen it in diesem {$lang->projectCommon} gesperrt";
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
+$lang->task->effortOperateTips         = 'Only the project manager, the executive supervisor, and the department head have the authority to %s logs belonging to others.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';

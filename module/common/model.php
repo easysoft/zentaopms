@@ -4002,6 +4002,47 @@ EOF;
 
         return $duration;
     }
+
+    /**
+     * Check operate effort.
+     *
+     * @param  object  $effort
+     * @access public
+     * @return bool
+     */
+    public function canOperateEffort($effort)
+    {
+        if(empty($effort)) return true;
+
+        $actor = $effort->account;
+
+        /* 如果是本人，可以直接修改。 */
+        if($actor == $this->app->user->account) return true;
+
+        /* 如果当前账户是项目负责人，则可以修改团队成员日志。*/
+        if(!empty($effort->project))
+        {
+            $PM = $this->dao->select('PM')->from(TABLE_PROJECT)->where('id')->eq($effort->project)->fetch('PM');
+            if($PM == $this->app->user->account) return true;
+        }
+
+        /* 如果当前账户是执行负责人，则可以修改团队成员日志。*/
+        if(!empty($effort->execution))
+        {
+            $PM = $this->dao->select('PM')->from(TABLE_PROJECT)->where('id')->eq($effort->execution)->fetch('PM');
+            if($PM == $this->app->user->account) return true;
+        }
+
+        /* 如果当前账户是上级部门(包括当前部门)负责人，则可以修改下属员工的日志。*/
+        $actorDeptPath = $this->dao->select('path')->from(TABLE_DEPT)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t2.dept = t1.id')
+            ->where('t2.account')->eq($actor)
+            ->fetch('path');
+        $deptManagers = $this->dao->select('manager')->from(TABLE_DEPT)->where('id')->in(explode(',', trim($actorDeptPath, ',')))->fetchPairs();
+        if(in_array($this->app->user->account, $deptManagers)) return true;
+
+        return false;
+    }
 }
 
 class common extends commonModel
