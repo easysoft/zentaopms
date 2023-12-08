@@ -49,6 +49,35 @@ jsVar('configLabel', $lang->solution->config);
 jsVar('skipLang', $lang->install->solution->skip);
 jsVar('backgroundLang', $lang->solution->background);
 jsVar('isModal', helper::isAjaxRequest('modal'));
+
+$actions = array();
+if(helper::isAjaxRequest('modal'))
+{
+    $actions[] = array(
+        'text'  => $lang->solution->background,
+        'href'  => createLink('install', 'step6'),
+        'id'    => 'skipInstallBtn',
+        'class' => 'btn primary',
+    );
+}
+
+$actions[] = array(
+    'text'    => $lang->solution->retryInstall,
+    'id'      => 'retryInstallBtn',
+    'class'   => 'btn primary hidden',
+    'onclick' => 'retryInstall(this)'
+);
+
+if(helper::isAjaxRequest('modal'))
+{
+    $actions[] = array(
+        'text'    => $lang->solution->cancelInstall,
+        'id'      => 'cancelInstallBtn',
+        'class'   => 'btn',
+        'onclick' => 'cancelInstall(this)'
+    );
+}
+
 div
 (
     set::id('main'),
@@ -71,26 +100,7 @@ div
                 $appList
             ),
             div(setClass('error-message text-warning text-center')),
-            set::actions(helper::isAjaxRequest('modal') ? '' : array(
-                array(
-                    'text'  => $lang->solution->background,
-                    'href'  => createLink('install', 'step6'),
-                    'id'    => 'skipInstallBtn',
-                    'class' => 'btn primary',
-                ),
-                array(
-                    'text'    => $lang->solution->retryInstall,
-                    'id'      => 'retryInstallBtn',
-                    'class'   => 'btn primary hidden',
-                    'onclick' => 'retryInstall(this)'
-                ),
-                array(
-                    'text'    => $lang->solution->cancelInstall,
-                    'id'      => 'cancelInstallBtn',
-                    'class'   => 'btn',
-                    'onclick' => 'cancelInstall(this)'
-                )
-            ))
+            set::actions($actions)
         )
     )
 );
