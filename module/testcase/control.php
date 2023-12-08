@@ -977,7 +977,7 @@ class testcase extends control
         if($_POST)
         {
             $fields = $this->testcaseZen->getExportFields($product->type);
-            $cases  = $this->testcase->getCasesToExport($this->post->exportType, $taskID, $orderBy, $this->post->limit);
+            $cases  = $this->testcase->getCasesToExport($this->post->exportType, $taskID, $orderBy, (int)$this->post->limit);
             $cases  = $this->testcaseZen->processCasesForExport($cases, $productID, $taskID);
 
             if($this->config->edition != 'open') list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);

@@ -511,11 +511,11 @@ class testcaseModel extends model
      * @param  string   $exportType
      * @param  int      $taskID
      * @param  string   $orderBy
-     * @param  int|bool $limit
+     * @param  int      $limit
      * @access public
      * @return array
      */
-    public function getCasesToExport(string $exportType, int $taskID, string $orderBy, int|bool $limit): array
+    public function getCasesToExport(string $exportType, int $taskID, string $orderBy, int $limit): array
     {
         if(strpos($orderBy, 'case') !== false)
         {
