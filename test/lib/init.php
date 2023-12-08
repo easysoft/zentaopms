@@ -69,7 +69,7 @@ include $frameworkRoot . 'control.class.php';
 include $frameworkRoot . 'model.class.php';
 include $frameworkRoot . 'helper.class.php';
 
-$app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
+$app    = router::createApp('pms', dirname(__FILE__, 3), 'router');
 $poolID = getenv('ZTF_POOL_ID');
 $dbPool = empty($config->dbPool) ? array() : $config->dbPool;
 
