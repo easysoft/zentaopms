@@ -1149,39 +1149,6 @@ class docModel extends model
     }
 
     /**
-     * Get doc menu.
-     *
-     * @param  int $libID
-     * @param  int $parent
-     * @access public
-     * @return array
-     */
-    public function getDocMenu($libID, $parent, $orderBy = 'name_asc', $browseType = '')
-    {
-        if($libID == 0 and $browseType != 'collectedbyme') return array();
-
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('1 = 1')
-            ->beginIF($browseType != "collectedbyme")->andWhere('root')->eq($libID)->fi()
-            ->beginIF($browseType == "collectedbyme")->andWhere('collector')->like("%,{$this->app->user->account},%")->fi()
-            ->andWhere('type')->eq('doc')
-            ->andWhere('parent')->eq($parent)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->fetchAll('id');
-
-        $docCounts = $this->dao->select("module, count(id) as docCount")->from(TABLE_DOC)
-            ->where('module')->in(array_keys($modules))
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('module')
-            ->fetchPairs();
-
-        foreach($modules as $moduleID => $module) $modules[$moduleID]->docCount = isset($docCounts[$moduleID]) ? $docCounts[$moduleID] : 0;
-
-        return $modules;
-    }
-
-    /**
      * Extract css styles for tables created in kindeditor.
      *
      * Like this: <table class="ke-table1" style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
