@@ -683,7 +683,11 @@ class actionModel extends model
                 $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $this->app->user->account && common::hasPriv('action', 'editComment');
             }
 
-            if($action->action === 'assigned' || $action->action === 'toaudit') $action->extra = zget($users, $action->extra);
+            if($action->action === 'assigned' || $action->action === 'toaudit')
+            {
+                $action->extra = zget($users, $action->extra);
+                if(str_contains($action->extra, ':')) $action->extra = substr($action->extra, strpos($action->extra, ':') + 1);
+            }
             $action->actor = zget($users, $action->actor);
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
