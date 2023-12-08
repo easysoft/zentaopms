@@ -1890,30 +1890,6 @@ class docModel extends model
     }
 
     /**
-     * Build doc bread title.
-     *
-     * @access public
-     * @return string
-     */
-    public function buildCrumbTitle($libID = 0, $param = 0, $title = '')
-    {
-        $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($param)->fetch('path');
-
-        $parantMoudles = $this->dao->select('id, name')->from(TABLE_MODULE)
-            ->where('id')->in($path)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('`grade`')
-            ->fetchAll('id');
-
-        foreach($parantMoudles as $parentID => $moduleName)
-        {
-            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name, '');
-        }
-
-        return $title;
-    }
-
-    /**
      * Build browse switch button.
      *
      * @param  int    $type

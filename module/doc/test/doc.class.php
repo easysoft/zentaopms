@@ -402,15 +402,6 @@ class docTest
         return $objects;
     }
 
-    public function buildCrumbTitleTest($libID = 0, $param = 0, $title = '')
-    {
-        $objects = $this->objectModel->buildCrumbTitle($libID = 0, $param = 0, $title = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function buildCreateButton4DocTest($objectType, $objectID, $libID)
     {
         $objects = $this->objectModel->buildCreateButton4Doc($objectType, $objectID, $libID);
