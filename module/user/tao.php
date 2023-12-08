@@ -71,4 +71,25 @@ class userTao extends userModel
             ->page($pager)
             ->fetchAll('id');
     }
+
+    /**
+     * 获取某个用户参与的执行和执行中指派给他的任务数键值对。
+     * Get the executions that the user joined and the task count of the execution.
+     *
+     * @param  string $account
+     * @param  array  $executionIdList
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionTaskCount(string $account, array $executionIdList): array
+    {
+        return $this->dao->select('execution, COUNT(1) AS count')
+            ->from(TABLE_TASK)
+            ->where('parent')->lt(1)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('assignedTo')->eq($account)
+            ->andWhere('execution')->in($executionIdList)
+            ->groupBy('execution')
+            ->fetchPairs();
+    }
 }
