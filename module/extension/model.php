@@ -598,23 +598,27 @@ class extensionModel extends model
     }
 
     /**
+     * 保存插件信息到数据库。
      * Save the extension to database.
      *
-     * @param  string    $extension     the extension code
-     * @param  string    $type          the extension type
+     * @param  string $code
+     * @param  string $type
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveExtension($extension, $type)
+    public function saveExtension(string $code, string $type): bool
     {
-        $code      = $extension;
-        $extension = $this->getInfoFromPackage($extension);
+        //从插件包中获取配置信息。
+        $extension = $this->getInfoFromPackage($code);
+
         $extension->status        = 'available';
         $extension->code          = $code;
         $extension->type          = empty($type) ? $extension->type : $type;
         $extension->installedTime = helper::now();
 
         $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
+
+        return !dao::isError();
     }
 
     /**

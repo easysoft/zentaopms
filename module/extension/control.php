@@ -215,6 +215,7 @@ class extension extends control
      * Activate an extension;
      *
      * @param  string $extension
+     * @param  string $ignore    yes|no
      * @access public
      * @return void
      */

@@ -10,12 +10,13 @@ cid=1
 - 删除安装的code1插件文件并检查有没有错误信息。 @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 zdTable('extension')->gen(10);
 
-global $tester, $app;
+global $tester;
 $tester->loadModel('extension');
 
 $result = $tester->extension->removePackage('code1');

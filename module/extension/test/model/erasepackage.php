@@ -15,7 +15,7 @@ su('admin');
 
 zdTable('extension')->gen(10);
 
-global $tester, $app;
+global $tester;
 $tester->loadModel('extension');
 
 $result = $tester->extension->erasePackage('code1');

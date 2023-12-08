@@ -15,7 +15,7 @@ su('admin');
 
 zdTable('extension')->gen(10);
 
-global $tester, $app;
+global $tester;
 $tester->loadModel('extension');
 
 r($tester->extension->executeDB('code1', 'install'))   && p('result') && e('ok'); // 执行code1插件的安装SQL语句。
