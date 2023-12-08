@@ -252,7 +252,8 @@ class action extends control
             }
 
             /* 获取评论内容并生成一条action数据。 */
-            $actionID = $this->action->create($objectType, $objectID, 'Commented', isset($this->post->actioncomment) ? $this->post->actioncomment : $this->post->comment);
+            $commentData = form::data($this->config->action->form->comment)->get();
+            $actionID    = $this->action->create($objectType, $objectID, 'Commented', isset($commentData->actioncomment) ? $commentData->actioncomment : $this->post->comment);
             if(empty($actionID))
             {
                 if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
