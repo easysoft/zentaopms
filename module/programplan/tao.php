@@ -374,6 +374,7 @@ class programplanTao extends programplanModel
      */
     protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex, array $reviewDeadline): void
     {
+        $this->app->loadLang('task');
         $taskPri   = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
         $today     = helper::today();
         $taskTeams = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
@@ -382,7 +383,8 @@ class programplanTao extends programplanModel
         foreach($tasks as $task)
         {
             $execution = zget($plans, $task->execution, array());
-            $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
+            $pri       = zget($this->lang->task->priList, $task->pri);
+            $priIcon   = sprintf($taskPri, $task->pri, $pri, $pri);
 
             $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
             $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
