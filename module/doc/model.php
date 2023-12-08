@@ -2423,47 +2423,6 @@ class docModel extends model
     }
 
     /**
-     * Print create document button.
-     *
-     * @param  object $lib
-     * @param  int    $moduleID
-     * @param  string $from list
-     * @access public
-     * @return string
-     */
-    public function printCreateBtn($lib, $moduleID, $from = '')
-    {
-        if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
-
-        $objectID      = zget($lib, $lib->type, 0);
-        $templateParam = in_array($this->config->edition, array('max', 'ipd')) ? '&from=template' : '';
-        $class         = $from == 'list' ? 'btn-info' : 'btn-primary';
-        $html          = "<div class='dropdown btn-group createDropdown'>";
-        $html         .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html$templateParam"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
-        $html         .= "<button type='button' class='btn $class dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
-        $html         .= "<ul class='dropdown-menu pull-right'>";
-
-        foreach($this->lang->doc->createList as $typeKey => $typeName)
-        {
-            $docType  = zget($this->config->doc->iconList, $typeKey);
-            $icon     = html::image("static/svg/{$docType}.svg", "class='file-icon'");
-            $attr     = "data-app='{$this->app->tab}'";
-            $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false || $typeKey == 'attachment' ? 'iframe' : '';
-            $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template' and in_array($this->config->edition, array('max', 'ipd'))) $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
-
-            $html .= "<li>";
-            $html .= html::a(helper::createLink('doc', $typeKey == 'attachment' ? 'uploadDocs' : 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
-            $html .= "</li>";
-
-            if($typeKey == 'template' || $typeKey == 'excel') $html .= '<li class="divider"></li>';
-        }
-
-        $html .= '</ul></div>';
-        return $html;
-    }
-
-    /**
      * 获取带库名称的模块数据。
      * Get option menu for libs.
      *
