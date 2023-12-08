@@ -2803,7 +2803,8 @@ class executionModel extends model
             if(isset($linkedStories[$storyID])) continue;
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
 
-            $story = zget($storyList, $storyID, '');
+            $storyID = (int)$storyID;
+            $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
