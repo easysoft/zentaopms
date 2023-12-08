@@ -26,29 +26,24 @@ foreach($repoList as $repo)
         if(in_array($repo->job, $successJobs)) $repo->report = '';
     }
 
-    $repo->productNames = '';
+    $productNames = array();
     $productList  = explode(',', str_replace(' ', '', $repo->product));
-    if($productList)
+    foreach($productList as $productID)
     {
-        foreach($productList as $productID)
-        {
-            if(!isset($products[$productID])) continue;
-            $repo->productNames .= '，' . zget($products, $productID, $productID);
-        }
-        $repo->productNames = trim($repo->productNames, '，');
+        if(!isset($products[$productID])) continue;
+        $productNames[] = zget($products, $productID, $productID);
     }
+    $repo->productNames = implode('，', $productNames);
 
-    $repo->projectNames = '';
+    $projectNames = array();
     $projectList  = explode(',', str_replace(' ', '', $repo->projects));
-    if($projectList)
+    foreach($projectList as $projectID)
     {
-        foreach($projectList as $projectID)
-        {
-            if(!isset($projects[$projectID])) continue;
-            $repo->projectNames .= '，' . zget($projects, $projectID, $projectID);
-        }
-        $repo->projectNames = trim($repo->projectNames, '，');
+        if(!isset($projects[$projectID])) continue;
+        $projectNames[] = zget($projects, $projectID, $projectID);
     }
+    $repo->projectNames = implode('，', $projectNames);
+
     if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
 }
 
