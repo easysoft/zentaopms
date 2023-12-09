@@ -848,6 +848,38 @@ class upgrade extends control
     }
 
     /**
+     * Ajax get fix consistency logs.
+     *
+     * @param  int    $offset
+     * @access public
+     * @return void
+     */
+    public function ajaxGetFixLogs($offset = 0)
+    {
+        $logFile  = $this->upgrade->getConsistencyLogFile();
+        $lines    = !file_exists($logFile) ? array() : file($logFile);
+
+        $log = array_slice($lines, $offset);
+        $finished = ($log and end($log) == 'Finished') ? true : false;
+
+        return print(json_encode(array('log' => implode("<br />", $log), 'finished' => $finished, 'offset' => count($lines))));
+    }
+
+    /**
+     * Ajax fix for consistency.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function ajaxFixConsistency($version)
+    {
+        set_time_limit(0);
+        session_write_close();
+        $this->upgrade->fixConsistency($version);
+    }
+
+    /**
      * Get the project of the program it belongs to.
      *
      * @param  int   $programID
@@ -900,8 +932,14 @@ class upgrade extends control
         $alterSQL = $this->upgrade->checkConsistency($this->config->version);
         if(!empty($alterSQL))
         {
+            $logFile  = $this->upgrade->getConsistencyLogFile();
+            $hasError = $this->upgrade->hasConsistencyError();
+            if(file_exists($logFile)) unlink($logFile);
+
             $this->view->title    = $this->lang->upgrade->consistency;
+            $this->view->hasError = $hasError;
             $this->view->alterSQL = $alterSQL;
+            $this->view->version  = $this->config->version;
             return $this->display('upgrade', 'consistency');
         }
 
@@ -953,9 +991,11 @@ class upgrade extends control
      */
     public function consistency($netConnect = true)
     {
-        set_time_limit(0);
+        $logFile  = $this->upgrade->getConsistencyLogFile();
+        $hasError = $this->upgrade->hasConsistencyError();
+        if(file_exists($logFile)) unlink($logFile);
+
         $alterSQL = $this->upgrade->checkConsistency();
-        $alterSQL = str_replace('ENGINE=MyISAM', 'ENGINE=InnoDB', $alterSQL);
         if(empty($alterSQL))
         {
             if(!$netConnect) $this->locate(inlink('selectVersion'));
@@ -963,7 +1003,9 @@ class upgrade extends control
         }
 
         $this->view->title    = $this->lang->upgrade->consistency;
+        $this->view->hasError = $hasError;
         $this->view->alterSQL = $alterSQL;
+        $this->view->version  = $this->config->installedVersion;
         $this->display();
     }
 

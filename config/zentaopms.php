@@ -199,6 +199,7 @@ $config->openMethods[] = 'misc.ping';
 $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.features';
 $config->openMethods[] = 'misc.getremind';
+$config->openMethods[] = 'misc.checknetconnect';
 $config->openMethods[] = 'sso.login';
 $config->openMethods[] = 'sso.logout';
 $config->openMethods[] = 'sso.bind';

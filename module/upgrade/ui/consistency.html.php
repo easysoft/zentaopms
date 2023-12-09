@@ -12,7 +12,9 @@ namespace zin;
 
 set::zui(true);
 
-$alterSQL = "SET @@sql_mode= '';\n{$alterSQL}";
+jsVar('version', $version);
+jsVar('execFixSQL', !empty($alterSQL) && !$hasError);
+
 div
 (
     setID('main'),
@@ -31,13 +33,13 @@ div
                 div
                 (
                     setClass('article-h3 mb-2'),
-                    $lang->upgrade->noticeSQL
+                    $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog
                 ),
-                h::textarea
+                div
                 (
-                    set::style(array('height' => '200px', 'width' => '100%')),
-                    set::readonly(true),
-                    html($alterSQL)
+                    set::style(array('height' => '200px', 'width' => '100%', 'overflow' => 'auto')),
+                    set::id('logBox'),
+                    $hasError ? html($alterSQL) : null
                 )
             ),
             div

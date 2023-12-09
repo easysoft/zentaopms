@@ -997,29 +997,90 @@ class upgradeModel extends model
                 }
                 elseif($line != $fields[$field])
                 {
+                    $stdConfigs = explode(' ', $line);
+                    $dbConfigs  = explode(' ', $fields[$field]);
+
+                    if($stdConfigs[1] != $dbConfigs[1])
+                    {
+                        $stdType   = $stdConfigs[1];
+                        $dbType    = $dbConfigs[1];
+                        $stdLength = 0;
+                        $dbLength  = 0;
+
+                        preg_match_all('/^(\w+)(\((\d+)\))?$/', $stdConfigs[1], $stdOutput);
+                        if(!empty($stdOutput[1][0])) $stdType   = $stdOutput[1][0];
+                        if(!empty($stdOutput[3][0])) $stdLength = $stdOutput[3][0];
+
+                        preg_match_all('/^(\w+)(\((\d+)\))?$/', $dbConfigs[1], $dbOutput);
+                        if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
+                        if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
+
+                        $stdIsInt     = stripos($stdType, 'int') !== false;
+                        $stdIsVarchar = stripos($stdType, 'varchar') !== false;
+                        $stdIsText    = stripos($stdType, 'text') !== false;
+                        $dbIsInt      = stripos($dbType, 'int') !== false;
+                        $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
+                        $dbIsText     = stripos($dbType, 'text') !== false;
+
+                        if($dbLength > $stdLength) $stdConfigs[1] = $dbConfigs[1];
+                        if($stdIsInt && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
+                        if($stdIsVarchar && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
+                        if($stdIsText && $dbIsText)
+                        {
+                            if($stdType == 'text' && in_array($dbType, array('mediumtext', 'longtext'))) $stdConfigs[1] = $dbConfigs[1];
+                            if($stdType == 'mediumtext' && $dbType == 'longtext') $stdConfigs[1] = $dbConfigs[1];
+                        }
+                        if(stripos($stdConfigs[1], 'int') === false && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
+                        $line = implode(' ', $stdConfigs);
+                        if($line == $fields[$field]) continue;
+                    }
+
                     $execSQL = "ALTER TABLE `$table` CHANGE $field $line";
                 }
 
                 if($execSQL)
                 {
-                    if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' primary key';
+                    if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
                     $alterSQL[] = "$execSQL";
                 }
             }
         }
 
-        if(count($alterSQL) > 100) return implode(";\n", $alterSQL);
-        foreach($alterSQL as $i => $execSQL)
+        return implode(";\n", $alterSQL);
+    }
+
+    /**
+     * Exec fix sql for consistency.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function fixConsistency($version)
+    {
+        $logFile = $this->getConsistencyLogFile();
+        if(file_exists($logFile)) unlink($logFile);
+
+        $hasError = false;
+        $fixSqls  = $this->checkConsistency($version);
+        if($fixSqls) $fixSqls = "SET @@sql_mode= '';" . $fixSqls;
+        foreach(explode(';', $fixSqls) as $fixSQL)
         {
+            file_put_contents($logFile, $fixSQL, FILE_APPEND);
             try
             {
-                $this->dbh->exec($execSQL);
-                unset($alterSQL[$i]);
+                $this->dbh->exec($fixSQL);
             }
-            catch(PDOException $e){}
+            catch(PDOException $e)
+            {
+                $hasError = true;
+                file_put_contents($logFile, $e->getMessage() . "\n", FILE_APPEND);
+            }
         }
 
-        return implode(";\n", $alterSQL);
+        $finishTag = "\nFinished";
+        if($hasError) $finishTag = "\nHasError" . $finishTag;
+        file_put_contents($logFile, $finishTag, FILE_APPEND);
     }
 
     /**
@@ -2749,6 +2810,17 @@ class upgradeModel extends model
         $errors = static::$errors;
         static::$errors = array();
         return $errors;
+    }
+
+    /**
+     * Get upgrade log file.
+     *
+     * @access public
+     * @return string
+     */
+    public function getConsistencyLogFile()
+    {
+        return $this->app->getTmpRoot() . 'log/consistency.' . date('Ymd') . '.log.php';
     }
 
     /**
@@ -9303,5 +9375,24 @@ class upgradeModel extends model
     public function stopOldCron()
     {
         touch($this->app->getCacheRoot() . 'restartcron');
+    }
+
+    public function hasConsistencyError()
+    {
+        $logFile = $this->getConsistencyLogFile();
+        if(!file_exists($logFile)) return false;
+
+        $lastTwoLines = array(0 =>'', 1 => '');
+
+        $fh = fopen($logFile, 'r');
+        while(!feof($fh))
+        {
+            $lastTwoLines[0] = $lastTwoLines[1];
+            $lastTwoLines[1] = fgets($fh);
+        }
+        fclose($fh);
+
+        if(trim($lastTwoLines[0]) == 'HasError') return true;
+        return false;
     }
 }
