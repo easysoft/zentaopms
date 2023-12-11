@@ -1540,15 +1540,17 @@ class userModel extends model
     }
 
     /**
+     * 删除一个联系人列表。
      * Delete a contact list.
      *
      * @param  int    $listID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteContactList($listID)
+    public function deleteContactList(int $listID): bool
     {
-        return $this->dao->delete()->from(TABLE_USERCONTACT)->where('id')->eq($listID)->exec();
+        $this->dao->delete()->from(TABLE_USERCONTACT)->where('id')->eq($listID)->exec();
+        return !dao::isError();
     }
 
     /**
