@@ -24,9 +24,6 @@ $config->user->loginImg['logo'] = 'zt-login-logo.svg';
 $config->user->loginImg['bg']   = 'zt-login-bg.svg';
 $config->user->loginImg['ai']   = 'zt-login-ai.svg';
 
-/* User detail fields for API against JIHU GitLab. */
-$config->user->detailFields = 'id,account,realname,avatar';
-
 $config->user->defaultFields['todo']      = array('id', 'name', 'pri', 'date', 'begin', 'end', 'status', 'type');
 $config->user->defaultFields['task']      = array('id', 'name', 'pri', 'status', 'execution', 'deadline', 'estimate', 'consumed', 'left');
 $config->user->defaultFields['story']     = array('id', 'title', 'pri', 'status', 'product', 'plan', 'openedBy', 'estimate', 'stage');

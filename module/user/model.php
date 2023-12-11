@@ -2792,33 +2792,29 @@ class userModel extends model
     }
 
     /**
-     * Get users details for API.
+     * 为 GitLab API 获取用户列表。
+     * Get user list for GitLab API.
      *
-     * @param  array  $userList
+     * @param  array  $accountList
      * @access public
      * @return array
      */
-    public function getListForGitLabAPI($userList)
+    public function getListForGitLabAPI(array $accountList): array
     {
-        $users = $this->dao->select($this->config->user->detailFields)->from(TABLE_USER)->where("account")->in($userList)->fetchAll();
-
-        $userDetails = array();
-        foreach($users as $index => $user)
+        /* 第二个参数设为空，确保返回的是一个索引数组。*/
+        /* Set the second param to empty, to make sure the return is an indexed array. */
+        $users = $this->getListByAccounts($accountList, '');
+        foreach($users as $user)
         {
-            $user->url = helper::createLink('user', 'profile', "userID={$user->id}");
-
-            if($user->avatar != "")
+            if($user->avatar)
             {
                 $user->avatar = common::getSysURL() . $user->avatar;
-            }
-            else
-            {
-                $user->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
+                continue;
             }
 
-            $userDetails[$user->account] = $user;
+            $user->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
         }
-        return $userDetails;
+        return $users;
     }
 
     /**
