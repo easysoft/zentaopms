@@ -1898,18 +1898,18 @@ class docModel extends model
     }
 
     /**
+     * 获取收信人和抄送人列表。
      * Get toList and ccList.
      *
-     * @param  object $doc
+     * @param  object     $doc
      * @access public
      * @return bool|array
      */
-    public function getToAndCcList($doc)
+    public function getToAndCcList(object $doc): bool|array
     {
         /* Set toList and ccList. */
         $toList = '';
         $ccList = str_replace(' ', '', trim($doc->mailto, ','));
-
         if(empty($toList))
         {
             if(empty($ccList)) return false;
