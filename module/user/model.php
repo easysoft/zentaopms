@@ -1340,13 +1340,14 @@ class userModel extends model
     }
 
     /**
-     * Plus the fail times.
+     * 登录失败次数加 1。
+     * The number of failed login attempts is increased by 1.
      *
-     * @param  string    $account
+     * @param  string $account
      * @access public
      * @return int
      */
-    public function failPlus($account)
+    public function failPlus(string $account): int
     {
         if(!validater::checkAccount($account)) return 0;
 
@@ -1364,12 +1365,10 @@ class userModel extends model
         if($fails < $this->config->user->failTimes)
         {
             $this->dao->update(TABLE_USER)->set('fails')->eq($fails)->set('locked = NULL')->where('account')->eq($account)->exec();
-        }
-        else
-        {
-            $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq(date('Y-m-d H:i:s'))->where('account')->eq($account)->exec();
+            return $fails;
         }
 
+        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq(date('Y-m-d H:i:s'))->where('account')->eq($account)->exec();
         return $fails;
     }
 
