@@ -2214,7 +2214,8 @@ class docModel extends model
         if($type != 'project') $libTree = array_values($libTree[$type]);
         if($type == 'mine')
         {
-            $libType     = $this->app->rawMethod == 'view' ? 'mine' : zget($this->app->rawParams, 'type', '');
+            $libType     = isset($this->app->rawParams['type']) ? $this->app->rawParams['type'] : '';
+            $libType     = $this->app->rawMethod == 'view' ? 'mine' : $libType;
             $mineMethods = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdBy' => 'myCreation', 'editedBy' => 'myEdited');
             $libTree     = array();
             foreach($mineMethods as $type => $mineMethod)
