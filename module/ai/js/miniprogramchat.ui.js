@@ -87,20 +87,39 @@ function sendMessagesToAI(message)
     formData.set('message', message);
     if(messageList.length) formData.set('messages', messageList);
 
+    const $inputBox = $('.chat-input-box');
+    const $sendBtn = $('.send-btn');
     const $messageList = $('.chat-history .message-list');
+    $inputBox.attr('readonly', 'readonly');
+    $sendBtn.attr('disabled', 'disabled');
     $.post(
         postLink,
         formData,
         function(response) {
-            console.log(JSON.parse(response));
+            $inputBox.removeAttr('readonly');
+            $sendBtn.removeAttr('disabled');
             response = JSON.parse(response);
-            const {content, time} = response.message;
-            const $message = createMessage('ai', content, time);
-            $messageList.append($message);
-            $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
+            const {message, result} = response;
+            if(result === 'success')
+            {
+                const {content, time} = message;
+                const $message = createMessage('ai', content, time);
+                $messageList.append($message);
+                $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
 
-            messageList.append(curMsgObj);
-            messageList.append(response.message);
+                messageList.append(curMsgObj);
+                messageList.append(response.message);
+                return;
+            }
+
+            const {reason} = response;
+            if(reason === 'no model')
+            {
+                $('.chat').addClass('hidden');
+                $('.chat-nomodel').removeClass('hidden');
+                $('form .footer .btn.primary').attr('disabled', 'disabled');
+                // $('.language-model .btn').attr('disabled', 'disabled');
+            }
         }
     );
 
@@ -152,7 +171,7 @@ window.aiMiniProgramChat.handleStarBtnClick = function()
     }, 'json');
 };
 
-window.aiMiniProgramChat.handleRestBtnClick = function()
+window.aiMiniProgramChat.handleRestBtnClick = () =>
 {
     try
     {
@@ -164,7 +183,9 @@ window.aiMiniProgramChat.handleRestBtnClick = function()
         $('.form-container .form-group > textarea[data-name]').val('');
     }
     catch (error) {}
-}
+};
+
+let composing = false;
 
 /**
  *
@@ -172,8 +193,8 @@ window.aiMiniProgramChat.handleRestBtnClick = function()
  */
 window.aiMiniProgramChat.handleInputEnter = (event) =>
 {
-    console.log(event.code);
-    if (event.code === 'Enter') {
+    console.log(composing, 3);
+    if (event.code === 'Enter' && !composing) {
         event.preventDefault();
         window.aiMiniProgramChat.clearInputAndChat();
     }
@@ -184,8 +205,34 @@ window.aiMiniProgramChat.clearInputAndChat = () =>
     const $inputBox = $('.chat-input-box');
     const message = $inputBox.val()
     $inputBox.val('');
+    if (!message) return;
     sendMessagesToAI(message);
-}
+};
+
+window.aiMiniProgramChat.handleInputCompositionStart = () =>
+{
+    composing = true;
+    console.log(composing, 1);
+};
+
+window.aiMiniProgramChat.handleInputCompositionEnd = () =>
+{
+    composing = false;
+    console.log(composing, 2);
+};
+
+/**
+ * @param {Event} event
+ */
+window.aiMiniProgramChat.handleInput = (event) =>
+{
+    /**
+     * @type {HTMLTextAreaElement}
+     */
+    const inputBox = event.target;
+    inputBox.style.height = 'auto';
+    inputBox.style.height = `${(inputBox.scrollHeight + 2)}px`
+};
 
 /**
  *
@@ -253,3 +300,11 @@ function createMessage(type, content, time = (new Date).toLocaleString())
         .append($avatar)
         .append($body);
 }
+
+$(function()
+{
+    $('#to-language-model').prop('href', $.createLink('ai', 'models'));
+    $('#reload-current').on('click', () => {
+        location.reload();
+    });
+});

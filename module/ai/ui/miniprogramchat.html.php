@@ -153,7 +153,7 @@ div(
         )
     ),
     div(
-        setClass('chat shadow-md flex-1 center hidden'),
+        setClass('chat chat-nohistory shadow-md flex-1 center hidden'),
         div(
             setClass('chat-tip flex'),
             html(<<<END
@@ -164,6 +164,16 @@ div(
             </svg>
             END),
             $lang->ai->miniPrograms->chatTip
+        )
+    ),
+    div(
+        setClass('chat chat-nomodel shadow-md flex-1 center hidden'),
+        div(
+            p(
+                icon(set::name('exclamation'), setClass('mr-2'), setStyle(array('color' => 'rgb(255, 159, 70)'))),
+                html($lang->ai->miniPrograms->noModel[0])
+            ),
+            p(html($lang->ai->miniPrograms->noModel[1]), setStyle('padding-left', '22px'))
         )
     ),
     div(
@@ -209,7 +219,7 @@ div(
                 </defs>
                 </svg>
             END),
-            html('<textarea class="chat-input-box" onkeydown="window.aiMiniProgramChat.handleInputEnter(event)"></textarea>'),
+            html('<textarea rows="1" class="chat-input-box" oninput="window.aiMiniProgramChat.handleInput(event)" onkeydown="window.aiMiniProgramChat.handleInputEnter(event)" oncompositionstart="window.aiMiniProgramChat.handleInputCompositionStart(event)" oncompositionend="window.aiMiniProgramChat.handleInputCompositionEnd(event)"></textarea>'),
             btn(
                 setClass('ghost send-btn'),
                 on::click('window.aiMiniProgramChat.clearInputAndChat'),

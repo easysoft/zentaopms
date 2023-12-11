@@ -496,6 +496,7 @@ $lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
 $lang->ai->miniPrograms->generate           = '生成';
 $lang->ai->miniPrograms->regenerate         = '重新生成';
 $lang->ai->miniPrograms->chatTip            = '点击左侧的生成按钮试试吧';
+$lang->ai->miniPrograms->noModel            = array('尚未配置语言模型，请联系管理员或跳转至后台配置<a id="to-language-model">语言模型</a>。', '若已完成相关配置，请尝试<a id="reload-current">重新加载</a>页面。');
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
