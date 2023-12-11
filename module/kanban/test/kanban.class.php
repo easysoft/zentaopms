@@ -91,6 +91,24 @@ class kanbanTest
     }
 
     /**
+     * Test copy a kanban column.
+     *
+     * @param  array  $copyColumns
+     * @param  int    $regionID
+     * @param  int    $newGroupID
+     * @access public
+     * @return array|false
+     */
+    public function copyColumnsTest(array $copyColumns, int $regionID, int $newGroupID)
+    {
+        $this->objectModel->copyColumns($copyColumns, $regionID, $newGroupID);
+
+        if(dao::isError()) return false;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_KANBANCOLUMN)->fetchAll();
+    }
+
+    /**
      * Test create default kanban lanes.
      *
      * @param  int    $regionID
@@ -1086,15 +1104,14 @@ class kanbanTest
      */
     public function updateRegionTest($regionID, $name)
     {
-        $_POST['name']  = $name;
+        $_POST['name'] = $name;
 
-        $change = $this->objectModel->updateRegion($regionID);
-        if($change == array()) $change = '没有数据更新';
-
-        unset($_POST);
+        $this->objectModel->updateRegion($regionID);
         if(dao::isError()) return dao::getError();
 
-        return $change;
+        unset($_POST);
+
+        return $this->objectModel->getRegionByID($regionID);
     }
 
     /**
