@@ -1554,48 +1554,37 @@ class userModel extends model
     }
 
     /**
+     * 获取弱密码用户。
      * Get weak users.
      *
      * @access public
      * @return array
      */
-    public function getWeakUsers()
+    public function getWeakUsers(): array
     {
         $users = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll();
-        $weaks = array();
-        foreach(explode(',', $this->config->safe->weak) as $weak)
-        {
-            $weak = md5(trim($weak));
-            $weaks[$weak] = $weak;
-        }
+        $weaks = array_unique(array_filter(explode(',', $this->config->safe->weak)));
+        $weaks = array_map(function($weak){return md5(trim($weak));}, $weaks);
 
         $weakUsers = array();
         foreach($users as $user)
         {
-            if(isset($weaks[$user->password]))
+            if(in_array($user->password, $weaks))
             {
                 $user->weakReason = 'weak';
                 $weakUsers[] = $user;
+                continue;
             }
-            elseif($user->password == md5($user->account))
+
+            foreach(array('account', 'phone', 'mobile', 'birthday') as $field)
             {
-                $user->weakReason = 'account';
-                $weakUsers[] = $user;
-            }
-            elseif($user->phone and $user->password == md5($user->phone))
-            {
-                $user->weakReason = 'phone';
-                $weakUsers[] = $user;
-            }
-            elseif($user->mobile and $user->password == md5($user->mobile))
-            {
-                $user->weakReason = 'mobile';
-                $weakUsers[] = $user;
-            }
-            elseif($user->birthday and $user->password == md5($user->birthday))
-            {
-                $user->weakReason = 'birthday';
-                $weakUsers[] = $user;
+                if(empty($user->$field)) continue;
+                if($user->password == md5($user->$field))
+                {
+                    $user->weakReason = $field;
+                    $weakUsers[] = $user;
+                    break;
+                }
             }
         }
 
