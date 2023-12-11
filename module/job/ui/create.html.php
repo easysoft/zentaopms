@@ -110,10 +110,9 @@ formPanel
         formGroup
         (
             set::id('svnDirBox'),
-            set::name('svnDir[]'),
             set::width('1/2'),
             set::label($lang->job->svnDir),
-            set::control('select')
+            set::control('static'),
         )
     ),
     formRow
