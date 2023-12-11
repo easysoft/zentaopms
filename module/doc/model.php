@@ -1844,12 +1844,13 @@ class docModel extends model
     }
 
     /**
+     * 获取文档的统计信息。
      * Get statistic information.
      *
      * @access public
      * @return object
      */
-    public function getStatisticInfo()
+    public function getStatisticInfo(): object
     {
         $today     = date('Y-m-d');
         $statistic = new stdclass();
@@ -1858,6 +1859,7 @@ class docModel extends model
             ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
+
         $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
@@ -1868,6 +1870,7 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
+
         $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.objectID) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
             ->where('t1.objectType')->eq('doc')
@@ -1879,18 +1882,18 @@ class docModel extends model
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
 
-        $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
+        $myStatistic = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
             ->where('addedBy')->eq($this->app->user->account)
             ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('lib')->ne('')
             ->fetch();
-        $statistic->myDocs = $my->myDocs;
-        $statistic->myDoc  = new stdclass();
-        $statistic->myDoc->docViews    = $my->docViews;
-        $statistic->myDoc->docCollects = $my->docCollects;
 
+        $statistic->myDocs = $myStatistic->myDocs;
+        $statistic->myDoc  = new stdclass();
+        $statistic->myDoc->docViews    = $myStatistic->docViews;
+        $statistic->myDoc->docCollects = $myStatistic->docCollects;
         return $statistic;
     }
 
