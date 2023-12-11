@@ -42,6 +42,26 @@ class userTao extends userModel
     }
 
     /**
+     * 获取某个用户参与的项目和项目包含的执行数键值对。
+     * Get the projects that the user joined and the execution count of the project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchProjectExecutionCount(array $projectIdList): array
+    {
+        return $this->dao->select('project, COUNT(1) AS count')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('multiple')->eq('1')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->andWhere('project')->in($projectIdList)
+            ->groupBy('project')
+            ->fetchPairs();
+    }
+
+    /**
      * 获取某个用户参与的执行和他在执行中的团队信息。
      * Get the executions that the user joined.j
      *
