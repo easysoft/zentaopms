@@ -296,6 +296,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
+            ->beginIF($metricScope == 'system')->page($pager)->fi()
             ->fetchAll();
 
         return $records;
