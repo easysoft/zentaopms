@@ -1929,28 +1929,27 @@ class docModel extends model
     }
 
     /**
+     * 获取下拉菜单的链接。
      * Get the dropmenu link.
      *
-     * @param  string $type
+     * @param  string $type     product|project
      * @param  int    $objectID
-     * @param  array  $libs
-     * @param  int    $libID
      * @access public
      * @return string
      */
-    public function getDropMenuLink($type, $objectID)
+    public function getDropMenuLink(string $type, int $objectID): string
     {
         if(!in_array($type, array('product', 'project'))) return '';
 
         $currentModule = $this->app->rawModule;
         $currentMethod = $this->app->rawMethod;
-        if($currentModule == 'api' and $currentMethod == 'index')
+        if($currentModule == 'api' && $currentMethod == 'index')
         {
             $currentModule = 'doc';
             $currentMethod = $type . 'Space';
         }
 
-        return helper::createLink('doc', 'ajaxGetDropMenu', "objectType=$type&objectID=$objectID&module=$currentModule&method=$currentMethod");
+        return helper::createLink('doc', 'ajaxGetDropMenu', "objectType={$type}&objectID={$objectID}&module={$currentModule}&method={$currentMethod}");
     }
 
     /**
