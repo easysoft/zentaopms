@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of file module of ZenTaoPMS.
  *
@@ -354,7 +355,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function getPathOfImportedFile()
+    public function getPathOfImportedFile(): string
     {
         $path = $this->app->getTmpRoot() . 'import';
         if(!is_dir($path)) mkdir($path, 0755, true);
@@ -879,7 +880,7 @@ class fileModel extends model
     /**
      * Auto delete useless image.
      *
-     * @param  int    $uid
+     * @param  string $uid
      * @access public
      * @return void
      */

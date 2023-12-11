@@ -260,14 +260,11 @@ class fileTest
      */
     public function setWebPathTest()
     {
+        global $tester;
+        $tester->config->webRoot = '/';
         $this->objectModel->setWebPath();
 
-
-        if(dao::isError()) return dao::getError();
-
-        global $tester;
-        $path = substr($tester->file->webPath, strpos($tester->file->webPath, '/test/model/'));
-        return $path;
+        return $this->objectModel->webPath;
     }
 
     /**

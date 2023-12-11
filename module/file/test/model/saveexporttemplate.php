@@ -1,24 +1,31 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 fileModel->saveExportTemplate();
+cid=0
+
+- 测试新建 公共 bug 模板
+ - 属性title @新建的公共bug模板
+ - 属性public @1
+- 测试新建 私有 bug 模板
+ - 属性title @新建的私有bug模板
+ - 属性public @0
+- 测试新建 公共 task 模板
+ - 属性title @新建的公共task模板
+ - 属性public @1
+- 测试新建 私有 task 模板
+ - 属性title @新建的私有task模板
+ - 属性public @0
+- 测试新建 重名 模板 @『模板名称』已经有『新建的公共bug模板』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/file.class.php';
 su('admin');
 
 zdTable('usertpl')->gen(0);
-
-/**
-
-title=测试 fileModel->saveExportTemplate();
-cid=1
-pid=1
-
-测试新建 公共 bug 模板 >> 新建的公共bug模板,1
-测试新建 私有 bug 模板 >> 新建的私有bug模板,0
-测试新建 公共 task 模板 >> 新建的公共task模板,1
-测试新建 私有 task 模板 >> 新建的私有task模板,0
-测试新建 重名 模板 >> 『模板名称』已经有『新建的公共bug模板』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
-
-*/
 $module = array('bug', 'task');
 
 $file1 = new stdclass();

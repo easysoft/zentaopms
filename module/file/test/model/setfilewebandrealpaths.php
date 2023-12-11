@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 fileModel->setFileWebAndRealPaths();
+cid=0
+
+- 检查 id=1 的真实路径 @1
+- 检查 id=1 的网络路径 @1
+- 检查 id=5 的真实路径 @1
+- 检查 id=5 的网络路径 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/file.class.php';
 su('admin');
@@ -7,14 +19,6 @@ su('admin');
 $file = zdTable('file');
 $file->pathname->range('202305/0414225006610005,202305/0414225006610006,202305/0414225006610007,202305/0414225006610008,202305/0414225006610009,202305/0414225006610010,202305/0414225006610011');
 $file->gen(20);
-
-/**
-
-title=测试 fileModel->setFileWebAndRealPaths();
-cid=1
-pid=1
-
-*/
 
 $file = new fileTest();
 

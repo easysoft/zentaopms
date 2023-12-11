@@ -1,18 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
-su('admin');
-
-zdTable('file')->gen(0);
 
 /**
 
 title=测试 fileModel->pasteImage();
-cid=1
-pid=1
+cid=0
+
+- 不传入任何数据。 @0
+- 传入有图片信息的数据。 @<img src="/file-read-1.png" />
+- 传入无图片信息的数据。 @12<script>3</script>4
+- 传入无图片信息的数据，并开启安全参数。 @124
+- 检查SESSION信息。 @1
+- 检查图片大小。属性size @4
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('file')->gen(0);
 
 global $tester;
 $fileModel = $tester->loadModel('file');

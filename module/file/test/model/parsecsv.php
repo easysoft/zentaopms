@@ -4,7 +4,6 @@
 /**
 
 title=测试 fileModel->parseCSV();
-timeout=0
 cid=0
 
 - 传入空参数 @0

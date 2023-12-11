@@ -4,7 +4,6 @@
 /**
 
 title=测试 fileModel->processFile4Object();
-timeout=0
 cid=0
 
 - 传入空对象。属性count @5

@@ -1,16 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
-su('admin');
 
 /**
 
 title=测试 fileModel->getUpload();
-cid=1
-pid=1
+cid=0
+
+- 测试获取上传的文件信息1
+ - 第0条的title属性 @file1.jpg
+ - 第1条的title属性 @file2.txt
+- 测试获取上传的文件信息2第0条的title属性 @file3.ppt
+- 测试获取上传的文件信息3第0条的title属性 @file5
+- 测试获取上传的文件信息4
+ - 第0条的title属性 @file6.ppt
+ - 第1条的title属性 @file7.mp4
+- 测试获取上传的文件信息5
+ - 第0条的title属性 @file9.ppt
+ - 第1条的title属性 @file10.mp4
+ - 第2条的title属性 @file11.wri
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/file.class.php';
+su('admin');
 
 $file = new fileTest();
 

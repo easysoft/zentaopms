@@ -4,8 +4,18 @@
 /**
 
 title=测试 fileModel->getImageSize();
-timeout=0
 cid=0
+
+- 传入空对象。 @0
+- 检查图片大小。
+ -  @100
+ - 属性1 @150
+ - 属性mime @image/png
+- 文件不存在。
+ -  @0
+ - 属性1 @0
+ - 属性2 @png
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

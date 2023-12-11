@@ -4,7 +4,6 @@
 /**
 
 title=测试 fileModel->getPairs();
-timeout=0
 cid=0
 
 - 测试获取文件 1 2 3 4 5 的 标题

@@ -4,7 +4,6 @@
 /**
 
 title=测试 fileModel->fileExists();
-timeout=0
 cid=0
 
 - 传入空对象 @0

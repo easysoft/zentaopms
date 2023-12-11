@@ -1,16 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
-su('admin');
 
 /**
 
 title=测试 fileModel->getUpload();
-cid=1
-pid=1
+cid=0
+
+- 测试获取上传的文件信息1 @2
+- 测试获取上传的文件信息2 @1
+- 测试获取上传的文件信息3 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/file.class.php';
+su('admin');
 
 $file = new fileTest();
 
