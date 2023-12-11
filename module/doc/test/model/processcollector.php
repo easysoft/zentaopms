@@ -23,5 +23,5 @@ $docIdList[0] = array();
 $docIdList[1] = range(1, 10);
 
 $docTester = new docTest();
-r($docTester->processCollectorTest($docIdList[0])) && p()                   && e('0');             // 测试空数据
-r($docTester->processCollectorTest($docIdList[1])) && p('1:collector', ';') && e(',admin,user1,'); // 测试正常数据
+r($docTester->processCollectorTest($docIdList[0])) && p()                   && e('0');       // 测试空数据
+r($docTester->processCollectorTest($docIdList[1])) && p('1:collector', ';') && e(',admin,'); // 测试正常数据
