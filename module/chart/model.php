@@ -18,7 +18,7 @@ class chartModel extends model
      * @access public
      * @return void
      */
-    public function __construct(string $appName = ''): void
+    public function __construct(string $appName = '')
     {
         parent::__construct($appName);
         $this->loadBIDAO();
