@@ -2437,15 +2437,16 @@ class docModel extends model
     }
 
     /**
+     * 检查接口库名称。
      * Check api library name.
      *
      * @param  object $lib
-     * @param  string $libType
+     * @param  string $libType product|project
      * @param  int    $libID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkApiLibName($lib, $libType, $libID = 0)
+    public function checkApiLibName($lib, $libType, $libID = 0): bool
     {
         $sameNames = $this->dao->select('*')
             ->from(TABLE_DOCLIB)
@@ -2455,9 +2456,12 @@ class docModel extends model
             ->andWhere('`type`')->eq('api')
             ->beginIF(!empty($libID))->andWhere('`id`')->ne($libID)->fi()
             ->fetchAll();
-        if(count($sameNames) > 0 and $libType == 'product') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
-        if(count($sameNames) > 0 and $libType == 'project') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
-        if(count($sameNames) > 0 and $libType == 'nolink')  dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+
+        if(count($sameNames) > 0 && $libType == 'product') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+        if(count($sameNames) > 0 && $libType == 'project') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+        if(count($sameNames) > 0 && $libType == 'nolink')  dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
+
+        return !dao::isError();
     }
 
     /**
