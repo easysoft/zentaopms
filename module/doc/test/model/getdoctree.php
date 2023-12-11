@@ -1,35 +1,24 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getDocTree();
 cid=1
-pid=1
-
-获取libID 1 的文档树 >> 目录1:文档标题1,子目录1,子目录2;
-获取libID 3 的文档树 >> 目录3:子目录5,子目录6;
-获取libID 8 的文档树 >> 目录8:子目录15,子目录16;
-获取libID 20 的文档树 >> 目录20:子目录39,子目录40;
-获取libID 101 的文档树 >> 0
-获取libID 191 的文档树 >> 0
-获取libID 821 的文档树 >> 0
-获取libID 901 的文档树 >> 0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-$libID = array(1, 3, 8, 20, 101, 191, 821, 901);
+zdTable('module')->config('module')->gen(3);
+zdTable('doclib')->config('doclib')->gen(30);
+zdTable('doc')->config('doc')->gen(50);
+zdTable('user')->gen(5);
 
-$doc = new docTest();
+$libIds = array(0, 11, 13, 14, 31);
 
-r($doc->getDocTreeTest($libID[0])) && p() && e('目录1:文档标题1,子目录1,子目录2;'); // 获取libID 1 的文档树
-r($doc->getDocTreeTest($libID[1])) && p() && e('目录3:子目录5,子目录6;');           // 获取libID 3 的文档树
-r($doc->getDocTreeTest($libID[2])) && p() && e('目录8:子目录15,子目录16;');         // 获取libID 8 的文档树
-r($doc->getDocTreeTest($libID[3])) && p() && e('目录20:子目录39,子目录40;');        // 获取libID 20 的文档树
-r($doc->getDocTreeTest($libID[4])) && p() && e('0');                                // 获取libID 101 的文档树
-r($doc->getDocTreeTest($libID[5])) && p() && e('0');                                // 获取libID 191 的文档树
-r($doc->getDocTreeTest($libID[6])) && p() && e('0');                                // 获取libID 821 的文档树
-r($doc->getDocTreeTest($libID[7])) && p() && e('0');                                // 获取libID 901 的文档树
+$docTester = new docTest();
+r($docTester->getDocTreeTest($libIds[0])) && p() && e('0');                                                                            // 测试libiID=0时，获取文档结构
+r($docTester->getDocTreeTest($libIds[1])) && p() && e('/:我的文档1,我的文档2;模块2:我的草稿文档7,我的草稿文档8;模块1:我的草稿文档6;'); // 测试libiID=11时，获取文档结构
+r($docTester->getDocTreeTest($libIds[2])) && p() && e('/:我的文档1,我的文档2;模块3:;');                                                // 测试libiID=13时，获取文档结构
+r($docTester->getDocTreeTest($libIds[3])) && p() && e('/:我的文档1,我的文档2;');                                                       // 测试libiID=14时，获取文档结构
+r($docTester->getDocTreeTest($libIds[4])) && p() && e('/:我的文档1,我的文档2;');                                                       // 测试libiID为不存在的ID时，获取文档结构

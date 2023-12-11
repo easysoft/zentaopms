@@ -306,23 +306,29 @@ class docTest
     }
 
     /**
-     * Test get doc tree.
+     * 获取文档的树形结构。
+     * Get doc tree.
      *
-     * @param  int $libID
+     * @param  int          $libID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getDocTreeTest($libID)
+    public function getDocTreeTest(int $libID): string|array
     {
-        $objects = $this->objectModel->getDocTree($libID);
-
+        $docTrees = $this->objectModel->getDocTree($libID);
         if(dao::isError()) return dao::getError();
 
         $names = '';
-        foreach($objects as $object)
+        foreach($docTrees as $object)
         {
             $names .= "$object->name:";
-            foreach($object->children as $children) $names .= (isset($children->name) ? $children->name : $children->title) . ",";
+            if(!empty($object->children))
+            {
+                foreach($object->children as $children)
+                {
+                    $names .= (isset($children->name) ? $children->name : $children->title) . ",";
+                }
+            }
             $names  = trim($names, ',');
             $names .= ";";
         }
