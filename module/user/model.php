@@ -1296,7 +1296,7 @@ class userModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            $project->storyCount     = zget($projectStoryCount, $project->id, 0);
+            $project->storyCount     = round(zget($projectStoryEstimate, $project->id, 0), 1);
             $project->executionCount = zget($projectExecutionCount, $project->id, 0);
         }
 
