@@ -1424,13 +1424,14 @@ class userModel extends model
         return !dao::isError();
     }
 
-	/**
+    /**
+     * 上传头像。
      * Upload avatar.
      *
      * @access public
      * @return array
      */
-    public function uploadAvatar()
+    public function uploadAvatar(): array
     {
         $uploadResult = $this->loadModel('file')->saveUpload('avatar');
         if(!$uploadResult) return array('result' => 'fail', 'message' => $this->lang->fail);
@@ -1465,14 +1466,14 @@ class userModel extends model
     }
 
     /**
-     * Get Contact List by account.
+     * 获取某个用户创建的联系人列表键值对。
+     * Get key-value pairs of the contact list created by a user.
      *
-     * @param string $account
-     *
+     * @param  string $account
      * @access public
      * @return array
      */
-    public function getListByAccount($account)
+    public function getListByAccount(string $account): array
     {
         return $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('account')->eq($account)->fetchPairs();
     }
@@ -1490,13 +1491,14 @@ class userModel extends model
     }
 
     /**
+     * 根据 id 获取一个联系人列表。
      * Get a contact list by id.
      *
      * @param  int    $listID
      * @access public
      * @return object
      */
-    public function getContactListByID($listID)
+    public function getContactListByID(int $listID): object
     {
         return $this->dao->select('*')->from(TABLE_USERCONTACT)->where('id')->eq($listID)->fetch();
     }
