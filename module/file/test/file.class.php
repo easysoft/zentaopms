@@ -368,4 +368,17 @@ class fileTest
 
         return $oldCase->fromCaseVersion != $case->fromCaseVersion;
     }
+
+    /**
+     * 测试 autoDelete 方法，返回file表数据行数
+     * Test autoDelete methid, return rows count of file table.
+     *
+     * @access public
+     * @return int
+     */
+    public function autoDeleteTest(string $uid): int
+    {
+        $this->objectModel->autoDelete($uid);
+        return $this->objectModel->dao->select('count(*) AS count')->from(TABLE_FILE)->fetch('count');
+    }
 }

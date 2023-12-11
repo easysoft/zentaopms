@@ -483,6 +483,7 @@ class fileModel extends model
      */
     public function fileExists(object $file): bool
     {
+        if(empty($file->realPath)) return false;
         return file_exists($file->realPath);
     }
 
@@ -495,6 +496,7 @@ class fileModel extends model
      */
     public function unlinkFile(object $file): bool|null
     {
+        if(empty($file->realPath)) return false;
         return @unlink($file->realPath);
     }
 
@@ -835,12 +837,9 @@ class fileModel extends model
      * @access public
      * @return object
      */
-    public function replaceImgURL($data, $fields)
+    public function replaceImgURL(object $data, string $fields): object
     {
         if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
-
-        $isonlybody = isInModal();
-        unset($_GET['onlybody']);
 
         foreach($fields as $field)
         {
@@ -863,7 +862,7 @@ class fileModel extends model
                 foreach($iframeTags[0] as $i => $iframeTag) $fieldData = str_replace($iframeTag, "<IFRAME_{$i}>", $fieldData);
                 foreach($preTags[0] as $i => $preTag) $fieldData = str_replace($preTag, "<PRE_{$i}>", $fieldData);
 
-                $fieldData = preg_replace('/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|\&|-|%|;)+)/i', "<a href='\\0' target='_blank'>\\0</a>", $fieldData);
+                $fieldData = preg_replace('/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|\&|-|%|;)+)/i', "<a href=\"\\0\" target=\"_blank\">\\0</a>", $fieldData);
 
                 foreach($aTags[0] as $i => $aTag) $fieldData = str_replace("<A_{$i}>", $aTag, $fieldData);
                 foreach($imgTags[0] as $i => $imgTag) $fieldData = str_replace("<IMG_{$i}>", $imgTag, $fieldData);
@@ -874,7 +873,6 @@ class fileModel extends model
             }
         }
 
-        if($isonlybody) $_GET['onlybody'] = 'yes';
         return $data;
     }
 
@@ -885,21 +883,21 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function autoDelete($uid)
+    public function autoDelete(string $uid): void
     {
-        if(!empty($_SESSION['album'][$uid]))
+        if(empty($_SESSION['album'][$uid])) return;
+
+        foreach($_SESSION['album'][$uid] as $imageID)
         {
-            foreach($_SESSION['album'][$uid] as $imageID)
-            {
-                if(!isset($_SESSION['album']['used'][$uid][$imageID]))
-                {
-                    $file = $this->getById($imageID);
-                    $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
-                    $this->unlinkFile($file);
-                }
-            }
-            unset($_SESSION['album'][$uid]);
+            if(isset($_SESSION['album']['used'][$uid][$imageID])) continue;
+
+            $file = $this->getById($imageID);
+            if(empty($file)) continue;
+
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
+            $this->unlinkFile($file);
         }
+        unset($_SESSION['album'][$uid]);
     }
 
     /**

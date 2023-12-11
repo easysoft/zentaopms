@@ -1,24 +1,43 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 fileModel->updateObjectID();
+cid=0
+
+- 测试更新 id 1 的objectID 为 101 objectType 为 bug
+ - 第1条的id属性 @1
+ - 第1条的objectID属性 @101
+ - 第1条的objectType属性 @bug
+ - 第1条的extra属性 @editor
+- 测试更新 id 2 的objectID 为 102 objectType 为 story
+ - 第2条的id属性 @2
+ - 第2条的objectID属性 @102
+ - 第2条的objectType属性 @story
+ - 第2条的extra属性 @editor
+- 测试更新 id 5 的objectID 为 103 objectType 为 task
+ - 第5条的id属性 @5
+ - 第5条的objectID属性 @103
+ - 第5条的objectType属性 @task
+ - 第5条的extra属性 @editor
+- 测试更新 id 6 的objectID 为 104 objectType 为 traincourse
+ - 第6条的id属性 @6
+ - 第6条的objectID属性 @104
+ - 第6条的objectType属性 @traincourse
+ - 第6条的extra属性 @editor
+- 测试更新 id 9 的objectID 为 105 objectType 为 testcase
+ - 第9条的id属性 @9
+ - 第9条的objectID属性 @105
+ - 第9条的objectType属性 @testcase
+ - 第9条的extra属性 @editor
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/file.class.php';
 su('admin');
 
 zdTable('file')->gen(20);
 
-/**
-
-title=测试 fileModel->updateObjectID();
-cid=1
-pid=1
-
-测试更新 id 1 的objectID 为 101 objectType 为 bug >> 1,101,bug
-测试更新 id 2 3 的objectID 为 102 objectType 为 story >> 2,102,story;3,102,story
-测试更新 id 4 5 的objectID 为 103 objectType 为 task >> 4,103,task;5,103,task
-测试更新 id 6 7 8 的objectID 为 104 objectType 为 traincourse >> 6,104,traincourse;7,104,traincourse;8,104,traincourse
-测试更新 id 9 10 11 的objectID 为 105 objectType 为 testcase >> 9,105,testcase;10,105,testcase;11,105,testcase
-
-*/
 $uid = '98390890341';
 $albums1 = array('used' => array($uid => array('1')));
 $albums2 = array('used' => array($uid => array('2', '3')));
