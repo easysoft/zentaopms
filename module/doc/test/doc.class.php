@@ -394,18 +394,20 @@ class docTest
     }
 
     /**
+     * 获取文档的统计信息。
      * Get statistic information.
      *
+     * @param  string       $account
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function getStatisticInfoTest()
+    public function getStatisticInfoTest(string $account): object|array
     {
-        $objects = $this->objectModel->getStatisticInfo();
+        if($account != $this->objectModel->app->user->account) su($account);
+        $statistic = $this->objectModel->getStatisticInfo();
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $statistic;
     }
 
     public function buildCreateButton4DocTest($objectType, $objectID, $libID)
