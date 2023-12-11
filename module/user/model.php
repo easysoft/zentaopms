@@ -1393,18 +1393,21 @@ class userModel extends model
     }
 
     /**
+     * 解锁被锁定的用户。
      * Unlock the locked user.
      *
-     * @param  string    $account
+     * @param  string $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function cleanLocked($account)
+    public function cleanLocked(string $account): bool
     {
-        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked = null')->where('account')->eq($account)->exec();
+        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked = NULL')->where('account')->eq($account)->exec();
 
         unset($_SESSION['loginFails']);
         unset($_SESSION["{$account}.loginLocked"]);
+
+        return !dao::isError();
     }
 
     /**
