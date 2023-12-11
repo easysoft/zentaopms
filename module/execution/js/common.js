@@ -60,17 +60,19 @@ function computeDaysDelta(date1, date2)
  */
 function computeWorkDays(currentID)
 {
-    isBactchEdit = false;
+    isBatchEdit   = false;
+    var beginDate = '';
+    var endDate   = '';
     if(currentID)
     {
-        index = currentID.replace(/\w*\[|\]/g, '');
-        if(!isNaN(index)) isBactchEdit = true;
+        index = currentID.replace(/[a-zA-Z]*/g, '');
+        if(!isNaN(index)) isBatchEdit = true;
     }
 
-    if(isBactchEdit)
+    if(isBatchEdit)
     {
-        beginDate = $('#begins\\[' + index + '\\]').val();
-        endDate   = $('#ends\\[' + index + '\\]').val();
+        beginDate = $("input[name=begins\\[" + index + "\\]]").val();
+        endDate   = $("input[name=ends\\[" + index + "\\]]").val();
     }
     else
     {
@@ -80,8 +82,8 @@ function computeWorkDays(currentID)
 
     if(beginDate && endDate)
     {
-        if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
-        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
+        if(isBatchEdit)  $("input[name=dayses\\[" + index + "\\]]").val(computeDaysDelta(beginDate, endDate));
+        if(!isBatchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
     }
     else if($('input[checked="true"]').val())
     {
