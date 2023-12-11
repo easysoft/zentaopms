@@ -102,6 +102,7 @@ $lang->testcase->caseType         = 'Case Type';
 $lang->testcase->allType          = 'All Types';
 $lang->testcase->showAutoCase     = 'Automated';
 $lang->testcase->automation       = 'Automation Test';
+$lang->testcase->autoCase         = 'Automation';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -192,6 +193,11 @@ $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in
 
 $lang->testcase->reviewList[0] = 'NON';
 $lang->testcase->reviewList[1] = 'OUI';
+
+$lang->testcase->autoList = array();
+$lang->testcase->autoList['']     = '';
+$lang->testcase->autoList['auto'] = 'Yes';
+$lang->testcase->autoList['no']   = 'No';
 
 $lang->testcase->priList[0] = '';
 $lang->testcase->priList[3] = 3;

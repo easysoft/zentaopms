@@ -102,6 +102,7 @@ $lang->testcase->caseType         = '用例类型';
 $lang->testcase->allType          = '所有类型';
 $lang->testcase->showAutoCase     = '自动化';
 $lang->testcase->automation       = '自动化设置';
+$lang->testcase->autoCase         = '自动化';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
@@ -192,6 +193,11 @@ $lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平�
 
 $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';
+
+$lang->testcase->autoList = array();
+$lang->testcase->autoList['']     = '';
+$lang->testcase->autoList['auto'] = '是';
+$lang->testcase->autoList['no']   = '否';
 
 $lang->testcase->priList[0] = '';
 $lang->testcase->priList[3] = 3;
