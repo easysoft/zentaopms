@@ -1338,4 +1338,20 @@ class docTest
         $link = $this->objectModel->getDropMenuLink($type, $objectID);
         return str_replace($app->getWebRoot(), '', $link);
     }
+
+    /**
+     * 检查文档是否正在被其他人编辑。
+     * Check other editing.
+     *
+     * @param  int        $docID
+     * @access public
+     * @return bool|array
+     */
+    public function checkOtherEditingTest(int $docID): bool|array
+    {
+        $otherEditing =  $this->objectModel->checkOtherEditing($docID);
+
+        if(dao::isError()) return dao::getError();
+        return $otherEditing;
+    }
 }
