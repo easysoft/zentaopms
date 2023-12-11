@@ -490,15 +490,16 @@ class docTest
     }
 
     /**
-     * Test check api library name.
+     * 检查接口库名称。
+     * Check api library name.
      *
      * @param  object $lib
-     * @param  string $libType
+     * @param  string $libType product|project
      * @param  int    $libID
      * @access public
-     * @return bool
+     * @return string
      */
-    public function checkApiLibNameTest($lib, $libType, $libID = 0)
+    public function checkApiLibNameTest(object $lib, string $libType, int $libID = 0): string
     {
         $this->objectModel->checkApiLibName($lib, $libType, $libID);
 
