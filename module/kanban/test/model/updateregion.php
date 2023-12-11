@@ -1,30 +1,28 @@
 #!/usr/bin/env php
 <?php
+/**
+title=测试 kanbanModel->updateRegion();
+timeout=0
+cid=1
+
+- 正常更新看板区域的名称属性name @测试修改区域名称
+- 更新看板区域名称为空第name条的0属性 @『区域名称』不能为空。
+- 更新看板区域名称为空格字符第name条的0属性 @『区域名称』不能为空。
+- 更新看板区域名称为超长字符串第name条的0属性 @『区域名称』长度应当不超过『255』，且大于『0』。
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
-/**
+zdTable('kanbanregion')->gen(4);
 
-title=测试 kanbanModel->updateRegion();
-cid=1
-pid=1
-
-测试修改区域1的信息 >> name,默认区域,测试修改区域名称1
-测试修改区域2的信息 >> name,默认区域,测试修改区域名称2
-测试修改区域3的信息 >> name,默认区域,测试修改区域名称3
-测试修改区域4的信息 >> 『区域名称』不能为空。
-测试修改区域5的信息 >> 『区域名称』不能为空。
-
-*/
-
-$regionIDList = array('1', '2', '3', '4', '5');
-$nameList     = array('测试修改区域名称1', '测试修改区域名称2', '测试修改区域名称3', '', '  ');
+$regionIDList = array('1', '2', '3', '4');
+$nameList     = array('测试修改区域名称', '', '  ', '这是一个超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长的名称');
 
 $kanban = new kanbanTest();
 
-r($kanban->updateRegionTest($regionIDList[0], $nameList[0])) && p('0:field,old,new') && e('name,默认区域,测试修改区域名称1'); // 测试修改区域1的信息
-r($kanban->updateRegionTest($regionIDList[1], $nameList[1])) && p('0:field,old,new') && e('name,默认区域,测试修改区域名称2'); // 测试修改区域2的信息
-r($kanban->updateRegionTest($regionIDList[2], $nameList[2])) && p('0:field,old,new') && e('name,默认区域,测试修改区域名称3'); // 测试修改区域3的信息
-r($kanban->updateRegionTest($regionIDList[3], $nameList[3])) && p('name:0')          && e('『区域名称』不能为空。');          // 测试修改区域4的信息
-r($kanban->updateRegionTest($regionIDList[4], $nameList[4])) && p('name:0')          && e('『区域名称』不能为空。');          // 测试修改区域5的信息
+r($kanban->updateRegionTest($regionIDList[0], $nameList[0])) && p('name')   && e('测试修改区域名称');       // 正常更新看板区域的名称
+r($kanban->updateRegionTest($regionIDList[1], $nameList[1])) && p('name:0') && e('『区域名称』不能为空。'); // 更新看板区域名称为空
+r($kanban->updateRegionTest($regionIDList[2], $nameList[2])) && p('name:0') && e('『区域名称』不能为空。'); // 更新看板区域名称为空格字符
+r($kanban->updateRegionTest($regionIDList[3], $nameList[3])) && p('name:0') && e('『区域名称』长度应当不超过『255』，且大于『0』。'); // 更新看板区域名称为超长字符串
