@@ -201,7 +201,7 @@ class props extends \zin\utils\dataset
             {
                 if(!is_string($value)) $value = json_encode($value);
 
-                $pairs[] = $name . '="' . htmlspecialchars($value) . '"';
+                $pairs[] = $name . '="' . htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false) . '"';
             }
         }
 
