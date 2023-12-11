@@ -1373,20 +1373,22 @@ class userModel extends model
     }
 
     /**
+     * 检查用户是否被锁定。
      * Check whether the user is locked.
      *
-     * @param  string    $account
+     * @param  string $account
      * @access public
      * @return bool
      */
-    public function checkLocked($account)
+    public function checkLocked(string $account): bool
     {
-        if($this->session->{"{$account}.loginLocked"} and (time() - strtotime($this->session->{"{$account}.loginLocked"})) <= $this->config->user->lockMinutes * 60) return true;
+        if($this->session->{"{$account}.loginLocked"} && (time() - strtotime($this->session->{"{$account}.loginLocked"})) <= $this->config->user->lockMinutes * 60) return true;
 
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-        if(empty($user) or is_null($user->locked)) return false;
+        if(empty($user) || is_null($user->locked)) return false;
 
         if((time() - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
+
         return true;
     }
 
