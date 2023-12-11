@@ -551,6 +551,19 @@ class searchTest
     }
 
     /**
+     * 获取查询语句的参数的测试用例。
+     * Get sql params test.
+     *
+     * @param  string $keywords
+     * @access public
+     * @return array
+     */
+    public function getSqlParamsTest(string $keywords): array
+    {
+        return $this->objectModel->getSqlParams($keywords);
+    }
+
+    /**
      * 测试获取有权限的对象。
      * Get allowed objects test.
      *
