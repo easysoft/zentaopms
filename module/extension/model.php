@@ -186,6 +186,19 @@ class extensionModel extends model
     }
 
     /**
+     * 获取可能依赖此插件的其他插件。
+     * Get other extensions that may depend on this extension.
+     *
+     * @param  string $extension
+     * @access public
+     * @return array
+     */
+    public function getDependsExtension(string $extension): array
+    {
+        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->andWhere('status')->ne('available')->fetchAll();
+    }
+
+    /**
      * 根据插件代号从插件包获取插件信息。
      * Get info of an extension from the package file.
      *
@@ -656,19 +669,6 @@ class extensionModel extends model
         $this->dao->update(TABLE_EXTENSION)->data($extension)->where('code')->eq($extension['code'])->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * 获取可能依赖此插件的其他插件。
-     * Get other extensions that may depend on this extension.
-     *
-     * @param  string $extension
-     * @access public
-     * @return array
-     */
-    public function getDependsExtension(string $extension): array
-    {
-        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->andWhere('status')->ne('available')->fetchAll();
     }
 
     /**
