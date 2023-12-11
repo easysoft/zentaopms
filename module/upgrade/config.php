@@ -918,6 +918,17 @@ $config->delete['18_8'][] = 'extension/biz/screen/ext/control/ajaxgetchart.php';
 $config->delete['18_8'][] = 'extension/max/screen/ext/control/ajaxgetchart.php';
 $config->delete['18_8'][] = 'extension/ipd/screen/ext/control/ajaxgetchart.php';
 $config->delete['18_8'][] = 'config/ext/feedback.php';
+$config->delete['18_9'][] = 'module/automation/control.php';
+$config->delete['18_9'][] = 'module/automation/model.php';
+$config->delete['18_9'][] = 'module/automation/config.php';
+$config->delete['18_9'][] = 'module/automation/css/browse.css';
+$config->delete['18_9'][] = 'module/automation/css/browse.en.css';
+$config->delete['18_9'][] = 'module/automation/lang/zh-cn.php';
+$config->delete['18_9'][] = 'module/automation/lang/fr.php';
+$config->delete['18_9'][] = 'module/automation/lang/zh-tw.php';
+$config->delete['18_9'][] = 'module/automation/lang/de.php';
+$config->delete['18_9'][] = 'module/automation/lang/en.php';
+$config->delete['18_9'][] = 'module/automation/view/browse.html.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution');
 
