@@ -860,7 +860,7 @@ class docModel extends model
         if(empty($files)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $lib = $this->getLibByID($doc->lib);
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
 
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
@@ -947,7 +947,7 @@ class docModel extends model
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
         $lib = $this->getLibByID($doc->lib);
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
@@ -1085,7 +1085,7 @@ class docModel extends model
         }
 
         $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], (string)$this->post->uid);
 
         if(!empty($lib))
         {
