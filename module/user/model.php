@@ -1521,25 +1521,20 @@ class userModel extends model
     }
 
     /**
+     * 更新一个联系人列表。
      * Update a contact list.
      *
-     * @param  int    $listID
+     * @param  object $userContact
      * @access public
      * @return bool
      */
-    public function updateContactList($listID): bool
+    public function updateContactList(object $userContact): bool
     {
-        $data = fixer::input('post')
-            ->add('account', $this->app->user->account)
-            ->setDefault('public', 0)
-            ->join('userList', ',')
-            ->get();
-
-        $this->dao->update(TABLE_USERCONTACT)->data($data)
+        $this->dao->update(TABLE_USERCONTACT)->data($userContact)
             ->batchCheck('listName,userList', 'notempty')
-            ->check('listName', 'unique', "id != '$listID' AND account = '{$data->account}'")
+            ->check('listName', 'unique', "id != '{$userContact->id}' AND account = '{$userContact->account}'")
             ->autoCheck()
-            ->where('id')->eq($listID)
+            ->where('id')->eq($userContact->id)
             ->exec();
         return !dao::isError();
     }
