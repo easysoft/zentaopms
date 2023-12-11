@@ -41,7 +41,7 @@
 .main .table-and-chart-multiple {height: 352px; padding: 8px 16px 16px 16px;}
 .main .canvas {height: calc(100vh - 172px + 48px); max-height: 920px; overflow-y: hidden;}
 .main .table-and-charts {height: calc(100vh - 172px); max-height: calc(100% - 48px); overflow-y: scroll;}
-.main .metricBox {max-height: 408px;}
+.main .metricBox {max-height: 440px;}
 .chart-single {height: calc(100% - 32px); width: 100%;}
 .chart-multiple {height: 285px; width: 100%;}
 .chart-type {width: 20%;}
