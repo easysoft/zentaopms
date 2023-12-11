@@ -670,19 +670,6 @@ class fileModel extends model
     }
 
     /**
-     * Remove interference for parse csv.
-     *
-     * @param  array    $matches
-     * @access private
-     * @return string
-     */
-    private function removeInterference(array $matches): string
-    {
-        if(strlen($matches[1]) % 2 == 1) return $matches[1] . $matches[2];
-        return str_replace('""', '"', $matches[1]) . str_replace(',', '&comma;', $matches[2]);
-    }
-
-    /**
      * Process editor.
      *
      * @param  object    $data
@@ -690,7 +677,7 @@ class fileModel extends model
      * @access public
      * @return object
      */
-    public function processImgURL($data, $editorList, $uid = '')
+    public function processImgURL(object $data, string $editorList, string $uid = ''): object
     {
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
         if(empty($editorList)) return $data;
@@ -734,7 +721,7 @@ class fileModel extends model
      * @access public
      * @return array
      */
-    public function compressImage($file)
+    public function compressImage(array $file): array
     {
         if(!extension_loaded('gd') or !function_exists('imagecreatefromjpeg')) return $file;
 
@@ -770,7 +757,7 @@ class fileModel extends model
      * @access public
      * @return resource
      */
-    public function imagecreatefrombmp($filename)
+    public function imagecreatefrombmp(string $filename): GdImage|false
     {
         $f = fopen($filename, "rb");
 
@@ -780,11 +767,8 @@ class fileModel extends model
             'Vwidth/Vheight/vplanes/vbits_per_pixel/Vcompression/Vdata_size/'.
             'Vh_resolution/Vv_resolution/Vcolors/Vimportant_colors', $header);
 
-        if ($header['identifier1'] != 66 or $header['identifier2'] != 77)
-            return false;
-
-        if ($header['bits_per_pixel'] != 24)
-            return false;
+        if ($header['identifier1'] != 66 or $header['identifier2'] != 77) return false;
+        if ($header['bits_per_pixel'] != 24) return false;
 
         $wid2 = ceil((3 * $header['width']) / 4) * 4;
 
@@ -812,7 +796,7 @@ class fileModel extends model
      * @access private
      * @return int
      */
-    private function dwordize($str)
+    private function dwordize(string $str): int
     {
         $a = ord($str[0]);
         $b = ord($str[1]);
