@@ -45,6 +45,12 @@ js::set('page', 'confirmbug');
           <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, "class='form-control chosen'");?></td>
           <td></td>
         </tr>
+        <tr>
+          <th><?php echo $lang->bug->deadline;?></th>
+          <td>
+            <span><?php echo html::input('deadline', helper::isZeroDate($bug->deadline) ? '' : $bug->deadline, "class='form-control form-date'");?></span>
+          </td>
+        </tr>
         <tr class='hide'>
           <th><?php echo $lang->bug->status;?></th>
           <td><?php echo html::hidden('status', $bug->status);?></td>
