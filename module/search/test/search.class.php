@@ -551,6 +551,21 @@ class searchTest
     }
 
     /**
+     * 获取变量参数数据的测试用例。
+     * Get param values test.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function getParamValuesTest(array $fields, array $params): array
+    {
+        $_SESSION['project'] = 0;
+        return $this->objectModel->getParamValues($fields, $params);
+    }
+
+    /**
      * 获取查询语句的参数的测试用例。
      * Get sql params test.
      *
