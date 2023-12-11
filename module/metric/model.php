@@ -1558,27 +1558,38 @@ class metricModel extends model
         if($type == 'pie') return $this->getPieEchartsOptions($header, $data);
 
         $headLength = count($header);
+        $options    = array();
+
         if($headLength == 2)
         {
-            return $this->getTimeOptions($header, $data, $type, $chartType);
+            $options = $this->getTimeOptions($header, $data, $type, $chartType);
         }
         elseif($headLength == 3)
         {
             if($this->isObjectMetric($header))
             {
-                return $this->getObjectOptions($data, $type, $chartType);
+                $options = $this->getObjectOptions($data, $type, $chartType);
             }
             else
             {
-                return $this->getTimeOptions($header, $data, $type, $chartType);
+                $options = $this->getTimeOptions($header, $data, $type, $chartType);
             }
         }
         elseif($headLength == 4)
         {
-            return $this->getObjectOptions($data, $type, $chartType);
+            $options = $this->getObjectOptions($data, $type, $chartType);
         }
 
-        return array();
+        if($type == 'bar')
+        {
+            $xAxis = $options['xAxis'];
+            $yAxis = $options['yAxis'];
+
+            $options['xAxis'] = $chartType == 'barY' ? $yAxis : $xAxis;
+            $options['yAxis'] = $chartType == 'barY' ? $xAxis : $yAxis;
+        }
+
+        return $options;
     }
 
     /**
@@ -1724,7 +1735,9 @@ class metricModel extends model
         }
 
         $options = array();
-        $options['data'] = $seriesData;
+        $options['tooltip'] = array('trigger' => 'item');
+        $options['legend']  = array('orient' => 'vertical', 'left' => 'left', 'type' => 'scroll');
+        $options['series']  = array(array('type' => 'pie', 'radius' => '50%', 'data' => $seriesData, 'emphasis' => array('itemStyle' => array('shadowBlur' => 10, 'shadowOffsetX' => 0, 'shadowColor' => 'rgba(0, 0, 0, 0.5)'))));
 
         return $options;
     }
