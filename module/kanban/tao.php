@@ -91,4 +91,22 @@ class kanbanTao extends kanbanModel
 
         return $regionData;
     }
+
+    /**
+     * 更新看板区域的排序。
+     * Update sort of kanban region.
+     *
+     * @param  array  $regionIdList
+     * @access public
+     * @return void
+     */
+    protected function updateRegionSort(array $regionIdList)
+    {
+        $order = 1;
+        foreach($regionIdList as $regionID)
+        {
+            $this->dao->update(TABLE_KANBANREGION)->set('`order`')->eq($order)->where('id')->eq($regionID)->exec();
+            $order++;
+        }
+    }
 }
