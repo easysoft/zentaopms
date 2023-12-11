@@ -443,12 +443,11 @@ class user extends control
         $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
-        $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->groups       = $this->loadModel('group')->getByAccount($user->account);
-        $this->view->deptPath     = $this->loadModel('dept')->getParents($user->dept);
-        $this->view->personalData = $this->user->getPersonalData($user->account);
-        $this->view->deptUsers    = $users;
-        $this->view->user         = $user;
+        $this->view->title     = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->groups    = $this->loadModel('group')->getByAccount($user->account);
+        $this->view->deptPath  = $this->loadModel('dept')->getParents($user->dept);
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
 
         $this->display();
     }
