@@ -1564,7 +1564,8 @@ class pivotModel extends model
     }
 
     /**
-     * Get sys options.
+     * 根据类型获取选项。
+     * Get options by type.
      *
      * @param  string $type
      * @param  string $object
@@ -1572,30 +1573,23 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
     {
         $options = array();
         switch($type)
         {
             case 'user':
-                $options = $this->loadModel('user')->getPairs('noletter');
-                break;
-            case 'product':
-                $options = $this->loadModel('product')->getPairs();
-                break;
+                return $this->loadModel('user')->getPairs('noletter');
             case 'project':
-                $options = $this->loadModel('project')->getPairsByProgram();
-                break;
+                return $this->loadModel('project')->getPairsByProgram();
+            case 'product':
             case 'execution':
-                $options = $this->loadModel('execution')->getPairs();
-                break;
+                return $this->loadModel($type)->getPairs();
             case 'dept':
-                $options = $this->loadModel('dept')->getOptionMenu(0);
-                break;
+                return $this->loadModel('dept')->getOptionMenu(0);
             case 'project.status':
                 $this->app->loadLang('project');
-                $options = $this->lang->project->statusList;
-                break;
+                return $this->lang->project->statusList;
             case 'option':
                 if($field)
                 {
@@ -1606,31 +1600,26 @@ class pivotModel extends model
                         $options = $schema->fields[$field]['options'];
                     }
                 }
-                break;
+                return $options;
             case 'object':
                 if($field)
                 {
                     $table = zget($this->config->objectTables, $object, '');
                     if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
-                break;
+                return $options;
             case 'string':
-                if($field)
+                if($field && $sql)
                 {
-                    $options = array();
-                    if($sql)
+                    $cols = $this->dbh->query($sql)->fetchAll();
+                    foreach($cols as $col)
                     {
-                        $cols = $this->dbh->query($sql)->fetchAll();
-                        foreach($cols as $col)
-                        {
-                            $data = $col->$field;
-                            $options[$data] = $data;
-                        }
+                        $data = $col->$field;
+                        $options[$data] = $data;
                     }
                 }
-                break;
+                return $options;
         }
-        return $options;
     }
 
     /**
