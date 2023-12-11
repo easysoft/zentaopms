@@ -2731,15 +2731,16 @@ class userModel extends model
     }
 
     /**
-     * Get User Template.
+     * 获取当前用户可以查看的模板列表。
+     * Get user templates.
      *
-     * @param  string    $type
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getUserTemplates($type)
+    public function getUserTemplates(string $type): array
     {
-        return $this->dao->select('id,account,title,content,public')
+        return $this->dao->select('id, account, title, content, public')
             ->from(TABLE_USERTPL)
             ->where('type')->eq($type)
             ->andwhere('account', true)->eq($this->app->user->account)
