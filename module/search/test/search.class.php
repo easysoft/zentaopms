@@ -549,4 +549,24 @@ class searchTest
         $where = '';
         return $this->objectModel->setWhere($where, $field, $operator, $value, $andOr);
     }
+
+    /**
+     * 测试获取有权限的对象。
+     * Get allowed objects test.
+     *
+     * @param  array|string $type
+     * @param  string       $systemMode
+     * @access public
+     * @return array
+     */
+    public function getAllowedObjectsTest(array|string $type, string $systemMode): array
+    {
+        global $tester;
+        $tester->config->systemMode = $systemMode;
+
+        $objects = $this->objectModel->getAllowedObjects($type);
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
 }
