@@ -4,7 +4,6 @@
 /**
 
 title=测试 docModel->checkPrivDoc();
-timeout=0
 cid=1
 
 - 检查管理员对于没有libID文档权限 @0

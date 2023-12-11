@@ -1,10 +1,42 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLibFiles();
-timeout=0
 cid=1
+
+- 测试空数据 @0
+- 获取关联产品ID=0数据的附件 @0
+- 获取关联产品ID=1数据的附件
+ - 第16条的title属性 @文件标题16
+ - 第16条的objectType属性 @testcase
+ - 第16条的objectID属性 @16
+- 获取关联产品ID=1且名称中包含“文件”的附件
+ - 第16条的title属性 @文件标题16
+ - 第16条的objectType属性 @testcase
+ - 第16条的objectID属性 @16
+- 获取关联项目ID=0数据的附件
+ - 第13条的title属性 @文件标题13
+ - 第13条的objectType属性 @task
+ - 第13条的objectID属性 @13
+- 获取关联项目ID=11数据的附件
+ - 第1条的title属性 @文件标题1
+ - 第1条的objectType属性 @task
+ - 第1条的objectID属性 @1
+- 获取关联项目ID=11且名称中包含“文件”的附件
+ - 第1条的title属性 @文件标题1
+ - 第1条的objectType属性 @task
+ - 第1条的objectID属性 @1
+- 获取关联执行ID=0数据的附件 @0
+- 获取关联执行ID=101数据的附件
+ - 第1条的title属性 @文件标题1
+ - 第1条的objectType属性 @task
+ - 第1条的objectID属性 @1
+- 获取关联执行ID=101且名称中包含“文件”的附件
+ - 第1条的title属性 @文件标题1
+ - 第1条的objectType属性 @task
+ - 第1条的objectID属性 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

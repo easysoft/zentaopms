@@ -1,10 +1,47 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getMineList();
-timeout=0
 cid=1
+
+- 获取最近浏览的所有文档
+ - 第3条的title属性 @我的文档3
+ - 第3条的status属性 @normal
+- 获取最近浏览的所有草稿文档
+ - 第6条的title属性 @我的草稿文档6
+ - 第6条的status属性 @draft
+- 获取最近浏览并且文档名字中有“ 文档” 的文档
+ - 第3条的title属性 @我的文档3
+ - 第3条的status属性 @normal
+- 获取最近收藏的所有文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的status属性 @normal
+- 获取最近收藏的所有草稿文档
+ - 第7条的title属性 @我的草稿文档7
+ - 第7条的status属性 @draft
+- 获取最近收藏并且文档名字中有“ 文档” 的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的status属性 @normal
+- 获取我创建的所有文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的status属性 @normal
+- 获取我创建的所有草稿文档
+ - 第7条的title属性 @我的草稿文档7
+ - 第7条的status属性 @draft
+- 获取我创建并且文档名字中有“ 文档” 的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的status属性 @normal
+- 获取我编辑的所有文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的status属性 @normal
+- 获取我编辑的所有草稿文档
+ - 第7条的title属性 @我的草稿文档7
+ - 第7条的status属性 @draft
+- 获取我编辑并且文档名字中有“ 文档” 的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的status属性 @normal
 
 */
 

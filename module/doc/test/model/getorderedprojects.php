@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getOrderedProjects();
-timeout=0
 cid=1
+
+- 获取系统中已排序的项目第1条的11属性 @项目11
+- 获取系统中包括ID=11已排序的项目第1条的11属性 @项目11
 
 */
 

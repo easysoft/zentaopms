@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLinkedExecutionData();
-timeout=0
 cid=1
+
+- 获取系统中关联执行ID=106的数据属性2 @6,16
+- 获取系统中关联执行ID=101的数据属性1 @1,11
+- 获取系统中关联执行ID=0的数据 @N/A
 
 */
 

@@ -1,10 +1,31 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->updateLib();
-timeout=0
 cid=1
+
+- 正常修改产品文档库
+ - 第0条的field属性 @name
+ - 第0条的old属性 @产品文档主库26
+ - 第0条的new属性 @编辑文档库
+- 正常修改项目文档库
+ - 第0条的field属性 @name
+ - 第0条的old属性 @项目文档主库18
+ - 第0条的new属性 @编辑文档库
+- 正常修改执行文档库
+ - 第0条的field属性 @name
+ - 第0条的old属性 @执行文档主库20
+ - 第0条的new属性 @编辑文档库
+- 正常修改自定义文档库
+ - 第0条的field属性 @name
+ - 第0条的old属性 @自定义文档库6
+ - 第0条的new属性 @编辑文档库
+- 正常修改无产品第product条的0属性 @『产品库』应当是数字。
+- 正常修改无项目第project条的0属性 @『project』应当是数字。
+- 正常修改无迭代第execution条的0属性 @『迭代库』应当是数字。
+- 正常修改无文档库名第name条的0属性 @『库名称』不能为空。
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

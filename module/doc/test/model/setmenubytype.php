@@ -1,10 +1,29 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->setMenuByType();
-timeout=0
 cid=1
+
+- 测试空数据
+ - 第11条的type属性 @mine
+ - 第11条的name属性 @我的文档库11
+- 设置我的文档库导航
+ - 第11条的type属性 @mine
+ - 第11条的name属性 @我的文档库11
+- 设置项目文档库导航
+ - 第16条的type属性 @project
+ - 第16条的name属性 @项目文档主库16
+- 设置执行文档库导航
+ - 第20条的type属性 @execution
+ - 第20条的name属性 @执行文档主库20
+- 设置产品文档库导航
+ - 第26条的type属性 @product
+ - 第26条的name属性 @产品文档主库26
+- 设置自定义文档库导航
+ - 第6条的type属性 @custom
+ - 第6条的name属性 @自定义文档库6
 
 */
 

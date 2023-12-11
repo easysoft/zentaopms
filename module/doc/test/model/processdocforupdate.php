@@ -1,10 +1,39 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->processDocForUpdate();
 cid=1
-outtime=0
+
+- 修改产品文档
+ - 属性lib @26
+ - 属性title @修改产品文档
+ - 属性acl @custom
+- 修改项目文档
+ - 属性lib @18
+ - 属性title @修改项目文档
+ - 属性acl @custom
+- 修改执行文档
+ - 属性lib @25
+ - 属性title @修改执行文档
+ - 属性acl @custom
+- 修改自定义文档
+ - 属性lib @6
+ - 属性title @修改自定义文档
+ - 属性acl @custom
+- 修改私有文档
+ - 属性lib @6
+ - 属性title @修改私有文档
+ - 属性acl @private
+- 修改我的文档
+ - 属性lib @11
+ - 属性title @修改我的文档
+ - 属性acl @private
+- 修改自定义文档
+ - 属性lib @7
+ - 属性title @修改自定义文档
+ - 属性acl @private
 
 */
 

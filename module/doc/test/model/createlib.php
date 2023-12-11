@@ -1,10 +1,43 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->createLib();
-cid=1
 timeout=0
+cid=1
+
+- 新建公有产品文档库
+ - 属性type @product
+ - 属性name @新建文档库
+- 新建公有项目文档库
+ - 属性type @project
+ - 属性acl @default
+- 新建公有产品api库
+ - 属性type @product
+ - 属性name @新建文档库
+- 新建公有项目api库
+ - 属性type @project
+ - 属性acl @default
+- 新建公有执行文档库
+ - 属性type @execution
+ - 属性vision @rnd
+- 新建我的私有文档库
+ - 属性type @mine
+ - 属性project @0
+- 新建公有api文档库
+ - 属性type @api
+ - 属性project @0
+- 新建公有自定义文档库
+ - 属性type @custom
+ - 属性project @0
+- 新建私有自定义文档库
+ - 属性type @custom
+ - 属性groups @1,2,3
+ - 属性users @admin,dev1,dev10
+- 新建无产品产品文档库第product条的0属性 @『产品库』应当是数字。
+- 新建无项目项目文档库第project条的0属性 @『project』应当是数字。
+- 新建无执行执行文档库第execution条的0属性 @『迭代库』应当是数字。
 
 */
 

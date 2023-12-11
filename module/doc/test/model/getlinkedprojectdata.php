@@ -1,10 +1,20 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLinkedProjectData();
-timeout=0
 cid=1
+
+- 获取开源版系统中所有关联项目的数据属性4 @SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'
+- 获取旗舰版系统中所有关联项目的数据属性1 @SELECT id FROM `zt_issue` WHERE `project`  = '0' AND  `deleted`  = '0'
+- 获取ipd版系统中所有关联项目的数据属性2 @SELECT id FROM `zt_meeting` WHERE `project`  = '0' AND  `deleted`  = '0'
+- 获取开源版系统中所有关联项目ID=11的数据属性4 @SELECT id FROM `zt_design` WHERE `project`  = '11' AND  `deleted`  = '0'
+- 获取旗舰版系统中所有关联项目ID=11的数据属性1 @SELECT id FROM `zt_issue` WHERE `project`  = '11' AND  `deleted`  = '0'
+- 获取ipd版系统中所有关联项目ID=11的数据属性2 @SELECT id FROM `zt_meeting` WHERE `project`  = '11' AND  `deleted`  = '0'
+- 获取开源版系统中所有关联项目ID=60的数据属性4 @SELECT id FROM `zt_design` WHERE `project`  = '60' AND  `deleted`  = '0'
+- 获取旗舰版系统中所有关联项目ID=60的数据属性1 @SELECT id FROM `zt_issue` WHERE `project`  = '60' AND  `deleted`  = '0'
+- 获取ipd版系统中所有关联项目ID=60的数据属性2 @SELECT id FROM `zt_meeting` WHERE `project`  = '60' AND  `deleted`  = '0'
 
 */
 

@@ -1,10 +1,99 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->buildSearchForm();
-timeout=0
 cid=1
+
+- 构造我的空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造我的空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造项目空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造项目空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造执行空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造执行空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造产品空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造产品空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造自定义空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
+- 构造自定义空间搜索表单
+ - 第fields条的title属性 @文档标题
+ - 第fields条的id属性 @ID
+ - 第fields条的lib属性 @所属库
+ - 第fields条的status属性 @文档状态
+ - 第fields条的addedDate属性 @创建日期
+ - 第fields条的editedDate属性 @修改日期
+ - 第fields条的keywords属性 @关键字
+ - 第fields条的version属性 @版本号
 
 */
 

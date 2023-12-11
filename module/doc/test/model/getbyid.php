@@ -1,10 +1,42 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getByID();
-timeout=0
 cid=1
+
+- 测试空数据 @0
+- 测试docID=1的数据
+ - 属性type @text
+ - 属性title @文档标题1
+- 测试docID=2的数据
+ - 属性type @text
+ - 属性title @文档标题2
+- 测试docID=3的数据
+ - 属性type @text
+ - 属性title @文档标题3
+- 测试docID=4的数据
+ - 属性type @text
+ - 属性title @文档标题4
+- 测试docID=5的数据
+ - 属性type @text
+ - 属性title @文档标题5
+- 测试docID=1的数据，并且设置图片大小
+ - 属性type @text
+ - 属性title @文档标题1
+- 测试docID=2的数据，并且设置图片大小
+ - 属性type @text
+ - 属性title @文档标题2
+- 测试docID=3的数据，并且设置图片大小
+ - 属性type @text
+ - 属性title @文档标题3
+- 测试docID=4的数据，并且设置图片大小
+ - 属性type @text
+ - 属性title @文档标题4
+- 测试docID=5的数据，并且设置图片大小
+ - 属性type @text
+ - 属性title @文档标题5
 
 */
 

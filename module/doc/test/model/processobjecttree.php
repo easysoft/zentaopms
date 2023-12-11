@@ -1,10 +1,25 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->processObjectTree();
-timeout=0
 cid=1
+
+- 处理api文档库数据 @0
+- 处理自定义文档库数据 @0
+- 处理我的文档库数据 @0
+- 处理项目文档库数据 @0
+- 处理执行文档库数据
+ - 属性name @附件库
+ - 属性type @annex
+ - 属性objectType @execution
+ - 属性objectID @101
+- 处理产品文档库数据
+ - 属性name @附件库
+ - 属性type @annex
+ - 属性objectType @product
+ - 属性objectID @1
 
 */
 

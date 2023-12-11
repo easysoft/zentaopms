@@ -1,10 +1,101 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLibTree();
-timeout=0
 cid=1
+
+- 获取接口库的树形结构
+ - 第0条的type属性 @apiLib
+ - 第0条的name属性 @项目接口库1
+ - 第0条的objectType属性 @api
+ - 第0条的objectID属性 @11
+- 获取搜索后的api文档树
+ - 第0条的type属性 @apiLib
+ - 第0条的name属性 @项目接口库1
+ - 第0条的objectType属性 @api
+ - 第0条的objectID属性 @11
+- 获取切换版本后的api文档树
+ - 第0条的type属性 @apiLib
+ - 第0条的name属性 @项目接口库1
+ - 第0条的objectType属性 @api
+ - 第0条的objectID属性 @11
+- 获取自定义库的树形结构
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @自定义文档库6
+ - 第0条的objectType属性 @custom
+ - 第0条的objectID属性 @0
+- 获取搜索后的自定义文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @自定义文档库6
+ - 第0条的objectType属性 @custom
+ - 第0条的objectID属性 @0
+- 获取切换版本后的自定义文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @自定义文档库6
+ - 第0条的objectType属性 @custom
+ - 第0条的objectID属性 @0
+- 获取我的文档库的树形结构
+ - 第0条的type属性 @mine
+ - 第0条的name属性 @我的个人库
+ - 第0条的objectType属性 @doc
+ - 第0条的objectID属性 @0
+- 获取搜索后的我的文档树
+ - 第0条的type属性 @mine
+ - 第0条的name属性 @我的个人库
+ - 第0条的objectType属性 @doc
+ - 第0条的objectID属性 @0
+- 获取切换版本后的我的文档树
+ - 第0条的type属性 @mine
+ - 第0条的name属性 @我的个人库
+ - 第0条的objectType属性 @doc
+ - 第0条的objectID属性 @0
+- 获取项目的树形结构
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @项目文档主库16
+ - 第0条的objectType属性 @project
+ - 第0条的objectID属性 @11
+- 获取搜索后的项目文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @项目文档主库16
+ - 第0条的objectType属性 @project
+ - 第0条的objectID属性 @11
+- 获取切换版本后的项目文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @项目文档主库16
+ - 第0条的objectType属性 @project
+ - 第0条的objectID属性 @11
+- 获取执行的树形结构
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @执行文档主库20
+ - 第0条的objectType属性 @execution
+ - 第0条的objectID属性 @101
+- 获取搜索后的执行文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @执行文档主库20
+ - 第0条的objectType属性 @execution
+ - 第0条的objectID属性 @101
+- 获取切换版本后的执行文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @执行文档主库20
+ - 第0条的objectType属性 @execution
+ - 第0条的objectID属性 @101
+- 获取产品的树形结构
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @产品文档主库26
+ - 第0条的objectType属性 @product
+ - 第0条的objectID属性 @1
+- 获取搜索后的产品文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @产品文档主库26
+ - 第0条的objectType属性 @product
+ - 第0条的objectID属性 @1
+- 获取切换版本后的产品文档树
+ - 第0条的type属性 @docLib
+ - 第0条的name属性 @产品文档主库26
+ - 第0条的objectType属性 @product
+ - 第0条的objectID属性 @1
 
 */
 

@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLibsOptionMenu();
-timeout=0
 cid=1
+
+- 测试libs为空 @0
+- 获取文档库的目录属性6_0 @自定义文档库6/
+- 获取接口库的目录属性1_0 @项目接口库1/
 
 */
 

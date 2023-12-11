@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getOrderedProducts();
-timeout=0
 cid=1
+
+- 获取系统中已排序的产品第0条的1属性 @产品1
+- 获取系统中包括ID=1已排序的产品第0条的1属性 @产品1
 
 */
 

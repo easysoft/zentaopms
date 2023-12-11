@@ -1,10 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->createApiLib();
-timeout=0
 cid=1
+
+- 新建公有接口库
+ - 属性type @api
+ - 属性name @新建api文档库
+- 新建私有接口库
+ - 属性acl @private
+ - 属性baseUrl @www.zentaopms.com
+- 新建自定义接口库属性acl @custom
+- 接口库名称为空第name条的0属性 @『库名称』不能为空。
+- 接口库地址为空属性baseUrl @~~
+- 重复创建接口库属性name @同一产品下的接口库中『库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

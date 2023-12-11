@@ -1,10 +1,40 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->update();
 cid=1
-outtime=0
+
+- 修改产品文档
+ - 第0条的field属性 @title
+ - 第0条的old属性 @文档标题41
+ - 第0条的new属性 @修改产品文档
+- 修改项目文档
+ - 第0条的field属性 @title
+ - 第0条的old属性 @文档标题31
+ - 第0条的new属性 @修改项目文档
+- 修改执行文档
+ - 第0条的field属性 @module
+ - 第0条的old属性 @3
+ - 第0条的new属性 @0
+- 修改自定义文档
+ - 第0条的field属性 @title
+ - 第0条的old属性 @文档标题11
+ - 第0条的new属性 @修改自定义文档
+- 修改私有文档
+ - 第2条的field属性 @acl
+ - 第2条的old属性 @custom
+ - 第2条的new属性 @private
+- 修改我的文档
+ - 第0条的field属性 @title
+ - 第0条的old属性 @文档标题1
+ - 第0条的new属性 @修改我的文档
+- 修改自定义文档
+ - 第0条的field属性 @lib
+ - 第0条的old属性 @6
+ - 第0条的new属性 @7
+- 修改标题为空第title条的0属性 @『文档标题』不能为空。
 
 */
 

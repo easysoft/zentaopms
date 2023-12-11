@@ -1,10 +1,89 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getObjectTree();
-timeout=0
 cid=1
+
+- 获取api文档树 @0
+- 获取搜索后的api文档树 @0
+- 获取切换版本后的api文档树 @0
+- 获取自定义文档树
+ - 第6条的type属性 @docLib
+ - 第6条的name属性 @自定义文档库6
+ - 第6条的objectType属性 @custom
+ - 第6条的objectID属性 @0
+- 获取搜索后的自定义文档树
+ - 第6条的type属性 @docLib
+ - 第6条的name属性 @自定义文档库6
+ - 第6条的objectType属性 @custom
+ - 第6条的objectID属性 @0
+- 获取切换版本后的自定义文档树
+ - 第6条的type属性 @docLib
+ - 第6条的name属性 @自定义文档库6
+ - 第6条的objectType属性 @custom
+ - 第6条的objectID属性 @0
+- 获取我的文档树
+ - 第11条的type属性 @docLib
+ - 第11条的name属性 @我的文档库11
+ - 第11条的objectType属性 @mine
+ - 第11条的objectID属性 @0
+- 获取搜索后的我的文档树
+ - 第11条的type属性 @docLib
+ - 第11条的name属性 @我的文档库11
+ - 第11条的objectType属性 @mine
+ - 第11条的objectID属性 @0
+- 获取切换版本后的我的文档树
+ - 第11条的type属性 @docLib
+ - 第11条的name属性 @我的文档库11
+ - 第11条的objectType属性 @mine
+ - 第11条的objectID属性 @0
+- 获取项目文档树
+ - 第16条的type属性 @docLib
+ - 第16条的name属性 @项目文档主库16
+ - 第16条的objectType属性 @project
+ - 第16条的objectID属性 @11
+- 获取搜索后的项目文档树
+ - 第16条的type属性 @docLib
+ - 第16条的name属性 @项目文档主库16
+ - 第16条的objectType属性 @project
+ - 第16条的objectID属性 @11
+- 获取切换版本后的项目文档树
+ - 第16条的type属性 @docLib
+ - 第16条的name属性 @项目文档主库16
+ - 第16条的objectType属性 @project
+ - 第16条的objectID属性 @11
+- 获取执行文档树
+ - 第20条的type属性 @docLib
+ - 第20条的name属性 @执行文档主库20
+ - 第20条的objectType属性 @execution
+ - 第20条的objectID属性 @101
+- 获取搜索后的执行文档树
+ - 第20条的type属性 @docLib
+ - 第20条的name属性 @执行文档主库20
+ - 第20条的objectType属性 @execution
+ - 第20条的objectID属性 @101
+- 获取切换版本后的执行文档树
+ - 第20条的type属性 @docLib
+ - 第20条的name属性 @执行文档主库20
+ - 第20条的objectType属性 @execution
+ - 第20条的objectID属性 @101
+- 获取产品文档树
+ - 第26条的type属性 @docLib
+ - 第26条的name属性 @产品文档主库26
+ - 第26条的objectType属性 @product
+ - 第26条的objectID属性 @1
+- 获取搜索后的产品文档树
+ - 第26条的type属性 @docLib
+ - 第26条的name属性 @产品文档主库26
+ - 第26条的objectType属性 @product
+ - 第26条的objectID属性 @1
+- 获取切换版本后的产品文档树
+ - 第26条的type属性 @docLib
+ - 第26条的name属性 @产品文档主库26
+ - 第26条的objectType属性 @product
+ - 第26条的objectID属性 @1
 
 */
 

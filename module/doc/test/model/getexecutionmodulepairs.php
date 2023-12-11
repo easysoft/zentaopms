@@ -1,9 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getExecutionModulePairs();
 cid=1
+
+- 测试系统里有执行文档库数据和模块数据的情况属性1 @这是一个模块1
+- 测试系统里没有执行库文档数据的情况 @0
 
 */
 

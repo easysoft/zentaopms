@@ -1,10 +1,487 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getDocsByBrowseType();
-timeout=0
 cid=1
+
+- 测试空数据 @0
+- 获取类型为所有时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、moduleID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、moduleID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、moduleID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、moduleID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=100时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=100时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=100时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=1、moduleID=100时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=2时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=2时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=2时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为所有、queryID=2时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=0时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=0时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=0时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=100时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=100时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=100时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=0、moduleID=100时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=0时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=0时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=0时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=100时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=100时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=100时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=1、moduleID=100时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=0时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=0时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=0时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=100时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=100时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=100时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为搜索、queryID=2、moduleID=100时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我创建、queryID=0、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我创建、queryID=0、moduleID=0时，按照id倒序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=0、moduleID=0时，按照id正序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=0、moduleID=0时，按照title正序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=0、moduleID=0时，按照title倒序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=0、moduleID=1时，按照id倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=0、moduleID=1时，按照id正序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=0、moduleID=1时，按照title正序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=0、moduleID=1时，按照title倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=0、moduleID=100时，按照id倒序排列的文档 @0
+- 获取类型为我创建、queryID=0、moduleID=100时，按照id正序排列的文档 @0
+- 获取类型为我创建、queryID=0、moduleID=100时，按照title正序排列的文档 @0
+- 获取类型为我创建、queryID=0、moduleID=100时，按照title倒序排列的文档 @0
+- 获取类型为我创建、queryID=1、moduleID=0时，按照id倒序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=1、moduleID=0时，按照id正序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=1、moduleID=0时，按照title正序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=1、moduleID=0时，按照title倒序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=1、moduleID=1时，按照id倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=1、moduleID=1时，按照id正序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=1、moduleID=1时，按照title正序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=1、moduleID=1时，按照title倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=1、moduleID=100时，按照id倒序排列的文档 @0
+- 获取类型为我创建、queryID=1、moduleID=100时，按照id正序排列的文档 @0
+- 获取类型为我创建、queryID=1、moduleID=100时，按照title正序排列的文档 @0
+- 获取类型为我创建、queryID=1、moduleID=100时，按照title倒序排列的文档 @0
+- 获取类型为我创建、queryID=2、moduleID=0时，按照id倒序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=2、moduleID=0时，按照id正序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=2、moduleID=0时，按照title正序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=2、moduleID=0时，按照title倒序排列的文档
+ - 第41条的title属性 @产品文档41
+ - 第41条的lib属性 @26
+ - 第41条的module属性 @0
+- 获取类型为我创建、queryID=2、moduleID=1时，按照id倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=2、moduleID=1时，按照id正序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=2、moduleID=1时，按照title正序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=2、moduleID=1时，按照title倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为我创建、queryID=2、moduleID=100时，按照id倒序排列的文档 @0
+- 获取类型为我创建、queryID=2、moduleID=100时，按照id正序排列的文档 @0
+- 获取类型为我创建、queryID=2、moduleID=100时，按照title正序排列的文档 @0
+- 获取类型为我创建、queryID=2、moduleID=100时，按照title倒序排列的文档 @0
+- 获取类型为我编辑、queryID=0、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=0时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=0时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=0时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=1时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=1时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=1时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=1时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我编辑、queryID=0、moduleID=100时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为我编辑、queryID=1、moduleID=0时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为我编辑、queryID=2、moduleID=0时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为我编辑、queryID=1、moduleID=1时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为我编辑、queryID=2、moduleID=1时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为我编辑、queryID=1、moduleID=100时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为我编辑、queryID=2、moduleID=100时，按照id倒序排列的文档
+ - 第17条的title属性 @自定义草稿文档17
+ - 第17条的lib属性 @6
+ - 第17条的module属性 @2
+- 获取类型为编辑日期排序、queryID=0、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为编辑日期排序、queryID=0、moduleID=0时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为编辑日期排序、queryID=0、moduleID=0时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为编辑日期排序、queryID=0、moduleID=0时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为编辑日期排序、queryID=0、moduleID=1时，按照id倒序排列的文档
+ - 第46条的title属性 @产品草稿文档46
+ - 第46条的lib属性 @26
+ - 第46条的module属性 @1
+- 获取类型为编辑日期排序、queryID=0、moduleID=100时，按照id倒序排列的文档 @0
+- 获取类型为编辑日期排序、queryID=1、moduleID=0时，按照id倒序排列的文档
+ - 第50条的title属性 @产品草稿文档50
+ - 第50条的lib属性 @26
+ - 第50条的module属性 @3
+- 获取类型为编辑日期排序、queryID=2、moduleID=0时，按照id倒序排列的文档
+ - 第50条的title属性 @产品草稿文档50
+ - 第50条的lib属性 @26
+ - 第50条的module属性 @3
+- 获取类型为我收藏、queryID=0、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我收藏、queryID=0、moduleID=0时，按照id正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我收藏、queryID=0、moduleID=0时，按照title正序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我收藏、queryID=0、moduleID=0时，按照title倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我收藏、queryID=0、moduleID=1时，按照id倒序排列的文档 @0
+- 获取类型为我收藏、queryID=0、moduleID=100时，按照id倒序排列的文档 @0
+- 获取类型为我收藏、queryID=1、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为我收藏、queryID=2、moduleID=0时，按照id倒序排列的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+- 获取类型为不存在类型、queryID=0、moduleID=0时，按照id倒序排列的文档 @0
+- 获取类型为不存在类型、queryID=0、moduleID=0时，按照id正序排列的文档 @0
+- 获取类型为不存在类型、queryID=0、moduleID=0时，按照title正序排列的文档 @0
+- 获取类型为不存在类型、queryID=0、moduleID=0时，按照title倒序排列的文档 @0
+- 获取类型为不存在类型、queryID=0、moduleID=1时，按照id倒序排列的文档 @0
+- 获取类型为不存在类型、queryID=0、moduleID=100时，按照id倒序排列的文档 @0
+- 获取类型为不存在类型、queryID=1、moduleID=0时，按照id倒序排列的文档 @0
+- 获取类型为不存在类型、queryID=2、moduleID=0时，按照id倒序排列的文档 @0
 
 */
 

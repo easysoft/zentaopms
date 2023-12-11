@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->deleteFiles();
-timeout=0
 cid=1
+
+- 测试空数据 @0
+- 测试正常数据属性1 @1
 
 */
 

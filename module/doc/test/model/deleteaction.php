@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->deleteAction();
-timeout=0
 cid=1
+
+- 删除不存在的action @0
+- 删除ID=1的操作 @1
+- 删除ID=2的操作 @1
+- 删除ID=11的操作 @1
+- 删除ID=16的操作 @1
 
 */
 

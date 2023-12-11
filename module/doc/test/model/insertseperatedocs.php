@@ -1,10 +1,26 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->insertSeperateDocs();
-timeout=0
 cid=1
+
+- 创建产品文档第1条的title属性 @新建产品文档
+- 创建项目文档第2条的title属性 @新建项目文档
+- 创建执行文档第3条的title属性 @新建执行文档
+- 创建自定义文档
+ - 第4条的type属性 @text
+- 创建私有文档第5条的acl属性 @private
+- 创建自定义文档
+ - 第6条的acl属性 @custom
+ - 第6条的groups属性 @1,2,3
+- 创建我的文档第7条的title属性 @新建我的文档
+- 创建草稿文档
+ - 第8条的title属性 @新建我的草稿文档
+ - 第8条的status属性 @ draft
+- 不输入文档库第lib条的0属性 @『所属库』不能为空。
+- 不输入标题第title条的0属性 @『文档标题』不能为空。
 
 */
 

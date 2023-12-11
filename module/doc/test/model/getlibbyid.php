@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLibById();
-timeout=0
 cid=1
+
+- 测试空数据 @0
+- 获取ID=1的文档库信息
+ - 属性type @api
+ - 属性name @项目接口库1
+- 获取ID=4的文档库信息
+ - 属性type @api
+ - 属性name @产品接口库4
 
 */
 

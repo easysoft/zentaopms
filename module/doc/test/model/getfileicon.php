@@ -2,11 +2,21 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/doc.class.php';
+
 /**
 
 title=测试 docModel->getFileIcon();
-timeout=0
 cid=1
+
+- 获取txt类型文件的图标 @<i class='file-icon icon icon-file-text'></i>
+- 获取doc类型文件的图标 @<i class='file-icon icon icon-file-word'></i>
+- 获取wps类型文件的图标 @<i class='file-icon icon icon-file'></i>
+- 获取pdf类型文件的图标 @<i class='file-icon icon icon-file-pdf'></i>
+- 获取ppt类型文件的图标 @<i class='file-icon icon icon-file-powerpoint'></i>
+- 获取xls类型文件的图标 @<i class='file-icon icon icon-file-excel'></i>
+- 获取avi类型文件的图标 @<i class='file-icon icon icon-file-video'></i>
+- 获取mp3类型文件的图标 @<i class='file-icon icon icon-file-audio'></i>
+- 获取rar类型文件的图标 @<i class='file-icon icon icon-file-archive'></i>
 
 */
 

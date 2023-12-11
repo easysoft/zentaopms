@@ -1,10 +1,39 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLinkedObjectData();
-timeout=0
 cid=1
+
+- 测试传入错误的type @0
+- 获取开源版关联产品ID=0的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'
+- 获取开源版关联产品ID=1的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'
+- 获取开源版关联产品ID=2的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '2' AND  `deleted`  = '0'
+- 获取旗舰版关联产品ID=0的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'
+- 获取旗舰版关联产品ID=1的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'
+- 获取旗舰版关联产品ID=2的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '2' AND  `deleted`  = '0'
+- 获取IPD版关联产品ID=0的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'
+- 获取IPD版关联产品ID=1的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'
+- 获取IPD版关联产品ID=2的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '2' AND  `deleted`  = '0'
+- 获取开源版关联项目ID=0的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'
+- 获取开源版关联项目ID=11的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '11' AND  `deleted`  = '0'
+- 获取开源版关联项目ID=60的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '60' AND  `deleted`  = '0'
+- 获取旗舰版关联项目ID=0的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'
+- 获取旗舰版关联项目ID=11的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '11' AND  `deleted`  = '0'
+- 获取旗舰版关联项目ID=60的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '60' AND  `deleted`  = '0'
+- 获取IPD版关联项目ID=0的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'
+- 获取IPD版关联项目ID=11的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '11' AND  `deleted`  = '0'
+- 获取IPD版关联项目ID=60的数据属性11 @SELECT id FROM `zt_design` WHERE `project`  = '60' AND  `deleted`  = '0'
+- 获取开源版关联执行ID=0的数据 @0
+- 获取开源版关联执行ID=101的数据属性13 @1,11
+- 获取开源版关联执行ID=106的数据属性13 @6,16
+- 获取旗舰版关联执行ID=0的数据 @0
+- 获取旗舰版关联执行ID=101的数据属性13 @1,11
+- 获取旗舰版关联执行ID=106的数据属性13 @6,16
+- 获取IPD版关联执行ID=0的数据 @0
+- 获取IPD版关联执行ID=101的数据属性13 @1,11
+- 获取IPD版关联执行ID=106的数据属性13 @6,16
 
 */
 

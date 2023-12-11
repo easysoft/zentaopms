@@ -1,10 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getActionByObject();
-timeout=0
 cid=1
+
+- 测试空数据 @0
+- 测试查询docID=1的数据 @0
+- 测试查询docID=1, action=collect的数据
+ - 属性doc @1
+ - 属性action @collect
+- 测试查询docID=1, action=view的数据属性doc @0
+属性action @0
+- 测试查询docID=1, action=collect, account=user1的数据属性doc @0
+属性action @0
+- 测试查询docID=1, action=view, account=user1的数据 @0
 
 */
 

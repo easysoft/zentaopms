@@ -1,10 +1,59 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->buildLibItem();
-timeout=0
 cid=1
+
+- 构造api文档库节点
+ - 属性type @apiLib
+ - 属性name @项目接口库1
+ - 属性objectType @api
+- 构造api文档库并且展示文档节点
+ - 属性type @apiLib
+ - 属性name @项目接口库1
+ - 属性objectType @api
+- 构造自定义文档库节点
+ - 属性type @docLib
+ - 属性name @自定义文档库6
+ - 属性objectType @custom
+- 构造自定义文档库并且展示文档节点
+ - 属性type @docLib
+ - 属性name @自定义文档库6
+ - 属性objectType @custom
+- 构造我的文档库节点
+ - 属性type @docLib
+ - 属性name @我的文档库11
+ - 属性objectType @mine
+- 构造我的文档库并且展示文档节点
+ - 属性type @docLib
+ - 属性name @我的文档库11
+ - 属性objectType @mine
+- 构造项目文档库节点
+ - 属性type @docLib
+ - 属性name @项目文档主库16
+ - 属性objectType @project
+- 构造项目文档库并且展示文档节点
+ - 属性type @docLib
+ - 属性name @项目文档主库16
+ - 属性objectType @project
+- 构造执行文档库节点
+ - 属性type @docLib
+ - 属性name @执行文档主库20
+ - 属性objectType @execution
+- 构造执行文档库并且展示文档节点
+ - 属性type @docLib
+ - 属性name @执行文档主库20
+ - 属性objectType @execution
+- 构造产品文档库节点
+ - 属性type @docLib
+ - 属性name @产品文档主库26
+ - 属性objectType @product
+- 构造产品文档库并且展示文档节点
+ - 属性type @docLib
+ - 属性name @产品文档主库26
+ - 属性objectType @product
 
 */
 

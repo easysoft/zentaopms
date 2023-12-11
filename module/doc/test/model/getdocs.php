@@ -1,10 +1,37 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getDocs();
-timeout=0
 cid=1
+
+- 获取libID=0、moduleID=0、browseType=all的文档列表
+ - 第6条的lib属性 @11
+ - 第6条的module属性 @1
+ - 第6条的title属性 @我的草稿文档6
+- 获取libID=0、moduleID=0、browseType=draft的文档列表 @0
+- 获取libID=0、moduleID=1、browseType=all的文档列表
+ - 第6条的lib属性 @11
+ - 第6条的module属性 @1
+ - 第6条的title属性 @我的草稿文档6
+- 获取libID=0、moduleID=1、browseType=draft的文档列表 @0
+- 获取libID=11、moduleID=0、browseType=all的文档列表
+ - 第1条的lib属性 @11
+ - 第1条的module属性 @0
+ - 第1条的title属性 @我的文档1
+- 获取libID=11、moduleID=0、browseType=draft的文档列表
+ - 第6条的lib属性 @11
+ - 第6条的module属性 @1
+ - 第6条的title属性 @我的草稿文档6
+- 获取libID=11、moduleID=1、browseType=all的文档列表
+ - 第6条的lib属性 @11
+ - 第6条的module属性 @1
+ - 第6条的title属性 @我的草稿文档6
+- 获取libID=11、moduleID=1、browseType=draft的文档列表
+ - 第6条的lib属性 @11
+ - 第6条的module属性 @1
+ - 第6条的title属性 @我的草稿文档6
 
 */
 
