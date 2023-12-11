@@ -2566,13 +2566,14 @@ class docModel extends model
     }
 
     /**
+     * 检查文档是否正在被其他人编辑。
      * Check other editing.
      *
      * @param  int    $docID
      * @access public
      * @return bool
      */
-    public function checkOtherEditing($docID)
+    public function checkOtherEditing(int $docID): bool
     {
         $now     = time();
         $account = $this->app->user->account;
@@ -2584,7 +2585,7 @@ class docModel extends model
         $otherEditing = false;
         foreach($editingDate as $editingAccount => $timestamp)
         {
-            if($editingAccount != $account and ($now - $timestamp) <= $this->config->doc->saveDraftInterval)
+            if($editingAccount != $account && ($now - $timestamp) <= $this->config->doc->saveDraftInterval)
             {
                 $otherEditing = true;
                 break;
