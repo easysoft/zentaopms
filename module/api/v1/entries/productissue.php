@@ -127,7 +127,7 @@ class productIssueEntry extends entry
         foreach($issue->assignedTo as $account) $accountList[] = $account;
         $accountList[]  = $issue->openedBy;
         $accountList    = array_unique($accountList);
-        $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
+        $profileList = $this->loadModel('user')->getListForGitLabAPI($accountList);
 
         /* Set the user detail to assignedTo and openedBy. */
         foreach($issue->assignedTo as $key => $account)
@@ -190,7 +190,7 @@ class productIssueEntry extends entry
 
         /* Format user detail and date. */
         $accountList = array_unique($accountList);
-        $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
+        $profileList = $this->loadModel('user')->getListForGitLabAPI($accountList);
         foreach($actions as $key => $action)
         {
             $action->actor = isset($profileList[$action->actor]) ? $profileList[$action->actor] : array();

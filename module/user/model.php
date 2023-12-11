@@ -2798,7 +2798,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getUserDetailsForAPI($userList)
+    public function getListForGitLabAPI($userList)
     {
         $users = $this->dao->select($this->config->user->detailFields)->from(TABLE_USER)->where("account")->in($userList)->fetchAll();
 

@@ -981,9 +981,9 @@ class userTest
      * @access public
      * @return void
      */
-    public function getUserDetailsForAPITest($userList)
+    public function getListForGitLabAPITest($userList)
     {
-        return $this->objectModel->getUserDetailsForAPI($userList);
+        return $this->objectModel->getListForGitLabAPI($userList);
     }
 
     /**

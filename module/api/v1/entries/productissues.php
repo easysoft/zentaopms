@@ -310,7 +310,7 @@ class productIssuesEntry extends entry
             $userList[] = $issue->openedBy;
         }
         $userList    = array_unique($userList);
-        $userDetails = $this->loadModel('user')->getUserDetailsForAPI($userList);
+        $userDetails = $this->loadModel('user')->getListForGitLabAPI($userList);
 
         /**
          * Set the user detail to assignedTo and openedBy.
