@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 fileModel->processImgURL();
-cid=
+cid=0
+
+- 不传入任何数据。 @0
+- 不传入 editorList 参数。属性step @<img src="/file-read-1.png" />
+- 字段中不存在 editorList 参数的数据。属性step @<img src="/file-read-1.png" />
+- 正常传入参数。属性step @<img src="{1.png}" />
+- 正常传入参数，但是 requestType = GET。属性step @<img src="{1.png}" />
+- 检查SESSION数据。 @1
 
 */
 

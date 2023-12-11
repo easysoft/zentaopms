@@ -1,22 +1,36 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 fileModel->compressImage();
+cid=0
+
+- 测试上传 png 文件
+ - 属性extension @png
+ - 属性title @file.png
+ - 属性size @2038
+- 测试上传 jpg 文件
+ - 属性extension @jpg
+ - 属性title @file.jpg
+ - 属性size @1888573
+- 测试上传 wri 文件
+ - 属性extension @wri
+ - 属性title @这是一个文件名称6.wri
+ - 属性size @38624
+- 测试上传 pdf 文件
+ - 属性extension @pdf
+ - 属性title @这是一个文件名称7.pdf
+ - 属性size @25964
+- 测试上传 ppt 文件
+ - 属性extension @ppt
+ - 属性title @这是一个文件名称8.ppt
+ - 属性size @37248
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/file.class.php';
 su('admin');
 
-/**
-
-title=测试 fileModel->compressImage();
-cid=1
-pid=1
-
-测试上传 png 文件 >> png,file.png,2038
-测试上传 jpg 文件 >> jpg,file.jpg,1888573
-测试上传 wri 文件 >> wri,这是一个文件名称6.wri,38624
-测试上传 pdf 文件 >> pdf,这是一个文件名称7.pdf,25964
-测试上传 ppt 文件 >> ppt,这是一个文件名称8.ppt,37248
-
-*/
 $pngFile = new stdclass();
 $pngFile->extension = 'png';
 $pngFile->pathname  = '202205/06094008030126kf.png';
