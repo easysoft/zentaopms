@@ -1327,4 +1327,25 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $node;
     }
+
+    /**
+     * 获取下拉菜单的链接。
+     * Get the dropmenu link.
+     *
+     * @param  string $type       project|product
+     * @param  int    $objectID
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return string
+     */
+    public function getDropMenuLinkTest(string $type, int $objectID, string $moduleName, string $methodName): string
+    {
+        global $app;
+        $app->rawModule = $moduleName;
+        $app->rawMethod = $methodName;
+
+        $link = $this->objectModel->getDropMenuLink($type, $objectID);
+        return str_replace($app->getWebRoot(), '', $link);
+    }
 }
