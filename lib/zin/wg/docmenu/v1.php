@@ -54,7 +54,6 @@ class docMenu extends wg
         if($this->spaceType == 'api')
         {
             $methodName = 'index';
-            $linkParams =  substr($linkParams, 1);
         }
         else if($item->type == 'annex')
         {
