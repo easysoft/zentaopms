@@ -81,74 +81,21 @@ class repoZen extends repo
      * 准备创建版本库的数据。
      * Prepare create repo data.
      *
-     * @param  form      $formData
-     * @param  bool      $isPipelineServer
+     * @param  object       $repo
      * @access protected
      * @return object|false
      */
-    protected function prepareCreateRepo(form $formData, bool $isPipelineServer): object|false
+    protected function prepareCreateRepo(object $repo): object|false
     {
-        $serviceHost = $_POST['serviceHost'];
-        $namespace   = $_POST['namespace'];
-
-        $group  = $this->repo->getGroups($serviceHost, $namespace);
-        $server = $this->loadModel('pipeline')->getByID($serviceHost);
-
-        $_POST['path']     = "{$server->url}/{$group}/{$_POST['name']}";
-        $_POST['encoding'] = 'utf-8';
-        $_POST['encrypt']  = 'plain';
-        $_POST['SCM']      = $this->getSCM($serviceHost);
-
-        if($this->config->inContainer || $this->config->inQuickon)
-        {
-            $formData->data->client = $_POST['client'] = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
-        }
-        else
-        {
-            if(!$this->checkClient()) return false;
-        }
-        if(!$this->checkConnection()) return false;
-
-        $repo = $formData
-            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setIf($isPipelineServer, 'prefix', '')
-            ->skipSpecial('path,client,account,password,desc')
-            ->setDefault('path', $this->post->path)
-            ->setDefault('encoding', $this->post->encoding)
-            ->setDefault('encrypt', $this->post->encrypt)
-            ->setDefault('SCM', $this->post->SCM)
-            ->setDefault('product', '')->join('product', ',')
-            ->setDefault('projects', '')->join('projects', ',')
-            ->remove('namespace')
-            ->get();
-
         $acl = $this->checkACL();
         if(!$acl) return false;
-        $repo->acl = json_encode($acl);
 
-        if($repo->SCM == 'Subversion')
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            $info     = $scm->info('');
-            $infoRoot = urldecode($info->root);
-            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
-            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
-        }
+        $repo->acl  = json_encode($acl);
 
-        if($isPipelineServer)
-        {
-            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
-                ->where('`SCM`')->eq($repo->SCM)
-                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
-                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
-                ->fetch();
-            if($serviceProject)
-            {
-                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
-                return false;
-            }
-        }
+        $group  = $this->repo->getGroups($repo->serviceHost, $repo->namespace);
+        $server = $this->loadModel('pipeline')->getByID($repo->serviceHost);
+        $repo->path = "{$server->url}/{$group}/{$repo->name}";
+
         return $repo;
     }
 

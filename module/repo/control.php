@@ -175,15 +175,14 @@ class repo extends control
         if($_POST)
         {
             /* Prepare data. */
-            $formData         = form::data($this->config->repo->form->createRepo);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
-            $repo             = $this->repoZen->prepareCreateRepo($formData, $isPipelineServer);
+            $formData = form::data($this->config->repo->form->createRepo)->get();
+            $repo     = $this->repoZen->prepareCreateRepo($formData);
 
             /* Create a repo. */
-            if($repo) $repoID = $this->repo->createRepo($repo, $_POST['namespace']);
+            if($repo) $repoID = $this->repo->createRepo($repo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->SCM == 'Gitlab')
+            if($formData->SCM == 'Gitlab')
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
@@ -193,9 +192,8 @@ class repo extends control
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
-            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
         $this->commonAction(0, $objectID);

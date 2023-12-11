@@ -2658,6 +2658,8 @@ class gitlabModel extends model
             {
                 foreach($response->message as $field => $fieldErrors)
                 {
+                    if(empty($fieldErrors)) continue;
+
                     if(is_string($fieldErrors))
                     {
                         $errorKey = array_search($fieldErrors, $this->lang->gitlab->apiError);

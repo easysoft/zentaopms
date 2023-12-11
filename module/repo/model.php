@@ -216,11 +216,10 @@ class repoModel extends model
      * Create a repo.
      *
      * @param  object $repo
-     * @param  int   $namespace
      * @access public
      * @return int|false
      */
-    public function createRepo(object $repo, int $namespace): int|false
+    public function createRepo(object $repo): int|false
     {
         $check = $this->repoTao->checkName($repo);
         if(!$check)
@@ -230,13 +229,13 @@ class repoModel extends model
         }
 
         $createRepoFunc = "create{$repo->SCM}Repo";
-        $response = $this->$createRepoFunc($repo, $namespace);
+        $response = $this->$createRepoFunc($repo, $repo->namespace);
 
         $this->loadModel($repo->SCM);
 
         if(!empty($response->id))
         {
-            $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $response->name);
+            $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $repo->name);
             $repo->path           = $response->path;
             $repo->serviceProject = $response->serviceProject;
             $repo->extra          = $response->extra;
@@ -249,6 +248,7 @@ class repoModel extends model
                 $repo->path = $path;
             }
 
+            unset($repo->namespace);
             $repoID = $this->create($repo, false);
             if(dao::isError())
             {
@@ -2332,7 +2332,7 @@ class repoModel extends model
      * @access public
      * @return string|array|false
      */
-    public function getGroups(int|string $serverID, int|string $groupID = 0): string|array|false
+    public function getGroups(int $serverID, int|string $groupID = 0): string|array|false
     {
         $server       = $this->loadModel('pipeline')->getByID($serverID);
         $getGroupFunc = 'get' . $server->type . 'Groups';
