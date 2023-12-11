@@ -268,7 +268,7 @@ class metric extends control
     public function ajaxGetMetricSideTree($scope, $checkedList)
     {
         $checkedList = explode(',', $checkedList);
-        $metrics     = $this->metric->getList($scope, 'released');
+        $metrics = $scope == 'collect' ? $this->metric->getListByCollect('released') : $this->metric->getList($scope, 'released');
 
         $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
         $this->view->checkedList  = $checkedList;
