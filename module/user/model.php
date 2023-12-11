@@ -1284,8 +1284,8 @@ class userModel extends model
         $projects = $this->userTao->fetchProjects($account, $status, $orderBy, $pager);
         if(!$projects) return array();
 
-        $projectStoryCount     = $this->userTao->fetchProjectStoryCount($account, array_keys($projects));
-        $projectExecutionCount = $this->userTao->fetchProjectExecutionCount($account, array_keys($projects));
+        $projectStoryEstimate  = $this->userTao->fetchProjectStoryEstimate(array_keys($projects));
+        $projectExecutionCount = $this->userTao->fetchProjectExecutionCount(array_keys($projects));
 
         foreach($projects as $project)
         {
