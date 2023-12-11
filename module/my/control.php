@@ -1308,8 +1308,16 @@ EOF;
     {
         if($_POST)
         {
-            if($listID)  $this->user->updateContactList($listID);
-            if(!$listID) $this->user->createContactList();
+            if($listID)
+            {
+                $userContact = form::data($this->config->my->form->manageContacts)->add('account', $this->app->user->account)->add('id', $listID)->get();
+                $this->user->updateContactList($userContact);
+            }
+            else
+            {
+                $userContact = form::data($this->config->my->form->manageContacts)->add('account', $this->app->user->account)->get();
+                $this->user->createContactList($userContact);
+            }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderContactList"));
