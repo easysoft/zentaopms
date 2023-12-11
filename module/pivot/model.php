@@ -1498,6 +1498,7 @@ class pivotModel extends model
     }
 
     /**
+     * 处理表格的切片数据。
      * Process data as slice table data.
      *
      * @param  array  $columnRows
@@ -1507,7 +1508,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function processSliceData($columnRows, $groups, $slice, $uuName)
+    public function processSliceData(array $columnRows, array $groups, string $slice, string $uuName): array
     {
         $sliceList = array();
         foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
@@ -1527,6 +1528,7 @@ class pivotModel extends model
                 $sliceRows[$index] = $columnRow;
                 continue;
             }
+
             $sliceFlag = true;
             foreach($groups as $group)
             {
