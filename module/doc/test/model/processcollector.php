@@ -1,13 +1,12 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 docModel->processCollector();
 cid=1
 
 - 测试空数据 @0
-- 测试正常数据第1条的collector属性 @,admin,user1,
+- 测试正常数据第1条的collector属性 @,admin,
 
 */
 
