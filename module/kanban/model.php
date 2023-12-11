@@ -724,9 +724,8 @@ class kanbanModel extends model
         $data  = array();
         $lanes = array();
         $lane  = '';
-        $begin = '0000-00-00';
-        $end   = '0000-00-00';
-
+        $begin = null;
+        $end   = null;
         foreach($cards->name as $i => $name)
         {
             $lane  = ($cards->lane[$i] == 'ditto')   ? $lane  : $cards->lane[$i];
@@ -736,10 +735,9 @@ class kanbanModel extends model
             if(empty($cards->name[$i])) continue;
             $data[$i]               = new stdclass();
             $data[$i]->name         = trim($cards->name[$i]);
-            $data[$i]->begin        = $begin;
-            $data[$i]->end          = $end;
+            $data[$i]->begin        = $begin ? $begin : null;
+            $data[$i]->end          = $end   ? $end   : null;
             $data[$i]->assignedTo   = $cards->assignedTo[$i];
-            $data[$i]->desc         = nl2br($cards->desc[$i]);
             $data[$i]->pri          = $cards->pri[$i];
             $data[$i]->kanban       = $kanbanID;
             $data[$i]->region       = $regionID;
