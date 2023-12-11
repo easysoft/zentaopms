@@ -1504,22 +1504,17 @@ class userModel extends model
     }
 
     /**
+     * 创建一个联系人列表。
      * Create a contact list.
      *
      * @access public
      * @return bool
      */
-    public function createContactList(): bool
+    public function createContactList(object $userContact): bool
     {
-        $data = fixer::input('post')
-            ->add('account', $this->app->user->account)
-            ->setDefault('public', 0)
-            ->join('userList', ',')
-            ->get();
-
-        $this->dao->insert(TABLE_USERCONTACT)->data($data)
+        $this->dao->insert(TABLE_USERCONTACT)->data($userContact)
             ->batchCheck('listName,userList', 'notempty')
-            ->check('listName', 'unique', "account = '{$data->account}'")
+            ->check('listName', 'unique', "account = '{$userContact->account}'")
             ->autoCheck()
             ->exec();
         return !dao::isError();
