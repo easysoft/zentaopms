@@ -1,29 +1,26 @@
 function updateProgressInterval()
 {
     $.get($.createLink('upgrade', 'ajaxFixConsistency', 'version=' + version));
-    showLogs(0);
-}
-
-function showLogs(logOffset)
-{
-    var url = $.createLink('upgrade', 'ajaxGetFixLogs', 'offset=' + logOffset);
-    $.getJSON(url, function(result)
+    logOffset = 0;
+    interval  = setInterval(function()
     {
-        logOffset = result.offset;
-
-        if(result.log) $('#logBox').append(result.log);
-
-        let element = document.getElementById('logBox');
-        element.scrollTop = element.scrollHeight;
-
-        if(result.finished)
+        var url = $.createLink('upgrade', 'ajaxGetFixLogs', 'offset=' + logOffset);
+        $.getJSON(url, function(result)
         {
-            loadCurrentPage();
-            return;
-        }
+            logOffset = result.offset;
 
-        showLogs(logOffset);
-    })
+            if(result.log) $('#logBox').append(result.log);
+
+            let element = document.getElementById('logBox');
+            element.scrollTop = element.scrollHeight;
+
+            if(result.finished)
+            {
+                clearInterval(interval);
+                loadCurrentPage();
+            }
+        })
+    }, 500);
 }
 
 if(execFixSQL) updateProgressInterval()
