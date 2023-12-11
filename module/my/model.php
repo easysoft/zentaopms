@@ -971,6 +971,7 @@ class myModel extends model
     public function getReviewingDemands(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('demand', 'review')) return array();
+        if($this->config->edition != 'ipd') return array();
 
         $this->app->loadLang('demand');
         $stmt = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
