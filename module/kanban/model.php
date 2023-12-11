@@ -3396,6 +3396,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 排序看板分组。
      * Sort kanban group.
      *
      * @param  int    $region
@@ -3403,10 +3404,8 @@ class kanbanModel extends model
      * @access public
      * @return bool
      */
-    public function sortGroup($region, $groups)
+    public function sortGroup(int $region, array $groups): bool
     {
-        $this->loadModel('action');
-
         $groupList = $this->getGroupList($region);
 
         $order = 1;
