@@ -428,24 +428,20 @@ class kanban extends control
     }
 
     /*
+     * 编辑区域。
      * Edit a region
      *
      * @param  int    $regionID
      * @access public
      * @return void
      */
-    public function editRegion($regionID = 0)
+    public function editRegion(int $regionID = 0)
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
-            $changes = $this->kanban->updateRegion($regionID);
+            $this->kanban->updateRegion($regionID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanbanregion', $regionID, 'edited');
-            $this->action->logHistory($actionID, $changes);
-
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
@@ -460,17 +456,12 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function sortRegion($regions = '')
+    public function sortRegion(string $regions = '')
     {
         if(empty($regions)) return;
         $regionIdList = explode(',', trim($regions, ','));
 
-        $order = 1;
-        foreach($regionIdList as $regionID)
-        {
-            $this->dao->update(TABLE_KANBANREGION)->set('`order`')->eq($order)->where('id')->eq($regionID)->exec();
-            $order++;
-        }
+        $this->kanbanTao->updateRegionSort($regionIdList);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
