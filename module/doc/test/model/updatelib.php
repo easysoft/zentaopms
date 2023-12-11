@@ -1,23 +1,22 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 docModel->updateLib();
 cid=1
 
 - 正常修改产品文档库
- - 第0条的field属性 @name
- - 第0条的old属性 @产品文档主库26
- - 第0条的new属性 @编辑文档库
+ - 第0条的field属性 @product
+ - 第0条的old属性 @1
+ - 第0条的new属性 @2
 - 正常修改项目文档库
  - 第0条的field属性 @name
  - 第0条的old属性 @项目文档主库18
  - 第0条的new属性 @编辑文档库
 - 正常修改执行文档库
- - 第0条的field属性 @name
- - 第0条的old属性 @执行文档主库20
- - 第0条的new属性 @编辑文档库
+ - 第0条的field属性 @execution
+ - 第0条的old属性 @101
+ - 第0条的new属性 @102
 - 正常修改自定义文档库
  - 第0条的field属性 @name
  - 第0条的old属性 @自定义文档库6
@@ -59,9 +58,9 @@ $noExecution     = array('type' => $type[2], 'execution' => $execution[0], 'name
 $noName          = array('type' => $type[0], 'product' => $product[1], 'name' => $name[0], 'acl' => $acl[0]);
 
 $docTester = new docTest();
-r($docTester->updateLibTest($docLibIds[0], $updateProduct))   && p('0:field,old,new') && e('name,产品文档主库26,编辑文档库'); // 正常修改产品文档库
+r($docTester->updateLibTest($docLibIds[0], $updateProduct))   && p('0:field,old,new') && e('product,1,2');                    // 正常修改产品文档库
 r($docTester->updateLibTest($docLibIds[1], $updateProject))   && p('0:field,old,new') && e('name,项目文档主库18,编辑文档库'); // 正常修改项目文档库
-r($docTester->updateLibTest($docLibIds[2], $updateExecution)) && p('0:field,old,new') && e('name,执行文档主库20,编辑文档库'); // 正常修改执行文档库
+r($docTester->updateLibTest($docLibIds[2], $updateExecution)) && p('0:field,old,new') && e('execution,101,102');              // 正常修改执行文档库
 r($docTester->updateLibTest($docLibIds[3], $updateCustom))    && p('0:field,old,new') && e('name,自定义文档库6,编辑文档库');  // 正常修改自定义文档库
 r($docTester->updateLibTest($docLibIds[0], $noProduct))       && p('product:0')       && e('『产品库』应当是数字。');         // 正常修改无产品
 r($docTester->updateLibTest($docLibIds[0], $noProject))       && p('project:0')       && e('『project』应当是数字。');        // 正常修改无项目
