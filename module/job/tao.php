@@ -83,9 +83,9 @@ class jobTao extends jobModel
         if(!empty($job->projectKey) and $job->frame == 'sonarqube')
         {
             $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
-            if(!empty($projectList))
+            if(!empty($projectList) && $projectList[$job->projectKey] != $jobID)
             {
-                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
+                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]);
                 dao::$errors['projectKey'][] = $message;
                 return false;
             }

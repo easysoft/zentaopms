@@ -26,14 +26,15 @@ class jobTest
     /**
      * Test get job list.
      *
+     * @param  int    $repoID
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
      * @return object
      */
-    public function getListTest($orderBy = 'id_desc', $pager = null)
+    public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null)
     {
-        $objects = $this->objectModel->getList($orderBy, $pager);
+        $objects = $this->objectModel->getList($repoID, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -161,30 +162,35 @@ class jobTest
      * @access public
      * @return string
      */
-    public function updateObject($jobId, $params = array())
+    public function updateObject($jobID, $params = array())
     {
         global $tester;
-        $object = $tester->dbh->query("SELECT * FROM " . TABLE_JOB  ." WHERE id = $jobId")->fetch();
+        $object = $tester->dbh->query("SELECT * FROM " . TABLE_JOB  ." WHERE id = $jobID")->fetch();
 
+        $job = array();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($params)))
             {
-                $_POST[$field] = $params[$field];
+                $job[$field] = $params[$field];
             }
             else
             {
-                $_POST[$field] = $value;
+                $job[$field] = $value;
             }
         }
-        $_POST['jkServer'] = 3;
-        $_POST['jkTask']   = 'dave';
+        $job['paramName'] = array();
+        if($job['engine'] == 'jenkins')
+        {
+            $job['jkServer'] = $job['server'];
+            $job['jkTask']   = $job['pipeline'];
+        }
 
-        $result = $this->objectModel->update($jobId);
-        unset($_POST);
-        if(dao::isError()) return dao::getError()[0];
+        $result = $this->objectModel->update($jobID, (object)$job);
+        if(dao::isError()) return dao::getError();
 
-        return $result ? 'Job更新成功' : 'Job更新失败';
+        $object = $this->objectModel->getByID($jobID);
+        return $object;
     }
 
     /**

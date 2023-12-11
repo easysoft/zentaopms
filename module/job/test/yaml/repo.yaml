@@ -4,11 +4,11 @@ author: Zeng Gang
 version: "1.0"
 fields:
 - field: id
-  range: 1
+  range: [1,2,3,4,5]
 - field: product
   range: 1
 - field: name
-  range: zentaopms
+  range: zentaopms,zentaopms2
 - field: path
   range: "http://10.0.7.242:9980/root/zentaopms"
 - field: SCM

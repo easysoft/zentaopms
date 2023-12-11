@@ -224,7 +224,7 @@ class jobModel extends model
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
-        $result = $this->jobTao->checkIframe($job);
+        $result = $this->jobTao->checkIframe($job, $id);
         if(!$result) return false;
 
         $this->jobTao->getSvnDir($job, $repo);
