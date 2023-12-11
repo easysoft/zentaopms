@@ -1764,23 +1764,24 @@ class docModel extends model
     }
 
     /**
+     * 获取文档的树形结构。
      * Get doc tree.
      *
-     * @param  int $libID
+     * @param  int    $libID
      * @access public
      * @return array
      */
-    public function getDocTree($libID)
+    public function getDocTree(int $libID): array
     {
-        $fullTrees = $this->loadModel('tree')->getTreeStructure($libID, 'doc');
-        array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'doc', 'actions' => false, 'root' => $libID));
-        foreach($fullTrees as $i => $tree)
+        $docTrees = $this->loadModel('tree')->getTreeStructure($libID, 'doc');
+        array_unshift($docTrees, array('id' => 0, 'name' => '/', 'type' => 'doc', 'actions' => false, 'root' => $libID));
+        foreach($docTrees as $i => $tree)
         {
             $tree          = (object)$tree;
-            $fullTrees[$i] = $this->buildDocNode($tree, $libID);
+            $docTrees[$i] = $this->buildDocNode($tree, $libID);
         }
-        if(empty($fullTrees[0]->children)) array_shift($fullTrees);
-        return $fullTrees;
+        if(empty($docTrees[0]->children)) array_shift($docTrees);
+        return $docTrees;
     }
 
     /**
