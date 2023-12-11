@@ -2690,15 +2690,16 @@ class userModel extends model
     }
 
     /**
-     * Judge an action is clickable or not.
+     * 判断一个按钮是否可以点击。
+     * Check if a button is clickable.
      *
-     * @param  object    $user
-     * @param  string    $action
+     * @param  object $user
+     * @param  string $action
      * @static
      * @access public
      * @return bool
      */
-    public static function isClickable($user, $action)
+    public static function isClickable(object $user, string $action): bool
     {
         global $config, $app;
         $action = strtolower($action);
