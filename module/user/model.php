@@ -2822,47 +2822,26 @@ class userModel extends model
     }
 
     /**
+     * 获取可以创建需求的用户。
      * Get users who have authority to create stories.
      *
      * @access public
      * @return array
      */
-    public function getCanCreateStoryUsers()
+    public function getCanCreateStoryUsers(): array
     {
-        $users     = $this->getPairs('noclosed|nodeleted');
-        $groupList = $this->dao->select('*')->from(TABLE_USERGROUP)
-            ->where('account')->in(array_keys($users))
-            ->fetchGroup('account', 'group');
+        $users      = $this->getPairs('noclosed|nodeleted');
+        $groupUsers = $this->dao->select('DISTINCT account')->from(TABLE_USERGROUP)->alias('t1')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('t2')->on('t1.group = t2.group')
+            ->where('t2.module')->eq('story')
+            ->andWhere('t2.method')->in('create,batchCreate')
+            ->fetchPairs('account');
 
-        $hasPrivGroups = $this->dao->select('*')->from(TABLE_GROUPPRIV)
-            ->where('module')->eq('story')
-            ->andWhere('(method')->eq('create')
-            ->orWhere('method')->eq('batchCreate')
-            ->markRight(1)
-            ->fetchAll('group');
-
-        foreach($users as $account => $user)
+        foreach($users as $account => $realname)
         {
-            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false) continue;
+            if($realname && (isset($groupUsers[$account]) || strpos($this->app->company->admins, ",{$account},") !== false)) continue;
 
-            if(!isset($groupList[$account]))
-            {
-                unset($users[$account]);
-                continue;
-            }
-
-            $groups  = $groupList[$account];
-            $hasPriv = false;
-            foreach($groups as $groupID => $group)
-            {
-                if(isset($hasPrivGroups[$groupID]))
-                {
-                    $hasPriv = true;
-                    break;
-                }
-            }
-
-            if(!$hasPriv) unset($users[$account]);
+            unset($users[$account]);
         }
 
         return $users;
