@@ -1570,7 +1570,7 @@ class repo extends control
         $repo = $this->repo->getByID($repoID);
         if($path) $path = helper::safe64Decode($path);
 
-        if($repo->SCM == 'gitlab') return print(json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch)));
+        if($repo->SCM == 'Gitlab') return print(json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch)));
         return print(json_encode($this->repoZen->getViewTree($repo, $path, $branch)));
     }
 
