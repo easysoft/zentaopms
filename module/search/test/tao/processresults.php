@@ -33,4 +33,4 @@ $objectList = array();
 $words = 'aaa__';
 
 $search = new searchTest();
-r($search->processResultsTest($results, $objectList, $words)) && p('0:title,summary') && e("<span class='text-danger'>aaa </span>,<span class='text-danger'>aaa </span>"); //测试 andOr,operator,value 的值
+r($search->processResultsTest($results, $objectList, $words)) && p('0:title,summary') && e("<span class='text-danger'>aaa </span>,<span class='text-danger'>aaa </span>"); //测试处理的搜索结果的值
