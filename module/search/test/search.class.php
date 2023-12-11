@@ -313,6 +313,22 @@ class searchTest
     }
 
     /**
+     * 测试获取搜索索引各个类型的数量。
+     * Get list count test.
+     *
+     * @param  string|array $type
+     * @access public
+     * @return array
+     */
+    public function getListCountTest(string|array $type): array
+    {
+        $listCount = $this->objectModel->getListCount($type);
+        if(dao::isError()) return dao::getError();
+
+        return $listCount;
+    }
+
+    /**
      * 测试保存搜索索引。
      * Test save index.
      *
