@@ -1411,15 +1411,17 @@ class userModel extends model
     }
 
     /**
-     * Unbind Ranzhi
+     * 解除禅道账号和 ZDOO 账号的绑定。
+     * Unbind ZDOO account and ZenTao account.
      *
-     * @param  string    $account
+     * @param  string $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unbind($account)
+    public function unbind(string $account): bool
     {
         $this->dao->update(TABLE_USER)->set('ranzhi')->eq('')->where('account')->eq($account)->exec();
+        return !dao::isError();
     }
 
 	/**
