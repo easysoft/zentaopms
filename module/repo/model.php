@@ -235,7 +235,7 @@ class repoModel extends model
 
         if(!empty($response->id))
         {
-            $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $repo->name);
+            // $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $repo->name);
             $repo->path           = $response->path;
             $repo->serviceProject = $response->serviceProject;
             $repo->extra          = $response->extra;
