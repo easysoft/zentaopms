@@ -1592,20 +1592,19 @@ class userModel extends model
     }
 
     /**
-     * Compute  password strength.
+     * 计算密码强度。
+     * Compute password strength.
      *
-     * @param  string    $password
+     * @param  string $password
      * @access public
      * @return int
      */
-    public function computePasswordStrength($password)
+    public function computePasswordStrength(string $password): int
     {
-        if(strlen($password) == 0) return 0;
+        $length = strlen($password);
+        if($length == 0) return 0;
 
-        $strength = 0;
-        $length   = strlen($password);
-
-        $complexity  = array();
+        $complexity = array();
         $chars = str_split($password);
         foreach($chars as $letter)
         {
@@ -1629,10 +1628,9 @@ class userModel extends model
         }
         $sumComplexity = array_sum($complexity);
 
-        if(($sumComplexity == 7 or $sumComplexity == 15) and $length >= 6)  $strength = 1;
-        if($sumComplexity == 15 and $length >= 10) $strength = 2;
-
-        return $strength;
+        if(($sumComplexity == 7 || $sumComplexity == 15) && $length >= 6)  return 1;
+        if($sumComplexity == 15 && $length >= 10) return 2;
+        return 0;
     }
 
     /**
