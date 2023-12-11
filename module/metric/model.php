@@ -175,7 +175,7 @@ class metricModel extends model
             elseif($dateType == 'week')
             {
                 $year = substr($dataInfo->$dateField, 0, 4);
-                $week = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
+                $week = sprintf($this->lang->metric->weekS, substr($dataInfo->dateString, 5, 2));
                 $date = "{$year}-{$week}";
             }
             elseif($dateType == 'day' or $dateType == 'nodate')
