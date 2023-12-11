@@ -49,6 +49,10 @@ class pivotModel extends model
             $this->setFilterDefault($filters);
             $pivot->filters = $filters;
         }
+        else
+        {
+            $pivot->filters = array();
+        }
 
         return $this->processPivot($pivot);
     }
@@ -960,7 +964,7 @@ class pivotModel extends model
             }
             $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
             if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
-            $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
+            $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 
             $this->getMergeData($columnRows, $groupsRow);
         }
@@ -1218,26 +1222,69 @@ class pivotModel extends model
     }
 
     /**
-     * Process column show mode.
+     * 处理需要展示的数据。
+     * Process data to be show.
      *
      * @param  array   $columnRows
      * @param  array   $groups
      * @param  array   $column
      * @param  string  $showColTotal
-     * @param  int     $uuName
+     * @param  string  $uuName
      * @access public
+     * @return void
+     */
+    public function processShowData(array &$columnRows, array $groups, array $column, string $showColTotal, string $uuName): void
+    {
+        $slice      = zget($column, 'slice',    'noSlice');
+        $showMode   = zget($column, 'showMode', 'default');
+        $showTotal  = $slice    == 'noSlice' ? 'noShow' : zget($column, 'showTotal',  'noShow');
+        $monopolize = $showMode == 'default' ? ''       : zget($column, 'monopolize', '');
+
+        $method = '';
+        if(in_array($showMode, array('column', 'row', 'total')))
+        {
+            $method = 'process' . ucfirst($showMode) . 'ShowData';
+        }
+        elseif($showMode == 'default' && $showTotal == 'sum')
+        {
+            $method = 'processDefaultShowData';
+        }
+
+        if($method)
+        {
+            $params = array();
+            $params['columnRows']   = $columnRows;
+            $params['groups']       = $groups;
+            $params['monopolize']   = $monopolize;
+            $params['uuName']       = $uuName;
+            $params['showTotal']    = $showTotal;
+            $params['showColTotal'] = $showColTotal;
+
+            call_user_func_array(array($this, $method), $params);
+        }
+        else
+        {
+            list($_, $allTotal, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+            $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, $showMode, $allTotal, $colTotal);
+        }
+    }
+
+    /**
+     * 获取总计数据。
+     * Get total statistics.
+     *
+     * @param  array   $columnRows
+     * @param  array   $groups
+     * @param  string  $monopolize
+     * @access private
      * @return array
      */
-    public function processShowData($columnRows, $groups, $column, $showColTotal, $uuName)
+    private function getTotalStatistics(array $columnRows, array $groups, string $monopolize): array
     {
-        $slice      = zget($column, 'slice', 'noSlice');
-        $showMode   = zget($column, 'showMode', 'default');
-        $showTotal  = $slice == 'noSlice' ? 'noShow' : zget($column, 'showTotal', 'noShow');
-        $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
-
         $colTotal = array();
         $rowTotal = array();
         $allTotal = 0;
+
         foreach($columnRows as $index => $row)
         {
             if(!isset($rowTotal[$index])) $rowTotal[$index] = 0;
@@ -1255,134 +1302,199 @@ class pivotModel extends model
 
                 $colTotal[$field] += (float)$value;
                 $rowTotal[$index] += (float)$value;
-                $allTotal += (float)$value;
+                $allTotal         += (float)$value;
             }
         }
 
-        if($showMode == 'total')
-        {
-            foreach($columnRows as $index => $row)
-            {
-                $columnRow = new stdclass();
-                foreach($row as $field => $value)
-                {
-                    if(in_array($field, $groups))
-                    {
-                        $columnRow->$field = $value;
-                        continue;
-                    }
-                    if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = round((float)$value / $allTotal * 100, 2) . '%';
-                }
-                if($showTotal == 'sum')
-                {
-                    if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{"sum_$uuName"} = round((float)$rowTotal[$index] / $allTotal * 100, 2) . '%';
-                }
-                $columnRows[$index] = $columnRow;
-            }
-        }
+        return array($rowTotal, $allTotal, $colTotal);
+    }
 
-        if($showMode == 'row')
-        {
-            foreach($columnRows as $index => $row)
-            {
-                $columnRow = new stdclass();
-                foreach($row as $field => $value)
-                {
-                    if(in_array($field, $groups))
-                    {
-                        $columnRow->$field = $value;
-                        continue;
-                    }
-                    if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = round((float)$value / $rowTotal[$index] * 100, 2) . '%';
-                }
-                if($showTotal == 'sum')
-                {
-                    if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{'sum_' . $uuName} = round((float)$rowTotal[$index] / $rowTotal[$index] * 100, 2) . '%';
-                }
-                $columnRows[$index] = $columnRow;
-            }
-        }
+    /**
+     * 处理模式为total的显示数据。
+     * Process show data when the mode is total.
+     *
+     * @param  array   $columnRows
+     * @param  array   $groups
+     * @param  string  $monopolize
+     * @param  string  $uuName
+     * @access private
+     * @return void
+     */
+    private function processTotalShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): void
+    {
+        list($rowTotal, $allTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
 
-        if($showMode == 'column')
+        foreach($columnRows as $index => $row)
         {
-            foreach($columnRows as $index => $row)
-            {
-                $columnRow = new stdclass();
-                foreach($row as $field => $value)
-                {
-                    if(in_array($field, $groups))
-                    {
-                        $columnRow->$field = $value;
-                        continue;
-                    }
-                    if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = round((float)$value / $colTotal[$field] * 100, 2) . '%';
-                }
-                if($showTotal == 'sum')
-                {
-                    if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{'sum_' . $uuName} = round((float)$rowTotal[$index] / $allTotal * 100, 2) . '%';
-                }
-                $columnRows[$index] = $columnRow;
-            }
-        }
-
-        if($showMode == 'default' and $showTotal == 'sum')
-        {
-            foreach($columnRows as $index => $row) $row->{'sum_' . $uuName} = $rowTotal[$index];
-        }
-
-        if($showColTotal == 'sum')
-        {
-            if(empty($columnRows)) return $columnRows;
-
-            $colTotalRow = new stdClass();
-            foreach($columnRows[0] as $field => $value)
+            $columnRow = new stdclass();
+            foreach($row as $field => $value)
             {
                 if(in_array($field, $groups))
                 {
-                    $colTotalRow->$field = $this->lang->pivot->step2->total;
+                    $columnRow->$field = $value;
+                    continue;
                 }
-                else
-                {
-                    if($showTotal == 'sum' and $field == "sum_$uuName")
-                    {
-                        if($showMode == 'default')
-                        {
-                            $colTotalRow->{$field} = $allTotal;
-                        }
-                        else
-                        {
-                            $colTotalRow->{$field} = round((float)$allTotal / $allTotal * 100, 2) . '%';
-                        }
-                        continue;
-                    }
-
-                    if(strpos($field, 'sum_self_') !== false)
-                    {
-                        $colTotalRow->{$field} = $allTotal;
-                        continue;
-                    }
-
-                    if(strpos($field, 'self_') !== false)
-                    {
-                        $colTotalRow->{$field} = $colTotal[$field];
-                        continue;
-                    }
-
-                    if($showMode == 'default') $colTotalRow->$field = $colTotal[$field];
-                    if($showMode == 'column')  $colTotalRow->$field = round((float)$colTotal[$field] / $colTotal[$field] * 100, 2) . '%';
-                    if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
-                }
+                if($monopolize) $columnRow->{"self_$field"} = $value;
+                $columnRow->{$field} = round((float)$value / $allTotal * 100, 2) . '%';
             }
-            $columnRows[] = $colTotalRow;
+
+            if($showTotal == 'sum')
+            {
+                if($monopolize) $columnRow->{"sum_self_$uuName"} = $rowTotal[$index];
+                $columnRow->{"sum_$uuName"} = round((float)$rowTotal[$index] / $allTotal * 100, 2) . '%';
+            }
+            $columnRows[$index] = $columnRow;
         }
 
-        return $columnRows;
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'total', $allTotal, $rowTotal);
+    }
+
+    /**
+     * 处理模式为row的显示数据。
+     * Process show data when the mode is row.
+     *
+     * @param  array   $columnRows
+     * @param  array   $groups
+     * @param  string  $monopolize
+     * @param  string  $uuName
+     * @access private
+     * @return void
+     */
+    private function processRowShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): void
+    {
+        list($rowTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        foreach($columnRows as $index => $row)
+        {
+            $columnRow = new stdclass();
+            foreach($row as $field => $value)
+            {
+                if(in_array($field, $groups))
+                {
+                    $columnRow->$field = $value;
+                    continue;
+                }
+                if($monopolize) $columnRow->{"self_$field"} = $value;
+                $columnRow->{$field} = round((float)$value / $rowTotal[$index] * 100, 2) . '%';
+            }
+            if($showTotal == 'sum')
+            {
+                if($monopolize) $columnRow->{"sum_self_$uuName"} = $rowTotal[$index];
+                $columnRow->{'sum_' . $uuName} = round((float)$rowTotal[$index] / $rowTotal[$index] * 100, 2) . '%';
+            }
+            $columnRows[$index] = $columnRow;
+        }
+
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'row', $rowTotal[0], $rowTotal);
+    }
+
+    /**
+     * 处理模式为column的显示数据。
+     * Process show data when the mode is column.
+     *
+     * @param  array   $columnRows
+     * @param  array   $groups
+     * @param  string  $monopolize
+     * @param  string  $uuName
+     * @access private
+     * @return void
+     */
+    private function processColumnShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): void
+    {
+        list($rowTotal, $allTotal, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        foreach($columnRows as $index => $row)
+        {
+            $columnRow = new stdclass();
+            foreach($row as $field => $value)
+            {
+                if(in_array($field, $groups))
+                {
+                    $columnRow->$field = $value;
+                    continue;
+                }
+                if($monopolize) $columnRow->{"self_$field"} = $value;
+                $columnRow->{$field} = round((float)$value / $colTotal[$field] * 100, 2) . '%';
+            }
+            if($showTotal == 'sum')
+            {
+                if($monopolize) $columnRow->{"sum_self_$uuName"} = $rowTotal[$index];
+                $columnRow->{'sum_' . $uuName} = round((float)$rowTotal[$index] / $allTotal * 100, 2) . '%';
+            }
+            $columnRows[$index] = $columnRow;
+        }
+
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'column', $allTotal, $colTotal);
+    }
+
+    /**
+     * 处理模式为default的显示数据。
+     * Process show data when the mode is default.
+     *
+     * @param  array   $columnRows
+     * @param  array   $groups
+     * @param  string  $monopolize
+     * @param  string  $uuName
+     * @access private
+     * @return void
+     */
+    private function processDefaultShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showColTotal): void
+    {
+        list($rowTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        foreach($columnRows as $index => $row) $row->{'sum_' . $uuName} = $rowTotal[$index];
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, 'sum', $uuName, 'default', $rowTotal[0], $rowTotal);
+    }
+
+    /**
+     * 重构列数据。
+     * Rebuild column data.
+     *
+     * @param  array   $columnRows
+     * @param  array   $groups
+     * @param  string  $showTotal
+     * @param  string  $uuName
+     * @param  string  $showMode
+     * @param  float   $allTotal
+     * @param  array   $colTotal
+     * @access private
+     * @return void
+     */
+    private function rebuildColumnRows(array &$columnRows, array $groups, string $showTotal, string $uuName, string $showMode, float $allTotal, array $colTotal): void
+    {
+        if(empty($columnRows)) return;
+
+        $colTotalRow = new stdClass();
+        foreach($columnRows[0] as $field => $_)
+        {
+            if(in_array($field, $groups))
+            {
+                $colTotalRow->$field = $this->lang->pivot->step2->total;
+            }
+            else
+            {
+                if($showTotal == 'sum' && $field == "sum_{$uuName}")
+                {
+                    $colTotalRow->{$field} = $showMode == 'default' ? $allTotal : round((float)$allTotal / $allTotal * 100, 2) . '%';
+                    continue;
+                }
+
+                if(strpos($field, 'sum_self_') !== false)
+                {
+                    $colTotalRow->{$field} = $allTotal;
+                    continue;
+                }
+
+                if(strpos($field, 'self_') !== false)
+                {
+                    $colTotalRow->{$field} = $colTotal[$field];
+                    continue;
+                }
+
+                if($showMode == 'default') $colTotalRow->$field = $colTotal[$field];
+                if($showMode == 'column')  $colTotalRow->$field = round((float)$colTotal[$field] / $colTotal[$field] * 100, 2) . '%';
+                if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
+            }
+        }
+
+        $columnRows[] = $colTotalRow;
     }
 
     /**
