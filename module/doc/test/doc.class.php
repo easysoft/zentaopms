@@ -455,13 +455,19 @@ class docTest
         return $objects;
     }
 
-    public function summaryTest($files)
+    /**
+     * 统计当前页面上文件的数量和大小。
+     * Count the number and size of files on the current page.
+     *
+     * @param  array $idList
+     * @access public
+     * @return void
+     */
+    public function summaryTest(array $idList): string
     {
-        $objects = $this->objectModel->summary($files);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        $files = array();
+        if($idList) $files = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('id')->in($idList)->fetchAll();
+        return $this->objectModel->summary($files);
     }
 
     /**
