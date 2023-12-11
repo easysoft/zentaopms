@@ -300,9 +300,9 @@ class dom
         if(is_object($item))
         {
             if(isDirective($item, 'html'))     return $item->data;
-            if(isDirective($item, 'text'))     return htmlspecialchars($item->data);
+            if(isDirective($item, 'text'))     return htmlspecialchars($item->data, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
             if(isset($item->html))             return $item->html;
-            if(isset($item->text))             return htmlspecialchars($item->text);
+            if(isset($item->text))             return htmlspecialchars($item->text, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
             if(method_exists($item, 'render')) return $item->render();
         }
 
@@ -327,9 +327,9 @@ class dom
         if(is_object($item))
         {
             if(isDirective($item, 'html'))     return $item->data;
-            if(isDirective($item, 'text'))     return htmlspecialchars($item->data);
+            if(isDirective($item, 'text'))     return htmlspecialchars($item->data, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
             if(isset($item->html))             return $item->html;
-            if(isset($item->text))             return htmlspecialchars($item->text);
+            if(isset($item->text))             return htmlspecialchars($item->text, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
             if(method_exists($item, 'render')) return $item->render();
         }
 
