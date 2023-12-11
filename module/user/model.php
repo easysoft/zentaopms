@@ -2712,23 +2712,24 @@ class userModel extends model
     }
 
     /**
-     * Save user template.
+     * 保存一个编辑器模板。
+     * Save a editor template.
      *
-     * @param  string    $type
+     * @param  object $template
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveUserTemplate($type)
+    public function saveUserTemplate(object $template): bool
     {
-        $template = fixer::input('post')
-            ->setDefault('account', $this->app->user->account)
-            ->setDefault('type', $type)
-            ->stripTags('content', $this->config->allowedTags)
-            ->get();
+        $this->dao->insert(TABLE_USERTPL)->data($template)
+            ->batchCheck('title, content', 'notempty')
+            ->check('title', 'unique', "`type`='{$template->type}' AND account='{$template->account}'")
+            ->exec();
+        if(dao::isError()) return false;
 
-        $condition = "`type`='$type' and account='{$this->app->user->account}'";
-        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
-        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+        $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+
+        return !dao::isError();
     }
 
     /**
