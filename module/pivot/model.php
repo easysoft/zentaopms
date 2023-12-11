@@ -825,25 +825,43 @@ class pivotModel extends model
 
             /* 如果有自定义的语言包，则使用自定义的语言包，否则使用系统默认的语言包。 */
             /* If there is a custom language pack, use the custom language pack, otherwise use the system default language pack. */
-            $colLabel = $group;
-            if(isset($langs[$group]) && !empty($langs[$group][$clientLang]))
-            {
-                $colLabel = $langs[$group][$clientLang];
-            }
-            else
-            {
-                if($fieldObject)
-                {
-                    $this->app->loadLang($fieldObject);
-                    if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
-                }
-            }
-            $col->label = $colLabel;
+            $col->label = $this->getColLabelValue($group, $fieldObject, $relatedField, $clientLang, $langs);
 
             $groupCol[] = $col;
         }
 
         return array($groups, $groupList, $groupCol);
+    }
+
+    /**
+     * 根据语言适配对应的列名。
+     * Adapt the corresponding column name according to the language.
+     *
+     * @param  string  $field
+     * @param  string  $fieldObject
+     * @param  string  $relatedField
+     * @param  string  $clientLang
+     * @param  array   $langs
+     * @access private
+     * @return string
+     */
+    private function getColLabelValue(string $field, string $fieldObject, string $relatedField, string $clientLang, array $langs = array()): string
+    {
+        $colLabel = $field;
+        if(isset($langs[$field]) && !empty($langs[$field][$clientLang]))
+        {
+            $colLabel = $langs[$field][$clientLang];
+        }
+        else
+        {
+            if($fieldObject)
+            {
+                $this->app->loadLang($fieldObject);
+                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+            }
+        }
+
+        return $colLabel;
     }
 
     /**
@@ -940,7 +958,7 @@ class pivotModel extends model
                 $countRows = $this->dao->query($countSQL)->fetchAll();
                 foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
             }
-            $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
+            $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
             if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
             $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 
@@ -1097,17 +1115,18 @@ class pivotModel extends model
     }
 
     /**
+     * 获取表头。
      * Get the header of the table.
      *
-     * @param  array  $columnRows
-     * @param  array  $column
-     * @param  array  $fields
-     * @param  array  $cols
-     * @param  array  $langs
-     * @access public
-     * @return array
+     * @param  array   $columnRows
+     * @param  array   $column
+     * @param  array   $fields
+     * @param  array   $cols
+     * @param  array   $langs
+     * @access private
+     * @return void
      */
-    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array(), $showOrigin = false)
+    private function getTableHeader(array $columnRows, array $column, array $fields, array &$cols, string $sql, array $langs = array(), bool $showOrigin = false): void
     {
         $stat       = zget($column, 'stat', '');
         $showMode   = zget($column, 'showMode', 'default');
@@ -1120,21 +1139,12 @@ class pivotModel extends model
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
-
-        $colLabel = $column['field'];
-        if($fieldObject)
-        {
-            $this->app->loadLang($fieldObject);
-            if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
-        }
-
-        $clientLang = $this->app->getClientLang();
-        if(isset($langs[$column['field']]) and !empty($langs[$column['field']][$clientLang])) $colLabel = $langs[$column['field']][$clientLang];
+        $colLabel     = $this->getColLabelValue($column['field'], $fieldObject, $relatedField, $this->app->getClientLang(), $langs);
 
         if(!$showOrigin)
         {
-            $colLabel = str_replace('{$field}', $colLabel, $this->lang->pivot->colLabel);
-            $colLabel = str_replace('{$stat}', zget($this->lang->pivot->step2->statList, $stat), $colLabel);
+            $colLabel = str_replace('{$field}', $colLabel,                                        $this->lang->pivot->colLabel);
+            $colLabel = str_replace('{$stat}',  zget($this->lang->pivot->step2->statList, $stat), $colLabel);
             if($showMode != 'default') $colLabel .= sprintf($this->lang->pivot->colShowMode, zget($this->lang->pivot->step2->showModeList, $showMode));
         }
         $col->label = $colLabel;
@@ -1142,39 +1152,8 @@ class pivotModel extends model
         $slice = zget($column, 'slice', 'noSlice');
         if($slice != 'noSlice')
         {
-            if(!isset($cols[1]))
-            {
-                foreach($cols[0] as $colData) $colData->rowspan = '2';
-                $cols[1] = array();
-            }
-            $sliceList = array();
-            foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
-
-            $optionList = $this->getSysOptions($fields[$slice]['type'], $fields[$slice]['object'], $fields[$slice]['field'], $sql);
-            foreach($sliceList as $field)
-            {
-                $childCol = new stdclass();
-                $childCol->name    = $field;
-                $childCol->isGroup = false;
-                $childCol->label   = isset($optionList[$field]) ? $optionList[$field] : $field;
-                $childCol->colspan = $monopolize ? 2 : 1;
-                $cols[1][] = $childCol;
-            }
-            $col->colspan = count($sliceList);
-            if($monopolize) $col->colspan *= 2;
-
-            if(zget($column, 'showTotal', 'noShow') !== 'noShow')
-            {
-                $childCol = new stdclass();
-                $childCol->name    = 'sum';
-                $childCol->isGroup = false;
-                $childCol->label   = $this->lang->pivot->step2->total;
-                $childCol->colspan = $monopolize ? 2 : 1;
-                $cols[1][] = $childCol;
-                $col->colspan += $childCol->colspan;
-            }
-
-            $cols[0][] = $col;
+            $showTotal = zget($column, 'showTotal', 'noShow') === 'noShow';
+            $this->processSliceHeader($cols, $col, $columnRows, $fields, $sql, $slice, $monopolize, $showTotal);
         }
         else
         {
@@ -1182,8 +1161,58 @@ class pivotModel extends model
             $col->colspan = $monopolize ? 2 : 1;
             $cols[0][] = $col;
         }
+    }
 
-        return $cols;
+    /**
+     * 处理切片表头。
+     * Process slice header.
+     *
+     * @param  array   $cols
+     * @param  object  $col
+     * @param  array   $columnRows
+     * @param  array   $fields
+     * @param  string  $sql
+     * @param  string  $slice
+     * @param  string  $monopolize
+     * @param  bool    $showTotal
+     * @access private
+     * @return void
+     */
+    private function processSliceHeader(array &$cols, object $col, array $columnRows, array $fields, string $sql, string $slice, string $monopolize, bool $showTotal): void
+    {
+        if(!isset($cols[1]))
+        {
+            foreach($cols[0] as $colData) $colData->rowspan = '2';
+            $cols[1] = array();
+        }
+        $sliceList = array();
+        foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
+
+        $optionList = $this->getSysOptions($fields[$slice]['type'], $fields[$slice]['object'], $fields[$slice]['field'], $sql);
+        foreach($sliceList as $field)
+        {
+            $childCol = new stdclass();
+            $childCol->name    = $field;
+            $childCol->isGroup = false;
+            $childCol->label   = $optionList[$field] ?? $field;
+            $childCol->colspan = $monopolize ? 2 : 1;
+            $cols[1][] = $childCol;
+        }
+        $col->colspan = count($sliceList);
+        if($monopolize) $col->colspan *= 2;
+
+        if(!$showTotal)
+        {
+            $childCol = new stdclass();
+            $childCol->name    = 'sum';
+            $childCol->isGroup = false;
+            $childCol->label   = $this->lang->pivot->step2->total;
+            $childCol->colspan = $monopolize ? 2 : 1;
+            $cols[1][] = $childCol;
+            $col->colspan += $childCol->colspan;
+        }
+
+        $cols[0][] = $col;
     }
 
     /**
@@ -1572,112 +1601,6 @@ class pivotModel extends model
     {
         if($pivot->builtin) return false;
         return true;
-    }
-
-    /**
-     * Build table use data and rowspan.
-     *
-     * @param  object $data
-     * @param  array  $configs
-     * @param  array  $fields
-     * @access public
-     * @return void
-     *
-     */
-    public function buildPivotTable($data, $configs, $fields = array(), $sql = '')
-    {
-        $clientLang  = $this->app->getClientLang();
-        $width       = 128;
-
-        /* Init table. */
-        $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
-
-        $showOrigins = array();
-        $hasShowOrigin = false;
-
-        foreach($data->cols[0] as $col)
-        {
-            $colspan = zget($col, 'colspan', 1);
-            $colShowOrigin = array_fill(0, $colspan, $col->showOrigin);
-            $showOrigins = array_merge($showOrigins, $colShowOrigin);
-            if($col->showOrigin) $hasShowOrigin = true;
-        }
-
-
-        /* Init table thead. */
-        $table .= "<thead>";
-        foreach($data->cols as $lineCols)
-        {
-            $table .= "<tr>";
-            foreach($lineCols as $col)
-            {
-                $isGroup = $col->isGroup;
-                $thName  = $col->label;
-                $colspan = zget($col, 'colspan', 1);
-                $rowspan = zget($col, 'rowspan', 1);
-
-                if($isGroup) $thHtml = "<th data-flex='false' rowspan='$rowspan' colspan='$colspan' data-width='auto' class='text-center'>$thName</th>";
-                else         $thHtml = "<th data-flex='true' rowspan='$rowspan' colspan='$colspan' data-type='number' data-width=$width class='text-center'>$thName</th>";
-
-                $table .= $thHtml;
-            }
-            $table .= "</tr>";
-        }
-        $table .= "</thead>";
-
-        /* Init table tbody. */
-        $table .= "<tbody>";
-        $rowCount = 0;
-        for($i = 0; $i < count($data->array); $i ++)
-        {
-            $rowCount ++;
-            if(!empty($data->columnTotal) and $data->columnTotal === 'sum' and $rowCount == count($data->array)) continue;
-
-            $line   = array_values($data->array[$i]);
-            $table .= "<tr class='text-center'>";
-            for($j = 0; $j < count($line); $j ++)
-            {
-                $isGroup = !empty($data->cols[0][$j]) ? $data->cols[0][$j]->isGroup : false;
-                $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
-                $hidden  = isset($configs[$i][$j]) ? false : (!$isGroup ? false : true);
-
-                $showOrigin = $showOrigins[$j];
-                if($hasShowOrigin && !$isGroup && !$showOrigin)
-                {
-                    $rowspan = isset($configs[$i]) ? end($configs[$i]) : 1;
-                    $hidden  = isset($configs[$i]) ? false : true;
-                }
-
-                $lineValue = $line[$j];
-                if($isGroup)
-                {
-                    $groupName = $data->cols[0][$j]->name;
-                }
-                if(is_numeric($lineValue)) $lineValue = round($lineValue, 2);
-
-                if(!$hidden) $table .= "<td rowspan='$rowspan'>$lineValue</td>";
-            }
-            $table .= "</tr>";
-        }
-
-        /* Add column total. */
-        if(!empty($data->columnTotal) and $data->columnTotal === 'sum' and !empty($data->array))
-        {
-            $table .= "<tr class='text-center'>";
-            $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->step2->total}</td>";
-            foreach(end($data->array) as $field => $total)
-            {
-                if(in_array($field, $data->groups)) continue;
-                if(is_numeric($total)) $total = round($total, 2);
-                $table .= "<td>$total</td>";
-            }
-            $table .= "</tr>";
-        }
-
-        $table .= "</tbody>";
-        $table .= "</table>";
-
-        echo $table;
     }
 
     /**
