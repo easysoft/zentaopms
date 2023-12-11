@@ -1953,28 +1953,27 @@ class docModel extends model
     }
 
     /**
+     * 统计当前页面上文件的数量和大小。
      * Count the number and size of files on the current page.
      *
      * @param  array  $files
      * @access public
      * @return string
      */
-    public function summary($files)
+    public function summary(array $files): string
     {
         $filesCount       = 0;
         $sizeCount        = 0;
         $extensionCount   = array();
         $extensionSummary = '';
-
         foreach($files as $file)
         {
             if(!isset($extensionCount[$file->extension])) $extensionCount[$file->extension] = 0;
 
-            $filesCount++;
-
             $sizeCount += $file->size;
 
-            $extensionCount[$file->extension]++;
+            $filesCount++;
+            $extensionCount[$file->extension] ++;
         }
 
         /* Unit conversion. */
