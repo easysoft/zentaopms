@@ -14,6 +14,7 @@ formPanel
 (
     set::title($lang->artifactrepo->create),
     set::actionsClass('w-2/3'),
+    on::change('#repoName', 'onRepoChange'),
     formGroup
     (
         set::width('2/3'),
@@ -44,8 +45,7 @@ formPanel
         set::name('repoName'),
         set::required(true),
         set::label($lang->artifactrepo->repoName),
-        set::items(array()),
-        on::change('onRepoChange'),
+        set::items(array())
     ),
     formGroup
     (
