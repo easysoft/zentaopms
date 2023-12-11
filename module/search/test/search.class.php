@@ -597,4 +597,21 @@ class searchTest
 
         return $objects;
     }
+
+    /**
+     * 测试处理搜索结果。
+     * Process results test.
+     *
+     * @param  array  $results
+     * @param  array  $objectList
+     * @param  string $words
+     * @access public
+     * @return array
+     */
+    public function processResultsTest(array $results, array $objectList, string $words): array
+    {
+        $dataList = $this->objectModel->processResults($results, $objectList, $words);
+
+        return $dataList;
+    }
 }
