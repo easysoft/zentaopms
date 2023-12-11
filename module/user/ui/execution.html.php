@@ -11,6 +11,9 @@ declare(strict_types=1);
 namespace zin;
 include './featurebar.html.php';
 
+$app->loadLang('execution');
+$app->loadModuleConfig('execution');
+
 jsVar('delayed', $lang->execution->delayed);
 jsVar('executionTypeList', $lang->user->executionTypeList);
 jsVar('edition', $config->edition);
