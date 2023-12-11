@@ -63,16 +63,19 @@ class api extends control
         /* 获取文档目录列表和当前选中的文档目录. */
         $libs       = $this->doc->getApiLibs($libID, $objectType, (int)$objectID);
         $lib        = $libID ? zget($libs, $libID) : current($libs);
-        $libID      = $lib ? $lib->id : 0;
-        $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
-        $objectID   = $lib->product ? $lib->product : ($lib->project ? $lib->project : 0);
+        $libID      = !empty($lib->id)      ? $lib->id : 0;
+        $objectType = !empty($lib->product) ? 'product'     : (!empty($lib->project) ? 'project' : 'nolink');
+        $objectID   = !empty($lib->product) ? $lib->product : (!empty($lib->project) ? $lib->project : 0);
 
         /* Build the search form. */
-        $browseType = $release ? 'byrelease' : $browseType;
-        $param      = $release ? $release : $param;
-        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL  = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&browseType=bySearch&param=myQueryID");
-        $this->apiZen->buildSearchForm($lib, $queryID, $actionURL, $libs);
+        if($lib)
+        {
+            $browseType = $release ? 'byrelease' : $browseType;
+            $param      = $release ? $release : $param;
+            $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
+            $actionURL  = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&browseType=bySearch&param=myQueryID");
+            $this->apiZen->buildSearchForm($lib, $queryID, $actionURL, $libs);
+        }
 
         $this->view->title             = $this->lang->api->pageTitle;
         $this->view->lib               = $lib;
