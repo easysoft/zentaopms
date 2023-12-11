@@ -383,7 +383,7 @@ class metricZen extends metric
         foreach($headers as $header) $width += isset($header['width']) ? $header['width'] : 160;
 
         /* Add a little redundancy. */
-        $width += 2;
+        $width ++;
 
         return $width;
     }
