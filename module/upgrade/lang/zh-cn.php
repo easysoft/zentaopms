@@ -150,7 +150,7 @@ $lang->upgrade->mergeExecutionTip = "系统将自动按年创建项目，将历�
 $lang->upgrade->createProgramTip  = "同时系统将自动创建一个默认的项目集，将所有的{$lang->projectCommon}都放在默认的项目集下。";
 $lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
 
-$lang->upgrade->defaultGroup = '默认分组';
+$lang->upgrade->defaultGroup = '未分组';
 
 include dirname(__FILE__) . '/version.php';
 

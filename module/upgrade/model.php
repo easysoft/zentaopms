@@ -8134,6 +8134,7 @@ class upgradeModel extends model
         $firstGroup->type   = $type;
         $firstGroup->parent = 0;
         $firstGroup->grade  = 1;
+        $firstGroup->order  = 1000;
         $firstGroup->name   = $this->lang->upgrade->defaultGroup;
 
         $this->dao->insert(TABLE_MODULE)->data($firstGroup)->autoCheck()->exec();
@@ -8147,6 +8148,7 @@ class upgradeModel extends model
         $secondGroup->type   = $type;
         $secondGroup->parent = $firstGroupID;
         $secondGroup->grade  = 2;
+        $secondGroup->order  = 1000;
         $secondGroup->name   = $this->lang->upgrade->defaultGroup;
 
         $this->dao->insert(TABLE_MODULE)->data($secondGroup)->autoCheck()->exec();
@@ -9340,5 +9342,37 @@ class upgradeModel extends model
 
         if(trim($lastTwoLines[0]) == 'HasError') return true;
         return false;
+    }
+
+    public function renameBIModule()
+    {
+        $moduleNames  = array('zh' => '默认分组', 'en' => 'Default');
+        $replaceNames = array('zh' => '未分组', 'en' => 'Ungrouped');
+        $BIModules    = array('pivot', 'chart');
+
+        foreach($BIModules as $BImodule)
+        {
+            foreach($moduleNames as $lang => $moduleName)
+            {
+                $modules = $this->dao->select('*')->from(TABLE_MODULE)
+                    ->where('name')->eq($moduleName)
+                    ->andWhere('type')->eq($BImodule)
+                    ->fetchAll();
+
+                if(count($modules) == 2)
+                {
+                    $data = new stdclass();
+                    $data->name  = $replaceNames[$lang];
+                    $data->order = 1000;
+
+                    foreach($modules as $module)
+                    {
+                        $this->dao->update(TABLE_MODULE)->data($data)->where('id')->eq($module->id)->exec();
+                    }
+
+                    break;
+                }
+            }
+        }
     }
 }
