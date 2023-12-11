@@ -381,4 +381,12 @@ class fileTest
         $this->objectModel->autoDelete($uid);
         return $this->objectModel->dao->select('count(*) AS count')->from(TABLE_FILE)->fetch('count');
     }
+
+    public function processFile4ObjectTest(string $objectType, object $oldObject, object $newObject): array
+    {
+        $this->objectModel->processFile4Object($objectType, $oldObject, $newObject);
+        $count = $this->objectModel->dao->select('count(*) AS count')->from(TABLE_FILE)->fetch('count');
+
+        return array('old' => $oldObject, 'new' => $newObject, 'count' => $count);
+    }
 }

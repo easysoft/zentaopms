@@ -1,39 +1,92 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
-su('admin');
 
 /**
 
 title=测试 fileModel->getPairs();
-cid=1
-pid=1
+timeout=0
+cid=0
 
-测试获取文件 1 2 3 4 5 的 标题 >> 这是一个文件名称1.txt,这是一个文件名称2.doc,这是一个文件名称3.docx,这是一个文件名称4.dot,这是一个文件名称5.wps
-测试获取文件 6 7 8 9 10 的 标题 >> 这是一个文件名称6.wri,这是一个文件名称7.pdf,这是一个文件名称8.ppt,这是一个文件名称9.pptx,这是一个文件名称10.xls
-测试获取文件 11 12 13 14 15 的 标题 >> 这是一个文件名称11.xlsx,这是一个文件名称12.ett,这是一个文件名称13.xlt,这是一个文件名称14.xlsm,这是一个文件名称15.csv
-测试获取文件 16 17 18 19 20 的 标题 >> 这是一个文件名称16.jpg,这是一个文件名称17.jpeg,这是一个文件名称18.png,这是一个文件名称19.psd,这是一个文件名称20.gif
-测试获取文件 21 22 23 24 25 的 标题 >> 这是一个文件名称21.ico,这是一个文件名称22.bmp,这是一个文件名称23.swf,这是一个文件名称24.avi,这是一个文件名称25.rmvb
-测试获取文件 1 2 3 4 5 的 扩展名 >> txt,doc,docx,dot,wps
-测试获取文件 6 7 8 9 10 的 扩展名 >> wri,pdf,ppt,pptx,xls
-测试获取文件 11 12 13 14 15 的 扩展名 >> xlsx,ett,xlt,xlsm,csv
-测试获取文件 16 17 18 19 20 的 扩展名 >> jpg,jpeg,png,psd,gif
-测试获取文件 21 22 23 24 25 的 扩展名 >> ico,bmp,swf,avi,rmvb
+- 测试获取文件 1 2 3 4 5 的 标题
+ - 属性1 @文件标题1
+ - 属性2 @文件标题2
+ - 属性3 @文件标题3
+ - 属性4 @文件标题4
+ - 属性5 @文件标题5
+- 测试获取文件 6 7 8 9 10 的 标题
+ - 属性6 @文件标题6
+ - 属性7 @文件标题7
+ - 属性8 @文件标题8
+ - 属性9 @文件标题9
+ - 属性10 @文件标题10
+- 测试获取文件 11 12 13 14 15 的 标题
+ - 属性11 @文件标题11
+ - 属性12 @文件标题12
+ - 属性13 @文件标题13
+ - 属性14 @文件标题14
+ - 属性15 @文件标题15
+- 测试获取文件 16 17 18 19 20 的 标题
+ - 属性16 @文件标题16
+ - 属性17 @文件标题17
+ - 属性18 @文件标题18
+ - 属性19 @文件标题19
+ - 属性20 @文件标题20
+- 测试获取文件 21 22 23 24 25 的 标题
+ - 属性21 @文件标题21
+ - 属性22 @文件标题22
+ - 属性23 @文件标题23
+ - 属性24 @文件标题24
+ - 属性25 @文件标题25
+- 测试获取文件 1 2 3 4 5 的 扩展名
+ - 属性1 @txt
+ - 属性2 @doc
+ - 属性3 @docx
+ - 属性4 @dot
+ - 属性5 @wps
+- 测试获取文件 6 7 8 9 10 的 扩展名
+ - 属性6 @wri
+ - 属性7 @pdf
+ - 属性8 @ppt
+ - 属性9 @pptx
+ - 属性10 @xls
+- 测试获取文件 11 12 13 14 15 的 扩展名
+ - 属性11 @xlsx
+ - 属性12 @ett
+ - 属性13 @xlt
+ - 属性14 @xlsm
+ - 属性15 @csv
+- 测试获取文件 16 17 18 19 20 的 扩展名
+ - 属性16 @jpg
+ - 属性17 @jpeg
+ - 属性18 @png
+ - 属性19 @psd
+ - 属性20 @gif
+- 测试获取文件 21 22 23 24 25 的 扩展名
+ - 属性21 @ico
+ - 属性22 @bmp
+ - 属性23 @swf
+ - 属性24 @avi
+ - 属性25 @rmvb
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/file.class.php';
+su('admin');
+
+zdTable('file')->gen(30);
+
 $fileIDs = array('1,2,3,4,5', '6,7,8,9,10', '11,12,13,14,15', '16,17,18,19,20', '21,22,23,24,25');
 $titles  = array('title', 'extension');
 
 $file = new fileTest();
 
-r($file->getPairsTest($fileIDs[0], $titles[0])) && p('1,2,3,4,5')      && e('这是一个文件名称1.txt,这是一个文件名称2.doc,这是一个文件名称3.docx,这是一个文件名称4.dot,这是一个文件名称5.wps');       // 测试获取文件 1 2 3 4 5 的 标题
-r($file->getPairsTest($fileIDs[1], $titles[0])) && p('6,7,8,9,10')     && e('这是一个文件名称6.wri,这是一个文件名称7.pdf,这是一个文件名称8.ppt,这是一个文件名称9.pptx,这是一个文件名称10.xls');      // 测试获取文件 6 7 8 9 10 的 标题
-r($file->getPairsTest($fileIDs[2], $titles[0])) && p('11,12,13,14,15') && e('这是一个文件名称11.xlsx,这是一个文件名称12.ett,这是一个文件名称13.xlt,这是一个文件名称14.xlsm,这是一个文件名称15.csv'); // 测试获取文件 11 12 13 14 15 的 标题
-r($file->getPairsTest($fileIDs[3], $titles[0])) && p('16,17,18,19,20') && e('这是一个文件名称16.jpg,这是一个文件名称17.jpeg,这是一个文件名称18.png,这是一个文件名称19.psd,这是一个文件名称20.gif');  // 测试获取文件 16 17 18 19 20 的 标题
-r($file->getPairsTest($fileIDs[4], $titles[0])) && p('21,22,23,24,25') && e('这是一个文件名称21.ico,这是一个文件名称22.bmp,这是一个文件名称23.swf,这是一个文件名称24.avi,这是一个文件名称25.rmvb');  // 测试获取文件 21 22 23 24 25 的 标题
-r($file->getPairsTest($fileIDs[0], $titles[1])) && p('1,2,3,4,5')      && e('txt,doc,docx,dot,wps');                                                                                                 // 测试获取文件 1 2 3 4 5 的 扩展名
-r($file->getPairsTest($fileIDs[1], $titles[1])) && p('6,7,8,9,10')     && e('wri,pdf,ppt,pptx,xls');                                                                                                 // 测试获取文件 6 7 8 9 10 的 扩展名
-r($file->getPairsTest($fileIDs[2], $titles[1])) && p('11,12,13,14,15') && e('xlsx,ett,xlt,xlsm,csv');                                                                                                // 测试获取文件 11 12 13 14 15 的 扩展名
-r($file->getPairsTest($fileIDs[3], $titles[1])) && p('16,17,18,19,20') && e('jpg,jpeg,png,psd,gif');                                                                                                 // 测试获取文件 16 17 18 19 20 的 扩展名
-r($file->getPairsTest($fileIDs[4], $titles[1])) && p('21,22,23,24,25') && e('ico,bmp,swf,avi,rmvb');                                                                                                 // 测试获取文件 21 22 23 24 25 的 扩展名
+r($file->getPairsTest($fileIDs[0], $titles[0])) && p('1,2,3,4,5')      && e('文件标题1,文件标题2,文件标题3,文件标题4,文件标题5');      // 测试获取文件 1 2 3 4 5 的 标题
+r($file->getPairsTest($fileIDs[1], $titles[0])) && p('6,7,8,9,10')     && e('文件标题6,文件标题7,文件标题8,文件标题9,文件标题10');     // 测试获取文件 6 7 8 9 10 的 标题
+r($file->getPairsTest($fileIDs[2], $titles[0])) && p('11,12,13,14,15') && e('文件标题11,文件标题12,文件标题13,文件标题14,文件标题15'); // 测试获取文件 11 12 13 14 15 的 标题
+r($file->getPairsTest($fileIDs[3], $titles[0])) && p('16,17,18,19,20') && e('文件标题16,文件标题17,文件标题18,文件标题19,文件标题20'); // 测试获取文件 16 17 18 19 20 的 标题
+r($file->getPairsTest($fileIDs[4], $titles[0])) && p('21,22,23,24,25') && e('文件标题21,文件标题22,文件标题23,文件标题24,文件标题25'); // 测试获取文件 21 22 23 24 25 的 标题
+r($file->getPairsTest($fileIDs[0], $titles[1])) && p('1,2,3,4,5')      && e('txt,doc,docx,dot,wps');                                   // 测试获取文件 1 2 3 4 5 的 扩展名
+r($file->getPairsTest($fileIDs[1], $titles[1])) && p('6,7,8,9,10')     && e('wri,pdf,ppt,pptx,xls');                                   // 测试获取文件 6 7 8 9 10 的 扩展名
+r($file->getPairsTest($fileIDs[2], $titles[1])) && p('11,12,13,14,15') && e('xlsx,ett,xlt,xlsm,csv');                                  // 测试获取文件 11 12 13 14 15 的 扩展名
+r($file->getPairsTest($fileIDs[3], $titles[1])) && p('16,17,18,19,20') && e('jpg,jpeg,png,psd,gif');                                   // 测试获取文件 16 17 18 19 20 的 扩展名
+r($file->getPairsTest($fileIDs[4], $titles[1])) && p('21,22,23,24,25') && e('ico,bmp,swf,avi,rmvb');                                   // 测试获取文件 21 22 23 24 25 的 扩展名

@@ -950,12 +950,13 @@ class fileModel extends model
     /**
      * Get image size.
      *
-     * @access public
      * @param  object $file
+     * @access public
      * @return array
      */
-    public function getImageSize($file)
+    public function getImageSize(object $file): array
     {
+        if(empty($file->realPath)) return array();
         if($this->config->file->storageType == 'fs')
         {
             return file_exists($file->realPath) ? getimagesize($file->realPath) : array(0, 0, $file->extension);
@@ -975,16 +976,14 @@ class fileModel extends model
     /**
      * Get file pairs.
      *
-     * @param  int    $IDs
+     * @param  string $idList
      * @param  string $value
      * @access public
-     * @return void
+     * @return array
      */
-    public function getPairs($IDs, $value = 'title')
+    public function getPairs(string $idList, string $value = 'title'): array
     {
-        return $this->dao->select("id,$value")->from(TABLE_FILE)
-            ->where('id')->in($IDs)
-            ->fetchPairs();
+        return $this->dao->select("id,$value")->from(TABLE_FILE)->where('id')->in($idList)->fetchPairs();
     }
 
     /**
@@ -1020,8 +1019,10 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function processFile4Object($objectType, $oldObject, $newObject, $extra = '', $filesName = 'files', $labelsName = 'labels')
+    public function processFile4Object(string $objectType, object $oldObject, object $newObject, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): void
     {
+        if(empty($oldObject->id)) return;
+
         $oldFiles    = empty($oldObject->files) ? '' : implode(',', array_keys($oldObject->files));
         $deleteFiles = $newObject->deleteFiles ?? null;
         if(!empty($deleteFiles))
@@ -1173,10 +1174,11 @@ class fileModel extends model
      *
      * @param  object $file
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function fileMTime($file)
+    public function fileMTime(object $file): int|false
     {
+        if(empty($file->realPath) or !file_exists($file->realPath)) return false;
         return filemtime($file->realPath);
     }
 
@@ -1187,8 +1189,9 @@ class fileModel extends model
      * @access public
      * @return int
      */
-    public function fileSize($file)
+    public function fileSize(object $file): int|false
     {
+        if(empty($file->realPath) or !file_exists($file->realPath)) return false;
         return filesize($file->realPath);
     }
 
@@ -1199,9 +1202,12 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function saveAsTempFile($file)
+    public function saveAsTempFile(object $file): string
     {
+        if(empty($file->realPath)) return '';
+
         /* If the storage type is local, do nothing. */
         if($this->config->file->storageType == 'fs') return $file->realPath;
+        return '';
     }
 }
