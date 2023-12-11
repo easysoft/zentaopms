@@ -2072,30 +2072,6 @@ class docModel extends model
     }
 
     /**
-     * Whether the url of link type documents needs to be autoloaded.
-     *
-     * @param  object  $doc
-     * @access public
-     * @return bool
-     */
-    public function checkAutoloadPage($doc)
-    {
-        $autoloadPage = true;
-        if(isset($doc->type) and $doc->type == 'url')
-        {
-            if(empty($doc->content)) return false;
-
-            if(!preg_match('/^https?:\/\//', $doc->content)) $doc->content = 'http://' . $doc->content;
-            $parsedUrl = parse_url($doc->content);
-            $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-            $urlDomain = $parsedUrl['host'] . $urlPort;
-            if($urlDomain == $_SERVER['HTTP_HOST']) $autoloadPage = false;
-        }
-
-        return $autoloadPage;
-    }
-
-    /**
      * 通过搜索获取文档列表数据。
      * Get docs by search.
      *

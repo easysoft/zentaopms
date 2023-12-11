@@ -490,23 +490,6 @@ class docTest
     }
 
     /**
-     * Whether the url of link type documents needs to be autoloaded.
-     *
-     * @param  int    $docID
-     * @access public
-     * @return bool
-     */
-    public function checkAutoloadPageTest($docID)
-    {
-        $doc     = $this->objectModel->getByID($docID);
-        $objects = $this->objectModel->checkAutoloadPage($doc);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Test check api library name.
      *
      * @param  object $lib

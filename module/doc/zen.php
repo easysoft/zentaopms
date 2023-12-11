@@ -704,7 +704,6 @@ class docZen extends doc
         $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->actions           = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users             = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->autoloadPage      = $this->doc->checkAutoloadPage($doc);
         $this->view->libTree           = $this->doc->getLibTree((int)$libID, (array)$libs, $type, (int)$doc->module, (int)$objectID, '', 0, $docID);
         $this->view->preAndNext        = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->moduleID          = $doc->module;
