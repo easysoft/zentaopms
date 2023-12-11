@@ -15953,7 +15953,7 @@ CREATE TABLE IF NOT EXISTS `zt_aimessage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `user` mediumint(8) unsigned NOT NULL,
-  `type` enum('req', 'res') NOT NULL,
+  `type` enum('req', 'res', 'ntf') NOT NULL,
   `content` text NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
