@@ -530,6 +530,7 @@ class doc extends control
     public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $from = 'doc')
     {
         $linkType = $objectType;
+        $account  = $this->app->user->account;
 
         if(!empty($_POST))
         {
@@ -541,7 +542,6 @@ class doc extends control
             switch($objectType)
             {
                 case 'custom':
-                    $account = (string)$this->app->user->account;
                     if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account and !(isset($groupAccounts) and in_array($account, $groupAccounts, true))) $canVisit = false;
                     break;
                 case 'product':
@@ -629,6 +629,8 @@ class doc extends control
         $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $moduleID = $libID . '_' . $moduleID;
 
+        $docContentType = $this->loadModel('setting')->getItem("vision=&owner=$account&module=doc&section=common&key=docContentType");
+
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
         $this->view->linkType         = $linkType;
         $this->view->objectType       = $objectType;
@@ -642,6 +644,7 @@ class doc extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->moduleID         = $moduleID;
         $this->view->docType          = $docType;
+        $this->view->docContentType   = $docContentType ? $docContentType : 'html';
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->from             = $from;

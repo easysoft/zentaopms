@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
+<?php js::set('docContentType', $docContentType);?>
 <style>
 #main {padding: 0;}
 .container {padding: 0 !important;}

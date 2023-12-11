@@ -60,6 +60,8 @@ $(function()
     if(typeof(window.editor) != 'undefined')
     {
         $('.ke-toolbar .ke-outline:last').after("<span data-name='unlink' class='ke-outline' title='Markdown' onclick='toggleEditor(\"markdown\")' style='font-size: unset; line-height: unset;'>Markdown</span>");
+
+        toggle(docContentType);
     }
 
     $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
@@ -106,6 +108,16 @@ $(function()
 
 function toggleEditor(type)
 {
+    toggle(type);
+    $('#contentType').val(type);
+
+    var link = createLink('custom', 'ajaxSaveCustomFields', 'module=doc&section=common&key=docContentType');
+    $.post(link, {fields: type});
+    return false;
+}
+
+function toggle(type)
+{
     if(type == 'html')
     {
         $('.contenthtml').removeClass('hidden');
@@ -116,8 +128,6 @@ function toggleEditor(type)
         $('.contenthtml').addClass('hidden');
         $('.contentmarkdown').removeClass('hidden');
     }
-    $('#contentType').val(type);
-    return false;
 }
 
 function initPage(type)
