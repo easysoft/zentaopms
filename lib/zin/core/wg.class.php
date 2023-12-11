@@ -381,9 +381,9 @@ class wg
         zin::disableGlobalRender();
 
         if($item instanceof wg)    $this->addToBlock($blockName, $item);
-        elseif(is_string($item))   $this->addToBlock($blockName, htmlentities($item));
+        elseif(is_string($item))   $this->addToBlock($blockName, htmlspecialchars($item, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false));
         elseif(isDirective($item)) $this->directive($item, $blockName);
-        else                       $this->addToBlock($blockName, htmlentities(strval($item)));
+        else                       $this->addToBlock($blockName, htmlspecialchars(strval($item), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false));
 
         zin::enableGlobalRender();
 
