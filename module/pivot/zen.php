@@ -200,7 +200,7 @@ class pivotZen extends pivot
         $tables = $this->loadModel('chart')->getTables($sql);
         $sql    = $tables['sql'];
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
-        $langs  = json_decode($pivot->langs, true);
+        $langs  = json_decode($pivot->langs, true) ?? array();
 
         list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
 

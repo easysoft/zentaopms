@@ -738,7 +738,8 @@ class pivotModel extends model
     }
 
     /**
-     * Gen sheet.
+     * 生成透视表页面表格以及表格数据。
+     * Generate pivot sheet and sheet data.
      *
      * @param  array  $fields
      * @param  array  $settings
@@ -748,171 +749,20 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function genSheet($fields, $settings, $sql, $filters, $langs = array())
+    public function genSheet(array $fields, array $settings, string $sql, array $filters, array $langs = array()): array
     {
-        $groups    = array();
-        $sqlGroups = array();
+        $cols = $configs = array();
+        list($groups, $groupList, $groupCol) = $this->initGroups($fields, $settings, $langs);
+        array_push($cols, $groupCol);
 
-        foreach($settings as $key => $value)
-        {
-            if(strpos($key, 'group') !== false && $value) $groups[] = $value;
-        }
-
-        $groups = array_unique($groups);
-
-        /* Add tt for sql. */
-        foreach($groups as $key => $group) $sqlGroups[$key] = (!empty($settings['filterType']) and $settings['filterType'] == 'query') ? "`$group`" : "tt.`$group`";
-
-        $groupList = implode(',', $sqlGroups);
-
-        $cols       = array();
-        $rows       = array();
-        $configs    = array();
-        $slices     = array();
-        $clientLang = $this->app->getClientLang();
-        /* Build cols. */
-        foreach($groups as $group)
-        {
-            $col = new stdclass();
-            $col->name    = $group;
-            $col->isGroup = true;
-
-            $fieldObject  = $fields[$group]['object'];
-            $relatedField = $fields[$group]['field'];
-
-            $colLabel = $group;
-            if($fieldObject)
-            {
-                $this->app->loadLang($fieldObject);
-                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
-            }
-
-            if(isset($langs[$group]) and !empty($langs[$group][$clientLang])) $colLabel = $langs[$group][$clientLang];
-            $col->label = $colLabel;
-
-            $cols[0][] = $col;
-        }
-
-        /* Replace the variable with the default value. */
-        $sql = $this->initVarFilter($filters, $sql);
-
-        /* Create sql. */
-        $sql = str_replace(';', '', $sql);
-
-        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
-        {
-            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
-        }
-
-        /* Process rows. */
-        $connectSQL = '';
-        if(!empty($filters) && !isset($filters[0]['from']))
-        {
-            $wheres = array();
-            foreach($filters as $field => $filter)
-            {
-                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
-            }
-
-            $whereStr    = implode(' and ', $wheres);
-            $connectSQL .= " where $whereStr";
-        }
-
-        $groupSQL = " group by $groupList";
-        $orderSQL = " order by $groupList";
-
-        $number       = 0;
         $groupsRow    = array();
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
-        $showOrigin   = false;
+        if(isset($settings['columns'])) $groupsRow = $this->processGroupRows($settings['columns'], $sql, $filters, $groups, $groupList, $fields, $showColTotal, $cols, $langs);
 
-        if(isset($settings['columns']))
-        {
-            foreach($settings['columns'] as $column)
-            {
-                if(isset($column['showOrigin']) and $column['showOrigin']) $showOrigin = true;
-            }
+        $this->getColumnConfig($groupsRow, $groups, 0, 0, $configs);
 
-            foreach($settings['columns'] as $column)
-            {
-                $columnShowOrigin = zget($column, 'showOrigin', false);
-                if($columnShowOrigin) $column['slice'] = 'noSlice';
-
-                $stat   = $column['stat'];
-                $field  = $column['field'];
-                $slice  = zget($column, 'slice', 'noSlice');
-                $uuName = $field . $number;
-                $number ++;
-
-                if($columnShowOrigin)
-                {
-                    $columnSQL = "select $groupList, tt.`$field` from ($sql) tt" . $connectSQL . $orderSQL;
-                }
-                else
-                {
-                    if($stat == 'distinct')
-                    {
-                        $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
-                    }
-                    else
-                    {
-                        if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
-                        {
-                            $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
-                            $columnSQL  = "$stat($convertSql) as `$uuName`";
-                        }
-                        else
-                        {
-                            $columnSQL = "$stat(tt.`$field`) as `$uuName`";
-                        }
-                    }
-
-                    if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
-                    if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
-                }
-
-                $columnRows = $this->dao->query($columnSQL)->fetchAll();
-
-                $rowcount = array_fill(0, count($columnRows), 1);
-                if($showOrigin && !$columnShowOrigin)
-                {
-                    $countSQL = "select $groupList, count(tt.`$field`) as rowCount from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
-                    $countRows = $this->dao->query($countSQL)->fetchAll();
-                    foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
-                }
-
-                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
-                if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
-                $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
-
-                $rowIndex = 0;
-                foreach($columnRows as $key => $row)
-                {
-                    $count = isset($rowcount[$key]) ? $rowcount[$key] : 1;
-                    for($i = 0; $i < $count; $i++)
-                    {
-                        if(!isset($groupsRow[$rowIndex])) $groupsRow[$rowIndex] = new stdclass();
-                        $groupsRow[$rowIndex] = (object)array_merge((array)$groupsRow[$rowIndex], (array)$row);
-                        $rowIndex += 1;
-                    }
-                }
-            }
-        }
-
-        /* Get configs. */
-        foreach($groups as $index => $group)
-        {
-            if($index == 0)
-            {
-                $groupRows = array();
-                foreach($groupsRow as $row) $groupRows[$row->$group][] = $row;
-            }
-
-            $haveNext = isset($groups[$index + 1]);
-            $this->getColumnConfig($groupRows, $configs, $groups, $index, $haveNext);
-        }
-
-        /* Get group field lang */
+        /* 处理分组字段显示。 */
+        /* Process group field display. */
         foreach($groups as $group)
         {
             $options = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field'], $sql);
@@ -939,14 +789,253 @@ class pivotModel extends model
     }
 
     /**
-     * InitVarFilter.
+     * 初始化分组信息。
+     * Init groups info.
      *
-     * @param  string $filters
+     * @param  array   $fields
+     * @param  array   $settings
+     * @param  array   $langs
+     * @access private
+     * @return array
+     */
+    private function initGroups(array $fields, array $settings, array $langs): array
+    {
+        $groups = $sqlGroups = array();
+        $condition  = !empty($settings['filterType']) && $settings['filterType'] == 'query';
+        $clientLang = $this->app->getClientLang();
+
+        foreach($settings as $key => $value)
+        {
+            if(strpos($key, 'group') !== false && $value) $groups[] = $value;
+        }
+        $groups = array_unique($groups);
+
+        foreach($groups as $group) $sqlGroups[] = $condition ? "`$group`" : "tt.`$group`";
+        $groupList = implode(',', $sqlGroups);
+
+        $groupCol = array();
+        foreach($groups as $group)
+        {
+            $col = new stdclass();
+            $col->name    = $group;
+            $col->isGroup = true;
+
+            $fieldObject  = $fields[$group]['object'];
+            $relatedField = $fields[$group]['field'];
+
+            /* 如果有自定义的语言包，则使用自定义的语言包，否则使用系统默认的语言包。 */
+            /* If there is a custom language pack, use the custom language pack, otherwise use the system default language pack. */
+            $colLabel = $group;
+            if(isset($langs[$group]) && !empty($langs[$group][$clientLang]))
+            {
+                $colLabel = $langs[$group][$clientLang];
+            }
+            else
+            {
+                if($fieldObject)
+                {
+                    $this->app->loadLang($fieldObject);
+                    if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+                }
+            }
+            $col->label = $colLabel;
+
+            $groupCol[] = $col;
+        }
+
+        return array($groups, $groupList, $groupCol);
+    }
+
+    /**
+     * 初始化sql。
+     * Init sql.
+     *
+     * @param  string  $sql
+     * @param  array   $filters
+     * @param  string  $groupList
+     * @access private
+     * @return array
+     */
+    private function initSql(string $sql, array $filters, string $groupList): array
+    {
+        $sql = str_replace(';', '', $this->initVarFilter($filters, $sql));
+
+        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        {
+            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+        }
+
+        $connectSQL = $this->getConnectSQL($filters);
+        $groupSQL   = " group by {$groupList}";
+        $orderSQL   = " order by {$groupList}";
+
+        return array($sql, $connectSQL, $groupSQL, $orderSQL);
+    }
+
+    /**
+     * 获取connectSQL。
+     * Get connectSQL.
+     *
+     * @param  array   $filters
+     * @access private
+     * @return string
+     */
+    private function getConnectSQL(array $filters): string
+    {
+        $connectSQL = '';
+        if(!empty($filters) && !isset($filters[0]['from']))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter) $wheres[] = "tt.`{$field}` {$filter['operator']} {$filter['value']}";
+
+            $whereStr    = implode(' and ', $wheres);
+            $connectSQL .= " where {$whereStr}";
+        }
+
+        return $connectSQL;
+    }
+
+    /**
+     * 构建表格数据。
+     * Build table data.
+     *
+     * @param  array   $columns
+     * @param  string  $sql
+     * @param  array   $filters
+     * @param  array   $groups
+     * @param  string  $groupList
+     * @param  array   $fields
+     * @param  string  $showColTotal
+     * @param  array   $cols
+     * @param  array   $langs
+     * @access private
+     * @return array
+     */
+    private function processGroupRows(array $columns, string $sql, array $filters, array $groups, string $groupList, array $fields, string $showColTotal, array &$cols ,array $langs): array
+    {
+        $groupsRow = array();
+
+        list($sql, $connectSQL, $groupSQL, $orderSQL) = $this->initSql($sql, $filters, $groupList);
+        $number       = 0;
+        $showOrigin   = !empty(array_filter(array_column($settings['columns'] ?? array(), 'showOrigin')));
+
+        foreach($columns as $column)
+        {
+            $columnShowOrigin = zget($column, 'showOrigin', false);
+            if($columnShowOrigin) $column['slice'] = 'noSlice';
+
+            $stat   = $column['stat'];
+            $field  = $column['field'];
+            $slice  = zget($column, 'slice', 'noSlice');
+            $uuName = $field . $number;
+            $number ++;
+
+            /* 获取列的原始数据，并且根据原始数据生成表头，切片数据以及统计数据。 */
+            /* Get the original data of the column, and generate the table header, slice data and statistics data based on the original data. */
+            $columnRows = $this->getColumnRows($fields, $field, $sql, $connectSQL, $orderSQL, $uuName, $groupList, $groupSQL, $slice, $stat, $columnShowOrigin);
+            $rowcount = array_fill(0, count($columnRows), 1);
+            if($showOrigin && !$columnShowOrigin)
+            {
+                $countSQL = "select $groupList, count(tt.`$field`) as rowCount from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                $countRows = $this->dao->query($countSQL)->fetchAll();
+                foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
+            }
+            $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
+            if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
+            $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
+
+            $this->getMergeData($columnRows, $groupsRow);
+        }
+
+        return $groupsRow;
+    }
+
+    /**
+     * 获取原始指标数据。
+     * Get original index data.
+     *
+     * @param  array   $fields
+     * @param  string  $field
+     * @param  string  $sql
+     * @param  string  $connectSQL
+     * @param  string  $orderSQL
+     * @param  string  $uuName
+     * @param  string  $groupList
+     * @param  string  $groupSQL
+     * @param  string  $slice
+     * @param  string  $stat
+     * @param  bool    $columnShowOrigin
+     * @access private
+     * @return array
+     */
+    private function getColumnRows(array $fields, string $field, string $sql, string $connectSQL, string $orderSQL, string $uuName, string $groupList, string $groupSQL, string $slice, string $stat, bool $columnShowOrigin): array
+    {
+        if($columnShowOrigin)
+        {
+            $columnSQL = "select $groupList, tt.`$field` from ($sql) tt" . $connectSQL . $orderSQL;
+        }
+        else
+        {
+            if($stat == 'distinct')
+            {
+                $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
+            }
+            else
+            {
+                if($fields[$field]['type'] != 'number' && in_array($stat, array('avg', 'sum')))
+                {
+                    $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
+                    $columnSQL  = "$stat($convertSql) as `$uuName`";
+                }
+                else
+                {
+                    $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                }
+            }
+
+            if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
+            if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+        }
+
+        return $this->dao->query($columnSQL)->fetchAll();
+    }
+
+    /**
+     * 合并数据。
+     * Merge data.
+     *
+     * @param  array  $columnRows
+     * @param  array  $groups
+     * @param  string $slice
+     * @param  string $uuName
+     * @access private
+     * @return array
+     */
+    public function getMergeData(array $columnRows, array &$groupsRow)
+    {
+        $rowIndex = 0;
+        foreach($columnRows as $key => $row)
+        {
+            $count = isset($rowcount[$key]) ? $rowcount[$key] : 1;
+            for($i = 0; $i < $count; $i++)
+            {
+                if(!isset($groupsRow[$rowIndex])) $groupsRow[$rowIndex] = new stdclass();
+                $groupsRow[$rowIndex] = (object)array_merge((array)$groupsRow[$rowIndex], (array)$row);
+                $rowIndex += 1;
+            }
+        }
+    }
+
+    /**
+     * 通过过滤器配置格式化sql。
+     * Init sql by filters.
+     *
+     * @param  array  $filters
      * @param  string $sql
      * @access public
-     * @return void
+     * @return string
      */
-    public function initVarFilter($filters = '', $sql = '')
+    private function initVarFilter(array $filters = array(), string $sql = ''): string
     {
         if(empty($filters)) return $sql;
         foreach($filters as $filter)
@@ -965,10 +1054,12 @@ class pivotModel extends model
         {
             foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
         }
+
         return $sql;
     }
 
     /**
+     * 获取合并单元格的配置。
      * Get column config to merge table cell.
      *
      * @param  array $groupRows
@@ -983,30 +1074,26 @@ class pivotModel extends model
      *
      * The key value of this array is unique;
      */
-    public function getColumnConfig(&$groupRows, &$configs, $groups, $index, $haveNext)
+    public function getColumnConfig($groupsRow, $groups, $index, $key, &$configs): void
     {
-        $newRows = array();
+        if(!count($groupsRow)) return;
+        if($index > count($groups) - 1) return;
+
         $start = 1;
-        $next  = $index + 1;
-        foreach($groupRows as $key => $datas)
+        $group = $groups[$index];
+        $groupRows = array_reduce($groupsRow, function($carry, $item)use($group){
+            $carry[$item->$group][] = $item;
+            return $carry;
+        });
+
+        foreach($groupRows as $groupRow)
         {
-            $number = count($datas);
-
-            $configs[$start - 1][$next - 1] = $number;
+            $number = count($groupRow);
+            $configs[$key][$index] = $number;
+            $this->getColumnConfig($groupRow, $groups, $index + 1, $start- 1, $configs);
             $start += $number;
-
-            if($haveNext)
-            {
-                $nextGroup = $groups[$next];
-                foreach($datas as $data)
-                {
-                    $newKey = $key . '_' . $data->$nextGroup;
-                    $newRows[$newKey][] = $data;
-                }
-            }
+            $key   += $number;
         }
-
-        if($haveNext) $groupRows = $newRows;
     }
 
     /**

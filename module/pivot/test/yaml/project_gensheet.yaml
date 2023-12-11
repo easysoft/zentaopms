@@ -1,0 +1,6 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: status
+    range: closed

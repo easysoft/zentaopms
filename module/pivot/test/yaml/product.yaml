@@ -1,0 +1,7 @@
+title: table zt_product
+desc: "产品"
+author: automated export
+version: "1.0"
+fields:
+  - field: vision
+    range: 'rnd'
