@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
+
 /**
-title=测试 kanbanModel->sortGroup();
+
+title=测试 kanbanTao->updateRegionSort();
 timeout=0
 cid=1
 
@@ -23,6 +25,7 @@ cid=1
  - 属性3 @3
  - 属性4 @2
  - 属性5 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
@@ -43,4 +46,5 @@ r($regions) && p('1,2,3,4,5') && e('5,4,3,2,1'); // 查看更新之后的排序
 
 $regionIDList = array('10', '11', '12', '13', '14');
 $tester->loadModel('kanban')->updateRegionSort($regionIDList);
+$regions = $tester->dao->select('id, `order`')->from(TABLE_KANBANREGION)->fetchPairs();
 r($regions) && p('1,2,3,4,5') && e('5,4,3,2,1'); // 更新不存在的ID，排序不变
