@@ -450,6 +450,7 @@ class kanban extends control
     }
 
     /**
+     * 排序区域。
      * Sort regions.
      *
      * @param  string $regions
@@ -468,14 +469,15 @@ class kanban extends control
     }
 
     /**
+     * 排序分组。
      * Sort group.
      *
      * @param  int    $region
-     * @param  int    $groups
+     * @param  string $groups
      * @access public
      * @return void
      */
-    public function sortGroup($region, $groups)
+    public function sortGroup(int $region, string $groups)
     {
         $groups = array_filter(explode(',', trim($groups, ',')));
         if(empty($groups)) return $this->send(array('result' => 'fail', 'message' => 'No groups to sort.'));
