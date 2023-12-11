@@ -62,6 +62,28 @@ class userTao extends userModel
     }
 
     /**
+     * 获取某个用户参与的项目和项目关联的需求规模数键值对。
+     * Get the projects that the user joined and the story estimate of the project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchProjectStoryEstimate(array $projectIdList): array
+    {
+        return $this->dao->select('t1.project, SUM(t3.estimate) AS estimate')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.project')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.multiple')->eq('1')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.id')->in($projectIdList)
+            ->groupBy('t1.project')
+            ->fetchPairs();
+    }
+
+    /**
      * 获取某个用户参与的执行和他在执行中的团队信息。
      * Get the executions that the user joined.j
      *
