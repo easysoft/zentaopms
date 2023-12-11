@@ -2928,19 +2928,20 @@ class kanbanModel extends model
     }
 
     /**
+     * 编辑区域。
      * Update a region.
      *
      * @param  int    $regionID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function updateRegion($regionID)
+    public function updateRegion(int $regionID): bool
     {
-        $region    = fixer::input('post')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->trim('name')
-            ->get();
+        $region = new stdclass();
+        $region->lastEditedBy   = $this->app->user->account;
+        $region->lastEditedDate = helper::now();
+        $region->name           = trim($this->post->name);
+
         $oldRegion = $this->getRegionById($regionID);
 
         $this->dao->update(TABLE_KANBANREGION)->data($region)
@@ -2949,10 +2950,16 @@ class kanbanModel extends model
             ->where('id')->eq($regionID)
             ->exec();
 
-        if(dao::isError()) return;
+        if(dao::isError()) return false;
 
         $changes = common::createChanges($oldRegion, $region);
-        return $changes;
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanbanregion', $regionID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
