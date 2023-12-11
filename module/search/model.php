@@ -298,11 +298,10 @@ class searchModel extends model
         $filterObjects = array();
         foreach($allowedObjects as $index => $object)
         {
-            if(strpos(',feedback,ticket,', ",$object,") !== false)
-            {
-                unset($allowedObjects[$index]);
-                $filterObjects[] = $object;
-            }
+            if(strpos(',feedback,ticket,', ",$object,") === false) continue;
+
+            unset($allowedObjects[$index]);
+            $filterObjects[] = $object;
         }
 
         $typeCount = $this->dao->select("objectType, count(*) AS objectCount")->from(TABLE_SEARCHINDEX)
