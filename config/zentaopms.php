@@ -468,6 +468,7 @@ define('TABLE_BASICMEAS', '' . $config->db->prefix . 'basicmeas');
 define('TABLE_MINIPROGRAM',       '`' . $config->db->prefix . 'miniprogram`');
 define('TABLE_MINIPROGRAMFIELD',  '`' . $config->db->prefix . 'miniprogramfield`');
 define('TABLE_MINIPROGRAMSTAR',   '`' . $config->db->prefix . 'miniprogramstar`');
+define('TABLE_AIMESSAGE',         '`' . $config->db->prefix . 'aimessage`');
 
 $config->objectTables['product']          = TABLE_PRODUCT;
 $config->objectTables['productplan']      = TABLE_PRODUCTPLAN;

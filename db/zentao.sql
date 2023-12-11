@@ -15948,6 +15948,17 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- DROP TABLE IF EXISTS `zt_aimessage`;
+CREATE TABLE IF NOT EXISTS `zt_aimessage` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `appID` mediumint(8) unsigned NOT NULL,
+  `user` mediumint(8) unsigned NOT NULL,
+  `type` enum('req', 'res') NOT NULL,
+  `content` text NOT NULL,
+  `createdDate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
