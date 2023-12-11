@@ -1055,7 +1055,11 @@ class user extends control
      */
     public function ajaxSaveTemplate(string $type)
     {
-        $this->user->saveUserTemplate($type);
+        $template = form::data($this->config->user->form->ajaxSaveTemplate)
+            ->add('account', $this->app->user->account)
+            ->add('type', $type)
+            ->get();
+        $this->user->saveUserTemplate($template);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => inlink('ajaxPrintTemplates', "type=$type")));
     }
