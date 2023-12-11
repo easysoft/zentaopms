@@ -429,20 +429,21 @@ class docTest
     }
 
     /**
+     * 获取收信人和抄送人列表。
      * Get toList and ccList.
      *
-     * @param  int    $docID
+     * @param  string     $mailto
      * @access public
      * @return bool|array
      */
-    public function getToAndCcListTest($docID)
+    public function getToAndCcListTest(string $mailto): bool|array
     {
-        $doc     = $this->objectModel->getByID($docID);
-        $objects = $this->objectModel->getToAndCcList($doc);
+        $doc = new stdclass();
+        $doc->mailto = $mailto;
+        $data = $this->objectModel->getToAndCcList($doc);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $data;
     }
 
     public function selectTest($type, $objects, $objectID, $libs, $libID = 0)
