@@ -42,7 +42,7 @@ div
                     $hasError ? html($alterSQL) : null
                 )
             ),
-            div
+            $hasError ? div
             (
                 setClass('text-center'),
                 btn
@@ -52,7 +52,7 @@ div
                     setClass('px-10'),
                     $lang->refresh
                 )
-            )
+            ) : null
         )
     )
 );

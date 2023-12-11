@@ -9377,6 +9377,12 @@ class upgradeModel extends model
         touch($this->app->getCacheRoot() . 'restartcron');
     }
 
+    /**
+     * Check has consistency error or not.
+     *
+     * @access public
+     * @return bool
+     */
     public function hasConsistencyError()
     {
         $logFile = $this->getConsistencyLogFile();
