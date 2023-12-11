@@ -559,7 +559,7 @@ class extensionModel extends model
 
         /* Remove the extracted files. */
         $extractedDir = $this->pkgRoot . $extension;
-        if($extractedDir and $extractedDir != '/' and !$this->classFile->removeDir($extractedDir))
+        if($extractedDir && $extractedDir != '/' && !$this->classFile->removeDir($extractedDir))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
         }
@@ -646,6 +646,7 @@ class extensionModel extends model
     {
         if(empty($extension['code'])) return false;
 
+        /* 安装插件时新增的文件夹目录。 */
         $appRoot = $this->app->getAppRoot();
         if(isset($extension['dirs']))
         {
@@ -656,6 +657,7 @@ class extensionModel extends model
             $extension['dirs'] = json_encode($extension['dirs']);
         }
 
+        /* 安装插件时复制的文件目录。 */
         if(isset($extension['files']))
         {
             foreach($extension['files'] as $fullFilePath => $md5)
@@ -672,13 +674,14 @@ class extensionModel extends model
     }
 
     /**
+     * 获取插件到期时间。
      * Get extension expire date.
      *
-     * @param  int    $extension
+     * @param  object $extension
      * @access public
      * @return string
      */
-    public function getExpireDate($extension)
+    public function getExpireDate(object $extension): string
     {
         $licencePath = $this->app->getConfigRoot() . 'license/';
         $today       = date('Y-m-d');
@@ -687,75 +690,61 @@ class extensionModel extends model
         $licenceOrderFiles = glob($licencePath . 'order*.txt');
         foreach($licenceOrderFiles as $licenceOrderFile)
         {
+            /* 找到和当前插件代号匹配的授权文件。 */
             if(stripos($licenceOrderFile, "{$extension->code}{$extension->version}.txt") === false) continue;
 
             $order = file_get_contents($licenceOrderFile);
             $order = unserialize($order);
-            if($order->type != 'life')
-            {
-                $days = isset($order->days) ? $order->days : 0;
-                if($order->type == 'demo') $days = 31;
-                if($order->type == 'year') $days = 365;
-                $startDate  = !helper::isZeroDate($order->paidDate) ? $order->paidDate : $order->createdDate;
-                if($days) $expiredDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
-            }
-            else
-            {
-                $expiredDate = $order->type;
-            }
+
+            /* 如果是终生版授权，直接返回life。 */
+            if($order->type == 'life') return 'life';
+
+            /* 获取授权总时长。 */
+            $days = 0;
+            if($order->type == 'demo') $days = 31;                   // 试用授权时长31天。
+            if($order->type == 'year') $days = 365;                  // 一年版授权时长365天。
+            if(!$days && isset($order->days)) $days = $order->days;  // 自定义授权时长根据days字段设置。
+
+            /* 根据授权时长和购买插件时间获取到期时间。 */
+            $startDate  = !helper::isZeroDate($order->paidDate) ? $order->paidDate : $order->createdDate;
+            if($days) $expiredDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600); // 如果授权时长是0则代表是不限时长的授权。
+
         }
 
         return $expiredDate;
     }
 
     /**
+     * 获取即将到期的插件列表。
      * Get plugins that are about to expire or have expired.
      *
-     * @param  bool    $category
+     * @param  bool   $isGroup  是否分组
      * @access public
      * @return array
      */
-    public function getExpiringPlugins($category = false)
+    public function getExpiringPlugins(bool $isGroup = false): array
     {
         $extensions = $this->getLocalExtensions('installed');
 
-        $plugins = $category ? array('expiring' => array(), 'expired' => array()) : array();
+        $plugins = $isGroup ? array('expiring' => array(), 'expired' => array()) : array();
         $today   = helper::today();
         foreach($extensions as $extension)
         {
             $expiredDate = $this->getExpireDate($extension);
-            if(!empty($expiredDate) and $expiredDate != 'life')
+            if(!empty($expiredDate) && $expiredDate != 'life')
             {
                 $dateDiff = helper::diffDate($expiredDate, $today);
-                if($category)
+                if($isGroup)
                 {
-                    if($dateDiff == 30 or $dateDiff == 14 or ($dateDiff <= 7 and $dateDiff >= 0)) $plugins['expiring'][] = $extension->name;
+                    if($dateDiff == 30 || $dateDiff == 14 || ($dateDiff <= 7 && $dateDiff >= 0)) $plugins['expiring'][] = $extension->name;
                     if($dateDiff <= -1) $plugins['expired'][] = $extension->name;
                 }
                 else
                 {
-                    if($dateDiff == 30 or $dateDiff == 14 or $dateDiff <= 7) $plugins[] = $extension->name;
+                    if($dateDiff == 30 || $dateDiff == 14 || $dateDiff <= 7) $plugins[] = $extension->name;
                 }
             }
         }
         return $plugins;
-    }
-
-    /**
-     * Mark package active or disabled
-     *
-     * @param  string $extension
-     * @param  string $action     disabled|active
-     * @access public
-     * @return bool
-     */
-    public function togglePackageDisable($extension, $action = 'disabled')
-    {
-        if(!is_dir($this->pkgRoot . $extension)) return true;
-
-        $disabledFile = $this->pkgRoot . $extension . DS . 'disabled';
-        if($action == 'disabled') touch($disabledFile);
-        if($action == 'active' && file_exists($disabledFile)) unlink($disabledFile);
-        return true;
     }
 }

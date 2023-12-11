@@ -1,0 +1,20 @@
+title: table zt_extension
+desc: "插件"
+author: automated export
+version: "1.0"
+fields:
+  - field: version
+    fields:
+      - field: version1
+        range: 1{10},2{10},3{10},4{10},5{10},6{10}
+      - field: version2
+        range: .
+      - field: version3
+        range: 0-9
+  - field: depends
+    note: "依赖插件"
+    range: 0{5},`{'code1':'all','code2':{'min':'1.0',max':'2.0'},'code3':{'min':'1.0','max':'1.0'}}`
+    postfix: ""
+    loop: 0
+    format: ""
+

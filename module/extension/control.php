@@ -200,7 +200,7 @@ class extension extends control
 
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension(array('code' => $extension, 'status' => 'available'));
-        $this->extension->togglePackageDisable($extension, 'disabled');
+        $this->extensionZen->togglePackageDisable($extension, 'disabled');
 
         $this->view->title          = $this->lang->extension->uninstallFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
@@ -235,7 +235,7 @@ class extension extends control
             }
         }
 
-        $this->extension->togglePackageDisable($extension, 'active');
+        $this->extensionZen->togglePackageDisable($extension, 'active');
         $this->extensionZen->copyPackageFiles($extension);
         $this->extension->updateExtension(array('code' => $extension, 'status' => 'installed'));
 
@@ -256,7 +256,7 @@ class extension extends control
         $this->extensionZen->checkSafe();
 
         $this->extension->updateExtension(array('code' => $extension, 'status' => 'deactivated'));
-        $this->extension->togglePackageDisable($extension, 'disabled');
+        $this->extensionZen->togglePackageDisable($extension, 'disabled');
 
         $this->view->title          = $this->lang->extension->deactivateFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);

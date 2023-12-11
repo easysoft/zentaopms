@@ -554,6 +554,7 @@ class extensionZen extends extension
     }
 
     /**
+     * 检查当前版本是否包含在指定版本内。
      * Compare for limit data.
      *
      * @param  string       $version
@@ -576,5 +577,24 @@ class extensionZen extends extension
         if($type != 'between') return !$result;
 
         return $result;
+    }
+
+    /**
+     * 标记此插件是否被禁用。
+     * Mark package active or disabled
+     *
+     * @param  string $extension
+     * @param  string $action     disabled|active
+     * @access public
+     * @return bool
+     */
+    public function togglePackageDisable(string $extension, string $action = 'disabled'): bool
+    {
+        if(!is_dir($this->pkgRoot . $extension)) return true;
+
+        $disabledFile = $this->pkgRoot . $extension . DS . 'disabled';
+        if($action == 'disabled') touch($disabledFile);
+        if($action == 'active' && file_exists($disabledFile)) unlink($disabledFile);
+        return true;
     }
 }
