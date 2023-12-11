@@ -1634,12 +1634,13 @@ class userModel extends model
     }
 
     /**
-     * Check Tmp dir.
+     * 检查缓存目录是否有写权限。
+     * Check if the tmp directory is writable.
      *
      * @access public
      * @return bool
      */
-    public function checkTmp()
+    public function checkTmp(): bool
     {
         if(!is_dir($this->app->tmpRoot))   mkdir($this->app->tmpRoot,   0755, true);
         if(!is_dir($this->app->cacheRoot)) mkdir($this->app->cacheRoot, 0755, true);
@@ -1651,12 +1652,10 @@ class userModel extends model
         {
             @fclose($fp);
             @unlink($file);
+            return true;
         }
-        else
-        {
-            return false;
-        }
-        return true;
+
+        return false;
     }
 
     /**
