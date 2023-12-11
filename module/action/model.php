@@ -1495,11 +1495,11 @@ class actionModel extends model
             /* If extra column is a username, then assemble link to that. */
             if($action->action == "assigned")
             {
-                $userDetails = $this->loadModel('user')->getUserDetailsForAPI($action->extra);
-                if(isset($userDetails[$action->extra]))
+                $user = $this->loadModel('user')->getById($action->extra);
+                if($user)
                 {
-                    $userDetail    = $userDetails[$action->extra];
-                    $action->extra = "<a href='{$userDetail->url}' target='_blank'>{$action->extra}</a>";
+                    $url = helper::createLink('user', 'profile', "userID={$user->id}");
+                    $action->extra = "<a href='{$url}' target='_blank'>{$action->extra}</a>";
                 }
             }
 
