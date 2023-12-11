@@ -497,6 +497,7 @@ $lang->ai->miniPrograms->generate           = 'Generate';
 $lang->ai->miniPrograms->regenerate         = 'Regenerate';
 $lang->ai->miniPrograms->chatTip            = 'Click the generate button on the left to give it a try.';
 $lang->ai->miniPrograms->noModel            = array('The language model has not been configured yet. Please contact the administrator or go to the backend to configure <a id="to-language-model"> the language model.</a>。', 'If the relevant configuration has been completed, please try <a id="reload-current">reloading</a> the page.');
+$lang->ai->miniPrograms->placeholder        = 'Continue asking';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
