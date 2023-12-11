@@ -1122,7 +1122,9 @@ class pivotModel extends model
      * @param  array   $column
      * @param  array   $fields
      * @param  array   $cols
+     * @param  string  $sql
      * @param  array   $langs
+     * @param  bool    $showOrigin
      * @access private
      * @return void
      */
