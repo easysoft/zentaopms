@@ -163,6 +163,7 @@ $lang->testcase->viewAll                 = 'Tous les CasTests';
 $lang->testcase->importToLib             = "Import To Library";
 $lang->testcase->showScript              = 'Show Script';
 $lang->testcase->autoScript              = 'Script';
+$lang->testcase->autoCase                = 'Automation';
 
 $lang->testcase->new = 'Nouveau';
 
@@ -202,6 +203,11 @@ $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in
 
 $lang->testcase->reviewList[0] = 'NON';
 $lang->testcase->reviewList[1] = 'OUI';
+
+$lang->testcase->autoList = array();
+$lang->testcase->autoList['']     = '';
+$lang->testcase->autoList['auto'] = 'Yes';
+$lang->testcase->autoList['no']   = 'No';
 
 $lang->testcase->priList[0] = '';
 $lang->testcase->priList[3] = 3;
