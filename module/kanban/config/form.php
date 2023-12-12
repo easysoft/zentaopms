@@ -70,3 +70,9 @@ $config->kanban->form->close['closedBy']       = array('type' => 'string',   're
 $config->kanban->form->close['closedDate']     = array('type' => 'datetime', 'required' => true,  'default' => $now);
 $config->kanban->form->close['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
 $config->kanban->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
+
+$config->kanban->form->createLane['name']           = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->createLane['mode']           = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->createLane['otherLane']      = array('type' => 'int',      'required' => false, 'default' => '');
+$config->kanban->form->createLane['color']          = array('type' => 'string',   'required' => true,  'default' => '#7ec5ff');
+$config->kanban->form->createLane['lastEditedTime'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
