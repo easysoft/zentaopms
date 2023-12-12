@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
-title=测试 pivotModel->getWorkload();
+title=测试 pivotModel->setExecutionName();
 cid=1
 pid=1
 

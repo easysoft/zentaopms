@@ -30,6 +30,9 @@ r(is_object($pivot->processPivot($pivotList[1], true)))       && p('') && e(1); 
 $add = ';;;;;;;;';
 $pivotList[2]->sql .= $add;
 $pivot->processPivot($pivotList[2], true);
-r(strpos($pivotList[2]->sql, $add) === false) && p('') && e(1);    //测试函数执行以后sql是否被修改
-r(is_array($pivotList[2]->settings)) && p('') && e(1);             //测试函数执行以后返回的setting是否是数组
-r($pivotList[2]->used) && p('') && e(1);                           //测试函数执行以后返回的used是否是true
+r(strpos($pivotList[2]->sql, $add) === false) && p('') && e(1);    //测试函数执行以后id为1002的透视表sql是否被修改
+r(is_array($pivotList[2]->settings)) && p('') && e(1);             //测试函数执行以后id为1002的透视表返回的setting是否是数组
+r($pivotList[2]->used) && p('') && e(1);                           //测试函数执行以后id为1002的透视表返回的used是否是true
+
+$pivot->processPivot($pivotList[3], true);
+r($pivotList[3]->used) && p('') && e(0);                           //测试函数执行以后id为1003的透视表返回的used是否是false

@@ -607,7 +607,7 @@ class pivotModel extends model
      * @access public
      * @return void
      */
-    public function setExecutionName(object &$execution, bool $canViewExecution): void
+    public function setExecutionName(object $execution, bool $canViewExecution): void
     {
         if($execution->multiple)
         {

@@ -1,14 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
 
-zdTable('bug')->gen(20);
-zdTable('product')->config('product')->gen(10);
-zdTable('module')->gen(10);
-zdTable('case')->gen(10);
-zdTable('project')->config('project_gensheet')->gen(20);
-zdTable('product')->gen(10);
 /**
 title=测试 pivotModel->getBugs();
 cid=1
@@ -27,8 +19,17 @@ pid=1
 查看id为1001的透视表生成的分组信息是否正确。 >> 一级项目集,项目名称
 查看id为1001的透视表生成的标签是否正确。 >> 一级项目集,一级项目集;单位时间交付需求规模数;单位时间交付需求规模数
 查看id为1001的透视表生成的列数据是否正确。 >> 项目11,3;项目20,10
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+
+zdTable('bug')->gen(20);
+zdTable('product')->config('product')->gen(10);
+zdTable('module')->gen(10);
+zdTable('case')->gen(10);
+zdTable('project')->config('project_gensheet')->gen(20);
+zdTable('product')->gen(10);
 
 global $tester;
 $pivotTest = new pivotTest();
