@@ -1378,4 +1378,22 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $idList;
     }
+
+    /**
+     * 将当前用户从文档的正在编辑者列表中移除。
+     * Removes the current user from the list of people editing the document.
+     *
+     * @param  int               $docID
+     * @access public
+     * @return array|bool|object
+     */
+    public function removeEditingTest(int $docID): array|bool|object
+    {
+        $doc    = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        $result = $this->objectModel->removeEditing($doc);
+
+        if(dao::isError()) return dao::getError();
+        if(!$result) return false;
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+    }
 }
