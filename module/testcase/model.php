@@ -1678,7 +1678,7 @@ class testcaseModel extends model
             $caseData->title        = $data->title[$key];
             $caseData->pri          = (int)$data->pri[$key];
             $caseData->type         = $data->type[$key];
-            $caseData->stage        = join(',', $data->stage[$key]);
+            $caseData->stage        = !empty($data->stage[$key]) ? join(',', $data->stage[$key]) : '';
             $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
