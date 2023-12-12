@@ -140,6 +140,10 @@ window.setParentProgram = function()
 {
     const programID = $('[name=parent]').val();
     const link      = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
+
+    if(programID) $('#linkProduct .input-group').addClass('required');
+    if(programID == 0) $('#linkProduct .input-group.required').removeClass('required');
+
     loadPage(link, '#aclList');
     $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
 }

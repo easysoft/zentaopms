@@ -398,6 +398,7 @@ formPanel
             set::label($lang->project->manageProducts),
             inputGroup
             (
+                $programID ? setClass('required') : null,
                 div
                 (
                     setClass('grow'),
@@ -409,7 +410,7 @@ formPanel
                 ),
                 div
                 (
-                    setClass('flex items-center pl-2 clip newProductBox'),
+                    setClass('flex items-center px-2 clip newProductBox'),
                     checkbox
                     (
                         set::name('newProduct'),

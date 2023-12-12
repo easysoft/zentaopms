@@ -9,3 +9,5 @@
 #copyProjects .btn.primary-outline span {color: rgba(var(--color-fore-rgb),var(--tw-text-opacity));}
 .productBox .line-btn {width: 48px; margin-right: 32px;}
 .productBox div[id^=plan] {flex: 1 1;}
+#mainContent .input-group.required {position: relative;}
+#mainContent .input-group.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 0.5rem; right: 0.125rem;}
