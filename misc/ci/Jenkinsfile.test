@@ -104,6 +104,16 @@ pipeline {
                     image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
                     command "/usr/bin/entrypoint.sh"
                   }
+                  yaml '''
+                    apiVersion: v1
+                    kind: Pod
+                    spec:
+                      containers:
+                      - name: zentao
+                        env:
+                        - name: MYSQL_INTERNAL
+                          value: "true"
+                  '''
                 }
               }
               options { skipDefaultCheckout() }
@@ -139,7 +149,7 @@ pipeline {
                       sh '''
                         . /etc/s6/s6-init/envs
                         . /opt/easysoft/scripts/libmysql.sh
-                        wait_for_mysql && initdb.php > /apps/zentao/unittestdb
+                        s6-svwait -u -t 30000 /etc/s6/s6-available/mysql && initdb.php > /apps/zentao/unittestdb
                         /apps/zentao/test/runtime/ztf ''' + targetDir + ''' -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log
                         chmod -R 777 /root
                         parsehtml.php
