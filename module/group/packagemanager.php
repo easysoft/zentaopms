@@ -555,10 +555,11 @@ $config->group->package->browseProgram = new stdclass();
 $config->group->package->browseProgram->order  = 5;
 $config->group->package->browseProgram->subset = 'program';
 $config->group->package->browseProgram->privs  = array();
-$config->group->package->browseProgram->privs['program-browse']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseProgram->privs['program-kanban']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseProgram->privs['program-product'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseProgram->privs['program-project'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseProgram->privs['program-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseProgram->privs['program-productView'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseProgram->privs['program-kanban']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseProgram->privs['program-product']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseProgram->privs['program-project']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->manageProgram = new stdclass();
 $config->group->package->manageProgram->order  = 10;

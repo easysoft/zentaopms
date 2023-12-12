@@ -386,7 +386,8 @@ $lang->stage->methodOrder[35] = 'plusBrowse';
 
 /* Program. */
 $lang->resource->program = new stdclass();
-$lang->resource->program->browse                  = 'browse';
+$lang->resource->program->browse                  = 'projectView';
+$lang->resource->program->productView             = 'productView';
 $lang->resource->program->kanban                  = 'kanbanAction';
 $lang->resource->program->product                 = 'product';
 $lang->resource->program->create                  = 'create';
