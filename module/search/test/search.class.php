@@ -620,6 +620,22 @@ class searchTest
     }
 
     /**
+     * 获取对象列表的测试用例。
+     * Get object list test.
+     *
+     * @param  array  $idListGroup
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getObjectListTest(array $idListGroup, string $type): array
+    {
+        $objectList = $this->objectModel->getObjectList($idListGroup);
+
+        return zget($objectList, $type, array());
+    }
+
+    /**
      * 测试处理搜索结果。
      * Process results test.
      *
