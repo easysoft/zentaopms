@@ -76,3 +76,10 @@ $config->kanban->form->createLane['mode']           = array('type' => 'string', 
 $config->kanban->form->createLane['otherLane']      = array('type' => 'int',      'required' => false, 'default' => '');
 $config->kanban->form->createLane['color']          = array('type' => 'string',   'required' => true,  'default' => '#7ec5ff');
 $config->kanban->form->createLane['lastEditedTime'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
+
+$config->kanban->form->createColumn['name']    = array('type' => 'string', 'required' => true,  'default' => '');
+$config->kanban->form->createColumn['color']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->kanban->form->createColumn['noLimit'] = array('type' => 'int',    'required' => false, 'default' => '');
+$config->kanban->form->createColumn['limit']   = array('type' => 'int',    'required' => false, 'default' => -1);
+$config->kanban->form->createColumn['group']   = array('type' => 'int',    'required' => true,  'default' => '');
+$config->kanban->form->createColumn['parent']  = array('type' => 'int',    'required' => false, 'default' => 0);
