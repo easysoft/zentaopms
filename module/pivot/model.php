@@ -181,7 +181,7 @@ class pivotModel extends model
      * @access public
      * @return void
      */
-    public function processFieldSettings(object $pivot)
+    public function processFieldSettings(object $pivot): void
     {
         $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
         if(empty($fieldSettings)) return;
@@ -213,7 +213,7 @@ class pivotModel extends model
 
         /* 重建fieldSettings字段。 */
         /* Rebuild fieldSettings field. */
-        $this->rebuildFieldSetting($pivot, $fieldPairs, $columns, $relatedObject, $fieldSettings);
+        $pivot->fieldSettings = $this->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings);
     }
 
     /**
@@ -226,9 +226,9 @@ class pivotModel extends model
      * @param  array   $relatedObject
      * @param  object  $fieldSettings
      * @access private
-     * @return void
+     * @return object
      */
-    private function rebuildFieldSetting(object $pivot, array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings): void
+    private function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings): object
     {
         $fieldSettingsNew = new stdclass();
 
@@ -241,7 +241,7 @@ class pivotModel extends model
 
             if(!isset($fieldSettings->$index))
             {
-                /* 如果字段设置中没有该字段，则使用默认值 */
+                /* 如果字段设置中没有该字段，则使用默认的配置。 */
                 /* If the field is not set in the field settings, use the default value. */
                 $fieldItem = new stdclass();
                 $fieldItem->name   = $field;
@@ -274,7 +274,7 @@ class pivotModel extends model
             }
         }
 
-        $pivot->fieldSettings = $fieldSettingsNew;
+        return $fieldSettingsNew;
     }
 
     /**
@@ -390,7 +390,6 @@ class pivotModel extends model
         $bugs = $this->getBugStatistics($bugGroups);
 
         uasort($bugs, 'sortSummary');
-
         return $bugs;
     }
 
@@ -413,8 +412,8 @@ class pivotModel extends model
             $bug['validRate']  = 0;
             $bug['total']      = 0;
 
-            /* 已解决状态bug数据初始化。 */
-            /* Initialize the status data of resolved bugs. */
+            /* Bug已解决状态数据初始化。 */
+            /* Bug resolved status data initialization. */
             foreach(array_keys($this->lang->bug->resolutionList) as $resolution)
             {
                 if($resolution) $bug[$resolution] = 0;
@@ -490,7 +489,7 @@ class pivotModel extends model
         $executions = $this->pivotTao->getNoAssignExecution(array_keys($deptUsers));
         if(empty($executions)) return array();
 
-        /* 构建需要的用户-项目-执行数据结构。 */
+        /* 构建用户-项目-执行数据结构。 */
         /* Build user-project-execution data structure. */
         $executionGroups = array();
         foreach($executions as $execution)
@@ -552,7 +551,7 @@ class pivotModel extends model
         $tasks = $this->pivotTao->getAssignTask(array_keys($deptUsers));
         if(empty($tasks)) return array();
 
-        /* 构建需要的用户-项目-执行-任务数据结构。 */
+        /* 构建用户-项目-执行-任务数据结构。 */
         /* Build user-project-execution-task data structure. */
         $taskGroups = array();
         foreach($tasks as $task)
@@ -632,7 +631,7 @@ class pivotModel extends model
      */
     private function getUserWorkLoad(array $projects, array $teamTasks, float $allHour): array
     {
-        /* 计算用户的任务数，剩余工时和总任务数。 */
+        /* 计算员工的任务数，剩余工时和总任务数。 */
         /* Calculate user's task count, left hours and total task count. */
         $totalTasks = $totalHours = $totalExecutions = 0;
         foreach($projects as $executions)
@@ -650,7 +649,7 @@ class pivotModel extends model
             }
         }
 
-        /* 计算用户的工作负载。 */
+        /* 计算员工的工作负载。 */
         /* Calculate user's workload. */
         $userWorkload = $allHour ? round($totalHours / $allHour * 100, 2) . '%' : '0%';
 
@@ -658,7 +657,7 @@ class pivotModel extends model
     }
 
     /**
-     * 获取未解决bug指派表相关数据。
+     * 获取未解决Bug指派表相关数据。
      * Get bug assign.
      *
      * @access public
@@ -787,8 +786,8 @@ class pivotModel extends model
     }
 
     /**
-     * 生成透视表页面表格以及表格数据。
-     * Generate pivot sheet and sheet data.
+     * 生成透视表页面表格配置和相关数据。
+     * Generate pivot page table configuration and related data.
      *
      * @param  array  $fields
      * @param  array  $settings
@@ -808,6 +807,8 @@ class pivotModel extends model
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
         if(isset($settings['columns'])) $groupsRow = $this->processGroupRows($settings['columns'], $sql, $filters, $groups, $groupList, $fields, $showColTotal, $cols, $langs);
 
+        /* 获取单元格合并配置。 */
+        /* Get cell merge configuration. */
         $this->getColumnConfig($groupsRow, $groups, 0, 0, $configs);
 
         /* 处理分组字段显示。 */
@@ -897,17 +898,14 @@ class pivotModel extends model
     private function getColLabelValue(string $field, string $fieldObject, string $relatedField, string $clientLang, array $langs = array()): string
     {
         $colLabel = $field;
-        if(isset($langs[$field]) && !empty($langs[$field][$clientLang]))
+        if(isset($langs[$field][$clientLang]))
         {
             $colLabel = $langs[$field][$clientLang];
         }
-        else
+        elseif($fieldObject)
         {
-            if($fieldObject)
-            {
-                $this->app->loadLang($fieldObject);
-                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
-            }
+            $this->app->loadLang($fieldObject);
+            if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
         }
 
         return $colLabel;
@@ -980,12 +978,11 @@ class pivotModel extends model
      */
     private function processGroupRows(array $columns, string $sql, array $filters, array $groups, string $groupList, array $fields, string $showColTotal, array &$cols ,array $langs): array
     {
-        $groupsRow = array();
-
         list($sql, $connectSQL, $groupSQL, $orderSQL) = $this->initSql($sql, $filters, $groupList);
         $number       = 0;
         $showOrigin   = !empty(array_filter(array_column($settings['columns'] ?? array(), 'showOrigin')));
 
+        $groupsRow = array();
         foreach($columns as $column)
         {
             $columnShowOrigin = zget($column, 'showOrigin', false);
@@ -1094,7 +1091,7 @@ class pivotModel extends model
     }
 
     /**
-     * 通过过滤器配置格式化sql。
+     * 通过过滤配置格式化sql。
      * Init sql by filters.
      *
      * @param  array  $filters
@@ -1129,10 +1126,10 @@ class pivotModel extends model
      * 获取合并单元格的配置。
      * Get column config to merge table cell.
      *
-     * @param  array $groupRows
-     * @param  array $configs
-     * @param  array $groups
-     * @param  int   $index
+     * @param  array  $groupRows
+     * @param  array  $configs
+     * @param  array  $groups
+     * @param  int    $index
      * @access public
      * @return void
      *
@@ -1141,7 +1138,7 @@ class pivotModel extends model
      *
      * The key value of this array is unique;
      */
-    public function getColumnConfig($groupsRow, $groups, $index, $key, &$configs): void
+    private function getColumnConfig($groupsRow, $groups, $index, $key, &$configs): void
     {
         if(!count($groupsRow)) return;
         if($index > count($groups) - 1) return;
