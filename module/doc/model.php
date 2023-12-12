@@ -2653,18 +2653,19 @@ class docModel extends model
     }
 
     /**
-     * Get editors by doc id.
+     * 获取编辑过文档的用户列表。
+     * Get editors of a document.
      *
      * @param  int    $docID
      * @access public
      * @return array
      */
-    public function getEditors($docID = 0)
+    public function getEditors(int $docID = 0): array
     {
         if(!$docID) return array();
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq('doc')
-            ->andWhere('objectID')->eq((int)$docID)
+            ->andWhere('objectID')->eq($docID)
             ->andWhere('action')->in('edited')
             ->orderBy('date_desc')
             ->fetchAll('id');
