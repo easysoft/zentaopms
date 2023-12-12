@@ -10,13 +10,14 @@ fields:
     prefix: svn-
     range: 1-10
   - field: path
-    range: '`http://10.0.7.237/svn/repo/unit_test`'
+    prefix: http://10.0.7.237/svn/repo/unit_test
+    range: '[],1-9'
   - field: prefix
     range: /unit_test
   - field: encoding
     range: "`utf-8`"
   - field: SCM
-    range: Subversion
+    range: Subversion{3},Gitlba,Gitea,Gogs
   - field: client
     range: /usr/bin/svn
   - field: commits

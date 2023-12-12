@@ -258,7 +258,7 @@ class svnModel extends model
     public function setClient(object $repo): bool
     {
         $this->client = $repo->client . " --non-interactive";
-        if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
+        if(stripos($repo->path, 'https') === 0 || stripos($repo->path, 'svn') === 0)
         {
             $cmd = $repo->client . ' --version --quiet';
             $version = `$cmd`;

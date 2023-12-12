@@ -1,8 +1,6 @@
 #!/usr/bin/env php
 <?php
-
 /**
-
 title=svnModel->run();
 timeout=0
 cid=1
