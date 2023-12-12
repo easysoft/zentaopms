@@ -9,7 +9,7 @@ $config->group->form->create['desc']      = array('type' => 'string', 'required'
 $config->group->form->create['project']   = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->group->form->create['vision']    = array('type' => 'string', 'required' => false, 'default' => $config->vision);
 $config->group->form->create['role']      = array('type' => 'string', 'required' => false, 'default' => '');
-$config->group->form->create['acl']       = array('type' => 'string', 'required' => false, 'default' => null);
+$config->group->form->create['acl']       = array('type' => 'string', 'required' => false, 'default' => '');
 $config->group->form->create['developer'] = array('type' => 'string', 'required' => false, 'default' => '1');
 
 $config->group->form->edit['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
