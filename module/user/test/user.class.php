@@ -416,27 +416,25 @@ class userTest
     }
 
     /**
-     * Check user password.
+     * 测试检查提交的用户密码。
+     * Test check posted user password.
      *
-     * @param  array $params
+     * @param  object $user
+     * @param  bool   $canNoPassword
      * @access public
      * @return void
      */
-    public function checkPasswordTest($params = array())
+    public function checkPasswordTest(object $user, bool $canNoPassword = false): array
     {
-        $_POST = $params;
+        $result = $this->objectModel->checkPassword($user, $canNoPassword);
+        $errors = dao::getError();
 
-        $this->objectModel->checkPassword();
-        unset($_POST);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode(',', $error);
+        }
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return '无报错';
-        }
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
