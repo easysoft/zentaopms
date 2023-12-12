@@ -154,7 +154,6 @@ pipeline {
                         parsehtml.php
                         initdb.php /apps/zentao/unittestdb
                         pipeline-unittest.sh /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log'''
-                      publishHTML (target : [allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
                     }
                   }
                 }
@@ -162,6 +161,9 @@ pipeline {
               }
 
               post {
+                always {
+                  publishHTML (target : [allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
+                }
                 failure {
                   ximNotify(title: "单元测试失败", content: "点击下方链接查看执行明细")
                 }
