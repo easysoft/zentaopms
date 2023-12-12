@@ -2599,13 +2599,14 @@ class docModel extends model
     }
 
     /**
+     * 获取文档动态。
      * Get document dynamic.
      *
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getDynamic($pager = null)
+    public function getDynamic(object $pager = null): array
     {
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');
