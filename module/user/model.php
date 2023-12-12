@@ -19,10 +19,10 @@ class userModel extends model
      *
      * @param  object $user
      * @param  bool   $canNoPassword
-     * @access private
+     * @access public
      * @return bool
      */
-    private function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
+    public function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
     {
         if(strtolower($user->account) == 'guest') dao::$errors['account'][] = sprintf($this->lang->user->error->reserved, $user->account);
 
@@ -38,10 +38,10 @@ class userModel extends model
      *
      * @param  array  $users
      * @param  string $verifyPassword
-     * @access private
+     * @access public
      * @return bool
      */
-    private function checkBeforeBatchCreate(array $users, string $verifyPassword): bool
+    public function checkBeforeBatchCreate(array $users, string $verifyPassword): bool
     {
         if(!$users) return true;
 
@@ -90,10 +90,10 @@ class userModel extends model
      *
      * @param  array  $users
      * @param  string $verifyPassword
-     * @access private
+     * @access public
      * @return bool
      */
-    private function checkBeforeBatchUpdate(array $users, string $verifyPassword): bool
+    public function checkBeforeBatchUpdate(array $users, string $verifyPassword): bool
     {
         if(!$users) return true;
 
@@ -115,10 +115,10 @@ class userModel extends model
      *
      * @param  object $user
      * @param  bool   $canNoPassword
-     * @access private
+     * @access public
      * @return bool
      */
-    private function checkPassword(object $user, bool $canNoPassword = false): bool
+    public function checkPassword(object $user, bool $canNoPassword = false): bool
     {
         if(empty($user->password1))
         {
@@ -162,10 +162,10 @@ class userModel extends model
      * Check if the current user password is correct.
      *
      * @param  string $verifyPassword
-     * @access private
+     * @access public
      * @return bool
      */
-    private function checkVerifyPassword(string $verifyPassword): bool
+    public function checkVerifyPassword(string $verifyPassword): bool
     {
         if(empty($verifyPassword) || $verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
@@ -291,10 +291,10 @@ class userModel extends model
      * @param  string|array $usersToAppended
      * @param  int          $maxCount
      * @param  int          $userCount
-     * @access private
+     * @access public
      * @return void
      */
-    private function processMoreLink(string $params, string|array $usersToAppended, int $maxCount, int $userCount): void
+    public function processMoreLink(string $params, string|array $usersToAppended, int $maxCount, int $userCount): void
     {
         unset($this->config->user->moreLink);
         if($maxCount && $maxCount == $userCount)
@@ -316,10 +316,10 @@ class userModel extends model
      * @param  array        $users
      * @param  string       $fields
      * @param  string       $keyField
-     * @access private
+     * @access public
      * @return array
      */
-    private function fetchExtraUsers(string $params, string|array $usersToAppended, array $users, string $fields, string $keyField): array
+    public function fetchExtraUsers(string $params, string|array $usersToAppended, array $users, string $fields, string $keyField): array
     {
         if($usersToAppended) return $users;
 
@@ -335,10 +335,10 @@ class userModel extends model
      *
      * @param  array  $users
      * @param  string $params
-     * @access private
+     * @access public
      * @return array
      */
-    private function processDisplayValue(array $users, string $params): array
+    public function processDisplayValue(array $users, string $params): array
     {
         foreach($users as $account => $user)
         {
@@ -909,7 +909,7 @@ class userModel extends model
      * @access public
      * @return bool|object
      */
-    private function identifyUser(string $account, string $password): bool|object
+    public function identifyUser(string $account, string $password): bool|object
     {
         $user = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->andWhere('account')->eq($account)->fetch();
         if(!$user) return false;
@@ -937,10 +937,10 @@ class userModel extends model
      *
      * @param  object $user
      * @param  int    $passwordStrength
-     * @access private
+     * @access public
      * @return object
      */
-    private function checkNeedModifyPassword(object $user, int $passwordStrength): object
+    public function checkNeedModifyPassword(object $user, int $passwordStrength): object
     {
         /* 如果开启了首次登录修改密码功能，检查是否是首次登录。*/
         /* If the modify password on first login feature is enabled, check if it's the first login. */
