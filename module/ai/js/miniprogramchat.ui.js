@@ -1,7 +1,25 @@
 if(!window.aiMiniProgramChat) window.aiMiniProgramChat = {};
 
 let firstGenerate = true;
-const messageList = [];
+let messageList = [];
+
+/**
+ *
+ * @param {Date?} date
+ * @returns {string}
+ */
+function formatDateTime(date = new Date()) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const formattedDate = `${year}/${month}/${day}`;
+    const formattedTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+
+    return `${formattedDate} ${formattedTime}`;
+}
 
 function getFormValue()
 {
@@ -119,6 +137,11 @@ function sendMessagesToAI(message)
                 $('.chat-nomodel').removeClass('hidden');
                 $('form .footer .btn.primary').attr('disabled', 'disabled');
                 // $('.language-model .btn').attr('disabled', 'disabled');
+                return;
+            }
+            if(reason === 'unpublished')
+            {
+                $('#open-dialog').trigger('click')
             }
         }
     );
@@ -149,6 +172,13 @@ window.aiMiniProgramChat.startAIChat = function()
         $(this).text(regenerateLang);
         firstGenerate = false;
     }
+    else
+    {
+        const $messageList = $('.chat-history .message-list');
+        $messageList.append(createNotificationMessage(`${formatDateTime()} ${clearContextLang}`));
+        messageList = [];
+    }
+    $('.input-container').removeClass('hidden');
     sendMessagesToAI(promptStr);
 };
 
@@ -234,6 +264,11 @@ window.aiMiniProgramChat.handleInput = (event) =>
     inputBox.style.height = `${(inputBox.scrollHeight + 2)}px`
 };
 
+window.aiMiniProgramChat.backToSquare = () =>
+{
+    location.href = $.createLink('ai', 'square', '#app=ai');
+};
+
 /**
  *
  * @param {'ai'|'user'} role
@@ -292,7 +327,7 @@ function createMessageBody(role, content, time)
  * @param {string} time
  * @returns {jQuery}
  */
-function createMessage(role, content, time = (new Date).toLocaleString())
+function createMessage(role, content, time = formatDateTime())
 {
     const $avatar = createAvatar(role);
     const $body = createMessageBody(role, content, time);
@@ -301,24 +336,39 @@ function createMessage(role, content, time = (new Date).toLocaleString())
         .append($body);
 }
 
+function createNotificationMessage(content)
+{
+    return $(`<div class="notification-message"><span>${content}</span></div>`);
+}
+
 $(function()
 {
     $('#to-language-model').prop('href', $.createLink('ai', 'models'));
     $('#reload-current').on('click', () => {
         location.reload();
     });
-    console.log(messages);
-    const $messageList = $('.chat-history .message-list');
-    const messagesReverse = messages.reverse();
-    for(let i = 0; i< messagesReverse.length; i++)
+
+    if(messages && messages.length)
     {
-        const message = messagesReverse[i];
-        const {type, content, createdDate: time} = message;
-        let role;
-        if(type === 'req') role = 'user';
-        else if(type === 'res') role = 'ai';
-        const $message = createMessage(role, content, time);
-        $messageList.append($message);
+        const $messageList = $('.chat-history .message-list');
+        const messagesReverse = messages.reverse();
+        for(let i = 0; i < messagesReverse.length; i++)
+        {
+            const message = messagesReverse[i];
+            const {type, content, createdDate: time} = message;
+            let role;
+            if(type === 'req') role = 'user';
+            else if(type === 'res') role = 'ai';
+            const $message = createMessage(role, content, time);
+            $messageList.append($message);
+        }
+
+        $messageList.append(createNotificationMessage(`${formatDateTime()} ${newChatTip}`));
+        $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
     }
-    $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
+
+    if(isAppDisabled)
+    {
+        $('#open-dialog').trigger('click')
+    }
 });

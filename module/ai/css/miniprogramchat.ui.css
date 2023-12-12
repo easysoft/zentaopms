@@ -151,3 +151,44 @@
 .chat-nomodel a {
     cursor: pointer;
 }
+
+.notification-message {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #4089F7;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+}
+
+.notification-message::before,
+.notification-message::after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background: #4089F7;
+}
+
+.notification-message span {
+    padding: 0 10px;
+}
+
+#disabled-dialog .modal-dialog {
+    width: 480px;
+}
+
+#disabled-dialog .modal-body {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+#disabled-dialog .modal-footer {
+    padding-top: 0;
+    padding-bottom: 32px;
+    justify-content: center;
+}

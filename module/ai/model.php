@@ -354,7 +354,11 @@ class aiModel extends model
             ->fetchAll();
 
         $messageIDs = array();
-        foreach ($messages as $message) $messageIDs[] = $message->id;
+        foreach ($messages as $message)
+        {
+            $message->createdDate = date('Y/n/j G:i', strtotime($message->createdDate));
+            $messageIDs[] = $message->id;
+        }
 
         $this->dao->delete()
             ->from(TABLE_AIMESSAGE)

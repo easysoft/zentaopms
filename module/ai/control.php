@@ -154,6 +154,8 @@ class ai extends control
         $messages = array();
         if(!empty($_POST))
         {
+            if($miniProgram->published === '0') return $this->send(array('result' => 'fail', 'reason' => 'unpublished'));
+
             $history = $this->post->history;
             $message = $this->post->message;
             $isRetry = $this->post->retry == 'true';
@@ -170,7 +172,7 @@ class ai extends control
                 if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->chatNoResponse, 'reason' => 'no response'));
 
                 $this->ai->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
-                return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/m/d H:m:s"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
+                return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/n/j G:i"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
             }
             else
             {

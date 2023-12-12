@@ -444,6 +444,7 @@ $lang->ai->miniPrograms->placeholder->desc    = 'Please enter a brief introducti
 $lang->ai->miniPrograms->placeholder->default = 'Please fill in the prompt, the default is "please enter"';
 $lang->ai->miniPrograms->placeholder->input   = 'Please enter';
 $lang->ai->miniPrograms->placeholder->prompt  = 'Please enter prompt design';
+$lang->ai->miniPrograms->placeholder->asking  = 'Continue asking';
 
 $lang->ai->miniPrograms->deleteFieldTip = 'Are you sure to delete this field?';
 
@@ -497,7 +498,10 @@ $lang->ai->miniPrograms->generate           = 'Generate';
 $lang->ai->miniPrograms->regenerate         = 'Regenerate';
 $lang->ai->miniPrograms->chatTip            = 'Click the generate button on the left to give it a try.';
 $lang->ai->miniPrograms->noModel            = array('The language model has not been configured yet. Please contact the administrator or go to the backend to configure <a id="to-language-model"> the language model.</a>。', 'If the relevant configuration has been completed, please try <a id="reload-current">reloading</a> the page.');
-$lang->ai->miniPrograms->placeholder        = 'Continue asking';
+$lang->ai->miniPrograms->clearContext       = 'The context content has been cleared.';
+$lang->ai->miniPrograms->newChatTip         = 'Please click on the Generate button on the left side to start a new conversation.';
+$lang->ai->miniPrograms->newVersionTip      = 'The mini-program has been updated on %s. The above is the past record.';
+$lang->ai->miniPrograms->disabledTip        = 'The current mini program is disabled.';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';

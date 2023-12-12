@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('prompt', $miniProgram->prompt);
-jsVar('regenerateLang', $lang->ai->miniPrograms->regenerate);
+jsVar('regenerateLang',   $lang->ai->miniPrograms->regenerate);
 jsVar('emptyNameWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
+jsVar('clearContextLang', $lang->ai->miniPrograms->clearContext);
+jsVar('newChatTip',       $lang->ai->miniPrograms->newChatTip);
+jsVar('newVersionTip',    $lang->ai->miniPrograms->newVersionTip);
+
+jsVar('prompt', $miniProgram->prompt);
 jsVar('postLink', createLink('ai', 'miniProgramChat', "id={$miniProgram->id}"));
 jsVar('messages', $messages);
+jsVar('isAppDisabled', $miniProgram->published === '0');
 
 $isDeleted = $miniProgram->deleted === '1';
 
@@ -70,6 +75,41 @@ jsVar('fields', $fields);
 list($iconName, $iconTheme) = explode('-', $miniProgram->icon);
 $star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
 $delete = $star === 'star' ? 'true' : 'false';
+
+btn(
+    setID('open-dialog'),
+    setData('toggle', 'modal'),
+    setData('target', '#disabled-dialog')
+);
+
+div(
+    setClass('modal'),
+    setData('backdrop', 'static'),
+    setID('disabled-dialog'),
+    div(
+        setClass('modal-dialog shadow size-sm bd-none'),
+        div(
+            setClass('modal-content'),
+            div(
+                setClass('modal-body'),
+                html('<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12.013" cy="12.0163" r="12" transform="rotate(0.0777774 12.013 12.0163)" fill="#FFA34D"/>
+                <path d="M11.5573 14.7861C12.0809 14.7867 12.6054 14.2164 12.6063 13.6455L13.0103 6.08095C13.0112 5.51 13.0129 4.36812 11.442 4.36619C10.002 4.36442 9.8696 5.36341 9.86853 6.07709L10.2499 13.6426C10.5109 14.2138 11.0337 14.7854 11.5573 14.7861ZM11.5551 16.2134C10.7697 16.2124 9.98317 16.9252 9.98167 17.9243C9.98039 18.7807 10.6336 19.6379 11.55 19.6391C12.4664 19.6402 13.122 18.9273 13.1235 17.9282C13.125 16.929 12.3406 16.2144 11.5551 16.2134Z" fill="white"/>
+                </svg>'),
+                $lang->ai->miniPrograms->disabledTip
+            ),
+            div(
+                setClass('modal-footer'),
+                btn(
+                    setClass('primary'),
+                    setData('dismiss', 'modal'),
+                    on::click('window.aiMiniProgramChat.backToSquare'),
+                    $lang->confirm
+                )
+            )
+        )
+    )
+);
 
 div(
     setClass('mini-program fixed flex'),
@@ -154,7 +194,8 @@ div(
         )
     ),
     div(
-        setClass('chat chat-nohistory shadow-md flex-1 center hidden'),
+        setClass('chat chat-nohistory shadow-md flex-1 center'),
+        setClass(array('hidden' => !empty($messages))),
         div(
             setClass('chat-tip flex'),
             html(<<<END
@@ -168,8 +209,7 @@ div(
         )
     ),
     div(
-        setClass('chat chat-nomodel shadow-md flex-1 center'),
-        setClass(array('hidden' => !empty($messages))),
+        setClass('chat chat-nomodel shadow-md flex-1 center hidden'),
         div(
             p(
                 icon(set::name('exclamation'), setClass('mr-2'), setStyle(array('color' => 'rgb(255, 159, 70)'))),
@@ -186,6 +226,7 @@ div(
         ),
         div(
             setClass('input-container'),
+            setClass(array('hidden' => !empty($messages))),
             html(<<<END
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M23.6037 4.22186C23.6037 3.95812 23.5162 3.73818 23.3401 3.56236L20.4372 0.659451C20.2614 0.483472 20.0415 0.395508 19.7775 0.395508C19.5134 0.395508 19.2938 0.483472 19.1178 0.659451L0.263943 19.5132C0.0877584 19.6893 0 19.9094 0 20.1732C0 20.4372 0.0877584 20.6569 0.263943 20.8329L3.16675 23.7356C3.34293 23.9117 3.56256 23.9996 3.82661 23.9996C4.09039 23.9996 4.31028 23.9121 4.48631 23.7356L23.3404 4.88171C23.5162 4.70558 23.6037 4.4859 23.6037 4.22186ZM17.0504 8.5176L15.4818 6.94884L19.7774 2.65314L21.3459 4.22186L17.0504 8.5176Z" fill="url(#paint0_linear_2090_3242)"/>
@@ -222,7 +263,7 @@ div(
                 </defs>
                 </svg>
             END),
-            html("<textarea placeholder='{$lang->ai->miniPrograms->placeholder}' rows='1' class='chat-input-box' oninput='window.aiMiniProgramChat.handleInput(event)' onkeydown='window.aiMiniProgramChat.handleInputEnter(event)' oncompositionstart='window.aiMiniProgramChat.handleInputCompositionStart(event)' oncompositionend='window.aiMiniProgramChat.handleInputCompositionEnd(event)'></textarea>"),
+            html("<textarea placeholder='{$lang->ai->miniPrograms->placeholder->asking}' rows='1' class='chat-input-box' oninput='window.aiMiniProgramChat.handleInput(event)' onkeydown='window.aiMiniProgramChat.handleInputEnter(event)' oncompositionstart='window.aiMiniProgramChat.handleInputCompositionStart(event)' oncompositionend='window.aiMiniProgramChat.handleInputCompositionEnd(event)'></textarea>"),
             btn(
                 setClass('ghost send-btn'),
                 on::click('window.aiMiniProgramChat.clearInputAndChat'),
