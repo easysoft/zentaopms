@@ -606,16 +606,16 @@ class searchTao extends searchModel
      * 检查搜索到的模块的权限。
      * Check the priviledge of the object.
      *
-     * @param  string    $objectType
-     * @param  string    $table
-     * @param  array     $results
-     * @param  array     $objectIdList
-     * @param  string    $products
-     * @param  array     $executions
-     * @access protected
+     * @param  string  $objectType
+     * @param  string  $table
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  string  $products
+     * @param  array   $executions
+     * @access private
      * @return array
      */
-    protected function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, string $products, array $executions): array
+    private function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, string $products, array $executions): array
     {
         if($objectType == 'product')   return $this->checkProductPriv($results, $objectIdList, $products);
         if($objectType == 'program')   return $this->checkProgramPriv($results, $objectIdList);
@@ -633,16 +633,16 @@ class searchTao extends searchModel
      * 检查各个模块所属的产品或者执行的权限。
      * Check related object priviledge.
      *
-     * @param  string    $objectType
-     * @param  string    $table
-     * @param  array     $results
-     * @param  array     $objectIdList
-     * @param  array     $products
-     * @param  array     $executions
-     * @access protected
+     * @param  string  $objectType
+     * @param  string  $table
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  array   $products
+     * @param  array   $executions
+     * @access private
      * @return array
      */
-    protected function checkRelatedObjectPriv(string $objectType, string $table, array $results, array $objectIdList, array $products, array $executions): array
+    private function checkRelatedObjectPriv(string $objectType, string $table, array $results, array $objectIdList, array $products, array $executions): array
     {
         $objectProducts   = array();
         $objectExecutions = array();
