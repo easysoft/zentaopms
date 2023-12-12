@@ -111,7 +111,7 @@ class extensionZen extends extension
         /* 兼容版本检查。 */
         /* Check version compatible. */
         $zentaoCompatible = $condition->zentao['compatible'];
-        if(!$this->extension->checkVersion($zentaoCompatible) && $ignoreCompatible == 'no')
+        if(!$this->extension->checkVersion((string)$zentaoCompatible) && $ignoreCompatible == 'no')
         {
             $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $installType, $ignoreLink, $installType, inlink('obtain'));
             return false;
@@ -590,9 +590,9 @@ class extensionZen extends extension
      */
     public function togglePackageDisable(string $extension, string $action = 'disabled'): bool
     {
-        if(!is_dir($this->pkgRoot . $extension)) return true;
+        if(!is_dir($this->extension->pkgRoot . $extension)) return true;
 
-        $disabledFile = $this->pkgRoot . $extension . DS . 'disabled';
+        $disabledFile = $this->extension->pkgRoot . $extension . DS . 'disabled';
         if($action == 'disabled') touch($disabledFile);
         if($action == 'active' && file_exists($disabledFile)) unlink($disabledFile);
         return true;

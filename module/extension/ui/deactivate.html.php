@@ -57,7 +57,8 @@ div
         btn
         (
             $lang->cancel,
-            set('data-dismiss', 'modal')
+            set('data-dismiss', 'modal'),
+            set::onclick('window.loadPage()')
         )
     )
 );
