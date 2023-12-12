@@ -662,7 +662,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($bugIdList as $bugID) $this->action->create('bug', $bugID, 'linked2bug', '', $buildID);
+        foreach($bugIdList as $bugID) $this->action->create('bug', (int)$bugID, 'linked2bug', '', $buildID);
 
         return !dao::isError();
     }

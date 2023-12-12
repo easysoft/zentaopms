@@ -630,7 +630,7 @@ class build extends control
         }
         else
         {
-            $allBugs = $this->bug->getExecutionBugs($executionID, 0, 'all', $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->allBugs, $pager);
+            $allBugs = $this->bug->getExecutionBugs($executionID, 0, 'all', array($buildID), 'noclosed', 0, 'status_desc,id_desc', $build->allBugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;
