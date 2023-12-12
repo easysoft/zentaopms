@@ -2621,7 +2621,7 @@ class taskModel extends model
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->query();
-        while($task = $stmt->fetch()) $tasks[$task->id] = ($task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '') . "$task->id:$task->finishedByRealName:$task->name";
+        while($task = $stmt->fetch()) $tasks[$task->id] = ($task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '') . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name";
         return $tasks;
     }
 
