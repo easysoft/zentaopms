@@ -503,6 +503,7 @@ class kanban extends control
     }
 
     /**
+     * 创建看板泳道。
      * Create a lane for a kanban.
      *
      * @param  int    $kanbanID
@@ -511,26 +512,15 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function createLane($kanbanID, $regionID, $from = 'kanban')
+    public function createLane(int $kanbanID, int $regionID, string $from = 'kanban')
     {
         if(!empty($_POST))
         {
-            $laneID = $this->kanban->createLane($kanbanID, $regionID, null);
+            $lane = form::data($this->config->kanban->form->createLane)->add('region', $regionID)->get();
+            $this->kanban->createLane($kanbanID, $regionID, $lane, 'new');
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
-
-            if($from == 'execution')
-            {
-                if(dao::isError()) return $this->sendError(dao::getError());
-
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
-                $kanbanData   = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
-            }
-
+            if($from == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban();"));
             $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
