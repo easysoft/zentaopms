@@ -608,6 +608,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
 
         if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
     }
+
     if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
     if($fieldList['actions']['minWidth'] < 48) $fieldList['actions']['minWidth'] = 48;
 
@@ -743,4 +744,28 @@ function getVisions(): array
     $visions    = array_flip(array_unique(array_filter(explode(',', trim($config->visions, ',')))));
     $visionList = $lang->visionList;
     return array_intersect_key($visionList, $visions);
+}
+
+/**
+ * 对数据进行HTML实体转为字符。
+ * Un HTML array.
+ *
+ * @param  mixed  $data
+ * @access public
+ * @return mixed
+ */
+function unHTMLArray($data, $processed = array())
+{
+    if(is_string($data)) return htmlspecialchars_decode($data);
+
+    if(is_array($data) || is_object($data))
+    {
+        if(in_array($data, $processed, true)) {
+            return $data;
+        }
+
+        $processed[] = $data;
+        foreach($data as &$value) $value = unHTMLArray($value, $processed);
+    }
+    return $data;
 }

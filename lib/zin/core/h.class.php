@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'json.func.php';
 require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'wg.func.php';
 
@@ -294,7 +295,7 @@ class h extends wg
 
     protected static function encodeJsonWithRawJs($data)
     {
-        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
+        $json = \zin\utils\jsonEncode($data, JSON_UNESCAPED_UNICODE);
         if(empty($json) && (is_array($data) || is_object($data))) return '[]';
 
         $json = str_replace('"RAWJS<', '', str_replace('>RAWJS"', '', $json));
