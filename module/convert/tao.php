@@ -59,7 +59,7 @@ class convertTao extends convertModel
         $issue->PROJECT     = isset($data['project']) ? $data['project'] : 0;
         $issue->issuestatus = isset($data['status']) ? $data['status'] : '';
         $issue->CREATED     = isset($data['created']) ? $data['created'] : '';
-        $issue->CREATOR     = isset($data['creator']) ? $$data['creator'] : '';
+        $issue->CREATOR     = isset($data['creator']) ? $data['creator'] : '';
         $issue->issuetype   = isset($data['type']) ? $data['type'] : '';
         $issue->ASSIGNEE    = isset($data['assignee']) ? $data['assignee'] : '';
         $issue->RESOLUTION  = isset($data['resolution']) ? $data['resolution'] : '';
@@ -245,6 +245,40 @@ class convertTao extends convertModel
     }
 
     /**
+     * 从jira文件中获取版本信息。
+     * Get version group from jira file.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getVersionGroup(): array
+    {
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
+        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
+        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if(empty($parsedXML)) return array();
+
+        $dataList  = array();
+        $parsedXML = $this->object2Array($parsedXML);
+        foreach($parsedXML as $key => $xmlArray)
+        {
+            if(strtolower($key) != 'nodeassociation') continue;
+            foreach($xmlArray as $key => $attributes)
+            {
+                foreach($attributes as $value)
+                {
+                    if(!is_array($value)) continue;
+                    if($value['sinkNodeEntity'] != 'Version') continue;
+                    $dataList[$value['sinkNodeId']][] = $value['sinkNodeId'];
+                    $dataList[$value['sinkNodeId']][] = $value['sourceNodeId'];
+                }
+            }
+        }
+
+        return $dataList;
+    }
+
+    /**
      * 获取需求、任务、bug、对象类型。
      * Get stories and tasks and bugs and objectType.
      *
@@ -295,7 +329,7 @@ class convertTao extends convertModel
         {
             foreach($parsedXML as $key => $value)
             {
-                if(!is_object($value) || !is_array($value)) continue;
+                if(!is_object($value) && !is_array($value)) continue;
                 $parsedXML[$key] = $this->object2Array($value);
             }
         }
@@ -653,7 +687,7 @@ class convertTao extends convertModel
             list($mime, $extension) = explode('/', $fileAttachment->MIMETYPE);
 
             $file = new stdclass();
-            $file->pathname   = $this->file->setPathName($fileID, $extension);
+            $file->pathname   = $this->file->setPathName((int)$fileID, $extension);
             $file->title      = str_ireplace(".{$extension}", '', $fileName);
             $file->extension  = $extension;
             $file->size       = $fileAttachment->FILESIZE;
@@ -1067,6 +1101,8 @@ class convertTao extends convertModel
                 {
                     $objectID = zget($issueBugs, $issueID);
                     $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($buildID)->exec();
+                    if(!isset($issue->relation)) continue;
+
                     if($issue->relation == 'IssueVersion')
                     {
                         $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('openedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();

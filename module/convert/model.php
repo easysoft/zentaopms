@@ -162,12 +162,12 @@ class convertModel extends model
             if(strtolower($key) != strtolower($fileName)) continue;
             foreach($xmlArray as $key => $attributes)
             {
-                $desc    = isset($attributes['description']) ? $attributes['description'] : '';
-                $summary = isset($attributes['summary']) ? $attributes['summary'] : '';
-                $body    = isset($attributes['body']) ? $attributes['body'] : '';
-
                 if(is_numeric($key))
                 {
+                    $desc    = isset($attributes['description']) ? $attributes['description'] : '';
+                    $summary = isset($attributes['summary']) ? $attributes['summary'] : '';
+                    $body    = isset($attributes['body']) ? $attributes['body'] : '';
+
                     foreach($attributes as $value)
                     {
                         if(!is_array($value)) continue;
@@ -192,41 +192,10 @@ class convertModel extends model
 
         foreach($dataList as $key => $data)
         {
+            if(!in_array($module, array_keys($this->config->convert->objectTables))) continue;
+
             $buildFunction  = 'build' . ucfirst($module) . 'Data';
             $dataList[$key] = $this->convertTao->$buildFunction($data);
-        }
-
-        return $dataList;
-    }
-
-    /**
-     * 从jira文件中获取版本信息。
-     * Get version group from jira file.
-     *
-     * @access public
-     * @return array
-     */
-    public function getVersionGroup(): array
-    {
-        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
-        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
-        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        $dataList  = array();
-        $parsedXML = $this->convertTao->object2Array($parsedXML);
-        foreach($parsedXML as $key => $xmlArray)
-        {
-            if(strtolower($key) != 'nodeassociation') continue;
-            foreach($xmlArray as $key => $attributes)
-            {
-                foreach($attributes as $value)
-                {
-                    if(!is_array($value)) continue;
-                    if($value['sinkNodeEntity'] != 'Version') continue;
-                    $dataList[$value['sinkNodeId']][] = $value['sinkNodeId'];
-                    $dataList[$value['sinkNodeId']][] = $value['sourceNodeId'];
-                }
-            }
         }
 
         return $dataList;
