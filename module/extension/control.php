@@ -103,7 +103,66 @@ class extension extends control
     }
 
     /**
-     * 安装插件流程。
+     * 上传插件页面。
+     * Upload an extension
+     *
+     * @access public
+     * @return void
+     */
+    public function upload()
+    {
+        if($_FILES)
+        {
+            /* 检查上传附件的错误信息。 */
+            if(!array_filter($_FILES['files']['name'])) return $this->send(array('result' => 'fail', 'message' => $this->lang->extension->errorFileNotEmpty));
+
+            $tmpName   = $_FILES['files']['tmp_name'][0];
+            $fileName  = $_FILES['files']['name'][0];
+            $dest      = $this->app->getTmpRoot() . "extension/$fileName";
+
+            /* 创建目录并将上传的插件包移动到该目录下。 */
+            if(!is_dir(dirname($dest))) mkdir(dirname($dest));
+            if(!move_uploaded_file($tmpName, $dest))
+            {
+                /* 如果文件移动失败则返回错误信息。 */
+                $downloadPath = $this->app->getTmpRoot() . 'extension/';
+                $errorMessage = strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $downloadPath, $downloadPath));
+                return $this->send(array('result' => 'fail', 'message' => $errorMessage));
+            }
+
+            /* 解压插件包, 失败则删除插件包并返回错误信息。 */
+            $extension = basename($fileName, '.zip');
+            $return    = $this->extensionZen->extractPackage($extension);
+            if($return->result != 'ok')
+            {
+                unlink($dest);
+                return $this->send(array('result' => 'fail', 'message' => str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
+            }
+
+            $info = $this->extension->parseExtensionCFG($extension);
+            if(isset($info->code) && $info->code != $extension)
+            {
+                /* 如果插件包的插件代号和插件包名字不一致，则删除解压文件并将上传的插件包改名为插件代号。 */
+                $classFile = $this->app->loadClass('zfile');
+                $classFile->removeDir($this->extension->pkgRoot . $extension); // 这里删掉也没事，后续安装升级的时候会再次解压。
+                rename($this->app->getTmpRoot() . "/extension/$fileName", $this->app->getTmpRoot() . "/extension/{$info->code}.zip");
+                $extension = $info->code;
+            }
+
+            /* 判断是否已经安装过此插件，安装过做升级操作，否则做安装操作。 */
+            $info = $this->extension->getInfoFromDB($extension);
+            $type = (!empty($info) && ($info->status == 'installed' || $info->status == 'deactivated')) ? 'upgrade' : 'install';
+            $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
+            return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
+        }
+
+        $this->extensionZen->checkSafe();
+        $this->view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));;
+        $this->display();
+    }
+
+    /**
+     * 安装插件页面。
      * Install a extension
      *
      * @param  string $extension
@@ -163,7 +222,7 @@ class extension extends control
     }
 
     /**
-     * 卸载插件流程。
+     * 卸载插件页面。
      * Uninstall an extension.
      *
      * @param  string $extension
@@ -211,7 +270,7 @@ class extension extends control
     }
 
     /**
-     * 激活插件。
+     * 激活插件页面。
      * Activate an extension;
      *
      * @param  string $extension
@@ -244,7 +303,7 @@ class extension extends control
     }
 
     /**
-     * 禁用插件。
+     * 禁用插件页面。
      * Deactivate an extension
      *
      * @param  string $extension
@@ -264,66 +323,7 @@ class extension extends control
     }
 
     /**
-     * 上传插件并读取插件信息。
-     * Upload an extension
-     *
-     * @access public
-     * @return void
-     */
-    public function upload()
-    {
-        if($_FILES)
-        {
-            /* 检查上传附件的错误信息。 */
-            if(!array_filter($_FILES['files']['name'])) return $this->send(array('result' => 'fail', 'message' => $this->lang->extension->errorFileNotEmpty));
-
-            $tmpName   = $_FILES['files']['tmp_name'][0];
-            $fileName  = $_FILES['files']['name'][0];
-            $dest      = $this->app->getTmpRoot() . "extension/$fileName";
-
-            /* 创建目录并将上传的插件包移动到该目录下。 */
-            if(!is_dir(dirname($dest))) mkdir(dirname($dest));
-            if(!move_uploaded_file($tmpName, $dest))
-            {
-                /* 如果文件移动失败则返回错误信息。 */
-                $downloadPath = $this->app->getTmpRoot() . 'extension/';
-                $errorMessage = strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $downloadPath, $downloadPath));
-                return $this->send(array('result' => 'fail', 'message' => $errorMessage));
-            }
-
-            /* 解压插件包, 失败则删除插件包并返回错误信息。 */
-            $extension = basename($fileName, '.zip');
-            $return    = $this->extensionZen->extractPackage($extension);
-            if($return->result != 'ok')
-            {
-                unlink($dest);
-                return $this->send(array('result' => 'fail', 'message' => str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
-            }
-
-            $info = $this->extension->parseExtensionCFG($extension);
-            if(isset($info->code) && $info->code != $extension)
-            {
-                /* 如果插件包的插件代号和插件包名字不一致，则删除解压文件并将上传的插件包改名为插件代号。 */
-                $classFile = $this->app->loadClass('zfile');
-                $classFile->removeDir($this->extension->pkgRoot . $extension); // 这里删掉也没事，后续安装升级的时候会再次解压。
-                rename($this->app->getTmpRoot() . "/extension/$fileName", $this->app->getTmpRoot() . "/extension/{$info->code}.zip");
-                $extension = $info->code;
-            }
-
-            /* 判断是否已经安装过此插件，安装过做升级操作，否则做安装操作。 */
-            $info = $this->extension->getInfoFromDB($extension);
-            $type = (!empty($info) && ($info->status == 'installed' || $info->status == 'deactivated')) ? 'upgrade' : 'install';
-            $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
-            return $this->send(array('result' => 'success', 'callback' => array('name' => 'loadInModal', 'params' => $link)));
-        }
-
-        $this->extensionZen->checkSafe();
-        $this->view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));;
-        $this->display();
-    }
-
-    /**
-     * 清除插件。
+     * 清除插件页面。
      * Erase an extension.
      *
      * @param  string $extension
@@ -340,7 +340,7 @@ class extension extends control
     }
 
     /**
-     * 升级插件。
+     * 升级插件页面。
      * Update extension.
      *
      * @param  string $extension
