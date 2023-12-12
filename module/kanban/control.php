@@ -612,31 +612,33 @@ class kanban extends control
      * 创建看板列。
      * Create a column for a kanban.
      *
-     * @param  int    $columnID
+     * @param  int    $fromColumnID
      * @param  string $position left|right
      * @access public
      * @return void
      */
-    public function createColumn($columnID, $position = 'left')
+    public function createColumn(int $fromColumnID, string $position = 'left')
     {
-        $column = $this->kanban->getColumnByID($columnID);
+        $fromColumn = $this->kanban->getColumnByID($fromColumnID);
 
         if($_POST)
         {
-            $order    = $position == 'left' ? $column->order : $column->order + 1;
-            $columnID = $this->kanban->createColumn($column->region, null, $order, $column->parent);
+            $order  = $position == 'left' ? $fromColumn->order : $fromColumn->order + 1;
+            $column = form::data($this->config->kanban->form->createColumn)
+                ->setDefault('order', $order)
+                ->setDefault('region', $fromColumn->region)
+                ->get();
+            $this->kanban->createColumn($fromColumn->region, $column, 'kanban', 'new');
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-            $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
-
-            $region   = $this->kanban->getRegionByID($column->region);
+            $region   = $this->kanban->getRegionByID($fromColumn->region);
             $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
-        $this->view->title    = $this->lang->kanban->createColumn;
-        $this->view->column   = $column;
-        $this->view->position = $position;
+        $this->view->title      = $this->lang->kanban->createColumn;
+        $this->view->fromColumn = $fromColumn;
+        $this->view->position   = $position;
         $this->display();
     }
 
