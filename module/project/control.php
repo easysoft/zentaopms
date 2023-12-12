@@ -665,18 +665,19 @@ class project extends control
     }
 
     /**
+     * 项目动态。
      * Project dynamic.
      *
      * @param  int    $projectID
      * @param  string $type
      * @param  string $param
      * @param  int    $recTotal
-     * @param  string $date
+     * @param  int    $date
      * @param  string $direction  next|pre
      * @access public
      * @return void
      */
-    public function dynamic(int $projectID = 0, string $type = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next')
+    public function dynamic(int $projectID = 0, string $type = 'today', string $param = '', int $recTotal = 0, int $date = 0, string $direction = 'next')
     {
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
