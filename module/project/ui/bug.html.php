@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}" . ($type == 'bysearch' ? '' : "&param=$param") . "&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
+$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}&param={$param}&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
 featureBar
 (
     set::current($type),
