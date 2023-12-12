@@ -147,7 +147,7 @@ class kanbanModel extends model
             $this->createDefaultLane($kanban, $regionID, $groupID);
             if(dao::isError()) return false;
 
-            $this->createDefaultColumns($kanban, $regionID, $groupID);
+            $this->createDefaultColumns($regionID, $groupID);
             if(dao::isError()) return false;
         }
 
@@ -276,7 +276,7 @@ class kanbanModel extends model
                 $copyColumn->parent = $parentColumns[$copyColumn->parent];
             }
 
-            $parentColumnID = $this->createColumn($regionID, $copyColumn, 0, 0, $from);
+            $parentColumnID = $this->createColumn($regionID, $copyColumn, $from, 'copy');
 
             if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
             if(dao::isError()) return false;
@@ -315,13 +315,12 @@ class kanbanModel extends model
     /**
      * Create default kanban columns.
      *
-     * @param  object $kanban
      * @param  int    $regionID
      * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function createDefaultColumns($kanban, $regionID, $groupID)
+    public function createDefaultColumns(int $regionID, int $groupID)
     {
         $order = 1;
         foreach($this->lang->kanban->defaultColumn as $columnName)
@@ -335,7 +334,7 @@ class kanbanModel extends model
             $column->color  = '#333';
             $column->type   = '';
 
-            $this->createColumn($regionID, $column);
+            $this->createColumn($regionID, $column, 'kanban', 'copy');
             $order ++;
         }
 
@@ -347,44 +346,19 @@ class kanbanModel extends model
      *
      * @param  int    $regionID
      * @param  object $column
-     * @param  int    $order
-     * @param  int    $parent
      * @param  string $from kanban|execution
+     * @param  string $mode new|copy
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function createColumn($regionID, $column = null, $order = 0, $parent = 0, $from = 'kanban')
+    public function createColumn(int $regionID, object $column = null, string $from = 'kanban', string $mode = 'new'): int|false
     {
-        if(empty($column))
+        if($mode == 'new')
         {
-            $column = fixer::input('post')
-                ->add('region', $regionID)
-                ->setIF($parent > 0, 'parent', $parent)
-                ->setIF($order, 'order', $order)
-                ->setDefault('color', '#333')
-                ->setDefault('limit', -1)
-                ->trim('name')
-                ->remove('WIPCount,noLimit')
-                ->get();
-
-            if(!$order)
-            {
-                $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)
-                    ->where('`group`')->eq($column->group)
-                    ->fetch('maxOrder');
-                $column->order = $maxOrder ? $maxOrder + 1 : 1;
-            }
-
-            if(!$column->limit && empty($_POST['noLimit'])) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
-            if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
-            {
-                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
-                return false;
-            }
+            if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
+            if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($column->noLimit) and $column->limit <= 0)) dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             if(dao::isError()) return false;
         }
-
-        $column->limit = (int)$column->limit;
 
         $limit = $column->limit;
         if(isset($column->parent) and $column->parent > 0)
@@ -395,33 +369,17 @@ class kanbanModel extends model
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
                 $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->andWhere('deleted')->eq(0)->fetch('sumChildLimit');
-                if($limit == -1 or (($limit + $sumChildLimit) > $parentColumn->limit))
-                {
-                    dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
-                    return false;
-                }
-
-                $childColumns = $this->getColumnsByObject('parent', $column->parent);
-                foreach($childColumns as $childColumn)
-                {
-                    $limit += (int)$childColumn->limit;
-                    if($limit > $parentColumn->limit and $parentColumn->limit != -1)
-                    {
-                        /* The total WIP of the child columns is greater than the WIP of the parent column. */
-                        dao::$errors['limit'][] = $this->lang->kanban->error->childLimitNote;
-                        return false;
-                    }
-                }
+                if($limit == -1 or (((int)$limit + (int)$sumChildLimit) > $parentColumn->limit)) dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
+                if(dao::isError()) return false;
             }
         }
 
-        if($order)
+        if($mode == 'new' && $column->order)
         {
-            /* It means copy a column or insert a column before or after a column. */
             $this->dao->update(TABLE_KANBANCOLUMN)
                 ->set('`order` = `order` + 1')
                 ->where('`group`')->eq($column->group)
-                ->andWhere('`order`')->ge($order)
+                ->andWhere('`order`')->ge($column->order)
                 ->exec();
         }
 
@@ -432,7 +390,7 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $columnID = $this->dao->lastInsertID();
-
+        $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
         if($from == 'kanban') $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
         /* Add kanban cell. */
@@ -2412,11 +2370,7 @@ class kanbanModel extends model
             elseif($lane->mode == 'independent')
             {
                 $lane->group = $this->createGroup($kanbanID, $regionID);
-                if($lane->type == 'common')
-                {
-                    $kanban = $this->getByID($kanbanID);
-                    $this->createDefaultColumns($kanban, $regionID, $lane->group);
-                }
+                if($lane->type == 'common') $this->createDefaultColumns($regionID, $lane->group);
             }
         }
 
