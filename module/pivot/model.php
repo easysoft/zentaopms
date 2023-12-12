@@ -985,7 +985,7 @@ class pivotModel extends model
         $groupsRow = array();
         foreach($columns as $column)
         {
-            $columnShowOrigin = zget($column, 'showOrigin', false);
+            $columnShowOrigin = zget($column, 'showOrigin', '');
             if($columnShowOrigin) $column['slice'] = 'noSlice';
 
             $stat   = $column['stat'];
