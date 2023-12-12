@@ -458,7 +458,7 @@ formPanel
                     set('id', 'begin'),
                     set::value($execution->begin),
                     set::placeholder($lang->execution->begin),
-                    on::change('computeWorkDays')
+                    on::change('computeWorkDays(NaN)')
                 ),
                 $lang->project->to,
                 datePicker
@@ -467,7 +467,7 @@ formPanel
                     set('id', 'end'),
                     set::value($execution->end),
                     set::placeholder($lang->execution->end),
-                    on::change('computeWorkDays')
+                    on::change('computeWorkDays(NaN)')
                 )
             )
         ),

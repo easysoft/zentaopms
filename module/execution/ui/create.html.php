@@ -294,8 +294,8 @@ formPanel
     on::click('.addLine', 'addNewLine'),
     on::click('.removeLine', 'removeLine'),
     on::change('[name^=products]', 'loadBranches'),
-    on::change('[name=begin]', 'computeWorkDays'),
-    on::change('[name=end]', 'computeWorkDays'),
+    on::change('[name=begin]', 'computeWorkDays(NaN)'),
+    on::change('[name=end]', 'computeWorkDays(NaN)'),
     formGroup
     (
         set::width('1/2'),

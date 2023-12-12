@@ -14,6 +14,7 @@ $setCode    = (isset($config->setCode) and $config->setCode == 1);
 $showMethod = $app->tab == 'project' && isset($project) && ($project->model == 'agileplus' || $project->model == 'waterfallplus');
 $typeTip    = $this->app->tab == 'execution' ? $lang->execution->waterfallTip . lcfirst($lang->execution->typeTip) : $lang->execution->typeTip;
 
+jsVar('weekend', $config->execution->weekend);
 jsVar('stageList', $lang->stage->typeList);
 jsVar('confirmSync', $lang->execution->confirmSync);
 
@@ -23,6 +24,8 @@ formBatchPanel
     set::data(array_values($executions)),
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[data-name="project"]', 'changeProject'),
+    on::change('[data-name="begin"]', "computeWorkDays($(e.target).attr('name'))"),
+    on::change('[data-name="end"]', "computeWorkDays($(e.target).attr('name'))"),
     formBatchItem
     (
         set::name('id'),
