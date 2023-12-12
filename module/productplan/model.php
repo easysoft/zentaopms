@@ -911,10 +911,11 @@ class productplanModel extends model
         {
             if(!isset($bugs[$bugID])) continue;
 
-            $bug = $bugs[$bugID];
+            $bug   = $bugs[$bugID];
+            $bugID = (int)$bugID;
             if($bug->plan == $planID) continue;
 
-            $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('id')->eq((int)$bugID)->exec();
+            $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('id')->eq($bugID)->exec();
             $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
         }
 
