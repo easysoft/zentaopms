@@ -328,6 +328,44 @@ class aiModel extends model
         return array_keys($paris);
     }
 
+    public function saveMiniProgramMessage($appID, $type, $content)
+    {
+        $message = new stdClass();
+        $message->appID = $appID;
+        $message->user = $this->app->user->id;
+        $message->type = $type;
+        $message->content = $content;
+        $message->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_AIMESSAGE)
+            ->data($message)
+            ->exec();
+        return !dao::isError();
+    }
+
+    public function getHistoryMessages($appID, $limit = 20)
+    {
+        $messages = $this->dao->select('*')
+            ->from(TABLE_AIMESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('user')->eq($this->app->user->id)
+            ->orderBy('createdDate_desc')
+            ->limit($limit)
+            ->fetchAll();
+
+        $messageIDs = array();
+        foreach ($messages as $message) $messageIDs[] = $message->id;
+
+        $this->dao->delete()
+            ->from(TABLE_AIMESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('user')->eq($this->app->user->id)
+            ->andWhere('id')->notin($messageIDs)
+            ->exec();
+
+        return $messages;
+    }
+
     /**
      * Get mini programs by appid.
      *

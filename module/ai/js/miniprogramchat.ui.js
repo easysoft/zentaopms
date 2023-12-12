@@ -236,12 +236,12 @@ window.aiMiniProgramChat.handleInput = (event) =>
 
 /**
  *
- * @param {'ai'|'user'} type
+ * @param {'ai'|'user'} role
  * @returns {jQuery}
  */
-function createAvatar(type)
+function createAvatar(role)
 {
-    const $avatar = type === 'user'
+    const $avatar = role === 'user'
         ? $('#userMenu-toggle > div.avatar').clone()
         : $('#program-avatar').clone().removeAttr('id');
     $avatar.addClass('message-avatar');
@@ -260,26 +260,26 @@ function createMessageTime(time)
 
 /**
  *
- * @param {'user'|'ai'} type
+ * @param {'user'|'ai'} role
  * @param {string} content
  * @returns {jQuery}
  */
-function createMessageContent(type, content)
+function createMessageContent(role, content)
 {
-    return $(`<div class="message-content ${type}-message-content">${content}</div>`);
+    return $(`<div class="message-content ${role}-message-content">${content}</div>`);
 }
 
 /**
  *
- * @param {'user'|'ai'} type
+ * @param {'user'|'ai'} role
  * @param {string} content
  * @param {string} time
  * @returns {jQuery}
  */
-function createMessageBody(type, content, time)
+function createMessageBody(role, content, time)
 {
     const $time = createMessageTime(time);
-    const $content = createMessageContent(type, content);
+    const $content = createMessageContent(role, content);
     return $(`<div class="message-body"></div>`)
         .append($time)
         .append($content);
@@ -287,16 +287,16 @@ function createMessageBody(type, content, time)
 
 /**
  *
- * @param {'user'|'ai'} type
+ * @param {'user'|'ai'} role
  * @param {string} content
  * @param {string} time
  * @returns {jQuery}
  */
-function createMessage(type, content, time = (new Date).toLocaleString())
+function createMessage(role, content, time = (new Date).toLocaleString())
 {
-    const $avatar = createAvatar(type);
-    const $body = createMessageBody(type, content, time);
-    return $(`<div class="message ${type}-message"></div>`)
+    const $avatar = createAvatar(role);
+    const $body = createMessageBody(role, content, time);
+    return $(`<div class="message ${role}-message"></div>`)
         .append($avatar)
         .append($body);
 }
@@ -307,4 +307,18 @@ $(function()
     $('#reload-current').on('click', () => {
         location.reload();
     });
+    console.log(messages);
+    const $messageList = $('.chat-history .message-list');
+    const messagesReverse = messages.reverse();
+    for(let i = 0; i< messagesReverse.length; i++)
+    {
+        const message = messagesReverse[i];
+        const {type, content, createdDate: time} = message;
+        let role;
+        if(type === 'req') role = 'user';
+        else if(type === 'res') role = 'ai';
+        const $message = createMessage(role, content, time);
+        $messageList.append($message);
+    }
+    $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
 });

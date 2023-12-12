@@ -159,12 +159,17 @@ class ai extends control
             $isRetry = $this->post->retry == 'true';
 
             $messages = json_decode($history);
-            if(!$isRetry) $messages[] = (object)array('role' => 'user', 'content' => $message);
+            if(!$isRetry)
+            {
+                $messages[] = (object)array('role' => 'user', 'content' => $message);
+                $this->ai->saveMiniProgramMessage($id, 'req', $message);
+            }
             if($this->ai->isModelConfigured())
             {
                 $response = $this->ai->converse($messages);
                 if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->chatNoResponse, 'reason' => 'no response'));
 
+                $this->ai->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
                 return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/m/d H:m:s"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
             }
             else
@@ -174,6 +179,7 @@ class ai extends control
         }
 
         $this->view->miniProgram  = $miniProgram;
+        $this->view->messages     = $this->ai->getHistoryMessages($id);
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
         $this->view->title        = "{$this->lang->ai->miniPrograms->common}#{$miniProgram->id} $miniProgram->name";

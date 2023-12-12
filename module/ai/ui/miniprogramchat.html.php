@@ -7,6 +7,7 @@ jsVar('prompt', $miniProgram->prompt);
 jsVar('regenerateLang', $lang->ai->miniPrograms->regenerate);
 jsVar('emptyNameWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
 jsVar('postLink', createLink('ai', 'miniProgramChat', "id={$miniProgram->id}"));
+jsVar('messages', $messages);
 
 $isDeleted = $miniProgram->deleted === '1';
 
@@ -167,7 +168,8 @@ div(
         )
     ),
     div(
-        setClass('chat chat-nomodel shadow-md flex-1 center hidden'),
+        setClass('chat chat-nomodel shadow-md flex-1 center'),
+        setClass(array('hidden' => !empty($messages))),
         div(
             p(
                 icon(set::name('exclamation'), setClass('mr-2'), setStyle(array('color' => 'rgb(255, 159, 70)'))),
@@ -178,6 +180,7 @@ div(
     ),
     div(
         setClass('chat chat-history shadow-md flex-1 col'),
+        setClass(array('hidden' => empty($messages))),
         div(
             setClass('flex-1 message-list'),
         ),
