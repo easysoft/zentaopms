@@ -77,8 +77,8 @@
             </td>
             <?php $params = "testcaseID=$caseID&version=$case->version";?>
             <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
-            <?php $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ztf'></i>" : '';?>
-            <td class='c-title text-left' title="<?php echo $case->title?>"><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title . $autoIcon, null, "style='color: $case->color' data-app='{$this->app->tab}'");?></td>
+            <?php $icon = $case->auto == 'auto' ? "<i class='icon icon-ztf'></i> " : "<i class='icon icon-test'></i> ";?>
+            <td class='c-title text-left' title="<?php echo $case->title?>"><?php echo $icon . html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'");?></td>
             <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
             <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
             <td>

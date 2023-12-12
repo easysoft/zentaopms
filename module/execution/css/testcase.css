@@ -3,3 +3,5 @@
 #pageNav #dropMenu .col-left {padding-bottom: 0px;}
 #currentBranch + #dropMenu .col-left {padding-bottom: 30px;}
 .status-blocked {left: -5px;}
+
+.icon-ztf,.icon-test {color: #888fa1; font-size: 12px;}
