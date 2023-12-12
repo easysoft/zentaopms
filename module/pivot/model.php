@@ -1007,7 +1007,7 @@ class pivotModel extends model
             }
             $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
             if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
-            $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
+            $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 
             $this->getMergeData($columnRows, $groupsRow);
         }
@@ -1274,9 +1274,9 @@ class pivotModel extends model
      * @param  string  $showColTotal
      * @param  string  $uuName
      * @access public
-     * @return void
+     * @return array
      */
-    public function processShowData(array &$columnRows, array $groups, array $column, string $showColTotal, string $uuName): void
+    public function processShowData(array $columnRows, array $groups, array $column, string $showColTotal, string $uuName): array
     {
         $slice      = zget($column, 'slice',    'noSlice');
         $showMode   = zget($column, 'showMode', 'default');
@@ -1303,12 +1303,12 @@ class pivotModel extends model
             $params['showTotal']    = $showTotal;
             $params['showColTotal'] = $showColTotal;
 
-            call_user_func_array(array($this, $method), $params);
+            return call_user_func_array(array($this, $method), $params);
         }
         else
         {
             list($_, $allTotal, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
-            $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, $showMode, $allTotal, $colTotal);
+            return $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, $showMode, $allTotal, $colTotal);
         }
     }
 
@@ -1361,11 +1361,11 @@ class pivotModel extends model
      * @param  string  $monopolize
      * @param  string  $uuName
      * @access private
-     * @return void
+     * @return array
      */
-    private function processTotalShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): void
+    private function processTotalShowData(array $columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): array
     {
-        list($rowTotal, $allTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        list($rowTotal, $allTotal, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
 
         foreach($columnRows as $index => $row)
         {
@@ -1389,7 +1389,9 @@ class pivotModel extends model
             $columnRows[$index] = $columnRow;
         }
 
-        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'total', $allTotal, $rowTotal);
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'total', $$allTotalallTotal, $colTotal);
+
+        return $columnRows;
     }
 
     /**
@@ -1401,11 +1403,11 @@ class pivotModel extends model
      * @param  string  $monopolize
      * @param  string  $uuName
      * @access private
-     * @return void
+     * @return array
      */
-    private function processRowShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): void
+    private function processRowShowData(array $columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): array
     {
-        list($rowTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        list($rowTotal, $_, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
         foreach($columnRows as $index => $row)
         {
             $columnRow = new stdclass();
@@ -1427,7 +1429,9 @@ class pivotModel extends model
             $columnRows[$index] = $columnRow;
         }
 
-        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'row', $rowTotal[0], $rowTotal);
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'row', $rowTotal[0], $colTotal);
+
+        return $columnRows;
     }
 
     /**
@@ -1439,9 +1443,9 @@ class pivotModel extends model
      * @param  string  $monopolize
      * @param  string  $uuName
      * @access private
-     * @return void
+     * @return array
      */
-    private function processColumnShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): void
+    private function processColumnShowData(array $columnRows, array $groups, string $monopolize, string $uuName, string $showTotal, string $showColTotal): array
     {
         list($rowTotal, $allTotal, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
         foreach($columnRows as $index => $row)
@@ -1466,6 +1470,8 @@ class pivotModel extends model
         }
 
         if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'column', $allTotal, $colTotal);
+
+        return $columnRows;
     }
 
     /**
@@ -1477,13 +1483,15 @@ class pivotModel extends model
      * @param  string  $monopolize
      * @param  string  $uuName
      * @access private
-     * @return void
+     * @return array
      */
-    private function processDefaultShowData(array &$columnRows, array $groups, string $monopolize, string $uuName, string $showColTotal): void
+    private function processDefaultShowData(array $columnRows, array $groups, string $monopolize, string $uuName, string $showColTotal): array
     {
-        list($rowTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        list($rowTotal, $_, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
         foreach($columnRows as $index => $row) $row->{'sum_' . $uuName} = $rowTotal[$index];
-        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, 'sum', $uuName, 'default', $rowTotal[0], $rowTotal);
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, 'sum', $uuName, 'default', $rowTotal[0], $colTotal);
+
+        return $columnRows;
     }
 
     /**
@@ -1498,11 +1506,11 @@ class pivotModel extends model
      * @param  float   $allTotal
      * @param  array   $colTotal
      * @access private
-     * @return void
+     * @return array
      */
-    private function rebuildColumnRows(array &$columnRows, array $groups, string $showTotal, string $uuName, string $showMode, float $allTotal, array $colTotal): void
+    private function rebuildColumnRows(array $columnRows, array $groups, string $showTotal, string $uuName, string $showMode, float $allTotal, array $colTotal): array
     {
-        if(empty($columnRows)) return;
+        if(empty($columnRows)) return array();
 
         $colTotalRow = new stdClass();
         foreach($columnRows[0] as $field => $_)
@@ -1536,8 +1544,9 @@ class pivotModel extends model
                 if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
             }
         }
-
         $columnRows[] = $colTotalRow;
+
+        return $columnRows;
     }
 
     /**
