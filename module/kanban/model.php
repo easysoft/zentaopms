@@ -234,7 +234,7 @@ class kanbanModel extends model
             $copyLane->region         = $regionID;
             $copyLane->group          = $newGroupID;
             $copyLane->lastEditedTime = helper::now();
-            $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane);
+            $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane, 'copy');
             if(dao::isError()) return false;
         }
 
@@ -2383,40 +2383,33 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建看板泳道。
      * Create a lane.
      *
      * @param  int    $kanbanID
      * @param  int    $regionID
      * @param  object $lane
+     * @param  string $mode    new|copy
      * @access public
-     * @return int
+     * @return int|bool
      */
-    public function createLane($kanbanID, $regionID, $lane = null)
+    public function createLane(int $kanbanID, int $regionID, object $lane = null, string $mode = 'new'): int|bool
     {
-        if(empty($lane))
+        if($mode == 'new')
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
                 ->where('region')->eq($regionID)
                 ->fetch('maxOrder');
-            $lane = fixer::input('post')
-                ->add('region', $regionID)
-                ->add('order', $maxOrder ? $maxOrder + 1 : 1)
-                ->add('lastEditedTime', helper::now())
-                ->setIF(isset($_POST['laneType']), 'execution', $kanbanID)
-                ->trim('name')
-                ->setDefault('color', '#7ec5ff')
-                ->remove('laneType')
-                ->get();
 
-            $lane->type = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+            $lane->order     = $maxOrder ? $maxOrder + 1 : 1;
+            $lane->type      = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+            $lane->execution = isset($_POST['laneType']) ? $kanbanID : 0;
 
-            $mode = zget($lane, 'mode', '');
-            if($mode == 'sameAsOther')
+            if($lane->mode == 'sameAsOther')
             {
-                $otherLane = zget($lane, 'otherLane', 0);
-                if($otherLane) $lane->group = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($otherLane)->fetch('group');
+                if($lane->otherLane) $lane->group = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($lane->otherLane)->fetch('group');
             }
-            elseif($mode == 'independent')
+            elseif($lane->mode == 'independent')
             {
                 $lane->group = $this->createGroup($kanbanID, $regionID);
                 if($lane->type == 'common')
@@ -2434,9 +2427,9 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        if($lane->type != 'common' and isset($mode) and $mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
+        if($lane->type != 'common' and $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
-        if(isset($mode) and ($mode == 'sameAsOther' or ($lane->type == 'common' and $mode == 'independent')))
+        if($mode == 'sameAsOther' or ($lane->type == 'common' and $mode == 'independent'))
         {
             $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
             foreach($columnIDList as $columnID)
@@ -2446,6 +2439,8 @@ class kanbanModel extends model
                 if(dao::isError()) return false;
             }
         }
+
+        $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
         return $laneID;
     }
 
