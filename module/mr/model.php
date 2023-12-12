@@ -43,8 +43,7 @@ class mrModel extends model
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
         }
 
-        return $this->dao->select('*')
-            ->from(TABLE_MR)
+        return $this->dao->select('*')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
             ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
@@ -555,7 +554,7 @@ class mrModel extends model
             $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
             {
-                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($hostID, $MR->assignee);
                 if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
             }
             return json_decode(commonModel::http($url, $MRObject));
