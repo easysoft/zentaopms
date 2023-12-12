@@ -87,7 +87,7 @@ class kanbanTao extends kanbanModel
 
             $regionData['items'][] = $groupData;
         }
-        $regionData['laneCount']  = $laneCount;
+        $regionData['laneCount'] = $laneCount;
 
         return $regionData;
     }

@@ -609,6 +609,7 @@ class kanban extends control
     }
 
     /**
+     * 创建看板列。
      * Create a column for a kanban.
      *
      * @param  int    $columnID

@@ -18,26 +18,25 @@ foreach($kanbanList as $current => $region)
     {
         $groupID = $group['id'];
 
-        $group['getLane']       = jsRaw('window.getLane');
-        $group['getCol']        = jsRaw('window.getCol');
-        $group['getItem']       = jsRaw('window.getItem');
-        $group['canDrop']       = jsRaw('window.canDrop');
-        $group['onDrop']        = jsRaw('window.onDrop');
-        $group['colWidth']      = 'auto';
-        $group['laneHeight']    = 'auto';
-        $group['minColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
-        $group['maxColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
-        $group['maxLaneHeight'] = '500';
-        $group['colProps']      = array('actions' => jsRaw('window.getColActions'));
-        $group['laneProps']     = array('actions' => jsRaw('window.getLaneActions'));
-        $group['itemProps']     = array('actions' => jsRaw('window.getItemActions'));
-
         foreach($group['data']['cols'] as $colIndex => $col)
         {
             if($col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
         }
 
         $kanbanList[$current]['items'][$index] = $group;
+        $kanbanList[$current]['kanbanProps']['getLane']       = jsRaw('window.getLane');
+        $kanbanList[$current]['kanbanProps']['getCol']        = jsRaw('window.getCol');
+        $kanbanList[$current]['kanbanProps']['getItem']       = jsRaw('window.getItem');
+        $kanbanList[$current]['kanbanProps']['canDrop']       = jsRaw('window.canDrop');
+        $kanbanList[$current]['kanbanProps']['onDrop']        = jsRaw('window.onDrop');
+        $kanbanList[$current]['kanbanProps']['colWidth']      = 'auto';
+        $kanbanList[$current]['kanbanProps']['laneHeight']    = 'auto';
+        $kanbanList[$current]['kanbanProps']['minColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
+        $kanbanList[$current]['kanbanProps']['maxColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
+        $kanbanList[$current]['kanbanProps']['maxLaneHeight'] = '500';
+        $kanbanList[$current]['kanbanProps']['colProps']      = array('actions' => jsRaw('window.getColActions'));
+        $kanbanList[$current]['kanbanProps']['laneProps']     = array('actions' => jsRaw('window.getLaneActions'));
+        $kanbanList[$current]['kanbanProps']['itemProps']     = array('actions' => jsRaw('window.getItemActions'));
     }
 
     $laneCount += $region['laneCount'];
