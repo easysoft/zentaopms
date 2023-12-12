@@ -23,7 +23,7 @@ pipeline {
                             returnStdout: true,
                             script: 'echo $BUILD_ID-${GIT_COMMIT}'
     ).trim()}"""
-    
+
     XIM_NOTIFY_USERS = "liyang"
     XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
   }
@@ -35,7 +35,7 @@ pipeline {
         script {
             env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
             env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-              
+
             def j = job.newJob()
             env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
 
@@ -117,7 +117,7 @@ pipeline {
                 }
               }
               options { skipDefaultCheckout() }
-                
+
               environment {
                 DATA_REPORT_TOKEN = credentials('data_report_token')
               }
@@ -149,7 +149,7 @@ pipeline {
                       sh '''
                         set +x && . /etc/s6/s6-init/envs && set -x
                         s6-svwait -u -t 30000 /etc/s6/s6-available/mysql && initdb.php > /apps/zentao/unittestdb
-                        /apps/zentao/test/runtime/ztf ''' + targetDir + ''' -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log
+                        /apps/zentao/test/runtime/ztf ''' + targetDir + ''' | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log
                         chmod -R 777 /root
                         parsehtml.php
                         initdb.php /apps/zentao/unittestdb
@@ -157,7 +157,7 @@ pipeline {
                     }
                   }
                 }
- 
+
               }
 
               post {
