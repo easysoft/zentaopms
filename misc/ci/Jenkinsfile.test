@@ -147,15 +147,14 @@ pipeline {
                     container('zentao') {
                       sh 'rm -f /bin/sh && ln -s /bin/bash /bin/sh'
                       sh '''
-                        . /etc/s6/s6-init/envs
-                        . /opt/easysoft/scripts/libmysql.sh
+                        set +x && . /etc/s6/s6-init/envs && set -x
                         s6-svwait -u -t 30000 /etc/s6/s6-available/mysql && initdb.php > /apps/zentao/unittestdb
                         /apps/zentao/test/runtime/ztf ''' + targetDir + ''' -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log
                         chmod -R 777 /root
                         parsehtml.php
-                        initdb.php /apps/zentao/unittestdb'''
+                        initdb.php /apps/zentao/unittestdb
+                        pipeline-unittest.sh /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log'''
                       publishHTML (target : [allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
-                      sh 'pipeline-unittest.sh /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log'
                     }
                   }
                 }
