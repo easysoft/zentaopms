@@ -213,4 +213,24 @@ class screen extends control
 
         echo(json_encode($data));
     }
+
+    /**
+     * 获取度量数据。
+     * Ajax get metric data.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMetricData()
+    {
+        $metricID = $this->post->metricID;
+        $metric   = $this->loadModel('metric')->getByID($metricID);
+        $result   = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
+
+        $metricData = new stdclass();
+        $metricData->header  = $this->metric->getViewTableHeader($metric);
+        $metricData->data    = $this->metric->getViewTableData($metric, $result);
+
+        echo(json_encode($metricData));
+    }
 }
