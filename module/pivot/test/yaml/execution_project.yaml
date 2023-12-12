@@ -1,0 +1,14 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 101-700
+  - field: type
+    range: sprint{10},stage{10}
+  - field: project
+    range: 0{5},11-15
+  - field: multiple
+    range: 1
+  - field: status
+    range: closed
