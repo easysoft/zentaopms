@@ -492,6 +492,7 @@ class groupModel extends model
             $dependPrivs = array();
             foreach($this->config->group->package as $packageCode => $packageData)
             {
+                if(!isset($packageData->privs)) continue;
                 foreach($packageData->privs as $privCode => $priv)
                 {
                     if(isset($priv['depend'])) $dependPrivs[$privCode] = $priv['depend'];
