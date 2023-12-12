@@ -124,7 +124,8 @@ pipeline {
                       if (env.XIM_NOTIFY_USERS) {
                          ximUsers = ximUsers + "," + env.XIM_NOTIFY_USERS
                       }
-                      env.XIM_USERS = ximUsers
+                      //env.XIM_USERS = ximUsers
+                      env.XIM_USERS = env.XIM_NOTIFY_USERS
                     }
 
                   }
