@@ -556,42 +556,37 @@ class kanban extends control
     }
 
     /**
+     * 排序看板列。
      * Sort columns.
      *
      * @param  int    $regionID
      * @param  string $columns
      * @access public
-     * @return array|string
+     * @return void
      */
-    public function sortColumn($regionID, $columns = '')
+    public function sortColumn(int $regionID, string $columns = '')
     {
         if(empty($columns)) return;
-        $columns =  explode(',', trim($columns, ','));
+        $columns = explode(',', trim($columns, ','));
 
-        $order = 1;
-        foreach($columns as $columnID)
-        {
-            $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
-            $order ++;
-        }
+        $this->kanbanTao->updateColumnSort($regionID, $columns);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $region     = $this->kanban->getRegionByID($regionID);
-        $kanbanData = $this->kanban->getKanbanData($region->kanban, $regionID);
-        $kanbanData = reset($kanbanData);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'regionID' => 'region' . $regionID, 'kanbanData' => $kanbanData));
+        $region   = $this->kanban->getRegionByID($regionID);
+        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback));
     }
 
     /**
+     * 删除看板泳道。
      * Delete a lane.
      *
      * @param  int    $regionID
-     * @param  int    $kanbanID
      * @param  int    $laneID
      * @access public
      * @return void
      */
-    public function deleteLane($regionID, $kanbanID, $laneID)
+    public function deleteLane(int $regionID, int $laneID)
     {
         $lane = $this->kanban->getLaneById($laneID);
         $this->kanban->delete(TABLE_KANBANLANE, $laneID);
@@ -599,22 +594,17 @@ class kanban extends control
         if($this->app->tab == 'execution')
         {
             if(dao::isError()) return $this->sendError(dao::getError());
-
-            $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-            $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-            $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
-            $kanbanData   = json_encode($kanbanData);
-            return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "refreshKanban();"));
         }
 
         $lanes = $this->kanban->getLanePairsByGroup($lane->group);
         if($lanes)
         {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $lane->region, array('items' => array(array('key' => 'group' . $lane->group, 'data' => array('lanes' => array(array('id' => $laneID, 'name' => $laneID, 'deleted' => true))))))))));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $lane->region, array('items' => array(array('key' => 'group' . $lane->group, 'data' => array('lanes' => array(array('id' => $laneID, 'name' => $laneID, 'deleted' => true))))))))));
         }
         else
         {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, array('items' => array(array('key' => 'group' . $lane->group, 'deleted' => true)))))));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, array('items' => array(array('key' => 'group' . $lane->group, 'deleted' => true)))))));
         }
     }
 
