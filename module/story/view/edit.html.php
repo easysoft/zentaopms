@@ -145,7 +145,7 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
-              <?php if($story->parent <= 0):?>
+              <?php if($story->parent <= 0 && !$hiddenProduct):?>
               <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
                 <th class='thWidth'><?php echo $lang->story->product;?></th>
                 <td id='productBox'>

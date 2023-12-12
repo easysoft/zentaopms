@@ -2067,7 +2067,8 @@ class project extends control
             if(!$project->hasProduct)
             {
                 $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->where('id')->eq($productID)->exec();
+                $product   = $this->product->getById($productID);
+                if($product->shadow) $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->where('id')->eq($productID)->exec();
             }
 
             $message = $this->executeHooks($projectID);

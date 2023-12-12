@@ -824,7 +824,14 @@ class story extends control
         /* Get datas. */
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
-        $products = $this->product->getPairs();
+        if($product->shadow)
+        {
+            $products = $this->product->getPairs('', 0, '', 'all');
+        }
+        else
+        {
+            $products = $this->product->getPairs();
+        }
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story', 0, $story->branch);
 
         /* Set menu. */
