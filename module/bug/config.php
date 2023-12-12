@@ -146,7 +146,7 @@ $config->bug->actionList['edit']['data-app'] = $app->tab;
 $config->bug->actionList['copy']['icon']     = 'copy';
 $config->bug->actionList['copy']['text']     = $lang->bug->copy;
 $config->bug->actionList['copy']['hint']     = $lang->bug->copy;
-$config->bug->actionList['copy']['url']      = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
+$config->bug->actionList['copy']['url']      = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution}');
 $config->bug->actionList['copy']['data-app'] = $app->tab;
 
 $config->bug->actionList['delete']['icon']         = 'trash';

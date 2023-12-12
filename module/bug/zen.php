@@ -847,13 +847,21 @@ class bugZen extends bug
 
         if($this->app->tab == 'execution')
         {
-            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu((int)$output['executionID']);
+            if(isset($output['executionID']))
+            {
+                $this->loadModel('execution')->setMenu((int)$output['executionID']);
+                $this->view->executionID = $output['executionID'];
+            }
             $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
         }
         elseif($this->app->tab == 'project')
         {
-            if(isset($output['projectID'])) $this->loadModel('project')->setMenu((int)$output['projectID']);
+            if(isset($output['projectID']))
+            {
+                $this->loadModel('project')->setMenu((int)$output['projectID']);
+                $this->view->projectID = $output['projectID'];
+            }
         }
         else
         {
