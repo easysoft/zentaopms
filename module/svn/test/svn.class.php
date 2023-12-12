@@ -22,4 +22,17 @@ class svnTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq(2)->fetch();
     }
+
+    public function getRepoLogsTest(int $version): object|bool
+    {
+        $this->objectModel->setRepos();
+        ob_start();
+        $repo = $this->objectModel->repos[1];
+        $logs = $this->objectModel->getRepoLogs($repo, $version);
+        $error = ob_get_clean();
+
+        if($error) return $error;
+        return $logs[count($logs) - 1];
+
+    }
 }

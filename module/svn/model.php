@@ -241,8 +241,6 @@ class svnModel extends model
     public function setRepo(object $repo): bool
     {
         $this->setClient($repo);
-        if(empty($this->client)) return false;
-
         $this->setRepoRoot($repo);
         return true;
     }
@@ -313,13 +311,13 @@ class svnModel extends model
      * @access public
      * @return array
      */
-    public function getRepoLogs(object $repo, int $fromRevision): array|false
+    public function getRepoLogs(object $repo, int $fromRevision): array
     {
         /* The svn log command. */
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $logs = $scm->log('', $fromRevision);
-        if(empty($logs)) return false;
+        if(empty($logs)) return array();
 
         /* Process logs. */
         foreach($logs as $log)
@@ -350,7 +348,6 @@ class svnModel extends model
         if(!$repo) return false;
 
         $this->setClient($repo);
-        if(empty($this->client)) return false;
         putenv('LC_CTYPE=en_US.UTF-8');
 
         $oldRevision = $revision - 1;
@@ -382,7 +379,6 @@ class svnModel extends model
         if(!$repo) return false;
 
         $this->setClient($repo);
-        if(empty($this->client)) return false;
 
         putenv('LC_CTYPE=en_US.UTF-8');
 
@@ -403,10 +399,10 @@ class svnModel extends model
      * Get repo by url.
      *
      * @param  string $url
-     * @access public
+     * @access private
      * @return object|false
      */
-    public function getRepoByURL(string $url): object|false
+    private function getRepoByURL(string $url): object|false
     {
         if(empty($this->repos)) $this->setRepos();
         foreach($this->repos as $repo)

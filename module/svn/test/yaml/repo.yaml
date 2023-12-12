@@ -17,7 +17,7 @@ fields:
   - field: encoding
     range: "`utf-8`"
   - field: SCM
-    range: Subversion{3},Gitlba,Gitea,Gogs
+    range: Subversion{3},Gitlab,Gitea,Gogs
   - field: client
     range: /usr/bin/svn
   - field: commits
