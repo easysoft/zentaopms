@@ -534,30 +534,25 @@ class kanban extends control
     }
 
     /**
+     * 泳道排序。
      * Sort lanes.
      *
      * @param  int    $regionID
      * @param  string $lanes
      * @access public
-     * @return array
+     * @return void
      */
-    public function sortLane($regionID, $lanes = '')
+    public function sortLane(int $regionID, string $lanes = '')
     {
         if(empty($lanes)) return;
         $lanes = explode(',', trim($lanes, ','));
 
-        $order = 1;
-        foreach($lanes as $laneID)
-        {
-            $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($order)->where('id')->eq($laneID)->andWhere('region')->eq($regionID)->exec();
-            $order++;
-        }
+        $this->kanbanTao->updateLaneSort($regionID, $lanes);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $region     = $this->kanban->getRegionByID($regionID);
-        $kanbanData = $this->kanban->getKanbanData($region->kanban, $regionID);
-        $kanbanData = reset($kanbanData);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'regionID' => 'region' . $regionID, 'kanbanData' => $kanbanData));
+        $region   = $this->kanban->getRegionByID($regionID);
+        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback));
     }
 
     /**
