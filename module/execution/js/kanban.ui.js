@@ -38,7 +38,7 @@ window.getLaneActions = function(lane)
         items: [
             lane.actionList.includes('editLaneName') ? {text: kanbanLang.editLaneName, icon: 'edit',  url: $.createLink('kanban', 'editLaneName', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
             lane.actionList.includes('editLaneColor') ? {text: kanbanLang.editLaneColor, icon: 'color',  url: $.createLink('kanban', 'editLaneColor', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
-            lane.actionList.includes('deleteLane') ? {text: kanbanLang.deleteLane, icon: 'trash',  url: $.createLink('kanban', 'deleteLane', 'regionID=' + lane.region + '&kanbanID=' + executionID + '&id=' + lane.id), 'data-confirm': laneLang.confirmDelete, 'innerClass': 'ajax-submit'} : null,
+            lane.actionList.includes('deleteLane') ? {text: kanbanLang.deleteLane, icon: 'trash',  url: $.createLink('kanban', 'deleteLane', 'regionID=' + lane.region + '&id=' + lane.id), 'data-confirm': laneLang.confirmDelete, 'innerClass': 'ajax-submit'} : null,
         ],
     }];
 }
