@@ -861,22 +861,16 @@ class kanbanTest
     /**
      * Test create a lane.
      *
-     * @param  object $object
      * @param  int    $kanbanID
      * @param  int    $regionID
+     * @param  object $lane
+     * @param  string $mode
      * @access public
      * @return object
      */
-    public function createLaneTest($object, $kanbanID, $regionID)
+    public function createLaneTest($kanbanID, $regionID, $lane, $mode = 'new')
     {
-        $lane = isset($object->id) ? $this->objectModel->getLaneByID($object->id) : null;
-        unset($object->id);
-        unset($lane->id);
-
-        foreach($object as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->createLane($kanbanID, $regionID, $lane);
-        unset($_POST);
+        $objectID = $this->objectModel->createLane($kanbanID, $regionID, $lane, $mode);
 
         if(dao::isError()) return dao::getError();
 
