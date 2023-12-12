@@ -1396,4 +1396,20 @@ class docTest
         if(!$result) return false;
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
     }
+
+    /**
+     * 获取编辑过文档的用户列表。
+     * Get editors of a document.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return array
+     */
+    public function getEditorsTest(int $docID): array
+    {
+        $editors = $this->objectModel->getEditors($docID);
+
+        if(dao::isError()) return dao::getError();
+        return $editors;
+    }
 }
