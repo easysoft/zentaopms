@@ -7,10 +7,18 @@ su('admin');
 /**
 
 title=测试 jobModel->checkParameterizedBuild();
+timeout=0
 cid=1
-pid=1
+
+- 检查job1是否启用了参数构建 @0
+- 检查job3是否启用了参数构建 @0
+- 检查job5是否启用了参数构建 @1
 
 */
+
+zdTable('pipeline')->config('pipeline')->gen(5);
+zdTable('job')->config('job')->gen(5);
+
 $jenkins1 = new stdclass();
 $jenkins1->url      = 'pms.cc.cc';
 $jenkins1->account  = '123456';
@@ -33,6 +41,6 @@ $jenkins3->pipeline = '';
 
 $compile = new jobTest();
 
-r($compile->checkParameterizedBuildTest('pms.cc.cc/job/12/api/json', '123456:zxd')) && p('') && e('1');
-r($compile->checkParameterizedBuildTest('pms.cc.cc/job/11/api/json', '123456:8bb44ffbc4b42fcbb3152cc05fd21c67')) && p('') && e('1');
-r($compile->checkParameterizedBuildTest('', '')) && p('') && e('0');
+r($compile->checkParameterizedBuildTest(1)) && p('') && e('0'); //检查job1是否启用了参数构建
+r($compile->checkParameterizedBuildTest(3)) && p('') && e('0'); //检查job3是否启用了参数构建
+r($compile->checkParameterizedBuildTest(5)) && p('') && e('1'); //检查job5是否启用了参数构建

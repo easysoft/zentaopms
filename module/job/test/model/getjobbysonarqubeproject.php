@@ -7,10 +7,10 @@ su('admin');
 /**
 
 title=jobModel->getJobBySonarqubeProject();
+timeout=0
 cid=1
-pid=1
 
-根据sonarqube project查询job >> 1
+- 根据sonarqube project查询job属性zentaopms @1
 
 */
 

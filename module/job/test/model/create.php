@@ -19,11 +19,12 @@ cid=1
 
 */
 
+zdTable('pipeline')->gen(5);
 zdTable('repo')->config('repo')->gen(1);
 
 $job_name              = array('name' => '这是一个job007');
 $job_engine            = array('engine' => 'gitlab');
-$job_triggerType      = array('triggerType' => 'tag');
+$job_triggerType       = array('triggerType' => 'tag');
 $job_name_blank        = array('name' => '');
 $job_engine_blank      = array('engine' => '');
 $job_triggerType_blank = array('triggerType' => '');

@@ -118,16 +118,16 @@ class compileModel extends model
     /**
      * Get build url.
      *
-     * @param  object $jenkins
+     * @param  object $job
      * @access public
      * @return object
      */
-    public function getBuildUrl(object $jenkins): object
+    public function getBuildUrl(object $job): object
     {
         $url = new stdclass();
-        $url->userPWD = $this->loadModel('jenkins')->getApiUserPWD($jenkins);
+        $url->userPWD = $this->loadModel('jenkins')->getApiUserPWD($job);
 
-        $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($jenkins->url, $jenkins->pipeline);
+        $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($job->url, $job->pipeline);
 
         $detailUrl             = $urlPrefix . 'api/json';
         $hasParameterizedBuild = $this->loadModel('job')->checkParameterizedBuild($detailUrl, $url->userPWD);

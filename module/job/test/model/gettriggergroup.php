@@ -7,11 +7,11 @@ su('admin');
 /**
 
 title=jobModel::getTriggerGroup();
+timeout=0
 cid=1
-pid=1
 
-获取trigger type为tag且repo id为1的name >> 这是一个Job1
-获取trigger type为commit且repo id为2的name >> 这是一个Job2
+- 获取trigger type为tag且repo id为1的name第1条的name属性 @这是一个Job1
+- 获取trigger type为commit且repo id为2的name第2条的name属性 @这是一个Job2
 
 */
 $job = new jobTest();

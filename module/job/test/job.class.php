@@ -32,9 +32,9 @@ class jobTest
      * @access public
      * @return object
      */
-    public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null)
+    public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null, string $engine = '')
     {
-        $objects = $this->objectModel->getList($repoID, $orderBy, $pager);
+        $objects = $this->objectModel->getList($repoID, $orderBy, $pager, $engine);
 
         if(dao::isError()) return dao::getError();
 
@@ -261,7 +261,7 @@ class jobTest
     {
         global $tester;
         $job    = $this->objectModel->getById($jobId);
-        $repo   = $tester->loadModel('repo')->getRepoById($job->repo);
+        $repo   = $tester->loadModel('repo')->getById($job->repo);
         $object = $this->objectModel->getLastTagByRepo($repo, $job);
 
         if(dao::isError()) return dao::getError();
@@ -314,13 +314,28 @@ class jobTest
      * @access public
      * @return bool
      */
-    public function checkParameterizedBuildTest(string $url, string $userPWD): bool
+    public function checkParameterizedBuildTest(int $jobID): bool
     {
-        $checked = $this->objectModel->checkParameterizedBuild($url, $userPWD);
+        global $tester;
+        $job       = $this->objectModel->getById($jobID);
+        $jenkins   = $tester->loadModel('pipeline')->getByID($job->server);
+        $urlPrefix = $tester->loadModel('compile')->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
+        $detailUrl = $urlPrefix . 'api/json';
+
+        $checked = $this->objectModel->checkParameterizedBuild($detailUrl, $tester->loadModel('jenkins')->getApiUserPWD($jenkins));
 
         if(dao::isError()) return dao::getError();
 
         return $checked;
     }
 
+    public function updateLastTagTest(int $jobID, string $lastTag)
+    {
+        $this->objectModel->updateLastTag($jobID, $lastTag);
+
+        if(dao::isError()) return dao::getError();
+
+        $job = $this->objectModel->getById($jobID);
+        return $job;
+    }
 }

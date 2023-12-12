@@ -303,9 +303,11 @@ class jobModel extends model
         $repo = $this->loadModel('repo')->getByID($job->repo);
         $now  = helper::now();
 
-        if($job->triggerType == 'schedule') $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
-
-        if($job->triggerType == 'tag')
+        if($job->triggerType == 'schedule')
+        {
+            $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
+        }
+        elseif($job->triggerType == 'tag')
         {
             $job->lastTag = $this->getLastTagByRepo($repo, $job);
 

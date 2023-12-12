@@ -1,0 +1,26 @@
+title: zt_pipeline
+author: Zeng gang
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: type
+    range: gitlab,sonarqube,jenkins,gitea,gogs
+  - field: name
+    range: GitLab服务器,SonarQube服务器,Jenkins服务器,Gitea服务器,Gogs服务器
+  - field: url
+    range: "[https://gitlabdev.qc.oop.cc],[http://10.0.7.242:9990],[https://jenkinsdev.qc.oop.cc],[https://giteadev.qc.oop.cc],[https://gogsdev.qc.oop.cc]"
+  - field: account
+    range: "[],[admin],[jenkins],[]{2}"
+  - field: password
+    range: "[],[U2h3N0NldHlsc1ozYkVTVjBreXM=],[MXJZN1JWREEyQlZrak81ME9qTUo=],[]{2}"
+  - field: token
+    range: "glpat-b8Sa1pM9k9ygxMZYPN6w,YWRtaW46U2h3N0NldHlsc1ozYkVTVjBreXM=,11ae7f2332f0d84501b55adfa94b59e3ac,6149a6013047301b116389d50db5cbf599772082,6aafc3d332b70312a680fedf26039c67e98cfabe"
+  - field: private
+    range: efe54b3725150d55d8d896622c34b18f,228b25587479f2fc7570428e8bcbabdc,598825e90a8ac1ce5c48306c53dc1609,22e2f01322e89a725ba98d77f0feec85,4fabcbd31314365506ebc56c0c83c1ec
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: "[2022-12-11 15:37:37]"
+  - field: deleted
+    range: 0

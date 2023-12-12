@@ -7,13 +7,17 @@ su('admin');
 /**
 
 title=jobModel->create();
+timeout=0
 cid=1
-pid=1
 
-测试执行job id为1的情况 >> 1
+- 测试执行job id为1的情况属性status @created
 
 */
 
-$jobID = 1;
+zdTable('pipeline')->config('pipeline')->gen(5);
+zdTable('job')->config('job')->gen(5);
+zdTable('compile')->gen(0);
+
 $job = new jobTest();
-r($job->execTest($jobID)) && p('id')&& e('1');     // 测试执行job id为1的情况
+r($job->execTest(1)) && p('status')&& e('created');     // 测试执行job id为1的情况
+//r($job->execTest(3)) && p('id')&& e('2'); // 测试执行job id为3的情况

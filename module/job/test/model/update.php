@@ -18,6 +18,7 @@ cid=1
 
 */
 
+zdTable('pipeline')->gen(5);
 zdTable('job')->gen(5);
 zdTable('repo')->config('repo')->gen(5);
 

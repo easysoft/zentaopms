@@ -7,10 +7,10 @@ su('admin');
 /**
 
 title=jobModel->getSonarqubeByRepo();
+timeout=0
 cid=1
-pid=1
 
-根据repo查询sonarqube >> 这是一个Job1
+- 根据repo查询sonarqube第1条的name属性 @这是一个Job1
 
 */
 

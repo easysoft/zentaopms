@@ -1,6 +1,6 @@
-title: table zt_job
+title: zt_job
 desc: "构建任务"
-author: automated export
+author: zenggang
 version: "1.0"
 fields:
   - field: id
@@ -46,7 +46,7 @@ fields:
     range: 3{1},1{1}
   - field: pipeline
     note: "流水线"
-    range: dave,[{"project":"1569","reference":"master"}]
+    range: '[/job/hello%20world/],[{"project":"1569"}],[/job/simple-job/],[],[/job/paramsJob/]'
   - field: triggerType
     note: "触发方式"
     range: tag,commit,schedule
