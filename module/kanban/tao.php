@@ -109,4 +109,23 @@ class kanbanTao extends kanbanModel
             $order++;
         }
     }
+
+    /**
+     * 更新看板泳道的排序。
+     * Update sort of kanban lane.
+     *
+     * @param  int    $regionID
+     * @param  array  $lanes
+     * @access public
+     * @return void
+     */
+    protected function updateLaneSort(int $regionID, array $lanes)
+    {
+        $order = 1;
+        foreach($lanes as $laneID)
+        {
+            $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($order)->where('id')->eq($laneID)->andWhere('region')->eq($regionID)->exec();
+            $order++;
+        }
+    }
 }
