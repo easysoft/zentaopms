@@ -163,7 +163,7 @@ pipeline {
 
               post {
                 failure {
-                  ximNotify(title: "单元测试失败", content: "单元测试未通过, [查看报告]($JOB_URL$BUILD_ID/UT_20Coverage_20Report/)", contentHeaderFile: job.headerFileName())
+                  ximNotify(title: "单元测试失败", content: "点击下方链接查看执行明细")
                 }
               }
             }
