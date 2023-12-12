@@ -729,7 +729,7 @@ class searchTao extends searchModel
             if(!isset($this->config->objectTables[$module])) continue;
 
             $fields = '';
-            if($module == 'issue')     $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
+            if($module == 'issue')     $fields = ($this->config->edition == 'max' || $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
             if($module == 'project')   $fields = 'id,model';
             if($module == 'execution') $fields = 'id,type,project';
             if($module == 'story' || $module == 'requirement') $fields = ($this->config->edition == 'max' || $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
