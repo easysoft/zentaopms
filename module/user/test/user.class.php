@@ -394,8 +394,8 @@ class userTest
     }
 
     /**
-     * Test check posted data before creating or editing a user.
      * 测试创建或编辑用户前检查提交的数据。
+     * Test check posted data before creating or editing a user.
      *
      * @param  object $user
      * @param  bool   $canNoPassword
