@@ -675,12 +675,12 @@ class fileModel extends model
     /**
      * Process editor.
      *
-     * @param  object    $data
-     * @param  string    $editorList
+     * @param  object       $data
+     * @param  string|array $editorList
      * @access public
      * @return object
      */
-    public function processImgURL(object $data, string $editorList, string $uid = ''): object
+    public function processImgURL(object $data, string|array $editorList, string $uid = ''): object
     {
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
         if(empty($editorList)) return $data;
