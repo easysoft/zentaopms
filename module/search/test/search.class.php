@@ -651,4 +651,31 @@ class searchTest
 
         return $dataList;
     }
+
+    /**
+     * 处理搜索到的数据列表的测试用例。
+     * Process data list test.
+     *
+     * @param  string $module
+     * @param  object $field
+     * @param  array  $dataList
+     * @access public
+     * @return array
+     */
+    public function processDataListTest(string $module, object $field, array $dataIdList): array
+    {
+        global $tester;
+        $table = $tester->config->objectTables[$module];
+        $dataList = $tester->dao->select('*')->from($table)->where('id')->in($dataIdList)->fetchAll('id');
+        $dataList = $this->objectModel->processDataList($module, $field, $dataList);
+
+        foreach($dataList as $data)
+        {
+            $data->comment = str_replace("\n", '', $data->comment);
+            $data->desc    = str_replace("\n", '', $data->desc);
+            $data->expect  = str_replace("\n", '', $data->expect);
+        }
+
+        return $dataList;
+    }
 }
