@@ -277,7 +277,7 @@ class compileModel extends model
         $response  = common::http($url, '', array(CURLOPT_USERPWD => $userPWD));
         if(!$response) return;
 
-        $jobInfo      = json_decode($response);
+        $jobInfo = json_decode($response);
         if(empty($jobInfo)) return;
 
         $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();

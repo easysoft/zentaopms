@@ -400,7 +400,7 @@ class jobModel extends model
         $pipelineParams->ref = zget($pipeline, 'reference', '');
         if(!$pipelineParams->ref)
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($job->server, $pipeline->project, false);
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($job->server, (int)$pipeline->project, false);
             $pipelineParams->ref = zget($project, 'default_branch', 'master');
 
             $pipeline->reference = $pipelineParams->ref;
@@ -423,7 +423,7 @@ class jobModel extends model
 
         /* Run pipeline. */
         $compile  = new stdclass;
-        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
+        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, (int)$pipeline->project, $pipelineParams);
         if(empty($pipeline->id))
         {
             $this->gitlab->apiErrorHandling($pipeline);

@@ -1595,7 +1595,7 @@ class gitlabModel extends model
     {
         if(!is_string($params)) $params = json_encode($params);
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
-        return json_decode(commonModel::http($url, $params, null, array("Content-Type: application/json")));
+        return json_decode(commonModel::http($url, $params, array(), array("Content-Type: application/json")));
     }
 
     /**

@@ -8,9 +8,9 @@ fields:
 - field: product
   range: 1
 - field: name
-  range: zentaopms,zentaopms2
+  range: testHtml,testHtml2
 - field: path
-  range: "http://10.0.7.242:9980/root/zentaopms"
+  range: "http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml"
 - field: SCM
   range: Gitlab
 - field: client
@@ -18,7 +18,7 @@ fields:
 - field: serviceHost
   range: 1
 - field: serviceProject
-  range: 9
+  range: 2
 - field: extra
   range: 9
 - field: preMerge

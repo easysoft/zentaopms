@@ -46,7 +46,7 @@ fields:
     range: 3{1},1{1}
   - field: pipeline
     note: "流水线"
-    range: '[/job/hello%20world/],[{"project":"1569"}],[/job/simple-job/],[],[/job/paramsJob/]'
+    range: '[/job/hello%20world/],[{"project":"2"}],[/job/simple-job/],[],[/job/paramsJob/]'
   - field: triggerType
     note: "触发方式"
     range: tag,commit,schedule
