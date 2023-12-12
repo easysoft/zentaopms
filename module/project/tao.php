@@ -488,7 +488,7 @@ class projectTao extends projectModel
 
             $projectAdmin = new stdclass();
             $projectAdmin->account  = $this->app->user->account;
-            $projectAdmin->group    = $maxGroupID + 1;
+            $projectAdmin->group    = (int)$maxGroupID + 1;
             $projectAdmin->projects = $projectID;
             $this->dao->replace(TABLE_PROJECTADMIN)->data($projectAdmin)->exec();
         }
