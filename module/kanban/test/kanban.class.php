@@ -149,24 +149,18 @@ class kanbanTest
     /**
      * Test create a column.
      *
-     * @param  object $param
+     * @param  int    $regionID
+     * @param  object $column
      * @access public
      * @return object
      */
-    public function createColumnTest($param)
+    public function createColumnTest($regionID, $column)
     {
-        $regionID = 1;
-
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->createColumn($regionID, null, 0, $param->parent);
-
-        unset($_POST);
+        $objectID = $this->objectModel->createColumn($regionID, $column);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getColumnByID($objectID);
-        return $object;
+        return $this->objectModel->getColumnByID($objectID);
     }
 
     /**
