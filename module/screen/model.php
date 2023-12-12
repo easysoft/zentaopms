@@ -205,7 +205,7 @@ class screenModel extends model
         $chartID = zget($component->chartConfig, 'sourceID', '');
         if(!$chartID) return $component;
 
-        $type  = zget($component->chartConfig, 'key', '');
+        $type  = $component->chartConfig->package;
         $type  = $this->getChartType($type);
         $table = $this->config->objectTables[$type];
         $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
