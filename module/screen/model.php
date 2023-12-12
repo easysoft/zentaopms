@@ -205,10 +205,12 @@ class screenModel extends model
         $chartID = zget($component->chartConfig, 'sourceID', '');
         if(!$chartID) return $component;
 
-        $type  = $component->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
-        $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+        $type  = zget($component->chartConfig, 'key', '');
+        $type  = $this->getChartType($type);
+        $table = $this->config->objectTables[$type];
         $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
+        if($type == 'metric') return $this->genMetricComponent($chart);
         return $this->genComponentData($chart, $type, $component);
     }
 
@@ -331,8 +333,11 @@ class screenModel extends model
         $component->type        = 'metric';
         $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
 
+        $component->chartConfig->title       = $metric->name;
+        $component->chartConfig->sourceID    = $metric->id;
         $component->chartConfig->chartOption = $this->getMetricChartOption($metric);
         $component->chartConfig->tableOption = $this->getMetricTableOption($metric);
+        $component->chartConfig->card        = $this->getMetricCardOption($metric);
 
         return $component;
     }
@@ -1600,6 +1605,10 @@ class screenModel extends model
         $allResultData = $this->metric->getViewTableData($metric, $allResult);
 
         $chartOption = $this->metric->getEchartsOptions($resultHeader, $allResultData);
+
+        if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'show' => true, 'titleShow' => true, 'textStyle' => array('color' => '#BFBFBF', 'fontSize' => 18));
+        $chartOption['title']['text'] = $metric->name;
+
         return $chartOption;
     }
 
@@ -1634,6 +1643,44 @@ class screenModel extends model
         $tableOption->borderBGC     = '#285A8EFF';
         $tableOption->borderSpacing = 1;
         return $tableOption;
+    }
+
+    /**
+     * 获取度量项卡片参数。
+     * Get card option of metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return object
+     */
+    public function getMetricCardOption(object $metric): object
+    {
+        $this->loadModel('metric');
+
+        $dateType = $this->metric->getDateTypeByCode($metric->code);
+        $result   = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+        $option = new stdclass();
+        $option->displayType = 'normal';
+        $option->cardType    = 'A';
+        $option->fontSize    = '56';
+        $option->bgColor     = '#26292EFF';
+        $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
+        $option->scope       = $metric->scope;
+        $option->objectPairs = array();
+        $option->data        = $this->metric->getViewTableData($metric, $result);
+        $option->filterValue = (is_array($option->data) && !empty($option->data)) ? current($option->data) : array();
+
+        if($metric->scope != 'system')
+        {
+            $objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
+            foreach($objectPairs as $value => $label)
+            {
+                $option->objectPairs[] = array('label' => $label, 'value' => "$value");
+            }
+        }
+
+        return $option;
     }
 
     /**
