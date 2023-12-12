@@ -15,6 +15,15 @@ declare(strict_types=1);
 class convertModel extends model
 {
     /**
+     * 数据库连接句柄。
+     * Database link handle.
+     *
+     * @var    object
+     * @access public
+     */
+    public $sourceDBH;
+
+    /**
      * 连接数据库。
      * Connect to db.
      *
@@ -248,6 +257,8 @@ class convertModel extends model
             if($module != $type && !$nextObject) continue;
             if($module == $type) $nextObject = true;
 
+            $this->convertTao->sourceDBH = $this->sourceDBH;
+
             while(true)
             {
                 $dataList = $this->convertTao->getJiraDataFromDB($module, $lastID, $limit);
@@ -296,6 +307,8 @@ class convertModel extends model
         {
             if($module != $type && !$nextObject) continue;
             if($module == $type) $nextObject = true;
+
+            $this->convertTao->sourceDBH = $this->sourceDBH;
 
             while(true)
             {

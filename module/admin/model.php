@@ -164,7 +164,7 @@ class adminModel extends model
             $menu['disabled'] = true;
             if(!isset($menu['link'])) $menu['link'] = '';
 
-            if($menuKey == 'company')
+            if($menuKey == 'company' && $this->app->rawModule != 'convert')
             {
                 $dept = $this->dao->select('id')->from(TABLE_DEPT)->fetch();
                 if($dept && common::hasPriv('company', 'browse')) $menu['link'] = helper::createLink('company', 'browse');
