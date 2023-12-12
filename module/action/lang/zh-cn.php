@@ -516,6 +516,7 @@ $lang->action->label->offline                 = '下架了';
 $lang->action->label->linkhost                = '主机关联到';
 $lang->action->label->delist                  = '下架了';
 $lang->action->label->createrepobranch        = '创建了分支从';
+$lang->action->label->communicate             = '沟通了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

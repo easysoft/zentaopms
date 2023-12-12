@@ -516,6 +516,7 @@ $lang->action->label->offline                 = 'offline';
 $lang->action->label->linkhost                = 'link hosts to';
 $lang->action->label->delist                  = 'delist';
 $lang->action->label->createrepobranch        = 'Created branch from';
+$lang->action->label->communicate             = 'Communicate';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
