@@ -599,6 +599,27 @@ class searchTest
     }
 
     /**
+     * 测试搜索结果分页。
+     * Set results in page test.
+     *
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function setResultsInPageTest(int $recPerPage, int $pageID): array
+    {
+        global $tester;
+
+        $results = $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->fetchAll();
+
+        $tester->app->loadClass('pager', true);
+        $pager = new pager(0, $recPerPage, $pageID);
+
+        return $this->objectModel->setResultsInPage($results, $pager);
+    }
+
+    /**
      * 测试处理搜索结果。
      * Process results test.
      *
