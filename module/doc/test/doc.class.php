@@ -11,6 +11,8 @@ class docTest
 
         $app->rawModule = 'doc';
         $app->rawMethod = 'index';
+        $app->setModuleName('doc');
+        $app->setMethodName('index');
     }
 
     /**
@@ -1353,5 +1355,27 @@ class docTest
 
         if(dao::isError()) return dao::getError();
         return $otherEditing;
+    }
+
+    /**
+     * 获取文档动态。
+     * Get document dynamic.
+     *
+     * @param  int          $recPerPage
+     * @param  int          $pageID
+     * @access public
+     * @return array|string
+     */
+    public function getDynamicTest(int $recPerPage, int $pageID): array|string
+    {
+        $this->objectModel->app->loadClass('pager', true);
+        $pager = new pager(0, $recPerPage, $pageID);
+
+        $actions = $this->objectModel->getDynamic($pager);
+        $idList  = '';
+        foreach($actions as $action) $idList .= $action->id . ';';
+
+        if(dao::isError()) return dao::getError();
+        return $idList;
     }
 }
