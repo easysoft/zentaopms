@@ -45,6 +45,17 @@ formPanel
         set::items($lang->bug->priList),
         set::value($bug->pri)
     ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->bug->deadline),
+        datePicker
+        (
+            setID('deadline'),
+            set::name('deadline'),
+            set::value($bug->deadline)
+        )
+    ),
     formRow
     (
         set::className('hidden'),

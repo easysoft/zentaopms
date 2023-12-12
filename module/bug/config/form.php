@@ -189,6 +189,7 @@ $config->bug->form->batchEdit['lastEditedDate'] = array('required' => false, 'ty
 
 $config->bug->form->confirm = array();
 $config->bug->form->confirm['pri']            = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->bug->form->confirm['deadline']       = array('required' => false, 'type' => 'date',   'default' => '');
 $config->bug->form->confirm['type']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->confirm['status']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->confirm['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
