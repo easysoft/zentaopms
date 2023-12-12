@@ -439,6 +439,27 @@ class userTest
     }
 
     /**
+     * 测试验证当前用户登录密码的功能。
+     * Test check verify password of current user.
+     *
+     * @param  string $verifyPassword
+     * @access public
+     * @return array
+     */
+    public function checkVerifyPasswordTest(string $verifyPassword): array
+    {
+        $result = $this->objectModel->checkVerifyPassword($verifyPassword);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode(',', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * Identify user.
      *
      * @param  string $account
