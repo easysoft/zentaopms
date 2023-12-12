@@ -156,6 +156,7 @@ $lang->testtask->titleOfAuto       = "%s 自动化测试";
 $lang->testtask->cannotBeParsed    = '导入的XML文件内容格式错误，无法解析。';
 $lang->testtask->finishedDateLess  = '实际完成日期不能小于开始日期%s';
 $lang->testtask->finishedDateMore  = '实际完成日期不能大于今天';
+$lang->testtask->accessDenied      = '您无权访问该测试单';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '全部用例';

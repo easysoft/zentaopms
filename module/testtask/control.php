@@ -295,6 +295,7 @@ class testtask extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
+        $this->checkAccess($task);
 
         /* When the session changes, you need to query the related products again. */
         if($this->session->project != $task->project) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->project);
@@ -445,6 +446,34 @@ class testtask extends control
     }
 
     /**
+     * Check access.
+     *
+     * @param  object $testtask
+     * @access private
+     * @return bool
+     */
+    private function checkAccess($testtask)
+    {
+        $canAccess = true;
+
+        $view = $this->app->user->view;
+
+        if(!$this->app->user->admin)
+        {
+            if($testtask->product   && strpos(",{$view->products},", ",$testtask->product,") === false)   $canAccess = false;
+            if($testtask->project   && strpos(",{$view->projects},", ",$testtask->project,") === false)   $canAccess = false;
+            if($testtask->execution && strpos(",{$view->sprints},",  ",$testtask->execution,") === false) $canAccess = false;
+        }
+
+        if($canAccess) return true;
+
+        echo(js::alert($this->lang->testtask->accessDenied));
+        echo js::locate(helper::createLink('testtask', 'browse'));
+
+        return false;
+    }
+
+    /**
      * Browse cases of a test task.
      *
      * @param  int    $taskID
@@ -477,6 +506,8 @@ class testtask extends control
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
         if(!$task) return print(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
+
+        $this->checkAccess($task);
 
         $productID = $task->product;
         $product   = $this->product->getByID($productID);
@@ -605,6 +636,7 @@ class testtask extends control
         $this->view->charts = array();
 
         $task = $this->testtask->getById($taskID);
+        $this->checkAccess($task);
 
         if(!empty($_POST))
         {
@@ -1089,6 +1121,7 @@ class testtask extends control
         $product   = $this->product->getByID($productID);
 
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+        $this->checkAccess($task);
 
         /* Save session. */
         if($this->app->tab == 'project')
@@ -1662,9 +1695,9 @@ class testtask extends control
     }
 
     /**
-     * AJAX: Get executionID by buildID. 
-     * 
-     * @param  int    $buildID 
+     * AJAX: Get executionID by buildID.
+     *
+     * @param  int    $buildID
      * @access public
      * @return int
      */
