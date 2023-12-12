@@ -24,6 +24,7 @@ pipeline {
                             script: 'echo $BUILD_ID-${GIT_COMMIT}'
     ).trim()}"""
     
+    XIM_NOTIFY_USERS = "liyang"
     XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
   }
 
@@ -120,6 +121,9 @@ pipeline {
                     targetDir = env.CHANGED_MODULES
                     if (env.CHANGED_MODULE_AUTHORS) {
                       def ximUsers = env.CHANGED_MODULE_AUTHORS
+                      if (env.XIM_NOTIFY_USERS) {
+                         ximUsers = ximUsers + "," + env.XIM_NOTIFY_USERS
+                      }
                       env.XIM_USERS = ximUsers
                     }
 
