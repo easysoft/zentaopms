@@ -104,7 +104,6 @@ class pivotTao extends pivotModel
             }
         }
 
-
         /* 将需求统计信息添加到产品中。 */
         /* Add demand statistics information to the product. */
         $this->getPlanStatusStatistics($products, $plans, $plannedStories, $unplannedStories);

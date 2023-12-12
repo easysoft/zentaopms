@@ -12,7 +12,8 @@
 class pivotModel extends model
 {
      /**
-     * Construct.
+     * 初始化，加载BI相关类。
+     * Construct,load BI related classes.
      *
      * @access public
      * @return void
@@ -35,24 +36,6 @@ class pivotModel extends model
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
-
-        $pivot->fieldSettings = array();
-        if(!empty($pivot->fields) && $pivot->fields != 'null')
-        {
-            $pivot->fieldSettings = json_decode($pivot->fields);
-            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
-        }
-
-        if(!empty($pivot->filters))
-        {
-            $filters = json_decode($pivot->filters, true);
-            $this->setFilterDefault($filters);
-            $pivot->filters = $filters;
-        }
-        else
-        {
-            $pivot->filters = array();
-        }
 
         return $this->processPivot($pivot);
     }
@@ -83,7 +66,7 @@ class pivotModel extends model
 
     /**
      * 构建透视表的信息。
-     * Process sql and correct type.
+     * Process pivot information.
      *
      * @param  object|array $pivots
      * @param  bool         $isObject
@@ -103,7 +86,7 @@ class pivotModel extends model
     }
 
     /**
-     * 补充透视表的信息。
+     * 完善透视表。
      * Complete pivot.
      *
      * @param  object $pivot
@@ -111,10 +94,28 @@ class pivotModel extends model
      * @access public
      * @return void
      */
-    public function completePivot(object $pivot, array $screenList): void
+    private function completePivot(object $pivot, array $screenList): void
     {
         if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
+
+        $pivot->fieldSettings = array();
+        if(!empty($pivot->fields) && $pivot->fields != 'null')
+        {
+            $pivot->fieldSettings = json_decode($pivot->fields);
+            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
+        }
+
+        if(!empty($pivot->filters))
+        {
+            $filters = json_decode($pivot->filters, true);
+            $this->setFilterDefault($filters);
+            $pivot->filters = $filters;
+        }
+        else
+        {
+            $pivot->filters = array();
+        }
 
         if(empty($pivot->type))
         {
@@ -147,7 +148,7 @@ class pivotModel extends model
      * @access public
      * @return bool
      */
-    public function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
+    private function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
     {
         foreach($screenList as $screen)
         {
@@ -168,6 +169,7 @@ class pivotModel extends model
                 }
             }
         }
+
         return false;
     }
 
@@ -184,7 +186,7 @@ class pivotModel extends model
         $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
         if(empty($fieldSettings)) return;
 
-        $sql     = isset($pivot->sql)     ? $pivot->sql     : '';
+        $sql     = isset($pivot->sql) ? $pivot->sql : '';
         $filters = $this->getFieldsFromPivot($pivot, 'filters', array(), !is_array($pivot->filters), true);
         if(!empty($filters)) $this->setFilterDefault($filters);
 
@@ -206,13 +208,11 @@ class pivotModel extends model
         $moduleNames = $tables ? $this->dataview->getModuleNames($tables) : array();
         list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
 
-        /* 使用fieldPairs, columns, relatedObject, objectFields刷新pivot的fieldSettings。 */
-        /* Use fieldPairs, columns, relatedObject, objectFields refresh pivot fieldSettings .*/
         $objectFields = array();
         foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->dataview->getTypeOptions($object);
 
-        /* 重建fieldSettings。 */
-        /* Rebuild fieldSettings. */
+        /* 重建fieldSettings字段。 */
+        /* Rebuild fieldSettings field. */
         $this->rebuildFieldSetting($pivot, $fieldPairs, $columns, $relatedObject, $fieldSettings);
     }
 
@@ -302,7 +302,7 @@ class pivotModel extends model
     }
 
     /**
-     * 获取产品透视表。
+     * 获取产品。
      * Get products.
      *
      * @param  string $conditions
@@ -322,6 +322,51 @@ class pivotModel extends model
 
         unset($products['']);
         return $products;
+    }
+
+    /**
+     * 获取产品计划的需求统计信息。
+     * Get product demand statistics information.
+     *
+     * @param  array  $products
+     * @param  array  $plans
+     * @param  array  $plannedStories
+     * @param  array  $unplannedStories
+     * @access public
+     * @return void
+     */
+    public function getPlanStatusStatistics(array &$products, array $plans, array $plannedStories, array $unplannedStories): void
+    {
+        /* 统计已经计划过的产品计划的需求状态信息。 */
+        /* Statistics of demand status information for planned product plans. */
+        foreach($plannedStories as $story)
+        {
+            $storyPlans = strpos($story->plan, ',') !== false ? $storyPlans = explode(',', trim($story->plan, ',')) : array($story->plan);
+            foreach($storyPlans as $planID)
+            {
+                if(!isset($plans[$planID])) continue;
+                $plan = $plans[$planID];
+                $products[$plan->product]->plans[$planID]->status[$story->status] = isset($products[$plan->product]->plans[$planID]->status[$story->status]) ? $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
+            }
+        }
+
+        /* 统计还未计划的产品计划的需求状态信息。 */
+        /* Statistics of demand status information for unplanned product plans. */
+        foreach($unplannedStories as $story)
+        {
+            $product = $story->product;
+            if(isset($products[$product]))
+            {
+                if(!isset($products[$product]->plans[0]))
+                {
+                    $products[$product]->plans[0] = new stdClass();
+                    $products[$product]->plans[0]->title = $this->lang->pivot->unplanned;
+                    $products[$product]->plans[0]->begin = '';
+                    $products[$product]->plans[0]->end   = '';
+                }
+                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
+            }
+        }
     }
 
     /**
@@ -1623,99 +1668,14 @@ class pivotModel extends model
     }
 
     /**
-     * Get tree of pivots and groups.
-     *
-     * @param  int    $groupID
-     * @param  string $orderBy
-     * @access public
-     * @return array
-     */
-    public function getPreviewPivots($dimensionID, $groupID, $pivotID = 0, $orderBy = 'id_desc')
-    {
-        if(!$groupID) return array(array(), array(), $groupID);
-
-        $group = $this->loadModel('tree')->getByID($groupID);
-        if(empty($group)) return array(array(), array(), $groupID);
-
-        $groups = $this->dao->select('id, name')->from(TABLE_MODULE)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('pivot')
-            ->beginIF($group->grade == '1')->andWhere('path')->like("%,$group->id,%")->fi()
-            ->beginIF($group->grade == '2')->andWhere('path')->like("%,$group->parent,%")->fi()
-            ->orderBy('`order`')
-            ->fetchPairs();
-
-        if(empty($groups)) return array(array(), array(), $groupID);
-
-        $pivotGroups = array();
-        foreach($groups as $id => $groupName)
-        {
-            $pivotGroups[$id] = $this->dao->select('*')->from(TABLE_PIVOT)
-                ->where('deleted')->eq(0)
-                ->andWhere("FIND_IN_SET($id, `group`)")
-                ->andWhere('stage')->ne('draft')
-                ->orderBy($orderBy)
-                ->fetchAll();
-        }
-
-        if(!$pivotGroups) return array(array(), array(), $groupID);
-
-        $pivotTree = '';
-        foreach($pivotGroups as $id => $pivots)
-        {
-            if(!$pivots) continue;
-            $pivots     = $this->processPivot($pivots, false);
-
-            $groupName  = zget($groups, $id, $id);
-            $title      = "title='{$groupName}'";
-            $pivotTree .= "<li class='closed' $title><a>$groupName</a>";
-            $pivotTree .= "<ul>";
-
-            foreach($pivots as $pivot)
-            {
-                $className  = "pivot-{$id}-{$pivot->id}";
-                $params     = helper::safe64Encode("pivotID=$pivot->id");
-                $linkHtml   = html::a(helper::createLink('pivot', 'preview', "dimensionID=$dimensionID&group=$id&module=pivot&medhot=show&params=$params"), $pivot->name, '_self', "id='module{$pivot->id}' title='{$pivot->name}'");
-                $pivotTree .= "<li class='$className'>$linkHtml</li>";
-                if(!$pivotID)
-                {
-                    $pivotID = $pivot->id;
-                    $groupID = $id;
-                }
-            }
-            $pivotTree .= "</ul></li>";
-        }
-
-        if($pivotTree) $pivotTree = "<ul id='pivotGroups' class='tree' data-ride='tree'>$pivotTree</ul>";
-
-        $pivot = $pivotID ? $this->getByID($pivotID) : array();
-
-        return array($pivotTree, $pivot, $groupID);
-    }
-
-    /**
-     * Adjust the action is clickable.
-     *
-     * @param  object $pivot
-     * @param  string $action
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function isClickable($pivot, $action)
-    {
-        if($pivot->builtin) return false;
-        return true;
-    }
-
-    /**
-     * replace defined table names.
+     * 替换定义的表名。
+     * Replace defined table names.
      *
      * @param  string $sql
      * @access public
      * @return string
      */
-    public function replaceTableNames($sql)
+    public function replaceTableNames(string $sql): string
     {
         if(preg_match_all("/TABLE_[A-Z]+/", $sql, $out))
         {
@@ -1726,8 +1686,8 @@ class pivotModel extends model
                 $sql = str_replace($table, trim(constant($table), '`'), $sql);
             }
         }
-        $sql = preg_replace("/= *'\!/U", "!='", $sql);
-        return $sql;
+
+        return preg_replace("/= *'\!/U", "!='", $sql);
     }
 
     /**
@@ -1759,7 +1719,7 @@ class pivotModel extends model
      * @access private
      * @return mixed
      */
-    private function getFieldsFromPivot(object $pivot, string $key, mixed $default, bool $jsonDecode = false, bool $needArray = false)
+    private function getFieldsFromPivot(object $pivot, string $key, mixed $default, bool $jsonDecode = false, bool $needArray = false): mixed
     {
         return isset($pivot->{$key}) && !empty($pivot->{$key}) ? ($jsonDecode ? json_decode($pivot->{$key}, $needArray) : $pivot->{$key}) : $default;
     }
