@@ -36,13 +36,24 @@ tbody > tr > td   .icon-share {font-size: 9px;}
 .table-nest-icon { cursor: pointer; }
 
 .tr-moving { opacity: 0.3; }
-
 .tr-acceptable { border: 2px solid rgba(255,0,0,0.5); }
-
 .none-select { -webkit-user-select: none; -moz-user-select: none; -moz-user-select: none; user-select: none; }
 
 .table-nest-toggle { vertical-align: middle; }
-
 .table-nest-title .icon-test { pointer-events: none; }
 
-.icon-test:after { border: 0px solid!important; }
+.icon-test:after,.icon-ztf:after { border: 0px solid!important; }
+
+#caseTableList.sortable-sorting > tr {opacity: 0.7}
+#caseTableList.sortable-sorting > tr.drag-row {opacity: 1;}
+#caseTableList > tr.drop-not-allowed {opacity: 0.1!important}
+#caseList .c-actions {overflow: visible;}
+#caseList > thead > tr > th .table-nest-toggle-global {top: 6px}
+#caseList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
+#caseTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
+#caseTableList .icon-common:before {width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
+#caseTableList .icon-project:before {content: '\e99c';}
+#caseTableList .icon-test:before {content: '\e956';}
+#caseTableList .icon-ztf:before {content: '\e9dd';}
+#caseTableList .icon-waterfall:before {content: '\e9a4';}
+#caseTableList .icon-kanban:before {content: '\e983';}

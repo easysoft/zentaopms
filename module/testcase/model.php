@@ -2373,7 +2373,8 @@ class testcaseModel extends model
                 }
                 else
                 {
-                    echo "<td class='c-name table-nest-title text-left sort-handler has-prefix has-suffix' {$title}><span class='table-nest-icon icon icon-test'></span>";
+                    $icon = $case->auto == 'auto' ? 'icon-ztf' : 'icon-test';
+                    echo "<td class='c-name table-nest-title text-left sort-handler has-prefix has-suffix' {$title}><span class='table-nest-icon icon {$icon}'></span>";
                 }
             }
             else
@@ -2422,15 +2423,17 @@ class testcaseModel extends model
                         $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
                     }
 
-                    $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ztf'></i>" : '';
                     if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                     if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                     echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")
                         : "<span style='color: $case->color'>$case->title</span>";
 
-                    $fromLink = ($fromCaseID and $canView) ? helper::createLink('testcase', 'view', "caseID=$fromCaseID") : '#';
-                    $title    = $fromCaseID ? "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]$autoIcon" : $autoIcon;
-                    if($case->auto == 'auto') echo html::a($fromLink, $title, '', "data-app='{$this->app->tab}'");
+                    if($fromCaseID and $canView)
+                    {
+                        $fromLink = helper::createLink('testcase', 'view', "caseID=$fromCaseID");
+                        $title    = "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]";
+                        echo html::a($fromLink, $title, '', "data-app='{$this->app->tab}'");
+                    }
                 }
                 else
                 {

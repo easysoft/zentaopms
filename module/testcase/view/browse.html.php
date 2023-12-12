@@ -344,20 +344,6 @@ js::set('langNormal',       $lang->testcase->normal);
     </div>
   </div>
 </div>
-<style>
-#caseTableList.sortable-sorting > tr {opacity: 0.7}
-#caseTableList.sortable-sorting > tr.drag-row {opacity: 1;}
-#caseTableList > tr.drop-not-allowed {opacity: 0.1!important}
-#caseList .c-actions {overflow: visible;}
-#caseList > thead > tr > th .table-nest-toggle-global {top: 6px}
-#caseList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
-#caseTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
-#caseTableList .icon-common:before {width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
-#caseTableList .icon-project:before {content: '\e99c';}
-#caseTableList .icon-test:before {content: '\e956';}
-#caseTableList .icon-waterfall:before {content: '\e9a4';}
-#caseTableList .icon-kanban:before {content: '\e983';}
-</style>
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
