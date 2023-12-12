@@ -338,6 +338,7 @@ class extension extends control
     public function uninstall($extension, $confirm = 'no')
     {
         /* Determine whether need to back up. */
+        $info   = $this->extension->getInfoFromDB($extension);
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
         if($confirm == 'no' and file_exists($dbFile))
         {
@@ -354,7 +355,8 @@ class extension extends control
             return $this->display();
         }
 
-        if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
+        $preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall');
+        if($preUninstallHook && $info->status == 'installed') include $preUninstallHook;
 
         if(file_exists($dbFile)) $this->view->backupFile = $this->extension->backupDB($extension);
 
@@ -365,7 +367,8 @@ class extension extends control
         $this->view->title          = $this->lang->extension->uninstallFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
 
-        if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
+        $postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall');
+        if($postUninstallHook && $info->status == 'installed') include $postUninstallHook;
         $this->display();
     }
 
