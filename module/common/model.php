@@ -1675,12 +1675,14 @@ class commonModel extends model
         static $productsStatus   = array();
         static $executionsStatus = array();
 
+        $commonModel = new commonModel();
+
         /* Check the product is closed. */
         if(!empty($object->product) and is_numeric($object->product) and empty($config->CRProduct))
         {
             if(!isset($productsStatus[$object->product]))
             {
-                $product = $app->control->loadModel('product')->getByID($object->product);
+                $product = $commonModel->loadModel('product')->getByID($object->product);
                 $productsStatus[$object->product] = $product ? $product->status : '';
             }
             if($productsStatus[$object->product] == 'closed') return false;
@@ -1688,7 +1690,7 @@ class commonModel extends model
         elseif(!empty($object->product) and is_string($object->product) and empty($config->CRProduct))
         {
             $products      = array(0) + explode(',', $object->product);
-            $products      = $app->control->loadModel('product')->getByIdList($products);
+            $products      = $commonModel->loadModel('product')->getByIdList($products);
             $productStatus = array();
             foreach($products as $product) $productStatus[$product->status] = 1;
             if(!empty($productStatus['closed']) and count($productStatus) == 1) return false;
@@ -1700,7 +1702,7 @@ class commonModel extends model
         {
             if(!isset($executionsStatus[$object->execution]))
             {
-                $execution = $app->control->loadModel('execution')->getByID($object->execution);
+                $execution = $commonModel->loadModel('execution')->getByID($object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
             if($executionsStatus[$object->execution] == 'closed') return false;
