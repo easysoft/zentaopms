@@ -393,6 +393,28 @@ class userTest
     }
 
     /**
+     * Test check posted data before creating or editing a user.
+     * 测试创建或编辑用户前检查提交的数据。
+     *
+     * @param  object $user
+     * @param  bool   $canNoPassword
+     * @access public
+     * @return array
+     */
+    public function checkBeforeCreateOrEditTest(object $user, bool $canNoPassword = false): array
+    {
+        $result = $this->objectModel->checkBeforeCreateOrEdit($user, $canNoPassword);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode(',', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * Check user password.
      *
      * @param  array $params
