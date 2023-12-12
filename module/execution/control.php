@@ -200,7 +200,7 @@ class execution extends control
         $this->view->status      = $status;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->modules     = $modules; 
+        $this->view->modules     = $modules;
         $this->view->modulePairs = $this->tree->getModulePairs($executionID, 'task', $showModule);
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $showModule);
         $this->view->memberPairs = $memberPairs;
@@ -1017,7 +1017,7 @@ class execution extends control
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
-        $this->view->allProjects         = $this->project->getPairsByModel('scrum,agileplus,waterfall,waterfallplus,kanban', 'noclosed,multiple');
+        $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
         $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->products            = $products;
         $this->view->teams               = $this->execution->getCanCopyObjects($projectID);
