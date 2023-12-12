@@ -2631,21 +2631,25 @@ class docModel extends model
     }
 
     /**
-     * Remove editing.
+     * 将当前用户从文档的正在编辑者列表中移除。
+     * Removes the current user from the list of people editing the document.
      *
-     * @param  object  $doc
+     * @param  object|bool $doc
      * @access public
-     * @return void
+     * @return bool
      */
-    public function removeEditing($doc)
+    public function removeEditing(object|bool $doc): bool
     {
-        if(empty($doc->id) or empty($doc->editingDate)) return false;
+        if(empty($doc->id) || empty($doc->editingDate)) return false;
+
         $account     = $this->app->user->account;
         $editingDate = json_decode($doc->editingDate, true);
         if(!isset($editingDate[$account])) return false;
 
         unset($editingDate[$account]);
         $this->dao->update(TABLE_DOC)->set('editingDate')->eq(json_encode($editingDate))->where('id')->eq($doc->id)->exec();
+
+        return !dao::isError();
     }
 
     /**
