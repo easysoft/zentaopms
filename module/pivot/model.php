@@ -213,7 +213,7 @@ class pivotModel extends model
 
         /* 重建fieldSettings字段。 */
         /* Rebuild fieldSettings field. */
-        $pivot->fieldSettings = $this->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings);
+        $pivot->fieldSettings = $this->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
     }
 
     /**
@@ -225,10 +225,11 @@ class pivotModel extends model
      * @param  object  $columns
      * @param  array   $relatedObject
      * @param  object  $fieldSettings
+     * @param  array   $objectFields
      * @access private
      * @return object
      */
-    private function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings): object
+    private function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings, array $objectFields): object
     {
         $fieldSettingsNew = new stdclass();
 
