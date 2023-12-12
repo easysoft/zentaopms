@@ -33,7 +33,10 @@ class coverage
 
         $this->traceFile = $tracePath . $this->moduleName . '_' . $this->testType . '_' . basename($this->runFile, '.php') . '.json';
         if(!is_dir($tracePath)) mkdir($tracePath, 0777, true);
-        if(!is_file($this->traceFile) && !in_array($this->moduleName, array('app', 'www'))) file_put_contents($this->traceFile, json_encode(array()));
+        if(!is_file($this->traceFile))
+        {
+            if(is_writable($tracePath)) file_put_contents($this->traceFile, json_encode(array()));
+        }
 
         return true;
     }
