@@ -221,4 +221,38 @@ class mrZen extends mr
         $this->view->allTasks = $allTasks;
         $this->view->pager    = $pager;
     }
+
+    /**
+     * 检查是否有权限编辑项目。
+     * Check if you have permission to edit the project.
+     *
+     * @param  string    $hostType
+     * @param  object    $sourceProject
+     * @param  object    $MR
+     * @access protected
+     * @return bool
+     */
+    protected function checkProjectEdit(string $hostType, object $sourceProject, object $MR): bool
+    {
+        if($hostType == 'gitlab')
+        {
+            $groupIDList = array(0 => 0);
+            $groups      = $this->loadModel('gitlab')->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            foreach($groups as $group) $groupIDList[] = $group->id;
+
+            $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
+            if(isset($gitUsers[$this->app->user->account]) && $isDeveloper) return true;
+        }
+        elseif($hostType == 'gitea')
+        {
+            return (isset($sourceProject->allow_merge_commits) && $sourceProject->allow_merge_commits == true);
+        }
+        elseif($hostType == 'gogs')
+        {
+            return (isset($sourceProject->permissions->push) && $sourceProject->permissions->push);
+        }
+
+        return false;
+    }
 }

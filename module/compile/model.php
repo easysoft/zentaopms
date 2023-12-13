@@ -17,9 +17,9 @@ class compileModel extends model
      *
      * @param  int    $buildID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID(int $buildID): object
+    public function getByID(int $buildID): object|false
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
     }

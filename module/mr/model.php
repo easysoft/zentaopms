@@ -215,7 +215,7 @@ class mrModel extends model
      */
     public function create(object $MR): array
     {
-        $result = $this->checkSameOpened($MR->hostID, (string)$MR->sourceProject, $MR->sourceBranch, (string)$MR->targetProject, $MR->targetBranch);
+        $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail') return $result;
 
         $this->createMR($MR);
@@ -224,7 +224,7 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertId();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
-        $rawMR = $this->apiCreateMR($MR->hostID, (string)$MR->sourceProject, $MR);
+        $rawMR = $this->apiCreateMR($MR->hostID, $MR->sourceProject, $MR);
 
         /**
          * Another open merge request already exists for this source branch.
@@ -246,7 +246,7 @@ class mrModel extends model
         }
 
         /* Create a todo item for this MR. */
-        if(empty($MR->jobID)) $this->apiCreateMRTodo($this->post->hostID, $this->post->targetProject, $rawMR->iid);
+        if(empty($MR->jobID)) $this->apiCreateMRTodo($MR->hostID, $MR->targetProject, $rawMR->iid);
 
         $newMR = new stdclass;
         $newMR->mriid       = $rawMR->iid;
@@ -1280,14 +1280,14 @@ class mrModel extends model
         if(empty($commits)) return true;
 
         /* Init objects. */
-        $objectList = array();
+        $objectList = array('story' => array(), 'bug' => array(), 'task' => array());
         $this->loadModel('repo');
         foreach($commits as $commit)
         {
             $objects = $this->repo->parseComment($commit->message);
-            $objectList['story'] = array_merge($objectList['stories'], $objects['stories']);
-            $objectList['bug']   = array_merge($objectList['bugs'],    $objects['bugs']);
-            $objectList['task']  = array_merge($objectList['tasks'],   $objects['tasks']);
+            $objectList['story'] = array_merge($objectList['story'], $objects['stories']);
+            $objectList['bug']   = array_merge($objectList['bug'],   $objects['bugs']);
+            $objectList['task']  = array_merge($objectList['task'],  $objects['tasks']);
         }
 
         $users          = $this->loadModel('user')->getPairs('noletter');

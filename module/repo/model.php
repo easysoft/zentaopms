@@ -1828,7 +1828,15 @@ class repoModel extends model
         $service = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
         if($repo->SCM == 'Gitlab')
         {
-            if($getCodePath) $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
+            if($getCodePath)
+            {
+                $project = $this->loadModel('gitlab')->apiGetSingleProject((int)$repo->serviceHost, (int)$repo->serviceProject);
+                if(isset($project->web_url) && !$repo->path)
+                {
+                    $repo->path = $project->web_url;
+                    $this->dao->update(TABLE_REPO)->set('path')->eq($repo->path)->where('id')->eq($repo->id)->exec();
+                }
+            }
 
             $repo->path     = (!$repo->path && $service) ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : $repo->path;
             $repo->apiPath  = sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject);
@@ -1840,6 +1848,7 @@ class repoModel extends model
         {
             $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
         }
+
         $repo->gitService = (int)$repo->serviceHost;
         $repo->project    = (int)$repo->serviceProject;
         return $repo;

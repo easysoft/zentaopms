@@ -314,7 +314,12 @@ class mr extends control
         $MR   = $this->mr->apiSyncMR($MR);
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
 
-        $projectOwner  = $projectEdit = false;
+        $projectOwner  = false;
+        if($host->type == 'gitlab')
+        {
+            $MR->sourceProject = (int)$MR->sourceProject;
+            $MR->targetProject = (int)$MR->targetProject;
+        }
         $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
         if(isset($MR->hostID) && !$this->app->user->admin)
         {
@@ -322,26 +327,6 @@ class mr extends control
             if(!$projectOwner && isset($sourceProject->owner->id) && $sourceProject->owner->id == $openID) $projectOwner = true;
         }
 
-        if($host->type == 'gitlab')
-        {
-            $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($MR->hostID, 'name_asc', 'developer');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-
-            $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
-            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
-            if(isset($gitUsers[$this->app->user->account]) && $isDeveloper) $projectEdit = true;
-        }
-        elseif($host->type == 'gitea')
-        {
-            $projectEdit = (isset($sourceProject->allow_merge_commits) && $sourceProject->allow_merge_commits == true) ? true : false;
-        }
-        elseif($host->type == 'gogs')
-        {
-            $projectEdit = (isset($sourceProject->permissions->push) && $sourceProject->permissions->push) ? true : false;
-        }
-
-        $this->app->loadLang('productplan');
         $this->view->title         = $this->lang->mr->view;
         $this->view->MR            = $MR;
         $this->view->repoID        = $MR->repoID;
@@ -350,7 +335,7 @@ class mr extends control
         $this->view->compile       = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob    = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
         $this->view->projectOwner  = $projectOwner;
-        $this->view->projectEdit   = $projectEdit;
+        $this->view->projectEdit   = $this->mrZen->checkProjectEdit($host->type, $sourceProject, $MR);
         $this->view->sourceProject = $sourceProject;
         $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject);
         $this->view->sourceBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
@@ -838,7 +823,14 @@ class mr extends control
    public function ajaxGetBranchPivs(int $hostID, string $project)
    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
-        if(in_array($host->type, array('gitea', 'gogs'))) $project = urldecode(base64_decode($project));
+        if(in_array($host->type, array('gitea', 'gogs')))
+        {
+            $project = urldecode(base64_decode($project));
+        }
+        else
+        {
+            $project = (int)$project;
+        }
 
         $branchPrivs = array();
         $branches    = $this->loadModel($host->type)->apiGetBranchPrivs($hostID, $project);
