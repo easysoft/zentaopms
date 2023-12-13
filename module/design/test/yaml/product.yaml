@@ -1,0 +1,18 @@
+title: product data
+author: zhouxin
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-30
+  - field: name
+    range: 1-30
+    prefix: '产品'
+  - field: program
+    range: 1{10},3{10},6{10}
+  - field: line
+    range: 1{10},2{10},3{10}
+  - field: status
+    range: 'normal{20},closed{10}'
+  - field: PO
+    range: 'admin{10},user1{10},user2{10}'

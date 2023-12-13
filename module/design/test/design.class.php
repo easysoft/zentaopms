@@ -1,10 +1,22 @@
 <?php
 class designTest
 {
-    public function __construct()
+    /**
+     * 构造函数。
+     *
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function __construct(string $account = 'admin')
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('design');
+        global $tester, $app;
+        $this->objectModel = $tester->loadModel('design');
+
+        su($account);
+
+        $app->rawModule = 'design';
+        $app->rawMethod = 'index';
     }
 
     /**
@@ -164,5 +176,24 @@ class designTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 获取搜索后的设计列表数据。
+     * Get designs by search.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getBySearchTest(int $projectID = 0, int $productID = 0, int $queryID = 0, string $orderBy = 'id_desc'): array
+    {
+        $designs = $this->objectModel->getBySearch($projectID, $productID, $queryID, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+        return $designs;
     }
 }

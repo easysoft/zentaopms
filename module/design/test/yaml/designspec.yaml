@@ -1,0 +1,11 @@
+title: zt_designspec.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: design
+    range: 1-100
+  - field: version
+    range: 1
+  - field: name
+    range: 1-100
+    prefix: '设计'

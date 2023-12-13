@@ -1,0 +1,13 @@
+title: projectproduct data
+author: Shujie Tian
+version: 1.0.0
+
+fields:
+  - field: project
+    range: "11,60,61,100"
+  - field: product
+    range: 1-10
+  - field: branch
+    range: 0
+  - field: plan
+    range: 0

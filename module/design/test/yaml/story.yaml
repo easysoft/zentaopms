@@ -1,0 +1,19 @@
+title: zt_story
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: title
+    range: 1-100
+    prefix: '需求'
+  - field: product
+    range: 1-10{2}
+  - field: branch
+    range: '0{55},2-15{5}'
+  - field: stage
+    range: 'projected,developing,developed,testing,tested'
+  - field: status
+    range: 'active'
+  - field: type
+    range: 'story'
