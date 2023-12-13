@@ -372,12 +372,13 @@ class compileModel extends model
         }
 
         $this->loadModel('job');
-        if($job->engine == 'gitlab')  $compile = $this->job->execGitlabPipeline($job, $compileID);
-        if($job->engine == 'jenkins') $compile = $this->job->execJenkinsPipeline($job, $repo, $compileID);
+        $result = new stdclass();
+        if($job->engine == 'gitlab')  $result = $this->job->execGitlabPipeline($job, $compileID);
+        if($job->engine == 'jenkins') $result = $this->job->execJenkinsPipeline($job, $repo, $compileID);
 
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+        $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
-            ->set('lastStatus')->eq($compile->status)
+            ->set('lastStatus')->eq($result->status)
             ->set('lastExec')->eq($compile->updateDate)
             ->where('id')->eq($job->id)
             ->exec();
