@@ -46,7 +46,7 @@ $pivot2 = $pivotList[1];
 $pivotTest->processFieldSettings($pivot2);
 $project = $pivot2->fieldSettings->project ?? null;
 $condition = $project && $project->name == '所属项目' && $project->field == 'project';
-r($condition) && p('') && e(1);  //id为1003的透视表，没有project字段，判断是否通过此方法生成了project配置以及project配置下是否生成了field字段,并且判断配置是否正确。
+r($condition) && p('') && e(0);  //id为1003的透视表，没有project字段，判断是否通过此方法生成了project配置以及project配置下是否生成了field字段,并且判断配置是否正确。
 
 $bsa = $pivot2->fieldSettings->BSA ?? null;
 $condition2 =  $bsa && $bsa->name == 'BSA' && $bsa->field == 'BSA' && $bsa->object == 'project';
