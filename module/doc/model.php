@@ -2298,11 +2298,11 @@ class docModel extends model
      * @param  int         $objectID
      * @param  string      $browseType bysearch|byrelease
      * @param  int         $docID
-     * @param  object|null $release
+     * @param  object|bool $release
      * @access public
      * @return object
      */
-    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, object|null $release = null): object
+    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, object|bool $release = false): object
     {
         $releaseModule = array();
         if($release && $release->lib == $lib->id)
