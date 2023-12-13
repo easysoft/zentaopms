@@ -86,6 +86,14 @@ class control extends wg
         );
     }
 
+    protected function buildInputGroup(): wg
+    {
+        return new inputGroup
+        (
+            set($this->props->skip('type')),
+        );
+    }
+
     protected function buildCheckbox(): wg
     {
         if($this->hasProp('items')) return $this->buildCheckList();
