@@ -896,7 +896,7 @@ class pivotModel extends model
      * @access private
      * @return string
      */
-    private function getColLabelValue(string $field, string $fieldObject, string $relatedField, string $clientLang, array $langs = array()): string
+    public function getColLabelValue(string $field, string $fieldObject, string $relatedField, string $clientLang, array $langs = array()): string
     {
         $colLabel = $field;
         if(isset($langs[$field][$clientLang]))
