@@ -6,7 +6,7 @@ window.createSortLink = function(col)
     return "javascript:loadModal('" + sortLink.replace('{orderBy}', sort) + "', '#table-repo-linkbug')";
 }
 
-$(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
+$(document).off('click','.dtable-footer .batch-btn-repo').on('click', '.dtable-footer .batch-btn-repo', function(e)
 {
     const dtable = zui.DTable.query(e.target);
     const checkedList = dtable.$.getChecks();

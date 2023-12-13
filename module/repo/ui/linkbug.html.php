@@ -24,7 +24,7 @@ detailHeader
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->productplan->linkBug, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy"))
+    array('text' => $lang->productplan->linkBug, 'className' => 'batch-btn-repo ajax-btn', 'data-url' => helper::createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'bugs'));
 
 searchForm

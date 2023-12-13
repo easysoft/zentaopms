@@ -24,7 +24,7 @@ detailHeader
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->repo->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy"))
+    array('text' => $lang->repo->linkStory, 'className' => 'batch-btn-repo ajax-btn', 'data-url' => helper::createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'stories'));
 
 searchForm
