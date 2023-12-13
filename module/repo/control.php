@@ -225,7 +225,7 @@ class repo extends control
             $result = $this->scm->createBranch($branch->name, $branch->from);
             if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $result['message']);
 
-            $this->repo->saveTaskRelation($repoID, $taskID, $branch->name);
+            $this->repo->saveTaskRelation((int)$repoID, $taskID, $branch->name);
             $this->loadModel('action')->create('task', $taskID, 'createRepoBranch', '', $branch->name);
             $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }

@@ -217,7 +217,7 @@ class gitlab
         $param->branch = $branchName;
         $result = $app->control->loadModel('gitlab')->apiCreateBranch($this->repo->serviceHost, $this->repo->serviceProject, $param);
 
-        return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => $result->message);
+        return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => empty($result->name) ? $result->message : '');
     }
 
     /**
