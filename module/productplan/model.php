@@ -886,7 +886,7 @@ class productplanModel extends model
         $this->dao->update(TABLE_STORY)->set('plan')->eq(implode(',', $plans))->where('id')->eq((int)$storyID)->exec();
 
         /* Delete the story in the sort of the plan. */
-        $this->loadModel('story')->updateStoryOrderOfPlan($storyID, '', $planID);
+        $this->loadModel('story')->updateStoryOrderOfPlan($storyID, '', (string)$planID);
 
         $this->story->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
