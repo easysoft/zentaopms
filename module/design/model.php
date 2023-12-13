@@ -14,47 +14,40 @@
 class designModel extends model
 {
     /**
+     * 创建一个设计。
      * Create a design.
      *
-     * @param  int    $projectID
+     * @param  object   $design
      * @access public
-     * @return void
+     * @return bool|int
      */
-    public function create($projectID)
+    public function create(object $design): bool|int
     {
-        $design = fixer::input('post')
-            ->stripTags('desc', $this->config->allowedTags)
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->add('project', $projectID)
-            ->add('version', 1)
-            ->remove('files,labels')
-            ->get();
+        $project = $this->loadModel('project')->getByID($design->project);
+        $requiredFields = $this->config->design->create->requiredFields;
+        if(!empty($project->hasProduct)) $requiredFields .= ',product';
 
-        $design = $this->loadModel('file')->processImgURL($design, 'desc', $this->post->uid);
+        $design = $this->loadModel('file')->processImgURL($design, 'desc', (string)$this->post->uid);
         $this->dao->insert(TABLE_DESIGN)->data($design)
             ->autoCheck()
-            ->batchCheck($this->config->design->create->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->exec();
 
-        if(!dao::isError())
-        {
-            $designID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $designID, 'design');
-            $files = $this->file->saveUpload('design', $designID);
+        if(dao::isError()) return false;
 
-            $spec = new stdclass();
-            $spec->design  = $designID;
-            $spec->version = 1;
-            $spec->name    = $design->name;
-            $spec->desc    = $design->desc;
-            $spec->files   = empty($files) ? '' : implode(',', array_keys($files));
-            $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
+        $designID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $designID, 'design');
+        $files = $this->file->saveUpload('design', $designID);
 
-            return $designID;
-        }
+        $spec = new stdclass();
+        $spec->design  = $designID;
+        $spec->version = 1;
+        $spec->name    = $design->name;
+        $spec->desc    = $design->desc;
+        $spec->files   = empty($files) ? '' : implode(',', array_keys($files));
+        $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
-        return false;
+        return $designID;
     }
 
     /**
