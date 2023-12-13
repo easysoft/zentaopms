@@ -1494,11 +1494,11 @@ class userModel extends model
      * 根据 id 获取一个联系人列表。
      * Get a contact list by id.
      *
-     * @param  int    $listID
+     * @param  int          $listID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getContactListByID(int $listID): object
+    public function getContactListByID(int $listID): object|bool
     {
         return $this->dao->select('*')->from(TABLE_USERCONTACT)->where('id')->eq($listID)->fetch();
     }
