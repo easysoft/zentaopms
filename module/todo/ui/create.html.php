@@ -291,7 +291,7 @@ formPanel
         formGroup
         (
             set::label($lang->todo->generate),
-            set::class('have-fix highlight-suffix'),
+            set::className('have-fix highlight-suffix'),
             set::width($isInModal ? '3/5' : '1/3'),
             inputControl
             (
