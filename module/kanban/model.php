@@ -3479,18 +3479,21 @@ class kanbanModel extends model
     }
 
     /**
+     * 归档看板列。
      * Archive a column.
      *
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function archiveColumn($columnID)
+    public function archiveColumn(int $columnID)
     {
         $this->dao->update(TABLE_KANBANCOLUMN)
             ->set('archived')->eq(1)
             ->where('id')->eq($columnID)
             ->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
     }
 
     /**
