@@ -238,10 +238,11 @@ class ai extends control
         {
             if(in_array($key, $usedCustomCategories)) $usedCustomCategoryList[$key] = $value;
         }
-
+        $squareCategories = $this->lang->ai->miniPrograms->squareCategories;
+        unset($squareCategories['collection']);
         $this->view->collectedIDs = empty($collectedIDs) ? $this->ai->getCollectedMiniProgramIDs($this->app->user->id) : $collectedIDs;
         $this->view->category     = $category;
-        $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->squareCategories, $usedCustomCategoryList);
+        $this->view->categoryList = empty($this->view->collectedIDs) ? array_merge($squareCategories, $usedCustomCategoryList) : array_merge($this->lang->ai->miniPrograms->squareCategories, $usedCustomCategoryList);
         $this->view->pager        = $pager;
         $this->view->miniPrograms = $miniPrograms ?: array();
         $this->view->title        = $this->lang->ai->miniPrograms->common;
