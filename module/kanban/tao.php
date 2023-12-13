@@ -147,4 +147,31 @@ class kanbanTao extends kanbanModel
             $order ++;
         }
     }
+
+    /**
+     * 为看板子列添加看板单元格。
+     * Add kanban cell for child column.
+     *
+     * @param  int    $columnID
+     * @param  int    $childColumnID
+     * @param  int    $i
+     * @access public
+     * @return void
+     */
+    protected function addChildColumnCell(int $columnID, int $childColumnID, int $i = 0)
+    {
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($columnID)->fetchAll();
+        foreach($cellList as $cell)
+        {
+            $newCell = new stdclass();
+            $newCell->kanban = $cell->kanban;
+            $newCell->lane   = $cell->lane;
+            $newCell->column = $childColumnID;
+            $newCell->type   = 'common';
+            $newCell->cards  = $i == 0 ? $cell->cards : '';
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($newCell)->exec();
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('id')->eq($cell->id)->exec();
+        }
+    }
 }
