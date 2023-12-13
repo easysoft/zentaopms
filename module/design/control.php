@@ -59,12 +59,13 @@ class design extends control
     }
 
     /**
+     * 设计列表页面。
      * Browse designs.
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
-     * @param  string $param
+     * @param  string $type       all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -72,29 +73,31 @@ class design extends control
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'all', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $productID = $this->commonAction($projectID, $productID);
         $project   = $this->project->getByID($projectID);
 
-        /* Save session for design list and process product id. */
+        /* Save session for design list. */
         $this->session->set('designList', $this->app->getURI(true), 'project');
         $this->session->set('reviewList', $this->app->getURI(true), 'project');
 
-        /* Build the search form. */
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $queryID       = $type == 'bySearch' ? $param : 0;
+
+        /* Build Search Form. */
         $this->config->design->search['params']['story']['values'] = $stories;
         $this->config->design->search['params']['type']['values']  = $this->lang->design->typeList;
 
-        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('design', 'browse', "projectID=$projectID&productID=$productID&type=bySearch&queryID=myQueryID");
-        $this->design->buildSearchForm($queryID, $actionURL);
+        $this->config->design->search['actionURL'] = $this->createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&type=bySearch&queryID=myQueryID");
+        $this->config->design->search['queryID']   = $queryID;
+        $this->loadModel('search')->setSearchParams($this->config->design->search);
 
-        /* Init pager and get designs. */
+        /* Init pager and set table field and actions. */
         $this->app->loadClass('pager', true);
-        $pager   = pager::init(0, $recPerPage, $pageID);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         if(isset($project->hasProduct) && !$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
         if(isset($project->hasProduct) && $project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
