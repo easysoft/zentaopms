@@ -178,6 +178,8 @@ window.aiMiniProgramChat.startAIChat = function()
         $messageList.append(createNotificationMessage(`${formatDateTime()} ${clearContextLang}`));
         messageList = [];
     }
+    $('.chat').addClass('hidden');
+    $('.chat-history').removeClass('hidden');
     $('.input-container').removeClass('hidden');
     sendMessagesToAI(promptStr);
 };
