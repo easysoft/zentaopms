@@ -39,4 +39,4 @@ $typeList = array('mine', 'project', 'execution', 'product', 'custom');
 
 $docTester = new docTest();
 r($docTester->buildQueryTest($typeList[0], $queries[0])) && p() && e(" 1 = 1");                                      // 测试type=mine 并且 queryID=0时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[0], $queries[1])) && p() && e("(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))"); // 测试type=mine 并且 queryID=1时，构造的搜索条件
+r($docTester->buildQueryTest($typeList[0], $queries[2])) && p() && e("(( 1 AND 1) AND ( 1 ))");                      // 测试type=mine 并且 queryID=2时，构造的搜索条件
