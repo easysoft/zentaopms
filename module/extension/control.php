@@ -235,6 +235,7 @@ class extension extends control
         $this->extensionZen->checkSafe();
 
         /* Determine whether need to back up. */
+        $info   = $this->extension->getInfoFromDB($extension);
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
         if($confirm == 'no' && file_exists($dbFile))
         {
@@ -253,7 +254,8 @@ class extension extends control
         }
 
         /* 卸载前的钩子加载。 */
-        if($preUninstallHook = $this->extensionZen->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
+        $preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall');
+        if($preUninstallHook && $info->status == 'installed') include $preUninstallHook;
 
         if(file_exists($dbFile)) $this->view->backupFile = $this->extensionZen->backupDB($extension);
 
@@ -265,7 +267,9 @@ class extension extends control
         $this->view->removeCommands = $this->extension->removePackage($extension);
 
         /* 卸载后的钩子加载。 */
-        if($postUninstallHook = $this->extensionZen->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
+        $postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall');
+        if($postUninstallHook && $info->status == 'installed') include $postUninstallHook;
+
         $this->display();
     }
 

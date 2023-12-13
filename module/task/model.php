@@ -1651,7 +1651,7 @@ class taskModel extends model
         foreach($tasks as $taskID => $task)
         {
             $prefix = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
-            $taskPairs[$taskID] = $prefix . "{$taskID}:{$task->finishedByRealName}:{$task->name}";
+            $taskPairs[$taskID] = $prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name";;
         }
         return $taskPairs;
     }

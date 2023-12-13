@@ -15,12 +15,12 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
+        <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']) . $this->lang->extension->activate;?></span>
       </h2>
     </div>
     <?php if(isset($error) and $error):?>
-    <div class='text-center'>
-      <div class='text-danger'><?php $error;?></div>
+    <div class='text-left'>
+      <div class='text-danger'><?php echo $error;?></div>
     </div>
     <?php else:?>
     <div class='text-center with-padding'>
