@@ -72,7 +72,7 @@ class statisticBlock extends blockPanel
                 a
                 (
                     toggle::tab(array('target' => "#blockTab_{$id}_{$item['id']}")),
-                    setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] == $active ? 'active scroll-into-view' : ''),
+                    setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] == $active ? 'active' : ''),
                     span(setClass('text clip'), $item['text'])
                 ),
                 !$longBlock ? span(setClass('block-statistic-nav-title text text-primary font-bold clip'), $item['text']) : null,
