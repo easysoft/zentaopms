@@ -19,16 +19,16 @@ $canCreate = hasPriv('artifactrepo', 'create');
 
 foreach($artifactRepos as $repo)
 {
-    $repo->productNames = '';
-    $productList = explode(',', str_replace(' ', '', $repo->products));
+    $productNames = array();
+    $productList  = explode(',', str_replace(' ', '', $repo->products));
     if($productList)
     {
         foreach($productList as $productID)
         {
             if(!isset($products[$productID])) continue;
-            $repo->productNames .= '，' . zget($products, $productID, $productID);
+            $repo->productNames[] = zget($products, $productID, $productID);
         }
-        $repo->productNames = trim($repo->productNames, '，');
+        $repo->productNames = implode('，', $repo->productNames);
     }
 }
 $artifactRepos = initTableData($artifactRepos, $config->artifactrepo->dtable->fieldList, $this->artifactrepo);
@@ -58,4 +58,3 @@ dtable
 );
 
 render();
-
