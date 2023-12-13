@@ -25,7 +25,5 @@ fields:
     range: "normal{5},draft{5}"
   - field: type
     range: text
-  - field: collector
-    range: '`admin,user1,user2`,[]{5},admin,user1,user2'
   - field: version
     range: 1
