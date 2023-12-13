@@ -32,7 +32,8 @@
   <?php endif;?>
     <?php echo $lang->history?> &nbsp;
     <button type="button" class="btn btn-mini btn-icon btn-reverse" title='<?php echo $lang->reverse;?>'>
-      <i class="icon icon-arrow-up icon-sm"></i>
+      <?php $reverseBtnClass = isset($_COOKIE['historyOrder']) && $this->cookie->historyOrder == 'desc' ? 'icon-arrow-down' : 'icon-arrow-up';?>
+      <i class="icon <?php echo $reverseBtnClass;?> icon-sm"></i>
     </button>
     <button type="button" class="btn btn-mini btn-icon btn-expand-all" title='<?php echo $lang->switchDisplay;?>'>
       <i class="icon icon-plus icon-sm"></i>
@@ -104,3 +105,9 @@
     </ol>
   </div>
 </div>
+<script>
+$(document).on('historiesReverse', '.histories-list', function(event, isAsc)
+{
+    $.cookie('historyOrder', isAsc ? 'asc' : 'desc', {expires:config.cookieLife, path:config.webRoot});
+});
+</script>

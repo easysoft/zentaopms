@@ -352,6 +352,7 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
+        $orderBy   = isset($_COOKIE['historyOrder']) && $this->cookie->historyOrder == 'desc' ? 'date_desc, id_desc' : 'date_asc, id_asc';
         $objectID  = is_array($objectID) ? $objectID : (int)$objectID;
         $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
         $commiters = $this->loadModel('user')->getCommiters();
@@ -377,7 +378,7 @@ class actionModel extends model
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->fi()
-            ->orderBy('date, id')
+            ->orderBy($orderBy)
             ->fetchAll('id');
 
         $histories = $this->getHistory(array_keys($actions));

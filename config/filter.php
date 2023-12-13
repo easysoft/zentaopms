@@ -25,15 +25,16 @@ $filter->default->get['_nocache']              = 'equal::1';
 $filter->default->get['tid']                   = 'reg::word';
 $filter->default->get['HTTP_X_REQUESTED_WITH'] = 'equal::XMLHttpRequest';
 
-$filter->default->cookie['lang']        = 'reg::lang';
-$filter->default->cookie['theme']       = 'reg::word';
-$filter->default->cookie['fingerprint'] = 'reg::word';
-$filter->default->cookie['hideMenu']    = 'equal::true';
-$filter->default->cookie['tab']         = 'reg::word';
-$filter->default->cookie['goback']      = 'reg::any';
-$filter->default->cookie['maxImport']   = 'reg::any';
-$filter->default->cookie['za']          = 'reg::any';
-$filter->default->cookie['zp']          = 'reg::any';
+$filter->default->cookie['lang']         = 'reg::lang';
+$filter->default->cookie['theme']        = 'reg::word';
+$filter->default->cookie['fingerprint']  = 'reg::word';
+$filter->default->cookie['hideMenu']     = 'equal::true';
+$filter->default->cookie['tab']          = 'reg::word';
+$filter->default->cookie['goback']       = 'reg::any';
+$filter->default->cookie['maxImport']    = 'reg::any';
+$filter->default->cookie['za']           = 'reg::any';
+$filter->default->cookie['zp']           = 'reg::any';
+$filter->default->cookie['historyOrder'] = 'reg::word';
 
 $filter->index        = new stdclass();
 $filter->my           = new stdclass();
