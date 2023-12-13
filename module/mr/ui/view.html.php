@@ -232,7 +232,7 @@ panel
                             (
                                 setClass('danger'),
                                 $MR->status
-                            ) : zget($lang->mr->statusList, $MR->status)
+                            ) : zget($lang->mr->statusList, (string)$MR->status)
                         ),
                         item
                         (

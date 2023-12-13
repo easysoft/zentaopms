@@ -262,7 +262,8 @@ class mrModel extends model
         $this->linkObjects($MR);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$this->post->executionID}" : ''));
+        $linkParams = $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
     }
 
     /**
@@ -414,7 +415,8 @@ class mrModel extends model
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse'));
+        $linkParams = $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
     }
 
     /**
@@ -1068,6 +1070,7 @@ class mrModel extends model
                 $changes = common::createChanges($oldMR, $MR);
                 $this->action->logHistory($actionID, $changes);
 
+                unset($MR->editedDate);
                 $MR->approver = $this->app->user->account;
                 $this->dao->update(TABLE_MR)->data($MR)
                     ->where('id')->eq($MR->id)

@@ -23,6 +23,7 @@ $config->mr->form->edit = common::formConfig('mr', 'edit');
 $config->mr->form->edit['title']              = array('type' => 'string', 'required' => true);
 $config->mr->form->edit['assignee']           = array('type' => 'string', 'required' => true);
 $config->mr->form->edit['repoID']             = array('type' => 'int',    'required' => true);
+$config->mr->form->edit['targetBranch']       = array('type' => 'string', 'required' => true);
 $config->mr->form->edit['needCI']             = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->mr->form->edit['removeSourceBranch'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->mr->form->edit['squash']             = array('type' => 'int',    'required' => false, 'default' => 0);

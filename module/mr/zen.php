@@ -55,6 +55,11 @@ class mrZen extends mr
     protected function assignEditData(object $MR, string $scm): void
     {
         $MR->canDeleteBranch = true;
+        if($scm == 'gitlab')
+        {
+            $MR->sourceProject = (int)$MR->sourceProject;
+            $MR->targetProject = (int)$MR->targetProject;
+        }
         $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
         foreach($branchPrivs as $priv)
         {
