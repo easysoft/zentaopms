@@ -118,9 +118,9 @@ class coverage
      * Compute the line coverage test method.
      * @param  array      $traces
      * @access private
-     * @return array|bool
+     * @return array|false
      */
-    private function computeMethodCoverage(array $traces): array|bool
+    private function computeMethodCoverage(array $traces): array|false
     {
         if(!isset($traces['executeLines'] )) return false;
         $executeLines = $traces['executeLines'];
@@ -432,10 +432,10 @@ EOT;
      *
      * @param  string            $filePath
      * @param  string            $key
-     * @return array|string|bool
+     * @return array|string|false
      *
      */
-    public function loadTraceFromFiles(string $filePath, string $key = ''): array|string|bool
+    public function loadTraceFromFiles(string $filePath, string $key = ''): array|string|false
     {
         $tracesFiles = glob("{$filePath}/*.json");
         if(!$tracesFiles) return false ;
