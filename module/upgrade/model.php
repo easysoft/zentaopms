@@ -9344,6 +9344,12 @@ class upgradeModel extends model
         return false;
     }
 
+    /**
+     * Rename BI default module name.
+     *
+     * @access public
+     * @return void
+     */
     public function renameBIModule()
     {
         $moduleNames  = array('zh' => '默认分组', 'en' => 'Default');
