@@ -1,0 +1,14 @@
+title: table zt_config
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: owner
+    range: "system"
+  - field: module
+    range: "common"
+  - field: section
+    range: "safe"
+  - field: key
+    range: "mode,weak,changeWeak"
+  - field: value
+    range: "0,`123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123`,0"
