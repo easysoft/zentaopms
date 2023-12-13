@@ -836,6 +836,7 @@ class pivotModel extends model
          * $configs, eg: array(0 => array(0 => 2, 1 => 1), 2 => array(0 => 2))
          * 代表在整个tbody中，位于[0,0]坐标的td rowspan为2，位于[0,1]坐标的td rowspan为1, 位于[2,0]坐标的td rowspan为2
          */
+
         return array($data, $configs);
     }
 
@@ -1300,8 +1301,9 @@ class pivotModel extends model
             $params['groups']       = $groups;
             $params['monopolize']   = $monopolize;
             $params['uuName']       = $uuName;
-            $params['showTotal']    = $showTotal;
             $params['showColTotal'] = $showColTotal;
+            if($method !== 'processDefaultShowData') $params['showTotal'] = $showTotal;
+
 
             return call_user_func_array(array($this, $method), $params);
         }
