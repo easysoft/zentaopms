@@ -61,6 +61,7 @@ class testresultsEntry extends entry
         $taskID  = $this->param('testtask', 0);
         $version = $this->param('version', $case->version);
         list($runID, $steps) = $this->getStepIDList($taskID, $caseID, $version);
+        $stepCount = !empty($steps) ? count($steps) : 1;
 
         $this->setPost('case',  $caseID);
         $this->setPost('version', $version);
@@ -75,7 +76,7 @@ class testresultsEntry extends entry
             {
                 /* When post data more than case steps, break after take useful data. */
                 $count ++;
-                if($count > count($steps)) break;
+                if($count > $stepCount) break;
 
                 $stepID           = $steps[$index];
                 $results[$stepID] = $step->result;
