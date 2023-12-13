@@ -174,4 +174,24 @@ class kanbanTao extends kanbanModel
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('id')->eq($cell->id)->exec();
         }
     }
+
+    /**
+     * 更新看板列的父列。
+     * Update parent column of kanban column.
+     *
+     * @param  object $column
+     * @access public
+     * @return void
+     */
+    protected function updateColumnParent(object $column)
+    {
+        $children = $this->dao->select('count(*) as count')->from(TABLE_KANBANCOLUMN)
+            ->where('parent')->eq($column->parent)
+            ->andWhere('id')->ne($column->id)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('archived')->eq('0')
+            ->fetch('count');
+
+        if(!$children) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
+    }
 }
