@@ -28,7 +28,7 @@ include dirname(__FILE__, 2) . '/doc.class.php';
 
 $userqueryTable = zdTable('userquery');
 $userqueryTable->id->range('1-2');
-$userqueryTable->sql->range("`((1 AND LIKE '%文档%') AND (1))`,`((1 AND `lib` = 'all') AND (1))`");
+$userqueryTable->sql->range("`((1 AND 1 LIKE 1) AND (1))`,`((1 AND `lib` = 'all') AND (1))`");
 $userqueryTable->gen(2);
 
 zdTable('user')->gen(5);
@@ -39,4 +39,4 @@ $typeList = array('mine', 'project', 'execution', 'product', 'custom');
 
 $docTester = new docTest();
 r($docTester->buildQueryTest($typeList[0], $queries[0])) && p() && e(" 1 = 1");                                  // 测试type=mine 并且 queryID=0时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[0], $queries[1])) && p() && e("((1 AND LIKE '%文档%') AND (1))"); // 测试type=mine 并且 queryID=1时，构造的搜索条件
+r($docTester->buildQueryTest($typeList[0], $queries[1])) && p() && e("((1 AND 1 LIKE 1) AND (1))"); // 测试type=mine 并且 queryID=1时，构造的搜索条件
