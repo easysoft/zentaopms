@@ -2,7 +2,7 @@
 <?php
 
 /**
-title=测试 pivotModel->getBugs();
+title=测试 pivotTao->getProductList();
 cid=1
 pid=1
 
