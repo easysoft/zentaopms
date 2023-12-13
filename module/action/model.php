@@ -785,7 +785,8 @@ class actionModel extends model
         $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
-        $this->loadModel('common')->saveQueryCondition($condition, 'action', false);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+
         return $this->transformActions($actions);
     }
 
@@ -2034,9 +2035,8 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
 
         $table = $this->actionTao->getActionTable($period);
-        return $this->dao->select('count(1) AS count')->from($table)
-            ->where($condition)
-            ->fetch('count');
+
+        return $this->dao->select('count(1) AS count')->from($table)->where($condition)->fetch('count');
     }
 
     /**

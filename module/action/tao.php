@@ -631,9 +631,11 @@ class actionTao extends actionModel
             ->beginIF($begin)->andWhere('date')->gt($begin)->fi()
             ->beginIF($end)->andWhere('date')->lt($end)->fi()
             ->fi()
-            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi();
+            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->fetchPairs();
+        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
 
-        $condition .= " OR (`objectID` IN ({$efforts->get()}) AND `objectType` = 'effort')";
+        $condition .= " OR (`objectID` IN ({$efforts}) AND `objectType` = 'effort')";
     }
 
     /**
