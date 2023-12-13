@@ -12,8 +12,6 @@ namespace zin;
 jsVar('avatar', $this->app->user->avatar);
 jsVar('userID', $this->app->user->id);
 
-if(!$user->avatar) $user->avatar = strtoupper($user->account[0]);
-
 $groupName = '';
 foreach($groups as $group) $groupName .= $group->name . ' ';
 

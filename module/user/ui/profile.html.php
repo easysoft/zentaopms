@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace zin;
 if(!isonlybody()) include 'featurebar.html.php';
 
-if(!$user->avatar) $user->avatar = strtoupper($user->account[0]);
-
 $groupName = '';
 foreach($groups as $group) $groupName .= $group->name . ' ';
 
