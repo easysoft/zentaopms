@@ -26,9 +26,9 @@ foreach($artifactRepos as $repo)
         foreach($productList as $productID)
         {
             if(!isset($products[$productID])) continue;
-            $repo->productNames[] = zget($products, $productID, $productID);
+            $productNames[] = zget($products, $productID, $productID);
         }
-        $repo->productNames = implode('，', $repo->productNames);
+        $repo->productNames = implode('，', $productNames);
     }
 }
 $artifactRepos = initTableData($artifactRepos, $config->artifactrepo->dtable->fieldList, $this->artifactrepo);

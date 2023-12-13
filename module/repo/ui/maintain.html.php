@@ -19,7 +19,7 @@ $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink
 
 foreach($repoList as $repo)
 {
-    $jobID       = 0;
+    $jobID        = 0;
     $repo->exec   = 'disabled';
     $repo->report = 'disabled';
     if(isset($sonarRepoList[$repo->id]))
@@ -38,10 +38,10 @@ foreach($repoList as $repo)
             if(!isset($products[$productID])) continue;
             $productNames[] = zget($products, $productID, $productID);
         }
-        $repo->productNames = implode('，', $repo->productNames);
+        $repo->productNames = implode('，', $productNames);
     }
 
-    $repo->projectNames = array();
+    $projectNames = array();
     $projectList  = explode(',', str_replace(' ', '', $repo->projects));
     if($projectList)
     {
@@ -50,7 +50,7 @@ foreach($repoList as $repo)
             if(!isset($projects[$projectID])) continue;
             $projectNames[] = zget($projects, $projectID, $projectID);
         }
-        $repo->projectNames = implode('，', $repo->projectNames);
+        $repo->projectNames = implode('，', $projectNames);
     }
 
     if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
