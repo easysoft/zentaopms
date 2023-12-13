@@ -33,6 +33,7 @@ zui.DTable.definePlugin(
             if(col.fixed == 'no') col.fixed = false;
             if(col.type === 'html' && col.flex === undefined) col.flex = col.width === 'auto' ? 1 : false;
             if(col.width === 'auto') allLeftColsFixed = false;
+            delete col.sort;
             return col;
         });
         return $.extend({fixedLeftWidth: '40%'}, options, {
