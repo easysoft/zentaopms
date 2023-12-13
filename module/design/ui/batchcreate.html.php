@@ -35,7 +35,7 @@ formBatchPanel
     (
         set::name('type'),
         set::label($lang->design->type),
-        set::control('select'),
+        set::control('picker'),
         set::items($lang->design->typeList),
         set::width('200px'),
         set::ditto(true)
