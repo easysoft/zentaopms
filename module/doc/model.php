@@ -2556,7 +2556,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function processCollector($docs): array
+    public function processCollector(array $docs): array
     {
         $actionGroup = $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->in(array_keys($docs))->andWhere('action')->eq('collect')->fetchGroup('doc', 'actor');
         foreach($docs as $docID => $doc)
