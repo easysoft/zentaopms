@@ -57,7 +57,7 @@ $doneCount    = 0;
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-        <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse') and !$project->multiple);?>
+        <?php $canTestReport = ($canBeChanged and common::hasPriv('testreport', 'browse'));?>
         <tr class='<?php if($total and $project->hasProduct) echo 'divider'; ?>'>
           <th class='c-side text-center <?php if(!$project->hasProduct) echo 'hide';?>'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
