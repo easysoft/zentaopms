@@ -51,37 +51,27 @@ class designModel extends model
     }
 
     /**
+     * 批量创建设计。
      * Batch create designs.
      *
      * @param  int    $projectID
      * @param  int    $productID
+     * @param  array  $designs
      * @access public
      * @return bool
      */
-    public function batchCreate($projectID = 0, $productID = 0)
+    public function batchCreate(int $projectID = 0, int $productID = 0, array $designs = array()): bool
     {
-        $data = fixer::input('post')->get();
-
         $this->loadModel('action');
-        foreach($data->name as $i => $name)
+        foreach($designs as $rowID => $design)
         {
-            if(!trim($name)) continue;
-
-            $design = new stdclass();
-            $design->story       = isset($data->story[$i]) ? $data->story[$i] : '';
-            $design->type        = $data->type[$i];
-            $design->name        = $name;
-            $design->product     = $productID;
-            $design->project     = $projectID;
-            $design->desc        = nl2br($data->desc[$i]);
-            $design->createdBy   = $this->app->user->account;
-            $design->createdDate = helper::now();
-
+            $design->product = $productID;
+            $design->project = $projectID;
             $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
 
             if(dao::isError())
             {
-                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$i}]"] = $error;
+                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$rowID}]"] = $error;
                 return false;
             }
 

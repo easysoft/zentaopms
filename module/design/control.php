@@ -158,11 +158,12 @@ class design extends control
     }
 
     /**
+     * 批量创建设计。
      * Batch create designs.
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
      * @access public
      * @return void
      */
@@ -172,20 +173,11 @@ class design extends control
 
         if($_POST)
         {
-            $this->design->batchCreate($projectID, $productID);
+            $designs = form::batchData()->get();
+            $this->design->batchCreate($projectID, $productID, $designs);
 
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = inlink('browse', "projectID=$projectID&productID=$productID");
-
-            return $this->send($response);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "projectID={$projectID}&productID={$productID}")));
         }
 
         $products      = $this->product->getProductPairsByProject($projectID);
@@ -193,8 +185,7 @@ class design extends control
 
         $project = $this->loadModel('project')->getByID($projectID);
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
-
+        $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->view->type     = $type;
