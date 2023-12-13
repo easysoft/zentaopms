@@ -164,6 +164,7 @@ window.rendDocCell = function(result, {col, row})
         }
 
         result[0] = {html: moduleHtml};
+        result[1] = {attrs: {title: moduleName}};
 
         return result;
     }
