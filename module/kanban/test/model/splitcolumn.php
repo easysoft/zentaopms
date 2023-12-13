@@ -1,49 +1,71 @@
 #!/usr/bin/env php
 <?php
+
+/**
+title=测试 kanbanModel->splitColumn();
+timeout=0
+cid=333
+
+- 正常创建子看板列，查看创建的数量 @3
+- 名字为空的看板列不会创建,返回一个错误 @1
+- 查看创建的子看板列的信息
+ - 第2条的name属性 @测试创建子列C
+ - 第2条的parent属性 @1
+ - 第2条的limit属性 @2
+- 名字为空给出错误属性name @『看板列名称』不能为空。
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
-/**
+zdTable('kanbancolumn')->gen(2);
 
-title=测试 kanbanModel->splitColumn();
-cid=1
-pid=1
+$columnA = new stdclass();
+$columnA->name    = '测试创建子列A';
+$columnA->limit   = '-1';
+$columnA->noLimit = '-1';
+$columnA->color   = '#333';
 
-测试拆分列1 >> 2
-测试拆分列2 >> 2
-测试拆分列3 >> 2
-测试拆分列4 >> 在制品数量必须是正整数。
-测试拆分列4 >> 『看板列名称』不能为空。
+$columnB = new stdclass();
+$columnB->name    = '测试创建子列B';
+$columnB->limit   = '2';
+$columnB->noLimit = '0';
+$columnB->color   = '#333';
 
-*/
+$columnC = new stdclass();
+$columnC->name    = '测试创建子列C';
+$columnC->limit   = '2';
+$columnC->noLimit = '0';
+$columnC->color   = '#333';
 
-$columnIDList = array('1', '2', '3', '4');
+$columnD = new stdclass();
+$columnD->name    = '';
+$columnD->limit   = '2';
+$columnD->noLimit = '0';
+$columnD->color   = '#333';
 
-$name     = array('1' => '拆分的子列1', '2' => '拆分的子列2');
-$color    = array('1' => '#333', '2' => '#333');
-$WIPCount = array('1' => '111');
-$noLimit  = array('2' => '-1');
-$splits1  = array('name' => $name, 'color' => $color, 'WIPCount' => $WIPCount, 'noLimit' => $noLimit);
+$columnE = new stdclass();
+$columnE->name    = '测试创建子列E';
+$columnE->limit   = '2';
+$columnE->noLimit = '0';
+$columnE->color   = '#333';
 
-$name     = array('1' => '拆分的子列3', '2' => '拆分的子列4');
-$WIPCount = array('1' => '111', '2' => '111');
-$splits2  = array('name' => $name, 'color' => $color, 'WIPCount' => $WIPCount);
+$columnF = new stdclass();
+$columnF->name    = '测试创建子列E';
+$columnF->limit   = '2';
+$columnF->noLimit = '0';
+$columnF->color   = '#333';
 
-$name    = array('1' => '拆分的子列5', '2' => '拆分的子列6');
-$noLimit = array('1' => '-1', '2' => '-1');
-$splits3 = array('name' => $name, 'color' => $color, 'noLimit' => $noLimit);
-
-$WIPCount = array('1' => 'a', '2' => '0');
-$splits4  = array('name' => $name, 'color' => $color, 'WIPCount' => $WIPCount);
-
-$name     = array('1' => '', '2' => '');
-$splits5  = array('name' => $name, 'color' => $color, 'noLimit' => $noLimit);
-
+$childrenA = array($columnA, $columnB, $columnC);
+$childrenB = array($columnD, $columnE, $columnF);
 $kanban = new kanbanTest();
 
-r($kanban->splitColumnTest($columnIDList[0], $splits1)) && p()        && e('2');                        // 测试拆分列1
-r($kanban->splitColumnTest($columnIDList[1], $splits2)) && p()        && e('2');                        // 测试拆分列2
-r($kanban->splitColumnTest($columnIDList[2], $splits3)) && p()        && e('2');                        // 测试拆分列3
-r($kanban->splitColumnTest($columnIDList[3], $splits4)) && p('limit') && e('在制品数量必须是正整数。'); // 测试拆分列4
-r($kanban->splitColumnTest($columnIDList[3], $splits5)) && p('name')  && e('『看板列名称』不能为空。'); // 测试拆分列4
+$childrenA = $kanban->splitColumnTest(1, $childrenA);
+$childrenB = $kanban->splitColumnTest(2, $childrenB);
+
+r(count($childrenA)) && p('') && e('3'); // 正常创建子看板列，查看创建的数量
+r(count($childrenB)) && p('') && e('1'); // 名字为空的看板列不会创建,返回一个错误
+
+r($childrenA) && p('2:name,parent,limit') && e('测试创建子列C,1,2');        // 查看创建的子看板列的信息
+r($childrenB) && p('name')                && e('『看板列名称』不能为空。'); // 名字为空给出错误

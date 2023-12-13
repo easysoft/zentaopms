@@ -167,23 +167,17 @@ class kanbanTest
      * Test split column.
      *
      * @param  int    $columnID
-     * @param  array  $param
+     * @param  array  $columns
      * @access public
      * @return int
      */
-    public function splitColumnTest($columnID, $param)
+    public function splitColumnTest($columnID, $columns)
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->splitColumn($columnID);
-
-        unset($_POST);
+        $this->objectModel->splitColumn($columnID, $columns);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $childs = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($columnID)->fetchAll();
-        return count($childs);
+        return $this->objectModel->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($columnID)->fetchAll();
     }
 
     /**
