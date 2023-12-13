@@ -292,6 +292,7 @@ class testtaskZen extends testtask
         }
 
         $this->setDropMenu($product->id, $testtask);
+        $showModule = $this->config->testtask->cases->showModule;
 
         $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
@@ -310,8 +311,8 @@ class testtaskZen extends testtask
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
-        $this->view->setModule      = false;
         $this->view->branch         = $testtask->branch;
+        $this->view->modulePairs    = $showModule ? $this->tree->getModulePairs($product->id, 'case', $showModule) : array();
     }
 
     /**

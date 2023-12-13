@@ -162,7 +162,9 @@ dtable
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
     set::footToolbar($footToolbar),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::customData(array('modules' => $modulePairs))
 );
 
 render();
