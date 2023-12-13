@@ -56,3 +56,4 @@
 .steps-editor-row.is-invalid-drop-level.is-dropping .steps-editor-step-name::before {content: attr(data-invalid-nested); display: block; position: absolute; left: calc(var(--name-indent) + 12px); top: 0; white-space: nowrap; background: var(--color-gray-100); padding: 1px 6px; border: 1px solid var(--color-border); color: var(--color-gray-500)}
 .steps-editor-row.is-invalid-drop-level.is-dropping[data-drop-side="top"] .steps-editor-step-name::before {top: -30px;}
 .steps-editor-row.is-invalid-drop-level.is-dropping[data-drop-side="bottom"] .steps-editor-step-name::before {bottom: -30px; top: auto}
+.steps-editor-step-expect.disabled {pointer-events: none;}
