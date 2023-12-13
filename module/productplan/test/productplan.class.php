@@ -404,17 +404,23 @@ class productPlan
     }
 
     /**
+     * 测试更新产品计划的关联信息。
      * Test syncLinkedStories method.
      *
+     * @param  int    $planID
      * @param  array  $storyIdList
+     * @param  bool   $deleteOld
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function syncLinkedStoriesTest($storyIdList): array
+    public function syncLinkedStoriesTest(int $planID, array $storyIdList, bool $deleteOld): string|array
     {
-        $this->productplan->syncLinkedStories(1, $storyIdList);
+        $this->productplan->syncLinkedStories($planID, $storyIdList, $deleteOld);
 
-        return $this->productplan->dao->select('*')->from(TABLE_PLANSTORY)->fetchAll();
+        if(dao::isError()) return dao::getError();
+
+        $planStories = $this->productplan->dao->select('story')->from(TABLE_PLANSTORY)->where('plan')->eq($planID)->fetchPairs();
+        return implode(',', $planStories);
     }
 
     /**
