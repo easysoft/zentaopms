@@ -5,3 +5,5 @@ fields:
   - field: objectType
     note: "对象类型"
     range: task
+  - field: execution
+    range: 2

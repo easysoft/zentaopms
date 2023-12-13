@@ -18,7 +18,7 @@ cid=2
 
 */
 
-$taskIdList      = array('1', '2', '3', '4', '5', '6', '7', '8');
+$taskIdList      = array(1, 2, 3, 4, 5, 6, 7, 8);
 $executionIdList = array('2', '3', '4', '5');
 $laneIdList      = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0');
 $columnIdList    = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0');

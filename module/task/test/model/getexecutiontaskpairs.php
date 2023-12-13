@@ -35,6 +35,6 @@ r(count($doingTasks))                       && p()    && e('2');                
 r(count($doneTasks))                        && p()    && e('1');                  // 获取执行ID为3的已完成任务数组数量
 r(count($cancelTasks))                      && p()    && e('1');                  // 获取执行ID为3的已取消任务数组数量
 r(count($closeTasks))                       && p()    && e('0');                  // 获取执行ID为3的已关闭任务数组数量
-r($existExecution)                          && p('7') && e('[子] 7::开发任务17'); // 获取执行ID为3的任务数组
+r($existExecution)                          && p('7') && e('[子] 7:开发任务17');  // 获取执行ID为3的任务数组
 r(implode(',', array_keys($tasksByIdASC)))  && p()    && e('1,2,3,4,5,6,7,8,9');  // 获取执行ID为3的按照任务Id正序任务数组
 r(implode(',', array_keys($tasksByIdDESC))) && p()    && e('9,8,7,6,5,4,3,2,1');  // 获取执行ID为3的按照任务Id倒序任务数组

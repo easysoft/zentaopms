@@ -4,12 +4,7 @@ version: "1.0"
 fields:
 - field: id
   range: 1-100
-- field: account
-  range: 1-100
-  prefix: 'user'
-- field: password
-  range: 'f8e41d6c31824c01e5d67c61a8ae49e9,e10adc3949ba59abbe56e057f20f883e'
 - field: realname
   range: 1-100
   prefix: '开发'
-  
+

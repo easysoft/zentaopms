@@ -48,6 +48,7 @@ class taskModel extends model
             ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
+        if(dao::isError()) return false;
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
@@ -60,7 +61,7 @@ class taskModel extends model
 
         $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
 
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        return common::createChanges($oldTask, $task);
     }
 
     /**
@@ -2938,7 +2939,7 @@ class taskModel extends model
         /* If both of lane id and column id are not empty, add task to the kanban cell. */
         if($laneID && $columnID)
         {
-            foreach($taskIdList as $taskID) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
+            foreach($taskIdList as $taskID) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', (string)$taskID);
         }
 
         /* If lane id or column id is empty, update the task type lane of the kanban. */
@@ -2964,12 +2965,12 @@ class taskModel extends model
 
         if($this->config->vision == 'lite')
         {
-            $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
+            $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', (string)$taskID);
         }
         else
         {
             $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
-            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
+            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', (string)$taskID);
         }
         return !dao::isError();
     }

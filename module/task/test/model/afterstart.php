@@ -33,6 +33,8 @@ $multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 $output     = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' => 1);
 
 $taskTester = new taskTest();
+$taskTester->objectModel->app->moduleName = 'task';
+$taskTester->objectModel->app->rawMethod  = 'start';
 
 r($taskTester->afterStartTest($taskIDList[0], $waitTask))          && p()               && e('1');                                    // 测试开始任务状态为未开始的任务后的数据处理
 r($taskTester->afterStartTest($taskIDList[1], $doingTask))         && p('load:confirm') && e('该任务为Bug转化得到，是否更新Bug:1 ?'); // 测试开始任务状态为进行中的任务后的数据处理
