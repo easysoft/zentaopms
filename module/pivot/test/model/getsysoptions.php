@@ -40,7 +40,7 @@ $sqlList    = array('',     '',        '',        '',          '',     '',      
 
 r($pivot->getSysOptions($typeList[0], $objectList[0], $fieldList[0], $sqlList[0])) && p('admin,closed') && e('admin,Closed');                                            //测试type为user，对象类型为空，字段为空，sql为空的情况下，用户列表获取是否正确。
 r($pivot->getSysOptions($typeList[1], $objectList[1], $fieldList[1], $sqlList[1])) && p('1,10')  && e('正常产品1,正常产品10');                                             //测试type为product，对象类型为空，字段为空，sql为空的情况下，产品列表获取是否正确。
-r($pivot->getSysOptions($typeList[2], $objectList[2], $fieldList[2], $sqlList[2])) && p('10,19') && e('项目集1,项目集10');                                                 //测试type为project，对象类型为空，字段为空，sql为空的情况下，项目列表获取是否正确。
+r($pivot->getSysOptions($typeList[2], $objectList[2], $fieldList[2], $sqlList[2])) && p('11,19') && e('项目集1,项目集9');                                                 //测试type为project，对象类型为空，字段为空，sql为空的情况下，项目列表获取是否正确。
 r($pivot->getSysOptions($typeList[3], $objectList[3], $fieldList[3], $sqlList[3])) && p('101,110') && e('/项目集1,/项目集10');                                             //测试type为execution，对象类型为空，字段为空，sql为空的情况下，执行列表获取是否正确。
 r($pivot->getSysOptions($typeList[4], $objectList[4], $fieldList[4], $sqlList[4])) && p('1,10') && e('/产品部1,/一级部门10');                                              //测试type为dept，对象类型为空，字段为空，sql为空的情况下，部门列表获取是否正确。
 r($pivot->getSysOptions($typeList[5], $objectList[5], $fieldList[5], $sqlList[5])) && p('wait,doing,suspended,closed,delay') && e('未开始,进行中,已挂起,已关闭,已延期');   //测试type为dept，对象类型为空，字段为空，sql为空的情况下，项目状态获取是否正确。
