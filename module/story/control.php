@@ -1441,7 +1441,7 @@ class story extends control
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
         $storyID = (int)$storyID;
-        $product = $this->product->getByID($story->product);
+        $product = $this->loadModel('product')->getByID($story->product);
 
         if(!(defined('RUN_MODE') && RUN_MODE == 'api') and $tab == 'product' and !empty($product->shadow))
         {
