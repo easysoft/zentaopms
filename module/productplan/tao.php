@@ -72,12 +72,13 @@ class productplanTao extends productplanModel
      *
      * @param  int       $planID
      * @param  array     $storyIdList
+     * @param  bool      $deleteOld
      * @access protected
      * @return bool
      */
-    protected function syncLinkedStories(int $planID, array $storyIdList): bool
+    protected function syncLinkedStories(int $planID, array $storyIdList, bool $deleteOld = true): bool
     {
-        $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($planID)->exec();
+        if($deleteOld) $this->dao->delete()->from(TABLE_PLANSTORY)->where('plan')->eq($planID)->exec();
 
         $order = 1;
         foreach($storyIdList as $storyID)
