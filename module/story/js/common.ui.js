@@ -26,7 +26,7 @@ window.customSubmit = function(e)
     if($this.prop('tagName') != 'BUTTON') $this = $this.closest('button');
 
     var storyStatus = 'active';
-    if(!$dataform.hasClass('form-batch')) storyStatus = !$('[name=reviewer]').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
+    if(!$dataform.hasClass('form-batch')) storyStatus = !$('[name^=reviewer]').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
     if($this.attr('id') == 'saveDraftButton')
     {
         storyStatus = 'draft';

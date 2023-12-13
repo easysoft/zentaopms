@@ -5,7 +5,7 @@ window.toggleReviewer = function(obj)
     const $this     = $(obj);
     const isChecked = $this.prop('checked');
 
-    $reviewer = $('[name=reviewer]').zui('picker');
+    $reviewer = $('[name^=reviewer]').zui('picker');
     options   = $reviewer.options;
     if(isChecked)
     {
