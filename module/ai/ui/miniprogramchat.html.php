@@ -77,6 +77,7 @@ $star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
 $delete = $star === 'star' ? 'true' : 'false';
 
 btn(
+    setClass('hidden'),
     setID('open-dialog'),
     setData('toggle', 'modal'),
     setData('target', '#disabled-dialog')

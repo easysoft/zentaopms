@@ -312,20 +312,32 @@ class aiModel extends model
     }
 
     /**
-     * Get popular mini programIDs.
+     * Get latest mini programs.
      *
      * @param pager $pager
      * @access public
      * @return array
      */
-    public function getPopularMiniProgramIDs($pager = null)
+    public function getLatestMiniPrograms($pager = null, $order = 'createdDate_desc')
     {
-        $paris = $this->dao->select('appID, COUNT(*) AS count')->from(TABLE_MINIPROGRAMSTAR)
-            ->groupBy('appID')
-            ->orderBy('count_desc')
+        return $this->dao->select('*')
+            ->from(TABLE_MINIPROGRAM)
+            ->where('deleted')->eq('0')
+            ->andWhere('published')->eq('1')
+            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-3 months')))
+            ->orderBy($order)
             ->page($pager)
-            ->fetchPairs();
-        return array_keys($paris);
+            ->fetchAll();
+    }
+
+    public function countLatestMiniPrograms()
+    {
+        return $this->dao->select('COUNT(*) as count')
+            ->from(TABLE_MINIPROGRAM)
+            ->where('deleted')->eq('0')
+            ->andWhere('published')->eq('1')
+            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-3 months')))
+            ->fetch('count');
     }
 
     public function saveMiniProgramMessage($appID, $type, $content)

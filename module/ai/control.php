@@ -219,12 +219,11 @@ class ai extends control
         }
         else if($category === 'discovery')
         {
-            $popularIDs = $this->ai->getPopularMiniProgramIDs($pager);
-            $miniPrograms = $this->ai->getMiniProgramsByID($popularIDs);
+            $miniPrograms = $this->ai->getMiniPrograms('', 'active', 'createdDate_desc', $pager);
         }
         else if($category === 'latest')
         {
-            $miniPrograms = $this->ai->getMiniPrograms('', 'active', 'createdDate_desc', $pager);
+            $miniPrograms = $this->ai->getLatestMiniPrograms($pager);
         }
         else
         {
@@ -239,10 +238,14 @@ class ai extends control
             if(in_array($key, $usedCustomCategories)) $usedCustomCategoryList[$key] = $value;
         }
         $squareCategories = $this->lang->ai->miniPrograms->squareCategories;
-        unset($squareCategories['collection']);
-        $this->view->collectedIDs = empty($collectedIDs) ? $this->ai->getCollectedMiniProgramIDs($this->app->user->id) : $collectedIDs;
+        $latestSum = $this->ai->countLatestMiniPrograms();
+        if(empty($collectedIDs)) $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
+        if(empty($collectedIDs)) unset($squareCategories['collection']);
+        if($latestSum == 0)      unset($squareCategories['latest']);
+
+        $this->view->collectedIDs = $collectedIDs;
         $this->view->category     = $category;
-        $this->view->categoryList = empty($this->view->collectedIDs) ? array_merge($squareCategories, $usedCustomCategoryList) : array_merge($this->lang->ai->miniPrograms->squareCategories, $usedCustomCategoryList);
+        $this->view->categoryList = array_merge($squareCategories, $usedCustomCategoryList);
         $this->view->pager        = $pager;
         $this->view->miniPrograms = $miniPrograms ?: array();
         $this->view->title        = $this->lang->ai->miniPrograms->common;
