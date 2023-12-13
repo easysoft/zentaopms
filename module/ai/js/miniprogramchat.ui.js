@@ -8,7 +8,8 @@ let messageList = [];
  * @param {Date?} date
  * @returns {string}
  */
-function formatDateTime(date = new Date()) {
+function formatDateTime(date = new Date())
+{
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -113,7 +114,8 @@ function sendMessagesToAI(message)
     $.post(
         postLink,
         formData,
-        function(response) {
+        function(response)
+        {
             $inputBox.removeAttr('readonly');
             $sendBtn.removeAttr('disabled');
             response = JSON.parse(response);
@@ -175,7 +177,7 @@ window.aiMiniProgramChat.startAIChat = function()
     else
     {
         const $messageList = $('.chat-history .message-list');
-        $messageList.append(createNotificationMessage(`${formatDateTime()} ${clearContextLang}`));
+        $messageList.append(createLocalNotification(`${formatDateTime()} ${clearContextLang}`));
         messageList = [];
     }
     $('.chat').addClass('hidden');
@@ -226,7 +228,8 @@ let composing = false;
 window.aiMiniProgramChat.handleInputEnter = (event) =>
 {
     console.log(composing, 3);
-    if (event.code === 'Enter' && !composing) {
+    if(event.code === 'Enter' && !composing)
+    {
         event.preventDefault();
         window.aiMiniProgramChat.clearInputAndChat();
     }
@@ -237,7 +240,7 @@ window.aiMiniProgramChat.clearInputAndChat = () =>
     const $inputBox = $('.chat-input-box');
     const message = $inputBox.val()
     $inputBox.val('');
-    if (!message) return;
+    if(!message) return;
     sendMessagesToAI(message);
 };
 
@@ -338,15 +341,21 @@ function createMessage(role, content, time = formatDateTime())
         .append($body);
 }
 
-function createNotificationMessage(content)
+function createLocalNotification(content)
 {
-    return $(`<div class="notification-message"><span>${content}</span></div>`);
+    return $(`<div class="local-notification"><span>${content}</span></div>`);
+}
+
+function createServerNotification(content)
+{
+    return $(`<div class="server-notification">${content}</div>`);
 }
 
 $(function()
 {
     $('#to-language-model').prop('href', $.createLink('ai', 'models'));
-    $('#reload-current').on('click', () => {
+    $('#reload-current').on('click', () =>
+    {
         location.reload();
     });
 
@@ -361,11 +370,13 @@ $(function()
             let role;
             if(type === 'req') role = 'user';
             else if(type === 'res') role = 'ai';
-            const $message = createMessage(role, content, time);
+            const $message = (role === 'user' || role === 'ai')
+                ? createMessage(role, content, time)
+                : createServerNotification(content);
             $messageList.append($message);
         }
 
-        $messageList.append(createNotificationMessage(`${formatDateTime()} ${newChatTip}`));
+        $messageList.append(createLocalNotification(`${formatDateTime()} ${newChatTip}`));
         $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
     }
 

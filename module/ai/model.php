@@ -609,6 +609,33 @@ class aiModel extends model
     }
 
     /**
+     * @param string $appID
+     * @return void
+     */
+    public function createNewVersionNotification($appID)
+    {
+        $users = $this->dao->select('user')
+            ->from(TABLE_AIMESSAGE)
+            ->where('appID')->eq($appID)
+            ->fetchAll('user');
+        $users = array_keys($users);
+
+        foreach($users as $user)
+        {
+            $data = new stdClass();
+            $data->appID       = $appID;
+            $data->user        = $user;
+            $data->type        = 'ntf';
+            $data->content     = sprintf($this->lang->ai->miniPrograms->newVersionTip, date("Y/n/j G:i"));
+            $data->createdDate = helper::now();
+
+            $this->dao->insert(TABLE_AIMESSAGE)
+                ->data($data)
+                ->exec();
+        }
+    }
+
+    /**
      * Change mini program `publish` value.
      *
      * @param string $appID
@@ -620,7 +647,15 @@ class aiModel extends model
     {
         $data = new stdClass();
         $data->published = $published;
-        if($published === '1') $data->publishedDate = helper::now();
+        if($published === '1')
+        {
+            $data->publishedDate = helper::now();
+            $miniProgram = $this->getMiniProgramByID($appID);
+            if(!empty($miniProgram->publishedDate))
+            {
+                $this->createNewVersionNotification($appID);
+            }
+        }
 
         $this->dao->update(TABLE_MINIPROGRAM)
             ->data($data)
