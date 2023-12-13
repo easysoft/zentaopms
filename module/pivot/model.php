@@ -109,8 +109,7 @@ class pivotModel extends model
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            $this->setFilterDefault($filters);
-            $pivot->filters = $filters;
+            $pivot->filters = $this->setFilterDefault($filters);;
         }
         else
         {
@@ -188,7 +187,7 @@ class pivotModel extends model
 
         $sql     = isset($pivot->sql) ? $pivot->sql : '';
         $filters = $this->getFieldsFromPivot($pivot, 'filters', array(), !is_array($pivot->filters), true);
-        if(!empty($filters)) $this->setFilterDefault($filters);
+        if(!empty($filters)) $filters = $this->setFilterDefault($filters);
 
         /* 检测sql是否有效。 */
         /* Check if the sql is valid. */
@@ -1062,6 +1061,7 @@ class pivotModel extends model
             if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
             if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
         }
+        $columnSQL = str_replace('0000-00-00', '1970-01-01', $columnSQL);
 
         return $this->dao->query($columnSQL)->fetchAll();
     }
@@ -1391,7 +1391,7 @@ class pivotModel extends model
             $columnRows[$index] = $columnRow;
         }
 
-        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'total', $$allTotalallTotal, $colTotal);
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, $showTotal, $uuName, 'total', $allTotal, $colTotal);
 
         return $columnRows;
     }
@@ -1489,9 +1489,9 @@ class pivotModel extends model
      */
     private function processDefaultShowData(array $columnRows, array $groups, string $monopolize, string $uuName, string $showColTotal): array
     {
-        list($rowTotal, $_, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
+        list($rowTotal, $allTotal, $colTotal) = $this->getTotalStatistics($columnRows, $groups, $monopolize);
         foreach($columnRows as $index => $row) $row->{'sum_' . $uuName} = $rowTotal[$index];
-        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, 'sum', $uuName, 'default', $rowTotal[0], $colTotal);
+        if($showColTotal == 'sum') $this->rebuildColumnRows($columnRows, $groups, 'sum', $uuName, 'default', $allTotal, $colTotal);
 
         return $columnRows;
     }
@@ -1705,15 +1705,17 @@ class pivotModel extends model
      *
      * @param  array   $filters
      * @access private
-     * @return void
+     * @return array
      */
-    private function setFilterDefault(array &$filters): void
+    public function setFilterDefault(array $filters): array
     {
         foreach($filters as &$filter)
         {
-            if(empty($filter['default'])) continue;
+            if(!isset($filter['default']) || empty($filter['default'])) continue;
             if(is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
         }
+
+        return $filters;
     }
 
     /**
