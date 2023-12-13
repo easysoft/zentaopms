@@ -600,8 +600,7 @@ class jobModel extends model
 
         if(!empty($variables)) $pipelineParams->variables = $variables;
 
-        $compile = new stdclass;
-
+        $compile  = new stdclass();
         $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
         if(empty($pipeline->id))
         {

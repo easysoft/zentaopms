@@ -302,12 +302,14 @@ class compileModel extends model
             if(isset($compilePairs[$build->queueId])) continue;
 
             $data = new stdclass();
-            $data->name        = $job->name;
-            $data->job         = $job->id;
-            $data->queue       = $build->queueId;
-            $data->status      = $build->result == 'SUCCESS' ? 'success' : 'failure';
-            $data->createdBy   = 'guest';
-            $data->createdDate = date('Y-m-d H:i:s', $build->timestamp / 1000);
+            $data->name      = $job->name;
+            $data->job       = $job->id;
+            $data->queue     = $build->queueId;
+            $data->status    = $build->result == 'SUCCESS' ? 'success' : 'failure';
+            $data->createdBy = 'guest';
+
+            $buildTime = is_int($build->timestamp) ? $build->timestamp / 1000 : round($build->timestamp);
+            $data->createdDate = date('Y-m-d H:i:s', $buildTime);
             $data->updateDate  = $data->createdDate;
 
             $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
@@ -385,7 +387,6 @@ class compileModel extends model
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($compile->job)
             ->fetch();
-
         if(!$job) return false;
 
         $compileID = $compile->id;
@@ -404,12 +405,14 @@ class compileModel extends model
         }
 
         $this->loadModel('job');
-        if($job->engine == 'gitlab')  $compile = $this->job->execGitlabPipeline($job, $compileID);
-        if($job->engine == 'jenkins') $compile = $this->job->execJenkinsPipeline($job, $repo, $compileID);
+        $result = new stdclass();
+        if($job->engine == 'gitlab')  $result = $this->job->execGitlabPipeline($job, $compileID);
+        if($job->engine == 'jenkins') $result = $this->job->execJenkinsPipeline($job, $repo, $compileID);
+        if(!$result) return false;
 
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+        $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
-            ->set('lastStatus')->eq($compile->status)
+            ->set('lastStatus')->eq($result->status)
             ->set('lastExec')->eq($compile->updateDate)
             ->where('id')->eq($job->id)
             ->exec();
