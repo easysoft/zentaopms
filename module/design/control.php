@@ -30,6 +30,7 @@ class design extends control
     }
 
     /**
+     * 设置页面公共的数据以及导航。
      * Design common action.
      *
      * @param  int    $projectID
@@ -47,11 +48,12 @@ class design extends control
 
         $productID = $this->product->getAccessibleProductID($productID, $products);
 
-        $this->lang->modulePageNav = $this->design->setMenu($projectID, $products, $productID);
         $this->project->setMenu($projectID);
-        $this->view->products = $products;
-        $this->view->switcherParams = "projectID={$projectID}&productID={$productID}";
-        $this->view->switcherText   = zget($products, $productID);
+
+        $this->view->products         = $products;
+        $this->view->switcherParams   = "projectID={$projectID}&productID={$productID}";
+        $this->view->switcherText     = zget($products, $productID);
+        $this->view->switcherObjectID = $productID;
 
         return $productID;
     }
