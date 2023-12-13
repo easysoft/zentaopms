@@ -1,0 +1,7 @@
+title: table zt_product
+desc: "产品"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: status
+    range: normal,closed
