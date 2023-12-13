@@ -309,7 +309,9 @@ class testtaskModel extends model
             ->where('t1.deleted')->eq('0')
             ->andWhere('t4.deleted')->eq('0')
             ->andWhere('t1.auto')->ne('unit')
-            ->andWhere('t1.owner')->eq($account)
+            ->andWhere('(t1.owner')->eq($account)
+            ->orWhere("FIND_IN_SET('$account', t1.members)")
+            ->markRight(1)
             ->andWhere('t2.id')->in($this->app->user->view->sprints)
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
@@ -1615,7 +1617,7 @@ class testtaskModel extends model
         if($action == 'runcase')
         {
             if(isset($testtask->auto) && $testtask->auto == 'unit')  return false;
-            if(isset($testtask->caseStatus)) return $testtask->caseStatus != 'wait'; 
+            if(isset($testtask->caseStatus)) return $testtask->caseStatus != 'wait';
             return $testtask->status != 'wait';
         }
 
