@@ -20,31 +20,24 @@ class designTest
     }
 
     /**
-     * Function create test by design
+     * 创建一个设计。
+     * Create a design.
      *
-     * @param  int   $projectID
-     * @param  array $param
+     * @param  array        $param
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function createTest($projectID, $param = array())
+    public function createTest(array $param = array()): object|array
     {
-        $labels = array();
-        $files  = array();
+        $designData   = new stdClass();
+        $createFields = array('project' => 11, 'desc' => '', 'version' => 1, 'createdBy' => $this->objectModel->app->user->account, 'createdDate' => helper::now());
+        foreach($createFields as $field => $defaultValue) $designData->{$field} = $defaultValue;
+        foreach($param as $key => $value) $designData->{$key} = $value;
 
-        $createFields = array('product' => '', 'story' => '', 'type' => '', 'name' => '', 'labels' => $labels, 'files' => $files, 'desc' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create($projectID);
-
-        unset($_POST);
+        $objectID = $this->objectModel->create($designData);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getByID($objectID);
-
-        return $objects;
+        return $this->objectModel->getByID($objectID);
     }
 
     /**
