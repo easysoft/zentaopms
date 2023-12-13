@@ -643,17 +643,19 @@ class kanban extends control
     }
 
     /**
+     * 拆分看板列。
      * Split column.
      *
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function splitColumn($columnID)
+    public function splitColumn(int $columnID)
     {
         if(!empty($_POST))
         {
-            $this->kanban->splitColumn($columnID);
+            $columns = form::batchData($this->config->kanban->form->splitColumn)->get();
+            $this->kanban->splitColumn($columnID, $columns);
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
             $column   = $this->kanban->getColumnById($columnID);
