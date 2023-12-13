@@ -106,6 +106,7 @@ $config->my->todo->dtable->fieldList['type']['flex']  = 2;
 $config->my->todo->dtable->fieldList['assignedBy']['name']  = 'assignedBy';
 $config->my->todo->dtable->fieldList['assignedBy']['title'] = $lang->todo->assignedBy;
 $config->my->todo->dtable->fieldList['assignedBy']['type']  = 'user';
+$config->my->todo->dtable->fieldList['assignedBy']['width'] = 90;
 $config->my->todo->dtable->fieldList['assignedBy']['group'] = 'assignedBy';
 $config->my->todo->dtable->fieldList['assignedBy']['flex']  = 1;
 
