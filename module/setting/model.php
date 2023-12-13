@@ -43,12 +43,12 @@ class settingModel extends model
      * 保存配置。
      * Set value of an item.
      *
-     * @param  string     $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
-     * @param  string|int $value
+     * @param  string  $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
+     * @param  mixed   $value
      * @access public
      * @return bool
      */
-    public function setItem(string $path, string|int $value = ''): bool
+    public function setItem(string $path, mixed $value = ''): bool
     {
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
