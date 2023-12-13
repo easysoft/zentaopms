@@ -252,7 +252,24 @@ class searchTest
      */
     public function replaceDynamicTest(string $query): string
     {
-        return $this->objectModel->replaceDynamic($query);
+        $replacedQuery = $this->objectModel->replaceDynamic($query);
+
+        global $tester;
+        $tester->app->loadClass('date');
+
+        $lastWeek  = date::getLastWeek();
+        $thisWeek  = date::getThisWeek();
+        $lastMonth = date::getLastMonth();
+        $thisMonth = date::getThisMonth();
+        $yesterday = date::yesterday();
+        $today     = date(DT_DATE1);
+
+        if(strpos($query, 'lastWeek') !== false)  return $replacedQuery == "date between '" . $lastWeek['begin'] . "' and '" . $lastWeek['end'] . "'";               //测试替换 $lastWeek
+        if(strpos($query, 'thisWeek') !== false)  return $replacedQuery == "date between '" . $thisWeek['begin'] . "' and '" . $thisWeek['end'] . "'";               //测试替换 $thisWeek
+        if(strpos($query, 'lastMonth') !== false) return $replacedQuery == "date between '" . $lastMonth['begin'] . "' and '" . $lastMonth['end'] . "'";             //测试替换 $lastMonth
+        if(strpos($query, 'thisMonth') !== false) return $replacedQuery == "date between '" . $thisMonth['begin'] . "' and '" . $thisMonth['end'] . "'";             //测试替换 $thisMonth
+        if(strpos($query, 'yesterday') !== false) return $replacedQuery == "date between '" . $yesterday . ' 00:00:00' . "' and '" . $yesterday . ' 23:59:59' . "'"; //测试替换 $yesterday
+        if(strpos($query, 'today') !== false)     return $replacedQuery == "date between '" . $today     . ' 00:00:00' . "' and '" . $today     . ' 23:59:59' . "'"; //测试替换 $today
     }
 
     /**
