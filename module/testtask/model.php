@@ -1617,15 +1617,17 @@ class testtaskModel extends model
     /**
      * Print cell data.
      *
-     * @param  object  $col
-     * @param  object  $run
-     * @param  array   $users
-     * @param  object  $task
-     * @param  array   $branches
+     * @param mixed $col
+     * @param mixed $run
+     * @param mixed $users
+     * @param mixed $task
+     * @param mixed $branches
+     * @param mixed $modulePairs
+     * @param string $mode
      * @access public
      * @return void
      */
-    public function printCell($col, $run, $users, $task, $branches, $mode = 'datatable')
+    public function printCell($col, $run, $users, $task, $branches, $modulePairs, $mode = 'datatable')
     {
         $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
         $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
@@ -1671,7 +1673,8 @@ class testtaskModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if(!empty($branches)) echo "<span class='label label-badge label-outline'>{$branches[$run->branch]}</span>";
+                if(!empty($branches)) echo "<span class='label label-badge label-outline'>{$branches[$run->branch]}</span> ";
+                if($modulePairs and $run->module and isset($modulePairs[$run->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$run->module]}</span> ";
                 if($canView)
                 {
                     if($fromCaseID)

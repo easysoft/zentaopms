@@ -556,6 +556,7 @@ class testtask extends control
         {
             $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
+        $showModule = $this->config->datatable->testtaskCases->showModule;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy, 't2.id');
@@ -611,11 +612,12 @@ class testtask extends control
         $this->view->treeClass      = $browseType == 'bymodule' ? '' : 'hidden';
         $this->view->pager          = $pager;
         $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
-        $this->view->setModule      = false;
+        $this->view->setModule      = true;
         $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
         $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = $canBeChanged;
-        $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
+        $this->view->automation     = $this->loadModel('zanode')->getAutomationByProduct($productID);
+        $this->view->modulePairs    = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
 
         $this->display();
     }

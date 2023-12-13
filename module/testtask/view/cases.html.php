@@ -27,7 +27,17 @@
 <div id='mainContent' class='main-row fade'>
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
-    <div class='cell'><?php echo $moduleTree;?></div>
+    <div class='cell'>
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted"><?php echo $lang->testcase->noModule;?></div>
+      <hr class="space">
+      <?php endif;?>
+      <?php echo $moduleTree;?>
+      <div class='text-center'>
+        <hr class="space-sm" />
+      </div>
+    </div>
   </div>
   <div class='main-col'>
     <div class="cell" id="queryBox" data-module='testtask'></div>
@@ -78,7 +88,7 @@
           <tbody>
             <?php foreach($runs as $run):?>
             <tr data-id='<?php echo $run->id?>' data-auto='<?php echo $run->auto;?>'>
-              <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
+              <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
             </tr>
             <?php endforeach;?>
           </tbody>
