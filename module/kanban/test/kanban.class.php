@@ -1436,9 +1436,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`id`')->eq($columnID)->fetch();
-        return $object;
+        return $this->objectModel->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`id`')->eq($columnID)->fetch();
     }
 
     /**
