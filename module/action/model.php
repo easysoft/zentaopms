@@ -2034,7 +2034,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
 
         $table = $this->actionTao->getActionTable($period);
-        return $this->dao->select('count(1) as count')->from($table)
+        return $this->dao->select('count(1) AS count')->from($table)
             ->where($condition)
             ->fetch('count');
     }
