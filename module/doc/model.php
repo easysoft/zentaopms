@@ -2291,18 +2291,18 @@ class docModel extends model
      * 构建文档库树形结构的节点。
      * Build a node of the tree structure of the document library.
      *
-     * @param  int         $libID
-     * @param  object      $lib
-     * @param  string      $type       mine|product|project|execution|api|custom
-     * @param  int         $moduleID
-     * @param  int         $objectID
-     * @param  string      $browseType bysearch|byrelease
-     * @param  int         $docID
-     * @param  object|bool $release
+     * @param  int              $libID
+     * @param  object           $lib
+     * @param  string           $type       mine|product|project|execution|api|custom
+     * @param  int              $moduleID
+     * @param  int              $objectID
+     * @param  string           $browseType bysearch|byrelease
+     * @param  int              $docID
+     * @param  object|null|bool $release
      * @access public
      * @return object
      */
-    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, object|bool $release = false): object
+    public function buildLibItem(int $libID, object $lib, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $docID = 0, object|null|bool $release = null): object
     {
         $releaseModule = array();
         if($release && $release->lib == $lib->id)
