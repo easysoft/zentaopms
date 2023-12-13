@@ -557,6 +557,8 @@ class searchTest
     public function getParamValuesTest(array $fields, array $params): array
     {
         $_SESSION['project'] = 0;
+        $_SESSION['searchParams']['module'] = 'bug';
+
         return $this->objectModel->getParamValues($fields, $params);
     }
 
