@@ -4572,6 +4572,7 @@ class storyModel extends model
         if($action == 'submitreview' and strpos('draft,changing', $story->status) === false) return false;
 
         static $shadowProducts = array();
+        static $taskGroups     = array();
         static $hasShadow      = true;
         if($hasShadow and empty($shadowProducts[$story->product]))
         {
@@ -4580,11 +4581,13 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
+        if($hasShadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
+
         if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
 
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */
-        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product]) && !empty($taskGroups[$story->id])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
@@ -4692,6 +4695,9 @@ class storyModel extends model
             $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
             if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow OR $story->type == 'requirement')
             {
+                static $taskGroups = array();
+                if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
+
                 $isClick = $this->isClickable($story, 'batchcreate');
                 $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
                 if(!$isClick and $story->status != 'closed')
@@ -4708,6 +4714,7 @@ class storyModel extends model
                     {
                         if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                         if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                        if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                     }
                 }
 
