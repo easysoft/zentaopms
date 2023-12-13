@@ -9,7 +9,6 @@ pid=1
 获取groupID=60的第一张透视表的id  >> 1027
 获取groupID=100的第一张透视表的id  >> 1002
 获取groupID=85的第一张透视表的id  >> 1001
-
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

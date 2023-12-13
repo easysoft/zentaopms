@@ -10,7 +10,6 @@ pid=1
 测试获取dimensionID为3，path为,9的模块信息  >> 9,这是一个模块9
 */
 
-global $tester;
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/pivot.class.php';
 
