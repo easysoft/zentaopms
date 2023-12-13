@@ -161,20 +161,27 @@ formBatchPanel
     (
         set::name('password'),
         set::label($lang->user->password),
-        set::control('inputGroup'),
-        inputGroup
+        set::control
         (
-            input
+            array
             (
-                set::name('password'),
-                set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, ''))
-            ),
-            span
-            (
-                setClass('input-group-addon passwordStrength hidden')
+                'type' => 'inputGroup',
+                'class' => 'form-control',
+                'items' => array(
+                    input
+                    (
+                        set::name('password'),
+                        set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, ''))
+                    ),
+                    span
+                    (
+                        setClass('input-group-addon passwordStrength hidden')
+                    )
+                )
             )
         ),
         set::width('160px'),
+        set::ditto(true),
         set::required(true)
     ),
     formBatchItem
