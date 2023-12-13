@@ -1628,8 +1628,8 @@ class userModel extends model
         }
         $sumComplexity = array_sum($complexity);
 
-        if(($sumComplexity == 7 || $sumComplexity == 15) && $length >= 6)  return 1;
         if($sumComplexity == 15 && $length >= 10) return 2;
+        if(($sumComplexity == 7 || $sumComplexity == 15) && $length >= 6)  return 1;
         return 0;
     }
 
