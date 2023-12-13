@@ -766,7 +766,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function assignApiVarForSpace(string $type, string $browseType, string $libType, int $libID, array $libs, int $objectID, int $moduleID, int $queryID, string $orderBy, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
+    protected function assignApiVarForSpace(string $type, string $browseType, string $libType, int $libID, array $libs, int $objectID, int $moduleID, int $queryID, string $orderBy, int $param, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
