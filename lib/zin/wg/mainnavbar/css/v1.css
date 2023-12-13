@@ -1,4 +1,4 @@
-#mainNavbar {padding-right: 1rem;}
+#mainNavbar {padding-left: 1rem; padding-right: 1rem;}
 #mainNavbar .main-navbar-left {position: absolute; z-index: 2;}
 #mainNavbar .main-navbar-left #switcher {position: relative; top: 5px; border: 1px solid rgb(var(--color-primary-500-rgb));}
 #mainNavbar .main-navbar-left #switcher > .dropmenu-btn {background: #FFF;}
