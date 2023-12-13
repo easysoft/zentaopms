@@ -1092,6 +1092,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板区域。
      * Get region by id.
      *
      * @param  int    $regionID
@@ -3733,20 +3734,21 @@ class kanbanModel extends model
     }
 
     /**
-     * Get columns by object id.
+     * 根据字段获取看板列。
+     * Get columns by field.
      *
-     * @param  string $objectType parent|region|group
-     * @param  int    $objectID
+     * @param  string $field    parent|region|group
+     * @param  int    $fieldID
      * @param  string $archived
      * @param  string $deleted
      * @access public
      * @return array
      */
-    public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
+    public function getColumnsByField(string $field = '', int $fieldID = 0, string $archived = '0', string $deleted = '0'): array
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('1 = 1')
-            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($field)->andWhere($field)->eq($fieldID)->fi()
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')

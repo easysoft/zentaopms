@@ -705,18 +705,19 @@ class kanban extends control
     }
 
     /**
+     * 查看归档看板列。
      * View archived columns.
      *
      * @param  int    $regionID
      * @access public
      * @return void
      */
-    public function viewArchivedColumn($regionID)
+    public function viewArchivedColumn(int $regionID)
     {
         $region = $this->kanban->getRegionByID($regionID);
 
         $this->view->kanban  = $this->kanban->getByID($region->kanban);
-        $this->view->columns = $this->kanban->getColumnsByObject('region', $regionID, '1');
+        $this->view->columns = $this->kanban->getColumnsByField('region', $regionID, '1');
 
         $this->display();
     }

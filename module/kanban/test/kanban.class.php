@@ -1565,18 +1565,18 @@ class kanbanTest
     }
 
     /**
-     * Test get columns by object id.
+     * Test get columns by field.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
+     * @param  string $field
+     * @param  int    $fieldID
      * @param  int    $archived
      * @param  string $deleted
      * @access public
      * @return int
      */
-    public function getColumnsByObjectTest($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
+    public function getColumnsByFieldTest($field = '', $fieldID = 0, $archived = 0, $deleted = '0')
     {
-        $objects = $this->objectModel->getColumnsByObject($objectType, $objectID, $archived, $deleted);
+        $objects = $this->objectModel->getColumnsByField($field, $fieldID, $archived, $deleted);
 
         if(dao::isError()) return dao::getError();
 
