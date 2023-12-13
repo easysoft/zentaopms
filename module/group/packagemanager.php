@@ -1009,13 +1009,13 @@ $config->group->package->executionWhitelist->privs['execution-whitelist']       
 $config->group->package->executionWhitelist->privs['execution-addWhitelist']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 245, 'depend' => array('execution-whitelist'), 'recommend' => array('execution-unbindWhitelist'));
 $config->group->package->executionWhitelist->privs['execution-unbindWhitelist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 250, 'depend' => array('execution-whitelist'), 'recommend' => array('execution-addWhitelist'));
 
-$config->group->package->gantt = new stdclass();
-$config->group->package->gantt->order  = 5;
-$config->group->package->gantt->subset = 'executionview';
-$config->group->package->gantt->privs  = array();
-$config->group->package->gantt->privs['execution-gantt']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array(), 'recommend' => array('execution-calendar', 'execution-ganttEdit', 'execution-ganttsetting', 'execution-grouptask', 'execution-taskEffort', 'execution-tree'));
-$config->group->package->gantt->privs['execution-ganttsetting'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('execution-gantt'), 'recommend' => array());
-$config->group->package->gantt->privs['execution-ganttEdit']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('execution-gantt'), 'recommend' => array());
+$config->group->package->executionGantt = new stdclass();
+$config->group->package->executionGantt->order  = 5;
+$config->group->package->executionGantt->subset = 'executionview';
+$config->group->package->executionGantt->privs  = array();
+$config->group->package->executionGantt->privs['execution-gantt']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array(), 'recommend' => array('execution-calendar', 'execution-ganttEdit', 'execution-ganttsetting', 'execution-grouptask', 'execution-taskEffort', 'execution-tree'));
+$config->group->package->executionGantt->privs['execution-ganttsetting'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('execution-gantt'), 'recommend' => array());
+$config->group->package->executionGantt->privs['execution-ganttEdit']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('execution-gantt'), 'recommend' => array());
 
 $config->group->package->browseTask = new stdclass();
 $config->group->package->browseTask->order  = 5;
@@ -3300,12 +3300,12 @@ $config->group->package->projectReleaseNotify->subset = 'projectrelease';
 $config->group->package->projectReleaseNotify->privs  = array();
 $config->group->package->projectReleaseNotify->privs['projectrelease-notify'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 13, 'depend' => array('projectrelease-browse'), 'recommend' => array());
 
-$config->group->package->gantt = new stdclass();
-$config->group->package->gantt->order  = 10;
-$config->group->package->gantt->subset = 'programplan';
-$config->group->package->gantt->privs  = array();
-$config->group->package->gantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
-$config->group->package->gantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
+$config->group->package->programplanGantt = new stdclass();
+$config->group->package->programplanGantt->order  = 10;
+$config->group->package->programplanGantt->subset = 'programplan';
+$config->group->package->programplanGantt->privs  = array();
+$config->group->package->programplanGantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
+$config->group->package->programplanGantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
 
 $config->group->package->executionRelation = new stdclass();
 $config->group->package->executionRelation->order  = 10;
