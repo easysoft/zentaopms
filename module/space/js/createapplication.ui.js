@@ -104,45 +104,48 @@ function onChangeStoreAppType(event)
 
     toggleLoading('#app_version', true);
     toggleLoading('#dbService', true);
-    $.get($.createLink('space', 'getStoreAppInfo', 'appID=' + storeApp), function(response)
+    if(storeApp)
     {
-        var app = JSON.parse(response);
+        $.get($.createLink('space', 'getStoreAppInfo', 'appID=' + storeApp), function(response)
+        {
+            var app = JSON.parse(response);
 
-        $('#app_version').val(app.app_version);
-        if(showVersion === true)
-        {
-            $('#version').picker({items: app.versionList, name: 'version', required: true});
-            setTimeout(() =>
+            $('#app_version').val(app.app_version);
+            if(showVersion === true)
             {
-                $('#version').picker('setValue', app.versionList[0].value);
-            }, 300);
-        }
-        else
-        {
-            $('#version').val(app.version);
-        }
-        if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList && pgList.length > 0))
-        {
-            $('div.dbType').removeClass('hidden');
-            $('[name=dbService]').prop('disabled', false);
-
-            var dbServiceItems = [];
-            var dbService = (app.dependencies.mysql && mysqlList) ? mysqlList : pgList;
-            for(i in dbService)
-            {
-                dbServiceItems.push({'text': dbService[i].alias, 'value': dbService[i].name});
+                $('#version').picker({items: app.versionList, name: 'version', required: true});
+                setTimeout(() =>
+                {
+                    $('#version').picker('setValue', app.versionList[0].value);
+                }, 300);
             }
-            $('#dbService').zui('picker').render({items: dbServiceItems});
-        }
-        else
-        {
-            $('div.dbType').addClass('hidden');
-            $('[name=dbService]').prop('disabled', true);
-        }
+            else
+            {
+                $('#version').val(app.version);
+            }
+            if((app.dependencies.mysql && mysqlList) || (app.dependencies.postgresql && pgList && pgList.length > 0))
+            {
+                $('div.dbType').removeClass('hidden');
+                $('[name=dbService]').prop('disabled', false);
 
-        toggleLoading('#app_version', false);
-        toggleLoading('#dbService', false);
-    });
+                var dbServiceItems = [];
+                var dbService = (app.dependencies.mysql && mysqlList) ? mysqlList : pgList;
+                for(i in dbService)
+                {
+                    dbServiceItems.push({'text': dbService[i].alias, 'value': dbService[i].name});
+                }
+                $('#dbService').zui('picker').render({items: dbServiceItems});
+            }
+            else
+            {
+                $('div.dbType').addClass('hidden');
+                $('[name=dbService]').prop('disabled', true);
+            }
+
+            toggleLoading('#app_version', false);
+            toggleLoading('#dbService', false);
+        });
+    }
 }
 
 function onChangeDbType(event)

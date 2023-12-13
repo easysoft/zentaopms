@@ -449,19 +449,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 更新gitlab。
-     * Update a gitlab.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return bool
-     */
-    public function update(int $gitlabID): bool
-    {
-        return $this->loadModel('pipeline')->update($gitlabID);
-    }
-
-    /**
      * 设置项目信息。
      * Set project data.
      *

@@ -59,15 +59,7 @@ class jenkins extends control
     {
         if($_POST)
         {
-            $jenkins = form::data($this->config->jenkins->form->create)
-                ->add('type', 'jenkins')
-                ->add('private',md5(rand(10,113450)))
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->trim('url,token,account,password')
-                ->skipSpecial('url,token,account,password')
-                ->remove('appType')
-                ->get();
+            $jenkins   = form::data($this->config->jenkins->form->create)->get();
             $jenkinsID = $this->loadModel('pipeline')->create($jenkins);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -94,7 +86,8 @@ class jenkins extends control
         $jenkins = $this->loadModel('pipeline')->getByID($jenkinsID);
         if($_POST)
         {
-            $this->pipeline->update($jenkinsID);
+            $jenkins = form::data($this->config->jenkins->form->edit)->get();
+            $this->pipeline->update($jenkinsID, $jenkins);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newJenkins = $this->pipeline->getByID($jenkinsID);

@@ -97,20 +97,20 @@ class pipelineModel extends model
      * @access public
      * @return bool
      */
-    public function create(object $pipeline): int|false
+    public function create(object $server): int|false
     {
-        $type = $pipeline->type;
-        if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
+        $type = $server->type;
+        $server->url = rtrim($server->url, '/');
 
-        if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
+        if(isset($server->password)) $server->password = base64_encode($server->password);
 
-        $this->dao->insert(TABLE_PIPELINE)->data($pipeline)
+        $this->dao->insert(TABLE_PIPELINE)->data($server)
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->check('name', 'unique', "`type` = '$type'")
             ->checkIF($type == 'jenkins', 'account', 'notempty')
-            ->checkIF($type == 'jenkins' and !$pipeline->token, 'password', 'notempty')
-            ->checkIF($type == 'jenkins' and !$pipeline->password, 'token', 'notempty')
+            ->checkIF($type == 'jenkins' && !$server->token, 'password', 'notempty')
+            ->checkIF($type == 'jenkins' && !$server->password, 'token', 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -126,26 +126,19 @@ class pipelineModel extends model
      * @access public
      * @return bool
      */
-    public function update(int $id): bool
+    public function update(int $id, object $server): bool
     {
-        $pipeline = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->trim('url,token,account,password')
-            ->skipSpecial('url,token,account,password')
-            ->get();
-
         $type = $this->dao->select('type')->from(TABLE_PIPELINE)->where('id')->eq($id)->fetch('type');
-        if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
-        if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
+        $server->url = rtrim($server->url, '/');
+        if(isset($server->password)) $server->password = base64_encode($server->password);
 
-        $this->dao->update(TABLE_PIPELINE)->data($pipeline)
+        $this->dao->update(TABLE_PIPELINE)->data($server)
             ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->check('name', 'unique', "`type` = '$type' and id <> $id")
             ->checkIF($type == 'jenkins', 'account', 'notempty')
-            ->checkIF($type == 'jenkins' and !$pipeline->token, 'password', 'notempty')
-            ->checkIF($type == 'jenkins' and !$pipeline->password, 'token', 'notempty')
+            ->checkIF($type == 'jenkins' and !$server->token, 'password', 'notempty')
+            ->checkIF($type == 'jenkins' and !$server->password, 'token', 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();

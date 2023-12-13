@@ -132,15 +132,7 @@ class sonarqube extends control
     {
         if($_POST)
         {
-            $sonarqube = form::data($this->config->sonarqube->form->create)
-                ->add('type', 'sonarqube')
-                ->add('private',md5(rand(10,113450)))
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->trim('url,account,password')
-                ->skipSpecial('url,token,account,password')
-                ->remove('token,appType')
-                ->get();
+            $sonarqube = form::data($this->config->sonarqube->form->create)->get();
             $this->checkToken($sonarqube, 0);
             $sonarqubeID = $this->loadModel('pipeline')->create($sonarqube);
 
@@ -202,14 +194,14 @@ class sonarqube extends control
             $oldSonarQube->password = $this->post->password;
             $this->checkToken($oldSonarQube, $sonarqubeID);
 
-            $_POST['token'] = $oldSonarQube->token;
-            $this->pipeline->update($sonarqubeID);
-            $sonarqube = $this->pipeline->getByID($sonarqubeID);
+            $sonarqube = form::data($this->config->sonarqube->form->edit)->get();
+            $sonarqube->token = $oldSonarQube->token;
+            $this->pipeline->update($sonarqubeID, $sonarqube);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action');
-            $actionID = $this->action->create('sonarqube', $sonarqubeID, 'edited');
-            $changes  = common::createChanges($oldSonarQube, $sonarqube);
+            $sonarqube = $this->pipeline->getByID($sonarqubeID);
+            $actionID  = $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'edited');
+            $changes   = common::createChanges($oldSonarQube, $sonarqube);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }

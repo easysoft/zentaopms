@@ -42,6 +42,7 @@ $lang->instance->cpuCore          = '核';
 $lang->instance->scalable         = '应用水平扩容';
 $lang->instance->change           = '修改';
 $lang->instance->browseProject    = "项目列表";
+$lang->instance->url              = "服务器地址";
 
 $lang->instance->systemLDAPInactive = '未开启系统LDAP';
 $lang->instance->toSystemLDAP       = '去启用';

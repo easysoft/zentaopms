@@ -41,12 +41,11 @@ class sonarqubeModel extends model
     public function apiValidate($host, $token)
     {
         $url    = rtrim($host, '/') . "/api/authentication/validate";
-        $header = 'Authorization: Basic ' . $token;
+        $header = array('Authorization: Basic ' . $token);
         $result = json_decode(commonModel::http($url, null, array(), $header));
         if(!isset($result->valid) or !$result->valid) return array('password' => array($this->lang->sonarqube->validError));
 
         $url     = rtrim($host, '/') . "/api/user_groups/search";
-        $header  = 'Authorization: Basic ' . $token;
         $adminer = json_decode(commonModel::http($url, null, array(), $header));
         if(empty($adminer) or isset($adminer->errors)) return array('account' => array($this->lang->sonarqube->notAdminer));
 

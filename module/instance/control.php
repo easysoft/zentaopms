@@ -427,16 +427,9 @@ class instance extends control
         $this->loadModel('sonarqube');
         $this->app->loadLang('pipeline');
 
-        $externalApp = form::data($this->config->sonarqube->form->create)
-            ->add('type', $type)
-            ->add('private',md5(rand(10,113450)))
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->trim('url,account,password')
-            ->skipSpecial('url,token,account,password')
-            ->remove('token,appType')
-            ->get();
-        $externalApp->url = rtrim($externalApp->url, '/');
+        $externalApp = form::data($this->config->instance->form->create)->get();
+        $externalApp->type = $type;
+        $externalApp->url  = rtrim($externalApp->url, '/');
         if(!$this->instance->checkAppNameUnique($externalApp->name)) return $this->send(array('result' => false, 'message' => array('name' => sprintf($this->lang->error->repeat, $this->lang->pipeline->name, $externalApp->name))));
 
         $appID = $this->loadModel('pipeline')->create($externalApp);
@@ -462,12 +455,12 @@ class instance extends control
 
         if($_POST)
         {
-            $this->pipeline->update($externalID);
-            $app = $this->pipeline->getByID($externalID);
+            $instance = form::data($this->config->instance->form->edit)->get();
+            $this->pipeline->update($externalID, $instance);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action');
-            $actionID = $this->action->create($app->type, $externalID, 'edited');
+            $app      = $this->pipeline->getByID($externalID);
+            $actionID = $this->loadModel('action')->create($app->type, $externalID, 'edited');
             $changes  = common::createChanges($oldApp, $app);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));

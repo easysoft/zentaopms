@@ -82,18 +82,6 @@ class giteaModel extends model
     }
 
     /**
-     * Update a gitea.
-     *
-     * @param  int $id
-     * @access public
-     * @return bool
-     */
-    public function update($id)
-    {
-        return $this->loadModel('pipeline')->update($id);
-    }
-
-    /**
      * Bind users.
      *
      * @param  int    $giteaID

@@ -40,7 +40,7 @@ class gitea extends control
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Admin user don't need bind. */
@@ -70,20 +70,12 @@ class gitea extends control
     {
         if($_POST)
         {
-            $gitea = form::data($this->config->gitea->form->create)
-                ->add('type', 'gitea')
-                ->add('private',md5(rand(10,113450)))
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->trim('url,token')
-                ->skipSpecial('url,token')
-                ->remove('account,password,appType')
-                ->get();
+            $gitea = form::data($this->config->gitea->form->create)->get();
             $this->checkToken($gitea);
             $giteaID = $this->loadModel('pipeline')->create($gitea);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'created');
+            $this->loadModel('action')->create('gitea', $giteaID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
@@ -123,14 +115,13 @@ class gitea extends control
 
         if($_POST)
         {
-            $gitea = fixer::input('post')->trim('url,token')->get();
+            $gitea = form::data($this->config->gitea->form->edit)->get();
             $this->checkToken($gitea);
-            $this->gitea->update($giteaID);
-            $gitea = $this->gitea->getByID($giteaID);
+            $this->loadModel('pipeline')->update($giteaID, $gitea);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action');
-            $actionID = $this->action->create('gitea', $giteaID, 'edited');
+            $gitea    = $this->gitea->getByID($giteaID);
+            $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'edited');
             $changes  = common::createChanges($oldGitea, $gitea);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));

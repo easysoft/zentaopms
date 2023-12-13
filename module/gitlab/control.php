@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\wg;
+
 /**
  * The control file of gitlab module of ZenTaoPMS.
  *
@@ -74,21 +77,13 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $gitlab = form::data($this->config->gitlab->form->create)
-                ->add('type', 'gitlab')
-                ->add('private',md5((string)rand(10,113450)))
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->trim('url,token')
-                ->skipSpecial('url,token,account,password')
-                ->remove('account,password,appType')
-                ->get();
+            $gitlab = form::data($this->config->gitlab->form->create)->get();
             $this->checkToken($gitlab);
             $gitlabID = $this->loadModel('pipeline')->create($gitlab);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action');
-            $actionID = $this->action->create('gitlab', $gitlabID, 'created');
+            $this->action->create('gitlab', $gitlabID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
@@ -130,9 +125,9 @@ class gitlab extends control
 
         if($_POST)
         {
-            $gitlab = form::data($this->config->gitlab->form->edit)->trim('url,token')->get();
+            $gitlab = form::data($this->config->gitlab->form->edit)->get();
             $this->checkToken($gitlab, $gitlabID);
-            $this->gitlab->update($gitlabID);
+            $this->loadModel('pipeline')->update($gitlabID, $gitlab);
             $gitLab = $this->gitlab->getByID($gitlabID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

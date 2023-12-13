@@ -68,20 +68,12 @@ class gogs extends control
     {
         if($_POST)
         {
-            $gogs = form::data($this->config->gogs->form->create)
-                ->add('type', 'gogs')
-                ->add('private',md5(rand(10,113450)))
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->trim('url,token')
-                ->skipSpecial('url,token')
-                ->remove('account,password,appType')
-                ->get();
+            $gogs = form::data($this->config->gogs->form->create)->get();
             $this->checkToken($gogs);
             $gogsID = $this->loadModel('pipeline')->create($gogs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'created');
+            $this->loadModel('action')->create('gogs', $gogsID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
@@ -121,14 +113,13 @@ class gogs extends control
 
         if($_POST)
         {
-            $gogs = fixer::input('post')->trim('url,token')->get();
+            $gogs = form::data($this->config->gogs->form->edit)->get();
             $this->checkToken($gogs);
-            $this->gogs->update($gogsID);
-            $gogs = $this->gogs->getByID($gogsID);
+            $this->gogs->update($gogsID, $gogs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action');
-            $actionID = $this->action->create('gogs', $gogsID, 'edited');
+            $gogs     = $this->gogs->getByID($gogsID);
+            $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'edited');
             $changes  = common::createChanges($oldGogs, $gogs);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));

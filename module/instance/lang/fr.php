@@ -42,6 +42,7 @@ $lang->instance->cpuCore          = 'Core';
 $lang->instance->scalable         = 'Application level expansion';
 $lang->instance->change           = 'Modify';
 $lang->instance->browseProject    = "Project List";
+$lang->instance->url              = "Server URL";
 
 $lang->instance->systemLDAPInactive = 'System LDAP not enabled';
 $lang->instance->toSystemLDAP       = 'Deactivate';
