@@ -300,7 +300,7 @@ class storyTao extends storyModel
         $relationGroups = $this->batchGetRelations(array_keys($stories), 'requirement', array('*'));
         if(empty($stories));
 
-        foreach($stories as $storyID => $story)
+        foreach($stories as $story)
         {
             /* Merge subdivided stories for requirement. */
             if(empty($relationGroups[$story->id])) continue;
@@ -309,8 +309,10 @@ class storyTao extends storyModel
             foreach($relationGroups[$story->id] as $SRID => $SRStory)
             {
                 if(empty($SRStory)) continue;
-                $SRStory->parent = $story->id;
-                $story->children[$SRID] = $SRStory;
+
+                $children = clone $SRStory;
+                $children->parent = $story->id;
+                $story->children[$SRID] = $children;
             }
             $story->linkStories = implode(',', array_column($story->children, 'title'));
         }
@@ -372,7 +374,6 @@ class storyTao extends storyModel
 
             if(isset($relations[$story->id]))
             {
-                $link = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$type");
                 if($type == 'story')       $story->URS = $relations[$story->id]->count;
                 if($type == 'requirement') $story->SRS = $relations[$story->id]->count;
             }
