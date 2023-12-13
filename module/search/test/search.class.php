@@ -93,28 +93,6 @@ class searchTest
     }
 
     /**
-     * 设置默认参数的测试用例。
-     * Set default params test.
-     *
-     * @param  array  $fields
-     * @param  array  $params
-     * @access public
-     * @return array
-     */
-    public function setDefaultParamsTest(array $fields, array $params): array
-    {
-        global $tester;
-        $tester->session->set('project', 0);
-
-        $params = $this->objectModel->setDefaultParams($fields, $params);
-
-        $paramValues = array();
-        foreach($params as $field => $param) $paramValues[$field] = $param['values'];
-
-        return $paramValues;
-    }
-
-    /**
      * 测试初始化 session。
      * Test init session function.
      *
