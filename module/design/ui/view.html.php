@@ -22,6 +22,12 @@ foreach($config->design->view->operateList['main'] as $operate)
 {
     if(!common::hasPriv('design', $operate)) continue;
 
+    if(empty($repos) && $operate == 'linkCommit')
+    {
+        $config->design->actionList[$operate]['url']      = createLink('repo', 'create', "projectID={$design->project}");
+        $config->design->actionList[$operate]['data-app'] = 'project';
+        unset($config->design->actionList[$operate]['data-toggle']);
+    }
     $operateMenus[] = $config->design->actionList[$operate];
 }
 
