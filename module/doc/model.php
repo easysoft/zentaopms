@@ -2188,6 +2188,7 @@ class docModel extends model
         if($type != 'project') $libTree = array_values($libTree[$type]);
         if($type == 'mine')
         {
+            $children    = $libTree;
             $libType     = isset($this->app->rawParams['type']) ? $this->app->rawParams['type'] : '';
             $libType     = $this->app->rawMethod == 'view' ? 'mine' : $libType;
             $mineMethods = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdBy' => 'myCreation', 'editedBy' => 'myEdited');
@@ -2204,6 +2205,7 @@ class docModel extends model
                 $myItem->objectID   = 0;
                 $myItem->hasAction  = false;
                 $myItem->active     = strtolower($libType) == strtolower($type) ? 1 : 0;
+                if($type == 'mine') $myItem->children = $children;
 
                 $libTree[] = $myItem;
             }
