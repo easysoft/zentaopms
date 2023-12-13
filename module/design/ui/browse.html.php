@@ -50,6 +50,8 @@ dtable
     set::userMap($users),
     set::cols($config->design->dtable->fieldList),
     set::data($tableData),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(
         usePager()
     )

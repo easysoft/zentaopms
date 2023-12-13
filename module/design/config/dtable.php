@@ -18,11 +18,12 @@ $config->design->dtable->fieldList['id']['type']  = 'id';
 $config->design->dtable->fieldList['name']['type'] = 'title';
 $config->design->dtable->fieldList['name']['link'] = array('module' => 'design', 'method' => 'view', 'params' => 'designID={id}');
 
-$config->design->dtable->fieldList['product']['type'] = 'desc';
+$config->design->dtable->fieldList['product']['type']     = 'desc';
+$config->design->dtable->fieldList['product']['sortType'] = true;
 
 $config->design->dtable->fieldList['type']['type']      = 'status';
 $config->design->dtable->fieldList['type']['statusMap'] = $lang->design->typeList;
-$config->design->dtable->fieldList['type']['sortType']  = false;
+$config->design->dtable->fieldList['type']['sortType']  = true;
 
 $config->design->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->design->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
@@ -31,7 +32,7 @@ $config->design->dtable->fieldList['assignedTo']['data-toggle'] = 'modal';
 $config->design->dtable->fieldList['assignedTo']['sortType']    = false;
 
 $config->design->dtable->fieldList['createdBy']['type']     = 'user';
-$config->design->dtable->fieldList['createdBy']['sortType'] = false;
+$config->design->dtable->fieldList['createdBy']['sortType'] = true;
 
 $config->design->dtable->fieldList['createdDate']['type'] = 'date';
 
