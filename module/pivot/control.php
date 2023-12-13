@@ -23,6 +23,7 @@ class pivot extends control
     }
 
     /**
+     * 访问透视表。
      * Preview a pivot.
      *
      * @param  int    $dimensionID
