@@ -402,87 +402,88 @@ class kanbanModel extends model
     }
 
     /**
+     * 拆分看板列。
      * Split column.
      *
      * @param  int    $columnID
+     * @param  array  $columns
      * @access public
      * @return void
      */
-    public function splitColumn($columnID)
+    public function splitColumn(int $columnID, array $columns)
     {
         $this->loadModel('action');
-        $data          = fixer::input('post')->get();
         $column        = $this->getColumnByID($columnID);
         $maxOrder      = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
         $order         = $maxOrder ? $maxOrder + 1 : 1;
         $sumChildLimit = 0;
 
         $childrenColumn = array();
-        foreach($data->name as $i => $name)
+        foreach($columns as $childColumn)
         {
-            $childColumn = new stdclass();
             $childColumn->parent = $column->id;
             $childColumn->region = $column->region;
             $childColumn->group  = $column->group;
-            $childColumn->name   = $name;
-            $childColumn->color  = $data->color[$i];
-            $childColumn->limit  = isset($data->noLimit[$i]) ? -1 : $data->WIPCount[$i];
+            $childColumn->limit  = $childColumn->noLimit == -1 ? -1 : $childColumn->limit;
             $childColumn->order  = $order;
 
-            if(empty($childColumn->name))
-            {
-                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->kanbancolumn->name);
-                return false;
-            }
-
-            if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!isset($data->noLimit[$i]) and $childColumn->limit <= 0))
-            {
-                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
-                return false;
-            }
-
             $sumChildLimit += $childColumn->limit == -1 ? 0 : $childColumn->limit;
-            if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
-            {
-                dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
-                return false;
-            }
+            if(!$this->checkChildColumn($column, $childColumn, $sumChildLimit)) return false;
 
             $order ++;
-            $childrenColumn[$i] = $childColumn;
+            $childrenColumn[] = $childColumn;
         }
 
         foreach($childrenColumn as $i => $childColumn)
         {
-            $this->dao->insert(TABLE_KANBANCOLUMN)->data($childColumn)
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($childColumn, 'noLimit')
                 ->autoCheck()
                 ->batchCheck($this->config->kanban->splitcolumn->requiredFields, 'notempty')
                 ->exec();
 
             if(dao::isError()) return false;
-            if(!dao::isError())
-            {
-                $childColumnID = $this->dao->lastInsertID();
-                $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
-                $this->action->create('kanbanColumn', $childColumnID, 'created');
 
-                $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($column->id)->fetchAll();
-                foreach($cellList as $cell)
-                {
-                    $newCell = new stdclass();
-                    $newCell->kanban = $cell->kanban;
-                    $newCell->lane   = $cell->lane;
-                    $newCell->column = $childColumnID;
-                    $newCell->type   = 'common';
-                    $newCell->cards  = $i == 1 ? $cell->cards : '';
+            $childColumnID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
+            $this->action->create('kanbanColumn', $childColumnID, 'created');
 
-                    $this->dao->insert(TABLE_KANBANCELL)->data($newCell)->exec();
-                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('id')->eq($cell->id)->exec();
-                }
-            }
+            $this->kanbanTao->addChildColumnCell($columnID, $childColumnID, $i);
         }
 
         $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($columnID)->exec();
+    }
+
+    /**
+     * 检查看板列信息是否合法。
+     * Check the column information is legal.
+     *
+     * @param  object $column
+     * @param  object $childColumn
+     * @param  int    $sumChildLimit
+     * @access public
+     * @return bool
+     */
+    public function checkChildColumn(object $column, object $childColumn, int $sumChildLimit): bool
+    {
+        if(empty($childColumn->name))
+        {
+            dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->kanbancolumn->name);
+            return false;
+        }
+
+        if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!$childColumn->noLimit and $childColumn->limit <= 0))
+        {
+            dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+            return false;
+        }
+
+        if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
+        {
+            dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+            return false;
+        }
+
+        return true;
     }
 
     /**
