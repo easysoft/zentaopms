@@ -2,25 +2,7 @@
 class pivotZen extends pivot
 {
     /**
-     * Get first group of a dimension.
-     *
-     * @param  int       $dimensionID
-     * @access protected
-     * @return int
-     */
-    protected function getFirstGroup(int $dimensionID): int
-    {
-        return $this->dao->select('id')->from(TABLE_MODULE)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('pivot')
-            ->andWhere('root')->eq($dimensionID)
-            ->andWhere('grade')->eq(1)
-            ->orderBy('`order`')
-            ->limit(1)
-            ->fetch('id');
-    }
-
-    /**
+     * 获取分组里一个透视表的默认方法和参数。
      * Get default method name and parameters of a pivot in a group.
      *
      * @param  int    $dimension
@@ -33,24 +15,14 @@ class pivotZen extends pivot
         $currentGroup = $this->loadModel('tree')->getByID($groupID);
         if(empty($currentGroup) || $currentGroup->grade != 1) return array('', '');
 
-        $groups = $this->dao->select('id, grade, name, collector')->from(TABLE_MODULE)
-            ->where('deleted')->eq('0')
-            ->andWhere('root')->eq($dimensionID)
-            ->andWhere('path')->like("{$currentGroup->path}%")
-            ->orderBy('`order`')
-            ->fetchAll();
+        $groups = $this->pivot->getGroupsByDimensionAndPath($dimensionID, $currentGroup->path);
         if(!$groups) return array('', '');
 
         foreach($groups as $group)
         {
             if($this->config->edition == 'open' && $group->grade == 1) continue;
 
-            $pivotID = $this->dao->select('id')->from(TABLE_PIVOT)
-                ->where("FIND_IN_SET({$group->id}, `group`)")
-                ->andWhere('stage')->ne('draft')
-                ->orderBy('id_desc')
-                ->limit(1)
-                ->fetch('id');
+            $pivotID = $this->pivot->getPivotID($group->id);
             if($pivotID) return array('show', "groupID={$group->id}&pivotID={$pivotID}");
         }
 
@@ -73,10 +45,11 @@ class pivotZen extends pivot
     }
 
     /**
+     * 获取侧边栏菜单。
      * Get sidebar menus of pivot.
      *
-     * @param  int    $dimensionID
-     * @param  object $groupID
+     * @param  int       $dimensionID
+     * @param  object    $groupID
      * @access protected
      * @return array
      */
@@ -85,12 +58,7 @@ class pivotZen extends pivot
         $currentGroup = $this->loadModel('tree')->getByID($groupID);
         if(empty($currentGroup) || $currentGroup->grade != 1) return array();
 
-        $groups = $this->dao->select('id, grade, name, collector')->from(TABLE_MODULE)
-            ->where('deleted')->eq('0')
-            ->andWhere('root')->eq($dimensionID)
-            ->andWhere('path')->like("{$currentGroup->path}%")
-            ->orderBy('`order`')
-            ->fetchAll();
+        $groups = $this->pivot->getGroupsByDimensionAndPath($dimensionID, $currentGroup->path);
         if(!$groups) return array();
 
         $menus = array();
@@ -98,12 +66,7 @@ class pivotZen extends pivot
         {
             if($this->config->edition == 'open' && $group->grade == 1) continue;
 
-            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
-                ->where("FIND_IN_SET({$group->id}, `group`)")
-                ->andWhere('stage')->ne('draft')
-                ->andWhere('deleted')->eq('0')
-                ->orderBy('id_desc')
-                ->fetchAll();
+            $pivots = $this->pivot->getAllPivotByGroupID($group->id);
 
             if(empty($group->collector) && empty($pivots)) continue;
 
@@ -127,10 +90,11 @@ class pivotZen extends pivot
     }
 
     /**
+     * 在第一个维度上显示内置透视表。
      * Display the built-in pivots in the first dimension.
      *
-     * @param  int    $dimensionID
-     * @param  object $currengGroup
+     * @param  int       $dimensionID
+     * @param  object    $currengGroup
      * @access protected
      * @return array
      */

@@ -35,7 +35,7 @@ class pivot extends control
     public function preview(int $dimensionID = 0, int $groupID = 0, string $method = '', string $params = '')
     {
         $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
-        if(!$groupID) $groupID = $this->getFirstGroup($dimensionID);
+        if(!$groupID) $groupID = $this->pivot->getFirstGroup($dimensionID);
         $params = helper::safe64Decode($params);
 
         if(!$method) list($method, $params) = $this->getDefaultMethodAndParams($dimensionID, $groupID);

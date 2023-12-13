@@ -285,4 +285,79 @@ class pivotTao extends pivotModel
             ->andWhere('t1.type')->in('stage,sprint')
             ->fetchAll();
     }
+
+    /**
+     * 获取一个维度的第一个分组。
+     * Get the first group of a dimension.
+     *
+     * @param  int       $dimensionID
+     * @access protected
+     * @return int
+     */
+    protected function getFirstGroup(int $dimensionID): int
+    {
+        return (int)$this->dao->select('id')->from(TABLE_MODULE)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('pivot')
+            ->andWhere('root')->eq($dimensionID)
+            ->andWhere('grade')->eq(1)
+            ->orderBy('`order`')
+            ->limit(1)
+            ->fetch('id');
+    }
+
+    /**
+     * 通过维度和路径获取分组。
+     * Get group by dimension and path.
+     *
+     * @param  int       $dimensionID
+     * @param  string    $path
+     * @access protected
+     * @return array
+     */
+    protected function getGroupsByDimensionAndPath(int $dimensionID, string $path): array
+    {
+        return $this->dao->select('id, grade, name, collector')->from(TABLE_MODULE)
+            ->where('deleted')->eq('0')
+            ->andWhere('root')->eq($dimensionID)
+            ->andWhere('path')->like("{$path}%")
+            ->orderBy('`order`')
+            ->fetchAll();
+    }
+
+    /**
+     * 根据分组获取对应的透视表id。
+     * Get the corresponding pivot table id according to the group.
+     *
+     * @param  int       $groupID
+     * @access protected
+     * @return int
+     */
+    protected function getPivotID(int $groupID): int
+    {
+        return (int)$this->dao->select('id')->from(TABLE_PIVOT)
+            ->where("FIND_IN_SET({$groupID}, `group`)")
+            ->andWhere('stage')->ne('draft')
+            ->orderBy('id_desc')
+            ->limit(1)
+            ->fetch('id');
+    }
+
+    /**
+     * 根据一个分组下的所有透视表。
+     * Get all pivot tables under a group.
+     *
+     * @param  int       $groupID
+     * @access protected
+     * @return array
+     */
+    protected function getAllPivotByGroupID(int $groupID): array
+    {
+        return $this->dao->select('*')->from(TABLE_PIVOT)
+            ->where("FIND_IN_SET({$groupID}, `group`)")
+            ->andWhere('stage')->ne('draft')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll();
+    }
 }
