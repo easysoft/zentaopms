@@ -783,7 +783,7 @@ class commonModel extends model
             if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
             if(in_array($check, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) && $value == '') continue;
 
-            if(isset($old->$key))
+            if(isset($old->$key) && !is_object($old->$key) && !is_array($old->$key))
             {
                 if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
 
