@@ -56,12 +56,11 @@ $(function()
         $('#status').val('normal');
     });
 
+    if(docType == 'html' || docType == 'markdown') docType = docContentType;
     setTimeout(function(){initPage(docType)}, 50);
     if(typeof(window.editor) != 'undefined')
     {
         $('.ke-toolbar .ke-outline:last').after("<span data-name='unlink' class='ke-outline' title='Markdown' onclick='toggleEditor(\"markdown\")' style='font-size: unset; line-height: unset;'>Markdown</span>");
-
-        toggle(docContentType);
     }
 
     $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
@@ -108,15 +107,14 @@ $(function()
 
 function toggleEditor(type)
 {
-    toggle(type);
+    toggleEditorMode(type);
     $('#contentType').val(type);
 
     var link = createLink('custom', 'ajaxSaveCustomFields', 'module=doc&section=common&key=docContentType');
     $.post(link, {fields: type});
-    return false;
 }
 
-function toggle(type)
+function toggleEditorMode(type)
 {
     if(type == 'html')
     {
