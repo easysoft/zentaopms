@@ -11,12 +11,15 @@ $(function()
  * @access public
  * @return void
  */
-function loadStory()
+function loadStory(e)
 {
-    const productID = $(this).val();
+    const productID = $(e.target).val();
+    const storyID   = $('input[name=story]').val();
     const link      = $.createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID + '&status=active&hasParent=false');
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
-        $('#story').replaceWith(data);
+        const $storyPicker = $('input[name=story]').zui('picker');
+        $storyPicker.render({items: data});
+        $storyPicker.$.setValue(storyID);
     })
 }
