@@ -840,7 +840,7 @@ class productModel extends model
      */
     public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
-        $branch = $branch ? $branch : 0;
+        $branch = $branch ? $branch : '0';
         if(!$involved) $projectList = $this->productTao->fetchAllProductProjects($productID, $browseType, $branch, $orderBy, $pager);
         if($involved)  $projectList = $this->productTao->fetchInvolvedProductProjects($productID, $browseType, $branch, $orderBy, $pager);
 
