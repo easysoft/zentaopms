@@ -41,36 +41,30 @@ class designTest
     }
 
     /**
-     * Function batchCreate test by desgin
+     * 批量创建设计。
+     * Batch create designs.
      *
-     * @param  int   $projectID
-     * @param  int   $productID
      * @param  array $param
      * @access public
      * @return array
      */
-    public function batchCreateTest($projectID, $productID, $param = array())
+    public function batchCreateTest(array $dataList = array()): array
     {
-        global $tester;
+        $designs = array();
+        foreach($dataList as $data)
+        {
+            $design = new stdClass();
+            foreach($data as $key => $value) $design->{$key} = $value;
+            if(!isset($design->story)) $design->story = 0;
 
-        $story = array('', '', '', '');
-        $type  = array('', '', '', '');
-        $name  = array('', '', '', '');
-        $desc  = array('', '', '', '');
+            $designs[] = $design;
+        }
 
-        $createFields = array('story' => $story, 'type' => $type, 'name' => $name, 'desc' => $desc);
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $this->objectModel->dao->delete()->from(TABLE_DESIGN)->exec();
+        $this->objectModel->batchCreate(11, 1, $designs);
 
-        $this->objectModel->batchCreate($projectID, $productID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $tester->dao->select('*')->from(TABLE_DESIGN)->where('project')->eq($projectID)->andwhere('product')->eq($productID)->fetchAll();
-
-        return $objects;
+        if(dao::isError()) return current(dao::getError());
+        return $this->objectModel->dao->select('*')->from(TABLE_DESIGN)->where('project')->eq(11)->andwhere('product')->eq(1)->fetchAll();
     }
 
     /**

@@ -1,47 +1,52 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
-su('admin');
-
 /**
 
 title=测试 designModel->batchCreate();
 cid=1
-pid=1
 
-批量创建设计数量统计 >> 4
-批量创建敏捷项目设计 >> 设计一
-批量创建瀑布项目设计 >> 32
-批量创建看板项目设计 >> 41
-不输入类型 >> 『设计类型』不能为空。
-不输入名字 >> 0
-不输入需求 >> 1
-不输入详情 >> 1
+- 批量创建概要设计
+ - 第0条的name属性 @概要设计1
+ - 第0条的type属性 @HLDS
+- 批量创建详细设计
+ - 第0条的name属性 @详细设计1
+ - 第0条的type属性 @DDS
+- 批量创建数据库设计
+ - 第0条的name属性 @数据库设计1
+ - 第0条的type属性 @DBDS
+- 批量创建接口设计
+ - 第0条的name属性 @接口设计1
+ - 第0条的type属性 @ADS
+- 批量创建无类型设计 @『设计类型』不能为空。
+- 批量创建所有类型设计
+ - 第0条的name属性 @概要设计3
+ - 第0条的type属性 @HLDS
+- 批量创建需求关联设计
+ - 第0条的name属性 @概要设计4
+ - 第0条的type属性 @HLDS
+ - 第0条的story属性 @1
 
 */
-$projectIDList = array('12', '32', '62', '13', '71', '72', '73', '75');
-$productIDList = array('1', '21', '41');
-$storys        = array('1', '2', '3', '5');
-$types         = array('HLDS', 'DDS', 'DBDS', 'ADS');
-$names         = array('设计一', '设计二', '设计三', '设计四');
-$desc          = array('详情一', '详情二', '详情三', '详情四');
 
-$normalDesign  = array('story' => $storys, 'type' => $types, 'name' => $names, 'desc' => $desc);
-$noStoryDesign = array('type' => $types, 'name' => $names, 'desc' => $desc);
-$noTypeDesign  = array('story' => $storys, 'name' => $names, 'desc' => $desc);
-$noNameDesign  = array('story' => $storys, 'type' => $types, 'desc' => $desc);
-$noDescDesign  = array('story' => $storys, 'type' => $types, 'name' => $names);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/design.class.php';
 
-$design = new designTest();
-r(count($design->batchCreateTest($projectIDList[7], $productIDList[0], $noDescDesign))) && p()            && e('4');                     //批量创建设计数量统计
-r($design->batchCreateTest($projectIDList[0], $productIDList[0], $normalDesign))        && p('0:name')    && e('设计一');                //批量创建敏捷项目设计
-r($design->batchCreateTest($projectIDList[1], $productIDList[1], $normalDesign))        && p('0:project') && e('32');                    //批量创建瀑布项目设计
-r($design->batchCreateTest($projectIDList[2], $productIDList[2], $normalDesign))        && p('0:product') && e('41');                    //批量创建看板项目设计
-r($design->batchCreateTest($projectIDList[4], $productIDList[0], $noTypeDesign))        && p('type:0')    && e('『设计类型』不能为空。');//不输入类型
-r($design->batchCreateTest($projectIDList[5], $productIDList[0], $noNameDesign))        && p()            && e('0');                     //不输入名字
-$result = $design->batchCreateTest($projectIDList[3], $productIDList[0], $noStoryDesign);
-r(empty($result[0]->story))                                                             && p()            && e(1);                       //不输入需求
-$result = $design->batchCreateTest($projectIDList[6], $productIDList[0], $noDescDesign);
-r(empty($result[0]->desc))                                                              && p('0:desc')    && e(1);                      //不输入详情
+zdTable('design')->gen(0);
+zdTable('user')->gen(5);
 
+$hldsDesgins   = array(array('type' => 'HLDS', 'name' => '概要设计1'),   array('type' => 'HLDS', 'name' => '概要设计2'));
+$ddsDesgins    = array(array('type' => 'DDS',  'name' => '详细设计1'),   array('type' => 'DDS',  'name' => '详细设计2'));
+$dbdsDesgins   = array(array('type' => 'DBDS', 'name' => '数据库设计1'), array('type' => 'DBDS', 'name' => '数据库设计2'));
+$adsDesgins    = array(array('type' => 'ADS',  'name' => '接口设计1'),   array('type' => 'ADS',  'name' => '接口设计2'));
+$noTypeDesgins = array(array('type' => '',     'name' => '无类型设计1'), array('type' => '',     'name' => '无类型设计2'));
+$allDesgins    = array(array('type' => 'HLDS', 'name' => '概要设计3'),   array('type' => 'DDS',  'name' => '详细设计3'), array('type' => 'DBDS', 'name' => '数据库设计3'), array('type' => 'ADS',  'name' => '接口设计3'));
+$storyDesgins  = array(array('type' => 'HLDS', 'name' => '概要设计4', 'story' => 1), array('type' => 'DDS',  'name' => '详细设计4', 'story' => 1), array('type' => 'DBDS', 'name' => '数据库设计4', 'story' => 1), array('type' => 'ADS',  'name' => '接口设计4', 'story' => 1));
+
+$designTester = new designTest();
+r($designTester->batchCreateTest($hldsDesgins))   && p('0:name,type')       && e('概要设计1,HLDS');         // 批量创建概要设计
+r($designTester->batchCreateTest($ddsDesgins))    && p('0:name,type')       && e('详细设计1,DDS');          // 批量创建详细设计
+r($designTester->batchCreateTest($dbdsDesgins))   && p('0:name,type')       && e('数据库设计1,DBDS');       // 批量创建数据库设计
+r($designTester->batchCreateTest($adsDesgins))    && p('0:name,type')       && e('接口设计1,ADS');          // 批量创建接口设计
+r($designTester->batchCreateTest($noTypeDesgins)) && p('0')                 && e('『设计类型』不能为空。'); // 批量创建无类型设计
+r($designTester->batchCreateTest($allDesgins))    && p('0:name,type')       && e('概要设计3,HLDS');         // 批量创建所有类型设计
+r($designTester->batchCreateTest($storyDesgins))  && p('0:name,type,story') && e('概要设计4,HLDS,1');       // 批量创建需求关联设计
