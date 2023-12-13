@@ -46,7 +46,7 @@ for($index = 0; $index <= 1; $index ++)
                     set('class', 'input-group-addon'),
                     $lang->kanban->WIPCount
                 ),
-                input(set::name("WIPCount[$index]"), set::disabled(true), set::style(array('width' => '80px'))),
+                input(set::name("limit[$index]"), set::disabled(true), set::style(array('width' => '80px'))),
                 span
                 (
                     set('class', 'input-group-addon'),
