@@ -84,7 +84,7 @@ class mrModel extends model
      */
     public function getAllProjects(int $repoID = 0, string $scm = 'Gitlab'): array
     {
-        $hostID = $this->dao->select('hostID')->from(TABLE_MR)
+        $hostID = (int)$this->dao->select('hostID')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('repoID')->eq($repoID)
             ->fetch('hostID');
