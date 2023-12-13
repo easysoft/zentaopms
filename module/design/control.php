@@ -442,7 +442,8 @@ class design extends control
     }
 
     /**
-     * Ajax get stories by productID and projectID.
+     * Ajax：通过产品ID获取产品下的需求。
+     * Ajax: Get stories by productID and projectID.
      *
      * @param  int    $productID
      * @param  int    $projectID
@@ -451,14 +452,18 @@ class design extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $projectID, $status = 'all', $hasParent = 'true')
+    public function ajaxGetProductStories(int $productID, int $projectID, string $status = 'all', string $hasParent = 'true')
     {
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'story', $hasParent);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'story', $hasParent);
-
-        return print(html::select('story', $stories, '', "class='form-control'"));
+        $items = array();
+        foreach($stories as $storyID => $storyTitle)
+        {
+            $items[] = array('value' => $storyID, 'text' => $storyTitle, 'keys' => $storyTitle);
+        }
+        return print(json_encode($items));
     }
 
     /**
