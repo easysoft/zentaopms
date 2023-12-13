@@ -322,18 +322,19 @@ class designModel extends model
     }
 
     /**
+     * 获取设计列表数据。
      * Get design list.
      *
-     * @param  int    $productID
-     * @param  int    $projectID
-     * @param  string $type all|bySearch|HLDS|DDS|DBDS|ADS
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  int    $pager
+     * @param  int      $productID
+     * @param  int      $projectID
+     * @param  string   $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  int      $param
+     * @param  string   $orderBy
+     * @param  int      $pager
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getList($projectID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if($type == 'bySearch')
         {
@@ -411,17 +412,18 @@ class designModel extends model
     }
 
     /**
+     * 获取搜索后的设计列表数据。
      * Get designs by search.
      *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  int    $pager
+     * @param  int      $projectID
+     * @param  int      $productID
+     * @param  int      $queryID
+     * @param  string   $orderBy
+     * @param  object   $pager
      * @access public
-     * @return object
+     * @return object[]
      */
-    public function getBySearch($projectID = 0, $productID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getBySearch(int $projectID = 0, int $productID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if($queryID)
         {
@@ -441,10 +443,8 @@ class designModel extends model
             if($this->session->designQuery === false) $this->session->set('designQuery', ' 1 = 1');
         }
 
-        $designQuery = $this->session->designQuery;
-
         return $this->dao->select('*')->from(TABLE_DESIGN)
-            ->where($designQuery)
+            ->where($this->session->designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
@@ -514,22 +514,6 @@ class designModel extends model
         }
 
         return $output;
-    }
-
-    /**
-     * Build search form.
-     *
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @access public
-     * @return void
-     */
-    public function buildSearchForm($queryID = 0, $actionURL = '')
-    {
-        $this->config->design->search['actionURL'] = $actionURL;
-        $this->config->design->search['queryID']   = $queryID;
-
-        $this->loadModel('search')->setSearchParams($this->config->design->search);
     }
 
     /**
