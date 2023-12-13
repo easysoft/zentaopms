@@ -22,6 +22,7 @@ formBatchPanel
     on::change('[data-name="new"]', 'batchToggleNew'),
     on::change('[data-name^=vision]', 'batchChangeVision'),
     on::keyup('[data-name="password"]', 'batchTogglePasswordStrength'),
+    on::keyup('[name="verifyPassword"]', 'changePassword'),
     on::click('button[type=submit]', 'encryptPassword'),
     to::titleSuffix
     (
@@ -159,7 +160,7 @@ formBatchPanel
     ),
     formBatchItem
     (
-        set::name('password'),
+        set::name('passwordfield'),
         set::label($lang->user->password),
         set::control
         (
@@ -168,15 +169,8 @@ formBatchPanel
                 'type' => 'inputGroup',
                 'class' => 'form-control',
                 'items' => array(
-                    input
-                    (
-                        set::name('password'),
-                        set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, ''))
-                    ),
-                    span
-                    (
-                        setClass('input-group-addon passwordStrength hidden')
-                    )
+                    array('type' => 'input', 'class' => 'form-control', 'name' => 'password', 'placeholder' => zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
+                    array('type' => 'span', 'class' => 'input-group-addon passwordStrength hidden')
                 )
             )
         ),
