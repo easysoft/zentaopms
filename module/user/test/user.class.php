@@ -409,7 +409,7 @@ class userTest
 
         foreach($errors as $key => $error)
         {
-            if(is_array($error)) $errors[$key] = implode(',', $error);
+            if(is_array($error)) $errors[$key] = implode('', $error);
         }
 
         return array('result' => (int)$result, 'errors' => $errors);
@@ -431,7 +431,7 @@ class userTest
 
         foreach($errors as $key => $error)
         {
-            if(is_array($error)) $errors[$key] = implode(',', $error);
+            if(is_array($error)) $errors[$key] = implode('', $error);
         }
 
         return array('result' => (int)$result, 'errors' => $errors);
@@ -452,7 +452,7 @@ class userTest
 
         foreach($errors as $key => $error)
         {
-            if(is_array($error)) $errors[$key] = implode(',', $error);
+            if(is_array($error)) $errors[$key] = implode('', $error);
         }
 
         return array('result' => (int)$result, 'errors' => $errors);
