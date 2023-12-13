@@ -350,7 +350,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "\n" . sprintf($this->lang->repo->error->output, $command, $result, implode("\n", $output));
+                dao::$errors['submit'] = $this->lang->repo->error->cmd . "\n" . sprintf($this->lang->repo->error->output, $command, $result, implode("\n", $output));
                 return false;
             }
         }
