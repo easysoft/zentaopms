@@ -1290,7 +1290,7 @@ class repoZen extends repo
                 /* Init branchID. */
                 if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
                 if(!isset($branches[$branchID])) $branchID = '';
-                if(empty($branchID)) $branchID = 'master';
+                if(empty($branchID)) $branchID = key($branches);
 
                 /* Get unsynced branches. */
                 unset($branches['master']);
@@ -1330,7 +1330,15 @@ class repoZen extends repo
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
                 if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
-                helper::setcookie("syncBranch", reset($branches));
+                if($branches)
+                {
+                    $branchID = array_shift($branches);
+                    helper::setcookie("syncBranch", $branchID);
+                }
+                else
+                {
+                    $branchID = '';
+                }
 
                 if($branchID) $this->repo->fixCommit($repo->id);
             }

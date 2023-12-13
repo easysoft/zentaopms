@@ -1132,7 +1132,7 @@ class repo extends control
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
-        $branchID = '';
+        $branchID = (string)$this->cookie->syncBranch;
         $branches = $this->repoZen->getSyncBranches($repo, $branchID);
 
         $logs    = array();
