@@ -1,5 +1,5 @@
 <style>
-#zentaoLinks .col-sm-2{width:20%;}
+#zentaoLinks .col-sm-2{width:25%;}
 #zentaoLinks .col-sm-2 .others ul{padding-left: 0px;}
 #zentaoLinks .col-sm-2 .others li{list-style: none; text-align:left;}
 #zentaoLinks .col-sm-2 .others img{height:25px; padding-right:5px;}
