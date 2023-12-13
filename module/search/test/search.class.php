@@ -286,7 +286,7 @@ class searchTest
      * @access public
      * @return int|array
      */
-    public function getListTest(string $keywords, string $type): int|array
+    public function getListTest(string $keywords, string|array $type): int|array
     {
         $result = array();
         while(!isset($result['finished']))

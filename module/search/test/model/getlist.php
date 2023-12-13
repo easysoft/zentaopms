@@ -7,7 +7,6 @@ su('admin');
 zdTable('task')->gen(10);
 zdTable('bug')->gen(10);
 zdTable('case')->gen(10);
-zdTable('doc')->gen(10);
 zdTable('todo')->gen(10);
 zdTable('build')->gen(10);
 zdTable('product')->gen(10);
@@ -18,6 +17,11 @@ zdTable('testreport')->gen(10);
 zdTable('productplan')->gen(10);
 zdTable('project')->gen(100);
 zdTable('story')->gen(10);
+
+$doc = zdTable('doc');
+$doc->version->range('1');
+$doc->gen(10);
+zdTable('doccontent')->gen(10);
 
 /**
 
