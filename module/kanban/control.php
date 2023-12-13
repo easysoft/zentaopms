@@ -669,33 +669,23 @@ class kanban extends control
     }
 
     /**
+     * 归档看板列。
      * Archive a column.
      *
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function archiveColumn($columnID)
+    public function archiveColumn(int $columnID)
     {
         $column = $this->kanban->getColumnById($columnID);
-        if($column->parent)
-        {
-            $children = $this->dao->select('count(*) as count')->from(TABLE_KANBANCOLUMN)
-                ->where('parent')->eq($column->parent)
-                ->andWhere('id')->ne($column->id)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('archived')->eq('0')
-                ->fetch('count');
 
-            if(!$children) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
-        }
+        if($column->parent) $this->kanban->updateColumnParent($column);
 
         $this->kanban->archiveColumn($columnID);
         if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-        $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
-
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
     }
 
     /**
