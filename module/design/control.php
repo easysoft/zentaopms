@@ -195,6 +195,7 @@ class design extends control
     }
 
     /**
+     * 设计详情页面。
      * View a design.
      *
      * @param  int    $designID
@@ -204,23 +205,21 @@ class design extends control
     public function view(int $designID = 0)
     {
         $design = $this->design->getByID($designID);
-        $this->commonAction($design->project, (int)$design->product, $designID);
+        $this->commonAction((int)$design->project, (int)$design->product, $designID);
 
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
+        $project       = $this->loadModel('project')->getByID($design->project);
 
-        $project = $this->loadModel('project')->getByID($design->project);
-
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
-
-        $this->view->design  = $design;
-        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
-        $this->view->repos   = $this->loadModel('repo')->getRepoPairs('project', $design->project);
+        $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
+        $this->view->design   = $design;
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions  = $this->loadModel('action')->getList('design', $design->id);
+        $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $this->view->project  = $project;
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
