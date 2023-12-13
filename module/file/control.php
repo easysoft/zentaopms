@@ -164,7 +164,7 @@ class file extends control
                 $output .= '"';
                 foreach($fields as $fieldName => $fieldLabel)
                 {
-                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlspecialchars_decode(strip_tags($row->$fieldName, '<img>'))) : '';
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlspecialchars_decode(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
                 $output .= '"' . "\n";
