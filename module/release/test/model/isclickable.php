@@ -28,7 +28,7 @@ r($releaseTester->isClickableTest($releases[0], $actions[1])) && p() && e('1'); 
 r($releaseTester->isClickableTest($releases[0], $actions[2])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击关联BUG按钮
 r($releaseTester->isClickableTest($releases[0], $actions[3])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击取消关联BUG按钮
 r($releaseTester->isClickableTest($releases[0], $actions[4])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击取消关联遗留BUG按钮
-r($releaseTester->isClickableTest($releases[0], $actions[5])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击激活按钮
+r($releaseTester->isClickableTest($releases[0], $actions[5])) && p() && e('0'); // 测试关联需求和Bug的发布是否可以点击激活按钮
 r($releaseTester->isClickableTest($releases[0], $actions[6])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击停止维护按钮
 r($releaseTester->isClickableTest($releases[0], $actions[7])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击编辑按钮
 r($releaseTester->isClickableTest($releases[0], $actions[8])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击通知按钮
@@ -38,7 +38,7 @@ r($releaseTester->isClickableTest($releases[1], $actions[1])) && p() && e('1'); 
 r($releaseTester->isClickableTest($releases[1], $actions[2])) && p() && e('1'); // 测试未关联需求和Bug的发布是否可以点击关联BUG按钮
 r($releaseTester->isClickableTest($releases[1], $actions[3])) && p() && e('1'); // 测试未关联需求和Bug的发布是否可以点击取消关联BUG按钮
 r($releaseTester->isClickableTest($releases[1], $actions[4])) && p() && e('1'); // 测试未关联需求和Bug的发布是否可以点击取消关联遗留BUG按钮
-r($releaseTester->isClickableTest($releases[1], $actions[5])) && p() && e('1'); // 测试未关联需求和Bug的发布是否可以点击激活按钮
+r($releaseTester->isClickableTest($releases[1], $actions[5])) && p() && e('0'); // 测试未关联需求和Bug的发布是否可以点击激活按钮
 r($releaseTester->isClickableTest($releases[1], $actions[6])) && p() && e('1'); // 测试未关联需求和Bug的发布是否可以点击停止维护按钮
 r($releaseTester->isClickableTest($releases[1], $actions[7])) && p() && e('1'); // 测试未关联需求和Bug的发布是否可以点击编辑按钮
 r($releaseTester->isClickableTest($releases[1], $actions[8])) && p() && e('0'); // 测试未关联需求和Bug的发布是否可以点击通知按钮

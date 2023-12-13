@@ -232,7 +232,7 @@ class releaseModel extends model
         }
 
         if($release->build) $release = $this->processReleaseForCreate($release, $isSync);
-        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
+        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], (string)$this->post->uid);
 
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
@@ -266,6 +266,7 @@ class releaseModel extends model
             $storyIDList = array_filter(explode(',', $release->stories));
             foreach($storyIDList as $storyID)
             {
+                $storyID = (int)$storyID;
                 $this->story->setStage($storyID);
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
             }
@@ -347,7 +348,7 @@ class releaseModel extends model
      */
     public function update($release, $oldRelease): array|false
     {
-        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
+        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], (string)$this->post->uid);
 
         /* update release project and branch */
         if($release->build)

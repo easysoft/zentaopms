@@ -3,8 +3,10 @@ class releaseTest
 {
     public function __construct()
     {
-         global $tester;
+         global $tester, $app;
          $this->objectModel = $tester->loadModel('release');
+
+         $app->rawModule = 'release';
     }
 
     /**
