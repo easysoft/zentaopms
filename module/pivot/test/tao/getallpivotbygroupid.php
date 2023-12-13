@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
 title=测试 pivotTao->getAllPivotByGroupID();
 cid=1
@@ -9,7 +8,6 @@ pid=1
 获取groupID=60的所有透视表  >> 1027;1007
 获取groupID=100的所有透视表 >> 1002
 获取groupID=85的所有透视表  >> 1001
-
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
