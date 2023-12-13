@@ -150,8 +150,8 @@ class userModel extends model
             /* 检查加密后的弱密码。*/
             /* Check for encrypted weak password. */
             $weaks = array();
-            foreach(explode(',', $this->config->safe->weak) as $weak) $weaks[$weak] = md5(trim($weak));
-            if(isset($weaks[substr($user->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+            foreach(explode(',', $this->config->safe->weak) as $weak) $weaks[] = md5(trim($weak));
+            if(in_array(substr($user->password1, 0, 32), $weaks)) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
         }
 
         return !dao::isError();
