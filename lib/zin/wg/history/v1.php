@@ -77,6 +77,8 @@ class history extends wg
     {
         list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $editCommentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'editCommentUrl', 'commentBtn'));
 
+        $canComment     = hasPriv('action', 'comment', null);
+        $canEditComment = hasPriv('action', 'editComment', null);
         return zui::historyPanel
         (
             $panel ? set::className('canvas py-1 px-2') : null,
@@ -84,9 +86,9 @@ class history extends wg
             set::objectType($objectType),
             set::actions($actions),
             set::title($title),
-            set::commentUrl($commentUrl),
-            set::editCommentUrl($editCommentUrl),
-            set::commentBtn($commentBtn),
+            $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
+            $canComment ? set::commentUrl($commentUrl) : null,
+            set::commentBtn($canComment ? $commentBtn : false),
             set($this->getRestProps())
         );
     }
