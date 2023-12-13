@@ -497,9 +497,11 @@ formPanel
     (
         set::label($lang->todo->desc),
         setID('desc'),
-        set::name('desc'),
-        set::control('editor'),
-        set::value(htmlSpecialString($todo->desc))
+        editor
+        (
+            set::name('desc'),
+            html($todo->desc)
+        )
     ),
     formGroup
     (

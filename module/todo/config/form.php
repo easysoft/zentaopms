@@ -45,8 +45,7 @@ $config->todo->edit->form['end']          = array('required' => false, 'type' =>
 $config->todo->edit->form['private']      = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->edit->form['assignedTo']   = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->edit->form['objectID']     = array('required' => false, 'type' => 'int',     'default' => 0);
-$config->todo->edit->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
-$config->todo->edit->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
+$config->todo->edit->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '', 'control' => 'editor');
 $config->todo->edit->form['config']       = array('required' => false, 'type' => 'array',   'default' => array());
 
 $config->todo->assignTo = new stdclass();
