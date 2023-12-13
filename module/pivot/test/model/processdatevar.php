@@ -1,8 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
 /**
 title=测试 pivotModel->processDataVar();
 cid=1
@@ -14,8 +11,11 @@ pid=1
 测试$SUNDAY     >> 1
 测试$MONTHBEGIN >> 1
 测试$MONTHEND   >> 1
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+
 
 $pivot = new pivotTest();
 

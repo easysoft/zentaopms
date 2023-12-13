@@ -1,14 +1,7 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
-zdTable('product')->gen(4);
-zdTable('productplan')->config('productplan')->gen(10);
-zdTable('story')->config('story')->gen(10);
-
 /**
-title=测试 pivotModel->getByID();
+title=测试 pivotModel->getProducts();
 cid=1
 pid=1
 
@@ -23,6 +16,12 @@ pid=1
 产品4没有计划，所以此不存在                                               >> 0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+
+zdTable('product')->gen(4);
+zdTable('productplan')->config('productplan')->gen(10);
+zdTable('story')->config('story')->gen(10);
 
 $pivot = new pivotTest();
 

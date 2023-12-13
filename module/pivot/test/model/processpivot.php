@@ -1,8 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
 /**
 title=测试 pivotModel->processPivot();
 cid=1
@@ -13,8 +10,11 @@ pid=1
 测试函数执行以后sql是否被修改              >> 1
 测试函数执行以后返回的setting是否是数组    >> 1
 测试函数执行以后返回的used是否是true       >> 1
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+
 
 $pivot = new pivotTest();
 

@@ -1,17 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
-su('admin');
-
-zdTable('user')->gen(20);
-zdTable('dept')->gen(4);
-zdTable('task')->config('task')->gen(10);
-zdTable('project')->gen(10);
-zdTable('project')->config('execution_workload')->gen(10, false, false);
-zdTable('team')->config('team')->gen(5);
-
 /**
 title=测试 pivotModel->getWorkload();
 cid=1
@@ -24,8 +12,20 @@ pid=1
 测试部门id为0，执行状态已分配，工时为7的透视表数据是否正常生成,此返回值包含四条数据。                                    >> 2,0,1,2,28.57;10,1,1,5,71.43
 测试部门id为0，执行状态已分配，工时为7.5的透视表数据是否正常生成,此返回值包含四条数据,与上面用例的区别在于负载率的不同。 >> 2,0,1,2,26.67;10,1,1,5,66.67
 测试部门id为0，执行状态已分配，工时为8的透视表数据是否正常生成,此返回值包含四条数据,于上边用例的区别在于负载率的不同。   >> 2,0,1,2,25;10,1,1,5,62.5
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+
+su('admin');
+
+zdTable('user')->gen(20);
+zdTable('dept')->gen(4);
+zdTable('task')->config('task')->gen(10);
+zdTable('project')->gen(10);
+zdTable('project')->config('execution_workload')->gen(10, false, false);
+zdTable('team')->config('team')->gen(5);
+
 
 $pivot = new pivotTest();
 

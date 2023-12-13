@@ -1,8 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
 /**
 title=测试 pivotModel->getByID();
 cid=1
@@ -14,6 +11,9 @@ pid=1
 测试id为1001的透视表的筛选器生成是否正确 >> closedDate
 测试id为1003的透视表                     >> 1003,项目工时透视表,59
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
 
 $pivot = new pivotTest();
 

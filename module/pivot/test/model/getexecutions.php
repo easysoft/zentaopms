@@ -1,12 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-su('admin');
-
-zdTable('project')->config('execution')->gen(10);
-zdTable('task')->gen(20);
-zdTable('user')->gen(2);
 /**
 title=测试 pivotModel->getExecutions();
 
@@ -14,8 +7,15 @@ title=测试 pivotModel->getExecutions();
 获取3个月前到1年后的执行    >> 3,33.33
 获取6个月前到4个月前的执行  >> 0,0
 获取用户user1的全部执行     >> 3,n/a
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+su('admin');
+
+zdTable('project')->config('execution')->gen(10);
+zdTable('task')->gen(20);
+zdTable('user')->gen(2);
 
 $pivot = new pivotTest();
 

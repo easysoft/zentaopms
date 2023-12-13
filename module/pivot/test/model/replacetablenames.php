@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
-title=测试 pivotModel->setExecutionName();
+title=测试 pivotModel->replaceTableNames();
 cid=1
 pid=1
 

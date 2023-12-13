@@ -1,18 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-su('admin');
-
-zdTable('user')->gen(10);
-zdTable('project')->gen(0);
-zdTable('product')->config('product_option')->gen(10);
-zdTable('project')->config('program_option')->gen(10);
-zdTable('project')->config('project_option')->gen(10, false, false);
-zdTable('project')->config('execution_option')->gen(10, false, false);
-zdTable('dept')->gen(10);
-zdTable('bug')->gen(5);
-
 /**
 title=测试 screenModel->getSysOptions();
 cid=1
@@ -27,8 +14,20 @@ pid=1
 测试type为option，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。             >> 激活,已解决,已关闭
 测试type为object，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。             >> BUG1,BUG5
 测试type为other，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。              >> user1,user9
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+su('admin');
+
+zdTable('user')->gen(10);
+zdTable('project')->gen(0);
+zdTable('product')->config('product_option')->gen(10);
+zdTable('project')->config('program_option')->gen(10);
+zdTable('project')->config('project_option')->gen(10, false, false);
+zdTable('project')->config('execution_option')->gen(10, false, false);
+zdTable('dept')->gen(10);
+zdTable('bug')->gen(5);
 
 $pivot = new pivotTest();
 

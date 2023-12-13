@@ -1,8 +1,7 @@
 #!/usr/bin/env php
 <?php
-
 /**
-title=测试 pivotModel->getBugs();
+title=测试 pivotModel->genSheet();
 cid=1
 pid=1
 

@@ -1,9 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
-zdTable('bug')->config('bug')->gen(20);
 /**
 title=测试 pivotModel->getBugs();
 cid=1
@@ -14,8 +10,12 @@ pid=1
 测试获取id为1的产品下的bug统计数据                  >> admin,3,0
 测试获取执行id为101的执行下的bug统计数据            >> admin,3,0
 测试获取id为1的产品以及id为101的执行下的bug统计数据 >> admin,3,0
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
+
+zdTable('bug')->config('bug')->gen(20);
 
 $pivot = new pivotTest();
 

@@ -8,8 +8,8 @@ pid=1
 测试传入的默认值为空，不对默认值进行处理   >> 1
 测试传入的默认值为字符串，对默认值进行处理 >> 1
 测试传入的默认值为数组，看是否对默认值了进行处理 >> 1
-e
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/pivot.class.php';
 $pivot = new pivotTest();

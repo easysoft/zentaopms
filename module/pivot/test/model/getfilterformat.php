@@ -1,10 +1,7 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
-
 /**
-title=测试 pivotModel->getByID();
+title=测试 pivotModel->getFilterFormat();
 cid=1
 pid=1
 
@@ -16,8 +13,10 @@ pid=1
 测试过滤类型为datetime,开始时间和结束时间都存在的情况, 判断生成的过滤条件是否正确      >> 1
 测试过滤类型为datetime,开始时间不存在但结束时间存在的情况, 判断生成的过滤条件是否正确  >> 1
 测试过滤类型为datetime,开始时间存在但结束时间不存在的情况, 判断生成的过滤条件是否正确  >> 1
-
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pivot.class.php';
 
 $pivot = new pivotTest();
 
