@@ -312,7 +312,7 @@ class design extends control
         $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
-        $repo      = $this->loadModel('repo')->getByID($repoID);
+        $repo      = $this->loadModel('repo')->getByID((int)$repoID);
         $revisions = $this->design->getCommits($repo,$begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         $this->session->set('designRevisions', $revisions);
@@ -379,12 +379,12 @@ class design extends control
      */
     public function viewCommit(int $designID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $design = $this->design->getCommit($designID, $pager);
-        $this->commonAction($design->project, $design->product, $designID);
-
         /* Init pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $recPerPage, $pageID);
+
+        $design = $this->design->getCommit($designID, $pager);
+        $this->commonAction($design->project, $design->product, $designID);
 
         $this->config->design->viewcommit->dtable->fieldList['actions']['list']['unlinkCommit']['url'] = sprintf($this->config->design->viewcommit->actionList['unlinkCommit']['url'], $designID);
 
