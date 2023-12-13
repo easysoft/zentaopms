@@ -196,4 +196,24 @@ class designTest
         if(dao::isError()) return dao::getError();
         return $designs;
     }
+
+    /**
+     * 获取设计列表数据。
+     * Get design list.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  int    $param
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getListTest(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc'): array
+    {
+        $designs = $this->objectModel->getList($projectID, $productID, $type, $param, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+        return $designs;
+    }
 }
