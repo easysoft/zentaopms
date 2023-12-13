@@ -689,18 +689,18 @@ class kanban extends control
     }
 
     /**
+     * 还原看板列。
      * Restore a column.
      *
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function restoreColumn($columnID)
+    public function restoreColumn(int $columnID)
     {
         $this->kanban->restoreColumn($columnID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-        $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
