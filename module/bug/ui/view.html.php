@@ -137,14 +137,16 @@ foreach($legendMisc['linkCommit']['text'] as $commit)
     ));
 }
 
-$legendBasic['os']['text']            = $osHTML;
-$legendBasic['browser']['text']       = $browserHTML;
-$legendBasic['mailto']['text']        = $mailtoHTML;
-$legendBasic['severity']['text']      = severityLabel($legendBasic['severity']['text'], set::text($lang->bug->severityList), set::isIcon(true));
-$legendBasic['pri']['text']           = priLabel($legendBasic['pri']['text'], set::text($lang->bug->priList));
-$legendLife['openedBuild']['text']    = $buildsHTML;
-$legendLife['resolution']['text']     = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
-$legendMain['story']['text']          = $bug->story ? div
+if(isset($bug->delay)) $legendBasic['deadline']['text'] = html($legendBasic['deadline']['text']);
+
+$legendBasic['os']['text']         = $osHTML;
+$legendBasic['browser']['text']    = $browserHTML;
+$legendBasic['mailto']['text']     = $mailtoHTML;
+$legendBasic['severity']['text']   = severityLabel($legendBasic['severity']['text'], set::text($lang->bug->severityList), set::isIcon(true));
+$legendBasic['pri']['text']        = priLabel($legendBasic['pri']['text'], set::text($lang->bug->priList));
+$legendLife['openedBuild']['text'] = $buildsHTML;
+$legendLife['resolution']['text']  = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
+$legendMain['story']['text']       = $bug->story ? div
 (
     label
     (
@@ -163,10 +165,10 @@ $legendMain['story']['text']          = $bug->story ? div
         ')'
     ) : ''
 ) : '';
-$legendMain['task']['text']           = $bug->task  ? div(label(setClass('dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
-$legendMisc['relatedBug']['text']     = $relatedBugs;
-$legendMisc['linkCommit']['text']     = $linkCommits;
-$legendMisc['linkMR']['text']         = $linkMR;
+$legendMain['task']['text']       = $bug->task  ? div(label(setClass('dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
+$legendMisc['relatedBug']['text'] = $relatedBugs;
+$legendMisc['linkCommit']['text'] = $linkCommits;
+$legendMisc['linkMR']['text']     = $linkMR;
 
 /* Handling special tags in bug descriptions. */
 $tplStep   = strip_tags(trim($lang->bug->tplStep));
