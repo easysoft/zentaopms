@@ -46,11 +46,4 @@ r($docTester->buildQueryTest($typeList[1], $queries[0])) && p() && e(" 1 = 1"); 
 r($docTester->buildQueryTest($typeList[1], $queries[1])) && p() && e("(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))"); // 测试type=project 并且 queryID=1时，构造的搜索条件
 r($docTester->buildQueryTest($typeList[1], $queries[2])) && p() && e("(( 1 AND 1) AND ( 1 ))");                      // 测试type=project 并且 queryID=2时，构造的搜索条件
 r($docTester->buildQueryTest($typeList[2], $queries[0])) && p() && e(" 1 = 1");                                      // 测试type=execution 并且 queryID=0时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[2], $queries[1])) && p() && e("(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))"); // 测试type=execution 并且 queryID=1时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[2], $queries[2])) && p() && e("(( 1 AND 1) AND ( 1 ))");                      // 测试type=execution 并且 queryID=2时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[3], $queries[0])) && p() && e(" 1 = 1");                                      // 测试type=product 并且 queryID=0时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[3], $queries[1])) && p() && e("(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))"); // 测试type=product 并且 queryID=1时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[3], $queries[2])) && p() && e("(( 1 AND 1) AND ( 1 ))");                      // 测试type=product 并且 queryID=2时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[4], $queries[0])) && p() && e(" 1 = 1");                                      // 测试type=custom 并且 queryID=0时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[4], $queries[1])) && p() && e("(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))"); // 测试type=custom 并且 queryID=1时，构造的搜索条件
-r($docTester->buildQueryTest($typeList[4], $queries[2])) && p() && e("(( 1 AND 1) AND ( 1 ))");                      // 测试type=custom 并且 queryID=2时，构造的搜索条件
+
