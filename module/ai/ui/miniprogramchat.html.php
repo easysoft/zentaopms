@@ -264,7 +264,7 @@ div(
                 </defs>
                 </svg>
             END),
-            html("<textarea placeholder='{$lang->ai->miniPrograms->placeholder->asking}' rows='1' class='chat-input-box' oninput='window.aiMiniProgramChat.handleInput(event)' onkeydown='window.aiMiniProgramChat.handleInputEnter(event)' oncompositionstart='window.aiMiniProgramChat.handleInputCompositionStart(event)' oncompositionend='window.aiMiniProgramChat.handleInputCompositionEnd(event)'></textarea>"),
+            html("<textarea placeholder='{$lang->ai->miniPrograms->placeholder->asking}' rows='1' class='chat-input-box'></textarea>"),
             btn(
                 setClass('ghost send-btn'),
                 on::click('window.aiMiniProgramChat.clearInputAndChat'),

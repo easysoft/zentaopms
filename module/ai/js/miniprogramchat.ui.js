@@ -205,7 +205,7 @@ window.aiMiniProgramChat.handleStarBtnClick = function()
     }, 'json');
 };
 
-window.aiMiniProgramChat.handleRestBtnClick = () =>
+window.aiMiniProgramChat.handleRestBtnClick = function()
 {
     try
     {
@@ -225,7 +225,7 @@ let composing = false;
  *
  * @param {KeyboardEvent} event
  */
-window.aiMiniProgramChat.handleInputEnter = (event) =>
+window.aiMiniProgramChat.handleInputEnter = function(event)
 {
     console.log(composing, 3);
     if(event.code === 'Enter' && !composing)
@@ -235,7 +235,7 @@ window.aiMiniProgramChat.handleInputEnter = (event) =>
     }
 };
 
-window.aiMiniProgramChat.clearInputAndChat = () =>
+window.aiMiniProgramChat.clearInputAndChat = function()
 {
     const $inputBox = $('.chat-input-box');
     const message = $inputBox.val()
@@ -244,13 +244,13 @@ window.aiMiniProgramChat.clearInputAndChat = () =>
     sendMessagesToAI(message);
 };
 
-window.aiMiniProgramChat.handleInputCompositionStart = () =>
+window.aiMiniProgramChat.handleInputCompositionStart = function()
 {
     composing = true;
     console.log(composing, 1);
 };
 
-window.aiMiniProgramChat.handleInputCompositionEnd = () =>
+window.aiMiniProgramChat.handleInputCompositionEnd = function()
 {
     composing = false;
     console.log(composing, 2);
@@ -259,7 +259,7 @@ window.aiMiniProgramChat.handleInputCompositionEnd = () =>
 /**
  * @param {Event} event
  */
-window.aiMiniProgramChat.handleInput = (event) =>
+window.aiMiniProgramChat.handleInput = function(event)
 {
     /**
      * @type {HTMLTextAreaElement}
@@ -269,7 +269,7 @@ window.aiMiniProgramChat.handleInput = (event) =>
     inputBox.style.height = `${(inputBox.scrollHeight + 2)}px`
 };
 
-window.aiMiniProgramChat.backToSquare = () =>
+window.aiMiniProgramChat.backToSquare = function()
 {
     location.href = $.createLink('ai', 'square', '#app=ai');
 };
@@ -383,5 +383,16 @@ $(function()
     if(isAppDisabled)
     {
         $('#open-dialog').trigger('click')
+    }
+
+    const $inputBox = $('.chat-input-box');
+    if(!$inputBox.attr('data-bind')) {
+        $inputBox
+            .on('input', window.aiMiniProgramChat.handleInput)
+            .on('keydown', window.aiMiniProgramChat.handleInputEnter)
+            .on('compositionstart', window.aiMiniProgramChat.handleInputCompositionStart)
+            .on('compositionend', window.aiMiniProgramChat.handleInputCompositionEnd);
+
+        $inputBox.attr('data-bind', 'true');
     }
 });
