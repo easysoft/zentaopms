@@ -951,11 +951,11 @@ class fileModel extends model
     /**
      * Get image size.
      *
-     * @param  object $file
+     * @param  object      $file
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getImageSize(object $file): array
+    public function getImageSize(object $file): array|false
     {
         if(empty($file->realPath)) return array();
         if($this->config->file->storageType == 'fs')
