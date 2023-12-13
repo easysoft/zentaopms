@@ -3497,13 +3497,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 还原看板列。
      * Restore a column.
      *
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function restoreColumn($columnID)
+    public function restoreColumn(int $columnID)
     {
         $column = $this->getColumnByID($columnID);
 
@@ -3550,6 +3551,8 @@ class kanbanModel extends model
             ->set('archived')->eq(0)
             ->where('id')->eq($columnID)
             ->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
     }
 
     /**
