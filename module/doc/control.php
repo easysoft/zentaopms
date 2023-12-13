@@ -338,7 +338,7 @@ class doc extends control
             $docData   = form::data()->get();
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($libID, $docResult);
+            return $this->docZen->responseAfterCreate($docData->lib, $docResult);
         }
 
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
