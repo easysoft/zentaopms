@@ -12,6 +12,7 @@
 class design extends control
 {
     /**
+     * 构造函数，加载通用的模块。
      * Construct function, load module auto.
      *
      * @param  string $moduleName
@@ -19,7 +20,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
