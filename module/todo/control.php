@@ -165,7 +165,7 @@ class todo extends control
         /* Get form data for my-todo. */
         if($from == 'myTodo')
         {
-            if(!$this->post->todoIdList) return $this->send(array('result' => 'fail', 'load' => true));
+            if(!$this->post->todoIdList) return $this->locate($this->session->todoList ? $this->session->todoList : createLink('my', 'todo'));
 
             $this->todoZen->batchEditFromMyTodo($this->post->todoIdList, $type, $userID, $status);
         }
