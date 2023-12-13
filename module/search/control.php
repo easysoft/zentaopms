@@ -147,29 +147,6 @@ class search extends control
     }
 
     /**
-     * Ajax get search query.
-     *
-     * @param  string $module
-     * @param  int    $queryID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetQuery($module = '', $queryID = 0)
-    {
-        $query   = $queryID ? $queryID : '';
-        $module  = empty($module) ? $this->session->searchParams['module'] : $module;
-        $queries = $this->search->getQueryList($module);
-        $html = '';
-        foreach($queries as $query)
-        {
-            if(empty($query->id)) continue;
-
-            $html .= '<li>' . html::a("javascript:executeQuery({$query->id})", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'") . '</li>';
-        }
-        echo $html;
-    }
-
-    /**
      * Ajax remove from menu.
      *
      * @param  int    $queryID
