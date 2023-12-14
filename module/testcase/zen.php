@@ -699,15 +699,6 @@ class testcaseZen extends testcase
      */
     protected function preProcessForEdit(object $case): object
     {
-        /* 处理单元测试用例列表的标签。*/
-        /* Process the sub menu of unit test case. */
-        if($case->auto == 'unit')
-        {
-            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
-            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
-        }
-
         /* 初始化用例步骤。*/
         /* Unit the steps of case. */
         if(empty($case->steps))
