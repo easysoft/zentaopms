@@ -339,8 +339,48 @@ class screenModel extends model
         $component->chartConfig->chartOption = $this->getMetricChartOption($metric);
         $component->chartConfig->tableOption = $this->getMetricTableOption($metric);
         $component->chartConfig->card        = $this->getMetricCardOption($metric);
+        $component->chartConfig->filters     = $this->buildMetricFilters($metric);
 
         return $component;
+    }
+
+    /**
+     * Build filters for metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function buildMetricFilters($metric)
+    {
+        $scope = $metric->scope;
+
+        $filters = array();
+        if($scope != 'system')
+        {
+            $filter = new stdclass();
+            $filter->from       = 'query';
+            $filter->field      = $scope;
+            $filter->name       = $this->lang->$scope->common;
+            $filter->type       = 'select';
+            $filter->typeOption = $scope;
+            $filter->default    = null;
+
+            $objectPairs = $this->loadModel('metric')->getPairsByScope($scope, true);
+            $filter->option = array_map(function($objectID, $objectName)
+            {
+                return array(
+                    'label' => $objectName,
+                    'value' => $objectID
+                );
+            },
+            array_keys($objectPairs),
+            array_values($objectPairs));
+
+            $filters[] = $filter;
+        }
+
+        return $filters;
     }
 
     /**
