@@ -333,6 +333,7 @@ if($('.dtable .dtable-header .has-checkbox').length > 0)
     if(checkedList.length)
     {
         if(window.config.currentModule == 'testcase') checkedList.forEach(function(item, index){ checkedList[index] = item.replace('case_', '');});
+        if(window.config.currentModule == 'product') checkedList.forEach(function(item, index){if(item.indexOf('-')) checkedList[index] = item.substr(item.indexOf('-') + 1);});
 
         $('#exportType').val('selected');
         $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
