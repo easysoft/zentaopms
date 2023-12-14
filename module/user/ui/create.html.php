@@ -118,7 +118,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::className('flex gap-4 items-center ' . (count($visions) > 1 ? '' : 'hide')),
+            set::className('flex items-center ' . (count($visions) > 1 ? '' : 'hide')),
             set::label($lang->user->visions),
             set::required(true),
             checkList
