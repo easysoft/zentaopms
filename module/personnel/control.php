@@ -165,7 +165,7 @@ class personnel extends control
 
             $this->loadModel('action')->create('whitelist', $objectID, 'managedWhitelist', '', $objectType);
 
-            $locateLink = $this->session->whitelistList ? $this->session->whitelistList : $this->createLink($module, 'whitelist', "objectID=$objectID");
+            $locateLink = $this->createLink($module, 'whitelist', "objectID=$objectID");
             $tab        = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $tab));
         }

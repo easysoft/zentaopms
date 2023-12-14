@@ -1,15 +1,17 @@
 window.renderRowData = function($row, index, row)
 {
-    if(row != undefined && row.isAppend == undefined)
+    if(row == undefined) return;
+
+    $row.find('[data-name="account"]').find('.picker-box').on('inited', function(e, info)
     {
-        $row.find('[data-name="account"]').find('.picker-box').on('inited', function(e, info)
-        {
-            let $account = info[0];
-            $account.render({items: userItems});
-            $account.$.setValue(row.account);
-            $account.render({required: true, readonly: true});
-        });
-    }
+        let $account = info[0];
+        let isAppend = typeof(row.isAppend) != 'undefined' && row.isAppend;
+
+        items = userItems;
+        if(isAppend) items = $account.options.items;
+        $account.render({items: items, required: true, readonly: !isAppend});
+        $account.$.setValue(row.account);
+    });
 }
 
 /**

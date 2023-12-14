@@ -15,11 +15,11 @@ jsVar('module', $module);
 jsVar('moduleMethod', 'addWhitelist');
 
 $members = !empty($whitelist) ? array_values($whitelist) : array();
-foreach($appendUsers as $account => $realname)
+foreach($appendUsers as $account)
 {
     $member = new stdclass();
     $member->account  = $account;
-    $member->realname = $realname;
+    $member->realname = \zget($users, $account);
     $member->isAppend = '1';
 
     $members[] = $member;
@@ -28,6 +28,8 @@ foreach($appendUsers as $account => $realname)
 $userItems = array();
 foreach($members as $member)
 {
+    if(!empty($member->isAppend))  continue;
+
     $userItems[] = array('value' => $member->account, 'text' => $member->realname);
     unset($users[$member->account]);
 }
