@@ -487,7 +487,7 @@ class jobModel extends model
         $build = new stdclass();
         $build->job         = $job->id;
         $build->name        = $job->name;
-        $build->createdBy   = $this->app->user->account;
+        $build->createdBy   = $this->app->user ? $this->app->user->account : 'system';
         $build->createdDate = $now;
         $build->updateDate  = $now;
 
