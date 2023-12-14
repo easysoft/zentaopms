@@ -219,18 +219,15 @@ class tutorialTest
     }
 
     /**
-     * Get team members pairs.
+     * 测试获取团队成员键值对。
+     * Test get team members pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTeamMembersPairsTest()
+    public function getTeamMembersPairsTest(): array
     {
-        $objects = $this->objectModel->getTeamMembersPairs();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getTeamMembersPairs();
     }
 
     /**
