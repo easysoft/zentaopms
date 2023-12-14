@@ -3,13 +3,18 @@ $(function()
     if(typeof(storyType) == 'undefined') storyType = '';
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
     if(typeof(rawMethod) == 'undefined') rawMethod = '';
-    if(typeof(app)       == 'undefined') app       = '';
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
+    app = $.cookie.get('tab');
     if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask')
     {
-        if(app != 'my') $('#navbar .nav li a').removeClass('active');
-        $("#navbar .nav li a[data-id=" + storyType + ']').addClass('active');
-        $('#subNavbar li a[data-id="' + storyType + '"]').addClass('active');
+        let $storyNavbar    = $("#navbar .nav li a[data-id=" + storyType + ']');
+        let $storySubNavbar = $('#subNavbar li a[data-id="' + storyType + '"]')
+        if($storyNavbar.length > 0 || $storySubNavbar.length > 0)
+        {
+            $('#navbar .nav li a').removeClass('active');
+            $storyNavbar.addClass('active');
+            storySubNavbar.addClass('active');
+        }
     }
 });
 
