@@ -568,11 +568,11 @@ class testtaskZen extends testtask
      * Process the rowspan property of cases for groupCase page for use by front-end component groupings.
      *
      * @param  array     $cases
-     * @param  int       $build
+     * @param  string    $build
      * @access protected
      * @return array
      */
-    protected function processRowspanForGroupCase(array $cases, int $build): array
+    protected function processRowspanForGroupCase(array $cases, string $build): array
     {
         $groupCases = array();
         foreach($cases as $case) $groupCases[$case->story][] = $case;

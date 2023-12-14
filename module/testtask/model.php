@@ -930,7 +930,7 @@ class testtaskModel extends model
     private function addPrefixToOrderBy(string $orderBy): string
     {
         $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
-        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $fieldToSort   = strpos($orderBy, '_') ? substr($orderBy, 0, strpos($orderBy, '_')) : $orderBy;
         $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
         return $orderBy;
     }
