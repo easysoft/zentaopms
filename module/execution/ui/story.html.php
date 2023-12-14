@@ -343,9 +343,9 @@ $setting = $this->loadModel('datatable')->getSetting('execution');
 $cols    = array();
 foreach($setting as $col)
 {
-    if(!$execution->hasProduct and $col['name'] == 'branch') continue;
-    if(!$execution->hasProduct and !$execution->multiple and $value['name'] == 'plan') continue;
-    if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['name'] == 'stage') continue;
+    if(!$execution->hasProduct && $col['name'] == 'branch') continue;
+    if(!$execution->hasProduct && !$execution->multiple && $col['name'] == 'plan') continue;
+    if(!$execution->hasProduct && !$execution->multiple && $storyType == 'requirement' && $col['name'] == 'stage') continue;
 
     if($col['name'] == 'title') $col['link'] = sprintf(zget($col['link'], 'url'), createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
 

@@ -213,7 +213,7 @@ detailBody
             )
         )
     ),
-    history(),
+    history(set::objectID($story->id)),
     floatToolbar
     (
         set::object($story),

@@ -109,7 +109,7 @@ class projectStory extends control
         if($projectID) $this->session->set('project', $projectID, 'project');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $story = $this->loadModel('story')->getByID($storyID);
+        $story = $this->loadModel('story')->getByID((int)$storyID);
         echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->project);
     }
 
