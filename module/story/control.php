@@ -339,7 +339,7 @@ class story extends control
         }
 
         $product = $this->product->getByID($productID);
-        if($product->type == 'normal') unset($customFields['branch']);
+        if($product && $product->type == 'normal') unset($customFields['branch']);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
