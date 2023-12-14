@@ -77,14 +77,13 @@ function typeChange(e)
  * 根据选择研发需求是否勾选切换相关字段的展示与隐藏。
  * Dynamically control whether task fields are hidden based on selection status of selectTestStory.
  *
- * @param  int    $executionID
+ * @param  int    executionID
  * @access public
  * @return void
  */
 function toggleSelectTestStory(executionID)
 {
-    executionID = parseInt(executionID);
-    if(!executionID) executionID = $("[name='execution'").val();
+    if(typeof(executionID) == 'undefined') executionID = window.executionID;
 
     $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
     if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
@@ -186,7 +185,7 @@ function loadModules(executionID)
 window.loadExecutionStories = function()
 {
     const storyID      = $('input[name="story"]').val();
-    const executionID  = $('input[name="execution"]').val();
+    const executionID  = $('input[name="execution"]').length == 0 ? window.executionID : $('input[name="execution"]').val();
     const moduleID     = $('input[name="module"]').val();
     const getStoryLink = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + storyID + '&number=&type=full&status=active');
     $.get(getStoryLink, function(stories)

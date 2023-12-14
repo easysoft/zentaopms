@@ -32,13 +32,13 @@ $hiddenMailto     = strpos(",$showFields,", ',mailto,') !== false ? '' : 'hidden
 jsVar('showFields', $showFields);
 jsVar('toTaskList', !empty($task->id));
 jsVar('blockID', $blockID);
-jsVar('executionID', $execution->id);
 jsVar('taskID', $taskID ?? 0);
 jsVar('ditto', $lang->task->ditto);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('vision', $config->vision);
 jsVar('requiredFields', $config->task->create->requiredFields);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
+jsVar('window.executionID', $execution->id);
 jsVar('window.lifetime', $execution->lifetime);
 jsVar('window.attribute', $execution->attribute);
 jsVar('window.lifetimeList', $lifetimeList);
@@ -105,6 +105,7 @@ if(!empty($execution->hasProduct))
         (
             set::href($this->createLink('execution', 'linkStory', "executionID=$execution->id")),
             setClass('text-primary'),
+            on::click('closeModal'),
             $lang->execution->linkStory
         )
     );
@@ -123,12 +124,7 @@ $storyPreviewBtn = span
     setID('preview'),
     modalTrigger
     (
-        to::trigger(
-            btn(
-                setClass('text-gray'),
-                set::icon('eye')
-            )
-        )
+        to::trigger(btn(setClass('text-gray'), set::icon('eye')))
     )
 );
 
@@ -188,10 +184,7 @@ for($i = 1; $i <= 3; $i ++)
 $selectStoryRow = '';
 if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
 {
-    $selectStoryRow = formRow(
-        setID('testStoryBox'),
-        setClass('hidden')
-    );
+    $selectStoryRow = formRow(setID('testStoryBox'), setClass('hidden'));
 }
 
 $afterCreateRow = '';
