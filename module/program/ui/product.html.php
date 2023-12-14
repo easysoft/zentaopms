@@ -16,7 +16,7 @@ dropmenu();
 featureBar
 (
     set::current($browseType),
-    set::linkParams("programID={$programID}&browseType={key}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
+    set::linkParams("programID={$programID}&browseType={key}&orderBy=$orderBy")
 );
 
 toolbar
