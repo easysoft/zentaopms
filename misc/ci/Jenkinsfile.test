@@ -168,7 +168,7 @@ pipeline {
                     '''
                     archiveArtifacts artifacts: 'dump/*.sql.gz', followSymlinks: false
                   }
-                  ximNotify(title: "单元测试失败", content: "点击下方链接查看执行明细")
+                  ximNotify(title: "单元测试失败", content: "[数据库导出]($JOB_URL$BUILD_ID/artifact/dump/) 点击下方链接查看执行明细")
                 }
                 always {
                   publishHTML([allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
