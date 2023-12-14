@@ -169,7 +169,6 @@ $config->testtask->unitgroup->dtable->fieldList['title']['nestedToggle'] = false
 $config->testtask->unitgroup->dtable->fieldList['title']['fixed']        = false;
 
 $config->testtask->unitgroup->dtable->fieldList['pri']           = $config->testcase->dtable->fieldList['pri'];
-$config->testtask->unitgroup->dtable->fieldList['status']        = $config->testcase->dtable->fieldList['status'];
 $config->testtask->unitgroup->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
 $config->testtask->unitgroup->dtable->fieldList['type']          = $config->testcase->dtable->fieldList['type'];
 $config->testtask->unitgroup->dtable->fieldList['bugs']          = $config->testcase->dtable->fieldList['bugs'];
