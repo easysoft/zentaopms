@@ -631,7 +631,7 @@ class actionModel extends model
         {
             $module      = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
             $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
-            $actionDesc  = str_replace('$extra', zget($moduleNames, $action->objectID), $desc['main']);
+            $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
         return $actionDesc;
     }

@@ -9,4 +9,4 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-history();
+history(set::commentBtn(false));
