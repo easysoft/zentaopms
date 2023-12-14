@@ -231,18 +231,15 @@ class tutorialTest
     }
 
     /**
-     * Get tutorial user pairs.
+     * 测试获取新手模式用户键值对。
+     * Test get tutorial user pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserPairsTest()
+    public function getUserPairsTest(): array
     {
-        $objects = $this->objectModel->getUserPairs();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getUserPairs();
     }
 
     /**
