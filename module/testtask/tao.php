@@ -21,7 +21,7 @@ class testtaskTao extends testtaskModel
      */
     protected function fetchTesttaskList(int $productID, string $branch = '', int $projectID = 0, string $unit = 'no', string $scope = '', string $status = '', string $begin = '', string $end = '', string $orderBy = '', object $pager = null): array
     {
-        $tasks = $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name as executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
+        return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -58,7 +58,5 @@ class testtaskTao extends testtaskModel
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        return $tasks;
     }
 }
