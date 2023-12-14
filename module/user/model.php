@@ -102,6 +102,8 @@ class userModel extends model
 
         foreach($users as $key => $user)
         {
+            if(empty($user->realname)) dao::$errors["realname[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->realname);
+            if(empty($user->visions)) dao::$errors["visions[{$key}][]"][] = sprintf($this->lang->error->notempty, $this->lang->user->visions);
             if($user->email and !validater::checkEmail($user->email)) dao::$errors["email[{$key}]"][] = sprintf($this->lang->error->email, $this->lang->user->email);
             if($user->phone and !validater::checkPhone($user->phone)) dao::$errors["phone[{$key}]"][] = sprintf($this->lang->error->phone, $this->lang->user->phone);
             if($user->mobile and !validater::checkMobile($user->mobile)) dao::$errors["mobile[{$key}]"][] = sprintf($this->lang->error->mobile, $this->lang->user->mobile);
