@@ -249,9 +249,9 @@ form
                     )
                 )
             )
-        )
-    ),
-    $fileModals
+        ),
+        $fileModals
+    )
 );
 
 div
