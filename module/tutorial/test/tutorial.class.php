@@ -114,7 +114,7 @@ class tutorialTest
      *
      * @param  string $browseType
      * @access public
-     * @return void
+     * @return array
      */
     public function getProjectStatsTest(string $browseType = ''): array
     {
@@ -127,7 +127,7 @@ class tutorialTest
      *
      * @param  string $browseType
      * @access public
-     * @return void
+     * @return array
      */
     public function getExecutionStatsTest(string $browseType = ''): array
     {
@@ -139,7 +139,7 @@ class tutorialTest
      * Get tutorial stories.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getStoriesTest(): array
     {
@@ -151,7 +151,7 @@ class tutorialTest
      * Test get tutorial Execution pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getExecutionPairsTest(): array
     {
