@@ -39,21 +39,47 @@ function loadModules(e)
     ajaxLoadModules(productID, branchID);
 }
 
+function changeRoot()
+{
+    var root = $('[name=root]').val();
+    var confirmRoot = type == 'doc' ? confirmRoot4Doc : confirmRoot;
+    if(moduleRoot != root)
+    {
+        zui.Modal.confirm(confirmRoot).then(result =>
+        {
+            if(result)
+            {
+                ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
+            }
+            else
+            {
+                $('[name=root]').zui('picker').$.setValue(moduleRoot);
+            }
+        });
+    }
+    else
+    {
+        ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
+    }
+}
+
 /**
  * Ajax load modules by product and branch.
  *
- * @param  int $productID
- * @param  int $branchID
+ * @param  int    $productID
+ * @param  int    $branchID
+ * @param  string $viewType
+ * @param  int    $currentModuleID
  * @access public
  * @return void
  */
-function ajaxLoadModules(productID, branchID)
+function ajaxLoadModules(productID, branchID, viewType = '', currentModuleID = 0)
 {
-    var link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + type + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=false&extra=excludeModuleID=noMainBranch,nodeleted');
-    $.get(link, function(data)
+    if(!viewType) viewType = type;
+
+    var link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + viewType + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=false&extra=excludeModuleID=' + currentModuleID + ',noMainBranch,nodeleted,excludeRelated');
+    $.getJSON(link, function(data)
     {
-        $('.moduleBox #parent').remove();
-        $('.moduleBox').append("<div class='form-group-wrapper picker-box' id='parent'></div>");
-        new zui.Picker('.moduleBox #parent', JSON.parse(data));
+        $('[name=parent]').zui('picker').render({items: data.items});
     });
 }

@@ -12,6 +12,11 @@ namespace zin;
 /* ====== Preparing and processing page data ====== */
 jsVar('confirmFinish', $lang->task->confirmFinish);
 jsVar('noticeTaskStart', $lang->task->noticeTaskStart);
+jsVar('confirmRoot4Doc', $lang->tree->confirmRoot4Doc);
+jsVar('confirmRoot', $lang->tree->confirmRoot);
+jsVar('moduleID', $module->id);
+jsVar('moduleRoot', $module->root);
+jsVar('moduleParent', $module->parent);
 jsVar('type', $type);
 
 /* zin: Set variables to define control for form. */
@@ -59,7 +64,8 @@ formPanel
             set::name('root'),
             set::value($module->root),
             set::items($libs),
-            set::required(true)
+            set::required(true),
+            on::change('changeRoot')
         )
     ) : null,
     formGroup

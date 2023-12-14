@@ -599,7 +599,16 @@ class tree extends control
             list($excludeModule, $noMainBranch) = explode(',', $extra);
             parse_str($excludeModule, $output);
             $excludeModuleID = $output['excludeModuleID'];
-            if(isset($optionMenu[$excludeModuleID])) unset($optionMenu[$excludeModuleID]);
+
+            if(strpos($extra, 'excludeRelated') !== false)
+            {
+                $childs = $this->tree->getAllChildId($excludeModuleID);
+                foreach($childs as $childModuleID) unset($optionMenu[$childModuleID]);
+            }
+            else
+            {
+                if(isset($optionMenu[$excludeModuleID])) unset($optionMenu[$excludeModuleID]);
+            }
         }
 
         if($returnType == 'items')
