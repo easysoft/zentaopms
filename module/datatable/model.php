@@ -152,7 +152,7 @@ class datatableModel extends model
         $order   = 1;
         foreach($fieldList as $field => $config)
         {
-            if(empty($config['required']) && empty($config['show']) && $onlyshow) continue;
+            if((isset($config['display']) && !$config['display']) || (empty($config['required']) && empty($config['show']) && $onlyshow)) continue;
 
             $config['order']    = $order++;
             $config['id']       = $field;
