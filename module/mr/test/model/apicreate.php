@@ -1,71 +1,56 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 mrModel::apiCreate();
+timeout=0
 cid=0
-pid=0
 
-使用空的RepoUrl数据创建 >> fail
-使用正确的RepoUrl,错误的分支数据创建mr请求 >> fail
-使用源分支和目标分支一样的数据创建mr请求 >> success
-使用正确的数据创建mr请求 >> success
+- 不存在的代码库ID @No matched gitlab.
+- 源分支为空，流水线为空情况
+ - 第sourceBranch条的0属性 @『源分支』不能为空。
+ - 第jobID条的0属性 @『流水线任务』不能为空。
+- 源分支与目标分支相同 @源项目分支与目标项目分支不能相同
+- 流水线为空情况第jobID条的0属性 @『流水线任务』不能为空。
+- 已存在一样的mr请求 @存在重复并且未关闭的合并请求: ID1
+- 正确的数据 @1
 
 */
 
-global $lang;
-$mrModel = $tester->loadModel('mr');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mr.class.php';
 
-$_POST = array(
-    'data' => array()
+zdTable('pipeline')->gen(1);
+zdTable('repo')->config('repo')->gen(1);
+zdTable('mr')->config('mr')->gen(1);
+
+$mrModel = new mrTest();
+
+/* Post params. */
+$params = array(
+    'repoID'       => 0,
+    'sourceBranch' => '',
+    'targetBranch' => 'master',
+    'diffs'        => '',
+    'jobID'        => 0,
+    'mergeStatus'  => 0
 );
 
-$_POST['data']['RepoUrl'] = '';
-$result = $mrModel->apiCreate();
-if(!$result) $result = 'fail';
-r($result) && p() && e('fail'); //使用空的RepoUrl数据创建
+r($mrModel->apiCreateTester($params)) && p('0') && e('No matched gitlab.'); // 不存在的代码库ID
 
-dao::$errors = array();
-$_POST['data']['RepoUrl']        = 'http://192.168.1.161:51080/root/azalea723test.git';
-$_POST['data']['DiffMsg']        = '';
-$_POST['data']['RepoSrcBranch']  = '';
-$_POST['data']['RepoDistBranch'] = '';
-$_POST['data']['MergeStatus']    = '1';
-$result = $mrModel->apiCreate();
-if(!$result) $result = 'fail';
-r($result) && p() && e('fail'); //使用正确的RepoUrl,错误的分支数据创建mr请求
+$params['repoID'] = 1;
+r($mrModel->apiCreateTester($params)) && p('sourceBranch:0;jobID:0') && e('『源分支』不能为空。,『流水线任务』不能为空。'); // 源分支为空，流水线为空情况
 
-dao::$errors = array();
-$_POST['data']['RepoSrcBranch']  = 'master';
-$_POST['data']['RepoDistBranch'] = 'master';
+$params['sourceBranch'] = 'master';
+r($mrModel->apiCreateTester($params)) && p('0') && e('源项目分支与目标项目分支不能相同'); // 源分支与目标分支相同
 
-/* Get same opened MR and close it.*/
-$gitlabID  = 1;
-$projectID = 42;
-$oldMR     = $mrModel->apiGetSameOpened($gitlabID, $projectID, 'master', $projectID, 'master');
-if($oldMR) $mrModel->apiCloseMR(1, 42, $oldMR->iid);
+$params['sourceBranch'] = 'test';
+r($mrModel->apiCreateTester($params)) && p('jobID:0') && e('『流水线任务』不能为空。'); // 流水线为空情况
 
-$result = $mrModel->apiCreate();
-if(!$result and dao::isError())
-{
-    $errors = dao::getError();
-    if($errors[0] == $lang->mr->errorLang[1]) $result = 'success';
-}
-r($result) && p() && e('success'); //使用源分支和目标分支一样的数据创建mr请求
+$params['jobID']        = 1;
+$params['sourceBranch'] = 'test1';
+r($mrModel->apiCreateTester($params)) && p('0') && e('存在重复并且未关闭的合并请求: ID1'); // 已存在一样的mr请求
 
-dao::$errors = array();
-$_POST['data']['RepoSrcBranch']  = 'branch-08';
-$_POST['data']['RepoDistBranch'] = 'master';
-$oldMR = $mrModel->apiGetSameOpened($gitlabID, $projectID, 'branch-08', $projectID, 'master');
-if($oldMR) $mrModel->apiCloseMR(1, 42, $oldMR->iid);
-
-$result = $mrModel->apiCreate();
-if(dao::isError())
-{
-    $errors = dao::getError();
-    $result = preg_match('/[存在另外一个同样的合并请求在源项目分支中,存在重复并且未关闭的合并请求]: ID([0-9]+)/', $errors[0], $matches); //检查错误原因是否是已存在一样的mr请求
-}
-if($result) $result = 'success';
-r($result) && p() && e('success'); //使用正确的数据创建mr请求
+$params['sourceBranch'] = 'test2';
+r($mrModel->apiCreateTester($params)) && p() && e('1'); // 正确的数据
