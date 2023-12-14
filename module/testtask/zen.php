@@ -292,7 +292,7 @@ class testtaskZen extends testtask
         }
 
         $this->setDropMenu($product->id, $testtask);
-        $showModule = $this->config->testtask->cases->showModule;
+        $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=testtask&section=cases&key=showModule");
 
         $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
