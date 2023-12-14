@@ -76,8 +76,8 @@ if($efforts)
                         (
                             setClass('btn ghost toolbar-item square size-sm'),
                             set::href(createLink('task', 'editEffort', "id={$effort->id}")),
+                            set('data-toggle', 'modal'),
                             icon('edit'),
-                            set('data-dismiss', 'modal')
                         ) : null,
                         common::hasPriv('task', 'deleteWorkhour') ? a
                         (
