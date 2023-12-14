@@ -31,3 +31,6 @@ UPDATE `zt_screen` SET `scheme` = '{\"editCanvasConfig\":{\"projectName\":\"2\",
 
 ALTER TABLE `zt_review` MODIFY `doc` varchar(255) DEFAULT '';
 ALTER TABLE `zt_review` MODIFY `docVersion` varchar(255) DEFAULT '';
+
+DELETE FROM `zt_cron` WHERE command='moduleName=measurement&methodName=initCrontabQueue';
+DELETE FROM `zt_cron` WHERE command='moduleName=measurement&methodName=execCrontabQueue';
