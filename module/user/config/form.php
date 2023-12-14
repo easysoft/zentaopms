@@ -10,7 +10,7 @@ $config->user->form->create['dept']             = array('required' => false, 'ty
 $config->user->form->create['account']          = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->create['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->create['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->create['visions']          = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
+$config->user->form->create['visions']          = array('required' => true,  'type' => 'array',  'default' => [], 'filter' => 'join');
 $config->user->form->create['realname']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->create['join']             = array('required' => false, 'type' => 'date',   'default' => null);
 $config->user->form->create['role']             = array('required' => false, 'type' => 'string', 'default' => '');
@@ -30,7 +30,7 @@ $config->user->form->batchCreate['new']        = array('required' => false, 'typ
 $config->user->form->batchCreate['newCompany'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['account']    = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->user->form->batchCreate['realname']   = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->batchCreate['visions']    = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
+$config->user->form->batchCreate['visions']    = array('required' => true,  'type' => 'array',  'default' => [], 'filter' => 'join');
 $config->user->form->batchCreate['role']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['group']      = array('required' => false, 'type' => 'array',  'default' => []);
 $config->user->form->batchCreate['email']      = array('required' => false, 'type' => 'string', 'default' => '');
@@ -58,7 +58,7 @@ $config->user->form->edit['dept']             = array('required' => false, 'type
 $config->user->form->edit['account']          = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->edit['password1']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['password2']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->user->form->edit['visions']          = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
+$config->user->form->edit['visions']          = array('required' => true,  'type' => 'array',  'default' => [], 'filter' => 'join');
 $config->user->form->edit['realname']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->edit['join']             = array('required' => false, 'type' => 'date',   'default' => null);
 $config->user->form->edit['role']             = array('required' => false, 'type' => 'string', 'default' => '');
@@ -85,7 +85,7 @@ $config->user->form->batchEdit['dept']     = array('required' => false, 'type' =
 $config->user->form->batchEdit['company']  = array('required' => false, 'type' => 'int',    'width' => '200px', 'name' => 'company',  'label' => $lang->user->company,  'control' => 'picker',    'default' => 0);
 $config->user->form->batchEdit['account']  = array('required' => true,  'type' => 'string', 'width' => '140px', 'name' => 'account',  'label' => $lang->user->account,  'control' => 'text',      'default' => '', 'readonly' => true, 'base' => true);
 $config->user->form->batchEdit['realname'] = array('required' => true,  'type' => 'string', 'width' => '96px',  'name' => 'realname', 'label' => $lang->user->realname, 'control' => 'text',      'default' => '');
-$config->user->form->batchEdit['visions']  = array('required' => true,  'type' => 'array',  'width' => '240px', 'name' => 'visions',  'label' => $lang->user->visions,  'control' => 'picker',    'default' => $config->vision, 'multiple' => true, 'filter' => 'join');
+$config->user->form->batchEdit['visions']  = array('required' => true,  'type' => 'array',  'width' => '240px', 'name' => 'visions',  'label' => $lang->user->visions,  'control' => 'picker',    'default' => [], 'multiple' => true, 'filter' => 'join');
 $config->user->form->batchEdit['role']     = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'role',     'label' => $lang->user->role,     'control' => 'picker',    'default' => '', 'ditto' => true, 'items' => $lang->user->roleList);
 $config->user->form->batchEdit['email']    = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'email',    'label' => $lang->user->email,    'control' => 'text',      'default' => '');
 $config->user->form->batchEdit['gender']   = array('required' => false, 'type' => 'string', 'width' => '100px', 'name' => 'gender',   'label' => $lang->user->gender,   'control' => array('type' => 'radioList', 'inline' => true), 'default' => 'm', 'items' => $lang->user->genderList);
