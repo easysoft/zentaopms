@@ -238,25 +238,26 @@ class designModel extends model
     }
 
     /**
-     * Get a design by id.
+     * 通过ID获取设计信息。
+     * Get design information by ID.
      *
-     * @param  int    $designID
+     * @param  int        $designID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID($designID = 0)
+    public function getByID(int $designID = 0): object|bool
     {
-        $this->app->loadLang('product');
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
+        $this->app->loadLang('product');
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
 
 
         $design->commit = '';
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
-        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID=$relation->BID&projectID={$design->project}"), "#$relation->BID");
+        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID={$relation->BID}&projectID={$design->project}"), "#{$relation->BID}");
 
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
