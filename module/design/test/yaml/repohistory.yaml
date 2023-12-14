@@ -1,0 +1,13 @@
+title: zt_repohistory
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: repo
+    range: '1'
+  - field: revision
+    range: 1-100
+  - field: comment
+    range: '1-100'
+    prefix: '提交备注'

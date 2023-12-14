@@ -203,4 +203,20 @@ class designTest
         if(dao::isError()) return dao::getError();
         return $designs;
     }
+
+    /**
+     * 通过ID获取设计信息。
+     * Get design information by ID.
+     *
+     * @param  int               $designID
+     * @access public
+     * @return object|bool|array
+     */
+    public function getByIDTest(int $id): object|bool|array
+    {
+        $design = $this->objectModel->getByID($id);
+
+        if(dao::isError()) return dao::getError();
+        return $design;
+    }
 }
