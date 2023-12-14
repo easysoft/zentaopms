@@ -151,6 +151,6 @@ r($result) && p('errors:realname[0]')    && e('~~'); // 姓名无错误提示。
 r($result) && p('errors:visions[0][]')   && e('~~'); // 界面类型无错误提示。
 r($result) && p('errors:password[0]')    && e('~~'); // 密码无错误提示。
 r($result) && p('errors:email[0]')       && e('~~'); // 邮箱无错误提示。
-r($result) && p('errors:phone0')         && e('~~'); // 电话无错误提示。
-r($result) && p('errors:mobile0')        && e('~~'); // 手机无错误提示。
+r($result) && p('errors:phone[0]')       && e('~~'); // 电话无错误提示。
+r($result) && p('errors:mobile[0]')      && e('~~'); // 手机无错误提示。
 r($result) && p('errors:verifyPassword') && e('~~'); // 验证密码无错误提示。
