@@ -25,7 +25,7 @@ panel
         icon('check-circle text-success icon-2x mr-2'),
         span
         (
-            set::className('article-h2 tip-title'),
+            set::className('text-md font-bold tip-title'),
             $lang->execution->afterInfo
         )
     ),

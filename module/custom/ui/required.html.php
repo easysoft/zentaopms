@@ -63,7 +63,7 @@ div
         set::actions($formActions),
         span
         (
-            setClass('article-h2'),
+            setClass('text-md font-bold'),
             $lang->custom->required
         ),
         $requiredRows

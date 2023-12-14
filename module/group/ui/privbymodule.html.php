@@ -14,7 +14,7 @@ jsVar('window.selectedPrivIdList', array());
 to::header(
     span
     (
-        set::className('article-h2'),
+        set::className('text-md font-bold2'),
         $lang->group->managePriv
     ),
     span

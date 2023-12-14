@@ -15,7 +15,7 @@ to::header
    span
    (
        $lang->testcase->automation,
-       setClass('article-h1')
+       setClass('text-lg font-bold')
    ),
    icon
    (

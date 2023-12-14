@@ -17,7 +17,7 @@ formPanel
     set::actionsClass('w-1/3'),
     span
     (
-        setClass('article-h2'),
+        setClass('text-md font-bold'),
         $lang->custom->flow
     ),
     formGroup

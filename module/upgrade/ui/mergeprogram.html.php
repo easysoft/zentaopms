@@ -37,7 +37,7 @@ div
         set::style(array('margin' => '50px auto 0', 'width' => '1200px')),
         div
         (
-            setClass('article-h1 mb-4'),
+            setClass('text-lg font-bold mb-4'),
             $lang->upgrade->mergeModes['manually']
         ),
         form

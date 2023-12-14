@@ -61,7 +61,7 @@ else
                 icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas'),
                 span
                 (
-                    setClass('article-h3 ml-2'),
+                    setClass('font-bold ml-2'),
                     $isToday ? $lang->action->dynamic->today : $date
                 ),
                 on::click('toggleCollapse')

@@ -92,7 +92,7 @@ div
                         setClass('w-1/3'),
                         div
                         (
-                            setClass('article-h1'),
+                            setClass('text-lg font-bold'),
                             $allStoryCount
                         ),
                         $lang->product->totalStories
@@ -102,7 +102,7 @@ div
                         setClass('w-1/3'),
                         div
                         (
-                            setClass('article-h1'),
+                            setClass('text-lg font-bold'),
                             $product->stories['closed']
                         ),
                         $lang->story->statusList['closed']
@@ -112,7 +112,7 @@ div
                         setClass('w-1/3'),
                         div
                         (
-                            setClass('article-h1'),
+                            setClass('text-lg font-bold'),
                             $allStoryCount - $product->stories['closed']
                         ),
                         $lang->story->unclosed
@@ -132,7 +132,7 @@ div
                     ),
                     div
                     (
-                        setClass('article-h2 ml-2 clip'),
+                        setClass('text-md font-bold ml-2 clip'),
                         $product->name
                     ),
                     !$hiddenCode ? label

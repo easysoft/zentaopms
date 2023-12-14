@@ -49,7 +49,7 @@ foreach($docList as $doc)
             ),
             div
             (
-                setClass('article-h3 my-2 mr-2 clip'),
+                setClass('font-bold my-2 mr-2 clip'),
                 img
                 (
                     setClass('inline pr-1'),

@@ -33,7 +33,7 @@ div
         ) : null,
         span
         (
-            setClass('article-h2 mx-2 clip'),
+            setClass('text-md font-bold mx-2 clip'),
             (isset($task->parentName) ? $task->parentName . '/' : '') . $task->name
         ),
         label
@@ -51,7 +51,7 @@ div
             $lang->task->estimate,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 $task->estimate . ' ' . $lang->execution->workHourUnit
             )
         ),
@@ -61,7 +61,7 @@ div
             $lang->task->consumedAB,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 round($task->consumed, 2) . ' ' . $lang->execution->workHourUnit
             )
         ),
@@ -71,7 +71,7 @@ div
             $lang->task->leftAB,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 $task->left . ' ' . $lang->execution->workHourUnit
             )
         ),
@@ -81,7 +81,7 @@ div
             $lang->task->type,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 $lang->task->typeList[$task->type]
             )
         ),
@@ -91,7 +91,7 @@ div
             $lang->task->deadline,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 $task->deadline
             ),
             isset($task->delay) ? label

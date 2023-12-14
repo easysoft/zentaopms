@@ -22,7 +22,7 @@ formPanel
             setClass('justify-center mr-8'),
             span
             (
-                setClass('article-h2'),
+                setClass('text-md font-bold'),
                 $lang->custom->URConcept
             )
         ) : null,
@@ -32,7 +32,7 @@ formPanel
             setClass('justify-center'),
             span
             (
-                setClass('article-h2'),
+                setClass('text-md font-bold'),
                 $lang->custom->SRConcept
             )
         )

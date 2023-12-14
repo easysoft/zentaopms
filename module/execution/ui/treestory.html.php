@@ -51,7 +51,7 @@ div
         ),
         span
         (
-            setClass('article-h2 clip'),
+            setClass('text-md font-bold clip'),
             $story->title
         )
     ),
@@ -62,7 +62,7 @@ div
             $lang->story->stage,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 $lang->story->stageList[$story->stage]
             )
         ),
@@ -72,7 +72,7 @@ div
             $lang->story->estimate,
             span
             (
-                setClass('ml-2 article-h3'),
+                setClass('ml-2 font-bold'),
                 $story->estimate
             )
         )

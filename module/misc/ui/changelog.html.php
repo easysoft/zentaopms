@@ -47,12 +47,12 @@ $idx = count($features) == 1 ? '' : 1;
 $featureItems = array();
 foreach($features as $feature)
 {
-    $featureItems[] = div 
+    $featureItems[] = div
     (
         set('class', 'mb-2'),
-        div 
+        div
         (
-            set('class', 'article-h2 py-2'),
+            set('class', 'text-md font-bold py-2'),
             $idx . ($idx ? '. ' : '') . $feature['title']
         ),
         div

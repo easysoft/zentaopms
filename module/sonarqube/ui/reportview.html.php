@@ -27,7 +27,7 @@ div
     setClass('flex items-center pb-2'),
     a
     (
-        setClass('article-h2'),
+        setClass('text-md font-bold'),
         set('data-close-modal', true),
         $projectName,
         hasPriv('instance', 'manage') ? set::href(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey))) : null

@@ -207,7 +207,7 @@ div
                     setClass('w-1/3'),
                     div
                     (
-                        setClass('article-h1'),
+                        setClass('text-lg font-bold'),
                         $statData->storyCount
                     ),
                     $lang->story->common
@@ -217,7 +217,7 @@ div
                     setClass('w-1/3'),
                     div
                     (
-                        setClass('article-h1'),
+                        setClass('text-lg font-bold'),
                         $statData->taskCount
                     ),
                     $lang->task->common
@@ -227,7 +227,7 @@ div
                     setClass('w-1/3'),
                     div
                     (
-                        setClass('article-h1'),
+                        setClass('text-lg font-bold'),
                         $statData->bugCount
                     ),
                     $lang->bug->common
@@ -247,7 +247,7 @@ div
                 ),
                 div
                 (
-                    setClass('article-h2 ml-2 clip'),
+                    setClass('text-md font-bold ml-2 clip'),
                     set::title($execution->name),
                     $execution->name
                 ),

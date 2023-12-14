@@ -11,6 +11,4 @@
 #dynamicBlock .panel-body {flex: 1 1 auto; overflow-y: auto;}
 #historyBlock {overflow-y: auto;}
 
-#historyBlock .article-h1 {font-size: 14px;}
-
 .member-list > .center-y {width: 12.5%}

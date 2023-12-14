@@ -92,7 +92,7 @@ div
             div
             (
                 setID('terminal'),
-                div(setClass('article-h2 pb-2'), $lang->install->solution->log)
+                div(setClass('text-md font-bold pb-2'), $lang->install->solution->log)
             ),
             div
             (

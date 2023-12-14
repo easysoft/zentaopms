@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-modalHeader(set::title($lang->kanban->createSpace), set::titleClass('article-h1'));
+modalHeader(set::title($lang->kanban->createSpace), set::titleClass('text-lg font-bold'));
 
 unset($this->lang->kanban->featureBar['space']['involved']);
 formPanel

@@ -23,7 +23,7 @@ div
         setClass('flex-auto ml-4'),
         span
         (
-            setClass('article-h2'),
+            setClass('text-md font-bold'),
             $lang->custom->$module->fields['limitTaskDate']
         ),
         formGroup

@@ -26,7 +26,7 @@ div
         ),
         div
         (
-            setClass('article-h2 leading-8 mb-2 text-success'),
+            setClass('text-md font-bold leading-8 mb-2 text-success'),
             $title
         )
     ),
@@ -61,4 +61,3 @@ div
 );
 
 render();
-

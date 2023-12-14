@@ -199,7 +199,7 @@ detailBody
     (
         div
         (
-            setClass('article-h1'),
+            setClass('text-lg font-bold'),
             $lang->zahost->init->statusTitle,
             button
             (

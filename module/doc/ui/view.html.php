@@ -227,7 +227,7 @@ $contentDom = div
     ),
     div
     (
-        setClass('detail-content article-content'),
+        setClass('detail-content article'),
         html($doc->content)
     ),
     div

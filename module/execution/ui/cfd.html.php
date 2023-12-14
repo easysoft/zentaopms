@@ -171,7 +171,7 @@ panel
             set('id', 'cfdHover')
         )
     ),
-    set::titleClass('article-h1 mt-2'),
+    set::titleClass('text-lg font-bold mt-2'),
     $cfdChart
 );
 

@@ -12,7 +12,7 @@ namespace zin;
 jsVar('spaceID', $spaceID);
 jsVar('spaceType', $type);
 
-modalHeader(set::title($lang->kanban->create), set::titleClass('article-h1'));
+modalHeader(set::title($lang->kanban->create), set::titleClass('text-lg font-bold'));
 
 formPanel
 (
@@ -360,7 +360,7 @@ modalTrigger
         (
             span
             (
-                setClass('copy-title article-h1'),
+                setClass('copy-title h1'),
                 $lang->kanban->copyTitle,
             ),
             span

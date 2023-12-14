@@ -45,7 +45,7 @@ div
         set::style(array('margin' => '50px auto 0', 'width' => '800px')),
         div
         (
-            set::className('article-h1 mb-4'),
+            set::className('text-lg font-bold mb-4'),
             $title
         ),
         div

@@ -164,7 +164,7 @@ div
             icon('check-circle text-success icon-2x'),
             p
             (
-                setClass('article-h1 pl-2'),
+                setClass('text-lg font-bold pl-2'),
                 $lang->mail->successSaved
             )
         )
@@ -178,7 +178,7 @@ div
             icon('check-circle text-success icon-2x'),
             p
             (
-                setClass('article-h1 pl-2'),
+                setClass('text-lg font-bold pl-2'),
                 $lang->mail->successSaved
             )
         ),

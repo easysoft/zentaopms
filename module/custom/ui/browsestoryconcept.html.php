@@ -29,7 +29,7 @@ div
             setClass('panel-header flex-auto'),
             div
             (
-                setClass('flex-auto article-h2'),
+                setClass('flex-auto text-md font-bold'),
                 $lang->custom->product->fields['browsestoryconcept']
             ),
             toolbar

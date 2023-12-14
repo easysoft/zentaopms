@@ -32,7 +32,7 @@ div
                 set::style(array('background-color' => 'var(--color-gray-100)')),
                 div
                 (
-                    setClass('article-h3 mb-2'),
+                    setClass('font-bold mb-2'),
                     $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog
                 ),
                 div

@@ -18,7 +18,7 @@ if($objectType == 'story')
         span
         (
             zget($object, 'title', ''),
-            setClass('text-primary article-h1')
+            setClass('text-primary text-lg font-bold entity-title')
         ),
         set::href(createLink('story', 'view', "storyID={$objectID}")),
     );
@@ -45,7 +45,7 @@ elseif($objectType == 'task')
         span
         (
             zget($object, 'name', ''),
-            setClass('text-primary article-h1')
+            setClass('text-primary text-lg font-bold entity-title')
         ),
         set::href(createLink('task', 'view', "taskID={$objectID}")),
     );
@@ -72,7 +72,7 @@ elseif($objectType == 'bug')
         span
         (
             zget($object, 'title', ''),
-            setClass('text-primary article-h1')
+            setClass('text-primary text-lg font-bold entity-title')
         ),
         set::href(createLink('bug', 'view', "bugID={$objectID}")),
     );
@@ -101,4 +101,3 @@ detailBody
 );
 
 render();
-

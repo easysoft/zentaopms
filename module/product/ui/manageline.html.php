@@ -138,7 +138,7 @@ div
     (
         set::width('1/3'),
         set::className('lineTree mr-1'),
-        h2(setClass('article-h2'), $lang->product->line),
+        h2(setClass('text-md font-bold'), $lang->product->line),
         div
         (
             setClass('mt-4 mr-4 pl-5 pt-2 pt-2 pb-2'),

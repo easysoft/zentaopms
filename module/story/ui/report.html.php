@@ -89,7 +89,7 @@ featureBar
     ),
     div
     (
-        setClass('entity-label flex items-center gap-x-2 article-h1'),
+        setClass('entity-label flex items-center gap-x-2 text-lg font-bold'),
         $lang->story->report->common
     )
 );

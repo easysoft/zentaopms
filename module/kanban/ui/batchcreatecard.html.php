@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-modalHeader(set::title($lang->kanban->batchCreateCard), set::titleClass('article-h1'));
+modalHeader(set::title($lang->kanban->batchCreateCard), set::titleClass('text-lg font-bold'));
 
 $items   = array();
 $items[] = array('name' => 'name',       'label' => $lang->kanbancard->name,       'control' => 'input',      'width' => '180px', 'required' => true);

@@ -75,7 +75,7 @@ else
             ),
             div
             (
-                setClass('article-h2 leading-8 mb-2'),
+                setClass('text-md font-bold leading-8 mb-2'),
                 $title
             )
         ),
@@ -124,4 +124,3 @@ else
 }
 
 render();
-

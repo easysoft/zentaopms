@@ -172,11 +172,11 @@ $legendMisc['linkMR']['text']     = $linkMR;
 
 /* Handling special tags in bug descriptions. */
 $tplStep   = strip_tags(trim($lang->bug->tplStep));
-$steps     = str_replace('<p>' . $tplStep, '<p class="article-h4 my-1">' . $tplStep . '</p><p>', $bug->steps);
+$steps     = str_replace('<p>' . $tplStep, '<p class="font-bold my-1">' . $tplStep . '</p><p>', $bug->steps);
 $tplResult = strip_tags(trim($lang->bug->tplResult));
-$steps     = str_replace('<p>' . $tplResult, '<p class="article-h4 my-1">' . $tplResult . '</p><p>', $steps);
+$steps     = str_replace('<p>' . $tplResult, '<p class="font-bold my-1">' . $tplResult . '</p><p>', $steps);
 $tplExpect = strip_tags(trim($lang->bug->tplExpect));
-$steps     = str_replace('<p>' . $tplExpect, '<p class="article-h4 my-1">' . $tplExpect . '</p><p>', $steps);
+$steps     = str_replace('<p>' . $tplExpect, '<p class="font-bold my-1">' . $tplExpect . '</p><p>', $steps);
 $steps     = str_replace('<p></p>', '', $steps);
 
 detailHeader

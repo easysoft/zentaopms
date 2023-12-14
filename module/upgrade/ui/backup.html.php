@@ -23,7 +23,7 @@ div
             set::style(array('margin' => '0 auto', 'width' => '600px')),
             div
             (
-                setClass('article-h1 mb-4'),
+                setClass('text-lg font-bold mb-4'),
                 icon
                 (
                     'exclamation-sign',

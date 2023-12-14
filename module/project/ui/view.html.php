@@ -261,7 +261,7 @@ div
                     setClass('w-1/3 storyCount'),
                     div
                     (
-                        setClass('article-h1'),
+                        setClass('text-md font-bold'),
                         $statData->storyCount
                     ),
                     span
@@ -275,7 +275,7 @@ div
                     setClass('w-1/3 taskCount'),
                     div
                     (
-                        setClass('article-h1'),
+                        setClass('text-md font-bold'),
                         $statData->taskCount
                     ),
                     span
@@ -289,7 +289,7 @@ div
                     setClass('w-1/3 bugCount'),
                     div
                     (
-                        setClass('article-h1'),
+                        setClass('text-md font-bold'),
                         $statData->bugCount
                     ),
                     span
@@ -313,7 +313,7 @@ div
                 ),
                 span
                 (
-                    setClass('article-h2 ml-2 clip'),
+                    setClass('text-md font-bold ml-2 clip'),
                     set::title($project->name),
                     $project->name
                 ),
@@ -678,7 +678,7 @@ div
         (
             div
             (
-                set('class', 'panel-title article-h2'),
+                set('class', 'panel-title text-md font-bold'),
                 $lang->execution->latestDynamic
             )
         ),

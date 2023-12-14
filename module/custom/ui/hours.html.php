@@ -21,7 +21,7 @@ div
         setClass('flex-auto ml-4'),
         span
         (
-            setClass('article-h2'),
+            setClass('text-md font-bold'),
             $type == 'hours' ? $lang->custom->setHours : $lang->custom->setWeekend
         ),
         formGroup

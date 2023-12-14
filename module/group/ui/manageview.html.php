@@ -136,7 +136,7 @@ formPanel
     set::id('manageViewForm'),
     span
     (
-        set::className('article-h2'),
+        set::className('text-md font-bold'),
         icon('lock mr-2'),
         $group->name
     ),
