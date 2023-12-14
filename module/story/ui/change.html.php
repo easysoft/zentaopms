@@ -64,7 +64,7 @@ $formItems['reviewer'] = formGroup
         ) : null,
         formHidden('needNotReview', $forceReview ? 0 : 1)
     ),
-    set::required($fields['reviewer']['required'])
+    set::required(true)
 );
 $formItems['title'] = formGroup
 (
