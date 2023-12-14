@@ -182,9 +182,10 @@ class form extends fixer
                 /* 检查必填字段。Check required fields. */
                 if(isset($config['required']) && $config['required'] && empty($rowData->$field))
                 {
+                    $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
                     $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
-                    if(!isset($this->errors["{$field}[{$rowIndex}]"])) $this->errors["{$field}[{$rowIndex}]"] = array();
-                    $this->errors["{$field}[{$rowIndex}]"] = sprintf($app->lang->error->notempty, $fieldName);
+                    if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
+                    $this->errors[$errorKey][] = sprintf($app->lang->error->notempty, $fieldName);
                 }
             }
 
@@ -235,9 +236,10 @@ class form extends fixer
 
         if(isset($config['required']) && $config['required'] && empty($data))
         {
+            $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
             $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
-            if(!isset($this->errors[$field])) $this->errors[$field] = array();
-            $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
+            if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
+            $this->errors[$errorKey][] = sprintf($app->lang->error->notempty, $fieldName);
         }
 
         $this->data->$field = isset($data) ? $data : null;
