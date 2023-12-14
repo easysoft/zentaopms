@@ -411,10 +411,11 @@ class docZen extends doc
      * @param  string    $linkType product|project|execution|custom
      * @param  object    $lib
      * @param  string    $unclosed
+     * @param  string    $objectID
      * @access protected
      * @return void
      */
-    protected function setObjectsForCreate(string $linkType, object $lib, string $unclosed): void
+    protected function setObjectsForCreate(string $linkType, object $lib, string $unclosed, int $objectID): void
     {
         $objects  = array();
         if($linkType == 'project')
@@ -520,7 +521,7 @@ class docZen extends doc
         if(!$libID && !empty($libs)) $libID = key($libs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->setObjectsForCreate($objectType, $lib, $unclosed);
+        $this->setObjectsForCreate($objectType, $lib, $unclosed, $objectID);
 
         $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->uploadDoc;
         $this->view->linkType         = $objectType;
