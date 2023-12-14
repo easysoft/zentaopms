@@ -188,11 +188,11 @@ class messageModel extends model
     public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
-        if(!empty($object->assignedTo)) $toList = $object->assignedTo;
-        if(empty($toList) && $objectType == 'todo') $toList = $object->account;
+        if(!empty($object->assignedTo))                 $toList = $object->assignedTo;
+        if(empty($toList) && $objectType == 'todo')     $toList = $object->account;
         if(empty($toList) && $objectType == 'testtask') $toList = $object->owner;
-        if(empty($toList) && $objectType == 'meeting') $toList = $object->host . $object->participant;
-        if(empty($toList) && $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) && $objectType == 'meeting')  $toList = $object->host . $object->participant;
+        if(empty($toList) && $objectType == 'mr')       $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) && $objectType == 'release')
         {
             /* Get notifiy persons. */
@@ -205,10 +205,8 @@ class messageModel extends model
         {
             /* Get task team members. */
             $teamMembers = $this->loadModel('task')->getMultiTaskMembers($object->id);
-            $toList      = array_filter($teamMembers, function($account){
-                return $account != $this->app->user->account;
-            });
-            $toList     = implode(',', $toList);
+            $toList      = array_filter($teamMembers, function($account){return $account != $this->app->user->account; });
+            $toList      = implode(',', $toList);
         }
 
         if($toList == 'closed') $toList = '';
