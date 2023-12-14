@@ -282,7 +282,7 @@ class Gitea
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client blame -l $revision -- $path"), 'array');
+        $list = execCmd(escapeCmd("$this->client blame -l -c $revision -- $path"), 'array');
 
         $blames   = array();
         $revLine  = 0;
