@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'header.html.php';
+
 $testcaseTitle = "[" . $lang->testcase->common . "#{case}]";
 $testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersion}");
 

@@ -93,147 +93,6 @@ class my extends control
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
-        //$this->showWorkCount($recTotal, $recPerPage, $pageID);
-    }
-
-    /**
-     * Show to-do work count.
-     *
-     * @param int    $recTotal
-     * @param int    $recPerPage
-     * @param int    $pageID
-     * @access public
-     * @return void
-     */
-    public function showWorkCount($recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $this->loadModel('task');
-        $this->loadModel('story');
-        $this->loadModel('bug');
-        $this->loadModel('testcase');
-        $this->loadModel('testtask');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        /* Get the number of tasks assigned to me. */
-        $tasks     = $this->task->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager);
-        $taskCount = $pager->recTotal;
-
-        /* Get the number of stories assigned to me. */
-        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false, 'all');
-        $assignedToStoryCount = $pager->recTotal;
-        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false, 'all');
-        $reviewByStoryCount   = $pager->recTotal;
-        $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
-
-        $requirementCount = 0;
-        $isOpenedURAndSR  = $this->config->URAndSR ? 1 : 0;
-        if($isOpenedURAndSR)
-        {
-            /* Get the number of requirements assigned to me. */
-            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement', false, 'all');
-            $assignedRequirementCount = $pager->recTotal;
-            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement', false, 'all');
-            $reviewByRequirementCount = $pager->recTotal;
-            $requirementCount         = $assignedRequirementCount + $reviewByRequirementCount;
-        }
-
-        /* Get the number of bugs assigned to me. */
-        $bugs     = $this->bug->getUserBugs($this->app->user->account, 'assignedTo', 'id_desc', 0, $pager);
-        $bugCount = $pager->recTotal;
-
-        /* Get the number of testcases assigned to me. */
-        $cases     = $this->testcase->getByAssignedTo($this->app->user->account, $auto = 'skip', 'id_desc', $pager);
-        $caseCount = $pager->recTotal;
-
-        /* Get the number of testtasks assigned to me. */
-        $testTasks     = $this->testtask->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
-        $testTaskCount = $pager->recTotal;
-
-        $issueCount   = 0;
-        $riskCount    = 0;
-        $ncCount      = 0;
-        $qaCount      = 0;
-        $meetingCount = 0;
-        $ticketCount  = 0;
-        $isMax        = in_array($this->config->edition, array('max', 'ipd')) ? 1 : 0;
-
-        $feedbackCount = 0;
-        $isBiz         = $this->config->edition == 'biz' ? 1 : 0;
-
-        if($this->config->edition != 'open')
-        {
-            $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
-            $feedbackCount = $pager->recTotal;
-
-            $ticketList  = $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
-            $ticketCount = $pager->recTotal;
-        }
-
-        if($isMax)
-        {
-            $this->loadModel('issue');
-            $this->loadModel('risk');
-            $this->loadModel('review');
-            $this->loadModel('meeting');
-
-            /* Get the number of issues assigned to me. */
-            $issues     = $this->issue->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
-            $issueCount = $pager->recTotal;
-
-            /* Get the number of risks assigned to me. */
-            $risks     = $this->risk->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
-            $riskCount = $pager->recTotal;
-
-            /* Get the number of nc assigned to me. */
-            $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
-            $ncCount = $pager->recTotal;
-
-            /* Get the number of nc assigned to me. */
-            $auditplanList  = $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
-            $auditplanCount = $pager->recTotal;
-            $qaCount        = $ncCount + $auditplanCount;
-
-            /* Get the number of meetings assigned to me. */
-            $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
-            $meetingCount = $pager->recTotal;
-        }
-
-        if($this->app->viewType != 'json')
-        {
-echo <<<EOF
-<script>
-var taskCount     = $taskCount;
-var storyCount    = $storyCount;
-var bugCount      = $bugCount;
-var caseCount     = $caseCount;
-var testTaskCount = $testTaskCount;
-
-var isOpenedURAndSR = $isOpenedURAndSR;
-if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
-
-var isMax = $isMax;
-var isBiz = $isBiz;
-
-if(isBiz !== 0 || isMax !== 0)
-{
-    var feedbackCount = $feedbackCount;
-    var ticketCount   = $ticketCount;
-}
-
-if(isMax !== 0)
-{
-    var issueCount   = $issueCount;
-    var riskCount    = $riskCount;
-    var qaCount      = $qaCount;
-    var meetingCount = $meetingCount;
-}
-</script>
-EOF;
-        }
     }
 
     /**
@@ -376,6 +235,8 @@ EOF;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildStorySearchForm($queryID, $actionURL, $currentMethod);
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         /* Assign. */
         $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->stories  = $stories;
@@ -439,6 +300,8 @@ EOF;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildRequirementSearchForm($queryID, $actionURL, $currentMethod);
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         /* Assign. */
         $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->stories  = $stories;
@@ -500,6 +363,8 @@ EOF;
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
         $this->my->buildTaskSearchForm($queryID, $actionURL);
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->tabID      = 'task';
@@ -558,6 +423,8 @@ EOF;
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $this->view->bugs        = $bugs;
@@ -615,6 +482,8 @@ EOF;
             if(empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
         }
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
         $this->view->tasks        = $tasks;
         $this->view->type         = $type;
@@ -669,6 +538,8 @@ EOF;
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTestCaseSearchForm($queryID, $actionURL, $currentMethod);
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
@@ -846,6 +717,8 @@ EOF;
         $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
         $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         $this->view->title       = $this->lang->my->issue;
         $this->view->mode        = 'issue';
         $this->view->users       = $this->user->getPairs('noclosed|noletter');
@@ -900,6 +773,8 @@ EOF;
         {
             $risks = $this->risk->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
         }
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->view->title       = $this->lang->my->risk;
         $this->view->risks       = $risks;
@@ -991,6 +866,8 @@ EOF;
 
         $auditplans = $this->loadModel('auditplan')->getList(0, $browseType, $param, $orderBy, $pager);
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         $this->app->loadLang('process');
         $this->view->executions      = $this->loadModel('execution')->getPairs();
         $this->view->projects        = $this->loadModel('project')->getPairs();
@@ -1041,6 +918,8 @@ EOF;
         foreach($ncList as $nc) $ncIdList[] = $nc->id;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
         $this->view->browseType = $browseType;
         $this->view->ncs        = $ncList;
@@ -1079,6 +958,8 @@ EOF;
         $queryID   = $browseType == 'bysearch' ? $param : 0;
         $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
         $this->loadModel('meeting')->buildSearchForm($queryID, $actionURL);
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
@@ -1121,6 +1002,7 @@ EOF;
 
         $this->myZen->assignRelatedData($feedbacks);
         $this->myZen->buildSearchFormForFeedback($queryID, $orderBy);
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->loadModel('datatable');
         $this->lang->datatable->moduleSetting  = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->moduleSetting);
@@ -1174,6 +1056,8 @@ EOF;
 
         $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTicketSearchForm($queryID, $actionURL);
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->ticket->browse;
         $this->view->products   = $this->loadModel('feedback')->getGrantProducts();

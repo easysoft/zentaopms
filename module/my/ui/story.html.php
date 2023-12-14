@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include 'header.html.php';
+
 jsVar('children',   $lang->story->children);
 jsVar('childrenAB', $lang->story->childrenAB);
 

@@ -138,5 +138,117 @@ class myZen extends my
 
         $this->loadModel('search')->setSearchParams($this->config->feedback->search);
     }
+
+    /**
+     * 展示待处理的数量。
+     * Show to-do work count.
+     *
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    protected function showWorkCount(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $count = array('task' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'issue' => 0, 'risk' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
+
+        /* Get the number of tasks assigned to me. */
+        $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager);
+        $count['task'] = $pager->recTotal;
+
+        /* Get the number of stories assigned to me. */
+        $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false, 'all');
+        $assignedToStoryCount = $pager->recTotal;
+        $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false, 'all');
+        $reviewByStoryCount = $pager->recTotal;
+        $count['story']     = $assignedToStoryCount + $reviewByStoryCount;
+
+        $isOpenedURAndSR  = $this->config->URAndSR ? 1 : 0;
+        if($isOpenedURAndSR)
+        {
+            /* Get the number of requirements assigned to me. */
+            $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement', false, 'all');
+            $assignedRequirementCount = $pager->recTotal;
+            $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement', false, 'all');
+            $reviewByRequirementCount = $pager->recTotal;
+            $count['requirement']     = $assignedRequirementCount + $reviewByRequirementCount;
+        }
+
+        /* Get the number of bugs assigned to me. */
+        $this->loadModel('bug')->getUserBugs($this->app->user->account, 'assignedTo', 'id_desc', 0, $pager);
+        $count['bug'] = $pager->recTotal;
+
+        /* Get the number of testcases assigned to me. */
+        $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip', 'id_desc', $pager);
+        $count['case'] = $pager->recTotal;
+
+        /* Get the number of testtasks assigned to me. */
+        $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
+        $count['testtask'] = $pager->recTotal;
+
+        $count = $this->showWorkCountNotInOpen($count, $pager);
+
+        $this->view->todoCount       = $count;
+        $this->view->isOpenedURAndSR = $isOpenedURAndSR;
+    }
+
+    /**
+     * 展示非开源版的待处理的数量。
+     * Show to-do work count that not in open edition.
+     *
+     * @param  array  $count
+     * @param  object $pager
+     * @access public
+     array @return void
+     */
+    protected function showWorkCountNotInOpen(array $count, object $pager): array
+    {
+        $isMax = in_array($this->config->edition, array('max', 'ipd')) ? 1 : 0;
+        $isBiz = $this->config->edition == 'biz' ? 1 : 0;
+
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
+            $count['feedback'] = $pager->recTotal;
+
+            $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
+            $count['ticket'] = $pager->recTotal;
+        }
+
+        if($isMax)
+        {
+            /* Get the number of issues assigned to me. */
+            $this->loadModel('issue')->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
+            $count['issue'] = $pager->recTotal;
+
+            /* Get the number of risks assigned to me. */
+            $this->loadModel('risk')->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
+            $count['risk'] = $pager->recTotal;
+
+            /* Get the number of nc assigned to me. */
+            $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
+            $ncCount = $pager->recTotal;
+
+            /* Get the number of nc assigned to me. */
+            $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
+            $auditplanCount = $pager->recTotal;
+            $count['qa']    = $ncCount + $auditplanCount;
+
+            /* Get the number of meetings assigned to me. */
+            $this->loadModel('meeting')->getListByUser('futureMeeting', 'id_desc', 0, $pager);
+            $count['meeting'] = $pager->recTotal;
+        }
+
+        $this->view->isMax = $isMax;
+        $this->view->isBiz = $isBiz;
+
+        return $count;
+    }
 }
 

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'header.html.php';
+
 featureBar
 (
     set::current($type),

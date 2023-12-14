@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include 'header.html.php';
+
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('childrenAB', $lang->task->childrenAB);
