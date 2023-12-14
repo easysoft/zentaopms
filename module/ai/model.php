@@ -318,13 +318,13 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function getLatestMiniPrograms($pager = null, $order = 'createdDate_desc')
+    public function getLatestMiniPrograms($pager = null, $order = 'publishedDate_desc')
     {
         return $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
-            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-3 months')))
+            ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->orderBy($order)
             ->page($pager)
             ->fetchAll();
@@ -336,7 +336,7 @@ class aiModel extends model
             ->from(TABLE_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
-            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-3 months')))
+            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->fetch('count');
     }
 
