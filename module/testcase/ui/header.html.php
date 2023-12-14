@@ -24,6 +24,7 @@ $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
 $moduleID      = isset($moduleID) ? (int)$moduleID : 0;
 $rawMethod     = $app->rawMethod;
 $load          = $rawMethod !== 'browse' ? null : 'table';
+$product       = is_bool($product) ? new stdclass() : $product;
 
 $canModify           = common::canModify('product', $product);
 $canSwitchCaseType   = $this->app->tab == 'qa';
