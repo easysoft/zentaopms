@@ -2007,14 +2007,14 @@ class docModel extends model
      * 设置文档的导航。
      * Set doc menu by type.
      *
-     * @param  string $type     mine|project|execution|product|custom
-     * @param  int    $objectID
-     * @param  int    $libID
-     * @param  int    $appendLib
+     * @param  string       $type     mine|project|execution|product|custom
+     * @param  int          $objectID
+     * @param  int          $libID
+     * @param  int          $appendLib
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function setMenuByType(string $type, int $objectID, int $libID, int $appendLib = 0): array
+    public function setMenuByType(string $type, int $objectID, int $libID, int $appendLib = 0): array|string
     {
         if(empty($type))
         {
