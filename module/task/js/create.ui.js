@@ -508,3 +508,12 @@ window.showAllModule = function()
         }
     });
 }
+
+window.closeModal = function(e)
+{
+    const $modal = $(e.target).closest('.modal');
+    if($modal.length == 0) return;
+
+    const modalID = $modal.attr('id');
+    zui.Modal.hide('#' + modalID);
+}

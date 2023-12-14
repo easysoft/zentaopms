@@ -256,7 +256,7 @@ formPanel
     ),
     formRow
     (
-        $executionBox,
+        $executionBox ? $executionBox : formHidden('execution', $execution->id),
         formGroup
         (
             set::width('1/2'),
