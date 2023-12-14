@@ -4874,6 +4874,9 @@ class storyModel extends model
                 /* Adjust code, hide split entry. */
                 if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
                 {
+                    static $taskGroups = array();
+                    if(empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
+
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
                     if(!$isClick and $story->status != 'closed')
@@ -4886,6 +4889,7 @@ class storyModel extends model
                         {
                             if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                             if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                            if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                         }
                     }
 
