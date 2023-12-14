@@ -12,7 +12,7 @@ class sectionCard extends wg
     {
         return div
         (
-            setClass('article-h4', 'mb-1'),
+            setClass('h4', 'mb-1'),
             "[$text]"
         );
     }

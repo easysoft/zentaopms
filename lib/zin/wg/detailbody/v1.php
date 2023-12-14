@@ -41,7 +41,7 @@ class detailBody extends wg
                 set($this->getRestProps()),
                 div
                 (
-                    setClass('col gap-1 grow'),
+                    setClass('col gap-1 grow min-w-0'),
                     $main,
                     $bottom,
                     empty($floating) ? null : center(setClass('pt-6'), $floating)
@@ -65,7 +65,7 @@ class detailBody extends wg
                     setStyle('min-height', '100%'),
                     div
                     (
-                        setClass('col grow'),
+                        setClass('col grow min-w-0'),
                         $main,
                         $bottom
                     ),

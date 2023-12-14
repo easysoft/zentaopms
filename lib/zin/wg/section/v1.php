@@ -35,7 +35,7 @@ class section extends wg
         {
             return div
             (
-                setClass('article-h1', 'mb-2', 'inline-flex'),
+                setClass('font-bold text-md', 'mb-2', 'inline-flex'),
                 $required ? h::label
                 (
                     setClass('form-label required mr-1'),
@@ -49,7 +49,7 @@ class section extends wg
             setClass('flex', 'items-center', 'mb-2'),
             div
             (
-                setClass('article-h1', 'inline-flex'),
+                setClass('font-bold text-md', 'inline-flex'),
                 $required ? h::label
                 (
                     setClass('form-label required mr-1'),
@@ -66,7 +66,7 @@ class section extends wg
 
         return div
         (
-            setClass('article-content'),
+            setClass('article'),
             $useHtml ? html($content) : $content
         );
 

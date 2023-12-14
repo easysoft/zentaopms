@@ -1,4 +1,4 @@
 .table-data {table-layout: fixed;}
 .table-data th,
-.table-data .table-data-th {width: 65px; color: var(--color-gray-600);}
+.table-data .table-data-th {width: 65px; color: var(--color-gray-600); border: none}
 .table-data th.required:before {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: relative; top: 0.25rem; right: 0.25rem;}
