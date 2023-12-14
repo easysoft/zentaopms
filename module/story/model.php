@@ -4585,9 +4585,14 @@ class storyModel extends model
 
         if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
 
-        if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        /* Adjust code, hide split entry. */
-        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product]) && !empty($taskGroups[$story->id])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+        if($action == 'batchcreate')
+        {
+            if($config->vision == 'lite' and ($story->status == 'active' and in_array($story->stage, array('wait', 'projected')))) return true;
+
+            if($story->status != 'active' or !empty($story->plan)) return false;
+            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) or $story->stage != 'projected')) return false;
+            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait') return false;
+        }
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
