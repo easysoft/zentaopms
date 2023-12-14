@@ -556,7 +556,6 @@ class testtask extends control
         {
             $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
-        $showModule = $this->config->datatable->testtaskCases->showModule;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy, 't2.id');
@@ -589,6 +588,8 @@ class testtask extends control
 
         $case2RunMap = array();
         foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
+
+        $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=datatable&section=testtaskCases&key=showModule");
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
