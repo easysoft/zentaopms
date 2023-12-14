@@ -4,18 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
 su('admin');
 
-function initData()
-{
-    $casedata = zdTable('case');
-    $casedata->id->range('1-10');
-    $casedata->product->range('1');
-    $casedata->branch->range('1-2');
-    $casedata->linkCase->range('3');
-
-    $casedata->gen(10);
-}
-
-initData();
+zdTable('case')->gen('100');
 
 /**
 
