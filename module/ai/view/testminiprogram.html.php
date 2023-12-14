@@ -1,7 +1,10 @@
 <?php include '../../common/view/header.html.php'; ?>
 
-<?php js::set('currentField', $currentFields); ?>
-<?php js::set('currentPrompt', $currentPrompt); ?>
+<?php
+js::set('currentField', $currentFields);
+js::set('currentPrompt', $currentPrompt);
+js::set('appID', $appID);
+?>
 <form action="<?= $this->createLink('ai', 'testMiniProgram', "appID=$appID"); ?>" method="post" style="width: 100%; height: 100%; display: flex; flex-direction: column; padding: 24px 32px 32px 32px; background: #fff; overflow: hidden;">
   <strong style="font-size: 16px; padding-bottom: 16px;"><?= $lang->ai->prompts->action->test; ?></strong>
   <div id="test-miniprogram">
@@ -13,7 +16,7 @@
         <div style="flex-grow: 1; overflow-y: auto; width: 100%; padding-right: 10px;">
           <table class="table table-form">
             <tbody class="field-content">
-              <?php foreach ($currentFields as $key => $field) : ?>
+              <?php foreach($currentFields as $key => $field): ?>
                 <tr data-id="<?= "field-$key"; ?>">
                   <th title="<?= $field->name; ?>">
                     <span class="field-name"><?= $field->name; ?></span>
@@ -26,13 +29,13 @@
                     $fieldOptions = array_combine($fieldOptions, $fieldOptions);
                   }; ?>
                   <td data-type="<?= $field->type; ?>" <?= empty($field->required) ? '' : 'class="required"'; ?>>
-                    <?php if ($field->type === 'text') : ?>
+                    <?php if($field->type === 'text') : ?>
                       <input type="text" class="form-control field-type" placeholder="<?= $field->placeholder; ?>">
-                    <?php elseif ($field->type === 'textarea') : ?>
+                    <?php elseif($field->type === 'textarea') : ?>
                       <textarea class="form-control field-type" placeholder="<?= $field->placeholder; ?>"></textarea>
-                    <?php elseif ($field->type === 'radio') : ?>
+                    <?php elseif($field->type === 'radio') : ?>
                       <?= html::select('', $fieldOptions, '', 'class="form-control picker-select field-type"'); ?>
-                    <?php else : ?>
+                    <?php else: ?>
                       <?= html::select('', $fieldOptions, '', 'class="form-control picker-select field-type" multiple'); ?>
                     <?php endif; ?>
                   </td>
@@ -57,7 +60,7 @@
       <div class="prompt-preview-area" style="height: 50%; position: relative;">
         <div class="area-title" style="display: flex; justify-content: space-between;">
           <strong style="font-size: 14px;"><?php echo $lang->ai->miniPrograms->field->prompterPreview; ?></strong>
-          <button class="btn btn-link" style="color: #2E7FFF; position: absolute; right: 16px; top: 10px;">
+          <button id="generate-result" class="btn btn-link" style="color: #2E7FFF; position: absolute; right: 16px; top: 10px;">
             <i class="icon-publish text-primary"></i>
             <?php echo $lang->ai->miniPrograms->field->generateResult; ?>
           </button>

@@ -198,7 +198,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
       <div class="prompt-preview-area" style="height: 50%; position: relative;">
         <div class="area-title" style="display: flex; justify-content: space-between;">
           <strong><?= $lang->ai->miniPrograms->field->prompterPreview; ?></strong>
-          <button class="btn btn-link" style="color: #2E7FFF; position: absolute; right: 16px;">
+          <button class="btn btn-link" style="color: #2E7FFF; position: absolute; right: 16px;" id="generate-result">
             <i class="icon-publish text-primary"></i>
             <?= $lang->ai->miniPrograms->field->generateResult; ?>
           </button>

@@ -154,7 +154,7 @@ class ai extends control
         $messages = array();
         if(!empty($_POST))
         {
-            if($miniProgram->published === '0') return $this->send(array('result' => 'fail', 'reason' => 'unpublished'));
+            if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'reason' => 'unpublished'));
 
             $history = $this->post->history;
             $message = $this->post->message;

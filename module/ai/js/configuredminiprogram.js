@@ -671,5 +671,34 @@ $(function ()
     $('#autocomplete-textarea').html(currentPrompt);
     updatePromptPreview();
     updateButtonStatus();
+
+    $('#generate-result').on('click', function()
+    {
+        const message = $('.prompt-preview-area .preview-container').text();
+        if(!message) return;
+
+        $('#generate-result').attr('disabled', 'disabled');
+        $.post(
+            createLink('ai', 'miniProgramChat', `id=${appID}`),
+            {
+                message,
+                test: '1'
+            },
+        ).done(function(response)
+        {
+            $('#generate-result').removeAttr('disabled');
+            response = JSON.parse(response);
+            const {message, result} = response;
+            if(result === 'success')
+            {
+                const {content} = message;
+                $('.prompt-result-area .preview-container').html(content);
+                return;
+            }
+
+            const {reason} = response;
+            $('.preview-container').html(reason);
+        });
+    });
 });
 
