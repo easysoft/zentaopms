@@ -449,34 +449,4 @@ class designModel extends model
 
         return $output;
     }
-
-    /**
-     * Print assignedTo html.
-     *
-     * @param  object $design
-     * @param  array  $users
-     * @access public
-     * @return string
-     */
-    public function printAssignedHtml($design = '', $users = '')
-    {
-        $btnTextClass   = '';
-        $btnClass       = '';
-        $assignedToText = zget($users, $design->assignedTo);
-
-        if(empty($design->assignedTo))
-        {
-            $btnClass       = $btnTextClass = 'assigned-none';
-            $assignedToText = $this->lang->design->noAssigned;
-        }
-        if($design->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
-        if(!empty($design->assignedTo) and $design->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
-
-        $btnClass    .= $design->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
-        $assignToLink = helper::createLink('design', 'assignTo', "designID=$design->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $design->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
-
-        echo !common::hasPriv('design', 'assignTo', $design) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
-    }
 }
