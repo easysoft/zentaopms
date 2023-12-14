@@ -135,18 +135,15 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式需求键值对。
      * Get tutorial stories.
      *
      * @access public
      * @return void
      */
-    public function getStoriesTest()
+    public function getStoriesTest(): array
     {
-        $objects = $this->objectModel->getStories();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getStories();
     }
 
     /**
