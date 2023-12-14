@@ -932,6 +932,42 @@ class apiModel extends model
     }
 
     /**
+     * 初始化搜索表单。
+     * Build search form.
+     *
+     * @param  object    $lib
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @param  array     $libs
+     * @param  string    $type      product|project
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm(object $lib, int $queryID, string $actionURL, array $libs = array(), string $type = '')
+    {
+        if(empty($lib)) return;
+
+        $libPairs = array('' => '', $lib->id => $lib->name);
+        $this->config->api->search['module'] = 'api';
+        if(!empty($libs))
+        {
+            foreach($libs as $lib)
+            {
+                if(empty($lib)) continue;
+                if($lib->type != 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+            $this->config->api->search['module'] = !empty($type) ? $type . 'apiDoc' : 'api';
+        }
+
+        $this->config->api->search['queryID']                 = $queryID;
+        $this->config->api->search['actionURL']               = $actionURL;
+        $this->config->api->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->api->allLibs);
+
+        $this->loadModel('search')->setSearchParams($this->config->api->search);
+    }
+
+    /**
      * 获取创建接口版本时所需的数据。
      * Get spec of api.
      *
