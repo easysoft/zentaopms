@@ -263,7 +263,7 @@ class testcase extends control
         /* 设置产品id和分支。 */
         /* Set productID and branch. */
         $productID = $this->product->checkAccess($productID, $this->products);
-        if($branch === '') $branch = $this->cookie->preBranch;
+        if($branch === '') $branch = $this->cookie->preBranch ? : '';
 
         $moduleID = $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
 
