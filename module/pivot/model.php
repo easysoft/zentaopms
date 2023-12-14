@@ -37,12 +37,29 @@ class pivotModel extends model
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
 
+        $pivot->fieldSettings = array();
+        if(!empty($pivot->fields) && $pivot->fields != 'null')
+        {
+            $pivot->fieldSettings = json_decode($pivot->fields);
+            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
+        }
+
+        if(!empty($pivot->filters))
+        {
+            $filters = json_decode($pivot->filters, true);
+            $pivot->filters = $this->setFilterDefault($filters);;
+        }
+        else
+        {
+            $pivot->filters = array();
+        }
+
         return $this->processPivot($pivot);
     }
 
     /**
-     * 构建sql的时间查询。
-     * Build sql date query.
+     * 时间占位符替换为实际的时间。
+     * Replace time placeholder with actual time.
      *
      * @param  string $var
      * @param  string $type
@@ -98,23 +115,6 @@ class pivotModel extends model
     {
         if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
-
-        $pivot->fieldSettings = array();
-        if(!empty($pivot->fields) && $pivot->fields != 'null')
-        {
-            $pivot->fieldSettings = json_decode($pivot->fields);
-            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
-        }
-
-        if(!empty($pivot->filters))
-        {
-            $filters = json_decode($pivot->filters, true);
-            $pivot->filters = $this->setFilterDefault($filters);;
-        }
-        else
-        {
-            $pivot->filters = array();
-        }
 
         if(empty($pivot->type))
         {

@@ -12,7 +12,8 @@
 class screenModel extends model
 {
     /**
-     * Filters
+     * 全局过滤器。
+     * Global filter.
      *
      * @var object
      * @access public
@@ -41,8 +42,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取大屏列表。
-     * Get screen list.
+     * 通过维度id获取大屏列表。
+     * Get screen list by dimension id.
      *
      * @param  int    $dimensionID
      * @access public
@@ -135,7 +136,7 @@ class screenModel extends model
         $chartData = new stdclass();
         $chartData->editCanvasConfig    = $config;
         $chartData->componentList       = $this->buildComponentList($componentList);
-        $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+        $chartData->requestGlobalConfig = json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
 
         return $chartData;
     }
@@ -157,8 +158,8 @@ class screenModel extends model
             foreach($list as $groupComponent) isset($groupComponent->key) && $groupComponent->key === 'Select' && $this->buildSelect($groupComponent);
         }
 
-        /* 过滤图表和构建图表。 */
-        /* Filter chart. */
+        /* 过滤为空的组件，并且为组件生成图表数据。 */
+        /* Filter component list is empty and generate chartData of component. */
         $list = array();
         array_map(function($component)use(&$list){
             !empty($component->isGroup) ? array_merge($list, $component->groupList) : array_push($list, $component);
@@ -169,8 +170,8 @@ class screenModel extends model
     }
 
     /**
-     * 获取最新的图表。
-     * Get the latest chart.
+     * 为组件生成图表数据。
+     * Generate chartData of component.
      *
      * @param  object $component
      * @access public
@@ -199,10 +200,11 @@ class screenModel extends model
      * @param  string $type
      * @param  object $component
      * @param  array  $filters
+     * @param  bool   $unit
      * @access public
      * @return void
      */
-    public function genComponentData(object $chart, object $component, string $type = 'chart', array $filters = array(), $unit = false): void
+    public function genComponentData(object $chart, object $component, string $type = 'chart', array $filters = array(), bool $unit = false): void
     {
         if(!$unit) $chart = clone($chart);
         if($type == 'pivot' && $chart)
@@ -237,8 +239,8 @@ class screenModel extends model
      */
     public function completeComponent(object $chart, string $type, array $filters, object $component): void
     {
-        /* 处理图表为空，图表stage值为draft和图表被删除的情况。 */
-        /* Process chart is empty, stage is draft or deleted. */
+        /* 处理图表为空，图表stage值为draft和图表被删除的情况，都给默认值。 */
+        /* Process chart is empty, chart stage is draft and chart is deleted, all give default value. */
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
             $this->completeComponentShowInfo($chart, $component, $type);
@@ -248,7 +250,6 @@ class screenModel extends model
         /* 根据图表类型获取图表配置。 */
         /* Get chart option by chart type. */
         $this->getChartOption($chart, $component, $filters);
-
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
         $component->chartConfig->filters  = $this->getChartFilters($chart);
@@ -271,8 +272,6 @@ class screenModel extends model
                 }
                 else
                 {
-                    /* 填充长度。 */
-                    /* Fill length. */
                     $component->option->series = array_pad([], count($component->option->dataset->dimensions), $defaultSeries[0]);
                 }
             }
@@ -408,14 +407,14 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            /* 获取图表配置。 */
-            /* Get chart settings. */
+            /* 获取图表字段配置和语言项。 */
+            /* Get chart fields and langs. */
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
-            /* 获取图表需要展示的内容。 */
-            /* Get chart data. */
+            /* 获取图表的相关配置和原始数据。 */
+            /* Get chart related settings and raw data. */
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
             $fields       = json_decode($chart->fields);
             $dimensions   = array($settings['xaxis'][0]['field']);
@@ -423,8 +422,6 @@ class screenModel extends model
             $clientLang   = $this->app->getClientLang();
             $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
-            /* 处理数据。 */
-            /* Process data. */
             foreach($yStats as $index => $dataList)
             {
                 $fieldConfig = zget($fields, $metrics[$index]);
@@ -466,14 +463,14 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            /* 获取图表配置。 */
-            /* Get chart settings. */
+            /* 获去字段配置和语言项。 */
+            /* Get chart fields and langs. */
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
-            /* 获取图表需要展示的内容。 */
-            /* Get chart data. */
+            /* 获取图表的相关配置和原始数据。 */
+            /* Get chart related settings and raw data. */
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
             $fields       = json_decode($chart->fields);
             $dimensions   = array($settings['xaxis'][0]['field']);
@@ -481,8 +478,6 @@ class screenModel extends model
             $clientLang   = $this->app->getClientLang();
             $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
-            /* 处理数据。 */
-            /* Process data. */
             foreach($yStats as $index => $dataList)
             {
                 $fieldConfig = zget($fields, $metrics[$index]);
@@ -535,19 +530,17 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            /* 获取图表配置。 */
+            /* 获取字段配置。 */
             /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
             $settings = current($settings);
 
-            /* 获取图表需要展示的内容。 */
-            /* Get chart data. */
+            /* 获取图表的相关配置和原始数据。 */
+            /* Get chart related settings and raw data. */
             $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters);
             $groupField = $settings['group'][0]['field'];
             $metricField = $settings['metric'][0]['field'];
 
-            /* 处理数据。 */
-            /* Process data. */
             if($groupField == $metricField) $groupField .= '1';
             $dimensions = array($groupField, $metricField);
             $sourceData = array();
@@ -590,16 +583,14 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            /* 获取图表配置。 */
-            /* Get chart settings. */
+            /* 获取字段配置和语言项。 */
+            /* Get chart fields and langs. */
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            /* 获取需要展示的内容。 */
-            /* Get chart data. */
             $fields         = json_decode($chart->fields);
             $radarIndicator = array();
             $seriesData     = array();
@@ -607,8 +598,6 @@ class screenModel extends model
             $clientLang     = $this->app->getClientLang();
             $xLabelValues   = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
-            /* 处理数据。 */
-            /* Process data. */
             foreach($yStats as $index => $dataList)
             {
                 $fieldConfig = zget($fields, $metrics[$index]);
@@ -623,6 +612,8 @@ class screenModel extends model
                 $seriesData[$index]->value = $values;
             }
 
+            /* 如果最后一列不为空，则添加一个指标列。 */
+            /* If the last column is not empty, add an indicator column. */
             if(!empty($dataList))
             {
                 foreach(array_keys($dataList) as $valueField)
@@ -657,15 +648,15 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            /* 获取图表配置。 */
-            /* Get chart settings. */
+            /* 获取表格字段配置以及单元格合并配置。 */
+            /* Get table fields and merge cells config. */
             $settings = json_decode($chart->settings, true);
+            $langs    = json_decode($chart->langs,    true) ? : array();
             $fields   = json_decode($chart->fields,   true);
-            $langs    = json_decode($chart->langs,    true);
             list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
 
-            /* 处理数据。 */
-            /* Process data. */
+            /* 处理合计行。 */
+            /* Process total row. */
             $colspan = array();
             if($options->columnTotal && $options->columnTotal == 'sum' && !empty($options->array))
             {
@@ -687,8 +678,8 @@ class screenModel extends model
 
             $dataset = array_map(function($data){return array_values($data);}, $options->array);
 
-            /* 处理合并单元格。 */
-            /* Process merge cells. */
+            /* 处理单元格合并数据。 */
+            /* Process merge cells data. */
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
@@ -1103,6 +1094,7 @@ class screenModel extends model
      */
     public function setFilterSQL(object $chart): string
     {
+        $sql = $chart->sql;
         if(isset($this->filter->charts[$chart->id]))
         {
             $conditions = array();
@@ -1135,10 +1127,12 @@ class screenModel extends model
                 }
             }
 
-            if($conditions) return 'SELECT * FROM (' . str_replace(';', '', $chart->sql) . ') AS t1 WHERE ' . implode(' AND ', $conditions);
+            if($conditions) $sql = 'SELECT * FROM (' . str_replace(';', '', $chart->sql) . ') AS t1 WHERE ' . implode(' AND ', $conditions);
         }
 
-        return $chart->sql;
+        /* 兼容新版本开启了严格模式的数据库，处理可能会报错的sql。 */
+        /* Compatible with databases that have strict mode enabled in new versions, and process sql that may cause errors. */
+        return str_replace('0000-00-00', '1970-01-01', $sql);
     }
 
     /**
