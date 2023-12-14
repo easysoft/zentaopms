@@ -93,7 +93,8 @@ class history extends wg
                 set::commentBtn($canComment ? $commentBtn : false),
                 set($this->getRestProps())
             ),
-            h::css('.history-panel-action blockquote.original {display:none}')
+            h::css('.history-panel-action blockquote.original {display:none}'),
+            h::css('.history-panel-action blockquote {padding: 5px 5px 5px 10px; margin: 5px 0 0; background: var(--color-surface)}'),
         );
     }
 }
