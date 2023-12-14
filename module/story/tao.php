@@ -338,7 +338,7 @@ class storyTao extends storyModel
         /* Get plans. */
         if(empty($productID)) $productID = '0';
         if(is_int($productID))$productID = (string)$productID;
-        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
+        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->beginIF($productID)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
         $parents = $this->extractParents($stories);
         if($parents)
