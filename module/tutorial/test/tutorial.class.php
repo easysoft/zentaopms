@@ -159,18 +159,15 @@ class tutorialTest
     }
 
     /**
-     * Get tutorial execution.
+     * 测试获取新手模式的执行。
+     * Test get tutorial execution.
      *
      * @access public
-     * @return void
+     * @return object
      */
-    public function getExecutionTest()
+    public function getExecutionTest(): object
     {
-        $objects = $this->objectModel->getExecution();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getExecution();
     }
 
     /**
