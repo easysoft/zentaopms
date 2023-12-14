@@ -107,6 +107,7 @@ class screen extends control
     }
 
     /**
+     * 通过ajax获取图表数据。
      * Ajax get chart.
      *
      * @access public
