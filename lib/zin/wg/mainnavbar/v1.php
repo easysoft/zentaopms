@@ -55,8 +55,9 @@ class mainNavbar extends nav
 
         \commonModel::setMainMenu();
         $activeMenu = \commonModel::getActiveMainMenu();
-        $items = \customModel::getModuleMenu($activeMenu);
+        if(empty($activeMenu)) return false;
 
+        $items = \customModel::getModuleMenu($activeMenu);
         if($items)
         {
             $items = json_decode(json_encode($items), true);

@@ -123,7 +123,7 @@ class build extends control
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($build->project);
         if($this->app->tab == 'execution')
         {
-            $this->execution->setMenu($build->execution);
+            $this->execution->setMenu((int)$build->execution);
             $this->view->executionID = $build->execution;
         }
 
@@ -181,7 +181,7 @@ class build extends control
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link          = $link;
         $this->view->orderBy       = $orderBy;
-        $this->view->execution     = $this->loadModel('execution')->getByID($build->execution);
+        $this->view->execution     = $this->loadModel('execution')->getByID((int)$build->execution);
         $this->view->childBuilds   = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
 
         $this->display();
@@ -425,7 +425,7 @@ class build extends control
             $this->loadModel('project')->setMenu($build->project);
             $this->view->projectID = $build->project;
         }
-        if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
+        if($build->execution) $this->loadModel('execution')->setMenu((int)$build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -435,7 +435,7 @@ class build extends control
         $this->buildZen->buildLinkStorySearchForm($build, $browseType == 'bySearch' ? (int)$param : 0, $product->type);
 
         $this->loadModel('story');
-        $executionID = $build->execution ? $build->execution : $build->project;
+        $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
         if($browseType == 'bySearch')
         {
             $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, 'id', $executionID, 'story', $build->allStories, $pager);
