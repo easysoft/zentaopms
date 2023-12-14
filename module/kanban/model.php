@@ -3660,7 +3660,7 @@ class kanbanModel extends model
     public function getSpaceById($spaceID)
     {
         $space = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
-        $space = $this->loadModel('file')->replaceImgURL($space, 'desc');
+        if($space) $space = $this->loadModel('file')->replaceImgURL($space, 'desc');
         return $space;
     }
 
