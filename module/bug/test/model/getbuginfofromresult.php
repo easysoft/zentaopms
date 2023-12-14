@@ -8,6 +8,7 @@ zdTable('case')->gen(10);
 zdTable('testsuite')->gen(10);
 zdTable('testrun')->gen(10);
 zdTable('casestep')->gen(10);
+zdTable('story')->gen(10);
 
 $result = zdTable('testresult');
 $result->stepResults->range('1-10')->prefix('a:1:{i:')->postfix(';a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}');
