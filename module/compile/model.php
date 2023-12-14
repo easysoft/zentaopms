@@ -214,7 +214,7 @@ class compileModel extends model
         $build->job         = $job->id;
         $build->name        = $job->name;
         if($type) $build->$type = $data;
-        $build->createdBy   = $this->app->user->account;
+        $build->createdBy   = $this->app->user ? $this->app->user->account : 'system';
         $build->createdDate = helper::now();
 
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
