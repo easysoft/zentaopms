@@ -366,7 +366,7 @@ class screenModel extends model
             $filter->default    = null;
 
             $objectPairs = $this->loadModel('metric')->getPairsByScope($scope, true);
-            $filter->option = array_map(function($objectID, $objectName)
+            $filter->options = array_map(function($objectID, $objectName)
             {
                 return array(
                     'label' => $objectName,
