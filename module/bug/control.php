@@ -1355,7 +1355,7 @@ class bug extends control
      * @param  int    $moduleID
      * @param  int    $productID
      * @access public
-     * @return string
+     * @return int
      */
     public function ajaxGetModuleOwner(int $moduleID, int $productID = 0)
     {
