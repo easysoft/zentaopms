@@ -201,7 +201,8 @@ detailBody
                         set::name('product'),
                         set::items($fields['product']['options']),
                         set::value($fields['product']['default']),
-                        on::change('loadProduct')
+                        on::change('loadProduct'),
+                        set::required(true)
                     ),
                     span
                     (

@@ -48,7 +48,7 @@ formPanel
             set::width('1/2'),
             inputGroup
             (
-                picker(set::name('product'), set::value($fields['product']['default']), set::items($fields['product']['options'])),
+                picker(set::name('product'), set::value($fields['product']['default']), set::items($fields['product']['options']), set::required(true)),
                 isset($fields['branch']) && $type != 'story' ? picker(set::name('branch'), set::items($fields['branch']['options']), set::value($fields['branch']['default'])) : null,
             ),
             set::required(true)
