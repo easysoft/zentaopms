@@ -293,7 +293,7 @@ class bugZen extends bug
         $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
         if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
-        return array($laneID, $columnID);
+        return array((int)$laneID, (int)$columnID);
     }
 
     /**
