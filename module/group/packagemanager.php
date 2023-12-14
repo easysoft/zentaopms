@@ -998,7 +998,6 @@ $config->group->package->gantt->subset = 'executionview';
 $config->group->package->gantt->privs  = array();
 $config->group->package->gantt->privs['execution-gantt']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array(), 'recommend' => array('execution-calendar', 'execution-ganttEdit', 'execution-ganttsetting', 'execution-grouptask', 'execution-taskEffort', 'execution-tree'));
 $config->group->package->gantt->privs['execution-ganttsetting'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('execution-gantt'), 'recommend' => array());
-$config->group->package->gantt->privs['execution-ganttEdit']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('execution-gantt'), 'recommend' => array());
 
 $config->group->package->browseTask = new stdclass();
 $config->group->package->browseTask->order  = 5;
