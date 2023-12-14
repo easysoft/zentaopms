@@ -1,9 +1,3 @@
-$(function()
-{
-    if(typeof type != 'undefined') $('#mainNavbar .nav a[data-id=' + type + ']').addClass('active');
-});
-
-
 /**
  * 渲染需求下拉框中的选项。
  * Options in the render story drop-down box.
