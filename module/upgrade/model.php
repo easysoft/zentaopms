@@ -9381,4 +9381,32 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * Migrate xuanxuan client settings, make owners user accounts.
+     *
+     * @access public
+     * @return void
+     */
+    public function migrateXuanClientSettings()
+    {
+        $existingSettings = $this->dao->select('`key`, `value`')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('chat')
+            ->andWhere('section')->eq('settings')
+            ->fetchAll();
+        if(empty($existingSettings)) return;
+
+        foreach($existingSettings as $setting)
+        {
+            $migratedSetting = array('owner' => $setting->key, 'module' => 'chat', 'section' => 'clientSettings', 'key' => 'settings', 'value' => $setting->value);
+            $this->dao->insert(TABLE_CONFIG)->data($migratedSetting)->exec();
+        }
+
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('chat')
+            ->andWhere('section')->eq('settings')
+            ->exec();
+    }
 }
