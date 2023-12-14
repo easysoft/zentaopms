@@ -17,3 +17,12 @@ function loadStory(e)
         $storyPicker.$.setValue(storyID);
     })
 }
+
+$(function()
+{
+    if(type)
+    {
+        $('#mainNavbar .nav a').removeClass('active');
+        $('#mainNavbar .nav a[data-id=' + type + ']').addClass('active');
+    }
+})

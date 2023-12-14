@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('designID', $designID);
-jsVar('type', strtolower($type));
 jsVar('errorDate', $lang->design->errorDate);
 
 modalHeader(set::title($lang->design->linkCommit));
