@@ -30,7 +30,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式产品键值对。
-     * Get tutorial product pairs.
+     * Test get tutorial product pairs.
      *
      * @access public
      * @return array
@@ -46,7 +46,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式模块键值对。
-     * Get module pairs for tutorial.
+     * Test get module pairs for tutorial.
      *
      * @access public
      * @return array
@@ -62,7 +62,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式产品信息。
-     * Get tutorial product.
+     * Test get tutorial product.
      *
      * @access public
      * @return object
@@ -74,7 +74,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式产品统计数据。
-     * Get product stats for tutorial.
+     * Test get product stats for tutorial.
      *
      * @access public
      * @return array
@@ -86,7 +86,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式项目信息。
-     * Get project for tutorial.
+     * Test get project for tutorial.
      *
      * @access public
      * @return object
@@ -98,7 +98,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式项目键值对。
-     * Get tutorial project pairs.
+     * Test get tutorial project pairs.
      *
      * @access public
      * @return array
@@ -110,7 +110,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式项目统计数据。
-     * Get project stats for tutorial.
+     * Test get project stats for tutorial.
      *
      * @param  string $browseType
      * @access public
@@ -123,7 +123,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式执行统计数据。
-     * Get execution stats for tutorial.
+     * Test get execution stats for tutorial.
      *
      * @param  string $browseType
      * @access public
@@ -136,7 +136,7 @@ class tutorialTest
 
     /**
      * 测试获取新手模式需求键值对。
-     * Get tutorial stories.
+     * Test get tutorial stories.
      *
      * @access public
      * @return array
@@ -195,8 +195,8 @@ class tutorialTest
     }
 
     /**
-     * 测试1获取新手模式执行的需求键值对。
-     * Get tutorial execution story pairs.
+     * 测试获取新手模式执行的需求键值对。
+     * Test get tutorial execution story pairs.
      *
      * @access public
      * @return array
