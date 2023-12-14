@@ -14979,9 +14979,7 @@ REPLACE INTO `zt_basicmeas` (`id`, `purpose`, `scope`, `object`, `name`, `code`,
 (53,'workload','project','finance','项目任务最终总预计工时数','pgmLastEstHours','小时','CREATE FUNCTION `qc_pgmlastesthours`($project int) RETURNS float(10,2)\r\nBEGIN\r\n    declare estimate float(10,2) default 0__DELIMITER__\r\n    declare inited int default 0__DELIMITER__\r\n    select qc_cminited($project,\'PP\') into inited__DELIMITER__\r\n    IF inited = 1 THEN\r\n    select qc_getlastesthours($project) into estimate__DELIMITER__\r\n    return estimate__DELIMITER__\r\n    ELSE \r\n    return 0__DELIMITER__\r\n    END IF__DELIMITER__\r\nEND','{\"$project\":{\"showName\":\"\\u6240\\u5c5e\\u9879\\u76ee\",\"varName\":\"$project\",\"varType\":\"select\",\"options\":\"project\",\"defaultValue\":\"\"}}','项目计划最后一个基线版本中所有任务最初预计工时和','','crontab','{\"week\":\"1,2,3,4,5,6,0\",\"type\":\"week\"}','00:00','','admin','2020-07-23 14:54:42','','1970-01-01 00:00:01',265,'0');
 
 REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('1','0','*','*','*','moduleName=weekly&methodName=computeWeekly','更新项目周报','zentao',0,'normal'),
-('1','0','*','*','*','moduleName=measurement&methodName=initCrontabQueue','初始化度量队列','zentao',0,'normal'),
-('*/5','*','*','*','*','moduleName=measurement&methodName=execCrontabQueue','执行度量队列','zentao',0,'running');
+('1','0','*','*','*','moduleName=weekly&methodName=computeWeekly','更新项目周报','zentao',0,'normal');
 
 -- DROP TABLE IF EXISTS `zt_pivot`;
 CREATE TABLE IF NOT EXISTS `zt_pivot`  (
