@@ -124,7 +124,7 @@ window.rendDocCell = function(result, {col, row})
         const docIcon   = `<img src='static/svg/${docType}.svg' class='file-icon mr-1'>`;
         if(canViewDoc)
         {
-            docNameHtml += `<a class="doc-name flex" href="` + $.createLink('doc', 'view', 'docID=' + row.data.id) + '">' + docIcon + ' ' + row.data.title + '</a>';
+            docNameHtml += `<a class="doc-name flex" data-app="${currentTab}" href="` + $.createLink('doc', 'view', 'docID=' + row.data.id) + '">' + docIcon + ' ' + row.data.title + '</a>';
         }
         else
         {

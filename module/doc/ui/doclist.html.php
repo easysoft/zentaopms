@@ -15,6 +15,7 @@ jsVar('draftText', $lang->doc->draft);
 jsVar('canViewDoc', common::hasPriv('doc', 'view'));
 jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
 jsVar('currentAccount', $app->user->account);
+jsVar('currentTab', $app->tab);
 
 $cols = array();
 foreach($config->doc->dtable->fieldList as $colName => $col)
