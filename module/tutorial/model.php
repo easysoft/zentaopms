@@ -234,7 +234,7 @@ class tutorialModel extends model
         $execution->projectName  = '';
         $execution->projectModel = '';
 
-        if($browseType and $browseType != 'all') $execution->name .= '-' . $browseType; // Fix bug #21096
+        if($browseType && $browseType != 'all') $execution->name .= '-' . $browseType;
 
         $executionStat[0] = $execution;
         return $executionStat;

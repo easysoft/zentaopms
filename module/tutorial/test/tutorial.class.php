@@ -122,6 +122,19 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式执行统计数据。
+     * Get execution stats for tutorial.
+     *
+     * @param  string $browseType
+     * @access public
+     * @return void
+     */
+    public function getExecutionStatsTest(string $browseType = ''): array
+    {
+        return $this->objectModel->getExecutionStats($browseType);
+    }
+
+    /**
      * Get tutorial stories.
      *
      * @access public
