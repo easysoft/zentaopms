@@ -183,18 +183,15 @@ class tutorialTest
     }
 
     /**
-     * Get tutorial execution stories.
+     * 测试获取新手模式执行的需求。
+     * Test get tutorial execution stories.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getExecutionStoriesTest()
+    public function getExecutionStoriesTest(): array
     {
-        $objects = $this->objectModel->getExecutionStories();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getExecutionStories();
     }
 
     /**

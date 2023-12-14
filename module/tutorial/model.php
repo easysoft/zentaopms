@@ -381,7 +381,7 @@ class tutorialModel extends model
     }
 
     /**
-     * 获取新手模式执行的故事点。
+     * 获取新手模式执行的需求。
      * Get tutorial execution stories.
      *
      * @access public
