@@ -886,19 +886,19 @@ class repoZen extends repo
      *
      * @param  int       $repoID
      * @param  string    $revision
-     * @param  string    $browseType
      * @param  int       $queryID
      * @param  object    $product
      * @param  array     $modules
      * @access protected
      * @return void
      */
-    protected function buildStorySearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules): void
+    protected function buildStorySearchForm(int $repoID, string $revision, int $queryID, object $product, array $modules): void
     {
         unset($this->lang->story->statusList['closed']);
         $storyStatusList = $this->lang->story->statusList;
 
         unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['params']['product']);
         $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';

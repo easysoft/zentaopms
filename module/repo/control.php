@@ -728,7 +728,8 @@ class repo extends control
         $fileName = basename(urldecode($entry));
         if($type != 'file') $fileName .= "r$fromRevision--r$toRevision.patch";
 
-        $extension = ltrim(strrchr($fileName, '.'), '.');
+        $extension = strpos($fileName, '.') ? strrchr($fileName, '.') : '';
+        $extension = ltrim($extension, '.');
         $this->fetch('file', 'sendDownHeader', array("fileName" => $fileName, "fileType" => $extension, "content" => $content));
     }
 
@@ -821,18 +822,18 @@ class repo extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->repoZen->buildStorySearchForm($repoID, $revision, $browseType, $queryID, $product, $modules);
+        $this->repoZen->buildStorySearchForm($repoID, $revision, $queryID, $product, $modules);
 
-        $this->view->modules        = $modules;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allStories     = $this->repoZen->getLinkStories($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID);
-        $this->view->product        = $product;
-        $this->view->repoID         = $repoID;
-        $this->view->revision       = $revision;
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->orderBy        = $orderBy;
-        $this->view->pager          = $pager;
+        $this->view->modules    = $modules;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allStories = $this->repoZen->getLinkStories($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID);
+        $this->view->product    = $product;
+        $this->view->repoID     = $repoID;
+        $this->view->revision   = $revision;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
