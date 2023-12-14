@@ -168,7 +168,8 @@ class coverage
      */
     private function getMethodInfo(): object
     {
-        $class = $this->getClassInfo();
+        $testMethod = new stdclass();
+        $class      = $this->getClassInfo();
         foreach($class->getMethods() as $method)
         {
             $methodName = $method->getName();
