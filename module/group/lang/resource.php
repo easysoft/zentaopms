@@ -398,6 +398,7 @@ $lang->resource->program->activate                = 'activate';
 $lang->resource->program->close                   = 'close';
 $lang->resource->program->delete                  = 'delete';
 $lang->resource->program->project                 = 'project';
+$lang->resource->program->view                    = 'view';
 $lang->resource->program->stakeholder             = 'stakeholder';
 $lang->resource->program->createStakeholder       = 'createStakeholder';
 $lang->resource->program->unlinkStakeholder       = 'unlinkStakeholder';
