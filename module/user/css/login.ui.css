@@ -1,4 +1,4 @@
-body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); background-color: #1183fb;}
+body {background: var(--color-primary-500) linear-gradient(-90deg, var(--color-primary-600) 0%, var(--color-primary-500) 100%); background-color: var(--color-primary-500);}
 #main {min-height:0px;}
 #login {max-width: 720px !important; margin: 0 auto; margin-top: 5%; padding: 0 40px;}
 #loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
