@@ -79,50 +79,43 @@ class designModel extends model
     }
 
     /**
+     * 编辑一个设计。
      * Update a design.
      *
-     * @param  int    $designID
+     * @param  int        $designID
+     * @param  object     $design
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function update($designID = 0)
+    public function update(int $designID = 0, object $design = null): bool|array
     {
         $oldDesign = $this->getByID($designID);
-        $design = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->stripTags($this->config->design->editor->edit['id'], $this->config->allowedTags)
-            ->remove('file,files,labels,children,toList')
-            ->get();
+        if(!$oldDesign) return false;
 
-        $design = $this->loadModel('file')->processImgURL($design, 'desc', $this->post->uid);
-        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck('name,type', 'notempty')->where('id')->eq($designID)->exec();
+        $design = $this->loadModel('file')->processImgURL($design, 'desc', (string)$this->post->uid);
+        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->edit->requiredFields, 'notempty')->where('id')->eq($designID)->exec();
 
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $this->file->updateObjectID($this->post->uid, $designID, 'design');
+        $files         = $this->file->saveUpload('design', $designID);
+        $designChanged = ($oldDesign->name != $design->name || $oldDesign->desc != $design->desc || !empty($files));
+        if($designChanged)
         {
-            $this->file->updateObjectID($this->post->uid, $designID, 'design');
-            $files = $this->file->saveUpload('design', $designID);
-            $designChanged = ($oldDesign->name != $design->name || $oldDesign->desc != $design->desc || !empty($files));
+            $version = $oldDesign->version + 1;
 
-            if($designChanged)
-            {
-                $design  = $this->getByID($designID);
-                $version = $design->version + 1;
-                $spec = new stdclass();
-                $spec->design  = $designID;
-                $spec->version = $version;
-                $spec->name    = $design->name;
-                $spec->desc    = $design->desc;
-                $spec->files   = empty($files) ? '' : implode(',', array_keys($files));
-                $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
+            $spec = new stdclass();
+            $spec->design  = $designID;
+            $spec->version = $version;
+            $spec->name    = $design->name;
+            $spec->desc    = $design->desc;
+            $spec->files   = empty($files) ? '' : implode(',', array_keys($files));
+            $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
-                $this->dao->update(TABLE_DESIGN)->set('version')->eq($version)->where('id')->eq($designID)->exec();
-            }
-
-            return common::createChanges($oldDesign, $design);
+            $this->dao->update(TABLE_DESIGN)->set('version')->eq($version)->where('id')->eq($designID)->exec();
         }
 
-        return false;
+        return common::createChanges($oldDesign, $design);
     }
 
     /**

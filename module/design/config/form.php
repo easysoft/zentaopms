@@ -24,3 +24,11 @@ $config->design->form->batchcreate['desc']        = array('type' => 'string',   
 $config->design->form->batchcreate['version']     = array('type' => 'int',      'required' => false, 'default' => 1);
 $config->design->form->batchcreate['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->design->form->batchcreate['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
+$config->design->form->edit['name']       = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
+$config->design->form->edit['type']       = array('type' => 'string',   'required' => true,  'default' => '');
+$config->design->form->edit['product']    = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->design->form->edit['story']      = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->design->form->edit['desc']       = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->design->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->design->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);

@@ -227,6 +227,7 @@ class design extends control
     }
 
     /**
+     * 编辑一个设计。
      * Edit a design.
      *
      * @param  int    $designID
@@ -237,18 +238,14 @@ class design extends control
     {
         $design = $this->design->getByID($designID);
         $design = $this->design->getAffectedScope($design);
-        $this->commonAction($design->project, (int)$design->product, $designID);
+        $this->commonAction((int)$design->project, (int)$design->product, $designID);
 
         if($_POST)
         {
-            $changes = $this->design->update($designID);
+            $designData = form::data()->get();
+            $changes    = $this->design->update($designID, $designData);
 
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($changes))
             {
@@ -256,21 +253,18 @@ class design extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = $this->createLink('design', 'view', "id={$designID}");
-            return $this->send($response);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('design', 'view', "id={$designID}")));
         }
 
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
-        $project       = $this->loadModel('project')->getByID($design->project);
+        $project       = $this->loadModel('project')->getByID((int)$design->project);
 
-        $this->view->title   = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
-        $this->view->design  = $design;
-        $this->view->project = $project;
-        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
+        $this->view->design   = $design;
+        $this->view->project  = $project;
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
