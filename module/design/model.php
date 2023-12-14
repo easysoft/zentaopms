@@ -171,10 +171,10 @@ class designModel extends model
                 if(in_array($commit->revision, $revisions))
                 {
                     $log = new stdclass();
-                    $log->committer = $commit->committer_name;
-                    $log->revision  = $commit->id;
-                    $log->comment   = $commit->message;
-                    $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+                    $log->committer = $commit->committer;
+                    $log->revision  = $commit->revision;
+                    $log->comment   = $commit->comment;
+                    $log->time      = date('Y-m-d H:i:s', strtotime($commit->time));
 
                     $logs[] = $log;
                 }

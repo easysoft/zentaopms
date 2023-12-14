@@ -42,17 +42,11 @@ $config->design->dtable->fieldList['actions']['list'] = $config->design->actionL
 
 $app->loadLang('repo');
 
-$config->design->linkcommit->dtable->fieldList['id']['title']    = '';
-$config->design->linkcommit->dtable->fieldList['id']['name']     = '';
-$config->design->linkcommit->dtable->fieldList['id']['checkbox'] = true;
-$config->design->linkcommit->dtable->fieldList['id']['type']     = 'checkID';
-$config->design->linkcommit->dtable->fieldList['id']['sortType'] = false;
-$config->design->linkcommit->dtable->fieldList['id']['width']    = 30;
-
 $config->design->linkcommit->dtable->fieldList['revision']['title']    = $lang->repo->revisionA;
 $config->design->linkcommit->dtable->fieldList['revision']['type']     = 'title';
 $config->design->linkcommit->dtable->fieldList['revision']['link']     = helper::createLink('repo', 'revision', 'repoID=%s&objectID=%s&revision={revision}');
 $config->design->linkcommit->dtable->fieldList['revision']['sortType'] = false;
+$config->design->linkcommit->dtable->fieldList['revision']['checkbox'] = true;
 
 $config->design->linkcommit->dtable->fieldList['commit']['title']    = $lang->repo->commit;
 $config->design->linkcommit->dtable->fieldList['commit']['type']     = 'category';
