@@ -955,6 +955,7 @@ class testtaskModel extends model
     {
         if($this->post->cases == false) return;
         $postData = fixer::input('post')->get();
+        $task     = $this->getById($taskID);
 
         if($type == 'bybuild') $assignedToPairs = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($postData)->fetchPairs('case', 'assignedTo');
         foreach($postData->cases as $caseID)
@@ -969,18 +970,32 @@ class testtaskModel extends model
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
 
             /* When the cases linked the testtask, the cases link to the project. */
-            if($this->app->tab != 'qa')
+            if($task->project or $task->execution)
             {
-                $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-
                 $data = new stdclass();
-                $data->project = $projectID;
-                $data->product = $this->session->product;
                 $data->case    = $caseID;
                 $data->version = 1;
-                $data->order   = ++ $lastOrder;
-                $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                $data->product = $task->product;
+
+                if($task->project)
+                {
+                    $projectID = $task->project;
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+
+                    $data->project = $projectID;
+                    $data->order   = ++ $lastOrder;
+                    $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                }
+
+                if($task->execution)
+                {
+                    $projectID = $task->execution;
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+
+                    $data->project = $projectID;
+                    $data->order   = ++ $lastOrder;
+                    $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                }
             }
             $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
         }
