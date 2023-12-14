@@ -3603,13 +3603,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 删除子列时，将子列的卡片移动到第一个子列，或者移动到父列。
      * Process cards when delete a column.
      *
      * @param  object $column
      * @access public
      * @return void
      */
-    public function processCards($column)
+    public function processCards(object $column)
     {
         $firstColumnID = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)
             ->where('parent')->eq($column->parent)

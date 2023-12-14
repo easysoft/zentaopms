@@ -723,13 +723,14 @@ class kanban extends control
     }
 
     /**
+     * 删除看板列。
      * Delete a column.
      *
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function deleteColumn($columnID)
+    public function deleteColumn(int $columnID)
     {
         $column = $this->kanban->getColumnById($columnID);
         if($column->parent > 0) $this->kanban->processCards($column);
