@@ -53,8 +53,6 @@ if(common::canModify('project', $project) and common::hasPriv('project', 'testre
         ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 }
 
-if($project->multiple) $config->project->dtable->testtask->fieldList['id']['checkbox'] = false;
-
 dtable
 (
     set::id('taskTable'),
@@ -67,7 +65,7 @@ dtable
     set::plugins(array('cellspan')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::fixedLeftWidth('20%'),
-    $project->multiple ? set::footer(array(array('html' => $summary), 'flex', 'pager')) : set::footToolbar($footToolbar),
+    set::footToolbar($footToolbar),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
