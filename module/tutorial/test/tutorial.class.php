@@ -171,18 +171,15 @@ class tutorialTest
     }
 
     /**
-     * Get tutorial execution products.
+     * 测试获取新手模式产品信息。
+     * Test get tutorial execution products.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getExecutionProductsTest()
+    public function getExecutionProductsTest(): array
     {
-        $objects = $this->objectModel->getExecutionProducts();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getExecutionProducts();
     }
 
     /**
