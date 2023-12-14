@@ -1,112 +1,82 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 mrModel::checkSameOpened();
+timeout=0
 cid=0
-pid=0
 
-使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch >> fail
-使用空的gitlabID >> success
-使用空的sourceProject >> success
-使用空的sourceBranch >> success
-使用空的targetProject >> success
-使用空的targetBranch >> success
-使用错误的gitlabID >> success
-使用错误的sourceProject >> success
-使用错误的sourceBranch >> success
-使用错误的targetProject >> success
-使用错误的targetBranch >> success
+- 使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch属性message @存在重复并且未关闭的合并请求: ID1
+- 使用空的gitlabID属性result @success
+- 源项目为空属性result @success
+- 源分支为空属性result @success
+- 目标项目为空属性result @success
+- 目标分支为空属性result @success
+- 使用错误的gitlabID属性result @success
+- 使用错误的源项目属性result @success
+- 使用错误的目标分支属性result @success
+- 使用错误的目标项目属性result @success
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('pipeline')->gen(1);
+zdTable('repo')->config('repo')->gen(1);
+zdTable('mr')->config('mr')->gen(1);
+su('admin');
+
+global $tester;
 $mrModel = $tester->loadModel('mr');
 
-$gitlabID      = '1';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
+$gitlabID      = 1;
+$sourceProject = '3';
+$sourceBranch  = 'test1';
+$targetProject = '3';
 $targetBranch  = 'master';
 $result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('fail'); //使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch
+r($result) && p('message') && e('存在重复并且未关闭的合并请求: ID1'); // 使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch
 
-$gitlabID      = '';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用空的gitlabID
+$gitlabID = 0;
+$result   = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 使用空的gitlabID
 
-$gitlabID      = '1';
-$sourceProject = '';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用空的sourceProject
+$gitlabID      = 1;
+$sourceProject = '0';
+$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 源项目为空
 
-$gitlabID      = '1';
-$sourceProject = '42';
+$sourceProject = '3';
 $sourceBranch  = '';
-$targetProject = '42';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用空的sourceBranch
+$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 源分支为空
 
-$gitlabID      = '1';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
+$sourceBranch  = 'test1';
 $targetProject = '';
-$targetBranch  = 'master';
 $result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用空的targetProject
+r($result) && p('result') && e('success'); // 目标项目为空
 
-$gitlabID      = '1';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
+$targetProject = '3';
 $targetBranch  = '';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用空的targetBranch
+$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 目标分支为空
 
-$gitlabID      = 'test';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用错误的gitlabID
+$gitlabID     = 10;
+$targetBranch = 'master';
+$result       = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 使用错误的gitlabID
 
-$gitlabID      = '1';
+$gitlabID      = 1;
 $sourceProject = 'test';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用错误的sourceProject
+$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 使用错误的源项目
 
-$gitlabID      = '1';
-$sourceProject = '42';
-$sourceBranch  = 'branch08';
-$targetProject = '42';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用错误的sourceBranch
+$sourceBranch = 'test1';
+$targetBranch = 'master1';
+$result       = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 使用错误的目标分支
 
-$gitlabID      = '1';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
 $targetProject = 'test';
 $targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用错误的targetProject
-
-$gitlabID      = '1';
-$sourceProject = '42';
-$sourceBranch  = 'branch-08';
-$targetProject = '42';
-$targetBranch  = 'main';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); //使用错误的targetBranch
+$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+r($result) && p('result') && e('success'); // 使用错误的目标项目

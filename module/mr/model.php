@@ -312,8 +312,7 @@ class mrModel extends model
     public function apiCreate(): int|false
     {
         $postData = fixer::input('post')->get();
-
-        $repo = $this->dao->findByID($postData->repoID)->from(TABLE_REPO)->fetch();
+        $repo     = $this->dao->findByID($postData->repoID)->from(TABLE_REPO)->fetch();
         if(empty($repo))
         {
             dao::$errors[] = 'No matched gitlab.';
@@ -322,10 +321,10 @@ class mrModel extends model
 
         /* Process and insert mr data. */
         $MR = new stdClass();
-        $MR->hostID         = $repo->client;
-        $MR->sourceProject  = $repo->path;
+        $MR->hostID         = (int)$repo->serviceHost;
+        $MR->sourceProject  = $repo->serviceProject;
         $MR->sourceBranch   = $postData->sourceBranch;
-        $MR->targetProject  = $repo->path;
+        $MR->targetProject  = $repo->serviceProject;
         $MR->targetBranch   = $postData->targetBranch;
         $MR->diffs          = $postData->diffs;
         $MR->title          = $this->lang->mr->common . ' ' . $postData->sourceBranch . $this->lang->mr->to . $postData->targetBranch ;
@@ -648,15 +647,14 @@ class mrModel extends model
     {
         if(empty($hostID) || empty($sourceProject) || empty($sourceBranch) ||  empty($targetProject) || empty($targetBranch)) return null;
 
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot((int)$hostID), "/projects/{$sourceProject}/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}";
+        $url      = sprintf($this->loadModel('gitlab')->getApiRoot((int)$hostID), "/projects/{$sourceProject}/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}";
         $response = json_decode(commonModel::http($url));
-
         if($response)
         {
             foreach($response as $MR)
             {
-                if(empty($MR->source_project_id) or empty($MR->target_project_id)) return null;
-                if($MR->source_project_id == $sourceProject and $MR->target_project_id == $targetProject) return $MR;
+                if(empty($MR->source_project_id) || empty($MR->target_project_id)) return null;
+                if($MR->source_project_id == $sourceProject && $MR->target_project_id == $targetProject) return $MR;
             }
         }
         return null;
@@ -1422,9 +1420,6 @@ class mrModel extends model
      */
     public function checkSameOpened(int $hostID, string $sourceProject, string $sourceBranch, string $targetProject, string $targetBranch): array
     {
-        if(empty($sourceProject) or empty($sourceBranch) or empty($targetProject) or empty($targetBranch)) return array('result' => 'success');
-        if(in_array(true, array(empty($sourceProject), empty($sourceBranch), empty($targetProject), empty($targetBranch)))) return array('result' => 'success');
-
         if($sourceProject == $targetProject && $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
         $dbOpenedID = $this->dao->select('id')->from(TABLE_MR)
             ->where('hostID')->eq($hostID)
