@@ -278,7 +278,7 @@ class Gogs
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client blame -l $revision -- $path"), 'array');
+        $list = execCmd(escapeCmd("$this->client blame -l --root $revision -- $path"), 'array');
 
         $blames   = array();
         $revLine  = 0;
