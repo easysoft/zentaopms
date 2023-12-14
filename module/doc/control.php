@@ -663,10 +663,9 @@ class doc extends control
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->id;
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
-        $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
-        $objectID   = zget($doc, $type, 0);
+        $objectID   = zget($doc, $objectType, 0);
         if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, (int)$doc->lib, $appendLib);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, $appendLib);
 
         /* Get doc. */
         if($docID)
@@ -683,7 +682,7 @@ class doc extends control
         if(isset($doc) && $doc->type == 'text') $doc = $this->docZen->processOutline($doc);
         if($this->app->tab != 'execution' && !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
 
-        $this->docZen->assignVarsForView($docID, $version, $type, $objectID, $libID, $doc, $object, $objectType, $libs, $objectDropdown);
+        $this->docZen->assignVarsForView($docID, $version, $objectType, $objectID, $libID, $doc, $object, $objectType, $libs, $objectDropdown);
         $this->display();
     }
 
