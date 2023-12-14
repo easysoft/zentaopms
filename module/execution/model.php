@@ -133,7 +133,7 @@ class executionModel extends model
         $this->session->set('execution', $executionID, $this->app->tab);
         common::setMenuVars('execution', $executionID);
 
-        if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')
+        if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')
         {
             $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
 

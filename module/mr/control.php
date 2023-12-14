@@ -55,6 +55,8 @@ class mr extends control
         {
             $this->session->set('execution', $objectID);
             $execution = $this->loadModel('execution')->getByID($objectID);
+            if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
             $features = $this->execution->getExecutionFeatures($execution);
             if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 

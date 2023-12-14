@@ -59,6 +59,8 @@ class repo extends control
         elseif($tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($objectID);
+            if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
             $features = $this->execution->getExecutionFeatures($execution);
             if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
 
