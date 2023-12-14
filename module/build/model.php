@@ -618,22 +618,23 @@ class buildModel extends model
      * 批量解除需求关联。
      * Batch unlink story.
      *
-     * @param  int       $buildID
+     * @param  int    $buildID
+     * @param  array  $storyIDList
      * @access public
      * @return bool
      */
-    public function batchUnlinkStory(int $buildID, array $storyIdList): bool
+    public function batchUnlinkStory(int $buildID, array $storyIDList): bool
     {
-        if(empty($storyIdList)) return true;
+        if(empty($storyIDList)) return true;
 
         $build = $this->getByID($buildID);
         $build->stories = ",$build->stories,";
-        foreach($storyIdList as $storyID) $build->stories = str_replace(",$storyID,", ',', $build->stories);
+        foreach($storyIDList as $storyID) $build->stories = str_replace(",$storyID,", ',', $build->stories);
         $build->stories = trim($build->stories, ',');
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($storyIdList as $storyID) $this->action->create('story', $storyID, 'unlinkedfrombuild', '', $buildID);
+        foreach($storyIDList as $storyID) $this->action->create('story', (int)$storyID, 'unlinkedfrombuild', '', $buildID);
         return !dao::isError();
     }
 
