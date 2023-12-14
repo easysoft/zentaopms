@@ -12,7 +12,8 @@
 class pivot extends control
 {
     /**
-     * The index of pivot, goto project deviation.
+     * 透视表首页，跳转到访问透视表页面。
+     * The index of pivot, goto preview.
      *
      * @access public
      * @return void
