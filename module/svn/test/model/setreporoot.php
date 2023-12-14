@@ -7,7 +7,7 @@ title=svnModel->setRepoRoot();
 timeout=0
 cid=1
 
-- 查询SVN仓库信息属性repoRoot @http://10.0.7.237/svn/repo
+- 查询SVN仓库信息属性repoRoot @https://svn.qc.oop.cc/svn/unittest
 
 */
 
@@ -22,4 +22,4 @@ $svn->setRepos();
 
 $repo = $svn->repos[1];
 $svn->setRepoRoot($repo);
-r($svn) && p('repoRoot') && e('http://10.0.7.237/svn/repo'); // 查询SVN仓库信息
+r($svn) && p('repoRoot') && e('https://svn.qc.oop.cc/svn/unittest'); // 查询SVN仓库信息

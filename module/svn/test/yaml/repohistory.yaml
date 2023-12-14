@@ -7,12 +7,12 @@ fields:
   - field: repo
     range: 1
   - field: revision
-    range: 23
+    range: 1
   - field: commit
     range: 1
   - field: comment
-    range: '+ Add unit_test dir.'
+    range: '+ Add fiel.'
   - field: committer
-    range: user
+    range: admin
   - field: time
-    range: '`2023-12-07 13:52:00`'
+    range: '`2023-12-14 09:04:27`'

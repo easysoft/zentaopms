@@ -22,10 +22,10 @@ global $tester;
 $svn = $tester->loadModel('svn');
 
 $failUrl     = 'http://10.0.7.237/svn/repo/unit';
-$realVersion = 23;
+$realVersion = 2;
 r($svn->cat($failUrl, $realVersion)) && p() && e('0'); // 正确的版本号，错误的URL
 
-$realUrl = 'http://10.0.7.237/svn/repo/unit_test/README';
+$realUrl = 'https://svn.qc.oop.cc/svn/unittest/README';
 r($svn->cat($realUrl, $realVersion)) && p() && e("单元测试使用"); // 正确的版本号，正确的URL
 
 $failVersion = 999;

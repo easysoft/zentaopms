@@ -10,10 +10,8 @@ fields:
     prefix: svn-
     range: 1-10
   - field: path
-    prefix: http://10.0.7.237/svn/repo/unit_test
+    prefix: https://svn.qc.oop.cc/svn/unittest
     range: '[],1-9'
-  - field: prefix
-    range: /unit_test
   - field: encoding
     range: "`utf-8`"
   - field: SCM
@@ -23,9 +21,9 @@ fields:
   - field: commits
     range: 10
   - field: account
-    range: user
+    range: admin
   - field: password
-    range: MTIzNDU2
+    range: S1hkT2k4emdUY1VxRUZYMkh4OEI=
   - field: encrypt
     range: base64
   - field: synced

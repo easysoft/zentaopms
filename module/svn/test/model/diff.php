@@ -21,8 +21,8 @@ su('admin');
 global $tester;
 $svn = $tester->loadModel('svn');
 
-$realUrl     = 'http://10.0.7.237/svn/repo/unit_test';
-$realVersion = 23;
+$realUrl     = 'https://svn.qc.oop.cc/svn/unittest';
+$realVersion = 1;
 r($svn->diff($realUrl, $realVersion)) && p() && e('Index: README'); // 正确的版本号，正确的URL
 
 $failVersion = 999;

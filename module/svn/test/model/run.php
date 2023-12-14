@@ -10,7 +10,7 @@ cid=1
 - 更新svn提交信息到禅道，检查第二条记录是否正确
  - 属性commit @2
  - 属性comment @+ Add secondary file.
- - 属性committer @user
+ - 属性committer @admin
 
 */
 
@@ -25,4 +25,4 @@ su('admin');
 
 $svn = new svnTest();
 
-r($svn->runTest()) && p('commit,comment,committer') && e('2,+ Add secondary file.,user'); // 更新svn提交信息到禅道，检查第二条记录是否正确
+r($svn->runTest()) && p('commit,comment,committer') && e('2,+ Add secondary file.,admin'); // 更新svn提交信息到禅道，检查第二条记录是否正确

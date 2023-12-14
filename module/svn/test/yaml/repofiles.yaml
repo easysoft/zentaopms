@@ -7,9 +7,9 @@ fields:
   - field: revision
     range: 1
   - field: path
-    range: /unit_test/README
+    range: /README
   - field: parent
-    range: /unit_test
+    range: /
   - field: type
     range: file
   - field: action

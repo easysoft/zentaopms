@@ -8,8 +8,8 @@ timeout=0
 cid=1
 
 - 查询SVN仓库信息
- - 属性repoRoot @http://10.0.7.237/svn/repo
- - 属性client @/usr/bin/svn --non-interactive --username user --password 123456 --no-auth-cache
+ - 属性repoRoot @https://svn.qc.oop.cc/svn/unittest
+ - 属性client @/usr/bin/svn --non-interactive --trust-server-cert --username admin --password KXdOi8zgTcUqEFX2Hx8B --no-auth-cache
 
 */
 
@@ -24,4 +24,4 @@ $svn->setRepos();
 
 $repo = $svn->repos[1];
 $svn->setRepo($repo);
-r($svn) && p('repoRoot,client') && e('http://10.0.7.237/svn/repo,/usr/bin/svn --non-interactive --username user --password 123456 --no-auth-cache'); // 查询SVN仓库信息
+r($svn) && p('repoRoot,client') && e('https://svn.qc.oop.cc/svn/unittest,/usr/bin/svn --non-interactive --trust-server-cert --username admin --password KXdOi8zgTcUqEFX2Hx8B --no-auth-cache'); // 查询SVN仓库信息
