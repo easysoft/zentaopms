@@ -10,10 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$changeProductBox = '';
+$changeProductBox = array();
 if($project->hasProduct)
 {
-    $changeProductBox = div(
+    $changeProductBox[] = div(
         setClass('select-product-box mx-2'),
         picker
         (
