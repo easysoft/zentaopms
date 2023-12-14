@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmRecord', $lang->task->confirmRecord);
-$readonly = (!empty($task->team) and $work->left == 0);
+$readonly = !$effort->isLast || (!empty($task->team) && $effort->left == 0);
 
 formPanel
 (
