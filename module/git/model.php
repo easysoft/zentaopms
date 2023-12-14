@@ -159,7 +159,11 @@ class gitModel extends model
             {
                 foreach(explode(',', $job->comment) as $comment)
                 {
-                    if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
+                    if(strpos($log->msg, $comment) !== false)
+                    {
+                        $this->loadModel('job')->exec($job->id);
+                        continue 2;
+                    }
                 }
             }
         }

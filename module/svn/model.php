@@ -135,7 +135,11 @@ class svnModel extends model
             {
                 foreach(explode(',', $job->comment) as $comment)
                 {
-                    if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
+                    if(strpos($log->msg, $comment) !== false)
+                    {
+                        $this->loadModel('compile')->createByJob($job->id);
+                        continue 2;
+                    }
                 }
             }
 
