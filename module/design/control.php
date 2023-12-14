@@ -293,11 +293,7 @@ class design extends control
         if($_POST)
         {
             $this->design->linkCommit($designID, $repoID);
-
-            $result['result']  = 'success';
-            $result['message'] = $this->lang->saveSuccess;
-            $result['locate']  = 'parent';
-            return $this->send($result);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $design = $this->design->getById($designID);
@@ -319,7 +315,7 @@ class design extends control
 
         /* Linked submission. */
         $linkedRevisions = array();
-        $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
+        $relations       = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $linkedRevisions[$relation->BID] = $relation->BID;
 
         foreach($revisions as $id => $commit)
