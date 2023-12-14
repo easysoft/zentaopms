@@ -395,7 +395,7 @@ class tutorialModel extends model
     }
 
     /**
-     * 获取新手模式执行的故事点键值对。
+     * 获取新手模式执行的需求键值对。
      * Get tutorial execution story pairs.
      *
      * @access public

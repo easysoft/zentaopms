@@ -195,18 +195,15 @@ class tutorialTest
     }
 
     /**
+     * 测试1获取新手模式执行的需求键值对。
      * Get tutorial execution story pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getExecutionStoryPairsTest()
+    public function getExecutionStoryPairsTest(): array
     {
-        $objects = $this->objectModel->getExecutionStoryPairs();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getExecutionStoryPairs();
     }
 
     /**
