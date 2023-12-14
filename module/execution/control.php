@@ -3142,7 +3142,6 @@ class execution extends control
      */
     public function ajaxGetCFD(int $executionID)
     {
-
         $execution = $this->execution->getById($executionID, true);
 
         $this->app->loadClass('date');
@@ -3153,6 +3152,7 @@ class execution extends control
 
         $this->view->begin     = helper::safe64Encode(urlencode($begin));
         $this->view->end       = helper::safe64Encode(urlencode($end));
+        $this->view->execution = $execution;
         $this->view->chartData = $chartData;
 
         $this->display();

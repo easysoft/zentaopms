@@ -328,15 +328,6 @@ div
                 $execution->name . $lang->execution->CFD
             )
         ) : null,
-        $isKanban ? to::headingActions
-        (
-            common::hasPriv('execution', $isKanban ? 'cfd' : 'burn') ? btn
-            (
-                setClass('ghost text-gray font-normal'),
-                set::url(createLink('execution', 'cfd', "executionID={$execution->id}")),
-                $lang->more
-            ) : null
-        ) : null,
         div
         (
             setID('chartLine'),
@@ -752,7 +743,7 @@ div
             ),
 
             /* Execution doc lib. */
-            hasPriv('execution', 'doc') ? h::table
+            hasPriv('execution', 'doc') && !$isKanban ? h::table
             (
                 setClass('table condensed bordered mt-4'),
                 h::thead
