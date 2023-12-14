@@ -205,7 +205,7 @@ class extensionModel extends model
         $data->depends          = '';
 
         $info = $this->parseExtensionCFG($extension);
-        foreach($info as $key => $value) if(isset($data->$key)) $data->$key = $value;
+        foreach($info as $key => $value) if(isset($data->$key)) $data->$key = is_null($value) ? '' : $value;
         if(isset($info->zentaoversion))        $data->zentaoCompatible = $info->zentaoversion;
         if(isset($info->zentao['compatible'])) $data->zentaoCompatible = $info->zentao['compatible'];
         if(isset($info->depends))              $data->depends          = json_encode($info->depends);
