@@ -88,3 +88,11 @@ $config->kanban->form->splitColumn['name']    = array('type' => 'string', 'requi
 $config->kanban->form->splitColumn['color']   = array('type' => 'string', 'required' => false, 'default' => '#333');
 $config->kanban->form->splitColumn['limit']   = array('type' => 'int',    'required' => false, 'default' => '');
 $config->kanban->form->splitColumn['noLimit'] = array('type' => 'int',    'required' => false, 'default' => '');
+
+$config->kanban->form->batchCreateCard['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'base' => 'true');
+$config->kanban->form->batchCreateCard['lane']       = array('type' => 'int',    'required' => true,  'default' => '');
+$config->kanban->form->batchCreateCard['assignedTo'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
+$config->kanban->form->batchCreateCard['estimate']   = array('type' => 'float',  'required' => false, 'default' => '');
+$config->kanban->form->batchCreateCard['begin']      = array('type' => 'date',   'required' => false, 'default' => '');
+$config->kanban->form->batchCreateCard['end']        = array('type' => 'date',   'required' => false, 'default' => '');
+$config->kanban->form->batchCreateCard['pri']        = array('type' => 'string', 'required' => false, 'default' => '');

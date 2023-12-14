@@ -773,6 +773,7 @@ class kanban extends control
     }
 
     /**
+     * 批量创建卡片。
      * Batch create cards.
      *
      * @param  int    $kanbanID
@@ -782,13 +783,14 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
+    public function batchCreateCard(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0)
     {
         $kanban = $this->kanban->getById($kanbanID);
 
         if($_POST)
         {
-            $this->kanban->batchCreateCard($kanbanID, $regionID, $groupID, $columnID);
+            $cards = form::batchData($this->config->kanban->form->batchCreateCard)->get();
+            $this->kanban->batchCreateCard($kanbanID, $regionID, $groupID, $columnID, $cards);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
