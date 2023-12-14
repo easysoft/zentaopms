@@ -5,11 +5,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 mrModel::convertApiError();
+timeout=0
 cid=0
-pid=0
 
-使用正确的message >> success
-使用空的message >> success
+- 使用正确的message @success
+- 使用空的message @success
 
 */
 $mrModel = $tester->loadModel('mr');
