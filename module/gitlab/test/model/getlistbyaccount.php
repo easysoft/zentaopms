@@ -14,6 +14,8 @@ cid=1
 
 */
 
+zdTable('oauth')->gen(5);
+
 $gitlab = $tester->loadModel('gitlab');
 
 r(count($gitlab->getListByAccount()))        && p() && e('0'); //默认admin用户查询绑定的gitlab服务器
