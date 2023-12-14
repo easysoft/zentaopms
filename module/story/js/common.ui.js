@@ -13,7 +13,7 @@ $(function()
         {
             $('#navbar .nav li a').removeClass('active');
             $storyNavbar.addClass('active');
-            storySubNavbar.addClass('active');
+            $storySubNavbar.addClass('active');
         }
     }
 });
