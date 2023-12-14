@@ -73,23 +73,27 @@ class history extends wg
         }
     }
 
-    protected function build(): wg
+    protected function build(): array
     {
         list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $editCommentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'editCommentUrl', 'commentBtn'));
 
         $canComment     = hasPriv('action', 'comment', null);
         $canEditComment = hasPriv('action', 'editComment', null);
-        return zui::historyPanel
+        return array
         (
-            $panel ? set::className('canvas py-1 px-2') : null,
-            set::objectID((int)$objectID),
-            set::objectType($objectType),
-            set::actions($actions),
-            set::title($title),
-            $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
-            $canComment ? set::commentUrl($commentUrl) : null,
-            set::commentBtn($canComment ? $commentBtn : false),
-            set($this->getRestProps())
+            zui::historyPanel
+            (
+                $panel ? set::className('canvas py-1 px-2') : null,
+                set::objectID((int)$objectID),
+                set::objectType($objectType),
+                set::actions($actions),
+                set::title($title),
+                $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
+                $canComment ? set::commentUrl($commentUrl) : null,
+                set::commentBtn($canComment ? $commentBtn : false),
+                set($this->getRestProps())
+            ),
+            h::css('.history-panel-action blockquote.original {display:none}')
         );
     }
 }
