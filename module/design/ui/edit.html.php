@@ -18,17 +18,14 @@ jsVar('type', strtolower($design->type));
 $productRow = '';
 if($project->hasProduct)
 {
-    $productRow = formRow(
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('product'),
-            set::label($lang->design->product),
-            set::value($design->product),
-            set::items($products),
-            set::required(true),
-            on::change('loadStory')
-        )
+    $productRow = formGroup(
+        set::width('1/2'),
+        set::name('product'),
+        set::label($lang->design->product),
+        set::value($design->product),
+        set::items($products),
+        set::required(true),
+        on::change('loadStory')
     );
 }
 
@@ -44,58 +41,42 @@ formPanel
         set::text($design->name)
     ),
     $productRow,
-    formRow
+    formGroup
     (
-        formGroup
+        set::width('1/2'),
+        set::name('story'),
+        set::label($lang->design->story),
+        set::value($design->story),
+        set::items($stories)
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name('type'),
+        set::label($lang->design->type),
+        set::value($design->type),
+        set::items($lang->design->typeList)
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name('name'),
+        set::value($design->name),
+        set::label($lang->design->name)
+    ),
+    formGroup
+    (
+        set::label($lang->design->desc),
+        editor
         (
-            set::width('1/2'),
-            set::name('story'),
-            set::label($lang->design->story),
-            set::value($design->story),
-            set::items($stories)
+            set::name('desc'),
+            html($design->desc),
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('type'),
-            set::label($lang->design->type),
-            set::value($design->type),
-            set::items($lang->design->typeList)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('name'),
-            set::value($design->name),
-            set::label($lang->design->name)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->design->desc),
-            editor
-            (
-                set::name('desc'),
-                set::value($design->desc),
-                set::rows('5'),
-            )
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->design->file),
-            upload()
-        )
+        set::label($lang->design->file),
+        upload()
     )
 );
 
