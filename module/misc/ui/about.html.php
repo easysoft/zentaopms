@@ -41,7 +41,7 @@ foreach($lang->misc->zentao as $label => $groupItems)
 
     $zentaoItems[] = panel
     (
-        set::className('w-1/5 mx-3'),
+        set::className('w-1/4 mx-3'),
         set::title($lang->misc->zentao->labels[$label]),
         set::titleClass('strong'),
         set::headingClass('gray-200'),
@@ -63,7 +63,7 @@ h::table
         h::td
         (
             set::className('text-center'),
-            zui::width('177px'),
+            zui::width('200px'),
             img
             (
                 set('src', $config->webRoot . 'theme/default/images/main/' . $lang->logoImg)
