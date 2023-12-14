@@ -486,6 +486,7 @@ class story extends control
         $story   = $this->story->mergeReviewer($story, true);
 
         $this->app->loadLang('bug');
+        $this->story->replaceURLang($story->type);
         $this->storyZen->getLinkedObjects($story);
         $this->storyZen->setHiddenFieldsForView($product);
 
