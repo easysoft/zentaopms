@@ -4032,14 +4032,7 @@ class kanbanModel extends model
                     ->fetch('count');
                 return $count > 1;
             case 'splitcolumn' :
-                if($object->parent) return false;   // The current column is a child column.
-
-                $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
-                    ->where('parent')->eq($object->id)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('archived')->eq('0')
-                    ->fetch('count');
-                return $count == 0;     // The column has child columns.
+                return $object->parent == 0;
             case 'restorecolumn' :
                 if($object->parent > 0)
                 {
@@ -4050,17 +4043,7 @@ class kanbanModel extends model
             case 'archivecolumn' :
                 return $object->archived == '0';    // The column has been archived.
             case 'deletecolumn' :
-                if($object->deleted != '0') return false;
-
-                $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
-                    ->where('region')->eq($object->region)
-                    ->andWhere('parent')->in('0,-1')
-                    ->andWhere('`group`')->eq($object->group)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('archived')->eq('0')
-                    ->fetch('count');
-
-                return $count > 1;
+                return $object->deleted == '0';
             case 'sortcolumn':
                 return $object->deleted == '0';
             case 'finishcard':
