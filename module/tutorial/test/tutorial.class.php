@@ -207,18 +207,15 @@ class tutorialTest
     }
 
     /**
-     * Get tutorial team members.
+     * 测试获取新手模式团队成员。
+     * Test get tutorial team members.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTeamMembersTest()
+    public function getTeamMembersTest(): array
     {
-        $objects = $this->objectModel->getTeamMembers();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getTeamMembers();
     }
 
     /**
