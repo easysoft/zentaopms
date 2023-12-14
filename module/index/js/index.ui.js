@@ -477,7 +477,7 @@ function goBack(target, url, startState)
         {
             const pathSet = new Set(target.toLowerCase().split(','));
             let state = startState;
-            while(state && state.path && !pathSet.has(state.path)) state = state.prev;
+            while(state && state.path && !pathSet.has(state.path.toLowerCase())) state = state.prev;
             if(state && pathSet.has(state.path.toLowerCase()))
             {
                 if(state.index === preState.index) return window.history.back();
