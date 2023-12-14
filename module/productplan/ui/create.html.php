@@ -44,9 +44,12 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->productplan->parent),
-        set::name('parent'),
-        set::items($parentPlanPairs),
-        $product->type != 'normal' ? on::change('loadBranches') : ''
+        picker
+        (
+            set::name('parent'),
+            set::items($parentPlanPairs),
+            $product->type != 'normal' ? on::change('loadBranches') : ''
+        )
     ) : formHidden('parent', $parent),
     !$product->shadow && $product->type != 'normal' ? formGroup
     (
