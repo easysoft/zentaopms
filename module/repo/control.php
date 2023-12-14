@@ -1133,7 +1133,7 @@ class repo extends control
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
-        $branchID = (string)$this->cookie->syncBranch;
+        $branchID = $repo->SCM == 'Subversion' ? '' : (string)$this->cookie->syncBranch;
         $branches = $this->repoZen->getSyncBranches($repo, $branchID);
 
         $logs    = array();
@@ -1144,7 +1144,9 @@ class repo extends control
 
             $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
             $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
-            $logs     = $this->scm->getCommits($revision, $type == 'batch' ? $this->config->repo->batchNum : 0, $branchID);
+            $batchNum = $type == 'batch' ? $this->config->repo->batchNum : 0;
+            if($repo->SCM == 'Subversion' && $batchNum) $batchNum = $this->config->repo->svnBatchNum;
+            $logs     = $this->scm->getCommits($revision, $batchNum, $branchID);
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);

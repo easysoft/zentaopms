@@ -24,12 +24,13 @@ $config->program->suffix['xml']  = "xml";
 $config->program->suffix['htm']  = "xml";
 $config->program->suffix['pl']   = "perl";
 
-$config->repo->cacheTime = 10;
-$config->repo->syncTime  = 10;
-$config->repo->batchNum  = 100;
-$config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
-$config->repo->binary    = '|pdf|';
-$config->repo->synced    = '';
+$config->repo->cacheTime   = 10;
+$config->repo->syncTime    = 10;
+$config->repo->batchNum    = 100;
+$config->repo->svnBatchNum = 10;
+$config->repo->images      = '|png|gif|jpg|ico|jpeg|bmp|';
+$config->repo->binary      = '|pdf|';
+$config->repo->synced      = '';
 
 $config->repo->repoSyncLog = new stdclass();
 $config->repo->repoSyncLog->one            = 1;
