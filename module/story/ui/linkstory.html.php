@@ -14,6 +14,8 @@ namespace zin;
 
 $pageParams = http_build_query($app->getParams());
 
+$config->story->dtable->fieldList['title']['title'] = $lang->story->title;
+
 $cols = array();
 $cols['id']     = $config->story->dtable->fieldList['id'];
 $cols['title']  = $config->story->dtable->fieldList['title'];
