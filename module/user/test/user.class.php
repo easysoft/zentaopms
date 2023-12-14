@@ -416,6 +416,28 @@ class userTest
     }
 
     /**
+     * 测试批量创建用户前检查提交的数据。
+     * Test check posted data before batch creating users.
+     *
+     * @param  array  $users
+     * @param  string $verifyPassword
+     * @access public
+     * @return array
+     */
+    public function checkBeforeBatchCreateTest(array $users, string $verifyPassword): array
+    {
+        $result = $this->objectModel->checkBeforeBatchCreate($users, $verifyPassword);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * 测试检查提交的用户密码。
      * Test check posted user password.
      *
