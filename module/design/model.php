@@ -23,14 +23,10 @@ class designModel extends model
      */
     public function create(object $design): bool|int
     {
-        $project = $this->loadModel('project')->getByID($design->project);
-        $requiredFields = $this->config->design->create->requiredFields;
-        if(!empty($project->hasProduct)) $requiredFields .= ',product';
-
         $design = $this->loadModel('file')->processImgURL($design, 'desc', (string)$this->post->uid);
         $this->dao->insert(TABLE_DESIGN)->data($design)
             ->autoCheck()
-            ->batchCheck($requiredFields, 'notempty')
+            ->batchCheck($this->config->design->create->requiredFields, 'notempty')
             ->exec();
 
         if(dao::isError()) return false;
