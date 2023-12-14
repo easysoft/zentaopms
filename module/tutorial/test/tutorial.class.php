@@ -243,17 +243,14 @@ class tutorialTest
     }
 
     /**
+     * 测试获取新手模式进度。
      * Get tutorialed.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function getTutorialedTest()
+    public function getTutorialedTest(): string
     {
-        $objects = $this->objectModel->getTutorialed();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getTutorialed();
     }
 }

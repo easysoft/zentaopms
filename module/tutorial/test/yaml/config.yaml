@@ -1,0 +1,17 @@
+title: config.
+desc: config data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: module
+    range: tutorial{8},system{8}
+  - field: section
+    range: tasks{4},stories{4}
+  - field: key
+    range: URSR{2},setting{2}
+  - field: owner
+    range: admin,user1
+  - field: value
+    range: 1-100
