@@ -7,9 +7,40 @@ title=测试 tutorialModel->getExecution();
 timeout=0
 cid=1
 
-- 检查获取数据的id属性id @3
-- 检查获取数据的PM属性PM @admin
-- 检查获取数据的burns第burns条的0属性 @35
+- 检查获取 admin 数据的id,project,name,PM,PO,QD,RD
+ - 属性id @3
+ - 属性project @2
+ - 属性name @Test execution
+ - 属性PM @admin
+ - 属性PO @admin
+ - 属性QD @admin
+ - 属性RD @admin
+- 检查获取 admin 数据的burns
+ - 第burns条的0属性 @35
+ - 第burns条的1属性 @35
+- 检查获取 admin 数据的hours
+ - 第hours条的totalEstimate属性 @52
+ - 第hours条的totalConsumed属性 @43
+ - 第hours条的totalLeft属性 @7
+ - 第hours条的progress属性 @86
+ - 第hours条的totalReal属性 @50
+- 检查获取 user1 数据的id,project,name,PM,PO,QD,RD
+ - 属性id @3
+ - 属性project @2
+ - 属性name @Test execution
+ - 属性PM @user1
+ - 属性PO @user1
+ - 属性QD @user1
+ - 属性RD @user1
+- 检查获取 user1 数据的burns
+ - 第burns条的0属性 @35
+ - 第burns条的1属性 @35
+- 检查获取 user1 数据的hours
+ - 第hours条的totalEstimate属性 @52
+ - 第hours条的totalConsumed属性 @43
+ - 第hours条的totalLeft属性 @7
+ - 第hours条的progress属性 @86
+ - 第hours条的totalReal属性 @50
 
 */
 
