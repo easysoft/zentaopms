@@ -352,45 +352,6 @@ class designModel extends model
     }
 
     /**
-     * Get commits
-     *
-     * @param  object $repo
-     * @param  string $begin
-     * @param  string $end
-     * @access public
-     * @return array
-     */
-    public function getCommits(object $repo, string $begin, string $end): array
-    {
-        $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repo->id)
-            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->orderBy('time desc')
-            ->limit(1)
-            ->fetch('time');
-
-        $comments = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repo->id)
-            ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
-            ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
-            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
-            ->orderBy('time desc')
-            ->fetchAll('id');
-
-        $this->loadModel('repo');
-        foreach($comments as $repoComment)
-        {
-            $repoComment->originalComment = $repoComment->comment;
-            $repoComment->comment         = $this->repo->replaceCommentLink($repoComment->comment);
-        }
-        return $comments;
-    }
-
-    /**
      * 获取搜索后的设计列表数据。
      * Get designs by search.
      *

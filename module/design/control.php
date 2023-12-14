@@ -309,7 +309,7 @@ class design extends control
         $repoID = $repoID ? $repoID : key($repos);
 
         $repo      = $this->loadModel('repo')->getByID((int)$repoID);
-        $revisions = $this->design->getCommits($repo,$begin, date('Y-m-d 23:59:59', strtotime($end)));
+        $revisions = $this->repo->getCommits($repo, '', 'HEAD', 'dir', null, $begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         $this->session->set('designRevisions', $revisions);
 
