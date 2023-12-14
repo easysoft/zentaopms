@@ -849,12 +849,11 @@ class transferModel extends model
         $productIDList = array_unique($productIDList);
 
         $storyDatas = end($stories);
-        $lastBranch = $storyDatas->branch;
         $lastType   = $storyDatas->type;
 
         if($storyDatas->type == 'requirement')
         {
-            $stories = $this->loadModel('story')->mergePlanTitle($productIDList , $stories, $lastBranch, $lastType);
+            $stories = $this->loadModel('story')->mergePlanTitleAndChildren($productIDList, $stories, $lastType);
         }
         elseif($storyDatas->type == 'story')
         {
