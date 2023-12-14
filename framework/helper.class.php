@@ -509,14 +509,14 @@ function initPageEntity(object $object): array
  */
 function initTableData(array $items, array &$fieldList, object $model = null): array
 {
-    if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderVaule) = explode('_', $_GET['orderBy']);
-    if(!empty($orderField) && !empty($orderVaule) && !empty($fieldList[$orderField]))
+    if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
+    if(!empty($orderField) && !empty($orderValue) && !empty($fieldList[$orderField]))
     {
         $sortType = false;
         $col      = $fieldList[$orderField];
         if(empty($col['sortType']) && !empty($col['type']) && in_array($col['type'], array('id', 'title'))) $sortType = true;
         if(!empty($col['sortType'])) $sortType = $col['sortType'];
-        if(is_bool($sortType)) $fieldList[$orderField]['sortType'] = $orderVaule;
+        if(is_bool($sortType)) $fieldList[$orderField]['sortType'] = $orderValue;
     }
 
     $items = setParent($items);
