@@ -35,7 +35,7 @@ class gitlabTest
     {
         $gitlab = $this->gitlab->getList($orderBy);
         if(empty($gitlab)) return 0;
-        return array_shift($gitlab);
+        return $gitlab;
     }
 
     /**
@@ -46,18 +46,44 @@ class gitlabTest
     public function getPairs()
     {
         $pairs = $this->gitlab->getPairs();
-        return key($pairs);
+        return $pairs;
+    }
+
+    public function getApiRootTest(int $gitlabID, bool $sudo = true)
+    {
+        return $this->gitlab->getApiRoot($gitlabID, $sudo);
+    }
+
+    public function getUserIdRealnamePairsTest(int $gitlabID)
+    {
+        return $this->gitlab->getUserIdRealnamePairs($gitlabID);
+    }
+
+    public function getUserIdAccountPairsTest(int $gitlabID)
+    {
+        return $this->gitlab->getUserIdAccountPairs($gitlabID);
+    }
+
+    public function getUserAccountIdPairsTest(int $gitlabID)
+    {
+        return $this->gitlab->getUserAccountIdPairs($gitlabID);
+    }
+
+    public function getUserIDByZentaoAccountTest(int $gitlab, string $zentaoAccount)
+    {
+        return $this->gitlab->getUserIDByZentaoAccount($gitlab, $zentaoAccount);
     }
 
     /**
      * Create a gitlab.
      *
+     * @param  array $gitlab
      * @access public
      * @return object|string
      */
-    public function create()
+    public function create(array $gitlab)
     {
-        $gitlabID = $this->gitlab->create();
+        $gitlabID = $this->gitlab->create((object)$gitlab);
         if(dao::isError())
         {
             $errors = dao::getError();

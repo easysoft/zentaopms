@@ -7,15 +7,16 @@ su('admin');
 /**
 
 title=测试gitlabModel->gitPairs();
+timeout=0
 cid=1
-pid=1
 
-获取GitLab   >> 1
+- 获取GitLab id为1的名字。属性1 @GitLab服务器
+- 获取GitLab 列表数量。 @1
 
 */
 
 $gitlab = new gitlabTest();
 
-r($gitlab->getPairs()) && p() && e('1');    // 获取GitLab
-
-system("./ztest init");
+$gitlabPairs = $gitlab->getPairs();
+r($gitlabPairs)        && p(1) && e('GitLab服务器'); // 获取GitLab id为1的名字。
+r(count($gitlabPairs)) && p()  && e('1');            // 获取GitLab 列表数量。

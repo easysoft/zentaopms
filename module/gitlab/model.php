@@ -472,9 +472,9 @@ class gitlabModel extends model
      * @param  array      $data
      * @param  array      $options
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiGet(int|string $host, string $api, array $data = array(), array $options = array()): object|array|null
+    public function apiGet(int|string $host, string $api, array $data = array(), array $options = array()): object|array|null|false
     {
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
@@ -529,9 +529,9 @@ class gitlabModel extends model
      * @param  string $host
      * @param  string $token
      * @access public
-     * @return array
+     * @return object|array|null|false
      */
-    public function apiGetCurrentUser(string $host, string $token): object|array|null
+    public function apiGetCurrentUser(string $host, string $token): object|array|null|false
     {
         $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
         return $this->apiGet($host, '/user');
@@ -1049,9 +1049,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  object $branch
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateBranch(int $gitlabID, int $projectID, object $branch): object|array|null
+    public function apiCreateBranch(int $gitlabID, int $projectID, object $branch): object|array|null|false
     {
         if(empty($branch->branch) or empty($branch->ref)) return false;
 
@@ -1739,9 +1739,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $tagName
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiDeleteTag(int $gitlabID, int $projectID, string $tagName = ''): object|array|null
+    public function apiDeleteTag(int $gitlabID, int $projectID, string $tagName = ''): object|array|null|false
     {
         if(!(int)$gitlabID or !(int)$projectID or empty($tagName)) return false;
 
@@ -1788,9 +1788,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $tag
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiDeleteTagPriv(int $gitlabID, int $projectID, string $tag): object|array|null
+    public function apiDeleteTagPriv(int $gitlabID, int $projectID, string $tag): object|array|null|false
     {
         if(empty($gitlabID)) return false;
         $apiRoot = $this->getApiRoot($gitlabID);
@@ -2618,6 +2618,7 @@ class gitlabModel extends model
             return true;
         }
 
+        if(!is_object($response)) return false;
         return $this->apiErrorHandling($response);
     }
 
@@ -2694,9 +2695,9 @@ class gitlabModel extends model
      * @param  string $keyword
      * @param  string $orderBy
      * @access public
-     * @return array
+     * @return array|object|null
      */
-    public function apiGetBranchPrivs(int $gitlabID, int $projectID, string $keyword = '', string $orderBy = 'id_desc'): array
+    public function apiGetBranchPrivs(int $gitlabID, int $projectID, string $keyword = '', string $orderBy = 'id_desc'): array|object|null
     {
         $keyword  = urlencode($keyword);
         $url      = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches");
@@ -2775,9 +2776,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  object $priv
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateBranchPriv(int $gitlabID, int $projectID, object $priv): object|array|null
+    public function apiCreateBranchPriv(int $gitlabID, int $projectID, object $priv): object|array|null|false
     {
         if(empty($gitlabID))   return false;
         if(empty($projectID))  return false;
@@ -2795,9 +2796,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiDeleteBranchPriv(int $gitlabID, int $projectID, string $branch): object|array|null
+    public function apiDeleteBranchPriv(int $gitlabID, int $projectID, string $branch): object|array|null|false
     {
         if(empty($gitlabID)) return false;
         $branch  = urlencode($branch);
@@ -2865,9 +2866,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  object $priv
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateTagPriv(int $gitlabID, int $projectID, object $priv): object|array|null
+    public function apiCreateTagPriv(int $gitlabID, int $projectID, object $priv): object|array|null|false
     {
         if(empty($gitlabID) or empty($projectID)) return false;
         if(empty($priv->name)) return false;
@@ -2906,9 +2907,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $tag
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiGetSingleTag(int $gitlabID, int $projectID, string $tag): object|array|null
+    public function apiGetSingleTag(int $gitlabID, int $projectID, string $tag): object|array|null|false
     {
         if(empty($gitlabID)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/tags/$tag");

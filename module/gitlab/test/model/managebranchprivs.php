@@ -7,23 +7,25 @@ su('admin');
 /**
 
 title=测试gitlabModel->manageBranchPrivs();
+timeout=0
 cid=1
-pid=1
 
-维护已存在的保护分支            >> fail
-使用错误的gitlabID维护保护分支  >> success
-使用错误的项目ID维护保护分支    >> success
+- 维护已存在的保护分支 @fail
+- 使用错误的gitlabID维护保护分支 @success
+- 使用错误的项目ID维护保护分支 @success
 
 */
 
+zdTable('pipeline')->gen(5);
+
 $gitlab = new gitlabTest();
 
-$_POST['branches'][0]    = '1227';
-$_POST['mergeLevels'][0] = 40;
-$_POST['pushLevels'][0]  = 40;
+$_POST['name'][0]        = 'protected_branch';
+$_POST['mergeAccess'][0] = 40;
+$_POST['pushAccess'][0]  = 40;
 
-$result1 = $gitlab->manageBranchPrivsTest(1, 1569);
-$result2 = $gitlab->manageBranchPrivsTest(0, 1569);
+$result1 = $gitlab->manageBranchPrivsTest(1, 2);
+$result2 = $gitlab->manageBranchPrivsTest(0, 2);
 $result3 = $gitlab->manageBranchPrivsTest(1, 0);
 
 r($result1) && p('') && e('fail');    // 维护已存在的保护分支
