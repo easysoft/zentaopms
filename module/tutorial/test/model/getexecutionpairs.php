@@ -1,18 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tutorial.class.php';
-su('admin');
-
+declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getExecutionPairs();
 cid=1
-pid=1
 
-检查获取的数据信息 >> Test execution
+- 检查获取的数据信息属性3 @Test execution
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tutorial.class.php';
+
+zdTable('user')->gen(5);
+
+su('admin');
 
 $tutorial = new tutorialTest();
 
