@@ -66,6 +66,7 @@ modal
     set::title($lang->product->link2Project),
     set::footerClass('form-actions'),
     setData('size', '500px'),
+    on::click('#saveButton', 'link2Project(e)'),
     to::footer
     (
         btn(setClass('primary'), set::id('saveButton'), $lang->save),
