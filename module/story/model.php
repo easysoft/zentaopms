@@ -4614,6 +4614,8 @@ class storyModel extends model
         $menu   = '';
         $params = "storyID=$story->id";
 
+        static $taskGroups = array();
+
         if($type == 'browse')
         {
             if(!common::canBeChanged('story', $story)) return $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'list', '', '', 'iframe', true);
@@ -4695,7 +4697,6 @@ class storyModel extends model
             $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
             if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow OR $story->type == 'requirement')
             {
-                static $taskGroups = array();
                 if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
 
                 $isClick = $this->isClickable($story, 'batchcreate');
@@ -4874,7 +4875,6 @@ class storyModel extends model
                 /* Adjust code, hide split entry. */
                 if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
                 {
-                    static $taskGroups = array();
                     if(empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
 
                     $isClick = $this->isClickable($story, 'batchcreate');
