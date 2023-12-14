@@ -861,7 +861,7 @@ $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = '合并请求|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab服务器|gitlab|view|id=%s';
 $lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
-$lang->action->label->module       = '模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
+$lang->action->label->module       = '模块|tree|browse|productid=%s&view=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = '工单|ticket|view|id=%s';
 $lang->action->label->chartgroup   = '分组';
 $lang->action->label->serverroom   = '机房|serverroom|browse|';
