@@ -84,21 +84,6 @@ class company extends control
         $this->display();
     }
 
-    public function create()
-    {
-        if(!empty($_POST))
-        {
-            $this->company->create();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::reload('parent.parent'));
-        }
-
-        $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->company->create;
-        $this->view->position = $this->lang->company->create;
-
-        $this->display();
-    }
-
     /**
      * 编辑公司信息。
      * Edit a company.
