@@ -29,9 +29,9 @@ class gitlabModel extends model
      *
      * @param  int $id
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID(int $id): object
+    public function getByID(int $id): object|false
     {
         return $this->loadModel('pipeline')->getByID($id);
     }
