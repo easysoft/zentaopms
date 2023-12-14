@@ -68,33 +68,31 @@ class designTest
     }
 
     /**
-     * Function update test by desgin
+     * 编辑一个设计。
+     * Update a design.
      *
-     * @param  int   $designID
-     * @param  array $param
+     * @param  int       $designID
+     * @param  array     $data
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function updateTest($designID, $param = array())
+    public function updateTest(int $designID, array $data = array()): array|bool
     {
-        global $tester;
+        $oldDesign = $this->objectModel->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+        $fields    = array('product', 'name', 'story', 'desc', 'type');
 
-        $labels = array();
-        $files  = array();
+        $design = new stdClass();
+        $design->editedBy = $this->objectModel->app->user->account;
+        $design->editedDate = helper::now();
+        if($oldDesign)
+        {
+            foreach($fields as $field) $design->{$field} = isset($data[$field]) ? $data[$field] : $oldDesign->{$field};
+        }
 
-        $createFields = $tester->dao->select('`product`,`story`,`type`,`name`,`desc`')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetchAll();
-        $createFields[0]->labels = $labels;
-        $createFields[0]->files  = $files;
-        foreach($createFields[0] as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->update($designID);
-
-        unset($_POST);
+        $changes = $this->objectModel->update($designID, $design);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $changes;
     }
 
     /**
