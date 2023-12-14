@@ -1,7 +1,6 @@
 function changeEngine(event)
 {
     const engine = $(event.target).val();
-
     if(engine == 'jenkins')
     {
         $('.reference').addClass('hidden');
@@ -20,7 +19,7 @@ function changeEngine(event)
         repoItems.push({'text': repos[i], 'value': i});
     }
 
-    const picker = $('#repo').zui('picker');
+    const picker = $('input[name=repo]').zui('picker');
     picker.render({items: repoItems});
     picker.$.setValue(repoID);
 
@@ -40,7 +39,8 @@ function changeEngine(event)
     {
         if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
     }
-    zui.Picker.query('#frame').render({items: items});
+    var $framePicker = $('[name=frame]').zui('picker');
+    if($framePicker) $framePicker.render({items: items});
 
     changeRepo();
 }
