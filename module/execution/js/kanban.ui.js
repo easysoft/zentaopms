@@ -215,8 +215,8 @@ window.buildStoryActions = function(item)
     if(priv.canCreateTask && item.status == 'active') actions.push({text: executionLang.wbs, icon: 'plus', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canBatchCreateTask && item.status == 'active') actions.push({text: executionLang.batchWBS, icon: 'pluses', url: $.createLink('task', 'batchCreate', 'executionID=' + executionID + '&storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canActivateStory && item.status == 'closed') actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('story', 'activate', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canUnlinkStory) actions.push({text: executionLang.unlinkStory, icon: 'unlink', url: $.createLink('execution', 'unlinkStory', 'executionID=' + executionID + '&storyID=' + item.id + '&confirm=no&from=' + '&laneID=' + item.lane + '&columnID=' + item.column), 'data-confirm' : executionLang.confirmUnlinkStory, 'innerClass' : 'ajax-submit'});
-    if(priv.canDeleteStory) actions.push({text: storyLang.delete, icon: 'trash', url: $.createLink('story', 'delete', 'storyID=' + item.id), 'data-confirm': storyLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canUnlinkStory) actions.push({text: executionLang.unlinkStory, icon: 'unlink', url: $.createLink('execution', 'unlinkStory', 'executionID=' + executionID + '&storyID=' + item.id + '&confirm=no&from=' + '&laneID=' + item.lane + '&columnID=' + item.column), 'innerClass' : 'ajax-submit'});
+    if(priv.canDeleteStory) actions.push({text: storyLang.delete, icon: 'trash', url: $.createLink('story', 'delete', 'storyID=' + item.id), 'innerClass': 'ajax-submit'});
 
     return actions;
 }

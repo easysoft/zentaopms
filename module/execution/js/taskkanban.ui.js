@@ -246,7 +246,12 @@ window.buildCardActions = function(item)
 
     item.actionList.forEach(action =>
     {
-        actions.push({'text': action.label, 'icon': action.icon, 'url': action.url, 'data-toggle': 'modal', 'data-size': 'lg'});
+        actionMap = {'text': action.label, 'icon': action.icon, 'url': action.url};
+        if(typeof(action.confirm) != 'undefined') actionMap['data-confirm'] = action.confirm;
+        if(typeof(action.modal) != 'undefined')   actionMap['data-toggle'] = 'modal';
+        if(typeof(action.size) != 'undefined')    actionMap['data-size']   = action.size;
+        if(typeof(action.modal) == 'undefined')   actionMap['innerClass'] = 'ajax-submit';
+        actions.push(actionMap);
     });
     return actions;
 }

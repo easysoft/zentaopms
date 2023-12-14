@@ -2285,10 +2285,11 @@ class execution extends control
     {
         if($confirm == 'no')
         {
-            $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-            $story = $this->loadModel('story')->getByID($storyID);
+            $confirmURL = $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from&laneID=$laneID&columnID=$columnID");
+            $tip        = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
+            $story      = $this->loadModel('story')->getByID($storyID);
             if($story->type == 'requirement') $tip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $tip);
-            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from&laneID=$laneID&columnID=$columnID")));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$tip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
 
         $execution = $this->execution->getByID($executionID);
@@ -2305,22 +2306,7 @@ class execution extends control
 
         $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
         $execGroupBy  = $this->session->execGroupBy  ? $this->session->execGroupBy : 'default';
-        if($this->app->tab == 'execution' and $execution->type == 'kanban')
-        {
-            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-            $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-            $kanbanData    = json_encode($kanbanData);
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
-        }
-        elseif($from == 'taskkanban')
-        {
-            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-            $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
-            $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
-            $kanbanData      = $kanbanData[$kanbanType];
-            $kanbanData      = json_encode($kanbanData);
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
-        }
+        if($this->app->tab == 'execution' and $execution->type == 'kanban' or $from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }

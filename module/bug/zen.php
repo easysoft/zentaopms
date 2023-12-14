@@ -2214,17 +2214,7 @@ class bugZen extends bug
 
         /* 在任务看板中删除 bug 时的返回。*/
         /* Respond when delete in task kanban. */
-        if($from == 'taskkanban')
-        {
-            $laneType    = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-            $groupBy     = $this->session->executionGroupBy  ? $this->session->executionGroupBy  : 'default';
-            $searchValue = $this->session->taskSearchValue   ? $this->session->taskSearchValue   : '';
-            $kanbanData  = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $searchValue);
-            $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
-            $kanbanData  = json_encode($kanbanData[$kanbanType]);
-
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
-        }
+        if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}")));
     }

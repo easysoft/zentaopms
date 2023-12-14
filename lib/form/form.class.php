@@ -229,7 +229,7 @@ class form extends fixer
         /* Assign the default value to the data if the default value exists and the data is not exist or null or empty string. */
         if(isset($config['default']) && (!isset($this->rawdata->$field) || is_null($this->rawdata->$field) || $this->rawdata->$field === '')) $data = $config['default'];
 
-        $data = helper::convertType($data, $config['type']);
+        if(isset($data)) $data = helper::convertType($data, $config['type']);
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
 
@@ -240,7 +240,7 @@ class form extends fixer
             $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
         }
 
-        $this->data->$field = $data;
+        $this->data->$field = isset($data) ? $data : null;
     }
 
     /**

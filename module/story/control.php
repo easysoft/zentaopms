@@ -440,13 +440,7 @@ class story extends control
                 $execution = $this->execution->getByID((int)$this->session->execution);
                 if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
-                    $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                    $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                    $taskSearchValue   = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData        = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $taskSearchValue);
-                    $kanbanData        = json_encode($kanbanData);
-
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban($kanbanData)", 'closeModal' => true));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "refreshKanban()", 'closeModal' => true));
                 }
                 else
                 {
@@ -570,8 +564,7 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-
-            if($this->app->tab == 'execution' and $from == 'taskkanban') return $this->storyZen->getResponseInModal();
+            if($this->app->tab == 'execution' and $from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
@@ -800,23 +793,9 @@ class story extends control
                 $execution = $this->execution->getByID((int)$this->session->execution);
                 $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
                 $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                if(($this->app->tab == 'execution' && $execution->type == 'kanban') || $from == 'taskkanban')
                 {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
-
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
-                    $kanbanData = json_encode($kanbanData);
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
-                }
-                elseif($from == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban()"));
                 }
                 else
                 {

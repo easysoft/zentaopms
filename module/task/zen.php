@@ -1569,7 +1569,7 @@ class taskZen extends task
         $execution = $this->loadModel('execution')->getByID((int)$task->execution);
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
-        if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban' || $from == 'taskkanban')
+        if((($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban') || $from == 'taskkanban')
         {
             $response['callback'] = 'refreshKanban()';
             return $response;
@@ -1675,7 +1675,7 @@ class taskZen extends task
     protected function responseAfterChangeStatus(object $task, string $from): array
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
+        if(isInModal()) return $this->responseModal($task, $from);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true);
     }
 
