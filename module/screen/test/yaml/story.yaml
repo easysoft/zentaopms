@@ -1,0 +1,9 @@
+title: table zt_story
+desc: "需求"
+author: automated export
+version: "1.0"
+fields:
+  - field: closedReason
+    range: done
+  - field: status
+    range: active{10},closed{10}

@@ -1,0 +1,9 @@
+title: zt_bug
+desc: "Bug表"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: status
+    range: active{10},closed{10}
+  - field: resolution
+    range: fixed
