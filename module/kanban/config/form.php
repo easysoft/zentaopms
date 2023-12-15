@@ -103,6 +103,17 @@ $config->kanban->form->createCard['assignedDate'] = array('type' => 'datetime', 
 $config->kanban->form->createCard['color']        = array('type' => 'string',   'required' => false, 'default' => '#fff');
 $config->kanban->form->createCard['fromID']       = array('type' => 'int',      'required' => false, 'default' => 0);
 
+$config->kanban->form->editCard['name']           = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->editCard['pri']            = array('type' => 'string',   'required' => false, 'default' => '');
+$config->kanban->form->editCard['estimate']       = array('type' => 'float',    'required' => false, 'default' => '');
+$config->kanban->form->editCard['progress']       = array('type' => 'float',    'required' => false, 'default' => '');
+$config->kanban->form->editCard['assignedTo']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->kanban->form->editCard['begin']          = array('type' => 'date',     'required' => false, 'default' => '');
+$config->kanban->form->editCard['end']            = array('type' => 'date',     'required' => false, 'default' => '');
+$config->kanban->form->editCard['desc']           = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->kanban->form->editCard['lastEditedBy']   = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->editCard['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
 $config->kanban->form->batchCreateCard['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'base' => 'true');
 $config->kanban->form->batchCreateCard['lane']       = array('type' => 'int',    'required' => true,  'default' => '');
 $config->kanban->form->batchCreateCard['assignedTo'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
