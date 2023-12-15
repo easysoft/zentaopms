@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
@@ -12,6 +11,8 @@ cid=0
 - 使用空的message @success
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
 $mrModel = $tester->loadModel('mr');
 
 $message = array();
