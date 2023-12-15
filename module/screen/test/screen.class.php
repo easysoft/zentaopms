@@ -50,9 +50,9 @@ class screenTest
     {
         global $tester,$app;
         $appPath = $app->getAppRoot();
-        $sqlFile = $appPath . 'data/screen.sql';
+        $sqlFile = $appPath . 'test/data/screen.sql';
         $tester->dbh->exec(file_get_contents($sqlFile));
-        $chartSqlFile = $appPath . 'data/chart.sql';
+        $chartSqlFile = $appPath . 'test/data/chart.sql';
         $tester->dbh->exec(file_get_contents($chartSqlFile));
     }
 
