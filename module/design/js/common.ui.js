@@ -20,7 +20,7 @@ function loadStory(e)
 
 $(function()
 {
-    if(type)
+    if(typeof type != 'undefined')
     {
         $('#mainNavbar .nav a').removeClass('active');
         $('#mainNavbar .nav a[data-id=' + type + ']').addClass('active');

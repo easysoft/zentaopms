@@ -62,6 +62,7 @@ $config->design->actionList['linkCommit']['text']          = $lang->design->link
 $config->design->actionList['linkCommit']['url']           = helper::createLink('design', 'linkCommit', 'designID={id}');
 $config->design->actionList['linkCommit']['data-toggle']   = 'modal';
 $config->design->actionList['linkCommit']['data-position'] = 'center';
+$config->design->actionList['linkCommit']['data-size']     = 'lg';
 
 $config->design->view->operateList['main']   = array('assignTo', 'linkCommit');
 $config->design->view->operateList['common'] = array('edit', 'delete');

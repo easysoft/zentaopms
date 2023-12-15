@@ -1,8 +1,8 @@
 function loadCommit()
 {
-    let begin  = $('#begin').val();
-    let end    = $('#end').val();
-    let repoID = $('#repo').val();
+    let begin  = $('.select-date-box input[name=begin]').val();
+    let end    = $('.select-date-box input[name=end]').val();
+    let repoID = $('.select-repo-box input[name=repo]').val();
 
     if(begin.indexOf('-') != -1)
     {

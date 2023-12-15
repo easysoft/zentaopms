@@ -1,3 +1,3 @@
+#featureBar {margin: 0.5rem 0 0.5rem 0;}
 .select-repo-box, .select-date-box {display: inline-flex;}
-.select-repo-box .repo-title {width: 104px;}
-.select-date-box .date-title {width: 62px;}
+.select-repo-box .repo-title,.select-date-box .date-title {width: 80px;}

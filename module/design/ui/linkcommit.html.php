@@ -38,12 +38,12 @@ else
                 setClass('flex items-center repo-title'),
                 $lang->repo->maintain
             ),
-            select
+            picker
             (
-                set::id('repo'),
                 set::name('repo'),
                 set::value($repoID),
                 set::items($repos),
+                set::width('200px'),
                 on::change('loadCommit'),
                 set::required(true)
             )
@@ -60,7 +60,6 @@ else
             (
                 datePicker
                 (
-                    set::id('begin'),
                     set::name('begin'),
                     set::value($begin),
                     on::change('loadCommit')
@@ -68,7 +67,6 @@ else
                 $lang->to,
                 datePicker
                 (
-                    set::id('end'),
                     set::name('end'),
                     set::value($end),
                     on::change('loadCommit')
@@ -92,12 +90,7 @@ else
         set::footToolbar($footToolbar),
         set::checkInfo(jsRaw('function(checkedIDList){return \'\';}')),
         set::rowKey('revision'),
-        set::footPager(
-            usePager
-            (
-                array('linkCreator' => helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recPerPage={recPerPage}&pageID={page}"))
-            )
-        )
+        set::footPager(usePager())
     );
 }
 
