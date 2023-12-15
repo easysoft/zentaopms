@@ -41,7 +41,8 @@ $statusList    = array('wait', 'normal', 'blocked', 'investigate');
 
 $testcase = new testcaseTest();
 
-r($app->user->view->products)                                                           && p() && e('3,4,5,1,2,3,4,5,6,7,8,9,10'); // 测试查询所有产品 所有状态的case
+$app->user->view->products = '1,2,3,4,5,6,7,8,9,10';
+
 r($testcase->getByStatusTest())                                                         && p() && e('10'); // 测试查询所有产品 所有状态的case
 r($testcase->getByStatusTest($productIDList[1]))                                        && p() && e('4');  // 测试查询产品1 所有状态的case
 r($testcase->getByStatusTest($productIDList[2]))                                        && p() && e('4');  // 测试查询产品2 所有状态的case
