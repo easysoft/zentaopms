@@ -1,18 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=accountModel->getPairs();
+timeout=0
+cid=0
+
+- 检查获取数据数。 @10
+- 检查部分数据。
+ - 属性1 @运维账号1
+ - 属性2 @运维账号2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
 zdTable('account')->gen(10);
-
-/**
-
-title=accountModel->getList();
-timeout=0
-cid=1
-
-*/
 
 global $tester;
 $accountModel = $tester->loadModel('account');
