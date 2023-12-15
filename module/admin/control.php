@@ -249,19 +249,23 @@ class admin extends control
 
         if($_POST)
         {
-            $data = form::data()->get();
+            $data           = form::data()->get();
             $closedFeatures = '';
-            foreach($data->module as $module => $checked)
+            foreach($this->config->featureGroup as $group => $features)
             {
-                if($module == 'myScore') continue;
-                if(!$checked) $closedFeatures .= "$module,";
+                foreach($features as $feature)
+                {
+                    if($feature == 'score' || $feature == 'UR') continue;
+                    $code = $group . ucfirst($feature);
+                    if(!isset($data->module[$code])) $closedFeatures .= "{$code},";
+                }
             }
 
             $this->setting->setItem('system.common.closedFeatures', rtrim($closedFeatures, ','));
-            $this->setting->setItem('system.common.global.scoreStatus', $data->module['myScore']);
-            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : $data->module['productUR']);
+            $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));
+            $this->setting->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : zget($data->module, 'UR', 0));
             $this->loadModel('custom')->processMeasrecordCron();
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppMenu'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppsMenu'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
