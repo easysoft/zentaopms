@@ -316,18 +316,22 @@ class designModel extends model
     }
 
     /**
+     * 获取设计关联的代码提交。
      * Get commit.
      *
-     * @param  int    $designID
-     * @param  int    $pager
+     * @param  int         $designID
+     * @param  object      $pager
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getCommit($designID = 0, $pager = null)
+    public function getCommit(int $designID = 0, object $pager = null): object|bool
     {
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+        if(!$design) return false;
 
-        $design->commit = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id');
+        $design->project = (int)$design->project;
+        $design->product = (int)$design->product;
+        $design->commit  = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id');
 
         return $design;
     }
