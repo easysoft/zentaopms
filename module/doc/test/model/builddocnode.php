@@ -123,7 +123,7 @@ r($docTester->buildDocNodeTest($normalModule, $libIds[2])) && p('type,docsCount,
 r($docTester->buildDocNodeTest($normalModule, $libIds[3])) && p('type,docsCount,actions') && e('module,0,~~'); // 测试模块为普通模块，libID不存在时，获取的文档节点数据
 
 /* Not exist module object. */
-r($docTester->buildDocNodeTest($notExistModule, $libIds[0])) && p('type,docsCount,actions') && e('module,0,~~');  // 测试模块不存在，libID=0时，获取的文档节点数据
-r($docTester->buildDocNodeTest($notExistModule, $libIds[1])) && p('type,docsCount,actions') && e('module,0,~~');  // 测试模块不存在，libID=11时，获取的文档节点数据
-r($docTester->buildDocNodeTest($notExistModule, $libIds[2])) && p('type,docsCount,actions') && e('module,0,~~');  // 测试模块不存在，libID=13时，获取的文档节点数据
-r($docTester->buildDocNodeTest($notExistModule, $libIds[3])) && p('type,docsCount,actions') && e('module,0,N/A'); // 测试模块不存在，libID不存在时，获取的文档节点数据
+r($docTester->buildDocNodeTest($notExistModule, $libIds[0])) && p('type,docsCount,actions') && e('module,0,~~'); // 测试模块不存在，libID=0时，获取的文档节点数据
+r($docTester->buildDocNodeTest($notExistModule, $libIds[1])) && p('type,docsCount,actions') && e('module,0,~~'); // 测试模块不存在，libID=11时，获取的文档节点数据
+r($docTester->buildDocNodeTest($notExistModule, $libIds[2])) && p('type,docsCount,actions') && e('module,0,~~'); // 测试模块不存在，libID=13时，获取的文档节点数据
+r($docTester->buildDocNodeTest($notExistModule, $libIds[3])) && p('type,docsCount,actions') && e('module,0,~~'); // 测试模块不存在，libID不存在时，获取的文档节点数据

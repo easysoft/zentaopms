@@ -36,4 +36,4 @@ $executions = array(0, 101, 106);
 $docTester = new docTest();
 r($docTester->getLinkedExecutionDataTest($executions[2])) && p('2', ';') && e('6,16'); // 获取系统中关联执行ID=106的数据
 r($docTester->getLinkedExecutionDataTest($executions[1])) && p('1', ';') && e('1,11'); // 获取系统中关联执行ID=101的数据
-r($docTester->getLinkedExecutionDataTest($executions[0])) && p('0')      && e('N/A');  // 获取系统中关联执行ID=0的数据
+r($docTester->getLinkedExecutionDataTest($executions[0])) && p('0')      && e('~~');  // 获取系统中关联执行ID=0的数据

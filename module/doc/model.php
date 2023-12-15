@@ -2625,7 +2625,7 @@ class docModel extends model
             ->orWhere('(objectType')->eq('api')
             ->andWhere('objectID')->in(array_keys($apiList))
             ->markRight(2)
-            ->orderBy('date_desc')
+            ->orderBy('date_desc,id_asc')
             ->page($pager)
             ->fetchAll();
 
