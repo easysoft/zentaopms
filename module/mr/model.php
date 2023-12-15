@@ -535,9 +535,9 @@ class mrModel extends model
      * @param  string $projectID
      * @param  object $MR
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiCreateMR(int $hostID, string $projectID, object $MR): object
+    public function apiCreateMR(int $hostID, string $projectID, object $MR): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
 
