@@ -268,4 +268,20 @@ class designTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->fetchAll();
     }
+
+    /**
+     * 通过ID获取提交记录。
+     * Get commit by ID.
+     *
+     * @param  int               $revisionID
+     * @access public
+     * @return object|bool|array
+     */
+    public function getCommitByIDTest(int $revisionID = 0): object|bool|array
+    {
+        $commit = $this->objectModel->getCommitByID($revisionID);
+
+        if(dao::isError()) return dao::getError();
+        return $commit;
+    }
 }
