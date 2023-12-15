@@ -543,10 +543,11 @@ class docZen extends doc
      * Set the dropdown values of object for creating document.
      *
      * @param  string    $objectType product|project|execution|custom
+     * @param  int       $objectID
      * @access protected
      * @return void
      */
-    protected function setObjectsForEdit(string $objectType): void
+    protected function setObjectsForEdit(string $objectType, int $objectID): void
     {
         $objects = array();
         if($objectType == 'project')

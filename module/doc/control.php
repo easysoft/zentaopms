@@ -403,7 +403,7 @@ class doc extends control
         $objectID = zget($lib, $lib->type, 0);
         $libs     = $this->doc->getLibs($lib->type, 'withObject', $doc->lib, $objectID);
 
-        $this->docZen->setObjectsForEdit($lib->type);
+        $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
         $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->doc              = $doc;
