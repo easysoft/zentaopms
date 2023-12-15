@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of design module of ZenTaoPMS.
  *
@@ -205,7 +206,7 @@ class design extends control
     public function view(int $designID = 0)
     {
         $design = $this->design->getByID($designID);
-        $this->commonAction((int)$design->project, (int)$design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true), 'product');
@@ -238,7 +239,7 @@ class design extends control
     {
         $design = $this->design->getByID($designID);
         $design = $this->design->getAffectedScope($design);
-        $this->commonAction((int)$design->project, (int)$design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         if($_POST)
         {
@@ -258,7 +259,7 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
-        $project       = $this->loadModel('project')->getByID((int)$design->project);
+        $project       = $this->loadModel('project')->getByID($design->project);
 
         $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
         $this->view->design   = $design;
@@ -271,6 +272,7 @@ class design extends control
     }
 
     /**
+     * 关联代码提交页面。
      * Design link commits.
      *
      * @param  int    $designID
@@ -286,12 +288,12 @@ class design extends control
     {
         if($_POST)
         {
-            $this->design->linkCommit($designID, $repoID);
+            $this->design->linkCommit($designID, $repoID, $_POST['revision']);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $design = $this->design->getById($designID);
-        $this->commonAction($design->project, (int)$design->product, $designID);
+        $design = $this->design->getByID($designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         /* Get project and date. */
         $project = $this->loadModel('project')->getByID($design->project);
@@ -299,15 +301,14 @@ class design extends control
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
         /* Get the repository information through the repoID. */
-        $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
-        $repoID = $repoID ? $repoID : key($repos);
-
+        $repos     = $this->loadModel('repo')->getRepoPairs('project', $design->project);
+        $repoID    = $repoID ? $repoID : key($repos);
         $repo      = $this->loadModel('repo')->getByID((int)$repoID);
         $revisions = $this->repo->getCommits($repo, '', 'HEAD', 'dir', null, $begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         $this->session->set('designRevisions', $revisions);
 
-        /* Linked submission. */
+        /* Get linked submission. */
         $linkedRevisions = array();
         $relations       = $this->loadModel('common')->getRelations('design', $designID, 'commit');
         foreach($relations as $relation) $linkedRevisions[$relation->BID] = $relation->BID;
@@ -319,24 +320,23 @@ class design extends control
 
         /* Init pager. */
         $this->app->loadClass('pager', true);
-        $pager     = new pager(count($revisions), $recPerPage, $pageID);
-        $revisions = array_chunk($revisions, $pager->recPerPage);
+        $pager          = new pager(count($revisions), $recPerPage, $pageID);
+        $chunkRevisions = array_chunk($revisions, $pager->recPerPage);
 
         $this->config->design->linkcommit->dtable->fieldList['revision']['link'] = sprintf($this->config->design->linkcommit->dtable->fieldList['revision']['link'], $repoID, $design->project);
         if(empty($repo->SCM) || $repo->SCM != 'Git') unset($this->config->design->linkcommit->dtable->fieldList['commit']);
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
-        $this->view->repos      = $repos;
-        $this->view->repoID     = $repoID;
-        $this->view->repo       = $repo;
-        $this->view->revisions  = empty($revisions) ? $revisions : $revisions[$pageID - 1];
-        $this->view->designID   = $designID;
-        $this->view->begin      = $begin;
-        $this->view->end        = $end;
-        $this->view->design     = $design;
-        $this->view->pager      = $pager;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->type       = $design->type;
+        $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
+        $this->view->repos     = $repos;
+        $this->view->repoID    = $repoID;
+        $this->view->repo      = $repo;
+        $this->view->revisions = empty($chunkRevisions) ? $chunkRevisions : $chunkRevisions[$pageID - 1];
+        $this->view->designID  = $designID;
+        $this->view->begin     = $begin;
+        $this->view->end       = $end;
+        $this->view->design    = $design;
+        $this->view->pager     = $pager;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
