@@ -234,12 +234,12 @@ class pivotModel extends model
 
         foreach($fieldPairs as $index => $field)
         {
-            $defaultType   = $columns->$index;
+            $defaultType   = $columns->{$index};
             $defaultObject = $relatedObject[$index];
 
             if(isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
 
-            if(!isset($fieldSettings->$index))
+            if(!isset($fieldSettings->{$index}))
             {
                 /* 如果字段设置中没有该字段，则使用默认的配置。 */
                 /* If the field is not set in the field settings, use the default value. */
@@ -249,28 +249,28 @@ class pivotModel extends model
                 $fieldItem->field  = $index;
                 $fieldItem->type   = $defaultType;
 
-                $fieldSettingsNew->$index = $fieldItem;
+                $fieldSettingsNew->{$index} = $fieldItem;
             }
             else
             {
                 /* 兼容旧版本的字段设置，当为空或者为布尔值时，使用默认值 */
                 /* Compatible with old version of field settings, use default value when empty or boolean. */
-                if(!isset($fieldSettings->$index->object) || is_bool($fieldSettings->$index->object) || strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
+                if(!isset($fieldSettings->{$index}->object) || is_bool($fieldSettings->{$index}->object) || strlen($fieldSettings->{$index}->object) == 0) $fieldSettings->{$index}->object = $defaultObject;
 
                 /* 当字段设置中没有字段名时，使用默认的字段名配置。 */
                 /* When there is no field name in the field settings, use the default field name configuration. */
-                if(!isset($fieldSettings->$index->field) || strlen($fieldSettings->$index->field) == 0)
+                if(!isset($fieldSettings->{$index}->field) || strlen($fieldSettings->{$index}->field) == 0)
                 {
-                    $fieldSettings->$index->field  = $index;
-                    $fieldSettings->$index->object = $defaultObject;
-                    $fieldSettings->$index->type   = 'string';
+                    $fieldSettings->{$index}->field  = $index;
+                    $fieldSettings->{$index}->object = $defaultObject;
+                    $fieldSettings->{$index}->type   = 'string';
                 }
 
-                $object = $fieldSettings->$index->object;
-                $type   = $fieldSettings->$index->type;
-                if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
+                $object = $fieldSettings->{$index}->object;
+                $type   = $fieldSettings->{$index}->type;
+                if($object == $defaultObject && $type != $defaultType) $fieldSettings->{$index}->type = $defaultType;
 
-                $fieldSettingsNew->$index = $fieldSettings->$index;
+                $fieldSettingsNew->{$index} = $fieldSettings->{$index};
             }
         }
 
@@ -818,7 +818,7 @@ class pivotModel extends model
             $options = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field'], $sql);
             foreach($groupsRow as $row)
             {
-                if(isset($row->$group)) $row->$group = zget($options, $row->$group);
+                if(isset($row->{$group})) $row->{$group} = zget($options, $row->{$group});
             }
         }
 
@@ -906,7 +906,7 @@ class pivotModel extends model
         elseif($fieldObject)
         {
             $this->app->loadLang($fieldObject);
-            if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+            if(isset($this->lang->{$fieldObject}->{$relatedField})) $colLabel = $this->lang->{$fieldObject}->{$relatedField};
         }
 
         return $colLabel;
@@ -1148,7 +1148,7 @@ class pivotModel extends model
         $start = 1;
         $group = $groups[$index];
         $groupRows = array_reduce($groupsRow, function($carry, $item)use($group){
-            $carry[$item->$group][] = $item;
+            $carry[$item->{$group}][] = $item;
             return $carry;
         });
 
@@ -1376,7 +1376,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $columnRow->$field = $value;
+                    $columnRow->{$field} = $value;
                     continue;
                 }
                 if($monopolize) $columnRow->{"self_$field"} = $value;
@@ -1417,7 +1417,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $columnRow->$field = $value;
+                    $columnRow->{$field} = $value;
                     continue;
                 }
                 if($monopolize) $columnRow->{"self_$field"} = $value;
@@ -1457,7 +1457,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $columnRow->$field = $value;
+                    $columnRow->{$field} = $value;
                     continue;
                 }
                 if($monopolize) $columnRow->{"self_$field"} = $value;
@@ -1519,7 +1519,7 @@ class pivotModel extends model
         {
             if(in_array($field, $groups))
             {
-                $colTotalRow->$field = $this->lang->pivot->step2->total;
+                $colTotalRow->{$field} = $this->lang->pivot->step2->total;
             }
             else
             {
@@ -1541,9 +1541,9 @@ class pivotModel extends model
                     continue;
                 }
 
-                if($showMode == 'default') $colTotalRow->$field = $colTotal[$field];
-                if($showMode == 'column')  $colTotalRow->$field = round((float)$colTotal[$field] / $colTotal[$field] * 100, 2) . '%';
-                if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
+                if($showMode == 'default') $colTotalRow->{$field} = $colTotal[$field];
+                if($showMode == 'column')  $colTotalRow->{$field} = round((float)$colTotal[$field] / $colTotal[$field] * 100, 2) . '%';
+                if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->{$field} = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
             }
         }
         $columnRows[] = $colTotalRow;
@@ -1571,8 +1571,8 @@ class pivotModel extends model
         $sliceRows = array();
         foreach($columnRows as $key => $columnRow)
         {
-            $field = $columnRow->$slice . '_slice_' . $uuName;
-            $columnRow->$field = $columnRow->$uuName;
+            $field = $columnRow->{$slice} . '_slice_' . $uuName;
+            $columnRow->{$field} = $columnRow->{$uuName};
             if(!in_array($slice, $groups)) unset($columnRow->{$slice});
             unset($columnRow->{$uuName});
 
@@ -1668,7 +1668,7 @@ class pivotModel extends model
                     $cols = $this->dbh->query($sql)->fetchAll();
                     foreach($cols as $col)
                     {
-                        $data = $col->$field;
+                        $data = $col->{$field};
                         $options[$data] = $data;
                     }
                 }

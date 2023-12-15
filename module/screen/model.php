@@ -879,7 +879,7 @@ class screenModel extends model
                     /* 通过sql查询展示字段。 */
                     /* Get field by sql. */
                     $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
-                    foreach($cols as $col) $options[$col->$field] = $col->$field;
+                    foreach($cols as $col) $options[$col->{$field}] = $col->{$field};
                 }
                 break;
 
@@ -1103,7 +1103,7 @@ class screenModel extends model
                 switch($key)
                 {
                     case 'year':
-                        $conditions[] = $field . " = '" . $this->filter->$key . "'";
+                        $conditions[] = $field . " = '" . $this->filter->{$key} . "'";
                         break;
                     case 'dept':
                         if($this->filter->dept && !$this->filter->account)
@@ -1122,7 +1122,7 @@ class screenModel extends model
                         }
                         break;
                     case 'account':
-                        if($this->filter->account) $conditions[] = $field . " = '" . $this->filter->$key . "'";
+                        if($this->filter->account) $conditions[] = $field . " = '" . $this->filter->{$key} . "'";
                         break;
                 }
             }
@@ -1159,12 +1159,12 @@ class screenModel extends model
                     $field   = $settings->value->field;
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
 
-                    if($settings->value->type === 'value') $value = !count($results) ? 0 : current($results)->$field;
+                    if($settings->value->type === 'value') $value = !count($results) ? 0 : current($results)->{$field};
                     if($settings->value->agg  === 'count') $value = count($results);
                     if($settings->value->agg  === 'sum')
                     {
                         $value = 0;
-                        foreach($results as $result) $value += (float)$result->$field;
+                        foreach($results as $result) $value += (float)$result->{$field};
                         $value = round($value);
                     }
                 }
@@ -1211,12 +1211,12 @@ class screenModel extends model
                     {
                         $key   = $settings->xaxis[0]->name;
                         $field = $settings->xaxis[0]->field;
-                        $row   = array($key => $result->$field);
+                        $row   = array($key => $result->{$field});
 
                         foreach($settings->yaxis as $yaxis)
                         {
                             $field = $yaxis->field;
-                            $row[$yaxis->name] = $result->$field;
+                            $row[$yaxis->name] = $result->{$field};
                         }
                         $sourceData[] = $row;
                     }
@@ -1261,7 +1261,7 @@ class screenModel extends model
                     /* 通过sql查询数据，并且处理数据。 */
                     /* Query data by sql and process data. */
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
-                    foreach($results as $result) $dataset[] = array_map(function($field)use($result){return $result->$field;}, array_keys($header));
+                    foreach($results as $result) $dataset[] = array_map(function($field)use($result){return $result->{$field};}, array_keys($header));
 
                     $component->option->header  = array_values($header);
                     $component->option->dataset = $dataset;
@@ -1312,17 +1312,17 @@ class screenModel extends model
 
                         if($settings->yaxis[0]->agg == 'sum')
                         {
-                            if(!isset($sourceData[$result->$field])) $sourceData[$result->$field] = array($key => $result->$field);
+                            if(!isset($sourceData[$result->{$field}])) $sourceData[$result->{$field}] = array($key => $result->{$field});
 
                             foreach($settings->yaxis as $yaxis)
                             {
-                                if(!isset($sourceData[$result->$field][$yaxis->name])) $sourceData[$result->$field][$yaxis->name] = 0;
-                                $sourceData[$result->$field][$yaxis->name] += $result->{$yaxis->field};
+                                if(!isset($sourceData[$result->{$field}][$yaxis->name])) $sourceData[$result->{$field}][$yaxis->name] = 0;
+                                $sourceData[$result->{$field}][$yaxis->name] += $result->{$yaxis->field};
                             }
                         }
                         else
                         {
-                            $row = array($key => $result->$field);
+                            $row = array($key => $result->{$field});
                             foreach($settings->yaxis as $yaxis) $row[$yaxis->name] = $result->{$yaxis->field};
                             $sourceData[] = $row;
                         }
@@ -1375,8 +1375,8 @@ class screenModel extends model
                     {
                         if($settings->metric[0]->agg == 'count')
                         {
-                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
-                            $groupCount[$result->$group]++;
+                            if(!isset($groupCount[$result->{$group}])) $groupCount[$result->{$group}] = 0;
+                            $groupCount[$result->{$group}]++;
                         }
                     }
                     arsort($groupCount);
@@ -1429,8 +1429,8 @@ class screenModel extends model
                     {
                         if($settings->metric[0]->agg == 'count')
                         {
-                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
-                            $groupCount[$result->$group]++;
+                            if(!isset($groupCount[$result->{$group}])) $groupCount[$result->{$group}] = 0;
+                            $groupCount[$result->{$group}]++;
                         }
                     }
 
