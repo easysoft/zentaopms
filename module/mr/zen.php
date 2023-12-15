@@ -38,7 +38,8 @@ class mrZen extends mr
         }
         else
         {
-            $projects += $this->mr->getAllProjects($repo->id, $repo->SCM);
+            $methodName = 'get' . ucfirst($repo->SCM) . 'Projects';
+            $projects  += $this->mr->{$methodName}((int)$repo->serviceHost);
         }
         return $projects;
     }

@@ -74,25 +74,6 @@ class mrModel extends model
     }
 
     /**
-     * 获取所有服务器的项目。如果不是管理员，则项目成员的角色应高于来宾。
-     * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
-     *
-     * @param  int    $repoID
-     * @param  string $scm
-     * @access public
-     * @return array
-     */
-    public function getAllProjects(int $repoID = 0, string $scm = 'Gitlab'): array
-    {
-        $hostID = (int)$this->dao->select('hostID')->from(TABLE_MR)
-            ->where('deleted')->eq('0')
-            ->andWhere('repoID')->eq($repoID)
-            ->fetch('hostID');
-
-        return $this->{'get' . $scm . 'Projects'}($hostID);
-    }
-
-    /**
      * 获取Gitea服务器的项目.
      * Get gitea projects.
      *
