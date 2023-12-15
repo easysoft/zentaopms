@@ -405,22 +405,21 @@ class design extends control
     }
 
     /**
-     * Ajax get design drop menu.
+     * Ajax: 设置2.5级产品下拉菜单。
+     * Ajax: Set the dropdown menu of 2.5 level product.
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $extra
      * @access public
      * @return void
      */
-    public function ajaxSwitcherMenu($projectID, $productID)
+    public function ajaxSwitcherMenu(int $projectID, int $productID)
     {
-        $products = $this->loadModel('product')->getProducts($projectID);
-
-        $this->view->link      = helper::createLink('design', 'browse', "projectID=$projectID&productID={id}");
-        $this->view->productID = $productID;
-        $this->view->products  = $products;
+        $this->view->link      = helper::createLink('design', 'browse', "projectID={$projectID}&productID={id}");
         $this->view->projectID = $projectID;
+        $this->view->productID = $productID;
+        $this->view->products  = $this->loadModel('product')->getProducts($projectID);
+
         $this->display();
     }
 
