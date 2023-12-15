@@ -276,4 +276,21 @@ class designTest
         if(dao::isError()) return dao::getError();
         return $commit;
     }
+
+    /**
+     * 获取设计 id=>value 的键值对数组。
+     * Get design id=>value pairs.
+     *
+     * @param  int    $productID
+     * @param  string $type      all|HLDS|DDS|DBDS|ADS
+     * @access public
+     * @return array
+     */
+    public function getPairsTest(int $productID = 0, string $type = 'all'): array
+    {
+        $designs = $this->objectModel->getPairs($productID, $type);
+
+        if(dao::isError()) return dao::getError();
+        return $designs;
+    }
 }
