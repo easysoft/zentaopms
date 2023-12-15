@@ -32,4 +32,21 @@ class mrTest
 
         return true;
     }
+
+    /**
+     * Test create method.
+     *
+     * @param  object  $MR
+     * @access public
+     * @return array|string
+     */
+    public function createTester(object $MR): array|string
+    {
+        $result = $this->objectModel->create($MR);
+        if($result['result'] == 'fail') return $result['message'];
+
+        $rawMR = $this->objectModel->fetchByID(2);
+        $this->objectModel->apiDeleteMR($rawMR->hostID, $rawMR->sourceProject, $rawMR->mriid);
+        return $result;
+    }
 }
