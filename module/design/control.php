@@ -359,6 +359,7 @@ class design extends control
     }
 
     /**
+     * 查看设计关联的代码提交。
      * View a design's commit.
      *
      * @param  int    $designID
