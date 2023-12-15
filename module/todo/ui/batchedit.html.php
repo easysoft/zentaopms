@@ -41,7 +41,6 @@ div
     inputGroup
     (
         div(setID('begin'), setClass('picker-box form-group-wrapper time-input')),
-        span(setClass('input-group-addon w-0.5 p-0 border-0')),
         div(setID('end'), setClass('picker-box form-group-wrapper time-input')),
         span
         (

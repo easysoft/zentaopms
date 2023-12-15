@@ -9,3 +9,5 @@
 .input-control > .form-control.before-days {padding-left: 50px;}
 .form .label-id {height: 20px; border-color: #D8DBDE; border-radius: 10px;}
 .form-row .form-group.items-center {align-items: center;}
+
+.time-input.focus{z-index: 2;}

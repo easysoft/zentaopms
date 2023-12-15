@@ -1,3 +1,10 @@
+$(document).on('click', '.time-input', function()
+{
+    $('.time-input').removeClass('focus');
+
+    $(this).addClass('focus');
+})
+
 let nameDefaultHtml = $('#nameInputBox').html();
 
 /**
