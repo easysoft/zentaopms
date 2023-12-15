@@ -4356,9 +4356,12 @@ class testcaseModel extends model
     {
         foreach($scenes as $scene)
         {
-            foreach($scene->cases as $key => $value)
+            if(isset($scene->cases))
             {
-                if(!isset($casePairs[$key])) unset($scene->cases[$key]);
+                foreach($scene->cases as $key => $value)
+                {
+                    if(!isset($casePairs[$key])) unset($scene->cases[$key]);
+                }
             }
             if(!empty($scene->children)) $this->processScenes($scene->children, $casePairs);
         }
