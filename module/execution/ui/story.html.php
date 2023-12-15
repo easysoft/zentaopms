@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace zin;
 
+data('activeMenuID', $storyType);
+jsVar('executionID', $execution->id);
+jsVar('childrenAB', $lang->story->childrenAB);
+
 /* Show feature bar. */
 featureBar
 (
@@ -19,8 +23,6 @@ featureBar
     li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))
 );
 
-jsVar('executionID', $execution->id);
-jsVar('childrenAB', $lang->story->childrenAB);
 $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
 $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
 modal

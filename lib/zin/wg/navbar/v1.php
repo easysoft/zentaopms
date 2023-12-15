@@ -222,6 +222,7 @@ class navbar extends wg
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
                         {
                             $activeMainMenu = true;
+                            if($activeMenuID) $activeMainMenu = $dropMenuName == $activeMenuID;
                         }
                         else
                         {
