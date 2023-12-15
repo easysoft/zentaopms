@@ -157,7 +157,7 @@ formPanel
                     set('id', 'goalTip'),
                     set('class', 'text-light')
                 ),
-                $execution->desc
+                html($execution->desc)
             )
         )
     ) : null,
