@@ -81,9 +81,10 @@ else
             ),
             h::td
             (
+                setClass('story-estimate'),
                 input
                 (
-                    setClass('form-control story-estimate'),
+                    setClass('form-control'),
                     empty($estimateInfo->estimate) ? set::name('estimate[]') : null,
                     set::disabled(!empty($estimateInfo->estimate)),
                     set::value($estimate),
