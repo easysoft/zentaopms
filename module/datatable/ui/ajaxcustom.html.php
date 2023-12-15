@@ -44,7 +44,7 @@ function buildItem(array $item): wg
         ),
         div
         (
-            setClass('row items-center gap-1'),
+            setClass('hidden row items-center gap-1'),
             span($lang->datatable->width, setClass('muted')),
             inputGroup
             (
