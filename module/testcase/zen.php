@@ -367,7 +367,7 @@ class testcaseZen extends testcase
             if(empty($moduleID)) $moduleID = $story->module;
         }
 
-        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $currentModuleID = !$moduleID && $productID == (int)$this->cookie->lastCaseProduct ? (int)$this->cookie->lastCaseModule : $moduleID;
 
         $modules = array();
         if($currentModuleID)
@@ -2152,6 +2152,7 @@ class testcaseZen extends testcase
         /* 设置 cookie。 */
         /* Set cookie. */
         helper::setcookie('lastCaseModule', (string)$case->module);
+        helper::setcookie('lastCaseProduct', (string)$case->product);
         helper::setcookie('lastCaseScene',  (string)$case->scene);
         helper::setcookie('caseModule', '0');
 
