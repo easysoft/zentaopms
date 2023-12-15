@@ -97,6 +97,6 @@ r($condition1 && $condition2 && $condition3) && p('') && e('1');  //判断生成
 isset($componentList['baroption']) && $screen->buildChartTest($componentList['baroption']);
 $baroption = $componentList['baroption'] ?? null;
 $condition1 = $baroption && $baroption->option->dataset->dimensions[0] == 'topProgram' && $baroption->option->dataset->source[0]->topProgram === '项目集4';
-$condition2 = $baroption && $baroption->option->dataset->dimensions[1] == '需求完成率(求和)' && $baroption->option->dataset->source[0]->{$baroption->option->dataset->dimensions[1]} === '0.00';
-$condition3 = $baroption && $baroption->option->dataset->dimensions[2] == 'bug修复率(求和)'  && $baroption->option->dataset->source[1]->{$baroption->option->dataset->dimensions[2]} === '0.00';
+$condition2 = $baroption && $baroption->option->dataset->dimensions[1] == '需求完成率(求和)' && $baroption->option->dataset->source[0]->{$baroption->option->dataset->dimensions[1]} === '100.00';
+$condition3 = $baroption && $baroption->option->dataset->dimensions[2] == 'bug修复率(求和)'  && $baroption->option->dataset->source[1]->{$baroption->option->dataset->dimensions[2]} === '66.67';
 r($condition1 && $condition2 && $condition3) && p('') && e('1');  //判断生成的柱状图表数据是否正确。

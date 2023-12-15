@@ -7,7 +7,7 @@ fields:
   - field: type
     range: sprint
   - field: project
-    range: 10
+    range: 11
   - field: vision
     range: 'rnd'
   - field: path
