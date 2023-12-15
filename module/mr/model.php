@@ -910,6 +910,8 @@ class mrModel extends model
      */
     public function getDiffs(object $MR, string $encoding = ''): array
     {
+        if(!isset($MR->repoID)) return array();
+
         $repo = $this->loadModel('repo')->getByID($MR->repoID);
         if(!$repo) return array();
 
