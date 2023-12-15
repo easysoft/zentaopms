@@ -4,55 +4,50 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbancard')->gen(1);
+
 /**
 
 title=测试 kanbanModel->updateCard();
+timeout=0
 cid=1
-pid=1
 
-测试修改卡片1 >> name,卡片1,修改名字;desc,,修改注释;estimate,0,3
-测试修改卡片2 >> begin,2022-03-30;end,2022-04-01;progress,50,0
-测试修改卡片3 >> assignedTo,admin,user5,po17,user3;progress,100,50;status,done,doing
-测试修改卡片4 >> progress,0,100;status,doing,done
-测试修改卡片5 >> pri,3,1
-测试修改卡片开始小于结束日期 >> "截止日期"不能小于"预计开始"!
-测试修改卡片预计小于0 >> 预计不能为负数!
-测试修改卡片进度小于0 >> 请输入正确的进度
-测试修改卡片进度大于100 >> 请输入正确的进度
+- 正常编辑卡片
+ - 属性name @修改名字
+ - 属性estimate @3
+ - 属性progress @20
+ - 属性pri @1
+- 卡片的预计不能是负数属性estimate @预计不能为负数!
+- 测试进度小于0的情况属性progress @请输入正确的进度
+- 测试进度大于100的情况属性progress @请输入正确的进度
+- 测试开始日期大于结束日期的情况属性end @"截止日期"不能小于"预计开始"!
 
 */
 
-$cardIDList = array('1', '2', '3', '4', '5');
+$card1 = new stdClass();
+$card1->name     = '修改名字';
+$card1->estimate = 3;
+$card1->progress = 20;
+$card1->pri      = 1;
 
-$name       = array('修改名字', '', '   ');
-$desc       = '修改注释';
-$assignedTo = array('user5', 'po17', 'user3');
-$begin      = '2022-03-30';
-$end        = '2022-04-01';
-$pri        = '1';
-$estimate   = array('3' , '0', '', '-1');
-$progress   = array('0', '50', '100', '-1', '101');
+$card2 = clone $card1;
+$card2->desc     = '修改描述';
+$card2->estimate = -1;
 
-$param1 = array('name' => $name[0], 'desc' => $desc, 'estimate' => $estimate[0]);
-$param2 = array('begin' => $begin, 'end' => $end,  'progress' => $progress[0]);
-$param3 = array('assignedTo' => $assignedTo, 'estimate' => $estimate[1], 'progress' => $progress[1]);
-$param4 = array('estimate' => $estimate[2], 'progress' => $progress[2]);
-$param5 = array('pri' => $pri);
+$card3 = clone $card1;
+$card3->progress = -10;
 
-$end    = '2022-01-01';
-$param6 = array('begin' => $begin, 'end' => $end);
-$param7 = array('estimate' => $estimate[3]);
-$param8 = array('progress' => $progress[3]);
-$param9 = array('progress' => $progress[4]);
+$card4 = clone $card1;
+$card4->progress = 110;
+
+$card5 = clone $card1;
+$card5->begin = '2022-03-30';
+$card5->end   = '2022-03-01';
 
 $kanban = new kanbanTest();
 
-r($kanban->updateCardTest($cardIDList[0], $param1)) && p('0:field,old,new;1:field,old,new;2:field,old,new') && e('name,卡片1,修改名字;desc,,修改注释;estimate,0,3');                      // 测试修改卡片1
-r($kanban->updateCardTest($cardIDList[1], $param2)) && p('0:field,new;1:field,new;2:field,old,new')         && e('begin,2022-03-30;end,2022-04-01;progress,50,0');                        // 测试修改卡片2
-r($kanban->updateCardTest($cardIDList[2], $param3)) && p('0:field,old,new;1:field,old,new;2:field,old,new') && e('assignedTo,admin,user5,po17,user3;progress,100,50;status,done,doing');  // 测试修改卡片3
-r($kanban->updateCardTest($cardIDList[3], $param4)) && p('0:field,old,new;1:field,old,new')                 && e('progress,0,100;status,doing,done');                                     // 测试修改卡片4
-r($kanban->updateCardTest($cardIDList[4], $param5)) && p('0:field,old,new')                                 && e('pri,3,1');                                                              // 测试修改卡片5
-r($kanban->updateCardTest($cardIDList[0], $param6)) && p()                                                  && e('"截止日期"不能小于"预计开始"!'); // 测试修改卡片开始小于结束日期
-r($kanban->updateCardTest($cardIDList[0], $param7)) && p()                                                  && e('预计不能为负数!'); // 测试修改卡片预计小于0
-r($kanban->updateCardTest($cardIDList[0], $param8)) && p()                                                  && e('请输入正确的进度'); // 测试修改卡片进度小于0
-r($kanban->updateCardTest($cardIDList[0], $param9)) && p()                                                  && e('请输入正确的进度'); // 测试修改卡片进度大于100
+r($kanban->updateCardTest(1, $card1)) && p('name,estimate,progress,pri') && e('修改名字,3,20,1');               // 正常编辑卡片
+r($kanban->updateCardTest(1, $card2)) && p('estimate')                   && e('预计不能为负数!');               // 卡片的预计不能是负数
+r($kanban->updateCardTest(1, $card3)) && p('progress')                   && e('请输入正确的进度');              // 测试进度小于0的情况
+r($kanban->updateCardTest(1, $card4)) && p('progress')                   && e('请输入正确的进度');              // 测试进度大于100的情况
+r($kanban->updateCardTest(1, $card5)) && p('end')                        && e('"截止日期"不能小于"预计开始"!'); // 测试开始日期大于结束日期的情况

@@ -1186,36 +1186,17 @@ class kanbanTest
      * Test update a card.
      *
      * @param  int    $cardID
-     * @param  array  $param
+     * @param  object $card
      * @access public
-     * @return array
+     * @return object
      */
-    public function updateCardTest($cardID, $param)
+    public function updateCardTest($cardID, $card)
     {
-        global $tester;
-        $object = $tester->dao->select('`name`,`desc`,`assignedTo`,`begin`,`end`,`pri`,`estimate`, `progress`')->from(TABLE_KANBANCARD)->where('`id`')->eq($cardID)->fetch();
-        $object->assignedTo = explode(',', $object->assignedTo);
+        $this->objectModel->updateCard($cardID, $card);
 
-        foreach($object as $field => $value)
-        {
-            if(in_array($field, array_keys($param)))
-            {
-                $_POST[$field] = $param[$field];
-            }
-            else
-            {
-                $_POST[$field] = $value;
-            }
-        }
+        if(dao::isError()) return dao::getError();
 
-        $change = $this->objectModel->updateCard($cardID);
-        if($change == array()) $change = '没有数据更新';
-        unset($_POST);
-
-
-        if(dao::isError()) return dao::getError()[0];
-
-        return $change;
+        return $this->objectModel->getCardByID($cardID);
     }
 
     /**
