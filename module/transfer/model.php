@@ -45,13 +45,14 @@ class transferModel extends model
     }
 
     /**
-     * Common Actions.
+     * Transfer 公共方法（格式化模块语言项，Config，字段）。
+     * Common actions.
      *
      * @param  int    $module
      * @access public
      * @return void
      */
-    public function commonActions($module = '')
+    public function commonActions(string $module = '')
     {
         if($module)
         {
@@ -519,14 +520,14 @@ class transferModel extends model
      * Get field values by method.
      *
      * @param  int    $module
-     * @param  int    $module
+     * @param  int    $callModule
      * @param  int    $method
      * @param  string $params
      * @param  string $pairs
      * @access public
      * @return void
      */
-    public function getSourceByModuleMethod($module, $module, $method, $params = '', $pairs = '')
+    public function getSourceByModuleMethod($module, $callModule, $method, $params = '', $pairs = '')
     {
         $getParams = $this->session->{$module . 'TransferParams'};
 
@@ -542,15 +543,15 @@ class transferModel extends model
         /* If this method has multiple parameters use call_user_func_array. */
         if(is_array($params))
         {
-            $values = call_user_func_array(array($this->loadModel($module), $method), $params);
+            $values = call_user_func_array(array($this->loadModel($callModule), $method), $params);
         }
         elseif($params)
         {
-            $values = $this->loadModel($module)->$method($params);
+            $values = $this->loadModel($callModule)->$method($params);
         }
         else
         {
-            $values = $this->loadModel($module)->$method();
+            $values = $this->loadModel($callModule)->$method();
         }
 
         if(!empty($pairs))
