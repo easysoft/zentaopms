@@ -788,7 +788,7 @@ class bug extends control
 
         /* 设置当前分支，并且设置导航。*/
         /* Get branch and set menu. */
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        if($branch === '') $branch = $this->cookie->preBranch;
         $this->qa->setMenu($productID, $branch);
 
         /* 展示批量创建bug的相关变量。*/
