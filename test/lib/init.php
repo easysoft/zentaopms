@@ -555,6 +555,5 @@ function su($account)
     $user      = $userModel->getByID($account);
     if($user) return $userModel->login($user);
 
-    $user = $userModel->identify($account, $user->password);
     return false;
 }
