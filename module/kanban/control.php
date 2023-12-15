@@ -949,6 +949,7 @@ class kanban extends control
     }
 
     /**
+     * 转入其它看板的卡片。
      * Import card.
      *
      * @param  int $kanbanID
@@ -962,7 +963,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importCard(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0, int $selectedKanbanID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -977,7 +978,7 @@ class kanban extends control
 
             foreach($importedIDList as $cardID)
             {
-                $this->loadModel('action')->create('kanbancard', $cardID, 'importedcard', '', $cards2Imported[$cardID]->kanban);
+                $this->loadModel('action')->create('kanbancard', (int)$cardID, 'importedcard', '', $cards2Imported[$cardID]->kanban);
             }
 
             $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
