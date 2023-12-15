@@ -1311,14 +1311,14 @@ class productModel extends model
 
         $this->session->set('product', $productID, $this->app->tab);
 
-        helper::setcookie('preProductID', (string)$productID);
-
         /* If preProductID changed, then reset preBranch. */
         if($this->cookie->preProductID != $this->session->product)
         {
             $this->cookie->set('preBranch', 0);
             helper::setcookie('preBranch', '0');
         }
+
+        helper::setcookie('preProductID', (string)$productID);
 
         return $productID;
     }
