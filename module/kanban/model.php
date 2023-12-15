@@ -527,6 +527,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 转入其它看板的卡片。
      * Import card.
      *
      * @param  int $kanbanID
@@ -534,14 +535,14 @@ class kanbanModel extends model
      * @param  int $groupID
      * @param  int $columnID
      * @access public
-     * @return bool|array
+     * @return array|false
      */
-    public function importCard($kanbanID, $regionID, $groupID, $columnID)
+    public function importCard(int $kanbanID, int $regionID, int $groupID, int $columnID): array|false
     {
-        $data         = fixer::input('post')->get();
-        $importIDList = $data->cards;
-        $targetLaneID = $data->targetLane;
-        $cardList     = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchAll('id');
+        $importIDList = $this->post->cards;
+        $targetLaneID = $this->post->targetLane;
+
+        if(!$importIDList || !$targetLaneID) return false;
 
         $updateData = new stdclass();
         $updateData->kanban = $kanbanID;
@@ -554,23 +555,12 @@ class kanbanModel extends model
         $kanbanUsers    = trim($kanban->owner) . ',' . trim($kanban->team);
         $users          = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
+        $cardList = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchAll('id');
         foreach($cardList as $cardID => $card)
         {
             $oldCardsKanban[$cardID] = $card->kanban;
             if(empty($card->assignedTo)) continue;
-            $assignedToList = explode(',', $card->assignedTo);
-            foreach($assignedToList as $index => $account)
-            {
-                if(!isset($users[$account])) unset($assignedToList[$index]);
-            }
-
-            $assignedTo = implode(',', $assignedToList);
-            $assignedTo = trim($assignedTo, ',');
-
-            if($card->assignedTo != $assignedTo)
-            {
-                $this->dao->update(TABLE_KANBANCARD)->set('assignedTo')->eq($assignedTo)->where('id')->eq($cardID)->exec();
-            }
+            $this->kanbanTao->updateCardAssignedTo($cardID, $card->assignedTo, $users);
         }
 
         if(!dao::isError())
@@ -3826,6 +3816,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取可转入的看板卡片。
      * Get cards to import.
      *
      * @param  int    $kanbanID
@@ -3834,7 +3825,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCards2Import($kanbanID = 0, $excludedID = 0, $pager = null)
+    public function getCards2Import(int $kanbanID = 0, int $excludedID = 0, object $pager = null): array
     {
         $kanbanIdList = $this->getCanViewObjects();
 
