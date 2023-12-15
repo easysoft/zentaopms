@@ -17,6 +17,8 @@ class designTest
 
         $app->rawModule = 'design';
         $app->rawMethod = 'index';
+        $app->setModuleName('design');
+        $app->setMethodName('index');
     }
 
     /**
@@ -164,13 +166,33 @@ class designTest
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->fetchAll();
     }
 
-    public function getCommitTest($designID = 0, $pager = null)
+    /**
+     * 获取设计关联的代码提交。
+     * Get commit.
+     *
+     * @param  int          $designID
+     * @param  int          $recPerPage
+     * @param  int          $pageID
+     * @access public
+     * @return array|string
+     */
+    public function getCommitTest($designID = 0, int $recPerPage = 20, int $pageID = 1): array|string
     {
-        $objects = $this->objectModel->getCommit($designID = 0, $pager = null);
+        $this->objectModel->app->loadClass('pager', true);
+        $pager  = pager::init(0, $recPerPage, $pageID);
+        $design = $this->objectModel->getCommit($designID, $pager);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $commits = '';
+        if(!empty($design->commit))
+        {
+            foreach($design->commit as $commit)
+            {
+                $commits .= $commit->id . ';';
+            }
+        }
+        return $commits;
     }
 
     /**
