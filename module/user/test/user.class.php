@@ -1085,18 +1085,6 @@ class userTest
     }
 
     /**
-     * Put the current user first
-     *
-     * @param  array    $users
-     * @access public
-     * @return array
-     */
-    public function setCurrentUserFirstTest($users = array())
-    {
-        return $this->objectModel->setCurrentUserFirst($users);
-    }
-
-    /**
      * Judge a user is logon or not.
      *
      * @access public
