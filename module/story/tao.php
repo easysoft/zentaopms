@@ -1579,6 +1579,8 @@ class storyTao extends storyModel
 
         $tutorialMode = commonModel::isTutorialMode();
 
+        static $taskGroups = array();
+
         $actSubmitreview = array();
         $actReview       = array();
         $actRecall       = array();
@@ -1662,9 +1664,11 @@ class storyTao extends storyModel
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-        $canBatchCreateStory = $this->app->tab == 'product' && (common::hasPriv('story', 'batchCreate', '', 'storyType=story')) && $this->isClickable($story, 'batchcreate');
+        $canBatchCreateStory = $this->isClickable($story, 'batchcreate');
         if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
         {
+            if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
+
             $title = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
             if(!$canBatchCreateStory && $story->status != 'closed')
             {
@@ -1672,6 +1676,7 @@ class storyTao extends storyModel
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                 if($story->parent > 0)    $title = $this->lang->story->subDivideTip['subStory'];
+                if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
             }
 
             $actions[] = array('name' => 'batchCreate', 'url' => $canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);

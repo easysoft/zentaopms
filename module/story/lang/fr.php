@@ -83,6 +83,7 @@ $lang->story->twins              = 'Twins story';
 $lang->story->relieved           = 'Relieved';
 $lang->story->relievedTwins      = 'Relieved Twins';
 $lang->story->loadAllStories     = 'Load all stories';
+$lang->story->hasDividedTask     = 'has divided task';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";

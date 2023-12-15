@@ -3121,6 +3121,7 @@ class storyModel extends model
         if($action == 'submitreview' and strpos('draft,changing', $story->status) === false) return false;
 
         static $shadowProducts = array();
+        static $taskGroups     = array();
         static $hasShadow      = true;
         if(isset($story->product) && $hasShadow && empty($shadowProducts[$story->product]))
         {
@@ -3129,11 +3130,18 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
+        if($hasShadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
+
         if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
-        if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        /* Adjust code, hide split entry. */
-        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+        if($action == 'batchcreate')
+        {
+            if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
+
+            if($story->status != 'active' || !empty($story->plan)) return false;
+            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
+            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait') return false;
+        }
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
@@ -3185,7 +3193,7 @@ class storyModel extends model
             $disabledFeatures = ",{$this->config->disabledFeatures},";
             if(in_array($this->config->edition, array('max', 'ipd')) && $this->app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false)
             {
-				$mainMenu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
+				        $mainMenu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
             }
 
             /* Print testcate actions. */
