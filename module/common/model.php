@@ -4013,6 +4013,8 @@ EOF;
      */
     public function canOperateEffort($effort)
     {
+        if($this->app->user->admin) return true;
+
         if(empty($effort)) return true;
 
         $actor = $effort->account;
