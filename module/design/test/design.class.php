@@ -123,26 +123,28 @@ class designTest
         return $objects;
     }
 
-    public function linkCommitTest($designID, $repoID, $param = array())
+    /**
+     * 设计关联代码提交。
+     * Design link commits.
+     *
+     * @param  int          $designID
+     * @param  int          $repoID
+     * @param  array        $revisions
+     * @access public
+     * @return array|string
+     */
+    public function linkCommitTest(int $designID, int $repoID, array $revisions = array()): array|string
     {
-        global $tester;
+        if($revisions) $this->objectModel->session->designRevisions = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->in($revisions)->fetchAll();
 
-        $revision = array();
-
-        $createFields = array('revision' => $revision);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->linkCommit($designID, $repoID);
-
-        unset($_POST);
+        $this->objectModel->linkCommit($designID, $repoID, $revisions);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $tester->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetchAll();
-
-        return $objects;
+        $commit = '';
+        $design = $this->objectModel->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+        if(!empty($design->commit)) $commit = str_replace(',', ';', $design->commit);
+        return $commit;
     }
 
     public function unlinkCommitTest($designID = 0, $commitID = 0)
