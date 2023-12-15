@@ -5,6 +5,8 @@ include dirname(__FILE__, 2) . '/testcase.class.php';
 
 zdTable('user')->gen('1');
 zdTable('scene')->gen(4)->fixPath();
+zdTable('action')->gen(0);
+zdTable('history')->gen(0);
 
 su('admin');
 
