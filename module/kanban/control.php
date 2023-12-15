@@ -848,17 +848,15 @@ class kanban extends control
     }
 
     /**
+     * 完成卡片。
      * Finish a card.
      *
      * @param  int    $cardID
-     * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function finishCard($cardID, $kanbanID)
+    public function finishCard(int $cardID)
     {
-        $this->loadModel('action');
-
         $oldCard = $this->kanban->getCardByID($cardID);
         $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq(100)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
         $card = $this->kanban->getCardByID($cardID);
@@ -867,7 +865,7 @@ class kanban extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $actionID = $this->action->create('kanbanCard', $cardID, 'finished');
+        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'finished');
         $this->action->logHistory($actionID, $changes);
 
         $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
