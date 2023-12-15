@@ -368,7 +368,7 @@ class mrModel extends model
         }
 
         /* Known issue: `reviewer_ids` takes no effect. */
-        $rawMR = $this->apiUpdateMR($oldMR->hostID, $oldMR->targetProject, $oldMR->mriid, $MR);
+        $rawMR = $this->apiUpdateMR($oldMR, $MR);
         if(!isset($rawMR->id) and isset($rawMR->message))
         {
             $errorMessage = $this->convertApiError($rawMR->message);
@@ -548,7 +548,7 @@ class mrModel extends model
             $MRObject->body = $MR->description;
             if(!$MR->assignee)
             {
-                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($hostID, $MR->assignee);
                 if($assignee) $MRObject->assignee = $assignee;
             }
 
@@ -714,16 +714,14 @@ class mrModel extends model
      * 通过API更新合并请求。
      * Update MR by API.
      *
-     * @param  int    $hostID
-     * @param  string $projectID
-     * @param  int    $MRID
+     * @param  object $oldMR
      * @param  object $MR
      * @access public
      * @return object
      */
-    public function apiUpdateMR(int $hostID, string $projectID, int $MRID, object $MR): object
+    public function apiUpdateMR(object $oldMR, object $MR): object
     {
-        $host  = $this->loadModel('pipeline')->getByID($hostID);
+        $host  = $this->loadModel('pipeline')->getByID($oldMR->hostID);
         $newMR = array('title' => $MR->title);
         if($host->type == 'gitlab')
         {
@@ -733,22 +731,22 @@ class mrModel extends model
             $newMR['squash']               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
             {
-                $gitlabAssignee = $this->loadModel('gitlab')->getUserIDByZentaoAccount($hostID, $MR->assignee);
+                $gitlabAssignee = $this->loadModel('gitlab')->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
                 if($gitlabAssignee) $newMR['assignee_ids'] = $gitlabAssignee;
             }
 
-            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            $url = sprintf($this->gitlab->getApiRoot($oldMR->hostID), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
             return json_decode(commonModel::http($url, $newMR, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
         {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($oldMR->hostID), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
 
             $newMR['base'] = $MR->targetBranch;
             $newMR['body'] = $MR->description;
             if($MR->assignee)
             {
-                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
                 if($assignee) $newMR['assignee'] = $assignee;
             }
             $mergeResult = json_decode(commonModel::http($url, $newMR, array(), array(), 'json', 'PATCH'));
@@ -1280,7 +1278,7 @@ class mrModel extends model
         foreach($objectList as $type => $objectIDs)
         {
             $relation           = new stdclass();
-            $relation->product  = $product->id;
+            $relation->product  = $product ? $product->id : 0;
             $relation->AType    = 'mr';
             $relation->AID      = $MR->id;
             $relation->relation = 'interrated';
@@ -1326,13 +1324,11 @@ class mrModel extends model
      *
      * @param  object $MR
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getMRProduct(object $MR): object
+    public function getMRProduct(object $MR): object|false
     {
-        $product = new stdclass();
-        $product->id = 0;
-
+        $product   = false;
         $productID = 0;
         if(is_object($MR) && $MR->repoID)
         {
@@ -1376,7 +1372,7 @@ class mrModel extends model
         $product = $this->getMRProduct($MR);
         foreach(array('story', 'bug', 'task') as $type)
         {
-            $objects = $this->getLinkList($MR->id, $product->id, $type);
+            $objects = $this->getLinkList($MR->id, $product ? $product->id : 0, $type);
             foreach($objects as $object)
             {
                 $this->action->create($type, $object->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));

@@ -542,10 +542,11 @@ class mr extends control
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $taskPager  = new pager(0, $recPerPage, $type == 'task' ? $pageID : 1);
 
-        $stories = $this->mr->getLinkList($MRID, $product->id, 'story', $type == 'story' ? $orderBy : '', $storyPager);
-        $bugs    = $this->mr->getLinkList($MRID, $product->id, 'bug',   $type == 'bug'   ? $orderBy : '', $bugPager);
-        $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
-        $builds  = $this->loadModel('build')->getBuildPairs($product->id);
+        $productID = $product ? $product->id : 0;
+        $stories = $this->mr->getLinkList($MRID, $productID, 'story', $type == 'story' ? $orderBy : '', $storyPager);
+        $bugs    = $this->mr->getLinkList($MRID, $productID, 'bug',   $type == 'bug'   ? $orderBy : '', $bugPager);
+        $tasks   = $this->mr->getLinkList($MRID, $productID, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
+        $builds  = $this->loadModel('build')->getBuildPairs($productID);
 
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR         = $MR;
