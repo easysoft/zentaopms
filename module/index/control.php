@@ -27,11 +27,11 @@ class index extends control
     /**
      * The index page of whole zentao system.
      *
-     * @param  string $open
+     * @param  string $open   base64 encode string.
      * @access public
      * @return void
      */
-    public function index($open = '')
+    public function index(string $open = '')
     {
         if($this->app->getViewType() == 'mhtml') $this->locate($this->createLink('my', 'index'));
         if($this->get->open) $open = $this->get->open;
@@ -39,27 +39,25 @@ class index extends control
         $latestVersionList = array();
         if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList, true);
 
-        $showFeatures = false;
-        if($this->config->edition != 'ipd')
-        {
-            foreach($this->config->newFeatures as $feature)
-            {
-                $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
-                if(strpos(",$accounts,", $this->app->user->account) === false) $showFeatures = true;
-            }
-        }
-
         $this->view->title             = $this->lang->index->common;
         $this->view->open              = helper::safe64Decode($open);
-        $this->view->showFeatures      = $showFeatures;
+        $this->view->showFeatures      = $this->indexZen->checkShowFeatures();
         $this->view->latestVersionList = $latestVersionList;
         $this->view->appsItems         = commonModel::getMainNavList($this->app->rawModule);
-        $this->view->browserMessage     = $this->loadModel('message')->getBrowserMessageConfig();
+        $this->view->browserMessage    = $this->loadModel('message')->getBrowserMessageConfig();
 
         $this->display();
     }
 
-    public function app($open = '')
+    /**
+     * 在框架中打开具体页面。
+     * Open url in index frame.
+     *
+     * @param  string $open     base64 encode string.
+     * @access public
+     * @return void
+     */
+    public function app(string $open = '')
     {
         $this->view->defaultUrl = helper::safe64Decode($open);
         $this->display();
@@ -72,7 +70,7 @@ class index extends control
      * @access public
      * @return void
      */
-    public function changeLog($version = '')
+    public function changeLog(string $version = '')
     {
         $latestVersionList = json_decode($this->config->global->latestVersionList);
         $version           = $latestVersionList->$version;
@@ -82,51 +80,16 @@ class index extends control
     }
 
     /**
-     * ajaxClearObjectSession
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxClearObjectSession()
-    {
-        $objectType = $this->post->objectType;
-        $appGroup   = zget($this->config->index->appGroup, $objectType, '');
-        if($objectType == 'testcase')    $objectType = 'case';
-        if($objectType == 'testreport')  $objectType = 'report';
-        if($objectType == 'productplan') $objectType = 'productPlan';
-
-        $this->session->set($objectType . 'List', '', $appGroup);
-    }
-
-    /**
-     * Ajax get view method.
+     * Ajax get view method for asset lib by object type.
      *
      * @param  int    $objectID
      * @param  string $objectType
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxGetViewMethod($objectID, $objectType)
+    public function ajaxGetViewMethod(int $objectID, string $objectType)
     {
-        $method = '';
-        if(isset($this->config->maxVersion))
-        {
-            $table     = $this->config->objectTables[$objectType];
-            $field     = $objectType == 'doc' ? 'assetLibType' : 'lib';
-            $objectLib = $this->dao->select($field)->from($table) ->where('id')->eq($objectID)->fetch($field);
-            if(!empty($objectLib))
-            {
-                if($objectType == 'doc')
-                {
-                    $method = $objectLib == 'practice' ? 'practiceView' : 'componentView';
-                }
-                else
-                {
-                    $this->app->loadConfig('action');
-                    $method = $this->config->action->assetViewMethod[$objectType];
-                }
-            }
-        }
-        echo $method;
+        $method = $this->indexZen->getViewMethodForAssetLib($objectID, $objectType);
+        return print($method);
     }
 }
