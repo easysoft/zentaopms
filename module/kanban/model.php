@@ -3785,15 +3785,18 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板卡片。
      * Get card by id.
      *
      * @param  int    $cardID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getCardByID($cardID)
+    public function getCardByID(int $cardID): object|false
     {
         $card = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        if(!$card) return false;
+
         $card = $this->loadModel('file')->replaceImgURL($card, 'desc');
 
         return $card;

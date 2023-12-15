@@ -900,23 +900,21 @@ class kanban extends control
     }
 
     /**
+     * 查看看板卡片详情。
      * View a card.
      *
      * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function viewCard($cardID)
+    public function viewCard(int $cardID)
     {
-        $this->loadModel('action');
-
         $card   = $this->kanban->getCardByID($cardID);
         $kanban = $this->kanban->getByID($card->kanban);
         $space  = $this->kanban->getSpaceById($kanban->space);
 
-        $this->view->title       = 'CARD #' . $card->id . ' ' . $card->name;
         $this->view->card        = $card;
-        $this->view->actions     = $this->action->getList('kanbancard', $cardID);
+        $this->view->actions     = $this->loadModel('action')->getList('kanbancard', $cardID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->space       = $space;
         $this->view->kanban      = $kanban;
