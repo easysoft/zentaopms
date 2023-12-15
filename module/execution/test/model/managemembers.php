@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试executionModel->manageMembersTest();
+timeout=0
+cid=1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 
@@ -27,14 +35,6 @@ zdTable('user')->gen(5);
 zdTable('projectproduct')->gen(0);
 zdTable('product')->gen(0);
 su('admin');
-
-/**
-
-title=测试executionModel->manageMembersTest();
-timeout=0
-cid=1
-
-*/
 
 $executionID = 3;
 $accounts    = array('user1', 'user2', 'admin');

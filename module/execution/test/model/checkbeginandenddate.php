@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试executionModel->checkBeginAndEndDate();
+cid=0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 zdTable('user')->gen(5);
@@ -9,14 +16,6 @@ $execution = zdTable('project')->config('execution');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220215 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(30);
-
-/**
-
-title=测试executionModel->checkBeginAndEndDate();
-timeout=0
-cid=1
-
-*/
 
 $projectIdList = array(11, 60, 100);
 $parentIdList  = array(0, 106);

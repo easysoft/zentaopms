@@ -1214,7 +1214,8 @@ class programplanModel extends model
         if(empty($stage) || empty($stage->path)) return false;
 
         $project = $this->loadModel('project')->getByID($stage->project);
-        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd','research')))) return false;
+        $model   = zget($project, 'model', '');
+        if(empty($stage) or empty($stage->path) or (!in_array($model, array('waterfall','waterfallplus','ipd','research')))) return false;
 
         $action       = strtolower($action);
         $parentIdList = explode(',', trim($stage->path, ','));
@@ -1232,14 +1233,8 @@ class programplanModel extends model
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childExecution)
             {
-                if(empty($statusCount[$childExecution->status]))
-                {
-                    $statusCount[$childExecution->status] = 1;
-                }
-                else
-                {
-                    $statusCount[$childExecution->status] ++;
-                }
+                if(empty($statusCount[$childExecution->status])) $statusCount[$childExecution->status] = 0;
+                $statusCount[$childExecution->status] ++;
             }
 
             if(empty($statusCount)) continue;

@@ -2430,7 +2430,7 @@ class executionTest
      * @access public
      * @return void
      */
-    public function syncNoMultipleSprintTest($projectID)
+    public function syncNoMultipleSprintTest(int $projectID): int
     {
         return $this->executionModel->syncNoMultipleSprint($projectID);
     }

@@ -33,6 +33,7 @@ $emptyNoFixColWidth  = array('fluidBoard' => 1, 'minColWidth' => 0, 'maxColWidth
 $minGtMaxWidth       = array('fluidBoard' => 1, 'minColWidth' => '400', 'maxColWidth' => '210');
 
 $executionTester = new executionTest();
+$executionTester->executionModel->config->minColWidth = '200';
 r($executionTester->setKanbanTest($executionID, $changeFixColWidth))   && p('fluidBoard,colWidth')                && e('0,300');                           // 测试修改固定列宽
 r($executionTester->setKanbanTest($executionID, $changeNoFixColWidth)) && p('fluidBoard,minColWidth,maxColWidth') && e('1,210,400');                       // 测试修改自适应列宽
 r($executionTester->setKanbanTest($executionID, $changeCardCount))     && p('displayCards')                       && e('5');                               // 测试修改卡片展示数量

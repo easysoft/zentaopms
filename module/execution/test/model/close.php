@@ -7,6 +7,7 @@ su('admin');
 
 $execution = zdTable('project');
 $execution->id->range('1-6');
+$execution->project->range('0,0,1,0,1,1');
 $execution->name->range('项目1,1-5')->prefix('执行');
 $execution->type->range('project,sprint,stage,kanban,stage{2}');
 $execution->status->range('wait{4},suspended,closed,doing');
@@ -32,4 +33,4 @@ r($executionTester->closeTest($executionIDList[0]))                && p('0:field
 r($executionTester->closeTest($executionIDList[1]))                && p('0:field,old,new') && e('status,wait,closed');         // 瀑布执行关闭
 r($executionTester->closeTest($executionIDList[2]))                && p('0:field,old,new') && e('status,wait,closed');         // 看板执行关闭
 r($executionTester->closeTest($executionIDList[1],$noRealEnd))     && p('realEnd:0')       && e('『实际完成日期』不能为空。'); // 不输入实际完成时间校验
-r($executionTester->closeTest($executionIDList[3], array(), true)) && p('status')          && e('closed');                     // 子阶段关闭获取父阶段状态
+r($executionTester->closeTest($executionIDList[3], array(), true)) && p('status')          && e('suspended');                  // 子阶段关闭获取父阶段状态

@@ -2397,6 +2397,8 @@ class treeModel extends model
      */
     public function getSyncConfig(string $type = ''): array
     {
+        if(!isset($this->config->global->syncProduct)) return array();
+
         /* If feedback or ticket module is merge add story module.*/
         $syncConfig = json_decode($this->config->global->syncProduct, true);
         $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();

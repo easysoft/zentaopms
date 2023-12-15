@@ -1,11 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试executionModel->syncNoMultipleSprint();
+timeout=0
+cid=1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 
 $execution = zdTable('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
+$execution->code->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');
 $execution->status->range('doing{3},closed,doing');
 $execution->parent->range('0,0,1,1,2');
@@ -33,15 +42,7 @@ $projectproduct->gen(5);
 
 su('admin');
 
-/**
-
-title=测试executionModel->syncNoMultipleSprint();
-timeout=0
-cid=1
-
-*/
-
-$projectIDList = array('2', '15');
+$projectIDList = array(2, 15);
 
 $execution = new executionTest();
 r($execution->syncNoMultipleSprintTest($projectIDList[0])) && p() && e('5'); // 同步没有执行的项目

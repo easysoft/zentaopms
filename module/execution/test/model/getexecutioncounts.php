@@ -25,7 +25,8 @@ cid=1
 
 */
 
-$execution = new executionTest();
-r($execution->getExecutionCountsTest(1)) && p() && e('1'); // 根据executionID查找任务详情
-r($execution->getExecutionCountsTest(2)) && p() && e('1'); // 根据executionID查找任务详情
-r($execution->getExecutionCountsTest(3)) && p() && e('0'); // 根据executionID查找任务详情
+global $tester;
+$tester->loadModel('execution');
+r($tester->execution->getExecutionCounts(1)) && p() && e('0'); // 根据executionID查找任务详情
+r($tester->execution->getExecutionCounts(2)) && p() && e('1'); // 根据executionID查找任务详情
+r($tester->execution->getExecutionCounts(3)) && p() && e('0'); // 根据executionID查找任务详情

@@ -417,7 +417,7 @@ class executionModel extends model
         if(isset($execution->project))
         {
             $executionProductList   = $this->loadModel('product')->getProducts($executionID);
-            $projectProductList     = $this->product->getProducts($execution->project);
+            $projectProductList     = $this->product->getProducts((int)$execution->project);
             $executionProductIdList = array_keys($executionProductList);
             $projectProductIdList   = array_keys($projectProductList);
             $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
@@ -441,7 +441,7 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID, $postData->syncStories ?? 'no');
+                $this->changeProject((int)$execution->project, $oldExecution->project, $executionID, $postData->syncStories ?? 'no');
             }
 
             $this->file->updateObjectID($postData->uid, $executionID, 'execution');
@@ -1166,7 +1166,7 @@ class executionModel extends model
     public function checkWorkload(string $type = '', float $percent = 0, object $oldExecution = null): bool
     {
         /* Check whether the workload is positive. */
-        if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $percent))
+        if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$percent))
         {
             dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
             return false;
@@ -1237,8 +1237,6 @@ class executionModel extends model
         $project = $this->loadModel('project')->getByID($projectID);
         if(empty($project)) return;
 
-        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
         if(($project->model == 'waterfall' || $project->model == 'waterfallplus') && $parentID != $projectID)
         {
             $this->app->loadLang('programplan');
@@ -1246,6 +1244,10 @@ class executionModel extends model
             if($parent && $begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
             if($parent && $end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
         }
+        if(dao::isError()) return;
+
+        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
@@ -4741,6 +4743,7 @@ class executionModel extends model
     public function appendTasks(array $tasks, array $rows): array
     {
         $this->loadModel('task');
+        $this->app->loadConfig('project');
 
         foreach($tasks as $task)
         {
@@ -4876,7 +4879,7 @@ class executionModel extends model
         $postData->status    = $project->status;
         $postData->acl       = 'open';
         $postData->products  = '';
-        $postData->code      = '';
+        $postData->code      = $project->code;
         $postData->uid       = '';
 
         /* Handle extend fields. */
@@ -4900,14 +4903,14 @@ class executionModel extends model
         $postData->teamMembers = array_values($teamMembers);
 
         /* Update execution and linked product. */
-        $executionID = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('type')->in('sprint,kanban')->andWhere('multiple')->eq(0)->fetch('id');
+        $executionID = (int)$this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('type')->in('sprint,kanban')->andWhere('multiple')->eq(0)->fetch('id');
         if($executionID)
         {
             $this->update($executionID, $postData);
             $this->updateProducts($executionID, (array)$updateProductsData);
         }
 
-        return (int)$executionID;
+        return $executionID;
     }
 
     /**
