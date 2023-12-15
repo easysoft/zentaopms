@@ -812,24 +812,21 @@ class kanban extends control
     }
 
     /**
+     * 编辑看板卡片。
      * Edit a card.
      *
      * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function editCard($cardID)
+    public function editCard(int $cardID)
     {
-        $this->loadModel('action');
-        $this->loadModel('user');
         if(!empty($_POST))
         {
-            $changes = $this->kanban->updateCard($cardID);
+            $card = form::data($this->config->kanban->form->editCard)->get();
+            $this->kanban->updateCard($cardID, $card);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanbanCard', $cardID, 'edited');
-            $this->action->logHistory($actionID, $changes);
 
             $card     = $this->kanban->getCardByID($cardID);
             $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
@@ -839,11 +836,10 @@ class kanban extends control
         $card        = $this->kanban->getCardByID($cardID);
         $kanban      = $this->kanban->getById($card->kanban);
         $kanbanUsers = $card->kanban == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
-        $kanbanUsers = $this->user->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+        $kanbanUsers = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
         $users       = $this->user->getPairs('noclosed|nodeleted');
 
         $this->view->card        = $card;
-        $this->view->actions     = $this->action->getList('kanbancard', $cardID);
         $this->view->users       = $users;
         $this->view->kanbanUsers = $kanbanUsers;
         $this->view->kanban      = $kanban;
