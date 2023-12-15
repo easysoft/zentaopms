@@ -4,11 +4,11 @@ $config->mr = new stdclass();
 
 $config->mr->create = new stdclass();
 $config->mr->create->skippedFields  = 'projectID,compile';
-$config->mr->create->requiredFields = 'gitlabID,sourceProject,sourceBranch,targetProject,targetBranch,title,repoID';
+$config->mr->create->requiredFields = 'hostID,sourceProject,sourceBranch,targetProject,targetBranch,title,repoID';
 
 $config->mr->edit = new stdclass;
 $config->mr->edit->skippedFields  = 'projectID,compile';
-$config->mr->edit->requiredFields = 'gitlabID,sourceProject,sourceBranch,targetProject,targetBranch,title,repoID';
+$config->mr->edit->requiredFields = 'hostID,sourceProject,sourceBranch,targetProject,targetBranch,title,repoID';
 
 $config->mr->editor = new stdclass();
 $config->mr->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
