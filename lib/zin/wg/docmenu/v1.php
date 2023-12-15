@@ -60,6 +60,11 @@ class docMenu extends wg
             $methodName = 'showFiles';
             $linkParams = "type={$objectType}&objectID={$item->objectID}";
         }
+        else if($item->type == 'text')
+        {
+            $methodName = 'view';
+            $linkParams = "docID={$item->id}";
+        }
         else if($objectType == 'execution')
         {
             $moduleName = 'execution';
