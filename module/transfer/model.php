@@ -65,59 +65,6 @@ class transferModel extends model
     }
 
     /**
-     * Check tmp file.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkTmpFile()
-    {
-        $file    = $this->session->fileImportFileName;
-        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile = $tmpPath . DS . md5(basename($file));
-
-        if($this->maxImport and file_exists($tmpFile)) return $tmpFile;
-        return false;
-    }
-
-    /**
-     * Check suhosin info.
-     *
-     * @param  array  $datas
-     * @access public
-     * @return void
-     */
-    public function checkSuhosinInfo($datas = array())
-    {
-        if(empty($datas)) return;
-        $current = (array)current($datas);
-
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($datas) * count($current); // Count all post datas
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-        return;
-    }
-
-    /**
-     * Create tmpFile.
-     *
-     * @param  int    $objectDatas
-     * @access public
-     * @return void
-     */
-    public function createTmpFile($objectDatas)
-    {
-        $file      = $this->session->fileImportFileName;
-        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile   = $tmpPath . DS . md5(basename($file));
-
-        if(file_exists($tmpFile)) unlink($tmpFile);
-        file_put_contents($tmpFile, serialize($objectDatas));
-        $this->session->set('tmpFile', $tmpFile);
-    }
-
-    /**
      * Check Required fields.
      *
      * @param  int    $module
@@ -451,16 +398,16 @@ class transferModel extends model
         $fields  = $this->getImportFields($module);
 
         /* Check tmpfile. */
-        $tmpFile = $this->checkTmpFile();
+        $tmpFile = $this->transferZen->checkTmpFile();
 
         /* If tmpfile not isset create tmpfile. */
         if(!$tmpFile)
         {
-            $rows      = $this->getRowsFromExcel();
+            $rows       = $this->getRowsFromExcel();
             $moduleData = $this->processRows4Fields($rows, $fields);
             $moduleData = $this->getNatureDatas($module, $moduleData, $filter, $fields);
 
-            $this->createTmpFile($moduleData);
+            $this->transferZen->createTmpFile($moduleData);
         }
         else
         {
@@ -1272,7 +1219,7 @@ class transferModel extends model
         /* Get page by datas. */
         $datas        = $this->getPageDatas($formatDatas, $pagerID);
 
-        $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
+        $suhosinInfo  = $this->transferZen->checkSuhosinInfo($datas->datas);
 
         $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
 

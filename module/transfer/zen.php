@@ -142,4 +142,62 @@ class transferZen extends transfer
 
         return $fields;
     }
+
+    /**
+     * 创建临时文件。
+     * Create tmpFile.
+     *
+     * @param  array  $objectDatas
+     * @access public
+     * @return array
+     */
+    public function createTmpFile(array $objectDatas)
+    {
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
+        if(file_exists($tmpFile)) unlink($tmpFile);
+        file_put_contents($tmpFile, serialize($objectDatas));
+        $this->session->set('tmpFile', $tmpFile);
+    }
+
+    /**
+     * 检查临时文件是否存在。
+     * Check tmp file.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function checkTmpFile()
+    {
+        /* 从session中获取临时文件。*/
+        /* Get tmp file from session. */
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
+        if($this->maxImport and file_exists($tmpFile)) return $tmpFile;
+        return false;
+    }
+
+    /**
+     * 检查suhosin信息。
+     * Check suhosin info.
+     *
+     * @param  array  $datas
+     * @access public
+     * @return string
+     */
+    public function checkSuhosinInfo(array $datas = array())
+    {
+        if(empty($datas)) return '';
+        $current = (array)current($datas);
+
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($datas) * count($current); // Count all post datas
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+        return '';
+    }
 }
