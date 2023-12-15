@@ -2892,7 +2892,7 @@ class executionModel extends model
             $executionBranches = zget($executionProducts, $productID, array());
             foreach($planIdList as $planID)
             {
-                $planStories = $this->story->getPlanStories($planID);
+                $planStories = $this->story->getPlanStories((int)$planID);
                 if(empty($planStories)) continue;
 
                 foreach($planStories as $id => $story)
