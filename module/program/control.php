@@ -23,8 +23,6 @@ class program extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('project');
-        $this->loadModel('group');
-        $this->loadModel('execution');
     }
 
     /**
