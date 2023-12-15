@@ -37,7 +37,7 @@ $params        = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&p
 $sortParams    = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
 $tableData     = empty($docs) ? array() : initTableData($docs, $cols);
 $createDocLink = '';
-if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}");
+if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&type=html{$templateParam}");
 if($app->rawMethod == 'myspace')
 {
     $sortParams = "type={$type}&" . $sortParams;

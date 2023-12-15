@@ -325,8 +325,8 @@ class doc extends control
 
         if(!empty($_POST))
         {
-            $doclib   = $this->loadModel('doc')->getLibByID($libID);
-            $canVisit = $this->docZen->checkPrivForCreate($doclib, $objectType);
+            $docLib   = $this->loadModel('doc')->getLibByID($libID);
+            $canVisit = $this->docZen->checkPrivForCreate($docLib, $objectType);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
             $libID    = $this->post->lib;
