@@ -5,6 +5,20 @@
 title=测试 designModel->updateLinkedCommits();
 cid=1
 
+- 测试空数据 @0
+- 测试designID为0的数据 @0
+- 测试repoID为0的数据 @0
+- 测试提交记录为空的数据 @0
+- 测试正常数据
+ - 第5条的project属性 @11
+ - 第5条的product属性 @0
+ - 第5条的AType属性 @commit
+ - 第5条的AID属性 @3
+ - 第5条的BType属性 @design
+ - 第5条的BID属性 @1
+ - 第5条的relation属性 @completedfrom
+- 测试designID不存在的数据 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
