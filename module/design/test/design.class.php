@@ -98,31 +98,23 @@ class designTest
     }
 
     /**
-     * Function assign test by desgin
+     * 更新设计的指派人。
+     * Update assign of design.
      *
-     * @param  int $designID
-     * @param  array $param
+     * @param  int        $designID
+     * @param  string     $assignTo
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function assignTest($designID, $param = array())
+    public function assignTest(int $designID, string $assignTo = ''): array|bool
     {
-        global $tester;
+        $design = new stdclass();
+        $design->assignedTo = $assignTo;
 
-        $createFields = array('assignedTo' => '', 'comment' => '');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->assign($designID);
-
-        unset($_POST);
+        $changes = $this->objectModel->assign($designID, $design);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $tester->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetchAll();
-
-        return $objects;
+        return $changes;
     }
 
     /**
