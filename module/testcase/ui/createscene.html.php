@@ -34,7 +34,8 @@ formPanel
                     setID('product'),
                     set::name('product'),
                     set::items($products),
-                    set::value($product->id)
+                    set::value($product->id),
+                    set::required(true)
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
@@ -42,7 +43,8 @@ formPanel
                     zui::width('120px'),
                     set::name('branch'),
                     set::items($branches),
-                    set::value($branch)
+                    set::value($branch),
+                    set::required(true)
                 ) : null
             )
         ),
@@ -57,7 +59,8 @@ formPanel
                     setID('module'),
                     set::name('module'),
                     set::items($modules),
-                    set::value($moduleID)
+                    set::value($moduleID),
+                    set::required(true)
                 ),
                 count($modules) == 1 ? div
                 (
@@ -88,7 +91,8 @@ formPanel
             setID('parent'),
             set::name('parent'),
             set::items($scenes),
-            set::value($parent)
+            set::value($parent),
+            set::required(true)
         )
     ),
     formGroup
