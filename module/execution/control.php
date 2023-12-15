@@ -1958,7 +1958,7 @@ class execution extends control
         {
             /* Get the number of unfinished tasks and unresolved bugs. */
             $unfinishedTasks     = $this->loadModel('task')->getUnfinishTasks($executionID);
-            $unresolvedBugs      = $this->loadModel('bug')->getActiveBugs(0, '', $executionID, array());
+            $unresolvedBugs      = $this->loadModel('bug')->getActiveBugs(0, '', (string)$executionID, array());
             $unfinishedTaskCount = count($unfinishedTasks);
             $unresolvedBugCount  = count($unresolvedBugs);
 
