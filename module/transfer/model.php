@@ -1,25 +1,34 @@
 <?php
+declare(strict_types=1);
+/**
+ * The control file of transfer module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Tang Hucheng <tanghucheng@cnezsoft.com>
+ * @package     transfer
+ * @link        https://www.zentao.net
+ */
 class transferModel extends model
 {
     /* transfer Module configs. */
     public $transferConfig;
 
-    public $transferLang;
+    /* From module configs. */
+    public $moduleConfig;
 
-    /* From model configs. */
-    public $modelConfig;
-
-    public $modelLang;
+    /* From module lang. */
+    public $moduleLang;
 
     public $maxImport;
 
-    public $modelFieldList;
+    public $moduleFieldList;
 
     public $templateFields;
 
     public $exportFields;
 
-    public $modelListFields;
+    public $moduleListFields;
 
     /**
      * The construc method, to do some auto things.
@@ -33,25 +42,24 @@ class transferModel extends model
 
         $this->maxImport  = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
         $this->transferConfig = $this->config->transfer;
-        $this->transferLang   = $this->lang->transfer;
     }
 
     /**
      * Common Actions.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @access public
      * @return void
      */
-    public function commonActions($model = '')
+    public function commonActions($module = '')
     {
-        if($model)
+        if($module)
         {
-            $this->loadModel($model);
-            $this->modelConfig     = $this->config->$model;
-            $this->modelLang       = $this->lang->$model;
-            $this->modelFieldList  = $this->config->$model->dtable->fieldList ?? array();
-            $this->modelListFields = explode(',', $this->config->$model->listFields ?? '');
+            $this->loadModel($module);
+            $this->moduleConfig     = $this->config->$module;
+            $this->moduleLang       = $this->lang->$module;
+            $this->moduleFieldList  = $this->config->$module->dtable->fieldList ?? array();
+            $this->moduleListFields = explode(',', $this->config->$module->listFields ?? '');
         }
     }
 
@@ -111,21 +119,21 @@ class transferModel extends model
     /**
      * Check Required fields.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $line
      * @param  int    $data
      * @access public
      * @return void
      */
-    public function checkRequired($model, $line, $data)
+    public function checkRequired($module, $line, $data)
     {
-        if(isset($this->config->$model->create->requiredFields))
+        if(isset($this->config->$module->create->requiredFields))
         {
-            $requiredFields = explode(',', $this->config->$model->create->requiredFields);
+            $requiredFields = explode(',', $this->config->$module->create->requiredFields);
             foreach($requiredFields as $requiredField)
             {
                 $requiredField = trim($requiredField);
-                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->transfer->noRequire, $line, $this->lang->$model->$requiredField);
+                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->transfer->noRequire, $line, $this->lang->$module->$requiredField);
             }
         }
     }
@@ -133,11 +141,11 @@ class transferModel extends model
     /**
      * Export module data.
      *
-     * @param  string $model
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function export($model = '')
+    public function export($module = '')
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','100');
@@ -145,16 +153,16 @@ class transferModel extends model
         $fields = $this->post->exportFields;
 
         /* Init config fieldList. */
-        $fieldList = $this->initFieldList($model, $fields);
+        $fieldList = $this->initFieldList($module, $fields);
 
-        $rows = $this->getRows($model, $fieldList);
-        if($model == 'story')
+        $rows = $this->getRows($module, $fieldList);
+        if($module == 'story')
         {
             $product = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
             if($product and $product->shadow) foreach($rows as $id => $row) $rows[$id]->product = '';
         }
 
-        $list = $this->setListValue($model, $fieldList);
+        $list = $this->setListValue($module, $fieldList);
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
         /* Get export rows and fields datas. */
@@ -163,23 +171,23 @@ class transferModel extends model
         $fields = $exportDatas['fields'];
         $rows   = !empty($exportDatas['rows']) ? $exportDatas['rows'] : array();
 
-        if($this->config->edition != 'open') list($fields, $rows) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $rows, $model);
+        if($this->config->edition != 'open') list($fields, $rows) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $rows, $module);
 
         $this->post->set('rows',   $rows);
         $this->post->set('fields', $fields);
-        $this->post->set('kind',   $model);
+        $this->post->set('kind',   $module);
     }
 
     /**
      * Init postFields.
      *
-     * @param  string $model
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function initPostFields($model = '')
+    public function initPostFields($module = '')
     {
-        $this->commonActions($model);
+        $this->commonActions($module);
         $datas = fixer::input('post')->get();
         $objectData = array();
         foreach($datas as $field => $data)
@@ -199,16 +207,16 @@ class transferModel extends model
     /**
      * Init FieldList.
      *
-     * @param  string $model
+     * @param  string $module
      * @param  string $fields
      * @param  bool   $withKey
      * @access public
      * @return array
      */
-    public function initFieldList($model, $fields = '', $withKey = true)
+    public function initFieldList($module, $fields = '', $withKey = true)
     {
-        $this->commonActions($model);
-        $this->mergeConfig($model);
+        $this->commonActions($module);
+        $this->mergeConfig($module);
 
         $this->transferConfig->sysDataList = $this->initSysDataFields();
         $transferFieldList = $this->transferConfig->fieldList;
@@ -222,26 +230,26 @@ class transferModel extends model
         foreach($fields as $field)
         {
             $field = trim($field);
-            if($model == 'bug' and $this->session->currentProductType == 'normal' and $field == 'branch') continue;
+            if($module == 'bug' and $this->session->currentProductType == 'normal' and $field == 'branch') continue;
 
-            $modelFieldList = isset($this->modelFieldList[$field]) ? $this->modelFieldList[$field] : array();
+            $moduleFieldList = isset($this->moduleFieldList[$field]) ? $this->moduleFieldList[$field] : array();
 
             foreach($transferFieldList as $transferField => $value)
             {
-                if((!isset($modelFieldList[$transferField])) or $transferField == 'title')
+                if((!isset($moduleFieldList[$transferField])) or $transferField == 'title')
                 {
-                    $modelFieldList[$transferField] = $this->transferConfig->fieldList[$transferField];
+                    $moduleFieldList[$transferField] = $this->transferConfig->fieldList[$transferField];
 
                     if(strpos($this->transferConfig->initFunction, $transferField) !== false)
                     {
                         $funcName = 'init' . ucfirst($transferField);
-                        $modelFieldList[$transferField] = $this->$funcName($model, $field);
+                        $moduleFieldList[$transferField] = $this->$funcName($module, $field);
                     }
                 }
             }
 
-            $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
-            $fieldList[$field] = $modelFieldList;
+            $moduleFieldList['values'] = $this->initValues($module, $field, $moduleFieldList, $withKey);
+            $fieldList[$field] = $moduleFieldList;
         }
 
         if(!empty($fieldList['mailto']))
@@ -254,7 +262,7 @@ class transferModel extends model
         {
             /* Set workflow fields. */
             $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
-                ->where('module')->eq($model)
+                ->where('module')->eq($module)
                 ->andWhere('buildin')->eq(0)
                 ->fetchAll('id');
 
@@ -273,7 +281,7 @@ class transferModel extends model
                     $fieldList[$field->field]['control'] = $control;
                     $fieldList[$field->field]['values']  = $options;
                     $fieldList[$field->field]['from']    = 'workflow';
-                    $this->config->$model->listFields .=  ',' . $field->field;
+                    $this->config->$module->listFields .=  ',' . $field->field;
                 }
             }
         }
@@ -284,25 +292,25 @@ class transferModel extends model
     /**
      * Init Title.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $field
      * @access public
      * @return void
      */
-    public function initTitle($model, $field)
+    public function initTitle($module, $field)
     {
         $title = $field;
 
-        $this->commonActions($model);
+        $this->commonActions($module);
 
-        if(!empty($this->modelConfig->fieldList[$field]['title'])) return $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
-        if(isset($this->lang->$model->$field))
+        if(!empty($this->moduleConfig->fieldList[$field]['title'])) return $this->moduleLang->{$this->moduleConfig->fieldList[$field]['title']};
+        if(isset($this->lang->$module->$field))
         {
-            $title = $this->lang->$model->$field;
+            $title = $this->lang->$module->$field;
         }
-        elseif(isset($this->lang->$model->{$field . 'AB'}))
+        elseif(isset($this->lang->$module->{$field . 'AB'}))
         {
-            $title = $this->lang->$model->{$field . 'AB'};
+            $title = $this->lang->$module->{$field . 'AB'};
         }
         elseif(isset($this->lang->transfer->reservedWord[$field]))
         {
@@ -319,11 +327,11 @@ class transferModel extends model
      * @access public
      * @return void
      */
-    public function initControl($model, $field)
+    public function initControl($module, $field)
     {
-        if(isset($this->modelFieldList[$field]['control']))    return $this->modelFieldList[$field]['control'];
-        if(isset($this->modelLang->{$field.'List'}))           return 'select';
-        if(isset($this->modelFieldList[$field]['dataSource'])) return 'select';
+        if(isset($this->moduleFieldList[$field]['control']))    return $this->moduleFieldList[$field]['control'];
+        if(isset($this->moduleLang->{$field.'List'}))           return 'select';
+        if(isset($this->moduleFieldList[$field]['dataSource'])) return 'select';
 
         if(strpos($this->transferConfig->sysDataFields, $field) !== false) return 'select';
         return $this->transferConfig->fieldList['control'];
@@ -332,14 +340,14 @@ class transferModel extends model
     /**
      * Init Values.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $field
      * @param  string $fieldValue
      * @param  int    $withKey
      * @access public
      * @return void
      */
-    public function initValues($model, $field, $fieldValue = '', $withKey = true)
+    public function initValues($module, $field, $fieldValue = '', $withKey = true)
     {
         $values = $fieldValue['values'];
 
@@ -353,7 +361,7 @@ class transferModel extends model
         {
             $params = !empty($params) ? $params : '';
             $pairs  = !empty($pairs)  ? $pairs : '';
-            $values = $this->getSourceByModuleMethod($model, $module, $method, $params, $pairs);
+            $values = $this->getSourceByModuleMethod($module, $module, $method, $params, $pairs);
         }
         elseif(!empty($lang))
         {
@@ -363,8 +371,8 @@ class transferModel extends model
         /* If empty values put system datas. */
         if(empty($values))
         {
-            if(strpos($this->modelConfig->sysLangFields, $field) !== false and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
-            if(strpos($this->modelConfig->sysDataFields, $field) !== false and !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
+            if(strpos($this->moduleConfig->sysLangFields, $field) !== false and !empty($this->moduleLang->{$field.'List'})) return $this->moduleLang->{$field.'List'};
+            if(strpos($this->moduleConfig->sysDataFields, $field) !== false and !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
         if(is_array($values) and $withKey)
@@ -379,18 +387,18 @@ class transferModel extends model
     /**
      * Init Required.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $field
      * @access public
      * @return void
      */
-    public function initRequired($model, $field)
+    public function initRequired($module, $field)
     {
-        $this->commonActions($model);
+        $this->commonActions($module);
 
-        if(empty($this->modelConfig->create->requiredFields)) return 'no';
+        if(empty($this->moduleConfig->create->requiredFields)) return 'no';
 
-        $requiredFields = "," . $this->modelConfig->create->requiredFields . ",";
+        $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
         if(strpos($requiredFields, $field) !== false) return 'yes';
         return 'no';
     }
@@ -431,15 +439,15 @@ class transferModel extends model
     /**
      * Get showImport datas.
      *
-     * @param  string $model
+     * @param  string $module
      * @param  string $filter
      * @access public
      * @return array
      */
-    public function format($model = '', $filter = '')
+    public function format($module = '', $filter = '')
     {
         /* Bulid import paris (field => name). */
-        $fields  = $this->getImportFields($model);
+        $fields  = $this->getImportFields($module);
 
         /* Check tmpfile. */
         $tmpFile = $this->checkTmpFile();
@@ -448,22 +456,22 @@ class transferModel extends model
         if(!$tmpFile)
         {
             $rows      = $this->getRowsFromExcel();
-            $modelData = $this->processRows4Fields($rows, $fields);
-            $modelData = $this->getNatureDatas($model, $modelData, $filter, $fields);
+            $moduleData = $this->processRows4Fields($rows, $fields);
+            $moduleData = $this->getNatureDatas($module, $moduleData, $filter, $fields);
 
-            $this->createTmpFile($modelData);
+            $this->createTmpFile($moduleData);
         }
         else
         {
-            $modelData = $this->getDatasByFile($tmpFile);
+            $moduleData = $this->getDatasByFile($tmpFile);
         }
 
-        $this->mergeConfig($model);
-        $modelData = $this->processDate($modelData);
+        $this->mergeConfig($module);
+        $moduleData = $this->processDate($moduleData);
         if(isset($fields['id'])) unset($fields['id']);
-        $this->session->set($model . 'TemplateFields',  implode(',', array_keys($fields)));
+        $this->session->set($module . 'TemplateFields',  implode(',', array_keys($fields)));
 
-        return $modelData;
+        return $moduleData;
     }
 
     /**
@@ -479,7 +487,7 @@ class transferModel extends model
         {
             foreach($data as $field => $value)
             {
-                if(strpos($this->modelConfig->dateFields, $field) !== false or strpos($this->modelConfig->datetimeFields, $field) !== false) $data->$field = $this->loadModel('common')->formatDate($value);
+                if(strpos($this->moduleConfig->dateFields, $field) !== false or strpos($this->moduleConfig->datetimeFields, $field) !== false) $data->$field = $this->loadModel('common')->formatDate($value);
             }
             $datas[$index] = $data;
         }
@@ -510,7 +518,7 @@ class transferModel extends model
     /**
      * Get field values by method.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $module
      * @param  int    $method
      * @param  string $params
@@ -518,9 +526,9 @@ class transferModel extends model
      * @access public
      * @return void
      */
-    public function getSourceByModuleMethod($model, $module, $method, $params = '', $pairs = '')
+    public function getSourceByModuleMethod($module, $module, $method, $params = '', $pairs = '')
     {
-        $getParams = $this->session->{$model . 'TransferParams'};
+        $getParams = $this->session->{$module . 'TransferParams'};
 
         if($params)
         {
@@ -570,7 +578,7 @@ class transferModel extends model
      */
     public function getSourceByLang($lang)
     {
-        return isset($this->modelLang->$lang) ? $this->modelLang->$lang : '';
+        return isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
     }
 
     /**
@@ -640,18 +648,18 @@ class transferModel extends model
     }
 
     /**
-     * Get files by model.
+     * Get files by module.
      *
-     * @param  string $model
+     * @param  string $module
      * @param  array  $datas
      * @access public
      * @return void
      */
-    public function getFiles($model, $datas)
+    public function getFiles($module, $datas)
     {
         $this->loadModel('file');
         $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)
-            ->where('objectType')->eq($model)
+            ->where('objectType')->eq($module)
             ->andWhere('objectID')->in(@array_keys($datas))
             ->andWhere('extra')
             ->ne('editor')
@@ -678,18 +686,18 @@ class transferModel extends model
     /**
      * Set list value.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $fieldList
      * @access public
      * @return void/array
      */
-    public function setListValue($model, $fieldList)
+    public function setListValue($module, $fieldList)
     {
         $lists = array();
-        $this->commonActions($model);
-        if(!empty($this->modelListFields))
+        $this->commonActions($module);
+        if(!empty($this->moduleListFields))
         {
-            $listFields = $this->modelListFields;
+            $listFields = $this->moduleListFields;
             foreach($listFields as $field)
             {
                 if(empty($field)) continue;
@@ -698,7 +706,7 @@ class transferModel extends model
                 if(!empty($fieldList[$field]))
                 {
                     $lists[$listName] = $fieldList[$field]['values'];
-                    if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = implode(',', $fieldList[$field]['values']);
+                    if(strpos($this->config->$module->sysLangFields, $field)) $lists[$listName] = implode(',', $fieldList[$field]['values']);
                 }
                 if(is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
             }
@@ -706,10 +714,10 @@ class transferModel extends model
             $lists['listStyle'] = $listFields;
         }
 
-        if(!empty($this->modelConfig->cascade))
+        if(!empty($this->moduleConfig->cascade))
         {
-            $lists = $this->getCascadeList($model, $lists);
-            $lists['cascade'] = $this->modelConfig->cascade;
+            $lists = $this->getCascadeList($module, $lists);
+            $lists['cascade'] = $this->moduleConfig->cascade;
         }
 
         return $lists;
@@ -718,17 +726,17 @@ class transferModel extends model
     /**
      * Get cascade list for export excel.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $lists
      * @access public
      * @return void
      */
-    public function getCascadeList($model, $lists)
+    public function getCascadeList($module, $lists)
     {
-        $this->commonActions($model);
-        if(!isset($this->modelConfig->cascade)) return $lists;
+        $this->commonActions($module);
+        if(!isset($this->moduleConfig->cascade)) return $lists;
 
-        $cascadeArray = $this->modelConfig->cascade;
+        $cascadeArray = $this->moduleConfig->cascade;
 
         foreach($cascadeArray as $field => $linkFiled)
         {
@@ -759,34 +767,34 @@ class transferModel extends model
     /**
      * Get Rows.
      *
-     * @param  string        $model
+     * @param  string        $module
      * @param  object|string|array $fieldList
      * @access public
      * @return void
      */
-    public function getRows(string $model, object|string|array $fieldList)
+    public function getRows(string $module, object|string|array $fieldList)
     {
-        $modelDatas = $this->getQueryDatas($model);
+        $moduleDatas = $this->getQueryDatas($module);
 
         if(is_object($fieldList)) $fieldList = (array) $fieldList;
-        if(isset($fieldList['files'])) $modelDatas = $this->getFiles($model, $modelDatas);
+        if(isset($fieldList['files'])) $moduleDatas = $this->getFiles($module, $moduleDatas);
 
         $rows = !empty($_POST['rows']) ? $_POST['rows'] : '';
         if($rows)
         {
             foreach($rows as $id => $row)
             {
-                $modelDatas[$id] = (object) array_merge((array)$modelDatas[$id], (array)$row);
+                $moduleDatas[$id] = (object) array_merge((array)$moduleDatas[$id], (array)$row);
             }
         }
 
         /* Deal children datas and multiple tasks. */
-        if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
+        if($moduleDatas) $moduleDatas = $this->updateChildDatas($moduleDatas);
 
         /* Deal linkStories datas. */
-        if($modelDatas and isset($fieldList['linkStories'])) $modelDatas = $this->updateLinkStories($modelDatas);
+        if($moduleDatas and isset($fieldList['linkStories'])) $moduleDatas = $this->updateLinkStories($moduleDatas);
 
-        return $modelDatas;
+        return $moduleDatas;
     }
 
     /**
@@ -820,17 +828,17 @@ class transferModel extends model
     /**
      * Get query datas.
      *
-     * @param  string $model
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function getQueryDatas($model = '')
+    public function getQueryDatas($module = '')
     {
-        $queryCondition    = $this->session->{$model . 'QueryCondition'};
-        $onlyCondition     = $this->session->{$model . 'OnlyCondition'};
-        $transferCondition = $this->session->{$model . 'TransferCondition'};
+        $queryCondition    = $this->session->{$module . 'QueryCondition'};
+        $onlyCondition     = $this->session->{$module . 'OnlyCondition'};
+        $transferCondition = $this->session->{$module . 'TransferCondition'};
 
-        $modelDatas = array();
+        $moduleDatas = array();
 
         if($transferCondition)
         {
@@ -838,24 +846,24 @@ class transferModel extends model
             $stmt = $this->dbh->query($transferCondition);
             while($row = $stmt->fetch())
             {
-                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
-                $modelDatas[$row->id] = $row;
+                if($selectKey !== 't1.id' and isset($row->$module) and isset($row->id)) $row->id = $row->$module;
+                $moduleDatas[$row->id] = $row;
             }
 
-            return $modelDatas;
+            return $moduleDatas;
         }
 
         /* Fetch the scene's cases. */
-        if($model == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
+        if($module == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
 
         $checkedItem = $this->post->checkedItem ? $this->post->checkedItem : $this->cookie->checkedItem;
 
         if($onlyCondition and $queryCondition)
         {
-            $table = zget($this->config->objectTables, $model);
-            if(isset($this->config->$model->transfer->table)) $table = $this->config->$model->transfer->table;
-            if($model == 'story') $queryCondition = str_replace('story', 'id', $queryCondition);
-            $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
+            $table = zget($this->config->objectTables, $module);
+            if(isset($this->config->$module->transfer->table)) $table = $this->config->$module->transfer->table;
+            if($module == 'story') $queryCondition = str_replace('story', 'id', $queryCondition);
+            $moduleDatas = $this->dao->select('*')->from($table)->alias('t1')
                 ->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
                 ->fetchAll('id');
@@ -863,33 +871,33 @@ class transferModel extends model
         elseif($queryCondition)
         {
             $selectKey = 'id';
-            if($model == 'testcase') $model = 'case';
-            preg_match_all('/[`"]' . $this->config->db->prefix . $model .'[`"] AS ([\w]+) /', $queryCondition, $matches);
+            if($module == 'testcase') $module = 'case';
+            preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : ''));
             while($row = $stmt->fetch())
             {
-                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
-                $modelDatas[$row->id] = $row;
+                if($selectKey !== 't1.id' and isset($row->$module) and isset($row->id)) $row->id = $row->$module;
+                $moduleDatas[$row->id] = $row;
             }
         }
-        return $modelDatas;
+        return $moduleDatas;
     }
 
     /**
      * Get related objects pairs.
      *
-     * @param  string $model
+     * @param  string $module
      * @param  string $object
      * @param  string $pairs
      * @access public
      * @return void
      */
-    public function getRelatedObjects($model = '', $object = '', $pairs = '')
+    public function getRelatedObjects($module = '', $object = '', $pairs = '')
     {
         /* Get objects. */
-        $datas = $this->getQueryDatas($model);
+        $datas = $this->getQueryDatas($module);
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();
@@ -911,17 +919,17 @@ class transferModel extends model
     /**
      * Get nature datas.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @param  int    $datas
      * @param  string $filter
      * @param  string $fields
      * @access public
      * @return void
      */
-    public function getNatureDatas($model, $datas, $filter = '', $fields = '')
+    public function getNatureDatas($module, $datas, $filter = '', $fields = '')
     {
-        $fieldList = $this->initFieldList($model, array_keys($fields), false);
-        $lang = $this->lang->$model;
+        $fieldList = $this->initFieldList($module, array_keys($fields), false);
+        $lang = $this->lang->$module;
 
         foreach($datas as $key => $data)
         {
@@ -961,7 +969,7 @@ class transferModel extends model
                 {
                     $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                     $datas[$key]->$field = $id;
-                    $control = !empty($this->modelFieldList[$field]['control']) ? $this->modelFieldList[$field]['control'] : '';
+                    $control = !empty($this->moduleFieldList[$field]['control']) ? $this->moduleFieldList[$field]['control'] : '';
                     if($control == 'multiple')
                     {
                         $cellValue = explode("\n", $cellValue);
@@ -1039,27 +1047,27 @@ class transferModel extends model
     /**
      * Get import fields.
      *
-     * @param  string $model
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function getImportFields($model = '')
+    public function getImportFields($module = '')
     {
-        $this->commonActions($model);
-        $modelLang = $this->lang->$model;
-        $fields    = explode(',', $this->modelConfig->templateFields);
+        $this->commonActions($module);
+        $moduleLang = $this->lang->$module;
+        $fields    = explode(',', $this->moduleConfig->templateFields);
 
         array_unshift($fields, 'id');
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($modelLang->$fieldName) ? $modelLang->$fieldName : $fieldName;
+            $fields[$fieldName] = isset($moduleLang->$fieldName) ? $moduleLang->$fieldName : $fieldName;
             unset($fields[$key]);
         }
 
         if($this->config->edition != 'open')
         {
-            $appendFields = $this->loadModel('workflowaction')->getFields($model, 'showimport', false);
+            $appendFields = $this->loadModel('workflowaction')->getFields($module, 'showimport', false);
             foreach($appendFields as $appendField)
             {
                 if(!$appendField->buildin and $appendField->show) $fields[$appendField->field] = $appendField->name;
@@ -1072,17 +1080,17 @@ class transferModel extends model
     /**
      * Get WorkFlow fields.
      *
-     * @param  int    $model
+     * @param  int    $module
      * @access public
      * @return void
      */
-    public function getWorkFlowFields($model)
+    public function getWorkFlowFields($module)
     {
         if($this->config->edition != 'open')
         {
-            $appendFields = $this->loadModel('workflowaction')->getFields($model, 'showimport', false);
+            $appendFields = $this->loadModel('workflowaction')->getFields($module, 'showimport', false);
 
-            foreach($appendFields as $appendField) $this->config->$model->exportFields .= ',' . $appendField->field;
+            foreach($appendFields as $appendField) $this->config->$module->exportFields .= ',' . $appendField->field;
 
             $this->session->set('appendFields', $appendFields);
             $this->session->set('notEmptyRule', $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty'));
@@ -1223,59 +1231,59 @@ class transferModel extends model
     /**
      * Merge configs .
      *
-     * @param  int    $model
+     * @param  int    $module
      * @access public
      * @return void
      */
-    public function mergeConfig($model)
+    public function mergeConfig($module)
     {
-        $this->commonActions($model);
+        $this->commonActions($module);
         $transferConfig  = $this->transferConfig;
-        $modelConfig = $this->modelConfig;
-        if(!isset($modelConfig->export)) $modelConfig->export = new stdClass();
-        if(!isset($modelConfig->import)) $modelConfig->export = new stdClass();
+        $moduleConfig = $this->moduleConfig;
+        if(!isset($moduleConfig->export)) $moduleConfig->export = new stdClass();
+        if(!isset($moduleConfig->import)) $moduleConfig->export = new stdClass();
 
-        $modelConfig->dateFields     = isset($modelConfig->dateFields)     ? $modelConfig->dateFields     : $transferConfig->dateFields;
-        $modelConfig->datetimeFields = isset($modelConfig->datetimeFields) ? $modelConfig->datetimeFields : $transferConfig->datetimeFields;
-        $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $transferConfig->sysLangFields;
-        $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $transferConfig->sysDataFields;
-        $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $transferConfig->listFields;
+        $moduleConfig->dateFields     = isset($moduleConfig->dateFields)     ? $moduleConfig->dateFields     : $transferConfig->dateFields;
+        $moduleConfig->datetimeFields = isset($moduleConfig->datetimeFields) ? $moduleConfig->datetimeFields : $transferConfig->datetimeFields;
+        $moduleConfig->sysLangFields  = isset($moduleConfig->sysLangFields)  ? $moduleConfig->sysLangFields  : $transferConfig->sysLangFields;
+        $moduleConfig->sysDataFields  = isset($moduleConfig->sysDataFields)  ? $moduleConfig->sysDataFields  : $transferConfig->sysDataFields;
+        $moduleConfig->listFields     = isset($moduleConfig->listFields)     ? $moduleConfig->listFields     : $transferConfig->listFields;
     }
 
     /**
      * Read excel and format data.
      *
-     * @param  string $model
+     * @param  string $module
      * @param  int    $pagerID
      * @param  string $insert
      * @param  string $filter
      * @access public
      * @return void
      */
-    public function readExcel($model = '', $pagerID = 1, $insert = '', $filter = '')
+    public function readExcel($module = '', $pagerID = 1, $insert = '', $filter = '')
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','100');
 
         /* Formatting excel data. */
-        $formatDatas  = $this->format($model, $filter);
+        $formatDatas  = $this->format($module, $filter);
 
         /* Get page by datas. */
         $datas        = $this->getPageDatas($formatDatas, $pagerID);
 
         $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
 
-        $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
+        $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
 
-        $datas->requiredFields = $this->config->$model->create->requiredFields;
+        $datas->requiredFields = $this->config->$module->create->requiredFields;
         $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
         $datas->pagerID        = $pagerID;
         $datas->isEndPage      = $pagerID >= $datas->allPager;
         $datas->maxImport      = $this->maxImport;
         $datas->dataInsert     = $insert;
-        $datas->fields         = $this->initFieldList($model, $importFields, false);
+        $datas->fields         = $this->initFieldList($module, $importFields, false);
         $datas->suhosinInfo    = $suhosinInfo;
-        $datas->model          = $model;
+        $datas->module          = $module;
 
         return $datas;
     }
@@ -1287,16 +1295,16 @@ class transferModel extends model
      * @param  int    $lastID
      * @param  string $fields
      * @param  int    $pagerID
-     * @param  string $model
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function buildNextList($list = array(), $lastID = 0, $fields = '', $pagerID = 1, $model = '')
+    public function buildNextList($list = array(), $lastID = 0, $fields = '', $pagerID = 1, $module = '')
     {
         $html  = '';
         $key   = key($list);
         $addID = 1;
-        if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskTransferParams['executionID'], 'execution');
+        if($module == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskTransferParams['executionID'], 'execution');
 
         $showImportCount = $this->config->transfer->lazyLoading ? $this->config->transfer->showImportCount : $this->maxImport;
         $lastRow         = $lastID + $key + $showImportCount;
@@ -1319,7 +1327,7 @@ class transferModel extends model
             else
             {
                 $sub = " <sub style='vertical-align:sub;color:gray'>{$this->lang->transfer->new}</sub>";
-                if($model == 'task') $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$this->lang->task->children}</sub>" : $sub;
+                if($module == 'task') $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$this->lang->task->children}</sub>" : $sub;
                 $addID ++;
                 $html .= $addID . $sub;
             }
@@ -1331,7 +1339,7 @@ class transferModel extends model
                 $values   = $value['values'];
                 $name     = "{$field}[$row]";
                 $selected = isset($object->$field) ? $object->$field : '';
-                if($model and $control == 'hidden' and isset($this->session->{$model.'TransferParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'TransferParams'}[$field. 'ID'];
+                if($module and $control == 'hidden' and isset($this->session->{$module.'TransferParams'}[$field. 'ID'])) $selected = $this->session->{$module . 'TransferParams'}[$field. 'ID'];
 
                 $options = array();
                 if($control == 'select')
@@ -1353,7 +1361,7 @@ class transferModel extends model
 
                 elseif($control == 'textarea')
                 {
-                    if($model == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
+                    if($module == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
                     $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
                 }
                 elseif($field == 'stepDesc' or $field == 'stepExpect' or $field == 'precondition')
@@ -1387,7 +1395,7 @@ class transferModel extends model
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
 
-            if(in_array($model, $this->config->transfer->actionModule)) $html .= '<td><a onclick="delItem(this)"><i class="icon-close"></i></a></td>';
+            if(in_array($module, $this->config->transfer->actionModule)) $html .= '<td><a onclick="delItem(this)"><i class="icon-close"></i></a></td>';
             $html .= '</tr>' . "\n";
         }
 
