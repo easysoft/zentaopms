@@ -1,0 +1,11 @@
+title: zt_task
+author: Shujie Tian
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 1-100
+    prefix: '关联设计的任务'
+  - field: design
+    range: 1

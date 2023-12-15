@@ -293,4 +293,21 @@ class designTest
         if(dao::isError()) return dao::getError();
         return $designs;
     }
+
+    /**
+     * 获取设计变更后受影响的任务。
+     * Get affected tasks after design changed.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return array
+     */
+    public function getAffectedScopeTest(int $designID = 0): array
+    {
+        $design = $this->objectModel->getByID($designID);
+        if(!$design) $design = new stdclass();
+
+        $design = $this->objectModel->getAffectedScope($design);
+        return isset($design->tasks) ? $design->tasks : array();
+    }
 }
