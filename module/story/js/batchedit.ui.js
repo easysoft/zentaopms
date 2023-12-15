@@ -113,7 +113,7 @@ window.renderRowData = function($row, index, story)
                 items.push({text: plans[plan], value: plan});
             }
             options.items = items;
-            options.disabled = story.parent < 0;
+            options.disabled = story.parent < 0 || story.type == 'requirement';
             options.defaultValue = story.plan;
 
             $picker.render(options);

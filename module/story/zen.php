@@ -675,7 +675,7 @@ class storyZen extends story
 
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
-        if($this->view->hiddenPlan) unset($fields['plan']);
+        if($this->view->hiddenPlan || $storyType == 'requirement') unset($fields['plan']);
 
         $this->view->branchID = $branch;
         return $fields;
@@ -863,7 +863,7 @@ class storyZen extends story
         $this->loadModel('tree');
 
         $branchProduct   = $product->type == 'normal' ? false : true;
-        $branches        = 0;
+        $branches        = array(0);
         $branchTagOption = array();
         if($branchProduct)
         {
@@ -878,7 +878,7 @@ class storyZen extends story
         $modules         = array($productID => $moduleList);
         $branchTagOption = array($productID => $branchTagOption);
         $products        = array($productID => $product);
-        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, array(), 'unexpired', true));
+        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, $branches, 'unexpired', true));
 
         return array('branchProduct' => $branchProduct, 'modules' => $modules, 'branchTagOption' => $branchTagOption, 'products' => $products, 'plans' => $plans);
 

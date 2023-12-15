@@ -1709,7 +1709,11 @@ class story extends control
             $this->product->setMenu($productID, $branchID);
         }
 
-        if($storyType != 'story') unset($this->lang->story->report->charts['storiesPerStage']);
+        if($storyType != 'story')
+        {
+            unset($this->lang->story->report->charts['storiesPerPlan']);
+            unset($this->lang->story->report->charts['storiesPerStage']);
+        }
 
         $this->view->title         = $product->name . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->productID     = $productID;

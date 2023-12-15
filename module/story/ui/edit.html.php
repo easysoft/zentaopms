@@ -249,7 +249,7 @@ detailBody
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : null,
-            item
+            $story->type == 'story' ? item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),
                 set::name($lang->story->plan),
@@ -263,7 +263,7 @@ detailBody
                     empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), setData(array('toggle' => 'modal')), icon('plus')) : null,
                     empty($fields['plan']['options']) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
-            ),
+            ) : null,
             item
             (
                 set::name($lang->story->source),
