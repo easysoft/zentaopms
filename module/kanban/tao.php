@@ -194,4 +194,31 @@ class kanbanTao extends kanbanModel
 
         if(!$children) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
     }
+
+    /**
+     * 转入卡片时，更新卡片的指派人。
+     * Update assignedTo of card when move in.
+     *
+     * @param  int    $cardID
+     * @param  string $oldAssignedToList
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    protected function updateCardAssignedTo($cardID, $oldAssignedToList, $users)
+    {
+        $assignedToList = explode(',', $oldAssignedToList);
+        foreach($assignedToList as $index => $account)
+        {
+            if(!isset($users[$account])) unset($assignedToList[$index]);
+        }
+
+        $assignedToList = implode(',', $assignedToList);
+        $assignedToList = trim($assignedToList, ',');
+
+        if($oldAssignedToList != $assignedToList)
+        {
+            $this->dao->update(TABLE_KANBANCARD)->set('assignedTo')->eq($assignedToList)->where('id')->eq($cardID)->exec();
+        }
+    }
 }
