@@ -41,11 +41,11 @@ $config->instance->actionList['ajaxUninstall']['className']    = 'ajax-submit';
 $config->instance->actionList['ajaxUninstall']['data-confirm'] = $lang->instance->notices['confirmUninstall'];
 $config->instance->actionList['ajaxUninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={id}&type={type}');
 
-$config->instance->actionList['visit']['icon'] = 'menu-my';
-$config->instance->actionList['visit']['hint'] = $lang->instance->visit;
-$config->instance->actionList['visit']['text'] = $lang->instance->visit;
-$config->instance->actionList['visit']['target'] = '_blank';
-$config->instance->actionList['visit']['url']  = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&externalID={externalID}');
+$config->instance->actionList['visit']['icon']  = 'menu-my';
+$config->instance->actionList['visit']['hint']  = $lang->instance->visit;
+$config->instance->actionList['visit']['text']  = $lang->instance->visit;
+$config->instance->actionList['visit']['class'] = 'ajax-submit ghost btn btn-default';
+$config->instance->actionList['visit']['url']   = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&externalID={externalID}');
 
 $config->instance->actionList['upgrade']['icon']        = 'refresh';
 $config->instance->actionList['upgrade']['data-toggle'] = 'modal';

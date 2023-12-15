@@ -395,7 +395,7 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function visit(int $id, int $externalID = 0): void
+    public function visit(int $id, int $externalID = 0)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if(!$externalID)
@@ -409,7 +409,7 @@ class instance extends control
             $url      = $pipeline->url;
         }
 
-        $this->locate($url);
+        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}')"));
     }
 
     /**
