@@ -24,13 +24,8 @@ spec:
   containers:
   - name: docker
     image: docker:23.0.6-dind-alpine3.17
-    command: ["sleep"]
-    args: ["99d"]
-    volumeMounts:
-    - mountPath: /var/run/docker.sock
-      name: docker-socket
-  volumes:
-  - name: docker-socket
-    hostPath:
-      path: /var/run/docker.sock
-      type: Socket
+    command: ["/usr/local/bin/docker-entrypoint.sh"]
+    args: ["dockerd", "--mtu", "1300"]
+    securityContext:
+      privileged: true
+

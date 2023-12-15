@@ -146,7 +146,7 @@ pipeline {
                   container('package') {
                     sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
-                    sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
+                    //sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'
                     sh 'ls -l ${ZENTAO_RELEASE_PATH}'
                   }
@@ -236,7 +236,7 @@ pipeline {
               }
               axis {
                 name "PHPVERSION"
-                values "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
+                values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
               }
             }
             excludes {
@@ -484,7 +484,7 @@ pipeline {
 
           agent {
             kubernetes {
-              inheritFrom "dind xuanim"
+              inheritFrom "dind2 xuanim"
               yamlFile 'misc/ci/publish-image.yaml'
             }
           }
@@ -495,6 +495,8 @@ pipeline {
                         returnStdout: true,
                         script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/%s/`echo ${ARTIFACT_SUBGROUP} | tr . /`/%s/%s/%s"
               ).trim()}"""
+            INSTALL_GOSS_TOOLS="true"
+            DEBUG="0" // set to int for dgoss
           }
 
           steps {
@@ -505,19 +507,29 @@ pipeline {
             script {
               dockerBuildx(host=env.REGISTRY_HOST, credentialsId=env.DOCKER_CREDENTIALS_ID) {
                 stage("prepare") {
-                  sh "apk --no-cache add make bash jq git tzdata"
+                  sh "apk --no-cache add curl make bash jq git tzdata"
                   sh "make markdown-init"
                 }
                 stage("docker build") {
+                  sh 'make test-open'
                   sh 'make build'
 
+                  sh 'make test-biz'
                   sh 'make build-biz'
+                  
+                  sh 'make test-biz-k8s'
                   sh 'make build-biz-k8s'
 
+                  sh 'make test-max'
                   sh 'make build-max'
+                  
+                  sh 'make test-max-k8s'
                   sh 'make build-max-k8s'
-
+                  
+                  sh 'make test-ipd'
                   sh 'make build-ipd'
+                  
+                  sh 'make test-ipd-k8s'
                   sh 'make build-ipd-k8s'
 
                   sh 'make markdown-render > ./report.md'
