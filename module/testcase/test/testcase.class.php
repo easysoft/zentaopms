@@ -1308,24 +1308,20 @@ class testcaseTest
 
         if(dao::isError()) return dao::getError();
 
-        $return = '';
-        foreach($array as $key => $step)
+        foreach($array as $key => $content)
         {
-            if(!isset($step->type))
-            {
-                $step->desc = explode("\n", trim($step->desc));
+            $contentDesc = '';
+            $content->desc = explode("\n", trim($content->desc));
+            foreach($content->desc as $desc) $contentDesc .= $desc . ' ';
+            $content->desc = $contentDesc;
 
-                $return .= 'step:';
-                foreach($step->desc as $desc) $return .= $desc . ' ';
-                $return .= "expect:{$step->expect}";
-            }
-            else
-            {
-                $return .= "step:{$step->desc} expect:{$step->expect} type:{$step->type}.   ";
-            }
+            $contentStep = '';
+            $content->step = explode("\n", trim($content->step));
+            foreach($content->step as $step) $contentStep .= $step . ' ';
+            $content->step = $contentStep;
         }
 
-        return trim($return);
+        return $array;
     }
 
     /**
