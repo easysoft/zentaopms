@@ -221,4 +221,47 @@ class kanbanTao extends kanbanModel
             $this->dao->update(TABLE_KANBANCARD)->set('assignedTo')->eq($assignedToList)->where('id')->eq($cardID)->exec();
         }
     }
+
+    /**
+     * 获取可转入卡片的产品。
+     * Get products can be imported.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    protected function getCanImportProducts($objectType = 'productplan'): array
+    {
+        $productPairs = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
+        $excludeProducts = array();
+        if($objectType == 'productPlan')
+        {
+            $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t2.type')->eq('project')
+                ->andWhere('t2.model')->ne('scrum')
+                ->andWhere('t2.hasProduct')->eq('0')
+                ->fetchPairs();
+        }
+        elseif($objectType == 'release')
+        {
+            $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t2.type')->eq('project')
+                ->andWhere('t2.model')->eq('kanban')
+                ->andWhere('t2.hasProduct')->eq('0')
+                ->fetchPairs();
+        }
+
+        if(!empty($excludeProducts))
+        {
+            foreach($productPairs as $id)
+            {
+                if(isset($excludeProducts[$id])) unset($productPairs[$id]);
+            }
+        }
+
+        return array($this->lang->kanban->allProducts) + $productPairs;
+    }
 }
