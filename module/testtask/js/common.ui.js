@@ -61,7 +61,7 @@ function loadTestReports(productID)
         if(result.reports)
         {
             $testreportPicker.render({items: result.reports});
-            $testreportPicker.$.changeState({value: '0'});
+            $testreportPicker.$.setValue('');
         }
     });
 }
