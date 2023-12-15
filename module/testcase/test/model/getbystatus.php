@@ -4,7 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testcase.class.php';
 su('admin');
 
+zdTable('product')->gen(10);
 zdTable('case')->gen(10);
+zdTable('story')->gen(10);
 
 /**
 
@@ -30,6 +32,8 @@ cid=1
 - 测试查询产品2 状态 investigate 的case @1
 
 */
+global $app;
+
 $productIDList = array('0', '1', '2');
 $branch        = 0;
 $typeList      = array('all', 'needConfirm');
@@ -37,6 +41,7 @@ $statusList    = array('wait', 'normal', 'blocked', 'investigate');
 
 $testcase = new testcaseTest();
 
+r($app->user->view->products)                                                           && p() && e('3,4,5,1,2,3,4,5,6,7,8,9,10'); // 测试查询所有产品 所有状态的case
 r($testcase->getByStatusTest())                                                         && p() && e('10'); // 测试查询所有产品 所有状态的case
 r($testcase->getByStatusTest($productIDList[1]))                                        && p() && e('4');  // 测试查询产品1 所有状态的case
 r($testcase->getByStatusTest($productIDList[2]))                                        && p() && e('4');  // 测试查询产品2 所有状态的case
