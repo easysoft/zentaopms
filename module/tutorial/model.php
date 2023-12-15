@@ -285,6 +285,7 @@ class tutorialModel extends model
         $story->deleted        = '0';
         $story->order          = '0';
         $story->URChanged      = false;
+        $story->mailto         = '';
 
         $stories = array();
         $stories[] = $story;
