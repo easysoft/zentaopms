@@ -192,24 +192,27 @@ class designModel extends model
     }
 
     /**
-     * Unlink commit.
+     * 设计解除代码提交关联。
+     * Design unlink a commit.
      *
      * @param  int    $designID
      * @param  int    $commitID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function unlinkCommit($designID = 0, $commitID = 0)
+    public function unlinkCommit(int $designID = 0, int $commitID = 0): bool
     {
-        /* Delete data in the zt_relation.*/
+        /* Delete linked commit in the relation table. */
         $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andwhere('AID')->eq($designID)->andwhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->andWhere('BID')->eq($commitID)->exec();
         $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andwhere('BID')->eq($designID)->andwhere('BType')->eq('design')->andwhere('relation')->eq('completedfrom')->andWhere('AID')->eq($commitID)->exec();
 
-        /* Commit after unlinking. */
+        /* Update linked commit in the design table. */
         $commit = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->fetchAll('BID');
         $commit = implode(",", array_keys($commit));
 
         $this->dao->update(TABLE_DESIGN)->set('commit')->eq($commit)->where('id')->eq($designID)->exec();
+
+        return !dao::isError();
     }
 
     /**

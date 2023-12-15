@@ -342,14 +342,15 @@ class design extends control
     }
 
     /**
-     * Design unlink commits.
+     * 设计解除代码提交关联。
+     * Design unlink a commit.
      *
      * @param  int    $designID
      * @param  int    $commitID
      * @access public
      * @return void
      */
-    public function unlinkCommit($designID = 0, $commitID = 0)
+    public function unlinkCommit(int $designID = 0, int $commitID = 0)
     {
         $this->design->unlinkCommit($designID, $commitID);
 
