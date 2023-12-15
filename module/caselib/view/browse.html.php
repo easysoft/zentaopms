@@ -59,7 +59,17 @@ js::set('flow',          $config->global->flow);
     ?>
     <div class='btn-group'>
      <?php common::printLink('caselib', 'exportTemplate', "libID=$libID", "<i class='icon icon-export muted'> </i> " . $lang->caselib->exportTemplate, '', "class='btn btn-link export' data-width='40%'");?>
-     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i> " . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
+     <div class='btn-group'>
+       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <span class='caret'></span></button>
+       <ul class='dropdown-menu pull-right' id='importActionMenu'>
+       <?php
+       if(common::hasPriv('caselib', 'import')) echo "<li>" . html::a($this->createlink('caselib', 'import', "libID=$libID"), $lang->testcase->fileImport, '', "class='export' data-app={$app->tab}") . "</li>";
+
+       $link  = $this->createLink('caselib', 'importFromLib', "productID=0&branch=0&libID=0&orderBy=id_desc&browseType=&queryID=10");
+       if(common::hasPriv('testcase', 'importFromLib')) echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', "data-app={$app->tab}") . "</li>";
+       ?>
+       </ul>
+     </div>
     </div>
     <?php echo html::a($this->createLink('caselib', 'create'), "<i class='icon icon-plus'> </i> " . $lang->caselib->create, '', 'class="btn btn-secondary"');?>
     <div class='btn-group dropdown'>

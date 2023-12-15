@@ -354,10 +354,11 @@ class testsuiteModel extends model
 
 
         $this->loadModel('branch');
-        $product  = $this->loadModel('product')->getById($productID);
-        $branches = $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array(0);
+        $product  = $productID ? $this->loadModel('product')->getById($productID) : 0;
+        $branches = ($productID && $product->type != 'normal') ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array(0);
         $canImport = array();
         foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportModules($productID, $libID, $branchID);
+        if(!$productID && !$branch) $canImport = $this->getCanImportModules($productID, $libID, $branchID);
 
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
@@ -375,14 +376,15 @@ class testsuiteModel extends model
      * @param  int    $productID
      * @param  int    $libID
      * @param  int    $branch
+     * @param  int    $toLib
      * @access public
      * @return array
      */
-    public function getCanImportModules($productID, $libID, $branch)
+    public function getCanImportModules($productID, $libID, $branch, $toLib = 0)
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
-            ->andWhere('lib')->eq($libID)
+            ->andWhere('lib')->eq($toLib ? $toLib : $libID)
             ->andWhere('branch')->eq($branch)
             ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
@@ -391,7 +393,14 @@ class testsuiteModel extends model
 
         $libCases = $this->loadModel('caselib')->getLibCases($libID, 'all');
 
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        if(empty($toLib))
+        {
+            $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        }
+        else
+        {
+            $modules = $this->loadModel('tree')->getOptionMenu($toLib, 'caselib');
+        }
 
         $canImportModules = array();
         foreach($libCases as $caseID => $case)

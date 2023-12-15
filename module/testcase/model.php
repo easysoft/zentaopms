@@ -666,7 +666,7 @@ class testcaseModel extends model
             ->beginIF($this->app->tab == 'project' and $this->config->systemMode == 'new')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($this->app->tab == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($this->app->tab != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($auto != 'unit' && strpos($caseQuery, "`auto` = '") === false)->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
@@ -1899,10 +1899,11 @@ class testcaseModel extends model
      * @param  int    $productID
      * @param  int    $libID
      * @param  int    $branch
+     * @param  int    $toLib
      * @access public
      * @return void
      */
-    public function importFromLib($productID, $libID, $branch)
+    public function importFromLib($productID, $libID, $branch, $toLib = 0)
     {
         $data = fixer::input('post')->get();
 
@@ -1927,7 +1928,7 @@ class testcaseModel extends model
         }
         else
         {
-            $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID,  $branch);
+            $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID, $branch, $toLib);
         }
 
         $libCases      = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
@@ -1951,6 +1952,7 @@ class testcaseModel extends model
                 continue;
             }
 
+            if($toLib) $case->lib = $toLib;
             $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->exec();
             if(dao::isError()) continue;
 
@@ -4317,5 +4319,48 @@ class testcaseModel extends model
 
         // Return node as array
         return array($xml->getName() => $propertiesArray);
+    }
+
+    /**
+     * Process searched data.
+     *
+     * @param  array  $scenes
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function processSearchedData($scenes, $cases)
+    {
+        $casePairs  = array();
+        foreach($cases as $case) $casePairs[$case->id] = $case;
+
+        $this->processScenes($scenes, $casePairs);
+
+        foreach($cases as $key => $case)
+        {
+            if($case->scene) unset($cases[$key]);
+        }
+
+        return array_merge($scenes, $cases);
+    }
+
+    /**
+     * Process searched scenes data.
+     *
+     * @param  int    $scenes
+     * @param  int    $casePairs
+     * @access public
+     * @return void
+     */
+    public function processScenes($scenes, $casePairs)
+    {
+        foreach($scenes as $scene)
+        {
+            foreach($scene->cases as $key => $value)
+            {
+                if(!isset($casePairs[$key])) unset($scene->cases[$key]);
+            }
+            if(!empty($scene->children)) $this->processScenes($scene->children, $casePairs);
+        }
     }
 }

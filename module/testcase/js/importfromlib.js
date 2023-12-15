@@ -32,7 +32,7 @@ $(function()
  */
 function reload(libID)
 {
-    link = createLink('testcase','importFromLib','productID='+ productID + '&branch=' + branch + '&libID='+libID);
+    link = createLink(module,'importFromLib','productID='+ productID + '&branch=' + branch + '&libID='+libID);
     location.href = link;
 }
 

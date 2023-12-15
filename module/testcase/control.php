@@ -244,6 +244,12 @@ class testcase extends control
             }
         }
 
+        $sceneCases = array_merge($scenes, $cases);
+        if($browseType == 'bysearch')
+        {
+            $sceneCases = $this->testcase->processSearchedData($scenes, $cases);
+        }
+
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
         $this->view->title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -266,7 +272,7 @@ class testcase extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->caseType        = $caseType;
-        $this->view->cases           = array_merge($scenes, $cases);
+        $this->view->cases           = $sceneCases;
         $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
@@ -2064,7 +2070,7 @@ class testcase extends control
     }
 
     /**
-     * Import case from lib.
+     * Import case from lib to cases or to caseLib.
      *
      * @param  int    $productID
      * @param  int    $branch
@@ -2073,21 +2079,27 @@ class testcase extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  bool   $toLib
      * @access public
      * @return void
      */
-    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0, $toLib = false)
     {
         $browseType = strtolower($browseType);
         $queryID    = (int)$queryID;
-        $product    = $this->loadModel('product')->getById($productID);
+        $product    = $productID ? $this->loadModel('product')->getById($productID) : 0;
         $branches   = array();
         if($branch == '') $branch = 0;
 
         $this->loadModel('branch');
-        if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
+        if(!$toLib && $product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
 
         $libraries = $this->loadModel('caselib')->getLibraries();
+        if($toLib)
+        {
+            $currentLib = $this->session->caseLib;
+            unset($libraries[$currentLib]);
+        }
         if(empty($libraries))
         {
             echo js::alert($this->lang->testcase->noLibrary);
@@ -2097,14 +2109,14 @@ class testcase extends control
 
         if($_POST)
         {
-            $this->testcase->importFromLib($productID, $libID, $branch);
+            $this->testcase->importFromLib($productID, $libID, $branch, $toLib ? $currentLib : 0);
             return print(js::reload('parent'));
         }
 
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink($toLib ? 'caselib' : 'testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['onMenuBar'] = 'no';
         $this->config->testcase->search['actionURL'] = $actionURL;
@@ -2119,7 +2131,7 @@ class testcase extends control
 
         $this->loadModel('testsuite');
         foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID);
-        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0);
+        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0, $toLib ? $currentLib : 0);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2141,6 +2153,7 @@ class testcase extends control
         $this->view->browseType       = $browseType;
         $this->view->queryID          = $queryID;
         $this->view->canImportModules = $canImportModules;
+        $this->view->toLib            = $toLib;
 
         $this->display();
     }

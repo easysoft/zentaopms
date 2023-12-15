@@ -195,7 +195,6 @@ $lang->testcase->reviewList[0] = 'NON';
 $lang->testcase->reviewList[1] = 'OUI';
 
 $lang->testcase->autoList = array();
-$lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = 'Yes';
 $lang->testcase->autoList['no']   = 'No';
 

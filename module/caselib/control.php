@@ -561,6 +561,28 @@ class caselib extends control
     }
 
     /**
+     * Import case from lib to caseLib.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $libID
+     * @param  string $orderBy
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  int    $projectID
+     * @param  bool   $toLib
+     * @access public
+     * @return void
+     */
+    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0, $toLib = true)
+    {
+        echo $this->fetch('testcase', 'importFromLib', "productID=$productID&libID=$libID&branch=$branch&orderBy=$orderBy&browseType=$browseType&queryID=$queryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&toLib=$toLib");
+    }
+
+    /**
      * Show import case.
      *
      * @param  int        $libID

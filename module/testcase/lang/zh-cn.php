@@ -195,7 +195,6 @@ $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';
 
 $lang->testcase->autoList = array();
-$lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = '是';
 $lang->testcase->autoList['no']   = '否';
 
