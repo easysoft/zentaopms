@@ -2,6 +2,7 @@
 $lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
 $lang->mr->server       = "服务器";
+$lang->mr->hostID       = "服务器";
 $lang->mr->view         = "概况";
 $lang->mr->viewAction   = "{$lang->mr->common}详情";
 $lang->mr->create       = "创建{$lang->mr->common}";

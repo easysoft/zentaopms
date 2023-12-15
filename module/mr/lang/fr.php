@@ -2,6 +2,7 @@
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
 $lang->mr->server       = "Server";
+$lang->mr->hostID       = "Server";
 $lang->mr->view         = "Survey";
 $lang->mr->viewAction   = "{$lang->mr->common} Details";
 $lang->mr->create       = "Submit {$lang->mr->common}";
