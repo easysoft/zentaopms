@@ -390,6 +390,7 @@ class design extends control
     }
 
     /**
+     * 单个代码提交记录。
      * A version of the repository.
      *
      * @param  int    $revisionID
@@ -399,8 +400,8 @@ class design extends control
      */
     public function revision(int $revisionID = 0, int $projectID = 0)
     {
-        $revision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($revisionID)->fetch();
-        $this->locate(helper::createLink('repo', 'revision', "repoID=$revision->repo&objectID=$projectID&revistion=$revision->revision"));
+        $revision = $this->design->getCommitByID($revisionID);
+        $this->locate(helper::createLink('repo', 'revision', "repoID={$revision->repo}&objectID={$projectID}&revistion={$revision->revision}"));
     }
 
     /**

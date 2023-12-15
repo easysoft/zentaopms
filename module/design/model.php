@@ -377,4 +377,17 @@ class designModel extends model
             ->page($pager)
             ->fetchAll('id');
     }
+
+    /**
+     * 通过ID获取提交记录。
+     * Get commit by ID.
+     *
+     * @param  int         $revisionID
+     * @access public
+     * @return object|bool
+     */
+    public function getCommitByID(int $revisionID = 0): object|bool
+    {
+        return $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($revisionID)->fetch();
+    }
 }
