@@ -3068,20 +3068,30 @@ class kanbanModel extends model
     }
 
     /**
+     * 激活卡片。
      * Activate a card.
      *
      * @param  int    $cardID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function activateCard($cardID)
+    public function activateCard(int $cardID): bool
     {
         if($this->post->progress >= 100 or $this->post->progress < 0)
         {
             dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
             return false;
         }
+
+        $oldCard = $this->getCardByID($cardID);
         $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress ? $this->post->progress : 0)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        $card = $this->getCardByID($cardID);
+
+        $changes = common::createChanges($oldCard, $card);
+        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'activated');
+        $this->action->logHistory($actionID, $changes);
+
+        return true;
     }
 
     /**
