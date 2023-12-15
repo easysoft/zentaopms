@@ -17,7 +17,7 @@
       <strong style="font-size: 16px;"><?= $lang->ai->miniPrograms->configuration; ?></strong>
       <i title="<?= $lang->help; ?>" class="icon icon-help text-warning" style="padding-left: 8px; padding-right: 2px;"></i>
       <span class="text-muted"><?= $lang->ai->miniPrograms->downloadTip; ?></span>
-      <a class="text-primary" href="https://www.zentao.net/page/download-client.html" target="_blank">&gt;&gt;<?= $lang->ai->miniPrograms->download; ?></a>
+      <a class="text-primary" href="https://www.zentao.net/page/download-new.html" target="_blank">&gt;&gt;<?= $lang->ai->miniPrograms->download; ?></a>
     </div>
     <form class="main-form form-ajax" method="post">
       <table class="table table-form">
