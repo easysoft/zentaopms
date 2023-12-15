@@ -253,42 +253,22 @@ class kanbanTest
     /**
      * Test batch create kanban cards.
      *
-     * @param  array  $param
-     * @param  bool   $endLtBegin
+     * @param  array  $cards
      * @access public
      * @return object
      */
-    public function batchCreateCardTest($param = array(), $endLtBegin = false)
+    public function batchCreateCardTest($cards)
     {
         $kanbanID = 1;
         $regionID = 1;
         $groupID  = 1;
         $columnID = 1;
-        $batchCreateFields['name']       = array('0' => '批量创建卡片1', '1' => '批量创建卡片2', '2' => '批量创建卡片3', '3' => '批量创建卡片4');
-        $batchCreateFields['lane']       = array('0' => '1', '1' => 'ditto', '2' => 'ditto', '3' => 'ditto');
-        $batchCreateFields['assignedTo'] = array();
-        $batchCreateFields['estimate']   = array('0' => '1', '1' => '2', '2' => '3', '3' => '4');
-        $batchCreateFields['begin']      = array('0' => date('Y-m-d', time()), '1' => date('Y-m-d', time()), '2' => '', '3' => '');
-        $batchCreateFields['end']        = !$endLtBegin ? array('0' => date('Y-m-d', time()), '1' => '', '2' => '', '3' => '') : array('0' => date('Y-m-d', strtotime("-1 day")), '1' => date('Y-m-d', strtotime("-1 day")), '2' => date('Y-m-d', strtotime("-2 day")), '3' => date('Y-m-d', strtotime("-3 day")));
-        $batchCreateFields['desc']       = array('0' => '描述1', '1' => '描述2', '2' => '描述3', '3' => '描述4');
-        $batchCreateFields['pri']        = array('0' => '1', '1' => '2', '2' => '3', '3' => '4');
-        $batchCreateFields['beginDitto'] = array('1' => 'on', '2' => 'on', '3' => 'on', '4' => 'on');
-        $batchCreateFields['endDitto']   = array('1' => 'on', '2' => 'on', '3' => 'on', '4' => 'on');
 
-        foreach($batchCreateFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        $this->objectModel->batchCreateCard($kanbanID, $regionID, $groupID, $columnID, $cards);
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        if(dao::isError()) return dao::getError();
 
-        $this->objectModel->batchCreateCard($kanbanID, $regionID, $groupID, $columnID);
-
-        global $tester;
-        $object = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($kanbanID)->andWhere('lane')->eq(1)->andWhere('`column`')->eq($columnID)->andWhere('type')->eq('common')->fetch();
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError()[0];
-
-        return $object;
+        return $this->objectModel->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($kanbanID)->andWhere('lane')->eq(1)->andWhere('`column`')->eq($columnID)->andWhere('type')->eq('common')->fetch();
     }
 
     /**

@@ -647,16 +647,16 @@ class kanbanModel extends model
     public function batchCreateCard(int $kanbanID, int $regionID, int $groupID, int $columnID, array $cards)
     {
         $now = helper::now();
-        foreach($cards as $card)
+        foreach($cards as $i => $card)
         {
             if($card->estimate < 0)
             {
-                dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+                dao::$errors["estimate[$i]"] = $this->lang->kanbancard->error->recordMinus;
                 return false;
             }
             if($card->end && $card->begin > $card->end)
             {
-                dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+                dao::$errors["end[$i]"] = $this->lang->kanbancard->error->endSmall;
                 return false;
             }
         }
