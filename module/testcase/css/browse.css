@@ -40,7 +40,7 @@ tbody > tr > td   .icon-share {font-size: 9px;}
 .none-select { -webkit-user-select: none; -moz-user-select: none; -moz-user-select: none; user-select: none; }
 
 .table-nest-toggle { vertical-align: middle; }
-.table-nest-title .icon-test { pointer-events: none; }
+.table-nest-title .icon-test,.table-nest-title .icon-ztf { pointer-events: none; }
 
 .icon-test:after,.icon-ztf:after { border: 0px solid!important; }
 
