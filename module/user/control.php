@@ -597,7 +597,7 @@ class user extends control
         $this->view->title     = $this->lang->user->batchEdit;
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
-        $this->view->users     = $this->user->getByIdList($this->post->userIdList);
+        $this->view->users     = $this->user->getListByIdList($this->post->userIdList);
         $this->view->rand      = updateSessionRandom();
         $this->view->visions   = getVisions();
         $this->view->type      = $type;
