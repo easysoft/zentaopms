@@ -1,0 +1,1 @@
+import{aj as o}from"./index.js";import{m as i,n as t}from"./useSync.hook-fa34be69.js";import"./plugin-00b0ac17.js";import"./icon-0db99487.js";import"./tables_list-38e71280.js";const s={dataset:"",fit:"contain",borderRadius:10};class c extends i{constructor(){super(...arguments),this.key=t.key,this.chartConfig=o(t),this.option=o(s)}}export{c as default,s as option};
