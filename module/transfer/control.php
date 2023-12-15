@@ -29,74 +29,49 @@ class transfer extends control
     }
 
     /**
+     * 导出模板
      * Export Template.
      *
-     * @param  int    $model
+     * @param  string $module
      * @param  string $params
      * @access public
      * @return void
      */
-    public function exportTemplate($model, $params = '')
+    public function exportTemplate(string $module, string $params = '')
     {
-        if($_POST)
+        if(!empty($_POST))
         {
-            $this->loadModel($model);
+            $this->loadModel($module);
+
+            /* 获取工作流字段。*/
+            /* Get workflow fields by module. */
             if($this->config->edition != 'open')
             {
-                $appendFields = $this->dao->select('t2.*')->from(TABLE_WORKFLOWLAYOUT)->alias('t1')
-                    ->leftJoin(TABLE_WORKFLOWFIELD)->alias('t2')->on('t1.field=t2.field && t1.module=t2.module')
-                    ->where('t1.module')->eq($model)
-                    ->andWhere('t1.action')->eq('exporttemplate')
-                    ->andWhere('t2.buildin')->eq(0)
-                    ->orderBy('t1.order')
-                    ->fetchAll();
-
+                $appendFields = $this->transferZen->getWorkflowFieldsByModule($module);
                 foreach($appendFields as $appendField)
                 {
-                    $this->lang->$model->{$appendField->field} = $appendField->name;
-                    $this->config->$model->templateFields .= ',' . $appendField->field;
+                    $this->lang->$module->{$appendField->field} = $appendField->name;
+                    $this->config->$module->templateFields .= ',' . $appendField->field;
                 }
             }
 
-            if($params)
-            {
-                /* Split parameters into variables (executionID=1,status=open). */
-                $params = explode(',', $params);
-                foreach($params as $key => $param)
-                {
-                    $param = explode('=', $param);
-                    $params[$param[0]] = $param[1];
-                    unset($params[$key]);
-                }
-                extract($params);
+            /* 将参数转成变量并存到SESSION中。*/
+            /* Set SESSION. */
+            $params = $this->transferZen->saveSession($module, $params);
+            extract($params);
 
-                /* save params to session. */
-                $this->session->set(($model.'TransferParams'), $params);
-            }
-
-            $this->loadModel($model);
+            /* 获取系统内置字段列表. */
+            /* Get system built-in field list. */
             $this->config->transfer->sysDataList = $this->transfer->initSysDataFields();
 
-            $fields = $this->config->$model->templateFields;
-            if($model == 'task')
-            {
-                $execution = $this->loadModel('execution')->getByID($executionID);
-                if(isset($execution) and $execution->type == 'ops' or in_array($execution->attribute, array('request', 'review'))) $fields = str_replace('story,', '', $fields);
-            }
+            /* 获取导出模板字段。*/
+            /* Get export template fields. */
+            $fields = $this->config->$module->templateFields;
+            if($module == 'task' and isset($executionID)) $fields = $this->transferZen->processTaskTemplateFields($executionID, $fields);
 
-            /* Init config fieldList. */
-            $fieldList = $this->transfer->initFieldList($model, $fields);
-
-            $list = $this->transfer->setListValue($model, $fieldList);
-            if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
-
-            $fields = $this->transfer->getExportDatas($fieldList);
-
-            $this->post->set('fields', $fields['fields']);
-            $this->post->set('kind', isset($_POST['kind']) ? $_POST['kind'] : $model);
-            $this->post->set('rows', array());
-            $this->post->set('extraNum', $this->post->num);
-            $this->post->set('fileName', isset($_POST['fileName']) ? $_POST['fileName'] : $model . 'Template');
+            /* 初始化字段列表并拼接下拉菜单数据。*/
+            /* Init field list and append dropdown menu data. */
+            $this->transferZen->initTemplateFields($fields);
 
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
