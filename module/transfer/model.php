@@ -65,28 +65,6 @@ class transferModel extends model
     }
 
     /**
-     * Check Required fields.
-     *
-     * @param  int    $module
-     * @param  int    $line
-     * @param  int    $data
-     * @access public
-     * @return void
-     */
-    public function checkRequired($module, $line, $data)
-    {
-        if(isset($this->config->$module->create->requiredFields))
-        {
-            $requiredFields = explode(',', $this->config->$module->create->requiredFields);
-            foreach($requiredFields as $requiredField)
-            {
-                $requiredField = trim($requiredField);
-                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->transfer->noRequire, $line, $this->lang->$module->$requiredField);
-            }
-        }
-    }
-
-    /**
      * Export module data.
      *
      * @param  string $module
