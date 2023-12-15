@@ -107,6 +107,7 @@
     line-height: 20px;
     color: #313C52;
     padding: 10px;
+    word-break: break-all;
 }
 
 .ai-message-content {
@@ -199,4 +200,8 @@
     padding-top: 0;
     padding-bottom: 32px;
     justify-content: center;
+}
+
+.chat {
+    overflow: hidden;
 }
