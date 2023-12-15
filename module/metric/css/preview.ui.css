@@ -38,19 +38,19 @@
 .main .chart-line-margin {margin-right: 16px;}
 .main .table-and-chart {display: flex;}
 .main .table-and-chart-single {height: calc(100vh - 180px - 48px); max-height: 864px; padding: 8px 16px 16px 16px;}
-.main .table-and-chart-multiple {max-height: 352px; padding: 8px 16px 16px 16px;}
+.main .table-and-chart-multiple {height: 352px; padding: 8px 16px 16px 16px;}
 .main .canvas {height: calc(100vh - 172px + 48px); max-height: 920px; overflow-y: hidden;}
 .main .table-and-charts {height: calc(100vh - 172px); max-height: calc(100% - 48px); overflow-y: scroll;}
-.main .metricBox {max-height: 408px;}
+.main .metricBox {max-height: 440px;}
 .chart-single {height: calc(100% - 32px); width: 100%;}
 .chart-multiple {height: 285px; width: 100%;}
-.chart-type {width: 30%; padding-left: 50px;}
+.chart-type {width: 20%;}
 
 i.star-empty {color: var(--color-gray-400);}
 i.star {color: var(--color-warning-300);}
 
-.table-and-chart .table-side {flex-shrink: 1; max-width: 50%;}
-.table-and-chart .chart-side {flex-grow: 1;}
+.table-and-chart .table-side {flex-shrink: 1; max-width: 50%; border-style: solid; border-width: 1px 0px 1px 1px; border-color: var(--color-gray-300);}
+.table-and-chart .chart-side {flex-grow: 1; border: 1px solid var(--color-gray-300); padding: 20px;}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
 
 .icon-18 {font-size: 18px;}
@@ -76,7 +76,6 @@ i.star {color: var(--color-warning-300);}
 .dropdown-icon.rotate {transform: rotate(270deg); }
 
 .filter-panel {margin-bottom: 1rem;}
-.filter-panel .divider {opacity: unset;}
 .filter-panel>.panel-body {display: flex;}
 .filter-panel>.panel-body .panel {position: relative; border: none; box-shadow: none;}
 .filter-panel>.panel-body .panel.divider:after {content: ""; position: absolute; right: 0px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
@@ -96,6 +95,7 @@ i.star {color: var(--color-warning-300);}
 .cell-ellipsis {display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .query-inline {padding-left: 8px !important;}
+.query-inline:first-child {padding-left: 0px !important;}
 .query-inline>label {justify-content: flex-start !important;}
 .query-btn {padding-left: 20px !important;}
 .picker-nowrap .picker-multi-selections {flex-wrap: nowrap !important; overflow: hidden !important;}

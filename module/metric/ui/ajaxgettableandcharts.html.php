@@ -14,44 +14,45 @@ jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 div
 (
     setClass("table-and-chart table-and-chart-{$viewType}"),
-    div
+    $groupData ? div
     (
         setClass('table-side'),
         setStyle(array('flex-basis' => $tableWidth . 'px')),
         div
         (
-            $groupData ? dtable
+            dtable
             (
-                $viewType == 'multiple' ? set::height(310) : set::height(jsRaw('window.getTableHeight')),
+                $viewType == 'multiple' ? set::height(328) : set::height(jsRaw('window.getTableHeight')),
+                set::rowHeight(32),
                 set::bordered(true),
                 set::cols($groupHeader),
                 set::data(array_values($groupData)),
-                ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
+                set::footPager(usePager('dtablePager')),
                 $headerGroup ? set::plugins(array('header-group')) : null,
                 set::onRenderCell(jsRaw('window.renderDTableCell')),
                 set::loadPartial(true)
-            ) : null
+            )
         )
-    ),
-    div
+    ) : null,
+    $echartOptions ? div
     (
         setClass('chart-side'),
         div
         (
             setClass('chart-type'),
-            $echartOptions ? picker
+            picker
             (
                 set::name('chartType'),
                 set::items($chartTypeList),
                 set::value('line'),
                 set::required(true),
                 set::onchange("window.handleChartTypeChange($metric->id, '$viewType')")
-            ) : null
+            )
         ),
         div
         (
             setClass("chart chart-{$viewType}"),
-            $echartOptions ? echarts
+            echarts
             (
                 set::xAxis($echartOptions['xAxis']),
                 set::yAxis($echartOptions['yAxis']),
@@ -60,7 +61,7 @@ div
                 isset($echartOptions['dataZoom']) ? set::dataZoom($echartOptions['dataZoom']) : null,
                 set::grid($echartOptions['grid']),
                 set::tooltip($echartOptions['tooltip'])
-            )->size('100%', '100%') : null
+            )->size('100%', '100%')
         )
-    )
+    ) : null
 );

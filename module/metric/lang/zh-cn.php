@@ -21,7 +21,7 @@ $lang->metric->date          = "日期";
 $lang->metric->metricData    = "度量数据";
 $lang->metric->system        = "system";
 $lang->metric->weekCell      = "%s年第%s周";
-$lang->metric->week          = "%s周";
+$lang->metric->weekS         = "%s周";
 $lang->metric->create        = "创建" . $this->lang->metric->common;
 $lang->metric->edit          = "编辑" . $this->lang->metric->common;
 $lang->metric->view          = '查看' . $this->lang->metric->common;
@@ -51,6 +51,11 @@ $lang->metric->selectCount   = '已选<span class="font-medium checked-count">%s
 $lang->metric->testMetric    = '测试度量';
 $lang->metric->calcTime      = '采集时间';
 $lang->metric->to            = '至';
+$lang->metric->year          = '年份';
+$lang->metric->month         = '月份';
+$lang->metric->week          = '周';
+$lang->metric->day           = '日期';
+$lang->metric->nodate        = '采集日期';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";

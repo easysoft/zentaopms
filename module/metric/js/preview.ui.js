@@ -128,17 +128,8 @@ window.handleChartTypeChange = function(metricID, viewType = 'single')
 
     $.post($.createLink('metric', 'ajaxGetEchartsOptions', 'metricID=' + metricID + '&chartType=' + chartType), formData, function(resp)
     {
-        var datas = JSON.parse(resp);
-        if(!datas) return;
-
-        if(chartType == 'pie')
-        {
-            var options = window.genPieOption(datas);
-        }
-        else
-        {
-            var options = window.genLineBarOption(chartType, datas);
-        }
+        var options = JSON.parse(resp);
+        if(!options) return;
 
         window.renderChart(metricID, viewType, options);
     });
@@ -694,67 +685,4 @@ window.deactiveNavMenu = function()
     var itemSelector = 'menu.nav-ajax .nav-item a';
     $(itemSelector).removeClass('active');
     $(itemSelector).find('span.label').remove();
-}
-
-window.genPieOption = function(datas)
-{
-    var option = {
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 'left',
-            type: 'scroll'
-        },
-        series: [
-            {
-                type: 'pie',
-                radius: '50%',
-                data: datas.data,
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
-
-    return option;
-}
-
-window.genLineBarOption = function(chartType, datas)
-{
-    var option = {
-        grid: {
-            left: '10%',
-            right: '10%',
-            bottom: '15%',
-            containLabel: true
-        },
-        legend: datas.legend,
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
-            },
-            confine:true,//限制tooltip在图表范围内展示
-            extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
-            enterable:true//鼠标可以进入tooltip区域，使用滚动条
-        },
-        xAxis: chartType == 'barY' ? datas.yAxis : datas.xAxis,
-        yAxis: chartType == 'barY' ? datas.xAxis : datas.yAxis,
-        series: datas.series,
-    };
-
-    var dataLength = Array.isArray(datas.series) ? datas.series[0].data.length : datas.series.data.length;
-    if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
-
-    return option;
 }

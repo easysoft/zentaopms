@@ -44,6 +44,27 @@ class metricTao extends metricModel
     }
 
     /**
+     * 根据范围获取度量项。
+     * Fetch metric by scope.
+     *
+     * @param  string $scope
+     * @param  int    $limit
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricsByScope($scope, $limit = -1)
+    {
+        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq('0')
+            ->andWhere('scope')->eq($scope)
+            ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->fetchAll();
+
+        return $metrics;
+    }
+
+    /**
      * 根据编号获取度项。
      * Fetch metric by id.
      *
@@ -174,13 +195,14 @@ class metricTao extends metricModel
         if($scope == 'system') return false;
 
         $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetchPairs();
+        $objects = array();
         if($scope == 'product')
         {
             $objects = $this->dao->select('id')->from(TABLE_PRODUCT)
                 ->where('deleted')->eq(0)
                 ->andWhere('shadow')->eq(0)
                 ->andWhere('id')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
         elseif($scope == 'project')
@@ -189,7 +211,7 @@ class metricTao extends metricModel
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->eq('project')
                 ->andWhere('id')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
         elseif($scope == 'execution')
@@ -198,7 +220,7 @@ class metricTao extends metricModel
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
                 ->andWhere('id')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
         elseif($scope == 'user')
@@ -206,7 +228,7 @@ class metricTao extends metricModel
             $objects = $this->dao->select('account')->from(TABLE_USER)
                 ->where('deleted')->eq('0')
                 ->andWhere('account')->in($scopeObjects)
-                ->page($pager)
+                ->beginIF(!empty($pager))->page($pager)->fi()
                 ->fetchPairs();
         }
 
@@ -274,6 +296,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
+            ->beginIF($metricScope == 'system')->page($pager)->fi()
             ->fetchAll();
 
         return $records;

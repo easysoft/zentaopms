@@ -33,7 +33,7 @@ class count_of_code_commits_in_codebase extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('codebase', 'value'));
+        $records = $this->getRecords(array('code', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
