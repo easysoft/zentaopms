@@ -1103,20 +1103,21 @@ class kanban extends control
     }
 
     /**
+     * 导入项目版本。
      * Import build.
      *
-     * @param  int $kanbanID
-     * @param  int $regionID
-     * @param  int $groupID
-     * @param  int $columnID
-     * @param  int $selectedProjectID
-     * @param  int $recTotal
-     * @param  int $recPerPage
-     * @param  int $pageID
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
+     * @param  int    $selectedProjectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importBuild(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0, int $selectedProjectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($_POST)
         {
@@ -1132,8 +1133,6 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
-        $this->loadModel('build');
-
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -1141,7 +1140,7 @@ class kanban extends control
         $builds2Imported = array();
         $projects        = array($this->lang->kanban->allProjects);
         $projects       += $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
-        $builds2Imported = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
+        $builds2Imported = $this->loadModel('build')->getProjectBuilds($selectedProjectID, 'all', '0', 't1.date_desc,t1.id_desc', $pager);
 
         $this->view->projects          = $projects;
         $this->view->selectedProjectID = $selectedProjectID;
