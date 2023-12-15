@@ -71,7 +71,7 @@ h::table
             h4
             (
                 set::className('text-center my-2 font-bold'),
-                trim($config->visions, ',') == 'lite' ? $lang->liteName . $config->liteVersion : sprintf($lang->misc->zentao->version, $config->version)
+                trim($config->visions, ',') == 'lite' ? $lang->liteName . ' ' . $config->liteVersion : sprintf($lang->misc->zentao->version, $config->version)
             )
         ),
         h::td
