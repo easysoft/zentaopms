@@ -1004,20 +1004,21 @@ class kanban extends control
     }
 
     /**
+     * 导入产品计划。
      * Import plan.
      *
-     * @param  int $kanbanID
-     * @param  int $regionID
-     * @param  int $groupID
-     * @param  int $columnID
-     * @param  int $selectedProductID
-     * @param  int $recTotal
-     * @param  int $recPerPage
-     * @param  int $pageID
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
+     * @param  int    $selectedProductID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importPlan(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0, int $selectedProductID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($_POST)
         {
@@ -1033,34 +1034,18 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
-        $this->loadModel('product');
-        $this->loadModel('productplan');
-
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $productPairs      = $this->product->getPairs('', 0, '', 'all');
+        $productPairs      = $this->loadModel('product')->getPairs('', 0, '', 0);
         $productPairs      = array($this->lang->kanban->allProducts) + $productPairs;
         $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
-
-        /* Waterfall project has no plan. */
-        $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.type')->eq('project')
-            ->andWhere('t2.model')->ne('scrum')
-            ->andWhere('t2.hasProduct')->eq('0')
-            ->fetchPairs();
-
-        foreach($productPairs as $id => $name)
-        {
-            if(isset($excludeProducts[$id])) unset($productPairs[$id]);
-        }
 
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all', $pager, 'begin_desc', 'skipparent|noproduct');
+        $this->view->plans2Imported    = $this->loadModel('productplan')->getList($selectedProductID, '0', 'all', $pager, 'begin_desc', 'skipparent|noproduct');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
         $this->view->regionID          = $regionID;
