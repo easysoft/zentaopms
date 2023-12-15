@@ -16,28 +16,24 @@ class mrModel extends model
      * 获取合并请求列表.
      * Get MR list of gitlab project.
      *
-     * @param  string     $mode
-     * @param  string     $param
-     * @param  string     $orderBy
-     * @param  array|bool $filterProjects
-     * @param  int        $repoID
-     * @param  int        $objectID
-     * @param  object     $pager
+     * @param  string $mode
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  array  $filterProjects
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  object $pager
      * @access public
      * @return array
      */
     public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, object $pager = null): array
     {
-        /* If filterProjects equals false,it means no permission. */
-        if($filterProjects === false) return array();
-
         $filterProjectSql = '';
-        if(!$this->app->user->admin and !empty($filterProjects))
+        if(!$this->app->user->admin && !empty($filterProjects))
         {
-            foreach($filterProjects as $hostID => $projects)
+            foreach($filterProjects as $hostID => $projectID)
             {
-                $projectIDList = array_keys($projects);
-                if(!empty($projectIDList)) $filterProjectSql .= "(hostID = {$hostID} and sourceProject " . helper::dbIN($projectIDList) . ") or ";
+                $filterProjectSql .= "(hostID = {$hostID} and sourceProject = {$projectID}) or ";
             }
 
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
@@ -45,9 +41,9 @@ class mrModel extends model
 
         return $this->dao->select('*')->from(TABLE_MR)
             ->where('deleted')->eq('0')
-            ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
-            ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
-            ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
+            ->beginIF($mode == 'status' && $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($mode == 'assignee' && $param != 'all')->andWhere('assignee')->eq($param)->fi()
+            ->beginIF($mode == 'creator' && $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->beginIF($objectID)->andWhere('executionID')->eq($objectID)->fi()

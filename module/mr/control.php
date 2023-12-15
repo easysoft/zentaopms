@@ -82,7 +82,7 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
+        $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
         $MRList         = $this->mr->batchSyncMR($MRList);
         $projects       = $this->mrZen->getAllProjects($repo, $MRList);
