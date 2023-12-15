@@ -56,11 +56,11 @@ r($card && $card->option->dataset == 5) && p('') && e('1');  //判断生成的�
 
 isset($componentList['line']) && $screen->buildChartTest($componentList['line']);
 $line = $componentList['line'] ?? null;
-r($line && $line->option->dataset->dimensions[0] == '月份') && p('') && e('1');  //判断生成的折线图表数据是否正确。
+r($line && $line->option->dataset->dimensions[0] == 'product' && $line->option->dataset->source[0]->product == 'Mon') && p('') && e('1');  //判断生成的折线图表数据是否正确。
 
 isset($componentList['bar']) && $screen->buildChartTest($componentList['bar']);
 $bar = $componentList['bar'] ?? null;
-r($bar && $bar->option->dataset->dimensions[0] == '项目集') && p('') && e('1');  //判断生成的柱状图表数据是否正确。
+r($bar && $bar->option->dataset->dimensions[0] == '对象类型') && p('') && e('1');  //判断生成的柱状图表数据是否正确。
 
 isset($componentList['piecircle']) && $screen->buildChartTest($componentList['piecircle']);
 $piecircle = $componentList['piecircle'] ?? null;
@@ -68,7 +68,7 @@ r($piecircle && $piecircle->option->dataset == '0.25') && p('') && e('1');  //�
 
 isset($componentList['pie']) && $screen->buildChartTest($componentList['pie']);
 $pie = $componentList['pie'] ?? null;
-r($pie && $pie->option->dataset->source[0]['id'] == '3') && p('') && e('1');  //判断生成的饼图表数据是否正确。
+r($pie && $pie->option->dataset->source[0]->id == '3') && p('') && e('1');  //判断生成的饼图表数据是否正确。
 
 isset($componentList['radar']) && $screen->buildChartTest($componentList['radar']);
 $radar = $componentList['radar'] ?? null;
@@ -84,4 +84,4 @@ r($table && count($table->option->dataset) == '5') && p('') && e('1');  //判断
 
 isset($componentList['baroption']) && $screen->buildChartTest($componentList['baroption']);
 $baroption = $componentList['baroption'] ?? null;
-r($baroption && $baroption->option->dataset->dimensions[0] == 'name') && p('') && e('1');  //判断生成的柱状图表数据是否正确。
+r($baroption && $baroption->option->dataset->dimensions[0] == 'topProgram' && $baroption->option->dataset->source[0]->topProgram === '项目集5') && p('') && e('1');  //判断生成的柱状图表数据是否正确。

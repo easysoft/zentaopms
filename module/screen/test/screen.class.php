@@ -52,8 +52,6 @@ class screenTest
         $appPath = $app->getAppRoot();
         $sqlFile = $appPath . 'test/data/screen.sql';
         $tester->dbh->exec(file_get_contents($sqlFile));
-        $chartSqlFile = $appPath . 'test/data/chart.sql';
-        $tester->dbh->exec(file_get_contents($chartSqlFile));
     }
 
     /**
