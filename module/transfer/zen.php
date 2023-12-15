@@ -22,7 +22,7 @@ class transferZen extends transfer
      */
     protected function getWorkflowFieldsByModule(string $module): array
     {
-        return = $this->dao->select('t2.*')->from(TABLE_WORKFLOWLAYOUT)->alias('t1')
+        return $this->dao->select('t2.*')->from(TABLE_WORKFLOWLAYOUT)->alias('t1')
             ->leftJoin(TABLE_WORKFLOWFIELD)->alias('t2')->on('t1.field=t2.field && t1.module=t2.module')
             ->where('t1.module')->eq($model)
             ->andWhere('t1.action')->eq('exporttemplate')

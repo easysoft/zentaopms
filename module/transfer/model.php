@@ -811,7 +811,7 @@ class transferModel extends model
         }
         elseif($storyDatas->type == 'story')
         {
-             return $stories;
+            return $stories;
         }
 
         return $stories;
@@ -1218,77 +1218,6 @@ class transferModel extends model
             $this->session->set('parentID', 0);
         }
         return $data;
-    }
-
-    /**
-     * Save import datas.
-     *
-     * @param  int    $model
-     * @param  int    $datas
-     * @access public
-     * @return void
-     */
-    public function saveImportDatas($model, $datas = '')
-    {
-        if(empty($datas)) $datas = $this->initPostFields($model);
-
-        foreach($datas as $key => $data)
-        {
-            $subDatas = array();
-            if(isset($data['subDatas']))
-            {
-                $subDatas = $data['subDatas'];
-                unset($data['subDatas']);
-            }
-
-            if($this->post->insert) unset($data['id']);
-
-            /* Check required field. */
-            $this->checkRequired($model, $key, $data);
-
-            if(!empty($objectID) and in_array($model, $this->config->transfer->hasChildDataFields))
-            {
-                $data = $this->processChildData($objectID, $data);
-            }
-
-            $table = zget($this->config->objectTables, $model);
-            $this->dao->replace($table)->data($data)->autoCheck()->checkFlow()->exec();
-            $objectID = $this->dao->lastInsertID();
-
-            if(dao::isError()) return print(js::error(dao::getError()));
-
-            if(!empty($subDatas)) $this->saveSubTable($objectID, $subDatas);
-
-            /* Create action. */
-            if($this->post->insert) $this->loadModel('action')->create($model, $objectID, 'Opened', '');
-        }
-
-        if($this->post->isEndPage)
-        {
-            unlink($this->session->fileImportFileName);
-            unlink($this->session->tmpFile);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-        }
-    }
-
-    /**
-     * Save SubTable datas.
-     *
-     * @param  int    $lastInsertID
-     * @param  int    $datas
-     * @access public
-     * @return void
-     */
-    public function saveSubTable($lastInsertID, $datas)
-    {
-        $table = zget($this->config->objectTables, $datas['name']);
-
-        foreach($datas['datas'] as $value)
-        {
-            $value[$datas['foreignkey']] = $lastInsertID;
-            $this->dao->replace($table)->data($value)->autoCheck()->exec();
-        }
     }
 
     /**
