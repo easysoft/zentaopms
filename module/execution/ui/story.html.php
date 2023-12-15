@@ -54,6 +54,11 @@ modal
 );
 
 /* Show tool bar. */
+if(!$product)
+{
+    $product = new stdclass();
+    $product->id = 0;
+}
 $canModifyProduct = common::canModify('product', $product);
 $canCreate        = $canModifyProduct && hasPriv('story', 'create');
 $canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
