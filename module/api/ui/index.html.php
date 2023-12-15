@@ -109,7 +109,7 @@ $docContent = panel
     div
     (
         setClass('detail base-url'),
-        $lang->api->baseUrl . $delimiter . $lib->baseUrl
+        $lang->api->baseUrl . $delimiter . ($lib ? $lib->baseUrl : '')
     ),
     h::hr(setClass('mb-4')),
     div
