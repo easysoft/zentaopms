@@ -1,0 +1,82 @@
+title: table zt_relation
+desc: "issue关系"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "所属执行"
+    range: "2,1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AType
+    note: "object类型"
+    range: task,bug,story
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AID
+    note: "自身ID"
+    range: "18,5,8,19"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: AVersion
+    note: "自身版本"
+    range: 2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: relation
+    note: "关联关系"
+    range: gitlab
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BType
+    note: "被关联需求类型"
+    range: issue
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BID
+    note: "被关联需求ID"
+    range: "4,3,2,1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: BVersion
+    note: "被关联版本"
+    range: 2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: extra
+    note: ""
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -245,46 +245,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 获取gitlab项目根据执行id。
-     * Get gitlab projects by executionID.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return array
-     */
-    public function getProjectsByExecution(int $executionID): array
-    {
-        $products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
-        $productIdList = array_keys($products);
-
-        return $this->dao->select('AID,BID as gitlabProject')
-            ->from(TABLE_RELATION)
-            ->where('relation')->eq('interrated')
-            ->andWhere('AType')->eq('gitlab')
-            ->andWhere('BType')->eq('gitlabProject')
-            ->andWhere('product')->in($productIdList)
-            ->fetchGroup('AID');
-    }
-
-    /**
-     * 获取gitlab模块的执行列表根据产品id。
-     * Get executions by one product for gitlab module.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return array
-     */
-    public function getExecutionsByProduct(int $productID): array
-    {
-        return $this->dao->select('distinct execution')->from(TABLE_RELATION)
-            ->where('relation')->eq('interrated')
-            ->andWhere('AType')->eq('gitlab')
-            ->andWhere('BType')->eq('gitlabProject')
-            ->andWhere('product')->eq($productID)
-            ->fetchAll('execution');
-    }
-
-    /**
      * 根据关联信息获取gitlab id和gitlab项目id。
      * Get gitlabID and projectID.
      *
@@ -318,25 +278,6 @@ class gitlabModel extends model
             ->andWhere('Atype')->eq($objectType)
             ->andWhere('AID')->in($objects)
             ->fetchAll('AID');
-    }
-
-
-    /**
-     * 获取gitlab用户id根据账号。
-     * Get gitlab userID by account.
-     *
-     * @param  int    $gitlabID
-     * @param  string $account
-     * @access public
-     * @return string
-     */
-    public function getGitlabUserID(int $gitlabID, string $account): string
-    {
-        return $this->dao->select('openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->andWhere('account')->eq($account)
-            ->fetch('openID');
     }
 
     /**
@@ -381,7 +322,6 @@ class gitlabModel extends model
             foreach($tags as $tag) $refList[$tag->name] = "Tag::" . $tag->name;
         }
         return $refList;
-
     }
 
     /**
@@ -2153,7 +2093,7 @@ class gitlabModel extends model
      */
     public function saveImportedIssue(int $gitlabID, int $projectID, string $objectType, int $objectID, object $issue, object $object): void
     {
-        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, (string)$objectID);
         $data  = new stdclass;
         if(isset($label->name)) $data->labels = $label->name;
 

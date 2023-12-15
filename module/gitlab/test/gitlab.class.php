@@ -69,9 +69,50 @@ class gitlabTest
         return $this->gitlab->getUserAccountIdPairs($gitlabID);
     }
 
-    public function getUserIDByZentaoAccountTest(int $gitlab, string $zentaoAccount)
+    public function getUserIDByZentaoAccountTest(int $gitlabID, string $zentaoAccount)
     {
-        return $this->gitlab->getUserIDByZentaoAccount($gitlab, $zentaoAccount);
+        return $this->gitlab->getUserIDByZentaoAccount($gitlabID, $zentaoAccount);
+    }
+
+    public function getProjectPairsTest(int $gitlabID)
+    {
+        return $this->gitlab->getProjectPairs($gitlabID);
+    }
+
+    public function getMatchedUsersTest(int $gitlabID, array $gitlabUsers = array(), array $zentaoUsers = array())
+    {
+        return $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
+    }
+
+    public function getRelationByObjectTest(string $objectType, int $objectID)
+    {
+        return $this->gitlab->getRelationByObject($objectType, $objectID);
+    }
+
+    public function getIssueListByObjectsTest(string $objectType, array $objects)
+    {
+        return $this->gitlab->getIssueListByObjects($objectType, $objects);
+    }
+
+    public function getProjectNameTest(int $gitlabID, int $projectID)
+    {
+        return $this->gitlab->getProjectName($gitlabID, $projectID);
+    }
+
+    public function getBranchesTest(int $gitlabID, int $projectID)
+    {
+        return $this->gitlab->getBranches($gitlabID, $projectID);
+    }
+
+    public function getReferenceOptionsTest(int $gitlabID, int $projectID)
+    {
+        return $this->gitlab->getReferenceOptions($gitlabID, $projectID);
+    }
+
+    public function setProjectTest(int $gitlabID, int $projectID, object $project)
+    {
+        $this->gitlab->setProject($gitlabID, $projectID, $project);
+        return $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
     }
 
     /**
@@ -154,6 +195,20 @@ class gitlabTest
     public function apiGetSingleTagTest($gitlabID, $projectID, $tag)
     {
         return $this->gitlab->apiGetSingleTag($gitlabID, $projectID, $tag);
+    }
+
+    /**
+     * Api get signle project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleProjectTest(int $gitlabID, int $projectID, bool $useUser = true)
+    {
+        return $this->gitlab->apiGetSingleProject($gitlabID, $projectID, $useUser);
     }
 
     /**

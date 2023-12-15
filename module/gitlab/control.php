@@ -998,6 +998,7 @@ class gitlab extends control
             foreach($executionList as $issueID => $executionID)
             {
                 if(empty($executionID)) continue;
+                $executionID = (int)$executionID;
 
                 $objectType = $objectTypeList[$issueID];
 
@@ -1008,7 +1009,7 @@ class gitlab extends control
                 $issue->updated_by_id = $issue->author->id; // Here can be replaced by current zentao user.
 
                 $object            = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
-                $object->product   = $productList[$issueID];
+                $object->product   = (int)$productList[$issueID];
                 $object->execution = $executionID;
                 $clonedObject      = clone $object;
 
