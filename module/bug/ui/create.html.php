@@ -155,7 +155,7 @@ formPanel
                 span
                 (
                     setID('buildBoxActions'),
-                    setClass('input-group-addon'),
+                    setClass('btn-group'),
                     setStyle(array('display' => 'none'))
                 ),
                 span
