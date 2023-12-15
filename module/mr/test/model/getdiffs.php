@@ -1,30 +1,24 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 mrModel::getDiffs();
+timeout=0
 cid=1
-pid=1
 
-使用空的MR >> return null
-使用正确的MR >> return normal
+- 使用空的MR @0
+- 使用正确的MR第0条的fileName属性 @README.md
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('mr')->config('mr')->gen(1);
+su('admin');
+
 $mrModel = $tester->loadModel('mr');
+r($mrModel->getDiffs(new stdclass())) && p() && e('0'); //使用空的MR
 
-$MR     = '';
-$result = $mrModel->getDiffs($MR);
-if(empty($result)) $result = 'return null';
-r($result) && p() && e('return null'); //使用空的MR
-
-$MR     = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
-$result = $mrModel->getDiffs($MR);
-if(!empty($result))
-{
-    $first = reset($result);
-    if(isset($first->fileName) and is_array($first->contents)) $result = 'return normal';
-}
-r($result) && p() && e('return normal'); //使用正确的MR
+$MR = $mrModel->fetchByID(1);
+r($mrModel->getDiffs($MR)) && p('0:fileName') && e('README.md'); //使用正确的MR
