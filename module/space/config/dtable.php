@@ -60,10 +60,10 @@ $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['className
 $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['data-confirm'] = $lang->instance->notices['confirmUninstall'];
 $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={orgID}&type={type}');
 
-$config->space->dtable->fieldList['actions']['list']['visit']['icon']   = 'menu-my';
-$config->space->dtable->fieldList['actions']['list']['visit']['hint']   = $lang->instance->visit;
-$config->space->dtable->fieldList['actions']['list']['visit']['url']    = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&externalID={externalID}');
-$config->space->dtable->fieldList['actions']['list']['visit']['target'] = '_blank';
+$config->space->dtable->fieldList['actions']['list']['visit']['icon']      = 'menu-my';
+$config->space->dtable->fieldList['actions']['list']['visit']['hint']      = $lang->instance->visit;
+$config->space->dtable->fieldList['actions']['list']['visit']['url']       = array('module' => 'instance', 'method' => 'visit', 'params' => 'id={id}&externalID={externalID}');
+$config->space->dtable->fieldList['actions']['list']['visit']['className'] = 'ajax-submit';
 
 $config->space->dtable->fieldList['actions']['list']['upgrade']['icon']        = 'refresh';
 $config->space->dtable->fieldList['actions']['list']['upgrade']['data-toggle'] = 'modal';
