@@ -4717,9 +4717,9 @@ class executionModel extends model
                 $realname = zget($users, $execution->PM);
                 if(empty($realname)) continue;
 
-                $execution->PM        = $realname;
-                $execution->PMAvatar  = zget($avatarList, $execution->PM);
                 $execution->PMAccount = $execution->PM;
+                $execution->PM        = $realname;
+                $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, $execution->PMAccount);
             }
 
             $rows[$execution->id] = $execution;
