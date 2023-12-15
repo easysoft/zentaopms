@@ -280,6 +280,7 @@ class programplanModel extends model
         {
             $execution = zget($plans, $task->execution, array());
             $pri       = zget($this->lang->task->priList, $task->pri);
+            $pri       = mb_substr($pri, 0, 1, 'UTF-8');
             $priIcon   = sprintf($taskPri, $task->pri, $pri, $pri);
 
             $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
