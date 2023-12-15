@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
-su('admin');
 
 $user = zdTable('user');
 $user->id->range('1001-1006');
