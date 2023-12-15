@@ -147,13 +147,21 @@ class designTest
         return $commit;
     }
 
-    public function unlinkCommitTest($designID = 0, $commitID = 0)
+    /**
+     * 设计解除代码提交关联。
+     * Design unlink a commit.
+     *
+     * @param  int    $designID
+     * @param  int    $commitID
+     * @access public
+     * @return array
+     */
+    public function unlinkCommitTest($designID = 0, $commitID = 0): array
     {
-        $objects = $this->objectModel->unlinkCommit($designID = 0, $commitID = 0);
+        $this->objectModel->unlinkCommit($designID, $commitID);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->fetchAll();
     }
 
     public function getCommitTest($designID = 0, $pager = null)
