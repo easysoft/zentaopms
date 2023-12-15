@@ -1,9 +1,12 @@
 #!/usr/bin/env php
 <?php
+/**
+title=测试 userModel->getPairs();
+cid=1
+pid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
-zdTable('user')->gen(10);
-su('admin');
 
 $user = zdTable('user');
 $user->id->range('1001-1005');
@@ -13,28 +16,21 @@ $user->email->range('account1!qq.com,account2!qq.com,account3!qq.com,account4!qq
 $user->deleted->range('0{5}');
 $user->gen(5);
 
-/**
+$userTest = new userTest();
+$result   = $userTest->getRealNameAndEmailsTest(array());
+r(count($result)) && p() && e(0); // 参数为空数组，返回空数组。
 
-title=测试 userModel->getPairs();
-cid=1
-pid=1
-
-获取account1的邮箱和真实姓名 >> account1@qq.com,用户名1
-获取account2的邮箱和真实姓名 >> account2@qq.com,用户名2
-获取account3的邮箱和真实姓名 >> account3@qq.com,用户名3
-获取account4的邮箱和真实姓名 >> account4@qq.com,用户名4
-获取account5的邮箱和真实姓名 >> account5@qq.com,用户名5
-从accounts中获取到的用户邮箱数量 >> 5
-
-*/
+$accounts = array('account1', 'account2', 'account3');
+$result   = $userTest->getRealNameAndEmailsTest($accounts);
+r(count($result)) && p() && e('3'); // 参数包含 3个账号，返回 3个账号的邮箱和真实姓名。
 
 $accounts = array('account1', 'account2', 'account3', 'account4', 'account5');
-$user     = new userTest();
-$emails   = $user->getRealNameAndEmailsTest($accounts);
+$result   = $userTest->getRealNameAndEmailsTest($accounts);
+r(count($result)) && p() && e('5'); // 参数包含 5个账号，返回 5个账号的邮箱和真实姓名。
 
-r($emails['account1'])  && p('email,realname') && e('account1!qq.com,用户名1'); //获取account1的邮箱和真实姓名
-r($emails['account2'])  && p('email,realname') && e('account2!qq.com,用户名2'); //获取account2的邮箱和真实姓名
-r($emails['account3'])  && p('email,realname') && e('account3!qq.com,用户名3'); //获取account3的邮箱和真实姓名
-r($emails['account4'])  && p('email,realname') && e('account4!qq.com,用户名4'); //获取account4的邮箱和真实姓名
-r($emails['account5'])  && p('email,realname') && e('account5!qq.com,用户名5'); //获取account5的邮箱和真实姓名
-r(count($emails))       && p()                 && e('5');                       //从accounts中获取到的用户邮箱数量
+$accounts = array('account1', 'account2', 'account3', 'account4', 'account5', 'account6');
+$result   = $userTest->getRealNameAndEmailsTest($accounts);
+r(count($result)) && p() && e('5'); // 参数包含 6个账号，返回 5个账号的邮箱和真实姓名。
+
+r($result['account1']) && p('email,realname') && e('account1!qq.com,用户名1'); //获取 account1 的邮箱和真实姓名
+r($result['account2']) && p('email,realname') && e('account2!qq.com,用户名2'); //获取 account2 的邮箱和真实姓名
