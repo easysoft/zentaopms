@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datatable.fix.html.php';?>
+<?php include '../../testcase/view/datatable.fix.html.php';?>
 <?php include './caseheader.html.php';?>
 <?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
@@ -45,7 +45,8 @@
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
     ?>
-    <form class='main-table table-cases' data-hot='true' method='post' name='casesform' id='casesForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
+    <form class='main-table table-case' data-nested='true' data-expand-nest-child='false' data-checkable='true' data-enable-empty-nested-row='true' data-replace-id='caseTableList' data-preserve-nested='true'
+    id='caseForm' method='post' <?php if(!$useDatatable) echo "data-ride='table'";?>>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -62,15 +63,13 @@
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
 
-      $config->testcase->datatable->defaultField = $config->testtask->datatable->defaultField;
-      $config->testcase->datatable->fieldList['actions']['width'] = '120';
 
       $setting = $this->datatable->getSetting('testtask');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
-        <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
+        <table class='table has-sort-head table-fixed table-nested table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
           <thead>
             <tr>
             <?php
@@ -85,12 +84,8 @@
             ?>
             </tr>
           </thead>
-          <tbody>
-            <?php foreach($runs as $run):?>
-            <tr data-id='<?php echo $run->id?>' data-auto='<?php echo $run->auto;?>'>
-              <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
-            </tr>
-            <?php endforeach;?>
+          <tbody id='caseTableList'>
+            <?php $this->testcase->printRow($runs, $setting, $users, array(), $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tbody>
         </table>
       <?php if(!$useDatatable) echo '</div>';?>
