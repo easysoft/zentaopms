@@ -85,6 +85,7 @@ foreach($config->testcase->dtable->fieldList as $field => $setting)
 $config->testtask->cases->dtable->fieldList['actions']['name']  = 'actions';
 $config->testtask->cases->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->testtask->cases->dtable->fieldList['actions']['type']  = 'actions';
+$config->testtask->cases->dtable->fieldList['actions']['width'] = 'auto';
 $config->testtask->cases->dtable->fieldList['actions']['list']  = $config->testtask->cases->actionList;
 $config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('confirmChange'), array('createBug', 'runCase', 'results', 'unlinkCase'));
 
