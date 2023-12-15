@@ -45,20 +45,20 @@ if(empty($suites))
 {
     if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
     {
-        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"), 'data-app' => $app->tab);
+        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID={$productID}"), 'data-app' => $app->tab);
     }
 }
 else
 {
     foreach($suites as $id => $name)
     {
-        $suiteItems[] = array('text' => $name, 'url' => inlink('cases', "taskID=$task->id&browseType=bySuite&param=$id"), 'active' => $id == $param, 'data-app' => $app->tab);
+        $suiteItems[] = array('text' => $name, 'url' => inlink('cases', "taskID={$task->id}&browseType=bySuite&param={$id}"), 'active' => $id == $param, 'data-app' => $app->tab);
     }
 }
 
 featureBar
 (
-    set::linkParams("taskID=$task->id&browseType={key}&param=0"),
+    set::linkParams("taskID={$task->id}&browseType={key}&param=0"),
     dropdown
     (
         btn
@@ -88,37 +88,37 @@ toolbar
     ),
     $canLinkCase ? btn
     (
-        set::className('ghost'),
+        setClass('ghost'),
         set::icon('link'),
-        set::url(inlink('linkCase', "taskID=$task->id")),
+        set::url(inlink('linkCase', "taskID={$task->id}")),
         set('data-app', $app->tab),
         $lang->testtask->linkCase
     ) : null,
     $canExport ? btn
     (
-        set::className('ghost'),
+        setClass('ghost'),
         set::icon('export'),
         set('data-toggle', 'modal'),
-        set::url($this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id")),
+        set::url($this->createLink('testcase', 'export', "productID={$productID}&orderBy=case_desc&taskID={$task->id}")),
         $lang->export
     ) : null,
     $canReport ? btn
     (
-        set::className('ghost'),
+        setClass('ghost'),
         set::icon('bar-chart'),
-        set::url(inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
+        set::url(inlink('report', "productID={$productID}&taskID={$task->id}&browseType={$browseType}&branchID={$task->branch}&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
         set('data-app', $app->tab),
         $lang->testtask->report->common
     ) : null,
     $canView ? btn
     (
-        set::className('ghost'),
+        setClass('ghost'),
         set::icon('list-alt'),
-        set::url(inlink('view', "taskID=$task->id")),
+        set::url(inlink('view', "taskID={$task->id}")),
         set('data-app', $app->tab),
         $lang->testtask->view
     ) : null,
-    btn(set::icon('back'), set::className('ghost'), set::url($this->session->testtaskList), $lang->goback)
+    btn(set::icon('back'), setClass('ghost'), set::url($this->session->testtaskList), $lang->goback)
 );
 
 $footToolbar = null;
@@ -129,25 +129,26 @@ if($canBatchAction)
     {
         $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
         (
-            array('text' => $lang->edit, 'className' => 'batch-btn not-open-url secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$productID&branch=all")),
-            array('caret' => 'up', 'className' => 'secondary', 'items' => array(array('text' => $lang->unlink, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"))), 'data-placement' => 'top-start')
+            array('text' => $lang->edit, 'className' => 'batch-btn not-open-url secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID={$productID}&branch=all")),
+            array('caret' => 'up', 'className' => 'secondary', 'items' => array(array('text' => $lang->unlink, 'innerClass' => 'batch-btn not-open-url ajax-btn', 'data-url' => inlink('batchUnlinkCases', "taskID={$task->id}"))), 'data-placement' => 'top-start')
         ));
     }
-    if($canBatchEdit && !$canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=all"));
-    if(!$canBatchEdit && $canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->unlink, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchUnlinkCases', "taskID=$task->id"));
+    if($canBatchEdit && !$canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => $this->createLink('testcase', 'batchEdit', "productID={$productID}&branch=all"));
+    if(!$canBatchEdit && $canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->unlink, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchUnlinkCases', "taskID={$task->id}"));
     if($canBatchAssign)
     {
         $userItems = array();
-        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID=$task->id&account=$account"));
+        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID={$task->id}&account={$account}"));
 
         $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $userItems, 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
     }
-    if($canBatchRun) $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$task->id&confirm=yes"));
+    if($canBatchRun) $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchRun', "productID={$productID}&orderBy=id_desc&from=testtask&taskID={$task->id}&confirm=yes"));
 }
 
 $cols = $this->loadModel('datatable')->getSetting('testtask');
 if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}';
+if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'caseID={case}';
 
 $runs = initTableData($runs, $cols);
 
