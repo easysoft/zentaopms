@@ -49,4 +49,20 @@ class mrTest
         $this->objectModel->apiDeleteMR($rawMR->hostID, $rawMR->sourceProject, $rawMR->mriid);
         return $result;
     }
+
+    /**
+     * Test update method.
+     *
+     * @param  int    $MRID
+     * @param  object $MR
+     * @access public
+     * @return array|string
+     */
+    public function updateTester(int $MRID, object $MR): array|string
+    {
+        $result = $this->objectModel->update($MRID, $MR);
+        if($result['result'] == 'fail') return $result['message'];
+
+        return $result;
+    }
 }

@@ -1,32 +1,51 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 mrModel::update();
+timeout=0
 cid=0
-pid=0
 
-POST数据正确修改MR描述 >> success
-使用title为空的数据mr请求 >> 『名称』不能为空。
+- 使用正确的mr请求数据属性result @success
+- 使用不存在的mr请求数据 @此合并请求不存在。
+- 使用需要ci的mr请求数据第jobID条的0属性 @『流水线任务』不能为空。
+- 使用标题为空的mr请求数据第title条的0属性 @『名称』不能为空。
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mr.class.php';
 
-$mrModel = $tester->loadModel('mr');
-$MRID    = 1;
+zdTable('pipeline')->gen(1);
+zdTable('repo')->config('repo')->gen(1);
+zdTable('mr')->config('mr')->gen(1);
 
-$_POST = array();
-$_POST['targetBranch']       = 'master';
-$_POST['title']              = 'Test MR';
-$_POST['description']        = '2022-01-31 23:59:59';
-$_POST['repoID']             = 1;
-$_POST['assignee']           = '';
-$_POST['removeSourceBranch'] = '0';
-$result = $mrModel->update($MRID);
-if($result['result'] == 'success') $result = 'success';
-r($result) && p() && e('success'); //POST数据正确修改MR描述
+$mrModel = new mrTest();
 
-$_POST['title'] = '';
-$result = $mrModel->update($MRID);
-r($result) && p('message[title]:0') && e('『名称』不能为空。'); //使用title为空的数据mr请求
+$MR = new stdclass();
+$MR->title              = 'test-merge';
+$MR->assignee           = 'admin';
+$MR->repoID             = 1;
+$MR->needCI             = 0;
+$MR->removeSourceBranch = 0;
+$MR->squash             = 0;
+$MR->jobID              = 0;
+$MR->description        = 'test-merge';
+$MR->editedBy           = 'admin';
+$MR->editedDate         = '2023-12-01 00:00:00';
+
+$mrModel = new mrTest();
+
+$MRID = 1;
+r($mrModel->updateTester($MRID, $MR)) && p('result') && e('success'); // 使用正确的mr请求数据
+
+$MRID = 2;
+r($mrModel->updateTester($MRID, $MR)) && p() && e('此合并请求不存在。'); // 使用不存在的mr请求数据
+
+$MRID = 1;
+$MR->needCI = 1;
+r($mrModel->updateTester($MRID, $MR)) && p('jobID:0') && e('『流水线任务』不能为空。'); // 使用需要ci的mr请求数据
+
+$MR->title = '';
+$MR->needCI = 0;
+r($mrModel->updateTester($MRID, $MR)) && p('title:0') && e('『名称』不能为空。'); // 使用标题为空的mr请求数据

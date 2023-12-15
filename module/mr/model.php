@@ -350,8 +350,8 @@ class mrModel extends model
     public function update(int $MRID, object $MR): array
     {
         $oldMR = $this->fetchByID($MRID);
+        if(!$oldMR) return array('result' => 'fail', 'message' => $this->lang->mr->notFound);
 
-        if($oldMR->sourceProject == $oldMR->targetProject and $oldMR->sourceBranch == $MR->targetBranch) dao::$errors['targetBranch'] = $this->lang->mr->errorLang[1];
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -359,11 +359,10 @@ class mrModel extends model
         if(isset($MR->jobID) && $MR->jobID)
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
-
             if(!empty($pipeline->queue))
             {
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
-                $MR->compileID = $compile->id;
+                $MR->compileID     = $compile->id;
                 $MR->compileStatus = $compile->status;
             }
         }
@@ -382,15 +381,18 @@ class mrModel extends model
             ->batchCheck($this->config->mr->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $MR = $this->fetchByID($MRID);
         $this->linkObjects($MR);
-        $changes = common::createChanges($oldMR, $MR);
+
         $actionID = $this->loadModel('action')->create('mr', $MRID, 'edited');
+        $changes  = common::createChanges($oldMR, $MR);
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
         $linkParams = $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
     }
