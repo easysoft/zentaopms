@@ -32,3 +32,8 @@ $config->design->form->edit['story']      = array('type' => 'int',      'require
 $config->design->form->edit['desc']       = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 $config->design->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->design->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
+$config->design->form->assignto['assignedTo']   = array('type' => 'string',   'required' => false, 'default' => '');
+$config->design->form->assignto['editedBy']     = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->design->form->assignto['editedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->design->form->assignto['assignedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);

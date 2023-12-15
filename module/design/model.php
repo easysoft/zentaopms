@@ -118,28 +118,23 @@ class designModel extends model
     }
 
     /**
-     * Assign a design.
+     * 更新设计的指派人。
+     * Update assign of design.
      *
-     * @param  int    $designID
+     * @param  int        $designID
+     * @param  object     $design
      * @access public
      * @return array|bool
      */
-    public function assign($designID = 0)
+    public function assign(int $designID = 0, object $design = null): array|bool
     {
         $oldDesign = $this->getByID($designID);
+        if(!$oldDesign) return false;
 
-        $design = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::today())
-            ->setDefault('assignedDate', helper::today())
-            ->stripTags($this->config->design->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('uid,comment,files,label')
-            ->get();
+        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
 
-        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq((int)$designID)->exec();
-
-        if(!dao::isError()) return common::createChanges($oldDesign, $design);
-        return false;
+        if(dao::isError()) return false;
+        return common::createChanges($oldDesign, $design);
     }
 
     /**

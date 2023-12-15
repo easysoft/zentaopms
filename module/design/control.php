@@ -467,6 +467,7 @@ class design extends control
     }
 
     /**
+     * 更新设计的指派人。
      * Update assign of design.
      *
      * @param  int    $designID
@@ -477,7 +478,8 @@ class design extends control
     {
         if($_POST)
         {
-            $changes = $this->design->assign($designID);
+            $designData = form::data()->get();
+            $changes    = $this->design->assign($designID, $designData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
