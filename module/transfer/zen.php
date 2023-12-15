@@ -110,4 +110,36 @@ class transferZen extends transfer
         $this->post->set('extraNum', $this->post->num);
         $this->post->set('fileName', isset($_POST['fileName']) ? $_POST['fileName'] : $module . 'Template');
     }
+
+    /**
+     * 处理导入字段。
+     * Process import fields.
+     *
+     * @param string $module
+     * @param string $fields
+     * @access protected
+     * @return array
+     */
+    protected function formatFields(string $module, string $fields = array()): array
+    {
+        if($module == 'story')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->storyTransferParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
+            if($this->session->storyType == 'requirement') unset($fields['plan']);
+        }
+        if($module == 'bug')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->bugTransferParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
+            if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
+        }
+        if($module == 'testcase')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->testcaseTransferParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
+        }
+
+        return $fields;
+    }
 }

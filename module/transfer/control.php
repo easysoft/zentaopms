@@ -137,40 +137,33 @@ class transfer extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTbody($module = '', $lastID = 0, $pagerID = 1)
+    public function ajaxGetTbody(string $module = '', int $lastID = 0, int $pagerID = 1)
     {
         $filter = '';
         if($module == 'task') $filter = 'estimate';
         if($module == 'story' and $this->session->storyType == 'requirement') $this->loadModel('story')->replaceUserRequirementLang();
 
+        /* 获取该模块导入字段数据。*/
+        /* Get the import field data of the module. */
         $this->loadModel($module);
         $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
-
         if($module == 'testcase' and !empty($_SESSION[$module . 'TemplateFields']) and is_array($importFields)) $this->config->$module->templateFields = implode(',', $importFields);
-        $fields       = $this->transfer->initFieldList($module, $importFields, false);
-        $formatDatas  = $this->transfer->format($module, $filter);
-        $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);
 
-        if($module == 'story')
-        {
-            $product = $this->loadModel('product')->getByID($this->session->storyTransferParams['productID']);
-            if($product->type == 'normal') unset($fields['branch']);
-            if($this->session->storyType == 'requirement') unset($fields['plan']);
-        }
-        if($module == 'bug')
-        {
-            $product = $this->loadModel('product')->getByID($this->session->bugTransferParams['productID']);
-            if($product->type == 'normal') unset($fields['branch']);
-            if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
-        }
-        if($module == 'testcase')
-        {
-            $product = $this->loadModel('product')->getByID($this->session->testcaseTransferParams['productID']);
-            if($product->type == 'normal') unset($fields['branch']);
-        }
+        /* 初始化字段列表。*/
+        /* Init field list. */
+        $fields      = $this->transfer->initFieldList($module, $importFields, false);
+        $formatDatas = $this->transfer->format($module, $filter);
+        $datas       = $this->transfer->getPageDatas($formatDatas, $pagerID);
+        $fields      = $this->transferZen->formatFields($module, $fields);
+
+        /* 处理任务统计列的数据。*/
+        /* Process task statistics column data. */
         if($module == 'task') $datas = $this->task->processDatas4Task($datas);
+
+        /* 构建导入表单。*/
+        /* Build import form. */
         $html = $this->transfer->buildNextList($datas->datas, $lastID, $fields, $pagerID, $module);
-        die($html);
+        return print($html);
     }
 
     /**
