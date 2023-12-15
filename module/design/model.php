@@ -203,8 +203,21 @@ class designModel extends model
     public function unlinkCommit(int $designID = 0, int $commitID = 0): bool
     {
         /* Delete linked commit in the relation table. */
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andwhere('AID')->eq($designID)->andwhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->andWhere('BID')->eq($commitID)->exec();
-        $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andwhere('BID')->eq($designID)->andwhere('BType')->eq('design')->andwhere('relation')->eq('completedfrom')->andWhere('AID')->eq($commitID)->exec();
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq('design')
+            ->andwhere('AID')->eq($designID)
+            ->andwhere('BType')->eq('commit')
+            ->andwhere('relation')->eq('completedin')
+            ->beginIF(!empty($commitID))->andWhere('BID')->eq($commitID)->fi()
+            ->exec();
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq('commit')
+            ->andwhere('BID')->eq($designID)
+            ->andwhere('BType')->eq('design')
+            ->andwhere('relation')->eq('completedfrom')
+            ->beginIF(!empty($commitID))->andWhere('AID')->eq($commitID)->fi()
+            ->exec();
 
         /* Update linked commit in the design table. */
         $commit = $this->dao->select('BID')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andwhere('relation')->eq('completedin')->fetchAll('BID');

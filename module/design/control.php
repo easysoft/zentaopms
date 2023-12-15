@@ -449,31 +449,21 @@ class design extends control
     }
 
     /**
+     * 删除一个设计。
      * Delete a design.
      *
      * @param  int    $designID
      * @access public
      * @return void
      */
-    public function delete($designID = 0)
+    public function delete(int $designID = 0)
     {
         $design = $this->design->getByID($designID);
         $this->design->delete(TABLE_DESIGN, $designID);
-        $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('design')->andWhere('AID')->eq($designID)->andWhere('Btype')->eq('commit')->andwhere('relation')->eq('completedin')->exec();
-        $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('Btype')->eq('design')->andwhere('relation')->eq('completedfrom')->exec();
+        $this->design->unlinkCommit($designID);
 
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result'] = 'success';
-            $response['load']   = inLink('browse', "projectID={$design->project}");
-        }
-
-        return $this->send($response);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => inlink('browse', "projectID={$design->project}")));
     }
 
     /**
