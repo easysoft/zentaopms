@@ -10,8 +10,6 @@ jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
 jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
 jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
-jsVar('pageSummary',         $summary);
-jsVar('checkedSummary',      $lang->program->checkedProjects);
 
 $this->loadModel('project');
 $cols    = $this->loadModel('datatable')->getSetting('program');
@@ -210,10 +208,11 @@ dtable
             ) : null
         )
     )),
-    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}")),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),
-    set::createLink($canCreateProgram ? createLink('program', 'create') : '')
+    set::createLink($canCreateProgram ? createLink('program', 'create') : ''),
+    set::customData(array('pageSummary' => $summary, 'checkedSummary' => $lang->program->checkedProjects))
 );
 
 render();

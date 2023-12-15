@@ -66,9 +66,9 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
     if($this.data('page') == 'batch') postAndLoadPage($this.data('formaction'), postData);
 });
 
-window.footerSummary = function(checkedIdList)
+window.footerSummary = function(element, checkedIdList)
 {
-    if(!checkedIdList.length) return {html: pageSummary, className: 'text-dark'};
+    if(!checkedIdList.length) return {html: element.options.customData.pageSummary, className: 'text-dark'};
 
     const dtable      = zui.DTable.query($('#projectviews'));
     let totalProjects = 0;
@@ -83,7 +83,7 @@ window.footerSummary = function(checkedIdList)
         totalProjects++;
     });
 
-    var summary = checkedSummary.replace('%s', totalProjects);
+    var summary = element.options.customData.checkedSummary.replace('%s', totalProjects);
 
     return {html: summary};
 };
