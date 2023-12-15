@@ -167,6 +167,7 @@ class transfer extends control
     }
 
     /**
+     * Ajax 获取某个字段下拉菜单。
      * Ajax Get Options.
      *
      * @param  string $module
@@ -181,10 +182,11 @@ class transfer extends control
         $this->loadModel($module);
         $fields = $this->config->$module->templateFields;
 
+        /* 如果是付费版，拼接工作流字符。*/
+        /* If it is paid version, append workflow field. */
         if($this->config->edition != 'open')
         {
             $appendFields = $this->loadModel('workflowaction')->getFields($module, 'showimport', false);
-
             foreach($appendFields as $appendField) $fields .= ',' . $appendField->field;
         }
 
@@ -193,10 +195,12 @@ class transfer extends control
         if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array('' => '');
         if(!in_array($field, $this->config->transfer->requiredFields)) $fieldList[$field]['values'][''] = '';
 
+        /* 如果字段是多选下拉则字段名称为$field[$index][]。*/
+        /* If the field is multiple select, the field name is $field[$index][]. */
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
-
-        $name = $field . "[$index]";
+        $name     = $field . "[$index]";
         if($multiple == 'multiple') $name .= "[]";
+
         return print(html::select($name, $fieldList[$field]['values'], $value, "class='form-control picker-select' data-field='$field' data-index='$index' $multiple"));
     }
 }
