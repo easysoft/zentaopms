@@ -187,24 +187,15 @@ class kanbanTest
      * @access public
      * @return object
      */
-    public function createCardTest($param)
+    public function createCardTest($columnID, $card)
     {
-        $kanbanID = 1;
-        $regionID = 1;
-        $groupID  = 1;
-        $columnID = 1;
-
         $_POST['lane']  = 1;
-        $_POST['begin'] = date('Y-m-d', strtotime("-3 day"));
-        $_POST['end']   = date('Y-m-d', strtotime("+3 day"));
-        foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $objectID = $this->objectModel->createCard($kanbanID, $regionID, $groupID, $columnID);
+        $objectID = $this->objectModel->createCard($columnID, $card);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getCardByID($objectID);
-        return $object;
+        return $this->objectModel->getCardByID($objectID);
     }
 
     /**
