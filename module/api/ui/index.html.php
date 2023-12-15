@@ -106,12 +106,12 @@ foreach($apiList as $api)
 $delimiter  = strpos($app->clientLang, 'zh') === 0 ? '：' : ': ';
 $docContent = panel
 (
-    div
+    $lib ? div
     (
         setClass('detail base-url'),
-        $lang->api->baseUrl . $delimiter . ($lib ? $lib->baseUrl : '')
-    ),
-    h::hr(setClass('mb-4')),
+        $lang->api->baseUrl . $delimiter . $lib->baseUrl
+    ) : null,
+    $lib ? h::hr(setClass('mb-4')) : null,
     div
     (
         setClass('detail'),
