@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of design module of ZenTaoPMS.
  *
@@ -9,8 +10,6 @@
  * @version     $Id: model.php 5107 2020-09-02 09:46:12Z tianshujie@easycorp.ltd $
  * @link        https://www.zentao.net
  */
-?>
-<?php
 class designModel extends model
 {
     /**
@@ -144,22 +143,25 @@ class designModel extends model
     }
 
     /**
-     * LinkCommit a design.
+     * 设计关联代码提交。
+     * Design link commits.
      *
      * @param  int    $designID
      * @param  int    $repoID
+     * @param  array  $revisions
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkCommit(int $designID = 0, int $repoID = 0)
+    public function linkCommit(int $designID = 0, int $repoID = 0, array $revisions = array()): bool
     {
-        $repo      = $this->loadModel('repo')->getByID($repoID);
-        $revisions = $_POST['revision'];
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        if(!isset($repo->SCM)) return true;
 
+        /* If the repo type is Gitlab, first store the commit log in the repohistory table and get the commit ID. */
         if($repo->SCM == 'Gitlab')
         {
             $logs = array();
-            foreach($this->session->designRevisions as $key => $commit)
+            foreach($this->session->designRevisions as $commit)
             {
                 if(in_array($commit->revision, $revisions))
                 {
@@ -168,7 +170,6 @@ class designModel extends model
                     $log->revision  = $commit->revision;
                     $log->comment   = $commit->comment;
                     $log->time      = date('Y-m-d H:i:s', strtotime($commit->time));
-
                     $logs[] = $log;
                 }
             }
@@ -176,28 +177,7 @@ class designModel extends model
             $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
         }
 
-        foreach($revisions as $revision)
-        {
-            $data = new stdclass();
-            $data->project  = $this->session->project;
-            $data->product  = $this->session->product;
-            $data->AType    = 'design';
-            $data->AID      = $designID;
-            $data->BType    = 'commit';
-            $data->BID      = $revision;
-            $data->relation = 'completedin';
-            $data->extra    = $repoID;
-
-            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
-
-            $data->AType    = 'commit';
-            $data->AID      = $revision;
-            $data->BType    = 'design';
-            $data->BID      = $designID;
-            $data->relation = 'completedfrom';
-
-            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
-        }
+        $this->designTao->updateLinkedCommits($designID, $repoID, $revisions);
 
         $oldCommit = $this->dao->findByID($designID)->from(TABLE_DESIGN)->fetch('commit');
         $revisions = implode(',', $revisions);
@@ -207,6 +187,8 @@ class designModel extends model
         $design->commit     = $commit;
         $design->commitedBy = $this->app->user->account;
         $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->where('id')->eq($designID)->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -246,6 +228,8 @@ class designModel extends model
         $this->app->loadLang('product');
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
+        $design->project     = (int)$design->project;
+        $design->product     = (int)$design->product;
 
 
         $design->commit = '';
