@@ -10,6 +10,45 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(!$lib)
+{
+    featureBar();
+    toolbar
+    (
+        btn
+        (
+            setClass('btn secondary ml-2'),
+            set::icon('plus'),
+            set::url(createLink('api', 'createLib', 'type=nolink&objectID=0')),
+            setData('toggle', 'modal'),
+            $lang->api->createLib
+        )
+    );
+    div
+    (
+        setClass('canvas text-center py-8'),
+        p
+        (
+            setClass('py-8 my-8'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->api->noLib,
+            ),
+            a
+            (
+                setClass('btn primary-pale bd-primary ml-0.5'),
+                set::href(createLink('api', 'createLib', 'type=nolink&objectID=0')),
+                setData('toggle', 'modal'),
+                icon('plus'),
+                $lang->api->createLib,
+            )
+        )
+    );
+    render();
+    return;
+}
+
 /* zin: Define the set::module('api') feature bar on main menu. */
 if($app->rawModule == 'api')
 {
