@@ -89,6 +89,20 @@ $config->kanban->form->splitColumn['color']   = array('type' => 'string', 'requi
 $config->kanban->form->splitColumn['limit']   = array('type' => 'int',    'required' => false, 'default' => '');
 $config->kanban->form->splitColumn['noLimit'] = array('type' => 'int',    'required' => false, 'default' => '');
 
+$config->kanban->form->createCard['name']         = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->createCard['pri']          = array('type' => 'string',   'required' => false, 'default' => '');
+$config->kanban->form->createCard['lane']         = array('type' => 'int',      'required' => true,  'default' => '');
+$config->kanban->form->createCard['estimate']     = array('type' => 'float',    'required' => false, 'default' => '');
+$config->kanban->form->createCard['assignedTo']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->kanban->form->createCard['begin']        = array('type' => 'date',     'required' => false, 'default' => '');
+$config->kanban->form->createCard['end']          = array('type' => 'date',     'required' => false, 'default' => '');
+$config->kanban->form->createCard['desc']         = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->kanban->form->createCard['createdBy']    = array('type' => 'string',   'required' => true,  'default' => $app->user->account);
+$config->kanban->form->createCard['createdDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->kanban->form->createCard['assignedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->kanban->form->createCard['color']        = array('type' => 'string',   'required' => false, 'default' => '#fff');
+$config->kanban->form->createCard['fromID']       = array('type' => 'int',      'required' => false, 'default' => 0);
+
 $config->kanban->form->batchCreateCard['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'base' => 'true');
 $config->kanban->form->batchCreateCard['lane']       = array('type' => 'int',    'required' => true,  'default' => '');
 $config->kanban->form->batchCreateCard['assignedTo'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
