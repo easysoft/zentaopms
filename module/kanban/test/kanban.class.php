@@ -239,13 +239,11 @@ class kanbanTest
     {
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $objects = $this->objectModel->importObject($kanbanID, $regionID, $groupID, $columnID, $objectType);
+        $this->objectModel->importObject($kanbanID, $regionID, $groupID, $columnID, $objectType);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($param['targetLane'])->andWhere('`column`')->eq($columnID)->andWhere('kanban')->eq($kanbanID)->andWhere('type')->eq('common')->fetch();
-        return $object;
+        return $this->objectModel->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($param['targetLane'])->andWhere('`column`')->eq($columnID)->andWhere('kanban')->eq($kanbanID)->andWhere('type')->eq('common')->fetch();
     }
 
     /**

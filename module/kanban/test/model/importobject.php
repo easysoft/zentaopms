@@ -4,16 +4,19 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbancell')->gen(1);
+zdTable('kanbancard')->gen(1);
+
 /**
 
 title=测试 kanbanModel->importObject();
+timeout=0
 cid=1
-pid=1
 
-测试导入卡片72 73 74到column 1 >> ,1001,1002,1003,1,2,801,
-测试导入卡片75 77 77到column 5 >> ,1004,1005,1006,9,10,809,
-测试导入卡片72 73 74到column 9 >> ,1007,1008,1009,17,18,817,
-测试导入卡片75 77 77到column 13 >> ,1010,1011,1012,25,26,825,
+- 测试导入卡片72 73 74到column 1属性cards @,2,3,4,1,2,801,
+- 测试导入卡片75 77 77到column 5属性cards @,5,6,7,
+- 测试导入卡片72 73 74到column 9属性cards @,8,9,10,
+- 测试导入卡片75 77 77到column 13属性cards @,11,12,13,
 
 */
 $productplans  = array('72', '73', '74');
@@ -36,7 +39,7 @@ $objectType = array('productplan', 'release', 'execution', 'build');
 
 $kanban = new kanbanTest();
 
-r($kanban->importObjectTest($kanbanIDList[0], $regionIDList[0], $groupIDList[0], $columnIDList[0], $objectType[0], $param1)) && p('cards') && e(',1001,1002,1003,1,2,801,');  // 测试导入卡片72 73 74到column 1
-r($kanban->importObjectTest($kanbanIDList[1], $regionIDList[1], $groupIDList[1], $columnIDList[1], $objectType[1], $param2)) && p('cards') && e(',1004,1005,1006,9,10,809,'); // 测试导入卡片75 77 77到column 5
-r($kanban->importObjectTest($kanbanIDList[2], $regionIDList[2], $groupIDList[2], $columnIDList[2], $objectType[2], $param3)) && p('cards') && e(',1007,1008,1009,17,18,817,');// 测试导入卡片72 73 74到column 9
-r($kanban->importObjectTest($kanbanIDList[3], $regionIDList[3], $groupIDList[3], $columnIDList[3], $objectType[3], $param4)) && p('cards') && e(',1010,1011,1012,25,26,825,');// 测试导入卡片75 77 77到column 13
+r($kanban->importObjectTest($kanbanIDList[0], $regionIDList[0], $groupIDList[0], $columnIDList[0], $objectType[0], $param1)) && p('cards', '|') && e(',2,3,4,1,2,801,'); // 测试导入卡片72 73 74到column 1
+r($kanban->importObjectTest($kanbanIDList[1], $regionIDList[1], $groupIDList[1], $columnIDList[1], $objectType[1], $param2)) && p('cards', '|') && e(',5,6,7,');         // 测试导入卡片75 77 77到column 5
+r($kanban->importObjectTest($kanbanIDList[2], $regionIDList[2], $groupIDList[2], $columnIDList[2], $objectType[2], $param3)) && p('cards', '|') && e(',8,9,10,');        // 测试导入卡片72 73 74到column 9
+r($kanban->importObjectTest($kanbanIDList[3], $regionIDList[3], $groupIDList[3], $columnIDList[3], $objectType[3], $param4)) && p('cards', '|') && e(',11,12,13,');      // 测试导入卡片75 77 77到column 13
