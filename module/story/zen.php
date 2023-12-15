@@ -323,8 +323,8 @@ class storyZen extends story
         $initStory->pri         = $story->pri;
         $initStory->estimate    = $story->estimate;
         $initStory->title       = $story->title;
-        $initStory->spec        = htmlSpecialString($story->spec);
-        $initStory->verify      = htmlSpecialString($story->verify);
+        $initStory->spec        = $story->spec;
+        $initStory->verify      = $story->verify;
         $initStory->keywords    = $story->keywords;
         $initStory->mailto      = $story->mailto;
         $initStory->category    = $story->category;
