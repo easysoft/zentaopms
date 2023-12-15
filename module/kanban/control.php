@@ -750,13 +750,17 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function createCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
+    public function createCard(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0)
     {
         if($_POST)
         {
-            $cardID = $this->kanban->createCard($kanbanID, $regionID, $groupID, $columnID);
+            $card = form::data($this->config->kanban->form->createCard)
+                ->add('kanban', $kanbanID)
+                ->add('region', $regionID)
+                ->add('group', $groupID)
+                ->get();
+            $this->kanban->createCard($columnID, $card);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('kanbancard', $cardID, 'created');
 
             $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
