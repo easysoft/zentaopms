@@ -709,7 +709,7 @@ class productplan extends control
     {
         if($this->post->bugIdList)
         {
-            foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug($bugID);
+            foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug((int)$bugID);
 
             $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIdList));
         }
