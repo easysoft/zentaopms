@@ -19,7 +19,7 @@ $lang->group->manageView         = '視野維護';
 $lang->group->managePriv         = '權限維護';
 $lang->group->managePrivByGroup  = '權限維護';
 $lang->group->managePrivByModule = '按模組分配權限';
-$lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl鍵進行多選）</span>';
+$lang->group->byModuleTips       = '（可以按住Shift或者Ctrl鍵進行多選）';
 $lang->group->manageMember       = '成員維護';
 $lang->group->manageProjectAdmin = '維護項目管理員';
 $lang->group->confirmDelete      = '您確定刪除該用戶分組嗎？';

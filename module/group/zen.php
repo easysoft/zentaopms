@@ -12,6 +12,86 @@ declare(strict_types=1);
 class groupZen extends group
 {
     /**
+     * 有些权限在resource里添加了，但没有在packagemanager里同步更新，需要追加上
+     * Append packages in resource.
+     *
+     * @access public
+     * @return void
+     */
+    public function appendResourcePackages()
+    {
+        $allPrivs = array();
+        foreach($this->config->group->package as $packageCode => $package)
+        {
+            if(empty($package->privs)) continue;
+
+            foreach($package->privs as $privCode => $priv)
+            {
+                $allPrivs[$privCode] = $privCode;
+            }
+        }
+
+        /* Privs in resource but not in package. */
+        foreach($this->lang->resource as $module => $methodList)
+        {
+            foreach($methodList as $method => $methodLang)
+            {
+                if(isset($allPrivs[$module . '-' . $method])) continue;
+
+                /* Create subset. */
+                if(!isset($this->config->group->subset->$module))
+                {
+                    $this->config->group->subset->$module = new stdclass();
+                    $this->config->group->subset->$module->order = 10000;
+                    $this->config->group->subset->$module->nav   = $module;
+                }
+
+                /* Create subset. */
+                $methodPackage = array('create' => 'manage', 'batchcreate' => 'manage', 'browse' => 'browse', 'view' => 'browse', 'delete' => 'delete', 'batchdelete' => 'delete', 'edit' => 'manage', 'batchedit' => 'manage');
+                $packageName = isset($methodPackage[$method]) ? $methodPackage[$method] : 'other';
+                $packageCode = $module . $packageName;
+                if(!isset($this->config->group->package->$packageCode))
+                {
+                    $this->config->group->package->$packageCode = new stdclass();
+                    $this->config->group->package->$packageCode->order  = 5;
+                    $this->config->group->package->$packageCode->subset = $module;
+                    $this->config->group->package->$packageCode->privs  = array();
+                    $this->lang->group->package->$packageCode = $this->lang->group->package->$packageName;
+                }
+
+                $this->appendWorkflowMenu($packageCode, $module, $method);
+            }
+        }
+    }
+
+    /**
+     * 工作流列表页面的菜单也需要拆分不同的权限，比如全部、未关闭、已完成
+     * Append priv to package of workflow browse menu.
+     *
+     * @param  string $packageCode
+     * @param  string $module
+     * @param  string $method
+     * @access protected
+     * @return mixed
+     */
+    protected function appendWorkflowMenu(string $packageCode, string $module, string $method)
+    {
+        /* Browse action in workflow. */
+        if(isset($this->lang->$module->menus) && $method == 'browse')
+        {
+            $this->config->group->package->$packageCode->privs["$module-$method"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
+            foreach($this->lang->$module->menus as $flowMethod => $flowName)
+            {
+                $this->config->group->package->$packageCode->privs["$module-$flowMethod"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array("$module-$method"), 'recommend' => array());
+            }
+        }
+        else
+        {
+            $this->config->group->package->$packageCode->privs["$module-$method"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array());
+        }
+    }
+    /**
      * Manage priv by package or group.
      *
      * @param  int    $groupID
@@ -117,6 +197,7 @@ class groupZen extends group
         /* Subsets in package. */
         foreach($this->config->group->package as $packageCode => $packageData)
         {
+            if(!isset($packageData->privs)) continue;
             foreach($packageData->privs as $privCode => $priv)
             {
                 list($moduleName, $methodName) = explode('-', $privCode);

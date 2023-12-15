@@ -19,7 +19,7 @@ $lang->group->manageView         = 'Quản lý Sight';
 $lang->group->managePriv         = 'Quản lý Privileges';
 $lang->group->managePrivByGroup  = 'Quản lý Privileges by Group';
 $lang->group->managePrivByModule = 'Quản lý Privileges by Module';
-$lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
+$lang->group->byModuleTips       = '(Press Shift/Ctrl to Multi-select)';
 $lang->group->manageMember       = 'Quản lý Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->editManagePriv     = 'Permission Edit';

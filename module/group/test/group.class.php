@@ -181,22 +181,6 @@ class groupTest
     }
 
     /**
-     * Get groups by accounts.
-     *
-     * @param  array  $accounts
-     * @access public
-     * @return array
-     */
-    public function getByAccountsTest($accounts)
-    {
-        $objects = $this->objectModel->getByAccounts($accounts);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Get the account number in the group.
      *
      * @param  array  $groupIdList
@@ -245,47 +229,30 @@ class groupTest
     }
 
     /**
-     * Get user programs of a group.
+     * 测试getAdmins方法。
+     * Test getAdmins method.
      *
-     * @param  int    $groupID
+     * @param  array  $idList
+     * @param  string $field
      * @access public
      * @return array
      */
-    public function getUserProgramsTest($groupID)
+    public function getAdminsTest(array $idList, string $field = 'programs'): array
     {
-        $objects = $this->objectModel->getUserPrograms($groupID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->getAdmins($idList, $field);
     }
 
     /**
-     * Get the ID of the group that has access to the program.
-     *
-     * @access public
-     * @return array
-     */
-    public function getAccessProgramGroupTest()
-    {
-        $objects = $this->objectModel->getAccessProgramGroup();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Delete a group.
+     * Remove a group.
      *
      * @param  int    $groupID
      * @param  null   $null      compatible with that of model::delete()
      * @access public
      * @return void
      */
-    public function deleteTest($groupID, $null = null)
+    public function removeTest($groupID)
     {
-        $this->objectModel->delete($groupID, $null = null);
+        $this->objectModel->remove($groupID);
 
         if(dao::isError()) return dao::getError();
 
@@ -368,91 +335,5 @@ class groupTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
-    }
-
-    /**
-     * Check menu have module
-     *
-     * @param  string    $menu
-     * @param  string    $moduleName
-     * @access public
-     * @return void
-     */
-    public function checkMenuModuleTest($menu, $moduleName)
-    {
-        $objects = $this->objectModel->checkMenuModule($menu, $moduleName);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get modules in menu
-     *
-     * @param  string    $menu
-     * @access public
-     * @return void
-     */
-    public function getMenuModulesTest($menu)
-    {
-        $objects = $this->objectModel->getMenuModules($menu);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * 获取一条权限的基本信息
-     *
-     * @param   int         $privID
-     * @param   string      $lang
-     * @access  public
-     * @return  void
-     */
-    public function getPrivInfoTest($priv, $lang)
-    {
-        $object = $this->objectModel->getPrivInfo($priv, $lang);
-        if(dao::isError()) return dao::getError();
-        return $object;
-    }
-
-    /**
-     * 获取模块和权限包option
-     *
-     * @access public
-     * @return array
-     */
-    public function getModuleAndPackageTreeTest()
-    {
-        return  $this->objectModel->getModuleAndPackageTree();
-    }
-
-    /**
-     * 更新权限
-     *
-     * @access public
-     * @return void
-     */
-    public function updatePrivTest($privID, $lang)
-    {
-        $this->objectModel->updatePrivLang($privID,$lang);
-        if(dao::isError()) return false;
-        return true;
-    }
-
-    /**
-     * 测试getAdmins方法。
-     * Test getAdmins method.
-     *
-     * @param  array  $idList
-     * @param  string $field
-     * @access public
-     * @return array
-     */
-    public function getAdminsTest(array $idList, string $field = 'programs'): array
-    {
-        return $this->objectModel->getAdmins($idList, $field);
     }
 }

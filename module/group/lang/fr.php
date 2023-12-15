@@ -20,7 +20,7 @@ $lang->group->manageView         = 'Gérer droits consultation';
 $lang->group->managePriv         = 'Assign Privileges';
 $lang->group->managePrivByGroup  = 'Assign Privileges by Group';
 $lang->group->managePrivByModule = 'Gérer Privilèges par Module';
-$lang->group->byModuleTips       = '<span class="tips">(Shift/Ctrl pour sélection multiple)</span>';
+$lang->group->byModuleTips       = '(Shift/Ctrl pour sélection multiple)';
 $lang->group->allTips            = 'After checking this option, the administrator can manage all objects in the system, including objects created later.';
 $lang->group->manageMember       = 'Gérer Membres';
 $lang->group->manageProjectAdmin = "Manage {$lang->projectCommon} Admins";

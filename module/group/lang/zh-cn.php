@@ -20,7 +20,7 @@ $lang->group->manageView         = '视野维护';
 $lang->group->managePriv         = '分配权限';
 $lang->group->managePrivByGroup  = '分配权限';
 $lang->group->managePrivByModule = '按模块分配权限';
-$lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl键进行多选）</span>';
+$lang->group->byModuleTips       = '（可以按住Shift或者Ctrl键进行多选）';
 $lang->group->allTips            = '勾选此项后，管理员可管理系统中所有对象，包括后续创建的对象。';
 $lang->group->manageMember       = '成员维护';
 $lang->group->manageProjectAdmin = "维护{$lang->projectCommon}管理员";
