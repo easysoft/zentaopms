@@ -873,34 +873,27 @@ class kanban extends control
     }
 
     /**
+     * 激活卡片。
      * Activate a card.
      *
      * @param  int    $cardID
-     * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function activateCard($cardID, $kanbanID)
+    public function activateCard(int $cardID)
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
-            $oldCard = $this->kanban->getCardByID($cardID);
             $this->kanban->activateCard($cardID);
-            $card = $this->kanban->getCardByID($cardID);
 
-            $changes = common::createChanges($oldCard, $card);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
-            $this->action->logHistory($actionID, $changes);
 
             $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $this->view->card    = $this->kanban->getCardByID($cardID);
-        $this->view->actions = $this->action->getList('kanbancard', $cardID);
+        $this->view->actions = $this->loadModel('action')->getList('kanbancard', $cardID);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->display();
