@@ -272,14 +272,17 @@ class designModel extends model
     }
 
     /**
-     * Get affected scope.
+     * 获取设计变更后受影响的任务。
+     * Get affected tasks after design changed.
      *
      * @param  int    $design
      * @access public
      * @return object
      */
-    public function getAffectedScope($design = 0)
+    public function getAffectedScope(object $design = null): object
     {
+        if(!isset($design->id)) return $design;
+
         /* Get affected tasks. */
         $design->tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
