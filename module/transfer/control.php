@@ -1,16 +1,27 @@
 <?php
+declare(strict_types=1);
+/**
+ * The control file of transfer module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     transfer
+ * @link        https://www.zentao.net
+ */
 class transfer extends control
 {
     /**
+     * 导出数据
      * Export datas.
      *
      * @param  string $model
      * @access public
      * @return void
      */
-    public function export($model = '')
+    public function export(string $model = '')
     {
-        if($_POST)
+        if(!empty($_POST))
         {
             $this->transfer->export($model);
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
