@@ -154,8 +154,6 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
             $field['items']  = $lang->execution->typeList;
         }
 
-        if($name == 'milestone') $field['value'] = 0;
-
         $items[] = $field;
     }
 

@@ -1,5 +1,6 @@
 window.onRenderRow = function(row, rowIdx, data)
 {
+    row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
     if(!data || !data.planIDList) return;
 
     row.children('.form-batch-row-actions').children('[data-type=delete]').addClass('hidden');
@@ -77,3 +78,11 @@ window.addRowErrors = function(rowErrors)
         index ++;
     });
 };
+
+window.waitDom('td[data-name=milestone]', function()
+{
+    $('td[data-name=milestone]').each(function()
+    {
+        if($(this).find('input[type=radio]:checked').length == 0) $(this).find('input[type=radio]').eq(1).prop('checked', true);
+    })
+})
