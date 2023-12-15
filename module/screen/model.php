@@ -354,21 +354,22 @@ class screenModel extends model
      */
     public function buildMetricFilters($metric)
     {
+        $this->loadModel('metric');
         $scope = $metric->scope;
 
         $filters = array();
         if($scope != 'system')
         {
-            $filter = new stdclass();
-            $filter->from       = 'query';
-            $filter->field      = $scope;
-            $filter->name       = $this->lang->$scope->common;
-            $filter->type       = 'select';
-            $filter->typeOption = $scope;
-            $filter->default    = null;
+            $scopeFilter = new stdclass();
+            $scopeFilter->from       = 'query';
+            $scopeFilter->field      = $scope;
+            $scopeFilter->name       = $this->lang->$scope->common;
+            $scopeFilter->type       = 'select';
+            $scopeFilter->typeOption = $scope;
+            $scopeFilter->default    = null;
 
-            $objectPairs = $this->loadModel('metric')->getPairsByScope($scope, true);
-            $filter->options = array_map(function($objectID, $objectName)
+            $objectPairs = $this->metric->getPairsByScope($scope, true);
+            $scopeFilter->options = array_map(function($objectID, $objectName)
             {
                 return array(
                     'label' => $objectName,
@@ -378,7 +379,27 @@ class screenModel extends model
             array_keys($objectPairs),
             array_values($objectPairs));
 
-            $filters[] = $filter;
+            $filters[] = $scopeFilter;
+        }
+
+        $resultHeader = $this->metric->getViewTableHeader($metric);
+        if($this->metric->isDateMetric($resultHeader))
+        {
+            $beginFilter = new stdclass();
+            $beginFilter->from       = 'query';
+            $beginFilter->field      = 'begin';
+            $beginFilter->type       = 'date';
+            $beginFilter->typeOption = null;
+            $beginFilter->default    = null;
+            $filters[] = $beginFilter;
+
+            $endFilter = new stdclass();
+            $endFilter->from       = 'query';
+            $endFilter->field      = 'end';
+            $endFilter->type       = 'date';
+            $endFilter->typeOption = null;
+            $endFilter->default    = null;
+            $filters[] = $endFilter;
         }
 
         return $filters;
