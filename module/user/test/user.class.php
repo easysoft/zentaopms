@@ -210,13 +210,14 @@ class userTest
      *
      * @param  string $browseType
      * @param  string $query
+     * @param  object $pager
      * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function getByQueryTest($browseType = 'inside', $query = '', $orderBy = 'id')
+    public function getByQueryTest($browseType = 'inside', $query = '', $pager = null, $orderBy = 'id')
     {
-        $objects = $this->objectModel->getByQuery($browseType, $query, null, $orderBy);
+        $objects = $this->objectModel->getByQuery($browseType, $query, $pager, $orderBy);
         if(dao::isError())
         {
             $error = dao::getError();
