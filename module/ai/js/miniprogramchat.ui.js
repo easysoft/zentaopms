@@ -284,6 +284,12 @@ function createAvatar(role)
     const $avatar = role === 'user'
         ? $('#userMenu-toggle > div.avatar').clone()
         : $('#program-avatar').clone().removeAttr('id');
+    if(role === 'ai')
+    {
+        $avatar.find('svg')
+            .attr('height', '14px')
+            .attr('width', '14px')
+    }
     $avatar.addClass('message-avatar');
     return $avatar;
 }
