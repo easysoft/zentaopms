@@ -16,7 +16,7 @@ $lang->misc->view    = '查看';
 $lang->misc->cancel  = '取消';
 
 $lang->misc->zentao = new stdclass();
-$lang->misc->zentao->version           = '版本%s';
+$lang->misc->zentao->version           = '开源版 %s';
 $lang->misc->zentao->labels['about']   = '关于禅道';
 $lang->misc->zentao->labels['support'] = '技术支持';
 $lang->misc->zentao->labels['cowin']   = '帮助我们';

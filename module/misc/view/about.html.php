@@ -11,9 +11,9 @@
             <img src='<?php echo $config->webRoot . 'theme/default/images/main/' . $lang->logoImg;?>' />
             <h4>
               <?php if(trim($config->visions, ',') == 'lite'):?>
-              <?php echo $lang->liteName.$config->liteVersion; ?>
+              <?php echo $lang->liteName . ' ' . $config->liteVersion;?>
               <?php else:?>
-              <?php printf($lang->misc->zentao->version, $config->version); ?>
+              <?php printf($lang->misc->zentao->version, $config->version);?>
               <?php endif;?>
             </h4>
           </td>

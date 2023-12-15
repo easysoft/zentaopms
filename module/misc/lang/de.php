@@ -16,7 +16,7 @@ $lang->misc->view    = 'Check';
 $lang->misc->cancel  = 'Cancel';
 
 $lang->misc->zentao = new stdclass();
-$lang->misc->zentao->version           = 'Version %s';
+$lang->misc->zentao->version           = 'ALM Version %s';
 $lang->misc->zentao->labels['about']   = 'Über';
 $lang->misc->zentao->labels['support'] = 'Support';
 $lang->misc->zentao->labels['cowin']   = 'Hilf uns';
