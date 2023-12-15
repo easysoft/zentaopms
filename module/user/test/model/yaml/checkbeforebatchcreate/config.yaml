@@ -11,4 +11,4 @@ fields:
   - field: key
     range: "weak"
   - field: value
-    range: "`123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890`"
+    range: "`password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890`"

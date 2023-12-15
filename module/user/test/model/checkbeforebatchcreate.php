@@ -137,9 +137,9 @@ $config->safe->changeWeak = 1;
 zdTable('config')->config('config')->gen(1); // 生成自定义常用弱口令。
 $tester->loadConfigFromDB();                 // 加载自定义常用弱口令。
 $result = $userTest->checkBeforeBatchCreateTest($users3, $verifyPassword);
-r($result) && p('result')                  && e(0);                                                                                                                              // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 false。
-r($result) && p('errors:password[0]', '|') && e('密码不能使用【123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890】这些常用弱口令。'); // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，有错误提示。
-r($result) && p('errors:password[1]', '|') && e('密码不能使用【123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890】这些常用弱口令。'); // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
+r($result) && p('result')                  && e(0);                                                                                                                       // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 false。
+r($result) && p('errors:password[0]')      && e('~~');                                                                                                                    // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
+r($result) && p('errors:password[1]', '|') && e('密码不能使用【password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890】这些常用弱口令。'); // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，有错误提示。
 
 /* 密码安全属性设为强，修改弱口令密码属性设为必须修改，符合所有检查项的用户。*/
 $config->safe->mode       = 2;
