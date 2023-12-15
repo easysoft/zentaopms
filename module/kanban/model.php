@@ -3324,6 +3324,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 移动看板卡片。
      * Move a card.
      *
      * @param  int    $cardID
@@ -3335,7 +3336,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
+    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0)
     {
         $groupBy = ($this->session->executionGroupBy and ($this->app->tab == 'execution' or $this->config->vision == 'lite')) ? $this->session->executionGroupBy : '';
 
@@ -3726,13 +3727,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 根据ID获取看板泳道。
      * Get lane by id.
      *
      * @param  int    $laneID
      * @access public
      * @return object
      */
-    public function getLaneById($laneID)
+    public function getLaneById(int $laneID)
     {
         return $this->dao->findById($laneID)->from(TABLE_KANBANLANE)->fetch();
     }
