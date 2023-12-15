@@ -487,35 +487,16 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建看板卡片。
      * Create a kanban card.
      *
-     * @param  int    $kanbanID
-     * @param  int    $regionID
-     * @param  int    $groupID
-     * @param  int    $columnID
+     * @param  int      $columnID
+     * @param  object   $card
      * @access public
      * @return bool|int
      */
-    public function createCard($kanbanID, $regionID, $groupID, $columnID)
+    public function createCard(int $columnID, object $card): bool|int
     {
-        $now  = helper::now();
-        $card = fixer::input('post')
-            ->add('kanban', $kanbanID)
-            ->add('region', $regionID)
-            ->add('group', $groupID)
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', $now)
-            ->add('assignedDate', $now)
-            ->add('color', '#fff')
-            ->trim('name,estimate')
-            ->setDefault('estimate,fromID', 0)
-            ->setDefault('fromType', '')
-            ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
-            ->join('assignedTo', ',')
-            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
-            ->remove('uid,lane')
-            ->get();
-
         if($card->estimate < 0)
         {
             dao::$errors['estimate'] = $this->lang->kanbancard->error->recordMinus;
@@ -530,25 +511,19 @@ class kanbanModel extends model
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
 
-        if(!$card->begin) unset($card->begin);
-        if(!$card->end)   unset($card->end);
-
         $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
             ->checkIF($card->estimate != '', 'estimate', 'float')
             ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
             ->exec();
 
-        if(!dao::isError())
-        {
-            $cardID = $this->dao->lastInsertID();
-            $this->file->saveUpload('kanbancard', $cardID);
-            $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, (int)$this->post->lane, $columnID, 'common', $cardID);
+        if(dao::isError()) return false;
 
-            return $cardID;
-        }
+        $cardID = $this->dao->lastInsertID();
+        $this->file->saveUpload('kanbancard', $cardID);
+        $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+        $this->addKanbanCell((int)$card->kanban, (int)$this->post->lane, $columnID, 'common', $cardID);
 
-        return false;
+        return $cardID;
     }
 
     /**
