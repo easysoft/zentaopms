@@ -577,6 +577,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 转入其它对象作为看板卡片
      * Import object.
      *
      * @param  int    $kanbanID
@@ -585,13 +586,12 @@ class kanbanModel extends model
      * @param  int    $columnID
      * @param  string $objectType
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function importObject($kanbanID, $regionID, $groupID, $columnID, $objectType)
+    public function importObject(int $kanbanID, int $regionID, int $groupID, int $columnID, string $objectType): array|false
     {
-        $data = fixer::input('post')->get();
-        $objectIDList = $data->{$objectType . 's'};
-        $targetLaneID = $data->targetLane;
+        $objectIDList = $this->post->{$objectType . 's'};
+        $targetLaneID = $this->post->targetLane;
 
         $objectCards = array();
         $now         = helper::now();
