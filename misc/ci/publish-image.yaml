@@ -9,13 +9,3 @@ spec:
             operator: Gt
             values:
             - "7"
-  containers:
-  - name: docker
-    volumeMounts:
-    - mountPath: /var/run/docker.sock
-      name: docker-socket
-  volumes:
-  - name: docker-socket
-    hostPath:
-      path: /var/run/docker.sock
-      type: Socket
