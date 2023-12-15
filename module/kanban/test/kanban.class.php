@@ -1169,17 +1169,14 @@ class kanbanTest
      */
     public function activateCardTest($cardID, $progress)
     {
-        global $tester;
-        $tester->post->progress = $progress;
-
+        $_POST['progress'] = $progress;
         $this->objectModel->activateCard($cardID);
 
-        unset($this->post);
+        unset($_POST);
 
-        if(dao::isError()) return dao::getError()[0];
+        if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getCardByID($cardID);
-        return $object;
+        return $this->objectModel->getCardByID($cardID);
     }
 
     /**
