@@ -428,7 +428,7 @@ class docZen extends doc
             {
                 $execution = $this->loadModel('execution')->getByID($lib->execution);
                 $objectID  = $execution->project;
-                $libs      = $this->doc->getLibs('execution', "withObject,{$unclosed}", $libID, $lib->execution);
+                $libs      = $this->doc->getLibs('execution', "withObject,{$unclosed}", $lib->id, $lib->execution);
 
                 $this->view->execution  = $execution;
                 $this->view->executions = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
