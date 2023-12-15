@@ -251,22 +251,23 @@ class designModel extends model
     }
 
     /**
-     * Get design pairs.
+     * 获取设计 id=>value 的键值对数组。
+     * Get design id=>value pairs.
      *
      * @param  int    $productID
-     * @param  string $type all|HLDS|DDS|DBDS|ADS
+     * @param  string $type      all|HLDS|DDS|DBDS|ADS
      * @access public
      * @return object
      */
-    public function getPairs($productID = 0, $type = 'all')
+    public function getPairs(int $productID = 0, string $type = 'all'): array
     {
         $designs = $this->dao->select('id, name')->from(TABLE_DESIGN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq($type)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
-        foreach($designs as $id => $name) $designs[$id] = $id . ':' . $name;
 
+        foreach($designs as $id => $name) $designs[$id] = $id . ':' . $name;
         return $designs;
     }
 
