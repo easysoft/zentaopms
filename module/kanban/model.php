@@ -3085,50 +3085,38 @@ class kanbanModel extends model
     }
 
     /**
+     * 编辑看板卡片。
      * Update a card.
      *
      * @param  int    $cardID
+     * @param  object $card
      * @access public
-     * @return array
+     * @return bool
      */
-    public function updateCard($cardID)
+    public function updateCard(int $cardID, object $card): bool
     {
-        if($this->post->estimate < 0)
+        if($card->estimate < 0)
         {
-            dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+            dao::$errors['estimate'] = $this->lang->kanbancard->error->recordMinus;
             return false;
         }
 
-        if($this->post->end && ($this->post->begin > $this->post->end))
+        if($card->end && ($card->begin > $card->end))
         {
-            dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+            dao::$errors['end'] = $this->lang->kanbancard->error->endSmall;
             return false;
         }
 
-        if($this->post->progress > 100 or $this->post->progress < 0)
+        if($card->progress > 100 or $card->progress < 0)
         {
-            dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
+            dao::$errors['progress'] = $this->lang->kanbancard->error->progressIllegal;
             return false;
         }
 
-        $cardID  = (int)$cardID;
         $oldCard = $this->getCardByID($cardID);
 
-        $now  = helper::now();
-        $card = fixer::input('post')
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->trim('name')
-            ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
-            ->setIF(!isset($_POST['estimate']), 'estimate', $oldCard->estimate)
-            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
-            ->stripTags($this->config->kanban->editor->editcard['id'], $this->config->allowedTags)
-            ->join('assignedTo', ',')
-            ->remove('uid')
-            ->get();
-
-        $card->assignedTo = isset($card->assignedTo) ? trim($card->assignedTo, ',') : '';
-        $card->status     = $this->post->progress == 100 ? 'done' : 'doing';
+        if(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo) $card->assignedDate = helper::now();
+        $card->status = $card->progress == 100 ? 'done' : 'doing';
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->editcard['id'], $this->post->uid);
 
@@ -3139,13 +3127,20 @@ class kanbanModel extends model
             ->where('id')->eq($cardID)
             ->exec();
 
-        if(!dao::isError())
-        {
-            $this->file->saveUpload('kanbancard', $cardID);
-            $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+        if(dao::isError()) return false;
 
-            return common::createChanges($oldCard, $card);
+        $this->file->saveUpload('kanbancard', $cardID);
+        $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+
+        $changes = common::createChanges($oldCard, $card);
+
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'edited');
+            $this->action->logHistory($actionID, $changes);
         }
+
+        return true;
     }
 
     /**
