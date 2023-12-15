@@ -544,7 +544,7 @@ class programplanModel extends model
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
             $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
-            $plan->milestone  = $milestone[$key] ? 1 : 0;
+            $plan->milestone  = !empty($milestone[$key]) ? 1 : 0;
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($projectManager[$key]) ? '' : $projectManager[$key];
