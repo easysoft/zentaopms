@@ -80,14 +80,15 @@ class transfer extends control
     }
 
     /**
+     * 导入数据。
      * Import.
      *
-     * @param  int    $model
+     * @param  string $model
      * @param  string $locate
      * @access public
      * @return void
      */
-    public function import($model, $locate = '')
+    public function import(string $model, string $locate = '')
     {
         $locate = $locate ? $locate : $this->session->showImportURL;
         if($_FILES)
@@ -99,13 +100,14 @@ class transfer extends control
             $shortName = $this->file->getSaveName($file['pathname']);
             if(empty($shortName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->emptyFileName));
 
+            /* 将文件从临时目录移动到保存目录。 */
+            /* Move file from temp dir to save dir. */
             $extension = $file['extension'];
             $fileName  = $this->file->savePath . $shortName;
-
             move_uploaded_file($file['tmpname'], $fileName);
 
-            if($extension == 'xlsx' or $extension == 'xls') $this->transfer->cutFile($fileName);
-
+            /* 读取Excel文件。*/
+            /* Read Excel file. */
             $phpExcel  = $this->app->loadClass('phpexcel');
             $phpReader = new PHPExcel_Reader_Excel2007();
             if(!$phpReader->canRead($fileName))
@@ -113,6 +115,9 @@ class transfer extends control
                 $phpReader = new PHPExcel_Reader_Excel5();
                 if(!$phpReader->canRead($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->excel->canNotRead));
             }
+
+            /* 将文件目录和后缀信息保存到SESSION。*/
+            /* Save file directory and extension info to session. */
             $this->session->set('fileImportFileName', $fileName);
             $this->session->set('fileImportExtension', $extension);
 

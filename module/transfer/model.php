@@ -131,52 +131,6 @@ class transferModel extends model
     }
 
     /**
-     * Delete sheet2 from import xlsx or xls file.
-     *
-     * @param  string $filePath
-     * @access public
-     * @return void
-     */
-    public function cutFile($filePath = '')
-    {
-        if(file_exists($filePath))
-        {
-            $tmpPath = $this->app->getAppRoot() . 'tmp/import/excel' . $this->app->user->account . time();
-            $this->app->loadClass('pclzip', true);
-            $zip   = new pclzip($filePath);
-            $zip->extract(PCLZIP_OPT_PATH, $tmpPath);
-
-            $sheet2Path = $tmpPath . '/xl/worksheets/sheet2.xml';
-            if(file_exists($sheet2Path))
-            {
-                $sheet2xmlPath  = $tmpPath . '/[Content_Types].xml';
-                $sheet2reslPath = $tmpPath . '/xl/_rels/workbook.xml.rels';
-                $sheet2wookbookPath = $tmpPath . '/xl/workbook.xml';
-
-                $sheet2xml  = '<Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
-                $sheet2resl = '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>';
-
-                $xml  = file_get_contents($sheet2xmlPath);
-                $resl = file_get_contents($sheet2reslPath);
-                $wookbook = file_get_contents($sheet2wookbookPath);
-
-                $xml  = str_ireplace($sheet2xml,'', $xml);
-                $resl = str_ireplace($sheet2resl,'', $resl);
-                $wookbook = preg_replace('/<sheet[^>]*sheetId="2[^>]*>/', '', $wookbook);
-
-                file_put_contents($sheet2xmlPath, $xml);
-                file_put_contents($sheet2reslPath, $resl);
-                file_put_contents($sheet2wookbookPath, $wookbook);
-                @unlink($sheet2Path);
-            }
-
-            $result = $zip->create($tmpPath,PCLZIP_OPT_REMOVE_PATH,$tmpPath);
-            $zfile  = $this->app->loadClass('zfile');
-            $zfile->removeDir($tmpPath);
-        }
-    }
-
-    /**
      * Export module data.
      *
      * @param  string $model
