@@ -217,4 +217,23 @@ class designTest
         if(dao::isError()) return dao::getError();
         return $design;
     }
+
+    /**
+     * 更新设计关联的代码提交记录。
+     * Update the commit logs linked with the design.
+     *
+     * @param  int   $designID
+     * @param  int   $repoID
+     * @param  array $revisions
+     * @access public
+     * @return array
+     */
+    public function updateLinkedCommitsTest(int $designID, int $repoID, array $revisions = array()): array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_RELATION)->exec();
+        $this->objectModel->updateLinkedCommits($designID, $repoID, $revisions);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->fetchAll();
+    }
 }
