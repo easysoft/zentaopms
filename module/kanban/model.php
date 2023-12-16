@@ -1324,17 +1324,18 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取已经导入的卡片。
      * Get imported cards.
      *
      * @param  int    $kanbanID
      * @param  object $cards
-     * @param  string $fromType
+     * @param  array  $fromType
      * @param  int    $archived
      * @param  int    $regionID
      * @access public
      * @return array
      */
-    public function getImportedCards($kanbanID, $cards, $fromType, $archived = 0, $regionID = 0)
+    public function getImportedCards(int $kanbanID, array $cards, string $fromType, int $archived = 0, int $regionID = 0): array
     {
         /* Get imported cards based on imported object type. */
         $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
@@ -1353,6 +1354,7 @@ class kanbanModel extends model
                 ->where('id')->in(array_keys($objectCards))
                 ->fetchAll('id');
 
+            $creators = array();
             if($fromType == 'productplan' or $fromType == 'release')
             {
                 $creators = $this->dao->select('objectID, actor')->from(TABLE_ACTION)
@@ -1372,32 +1374,7 @@ class kanbanModel extends model
 
                     foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
 
-                    if($fromType == 'productplan' or $fromType == 'release')
-                    {
-                        $objectCard->createdBy = zget($creators, $object->id, '');
-                        $objectCard->delay     = helper::today() > $objectCard->end ? true : false;
-                    }
-
-                    if($fromType =='execution')
-                    {
-                        if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
-                        {
-                            $delay = helper::diffDate(helper::today(), $object->end);
-                            if($delay > 0) $objectCard->delay = $delay;
-                        }
-                        $objectCard->execType = $object->type;
-                        $objectCard->progress = $object->progress;
-
-                        $parentExecutions  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                        $objectCard->title = implode('/', $parentExecutions);
-
-                        $children             = $this->dao->select('count(1) as children')->from(TABLE_EXECUTION)->where('parent')->eq($object->id)->andWhere('type')->in('stage,kanban,sprint')->andWhere('deleted')->eq(0)->fetch('children');
-                        $objectCard->children = !empty($children) ? $children : 0;
-                    }
-
-                    $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
-                    $objectCard->objectStatus = $objectCard->status;
-                    $objectCard->status       = $objectCard->progress == 100 ? 'done' : 'doing';
+                    $objectCard = $this->kanbanTao->buildObjectCard($objectCard, $object, $fromType, $creators);
                     $cards[$cardID] = $objectCard;
                 }
             }
