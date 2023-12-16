@@ -38,7 +38,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->parent),
-        set::width('1/2'),
+        set::width('2/3'),
         picker
         (
             setID('parent'),
@@ -52,21 +52,21 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->name),
-        set::width('1/2'),
+        set::width('2/3'),
         set::required(true),
         input(set::name('name'), set::value($plan->name))
     ),
     isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
         set::label($lang->execution->code),
-        set::width('1/2'),
+        set::width('2/3'),
         set::required(true),
         input(set::name('code'), set::value($plan->code))
     ): null,
     formGroup
     (
         set::label($lang->programplan->PM),
-        set::width('1/2'),
+        set::width('2/3'),
         picker
         (
             set::name('PM'),
@@ -79,7 +79,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->percent),
-        set::width('1/2'),
+        set::width('2/3'),
         inputControl
         (
             input(set::name('percent'), set::value($plan->percent)),
@@ -92,7 +92,7 @@ formPanel
         formGroup
         (
             set::label($lang->programplan->attribute),
-            set::width('1/2'),
+            set::width('2/3'),
             div
             (
                 setID('attributeType'),
@@ -121,7 +121,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->planDateRange),
-        set::width('1/2'),
+        set::width('2/3'),
         set::required(true),
         inputGroup
         (
@@ -133,7 +133,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->realDateRange),
-        set::width('1/2'),
+        set::width('2/3'),
         inputGroup
         (
             datepicker(set::name('realBegan'), set::value($plan->realBegan)),
@@ -144,7 +144,7 @@ formPanel
     formGroup
     (
         set::label($lang->project->acl),
-        set::width('1/2'),
+        set::width('2/3'),
         picker
         (
             set::name('acl'),
@@ -157,7 +157,7 @@ formPanel
     $plan->setMilestone ? formGroup
     (
         set::label($lang->programplan->milestone),
-        set::width('1/2'),
+        set::width('2/3'),
         radioList
         (
             set::name('milestone'),
@@ -170,7 +170,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->output),
-        set::width('1/2'),
+        set::width('2/3'),
         picker
         (
             set::name('output[]'),

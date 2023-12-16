@@ -57,6 +57,7 @@ $fnGenerateCols = function() use ($config, $project)
     /* waterfall & waterfallplus model with different edit link. */
     if(in_array($project->model, array('waterfall', 'waterfallplus')))
     {
+        $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
         $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
     }
 
