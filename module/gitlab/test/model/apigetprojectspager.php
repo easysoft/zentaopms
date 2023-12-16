@@ -8,11 +8,11 @@ title=测试 gitlabModel::apiGetProjectsPager();
 timeout=0
 cid=1
 
-- 通过gitlabID,projectID,获取GitLab项目列表 @1
-- 通过gitlabID,projectID,获取GitLab项目数量 @1
+- 通过gitlabID,获取GitLab项目列表 @1
+- 通过gitlabID,获取GitLab项目数量 @1
 - 当gitlabID为0时,获取GitLab项目列表 @return empty
-- 通过gitlabID,projectID,按项目名升序获取GitLab项目列表第1条的name属性 @testHtml
-- 通过gitlabID,projectID,搜索字符'zentaopms_15.2_20210720'获取GitLab项目列表第0条的name属性 @privateProject
+- 通过gitlabID,按项目名升序获取GitLab项目列表第1条的name属性 @testHtml
+- 通过gitlabID,搜索字符'private'获取GitLab项目列表第0条的name属性 @privateProject
 
 */
 

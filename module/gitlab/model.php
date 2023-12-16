@@ -89,6 +89,22 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlab user id by zentao account.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return array
+     */
+    public function getUserIDByZentaoAccount($gitlabID, $zentaoAccount)
+    {
+        return $this->dao->select('openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('providerID')->eq($gitlabID)
+            ->andWhere('account')->eq($zentaoAccount)
+            ->fetch('openID');
+    }
+
+    /**
      * 获取gitlab的用户id和真实名字的键值对。
      * Get gitlab user id and realname pairs of one gitlab.
      *

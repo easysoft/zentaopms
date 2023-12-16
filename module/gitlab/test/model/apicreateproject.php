@@ -12,7 +12,7 @@ cid=1
 - 使用空的群组URL创建gitlab群组 @return false
 - 使用错误gitlabID创建群组 @0
 - 通过gitlabID,projectID,分支对象正确创建GitLab分支 @1
-- 使用重复的分支信息创建分支属性message @Failed to save project {:path=>["已经被使用"]}
+- 使用重复的分支信息创建分支第path条的0属性 @已经被使用
 
 */
 

@@ -13,7 +13,7 @@ cid=1
 - 获取gitlab服务器1匹配的用户列表。
  - 第1条的account属性 @root
  - 第1条的zentaoAccount属性 @user3
-- 获取gitlab服务器1匹配的用户数量。 @2
+- 获取gitlab服务器1匹配的用户数量。 @3
 - 当gitlab用户为空时获取gitlab服务器1匹配的用户数量。 @0
 - 当禅道用户为空时获取gitlab服务器1匹配的用户数量。
  - 第4条的account属性 @user6
