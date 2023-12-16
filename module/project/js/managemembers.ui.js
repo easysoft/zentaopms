@@ -54,9 +54,9 @@ window.deleteItem = function(obj)
  * @access public
  * @return void
  */
-window.setDeptUsers = function()
+window.setDeptUsers = function(e)
 {
-    const dept = $(this).val(); // Get dept ID.
+    const dept = $(e.target).val(); // Get dept ID.
     const link = $.createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID); // Create manageMembers link.
     loadPage(link);
 }
@@ -68,10 +68,10 @@ window.setDeptUsers = function()
  * @access public
  * @return void
  */
-function choseTeam2Copy()
+function choseTeam2Copy(e)
 {
-    const copyProjectID = $(this).val();
-    const dept          = $('#dept').val();
+    const copyProjectID = $(e.target).val();
+    const dept          = $('input[name=dept]').val();
     const link          = $.createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID);
     loadPage(link);
 }

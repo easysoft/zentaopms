@@ -1093,7 +1093,7 @@ class project extends control
 
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles        = $this->user->getUserRoles(array_keys($users));
-        $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs((int)$dept);
 
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
