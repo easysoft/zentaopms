@@ -3374,14 +3374,15 @@ class kanbanModel extends model
     }
 
     /**
+     * 更新卡片的颜色。
      * Update a card's color.
      *
      * @param  int    $cardID
-     * @param  int    $color
+     * @param  string $color
      * @access public
      * @return void
      */
-    public function updateCardColor($cardID, $color)
+    public function updateCardColor(int $cardID, string $color)
     {
         $this->dao->update(TABLE_KANBANCARD)->set('`color`')->eq('#' . $color)->where('id')->eq($cardID)->exec();
     }
