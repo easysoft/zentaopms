@@ -1220,22 +1220,22 @@ class kanbanTest
      * Test set a lane.
      *
      * @param  int    $laneID
+     * @param  string $name
+     * @param  string $color
      * @access public
      * @return object
      */
     public function setLaneTest($laneID, $name, $color)
     {
-        $_POST['name']  = $name;
-        $_POST['color'] = $color;
+        $lane = new stdclass();
+        $lane->name  = $name;
+        $lane->color = $color;
 
-        $this->objectModel->setLane($laneID);
-
-        unset($_POST);
+        $this->objectModel->setLane($laneID, $lane);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getLaneByID($laneID);
-        return $object;
+        return $this->objectModel->getLaneByID($laneID);
     }
 
     /**
