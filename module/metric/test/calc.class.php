@@ -24,6 +24,11 @@ class metricTest
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
+    public function getByID($metricID, $fieldList = '*')
+    {
+        return $this->objectModel->getByID($metricID, $fieldList);
+    }
+
     /**
      * 测试根据code获取度量项数据方法。
      * Test get metric by code.
