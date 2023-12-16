@@ -80,9 +80,9 @@ $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';
 
 $lang->release->exportTypeList['all']     = '所有';
-$lang->release->exportTypeList['story']   = $lang->SRCommon;
-$lang->release->exportTypeList['bug']     = 'Bug';
-$lang->release->exportTypeList['leftbug'] = '遗留Bug';
+$lang->release->exportTypeList['story']   = $lang->release->stories;
+$lang->release->exportTypeList['bug']     = $lang->release->bugs;
+$lang->release->exportTypeList['leftbug'] = $lang->release->leftBugs;
 
 $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = '正常';

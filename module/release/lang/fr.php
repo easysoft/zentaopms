@@ -80,9 +80,9 @@ $lang->release->filePath = 'Télecharger : ';
 $lang->release->scmPath  = 'SCM Path : ';
 
 $lang->release->exportTypeList['all']     = 'Tous';
-$lang->release->exportTypeList['story']   = 'Story';
-$lang->release->exportTypeList['bug']     = 'Bug';
-$lang->release->exportTypeList['leftbug'] = 'Bug Actifs';
+$lang->release->exportTypeList['story']   = $lang->release->stories;
+$lang->release->exportTypeList['bug']     = $lang->release->bugs;
+$lang->release->exportTypeList['leftbug'] = $lang->release->leftBugs;
 
 $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = 'Normale';

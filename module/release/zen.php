@@ -299,141 +299,60 @@ class releaseZen extends release
      */
     protected function buildStoryDataForExport(object $release): string
     {
-        $html  = '';
-        $html .= "<h3>{$this->lang->release->stories}</h3>";
         $this->loadModel('story');
 
+        $html    = "<h3>{$this->lang->release->stories}</h3>";
+        $fields  = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
         $stories = $this->release->getStoryList($release->stories, (int)$release->branch);
-        foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
-
-        $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
-        $rows   = $stories;
+        if(empty($stories)) return $html;
 
         $html .= '<table><tr>';
         foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
         $html .= '</tr>';
-        foreach($rows as $row)
+
+        $stories = array_map(function($story){$story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>"; return $story;}, $stories);
+        foreach($stories as $row)
         {
-            $stories = $this->story->getByList($release->stories);
-            foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
-
-            $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
-            $rows   = $stories;
-
-            $html .= '<table><tr>';
-            foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-            $html .= '</tr>';
-            foreach($rows as $row)
-            {
-                $html .= "<tr valign='top'>\n";
-                foreach($fields as $fieldName => $fieldLabel)
-                {
-                    $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                    $html .= "<td><nobr>$fieldValue</nobr></td>\n";
-                }
-                $html .= "</tr>\n";
-            }
-            $html .= '</table>';
+            $html .= "<tr valign='top'>\n";
+            foreach($fields as $fieldName => $fieldLabel) $html .= "<td><nobr>" . zget($row, $fieldName, '') . "</nobr></td>\n";
+            $html .= "</tr>\n";
         }
+        $html .= '</table>';
 
         return $html;
     }
 
     /**
-     * 构造导出的解决的Bug列表数据。
-     * Build the resolved bug list data for export.
+     * 构造导出的解决的Bug或遗留Bug列表数据。
+     * Build the resolved or generated bug list data for export.
      *
      * @param  object    $release
+     * @param  string    $type        bug|leftbug
      * @access protected
      * @return string
      */
-    protected function buildBugDataForExport(object $release): string
+    protected function buildBugDataForExport(object $release, string $type = 'bug'): string
     {
-        $html  = '';
-        $html .= "<h3>{$this->lang->release->bugs}</h3>";
         $this->loadModel('bug');
 
-        $bugs = $this->release->getBugList($release->bugs);
-        foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-        $rows   = $bugs;
+        $title     = $type == 'bug' ? $this->lang->release->bugs : $this->lang->release->generatedBugs;
+        $html      = "<h3>{$title}</h3>";
+        $fields    = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $bugIdList = $type == 'bug' ? $release->bugs : $release->leftBugs;
+        $bugs      = $this->release->getBugList($bugIdList);
+        if(empty($bugs)) return $html;
 
         $html .= '<table><tr>';
         foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
         $html .= '</tr>';
-        foreach($rows as $row)
+        $bugs = array_map(function($bug){$bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>"; return $bug;}, $bugs);
+        foreach($bugs as $row)
         {
-            $bugs = $this->bug->getByIdList($release->bugs);
-            foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-            $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-            $rows   = $bugs;
-
-            $html .= '<table><tr>';
-            foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-            $html .= '</tr>';
-            foreach($rows as $row)
-            {
-                $html .= "<tr valign='top'>\n";
-                foreach($fields as $fieldName => $fieldLabel)
-                {
-                    $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                    $html .= "<td><nobr>$fieldValue</nobr></td>\n";
-                }
-                $html .= "</tr>\n";
-            }
-            $html .= '</table>';
+            $html .= "<tr valign='top'>\n";
+            foreach($fields as $fieldName => $fieldLabel) $html .= "<td><nobr>" . zget($row, $fieldName, '') . "</nobr></td>\n";
+            $html .= "</tr>\n";
         }
-
-        return $html;
-    }
-
-    /**
-     * 构造导出的遗留的Bug列表数据。
-     *
-     * @param  object    $release
-     * @access protected
-     * @return string
-     */
-    protected function buildLeftBugDataForExport(object $release): string
-    {
-        $html  = '';
-        $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
-        $this->loadModel('bug');
-
-        $bugs = $this->release->getBugList($release->leftBugs);
-        foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-        $rows   = $bugs;
-
-        $html .= '<table><tr>';
-        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-        $html .= '</tr>';
-        foreach($rows as $row)
-        {
-            $bugs = $this->bug->getByIdList($release->bugs);
-            foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-            $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-            $rows   = $bugs;
-
-            $html .= '<table><tr>';
-            foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-            $html .= '</tr>';
-            foreach($rows as $row)
-            {
-                $html .= "<tr valign='top'>\n";
-                foreach($fields as $fieldName => $fieldLabel)
-                {
-                    $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                    $html .= "<td><nobr>$fieldValue</nobr></td>\n";
-                }
-                $html .= "</tr>\n";
-            }
-            $html .= '</table>';
-        }
+        $html .= '</table>';
 
         return $html;
     }
