@@ -328,6 +328,8 @@ class testtaskZen extends testtask
      */
     protected function assignForCreate(int $productID, int $projectID, int $executionID, int $build): void
     {
+        $objectType = 'project';
+        $objectID   = $projectID;
         if($projectID)
         {
             /* 如果是无迭代项目，则获取影子迭代的迭代ID。*/
@@ -342,6 +344,8 @@ class testtaskZen extends testtask
             /* Adjust the display value based on the type of sprint selected. */
             $execution = $this->loadModel('execution')->getByID($executionID);
             if(!empty($execution) && $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
+            $objectType = 'execution';
+            $objectID   = $executionID;
         }
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
@@ -355,7 +359,7 @@ class testtaskZen extends testtask
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
-        $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withexecution', $projectID, 'project', '', false) : array();
+        $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withexecution', $objectID, $objectType, '', false) : array();
         $this->view->testreports = $this->loadModel('testreport')->getPairs($productID);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
         $this->view->projectID   = $projectID;
