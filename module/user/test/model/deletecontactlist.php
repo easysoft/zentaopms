@@ -1,27 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-su('admin');
-
-$usercontact = zdTable('usercontact');
-$usercontact->gen(5);
-
 /**
-
 title=测试 userModel->deleteContactList();
 cid=1
 pid=1
-
-删除ID为1的联系人列表 >> 0
-删除ID为2的联系人列表 >> 0
-删除ID为null的联系人列表 >> 0
-删除ID为1000的联系人列表 >> 0
-
 */
-$user = new userTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/user.class.php';
 
-r($user->deleteContactListTest(1))    && p('listName')  && e('0'); //删除ID为1的联系人列表
-r($user->deleteContactListTest(2))    && p('listName')  && e('0'); //删除ID为2的联系人列表
-r($user->deleteContactListTest(null)) && p('userLsit')  && e('0'); //删除ID为null的联系人列表
-r($user->deleteContactListTest(1000)) && p('userList')  && e('0'); //删除ID为1000的联系人列表
+$table = zdTable('usercontact');
+$table->account->range('user1');
+$table->gen(3);
+
+$userTest = new userTest();
+
+$lists = $userTest->getContactListsTest('user1');
+r(count($lists)) && p()       && e(3); //联系人列表数量为 3。
+r($lists)        && p('0:id') && e(3); //联系人列表第 1 条 id 为 3。
+r($lists)        && p('1:id') && e(2); //联系人列表第 2 条 id 为 2。
+r($lists)        && p('2:id') && e(1); //联系人列表第 3 条 id 为 1。
+
+r($userTest->deleteContactListTest(4)) && p('result') && e(1); //删除 id 为 4 的联系人列表。
+r($userTest->deleteContactListTest(3)) && p('result') && e(1); //删除 id 为 3 的联系人列表。
+r($userTest->deleteContactListTest(2)) && p('result') && e(1); //删除 id 为 2 的联系人列表。
+
+$lists = $userTest->getContactListsTest('user1');
+r(count($lists)) && p()       && e(1); //联系人列表数量为 1。
+r($lists)        && p('0:id') && e(1); //联系人列表第 1 条 id 为 1。

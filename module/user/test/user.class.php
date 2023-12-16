@@ -735,18 +735,24 @@ class userTest
     }
 
     /**
+     * 测试删除联系人列表。
      * Test delete a contact list.
      *
      * @param  int    $listID
      * @access public
-     * @return void
+     * @return array
      */
-    public function deleteContactListTest($listID)
+    public function deleteContactListTest(int $listID): array
     {
-        $this->objectModel->deleteContactList($listID);
+        $result = $this->objectModel->deleteContactList($listID);
+        $errors = dao::getError();
 
-        if(dao::isError()) return dao::getError();
-        return $this->objectModel->getContactListByID($listID);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
