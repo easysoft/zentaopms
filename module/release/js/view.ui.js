@@ -22,7 +22,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     const postData = new FormData();
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
-    $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage($.createLink(releaseModule, 'view', `releaseID=${releaseID}&type=${type}`))});
+    $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
 });
 
 /**
@@ -65,9 +65,7 @@ window.setStoryStatistics = function(element, checkedIDList)
     let rate = '0%';
     if(rateCount) rate = Math.round(checkedCase / rateCount * 100) + '%';
 
-    return {
-        html: checkedSummary.replace('%total%', checkedTotal).replace('%estimate%', checkedEstimate.toFixed(1)).replace('%rate%', rate)
-    };
+    return {html: checkedSummary.replace('%total%', checkedTotal).replace('%estimate%', checkedEstimate.toFixed(1)).replace('%rate%', rate)};
 }
 
 /**
@@ -117,10 +115,7 @@ window.showLink = function(type, params, onlyUpdateTable)
 
 $(function()
 {
-    if(initLink == 'true')
-    {
-        window.showLink(type, linkParams);
-    }
+    if(initLink == 'true') window.showLink(type, linkParams);
 })
 
 window.onSearchLinks = function(type, result)

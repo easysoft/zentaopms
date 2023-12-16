@@ -573,7 +573,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
+        foreach($bugs as $bugID) $this->action->create('bug', (int)$bugID, 'linked2release', '', $releaseID);
 
         return !dao::isError();
     }
