@@ -1079,7 +1079,7 @@ class fileModel extends model
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
 
-        $html .= "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
         if(strpos('view,edit', $method) !== false)
         {
             if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);

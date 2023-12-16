@@ -39,11 +39,7 @@ class fileList extends wg
 
         foreach($files as $file)
         {
-            $fileItemView = li
-                (
-                    setClass('mb-2'),
-                    html($app->loadTarget('file')->printFile($file, $method, $showDelete, $showEdit, $object))
-                );
+            $fileItemView = html($app->loadTarget('file')->printFile($file, $method, $showDelete, $showEdit, $object));
 
             $fileListView->add($fileItemView);
         }
