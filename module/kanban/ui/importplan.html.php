@@ -31,6 +31,8 @@ unset($config->productplan->dtable->fieldList['branch']);
 unset($config->productplan->dtable->fieldList['execution']);
 unset($config->productplan->dtable->fieldList['actions']);
 
+foreach($config->productplan->dtable->fieldList as $id => $field) $config->productplan->dtable->fieldList[$id]['sortType'] = false;
+
 formBase
 (
     set::id('linkForm'),
@@ -41,6 +43,7 @@ formBase
         set::id('linkPlan'),
         set::fixedLeftWidth('0.33'),
         set::checkable(true),
+        set::sortType(false),
         set::cols(array_values($config->productplan->dtable->fieldList)),
         set::data(array_values($plans2Imported)),
         set::footToolbar(array('items' => array(array('text' => $lang->kanban->importAB, 'btnType' => 'primary', 'className' => 'size-sm batch-btn', 'data-url'  => inlink('importplan', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID"))))),

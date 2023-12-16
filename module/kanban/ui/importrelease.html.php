@@ -47,6 +47,8 @@ unset($config->release->dtable->fieldList['title']['link']);
 unset($config->release->dtable->fieldList['branch']);
 unset($config->release->dtable->fieldList['actions']);
 
+foreach($config->release->dtable->fieldList as $id => $field) $config->release->dtable->fieldList[$id]['sortType'] = false;
+
 formBase
 (
     setID('linkForm'),

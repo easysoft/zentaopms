@@ -32,6 +32,8 @@ unset($config->build->dtable->fieldList['branch']);
 unset($config->build->dtable->fieldList['path']);
 unset($config->build->dtable->fieldList['actions']);
 
+foreach($config->build->dtable->fieldList as $id => $field) $config->build->dtable->fieldList[$id]['sortType'] = false;
+
 formBase
 (
     set::id('linkForm'),

@@ -48,6 +48,8 @@ unset($config->execution->dtable->fieldList['progress']);
 unset($config->execution->dtable->fieldList['burn']);
 unset($config->execution->dtable->fieldList['actions']);
 
+foreach($config->execution->dtable->fieldList as $id => $field) $config->execution->dtable->fieldList[$id]['sortType'] = false;
+
 formBase
 (
     setID('linkForm'),
