@@ -2717,6 +2717,7 @@ class userModel extends model
         $this->dao->insert(TABLE_USERTPL)->data($template)
             ->batchCheck('title, content', 'notempty')
             ->check('title', 'unique', "`type`='{$template->type}' AND account='{$template->account}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
