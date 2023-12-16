@@ -2140,7 +2140,7 @@ class executionModel extends model
     public function getByBuild(int $buildID)
     {
         $build = $this->loadModel('build')->getById($buildID);
-        return $this->getById($build->execution);
+        return $this->getById((int)$build->execution);
     }
 
     /**
