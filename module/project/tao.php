@@ -921,12 +921,6 @@ class projectTao extends projectModel
 
         $postData = new stdclass();
         $postData->status    = $status;
-        $postData->uid       = '';
-        $postData->comment   = '';
-        $postData->realBegan = null;
-        $postData->begin     = null;
-        $postData->end       = null;
-        $postData->realEnd   = null;
         return $this->loadModel('execution')->$status($executionID, $postData);
     }
 

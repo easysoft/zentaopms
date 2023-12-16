@@ -892,11 +892,13 @@ class executionModel extends model
     {
         $oldExecution = $this->getById($executionID);
 
-        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->start['id'], $postData->uid);
+        $execution = $postData;
+        if(!empty($postData->uid)) $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->start['id'], $postData->uid);
+
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
-            ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
+            ->checkIF(!empty($execution->realBegan) && $execution->realBegan != '', 'realBegan', 'le', helper::today())
             ->checkFlow()
             ->where('id')->eq($executionID)
             ->exec();
@@ -910,7 +912,7 @@ class executionModel extends model
 
         $changes = common::createChanges($oldExecution, $execution);
 
-        if($postData->comment != '' || !empty($changes))
+        if(!empty($postData->comment) || !empty($changes))
         {
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Started', $postData->comment);
