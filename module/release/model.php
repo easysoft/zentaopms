@@ -64,7 +64,7 @@ class releaseModel extends model
      * @access public
      * @return object[]
      */
-    public function getList(int $productID, string $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $releaseQuery = '', object $pager = null): array
+    public function getList(int $productID, string|int $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $releaseQuery = '', object $pager = null): array
     {
         $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
