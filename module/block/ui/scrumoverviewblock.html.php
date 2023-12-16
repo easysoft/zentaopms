@@ -48,7 +48,7 @@ foreach($config->block->projectstatistic->items as $module => $items)
             span
             (
                 setClass('font-bold text-black mr-0.5'),
-                zget($project, $field, 0)
+                round(zget($project, $field, 0), 2)
             ),
             span
             (
@@ -122,7 +122,7 @@ panel
                     span
                     (
                         setClass('font-bold text-warning'),
-                        999
+                        round(zget($project, 'risks', 0), 2)
                     )
                 ),
                 span
@@ -132,7 +132,7 @@ panel
                     span
                     (
                         setClass('font-bold text-warning'),
-                        999
+                        zget($project, 'issues', 0)
                     )
                 )
             ) : '',

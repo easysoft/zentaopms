@@ -898,89 +898,13 @@ class blockZen extends block
         $projects      = $this->loadModel('project')->getProjectList($status, 'order_asc', $count, $excludedModel);
         $projectIdList = array_keys($projects);
 
-        $this->loadModel('metric');
-        /* 敏捷和瀑布相关目的统计信息。 */
-        $riskCountGroup  = $this->metric->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
-        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
-
-        /* 敏捷项目的统计信息。 */
-        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)));
-        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)));
-        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)));
-        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)));
-        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)));
-        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)));
-        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)));
-        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)));
-        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)));
-        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)));
-        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)));
-        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)));
-
-        if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
-        if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
-        if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
-        if($countStoryGroup)    $countStoryGroup    = array_column($countStoryGroup,    null, 'project');
-        if($finishedStoryGroup) $finishedStoryGroup = array_column($finishedStoryGroup, null, 'project');
-        if($unclosedStoryGroup) $unclosedStoryGroup = array_column($unclosedStoryGroup, null, 'project');
-        if($countTaskGroup)     $countTaskGroup     = array_column($countTaskGroup,     null, 'project');
-        if($waitTaskGroup)      $waitTaskGroup      = array_column($waitTaskGroup,      null, 'project');
-        if($doingTaskGroup)     $doingTaskGroup     = array_column($doingTaskGroup,     null, 'project');
-        if($countBugGroup)      $countBugGroup      = array_column($countBugGroup,      null, 'project');
-        if($closedBugGroup)     $closedBugGroup     = array_column($closedBugGroup,     null, 'project');
-        if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
-
-        /* 瀑布项目的统计信息。 */
-        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)));
-        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)));
-        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)));
-        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)));
-        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)));
-        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)));
-
-        if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
-        if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
-        if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
-        if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
-        if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
-        if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
-        if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
-        if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
+        /* Get metric data. */
+        $data = $this->getProjectsStatisticData($projectIdList);
 
         /* 将获取的度量数据塞入项目列表数据中。 */
-        $this->loadModel('execution');
         $this->app->loadClass('pager', true);
-        $pager  = pager::init(0, 3, 1);
-        $today  = helper::today();
-        foreach($projects as $projectID => $project)
-        {
-            $project->progress = isset($taskProgressGroup[$projectID]['value']) ? $taskProgressGroup[$projectID]['value'] * 100 : 0;
-            if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
-            {
-                $project->executions   = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
-                $project->costs        = isset($investedGroup[$projectID]['value'])      ? $investedGroup[$projectID]['value']      : 0;
-                $project->consumed     = isset($consumeTaskGroup[$projectID]['value'])   ? $consumeTaskGroup[$projectID]['value']   : 0;
-                $project->remainder    = isset($leftTaskGroup[$projectID]['value'])      ? $leftTaskGroup[$projectID]['value']      : 0;
-                $project->storyPoints  = isset($countStoryGroup[$projectID]['value'])    ? $countStoryGroup[$projectID]['value']    : 0;
-                $project->done         = isset($finishedStoryGroup[$projectID]['value']) ? $finishedStoryGroup[$projectID]['value'] : 0;
-                $project->undone       = isset($unclosedStoryGroup[$projectID]['value']) ? $unclosedStoryGroup[$projectID]['value'] : 0;
-                $project->tasks        = isset($countTaskGroup[$projectID]['value'])     ? $countTaskGroup[$projectID]['value']     : 0;
-                $project->wait         = isset($waitTaskGroup[$projectID]['value'])      ? $waitTaskGroup[$projectID]['value']      : 0;
-                $project->doing        = isset($doingTaskGroup[$projectID]['value'])     ? $doingTaskGroup[$projectID]['value']     : 0;
-                $project->bugs         = isset($countBugGroup[$projectID]['value'])      ? $countBugGroup[$projectID]['value']      : 0;
-                $project->resolvedDate = isset($closedBugGroup[$projectID]['value'])     ? $closedBugGroup[$projectID]['value']     : 0;
-                $project->active       = isset($activatedBugGroup[$projectID]['value'])  ? $activatedBugGroup[$projectID]['value']  : 0;
-            }
-            elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
-            {
-                $project->pv = isset($PVGroup[$projectID]['value']) ? (int)$PVGroup[$projectID]['value'] * 100 : 0;
-                $project->ev = isset($EVGroup[$projectID]['value']) ? (int)$EVGroup[$projectID]['value'] * 100 : 0;
-                $project->ac = isset($ACGroup[$projectID]['value']) ? (int)$ACGroup[$projectID]['value'] * 100 : 0;
-                $project->sv = isset($SVGroup[$projectID]['value']) ? (int)$SVGroup[$projectID]['value'] * 100 : 0;
-                $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
-            }
-            if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, $today);
-        }
+        $pager = pager::init(0, 3, 1);
+        foreach($projects as $project) $project = $this->buildProjectStatistic($project, $data, $pager);
 
         $this->view->projects = $projects;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
@@ -1355,15 +1279,19 @@ class blockZen extends block
     {
         $projectID = $this->session->project;
         $this->app->loadLang('bug');
-        $totalData = $this->loadModel('project')->getOverviewList('', $projectID, 'id_desc', 1);
 
-        $project = zget($totalData, $projectID, new stdclass());
+        /* Get metric data. */
+        $projectIdList = array($projectID);
+        $data          = $this->getProjectsStatisticData($projectIdList);
+
+        /* Get base project. */
+        $project = $this->loadModel('project')->fetchById($projectID);
+
+        /* Build project statistic data. */
         $this->app->loadClass('pager', true);
-        $pager = pager::init(0, 3, 1);
-        $project->progress   = empty($project->allStories) ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-        $project->executions = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+        $pager   = pager::init(0, 3, 1);
+        $project = $this->buildProjectStatistic($project, $data, $pager);
 
-        $this->view->totalData = $totalData;
         $this->view->projectID = $projectID;
         $this->view->project   = $project;
     }
@@ -3263,5 +3191,111 @@ class blockZen extends block
         $sso = isset($this->get->sso) ? base64_decode($this->get->sso) : '';
         $this->view->sso  = $sso;
         $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
+    }
+
+    /**
+     * 获取项目总览相关数据。
+     * Get project overview related data.
+     *
+     * @param  array     $projectIdList
+     * @access protected
+     * @return array
+     */
+    protected function getProjectsStatisticData(array $projectIdList): array
+    {
+        /* 敏捷和瀑布相关目的统计信息。 */
+        $riskCountGroup  = $this->loadModel('metric')->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
+        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
+        if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
+        if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
+
+        /* 敏捷项目的统计信息。 */
+        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)));
+        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)));
+        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)));
+        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)));
+        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)));
+        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)));
+        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)));
+        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)));
+        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)));
+        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)));
+        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)));
+        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)));
+        if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
+        if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
+        if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
+        if($countStoryGroup)    $countStoryGroup    = array_column($countStoryGroup,    null, 'project');
+        if($finishedStoryGroup) $finishedStoryGroup = array_column($finishedStoryGroup, null, 'project');
+        if($unclosedStoryGroup) $unclosedStoryGroup = array_column($unclosedStoryGroup, null, 'project');
+        if($countTaskGroup)     $countTaskGroup     = array_column($countTaskGroup,     null, 'project');
+        if($waitTaskGroup)      $waitTaskGroup      = array_column($waitTaskGroup,      null, 'project');
+        if($doingTaskGroup)     $doingTaskGroup     = array_column($doingTaskGroup,     null, 'project');
+        if($countBugGroup)      $countBugGroup      = array_column($countBugGroup,      null, 'project');
+        if($closedBugGroup)     $closedBugGroup     = array_column($closedBugGroup,     null, 'project');
+        if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
+
+        /* 瀑布项目的统计信息。 */
+        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)));
+        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)));
+        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)));
+        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)));
+        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)));
+        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)));
+        if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
+        if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
+        if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
+        if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
+        if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
+        if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
+
+        return array('riskCountGroup' => $riskCountGroup, 'issueCountGroup' => $issueCountGroup, 'investedGroup' => $investedGroup, 'consumeTaskGroup' => $consumeTaskGroup, 'leftTaskGroup' => $leftTaskGroup, 'countStoryGroup' => $countStoryGroup, 'finishedStoryGroup' => $finishedStoryGroup, 'unclosedStoryGroup' => $unclosedStoryGroup, 'countTaskGroup' => $countTaskGroup, 'waitTaskGroup' => $waitTaskGroup, 'doingTaskGroup' => $doingTaskGroup, 'countBugGroup' => $countBugGroup, 'closedBugGroup' => $closedBugGroup, 'activatedBugGroup' => $activatedBugGroup, 'taskProgressGroup' => $taskProgressGroup, 'SVGroup' => $SVGroup, 'PVGroup' => $PVGroup, 'EVGroup' => $EVGroup, 'CVGroup' => $CVGroup, 'ACGroup' => $ACGroup);
+    }
+
+    /**
+     * 构建项目统计信息。
+     * Build project statistic.
+     *
+     * @param  object    $project
+     * @param  array     $data
+     * @param  object    $pager
+     * @access protected
+     * @return object
+     */
+    protected function buildProjectStatistic(object $project, array $data, object $pager = null): object
+    {
+        extract($data);
+        $projectID = $project->id;
+
+        $project->progress = isset($taskProgressGroup[$projectID]['value']) ? $taskProgressGroup[$projectID]['value'] * 100 : 0;
+        if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
+        {
+            $project->executions   = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+            $project->costs        = isset($investedGroup[$projectID]['value'])      ? $investedGroup[$projectID]['value']      : 0;
+            $project->consumed     = isset($consumeTaskGroup[$projectID]['value'])   ? $consumeTaskGroup[$projectID]['value']   : 0;
+            $project->remainder    = isset($leftTaskGroup[$projectID]['value'])      ? $leftTaskGroup[$projectID]['value']      : 0;
+            $project->storyPoints  = isset($countStoryGroup[$projectID]['value'])    ? $countStoryGroup[$projectID]['value']    : 0;
+            $project->done         = isset($finishedStoryGroup[$projectID]['value']) ? $finishedStoryGroup[$projectID]['value'] : 0;
+            $project->undone       = isset($unclosedStoryGroup[$projectID]['value']) ? $unclosedStoryGroup[$projectID]['value'] : 0;
+            $project->tasks        = isset($countTaskGroup[$projectID]['value'])     ? $countTaskGroup[$projectID]['value']     : 0;
+            $project->wait         = isset($waitTaskGroup[$projectID]['value'])      ? $waitTaskGroup[$projectID]['value']      : 0;
+            $project->doing        = isset($doingTaskGroup[$projectID]['value'])     ? $doingTaskGroup[$projectID]['value']     : 0;
+            $project->bugs         = isset($countBugGroup[$projectID]['value'])      ? $countBugGroup[$projectID]['value']      : 0;
+            $project->closed       = isset($closedBugGroup[$projectID]['value'])     ? $closedBugGroup[$projectID]['value']     : 0;
+            $project->activated    = isset($activatedBugGroup[$projectID]['value'])  ? $activatedBugGroup[$projectID]['value']  : 0;
+        }
+        elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+        {
+            $project->pv = isset($PVGroup[$projectID]['value']) ? (int)$PVGroup[$projectID]['value'] * 100 : 0;
+            $project->ev = isset($EVGroup[$projectID]['value']) ? (int)$EVGroup[$projectID]['value'] * 100 : 0;
+            $project->ac = isset($ACGroup[$projectID]['value']) ? (int)$ACGroup[$projectID]['value'] * 100 : 0;
+            $project->sv = isset($SVGroup[$projectID]['value']) ? (int)$SVGroup[$projectID]['value'] * 100 : 0;
+            $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
+        }
+        if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, helper::today());
+        $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] * 100 : 0;
+        $project->issues = isset($issueCountGroup[$projectID]['value']) ? (int)$issueCountGroup[$projectID]['value'] * 100 : 0;
+
+        return $project;
     }
 }
