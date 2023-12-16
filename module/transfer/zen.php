@@ -221,4 +221,43 @@ class transferZen extends transfer
         if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
         return '';
     }
+
+    /**
+     * 读取excel并格式化数据。
+     * Read excel and format data.
+     *
+     * @param  string $module
+     * @param  int    $pagerID
+     * @param  string $insert
+     * @param  string $filter
+     * @access public
+     * @return object
+     */
+    public function readExcel(string $module = '', int $pagerID = 1, string $insert = '', string $filter = ''): object
+    {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time','100');
+
+        /* 格式化数据。*/
+        /* Formatting excel data. */
+        $formatDatas = $this->transfer->format($module, $filter);
+
+        /* 获取分页后的数据。*/
+        /* Get page by datas. */
+        $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);
+        $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
+        $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
+
+        $datas->requiredFields = $this->config->$module->create->requiredFields;
+        $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
+        $datas->pagerID        = $pagerID;
+        $datas->isEndPage      = $pagerID >= $datas->allPager;
+        $datas->maxImport      = $this->transfer->maxImport;
+        $datas->dataInsert     = $insert;
+        $datas->fields         = $this->transfer->initFieldList($module, $importFields, false);
+        $datas->suhosinInfo    = $suhosinInfo;
+        $datas->module         = $module;
+
+        return $datas;
+    }
 }

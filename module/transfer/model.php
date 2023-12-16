@@ -944,42 +944,6 @@ class transferModel extends model
     }
 
     /**
-     * Read excel and format data.
-     *
-     * @param  string $module
-     * @param  int    $pagerID
-     * @param  string $insert
-     * @param  string $filter
-     * @access public
-     * @return void
-     */
-    public function readExcel($module = '', $pagerID = 1, $insert = '', $filter = '')
-    {
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time','100');
-
-        /* Formatting excel data. */
-        $formatDatas  = $this->format($module, $filter);
-
-        /* Get page by datas. */
-        $datas        = $this->getPageDatas($formatDatas, $pagerID);
-        $suhosinInfo  = $this->transferZen->checkSuhosinInfo($datas->datas);
-        $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
-
-        $datas->requiredFields = $this->config->$module->create->requiredFields;
-        $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
-        $datas->pagerID        = $pagerID;
-        $datas->isEndPage      = $pagerID >= $datas->allPager;
-        $datas->maxImport      = $this->maxImport;
-        $datas->dataInsert     = $insert;
-        $datas->fields         = $this->initFieldList($module, $importFields, false);
-        $datas->suhosinInfo    = $suhosinInfo;
-        $datas->module         = $module;
-
-        return $datas;
-    }
-
-    /**
      * Build NextList.
      *
      * @param  array  $list
