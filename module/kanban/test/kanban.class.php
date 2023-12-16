@@ -1197,24 +1197,23 @@ class kanbanTest
      *
      * @param  int    $columnID
      * @param  int    $limit
-     * @param  int    $WIPCount
+     * @param  int    $noLimit
      * @access public
      * @return object
      */
-    public function setWIPTest($columnID, $limit, $WIPCount)
+    public function setWIPTest($columnID, $limit, $noLimit)
     {
-        $_POST['limit'] = $limit;
-        if($WIPCount == '-1') $_POST['WIPCount'] = $WIPCount;
-        if($WIPCount == '-1') $_POST['noLimit']  = $WIPCount;
+        $WIP = new stdclass();
+        $WIP->limit   = $limit;
+        $WIP->noLimit = $noLimit;
 
-        $this->objectModel->setWIP($columnID);
+        $this->objectModel->setWIP($columnID, $WIP);
 
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getColumnByID($columnID);
-        return $object;
+        return $this->objectModel->getColumnByID($columnID);
     }
 
     /**
