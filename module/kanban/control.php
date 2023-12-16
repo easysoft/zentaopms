@@ -1157,6 +1157,7 @@ class kanban extends control
     }
 
     /**
+     * 导入执行。
      * Import execution.
      *
      * @param  int $kanbanID
@@ -1170,7 +1171,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importExecution(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0, int $selectedProjectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($_POST)
         {
@@ -1186,18 +1187,14 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
-        $this->loadModel('project');
-        $this->loadModel('execution');
-        $this->loadModel('programplan');
-
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram(0, 'all', false, '', '', '', 'multiple');
+        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->loadModel('project')->getPairsByProgram(0, 'all', false, '', '', '', 'multiple');
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, 'hasParentName', 'id_asc', $pager);
+        $this->view->executions2Imported = $this->loadModel('execution')->getStatData($selectedProjectID, 'undone', 0, 0, false, 'hasParentName', 'id_asc', $pager);
         $this->view->users               = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager               = $pager;
         $this->view->kanbanID            = $kanbanID;
@@ -1209,20 +1206,21 @@ class kanban extends control
     }
 
     /**
+     * 导入工单。
      * Import ticket.
      *
-     * @param  int $kanbanID
-     * @param  int $regionID
-     * @param  int $groupID
-     * @param  int $columnID
-     * @param  int $selectedProductID
-     * @param  int $recTotal
-     * @param  int $recPerPage
-     * @param  int $pageID
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
+     * @param  int    $selectedProductID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importTicket($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importTicket(int $kanbanID = 0, int $regionID = 0, int $groupID = 0, int $columnID = 0, int $selectedProductID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($_POST)
         {
@@ -1237,17 +1235,14 @@ class kanban extends control
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
 
-        $this->loadModel('feedback');
-        $this->loadModel('ticket');
-
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->products          = array('all' => $this->lang->kanban->allProducts) + $this->feedback->getGrantProducts();
+        $this->view->products          = array('all' => $this->lang->kanban->allProducts) + $this->loadModel('feedback')->getGrantProducts();
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->tickets2Imported  = $this->ticket->getTicketByProduct($selectedProductID, 'noclosed|nodone', 'id_desc', $pager);
+        $this->view->tickets2Imported  = $this->loadModel('ticket')->getTicketByProduct($selectedProductID, 'noclosed|nodone', 'id_desc', $pager);
         $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
