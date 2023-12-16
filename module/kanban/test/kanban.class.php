@@ -1406,11 +1406,11 @@ class kanbanTest
      */
     public function restoreCardTest($cardID)
     {
-        $objects = $this->objectModel->restoreCard($cardID);
+        $this->objectModel->restoreCard($cardID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getCardByID($cardID);
     }
 
     public function processCardsTest($columnID)
