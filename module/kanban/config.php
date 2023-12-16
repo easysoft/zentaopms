@@ -14,7 +14,7 @@ $config->kanban->actions->viewcard['suffixActions'] = array('deleteCard');
 
 $config->kanban->setwip        = new stdclass();
 $config->kanban->setlane       = new stdclass();
-$config->kanban->setlaneColumn = new stdclass();
+$config->kanban->setColumn     = new stdclass();
 $config->kanban->create        = new stdclass();
 $config->kanban->edit          = new stdclass();
 $config->kanban->createspace   = new stdclass();
@@ -27,7 +27,7 @@ $config->kanban->splitcolumn   = new stdclass();
 
 $config->kanban->setwip->requiredFields        = 'limit';
 $config->kanban->setlane->requiredFields       = 'name,type';
-$config->kanban->setlaneColumn->requiredFields = 'name';
+$config->kanban->setColumn->requiredFields     = 'name';
 $config->kanban->create->requiredFields        = 'space,name';
 $config->kanban->edit->requiredFields          = 'space,name';
 $config->kanban->createspace->requiredFields   = 'name,owner';
