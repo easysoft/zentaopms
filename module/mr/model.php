@@ -714,7 +714,7 @@ class mrModel extends model
         if($host->type == 'gitlab')
         {
             $newMR['description']          = $MR->description;
-            $newMR['target_branch']        = $MR->targetBranch;
+            $newMR['target_branch']        = $oldMR->targetBranch;
             $newMR['remove_source_branch'] = $MR->removeSourceBranch == '1' ? true : false;
             $newMR['squash']               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
