@@ -50,7 +50,7 @@ class taskZen extends task
         if($execution->type == 'kanban') $this->assignKanbanForCreate($executionID, $output);
 
         /* Set Custom fields. */
-        foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        foreach(explode(',', $this->config->task->list->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
         $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
         $this->view->customFields  = $customFields;
