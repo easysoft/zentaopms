@@ -60,7 +60,7 @@ $projectOverview[] = $config->edition != 'open' ? cell
         span
         (
             setClass('font-bold text-warning'),
-            999
+            $project->risks
         )
     ),
     span
@@ -70,7 +70,7 @@ $projectOverview[] = $config->edition != 'open' ? cell
         span
         (
             setClass('font-bold text-warning'),
-            999
+            $project->issues
         )
     )
 ) : '';
@@ -138,7 +138,7 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                 span
                 (
                     setClass('font-bold text-black mr-0.5'),
-                    zget($project, $field, 0)
+                    round(zget($project, $field, 0), 2)
                 ),
                 span
                 (
