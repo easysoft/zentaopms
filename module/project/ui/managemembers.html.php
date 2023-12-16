@@ -82,8 +82,8 @@ foreach($teamMembers as $member)
                 ),
                 input
                 (
-                    set::id("accounts{$i}"),
-                    set::name("accounts[$i]"),
+                    set::id("account{$i}"),
+                    set::name("account[$i]"),
                     set::value($member->account),
                     set::type('hidden')
                 )
@@ -91,7 +91,7 @@ foreach($teamMembers as $member)
                 picker
                 (
                     set::id("account{$i}"),
-                    set::name("accounts[$i]"),
+                    set::name("account[$i]"),
                     set::value($member->account),
                     set::items($users),
                     set('data-max-list-count', $config->maxCount),
@@ -103,7 +103,7 @@ foreach($teamMembers as $member)
                 input
                 (
                     set::id("role{$i}"),
-                    set::name("roles[$i]"),
+                    set::name("role[$i]"),
                     set::value($member->role)
                 )
             ),
@@ -165,7 +165,7 @@ h::table
             picker
             (
                 set::id("account{$i}"),
-                set::name("accounts[$i]"),
+                set::name("account[$i]"),
                 set::items($users),
                 set('data-max-list-count', $config->maxCount),
                 set('onchange', "setRole(this.value, '{$i}')")
@@ -176,7 +176,7 @@ h::table
             input
             (
                 set::id("role{$i}"),
-                set::name("roles[$i]")
+                set::name("role[$i]")
             )
         ),
         h::td

@@ -27,7 +27,7 @@ window.addItem = function(obj)
     $currentTr.after(item);
 
     const $newRow = $currentTr.next();
-    $('select[name^=accounts]').each(function()
+    $('select[name^=account]').each(function()
     {
         const selectValue = $(this).val();
         if(selectValue) $newRow.find(`option[value='${selectValue}']`).remove();
@@ -80,7 +80,7 @@ window.changeProjectMembers = function()
 {
     let isDeleted   = false;
     let accountList = [];
-    $("[name^='accounts']").each(function()
+    $("[name^='account']").each(function()
     {
         if($(this).val()) accountList.push($(this).val());
     });

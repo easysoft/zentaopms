@@ -4889,7 +4889,7 @@ class executionModel extends model
         $postData->status    = $project->status;
         $postData->acl       = 'open';
         $postData->products  = '';
-        $postData->code      = $project->code;
+        $postData->code      = empty($project->code) ? $project->name : $project->code;
         $postData->uid       = '';
 
         /* Handle extend fields. */

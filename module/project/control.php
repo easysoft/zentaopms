@@ -1082,7 +1082,8 @@ class project extends control
             if(empty($project->multiple))
             {
                 $executionID = $this->execution->getNoMultipleID($projectID);
-                if($executionID) $this->execution->manageMembers($executionID);
+                $execution   = $this->execution->getByID($executionID);
+                if($executionID) $this->execution->manageMembers($execution, $members);
             }
 
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');

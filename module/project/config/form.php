@@ -53,8 +53,8 @@ $config->project->form->batchedit['day']     = array('type' => 'int',    'requir
 $config->project->form->batchedit['acl']     = array('type' => 'string', 'required' => false);
 if(isset($config->setCode) and $config->setCode == 1) $config->project->form->batchedit['code'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
 
-$config->project->form->manageMembers['accounts'] = array('type' => 'string', 'required' => false, 'base' => true);
-$config->project->form->manageMembers['roles']    = array('type' => 'string', 'required' => false, 'filter' => 'trim');
-$config->project->form->manageMembers['days']     = array('type' => 'int',    'required' => false);
-$config->project->form->manageMembers['hours']    = array('type' => 'float',  'required' => false);
-$config->project->form->manageMembers['limited']  = array('type' => 'date',   'required' => false);
+$config->project->form->manageMembers['account'] = array('type' => 'string', 'required' => false, 'base' => true);
+$config->project->form->manageMembers['role']    = array('type' => 'string', 'required' => false, 'filter' => 'trim');
+$config->project->form->manageMembers['days']    = array('type' => 'int',    'required' => false);
+$config->project->form->manageMembers['hours']   = array('type' => 'float',  'required' => false);
+$config->project->form->manageMembers['limited'] = array('type' => 'date',   'required' => false);

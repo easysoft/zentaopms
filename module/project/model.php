@@ -1657,7 +1657,7 @@ class projectModel extends model
         /* Check fields. */
         foreach($members as $key => $member)
         {
-            if(empty($member->accounts)) continue;
+            if(empty($member->account)) continue;
 
             if(!empty($project->days) and (int)$member->days > $project->days)
             {

@@ -225,12 +225,12 @@ class projectTao extends projectModel
         $accounts = array();
         foreach($members as $member)
         {
-            if(empty($member->accounts)) continue;
-            $account    = $member->accounts;
+            if(empty($member->account)) continue;
+            $account    = $member->account;
             $accounts[] = $account;
 
             $data          = new stdclass();
-            $data->role    = $member->roles;
+            $data->role    = $member->role;
             $data->days    = $member->days;
             $data->hours   = $member->hours;
             $data->limited = isset($member->limited) ? $member->limited : 'no';
