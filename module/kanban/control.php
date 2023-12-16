@@ -1382,42 +1382,28 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function setWIP($columnID, $executionID = 0, $from = 'kanban')
+    public function setWIP(int $columnID, int $executionID = 0, string $from = 'kanban')
     {
         $column = $this->kanban->getColumnById($columnID);
+        if(!$column) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'kanban', "executionID=$executionID"))));
+
         if($_POST)
         {
-            $this->kanban->setWIP($columnID);
+            $WIP = form::data($this->config->kanban->form->setWIP)->get();
+            $this->kanban->setWIP($columnID, $WIP);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
 
-            if($from == 'RDKanban')
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban()"));
-            }
-            elseif($from == 'kanban')
-            {
-                $region   = $this->kanban->getRegionByID($column->region);
-                $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
-            }
-            else
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            }
+            if($from != 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban()"));
+
+            $region   = $this->kanban->getRegionByID($column->region);
+            $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
-        $this->app->loadLang('story');
-
-        if(!$column) return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
-
-        $title  = isset($column->parentName) ? $column->parentName . '/' . $column->name : $column->name;
-
-        $this->view->title  = $title . $this->lang->colon . $this->lang->kanban->setWIP . '(' . $this->lang->kanban->WIP . ')';
         $this->view->column = $column;
         $this->view->from   = $from;
-
         if($from != 'kanban') $this->view->status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $this->display();
     }
