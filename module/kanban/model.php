@@ -3124,40 +3124,29 @@ class kanbanModel extends model
      * Set WIP limit.
      *
      * @param  int    $columnID
+     * @param  object $WIP
      * @access public
      * @return bool
      */
-    public function setWIP($columnID)
+    public function setWIP(int $columnID, object $WIP): bool
     {
         $oldColumn = $this->getColumnById($columnID);
-        $column    = fixer::input('post')->remove('WIPCount,noLimit')->get();
-        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
+        if(!preg_match("/^-?\d+$/", $WIP->limit) or (!$WIP->noLimit and $WIP->limit <= 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
         }
-        $column->limit = (int)$column->limit;
 
         /* Check column limit. */
         $sumChildLimit = 0;
-        if($oldColumn->parent == -1 and $column->limit != -1)
+        if($oldColumn->parent == -1 and $WIP->limit != -1)
         {
             $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->andWhere('deleted')->eq(0)->fetchAll();
-            foreach($childColumns as $childColumn)
-            {
-                if($childColumn->limit == -1)
-                {
-                    dao::$errors['limit'] = $this->lang->kanban->error->childLimitEmpty;
-                    return false;
-                }
+            foreach($childColumns as $childColumn) $sumChildLimit += $childColumn->limit;
 
-                $sumChildLimit += $childColumn->limit;
-            }
-
-            if($sumChildLimit > $column->limit)
+            if($sumChildLimit > $WIP->limit)
             {
                 dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
-                return false;
             }
         }
         elseif($oldColumn->parent > 0)
@@ -3170,24 +3159,25 @@ class kanbanModel extends model
                     ->andWhere('id')->ne($columnID)
                     ->fetch('limit');
 
-                $sumChildLimit = $siblingLimit + $column->limit;
+                $sumChildLimit = (int)$siblingLimit + (int)$WIP->limit;
 
-                if($column->limit == -1 or $siblingLimit == -1 or $sumChildLimit > $parentColumn->limit)
+                if($WIP->limit == -1 or $siblingLimit == -1 or $sumChildLimit > $parentColumn->limit)
                 {
                     dao::$errors['limit'] = $this->lang->kanban->error->childLimitNote;
-                    return false;
                 }
             }
         }
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->data($column)
+        if(dao::isError()) return false;
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($WIP, 'noLimit')
             ->autoCheck()
-            ->checkIF($column->limit != -1, 'limit', 'gt', 0)
+            ->checkIF($WIP->limit != -1, 'limit', 'gt', 0)
             ->batchcheck($this->config->kanban->setwip->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
 
-        return dao::isError();
+        return !dao::isError();
     }
 
     /**
