@@ -22,3 +22,4 @@ $lang->projectbuild->unlinkBug        = "移除Bug";
 $lang->projectbuild->batchUnlink      = '批量移除';
 $lang->projectbuild->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->projectbuild->batchUnlinkBug   = '批量移除Bug';
+$lang->projectbuild->name             = '名称编号';

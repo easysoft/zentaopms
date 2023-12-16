@@ -6,7 +6,7 @@ $now = helper::now();
 $config->build->form->create['project']        = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->build->form->create['execution']      = array('type' => 'int',       'required' => $app->tab == 'execution', 'default' => 0);
 $config->build->form->create['artifactRepoID'] = array('type' => 'int',       'required' => false, 'default' => 0);
-$config->build->form->create['product']        = array('type' => 'int',       'required' => true,  'default' => 0);
+$config->build->form->create['product']        = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->build->form->create['scmPath']        = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->create['filePath']       = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->create['desc']           = array('type' => 'string',    'required' => false, 'default' => '', 'control' => 'editor');

@@ -22,3 +22,4 @@ $lang->projectbuild->unlinkBug        = "Unlink Bug";
 $lang->projectbuild->batchUnlink      = 'Batch Unlink';
 $lang->projectbuild->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
 $lang->projectbuild->batchUnlinkBug   = 'Batch Unlink Bug';
+$lang->projectbuild->name             = 'Name';
