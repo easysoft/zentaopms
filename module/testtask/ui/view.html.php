@@ -43,6 +43,11 @@ detailBody
             set::content($task->desc ? $task->desc : $lang->noData),
             set::useHtml(true)
         ),
+        fileList
+        (
+            set::files($task->files),
+            set::padding(false)
+        ),
         history(set::objectID($task->id)),
         center
         (
