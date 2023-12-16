@@ -1123,19 +1123,17 @@ class kanbanTest
      * @access public
      * @return array
      */
-    public function updateLaneColumnTest($columnID, $name, $color)
+    public function updateColumnTest($columnID, $name, $color)
     {
-        $_POST['name']  = $name;
-        $_POST['color'] = $color;
+        $column = new stdclass();
+        $column->name  = $name;
+        $column->color = $color;
 
-        $column = $this->objectModel->getColumnByID($columnID);
-        $change = $this->objectModel->updateLaneColumn($columnID, $column);
-        if($change == array()) $change = '没有数据更新';
+        $changes = $this->objectModel->updateColumn($columnID, $column);
 
-        unset($_POST);
         if(dao::isError()) return dao::getError();
 
-        return $change;
+        return $changes;
     }
 
     /**
