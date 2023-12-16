@@ -1676,13 +1676,14 @@ class kanban extends control
     }
 
     /**
+     * 保存当前区域到Session。
      * Ajax save regionID.
      *
-     * @param  int|string $regionID
+     * @param  int    $regionID
      * @access public
      * @return void
      */
-    public function ajaxSaveRegionID($regionID)
+    public function ajaxSaveRegionID(int $regionID)
     {
         $this->session->set('regionID', $regionID, 'kanban');
     }
@@ -1691,12 +1692,12 @@ class kanban extends control
      * 获取排序的列表。
      * Ajax Get sort items.
      *
-     * @param  int    $objectType
+     * @param  string $objectType
      * @param  int    $objectID
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxGetSortItems($objectType, $objectID)
+    public function ajaxGetSortItems(string $objectType, int $objectID)
     {
         $itemList = array();
         if($objectType == 'region')
