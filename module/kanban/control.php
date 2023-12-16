@@ -1356,44 +1356,21 @@ class kanban extends control
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
-	/**
-	 * Delete a card.
-	 *
-	 * @param  int    $cardID
-	 * @access public
-	 * @return void
-	 */
-    public function deleteCard($cardID)
+    /**
+     * 删除看板卡片。
+     * Delete a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return void
+     */
+    public function deleteCard(int $cardID)
     {
         $card = $this->kanban->getCardByID($cardID);
         if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
         if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
-    }
-
-    /**
-     * Delete a card.
-     *
-     * @param  string $objectType story|task|bug
-     * @param  int    $objectID
-     * @param  int    $regionID
-     * @access public
-     * @return void
-     */
-    public function deleteObjectCard($objectType, $objectID, $regionID)
-    {
-        if(!($objectType == 'task' or $objectType == 'story' or $objectType == 'bug')) return false;
-        $table = 'TABLE_' . strtoupper($objectType);
-        $this->loadModel($objectType)->delete(constant($table), $objectID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $kanbanID    = $regionID ? $this->kanban->getKanbanIDByRegion($regionID) : $this->session->execution;
-        $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->executionLaneType;
-        $groupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType, 'id_desc', 0, $groupBy);
-
-        return print(json_encode($kanbanGroup));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
     }
 
     /**
