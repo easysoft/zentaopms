@@ -219,7 +219,7 @@ panel
                 ),
                 strpos($type, 'withdelay') !== false ? array
                 (
-                    'data' => $chartData['delayLine'],
+                    'data' => empty($chartData['delayLine']) ? array() : $chartData['delayLine'],
                     'type' => 'line',
                     'name' => $lang->execution->charts->burn->graph->delay,
                     'symbolSize' => 8,
