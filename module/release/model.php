@@ -625,7 +625,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($bugIdList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+        foreach($bugIdList as $unlinkBugID) $this->action->create('bug', (int)$unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
 
         return !dao::isError();
     }
