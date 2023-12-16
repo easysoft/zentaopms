@@ -700,17 +700,17 @@ class userTest
      * @access public
      * @return void
      */
-    public function createContactListTest($listName = '', $userList = array())
+    public function createContactListTest(object $userContact)
     {
-        $_POST = array();
-        $_POST['listName'] = $listName;
-        $_POST['userList'] = $userList;
+        $result = $this->objectModel->createContactList($userContact);
+        $errors = dao::getError();
 
-        $listID  = $this->objectModel->createContactList();
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
 
-        if(dao::isError()) return array('message' => dao::getError());
-        global $dao;
-        return $dao->select('*')->from(TABLE_USERCONTACT)->orderBy('id_desc')->fetch();
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
