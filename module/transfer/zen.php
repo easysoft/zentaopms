@@ -136,12 +136,12 @@ class transferZen extends transfer
      * 处理导入字段。
      * Process import fields.
      *
-     * @param string $module
-     * @param string $fields
+     * @param  string    $module
+     * @param  array     $fields
      * @access protected
      * @return array
      */
-    protected function formatFields(string $module, string $fields = array()): array
+    protected function formatFields(string $module, array $fields = array()): array
     {
         if($module == 'story')
         {

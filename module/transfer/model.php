@@ -244,6 +244,73 @@ class transferModel extends model
     }
 
     /**
+     * Init Title.
+     *
+     * @param  int    $module
+     * @param  int    $field
+     * @access public
+     * @return void
+     */
+    public function initTitle($module, $field)
+    {
+        $title = $field;
+
+        $this->commonActions($module);
+
+        if(!empty($this->moduleConfig->fieldList[$field]['title'])) return $this->moduleLang->{$this->moduleConfig->fieldList[$field]['title']};
+        if(isset($this->lang->$module->$field))
+        {
+            $title = $this->lang->$module->$field;
+        }
+        elseif(isset($this->lang->$module->{$field . 'AB'}))
+        {
+            $title = $this->lang->$module->{$field . 'AB'};
+        }
+        elseif(isset($this->lang->transfer->reservedWord[$field]))
+        {
+            $title = $this->lang->transfer->reservedWord[$field];
+        }
+
+        return $title;
+    }
+
+    /**
+     * Init Control.
+     *
+     * @param  string $field
+     * @access public
+     * @return void
+     */
+    public function initControl($module, $field)
+    {
+        if(isset($this->moduleFieldList[$field]['control']))    return $this->moduleFieldList[$field]['control'];
+        if(isset($this->moduleLang->{$field.'List'}))           return 'select';
+        if(isset($this->moduleFieldList[$field]['dataSource'])) return 'select';
+
+        if(strpos($this->transferConfig->sysDataFields, $field) !== false) return 'select';
+        return $this->transferConfig->fieldList['control'];
+    }
+
+    /**
+     * Init Required.
+     *
+     * @param  int    $module
+     * @param  int    $field
+     * @access public
+     * @return void
+     */
+    public function initRequired($module, $field)
+    {
+        $this->commonActions($module);
+
+        if(empty($this->moduleConfig->create->requiredFields)) return 'no';
+
+        $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
+        if(strpos($requiredFields, $field) !== false) return 'yes';
+        return 'no';
+    }
+
+    /**
      * Init system datafields list.
      *
      * @access public
