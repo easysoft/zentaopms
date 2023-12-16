@@ -4377,11 +4377,15 @@ class storyModel extends model
 
         if($story->parent < 0) $story->parent = 0;
         if(empty($options['execution'])) $story->isParent = isset($story->children);
-        if($story->mailto)
+
+        /* Format user list. */
+        foreach(array('mailto', 'reviewer') as $fieldName)
         {
-            $mailto = array_filter(explode(',', $story->mailto));
-            foreach($mailto as $i => $account) $mailto[$i] = zget(zget($options, 'users', array()), $account);
-            $story->mailto = implode(' ', $mailto);
+            if(!isset($story->{$fieldName})) continue;
+
+            $fieldValue = is_string($story->{$fieldName}) ? array_filter(explode(',', $story->{$fieldName})) : array_filter($story->{$fieldName});
+            foreach($fieldValue as $i => $account) $fieldValue[$i] = zget(zget($options, 'users', array()), $account);
+            $story->{$fieldName} = implode(' ', $fieldValue);
         }
 
         /* Rewrite actions by action menus in options. */

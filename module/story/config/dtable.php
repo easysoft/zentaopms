@@ -97,8 +97,7 @@ $config->story->dtable->fieldList['estimate']['group']    = 5;
 
 $config->story->dtable->fieldList['reviewer']['name']     = 'reviewer';
 $config->story->dtable->fieldList['reviewer']['title']    = $lang->story->reviewer;
-$config->story->dtable->fieldList['reviewer']['sortType'] = true;
-$config->story->dtable->fieldList['reviewer']['type']     = 'user';
+$config->story->dtable->fieldList['reviewer']['sortType'] = false;
 $config->story->dtable->fieldList['reviewer']['show']     = true;
 $config->story->dtable->fieldList['reviewer']['group']    = 5;
 
