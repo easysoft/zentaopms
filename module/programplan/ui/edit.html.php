@@ -121,7 +121,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->planDateRange),
-        set::width('2/3'),
+        set::width('1/2'),
         set::required(true),
         inputGroup
         (
@@ -133,7 +133,7 @@ formPanel
     formGroup
     (
         set::label($lang->programplan->realDateRange),
-        set::width('2/3'),
+        set::width('1/2'),
         inputGroup
         (
             datepicker(set::name('realBegan'), set::value($plan->realBegan)),
