@@ -467,10 +467,13 @@ class installModel extends model
      */
     public function buildDBLogFile($type)
     {
-        if($type == 'config')   return $this->app->getCacheRoot() . 'db.cnf';
-        if($type == 'error')    return $this->app->getCacheRoot() . 'dberror.log';
-        if($type == 'success')  return $this->app->getCacheRoot() . 'dbsuccess.log';
-        if($type == 'progress') return $this->app->getCacheRoot() . 'dbprogress.log';
+        $cacheRoot = $this->app->getCacheRoot();
+        if(!file_exists($cacheRoot)) mkdir($cacheRoot, 0777, true);
+
+        if($type == 'config')   return $cacheRoot . 'db.cnf';
+        if($type == 'error')    return $cacheRoot . 'dberror.log';
+        if($type == 'success')  return $cacheRoot . 'dbsuccess.log';
+        if($type == 'progress') return $cacheRoot . 'dbprogress.log';
     }
 
     /**
