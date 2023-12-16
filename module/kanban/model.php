@@ -2928,7 +2928,7 @@ class kanbanModel extends model
         }
         elseif($laneType == 'bug')
         {
-            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID, 0, 'all', 0, '', 0, 'id_desc', $otherCardList);
+            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID, 0, 'all', '0', '', 0, 'id_desc', $otherCardList);
             foreach($bugs as $bugID => $bug)
             {
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
