@@ -1,32 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-su('admin');
-
-$userContactList = zdTable('usercontact');
-$userContactList->gen(3);
-
 /**
-
 title=测试 userModel->getContactListByID();
 cid=1
 pid=1
-
-获取ID为1的联系人列表名称 >> 联系人列表1
-获取ID为2的联系人列表创建者 >> dev2
-获取ID为3的联系人列表所包含的用户 >> test22,test42
-获取ID为1000的联系人列表，返回空 >> 0
-获取ID为false的联系人列表，返回空 >> 0
-获取ID为null的联系人列表，返回空 >> 0
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/user.class.php';
 
-$user = new userTest();
+zdTable('usercontact')->gen(2);
 
-r($user->getContactListByIDTest(1))     && p('listName')      && e('联系人列表1');    //获取ID为1的联系人列表名称
-r($user->getContactListByIDTest(2))     && p('account')       && e('dev2');           //获取ID为2的联系人列表创建者
-r($user->getContactListByIDTest(3))     && p('userList', '-') && e('test22,test42');  //获取ID为3的联系人列表所包含的用户
-r($user->getContactListByIDTest(1000))  && p() && e('0');                             //获取ID为1000的联系人列表，返回空
-r($user->getContactListByIDTest(false)) && p() && e('0');                             //获取ID为false的联系人列表，返回空
-r($user->getContactListByIDTest(null))  && p() && e('0');                        //获取ID为null的联系人列表，返回空
+$userTest = new userTest();
+
+r($userTest->getContactListByIDTest(0)) && p() && e(0); //获取 id 为 0 的联系人列表，返回空。
+r($userTest->getContactListByIDTest(3)) && p() && e(0); //获取 id 为 4 的联系人列表，返回空。
+
+r($userTest->getContactListByIDTest(1)) && p('account|listName|userList', '|') && e('user1|联系人列表1|user20,user40'); //获取 id 为 1 的联系人列表，查看创建者、名称和联系人。
+r($userTest->getContactListByIDTest(2)) && p('account|listName|userList', '|') && e('dev2|联系人列表2|dev21,dev41');    //获取 id 为 2 的联系人列表，查看创建者、名称和联系人。
