@@ -950,7 +950,7 @@ class task extends control
     public function delete(int $executionID, int $taskID)
     {
         $task = $this->task->getByID($taskID);
-        if($task->parent == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
+        if($task->parent == '-1') return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
 
         $this->task->delete(TABLE_TASK, $taskID);
         if($task->parent > 0)
