@@ -553,7 +553,14 @@ function su($account)
 {
     $userModel = new userModel();
     $user      = $userModel->getByID($account);
-    if($user) return $userModel->login($user);
+    if($user)
+    {
+        $user = $userModel->identify($account, $user->password);
+
+        global $app;
+        $app->session->set('user', $user);
+        $app->user = $user;
+    }
 
     return false;
 }
