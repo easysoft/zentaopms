@@ -1080,7 +1080,7 @@ class product extends control
     public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '', string $from = '')
     {
         $shadow = '0';
-        if($from == 'qa') $shadow = 'all';
+        if($this->app->tab == 'qa' || $from == 'qa') $shadow = 'all';
 
         $products        = $this->productZen->getProducts4DropMenu($shadow);
         $programProducts = array();
