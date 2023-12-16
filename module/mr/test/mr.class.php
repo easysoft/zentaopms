@@ -126,4 +126,19 @@ class mrTest
 
         return $this->objectModel->fetchByID($this->objectModel->dao->lastInsertID());
     }
+
+    /**
+     * Test insertMR method.
+     *
+     * @param  object  $MR
+     * @access public
+     * @return array|object
+     */
+    public function insertMrTester(object $MR): array|object
+    {
+        $this->objectModel->insertMR($MR);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->fetchByID($this->objectModel->dao->lastInsertID());
+    }
 }
