@@ -63,7 +63,7 @@ $fnGenerateCols = function() use ($config, $project)
     if(!$this->cookie->showTask)
     {
         $fieldList['name']['type'] = 'title';
-        unset($fieldList['name']['nestedToggle']);
+        if(!in_array($project->model, array('waterfall', 'waterfallplus'))) unset($fieldList['name']['nestedToggle']);
     }
 
     return array_values($fieldList);
