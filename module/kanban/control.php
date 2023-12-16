@@ -1374,6 +1374,7 @@ class kanban extends control
     }
 
     /**
+     * 设置看板在制品限制。
      * Set WIP.
      *
      * @param  int    $columnID
@@ -1409,6 +1410,7 @@ class kanban extends control
     }
 
     /**
+     * 设置泳道。
      * Set lane info.
      *
      * @param  int    $laneID
@@ -1417,22 +1419,22 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function setLane($laneID, $executionID = 0, $from = 'kanban')
+    public function setLane(int $laneID, int $executionID = 0, string $from = 'kanban')
     {
         if($_POST)
         {
-            $this->kanban->setLane($laneID);
+            $lane = form::data($this->config->kanban->form->setLane)->get();
+            $this->kanban->setLane($laneID, $lane);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $lane = $this->kanban->getLaneById($laneID);
-        if(!$lane) return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
+        if(!$lane) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'kanban', "executionID=$executionID"))));
 
-        $this->view->title = $from == 'kanban' ? $this->lang->edit . '“' . $lane->name . '”' . $this->lang->kanbanlane->common : zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
         $this->view->lane  = $lane;
         $this->view->from  = $from;
 
@@ -1440,6 +1442,7 @@ class kanban extends control
     }
 
     /**
+     * 编辑泳道名称。
      * Edit lane's name
      *
      * @param  int    $laneID
@@ -1448,11 +1451,12 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function editLaneName($laneID, $executionID = 0, $from = 'kanban')
+    public function editLaneName(int $laneID, int $executionID = 0, string $from = 'kanban')
     {
         if($_POST)
         {
-            $this->kanban->setLane($laneID);
+            $lane = form::data($this->config->kanban->form->setLane)->remove('color')->get();
+            $this->kanban->setLane($laneID, $lane);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
@@ -1464,9 +1468,8 @@ class kanban extends control
         }
 
         $lane = $this->kanban->getLaneById($laneID);
-        if(!$lane) return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
+        if(!$lane) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'kanban', "executionID=$executionID"))));
 
-        $this->view->title = $from == 'kanban' ? $this->lang->edit . '“' . $lane->name . '”' . $this->lang->kanbanlane->common : zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
         $this->view->lane  = $lane;
         $this->view->from  = $from;
 
@@ -1482,11 +1485,12 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function editLaneColor($laneID, $executionID = 0, $from = 'kanban')
+    public function editLaneColor(int $laneID, int $executionID = 0, string $from = 'kanban')
     {
         if($_POST)
         {
-            $this->kanban->setLane($laneID);
+            $lane = form::data($this->config->kanban->form->setLane)->remove('name')->get();
+            $this->kanban->setLane($laneID, $lane);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
@@ -1498,14 +1502,14 @@ class kanban extends control
         }
 
         $lane = $this->kanban->getLaneById($laneID);
-        if(!$lane) return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
+        if(!$lane) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'kanban', "executionID=$executionID"))));
 
-        $this->view->title = $from == 'kanban' ? $this->lang->edit . '“' . $lane->name . '”' . $this->lang->kanbanlane->common : zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
         $this->view->lane  = $lane;
         $this->view->from  = $from;
 
         $this->display();
     }
+
     /**
      * Set lane column info.
      *
