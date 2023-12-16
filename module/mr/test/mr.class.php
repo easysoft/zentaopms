@@ -157,4 +157,19 @@ class mrTest
 
         return $this->objectModel->fetchByID($MRID);
     }
+
+    /**
+     * Test createMRLinkedAction method.
+     *
+     * @param  int     $MRID
+     * @access public
+     * @return array|object
+     */
+    public function createMRLinkedActionTester(int $MRID): array|object
+    {
+        $this->objectModel->createMRLinkedAction($MRID, 'createmr', '2023-12-12 12:12:12');
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->fetchAll();
+    }
 }
