@@ -127,3 +127,6 @@ $config->kanban->form->setWIP['noLimit'] = array('type' => 'int',    'required' 
 
 $config->kanban->form->setLane['name']  = array('type' => 'string',  'required' => false, 'default' => '');
 $config->kanban->form->setLane['color'] = array('type' => 'string',  'required' => false, 'default' => '');
+
+$config->kanban->form->setColumn['name']  = array('type' => 'string',  'required' => true,  'default' => '');
+$config->kanban->form->setColumn['color'] = array('type' => 'string',  'required' => false, 'default' => '');
