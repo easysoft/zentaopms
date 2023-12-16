@@ -1300,42 +1300,26 @@ class story extends control
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', 'all');
-        $product  = $this->product->getByID($story->product);
 
         /* Change for requirement story title. */
-        if($story->type == 'story')
-        {
-            $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
-            $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
-            $this->config->product->search['fields']['title'] = $this->lang->story->title;
-            unset($this->config->product->search['fields']['stage']);
-        }
-        else
+        if($story->type == 'requirement')
         {
             $this->lang->story->title     = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
             $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
         }
 
-        if(!empty($product->shadow))
-        {
-            unset($this->config->product->search['fields']['plan']);
-            unset($this->config->product->search['fields']['product']);
-        }
-
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
-        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type == 'story' ? 'requirement' : 'story');
 
         /* Get stories to link. */
-        $storyType    = $story->type;
-        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $storyType);
+        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);
 
         /* Assign. */
         $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->colon .$this->lang->story->linkStory;
         $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->storyType    = $storyType;
 
         $this->display();
     }
@@ -1363,20 +1347,13 @@ class story extends control
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', 'all');
-        $product  = $this->product->getByID($story->product);
         $queryID  = ($browseType == 'bySearch') ? $param : 0;
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
-        if(!empty($product->shadow))
-        {
-            unset($this->config->product->search['fields']['product']);
-            unset($this->config->product->search['fields']['plan']);
-        }
-
         /* Build search form. */
         $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID");
-        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type);
 
         $this->view->story        = $story;
         $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);

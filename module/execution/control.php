@@ -430,7 +430,9 @@ class execution extends control
             $this->story->replaceURLang($storyType);
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
             unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['params']['plan']);
             unset($this->config->product->search['fields']['stage']);
+            unset($this->config->product->search['params']['stage']);
         }
 
         /* Process the order by field. */

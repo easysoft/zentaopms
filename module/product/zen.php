@@ -1120,21 +1120,20 @@ class productZen extends product
      */
     protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
     {
-        /* Change for requirement story title. */
-        if($storyType == 'requirement')
-        {
-            $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
-            $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
-            $this->config->product->search['fields']['title'] = $this->lang->story->title;
-            unset($this->config->product->search['fields']['plan']);
-            unset($this->config->product->search['fields']['stage']);
-        }
+        if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
 
         if(isset($project->hasProduct) && empty($project->hasProduct))
         {
-            if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
-            unset($this->config->product->search['fields']['product']);                                           // The none-product project don't need display the product in the search form.
-            if($project->model != 'scrum') unset($this->config->product->search['fields']['plan']);               // The none-product and none-scrum project don't need display the plan in the search form.
+            /* The none-product project don't need display the product in the search form. */
+            unset($this->config->product->search['fields']['product']);
+            unset($this->config->product->search['params']['product']);
+
+            /* The none-product and none-scrum project don't need display the plan in the search form. */
+            if($project->model != 'scrum')
+            {
+                unset($this->config->product->search['fields']['plan']);
+                unset($this->config->product->search['params']['plan']);
+            }
         }
 
         /* Build search form. */
@@ -1143,7 +1142,7 @@ class productZen extends product
 
         $this->config->product->search['onMenuBar'] = 'yes';
         $queryID = ($browseType == 'bysearch') ? $param : 0;
-        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch, $projectID);
+        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
     }
 
     /**

@@ -1595,7 +1595,7 @@ class storyTao extends storyModel
         $reviewLink             = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type");
         $recallLink             = helper::createLink('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type");
         $batchCreateStoryLink   = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
-        $editLink               = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type");
+        $editLink               = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
         $createCaseLink         = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */

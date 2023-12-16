@@ -700,40 +700,56 @@ class productModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  int    $actionURL
+     * @param  string $storyType
      * @param  string $branch
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '', int $projectID = 0): void
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $storyType = 'story', string $branch = '', int $projectID = 0): void
     {
         $searchConfig = $this->config->product->search;
 
         $searchConfig['queryID']   = $queryID;
         $searchConfig['actionURL'] = $actionURL;
 
-        /* Get product plan data. */
-        $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
-        $branchParam   = ($this->app->tab == 'project' && empty($productID)) ? '' : $branch;
-        $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
-
         /* Get product data. */
         $product = ($this->app->tab == 'project' && empty($productID)) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        /* Get product stage data. */
-        $this->config->product->search['params']['stage']['values'] = array('' => '') + $this->lang->story->stageList;
-
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
         $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
+
+        if($storyType == 'requirement')
+        {
+            /* Change for requirement story title. */
+            $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
+            $searchConfig['fields']['title'] = $this->lang->story->title;
+            unset($searchConfig['fields']['plan']);
+            unset($searchConfig['params']['plan']);
+            unset($searchConfig['fields']['stage']);
+            unset($searchConfig['params']['stage']);
+        }
+        else
+        {
+            /* Get product plan data. */
+            $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
+            $branchParam   = ($this->app->tab == 'project' && empty($productID)) ? '' : $branch;
+            $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
+        }
 
         /* Get branch data. */
         if($productID)
         {
             $productInfo = $this->getByID($productID);
-            if(!empty($productInfo->shadow)) unset($searchConfig['fields']['product']);
+            if(!empty($productInfo->shadow))
+            {
+                unset($searchConfig['fields']['product']);
+                unset($searchConfig['params']['product']);
+            }
             if($productInfo->type == 'normal' || $this->app->tab == 'assetlib')
             {
                 unset($searchConfig['fields']['branch']);
