@@ -1499,6 +1499,7 @@ class userModel extends model
      * 创建一个联系人列表。
      * Create a contact list.
      *
+     * @param  object $userContact
      * @access public
      * @return bool
      */
