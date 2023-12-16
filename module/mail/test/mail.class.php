@@ -208,13 +208,8 @@ class mailTest
      */
     public function addQueueTest($toList, $subject, $body = '', $ccList = '', $includeMe = false)
     {
-        $this->objectModel->addQueue($toList, $subject, $body, $ccList, $includeMe);
-
-        if($toList and $subject)
-        {
-            $id     = $this->dao->lastInsertID();
-            $object = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($id)->fetch();
-        }
+        $notifyID = $this->objectModel->addQueue($toList, $subject, $body, $ccList, $includeMe);
+        $object   = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($notifyID)->fetch();
 
         if(!$object)       return '没有数据提交';
         if(dao::isError()) return dao::getError();

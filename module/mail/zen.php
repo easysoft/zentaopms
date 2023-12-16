@@ -64,5 +64,20 @@ class mailZen extends mail
 
         return $mailConfig;
     }
+
+    /**
+     * Get has mail user pairs.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getHasMailUserPairs(): array
+    {
+        $users     = $this->dao->select('*')->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchAll();
+        $userPairs = array();
+        foreach($users as $user) $userPairs[$user->account] = $user->realname . ' ' . $user->email;
+
+        return $userPairs;
+    }
 }
 

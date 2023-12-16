@@ -236,54 +236,19 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array(), $forceSync = false)
+    public function send(string $toList, string $subject, string $body = '', string $ccList = '', bool $includeMe = false, array $emails = array(), bool $forceSync = false): int|bool
     {
-        if(!$this->config->mail->turnon) return;
+        if(!$this->config->mail->turnon) return false;
         if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
 
-        if(empty($emails))
-        {
-            $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
-            $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
-
-            /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
-            if($includeMe == false)
-            {
-                $account = isset($this->app->user->account) ? $this->app->user->account : '';
-
-                foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
-                foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
-            }
-
-            /* Remove deleted users. */
-            $this->app->loadConfig('message');
-            $users      = $this->loadModel('user')->getPairs('nodeleted|all');
-            $blockUsers = isset($this->config->message->blockUser) ? explode(',', $this->config->message->blockUser) : array();
-            foreach($toList as $key => $to) if(!isset($users[trim($to)]) or in_array(trim($to), $blockUsers)) unset($toList[$key]);
-            foreach($ccList as $key => $cc) if(!isset($users[trim($cc)]) or in_array(trim($cc), $blockUsers)) unset($ccList[$key]);
-
-            if(!$toList and !$ccList) return;
-            if(!$toList and $ccList) $toList = array(array_shift($ccList));
-            $toList = implode(',', $toList);
-            $ccList = implode(',', $ccList);
-
-            /* Get realname and email of users. */
-            $this->loadModel('user');
-            $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
-        }
+        $body = $this->mailTao->replaceImageURL($body);
+        list($toList, $ccList) = $this->mailTao->processToAndCC($toList, $ccList, $includeMe);
+        /* Get realname and email of users. */
+        if(empty($emails)) $emails = $this->loadModel('user')->getRealNameAndEmails($toList . ',' . $ccList);
 
         $this->clear();
-
-        /* Replace full webPath image for mail. */
-        $sysURL      = zget($this->config->mail, 'domain', common::getSysURL());
-        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
-        if(isInModal()) $readLinkReg = str_replace(array('\?onlybody=yes', '&onlybody=yes'), '', $readLinkReg);
-
-        $body = preg_replace('/ src="(' . $readLinkReg . ')" /', ' src="' . $sysURL . '$1" ', $body);
-        $body = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $sysURL . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $body);
-        $body = preg_replace('/<img (.*)src="\/?data\/upload/', '<img $1 src="' . $sysURL . $this->config->webRoot . 'data/upload', $body);
 
         try
         {
@@ -292,8 +257,8 @@ class mailModel extends model
 
             $this->mta->setFrom($this->config->mail->fromAddress, $this->convertCharset($this->config->mail->fromName));
             $this->setSubject($this->convertCharset($subject));
-            $this->setTO($toList, $emails);
-            $this->setCC($ccList, $emails);
+            $this->setTO(explode(',', $toList), $emails);
+            $this->setCC(explode(',', $ccList), $emails);
             $this->setBody($this->convertCharset($body));
             $this->setErrorLang();
             $this->mta->send();
@@ -301,11 +266,9 @@ class mailModel extends model
         catch (phpmailerException $e)
         {
             $mailError = ob_get_contents();
-            if(extension_loaded('mbstring'))
-            {
-                $encoding = mb_detect_encoding($mailError, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
-                if($encoding != 'UTF-8') $mailError = mb_convert_encoding($mailError, 'utf8', $encoding);
-            }
+            $encoding  = mb_detect_encoding($mailError, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
+            if($encoding != 'UTF-8') $mailError = mb_convert_encoding($mailError, 'utf8', $encoding);
+
             $this->errors[] = nl2br(trim(strip_tags($e->errorMessage())));
             $this->errors[] = $mailError;
         }
@@ -327,17 +290,18 @@ class mailModel extends model
     /**
      * Set to address
      *
-     * @param  string   $toList
-     * @param  array    $emails
+     * @param  array  $toList
+     * @param  array  $emails
      * @access public
      * @return void
      */
-    public function setTO($toList, $emails)
+    public function setTO(array $toList, array $emails): void
     {
-        $toList = explode(',', str_replace(' ', '', $toList));
+        if(empty($toList)) return;
         foreach($toList as $account)
         {
             if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
+
             $this->mta->addAddress($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
             $emails[$account]->sended = true;
         }
@@ -351,14 +315,13 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function setCC($ccList, $emails)
+    public function setCC(array $ccList, array $emails): void
     {
-        $ccList = explode(',', str_replace(' ', '', $ccList));
-        if(!is_array($ccList)) return;
-        $ccList = array_unique($ccList);
+        if(empty($ccList)) return;
         foreach($ccList as $account)
         {
             if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
+
             $this->mta->addCC($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
             $emails[$account]->sended = true;
         }
@@ -371,7 +334,7 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): void
     {
         $this->mta->Subject = stripslashes($subject);
     }
@@ -383,9 +346,9 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function setBody($body)
+    public function setBody(string $body): void
     {
-        $this->mta->msgHtml("$body");
+        $this->mta->msgHtml($body);
     }
 
     /**
@@ -395,9 +358,9 @@ class mailModel extends model
      * @access public
      * @return string
      */
-    public function convertCharset($string)
+    public function convertCharset(string $string): string
     {
-        if(!empty($this->config->mail->smtp->charset) and $this->config->mail->smtp->charset != strtolower($this->config->charset)) return iconv($this->config->charset, $this->config->mail->smtp->charset . '//IGNORE', $string);
+        if(!empty($this->config->mail->smtp->charset) and $this->config->mail->smtp->charset != strtolower($this->config->charset)) return helper::convertEncoding($string, $this->config->charset, $this->config->mail->smtp->charset);
         return $string;
     }
 
@@ -407,7 +370,7 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function setErrorLang()
+    public function setErrorLang(): void
     {
         $this->mta->SetLanguage($this->app->getClientLang());
     }
@@ -418,7 +381,7 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->mta->clearAllRecipients();
         $this->mta->clearAttachments();
@@ -452,7 +415,7 @@ class mailModel extends model
      * @access public
      * @return array
      */
-    public function getError()
+    public function getError(): array
     {
         $errors = $this->errors;
         $this->errors = array();
@@ -468,27 +431,13 @@ class mailModel extends model
      * @param  string $ccList
      * @param  bool   $includeMe
      * @access public
-     * @return void
+     * @return int|bool
      */
-    public function addQueue($toList, $subject, $body = '', $ccList = '', $includeMe = false)
+    public function addQueue(string $toList, string $subject, string $body = '', string $ccList = '', bool $includeMe = false): int|bool
     {
-        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
-        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
-
-        /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
-        if($includeMe == false)
-        {
-            $account = isset($this->app->user->account) ? $this->app->user->account : '';
-
-            foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
-            foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
-        }
-        if(!$toList and !$ccList) return;
-        if(!$toList and $ccList) $toList = array(array_shift($ccList));
-
-        $toList = implode(',', $toList);
-        $ccList = implode(',', $ccList);
-        if(empty($toList) or empty($subject)) return true;
+        list($toList, $ccList) = $this->mailTao->processToAndCC($toList, $ccList, $includeMe);
+        if(empty($toList) and empty($ccList)) return false;
+        if(empty($toList) or empty($subject)) return false;
 
         $data = new stdclass();
         $data->objectType  = 'mail';
@@ -499,6 +448,8 @@ class mailModel extends model
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $this->dao->insert(TABLE_NOTIFY)->data($data)->autocheck()->exec();
+
+        return $this->dao->lastInsertID();
     }
 
     /**

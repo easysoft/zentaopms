@@ -142,8 +142,7 @@ class mail extends control
             if($this->config->mail->smtp->secure == 'tls')
             {
                 if(!extension_loaded('openssl')) return $this->sendError($this->lang->mail->noOpenssl);
-
-                if(!extension_loaded('curl')) return $this->sendError($this->lang->mail->noCurl);
+                if(!extension_loaded('curl'))    return $this->sendError($this->lang->mail->noCurl);
             }
 
             $this->mail->send($this->post->to, $this->lang->mail->testSubject, $this->lang->mail->testContent, '', true);
@@ -152,12 +151,8 @@ class mail extends control
             return $this->sendSuccess(array('load' => inLink('test')));
         }
 
-        $users     = $this->dao->select('*')->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchAll();
-        $userPairs = array();
-        foreach($users as $user) $userPairs[$user->account] = $user->realname . ' ' . $user->email;
-
         $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
-        $this->view->users = $userPairs;
+        $this->view->users = $this->mailZen->getHasMailUserPairs();
         $this->display();
     }
 
@@ -170,7 +165,7 @@ class mail extends control
     public function reset()
     {
         $this->dao->delete('*')->from(TABLE_CONFIG)->where('module')->eq('mail')->exec();
-        $this->locate(inlink('index'));
+        return $this->sendSuccess(array('load' => inlink('detect')));
     }
 
     /**

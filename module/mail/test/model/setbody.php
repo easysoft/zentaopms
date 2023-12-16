@@ -1,18 +1,17 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
-su('admin');
 
 /**
 
-title=测试 mailModel->setCC();
-cid=1
-pid=1
+title=测试 mailModel->setBody();
+cid=0
 
-测试设置内容 >> test body
+- 测试设置内容属性Body @test body
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mail.class.php';
+su('admin');
 
 $mail = new mailTest();
 
