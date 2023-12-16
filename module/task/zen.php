@@ -197,7 +197,7 @@ class taskZen extends task
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
+        foreach(explode(',', $this->config->task->list->customBatchEditFields) as $field)
         {
             if(!empty($execution) && $execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
             $customFields[$field] = $this->lang->task->$field;
@@ -1154,7 +1154,7 @@ class taskZen extends task
     {
         /* 设置自定义字段列表。 Set custom field list. */
         $customFormField = 'custom' . ucfirst($action). 'Fields';
-        foreach(explode(',', $this->config->task->{$customFormField}) as $field)
+        foreach(explode(',', $this->config->task->list->{$customFormField}) as $field)
         {
             if($execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
             $customFields[$field] = $this->lang->task->$field;
