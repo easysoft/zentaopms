@@ -1599,25 +1599,6 @@ class kanban extends control
     }
 
     /**
-     * Ajax get contact users.
-     *
-     * @param  string $field
-     * @param  int    $contactListID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetContactUsers($field, $contactListID)
-    {
-        $this->loadModel('user');
-        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $users = $this->user->getPairs('nodeleted|noclosed', '', $this->config->maxCount);
-
-        if(!$contactListID or !isset($list->userList)) return print(html::select($field . '[]', $users, '', "class='form-control picker-select' multiple"));
-
-        return print(html::select($field . '[]', $users, $list->userList, "class='form-control picker-select' multiple"));
-    }
-
-    /**
      * Ajax get kanban menu.
      *
      * @param  int    $kanbanID
