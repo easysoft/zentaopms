@@ -11,20 +11,6 @@ class gogsTest
     }
 
     /**
-     * Get by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        $gogs = $this->gogs->getByID($id);
-        if(empty($gogs)) return 0;
-        return $gogs;
-    }
-
-    /**
      * Get gogs list.
      *
      * @param  string $orderBy
@@ -64,7 +50,7 @@ class gogsTest
             return key($errors);
         }
 
-        return $this->gogs->getById($gogsID);
+        return $this->gogs->fetchByID($gogsID);
     }
 
     /**
@@ -83,6 +69,6 @@ class gogsTest
             return key($errors);
         }
 
-        return $this->gogs->getById($id);
+        return $this->gogs->fetchByID($id);
     }
 }

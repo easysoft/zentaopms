@@ -92,7 +92,7 @@ class gitea extends control
      */
     public function view($giteaID)
     {
-        $gitea = $this->gitea->getByID($giteaID);
+        $gitea = $this->gitea->fetchByID($giteaID);
 
         $this->view->title      = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->view;
         $this->view->gitea      = $gitea;
@@ -111,7 +111,7 @@ class gitea extends control
      */
     public function edit($giteaID)
     {
-        $oldGitea = $this->gitea->getByID($giteaID);
+        $oldGitea = $this->gitea->fetchByID($giteaID);
 
         if($_POST)
         {
@@ -120,7 +120,7 @@ class gitea extends control
             $this->loadModel('pipeline')->update($giteaID, $gitea);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $gitea    = $this->gitea->getByID($giteaID);
+            $gitea    = $this->gitea->fetchByID($giteaID);
             $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'edited');
             $changes  = common::createChanges($oldGitea, $gitea);
             $this->action->logHistory($actionID, $changes);
@@ -143,7 +143,7 @@ class gitea extends control
      */
     public function delete($giteaID)
     {
-        $oldGitea = $this->loadModel('pipeline')->getByID($giteaID);
+        $oldGitea = $this->loadModel('pipeline')->fetchByID($giteaID);
         $actionID = $this->pipeline->deleteByObject($giteaID, 'gitea');
         if(!$actionID)
         {
@@ -152,7 +152,7 @@ class gitea extends control
             return $this->send($response);
         }
 
-        $gitea   = $this->pipeline->getByID($giteaID);
+        $gitea   = $this->pipeline->fetchByID($giteaID);
         $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
 

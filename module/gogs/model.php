@@ -13,18 +13,6 @@
 class gogsModel extends model
 {
     /**
-     * Get a gogs by id.
-     *
-     * @param  int $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
      * Get gogs list.
      *
      * @param  string $orderBy
@@ -59,7 +47,7 @@ class gogsModel extends model
      */
     public function getApiRoot($gogsID)
     {
-        $gogs = $this->getByID($gogsID);
+        $gogs = $this->fetchByID($gogsID);
         if(!$gogs) return '';
 
         return rtrim($gogs->url, '/') . '/api/v1%s' . "?token={$gogs->token}";
@@ -290,8 +278,7 @@ class gogsModel extends model
             $project->http_url_to_repo    = $project->html_url;
             $project->name_with_namespace = $project->full_name;
 
-            $gogs  = $this->getByID($gogsID);
-            $oauth = "{$gogs->token}@";
+            $gogs = $this->fetchByID($gogsID);
             $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', '${1}' . $gogs->token . '@', $project->html_url);
         }
 
@@ -463,7 +450,7 @@ class gogsModel extends model
         $branch = json_decode(commonModel::http($url));
         if($branch)
         {
-            $gogs = $this->getByID($gogsID);
+            $gogs = $this->fetchByID($gogsID);
             $branch->web_url = "{$gogs->url}/$project/src/$branchName";
         }
 

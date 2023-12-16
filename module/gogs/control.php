@@ -90,7 +90,7 @@ class gogs extends control
      */
     public function view($gogsID)
     {
-        $gogs = $this->gogs->getByID($gogsID);
+        $gogs = $this->gogs->fetchByID($gogsID);
 
         $this->view->title      = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->view;
         $this->view->gogs       = $gogs;
@@ -109,7 +109,7 @@ class gogs extends control
      */
     public function edit($gogsID)
     {
-        $oldGogs = $this->gogs->getByID($gogsID);
+        $oldGogs = $this->gogs->fetchByID($gogsID);
 
         if($_POST)
         {
@@ -118,7 +118,7 @@ class gogs extends control
             $this->gogs->update($gogsID, $gogs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $gogs     = $this->gogs->getByID($gogsID);
+            $gogs     = $this->gogs->fetchByID($gogsID);
             $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'edited');
             $changes  = common::createChanges($oldGogs, $gogs);
             $this->action->logHistory($actionID, $changes);
@@ -141,7 +141,7 @@ class gogs extends control
      */
     public function delete($gogsID)
     {
-        $oldGogs  = $this->loadModel('pipeline')->getByID($gogsID);
+        $oldGogs  = $this->loadModel('pipeline')->fetchByID($gogsID);
         $actionID = $this->pipeline->deleteByObject($gogsID, 'gogs');
         if(!$actionID)
         {
@@ -151,7 +151,7 @@ class gogs extends control
             return $this->send($response);
         }
 
-        $gogs    = $this->pipeline->getByID($gogsID);
+        $gogs    = $this->pipeline->fetchByID($gogsID);
         $changes = common::createChanges($oldGogs, $gogs);
         $this->loadModel('action')->logHistory($actionID, $changes);
 

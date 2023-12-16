@@ -11,20 +11,6 @@ class giteaTest
     }
 
     /**
-     * Get by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        $gitea = $this->gitea->getByID($id);
-        if(empty($gitea)) return 0;
-        return $gitea;
-    }
-
-    /**
      * Get gitea list.
      *
      * @param  string $orderBy
@@ -78,7 +64,7 @@ class giteaTest
             return key($errors);
         }
 
-        return $this->gitea->getById($giteaID);
+        return $this->gitea->fetchByID($giteaID);
     }
 
     /**
@@ -97,6 +83,6 @@ class giteaTest
             return key($errors);
         }
 
-        return $this->gitea->getById($id);
+        return $this->gitea->fetchByID($id);
     }
 }

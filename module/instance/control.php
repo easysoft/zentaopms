@@ -46,7 +46,7 @@ class instance extends control
         }
         else
         {
-            $instance = $this->loadModel('gitea')->getByID($id);
+            $instance = $this->loadModel('gitea')->fetchByID($id);
             $instance->status      = '';
             $instance->source      = 'user';
             $instance->externalID  = $instance->id;

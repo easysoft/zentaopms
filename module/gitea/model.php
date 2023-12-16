@@ -21,18 +21,6 @@ class giteaModel extends model
     public $maintainerAccess = 40;
 
     /**
-     * Get a gitea by id.
-     *
-     * @param  int $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
      * Get gitea list.
      *
      * @param  string $orderBy
@@ -68,7 +56,7 @@ class giteaModel extends model
      */
     public function getApiRoot($giteaID, $sudo = true)
     {
-        $gitea = $this->getByID($giteaID);
+        $gitea = $this->fetchByID($giteaID);
         if(!$gitea) return '';
 
         $sudoParam = '';
@@ -331,7 +319,7 @@ class giteaModel extends model
             $project->http_url_to_repo    = $project->html_url;
             $project->name_with_namespace = $project->full_name;
 
-            $gitea = $this->getByID($giteaID);
+            $gitea = $this->fetchByID($giteaID);
             $oauth = "oauth2:{$gitea->token}@";
             $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
             $project->tokenCloneUrl = str_replace(array('https://', 'http://'), strstr($url, ':', true) . '://', $project->tokenCloneUrl);
@@ -525,7 +513,7 @@ class giteaModel extends model
         $branch = json_decode(commonModel::http($url));
         if($branch)
         {
-            $gitea = $this->getByID($giteaID);
+            $gitea = $this->fetchByID($giteaID);
             $branch->web_url = "{$gitea->url}/$project/src/branch/$branchName";
         }
 
