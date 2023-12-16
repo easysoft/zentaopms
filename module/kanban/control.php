@@ -1273,6 +1273,7 @@ class kanban extends control
     }
 
     /**
+     * 排序卡片。
      * Sort cards.
      *
      * @param  int    $kanbanID
@@ -1282,7 +1283,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function sortCard($kanbanID, $laneID, $columnID, $cards = '')
+    public function sortCard(int $kanbanID, int $laneID, int $columnID, string $cards = '')
     {
         if(empty($cards)) return;
 
@@ -1296,19 +1297,17 @@ class kanban extends control
     }
 
     /**
+     * 归档看板卡片。
      * Archive a card.
      *
      * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function archiveCard($cardID)
+    public function archiveCard(int $cardID)
     {
-        $changes = $this->kanban->archiveCard($cardID);
+        $this->kanban->archiveCard($cardID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
-        $this->action->logHistory($actionID, $changes);
 
         $card = $this->kanban->getCardByID($cardID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
