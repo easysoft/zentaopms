@@ -1,19 +1,18 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
-su('admin');
 
 /**
 
 title=测试 mailModel->getConfigFromProvider();
-cid=1
-pid=1
+cid=0
 
-获取qq相关信息 >> smtp.qq.com
-获取sohu相关信息 >> smtp.sohu.com
+- 获取qq相关信息属性host @smtp.qq.com
+- 获取sohu相关信息属性host @smtp.sohu.com
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mail.class.php';
+su('admin');
 
 $mail = new mailTest();
 

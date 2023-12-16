@@ -18,6 +18,13 @@ class mailModel extends model
     public $mtaType;
     public $errors = array();
 
+    /**
+     * 初始化
+     * Construct
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -29,14 +36,16 @@ class mailModel extends model
     /**
      * Auto detect email config.
      *
-     * @param  string    $email
+     * @param  string $email
      * @access public
      * @return object
      */
-    public function autoDetect($email)
+    public function autoDetect(string $email): object
     {
+        $username = $domain = '';
+
         /* Split the email to username and domain. */
-        list($username, $domain) = explode('@', $email);
+        if(str_contains($email, '@')) list($username, $domain) = explode('@', $email);
         $domain = strtolower($domain);
 
         /*
@@ -68,46 +77,44 @@ class mailModel extends model
     /**
      * Try get config from providers.
      *
-     * @param  int    $domain
-     * @param  int    $username
+     * @param  string $domain
+     * @param  string $username
      * @access public
-     * @return bool|object
+     * @return object|false
      */
-    public function getConfigFromProvider($domain, $username)
+    public function getConfigFromProvider(string $domain, string $username): object|false
     {
-        if(isset($this->config->mail->provider[$domain]))
-        {
-            $config = (object)$this->config->mail->provider[$domain];
-            $config->mta      = 'smtp';
-            $config->username = $username;
-            $config->auth     = 1;
-            if(!isset($config->port))   $config->port   = 25;
-            if(!isset($config->secure)) $config->secure = '';
-            return $config;
-        }
-        return false;
+        if(!isset($this->config->mail->provider[$domain])) return false;
+
+        $config = (object)$this->config->mail->provider[$domain];
+        $config->mta      = 'smtp';
+        $config->username = $username;
+        $config->auth     = 1;
+        if(!isset($config->port))   $config->port   = 25;
+        if(!isset($config->secure)) $config->secure = '';
+        return $config;
     }
 
     /**
      * Get config by MXRR.
      *
-     * @param  string    $domain
-     * @param  string    $username
+     * @param  string $domain
+     * @param  string $username
      * @access public
-     * @return bool|object
+     * @return object|false
      */
-    public function getConfigByMXRR($domain, $username)
+    public function getConfigByMXRR(string $domain, string $username): object|false
     {
         /* Try to get mx record, under linux, use getmxrr() directly, windows use nslookup. */
+        $smtpHosts = array();
         if(function_exists('getmxrr'))
         {
             getmxrr($domain, $smtpHosts);
         }
         elseif(strpos(PHP_OS, 'WIN') !== false)
         {
-            $smtpHosts = array();
-            $result    = `nslookup -q=mx {$domain} 2>nul`;
-            $lines     = explode("\n", $result);
+            $result = `nslookup -q=mx {$domain} 2>nul`;
+            $lines  = explode("\n", $result);
             foreach($lines as $line)
             {
                 if(stripos($line, 'exchanger')) $smtpHosts[] = trim(substr($line, strrpos($line, '=') + 1));
@@ -121,11 +128,10 @@ class mailModel extends model
             $smtpDomain = explode('.', $smtpHost);
             array_shift($smtpDomain);
             $smtpDomain = strtolower(implode('.', $smtpDomain));
-            if($config = $this->getConfigFromProvider($smtpDomain, $username))
-            {
-                $config->username = "$username@$domain";
-                return $config;
-            }
+
+            $config = $this->getConfigFromProvider($smtpDomain, $username);
+            if($config) $config->username = "$username@$domain";
+            return $config;
         }
 
         return false;
@@ -138,13 +144,15 @@ class mailModel extends model
      * @param  string $username
      * @param  int    $port
      * @access public
-     * @return bool|object
+     * @return object|false
      */
-    public function getConfigByDetectingSMTP($domain, $username, $port)
+    public function getConfigByDetectingSMTP(string $domain, string $username, int $port): object|false
     {
-        $host = 'smtp.' . $domain;
         ini_set('default_socket_timeout', 3);
+
+        $host = 'smtp.' . $domain;
         if(gethostbynamel($host) == false) return false;
+
         $connection = @fsockopen($host, $port);
         if(!$connection) return false;
         fclose($connection);
