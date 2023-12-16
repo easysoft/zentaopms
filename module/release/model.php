@@ -481,6 +481,7 @@ class releaseModel extends model
             foreach($stories as $storyID)
             {
                 /* Reset story stagedBy field for auto compute stage. */
+                $storyID = (int)$storyID;
                 $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
                 if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
 
@@ -540,6 +541,7 @@ class releaseModel extends model
         $this->loadModel('action');
         foreach($storyIdList as $unlinkStoryID)
         {
+            $unlinkStoryID = (int)$unlinkStoryID;
             $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
             $this->loadModel('story')->setStage($unlinkStoryID);
         }
