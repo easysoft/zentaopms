@@ -300,13 +300,11 @@ $lang->project->modelList['kanban']    = "Kanban";
 $lang->project->modelList['agileplus'] = "Agile +";
 if(helper::hasFeature('waterfallplus')) $lang->project->modelList['waterfallplus'] = "Waterfall +";
 
-$lang->project->featureBar['browse']['all']       = 'All';
-$lang->project->featureBar['browse']['undone']    = 'Unfinished';
-$lang->project->featureBar['browse']['wait']      = 'Waiting';
-$lang->project->featureBar['browse']['doing']     = 'Doing';
-$lang->project->featureBar['browse']['exceeded']  = 'Exceeded';
-$lang->project->featureBar['browse']['risky']     = 'Risky';
-$lang->project->featureBar['browse']['more']      = 'More';
+$lang->project->featureBar['browse']['all']    = 'All';
+$lang->project->featureBar['browse']['undone'] = 'Unfinished';
+$lang->project->featureBar['browse']['wait']   = 'Waiting';
+$lang->project->featureBar['browse']['doing']  = 'Doing';
+$lang->project->featureBar['browse']['more']   = 'More';
 
 $lang->project->featureBar['index']['all']       = 'All';
 $lang->project->featureBar['index']['undone']    = 'Unfinished';

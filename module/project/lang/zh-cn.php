@@ -300,13 +300,11 @@ $lang->project->modelList['kanban']      = "看板";
 $lang->project->modelList['agileplus']   = "融合敏捷";
 if(helper::hasFeature('waterfallplus')) $lang->project->modelList['waterfallplus'] = "融合瀑布";
 
-$lang->project->featureBar['browse']['all']       = '全部';
-$lang->project->featureBar['browse']['undone']    = '未完成';
-$lang->project->featureBar['browse']['wait']      = '未开始';
-$lang->project->featureBar['browse']['doing']     = '进行中';
-$lang->project->featureBar['browse']['exceeded']  = '已逾期';
-$lang->project->featureBar['browse']['risky']     = '有风险';
-$lang->project->featureBar['browse']['more']      = '更多';
+$lang->project->featureBar['browse']['all']    = '全部';
+$lang->project->featureBar['browse']['undone'] = '未完成';
+$lang->project->featureBar['browse']['wait']   = '未开始';
+$lang->project->featureBar['browse']['doing']  = '进行中';
+$lang->project->featureBar['browse']['more']   = '更多';
 
 $lang->project->featureBar['index']['all']       = '全部';
 $lang->project->featureBar['index']['undone']    = '未完成';
