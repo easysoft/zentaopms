@@ -148,7 +148,7 @@ class bug extends control
 
         /* 判断 bug 是否存在。*/
         /* Judge bug exits or not. */
-        if(!$bug) return print(js::alert($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        if(!$bug) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
         /* 检查用户是否拥有所属执行的权限。*/
         /* Check bug execution priv. */
