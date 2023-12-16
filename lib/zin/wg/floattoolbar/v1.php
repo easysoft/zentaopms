@@ -85,7 +85,7 @@ class floatToolbar extends wg
 
         return div
         (
-            setClass('toolbar bg-darker backdrop-blur bg-opacity-60 text-canvas float-toolbar rounded p-1.5'),
+            setClass('toolbar bg-black text-fore-in-dark backdrop-blur bg-opacity-60 text-canvas float-toolbar rounded p-1.5'),
             $prefixBtns,
             $this->buildDivider($prefixBtns, $mainBtns),
             $mainBtns,
