@@ -1011,19 +1011,24 @@ class userTest
     }
 
     /**
+     * 测试保存用户模板。
      * Test save user template.
      *
-     * @param  string $type
+     * @param  object $template
      * @access public
-     * @return void
+     * @return array
      */
-    public function saveUserTemplate($type)
+    public function saveUserTemplateTest(object $template): array
     {
-        global $tester;
-        $this->objectModel->saveUserTemplate($type);
+        $result = $this->objectModel->saveUserTemplate($template);
+        $errors =  dao::getError();
 
-        if(dao::isError()) return dao::getError();
-        return $this->objectModel->getUserTemplates($type);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
