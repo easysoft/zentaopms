@@ -3511,26 +3511,35 @@ class kanbanModel extends model
     }
 
     /**
+     * 还原看板卡片。
      * Restore a card.
      *
      * @param  int    $cardID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function restoreCard($cardID)
+    public function restoreCard(int $cardID): bool
     {
         $oldCard = $this->getCardByID($cardID);
 
         $this->dao->update(TABLE_KANBANCARD)
             ->set('archived')->eq(0)
             ->set('archivedBy')->eq('')
-            ->set('archivedDate')->eq('')
+            ->set('archivedDate')->eq(null)
             ->where('id')->eq($cardID)
             ->exec();
 
-        $card = $this->getCardByID($cardID);
+        if(dao::isError()) return false;
 
-        if(!dao::isError()) return common::createChanges($oldCard, $card);
+        $card    = $this->getCardByID($cardID);
+        $changes = common::createChanges($oldCard, $card);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
