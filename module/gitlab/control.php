@@ -178,7 +178,7 @@ class gitlab extends control
 
         $userList      = array();
         $gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
-        $bindedUsers   = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         $matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers);
 
         foreach($gitlabUsers as $gitlabUserID => $gitlabUser)
@@ -573,7 +573,7 @@ class gitlab extends control
         }
 
         $users       = $this->loadModel('user')->getList();
-        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $bindedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         $userPairs   = array();
         $userInfos   = array();
         foreach($users as $key => $user)
@@ -620,7 +620,7 @@ class gitlab extends control
         $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($gitlabUser->id)->fetch('account');
 
         $users       = $this->loadModel('user')->getList();
-        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $bindedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         $userPairs   = array();
         foreach($users as $user)
         {
@@ -1119,7 +1119,7 @@ class gitlab extends control
 
             $repo        = $this->loadModel('repo')->getByID($repoID);
             $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-            $bindedUsers = $this->gitlab->getUserAccountIdPairs($repo->gitService);
+            $bindedUsers = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, 'gitlab', 'account,openID');
 
             if(empty($repo->acl))
             {
@@ -1169,7 +1169,7 @@ class gitlab extends control
 
         /* Get users accesslevel. */
         $userAccessData = array();
-        $bindedUsers    = $this->gitlab->getUserIdAccountPairs($repo->gitService);
+        $bindedUsers    = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, 'gitlab', 'openID,account');
 
         foreach($projectMembers as $projectMember)
         {
@@ -1233,36 +1233,6 @@ class gitlab extends control
             $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
         return print(json_encode($options));
-    }
-
-    /**
-     * Ajax方式获取合并请求用户键值对。
-     * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
-     * Attention: The user must be a member of the GitLab project.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMRUserPairs(int $gitlabID, int $projectID)
-    {
-        if(!$gitlabID) return $this->send(array('message' => array()));
-
-        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($gitlabID);
-        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($gitlabID, $projectID);
-        $users           = array();
-        foreach($rawProjectUsers as $rawProjectUser)
-        {
-            if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
-        }
-
-        $options  = "<option value=''></option>";
-        foreach($users as $index => $user)
-        {
-            $options .= "<option value='{$index}'>{$user}</option>";
-        }
-        $this->send($options);
     }
 
     /**

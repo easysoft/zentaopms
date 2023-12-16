@@ -108,74 +108,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 获取gitlab的用户id和禅道的账号 键值对。
-     * Get gitlab user id and zentao account pairs of one gitlab.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return array
-     */
-    public function getUserIdAccountPairs(int $gitlabID): array
-    {
-        return $this->dao->select('openID,account')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->fetchPairs();
-    }
-
-    /**
-     * 获取gitlab的禅道账号和gitlab用户id的 键值对。
-     * Get zentao account gitlab user id pairs of one gitlab.
-     *
-     * @param  int $gitlabID
-     * @access public
-     * @return array
-     */
-    public function getUserAccountIdPairs(int $gitlabID): array
-    {
-        return $this->dao->select('account,openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->fetchPairs();
-    }
-
-    /**
-     * 获取gitlab用户id根据禅道账号。
-     * Get gitlab user id by zentao account.
-     *
-     * @param  int    $gitlabID
-     * @param  string $zentaoAccount
-     * @access public
-     * @return string
-     */
-    public function getUserIDByZentaoAccount(int $gitlabID, string $zentaoAccount): string
-    {
-        return $this->dao->select('openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->andWhere('account')->eq($zentaoAccount)
-            ->fetch('openID');
-    }
-
-    /**
-     * 获取gitlab列表根据禅道账号。
-     * Get GitLab id list by user account.
-     *
-     * @param  string $account
-     * @access public
-     * @return array
-     */
-    public function getListByAccount(string $account = ''): array
-    {
-        if(!$account) $account = $this->app->user->account;
-
-        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('account')->eq($account)
-            ->fetchPairs('providerID');
-    }
-
-    /**
      * 获取gitlab的 项目id和名称 键值对。
      * Get project pairs of one gitlab.
      *
@@ -216,7 +148,7 @@ class gitlabModel extends model
             }
         }
 
-        $bindedUsers = $this->getUserIdAccountPairs($gitlabID);
+        $bindedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'openID,account');
 
         $matchedUsers = array();
         foreach($gitlabUsers as $gitlabUser)
@@ -452,9 +384,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  int    $sudo
      * @access public
-     * @return object|array|null
+     * @return object|array|null|string
      */
-    public function apiGetTodoList(int $gitlabID, int $projectID, int $sudo): object|array|null
+    public function apiGetTodoList(int $gitlabID, int $projectID, int $sudo): object|array|null|string
     {
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
@@ -524,7 +456,7 @@ class gitlabModel extends model
 
         /* Get linked users. */
         $linkedUsers = array();
-        if($onlyLinked) $linkedUsers = $this->getUserIdAccountPairs($gitlabID);
+        if($onlyLinked) $linkedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'openID,account');
 
         $users = array();
         foreach($response as $gitlabUser)
@@ -649,9 +581,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $group
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateGroup(int $gitlabID, object $group): object|array|null
+    public function apiCreateGroup(int $gitlabID, object $group): object|array|null|false
     {
         if(empty($group->name) or empty($group->path)) return false;
 
@@ -687,6 +619,8 @@ class gitlabModel extends model
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
         $recPerPage = $header['X-Per-Page'];
+
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pager->pageID);
 
         return array('pager' => $pager, 'projects' => json_decode($result['body']));
@@ -734,11 +668,11 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $project
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateProject(int $gitlabID, object $project): object|array|null
+    public function apiCreateProject(int $gitlabID, object $project): object|array|null|false
     {
-        if(empty($project->name) and empty($project->path)) return false;
+        if(empty($project->name) || empty($project->path)) return false;
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects");
@@ -753,9 +687,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  object $member
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateProjectMember(int $gitlabID, int $projectID, object $member): object|array|null
+    public function apiCreateProjectMember(int $gitlabID, int $projectID, object $member): object|array|null|false
     {
         if(empty($member->user_id) or empty($member->access_level)) return false;
 
@@ -772,9 +706,9 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  object $member
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiUpdateProjectMember(int $gitlabID, int $projectID, object $member): object|array|null
+    public function apiUpdateProjectMember(int $gitlabID, int $projectID, object $member): object|array|null|false
     {
         if(empty($member->user_id) or empty($member->access_level)) return false;
 
@@ -2116,7 +2050,7 @@ class gitlabModel extends model
     public function taskToIssue(int $gitlabID, int $gitlabProjectID, object $task): object
     {
         $map         = $this->config->gitlab->maps->task;
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
 
         $issue = new stdclass;
         foreach($map as $taskField => $config)
@@ -2158,7 +2092,7 @@ class gitlabModel extends model
     {
         $map         = $this->config->gitlab->maps->story;
         $issue       = new stdclass;
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         if(empty($gitlabUsers)) return false;
 
         foreach($map as $storyField => $config)
@@ -2205,7 +2139,7 @@ class gitlabModel extends model
     {
         $map         = $this->config->gitlab->maps->bug;
         $issue       = new stdclass;
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         if(empty($gitlabUsers)) return false;
 
         foreach($map as $bugField => $config)
@@ -2251,7 +2185,7 @@ class gitlabModel extends model
      */
     public function parseObjectToIssue(int $gitlabID, int $projectID, string $objectType, object $object): object
     {
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         if(empty($gitlabUsers)) return false;
         $issue = new stdclass;
         $map   = $this->config->gitlab->maps->$objectType;
@@ -2300,7 +2234,7 @@ class gitlabModel extends model
 
         if(isset($changes->assignees)) $changes->assignee_id = true;
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
-        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
+        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'openID,account');
 
         $object     = new stdclass;
         $object->id = $issue->objectID;
