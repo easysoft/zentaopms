@@ -382,6 +382,29 @@ class transferModel extends model
     }
 
     /**
+     * 将被操作模块与Transfer模块的配置合并。
+     * Merge config.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function mergeConfig(string $module)
+    {
+        $this->commonActions($module);
+        $transferConfig = $this->transferConfig;
+        $moduleConfig   = $this->moduleConfig;
+        if(!isset($moduleConfig->export)) $moduleConfig->export = new stdClass();
+        if(!isset($moduleConfig->import)) $moduleConfig->export = new stdClass();
+
+        $this->moduleConfig->dateFields     = isset($moduleConfig->dateFields)     ? $moduleConfig->dateFields     : $transferConfig->dateFields;
+        $this->moduleConfig->listFields     = isset($moduleConfig->listFields)     ? $moduleConfig->listFields     : $transferConfig->listFields;
+        $this->moduleConfig->sysLangFields  = isset($moduleConfig->sysLangFields)  ? $moduleConfig->sysLangFields  : $transferConfig->sysLangFields;
+        $this->moduleConfig->sysDataFields  = isset($moduleConfig->sysDataFields)  ? $moduleConfig->sysDataFields  : $transferConfig->sysDataFields;
+        $this->moduleConfig->datetimeFields = isset($moduleConfig->datetimeFields) ? $moduleConfig->datetimeFields : $transferConfig->datetimeFields;
+    }
+
+    /**
      * Process datas, convert date to YYYY-mm-dd, convert datetime to YYYY-mm-dd HH:ii:ss.
      *
      * @param  array   $datas
@@ -1132,28 +1155,6 @@ class transferModel extends model
             $this->session->set('parentID', 0);
         }
         return $data;
-    }
-
-    /**
-     * Merge configs .
-     *
-     * @param  int    $module
-     * @access public
-     * @return void
-     */
-    public function mergeConfig($module)
-    {
-        $this->commonActions($module);
-        $transferConfig  = $this->transferConfig;
-        $moduleConfig = $this->moduleConfig;
-        if(!isset($moduleConfig->export)) $moduleConfig->export = new stdClass();
-        if(!isset($moduleConfig->import)) $moduleConfig->export = new stdClass();
-
-        $moduleConfig->dateFields     = isset($moduleConfig->dateFields)     ? $moduleConfig->dateFields     : $transferConfig->dateFields;
-        $moduleConfig->datetimeFields = isset($moduleConfig->datetimeFields) ? $moduleConfig->datetimeFields : $transferConfig->datetimeFields;
-        $moduleConfig->sysLangFields  = isset($moduleConfig->sysLangFields)  ? $moduleConfig->sysLangFields  : $transferConfig->sysLangFields;
-        $moduleConfig->sysDataFields  = isset($moduleConfig->sysDataFields)  ? $moduleConfig->sysDataFields  : $transferConfig->sysDataFields;
-        $moduleConfig->listFields     = isset($moduleConfig->listFields)     ? $moduleConfig->listFields     : $transferConfig->listFields;
     }
 
     /**
