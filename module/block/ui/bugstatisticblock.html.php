@@ -44,28 +44,32 @@ statisticBlock
             div
             (
                 setClass('flex justify-center w-full'),
-                zui::progressCircle
+                progressCircle
                 (
-                    set('percent', $resolvedRate),
-                    set('size', 112),
-                    set('circleWidth', 6),
-                    set('text', $resolvedRate . '%'),
-                    set('textY', 50),
-                    set('textStyle', 'font-size: 30px;')
-                )
-            ),
-            div
-            (
-                setClass('flex justify-center w-full h-0'),
-                span
-                (
-                    setClass('text-gray text-sm progress-text'),
-                    $lang->block->qastatistic->fixBugRate,
-                    icon
+                    set::percent($resolvedRate),
+                    set::size(112),
+                    set::text(false),
+                    set::circleWidth('0.06'),
+                    div(span(setClass('text-2xl font-bold'), $resolvedRate), '%'),
+                    div
                     (
-                        setClass('pl-0.5'),
-                        toggle::tooltip(array('title' => '提示文本')),
-                        'help'
+                        setClass('row text-sm text-gray items-center gap-1'),
+                        $lang->block->qastatistic->fixBugRate,
+                        icon
+                        (
+                            setClass('text-light text-sm'),
+                            toggle::tooltip
+                            (
+                                array
+                                (
+                                    'title'     => $lang->block->tooltips['resolvedRate'],
+                                    'placement' => 'bottom',
+                                    'type'      => 'white',
+                                    'className' => 'text-dark border border-light leading-5'
+                                )
+                            ),
+                            'help'
+                        )
                     )
                 )
             ),
@@ -124,7 +128,7 @@ statisticBlock
                 set::tooltip(array('trigger' => 'axis')),
                 set::grid(array('left' => '10px', 'top' => '50px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0', 'top' => '25px', 'textStyle' => array('fontSize' => '11'))),
-                set::xAxis(array('type' => 'category', 'data' => $months, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
+                set::xAxis(array('type' => 'category', 'data' => array_keys($activateBugs), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
                 set::yAxis(array('type' => 'value', 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'), 'axisLabel' => array('showMaxLabel' => true, 'interval' => 'auto'))),
                 set::tooptop(array('show' => true, 'formatter' => '{b}: {c}')),
                 set::series

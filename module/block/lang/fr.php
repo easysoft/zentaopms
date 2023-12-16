@@ -710,6 +710,7 @@ $lang->block->moduleList['html']            = $lang->block->html;
 
 $lang->block->tooltips = array();
 $lang->block->tooltips['deliveryRate']      = "{$lang->SRCommon} delivery rate = Number of {$lang->SRCommon} delivered by {$lang->productCommon} / (Total number of {$lang->SRCommon} by {$lang->productCommon} - Number of {$lang->SRCommon} delivered by {$lang->productCommon}) * 100%";
+$lang->block->tooltips['resolvedRate']      = "Bug repair rate by {$lang->productCommon} = number of fixed bugs by {$lang->productCommon} / number of valid bugs by {$lang->productCommon}";
 $lang->block->tooltips['effectiveStory']    = "Total number of {$lang->SRCommon} by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in a {$lang->productCommon}, filter deleted {$lang->SRCommon} and filter deleted {$lang->productCommon}.";
 $lang->block->tooltips['deliveredStory']    = "Number of {$lang->SRCommon} delivered by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in the {$lang->productCommon}, the stage is released or the reason for closure is done, filter the deleted {$lang->SRCommon} and filter the deleted {$lang->productCommon}.";
 $lang->block->tooltips['costs']             = "Have invested = Hours consumed / Available hours per day";

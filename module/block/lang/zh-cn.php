@@ -708,6 +708,7 @@ $lang->block->moduleList['html']            = $lang->block->html;
 
 $lang->block->tooltips = array();
 $lang->block->tooltips['deliveryRate']      = "{$lang->SRCommon}交付率=按{$lang->productCommon}统计的已交付{$lang->SRCommon}数 /（按{$lang->productCommon}统计的{$lang->SRCommon}总数 - 按{$lang->productCommon}统计的无效{$lang->SRCommon}数） * 100%";
+$lang->block->tooltips['resolvedRate']      = "按{$lang->productCommon}统计的Bug修复率 = 按{$lang->productCommon}统计的修复Bug数 / 按{$lang->productCommon}统计的有效Bug数";
 $lang->block->tooltips['effectiveStory']    = "按{$lang->productCommon}统计的{$lang->SRCommon}总数：{$lang->productCommon}中{$lang->SRCommon}的个数求和，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
 $lang->block->tooltips['deliveredStory']    = "按{$lang->productCommon}统计的已交付{$lang->SRCommon}数：{$lang->productCommon}中{$lang->SRCommon}个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
 $lang->block->tooltips['costs']             = "已投入 = 已消耗工时 / 每日可用工时";
