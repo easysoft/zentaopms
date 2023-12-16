@@ -1341,21 +1341,17 @@ class kanban extends control
     }
 
     /**
+     * 还原看板卡片。
      * Restore a card.
      *
      * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function restoreCard($cardID)
+    public function restoreCard(int $cardID)
     {
         $this->kanban->restoreCard($cardID);
-
-        $changes = $this->kanban->restoreCard($cardID);
-        if(dao::isError()) return print(js::error(dao::getError()));
-
-        $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
-        $this->action->logHistory($actionID, $changes);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'load' => true));
     }
