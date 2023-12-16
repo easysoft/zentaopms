@@ -244,9 +244,10 @@ class mrModel extends model
     {
         if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
         {
-            $extraParam = array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch);
-            $pipeline   = $this->loadModel('job')->exec($MR->jobID, $extraParam);
-            $newMR      = new stdClass();
+            $pipeline = $this->loadModel('job')->exec($MR->jobID, array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch));
+            if(!$pipeline) return false;
+
+            $newMR = new stdClass();
             if(!empty($pipeline->queue))
             {
                 $compile = $this->loadModel('compile')->getByQueue((int)$pipeline->queue);
