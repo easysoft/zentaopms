@@ -101,55 +101,28 @@ class mail extends control
     {
         if(!empty($_POST))
         {
-            $mailConfig = new stdclass();
-            $mailConfig->smtp = new stdclass();
-
-            $mailConfig->turnon         = $this->post->turnon;
-            $mailConfig->mta            = 'smtp';
-            $mailConfig->async          = $this->post->async;
-            $mailConfig->fromAddress    = trim($this->post->fromAddress);
-            $mailConfig->fromName       = trim($this->post->fromName);
-            $mailConfig->domain         = trim($this->post->domain);
-            $mailConfig->smtp->host     = trim($this->post->host);
-            $mailConfig->smtp->port     = trim($this->post->port);
-            $mailConfig->smtp->auth     = $this->post->auth;
-            $mailConfig->smtp->username = trim($this->post->username);
-            $mailConfig->smtp->password = $this->post->password;
-            $mailConfig->smtp->secure   = $this->post->secure;
-            $mailConfig->smtp->debug    = $this->post->debug;
-            $mailConfig->smtp->charset  = $this->post->charset;
+            $mailConfig = $this->mailZen->getConfigForSave();
 
             if($mailConfig->turnon && empty($mailConfig->fromName)) return $this->sendError(array('fromName' => sprintf($this->lang->error->notempty, $this->lang->mail->fromName)));
 
             /* The mail need openssl and curl extension when secure is tls. */
             if($mailConfig->smtp->secure == 'tls')
             {
-                if(!extension_loaded('openssl'))
-                {
-                    return $this->sendError($this->lang->mail->noOpenssl);
-                }
-                if(!extension_loaded('curl'))
-                {
-                    return $this->sendError($this->lang->mail->noCurl);
-                }
+                if(!extension_loaded('openssl')) return $this->sendError($this->lang->mail->noOpenssl);
+                if(!extension_loaded('curl'))    return $this->sendError($this->lang->mail->noCurl);
             }
 
             $this->session->set('mailConfig', $mailConfig->turnon);
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $result = array('result' => 'success');
             if($mailConfig->turnon)
             {
                 $mailExist = !empty($this->mail->mailExist());
-                $result['callback'] = "window.mailTips({$mailExist});";
+                return $this->sendSuccess(array('callback' => "window.mailTips({$mailExist})"));
             }
-            else
-            {
-                $result['load'] = inlink('detect');
-            }
-            return $this->send($result);
         }
+        return $this->sendSuccess(array('load' => inLink('detect')));
     }
 
     /**

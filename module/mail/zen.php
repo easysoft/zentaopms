@@ -35,5 +35,34 @@ class mailZen extends mail
         $mailConfig->domain = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
         return $mailConfig;
     }
+
+    /**
+     * Get mail config for save.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function getConfigForSave(): object
+    {
+        $mailConfig = new stdclass();
+        $mailConfig->smtp = new stdclass();
+
+        $mailConfig->turnon         = $this->post->turnon;
+        $mailConfig->mta            = 'smtp';
+        $mailConfig->async          = $this->post->async;
+        $mailConfig->fromAddress    = trim($this->post->fromAddress);
+        $mailConfig->fromName       = trim($this->post->fromName);
+        $mailConfig->domain         = trim($this->post->domain);
+        $mailConfig->smtp->host     = trim($this->post->host);
+        $mailConfig->smtp->port     = trim($this->post->port);
+        $mailConfig->smtp->auth     = $this->post->auth;
+        $mailConfig->smtp->username = trim($this->post->username);
+        $mailConfig->smtp->password = $this->post->password;
+        $mailConfig->smtp->secure   = $this->post->secure;
+        $mailConfig->smtp->debug    = $this->post->debug;
+        $mailConfig->smtp->charset  = $this->post->charset;
+
+        return $mailConfig;
+    }
 }
 
