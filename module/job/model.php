@@ -301,8 +301,6 @@ class jobModel extends model
         if(!$job) return false;
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
-        $now  = helper::now();
-
         if($job->triggerType == 'schedule')
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
@@ -331,7 +329,7 @@ class jobModel extends model
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
         $this->dao->update(TABLE_JOB)
-            ->set('lastExec')->eq($now)
+            ->set('lastExec')->eq(helper::now())
             ->set('lastStatus')->eq($compile->status)
             ->where('id')->eq($job->id)
             ->exec();

@@ -1,0 +1,21 @@
+title: job
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    prefix: 流水线
+    range: 1-10
+  - field: repo
+    range: 1-10
+  - field: product
+    range: 1
+  - field: server
+    range: 3
+  - field: pipeline
+    range: /job/paramsJob/
+  - field: engine
+    range: jenkins
+  - field: triggerType
+    range: tag

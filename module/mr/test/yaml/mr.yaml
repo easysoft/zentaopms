@@ -33,6 +33,8 @@ fields:
     range: 1-10
   - field: executionID
     range: 1-10
+  - field: jobID
+    range: 0-9
   - field: synced
     range: 1
   - field: deleted

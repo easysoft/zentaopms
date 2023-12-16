@@ -161,7 +161,7 @@ class mrModel extends model
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
             if(!empty($pipeline->queue))
             {
-                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $compile = $this->loadModel('compile')->getByQueue((int)$pipeline->queue);
                 $MR->compileID     = $compile->id;
                 $MR->compileStatus = $compile->status;
             }
@@ -186,7 +186,7 @@ class mrModel extends model
         $this->createMR($MR);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        $MRID = $this->dao->lastInsertId();
+        $MRID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
         $rawMR = $this->apiCreateMR($MR->hostID, $MR->sourceProject, $MR);
@@ -319,7 +319,7 @@ class mrModel extends model
         $this->mrTao->insertMr($MR);
         if(dao::isError()) return false;
 
-        $MRID = $this->dao->lastInsertId();
+        $MRID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
         /* Exec Job */

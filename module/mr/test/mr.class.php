@@ -111,4 +111,19 @@ class mrTest
 
         return $projects[$hostID];
     }
+
+    /**
+     * Test createMR method.
+     *
+     * @param  object  $MR
+     * @access public
+     * @return array|object
+     */
+    public function createMrTester(object $MR): array|object
+    {
+        $this->objectModel->createMR($MR);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->fetchByID($this->objectModel->dao->lastInsertID());
+    }
 }
