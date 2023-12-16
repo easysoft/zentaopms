@@ -3198,7 +3198,7 @@ class kanbanModel extends model
             ->where('id')->eq($laneID)
             ->exec();
 
-        return dao::isError();
+        return !dao::isError();
     }
 
     /**
