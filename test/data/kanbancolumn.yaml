@@ -4,7 +4,7 @@ author: automated export
 version: "1.0"
 fields:
     - field: parent
-      range: "0"
+      range: "0{400},1-100"
     - field: type
       range: 1-400
       prefix: "column"
@@ -17,7 +17,7 @@ fields:
     - field: color
       range: "#333"
     - field: limit
-      range: '`-1`'
+      range: '100{400},`-1`{100}'
     - field: order
       range: 1-4
     - field: archived
