@@ -1548,6 +1548,7 @@ class kanban extends control
     }
 
     /**
+     * 拖动看板卡片。
      * Ajax move card.
      *
      * @param  int    $cardID
@@ -1563,41 +1564,19 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColID = 0, $fromLaneID = 0, $toLaneID = 0, $executionID = 0, $browseType = 'all', $groupBy = '', $regionID = 0, $orderBy = '')
+    public function ajaxMoveCard(int $cardID = 0, int $fromColID = 0, int $toColID = 0, int $fromLaneID = 0, int $toLaneID = 0, int $executionID = 0, string $browseType = 'all', string $groupBy = '', int $regionID = 0, string $orderBy = '')
     {
-        $fromCell = $this->dao->select('id, cards, lane')->from(TABLE_KANBANCELL)
-            ->where('kanban')->eq($executionID)
-            ->andWhere('`column`')->eq($fromColID)
-            ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
-            ->beginIF($groupBy and $groupBy != 'default')
-            ->andWhere('type')->eq($browseType)
-            ->andWhere('cards')->like("%,$cardID,%")
-            ->fi()
-            ->fetch();
-
         if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
 
-        $toCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
-            ->where('kanban')->eq($executionID)
-            ->andWhere('lane')->eq($toLaneID)
-            ->andWhere('`column`')->eq($toColID)
-            ->fetch();
+        $fromCell = $this->kanban->getExecutionFromCell($cardID, $executionID, $fromColID, $fromLaneID, $groupBy, $browseType);
+        $toCell   = $this->kanban->getExecutionToCell($executionID, $toColID, $toLaneID);
 
         $fromCards = str_replace(",$cardID,", ',', $fromCell->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
         $toCards   = ',' . implode(',', array_unique(array_filter(explode(',', $toCell->cards)))) . ",$cardID,";
 
-        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCards)
-            ->where('kanban')->eq($executionID)
-            ->andWhere('lane')->eq($fromLaneID)
-            ->andWhere('`column`')->eq($fromColID)
-            ->exec();
-
-        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCards)
-            ->where('kanban')->eq($executionID)
-            ->andWhere('lane')->eq($toLaneID)
-            ->andWhere('`column`')->eq($toColID)
-            ->exec();
+        $this->kanban->updateExecutionCell($executionID, $fromColID, $fromLaneID, $fromCards);
+        $this->kanban->updateExecutionCell($executionID, $toColID, $toLaneID, $toCards);
 
         $toColumn = $this->kanban->getColumnByID($toColID);
         if($toColumn->laneType == 'story' and in_array($toColumn->type, array('tested', 'verified', 'released', 'closed')))
