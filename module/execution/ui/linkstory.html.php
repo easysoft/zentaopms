@@ -16,7 +16,7 @@ featureBar(li
 (
     setClass('nav-item'),
     a(setClass('active'), $lang->execution->linkStory),
-    isInModal() ? null : li(searchToggle(set::module('story')))
+    isInModal() ? null : li(searchToggle(set::module('story'), set::open(true)))
 ));
 
 $cols = $config->execution->linkStory->dtable->fieldList;
