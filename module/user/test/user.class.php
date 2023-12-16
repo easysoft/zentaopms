@@ -714,23 +714,24 @@ class userTest
     }
 
     /**
+     * 测试更新联系人列表。
      * Test update contact list.
      *
-     * @param  int    $listID
-     * @param  string $listName
-     * @param  array  $userList
+     * @param  object $userContact
      * @access public
-     * @return void
+     * @return array
      */
-    public function updateContactListTest($listID = 0, $listName = '', $userList = array())
+    public function updateContactListTest(object $userContact): array
     {
-        $_POST = array();
-        $_POST['listName'] = $listName;
-        $_POST['userList'] = $userList;
-        $this->objectModel->updateContactList($listID);
+        $result = $this->objectModel->updateContactList($userContact);
+        $errors = dao::getError();
 
-        if(dao::isError()) return array('message' => dao::getError());
-        return $this->objectModel->getContactListByID($listID);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
