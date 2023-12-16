@@ -273,7 +273,9 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $repo    = $this->loadModel('repo')->getByID($job->repo);
+            $repo = $this->loadModel('repo')->getByID($job->repo);
+            if(!$repo) return false;
+
             $lastTag = $this->getLastTagByRepo($repo, $job);
             $this->updateLastTag($id, $lastTag);
         }
@@ -301,6 +303,8 @@ class jobModel extends model
         if(!$job) return false;
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
+        if(!$repo) return false;
+
         if($job->triggerType == 'schedule')
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
@@ -333,7 +337,6 @@ class jobModel extends model
             ->set('lastStatus')->eq($compile->status)
             ->where('id')->eq($job->id)
             ->exec();
-
         return $compile;
     }
 
