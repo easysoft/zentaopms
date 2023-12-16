@@ -141,4 +141,20 @@ class mrTest
 
         return $this->objectModel->fetchByID($this->objectModel->dao->lastInsertID());
     }
+
+    /**
+     * Test afterApiCreate method.
+     *
+     * @param  int     $MRID
+     * @param  object  $MR
+     * @access public
+     * @return array|object
+     */
+    public function afterApiCreateTester(int $MRID, object $MR): array|object
+    {
+        $this->objectModel->afterApiCreate($MRID, $MR);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->fetchByID($MRID);
+    }
 }

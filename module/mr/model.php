@@ -238,9 +238,9 @@ class mrModel extends model
      * @param  int    $MRID
      * @param  object $MR
      * @access public
-     * @return int|false
+     * @return bool
      */
-    public function afterApiCreate(int $MRID, object $MR): int|false
+    public function afterApiCreate(int $MRID, object $MR): bool
     {
         if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
         {
@@ -249,7 +249,7 @@ class mrModel extends model
             $newMR      = new stdClass();
             if(!empty($pipeline->queue))
             {
-                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $compile = $this->loadModel('compile')->getByQueue((int)$pipeline->queue);
                 $newMR->compileID     = $compile->id;
                 $newMR->compileStatus = $compile->status;
                 if($newMR->compileStatus == 'failure') $newMR->status = 'closed';
@@ -264,7 +264,7 @@ class mrModel extends model
             $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
             if(dao::isError()) return false;
         }
-        return $MRID;
+        return true;
     }
 
     /**
@@ -323,7 +323,8 @@ class mrModel extends model
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
         /* Exec Job */
-        return $this->afterApiCreate($MRID, $MR);
+        $this->afterApiCreate($MRID, $MR);
+        return $MRID;
     }
 
     /**
