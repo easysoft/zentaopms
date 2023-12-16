@@ -121,3 +121,6 @@ $config->kanban->form->batchCreateCard['estimate']   = array('type' => 'float', 
 $config->kanban->form->batchCreateCard['begin']      = array('type' => 'date',   'required' => false, 'default' => '');
 $config->kanban->form->batchCreateCard['end']        = array('type' => 'date',   'required' => false, 'default' => '');
 $config->kanban->form->batchCreateCard['pri']        = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->kanban->form->setWIP['limit']   = array('type' => 'int',    'required' => false, 'default' => -1);
+$config->kanban->form->setWIP['noLimit'] = array('type' => 'int',    'required' => false, 'default' => '');
