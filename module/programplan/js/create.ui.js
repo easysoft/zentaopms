@@ -1,6 +1,6 @@
 window.onRenderRow = function(row, rowIdx, data)
 {
-    row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
+    if(row.children('[data-name=milestone]').find('input[type=radio]:checked').length == 0) row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
     if(!data || !data.planIDList) return;
 
     row.children('.form-batch-row-actions').children('[data-type=delete]').addClass('hidden');
