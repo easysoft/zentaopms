@@ -1601,7 +1601,8 @@ class storyTao extends storyModel
         /* If the story cannot be changed, render the close button. */
         $canClose = common::hasPriv('story', 'close') && $this->isClickable($story, 'close');
         if(!common::canBeChanged('story', $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
-        if($story->URChanged) return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'url' => common::hasPriv('story', 'processStoryChange') ? $processStoryChangeLink : null));
+        $canProcess = common::hasPriv('story', 'processStoryChange');
+        if($story->URChanged) return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'url' => $canProcess ? $processStoryChangeLink : null, 'disabled' => !$canProcess));
 
         /* Change button. */
         $canChange = common::hasPriv('story', 'change') && $this->isClickable($story, 'change');
