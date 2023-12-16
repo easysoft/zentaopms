@@ -79,6 +79,7 @@ if(!empty($legendBasic['mailto']['text']))
     foreach($mailtoList as $account)
     {
         $mailtoHTML[] = span(zget($users, $account));
+        $mailtoHTML[] = ' ';
     }
 }
 
