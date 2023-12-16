@@ -1471,19 +1471,6 @@ class userModel extends model
     }
 
     /**
-     * 获取某个用户创建的联系人列表键值对。
-     * Get key-value pairs of the contact list created by a user.
-     *
-     * @param  string $account
-     * @access public
-     * @return array
-     */
-    public function getListByAccount(string $account): array
-    {
-        return $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('account')->eq($account)->fetchPairs();
-    }
-
-    /**
      * Get users who have access to the parent stage.
      *
      * @param  int    $stageID

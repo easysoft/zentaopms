@@ -669,18 +669,6 @@ class userTest
     }
 
     /**
-     * Test get list by account method.
-     *
-     * @param  string $account
-     * @access public
-     * @return void
-     */
-    public function getListByAccountTest($account)
-    {
-        return $this->objectModel->getListByAccount($account);
-    }
-
-    /**
      * Test get parent stage authed users.
      *
      * @param  int    $stageID
