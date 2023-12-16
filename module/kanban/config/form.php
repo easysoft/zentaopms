@@ -124,3 +124,6 @@ $config->kanban->form->batchCreateCard['pri']        = array('type' => 'string',
 
 $config->kanban->form->setWIP['limit']   = array('type' => 'int',    'required' => false, 'default' => -1);
 $config->kanban->form->setWIP['noLimit'] = array('type' => 'int',    'required' => false, 'default' => '');
+
+$config->kanban->form->setLane['name']  = array('type' => 'string',  'required' => false, 'default' => '');
+$config->kanban->form->setLane['color'] = array('type' => 'string',  'required' => false, 'default' => '');
