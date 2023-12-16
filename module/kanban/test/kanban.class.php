@@ -1344,8 +1344,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getCardByID($cardID);
-        return $object;
+        return $this->objectModel->getCardByID($cardID);
     }
 
     /**
