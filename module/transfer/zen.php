@@ -172,7 +172,7 @@ class transferZen extends transfer
      * @access public
      * @return void
      */
-    public function createTmpFile(array $objectDatas)
+    protected function createTmpFile(array $objectDatas)
     {
         $file    = $this->session->fileImportFileName;
         $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
@@ -210,7 +210,7 @@ class transferZen extends transfer
      * @access public
      * @return string
      */
-    public function checkSuhosinInfo(array $datas = array()): string
+    protected function checkSuhosinInfo(array $datas = array()): string
     {
         if(empty($datas)) return '';
         $current = (array)current($datas);
@@ -233,7 +233,7 @@ class transferZen extends transfer
      * @access public
      * @return object
      */
-    public function readExcel(string $module = '', int $pagerID = 1, string $insert = '', string $filter = ''): object
+    protected function readExcel(string $module = '', int $pagerID = 1, string $insert = '', string $filter = ''): object
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','100');
@@ -259,5 +259,177 @@ class transferZen extends transfer
         $datas->module         = $module;
 
         return $datas;
+    }
+
+    /**
+     * 构建Html表单。
+     * Build NextList.
+     *
+     * @param  array  $list
+     * @param  int    $lastID
+     * @param  string $fields
+     * @param  int    $pagerID
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    protected function buildNextList(array $list = array(), int $lastID = 0, string $fields = '', int $pagerID = 1, string $module = ''): string
+    {
+        $html  = '';
+        $key   = key($list);
+        $addID = 1;
+        if($module == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskTransferParams['executionID'], 'execution');
+
+        $showImportCount = $this->config->transfer->lazyLoading ? $this->config->transfer->showImportCount : $this->maxImport;
+        $lastRow         = $lastID + $key + $showImportCount;
+
+        foreach($list as $row => $object)
+        {
+            if($row <= $lastID) continue;
+            if($row > $lastRow) break;
+
+            $tmpList[$row] = $object;
+            $trClass = '';
+            if($row == $lastRow) $trClass = 'showmore';
+            $html .= "<tr class='text-top $trClass' data-id=$row>";
+            $html .= '<td>';
+
+            if(!empty($object->id))
+            {
+                $html .= $object->id . html::hidden("id[$row]", $object->id);
+            }
+            else
+            {
+                $sub = " <sub style='vertical-align:sub;color:gray'>{$this->lang->transfer->new}</sub>";
+                if($module == 'task') $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$this->lang->task->children}</sub>" : $sub;
+                $addID ++;
+                $html .= $addID . $sub;
+            }
+            $html .= "</td>";
+
+            foreach($fields as $field => $value)
+            {
+                $control  = $value['control'];
+                $values   = $value['values'];
+                $name     = "{$field}[$row]";
+                $selected = isset($object->$field) ? $object->$field : '';
+                if($module and $control == 'hidden' and isset($this->session->{$module.'TransferParams'}[$field. 'ID'])) $selected = $this->session->{$module . 'TransferParams'}[$field. 'ID'];
+
+                $options = array();
+                if($control == 'select')
+                {
+                    if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
+                    if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1, true);
+                    if(!isset($options['']) and !in_array($field, $this->config->transfer->requiredFields)) $options[''] = '';
+                }
+
+                if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
+
+                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $values, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
+
+                elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date' autocomplete='off'") . '</td>';
+
+                elseif($control == 'datetime') $html .= '<td>' . html::input("$name", $selected, "class='form-control form-datetime' autocomplete='off'") . '</td>';
+
+                elseif($control == 'hidden')   $html .= html::hidden("$name", $selected);
+
+                elseif($control == 'textarea')
+                {
+                    if($module == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
+                    $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
+                }
+                elseif($field == 'stepDesc' or $field == 'stepExpect' or $field == 'precondition')
+                {
+                    $stepDesc = $this->process4Testcase($field, $tmpList, $row);
+                    if($stepDesc) $html .= '<td>' . $stepDesc . '</td>';
+                }
+                elseif($field == 'estimate')
+                {
+                    $html .= '<td>';
+                    if(!empty($object->estimate) and is_array($object->estimate))
+                    {
+                        $html .= "<table class='table-borderless'>";
+                        foreach($object->estimate as $account => $estimate)
+                        {
+                            $html .= '<tr>';
+                            $html .= '<td class="c-team">' . html::select("team[$row][]", $members, $account, "class='form-control chosen'") . '</td>';
+                            $html .= '<td class="c-estimate-1">' . html::input("estimate[$row][]", $estimate, "class='form-control' autocomplete='off'")  . '</td>';
+                            $html .= '</tr>';
+                        }
+                        $html .= "</table>";
+                    }
+                    else
+                    {
+                        $html .= html::input("estimate[$row]", !empty($object->estimate) ? $object->estimate : '', "class='form-control'");
+                    }
+                    $html .= '</td>';
+                }
+                elseif(strpos($this->transferConfig->textareaFields, $field) !== false) $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' style='overflow:hidden;'") . '</td>';
+
+                else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
+            }
+
+            if(in_array($module, $this->config->transfer->actionModule)) $html .= '<td><a onclick="delItem(this)"><i class="icon-close"></i></a></td>';
+            $html .= '</tr>' . "\n";
+        }
+
+        return $html;
+    }
+
+    /**
+     * 处理用例步骤描述和预期结果。
+     * Process stepExpect、stepDesc and precondition for testcase.
+     *
+     * @param  int    $field
+     * @param  int    $datas
+     * @param  int    $key
+     * @access public
+     * @return string
+     */
+    protected function process4Testcase(string $field, array $datas, int $key = 0): string
+    {
+        $stepData = $this->loadModel('testcase')->processDatas($datas);
+
+        $html = '';
+        if($field == 'precondition' and isset($datas[$key])) return html::textarea("precondition[$key]", htmlSpecialString($datas[$key]->precondition), "class='form-control' style='overflow:hidden'");
+        if($field == 'stepExpect') return $html;
+        if(isset($stepData[$key]['desc']))
+        {
+            $html = "<table class='w-p100 bd-0'>";
+            $hasStep = false;
+            foreach($stepData[$key]['desc'] as $id => $desc)
+            {
+                if(empty($desc['content'])) continue;
+                $hasStep = true;
+
+                $html .= "<tr class='step'>";
+                $html .= '<td>' . $id . html::hidden("stepType[$key][$id]", $desc['type']) . '</td>';
+                $html .= '<td>' . html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'") . '</td>';
+                if($desc['type'] != 'group') $html .= '<td>' . html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'") . '</td>';
+                $html .= "</tr>";
+            }
+
+            if(!$hasStep)
+            {
+                $html .= "<tr class='step'>";
+                $html .= "<td>1" . html::hidden("stepType[$key][1]", 'step') . " </td>";
+                $html .= "<td>" . html::textarea("desc[$key][1]", '', "class='form-control'") . "</td>";
+                $html .= "<td>" . html::textarea("expect[$key][1]", '', "class='form-control'") . "</td>";
+                $html .= "</tr>";
+            }
+            $html .= "</table>";
+        }
+        else
+        {
+            $html  = "<table class='w-p100 bd-0'>";
+            $html .= "<tr class='step'>";
+            $html .= "<td>1" . html::hidden("stepType[$key][1]", 'step') . " </td>";
+            $html .= "<td>" . html::textarea("desc[$key][1]", '', "class='form-control'") . "</td>";
+            $html .= "<td>" . html::textarea("expect[$key][1]", '', "class='form-control'") . "</td>";
+            $html .= "</tr>";
+            $html .= "</table>";
+        }
+
+        return $html;
     }
 }
