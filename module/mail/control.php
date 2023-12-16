@@ -81,26 +81,10 @@ class mail extends control
      */
     public function edit()
     {
-        if($this->config->mail->turnon)
-        {
-            $mailConfig = $this->config->mail->smtp;
-            $mailConfig->fromAddress = $this->config->mail->fromAddress;
-            $mailConfig->fromName    = $this->config->mail->fromName;
-            $mailConfig->charset     = zget($mailConfig, 'charset', 'utf-8');
-        }
-        elseif($this->session->mailConfig)
-        {
-            $mailConfig = $this->session->mailConfig;
-        }
-        else
-        {
-            $this->locate(inlink('detect'));
-        }
-
-        $mailConfig->domain = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
+        $mailConfig = $this->mailZen->getConfigForEdit();
+        if(empty($mailConfig)) $this->locate(inlink('detect'));
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->edit;
-
         $this->view->mailExist  = $this->mail->mailExist();
         $this->view->mailConfig = $mailConfig;
         $this->view->openssl    = extension_loaded('openssl');

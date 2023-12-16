@@ -4,8 +4,10 @@
 /**
 
 title=测试 mailModel->setMTA();
-cid=1
-pid=1
+cid=0
+
+- 获取MTA主机属性Host @localhost
+- 获取MTAdebug设置属性SMTPDebug @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

@@ -4,8 +4,15 @@
 /**
 
 title=测试 mailModel->setGMail();
-cid=1
-pid=1
+cid=0
+
+- 获取Gmail主机
+ - 属性Mailer @smtp
+ - 属性Host @smtp.gmail.com
+ - 属性Port @465
+ - 属性SMTPSecure @ssl
+ - 属性Username @admin
+ - 属性Password @123456
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
