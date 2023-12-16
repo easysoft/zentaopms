@@ -272,7 +272,7 @@ class transferModel extends model
         }
         elseif(!empty($lang))
         {
-            $values = $this->getSourceByLang($lang);
+            $values = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
         }
 
         /* If empty values put system datas. */
@@ -422,17 +422,6 @@ class transferModel extends model
             $datas[$index] = $data;
         }
         return $datas;
-    }
-
-    /**
-     * Get field values by lang.
-     *
-     * @access public
-     * @return void|array
-     */
-    public function getSourceByLang($lang)
-    {
-        return isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
     }
 
     /**
