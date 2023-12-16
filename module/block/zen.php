@@ -1606,14 +1606,14 @@ class blockZen extends block
         $createdBugGroup  = $this->metric->getResultByCode('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日新增的Bug数。
         $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日解决的Bug数。
         $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日关闭的Bug数。
-        $bugFixRate       = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList))); // 获取Bug关闭率。
-        $effectiveBug     = $this->metric->getResultByCode('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList))); // 获取Bug总数。
-        $restoredBug      = $this->metric->getResultByCode('count_of_restored_bug_in_product',       array('product' => join(',', $productIdList))); // 获取Bug关闭数。
+        $bugFixRate       = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList))); // 获取Bug修复率。
+        $effectiveBug     = $this->metric->getResultByCode('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList))); // 获取有效Bug总数。
+        $fixedBug         = $this->metric->getResultByCode('count_of_fixed_bug_in_product',          array('product' => join(',', $productIdList))); // 获取Bug修复数。
         $activatedBug     = $this->metric->getResultByCode('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList))); // 获取Bug激活数。
 
         if(!empty($bugFixRate))   $bugFixRate   = array_column($bugFixRate,   null, 'product');
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
-        if(!empty($restoredBug))  $restoredBug  = array_column($restoredBug,  null, 'product');
+        if(!empty($fixedBug))     $fixedBug     = array_column($fixedBug,  null, 'product');
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
         /* 将获取出的度量项数据塞入产品列表数据中。 */
@@ -1655,10 +1655,10 @@ class blockZen extends block
                 }
             }
 
-            $product->closedBugRate = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
-            $product->totalBug      = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
-            $product->closedBug     = isset($restoredBug[$productID]['value'])  ? $restoredBug[$productID]['value']      : 0;
-            $product->activatedBug  = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
+            $product->fixedBugRate = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
+            $product->totalBug     = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
+            $product->fixedBug     = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
+            $product->activatedBug = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
         }
 
         $this->view->products = $products;

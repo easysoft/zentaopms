@@ -159,15 +159,15 @@ statisticBlock
             setClass('gap-4 px-5', $testTasksView ? 'flex-none' : 'flex-1'),
             progressCircle
             (
-                set::percent($product->closedBugRate),
+                set::percent($product->fixedBugRate),
                 set::size(112),
                 set::text(false),
                 set::circleWidth(0.06),
-                div(span(setClass('text-2xl font-bold'), $product->closedBugRate), '%'),
+                div(span(setClass('text-2xl font-bold'), $product->fixedBugRate), '%'),
                 div
                 (
                     setClass('row text-gray items-center gap-1'),
-                    $lang->block->qastatistic->closedBugRate
+                    $lang->block->qastatistic->fixBugRate
                 )
             ),
             row
@@ -179,16 +179,16 @@ statisticBlock
                     div
                     (
                         setClass('text-sm text-gray'),
-                        $lang->block->qastatistic->totalBug
+                        $lang->block->bugstatistic->effective
                     )
                 ),
                 center
                 (
-                    div(span(!empty($product->closedBug) ? $product->closedBug : 0)),
+                    div(span(!empty($product->fixedBug) ? $product->fixedBug : 0)),
                     div
                     (
                         setClass('text-sm text-gray'),
-                        $lang->bug->statusList['closed']
+                        $lang->block->bugstatistic->fixed
                     )
                 ),
                 center
