@@ -11,12 +11,6 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name === 'storyCount')
-    {
-        result[result.length] = {html:'<span class="text-gray text-xs">SP</span>'};
-        return result;
-    }
-
     if(col.name === 'invested')
     {
         result[result.length] = {html:'<span class="text-gray text-xs">' + langManDay + '</span>'};
