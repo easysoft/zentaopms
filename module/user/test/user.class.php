@@ -1032,13 +1032,14 @@ class userTest
     }
 
     /**
+     * 测试获取指定类型的用户模板。
      * Test get user templates.
      *
      * @param  string $type
      * @access public
      * @return array
      */
-    public function getUserTemplatesTest($type)
+    public function getUserTemplatesTest(string $type): array
     {
         return $this->objectModel->getUserTemplates($type);
     }
