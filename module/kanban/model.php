@@ -2902,7 +2902,7 @@ class kanbanModel extends model
 
         if($laneType == 'story')
         {
-            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', 0, 'story', $otherCardList);
+            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'story', $otherCardList);
             foreach($stories as $storyID => $story)
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
