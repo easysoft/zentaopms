@@ -307,4 +307,69 @@ class kanbanTao extends kanbanModel
 
         return $objectCard;
     }
+
+    /**
+     * 获取执行下看板的来源看板Cell。
+     * Get source kanban cell of execution.
+     *
+     * @param  int    $cardID
+     * @param  int    $executionID
+     * @param  int    $fromColID
+     * @param  int    $fromLaneID
+     * @param  string $groupBy
+     * @param  string $browseType
+     * @access public
+     * @return object
+     */
+    protected function getExecutionFromCell(int $cardID, int $executionID, int $fromColID, int $fromLaneID, string $groupBy, string $browseType): object
+    {
+        return $this->dao->select('id, cards, lane')->from(TABLE_KANBANCELL)
+                    ->where('kanban')->eq($executionID)
+                    ->andWhere('`column`')->eq($fromColID)
+                    ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
+                    ->beginIF($groupBy and $groupBy != 'default')
+                    ->andWhere('type')->eq($browseType)
+                    ->andWhere('cards')->like("%,$cardID,%")
+                    ->fi()
+                    ->fetch();
+    }
+
+    /**
+     * 获取执行下看板的目标看板Cell。
+     * Get target kanban cell of execution.
+     *
+     * @param  int    $executionID
+     * @param  int    $toColID
+     * @param  int    $toLaneID
+     * @access public
+     * @return object
+     */
+    protected function getExecutionToCell(int $executionID, int $toColID, int $toLaneID): object
+    {
+        return $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+                    ->where('kanban')->eq($executionID)
+                    ->andWhere('lane')->eq($toLaneID)
+                    ->andWhere('`column`')->eq($toColID)
+                    ->fetch();
+    }
+
+    /**
+     * 更新执行下看板的卡片。
+     * Update card of execution.
+     *
+     * @param  int    $executionID
+     * @param  int    $colID
+     * @param  int    $laneID
+     * @param  string $cards
+     * @access public
+     * @return void
+     */
+    protected function updateExecutionCell(int $executionID, int $colID, int $laneID, string $cards)
+    {
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)
+              ->where('kanban')->eq($executionID)
+              ->andWhere('lane')->eq($laneID)
+              ->andWhere('`column`')->eq($colID)
+              ->exec();
+    }
 }
