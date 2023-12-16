@@ -1254,15 +1254,15 @@ class kanban extends control
     }
 
     /**
+     * 设置卡片颜色。
      * Set a card's color.
      *
-     * @param  int   $cardID
-     * @param  int   $color
-     * @param  int   $kanbanID
+     * @param  int    $cardID
+     * @param  string $color
      * @access public
      * @return string
      */
-    public function setCardColor($cardID, $color, $kanbanID)
+    public function setCardColor(int $cardID, string $color)
     {
         $this->kanban->updateCardColor($cardID, $color);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
