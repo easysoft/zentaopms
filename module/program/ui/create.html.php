@@ -62,14 +62,9 @@ formPanel
             set::label($lang->project->budget),
             inputGroup
             (
-                inputControl
-                (
-                    $parentProgram ? set::prefix(zget($lang->project->currencySymbol, $currency)) : null,
-                    $parentProgram ? set::prefixWidth('icon') : null,
-                    input(set::name('budget')),
-                    set::suffix($lang->project->tenThousandYuan),
-                    set::suffixWidth(50)
-                ),
+                $parentProgram ? set::prefix(zget($lang->project->currencySymbol, $currency)) : null,
+                $parentProgram ? set::prefixWidth('icon') : null,
+                input(set::name('budget')),
                 $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(set::name('budgetUnit'), set::items($budgetUnitList), set::value($config->project->defaultCurrency), set::required(true))
             )
         ),
