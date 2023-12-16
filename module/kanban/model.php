@@ -3501,13 +3501,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 归档看板卡片。
      * Archive a card.
      *
      * @param  int    $cardID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function archiveCard($cardID)
+    public function archiveCard(int $cardID): bool
     {
         $oldCard = $this->getCardByID($cardID);
 
@@ -3520,7 +3521,16 @@ class kanbanModel extends model
 
         $card = $this->getCardByID($cardID);
 
-        if(!dao::isError()) return common::createChanges($oldCard, $card);
+        if(dao::isError()) return false;
+        $changes = common::createChanges($oldCard, $card);
+
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
