@@ -1,0 +1,46 @@
+title: table zt_execution
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    range: 1-700
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 项目集{10},项目{90},迭代{200},阶段{200},看板{200}
+    - field: name2
+      range: 1-10000
+  - field: project
+    range: 0{10},1-10{9},11-100
+  - field: model
+    range: "[]{10},[scrum,waterfall,kanban,agileplus,waterfallplus]{30!}"
+  - field: type
+    range: program{10},project{90},sprint{200},stage{200},kanban{200}
+  - field: budget
+    range: 800000-1:100
+  - field: status
+    range: wait,doing
+  - field: percent
+    range: 0{30},10{30},0{30}
+  - field: milestone
+    range: 0{30},1{10},0{10},1{10},0{30}
+  - field: auth
+    range: "extend"
+  - field: desc
+    range: 1-10000
+    prefix: "描述"
+  - field: begin
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 0{10},1-10{9},11-100
