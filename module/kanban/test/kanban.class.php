@@ -21,9 +21,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->findByID($objectID)->from(TABLE_KANBANGROUP)->fetch();
-        return $object;
+        return $this->objectModel->dao->findByID($objectID)->from(TABLE_KANBANGROUP)->fetch();
     }
 
     /**

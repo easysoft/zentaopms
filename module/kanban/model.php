@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of kanban module of ZenTaoPMS.
  *
@@ -9,19 +10,18 @@
  * @version     $Id: model.php 5118 2021-10-22 10:18:41Z $
  * @link        https://www.zentao.net
  */
-?>
-<?php
 class kanbanModel extends model
 {
     /**
+     * 创建看板分组。
      * Create a kanban group.
      *
      * @param  int    $kanbanID
      * @param  int    $regionID
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function createGroup($kanbanID, $regionID)
+    public function createGroup(int $kanbanID, int $regionID): int|false
     {
         $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANGROUP)
             ->where('region')->eq($regionID)
