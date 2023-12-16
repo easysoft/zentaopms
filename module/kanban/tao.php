@@ -264,4 +264,47 @@ class kanbanTao extends kanbanModel
 
         return array($this->lang->kanban->allProducts) + $productPairs;
     }
+
+    /**
+     * 构造导入卡片的数据结构。
+     * Build import card data structure.
+     *
+     * @param  object $objectType
+     * @param  object $object
+     * @param  string $fromType
+     * @param  array  $creators
+     * @access public
+     * @return object
+     */
+    protected function buildObjectCard(object $objectCard, object $object, string $fromType, array $creators): object
+    {
+        if($fromType == 'productplan' or $fromType == 'release')
+        {
+            $objectCard->createdBy = zget($creators, $object->id, '');
+            $objectCard->delay     = helper::today() > $objectCard->end ? true : false;
+        }
+
+        if($fromType =='execution')
+        {
+            if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $object->end);
+                if($delay > 0) $objectCard->delay = $delay;
+            }
+            $objectCard->execType = $object->type;
+            $objectCard->progress = $object->progress;
+
+            $parentExecutions  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+            $objectCard->title = implode('/', $parentExecutions);
+
+            $children             = $this->dao->select('count(1) as children')->from(TABLE_EXECUTION)->where('parent')->eq($object->id)->andWhere('type')->in('stage,kanban,sprint')->andWhere('deleted')->eq(0)->fetch('children');
+            $objectCard->children = !empty($children) ? $children : 0;
+        }
+
+        $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
+        $objectCard->objectStatus = $objectCard->status;
+        $objectCard->status       = $objectCard->progress == 100 ? 'done' : 'doing';
+
+        return $objectCard;
+    }
 }
