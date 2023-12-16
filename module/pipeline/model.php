@@ -66,6 +66,7 @@ class pipelineModel extends model
      */
     public function getList(string $type = 'jenkins', string $orderBy = 'id_desc', object|null $pager = null): array
     {
+        $type = strtolower($type);
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->beginIF($type)->AndWhere('type')->in($type)->fi()
@@ -84,6 +85,7 @@ class pipelineModel extends model
      */
     public function getPairs(string $type = ''): array
     {
+        $type = strtolower($type);
         return $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->beginIF($type)->AndWhere('type')->eq($type)->fi()

@@ -115,7 +115,7 @@ class gogs extends control
         {
             $gogs = form::data($this->config->gogs->form->edit)->get();
             $this->checkToken($gogs);
-            $this->gogs->update($gogsID, $gogs);
+            $this->loadModel('pipeline')->update($gogsID, $gogs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $gogs     = $this->gogs->fetchByID($gogsID);

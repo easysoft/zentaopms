@@ -21,17 +21,6 @@ class giteaModel extends model
     public $maintainerAccess = 40;
 
     /**
-     * Get gitea pairs.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPairs()
-    {
-        return $this->loadModel('pipeline')->getPairs('gitea');
-    }
-
-    /**
      * Get gitea api base url by gitea id.
      *
      * @param  int    $giteaID

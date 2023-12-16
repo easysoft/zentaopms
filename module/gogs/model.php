@@ -13,17 +13,6 @@
 class gogsModel extends model
 {
     /**
-     * Get gogs pairs.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPairs()
-    {
-        return $this->loadModel('pipeline')->getPairs('gogs');
-    }
-
-    /**
      * Get gogs api base url by gogs id.
      *
      * @param  int    $gogsID
@@ -36,29 +25,6 @@ class gogsModel extends model
         if(!$gogs) return '';
 
         return rtrim($gogs->url, '/') . '/api/v1%s' . "?token={$gogs->token}";
-    }
-
-    /**
-     * Create a gogs.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gogs');
-    }
-
-    /**
-     * Update a gogs.
-     *
-     * @param  int $id
-     * @access public
-     * @return bool
-     */
-    public function update($id)
-    {
-        return $this->loadModel('pipeline')->update($id);
     }
 
     /**

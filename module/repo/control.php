@@ -1309,7 +1309,7 @@ class repo extends control
      */
     public function ajaxGetHosts(string $scm)
     {
-        $hosts = $this->loadModel(strtolower($scm))->getPairs();
+        $hosts = $this->loadModel('pipeline')->getPairs($scm);
 
         $options = array();
         foreach($hosts as $hostID => $host)
