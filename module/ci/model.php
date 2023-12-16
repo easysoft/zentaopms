@@ -279,7 +279,7 @@ class ciModel extends model
         $MRObject->remove_source_branch = $relateMR->removeSourceBranch == '1' ? true : false;
         if($relateMR->assignee)
         {
-            $gitlabAssignee = $this->loadModel('gitlab')->getUserIDByZentaoAccount($relateMR->gitlabID, $relateMR->assignee);
+            $gitlabAssignee = $this->loadModel('pipeline')->getOpenIdByAccount($relateMR->gitlabID, 'gitlab', $relateMR->assignee);
             if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
         }
 

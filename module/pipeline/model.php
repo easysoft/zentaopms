@@ -200,4 +200,44 @@ class pipelineModel extends model
             ->andWhere('providerID')->eq($providerID)
             ->fetchPairs();
     }
+
+    /**
+     * 根据服务器ID和禅道账号获取禅道用户绑定的第三方账号。
+     * Get user binded third party accounts.
+     *
+     * @param  int    $providerID
+     * @param  string $providerType  gitlab, gitea, gogs
+     * @param  string $zentaoAccount
+     * @access public
+     * @return string
+     */
+    public function getOpenIdByAccount(int $providerID, string $providerType, string $zentaoAccount): string
+    {
+        $providerType = strtolower($providerType);
+        return (string)$this->dao->select('openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq($providerType)
+            ->andWhere('providerID')->eq($providerID)
+            ->andWhere('account')->eq($zentaoAccount)
+            ->fetch('openID');
+    }
+
+    /**
+     * 根据禅道账号获取禅道用户绑定的第三方服务器和账号信息。
+     * Get user binded third party accounts.
+     *
+     * @param  string $providerType  gitlab, gitea, gogs
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getProviderPairsByAccount(string $providerType, string $account = ''): array
+    {
+        $providerType = strtolower($providerType);
+        if(!$account) $account = $this->app->user->account;
+
+        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq($providerType)
+            ->andWhere('account')->eq($account)
+            ->fetchPairs('providerID');
+    }
 }

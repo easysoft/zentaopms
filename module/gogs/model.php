@@ -237,23 +237,6 @@ class gogsModel extends model
     }
 
     /**
-     * Get gogs user id by zentao account.
-     *
-     * @param  int    $gogsID
-     * @param  string $zentaoAccount
-     * @access public
-     * @return array
-     */
-    public function getUserIDByZentaoAccount($gogsID, $zentaoAccount)
-    {
-        return $this->dao->select('openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gogs')
-            ->andWhere('providerID')->eq($gogsID)
-            ->andWhere('account')->eq($zentaoAccount)
-            ->fetch('openID');
-    }
-
-    /**
      * Get matched gogs users.
      *
      * @param  int   $gogsID

@@ -74,7 +74,7 @@ class giteaModel extends model
         $sudoParam = '';
         if($sudo == true and !$this->app->user->admin)
         {
-            $openID = $this->getUserIDByZentaoAccount($giteaID, $this->app->user->account);
+            $openID = $this->loadModel('pipeline')->getOpenIdByAccount($giteaID, 'gitea', $this->app->user->account);
             if($openID) $sudoParam = "&sudo={$openID}";
         }
 
@@ -275,23 +275,6 @@ class giteaModel extends model
             ->where('providerType')->eq('gitea')
             ->andWhere('account')->eq($account)
             ->fetchPairs('providerID');
-    }
-
-    /**
-     * Get gitea user id by zentao account.
-     *
-     * @param  int    $giteaID
-     * @param  string $zentaoAccount
-     * @access public
-     * @return array
-     */
-    public function getUserIDByZentaoAccount($giteaID, $zentaoAccount)
-    {
-        return $this->dao->select('openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitea')
-            ->andWhere('providerID')->eq($giteaID)
-            ->andWhere('account')->eq($zentaoAccount)
-            ->fetch('openID');
     }
 
     /**

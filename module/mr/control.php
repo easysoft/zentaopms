@@ -325,7 +325,7 @@ class mr extends control
         $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
         if(isset($MR->hostID) && !$this->app->user->admin)
         {
-            $openID = $this->{$host->type}->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
+            $openID = $this->loadModel('pipeline')->getOpenIdByAccount($MR->hostID, $host->type, $this->app->user->account);
             if(!$projectOwner && isset($sourceProject->owner->id) && $sourceProject->owner->id == $openID) $projectOwner = true;
         }
 

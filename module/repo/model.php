@@ -2318,10 +2318,10 @@ class repoModel extends model
         }
         else
         {
-            $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            $gitlabUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
             if(!$gitlabUser) $this->app->control->send(array('message' => array()));
 
-            $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            $projects    = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
             $groupIDList = array(0 => 0);
             $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;

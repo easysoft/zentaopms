@@ -499,8 +499,9 @@ class mrModel extends model
     public function apiCreateMR(int $hostID, string $projectID, object $MR): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($hostID, $host->type, $MR->assignee);
 
-        $MRObject = new stdclass;
+        $MRObject = new stdclass();
         $MRObject->title = $MR->title;
         if($host->type == 'gitlab')
         {
@@ -512,11 +513,7 @@ class mrModel extends model
             $MRObject->description          = $MR->description;
             $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
             $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
-            if($MR->assignee)
-            {
-                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($hostID, $MR->assignee);
-                if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
-            }
+            if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
             return json_decode(commonModel::http($url, $MRObject));
         }
         elseif(in_array($host->type, array('gitea', 'gogs')))
@@ -526,11 +523,7 @@ class mrModel extends model
             $MRObject->head = $MR->sourceBranch;
             $MRObject->base = $MR->targetBranch;
             $MRObject->body = $MR->description;
-            if(!$MR->assignee)
-            {
-                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($hostID, $MR->assignee);
-                if($assignee) $MRObject->assignee = $assignee;
-            }
+            if(!empty($assignee)) $MRObject->assignee = $assignee;
 
             $mergeResult = json_decode(commonModel::http($url, $MRObject));
             if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
@@ -702,34 +695,30 @@ class mrModel extends model
     public function apiUpdateMR(object $oldMR, object $MR): object
     {
         $host  = $this->loadModel('pipeline')->getByID($oldMR->hostID);
-        $newMR = array('title' => $MR->title);
+        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($hostID, $host->type, $MR->assignee);
+
+        $MRObject = new stdclass();
+        $MRObject->title = $MR->title;
         if($host->type == 'gitlab')
         {
-            $newMR['description']          = $MR->description;
-            $newMR['target_branch']        = $oldMR->targetBranch;
-            $newMR['remove_source_branch'] = $MR->removeSourceBranch == '1' ? true : false;
-            $newMR['squash']               = $MR->squash == '1' ? 1 : 0;
-            if($MR->assignee)
-            {
-                $gitlabAssignee = $this->loadModel('gitlab')->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
-                if($gitlabAssignee) $newMR['assignee_ids'] = $gitlabAssignee;
-            }
+            $MRObject->target_branch        = $MR->targetBranch;
+            $MRObject->description          = $MR->description;
+            $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+            $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
+            if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
 
-            $url = sprintf($this->gitlab->getApiRoot($oldMR->hostID), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
-            return json_decode(commonModel::http($url, $newMR, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+            $url = sprintf($this->loadModel('gitlab')->getApiRoot($oldMR->hostID), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
+            return json_decode(commonModel::http($url, $MRObject, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
         {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($oldMR->hostID), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
+            $MRObject->base = $MR->targetBranch;
+            $MRObject->body = $MR->description;
+            if(!empty($assignee)) $MRObject->assignee = $assignee;
 
-            $newMR['base'] = $MR->targetBranch;
-            $newMR['body'] = $MR->description;
-            if($MR->assignee)
-            {
-                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
-                if($assignee) $newMR['assignee'] = $assignee;
-            }
-            $mergeResult = json_decode(commonModel::http($url, $newMR, array(), array(), 'json', 'PATCH'));
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($oldMR->hostID), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
+            $mergeResult = json_decode(commonModel::http($url, $MRObject, array(), array(), 'json', 'PATCH'));
+
             if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;
             if(isset($mergeResult->mergeable))
             {
