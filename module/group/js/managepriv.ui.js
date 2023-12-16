@@ -297,11 +297,7 @@ function updatePrivTree(privList)
     loadTarget($.createLink('group', 'ajaxGetRelatedPrivs'), '.side', options);
 }
 
-window.onsize = function()
-{
-    positionBtn();
-}
-
+$(window).on('resize', positionBtn);
 
 /**
  * Change btn position.
@@ -312,7 +308,8 @@ window.onsize = function()
 function positionBtn()
 {
     let btnLeft = $('.main.main-content > table').width() - 75;
-    $('.main.main-content > .btn-group').css('left', btnLeft).css('visibility', 'unset');
+    let pagePadding = $('#mainContainer').css('padding-left');
+    $('.main.main-content > .btn-group').css('left', `calc(${btnLeft}px + ${pagePadding})`).css('visibility', 'unset');
 }
 
 /**

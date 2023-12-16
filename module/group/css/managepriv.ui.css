@@ -10,7 +10,7 @@
 #mainContainer {gap: 16px; height: calc(100vh - 165px);}
 #mainContainer > .main {flex: 1 1 75%; overflow-y: auto; padding: 0px; border: 1px solid #FFF; box-sizing: content-box;}
 #mainContainer > .side {flex: 1 1 25%;}
-#mainContainer .main .btn-group {position: absolute; visibility: hidden; display: inline-block; z-index: 2; left: 66% !important;}
+#mainContainer .main .btn-group {position: absolute; visibility: hidden; display: inline-block; z-index: 2;}
 #mainContainer .main .btn-group .switchBtn {padding: 6px 10px;}
 #mainContainer .main .btn-group .switchBtn:first-child {border-radius: 4px 0px 0px 4px;}
 #mainContainer .main .btn-group .switchBtn:last-child {border-radius: 0px 4px 4px 0px;}
