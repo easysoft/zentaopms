@@ -1146,20 +1146,16 @@ class userTest
     }
 
     /**
-     * test of isClickable.
+     * 测试是否可以针对用户执行某个操作。
+     * Test whether an action can be performed on the user.
      *
-     * @param  int    $userID
+     * @param  object $user
      * @param  string $action
      * @access public
      * @return bool
      */
-    public function isClickableTest($userID, $action = '')
+    public function isClickableTest(object $user, string $action): bool
     {
-        global $tester;
-
-        $user = $tester->loadModel('user')->getById($userID, 'id');
-        if($userID == 10) $user->ranzhi = '';
-
         return $this->objectModel->isClickable($user, $action);
     }
 }
