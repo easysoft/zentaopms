@@ -12,6 +12,11 @@ ALTER TABLE `zt_meeting` MODIFY `editedDate` datetime NULL;
 
 ALTER TABLE `zt_productplan` MODIFY `mailto` text NULL;
 
+ALTER TABLE `zt_story` MODIFY `submitedBy` varchar(30) DEFAULT '';
+ALTER TABLE `zt_story` MODIFY `demand` mediumint(8) DEFAULT 0;
+ALTER TABLE `zt_story` MODIFY `duration` char(30) DEFAULT '';
+ALTER TABLE `zt_story` MODIFY `BSA` char(30) DEFAULT '';
+
 CREATE INDEX `metricCode` ON zt_metriclib (metricCode) USING BTREE;
 CREATE INDEX `metricID` ON zt_metriclib (metricID) USING BTREE;
 
