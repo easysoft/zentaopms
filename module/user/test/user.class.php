@@ -34,22 +34,16 @@ class userTest
      *
      * @param  array  $accounts
      * @param  string $keyField
-     * @param  bool   $count
      * @access public
      * @return void
      */
-    public function getListByAccountsTest($accounts = array(), $keyField = 'id', $count = false)
+    public function getListByAccountsTest($accounts = array(), $keyField = 'id')
     {
         $objects = $this->objectModel->getListByAccounts($accounts, $keyField);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $count ? count($objects) : $objects;
-        }
+        if(!dao::isError()) return $objects;
+
+        $error = dao::getError();
+        return $error[0];
     }
 
     /**
