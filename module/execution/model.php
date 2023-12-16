@@ -1672,6 +1672,8 @@ class executionModel extends model
                 $executions[$execution->id]->title = implode('/', $parentExecutions);
             }
         }
+
+        foreach($parentList as $parentID) unset($executions[$parentID]);
         return $executions;
     }
 

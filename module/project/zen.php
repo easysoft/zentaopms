@@ -1240,7 +1240,7 @@ class projectZen extends project
             $projectStories = $this->story->getExecutionStoryPairs($project->id);
             $project->storyCount = count($projectStories);
 
-            $executions = $this->execution->getStatData($project->id, 'all');
+            $executions = $this->execution->getStatData($project->id, 'all', 0, 0, false, 'skipParent');
             $project->executionCount = count($executions);
 
             $project->from    = 'project';

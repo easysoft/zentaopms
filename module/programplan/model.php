@@ -495,7 +495,7 @@ class programplanModel extends model
         $planIDList     = $formData->get('planIDList');
         $names          = $formData->get('name');
         $projectManager = $formData->get('PM');
-        $percents       = $formData->get('percent');
+        $percent        = $formData->get('percent');
         $attributes     = $formData->get('attribute');
         $acl            = $formData->get('acl');
         $milestone      = $formData->get('milestone');
@@ -506,7 +506,7 @@ class programplanModel extends model
         $desc           = $formData->get('desc');
         $orders         = $formData->get('orders');
         $type           = $formData->get('type');
-        $codes          = $formData->get('code');
+        $code           = $formData->get('code');
         $output         = $formData->get('output');
 
         /* Determine if a task has been created under the parent phase. */
@@ -550,10 +550,8 @@ class programplanModel extends model
             $plan->PM         = empty($projectManager[$key]) ? '' : $projectManager[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
-            $plan->percent    = 0;
-            $plan->code       = '';
-            if($setCode)    $plan->code    = $codes[$key];
-            if($setPercent) $plan->percent = $percents[$key];
+            if($setCode)    $plan->code    = empty($code[$key]) ? '' : $code[$key];
+            if($setPercent) $plan->percent = empty($percent[$key]) ? 0 : $percent[$key];
 
             $plan->begin     = empty($begin[$key])     ? null : $begin[$key];
             $plan->end       = empty($end[$key])       ? null : $end[$key];
