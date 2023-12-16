@@ -1511,6 +1511,7 @@ class kanban extends control
     }
 
     /**
+     * 编辑看板列。
      * Set lane column info.
      *
      * @param  int $columnID
@@ -1519,17 +1520,18 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function setColumn($columnID, $executionID = 0, $from = 'kanban')
+    public function setColumn(int $columnID, int $executionID = 0, string $from = 'kanban')
     {
         $column = $this->kanban->getColumnByID($columnID);
-
         if($_POST)
         {
-            $changes = $this->kanban->updateLaneColumn($columnID, $column);
+            $formData = form::data($this->config->kanban->form->setColumn)->get();
+            $changes  = $this->kanban->updateColumn($columnID, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
+
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
+                $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'edited', '', $executionID);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1542,7 +1544,6 @@ class kanban extends control
 
         $this->view->canEdit = $from == 'RDKanban' ? 0 : 1;
         $this->view->column  = $column;
-        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->editColumn;
         $this->display();
     }
 
