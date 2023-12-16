@@ -268,7 +268,7 @@ class transferModel extends model
         {
             $params = !empty($params) ? $params : '';
             $pairs  = !empty($pairs)  ? $pairs : '';
-            $values = $this->getSourceByModuleMethod($model, $Module, $method, $params, $pairs);
+            $values = $this->transferTao->getSourceByModuleMethod($model, $Module, $method, $params, $pairs);
         }
         elseif(!empty($lang))
         {
@@ -422,60 +422,6 @@ class transferModel extends model
             $datas[$index] = $data;
         }
         return $datas;
-    }
-
-    /**
-     * Get field values by method.
-     *
-     * @param  int    $module
-     * @param  int    $callModule
-     * @param  int    $method
-     * @param  string $params
-     * @param  string $pairs
-     * @access public
-     * @return void
-     */
-    public function getSourceByModuleMethod($module, $callModule, $method, $params = '', $pairs = '')
-    {
-        $getParams = $this->session->{$module . 'TransferParams'};
-
-        if(is_string($params)) $params = explode('&', $params);
-        foreach($params as $param => $value)
-        {
-            if(empty($value) || strpos($value, '$') === false) continue;
-
-            $params[$param] = isset($getParams[ltrim($value, '$')]) ? $getParams[ltrim($value, '$')] : '';
-        }
-
-        /* If this method has multiple parameters use call_user_func_array. */
-        if(is_array($params))
-        {
-            $values = call_user_func_array(array($this->loadModel($callModule), $method), $params);
-        }
-        elseif($params)
-        {
-            $values = $this->loadModel($callModule)->$method($params);
-        }
-        else
-        {
-            $values = $this->loadModel($callModule)->$method();
-        }
-
-        if(!empty($pairs))
-        {
-            $valuePairs = array();
-            foreach($values as $key => $value)
-            {
-                if(is_object($value)) $value = get_object_vars($value);
-
-                $valuePairs[$key] = $value[$pairs[1]];
-                if(!empty($pairs[0])) $valuePairs[$value[$pairs[0]]] = $value[$pairs[1]];
-            }
-            $values = $valuePairs;
-            if(reset($values) and (current($values) or (current($values) == 0))) $values = array('');
-        }
-
-        return $values;
     }
 
     /**

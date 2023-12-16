@@ -19,15 +19,22 @@ class transferTest
     }
 
     /**
-     * 测试通过 id 获取用例库信息。
-     * Get by ID test.
+     * 根据config:dataSource中配置的方法获取字段数据源。
+     * Get source by module method.
      *
-     * @param  bool               $setImgSize
+     * @param  string $module
+     * @param  string $callModule
+     * @param  string $method
+     * @param  string|array $params
+     * @param  string|array $pairs
      * @access public
-     * @return void
+     * @return array|string
      */
-    public function commonActionsTest(string $module)
+    public function getSourceByModuleMethodTest(string $module, string $callModule, string $method, string|array $params = '', string|array $pairs = ''): array|string
     {
-        $this->objectModel->commonActions($module);
+        if(empty($module))     return 'Module is empty';
+        if(empty($callModule)) return 'Call module is empty';
+        if(empty($method))     return 'Method is empty';
+        return $this->objectModel->getSourceByModuleMethod($module, $callModule, $method, $params, $pairs);
     }
 }
