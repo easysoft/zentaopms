@@ -42,7 +42,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
 /* Generate checkboxes for sub-stage management. */
 $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType)
 {
-    if(empty($planID) || in_array($project->model, array('waterfallplus', 'ipd'))) return div();
+    if(empty($planID) || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
 
     $typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->programplan->typeList;
 
