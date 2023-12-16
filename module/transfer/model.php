@@ -197,54 +197,6 @@ class transferModel extends model
     }
 
     /**
-     * Init Title.
-     *
-     * @param  int    $module
-     * @param  int    $field
-     * @access public
-     * @return void
-     */
-    public function initTitle($module, $field)
-    {
-        $title = $field;
-
-        $this->commonActions($module);
-
-        if(!empty($this->moduleConfig->fieldList[$field]['title'])) return $this->moduleLang->{$this->moduleConfig->fieldList[$field]['title']};
-        if(isset($this->lang->$module->$field))
-        {
-            $title = $this->lang->$module->$field;
-        }
-        elseif(isset($this->lang->$module->{$field . 'AB'}))
-        {
-            $title = $this->lang->$module->{$field . 'AB'};
-        }
-        elseif(isset($this->lang->transfer->reservedWord[$field]))
-        {
-            $title = $this->lang->transfer->reservedWord[$field];
-        }
-
-        return $title;
-    }
-
-    /**
-     * Init Control.
-     *
-     * @param  string $field
-     * @access public
-     * @return void
-     */
-    public function initControl($module, $field)
-    {
-        if(isset($this->moduleFieldList[$field]['control']))    return $this->moduleFieldList[$field]['control'];
-        if(isset($this->moduleLang->{$field.'List'}))           return 'select';
-        if(isset($this->moduleFieldList[$field]['dataSource'])) return 'select';
-
-        if(strpos($this->transferConfig->sysDataFields, $field) !== false) return 'select';
-        return $this->transferConfig->fieldList['control'];
-    }
-
-    /**
      * Init Values.
      *
      * @param  int    $model
@@ -289,25 +241,6 @@ class transferModel extends model
         }
 
         return $values;
-    }
-
-    /**
-     * Init Required.
-     *
-     * @param  int    $module
-     * @param  int    $field
-     * @access public
-     * @return void
-     */
-    public function initRequired($module, $field)
-    {
-        $this->commonActions($module);
-
-        if(empty($this->moduleConfig->create->requiredFields)) return 'no';
-
-        $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
-        if(strpos($requiredFields, $field) !== false) return 'yes';
-        return 'no';
     }
 
     /**
@@ -370,7 +303,7 @@ class transferModel extends model
         }
         else
         {
-            $moduleData = $this->getDatasByFile($tmpFile);
+            $moduleData = unserialize(file_get_contents($file));
         }
 
         $this->mergeConfig($module);
@@ -831,18 +764,6 @@ class transferModel extends model
     }
 
     /**
-     * Get datas by file.
-     *
-     * @param  int    $file
-     * @access public
-     * @return void
-     */
-    public function getDatasByFile($file)
-    {
-        if(file_exists($file)) return  unserialize(file_get_contents($file));
-    }
-
-    /**
      * Get pagelist for datas.
      *
      * @param  int    $datas
@@ -918,26 +839,6 @@ class transferModel extends model
         }
 
         return $fields;
-    }
-
-    /**
-     * Get WorkFlow fields.
-     *
-     * @param  int    $module
-     * @access public
-     * @return void
-     */
-    public function getWorkFlowFields($module)
-    {
-        if($this->config->edition != 'open')
-        {
-            $appendFields = $this->loadModel('workflowaction')->getFields($module, 'showimport', false);
-
-            foreach($appendFields as $appendField) $this->config->$module->exportFields .= ',' . $appendField->field;
-
-            $this->session->set('appendFields', $appendFields);
-            $this->session->set('notEmptyRule', $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty'));
-        }
     }
 
     /**
@@ -1043,35 +944,6 @@ class transferModel extends model
     }
 
     /**
-     * Process child datas (task, story).
-     *
-     * @param  int    $objectID
-     * @param  int    $data
-     * @access public
-     * @return void
-     */
-    public function processChildData($lastID, $data)
-    {
-        $parentID = $this->session->parentID ? $this->session->parentID : 0;
-        if(strpos($data['name'], '&gt;') === 0)
-        {
-            if(!$parentID)
-            {
-                $parentID = $lastID;
-                $this->session->set('parentID', $parentID);
-            }
-            $data['parent'] = $parentID;
-            $data['name'] = ltrim($data['name'], '&gt;');
-            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
-        }
-        else
-        {
-            $this->session->set('parentID', 0);
-        }
-        return $data;
-    }
-
-    /**
      * Read excel and format data.
      *
      * @param  string $module
@@ -1091,9 +963,7 @@ class transferModel extends model
 
         /* Get page by datas. */
         $datas        = $this->getPageDatas($formatDatas, $pagerID);
-
         $suhosinInfo  = $this->transferZen->checkSuhosinInfo($datas->datas);
-
         $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
 
         $datas->requiredFields = $this->config->$module->create->requiredFields;
@@ -1104,7 +974,7 @@ class transferModel extends model
         $datas->dataInsert     = $insert;
         $datas->fields         = $this->initFieldList($module, $importFields, false);
         $datas->suhosinInfo    = $suhosinInfo;
-        $datas->module          = $module;
+        $datas->module         = $module;
 
         return $datas;
     }
