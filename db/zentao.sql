@@ -2104,6 +2104,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
+  `members` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product` ON `zt_testtask` (`product`);
