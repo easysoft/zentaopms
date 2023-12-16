@@ -152,7 +152,7 @@ $config->story->form->close['lastEditedBy']   = array('type' => 'string',   'req
 $config->story->form->close['changedBy']      = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->story->form->close['closedBy']       = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->story->form->close['closedReason']   = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->close['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => null);
+$config->story->form->close['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->close['assignedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->close['duplicateStory'] = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->story->form->close['childStories']   = array('type' => 'string',   'required' => false, 'default' => '');
