@@ -32,6 +32,27 @@ class transferZen extends transfer
     }
 
     /**
+     * 获取Excel中的数据。
+     * Get rows from excel.
+     *
+     * @access public
+     * @return array
+     */
+    protected function getRowsFromExcel(): array
+    {
+        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
+        if(is_string($rows))
+        {
+            if($this->session->fileImportFileName) unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($rows);
+            return print(js::locate('back'));
+        }
+        return $rows;
+    }
+
+    /**
      * 将参数转成变量存到SESSION中。
      * Set SESSION by params.
      *
@@ -149,7 +170,7 @@ class transferZen extends transfer
      *
      * @param  array  $objectDatas
      * @access public
-     * @return array
+     * @return void
      */
     public function createTmpFile(array $objectDatas)
     {
@@ -189,7 +210,7 @@ class transferZen extends transfer
      * @access public
      * @return string
      */
-    public function checkSuhosinInfo(array $datas = array())
+    public function checkSuhosinInfo(array $datas = array()): string
     {
         if(empty($datas)) return '';
         $current = (array)current($datas);

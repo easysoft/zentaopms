@@ -362,7 +362,7 @@ class transferModel extends model
         /* If tmpfile not isset create tmpfile. */
         if(!$tmpFile)
         {
-            $rows       = $this->getRowsFromExcel();
+            $rows       = $this->transferZen->getRowsFromExcel();
             $moduleData = $this->processRows4Fields($rows, $fields);
             $moduleData = $this->getNatureDatas($module, $moduleData, $filter, $fields);
 
@@ -422,27 +422,6 @@ class transferModel extends model
             $datas[$index] = $data;
         }
         return $datas;
-    }
-
-    /**
-     * Get rows from excel.
-     *
-     * @access public
-     * @return array
-     */
-    public function getRowsFromExcel()
-    {
-        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
-        if(is_string($rows))
-        {
-            if($this->session->fileImportFileName) unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            echo js::alert($rows);
-            return print(js::locate('back'));
-        }
-        return $rows;
-
     }
 
     /**
