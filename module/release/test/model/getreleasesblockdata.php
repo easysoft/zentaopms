@@ -1,11 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('product')->config('product')->gen(10);
-zdTable('project')->config('project')->gen(10);
-zdTable('release')->config('release')->gen(100);
 
 /**
 
@@ -14,6 +8,12 @@ timeout=0
 cid=0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('product')->config('product')->gen(10);
+zdTable('project')->config('project')->gen(10);
+zdTable('release')->config('release')->gen(100);
 
 $projectIdList = array(0, 1, 2, 3, 4, 5, 100);
 $orderByList   = array('id_asc', 'product_asc');
@@ -21,6 +21,9 @@ $limitList     = array(0, 10, 20);
 
 global $tester;
 $releaseModel = $tester->loadModel('release');
+$releaseModel->app->user->admin = true;
+$releaseModel->app->user->view  = new stdclass();
+$releaseModel->app->user->view->products = '1,2,3';
 
 r($releaseModel->getReleasesBlockData($projectIdList[0]))                                        && p('1:id,name')         && e('79,发布79');   // 测试传入的projectID为0时，获取发布信息
 r($releaseModel->getReleasesBlockData($projectIdList[1]))                                        && p('1:id,name,project') && e('61,发布61,1'); // 测试传入的projectID为1时，获取发布信息

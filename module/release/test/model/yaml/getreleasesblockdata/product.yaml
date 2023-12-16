@@ -14,4 +14,4 @@ fields:
     - field: vision
       range: "rnd{8},lite{2}"
     - field: deleted
-      range: "0{6},1{3}0"
+      range: "0{6},1{3},0"

@@ -1,21 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=taskModel->getReleaseCount();
+cid=0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 zdTable('product')->config('product')->gen(10);
 zdTable('release')->config('release')->gen(100);
 
-/**
-
-title=taskModel->getReleaseCount();
-timeout=0
-cid=0
-
-*/
-
 global $tester;
 $releaseModel = $tester->loadModel('release');
+$releaseModel->app->user->admin = true;
+$releaseModel->app->user->view  = new stdclass();
+$releaseModel->app->user->view->products = '1,2,3';
 
 r($releaseModel->getReleaseCount())            && p() && e('40'); // 获取不传入参数的发布数量
 r($releaseModel->getReleaseCount(''))          && p() && e('40'); // 获取传入参数为空的发布数量
