@@ -426,18 +426,10 @@ class mrModel extends model
         /* Sync MR in ZenTao database whatever status of MR in GitLab. */
         if(isset($rawMR->iid))
         {
-            $map = $this->config->mr->maps->sync;
-            if($rawMR->gitService == 'gitlab')
-            {
-                $gitUsers = $this->loadModel('gitlab')->getUserIdAccountPairs($MR->hostID);
-            }
-            else
-            {
-                $gitUsers = $this->loadModel($rawMR->gitService)->getUserAccountIdPairs($MR->hostID, 'openID,account');
-            }
+            $gitUsers = $this->loadModel('pipeline')->getUserBindedPairs($MR->hostID, $rawMR->gitService, 'openID,account');
 
-            $newMR = new stdclass;
-            foreach($map as $syncField => $config)
+            $newMR = new stdclass();
+            foreach($this->config->mr->maps->sync as $syncField => $config)
             {
                 $value = '';
                 list($field, $optionType, $options) = explode('|', $config);
@@ -469,7 +461,7 @@ class mrModel extends model
                 ->where('id')->eq($MR->id)
                 ->exec();
         }
-        return $this->dao->findByID($MR->id)->from(TABLE_MR)->fetch();
+        return $this->fetchByID($MR->id);
     }
 
     /**

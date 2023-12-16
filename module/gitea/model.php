@@ -278,21 +278,6 @@ class giteaModel extends model
     }
 
     /**
-     * Get zentao account gitea user id pairs of one gitea.
-     *
-     * @param  int $giteaID
-     * @access public
-     * @return array
-     */
-    public function getUserAccountIdPairs($giteaID, $fields = 'account,openID')
-    {
-        return $this->dao->select($fields)->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitea')
-            ->andWhere('providerID')->eq($giteaID)
-            ->fetchPairs();
-    }
-
-    /**
      * Get gitea user id by zentao account.
      *
      * @param  int    $giteaID
@@ -331,7 +316,7 @@ class giteaModel extends model
             }
         }
 
-        $bindedUsers  = $this->getUserAccountIdPairs($giteaID, 'openID,account');
+        $bindedUsers  = $this->loadModel('pipeline')->getUserBindedPairs($giteaID, 'gitea', 'openID,account');
         $matchedUsers = array();
         foreach($giteaUsers as $giteaUser)
         {
@@ -467,7 +452,7 @@ class giteaModel extends model
 
         /* Get linked users. */
         $linkedUsers = array();
-        if($onlyLinked) $linkedUsers = $this->getUserAccountIdPairs($giteaID, 'openID,account');
+        if($onlyLinked) $linkedUsers = $this->loadModel('pipeline')->getUserBindedPairs($giteaID, 'gitea', 'openID,account');
 
         $users = array();
         foreach($response as $giteaUser)

@@ -201,10 +201,10 @@ class gogs extends control
 
         $userList      = array();
         $gogsUsers     = $this->gogs->apiGetUsers($gogsID);
-        $bindedUsers   = $this->gogs->getUserAccountIdPairs($gogsID);
+        $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs');
         $matchedResult = $this->gogs->getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers);
 
-        foreach($gogsUsers as $gogsUserID => $gogsUser)
+        foreach($gogsUsers as $gogsUser)
         {
             $user = new stdclass();
             $user->email          = '';

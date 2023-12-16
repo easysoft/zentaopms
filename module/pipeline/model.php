@@ -181,4 +181,23 @@ class pipelineModel extends model
         $actionID = $this->dao->lastInsertID();
         return $actionID;
     }
+
+    /**
+     * 获取禅道用户绑定的第三方账号。
+     * Get user binded third party accounts.
+     *
+     * @param  int    $providerID
+     * @param  string $providerType  gitlab, gitea, gogs
+     * @param  string $fields        key, value
+     * @access public
+     * @return array
+     */
+    public function getUserBindedPairs(int $providerID, string $providerType, string $fields = 'account,openID'): array
+    {
+        $providerType = strtolower($providerType);
+        return $this->dao->select($fields)->from(TABLE_OAUTH)
+            ->where('providerType')->eq($providerType)
+            ->andWhere('providerID')->eq($providerID)
+            ->fetchPairs();
+    }
 }

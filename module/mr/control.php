@@ -261,13 +261,13 @@ class mr extends control
         /* Fetch user list both in Zentao and current GitLab project. */
         $host     = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm      = $host->type;
-        $gitUsers = $this->loadModel($scm)->getUserAccountIdPairs($MR->hostID);
+        $gitUsers = $this->pipeline->getUserBindedPairs($MR->hostID, $scm)
 
         /* Check permissions. */
         if(!$this->app->user->admin and $scm == 'gitlab')
         {
             $groupIDList = array(0 => 0);
-            $groups      = $this->$scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            $groups      = $this->loadModel($scm)->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
 
             $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);

@@ -241,7 +241,7 @@ class mrZen extends mr
             foreach($groups as $group) $groupIDList[] = $group->id;
 
             $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
-            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
+            $gitUsers    = $this->loadModel('pipeline')->getUserBindedPairs($MR->hostID, 'gitlab');
             if(isset($gitUsers[$this->app->user->account]) && $isDeveloper) return true;
         }
         elseif($hostType == 'gitea')

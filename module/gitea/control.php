@@ -204,10 +204,10 @@ class gitea extends control
 
         $userList      = array();
         $giteaUsers    = $this->gitea->apiGetUsers($giteaID);
-        $bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
+        $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($giteaID, 'gitea');
         $matchedResult = $this->gitea->getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers);
 
-        foreach($giteaUsers as $giteaUserID => $giteaUser)
+        foreach($giteaUsers as $giteaUser)
         {
             $user = new stdclass();
             $user->email           = '';

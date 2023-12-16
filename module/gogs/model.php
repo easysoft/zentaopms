@@ -237,21 +237,6 @@ class gogsModel extends model
     }
 
     /**
-     * Get zentao account gogs user id pairs of one gogs.
-     *
-     * @param  int $gogsID
-     * @access public
-     * @return array
-     */
-    public function getUserAccountIdPairs($gogsID, $fields = 'account,openID')
-    {
-        return $this->dao->select($fields)->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gogs')
-            ->andWhere('providerID')->eq($gogsID)
-            ->fetchPairs();
-    }
-
-    /**
      * Get gogs user id by zentao account.
      *
      * @param  int    $gogsID
@@ -290,7 +275,7 @@ class gogsModel extends model
             }
         }
 
-        $bindedUsers  = $this->getUserAccountIdPairs($gogsID, 'openID,account');
+        $bindedUsers  = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs', 'openID,account');
         $matchedUsers = array();
         foreach($gogsUsers as $gogsUser)
         {
@@ -419,7 +404,7 @@ class gogsModel extends model
 
         /* Get linked users. */
         $linkedUsers = array();
-        if($onlyLinked) $linkedUsers = $this->getUserAccountIdPairs($gogsID, 'openID,account');
+        if($onlyLinked) $linkedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs', 'openID,account');
 
         $users = array();
         foreach($response as $gogsUser)
