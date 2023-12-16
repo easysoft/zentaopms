@@ -3011,26 +3011,26 @@ class kanbanModel extends model
     }
 
     /**
-     * Update lane column.
+     * 编辑看板列。
+     * Update column.
      *
      * @param  int    $columnID
      * @param  object $column
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function updateLaneColumn($columnID, $column)
+    public function updateColumn(int $columnID, object $column): array|false
     {
-        $data = fixer::input('post')->trim('name')->get();
-
-        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
+        $oldColumn = $this->getColumnById($columnID);
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($column)
             ->autoCheck()
-            ->batchcheck($this->config->kanban->setlaneColumn->requiredFields, 'notempty')
+            ->batchcheck($this->config->kanban->setColumn->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
 
-        if(dao::isError()) return;
+        if(dao::isError()) return false;
 
-        $changes = common::createChanges($column, $data);
+        $changes = common::createChanges($oldColumn, $column);
         return $changes;
     }
 
