@@ -471,11 +471,11 @@ class searchTao extends searchModel
      *
      * @param  array   $results
      * @param  array   $objectIdList
-     * @param  array   $executions
+     * @param  string  $executions
      * @access private
      * @return array
      */
-    private function checkExecutionPriv(array $results, array $objectIdList, array $executions): array
+    private function checkExecutionPriv(array $results, array $objectIdList, string $executions): array
     {
         foreach($objectIdList as $executionID => $recordID)
         {
@@ -611,11 +611,11 @@ class searchTao extends searchModel
      * @param  array   $results
      * @param  array   $objectIdList
      * @param  string  $products
-     * @param  array   $executions
+     * @param  string  $executions
      * @access private
      * @return array
      */
-    private function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, string $products, array $executions): array
+    private function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, string $products, string $executions): array
     {
         if($objectType == 'product')   return $this->checkProductPriv($results, $objectIdList, $products);
         if($objectType == 'program')   return $this->checkProgramPriv($results, $objectIdList);
@@ -637,12 +637,12 @@ class searchTao extends searchModel
      * @param  string  $table
      * @param  array   $results
      * @param  array   $objectIdList
-     * @param  array   $products
-     * @param  array   $executions
+     * @param  string  $products
+     * @param  string  $executions
      * @access private
      * @return array
      */
-    private function checkRelatedObjectPriv(string $objectType, string $table, array $results, array $objectIdList, array $products, array $executions): array
+    private function checkRelatedObjectPriv(string $objectType, string $table, array $results, array $objectIdList, string $products, string $executions): array
     {
         $objectProducts   = array();
         $objectExecutions = array();
