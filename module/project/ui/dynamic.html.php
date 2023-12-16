@@ -68,7 +68,7 @@ else
             ),
             div
             (
-                setClass('flex-auto mx-6 mt-2 px-4 alert lighter'),
+                setClass('flex-auto mx-6 mt-2 px-4 alert'),
                 setClass($type == 'today' ? 'border-secondary' : ''),
                 dynamic
                 (
