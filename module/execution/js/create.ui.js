@@ -77,7 +77,7 @@ $(document).on('change', '#end', function(e)
  */
 function loadProjectExecutions(projectID)
 {
-    projectID = projectID ? projectID : $('#copyExecutionModal input[name=project]').val();
+    projectID = parseInt(projectID) ? projectID : $('#copyExecutionModal input[name=project]').val();
     projectID = parseInt(projectID);
     loadTarget($.createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&copyExecutionID=' + copyExecutionID), '#copyExecutions');
 }
