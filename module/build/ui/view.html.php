@@ -236,8 +236,8 @@ detailBody
                             ltrim($executionName, '/')
                         ) : item
                         (
-                            set::name($builds),
-                            rtrim($builds, $lang->comma)
+                            set::name($lang->build->builds),
+                            html(rtrim($builds, $lang->comma))
                         ),
                         item
                         (
