@@ -1188,13 +1188,12 @@ class bug extends control
         /* 关闭解决的 bugs。 */
         /* Close resolved bugs. */
         $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
+        $skipBugs  = array();
         if($bugIdList)
         {
             $bugIdList = array_unique($bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
-
-            $bug      = form::data($this->config->bug->form->close)->get();
-            $skipBugs = array();
+            $bug       = form::data($this->config->bug->form->close)->get();
             foreach($bugIdList as $bugID)
             {
                 $oldBug = $bugs[$bugID];
