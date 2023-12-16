@@ -91,7 +91,6 @@ $config->kanban->form->splitColumn['noLimit'] = array('type' => 'int',    'requi
 
 $config->kanban->form->createCard['name']         = array('type' => 'string',   'required' => true,  'default' => '');
 $config->kanban->form->createCard['pri']          = array('type' => 'string',   'required' => false, 'default' => '');
-$config->kanban->form->createCard['lane']         = array('type' => 'int',      'required' => true,  'default' => '');
 $config->kanban->form->createCard['estimate']     = array('type' => 'float',    'required' => false, 'default' => '');
 $config->kanban->form->createCard['assignedTo']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->kanban->form->createCard['begin']        = array('type' => 'date',     'required' => false, 'default' => '');
