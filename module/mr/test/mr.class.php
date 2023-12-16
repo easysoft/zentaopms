@@ -65,4 +65,50 @@ class mrTest
 
         return $result;
     }
+
+    /**
+     * Test getGiteaProjects method.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array|null
+     */
+    public function getGiteaProjectsTester(int $hostID): array|null
+    {
+        $projects = $this->objectModel->getGiteaProjects($hostID);
+        if(empty($projects[$hostID])) return null;
+
+        return $projects[$hostID];
+    }
+
+    /**
+     * Test getGogsProjects method.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array|null
+     */
+    public function getGogsProjectsTester(int $hostID): array|null
+    {
+        $projects = $this->objectModel->getGogsProjects($hostID);
+        if(empty($projects[$hostID])) return null;
+
+        return $projects[$hostID];
+    }
+
+    /**
+     * Test getGitlabProjects method.
+     *
+     * @param  int    $hostID
+     * @param  arra   $projectIdList
+     * @access public
+     * @return array|null
+     */
+    public function getGitlabProjectsTester(int $hostID, array $projectIdList): array|null
+    {
+        $projects = $this->objectModel->getGitlabProjects($hostID, $projectIdList);
+        if(empty($projects[$hostID])) return null;
+
+        return $projects[$hostID];
+    }
 }
