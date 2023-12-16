@@ -170,48 +170,7 @@ class screenModel extends model
             }
         }
 
-        foreach($scheme->componentList as $index => $component)
-        {
-            if(!empty($component->isGroup))
-            {
-                foreach($component->groupList as $key => $groupComponent)
-                {
-                    $groupComponent = $this->getLatestChart($groupComponent);
-                }
-            }
-            else if($component)
-            {
-                $this->getLatestChart($component);
-            }
-            else
-            {
-                unset($scheme->componentList[$index]);
-            }
-        }
-
         return $scheme;
-    }
-
-    /**
-     * Get the latest chart.
-     *
-     * @param  object  $component
-     * @access public
-     * @return void
-     */
-    public function getLatestChart($component)
-    {
-        if(isset($component->key) and $component->key === 'Select') return $component;
-        $chartID = zget($component->chartConfig, 'sourceID', '');
-        if(!$chartID) return $component;
-
-        $type  = $component->chartConfig->package;
-        $type  = $this->getChartType($type);
-        $table = $this->config->objectTables[$type];
-        $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
-
-        if($type == 'metric') return $this->genMetricComponent($chart, $component);
-        return $this->genComponentData($chart, $type, $component);
     }
 
     /**
@@ -247,37 +206,7 @@ class screenModel extends model
 
         list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
-        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
-        {
-            $component->option = new stdclass();
-            if($type == 'chart')
-            {
-                $component->option->title = new stdclass();
-                $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
-                $component->option->title->left = 'center';
-                $component->option->title->top  = '50%';
-
-                $component->option->xAxis = new stdclass();
-                $component->option->xAxis->show = false;
-                $component->option->yAxis = new stdclass();
-                $component->option->yAxis->show = false;
-            }
-            else if($type == 'pivot')
-            {
-                $component->option->ineffective = 1;
-                $component->option->header      = array();
-                $component->option->align       = array('center');
-                $component->option->headerBGC   = 'transparent';
-                $component->option->oddRowBGC   = 'transparent';
-                $component->option->evenRowBGC  = 'transparent';
-                $component->option->columnWidth = array();
-                $component->option->rowspan     = array();
-                $component->option->colspan     = array();
-                $component->option->rowNum      = 1;
-                $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
-            }
-            return $component;
-        }
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1')) return $this->genNotFoundOrDraftComponentOption($component);
 
         $component = $this->getChartOption($chart, $component, $filters);
 
@@ -302,11 +231,7 @@ class screenModel extends model
                     foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
                     $component->option->legend->data = $legends;
                 }
-                elseif($component->type == 'waterpolo')
-                {
-                    // Do nothing
-                }
-                else
+                elseif($component->type != 'waterpolo')
                 {
                     $series = array();
                     for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
@@ -314,6 +239,26 @@ class screenModel extends model
                 }
             }
         }
+
+        return $component;
+    }
+
+    /**
+     * 生成不存在的图表或者草稿图表的参数。
+     * Generate not found or draft chart option.
+     *
+     * @param  int    $component
+     * @access public
+     * @return void
+     */
+    public function genNotFoundOrDraftComponentOption($component)
+    {
+        if(empty($component)) $component = new stdclass();
+
+        $component->option = new stdclass();
+        $component->option->title = new stdclass();
+        $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
+        $component->option->isDeleted   = true;
 
         return $component;
     }
@@ -1482,6 +1427,8 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
+            a($chart);
+            die;
             $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
             $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
             $component->key         = "PieCommon";
@@ -1540,13 +1487,29 @@ class screenModel extends model
      */
     public function buildPieCircleChart($component, $chart)
     {
+        $option = new stdclass();
+        $option->type = 'nomal';
+        $option->series = array();
+        $option->series[0] = new stdclass();
+        $option->series[0]->type = 'pie';
+        $option->series[0]->radius = '70%';
+        $option->series[0]->roseType = false;
+        $option->backgroundColor = 'rgba(0,0,0,0)';
+        $option->series[0]->data = array();
+        $option->series[0]->data[0] = new stdclass();
+        $option->series[0]->data[0]->value = array();
+        $option->series[0]->data[0]->value[0] = 0;
+        $option->series[0]->data[1] = new stdclass();
+        $option->series[0]->data[1]->value = array();
+        $option->series[0]->data[1]->value[0] = 0;
+
         if(!$chart->settings)
         {
             $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
             $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
             $component->key         = "PieCircle";
             $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
-            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+            $component->option      = $option;
 
             return $this->setComponentDefaults($component);
         }
@@ -1577,6 +1540,8 @@ class screenModel extends model
                 }
                 $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
                 $component->option->dataset = $doneData;
+                if(!isset($component->option->series) || !is_array($component->option->series)) $component->option->series = $option->series;
+                if(!isset($component->option)) $component->option = $option;
                 $component->option->series[0]->data[0]->value  = array($doneData);
                 $component->option->series[0]->data[1]->value  = array(1 - $doneData);
             }
@@ -1985,6 +1950,8 @@ class screenModel extends model
         if(!isset($component->type))        $component->type        = 'metric';
         if(!isset($component->chartConfig)) $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
         if(!isset($component->option))      $component->option      = new stdclass();
+
+        $component->chartConfig->sourceID = $metric->id;
 
         return array($component, false);
     }

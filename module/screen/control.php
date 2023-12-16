@@ -125,6 +125,7 @@ class screen extends control
             $chartID      = $this->post->sourceID;
             $type         = $this->post->type;
             $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+            $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
 
             $type = $this->screen->getChartType($type);
 
@@ -187,11 +188,11 @@ class screen extends control
 
             if($type == 'metric')
             {
-                $chartData = $this->screen->genMetricComponent($chart, null, $filterParams);
+                $chartData = $this->screen->genMetricComponent($chart, $component, $filterParams);
             }
             else
             {
-                $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
+                $chartData = $this->screen->genComponentData($chart, $type, $component, $filterFormat);
             }
             print(json_encode($chartData));
         }
