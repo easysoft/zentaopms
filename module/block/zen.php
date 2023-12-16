@@ -3041,12 +3041,12 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $monthStroyScaleGroup     = $this->metric->getResultByCode('scale_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
-        $monthCreatedStroyGroup   = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
-        $monthFinishedStoryGroup  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
-        $monthCreatedBugGroup     = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product',     array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
-        $monthFixedBugGroup       = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',       array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
-        $monthCreatedReleaseGroup = $this->metric->getResultByCode('count_of_monthly_created_release_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthStroyScaleGroup     = $this->metric->getResultByCode('scale_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的完成需求数。
+        $monthCreatedStroyGroup   = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的新增需求数。
+        $monthFinishedStoryGroup  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的完成需求数。
+        $monthCreatedBugGroup     = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product',     array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的新增Bug数。
+        $monthFixedBugGroup       = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',       array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的修复Bug数。
+        $monthCreatedReleaseGroup = $this->metric->getResultByCode('count_of_monthly_created_release_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的发布数。
 
         $months            = array();
         $doneStoryEstimate = array();
