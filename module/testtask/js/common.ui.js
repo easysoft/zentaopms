@@ -207,6 +207,6 @@ function setExecutionByBuild()
     link = $.createLink('testtask', 'ajaxGetExecutionByBuild', 'buildID=' + buildID);
     $.get(link, function(data)
     {
-        $('[name="execution"]').zui('picker').$.setValue(data);
+        if(data != '0') $('[name="execution"]').zui('picker').$.setValue(data);
     });
 }
