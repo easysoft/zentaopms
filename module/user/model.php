@@ -1627,31 +1627,6 @@ class userModel extends model
     }
 
     /**
-     * 检查缓存目录是否有写权限。
-     * Check if the tmp directory is writable.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkTmp(): bool
-    {
-        if(!is_dir($this->app->tmpRoot))   mkdir($this->app->tmpRoot,   0755, true);
-        if(!is_dir($this->app->cacheRoot)) mkdir($this->app->cacheRoot, 0755, true);
-        if(!is_dir($this->app->logRoot))   mkdir($this->app->logRoot,   0755, true);
-        if(!is_dir($this->app->logRoot))   return false;
-
-        $file = $this->app->logRoot . DS . 'demo.txt';
-        if($fp = @fopen($file, 'a+'))
-        {
-            @fclose($fp);
-            @unlink($file);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Compute user view.
      *
      * @param  string $account
