@@ -13,21 +13,6 @@
 class gogsModel extends model
 {
     /**
-     * Get gogs list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList($orderBy = 'id_desc', $pager = null)
-    {
-        $gogsList = $this->loadModel('pipeline')->getList('gogs', $orderBy, $pager);
-
-        return $gogsList;
-    }
-
-    /**
      * Get gogs pairs.
      *
      * @access public

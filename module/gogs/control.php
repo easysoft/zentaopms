@@ -38,11 +38,11 @@ class gogs extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Admin user don't need bind. */
-        $gogsList = $this->gogs->getList($orderBy, $pager);
+        $gogsList = $this->loadModel('pipeline')->getList('gogs', $orderBy, $pager);
         $myGogses = $this->gogs->getGogsListByAccount();
         foreach($gogsList as $gogs)
         {

@@ -44,7 +44,7 @@ class gitea extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Admin user don't need bind. */
-        $giteaList = $this->gitea->getList($orderBy, $pager);
+        $giteaList = $this->loadModel('pipeline')->getList('gitea', $orderBy, $pager);
         $myGiteas  = $this->gitea->getGiteaListByAccount();
         foreach($giteaList as $gitea)
         {

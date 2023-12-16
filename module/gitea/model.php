@@ -21,21 +21,6 @@ class giteaModel extends model
     public $maintainerAccess = 40;
 
     /**
-     * Get gitea list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList($orderBy = 'id_desc', $pager = null)
-    {
-        $giteaList = $this->loadModel('pipeline')->getList('gitea', $orderBy, $pager);
-
-        return $giteaList;
-    }
-
-    /**
      * Get gitea pairs.
      *
      * @access public

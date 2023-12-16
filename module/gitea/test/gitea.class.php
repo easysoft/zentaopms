@@ -11,20 +11,6 @@ class giteaTest
     }
 
     /**
-     * Get gitea list.
-     *
-     * @param  string $orderBy
-     * @access public
-     * @return object
-     */
-    public function getList($orderBy = 'id_desc')
-    {
-        $gitea = $this->gitea->getList($orderBy);
-        if(empty($gitea)) return 0;
-        return array_shift($gitea);
-    }
-
-    /**
      * Get gitea pairs
      *
      * @return string

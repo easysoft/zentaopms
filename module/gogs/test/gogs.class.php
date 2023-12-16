@@ -11,20 +11,6 @@ class gogsTest
     }
 
     /**
-     * Get gogs list.
-     *
-     * @param  string $orderBy
-     * @access public
-     * @return object
-     */
-    public function getList($orderBy = 'id_desc')
-    {
-        $gogs = $this->gogs->getList($orderBy);
-        if(empty($gogs)) return 0;
-        return array_shift($gogs);
-    }
-
-    /**
      * Get gogs pairs
      *
      * @return string
