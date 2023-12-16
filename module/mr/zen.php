@@ -22,26 +22,20 @@ class mrZen extends mr
      */
     protected function getAllProjects(object $repo, array $MRList): array
     {
-        $projects = array();
+        $projectIdList = array();
         if($repo->SCM == 'Gitlab')
         {
-            $projectIds = array();
             foreach($MRList as $MR)
             {
                 if($repo->id != $MR->repoID) continue;
 
-                $projectIds[$MR->sourceProject] = $MR->sourceProject;
-                $projectIds[$MR->targetProject] = $MR->targetProject;
+                $projectIdList[$MR->sourceProject] = $MR->sourceProject;
+                $projectIdList[$MR->targetProject] = $MR->targetProject;
             }
+        }
 
-            $projects += $this->mr->getGitlabProjects((int)$repo->serviceHost, $projectIds);
-        }
-        else
-        {
-            $methodName = 'get' . ucfirst($repo->SCM) . 'Projects';
-            $projects  += $this->mr->{$methodName}((int)$repo->serviceHost);
-        }
-        return $projects;
+        $methodName = 'get' . ucfirst($repo->SCM) . 'Projects';
+        return $this->mr->{$methodName}((int)$repo->serviceHost, $projectIdList);
     }
 
     /**

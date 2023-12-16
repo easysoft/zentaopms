@@ -102,35 +102,25 @@ class mrModel extends model
      * Get gitlab projects.
      *
      * @param  int    $hostID
-     * @param  array  $projectIds
+     * @param  array  $projectIdList
      * @access public
      * @return array
      */
-    public function getGitlabProjects(int $hostID = 0, array $projectIds = array()): array
+    public function getGitlabProjects(int $hostID = 0, array $projectIdList = array()): array
     {
         $gitlabUsers = $this->loadModel('gitlab')->getListByAccount();
         if(!$this->app->user->admin && !isset($gitlabUsers[$hostID])) return array();
 
-        $allProjects = $allGroups  = array();
-        $minProject  = $maxProject = 0;
+        $minProject = $maxProject = 0;
         /* Mysql string to int. */
-        $projectCount = $this->dao->select('min(sourceProject + 0) as minSource, MAX(sourceProject + 0) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
+        $MR = $this->dao->select('min(sourceProject + 0) as minSource, MAX(sourceProject + 0) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('hostID')->eq($hostID)
             ->fetch();
-        if($projectCount)
+        if($MR)
         {
-            $minProject = min($projectCount->minSource, $projectCount->minTarget);
-            $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
-        }
-
-        $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', (int)$minProject, (int)$maxProject);
-        if($projectIds)
-        {
-            foreach($allProjects[$hostID] as $index => $project)
-            {
-                if(!in_array($project->id, $projectIds)) unset($allProjects[$hostID][$index]);
-            }
+            $minProject = min($MR->minSource, $MR->minTarget);
+            $maxProject = max($MR->maxSource, $MR->maxTarget);
         }
 
         /* If not an administrator, need to obtain group member information. */
@@ -140,18 +130,16 @@ class mrModel extends model
             $groups = $this->gitlab->apiGetGroups($hostID, 'name_asc', 'reporter');
             foreach($groups as $group) $groupIDList[] = $group->id;
         }
-        $allGroups[$hostID] = $groupIDList;
 
         $allProjectPairs = array();
-        foreach($allProjects as $hostID => $projects)
+        $allProjects     = $this->gitlab->apiGetProjects($hostID, 'false', (int)$minProject, (int)$maxProject);
+        foreach($allProjects as $project)
         {
-            foreach($projects as $project)
-            {
-                if($this->gitlab->checkUserAccess($hostID, 0, $project, $allGroups[$hostID], 'reporter') == false) continue;
-                $project->isDeveloper = $this->gitlab->checkUserAccess($hostID, 0, $project, $allGroups[$hostID], 'developer');
+            if($projectIdList && !in_array($project->id, $projectIdList)) continue;
+            if(!$this->gitlab->checkUserAccess($hostID, 0, $project, $groupIDList, 'reporter')) continue;
 
-                $allProjectPairs[$hostID][$project->id] = $project;
-            }
+            $project->isDeveloper = $this->gitlab->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer');
+            $allProjectPairs[$hostID][$project->id] = $project;
         }
 
         return $allProjectPairs;
