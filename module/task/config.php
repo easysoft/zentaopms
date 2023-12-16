@@ -52,13 +52,15 @@ $config->task->exportFields = '
     lastEditedBy, lastEditedDate, activatedDate, files
     ';
 
-$config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
-$config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
-$config->task->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
-$config->task->defaultLoadCount        = 50;
+$config->task->list = new stdclass();
+$config->task->list->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
+$config->task->list->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
+$config->task->list->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
+
+$config->task->defaultLoadCount = 50;
 
 $config->task->custom = new stdclass();
-$config->task->custom->createFields      = $config->task->customCreateFields;
+$config->task->custom->createFields      = $config->task->list->customCreateFields;
 $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 
