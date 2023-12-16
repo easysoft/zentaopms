@@ -1473,26 +1473,20 @@ class bug extends control
      *
      * @param  int     $productID
      * @param  int     $bugID
+     * @param  string  $type
      * @access public
      * @return int
      */
-    public function ajaxGetProductBugs($productID, $bugID, $type = 'html')
+    public function ajaxGetProductBugs(int $productID, int $bugID, string $type = 'html')
     {
         /* 获取除了这个 bugID 的产品 bugs。 */
         /* Get product bugs exclude this bugID. */
-        $search      = $this->get->search;
-        $limit       = $this->get->limit;
+        $search      = (string)$this->get->search;
+        $limit       =  $this->get->limit ? $this->get->limit : $this->config->maxCount;
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
-        $branch = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-
-        $productBugs = array();
-        if($bug->resolution and $bug->duplicateBug)
-        {
-            $duplicateBug = $this->bug->getByID($bug->duplicateBug);
-            $productBugs  = $this->bug->getProductBugPairs($productID, $branch, $duplicateBug->title, $limit);
-        }
-        $this->config->moreLinks['duplicateBug'] = inlink('ajaxGetProductBugs', "productID={$productID}&bugID={$bugID}&type=json");
+        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit);
 
         unset($productBugs[$bugID]);
         if($type == 'json') return print(helper::jsonEncode($productBugs));
