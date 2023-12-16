@@ -1543,7 +1543,7 @@ class docModel extends model
         if($type == 'project')   $userView = $this->app->user->view->projects;
         if($type == 'execution') $userView = $this->app->user->view->sprints;
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = $storyIDList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $testtaskIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = $storyIDList = 0;
         $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->beginIF(!$this->app->user->admin)->andWhere($type)->in($userView)->fi()->fetchPairs('id');
         if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
 
@@ -1559,7 +1559,7 @@ class docModel extends model
         {
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
-        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
+        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
         {
