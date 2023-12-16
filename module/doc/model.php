@@ -1487,7 +1487,7 @@ class docModel extends model
     {
         if(!in_array($type, array('execution', 'project', 'product'))) return array();
 
-        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList) = $this->getLinkedObjectData($type, $objectID);
+        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedObjectData($type, $objectID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
             ->where('size')->gt('0')
@@ -1511,6 +1511,7 @@ class docModel extends model
             ->beginIF($type == 'project' || $type == 'execution')
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+            ->orWhere("(objectType = 'testtask' and objectID in ($testtaskIdList))")
             ->beginIF($storyIDList)->orWhere("(objectType = 'story' and objectID in ($storyIDList))")->fi()
             ->fi()
             ->markRight(1)
@@ -1572,10 +1573,10 @@ class docModel extends model
         }
         elseif($type == 'execution')
         {
-            list($storyIDList, $taskIdList, $buildIdList) = $this->getLinkedExecutionData($objectID);
+            list($storyIDList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedExecutionData($objectID);
         }
 
-        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList);
+        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList);
     }
 
     /**
@@ -1651,7 +1652,7 @@ class docModel extends model
      */
     public function getLinkedExecutionData(int $executionID): array
     {
-        $storyIDList = $taskIdList = $buildIdList = 0;
+        $storyIDList = $taskIdList = $buildIdList = $testtaskIdList = 0;
         $execution   = $this->loadModel('execution')->getByID($executionID);
         $project     = $execution ? $this->loadModel('project')->getByID((int)$execution->project) : '';
 
@@ -1672,7 +1673,14 @@ class docModel extends model
             ->fetchPairs('id');
         if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
-        return array($storyIDList, $taskIdList, $buildIdList);
+        $testtaskPairs = $this->dao->select('id')->from(TABLE_TESTTASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchPairs('id');
+        if(!empty($testtaskPairs)) $testtaskIdList = implode(',', $testtaskPairs);
+
+        return array($storyIDList, $taskIdList, $buildIdList, $testtaskIdList);
     }
 
     /**
