@@ -1390,11 +1390,11 @@ class kanbanTest
      */
     public function archiveCardTest($cardID)
     {
-        $changes = $this->objectModel->archiveCard($cardID);
+        $this->objectModel->archiveCard($cardID);
 
         if(dao::isError()) return dao::getError();
 
-        return $changes;
+        return $this->objectModel->getCardByID($cardID);
     }
 
     /**
