@@ -214,7 +214,11 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->usertpl = new stdclass();
-$lang->usertpl->title = 'Template Name';
+$lang->usertpl->account = 'Creator';
+$lang->usertpl->type    = 'Template Type';
+$lang->usertpl->title   = 'Template Name';
+$lang->usertpl->content = 'Template Content';
+$lang->usertpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '>= 3 letters, underline and numbers';
@@ -281,8 +285,10 @@ $lang->user->contacts->listName = 'List Name';
 $lang->user->contacts->userList = 'User List';
 
 $lang->usercontact = new stdclass;
+$lang->usercontact->account  = 'Creator';
 $lang->usercontact->listName = 'List Name';
 $lang->usercontact->userList = 'User List';
+$lang->usercontact->public   = 'Public';
 
 $lang->user->contacts->manage        = 'Manage List';
 $lang->user->contacts->contactsList  = 'Contact List';

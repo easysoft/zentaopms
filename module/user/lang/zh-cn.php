@@ -214,7 +214,11 @@ $lang->user->tpl->content = '内容';
 $lang->user->tpl->public  = '是否公开';
 
 $lang->usertpl = new stdclass();
-$lang->usertpl->title = '模板名称';
+$lang->usertpl->account = '创建人';
+$lang->usertpl->type    = '模板类型';
+$lang->usertpl->title   = '模板名称';
+$lang->usertpl->content = '模板内容';
+$lang->usertpl->public  = '公共模板';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
@@ -281,8 +285,10 @@ $lang->user->contacts->listName = '列表名称';
 $lang->user->contacts->userList = '用户列表';
 
 $lang->usercontact = new stdclass;
+$lang->usercontact->account  = '创建人';
 $lang->usercontact->listName = '列表名称';
 $lang->usercontact->userList = '用户列表';
+$lang->usercontact->public   = '公共联系人';
 
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';
