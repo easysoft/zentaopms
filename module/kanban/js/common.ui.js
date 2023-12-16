@@ -42,7 +42,7 @@ window.changeKanbanType = function()
 
 window.loadAllUsers = function()
 {
-    const link = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('[name=owner]').val() + "&type=all");
+    const link = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&type=all');
     $.getJSON(link, function(data)
     {
         $('[name=owner]').zui('picker').render({items: data});
@@ -54,7 +54,7 @@ window.changeKanbanSpace = function()
     const spaceID = $('[name=space]').val();
     if(spaceType == 'private')
     {
-        const url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=whitelist&selectedUser=' + $('[name^=whitelist]').val());
+        const url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=whitelist');
         $.getJSON(url, function(data)
         {
             $('[name^=whitelist]').zui('picker').render({items: data});
@@ -62,7 +62,7 @@ window.changeKanbanSpace = function()
     }
     else
     {
-        url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=owner&selectedUser=' + $('[name=owner]').val());
+        url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=owner');
         $.getJSON(url, function(data)
         {
             $('[name=owner]').zui('picker').render({items: data});

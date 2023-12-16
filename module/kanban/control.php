@@ -1599,6 +1599,7 @@ class kanban extends control
     }
 
     /**
+     * 获取看板左上角下拉菜单。
      * Ajax get kanban menu.
      *
      * @param  int    $kanbanID
@@ -1607,7 +1608,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($kanbanID, $moduleName, $methodName)
+    public function ajaxGetDropMenu(int $kanbanID, string $moduleName, string $methodName)
     {
         $kanbanIdList = $this->kanban->getCanViewObjects();
         $spacePairs   = $this->kanban->getSpacePairs('showClosed');
@@ -1627,6 +1628,7 @@ class kanban extends control
     }
 
     /**
+     * 获取区域中的泳道。
      * Ajax get lanes by region id.
      *
      * @param  int    $regionID
@@ -1636,7 +1638,7 @@ class kanban extends control
      * @access public
      * @return string
      */
-    public function ajaxGetLanes($regionID, $type = 'all', $field = 'otherLane', $pageType = '')
+    public function ajaxGetLanes(int $regionID, string $type = 'all', string $field = 'otherLane', string $pageType = '')
     {
         $lanes = $this->kanban->getLanePairsByRegion($regionID, $type);
 
@@ -1654,12 +1656,11 @@ class kanban extends control
      *
      * @param  int    $spaceID
      * @param  string $field team|whitelist|owner
-     * @param  string $selectedUser
      * @param  string $space all|space
      * @access public
      * @return string
      */
-    public function ajaxLoadUsers($spaceID, $field = '', $selectedUser = '', $type = 'space')
+    public function ajaxLoadUsers(int $spaceID, string $field = '', string $type = 'space')
     {
         $space    = $this->kanban->getSpaceById($spaceID);
         $accounts = '';
