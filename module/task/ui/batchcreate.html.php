@@ -48,6 +48,7 @@ if(!$hideStory)
                     'hint' => $lang->preview,
                     'data-url' => '#',
                     'data-toggle' => 'modal',
+                    'data-size' => 'lg',
                     'disabled' => true
                 )
             )
