@@ -78,17 +78,6 @@ fields:
     prefix: "\t"
     type: timestamp
     format: "YYYY-MM-DD"
-  - field: lastEditedDate
-    note: "最后编辑日期"
-    range: ""
-    prefix: ""
-    postfix: ""
-    tampoop: 0
-  - field: closedDate
-    note: "关闭时间"
-    range: ""
-    prefix: ""
-    postfix: ""
   - field: deleted
     note: ""
     range: 0
