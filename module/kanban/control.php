@@ -1314,13 +1314,14 @@ class kanban extends control
     }
 
     /**
+     * 查看归档的卡片。
      * View archived cards.
      *
      * @param  int    $regionID
      * @access public
      * @return void
      */
-    public function viewArchivedCard($regionID)
+    public function viewArchivedCard(int $regionID)
     {
         $region = $this->kanban->getRegionByID($regionID);
 
