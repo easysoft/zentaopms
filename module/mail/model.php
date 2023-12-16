@@ -22,7 +22,7 @@ class mailModel extends model
     {
         parent::__construct();
         $mta = $this->config->mail->mta;
-        $this->app->loadClass(($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'phpmailer', $static = true);
+        $this->app->loadClass('phpmailer', $static = true);
         $this->setMTA();
     }
 
@@ -165,13 +165,12 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function setMTA()
+    public function setMTA(): object
     {
-        $mta = $this->config->mail->mta;
-        $className = ($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'phpmailer';
-        if(static::$instance == null) static::$instance = new $className(true);
+        if(static::$instance == null) static::$instance = new phpmailer(true);
         $this->mta = static::$instance;
         $this->mta->CharSet = $this->config->charset;
+
         $funcName = "set{$this->config->mail->mta}";
         if(!method_exists($this, $funcName)) $this->app->triggerError("The MTA {$this->config->mail->mta} not supported now.", __FILE__, __LINE__, $exit = true);
         $this->$funcName();
@@ -185,7 +184,7 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function setSMTP()
+    public function setSMTP(): void
     {
         $this->mta->isSMTP();
         $this->mta->SMTPDebug = $this->config->mail->smtp->debug;
@@ -199,58 +198,12 @@ class mailModel extends model
     }
 
     /**
-     * Set sendcloud
-     *
-     * @access public
-     * @return void
-     */
-    public function setSendcloud()
-    {
-        $this->mta->accessKey = $this->config->mail->sendcloud->accessKey;
-        $this->mta->secretKey = $this->config->mail->sendcloud->secretKey;
-    }
-
-    /**
-     * Set Ztcloud.
-     *
-     * @access public
-     * @return void
-     */
-    public function setZtcloud()
-    {
-        $this->mta->account   = $this->config->global->community;
-        $this->mta->secretKey = $this->config->mail->ztcloud->secretKey;
-    }
-
-    /**
-     * PHPmail.
-     *
-     * @access public
-     * @return void
-     */
-    public function setPhpMail()
-    {
-        $this->mta->isMail();
-    }
-
-    /**
-     * Sendmail.
-     *
-     * @access public
-     * @return void
-     */
-    public function setSendMail()
-    {
-        $this->mta->isSendmail();
-    }
-
-    /**
      * Gmail.
      *
      * @access public
      * @return void
      */
-    public function setGMail()
+    public function setGMail(): void
     {
         $this->mta->isSMTP();
         $this->mta->SMTPDebug  = $this->config->mail->gmail->debug;

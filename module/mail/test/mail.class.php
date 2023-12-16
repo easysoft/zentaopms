@@ -2,8 +2,8 @@
 class mailTest
 {
     /**
-     * __construct. 
-     * 
+     * __construct.
+     *
      * @access public
      * @return void
      */
@@ -17,9 +17,9 @@ class mailTest
     }
 
     /**
-     * AutoDetect. 
-     * 
-     * @param  int    $email 
+     * AutoDetect.
+     *
+     * @param  int    $email
      * @access public
      * @return object
      */
@@ -29,15 +29,15 @@ class mailTest
 
         if(dao::isError())  return dao::getError();
         if(!$objects->host) return '没有检测到相关信息';
-        
+
         return $objects;
     }
 
     /**
-     * Get config from provider. 
-     * 
-     * @param  int    $domain 
-     * @param  int    $username 
+     * Get config from provider.
+     *
+     * @param  int    $domain
+     * @param  int    $username
      * @access public
      * @return object
      */
@@ -51,10 +51,10 @@ class mailTest
     }
 
     /**
-     * Get config by MXRR. 
-     * 
-     * @param  int    $domain 
-     * @param  int    $username 
+     * Get config by MXRR.
+     *
+     * @param  int    $domain
+     * @param  int    $username
      * @access public
      * @return object
      */
@@ -68,11 +68,11 @@ class mailTest
     }
 
     /**
-     * Get config by detecting SMTP. 
-     * 
-     * @param  int    $domain 
-     * @param  int    $username 
-     * @param  int    $port 
+     * Get config by detecting SMTP.
+     *
+     * @param  int    $domain
+     * @param  int    $username
+     * @param  int    $port
      * @access public
      * @return object
      */
@@ -86,8 +86,8 @@ class mailTest
     }
 
     /**
-     * Set MTA. 
-     * 
+     * Set MTA.
+     *
      * @access public
      * @return object
      */
@@ -101,8 +101,8 @@ class mailTest
     }
 
     /**
-     * Set sendmail. 
-     * 
+     * Set sendmail.
+     *
      * @access public
      * @return object
      */
@@ -117,14 +117,14 @@ class mailTest
 
 
     /**
-     * Send. 
-     * 
-     * @param  int    $toList 
-     * @param  int    $subject 
-     * @param  string $body 
-     * @param  string $ccList 
-     * @param  int    $includeMe 
-     * @param  array  $emails 
+     * Send.
+     *
+     * @param  int    $toList
+     * @param  int    $subject
+     * @param  string $body
+     * @param  string $ccList
+     * @param  int    $includeMe
+     * @param  array  $emails
      * @access public
      * @return object
      */
@@ -138,10 +138,10 @@ class mailTest
     }
 
     /**
-     * Set CC. 
-     * 
-     * @param  int    $ccList 
-     * @param  int    $emails 
+     * Set CC.
+     *
+     * @param  int    $ccList
+     * @param  int    $emails
      * @access public
      * @return object
      */
@@ -153,9 +153,9 @@ class mailTest
     }
 
     /**
-     * Set subject. 
-     * 
-     * @param  int    $subject 
+     * Set subject.
+     *
+     * @param  int    $subject
      * @access public
      * @return object
      */
@@ -167,9 +167,9 @@ class mailTest
     }
 
     /**
-     * Set body. 
-     * 
-     * @param  int    $body 
+     * Set body.
+     *
+     * @param  int    $body
      * @access public
      * @return object
      */
@@ -181,8 +181,8 @@ class mailTest
     }
 
     /**
-     * Mail exist. 
-     * 
+     * Mail exist.
+     *
      * @access public
      * @return object
      */
@@ -196,13 +196,13 @@ class mailTest
     }
 
     /**
-     * Add queue. 
-     * 
-     * @param  int    $toList 
-     * @param  int    $subject 
-     * @param  string $body 
-     * @param  string $ccList 
-     * @param  int    $includeMe 
+     * Add queue.
+     *
+     * @param  int    $toList
+     * @param  int    $subject
+     * @param  string $body
+     * @param  string $ccList
+     * @param  int    $includeMe
      * @access public
      * @return object
      */
@@ -213,21 +213,21 @@ class mailTest
         if($toList and $subject)
         {
             $id     = $this->dao->lastInsertID();
-            $object = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($id)->fetch(); 
+            $object = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($id)->fetch();
         }
 
         if(!$object)       return '没有数据提交';
         if(dao::isError()) return dao::getError();
-        
-        return $object; 
+
+        return $object;
     }
 
     /**
-     * Get queue. 
-     * 
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  int    $pager 
+     * Get queue.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $pager
      * @access public
      * @return object
      */
@@ -241,9 +241,9 @@ class mailTest
     }
 
     /**
-     * Get queue by id. 
-     * 
-     * @param  int    $queueID 
+     * Get queue by id.
+     *
+     * @param  int    $queueID
      * @access public
      * @return object
      */
@@ -257,9 +257,9 @@ class mailTest
     }
 
     /**
-     * Merge mails. 
-     * 
-     * @param  int    $user 
+     * Merge mails.
+     *
+     * @param  int    $user
      * @access public
      * @return object
      */
@@ -269,7 +269,7 @@ class mailTest
             ->where('objectType')->eq('mail')
             ->andWhere('toList')->eq($user)
             ->fetchAll();
-        
+
         $object = $this->objectModel->mergeMails($mails);
 
         if(dao::isError()) return dao::getError();
@@ -278,12 +278,12 @@ class mailTest
     }
 
     /**
-     * Get subject. 
-     * 
-     * @param  int    $objectType 
-     * @param  int    $object 
-     * @param  int    $title 
-     * @param  int    $actionType 
+     * Get subject.
+     *
+     * @param  int    $objectType
+     * @param  int    $object
+     * @param  int    $title
+     * @param  int    $actionType
      * @access public
      * @return object
      */

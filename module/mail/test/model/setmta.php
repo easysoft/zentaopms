@@ -1,19 +1,16 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
-su('admin');
 
 /**
 
-title=测试 mailModel->setCC();
+title=测试 mailModel->setMTA();
 cid=1
 pid=1
 
-获取MTA主机 >> localhost
-获取MTAdebug设置 >> 0
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mail.class.php';
+su('admin');
 
 $mail = new mailTest();
 
