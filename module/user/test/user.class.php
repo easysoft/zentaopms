@@ -1058,13 +1058,13 @@ class userTest
     /**
      * Test get user details for api.
      *
-     * @param  array $userList
+     * @param  array $accountList
      * @access public
-     * @return void
+     * @return array
      */
-    public function getListForGitLabAPITest($userList)
+    public function getListForGitLabAPITest(array $accountList): array
     {
-        return $this->objectModel->getListForGitLabAPI($userList);
+        return $this->objectModel->getListForGitLabAPI($accountList);
     }
 
     /**
