@@ -261,23 +261,6 @@ class giteaModel extends model
     }
 
     /**
-     * Get Gitea id list by user account.
-     *
-     * @param  string $account
-     * @access public
-     * @return array
-     */
-    public function getListByAccount($account = '')
-    {
-        if(!$account) $account = $this->app->user->account;
-
-        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitea')
-            ->andWhere('account')->eq($account)
-            ->fetchPairs('providerID');
-    }
-
-    /**
      * Get matched gitea users.
      *
      * @param  int   $giteaID

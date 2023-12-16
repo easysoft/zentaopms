@@ -108,7 +108,7 @@ class mrModel extends model
      */
     public function getGitlabProjects(int $hostID = 0, array $projectIdList = array()): array
     {
-        $gitlabUsers = $this->loadModel('gitlab')->getListByAccount();
+        $gitlabUsers = $this->loadModel('pipeline')->getProviderPairsByAccount('gitlab');
         if(!$this->app->user->admin && !isset($gitlabUsers[$hostID])) return array();
 
         $minProject = $maxProject = 0;
@@ -125,6 +125,7 @@ class mrModel extends model
 
         /* If not an administrator, need to obtain group member information. */
         $groupIDList = array(0 => 0);
+        $this->loadModel('gitlab');
         if(!$this->app->user->admin)
         {
             $groups = $this->gitlab->apiGetGroups($hostID, 'name_asc', 'reporter');

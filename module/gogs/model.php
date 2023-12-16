@@ -220,23 +220,6 @@ class gogsModel extends model
     }
 
     /**
-     * Get Gogs id list by user account.
-     *
-     * @param  string $account
-     * @access public
-     * @return array
-     */
-    public function getListByAccount($account = '')
-    {
-        if(!$account) $account = $this->app->user->account;
-
-        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gogs')
-            ->andWhere('account')->eq($account)
-            ->fetchPairs('providerID');
-    }
-
-    /**
      * Get matched gogs users.
      *
      * @param  int   $gogsID

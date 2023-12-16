@@ -103,7 +103,7 @@ class mr extends control
         $this->view->objectID   = $objectID;
         $this->view->repo       = $repo;
         $this->view->orderBy    = $orderBy;
-        $this->view->openIDList = $this->app->user->admin ? array() : $this->loadModel(strtolower($repo->SCM))->getListByAccount($this->app->user->account);
+        $this->view->openIDList = $this->app->user->admin ? array() : $this->loadModel('pipeline')->getProviderPairsByAccount($repo->SCM);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
@@ -153,9 +153,8 @@ class mr extends control
         $openIDList = array();
         if(!$this->app->user->admin)
         {
-            $openIDList += $this->loadModel('gitlab')->getListByAccount($this->app->user->account);
-            $openIDList += $this->loadModel('gitea')->getListByAccount($this->app->user->account);
-            $openIDList += $this->loadModel('gogs')->getListByAccount($this->app->user->account);
+            $this->loadModel('pipeline');
+            foreach(array('gitlab', 'gitea', 'gogs') as $service) $openIDList += $this->pipeline->getProviderPairsByAccount($service);
         }
 
         $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
