@@ -49,8 +49,9 @@ $lang->action->trashAction    = 'Recycle List';
 $lang->action->undeleteAction = 'Reset Data';
 $lang->action->hideOneAction  = 'Hide Data';
 
-$lang->action->refusecase  = 'Before restoring the use case, please restore the scene to which the use case belongs';
-$lang->action->refusescene = ' Before restoring the use case, please restore the parent scene of this scene ';
+$lang->action->refusecase   = 'Before restoring the use case, please restore the scene to which the use case belongs';
+$lang->action->refusescene  = 'Before restoring the scene, please restore the parent scene of this scene ';
+$lang->action->refusemodule = 'Before restoring the module, please restore the parent module of this module ';
 
 $lang->action->trashTips          = 'Note: Delete in ZenTao is logic.';
 $lang->action->textDiff           = 'Text Format';

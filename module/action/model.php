@@ -1865,6 +1865,12 @@ class actionModel extends model
         {
             $repeatName = $this->loadModel('tree')->checkUnique($object);
             if($repeatName) return sprintf($this->lang->tree->repeatName, $repeatName);
+
+            if($object->parent > 0)
+            {
+                $parent = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($object->parent)->fetch();
+                if($parent && $parent->deleted == '1') return $this->lang->action->refusemodule;
+            }
         }
         elseif($action->objectType == 'case' && $object->scene)
         {
