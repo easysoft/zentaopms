@@ -41,13 +41,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建默认看板区域。
      * Create a default kanban region.
      *
      * @param  object $kanban
      * @access public
-     * @return int
+     * @return int|bool
      */
-    public function createDefaultRegion($kanban)
+    public function createDefaultRegion(object $kanban): int|bool
     {
         $region = new stdclass();
         $region->name        = $this->lang->kanbanregion->default;
