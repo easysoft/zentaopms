@@ -62,6 +62,7 @@ $config->release->dtable->story->fieldList['title']['name']        = 'title';
 $config->release->dtable->story->fieldList['title']['type']        = 'title';
 $config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}');
 $config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
+$config->release->dtable->story->fieldList['title']['data-size']   = 'lg';
 $config->release->dtable->story->fieldList['title']['data-app']    = $app->tab;
 
 $config->release->dtable->story->fieldList['pri']['title'] = $lang->priAB;
@@ -107,6 +108,7 @@ $config->release->dtable->bug->fieldList['title']['name']        = 'title';
 $config->release->dtable->bug->fieldList['title']['type']        = 'title';
 $config->release->dtable->bug->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->release->dtable->bug->fieldList['title']['data-toggle'] = 'modal';
+$config->release->dtable->bug->fieldList['title']['data-size']   = 'lg';
 $config->release->dtable->bug->fieldList['title']['data-app']    = $app->tab;
 
 $config->release->dtable->bug->fieldList['severity']['title'] = $lang->bug->severity;

@@ -13,7 +13,15 @@ namespace zin;
 $buildModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
 
 $cols = array();
-foreach($config->release->dtable->defaultFields['linkBug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
+foreach($config->release->dtable->defaultFields['linkBug'] as $field)
+{
+    $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
+    if($field == 'title')
+    {
+        $cols['title']['data-toggle'] = 'modal';
+        $cols['title']['data-size']   = 'lg';
+    }
+}
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
 searchForm

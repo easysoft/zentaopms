@@ -17,6 +17,7 @@ foreach($config->release->dtable->defaultFields['linkStory'] as $field) $cols[$f
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $cols['title']['nestedToggle'] = false;
+$cols['title']['data-size']    = 'lg';
 
 searchForm
 (
