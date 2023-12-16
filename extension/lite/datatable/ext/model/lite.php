@@ -7,7 +7,7 @@
  * @access public
  * @return array
  */
-public function getFieldList($module, $method = '')
+public function getFieldList(string $module, string $method = ''): array
 {
     /* Load corresponding module. */
     if(!isset($this->config->$module)) $this->loadModel($module);
