@@ -6,6 +6,22 @@ class metricTest
         global $tester;
         $this->objectModel = $tester->loadModel('metric');
         $this->tester = $tester;
+        $this->initMetric();
+    }
+
+    /**
+     * 运行sql重置zt_metric表。
+     * Truncate zt_metric and insert data again.
+     *
+     * @access public
+     * @return void
+     */
+    public function initMetric()
+    {
+        global $tester,$app;
+        $appPath = $app->getAppRoot();
+        $sqlFile = $appPath . 'test/data/metric.sql';
+        $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
     /**
