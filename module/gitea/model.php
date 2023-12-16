@@ -511,24 +511,6 @@ class giteaModel extends model
     }
 
     /**
-     * Get gitea user id and realname pairs of one gitea.
-     *
-     * @param  int $giteaID
-     * @access public
-     * @return array
-     */
-    public function getUserIdRealnamePairs($giteaID)
-    {
-        return $this->dao->select('oauth.openID as openID,user.realname as realname')
-            ->from(TABLE_OAUTH)->alias('oauth')
-            ->leftJoin(TABLE_USER)->alias('user')
-            ->on("oauth.account = user.account")
-            ->where('providerType')->eq('gitea')
-            ->andWhere('providerID')->eq($giteaID)
-            ->fetchPairs();
-    }
-
-    /**
      * Get single branch by API.
      *
      * @param  int    $giteaID

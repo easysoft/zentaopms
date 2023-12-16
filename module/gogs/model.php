@@ -449,24 +449,6 @@ class gogsModel extends model
     }
 
     /**
-     * Get gogs user id and realname pairs of one gogs.
-     *
-     * @param  int $gogsID
-     * @access public
-     * @return array
-     */
-    public function getUserIdRealnamePairs($gogsID)
-    {
-        return $this->dao->select('oauth.openID as openID,user.realname as realname')
-            ->from(TABLE_OAUTH)->alias('oauth')
-            ->leftJoin(TABLE_USER)->alias('user')
-            ->on("oauth.account = user.account")
-            ->where('providerType')->eq('gogs')
-            ->andWhere('providerID')->eq($gogsID)
-            ->fetchPairs();
-    }
-
-    /**
      * Get single branch by API.
      *
      * @param  int    $gogsID
