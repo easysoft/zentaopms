@@ -3121,6 +3121,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 设置看板在制品限制。
      * Set WIP limit.
      *
      * @param  int    $columnID
@@ -3181,16 +3182,16 @@ class kanbanModel extends model
     }
 
     /**
+     * 设置看板列。
      * Set lane info.
      *
      * @param  int    $laneID
+     * @param  object $lane
      * @access public
      * @return bool
      */
-    public function setLane($laneID)
+    public function setLane(int $laneID, object $lane): bool
     {
-        $lane = fixer::input('post')->trim('name')->get();
-
         $this->dao->update(TABLE_KANBANLANE)->data($lane)
             ->autoCheck()
             ->batchcheck($this->config->kanban->setlane->requiredFields, 'notempty')
