@@ -1,0 +1,14 @@
+title: relation
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: AType
+    range: mr
+  - field: AID
+    range: 1
+  - field: BType
+    range: story,task,bug
+  - field: BID
+    range: 1-10

@@ -402,14 +402,12 @@ class mrModel extends model
 
         $MRAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink('mr', 'view', "mr={$MRID}");
 
-        $linkedStories = $this->mrTao->getLinkedObjectPairs($MRID, 'story');
-        $linkedTasks   = $this->mrTao->getLinkedObjectPairs($MRID, 'task');
-        $linkedBugs    = $this->mrTao->getLinkedObjectPairs($MRID, 'bug');
-
         $this->loadModel('action');
-        foreach($linkedStories as $storyID) $this->action->create('story', $storyID, $action, '', $MRAction);
-        foreach($linkedTasks as $taskID)    $this->action->create('task', $taskID, $action, '', $MRAction);
-        foreach($linkedBugs as $bugID)      $this->action->create('bug', $bugID, $action, '', $MRAction);
+        foreach(array('story', 'task', 'bug') as $objectType)
+        {
+            $linkedObjects = $this->mrTao->getLinkedObjectPairs($MRID, $objectType);
+            foreach($linkedObjects as $objectID) $this->action->create($objectType, $objectID, $action, '', $MRAction);
+        }
         return !dao::isError();
     }
 
