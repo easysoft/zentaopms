@@ -693,14 +693,14 @@ class userTest
     }
 
     /**
+     * 测试创建联系人列表。
      * Test create contact list.
      *
-     * @param  string $listName
-     * @param  array  $userList
+     * @param  object $userContact
      * @access public
-     * @return void
+     * @return array
      */
-    public function createContactListTest(object $userContact)
+    public function createContactListTest(object $userContact): array
     {
         $result = $this->objectModel->createContactList($userContact);
         $errors = dao::getError();
