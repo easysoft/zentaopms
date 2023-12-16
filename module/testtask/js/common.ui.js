@@ -24,7 +24,7 @@ function loadExecutionRelated()
  * @access public
  * @return void
  */
-function loadExecutionBuilds()
+window.loadExecutionBuilds = function()
 {
     const productID   = $('[name=product]').val();
     const executionID = $('[name=execution]').val();
@@ -35,13 +35,19 @@ function loadExecutionBuilds()
     if(executionID == 0) link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=build&build=' + selectedBuild + '&branch=&needCreate=&type=noempty,notrunk,withexecution');
     if(executionID == 0 && projectID == 0) link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=build&build=&branch=all&index=&type=notrunk,withexecution');
 
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         let $buildPicker = $('[name="build"]').zui('picker');
-        if(data)
+        let oldBuild     = $('[name="build"]').val();
+        $buildPicker.render({items: data});
+        $buildPicker.$.setValue(oldBuild);
+        if(data.length == 0)
         {
-            data = JSON.parse(data);
-            $buildPicker.render({items: data});
+            $('[name="build"]').closest('.input-group').find('.input-group-addon').removeClass('hidden');
+        }
+        else
+        {
+            $('[name="build"]').closest('.input-group').find('.input-group-addon').addClass('hidden');
         }
     });
 }
@@ -201,7 +207,6 @@ function setExecutionByBuild()
     link = $.createLink('testtask', 'ajaxGetExecutionByBuild', 'buildID=' + buildID);
     $.get(link, function(data)
     {
-
         $('[name="execution"]').zui('picker').$.setValue(data);
     });
 }

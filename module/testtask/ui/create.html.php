@@ -34,15 +34,18 @@ formPanel
         set::type('hidden'),
         set::name('execution'),
         set::value($noMultipleExecutionID)
-    ) : formGroup
+    ) : formRow
     (
-        set::width('1/2'),
-        set::label($lang->testtask->execution),
         set::className(($app->tab == 'execution' && $executionID) ? 'hidden' : ''),
-        set::name('execution'),
-        set::value($executionID),
-        set::control('picker'),
-        set::items($executions)
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testtask->execution),
+            set::name('execution'),
+            set::value($executionID),
+            set::control('picker'),
+            set::items($executions)
+        )
     ),
     formGroup
     (
@@ -63,7 +66,7 @@ formPanel
             ),
             span
             (
-                set::className(!empty($executionID) && empty($builds) ? 'input-group-addon' : 'hidden'),
+                set::className('input-group-addon', !empty($executionID) && empty($builds) ? '' : 'hidden'),
                 a
                 (
                     set('href', createLink('build', 'create', "executionID=$executionID&productID={$product->id}&projectID={$projectID}")),
@@ -73,7 +76,7 @@ formPanel
             ),
             span
             (
-                set::className(!empty($executionID) && empty($builds) ? 'input-group-addon' : 'hidden'),
+                set::className('input-group-addon', !empty($executionID) && empty($builds) ? '' : 'hidden'),
                 a
                 (
                     set('href', 'javascript:void(0)'),
