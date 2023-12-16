@@ -11,10 +11,10 @@ $config->bug->dtable->fieldList['id']['required'] = true;
 $config->bug->dtable->fieldList['id']['group']    = 1;
 
 $config->bug->dtable->fieldList['product']['display']    = false;
-$config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all'); ;
+$config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 
 $config->bug->dtable->fieldList['module']['display']    = false;
-$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug&0&all');
+$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => ['rootID' => '$productID', 'type' => 'bug', 'startModule' => 0, 'branch' => 'all']);
 
 $config->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
 $config->bug->dtable->fieldList['title']['type']     = 'title';
@@ -214,7 +214,7 @@ $config->bug->dtable->fieldList['closedDate']['title']    = $lang->bug->closedDa
 $config->bug->dtable->fieldList['closedDate']['type']     = 'date';
 $config->bug->dtable->fieldList['closedDate']['group']    = 10;
 $config->bug->dtable->fieldList['closedDate']['sortType'] = 'date';
- 
+
 $config->bug->dtable->fieldList['steps']['title']   = 'steps';
 $config->bug->dtable->fieldList['steps']['control'] = 'textarea';
 $config->bug->dtable->fieldList['steps']['display'] = false;

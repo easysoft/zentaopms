@@ -65,14 +65,17 @@ class transferModel extends model
     }
 
     /**
+     * 生成导出数据
      * Export module data.
      *
      * @param  string $module
      * @access public
      * @return void
      */
-    public function export($module = '')
+    public function export(string $module = '')
     {
+        /* 设置PHP最大运行内存和最大执行时间。 */
+        /* Set PHP max running memory and max execution time. */
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','100');
 
@@ -81,6 +84,8 @@ class transferModel extends model
         /* Init config fieldList. */
         $fieldList = $this->initFieldList($module, $fields);
 
+        /* 生成该模块的导出数据。 */
+        /* Generate export datas. */
         $rows = $this->getRows($module, $fieldList);
         if($module == 'story')
         {
@@ -88,6 +93,8 @@ class transferModel extends model
             if($product and $product->shadow) foreach($rows as $id => $row) $rows[$id]->product = '';
         }
 
+        /* 设置Excel下拉数据。 */
+        /* Set Excel dropdown data. */
         $list = $this->setListValue($module, $fieldList);
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
@@ -102,32 +109,6 @@ class transferModel extends model
         $this->post->set('rows',   $rows);
         $this->post->set('fields', $fields);
         $this->post->set('kind',   $module);
-    }
-
-    /**
-     * Init postFields.
-     *
-     * @param  string $module
-     * @access public
-     * @return void
-     */
-    public function initPostFields($module = '')
-    {
-        $this->commonActions($module);
-        $datas = fixer::input('post')->get();
-        $objectData = array();
-        foreach($datas as $field => $data)
-        {
-            if(is_array($data))
-            {
-                foreach($data as $key => $value)
-                {
-                    if(is_array($value)) $value = implode(',', $value);
-                    $objectData[$key][$field] = $value;
-                }
-            }
-        }
-        return $objectData;
     }
 
     /**
@@ -266,14 +247,14 @@ class transferModel extends model
     /**
      * Init Values.
      *
-     * @param  int    $module
+     * @param  int    $model
      * @param  int    $field
      * @param  string $fieldValue
      * @param  int    $withKey
      * @access public
      * @return void
      */
-    public function initValues($module, $field, $fieldValue = '', $withKey = true)
+    public function initValues($model, $field, $fieldValue = '', $withKey = true)
     {
         $values = $fieldValue['values'];
 
@@ -283,11 +264,11 @@ class transferModel extends model
 
         extract($fieldValue['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
 
-        if(!empty($module) and !empty($method))
+        if(!empty($Module) and !empty($method))
         {
             $params = !empty($params) ? $params : '';
             $pairs  = !empty($pairs)  ? $pairs : '';
-            $values = $this->getSourceByModuleMethod($module, $module, $method, $params, $pairs);
+            $values = $this->getSourceByModuleMethod($model, $Module, $method, $params, $pairs);
         }
         elseif(!empty($lang))
         {
@@ -456,13 +437,12 @@ class transferModel extends model
     {
         $getParams = $this->session->{$module . 'TransferParams'};
 
-        if($params)
+        if(is_string($params)) $params = explode('&', $params);
+        foreach($params as $param => $value)
         {
-            $params = explode('&', $params);
-            foreach($params as $param => $value)
-            {
-                if(strpos($value, '$') !== false) $params[$param] = $getParams[ltrim($value, '$')];
-            }
+            if(empty($value) || strpos($value, '$') === false) continue;
+
+            $params[$param] = isset($getParams[ltrim($value, '$')]) ? $getParams[ltrim($value, '$')] : '';
         }
 
         /* If this method has multiple parameters use call_user_func_array. */
