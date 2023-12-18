@@ -171,81 +171,14 @@ class upgrade extends control
 
         if($this->config->version != $installedVersion) $this->upgrade->execute($rawFromVersion);
 
-        if(!$this->upgrade->isError())
+        if($this->upgrade->isError())
         {
-            $this->setting->updateVersion($this->config->version);
-
-            /* Delete all patch actions if upgrade success. */
-            $this->loadModel('action')->deleteByType('patch');
-
-            $selectMode = true;
-            $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
-            /* 如果经典管理模式。*/
-            /* If the system mode is classic. */
-            if($systemMode == 'classic')
-            {
-                $this->setting->setItem('system.common.global.mode', 'light');
-
-                $programID = $this->loadModel('program')->createDefaultProgram();
-                $this->setting->setItem('system.common.global.defaultProgram', $programID);
-
-                /* Set default program for product and project with no program. */
-                $this->upgrade->relateDefaultProgram($programID);
-
-                $_POST['projectType'] = 'execution';
-                $this->upgrade->upgradeInProjectMode($programID, $systemMode);
-
-                $this->upgrade->computeObjectMembers();
-                $this->upgrade->initUserView();
-                $this->upgrade->setDefaultPriv();
-                $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
-
-                $hourPoint = $this->setting->getItem('owner=system&module=custom&key=hourPoint');
-                if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
-
-                $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
-                $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
-
-                $this->loadModel('custom')->disableFeaturesByMode('light');
-
-                $selectMode = false;
-            }
-
-            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $rawFromVersion));
-
-            /* 从15 版本以后升级。*/
-            /* when upgrade from the vesion is more than 15. */
-            if(version_compare($openVersion, '15_0_rc1', '>=') && $systemMode == 'new')
-            {
-                $this->setting->setItem('system.common.global.mode', 'ALM');
-                if(empty($this->config->URAndSR)) $this->setting->setItem('system.common.closedFeatures', 'productUR');
-                $selectMode = false;
-            }
-            if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
-
-            /* 如果是 ipd 版本，设置相关的配置。*/
-            /* When the edition is ipd. */
-            if($this->config->edition == 'ipd' && strpos($fromVersion, 'ipd') === false)
-            {
-                $this->setting->setItem('system.common.global.mode', 'PLM');
-                $this->setting->setItem('system.custom.URAndSR', '1');
-                $this->setting->setItem('system.common.closedFeatures', '');
-                $this->setting->setItem('system.common.disabledFeatures', '');
-                $this->upgrade->addORPriv();
-            }
-
-            if($selectMode)
-            {
-                if($this->config->edition == 'ipd') $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}&mode=ALM"));
-                $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}"));
-            }
-
-            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
+            $this->view->result = 'sqlFail';
+            $this->view->errors = $this->upgrade->getError();
+            $this->display();
         }
 
-        $this->view->result = 'sqlFail';
-        $this->view->errors = $this->upgrade->getError();
-        $this->display();
+        $this->upgradeZen->afterExec($fromVersion, $rawFromVersion);
     }
 
     /**
