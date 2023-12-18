@@ -19,19 +19,15 @@ class upgrade extends control
      */
     public function index()
     {
+        /* 如果没有升级入口文件，跳转到应用的首页。*/
         /* Locate to index page of my module, if upgrade.php does not exist. */
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
+        /* 删除临时 model 文件。*/
+        /* Delete tmp mode files. */
         $this->upgrade->deleteTmpModel();
 
-        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
-        if(empty($systemMode) && !isset($this->config->qcVersion))
-        {
-            /* Judge upgrade step. */
-            $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
-            if($upgradeStep == 'mergeProgram') $this->locate(inlink('mergeProgram'));
-        }
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
     }
