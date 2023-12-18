@@ -71,6 +71,7 @@ class upgrade extends control
     }
 
     /**
+     * 选择升级前的禅道版本。
      * Select the version of old zentao.
      *
      * @access public
@@ -982,12 +983,14 @@ class upgrade extends control
     }
 
     /**
-     * Consistency.
+     * 数据库一致性检查。
+     * Check database consistency.
      *
+     * @param  bool   $netConnect
      * @access public
      * @return void
      */
-    public function consistency($netConnect = true)
+    public function consistency(bool $netConnect = true)
     {
         $logFile  = $this->upgrade->getConsistencyLogFile();
         $hasError = $this->upgrade->hasConsistencyError();
@@ -996,6 +999,8 @@ class upgrade extends control
         $alterSQL = $this->upgrade->checkConsistency();
         if(empty($alterSQL))
         {
+            /* 能访问禅道官网插件接口跳转到检查插件页面，否则跳转到选择版本页面。*/
+            /* If you can access the ZenTao official website extension interface, locate to the check extension page, otherwise locate to the version selection page. */
             if(!$netConnect) $this->locate(inlink('selectVersion'));
             $this->locate(inlink('checkExtension'));
         }
