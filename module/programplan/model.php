@@ -685,8 +685,7 @@ class programplanModel extends model
                 $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
             }
 
-            $plan->days  = helper::diffDate($plan->end, $plan->begin) + 1;
-            $plan->order = (int)current($orders);
+            $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
 
             if($plan->id)
             {
