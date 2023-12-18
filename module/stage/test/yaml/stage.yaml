@@ -14,5 +14,7 @@ fields:
     range: 'waterfall{6},waterfallplus{6}'
   - field: type
     range: "request,design,dev,qa,release,review"
+  - field: percent
+    range: 10
   - field: deleted
     range: 0

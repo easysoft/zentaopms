@@ -128,19 +128,19 @@ class stageTest
     }
 
     /**
-     * Test get a stage by id.
+     * 获取给定模型下的阶段总百分比。
+     * Get total percent of the type.
      *
-     * @param  string $projectType
+     * @param  string    $projectType waterfall|waterfallplus
      * @access public
-     * @return object
+     * @return int|array
      */
-    public function getTotalPercentTest($projectType)
+    public function getTotalPercentTest(string $projectType): int|array
     {
-        $object = $this->objectModel->getTotalPercent($projectType);
+        $totalPercent = $this->objectModel->getTotalPercent($projectType);
 
         if(dao::isError()) return dao::getError();
-
-        return $object;
+        return $totalPercent;
     }
 
     /**
