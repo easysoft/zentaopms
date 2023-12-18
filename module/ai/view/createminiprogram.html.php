@@ -44,7 +44,7 @@
         <tr>
           <th><?= $lang->ai->miniPrograms->desc; ?></th>
           <td colspan="2">
-            <?= html::input('desc', $desc, "class='form-control' required placeholder='" . $lang->ai->miniPrograms->placeholder->desc . "'"); ?>
+            <?= html::textarea('desc', $desc, "rows='1' class='form-control' required placeholder='" . $lang->ai->miniPrograms->placeholder->desc . "'"); ?>
           </td>
         </tr>
         <tr class="hidden">
