@@ -1,43 +1,84 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
-su('admin');
-
-zdTable('stage')->gen(0);
-
 /**
 
 title=测试 stageModel->create();
 cid=1
-pid=1
 
-测试新建瀑布项目一个需求阶段 >> 新建的需求,1,request
-测试新建瀑布项目一个设计阶段 >> 新建的设计,2,design
-测试新建瀑布项目一个开发阶段 >> 新建的开发,3,dev
-测试新建瀑布项目一个测试阶段 >> 新建的测试,4,qa
-测试新建瀑布项目一个发布阶段 >> 新建的发布,5,release
-测试新建瀑布项目一个总结评审阶段 >> 新建的总结评审,6,review
-测试新建瀑布项目一个其他阶段 >> 新建的其他,7,other
-测试新建瀑布项目名称为空 >> 『阶段名称』不能为空。
-测试新建瀑布项目类型为空 >> 『工作量占比』不能为空。
-测试新建瀑布项目百分比为空 >> 『阶段类型』不能为空。
-测试新建瀑布项目非数字的百分比 >> 工作量占比应当是数字
-测试新建瀑布项目总百分比超过100 >> 工作量占比累计不应当超过100%
-测试新建融合瀑布项目一个需求阶段 >> 新建的需求,1,request
-测试新建融合瀑布项目一个设计阶段 >> 新建的设计,2,design
-测试新建融合瀑布项目一个开发阶段 >> 新建的开发,3,dev
-测试新建融合瀑布项目一个测试阶段 >> 新建的测试,4,qa
-测试新建融合瀑布项目一个发布阶段 >> 新建的发布,5,release
-测试新建融合瀑布项目一个总结评审阶段 >> 新建的总结评审,6,review
-测试新建融合瀑布项目一个其他阶段 >> 新建的其他,7,other
-测试新建融合瀑布项目名称为空 >> 『阶段名称』不能为空。
-测试新建融合瀑布项目类型为空 >> 『工作量占比』不能为空。
-测试新建融合瀑布项目百分比为空 >> 『阶段类型』不能为空。
-测试新建融合瀑布项目非数字的百分比 >> 工作量占比应当是数字
-测试新建融合瀑布项目总百分比超过100 >> 工作量占比累计不应当超过100%
+- 测试新建瀑布项目一个需求阶段
+ - 属性name @新建的需求
+ - 属性percent @1
+ - 属性type @request
+- 测试新建瀑布项目一个设计阶段
+ - 属性name @新建的设计
+ - 属性percent @2
+ - 属性type @design
+- 测试新建瀑布项目一个开发阶段
+ - 属性name @新建的开发
+ - 属性percent @3
+ - 属性type @dev
+- 测试新建瀑布项目一个测试阶段
+ - 属性name @新建的测试
+ - 属性percent @4
+ - 属性type @qa
+- 测试新建瀑布项目一个发布阶段
+ - 属性name @新建的发布
+ - 属性percent @5
+ - 属性type @release
+- 测试新建瀑布项目一个总结评审阶段
+ - 属性name @新建的总结评审
+ - 属性percent @6
+ - 属性type @review
+- 测试新建瀑布项目一个其他阶段
+ - 属性name @新建的其他
+ - 属性percent @7
+ - 属性type @other
+- 测试新建瀑布项目名称为空第name条的0属性 @『阶段名称』不能为空。
+- 测试新建瀑布项目类型为空第percent条的0属性 @『工作量占比』不能为空。
+- 测试新建瀑布项目百分比为空第type条的0属性 @『阶段类型』不能为空。
+- 测试新建瀑布项目非数字的百分比属性percent @工作量占比应当是数字
+- 测试新建瀑布项目总百分比超过100属性percent @工作量占比累计不应当超过100%
+- 测试新建融合瀑布项目一个需求阶段
+ - 属性name @新建的需求
+ - 属性percent @1
+ - 属性type @request
+- 测试新建融合瀑布项目一个设计阶段
+ - 属性name @新建的设计
+ - 属性percent @2
+ - 属性type @design
+- 测试新建融合瀑布项目一个开发阶段
+ - 属性name @新建的开发
+ - 属性percent @3
+ - 属性type @dev
+- 测试新建融合瀑布项目一个测试阶段
+ - 属性name @新建的测试
+ - 属性percent @4
+ - 属性type @qa
+- 测试新建融合瀑布项目一个发布阶段
+ - 属性name @新建的发布
+ - 属性percent @5
+ - 属性type @release
+- 测试新建融合瀑布项目一个总结评审阶段
+ - 属性name @新建的总结评审
+ - 属性percent @6
+ - 属性type @review
+- 测试新建融合瀑布项目一个其他阶段
+ - 属性name @新建的其他
+ - 属性percent @7
+ - 属性type @other
+- 测试新建融合瀑布项目名称为空第name条的0属性 @『阶段名称』不能为空。
+- 测试新建融合瀑布项目类型为空第percent条的0属性 @『工作量占比』不能为空。
+- 测试新建融合瀑布项目百分比为空第type条的0属性 @『阶段类型』不能为空。
+- 测试新建融合瀑布项目非数字的百分比属性percent @工作量占比应当是数字
+- 测试新建融合瀑布项目总百分比超过100属性percent @工作量占比累计不应当超过100%
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/stage.class.php';
+
+zdTable('user')->gen(5);
+zdTable('stage')->gen(0);
 
 $stage1 = new stdclass();
 $stage1->name    = '新建的需求';
@@ -99,29 +140,36 @@ $percentOver->name    = '一个名称';
 $percentOver->percent = 101;
 $percentOver->type    = 'other';
 
-$stage = new stageTest();
+$stageTester = new stageTest();
 
-r($stage->createTest($stage1))                          && p('name,percent,type') && e('新建的需求,1,request');         // 测试新建瀑布项目一个需求阶段
-r($stage->createTest($stage2))                          && p('name,percent,type') && e('新建的设计,2,design');          // 测试新建瀑布项目一个设计阶段
-r($stage->createTest($stage3))                          && p('name,percent,type') && e('新建的开发,3,dev');             // 测试新建瀑布项目一个开发阶段
-r($stage->createTest($stage4))                          && p('name,percent,type') && e('新建的测试,4,qa');              // 测试新建瀑布项目一个测试阶段
-r($stage->createTest($stage5))                          && p('name,percent,type') && e('新建的发布,5,release');         // 测试新建瀑布项目一个发布阶段
-r($stage->createTest($stage6))                          && p('name,percent,type') && e('新建的总结评审,6,review');      // 测试新建瀑布项目一个总结评审阶段
-r($stage->createTest($stage7))                          && p('name,percent,type') && e('新建的其他,7,other');           // 测试新建瀑布项目一个其他阶段
-r($stage->createTest($emptyName))                       && p('name:0')            && e('『阶段名称』不能为空。');       // 测试新建瀑布项目名称为空
-r($stage->createTest($emptyPercent))                    && p('percent:0')         && e('『工作量占比』不能为空。');     // 测试新建瀑布项目类型为空
-r($stage->createTest($emptyType))                       && p('type:0')            && e('『阶段类型』不能为空。');       // 测试新建瀑布项目百分比为空
-r($stage->createTest($IllegalPercent))                  && p('message:0')         && e('工作量占比应当是数字');         // 测试新建瀑布项目非数字的百分比
-r($stage->createTest($percentOver))                     && p('message:0')         && e('工作量占比累计不应当超过100%'); // 测试新建瀑布项目总百分比超过100
-r($stage->createTest($stage1, 'waterfallplus'))         && p('name,percent,type') && e('新建的需求,1,request');         // 测试新建融合瀑布项目一个需求阶段
-r($stage->createTest($stage2, 'waterfallplus'))         && p('name,percent,type') && e('新建的设计,2,design');          // 测试新建融合瀑布项目一个设计阶段
-r($stage->createTest($stage3, 'waterfallplus'))         && p('name,percent,type') && e('新建的开发,3,dev');             // 测试新建融合瀑布项目一个开发阶段
-r($stage->createTest($stage4, 'waterfallplus'))         && p('name,percent,type') && e('新建的测试,4,qa');              // 测试新建融合瀑布项目一个测试阶段
-r($stage->createTest($stage5, 'waterfallplus'))         && p('name,percent,type') && e('新建的发布,5,release');         // 测试新建融合瀑布项目一个发布阶段
-r($stage->createTest($stage6, 'waterfallplus'))         && p('name,percent,type') && e('新建的总结评审,6,review');      // 测试新建融合瀑布项目一个总结评审阶段
-r($stage->createTest($stage7, 'waterfallplus'))         && p('name,percent,type') && e('新建的其他,7,other');           // 测试新建融合瀑布项目一个其他阶段
-r($stage->createTest($emptyName, 'waterfallplus'))      && p('name:0')            && e('『阶段名称』不能为空。');       // 测试新建融合瀑布项目名称为空
-r($stage->createTest($emptyPercent, 'waterfallplus'))   && p('percent:0')         && e('『工作量占比』不能为空。');     // 测试新建融合瀑布项目类型为空
-r($stage->createTest($emptyType, 'waterfallplus'))      && p('type:0')            && e('『阶段类型』不能为空。');       // 测试新建融合瀑布项目百分比为空
-r($stage->createTest($IllegalPercent, 'waterfallplus')) && p('message:0')         && e('工作量占比应当是数字');         // 测试新建融合瀑布项目非数字的百分比
-r($stage->createTest($percentOver, 'waterfallplus'))    && p('message:0')         && e('工作量占比累计不应当超过100%'); // 测试新建融合瀑布项目总百分比超过100
+/* Normal condition. */
+r($stageTester->createTest($stage1)) && p('name,percent,type') && e('新建的需求,1,request');    // 测试新建瀑布项目一个需求阶段
+r($stageTester->createTest($stage2)) && p('name,percent,type') && e('新建的设计,2,design');     // 测试新建瀑布项目一个设计阶段
+r($stageTester->createTest($stage3)) && p('name,percent,type') && e('新建的开发,3,dev');        // 测试新建瀑布项目一个开发阶段
+r($stageTester->createTest($stage4)) && p('name,percent,type') && e('新建的测试,4,qa');         // 测试新建瀑布项目一个测试阶段
+r($stageTester->createTest($stage5)) && p('name,percent,type') && e('新建的发布,5,release');    // 测试新建瀑布项目一个发布阶段
+r($stageTester->createTest($stage6)) && p('name,percent,type') && e('新建的总结评审,6,review'); // 测试新建瀑布项目一个总结评审阶段
+r($stageTester->createTest($stage7)) && p('name,percent,type') && e('新建的其他,7,other');      // 测试新建瀑布项目一个其他阶段
+
+/* Error condition. */
+r($stageTester->createTest($emptyName))      && p('name:0')    && e('『阶段名称』不能为空。');       // 测试新建瀑布项目名称为空
+r($stageTester->createTest($emptyPercent))   && p('percent:0') && e('『工作量占比』不能为空。');     // 测试新建瀑布项目类型为空
+r($stageTester->createTest($emptyType))      && p('type:0')    && e('『阶段类型』不能为空。');       // 测试新建瀑布项目百分比为空
+r($stageTester->createTest($IllegalPercent)) && p('percent')   && e('工作量占比应当是数字');         // 测试新建瀑布项目非数字的百分比
+r($stageTester->createTest($percentOver))    && p('percent')   && e('工作量占比累计不应当超过100%'); // 测试新建瀑布项目总百分比超过100
+
+/* Normal condition. */
+r($stageTester->createTest($stage1, 'waterfallplus')) && p('name,percent,type') && e('新建的需求,1,request');    // 测试新建融合瀑布项目一个需求阶段
+r($stageTester->createTest($stage2, 'waterfallplus')) && p('name,percent,type') && e('新建的设计,2,design');     // 测试新建融合瀑布项目一个设计阶段
+r($stageTester->createTest($stage3, 'waterfallplus')) && p('name,percent,type') && e('新建的开发,3,dev');        // 测试新建融合瀑布项目一个开发阶段
+r($stageTester->createTest($stage4, 'waterfallplus')) && p('name,percent,type') && e('新建的测试,4,qa');         // 测试新建融合瀑布项目一个测试阶段
+r($stageTester->createTest($stage5, 'waterfallplus')) && p('name,percent,type') && e('新建的发布,5,release');    // 测试新建融合瀑布项目一个发布阶段
+r($stageTester->createTest($stage6, 'waterfallplus')) && p('name,percent,type') && e('新建的总结评审,6,review'); // 测试新建融合瀑布项目一个总结评审阶段
+r($stageTester->createTest($stage7, 'waterfallplus')) && p('name,percent,type') && e('新建的其他,7,other');      // 测试新建融合瀑布项目一个其他阶段
+
+/* Error condition. */
+r($stageTester->createTest($emptyName,      'waterfallplus')) && p('name:0')    && e('『阶段名称』不能为空。');       // 测试新建融合瀑布项目名称为空
+r($stageTester->createTest($emptyPercent,   'waterfallplus')) && p('percent:0') && e('『工作量占比』不能为空。');     // 测试新建融合瀑布项目类型为空
+r($stageTester->createTest($emptyType,      'waterfallplus')) && p('type:0')    && e('『阶段类型』不能为空。');       // 测试新建融合瀑布项目百分比为空
+r($stageTester->createTest($IllegalPercent, 'waterfallplus')) && p('percent')   && e('工作量占比应当是数字');         // 测试新建融合瀑布项目非数字的百分比
+r($stageTester->createTest($percentOver,    'waterfallplus')) && p('percent')   && e('工作量占比累计不应当超过100%'); // 测试新建融合瀑布项目总百分比超过100

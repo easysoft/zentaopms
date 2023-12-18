@@ -15,25 +15,22 @@ class stageTest
     }
 
     /**
-     * Test create a stage.
+     * 创建一个阶段。
+     * Create a stage.
      *
-     * @param  object $stage
-     * @param  string $type
+     * @param  object       $stage
+     * @param  string       $type  waterfall|waterfallplus
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function createTest($stage, $type = 'waterfall')
+    public function createTest(object $stage, string $type = 'waterfall'): object|array
     {
-        foreach($stage as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create($type);
-
-        unset($_POST);
+        $this->objectModel->config->setPercent = 1;
+        $this->objectModel->config->stage->create->requiredFields = 'type,name,percent';
+        $stageID = $this->objectModel->create($stage, $type);
 
         if(dao::isError()) return dao::getError();
-
-        $object = $this->objectModel->getByID($objectID, $type);
-        return $object;
+        return $this->objectModel->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
     }
 
     /**
