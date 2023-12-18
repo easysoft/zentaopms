@@ -34,22 +34,32 @@ class stageTest
     }
 
     /**
-     * Test batch create stages.
+     * 批量创建阶段。
+     * Batch create stages.
      *
-     * @param  array  $param
-     * @param  string $type
+     * @param  array            $data
+     * @param  string           $type waterfall|waterfallplus
      * @access public
-     * @return int
+     * @return int|string|array
      */
-    public function batchCreateTest($param ,$type = 'waterfall')
+    public function batchCreateTest(array $data, string $type = 'waterfall'): int|string|array
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $this->objectModel->config->setPercent = 1;
+        $this->objectModel->config->stage->create->requiredFields = 'type,name,percent';
 
-        $this->objectModel->batchCreate($type);
+        $stages = array();
+        foreach($data['name'] as $rowID => $value)
+        {
+            $stage = new stdclass();
+            $stage->name = $value;
+            $stage->type = $data['type'][$rowID];
+            $stage->percent = $data['percent'][$rowID];
 
-        unset($_POST);
+            $stages[] = $stage;
+        }
 
-        if(dao::isError()) return dao::getError();
+        $this->objectModel->batchCreate($type, $stages);
+        if(dao::isError()) return current(dao::getError());
 
         $objects = $this->objectModel->getStages('id_desc', 0, $type);
         return count($objects);
