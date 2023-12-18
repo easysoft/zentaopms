@@ -785,17 +785,16 @@ class userTest
     }
 
     /**
+     * 测试计算密码强度。
      * Test compute password strength.
      *
+     * @param  string $password
      * @access public
-     * @return void
+     * @return int
      */
-    public function computePasswordStrengthTest($password)
+    public function computePasswordStrengthTest(string $password): int
     {
-        $strength = $this->objectModel->computePasswordStrength($password);
-
-        if(dao::isError()) return dao::getError();
-        return $strength;
+        return $this->objectModel->computePasswordStrength($password);
     }
 
     /**
