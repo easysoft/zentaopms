@@ -549,25 +549,16 @@ class userTest
     }
 
     /**
-     * Test get groups by user.
+     * 测试获取某个用户的权限组。
+     * Test get groups of a user.
      *
      * @param  string $account
-     * @param  string $password
      * @access public
-     * @return void
+     * @return array
      */
-    public function getGroupsTest($account)
+    public function getGroupsTest(string $account): array
     {
-        $groups = $this->objectModel->getGroups($account);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $groups;
-        }
+        return $this->objectModel->getGroups($account);
     }
 
     /**
