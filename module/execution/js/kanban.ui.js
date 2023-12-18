@@ -186,8 +186,8 @@ window.renderAvatar = function(item)
     }
     else
     {
-        if(assignLink != '') return '<a href="' + assignLink + '" class="avatar rounded-full size-xs ml-1 primary" title="' + item.assignedToRealName + '" data-toggle="modal">' + item.uavatar + '</a>';
-        return '<div class="avatar rounded-full size-xs ml-1 primary" title="' + item.assignedToRealName + '">' + item.uavatar + '</div>';
+        if(assignLink != '') return '<a href="' + assignLink + '" class="avatar rounded-full size-xs ml-1 primary" title="' + item.realnames + '" data-toggle="modal">' + item.avatarList[0] + '</a>';
+        return '<div class="avatar rounded-full size-xs ml-1 primary" title="' + item.realnames + '">' + item.avatarList[0] + '</div>';
     }
 }
 

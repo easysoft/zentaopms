@@ -526,21 +526,25 @@ class kanbanTao extends kanbanModel
         $item['id']           = $card->id;
         $item['name']         = $card->id;
         $item['pri']          = $card->pri;
-        $item['begin']        = $card->begin;
-        $item['end']          = $card->end;
-        $item['group']        = $card->group;
-        $item['region']       = $card->region;
         $item['color']        = $card->color;
-        $item['progress']     = $card->progress;
         $item['assignedTo']   = $card->assignedTo;
-        $item['fromID']       = $card->fromID;
-        $item['fromType']     = $card->fromType;
+        $item['progress']     = !empty($card->progress) ? $card->progress : 0;
+        $item['group']        = !empty($card->group) ? $card->group : '';
+        $item['region']       = !empty($card->region) ? $card->region : '';
+        $item['begin']        = !empty($card->begin) ? $card->begin : '';
+        $item['end']          = !empty($card->end) ? $card->end  : '';
+        $item['fromID']       = !empty($card->fromID) ? $card->fromID : 0;
+        $item['fromType']     = !empty($card->fromType) ? $card->fromType : '';
         $item['desc']         = !empty($card->desc) ? $card->desc : '';
         $item['delay']        = !empty($card->delay) ? $card->delay : 0;
         $item['status']       = !empty($card->status) ? $card->status : '';
         $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
         $item['deleted']      = !empty($card->deleted) ? $card->deleted : 0;
         $item['date']         = !empty($card->date) ? $card->date : '';
+        $item['estimate']     = !empty($card->estimate) ? $card->estimate : '';
+        $item['deadline']     = !empty($card->deadline) ? $card->deadline : '';
+        $item['severity']     = !empty($card->severity) ? $card->severity : '';
+        $item['cardType']     = $cell->type;
         $item['avatarList']   = array();
         $item['realnames']    = '';
         $item['order']        = $order;
@@ -557,6 +561,13 @@ class kanbanTao extends kanbanModel
                 $item['avatarList'][]  = $userAvatar;
                 $item['realnames']    .= zget($users, $account, '') . ' ';
             }
+        }
+
+        if($cell->type == 'task')
+        {
+            $item['left']       = $card->left;
+            $item['estStarted'] = $card->estStarted;
+            $item['mode']       = $card->mode;
         }
 
         return $item;

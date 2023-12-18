@@ -1328,7 +1328,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
+    public function getCardGroupByExecution(int $executionID, string $browseType = 'all', string $orderBy = 'id_asc', string $searchValue = ''): array
     {
         $cards = $this->dao->select('t1.*, t2.type as columnType, t2.group')
             ->from(TABLE_KANBANCELL)->alias('t1')
@@ -1351,7 +1351,7 @@ class kanbanModel extends model
         {
             foreach($cells as $cell)
             {
-                $cardOrder  = 1;
+                $order = 0;
                 $cardIdList = array_filter(explode(',', $cell->cards));
                 foreach($cardIdList as $cardID)
                 {
@@ -1361,46 +1361,11 @@ class kanbanModel extends model
 
                     if(empty($object)) continue;
 
-                    $cardData['id']                 = $object->id;
-                    $cardData['name']               = $object->id;
-                    $cardData['order']              = $cardOrder++;
-                    $cardData['pri']                = $object->pri ? $object->pri : '';
-                    $cardData['estimate']           = $cell->type == 'bug' ? '' : $object->estimate;
-                    $cardData['assignedTo']         = $object->assignedTo;
-                    $cardData['deadline']           = $cell->type == 'story' ? '' : $object->deadline;
-                    $cardData['severity']           = $cell->type == 'bug' ? $object->severity : '';
-                    $cardData['acl']                = 'open';
-                    $cardData['lane']               = $laneID;
-                    $cardData['column']             = $cell->column;
-                    $cardData['openedDate']         = $object->openedDate;
-                    $cardData['closedDate']         = $object->closedDate;
-                    $cardData['lastEditedDate']     = $object->lastEditedDate;
-                    $cardData['status']             = $object->status;
-                    $cardData['cardType']           = $cell->type;
-                    $cardData['uavatar']            = '';
-                    $cardData['assignedToRealName'] = '';
+                    $cardData = $this->kanbanTao->initCardItem($object, $cell, $order, $avatarPairs, $users);
+                    $cardData['acl'] = 'open';
+                    $order ++;
 
-                    if($object->assignedTo)
-                    {
-                        $userAvatar = zget($avatarPairs, $object->assignedTo, '');
-                        $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($object->assignedTo, 0, 1, 'utf-8'));
-                        $cardData['uavatar']            = $userAvatar;
-                        $cardData['assignedToRealName'] = zget($users, $object->assignedTo, '');
-                    }
-
-                    if($cell->type == 'task')
-                    {
-                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                        $cardData['title']      = $object->name;
-                        $cardData['left']       = $object->left;
-                        $cardData['estStarted'] = $object->estStarted;
-                        $cardData['mode']       = $object->mode;
-                    }
-                    else
-                    {
-                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
-                        $cardData['title'] = $object->title;
-                    }
+                    if($searchValue != '' and strpos($cardData['title'], $searchValue) === false) continue;
                     $cardGroup[$cell->group][$laneID][$cell->column][] = $cardData;
                 }
             }
