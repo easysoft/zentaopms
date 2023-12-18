@@ -133,13 +133,11 @@ class kanbanTest
      */
     public function createDefaultColumnsTest($regionID, $groupID)
     {
-        $this->objectModel->createDefaultColumns(null, $regionID, $groupID);
-
+        $this->objectModel->createDefaultColumns($regionID, $groupID);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`region`')->eq($regionID)->andWhere('`group`')->eq($groupID)->andWhere('`type`')->like('column%')->fetchAll();
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`region`')->eq($regionID)->andWhere('`group`')->eq($groupID)->andWhere('`type`')->like('column%')->fetchAll();
         return count($objects);
     }
 
