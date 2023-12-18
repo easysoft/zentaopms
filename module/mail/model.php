@@ -456,10 +456,12 @@ class mailModel extends model
      * Get queue.
      *
      * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getQueue($status = '', $orderBy = 'id_desc', $pager = null)
+    public function getQueue(string $status = '', string $orderBy = 'id_desc', object|null $pager = null): array
     {
         $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('mail')
@@ -467,8 +469,6 @@ class mailModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        if($this->app->methodName == 'browse' or $this->config->mail->mta == 'sendcloud') return $mails;
 
         /* Group mails by toList and ccList. */
         $groupMails = array();
@@ -501,60 +501,48 @@ class mailModel extends model
      * @access public
      * @return object
      */
-    public function mergeMails($mails = array())
+    public function mergeMails(array $mails = array()): object|null
     {
-        $mail = new stdClass();
-        $mail->id      = '';
-        $mail->status  = 'wait';
-        $mail->merge   = true;
+        if(count($mails) <= 1) return array_shift($mails);
 
         /* Get first and last mail. */
-        $firstMail = array_shift($mails);
-        $lastMail  = array_pop($mails);
+        $firstMail  = array_shift($mails);
+        $lastMail   = array_pop($mails);
+        $secondMail = empty($mails) ? '' : reset($mails);
 
         /* Set mail info.*/
+        $mail = new stdClass();
+        $mail->status  = 'wait';
+        $mail->merge   = true;
         $mail->id      = $firstMail->id;
         $mail->toList  = $firstMail->toList;
         $mail->ccList  = $firstMail->ccList;
         $mail->subject = $firstMail->subject;
-        if($mails)
-        {
-            $secondMail = reset($mails);
-            $mail->subject .= '|' . $secondMail->subject . '|' . $this->lang->mail->more;
-        }
-        else
-        {
-            $mail->subject .= '|' . $lastMail->subject;
-        }
+        $mail->data    = $firstMail->data;
 
         /* Remove html tail for first mail. */
-        $endPos     = strripos($firstMail->data, '</td>');
-        $mail->data = trim(substr($firstMail->data, 0, $endPos));
+        if(($endPos = strripos($firstMail->data, '</td>')) !== false) $mail->data = substr($firstMail->data, 0, $endPos);
 
-        /* Merge middle mails. */
-        if($mails)
+        if(empty($mails))  $mail->subject .= '|' . $lastMail->subject;
+        if(!empty($mails)) $mail->subject .= '|' . $secondMail->subject . '|' . $this->lang->mail->more;
+
+        foreach($mails as $middleMail)
         {
-            foreach($mails as $middleMail)
-            {
-                $mail->id .= ',' . $middleMail->id;
+            $mail->id .= ',' . $middleMail->id;
 
-                /* Remove html head and tail for middle mails. */
-                $beginPos = strpos($middleMail->data, '</table>');
-                $mailBody = trim(substr($middleMail->data, $beginPos));
-                $endPos   = strripos($mailBody, '</td>');
-                $mailBody = trim(substr($mailBody, 0, $endPos));
-
-                $mail->data .= ltrim($mailBody, '</table>');
-            }
+            /* Remove html head and tail for middle mails. */
+            $mailBody = $middleMail->data;
+            if(($beginPos = strpos($mailBody, '</table>')) !== false) $mailBody = substr($mailBody, $beginPos + 8);
+            if(($endPos = strripos($mailBody, '</td>')) !== false)    $mailBody = substr($mailBody, 0, $endPos);
+            $mail->data .= $mailBody;
         }
 
-        $mail->id .= ',' . $lastMail->id;
-
         /* Remove html head for last mail. */
-        $beginPos    = strpos($lastMail->data, '</table>');
-        $mailBody    = substr($lastMail->data, $beginPos);
-        $mail->data .= trim(ltrim($mailBody, '</table>'));
+        $mailBody = $lastMail->data;
+        if(($beginPos = strpos($mailBody, '</table>')) !== false) $mailBody = substr($mailBody, $beginPos + 8);
 
+        $mail->id   .= ',' . $lastMail->id;
+        $mail->data .= $mailBody;
         return $mail;
     }
 

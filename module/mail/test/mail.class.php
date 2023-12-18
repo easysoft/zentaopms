@@ -228,7 +228,7 @@ class mailTest
      */
     public function getQueueTest($status = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getQueue($status = '', $orderBy = 'id_desc', $pager = null);
+        $objects = $this->objectModel->getQueue($status, $orderBy = 'id_desc', $pager = null);
 
         if(dao::isError()) return dao::getError();
 
