@@ -696,6 +696,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板键值对。
      * Get kanban pairs.
      *
      * @access public
