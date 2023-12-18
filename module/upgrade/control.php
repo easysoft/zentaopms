@@ -82,6 +82,8 @@ class upgrade extends control
         $version = str_replace(array(' ', '.'), array('', '_'), $this->config->installedVersion);
         $version = strtolower($version);
 
+        /* 处理迅捷版的版本。*/
+        /* Process the lite version. */
         if($this->config->visions == ',lite,')
         {
             $installedVersion = str_replace('.', '_', $this->config->installedVersion);
