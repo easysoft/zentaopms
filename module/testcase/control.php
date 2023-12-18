@@ -2094,11 +2094,13 @@ class testcase extends control
         $this->loadModel('branch');
         if(!$toLib && $product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
 
-        $libraries = $this->loadModel('caselib')->getLibraries();
+        $libList   = $this->loadModel('caselib')->getLibraries();
+        $libraries = $libList;
         if($toLib)
         {
             $currentLib = $this->session->caseLib;
-            unset($libraries[$currentLib]);
+            $this->loadModel('caselib')->setLibMenu($libList, $currentLib);
+            $libraries = array_diff($libList, array($currentLib => $libList[$currentLib]));
         }
         if(empty($libraries))
         {
@@ -2113,7 +2115,7 @@ class testcase extends control
             return print(js::reload('parent'));
         }
 
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        if(!$toLib) $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Build the search form. */
         $actionURL = $this->createLink($toLib ? 'caselib' : 'testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
@@ -2122,7 +2124,7 @@ class testcase extends control
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
         $this->config->testcase->search['fields']['lib'] = $this->lang->testcase->lib;
-        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all));
+        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libList[$libID], 'all' => $this->lang->caselib->all));
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib');
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['product']);
