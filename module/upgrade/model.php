@@ -267,13 +267,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 通过版本号获取产品版本类型。
      * Get edition by version.
      *
-     * @param  string    $version
+     * @param  string $version
      * @access public
      * @return string
      */
-    public function getEditionByVersion($version)
+    public function getEditionByVersion(string $version): string
     {
         $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max', 'i' => 'ipd');
         return is_numeric($version[0]) ? 'open' : $editions[$version[0]];

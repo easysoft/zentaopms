@@ -44,4 +44,17 @@ class upgradeTest
     {
         return $this->objectModel->$method($args);
     }
+
+    /**
+     * 测试通过版本号获取产品版本类型。
+     * Test get edition by version.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function getEditionByVersionTest(string $version): string
+    {
+        return $this->objectModel->getEditionByVersion($version);
+    }
 }
