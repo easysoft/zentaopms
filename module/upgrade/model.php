@@ -187,13 +187,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 处理专业版数据
      * Process data for pro.
      *
      * @param  string $proVersion
      * @access public
      * @return void
      */
-    public function executePro($proVersion)
+    public function executePro(string $proVersion): void
     {
         if($proVersion == 'pro1_1_1') $this->execSQL($this->getUpgradeFile('pro1.1'));
         if($proVersion == 'pro8_3')   $this->execSQL($this->getUpgradeFile('pro8.2')); //Fix bug #1752.
