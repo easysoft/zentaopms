@@ -7,14 +7,34 @@ su('admin');
 /**
 
 title=测试 kanbanModel->createDefaultLane();
+timeout=0
 cid=1
-pid=1
 
-创建region 1 group 1的默认泳道 >> 默认泳道,1,1,common
-创建region 2 group 2的默认泳道 >> 默认泳道,2,2,common
-创建region 3 group 3的默认泳道 >> 默认泳道,3,3,common
-创建region 4 group 4的默认泳道 >> 默认泳道,4,4,common
-创建region 5 group 5的默认泳道 >> 默认泳道,5,5,common
+- 创建region 1 group 1的默认泳道
+ - 属性name @默认泳道
+ - 属性group @1
+ - 属性region @1
+ - 属性type @common
+- 创建region 2 group 2的默认泳道
+ - 属性name @默认泳道
+ - 属性group @2
+ - 属性region @2
+ - 属性type @common
+- 创建region 3 group 3的默认泳道
+ - 属性name @默认泳道
+ - 属性group @3
+ - 属性region @3
+ - 属性type @common
+- 创建region 4 group 4的默认泳道
+ - 属性name @默认泳道
+ - 属性group @4
+ - 属性region @4
+ - 属性type @common
+- 创建region 5 group 5的默认泳道
+ - 属性name @默认泳道
+ - 属性group @5
+ - 属性region @5
+ - 属性type @common
 
 */
 

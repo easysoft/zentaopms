@@ -146,7 +146,7 @@ class kanbanModel extends model
             $groupID = $this->createGroup($kanban->id, $regionID);
             if(dao::isError()) return false;
 
-            $this->createDefaultLane($kanban, $regionID, $groupID);
+            $this->createDefaultLane($regionID, $groupID);
             if(dao::isError()) return false;
 
             $this->createDefaultColumns($regionID, $groupID);
@@ -287,15 +287,15 @@ class kanbanModel extends model
 
 
     /**
+     * 创建默认泳道。
      * Create default lane.
      *
-     * @param  object $kanban
      * @param  int    $regionID
      * @param  int    $groupID
      * @access public
      * @return int
      */
-    public function createDefaultLane($kanban, $regionID, $groupID)
+    public function createDefaultLane(int $regionID, int $groupID)
     {
         $lane = new stdclass();
         $lane->name           = $this->lang->kanbanlane->default;
@@ -315,6 +315,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建默认看板列。
      * Create default kanban columns.
      *
      * @param  int    $regionID

@@ -116,12 +116,11 @@ class kanbanTest
      */
     public function createDefaultLaneTest($regionID, $groupID)
     {
-        $objectID = $this->objectModel->createDefaultLane(null, $regionID, $groupID);
+        $objectID = $this->objectModel->createDefaultLane($regionID, $groupID);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getLaneByID($objectID);
-        return $object;
+        return $this->objectModel->getLaneByID($objectID);
     }
 
     /**
