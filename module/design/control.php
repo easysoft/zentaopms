@@ -189,11 +189,12 @@ class design extends control
 
         $project = $this->loadModel('project')->getByID($projectID);
 
-        $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->type     = $type;
-        $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
+        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->type      = $type;
+        $this->view->typeList  = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $this->view->projectID = $projectID;
 
         $this->display();
     }
