@@ -546,11 +546,11 @@ function zdImport($table, $yaml, $count = 10)
  * Switch user.
  *
  * @param  string $account
- * @param  boo    $initRights  If true, will init user rights, groups, view.
+ * @param  bool   $initRights  If true, will init user rights, groups, view.
  * @access public
  * @return bool
  */
-function su($account, $initRights = false)
+function su($account, $initRights = true)
 {
     $userModel = new userModel();
     $user      = $userModel->getByID($account);
