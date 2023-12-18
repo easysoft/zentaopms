@@ -1138,13 +1138,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板下的卡片。
      * Get card group by kanban id.
      *
      * @param  int    $kanbanID
      * @access public
      * @return array
      */
-    public function getCardGroupByKanban($kanbanID)
+    public function getCardGroupByKanban(int $kanbanID): array
     {
         /* Get card data.*/
         $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
@@ -1154,10 +1155,7 @@ class kanbanModel extends model
             ->andWhere('fromID')->eq(0)
             ->fetchAll('id');
 
-        foreach($this->config->kanban->fromType as $fromType)
-        {
-            $cards = $this->getImportedCards($kanbanID, $cards, $fromType);
-        }
+        foreach($this->config->kanban->fromType as $fromType) $cards = $this->getImportedCards($kanbanID, $cards, $fromType);
 
         $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
@@ -1179,47 +1177,9 @@ class kanbanModel extends model
                 if(!isset($cards[$cardID])) continue;
 
                 $card = zget($cards, $cardID);
-
-                $item = array();
-                $item['column']       = $cell->column;
-                $item['lane']         = $cell->lane;
-                $item['title']        = !empty($card->title) ? htmlspecialchars_decode($card->title) : htmlspecialchars_decode($card->name);
-                $item['id']           = $card->id;
-                $item['name']         = $card->id;
-                $item['pri']          = $card->pri;
-                $item['begin']        = $card->begin;
-                $item['end']          = $card->end;
-                $item['group']        = $card->group;
-                $item['region']       = $card->region;
-                $item['color']        = $card->color;
-                $item['progress']     = $card->progress;
-                $item['assignedTo']   = $card->assignedTo;
-                $item['fromID']       = $card->fromID;
-                $item['fromType']     = $card->fromType;
-                $item['desc']         = !empty($card->desc) ? $card->desc : '';
-                $item['delay']        = !empty($card->delay) ? $card->delay : 0;
-                $item['status']       = !empty($card->status) ? $card->status : '';
-                $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
-                $item['deleted']      = !empty($card->deleted) ? $card->deleted : 0;
-                $item['date']         = !empty($card->date) ? $card->date : '';
-                $item['avatarList']   = array();
-                $item['realnames']    = '';
-                $item['order']        = $order;
+                $item = $this->kanbanTao->initCardItem($card, $cell, $order, $avatarPairs, $users);
 
                 $order ++;
-                if($card->assignedTo)
-                {
-                    $assignedToList = explode(',', $card->assignedTo);
-                    foreach($assignedToList as $account)
-                    {
-                        if(!$account) continue;
-
-                        $userAvatar = zget($avatarPairs, $account, '');
-                        $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($account, 0, 1, 'utf-8'));
-                        $item['avatarList'][]  = $userAvatar;
-                        $item['realnames']    .= zget($users, $account, '') . ' ';
-                    }
-                }
 
                 foreach($actions as $action)
                 {
@@ -1228,7 +1188,7 @@ class kanbanModel extends model
                         if($card->fromType == 'execution')
                         {
                             if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $item['actionList'][] = $action;
-                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $item['actionList'][] = $action;
+                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view'))   $item['actionList'][] = $action;
                         }
                         else
                         {
@@ -1251,7 +1211,7 @@ class kanbanModel extends model
      * Get imported cards.
      *
      * @param  int    $kanbanID
-     * @param  object $cards
+     * @param  array  $cards
      * @param  array  $fromType
      * @param  int    $archived
      * @param  int    $regionID

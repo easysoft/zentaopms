@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbancard')->gen(100);
+zdTable('kanbancell')->gen(100);
 /**
 
 title=测试 kanbanModel->getCardGroupByKanban();

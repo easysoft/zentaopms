@@ -504,4 +504,61 @@ class kanbanTao extends kanbanModel
 
         return $regionData;
     }
+
+    /**
+     * 初始化卡片数据。
+     * Init card data.
+     *
+     * @param  object $card
+     * @param  object $cell
+     * @param  int    $order
+     * @param  array  $avatarPairs
+     * @param  array  $users
+     * @access public
+     * @return array
+     */
+    protected function initCardItem(object $card, object $cell, int $order, array $avatarPairs, array $users): array
+    {
+        $item = array();
+        $item['column']       = $cell->column;
+        $item['lane']         = $cell->lane;
+        $item['title']        = !empty($card->title) ? htmlspecialchars_decode($card->title) : htmlspecialchars_decode($card->name);
+        $item['id']           = $card->id;
+        $item['name']         = $card->id;
+        $item['pri']          = $card->pri;
+        $item['begin']        = $card->begin;
+        $item['end']          = $card->end;
+        $item['group']        = $card->group;
+        $item['region']       = $card->region;
+        $item['color']        = $card->color;
+        $item['progress']     = $card->progress;
+        $item['assignedTo']   = $card->assignedTo;
+        $item['fromID']       = $card->fromID;
+        $item['fromType']     = $card->fromType;
+        $item['desc']         = !empty($card->desc) ? $card->desc : '';
+        $item['delay']        = !empty($card->delay) ? $card->delay : 0;
+        $item['status']       = !empty($card->status) ? $card->status : '';
+        $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
+        $item['deleted']      = !empty($card->deleted) ? $card->deleted : 0;
+        $item['date']         = !empty($card->date) ? $card->date : '';
+        $item['avatarList']   = array();
+        $item['realnames']    = '';
+        $item['order']        = $order;
+
+        if($card->assignedTo)
+        {
+            $assignedToList = explode(',', $card->assignedTo);
+            foreach($assignedToList as $account)
+            {
+                if(!$account) continue;
+
+                $userAvatar = zget($avatarPairs, $account, '');
+                $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($account, 0, 1, 'utf-8'));
+                $item['avatarList'][]  = $userAvatar;
+                $item['realnames']    .= zget($users, $account, '') . ' ';
+            }
+        }
+
+        return $item;
+    }
 }
