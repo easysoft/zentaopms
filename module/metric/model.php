@@ -1963,6 +1963,14 @@ class metricModel extends model
         return 'nodate';
     }
 
+    /**
+     * 根据代号获取度量数据的日期类型。
+     * Get date type of metric by code.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
     public function getDateTypeByCode(string $code)
     {
         $dataFields = $this->getMetricRecordDateField($code);
