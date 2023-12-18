@@ -11,8 +11,8 @@ function updateProgress()
     var url = $.createLink('upgrade', 'ajaxGetProgress', 'offset=' + logOffset);
     $.ajax(
     {
-        url:url,
-        success:function(result)
+        url: url,
+        success: function(result)
         {
             result    = JSON.parse(result);
             logOffset = result.offset;

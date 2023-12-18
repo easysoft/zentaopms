@@ -626,6 +626,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.7'));
              case '18_8':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('18.8')); // confirm insert position.
+             case '18_9':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('18.9')); // confirm insert position.
         }
 
         return $confirmContent;
@@ -9399,7 +9401,7 @@ class upgradeModel extends model
         $logFile = $this->getConsistencyLogFile();
         if(!file_exists($logFile)) return false;
 
-        $lastTwoLines = array(0 =>'', 1 => '');
+        $lastTwoLines = array(0 => '', 1 => '');
 
         $fh = fopen($logFile, 'r');
         while(!feof($fh))
