@@ -55,7 +55,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
     global $app;
     $createLink      = createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
-    $batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType");
+    $batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
 
     $createBtnLink  = '';
     $createBtnTitle = '';

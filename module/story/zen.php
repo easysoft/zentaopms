@@ -39,7 +39,11 @@ class storyZen extends story
 
         /* Set menu by tab. */
         if($this->app->tab == 'product')   $this->product->setMenu($productID);
-        if($this->app->tab == 'execution') $this->execution->setMenu($objectID);
+        if($this->app->tab == 'execution')
+        {
+            $this->execution->setMenu($objectID);
+            $this->view->executionID = $objectID;
+        }
         if($this->app->tab == 'project')
         {
             $projectID = $objectID;
@@ -51,6 +55,8 @@ class storyZen extends story
 
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->checkAccess($projectID, $projects);
+
+            $this->view->projectID = $projectID;
             $this->project->setMenu($projectID);
         }
 
@@ -77,6 +83,7 @@ class storyZen extends story
         if($this->app->tab == 'project' and $this->config->vision == 'lite')
         {
             $this->project->setMenu($this->session->project);
+            $this->view->projectID = $this->session->project;
             return;
         }
 
@@ -96,6 +103,8 @@ class storyZen extends story
             $model = $execution->model == 'waterfallplus' ? 'waterfall' : $execution->model;
             if($execution->model == 'agileplus') $model = 'scrum';
             $this->lang->product->menu = $this->lang->{$model}->menu;
+
+            $this->view->projectID = $executionID;
         }
         else
         {
@@ -116,6 +125,7 @@ class storyZen extends story
                 $this->view->regionPairs = $regionPairs;
                 $this->view->lanePairs   = $lanePairs;
             }
+            $this->view->executionID = $executionID;
         }
 
         if($this->app->tab != 'project' && $this->app->tab != 'execution') return;
