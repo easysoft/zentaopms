@@ -442,39 +442,39 @@ class transferModel extends model
     }
 
     /**
-     * Get files by module.
+     * 获取当前选中数据的所有附件。
+     * Get related files.
      *
      * @param  string $module
-     * @param  array  $datas
+     * @param  array  $rows
      * @access public
-     * @return void
+     * @return array
      */
-    public function getFiles($module, $datas)
+    public function getFiles(string $module, array $rows)
     {
-        $this->loadModel('file');
-        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)
-            ->where('objectType')->eq($module)
-            ->andWhere('objectID')->in(@array_keys($datas))
-            ->andWhere('extra')
-            ->ne('editor')
-            ->fetchGroup('objectID');
+        if(empty($rows)) return array();
 
-        if(empty($datas) and empty($relatedFiles)) return $datas;
+        /* 获取附件分组。*/
+        /* Get file groups. */
+        $fileGroups = $this->transferTao->getFileGroups($module, array_keys($rows));
+        if(empty($fileGroups)) return $rows;
 
+        /* 将附件追加到数组中并设置下载链接。*/
         /* Set related files. */
-        foreach($datas as $data)
+        foreach($rows as $row)
         {
-            $data->files = '';
-            if(isset($relatedFiles[$data->id]))
+            $row->files = '';
+            if(!isset($fileGroups[$row->id])) continue;
+
+            foreach($fileGroups[$row->id] as $file)
             {
-                foreach($relatedFiles[$data->id] as $file)
-                {
-                    $fileURL      = common::getSysURL() . helper::createLink('file', 'download', "fileID={$file->id}");
-                    $data->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
-                }
+                /* 设置下载链接。*/
+                /* Set download link. */
+                $fileURL     = common::getSysURL() . helper::createLink('file', 'download', "fileID={$file->id}");
+                $row->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
             }
         }
-        return $datas;
+        return $rows;
     }
 
     /**

@@ -19,7 +19,7 @@ $execution->gen(5);
 
 /**
 
-title=测试 transfer->mergeConfig();
+title=测试 transfer->getSourceByModuleMethod();
 timeout=0
 cid=1
 

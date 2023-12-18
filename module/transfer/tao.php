@@ -21,7 +21,7 @@ class transferTao extends transferModel
      * @param  string $method
      * @param  string|array $params
      * @param  string|array $pairs
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getSourceByModuleMethod(string $module, string $callModule, string $method, string|array $params = '', string|array $pairs = ''): array
@@ -69,5 +69,24 @@ class transferTao extends transferModel
         }
 
         return $values;
+    }
+
+    /**
+     * 根据id获取附件分组。
+     * Get file group by id.
+     *
+     * @param  string $module
+     * @param  array  $idList
+     * @access protected
+     * @return array
+     */
+    protected function getFileGroups(string $module, array $idList): array
+    {
+        return $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)
+            ->where('objectType')->eq($module)
+            ->beginIf($idList)->andWhere('objectID')->in($idList)->fi()
+            ->andWhere('extra')
+            ->ne('editor')
+            ->fetchGroup('objectID');
     }
 }

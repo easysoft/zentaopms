@@ -37,4 +37,21 @@ class transferTest
         if(empty($method))     return 'Method is empty';
         return $this->objectModel->getSourceByModuleMethod($module, $callModule, $method, $params, $pairs);
     }
+
+    /**
+     * 测试获取文件
+     * Test get files.
+     *
+     * @param  string $module
+     * @param  array  $rows
+     * @param  int    $index
+     * @access public
+     * @return string
+     */
+    public function getFilesTest(string $module, array $rows, int $index): string
+    {
+        $result = $this->objectModel->getFiles($module, $rows);
+        if(!empty($result[$index]->files)) return 'File isset';
+        return 'No File';
+    }
 }
