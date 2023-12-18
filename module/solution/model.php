@@ -88,7 +88,7 @@ class solutionModel extends model
             if(empty($selectedApps[$category])) unset($selectedApps[$category]);
         }
 
-        if(!$this->app->user->account)
+        if(!isset($this->app->user->account))
         {
             $this->app->user = new stdclass();
             $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
@@ -481,12 +481,12 @@ class solutionModel extends model
      * 转化方案的配置信息为选择项的参数。
      * Convert schema choices to select options.
      *
-     * @param  object $schemaChoices
+     * @param  array  $schemaChoices
      * @param  object $cloudSolution
      * @access public
      * @return array
      */
-    public function createSelectOptions(object $schemaChoices, object $cloudSolution): array
+    public function createSelectOptions(array $schemaChoices, object $cloudSolution): array
     {
         $options = array();
         foreach($schemaChoices as $cloudApp)
