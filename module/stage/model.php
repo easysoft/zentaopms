@@ -210,17 +210,19 @@ class stageModel extends model
     }
 
     /**
+     * 设置阶段导航。
      * Set menu.
      *
-     * @param  string $type
+     * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function setMenu($type)
+    public function setMenu(string $type): void
     {
         $this->app->loadLang('admin');
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
+
         if(!isset($this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] = '';
         if(!isset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] = '';
         if($type == 'waterfall')
