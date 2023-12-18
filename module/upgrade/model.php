@@ -172,14 +172,15 @@ class upgradeModel extends model
     }
 
     /**
+     * 处理开源版的数据。
      * Process data for open source.
      *
      * @param  string $openVersion
      * @param  bool   $executedXuanxuan
      * @access public
-     * @return void
+     * @return bool
      */
-    public function executeOpen($openVersion, $executedXuanxuan)
+    public function executeOpen(string $openVersion, bool $executedXuanxuan): bool
     {
         $this->executeByConfig($openVersion, $executedXuanxuan);
         return true;
