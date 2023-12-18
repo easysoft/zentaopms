@@ -3818,13 +3818,13 @@ class executionModel extends model
      *
      * @param  object $execution
      * @param  string $action
-     * @param  string $module
      * @access public
      * @return bool
      */
-    public static function isClickable(object $execution, string $action, string $module = 'execution'): bool
+    public static function isClickable(object $execution, string $action): bool
     {
-        if($module == 'programplan') $module = 'execution';
+        if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create');
+        if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create');
         if(!commonModel::hasPriv('execution', $action)) return false;
 
         $action = strtolower($action);
@@ -4717,7 +4717,9 @@ class executionModel extends model
                 $actions = explode('|', $actionKey);
                 foreach($actions as $actionName)
                 {
-                    if(!commonModel::hasPriv('execution', $actionName)) continue;
+                    if($actionName == 'createChildStage' && !commonModel::hasPriv('programplan', 'create')) continue;
+                    if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
+                    if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                     $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
                     if(!$action['disabled']) break;
                 }
