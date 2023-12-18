@@ -56,10 +56,13 @@ foreach($cases as $case)
     $case->stage = implode($lang->comma, $stages);
 }
 
+$cols = $config->testcase->dtable->fieldList;
+unset($cols['module']);
+
 dtable
 (
     set::userMap($users),
-    set::cols($config->testcase->dtable->fieldList),
+    set::cols($cols),
     set::data($cases),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&param=0&moduleID={$moduleID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
