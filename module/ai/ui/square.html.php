@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace zin;
 
 $navItems = array();
+$showTag = in_array($category, array('collection', 'discovery', 'latest'));
 
 if(count($categoryList) <= 9)
 {
@@ -58,7 +59,7 @@ else
 
 featureBar(set::items($navItems));
 
-$miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs)
+$miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $showTag)
 {
     global $config, $lang;
 
@@ -104,6 +105,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs)
             setClass('program-actions'),
             div(
                 setClass('badge'),
+                setClass(array('invisible' => !$showTag)),
                 $categoryList[$miniProgram->category]
             ),
             btn(
