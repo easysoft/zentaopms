@@ -78,7 +78,7 @@ class metricTest
      */
     public function getList($scope, $stage = 'all', $sort = 'id_desc')
     {
-        return $this->objectModel->getList($scope, $stage, $param, '', 0, $sort);
+        return $this->objectModel->getList($scope, $stage, 0, '', 0, $sort);
     }
 
     /**
