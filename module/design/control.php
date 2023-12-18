@@ -51,6 +51,9 @@ class design extends control
 
         $this->project->setMenu($projectID);
 
+        $project = $this->project->getByID($projectID);
+        if(!$project->hasProduct) $this->config->hasSwitcherModules = array();
+
         $this->view->products         = $products;
         $this->view->switcherParams   = "projectID={$projectID}&productID={$productID}";
         $this->view->switcherText     = zget($products, $productID);
