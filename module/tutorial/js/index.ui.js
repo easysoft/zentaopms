@@ -36,6 +36,8 @@ $(function()
     var appsWindow = window.frames['iframePage'];
     var checkTaskId = null, modalShowTaskId;
     var checkFormReadyId = null;
+    var checkStatusId = null;
+    var checkStatusCycle = null;
     var showToolTipTask = null;
     var submitBindCount = 0;
 
@@ -84,6 +86,8 @@ $(function()
 
     var clearTips = function()
     {
+        if(!appsWindow.$) return false;
+
         var $menuMainNav = appsWindow.$('#menuNav');
         $menuMainNav.find('.hl-tutorial').removeClass('hl-tutorial hl-in');
         $menuMainNav.find('.tooltip-tutorial').tooltip('destroy').removeClass('tooltip-tutorial');
@@ -129,7 +133,7 @@ $(function()
                 result = JSON.parse(e);
                 if(result.result === 'success')
                 {
-                    $task.addClass('finish').find('[data-target]').removeClass('active').removeClass('wait').addClass('finish');
+                    taskSuccess = false;
                     updateUI();
                     showModal(finishCount >= totalCount);
                 }
@@ -144,15 +148,14 @@ $(function()
 
     var resetTasks = function()
     {
-        clearTips();
-
         $.post(ajaxSetTasksUrl, {finish: ''}, function(e)
         {
             result = JSON.parse(e);
             if(result.result === 'success')
             {
+                taskSuccess = false;
                 setting = {};
-                updateUI();
+                window.reloadPage();
             }
             else
             {
@@ -225,341 +228,9 @@ $(function()
         }
     };
 
-    var tryCheckTask = function()
-    {
-        if(checkTaskId) clearTimeout(checkTaskId);
-
-        var iWindow = getAppWindow();
-        if(!(iWindow && iWindow.config && iWindow.$))
-        {
-            checkTaskId = setTimeout(tryCheckTask, 1000);
-        }
-        else
-        {
-            checkTaskId = setTimeout(checkTask, 200);
-        }
-    };
-
-    var checkFormReady = function()
-    {
-        var iWindow = getAppWindow();
-        if(!iWindow || !iWindow.$) return tryCheckTask();
-        var task = tasks[current];
-        var appCode = task.nav.app || task.nav.menuModule || task.nav['module'];
-        var app = getApp(appCode);
-        if(!app) return;
-
-        var $$ = iWindow.$;
-        var pageConfig = iWindow.config;
-        var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig ? pageConfig.currentModule : '').toLowerCase();
-        var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig ? pageConfig.currentMethod : '').toLowerCase();
-        var targetStatus = {},
-            $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
-            $formTarget = $task.find('[data-target="form"]').removeClass('active'),
-            $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
-        targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
-
-        var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
-
-        if(task.nav.formType === 'table')
-        {
-            targetStatus.form = true;
-            if(current === 'manageTeam') fieldSelector = 'input[name="' + task.nav.requiredFields + '"]';
-            else fieldSelector = '.dtable-checkbox';
-
-            var $formItem = $$(fieldSelector);
-            targetStatus.form = $formItem && ($formItem.eq(1).hasClass('checked') || ($formItem.val() !== undefined && $formItem.val() !== null && $formItem.val() !== '' && $formItem.val() !== '0'));
-            if(!targetStatus.form) {
-                targetStatus.waitField = $formItem.closest('div');
-            }
-        }
-        else if(requiredFields)
-        {
-            targetStatus.form = true;
-            requiredFields = requiredFields.split(',');
-            $.each(requiredFields, function(idx, requiredId)
-            {
-                var $required = $$('#' + requiredId);
-                var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
-                if($authBlock.length)
-                {
-                    var val = $authBlock.val();
-                    if(val === undefined || val === null || val === '' || val === '0')
-                    {
-                        targetStatus.form = false;
-                        if(!targetStatus.waitField) targetStatus.waitField = $required;
-                    }
-                }
-            });
-        }
-
-        var $form = $$(task.nav.form);
-        var $formWrapper = $form.closest('#mainContent');
-        if(!$formWrapper.length) $formWrapper = $form;
-
-        if(targetStatus.form)
-        {
-            if(showToolTipTask) clearTimeout(showToolTipTask);
-
-            $submitTarget.addClass('active');
-            clearTips();
-            if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text(), {placement: 'top'});
-        }
-        else
-        {
-            if(targetStatus.waitField)
-            {
-                if(targetStatus.waitField.hasClass("chosen-controled")) targetStatus.waitField = targetStatus.waitField.next();
-                var fieldName = targetStatus.waitField.siblings('label').text();
-                if(!fieldName) fieldName = targetStatus.waitField.find('label').text();
-                if(!fieldName) fieldName = targetStatus.waitField.parent().siblings('label').text();
-                if(fieldName) showToolTip(targetStatus.waitField, lang.requiredTip.replace('%s', fieldName));
-                highlight(targetStatus.waitField, function()
-                {
-                    clearTimeout(showToolTipTask);
-                    showToolTipTask = setTimeout(function()
-                    {
-                        targetStatus.waitField.closest('td').find('#typeLabel').remove();
-                        showToolTip($formWrapper, $formTarget.text());
-                        highlight($formWrapper);
-                    }, 2000);
-                });
-            }
-            $formTarget.addClass('active');
-        }
-
-        $navTarget.toggleClass('finish', !!targetStatus.nav);
-        $formTarget.toggleClass('finish', !!targetStatus.form);
-        $submitTarget.toggleClass('finish', !!targetStatus.submitOK);
-        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
-        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
-        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
-        $openTaskPage.toggleClass('open', targetStatus.nav);
-
-        targetStatus.submitOK = targetStatus.nav && targetStatus.form;
-
-        return targetStatus;
-    }
-
-    var tryCheckFormReady = function()
-    {
-        if(checkFormReadyId) clearTimeout(checkFormReadyId);
-
-        var iWindow = getAppWindow();
-        if(!(iWindow && iWindow.config && iWindow.$))
-        {
-            checkFormReadyId = setTimeout(tryCheckFormReady, 1000);
-        }
-        else
-        {
-            checkFormReadyId = setTimeout(checkFormReady, 200);
-        }
-    }
-
-    var checkTask = function()
-    {
-        clearTips();
-
-        var iWindow = getAppWindow();
-        if(!iWindow || !iWindow.$) return tryCheckTask();
-        var task = tasks[current];
-        var appCode = task.nav.app || task.nav.menuModule || task.nav['module'];
-        var app = getApp(appCode);
-        if(!app) return;
-
-        var $$ = iWindow.$;
-        var pageConfig = iWindow.config;
-        var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig ? pageConfig.currentModule : '').toLowerCase();
-        var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig ? pageConfig.currentMethod : '').toLowerCase();
-        var targetStatus = {},
-            $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
-            $formTarget = $task.find('[data-target="form"]').removeClass('active'),
-            $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
-        targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
-
-        if(targetStatus.nav)
-        {
-            var $form = $$(task.nav.form);
-            var $formWrapper = $form.closest('#mainContent');
-            if(!$formWrapper.length) $formWrapper = $form;
-            $formTarget.addClass('active');
-            highlight($formWrapper);
-            showToolTip($formWrapper, $formTarget.text());
-            var fieldSelector = '';
-            var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
-
-            if(task.nav.formType === 'table')
-            {
-                if(current === 'manageTeam') fieldSelector = 'input[name="' + task.nav.requiredFields + '"]';
-                else fieldSelector = '.dtable-checkbox';
-            }
-            else if(requiredFields)
-            {
-                targetStatus.form = true;
-                requiredFields = requiredFields.split(',');
-                $.each(requiredFields, function(idx, requiredId)
-                {
-                    fieldSelector += ',' + '#' + requiredId;
-                });
-                if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
-            }
-
-            if(!$form.data('bindCheckTaskEvent'))
-            {
-                $form.off('.tutorial').off('submit');
-                $form.on('change.tutorial', fieldSelector, tryCheckFormReady)
-                $form.on('blur.tutorial', fieldSelector, tryCheckFormReady)
-
-                var onSubmit = function(e)
-                {
-                    var status = checkFormReady();
-                    if(status.submitOK)
-                    {
-                        clearTips();
-                        finishTask();
-                    }
-
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-
-                $form = $form.is('form') ? $form : $form.find('form').last();
-                if($form.length)
-                {
-                    if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
-                    else $form.submit(onSubmit);
-                }
-                else
-                {
-                    $$(task.nav.target).on('click', function(){
-                        var current = this
-                        setTimeout(
-                            function()
-                            {
-                                if($(current).hasClass('checked'))
-                                {
-                                    highlight($$(task.nav.submit))
-                                    showToolTip($$(task.nav.submit), $submitTarget.text(), {placement: 'top'});
-                                }
-
-                                $$(task.nav.submit).on('click', function(){
-                                    finishTask();
-                                })
-                            },
-                            500
-                        )
-                    });
-                }
-            }
-        }
-        else
-        {
-            /* Active current nav target in task panel */
-            $navTarget.addClass('active');
-
-            /* Highlight app button in left menu */
-            var $appNav = appsWindow.$('#menuMainNav > li[data-app="' + appCode + '"]');
-            var lastApp = appsWindow.$.apps.getLastApp();
-            if(appCode !== lastApp.code)
-            {
-                if($appNav.css('display') === 'none' && appsWindow.$('#menuMoreList').css('display') !== 'none') $appNav = appsWindow.$('#menuMoreList > li[data-app="' + appCode + '"]');
-                var targetAppTip = lang.targetAppTip.replace('%s', app.text || lang.target);
-                highlight($appNav);
-                showToolTip($appNav, targetAppTip);
-            }
-            else
-            {
-                var menuModule = task.nav.menuModule || task.nav['module'];
-                var $navbar    = $$('#navbar');
-                if(task.nav.app == 'admin') $navbar = $$('#settings');
-                var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
-                var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
-                if($navbarItem.length && !$navbarItem.hasClass('active'))
-                {
-                    highlight($navbarItem);
-                    showToolTip($navbarItem, targetPageTip);
-                }
-                else if(task.nav.menu)
-                {
-                    if(task.nav.menu === '#pageNav')
-                    {
-                        var $pageNav = $$('#pageNav');
-                        var $targetBtn = $pageNav.find(task.nav.target);
-                        var $targetBtnGroup = $targetBtn.closest('.btn-group');
-
-                        if($targetBtnGroup.hasClass('open'))
-                        {
-                            highlight($targetBtn);
-                            showToolTip($targetBtn, targetPageTip);
-                        }
-                        else
-                        {
-                            highlight($targetBtnGroup);
-                            showToolTip($targetBtnGroup, targetPageTip);
-                        }
-                        if(!$targetBtnGroup.data('initTutorial'))
-                        {
-                            $targetBtnGroup.data('initTutorial', 1).on('click', tryCheckTask);
-                        }
-                    }
-                    else if(task.nav.menu[0] === '#')
-                    {
-                        var $customMenu = $$(task.nav.menu).last();
-                        if($customMenu.length)
-                        {
-                            highlight($customMenu);
-                            showToolTip($customMenu, targetPageTip);
-                        }
-                        else if(task.nav.target)
-                        {
-                            var $targetItem = $$(task.nav.target);
-                            highlight($targetItem);
-                            showToolTip($targetItem, targetPageTip);
-                        }
-                    }
-                    else
-                    {
-                        var $modulemenu = $$('#subNavbar');
-                        if(task.nav.app == 'admin') $modulemenu = $$('#navbar');
-                        var $modulemenuItem = $modulemenu.find('[data-id="' + task.nav.menu + '"]');
-                        if($modulemenuItem.length && !$modulemenuItem.hasClass('active'))
-                        {
-                            highlight($modulemenuItem);
-                            showToolTip($modulemenuItem, targetPageTip);
-                        }
-                        else if(task.nav.target)
-                        {
-                            var $targetItem = $$(task.nav.target);
-                            highlight($targetItem);
-                            showToolTip($targetItem, targetPageTip);
-                        }
-                    }
-                }
-                else if(task.nav.target)
-                {
-                    var $targetItem = $$(task.nav.target);
-                    highlight($targetItem);
-                    showToolTip($targetItem, targetPageTip);
-                }
-            }
-        }
-
-        $navTarget.toggleClass('finish', !!targetStatus.nav);
-        $formTarget.toggleClass('finish', !!targetStatus.form);
-        $submitTarget.toggleClass('finish', !!targetStatus.submitOK);
-        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
-        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
-        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
-        $openTaskPage.toggleClass('open', targetStatus.nav);
-
-        targetStatus.submitOK = targetStatus.nav && targetStatus.form;
-        return targetStatus;
-    };
-
     var checkTutorialState = function()
     {
-        tryCheckTask();
+        tryCheckStatus();
         var iWindow = getAppWindow();
         var title = (iWindow.$ ? iWindow.$('head > title').text() : '') + $('head > title').text();
         var url = $.createLink('tutorial', 'index', 'referer=' + btoa(iWindow.location.href) + '&task=' + current);
@@ -595,7 +266,6 @@ $(function()
         var $prev = $li.prev('li'), $next = $li.next('li');
         $('.btn-prev-task').toggleClass('hidden', !$prev.length).data('name', $prev.data('name'));
         $('.btn-next-task').toggleClass('hidden', !$next.length).data('name', $next.data('name'));
-        tryCheckTask();
     };
 
     var updateUI = function()
@@ -628,6 +298,328 @@ $(function()
         if(progress == 100) $.getJSON($.createLink('tutorial', 'ajaxFinish'));
         showTask(current);
     };
+
+    var task;
+    var taskSuccess = false;
+
+    var tryCheckStatus = function()
+    {
+        if(!checkStatusId) clearTimeout(checkStatusId);
+        var iWindow = getAppWindow();
+        if(!(iWindow && iWindow.config && iWindow.$))
+        {
+            checkStatusId = setTimeout(tryCheckStatus, 1000);
+        }
+        else
+        {
+            checkStatusId = setTimeout(checkStatus, 200);
+        }
+    }
+
+    var checkStatus = function()
+    {
+        if(taskSuccess) return;
+        var iWindow = getAppWindow();
+        //if(!iWindow || !iWindow.$) return checkStatus();
+
+        task = tasks[current];
+        if(!task) checkStatus();
+        var appCode = task.nav.app || task.nav.menuModule || task.nav['module'];
+        var app = getApp(appCode);
+        if(!app) return;
+
+        $$ = iWindow.$;
+        if(!checkIsFormPage(task, iWindow, appCode))
+        {
+            taskSuccess = false;
+            setTaskStatus(true, false, false);
+            getNeedHightlightDom(appCode, iWindow, app);
+        }
+        else
+        {
+            setTaskStatus(true, true, false);
+            form = $$(task.nav.form);
+            tryCheckFormStatusReady();
+        }
+    }
+
+    var checkIsFormPage = function(task, iWindow, appCode)
+    {
+        var pageConfig = iWindow.config;
+        var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig ? pageConfig.currentModule : '').toLowerCase();
+        var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig ? pageConfig.currentMethod : '').toLowerCase();
+        return task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
+    }
+
+    var getNeedHightlightDom = function(appCode, iWindow, app)
+    {
+        $$ = iWindow.$;
+        firstMenu = isInFirstMenu(appCode, iWindow)
+        if(firstMenu)
+        {
+            tip = lang.targetAppTip.replace('%s', app.text || lang.target);
+            forcusOnDom(firstMenu, tip);
+            return;
+        }
+
+        var menuModule = task.nav.menuModule || task.nav['module'];
+        var $navbar    = $$('#navbar');
+        if(task.nav.app == 'admin') $navbar = $$('#settings');
+        var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
+        var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
+        if($navbarItem.length && !$navbarItem.hasClass('active'))
+        {
+            forcusOnDom($navbarItem, targetPageTip);
+            return;
+        }
+        else
+        {
+            var $domList = $$(task.nav.target)
+            if($domList.length === 0) $domList = $$(task.nav.menu)
+            forcusOnDom($domList.last(), targetPageTip);
+        }
+
+    }
+
+    var isInFirstMenu = function(appCode)
+    {
+        var $appNav = appsWindow.$('#menuMainNav > li[data-app="' + appCode + '"]');
+        var lastApp = appsWindow.$.apps.getLastApp();
+        if(appCode !== lastApp.code)
+        {
+            if($appNav.css('display') === 'none' && appsWindow.$('#menuMoreList').css('display') !== 'none') $appNav = appsWindow.$('#menuMoreList > li[data-app="' + appCode + '"]');
+            return $appNav;
+        }
+
+        return false;
+
+    }
+
+    var forcusOnDom = function(dom, tip)
+    {
+        clearTips();
+        if(dom.length > 0) highlight(dom)
+        if(dom.length > 0 && tip) showToolTip(dom, tip)
+    }
+
+    var bindFormListenEvent = function(form, fieldSelector)
+    {
+        form.off('.tutorial').off('submit');
+        console.log('fieldSelector is', fieldSelector)
+        if(fieldSelector.includes('dtable-checkbox'))
+        {
+            form.on('click.tutorial', fieldSelector, fieldChangeEvent)
+        }
+        else if(form.is('form'))
+        {
+            form.on('change.tutorial', fieldSelector, fieldChangeEvent)
+            form.on('blur.tutorial', fieldSelector, fieldChangeEvent)
+        }
+
+        if(form.is('form'))
+        {
+            if(task.nav.submit) form.on('click.tutorial', task.nav.submit, onFormSubmit);
+            else form.submit(onFormSubmit);
+        }
+        else
+        {
+            form.find(task.nav.submit).off();
+            form.find(task.nav.submit).on('click.tutorial', onFormSubmit);
+        }
+    }
+
+    var tryCheckFormStatusReady = function()
+    {
+        if(checkFormReadyId) clearTimeout(checkFormReadyId);
+
+        var iWindow = getAppWindow();
+        if(!(iWindow && iWindow.config && iWindow.$))
+        {
+            checkFormReadyId = setTimeout(tryCheckFormStatusReady, 1000);
+        }
+        else
+        {
+            checkFormReadyId = setTimeout(checkFormStatusReady, 200);
+        }
+    }
+
+    var checkFormStatusReady = function()
+    {
+        var iWindow = getAppWindow();
+        form = iWindow.$(task.nav.form);
+        console.log(form)
+        if(!form.is('form') && current !== 'linkStory') form = form.find('form')
+        if(!form) return;
+
+        var fieldSelector = getFieldSelector(task, iWindow);
+        bindFormListenEvent(form, fieldSelector);
+
+        formwrapper = getFormWrapper(form);
+
+        $formTarget = $task.find('[data-target="form"]');
+        forcusOnDom(formWrapper, $formTarget.text())
+    }
+
+    var getFormWrapper = function(form)
+    {
+        if(!form)
+        {
+            var iWindow = getAppWindow();
+            form = iWindow.$(task.nav.form);
+        }
+
+        console.log('form is', form)
+        formWrapper = form.closest('#mainContent');
+        if(!formWrapper.length) formWrapper = form;
+
+        return formWrapper;
+    }
+
+    var fieldChangeEvent = function()
+    {
+        clearInterval(checkStatusId)
+        var iWindow = getAppWindow();
+        var fieldSelector = getFieldSelector(task, iWindow);
+        var fieldCheckResult = checkFieldStatusReady(iWindow, fieldSelector);
+
+        if(!fieldCheckResult.submitOK)
+        {
+            taskSuccess = false
+            if(targetStatus.waitField) requestFieldsWarining(targetStatus.waitField);
+        }
+        else
+        {
+            setTaskStatus(true, true, true);
+            clearInterval(checkStatusId)
+            taskSuccess = true;
+            $submitBtn = $$(task.nav.submit);
+            $submitTarget = $task.find('[data-target="submit"]');
+            forcusOnDom($submitBtn, $submitTarget.text())
+        }
+
+    }
+
+    var requestFieldsWarining = function(dom )
+    {
+        if(dom.hasClass("chosen-controled")) dom = dom.next();
+        var fieldName = dom.siblings('label').text();
+        if(!fieldName) fieldName = dom.find('label').text();
+        if(!fieldName) fieldName = dom.parent().siblings('label').text();
+
+        if(fieldName) forcusOnDom(dom, lang.requiredTip.replace('%s', fieldName))
+
+        setTimeout(checkStatus, 1000);
+    }
+
+    var checkFieldStatusReady = function(iWindow, fieldSelector)
+    {
+        pageConfig = iWindow.config;
+        targetStatus = {submitOK: true};
+        var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
+        if(task.nav.formType === 'table')
+        {
+            if(current === 'manageTeam') fieldSelector = 'input[name="' + task.nav.requiredFields + '"]';
+            else fieldSelector = '.dtable-checkbox';
+
+            var $formItem = $$(fieldSelector);
+            targetStatus.form = $formItem && ($formItem.eq(1).hasClass('checked') || ($formItem.val() !== undefined && $formItem.val() !== null && $formItem.val() !== '' && $formItem.val() !== '0'));
+            if(!targetStatus.form) {
+                targetStatus.submitOK = false;
+                targetStatus.waitField = $formItem.closest('div');
+            }
+        }
+        else if(requiredFields)
+        {
+            requiredFields = requiredFields.split(',');
+            $.each(requiredFields, function(_, requiredId)
+            {
+                var $required = $$('#' + requiredId);
+                var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
+                if($authBlock.length)
+                {
+                    var val = $authBlock.val();
+                    if(val === undefined || val === null || val === '' || val === '0')
+                    {
+                        targetStatus.submitOK = false;
+                        if(!targetStatus.waitField) targetStatus.waitField = $required;
+                    }
+                }
+            });
+        }
+
+        return targetStatus;
+    }
+
+    var onFormSubmit = function(e)
+    {
+        var iWindow = getAppWindow();
+        var fieldSelector = getFieldSelector(task, iWindow);
+        var status = checkFieldStatusReady(iWindow, fieldSelector);
+        if(status.submitOK)
+        {
+            setTaskStatus(true, true, true, true);
+            taskSuccess = true
+            finishTask();
+        }
+        else
+        {
+            requestFieldsWarining(status.waitField)
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        return false;
+    }
+
+    var getFieldSelector = function(task, iWindow)
+    {
+        pageConfig = iWindow.config;
+        var fieldSelector = '';
+        var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
+
+        if(task.nav.formType === 'table')
+        {
+            if(current === 'manageTeam') fieldSelector = 'input[name="' + task.nav.requiredFields + '"]';
+            else fieldSelector = '.dtable-checkbox';
+        }
+        else if(requiredFields)
+        {
+            requiredFields = requiredFields.split(',');
+            $.each(requiredFields, function(_, requiredId){ fieldSelector += ',' + '#' + requiredId;});
+            if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
+        }
+
+        return fieldSelector;
+    }
+
+    var setTaskStatus = function($nav, $form, $submitOk, $submitSuccess)
+    {
+        $navTarget    = $task.find('[data-target="nav"]');
+        $formTarget   = $task.find('[data-target="form"]');
+        $submitTarget = $task.find('[data-target="submit"]');
+
+        if($nav && !$form && !$submitOk) $navTarget.addClass('active');
+        if($nav && $form  && !$submitOk)
+        {
+            $navTarget.removeClass('active');
+            $formTarget.addClass('active');
+        }
+        if($nav && $form  && $submitOk)
+        {
+            $navTarget.removeClass('active');
+            $formTarget.removeClass('active');
+            $submitTarget.addClass('active');
+        }
+
+        $navTarget.toggleClass('finish', !!$form);
+        $formTarget.toggleClass('finish', !!$submitOk);
+        $submitTarget.toggleClass('finish', !!$submitSuccess);
+        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
+        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
+        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
+        $openTaskPage.toggleClass('open', $form);
+    }
 
     /** Init apps iframe page */
     function initAppsPage()
@@ -667,10 +659,7 @@ $(function()
         $(document).on('click', '.btn-task', function()
         {
             showTask($(this).data('name'));
-
-            /* Code for task #51133. */
-            var status = checkTask();
-            if(status.submitOK) window.location.reload();
+            tryCheckStatus();
         }).on('click', '.btn-open-target-page', function()
         {
             appsWindow.$.apps.openApp(tasks[current].url);

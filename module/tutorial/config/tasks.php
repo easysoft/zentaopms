@@ -42,10 +42,11 @@ $config->tutorial->tasksConfig['createProduct']['nav']['app']            = 'prod
 $config->tutorial->tasksConfig['createProduct']['nav']['module']         = 'product';
 $config->tutorial->tasksConfig['createProduct']['nav']['method']         = 'create';
 $config->tutorial->tasksConfig['createProduct']['nav']['menuModule']     = 'product';
-$config->tutorial->tasksConfig['createProduct']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, .create-product-btn';
+$config->tutorial->tasksConfig['createProduct']['nav']['requiredFields'] = 'name,code';
+$config->tutorial->tasksConfig['createProduct']['nav']['menu']           = '#heading > .toolbar > .toolbar-item';
 $config->tutorial->tasksConfig['createProduct']['nav']['form']           = '#mainContent';
 $config->tutorial->tasksConfig['createProduct']['nav']['submit']         = 'button[type=submit]';
-$config->tutorial->tasksConfig['createProduct']['nav']['target']         = '';
+$config->tutorial->tasksConfig['createProduct']['nav']['target']         = '.create-product-btn';
 $config->tutorial->tasksConfig['createProduct']['nav']['targetPageName'] = $lang->tutorial->tasks->createProduct->targetPageName;
 
 $config->tutorial->tasksConfig['createProduct']['desc'] = $lang->tutorial->tasks->createProduct->desc;
@@ -94,7 +95,7 @@ $config->tutorial->tasksConfig['manageTeam']['nav']['vars']           = 'project
 $config->tutorial->tasksConfig['manageTeam']['nav']['menuModule']     = '';
 $config->tutorial->tasksConfig['manageTeam']['nav']['menu']           = '#actionBar, #header > .container > #heading > .toolbar, #table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, #table-project-browse > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, .nav-item > a[data-id="settings"], #mainNavbar > .container > .nav > .nav-item > a[data-id="members"]';
 $config->tutorial->tasksConfig['manageTeam']['nav']['form']           = '#teamForm';
-$config->tutorial->tasksConfig['manageTeam']['nav']['requiredFields'] = 'accounts[1]';
+$config->tutorial->tasksConfig['manageTeam']['nav']['requiredFields'] = 'account[1]';
 $config->tutorial->tasksConfig['manageTeam']['nav']['formType']       = 'table';
 $config->tutorial->tasksConfig['manageTeam']['nav']['submit']         = '.form-row > .form-actions > button:first-child';
 $config->tutorial->tasksConfig['manageTeam']['nav']['target']         = '.manage-team-btn';
@@ -125,11 +126,11 @@ $config->tutorial->tasksConfig['linkStory']['nav']['app']            = 'executio
 $config->tutorial->tasksConfig['linkStory']['nav']['module']         = 'execution';
 $config->tutorial->tasksConfig['linkStory']['nav']['method']         = 'linkStory';
 $config->tutorial->tasksConfig['linkStory']['nav']['menuModule']     = 'story';
-$config->tutorial->tasksConfig['linkStory']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, #table-execution-all > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="nameCol"] > .dtable-cell-content > .dtable-cell-html, .link-story-btn';
+$config->tutorial->tasksConfig['linkStory']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, #table-execution-all > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="nameCol"] > .dtable-cell-content > .dtable-cell-html';
 $config->tutorial->tasksConfig['linkStory']['nav']['form']           = '#table-tutorial-wizard,#table-execution-linkstory';
 $config->tutorial->tasksConfig['linkStory']['nav']['formType']       = 'table';
-$config->tutorial->tasksConfig['linkStory']['nav']['submit']         = '.link-story-btn';
-$config->tutorial->tasksConfig['linkStory']['nav']['target']         = '.dtable-checkbox';
+$config->tutorial->tasksConfig['linkStory']['nav']['submit']         = '.import-story-btn';
+$config->tutorial->tasksConfig['linkStory']['nav']['target']         = '.link-story-btn';
 $config->tutorial->tasksConfig['linkStory']['nav']['targetPageName'] = $lang->tutorial->tasks->linkStory->targetPageName;
 
 $config->tutorial->tasksConfig['linkStory']['desc'] = $lang->tutorial->tasks->linkStory->desc;
