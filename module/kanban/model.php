@@ -891,31 +891,15 @@ class kanbanModel extends model
      * @param  int    $regionID
      * @param  string $groupBy
      * @param  string $searchValue
-     *
      * @access public
      * @return array
      */
-    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default', $searchValue = '')
+    public function getRDKanban(int $executionID, string $browseType = 'all', string $orderBy = 'id_desc', int $regionID = 0, string $groupBy = 'default', string $searchValue = '')
     {
         $kanbanList = array();
         $execution  = $this->loadModel('execution')->getByID($executionID);
 
-        if($groupBy != 'default' and $groupBy != '')
-        {
-            $regionData = array();
-            $heading          = new stdclass();
-            $heading->title   = $execution->name;
-            $heading->actions = $this->getRDRegionActions($executionID, $regionID);
-
-            $regionData['key']               = "region{$executionID}";
-            $regionData['id']                = $executionID;
-            $regionData['heading']           = $heading;
-            $regionData['toggleFromHeading'] = true;
-            $regionData['items']             = $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
-
-            $kanbanList[] = $regionData;
-            return $kanbanList;
-        }
+        if($groupBy != 'default' and $groupBy != '') return $this->kanbanTao->getRDKanbanByGroup($executionID, $browseType, $orderBy, $regionID, $groupBy, $searchValue);
 
         $regions      = $this->getRegionPairs($executionID, $regionID, 'execution');
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
@@ -939,9 +923,7 @@ class kanbanModel extends model
 
         foreach($regions as $regionID => $regionName)
         {
-            $laneCount  = 0;
             $regionData = array();
-            $groupData  = array();
 
             $heading = new stdclass();
             $heading->title   = $regionName;
@@ -953,50 +935,9 @@ class kanbanModel extends model
             $regionData['toggleFromHeading'] = true;
 
             $groups = zget($groupGroup, $regionID, array());
-            foreach($groups as $group)
-            {
-                $lanes = zget($laneGroup, $group->id, array());
-                if(!$lanes) continue;
 
-                $cols  = zget($columnGroup, $group->id, array());
-                $items = zget($cardGroup, $group->id, array());
+            $regionData = $this->kanbanTao->buildRDRegionData($regionData, $groups, $laneGroup, $columnGroup, $cardGroup, $searchValue);
 
-                if($searchValue != '' and empty($items)) continue;
-
-                /* 计算各个列上的卡片数量。 */
-                $columnCount = array();
-                $parentCols  = array();
-                foreach($cols as $col) $parentCols[$col['id']] = $col['parent'];
-                foreach($items as $colGroup)
-                {
-                    foreach($colGroup as $colID => $cards)
-                    {
-                        if(!isset($columnCount[$colID])) $columnCount[$colID] = 0;
-                        $columnCount[$colID] += count($cards);
-
-                        if(isset($parentCols[$colID]) && $parentCols[$colID] > 0)
-                        {
-                            if(!isset($columnCount[$parentCols[$colID]])) $columnCount[$parentCols[$colID]] = 0;
-                            $columnCount[$parentCols[$colID]] += count($cards);
-                        }
-                    }
-                }
-
-                foreach($cols as $colIndex => $col) $cols[$colIndex]['cards'] = isset($columnCount[$col['id']]) ? $columnCount[$col['id']] : 0;
-
-                $lanes = array_values($lanes);
-                $laneCount += count($lanes);
-
-                $groupData['id']            = $group->id;
-                $groupData['key']           = "group{$group->id}";
-                $groupData['data']['lanes'] = $lanes;
-                $groupData['data']['cols']  = $cols;
-                $groupData['data']['items'] = $items;
-
-                $regionData['items'][] = $groupData;
-            }
-
-            $regionData['laneCount'] = $laneCount;
             if(!empty($regionData['items'])) $kanbanList[] = $regionData;
         }
 

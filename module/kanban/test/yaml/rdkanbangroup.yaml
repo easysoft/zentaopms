@@ -1,10 +1,8 @@
 title: table zt_kanbangroup
-desc: "看板单元格"
-author: Tian Shujie
+desc: "专业研发看板组"
+author: Sun Guangming
 version: "1.0"
 fields:
-    - field: id
-      range: 1-20
     - field: kanban
       range: 1-20
     - field: region

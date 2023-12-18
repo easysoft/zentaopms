@@ -1,0 +1,23 @@
+title: zt_task
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: project
+    range: 0
+  - field: execution
+    range: 1-5
+  - field: module
+    range: 0
+  - field: story
+    range: 0
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 任务
+    - field: name2
+      range: 1-100
+  - field: status
+    range: "wait,doing,done,cancel,closed"

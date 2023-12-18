@@ -1,0 +1,26 @@
+title: table zt_kanbanregion
+desc: 专业研发看板区域
+author: Sun Guangming
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100
+    - field: kanban
+      range: 1-5
+    - field: space
+      range: 0
+    - field: name
+      range: 1-100
+      prefix: 默认区域
+    - field: createdBy
+      range: "admin,user1,user2,user3,user4,user5"
+    - field: createdDate
+      range: "20201101 000000:1D"
+      type: timestamp
+      format: "YY/MM/DD hh::mm:ss"
+      postfix: "\t"
+    - field: lastEditedDate
+      range: "20220101 000000:1D"
+      type: timestamp
+      format: "YY/MM/DD"
+      postfix: "\t"

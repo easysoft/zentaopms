@@ -348,22 +348,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        $columnCount = 0;
-        $laneCount   = 0;
-        $cardCount   = 0;
-        foreach($objects as $regions)
-        {
-            foreach($regions->groups as $group)
-            {
-                $columnCount += count($group->columns);
-                $laneCount += count($group->lanes);
-                foreach($group->lanes as $lane)
-                {
-                    foreach($lane->items as $item) $cardCount += count($item);
-                }
-            }
-        }
-        return 'columns:' . $columnCount . ', lanes:' . $laneCount . ', cards:' . $cardCount;
+        return $objects;
     }
 
     /**

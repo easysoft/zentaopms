@@ -1,0 +1,22 @@
+title: table zt_kanbancell
+desc: "看板单元格"
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: kanban
+      range: 1-5
+    - field: lane
+      range: 1-20
+    - field: column
+      range: 1-20
+    - field: type
+      range: task{10},bug{10},story{10}
+    - field: cards
+      fields:
+        - field: card1
+          prefix: ","
+          postfix: ","
+          range: "1-20"
+        - field: card2
+          postfix: ","
+          range: "21-40"

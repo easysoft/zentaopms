@@ -1,0 +1,19 @@
+title: table zt_execution
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 看板
+    - field: name2
+      range: 1-10
+  - field: project
+    range: 0
+  - field: type
+    range: kanban
+  - field: status
+    range: wait,doing

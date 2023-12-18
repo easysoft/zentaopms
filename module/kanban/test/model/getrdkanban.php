@@ -4,40 +4,47 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('project')->config('kanbanexecution')->gen(5);
+zdTable('kanbanregion')->config('rdkanbanregion')->gen(5);
+zdTable('kanbangroup')->config('rdkanbangroup')->gen(20);
+zdTable('kanbancolumn')->gen(20);
+zdTable('kanbanlane')->config('rdkanbanlane')->gen(10);
+zdTable('kanbancell')->config('rdkanbancell')->gen(20);
+zdTable('task')->config('rdkanbantask')->gen(20);
+
 /**
 
 title=测试 kanbanModel->getRDKanban();
+timeout=0
 cid=1
-pid=1
 
-获取执行161的执行看板 >> columns:27, lanes:3, cards:5
-获取执行161 all region 101的执行看板 >> columns:27, lanes:3, cards:8
-获取执行161 all region 102的执行看板 >> columns:0, lanes:0, cards:0
-获取执行162的执行看板 >> columns:27, lanes:3, cards:5
-获取执行162 story region 102的执行看板 >> columns:11, lanes:1, cards:2
-获取执行163的执行看板 >> columns:27, lanes:3, cards:4
-获取执行163 task region 103的执行看板 >> columns:7, lanes:1, cards:4
-获取执行164的执行看板 >> columns:27, lanes:3, cards:4
-获取执行164 bug region 104的执行看板 >> columns:9, lanes:1, cards:3
-获取执行165的执行看板 >> columns:27, lanes:3, cards:0
-获取执行165 story region 105的执行看板 >> columns:11, lanes:1, cards:2
+- 获取执行1的看板信息
+ - 第0条的id属性 @1
+ - 第0条的title属性 @泳道1
+- 获取执行2的看板信息
+ - 第0条的id属性 @7
+ - 第0条的title属性 @任务7
+- 获取执行3的看板信息
+ - 第0条的id属性 @9
+ - 第0条的title属性 @未开始
+- 获取执行1的看板信息,传入列类型
+ - 第0条的id属性 @0
+ - 第0条的title属性 @0
+- 获取执行2的看板信息,传入列类型
+ - 第0条的id属性 @2
+ - 第0条的title属性 @泳道2
+- 获取执行3的看板信息,传入列类型
+ - 第0条的id属性 @0
+ - 第0条的title属性 @0
 
 */
-$executionIDList = array('161', '162', '163', '164', '165');
-$browseTypeList  = array('all', 'story', 'task', 'bug');
-$regionIDList    = array('0', '101', '102', '103', '104', '105');
-$groupBy         = 'pri';
+$executionIDList = array(1, 2, 3);
 
 $kanban = new kanbanTest();
 
-r($kanban->getRDKanbanTest($executionIDList[0]))                                       && p() && e('columns:27, lanes:3, cards:5'); // 获取执行161的执行看板
-r($kanban->getRDKanbanTest($executionIDList[0], $browseTypeList[0], $regionIDList[1])) && p() && e('columns:27, lanes:3, cards:8'); // 获取执行161 all region 101的执行看板
-r($kanban->getRDKanbanTest($executionIDList[0], $browseTypeList[0], $regionIDList[2])) && p() && e('columns:0, lanes:0, cards:0');  // 获取执行161 all region 102的执行看板
-r($kanban->getRDKanbanTest($executionIDList[1]))                                       && p() && e('columns:27, lanes:3, cards:5'); // 获取执行162的执行看板
-r($kanban->getRDKanbanTest($executionIDList[1], $browseTypeList[1], $regionIDList[2])) && p() && e('columns:11, lanes:1, cards:2'); // 获取执行162 story region 102的执行看板
-r($kanban->getRDKanbanTest($executionIDList[2]))                                       && p() && e('columns:27, lanes:3, cards:4'); // 获取执行163的执行看板
-r($kanban->getRDKanbanTest($executionIDList[2], $browseTypeList[2], $regionIDList[3])) && p() && e('columns:7, lanes:1, cards:4');  // 获取执行163 task region 103的执行看板
-r($kanban->getRDKanbanTest($executionIDList[3]))                                       && p() && e('columns:27, lanes:3, cards:4'); // 获取执行164的执行看板
-r($kanban->getRDKanbanTest($executionIDList[3], $browseTypeList[3], $regionIDList[4])) && p() && e('columns:9, lanes:1, cards:3');  // 获取执行164 bug region 104的执行看板
-r($kanban->getRDKanbanTest($executionIDList[4]))                                       && p() && e('columns:27, lanes:3, cards:0'); // 获取执行165的执行看板
-r($kanban->getRDKanbanTest($executionIDList[4], $browseTypeList[1], $regionIDList[5])) && p() && e('columns:11, lanes:1, cards:2'); // 获取执行165 story region 105的执行看板
+r($kanban->getRDKanbanTest($executionIDList[0])[0]['items'][0]['data']['lanes'])          && p('0:id,title') && e('1,泳道1');  // 获取执行1的看板信息
+r($kanban->getRDKanbanTest($executionIDList[1])[0]['items'][0]['data']['items'][7][7])    && p('0:id,title') && e('7,任务7');  // 获取执行2的看板信息
+r($kanban->getRDKanbanTest($executionIDList[2])[0]['items'][0]['data']['cols'])           && p('0:id,title') && e('9,未开始'); // 获取执行3的看板信息
+r($kanban->getRDKanbanTest($executionIDList[0], 'story')[0]['items'][0]['data']['lanes']) && p('0:id,title') && e('0,0');      // 获取执行1的看板信息,传入列类型
+r($kanban->getRDKanbanTest($executionIDList[1], 'task')[0]['items'][0]['data']['lanes'])  && p('0:id,title') && e('2,泳道2');  // 获取执行2的看板信息,传入列类型
+r($kanban->getRDKanbanTest($executionIDList[2], 'bug')[0]['items'][0]['data']['lanes'])   && p('0:id,title') && e('0,0');      // 获取执行3的看板信息,传入列类型
