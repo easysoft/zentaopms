@@ -83,21 +83,21 @@ class install extends control
     public function step1()
     {
         $this->view->title          = $this->lang->install->checking;
-        $this->view->phpVersion     = $this->install->getPhpVersion();
-        $this->view->phpResult      = $this->install->checkPHP();
-        $this->view->pdoResult      = $this->install->checkPDO();
-        $this->view->pdoMySQLResult = $this->install->checkPDOMySQL();
-        $this->view->jsonResult     = $this->install->checkJSON();
-        $this->view->opensslResult  = $this->install->checkOpenssl();
-        $this->view->mbstringResult = $this->install->checkMbstring();
-        $this->view->zlibResult     = $this->install->checkZlib();
-        $this->view->curlResult     = $this->install->checkCurl();
-        $this->view->filterResult   = $this->install->checkFilter();
-        $this->view->iconvResult    = $this->install->checkIconv();
-        $this->view->tmpRootInfo    = $this->install->getTmpRoot();
-        $this->view->tmpRootResult  = $this->install->checkTmpRoot();
-        $this->view->dataRootInfo   = $this->install->getDataRoot();
-        $this->view->dataRootResult = $this->install->checkDataRoot();
+        $this->view->phpVersion     = $this->installZen->getPHPVersion();
+        $this->view->phpResult      = $this->installZen->checkPHPVersion();
+        $this->view->pdoResult      = $this->installZen->checkPDO();
+        $this->view->pdoMySQLResult = $this->installZen->checkPDOMySQL();
+        $this->view->jsonResult     = $this->installZen->checkJSON();
+        $this->view->opensslResult  = $this->installZen->checkOpenssl();
+        $this->view->mbstringResult = $this->installZen->checkMBstring();
+        $this->view->zlibResult     = $this->installZen->checkZlib();
+        $this->view->curlResult     = $this->installZen->checkCURL();
+        $this->view->filterResult   = $this->installZen->checkFilter();
+        $this->view->iconvResult    = $this->installZen->checkIconv();
+        $this->view->tmpRootInfo    = $this->installZen->getTmpRoot();
+        $this->view->tmpRootResult  = $this->installZen->checkTmpRoot();
+        $this->view->dataRootInfo   = $this->installZen->getDataRoot();
+        $this->view->dataRootResult = $this->installZen->checkDataRoot();
         $this->view->iniInfo        = $this->install->getIniInfo();
 
         $checkSession = ini_get('session.save_handler') == 'files';
@@ -105,8 +105,8 @@ class install extends control
         $this->view->checkSession  = $checkSession;
         if($checkSession)
         {
-            $sessionResult = $this->install->checkSessionSavePath();
-            $sessionInfo   = $this->install->getSessionSavePath();
+            $sessionResult = $this->installZen->checkSessionSavePath();
+            $sessionInfo   = $this->installZen->getSessionSavePath();
             if($sessionInfo['path'] == '') $sessionResult = 'ok';
 
             $this->view->sessionResult = $sessionResult;
@@ -139,7 +139,7 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            $return = $this->install->checkConfig();
+            $return = $this->installZen->checkConfig();
             if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '480', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
 
             $myConfig = array();
@@ -384,7 +384,7 @@ class install extends control
 
         /* DevOps平台版将配置信息写入my.php。*/
         /* Save config file when inQuickon is true. */
-        if($this->config->inQuickon) $this->install->saveConfigFile();
+        if($this->config->inQuickon) $this->installZen->saveConfigFile();
 
         $this->app->loadLang('upgrade');
         $this->view->title = $this->lang->install->getPriv;
