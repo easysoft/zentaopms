@@ -274,18 +274,22 @@ class transferModel extends model
     }
 
     /**
+     * 设置字段的控件类型(是否是下拉菜单)。
      * Init Control.
      *
+     * @param  string $module
      * @param  string $field
      * @access public
      * @return void
      */
-    public function initControl($module, $field)
+    public function initControl(string $module, string $field)
     {
         if(isset($this->moduleFieldList[$field]['control']))    return $this->moduleFieldList[$field]['control'];
-        if(isset($this->moduleLang->{$field.'List'}))           return 'select';
-        if(isset($this->moduleFieldList[$field]['dataSource'])) return 'select';
+        if(isset($this->moduleLang->{$field.'List'}))           return 'select'; //如果存在该字段的语言项列表,则控件为select
+        if(isset($this->moduleFieldList[$field]['dataSource'])) return 'select'; //如果定义了dataSource,则控件为select
 
+        /* 如果Transfer系统字段中存在该字段,则control为下拉。 */
+        /* If Transfer system field exists the field, control is select. */
         if(strpos($this->transferConfig->sysDataFields, $field) !== false) return 'select';
         return $this->transferConfig->fieldList['control'];
     }
