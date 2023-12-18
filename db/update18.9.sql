@@ -34,3 +34,44 @@ ALTER TABLE `zt_review` MODIFY `docVersion` varchar(255) DEFAULT '';
 
 DELETE FROM `zt_cron` WHERE command='moduleName=measurement&methodName=initCrontabQueue';
 DELETE FROM `zt_cron` WHERE command='moduleName=measurement&methodName=execCrontabQueue';
+
+ALTER TABLE `zt_artifactrepo` MODIFY `name` varchar(45) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `products` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `serverID` smallint(8) NOT NULL DEFAULT 0;
+ALTER TABLE `zt_artifactrepo` MODIFY `repoName` varchar(45) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `format` varchar(10) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `type` char(7) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `status` varchar(10) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `createdBy` varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `editedBy` varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_artifactrepo` MODIFY `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT 0;
+
+ALTER TABLE `zt_space` MODIFY `createdAt` datetime NULL;
+
+ALTER TABLE `zt_instance` MODIFY `name` char(50) NOT NULL DEFAULT '';
+ALTER TABLE `zt_instance` MODIFY `logo` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `zt_instance` MODIFY `desc` text NULL;
+ALTER TABLE `zt_instance` MODIFY `introduction` text NULL;
+ALTER TABLE `zt_instance` MODIFY `channel` char(20) NOT NULL DEFAULT '';
+ALTER TABLE `zt_instance` MODIFY `smtpSnippetName` char(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_instance` MODIFY `ldapSnippetName` char(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_instance` MODIFY `ldapSettings` text NULL;
+ALTER TABLE `zt_instance` MODIFY `dbSettings` text NULL;
+ALTER TABLE `zt_instance` MODIFY `env` text NULL;
+ALTER TABLE `zt_instance` MODIFY `createdAt` datetime NULL;
+
+ALTER TABLE `zt_solution` MODIFY `name` char(50) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `appID` mediumint(8) unsigned NOT NULL DEFAULT 0;
+ALTER TABLE `zt_solution` MODIFY `appName` char(50) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `appVersion` char(20) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `version` char(50) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `chart` char(50) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `cover` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `desc` text NULL;
+ALTER TABLE `zt_solution` MODIFY `introduction` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `source` char(20) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `channel` char(20) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `components` text NULL;
+ALTER TABLE `zt_solution` MODIFY `status` char(20) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `createdBy` char(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_solution` MODIFY `createdAt` datetime NULL;
