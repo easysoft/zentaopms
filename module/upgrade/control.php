@@ -105,33 +105,33 @@ class upgrade extends control
     }
 
     /**
-     * Confirm the version.
+     * 确认要执行的SQL语句。
+     * Confirm the upgrade sql.
      *
      * @param  string  $fromVersion
      * @access public
      * @return void
      */
-    public function confirm($fromVersion = '')
+    public function confirm(string $fromVersion = '')
     {
+        if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
+
         $this->view->fromVersion = $fromVersion;
 
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
 
-        $writable = true;
-        if (!is_writable($this->app->getTmpRoot())) $writable = false;
-        if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
-        $confirmSql = $this->upgrade->getConfirm($fromVersion);
+        if($_POST) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
-        $this->session->set('step', '');
-        $this->view->title    = $this->lang->upgrade->confirm;
-        $this->view->confirm  = $confirmSql;
-        $this->view->writable = $writable;
+        $confirmSql = $this->upgrade->getConfirm($fromVersion);
 
         /* When sql is empty then skip it. */
         if(empty($confirmSql)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
-        if($_POST) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
+        $this->session->set('step', '');
+        $this->view->title    = $this->lang->upgrade->confirm;
+        $this->view->confirm  = $confirmSql;
+        $this->view->writable = is_writable($this->app->getTmpRoot()) ? true : false;
 
         $this->display();
     }
