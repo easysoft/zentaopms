@@ -33,7 +33,7 @@ $config->repo->binary      = '|pdf|';
 $config->repo->synced      = '';
 
 $config->repo->repoSyncLog = new stdclass();
-$config->repo->repoSyncLog->one            = 1;
+$config->repo->repoSyncLog->one            = '1';
 $config->repo->repoSyncLog->done           = array('done', '完成', 'git/attributes');
 $config->repo->repoSyncLog->total          = array('Total', '总数');
 $config->repo->repoSyncLog->fatal          = array('fatal', '致命');
