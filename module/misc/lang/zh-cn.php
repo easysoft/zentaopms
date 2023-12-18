@@ -111,6 +111,7 @@ $lang->misc->feature->aiChatImage       = 'theme/default/images/main/ai_chat.svg
 $lang->misc->feature->learnMoreLink     = 'https://www.zentao.net/book/zentaopms/1096.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.10']       = '2023-12-18';
 $lang->misc->releaseDate['18.9']        = '2023-11-09';
 $lang->misc->releaseDate['18.8']        = '2023-09-28';
 $lang->misc->releaseDate['18.7']        = '2023-08-29';
@@ -216,6 +217,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.10'][]       = array('title' => '用例库可以从其他用例库导入用例，文档导出可以按Word自适应图片比例，历史记录排序方式增加cookie记录，优化修改他人日志逻辑。反馈、工单转化时可自动带入附件，反馈增加关键词、抄送字段，图表类型新增水球图，优化度量项的采集逻辑和展示样式。', 'desc' => '');
 $lang->misc->feature->all['18.9'][]        = array('title' => '全面接入AI大模型，客户端引入增强版会议，测试单增加参与人，视频附件增加在线预览，评审检查分类增加自定义等。', 'desc' => '');
 $lang->misc->feature->all['18.8'][]        = array('title' => 'BI中新增了度量项功能和应用巡检报告大屏，DevOps平台版增加了配置向导，需求与市场管理界面中增加了市场管理功能，客户端导航及个人中心全新改版。', 'desc' => '');
 $lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps新增了云原生平台、制品库和应用管理功能，优化了导航结构和相关UI交互。同时，新增了AI提词设计器功能，支持与大语言模型对接，支持自定义AI应用等。', 'desc' => '');

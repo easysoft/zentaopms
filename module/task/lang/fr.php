@@ -262,6 +262,7 @@ $lang->task->deniedNotice              = 'Seulement le %s peut %s la tâche.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
 $lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = "Pas de tâche pour l'instant. ";
+$lang->task->noModule                  = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->task->createDenied              = 'La création de tâches est interdite dans ce ' . $lang->projectCommon;
 $lang->task->cannotDeleteParent        = 'Impossible de supprimer la tâche parente';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
