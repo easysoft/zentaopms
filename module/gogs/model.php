@@ -354,39 +354,6 @@ class gogsModel extends model
     }
 
     /**
-     * Get upstream project by API.
-     *
-     * @param  int    $gogsID
-     * @param  string $project
-     * @access public
-     * @return void
-     */
-    public function apiGetUpstream($gogsID, $project)
-    {
-        $currentProject = $this->apiGetSingleProject($gogsID, $project);
-        if(isset($currentProject->parent->full_name)) return $currentProject->parent->full_name;
-        return array();
-    }
-
-    /**
-     * Get branches.
-     *
-     * @param  int    $gogsID
-     * @param  string $project
-     * @access public
-     * @return array
-     */
-    public function getBranches($gogsID, $project)
-    {
-        $rawBranches = $this->apiGetBranches($gogsID, $project);
-
-        $branches = array();
-        foreach($rawBranches as $branch) $branches[] = $branch->name;
-
-        return $branches;
-    }
-
-    /**
      * Get single branch by API.
      *
      * @param  int    $gogsID
