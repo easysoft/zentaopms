@@ -79,5 +79,57 @@ class mailZen extends mail
 
         return $userPairs;
     }
-}
 
+    /**
+     * Send a queue.
+     *
+     * @param  object    $queue
+     * @access protected
+     * @return array|false
+     */
+    protected function sendQueue(object $queue, bool $includeMe = false): array|false
+    {
+        $now        = helper::now();
+        $log        = '';
+        $mailStatus = '';
+        if(!isset($queue->merge) or $queue->merge == false) $mailStatus = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($queue->id)->fetch('status');
+        if(empty($mailStatus) or $mailStatus != 'wait') return false;
+
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
+        $this->mail->send($queue->toList, $queue->subject, $queue->data, $queue->ccList, $includeMe);
+
+        $data = new stdclass();
+        $data->sendTime = $now;
+        $data->status   = 'sended';
+        if($this->mail->isError())
+        {
+            $data->status = 'fail';
+            $data->failReason = implode("\n", $this->mail->getError());
+        }
+        $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
+
+        $log .= "Send #$queue->id  result is {$data->status}\n";
+        if($data->status == 'fail') $log .= "reason is $data->failReason\n";
+
+        return array('result' => $data->status == 'fail' ? 'fail' : 'success', 'message' => $log);
+    }
+
+    /**
+     * Delete sent queue.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function deleteSentQueues(): void
+    {
+        $lastMail  = $this->dao->select('id,status')->from(TABLE_NOTIFY)->where('objectType')->eq('mail')->orderBy('id_desc')->limit(1)->fetch();
+        if(!empty($lastMail) and $lastMail->id > 1000000)
+        {
+            $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_NOTIFY)->where('status')->eq('wait')->fetch('count');
+            if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_NOTIFY);
+        }
+
+        /* Delete two days ago queues. */
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+    }
+}

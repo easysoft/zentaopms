@@ -1,8 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
-su('admin');
 
 /**
 
@@ -17,6 +14,9 @@ pid=1
 获取操作BUG时的邮件主题 >> BUG #1 test - 正常产品1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mail.class.php';
+su('admin');
 
 $mail = new mailTest();
 

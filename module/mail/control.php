@@ -180,44 +180,17 @@ class mail extends control
         $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadConfig('mail');
         $queueList = $this->mail->getQueue('wait', 'id_asc');
-        $now       = helper::now();
         if(isset($this->config->mail->async))$this->config->mail->async = 0;
-        $log = '';
+
         foreach($queueList as $queue)
         {
-            if(!isset($queue->merge) or $queue->merge == false)
-            {
-                $mailStatus = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($queue->id)->fetch('status');
-                if(empty($mailStatus) or $mailStatus != 'wait') continue;
-            }
-
-            $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
-            $this->mail->send($queue->toList, $queue->subject, $queue->data, $queue->ccList, true);
-
-            $data = new stdclass();
-            $data->sendTime = $now;
-            $data->status   = 'sended';
-            if($this->mail->isError())
-            {
-                $data->status = 'fail';
-                $data->failReason = implode("\n", $this->mail->getError());
-            }
-            $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
-
-            $log .= "Send #$queue->id  result is $data->status\n";
-            if($data->status == 'fail') $log .= "reason is $data->failReason\n";
+            $log = $this->mailZen->sendQueues($queue, true);
+            if($log) echo $log['message'];
         }
 
         /* Delete sended mail. */
-        $lastMail  = $this->dao->select('id,status')->from(TABLE_NOTIFY)->where('objectType')->eq('mail')->orderBy('id_desc')->limit(1)->fetch();
-        if(!empty($lastMail) and $lastMail->id > 1000000)
-        {
-            $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_NOTIFY)->where('status')->eq('wait')->fetch('count');
-            if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_NOTIFY);
-        }
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+        $this->mailZen->deleteSentQueue();
 
-        echo $log;
         echo "OK\n";
     }
 
@@ -227,26 +200,14 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function resend($queueID)
+    public function resend(int $queueID)
     {
         $queue = $this->mail->getQueueById($queueID);
         if($queue and $queue->status == 'sended') return $this->sendSuccess(array('message' => $this->lang->mail->noticeResend, 'load' => true));
 
         if(isset($this->config->mail->async)) $this->config->mail->async = 0;
-        $this->mail->send($queue->toList, $queue->subject, $queue->data, $queue->ccList);
-
-        $data = new stdclass();
-        $data->sendTime   = helper::now();
-        $data->status     = 'sended';
-        $data->failReason = '';
-        if($this->mail->isError())
-        {
-            $data->status     = 'fail';
-            $data->failReason = str_replace("\n", '', implode("\n", $this->mail->getError()));
-        }
-        $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
-
-        if($data->status == 'fail') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert(" . json_encode(array('message' => array('html' => $data->failReason))) . ")"));
+        $log = $this->mailZen->sendQueue($queue);
+        if($log && $log['result'] == 'fail') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert(" . json_encode(array('message' => array('html' => str_replace("\n", '<br />', $log['message'])))) . ")"));
         return $this->sendSuccess(array('result' => 'success', 'message' => $this->lang->mail->noticeResend, 'load' => true));
     }
 

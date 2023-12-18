@@ -404,7 +404,7 @@ class mailModel extends model
      * @access public
      * @return bool
      */
-    public function isError()
+    public function isError(): bool
     {
         return !empty($this->errors);
     }
@@ -489,7 +489,14 @@ class mailModel extends model
         return $queue;
     }
 
-    public function getQueueById($queueID)
+    /**
+     * Get queue by id.
+     *
+     * @param  int    $queueID
+     * @access public
+     * @return object|false
+     */
+    public function getQueueById(int $queueID): object|false
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($queueID)->fetch();
     }

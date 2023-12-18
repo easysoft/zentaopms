@@ -1,18 +1,17 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
-su('admin');
 
 /**
 
 title=测试 mailModel->send();
-cid=1
-pid=1
+cid=0
 
  >> 0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/mail.class.php';
+su('admin');
 
 $mail = new mailTest();
 
@@ -40,4 +39,4 @@ if(!isset($tester->config->mail->turnon)) $tester->loadModel('setting')->setItem
 
 $result1 = $mail->sendTest('admin','test','test','',true);
 
-r($result1) && p() && e('0');
+r($result1) && p() && e('0'); //

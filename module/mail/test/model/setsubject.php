@@ -3,8 +3,7 @@
 
 /**
 
-title=测试 mailModel->setCC();
-timeout=0
+title=测试 mailModel->setSubject();
 cid=0
 
 - 测试设置主题属性Subject @test subject
