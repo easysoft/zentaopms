@@ -4505,13 +4505,15 @@ class executionModel extends model
      *
      * @param  object    $execution
      * @param  string    $action
+     * @param  string    $module
      * @access public
      * @return bool
      */
-    public static function isClickable($execution, $action)
+    public static function isClickable($execution, $action, $module = 'execution')
     {
+        if($module == 'programplan') $module = 'execution';
         $action    = strtolower($action);
-        $clickable = commonModel::hasPriv('execution', $action);
+        $clickable = commonModel::hasPriv($module, $action);
         if(!$clickable) return false;
 
         if($action == 'start')    return $execution->status == 'wait';
