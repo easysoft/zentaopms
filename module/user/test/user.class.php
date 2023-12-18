@@ -1078,12 +1078,13 @@ class userTest
     }
 
     /**
+     * 判断用户是否登录。
      * Judge a user is logon or not.
      *
      * @access public
      * @return bool
      */
-    public function isLogonTest()
+    public function isLogonTest(): bool
     {
         return $this->objectModel->isLogon();
     }

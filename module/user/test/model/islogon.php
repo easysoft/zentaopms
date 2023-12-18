@@ -1,30 +1,25 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-su('admin');
-
 /**
-
 title=测试 userModel->isLogon();
 cid=1
 pid=1
-
-获取admin用户的登录状态 >> 1
-获取游客的登录状态 >> 0
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/user.class.php';
 
-$user = new userTest();
+zdTable('user')->gen(2);
 
-$_SESSION['user'] = new stdclass();
-$_SESSION['user']->account  = 'admin';
-$_SESSION['user']->password = 'a0933c1218a4e745bacdcf572b10eba7';
-$admin = $user->isLogonTest();
+$userTest = new userTest();
 
-$_SESSION['user']->account  = 'guest';
-$_SESSION['user']->password = '';
-$guest = $user->isLogonTest();
+$_SESSION['user'] = $userTest->getbyIdTest('admin');
+r($userTest->isLogonTest()) && p() && e(1); // session 中用户为 admin 时获取用户的登录状态。
 
-r($admin) && p() && e('1'); //获取admin用户的登录状态
-r($guest) && p() && e('0'); //获取游客的登录状态
+$_SESSION['user'] = $userTest->getbyIdTest('user1');
+r($userTest->isLogonTest()) && p() && e(1); // session 中用户为 user1 时获取用户的登录状态。
+
+$_SESSION['user'] = (object)array('account' => 'guest');
+r($userTest->isLogonTest()) && p() && e(0); // session 中用户为 guest 时获取用户的登录状态。
+
+$_SESSION['user'] = false;
+r($userTest->isLogonTest()) && p() && e(0); // session 中用户为空时获取用户的登录状态。
