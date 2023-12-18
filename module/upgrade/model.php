@@ -1034,6 +1034,12 @@ class upgradeModel extends model
                         {
                             $textFieldLengths = $this->config->upgrade->dbFieldLengths['text'];
                             if($textFieldLengths[$stdType] < $textFieldLengths[$dbType]) $stdConfigs[1] = $dbConfigs[1];
+
+                            if(strpos($fields[$field], ' NULL') === false and strpos($line, ' DEFAULT NULL') !== false)
+                            {
+                                $line = str_replace(' DEFAULT NULL', '', implode(' ', $stdConfigs));
+                                $stdConfigs = explode(' ', $line);
+                            }
                         }
                         if(stripos($stdConfigs[1], 'int') === false && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
 
