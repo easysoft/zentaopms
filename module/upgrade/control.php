@@ -33,6 +33,7 @@ class upgrade extends control
     }
 
     /**
+     * 授权协议页面。
      * Check agree license.
      *
      * @access public
@@ -47,7 +48,7 @@ class upgrade extends control
         $licenseEN  = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.EN');
 
         $license = $licenseEN . $licenseCN;
-        if($clientLang == 'zh-cn' or $clientLang == 'zh-tw') $license = $licenseCN . $licenseEN;
+        if($clientLang == 'zh-cn' || $clientLang == 'zh-tw') $license = $licenseCN . $licenseEN;
 
         $this->view->title   = $this->lang->upgrade->common;
         $this->view->license = $license;
