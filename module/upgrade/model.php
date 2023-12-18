@@ -281,13 +281,14 @@ class upgradeModel extends model
     }
 
     /**
-     * Get openVersion
+     * 获取开源版版本。
+     * Get open version.
      *
-     * @param  int    $version.
+     * @param  string $version.
      * @access public
      * @return string
      */
-    public function getOpenVersion($version)
+    public function getOpenVersion(string $version): string
     {
         $edition = $this->getEditionByVersion($version);
         return is_numeric($version[0]) ? $version : zget($this->config->upgrade->{$edition . 'Version'}, $version);

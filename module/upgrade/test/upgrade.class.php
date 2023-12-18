@@ -57,4 +57,17 @@ class upgradeTest
     {
         return $this->objectModel->getEditionByVersion($version);
     }
+
+    /**
+     * 测试获取开源版版本。
+     * Test get open version.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function getOpenVersionTest(string $version): string
+    {
+        return $this->objectModel->getOpenVersion($version);
+    }
 }
