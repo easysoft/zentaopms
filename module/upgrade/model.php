@@ -86,29 +86,18 @@ class upgradeModel extends model
     }
 
     /**
+     * 执行升级 sql 文件。
      * The execute method. According to the $fromVersion call related methods.
      *
      * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function execute($fromVersion)
+    public function execute(string $fromVersion): void
     {
         set_time_limit(0);
 
         if(!isset($this->app->user)) $this->loadModel('user')->su();
-
-        $fromEdition = $this->getEditionByVersion($fromVersion);
-
-        $this->fromVersion = $fromVersion;
-        $this->fromEdition = $fromEdition;
-
-        /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
-        $currentVersion  = str_replace('.', '_', $this->config->version);
-
-        /* Execute. */
-        $fromOpenVersion = $this->getOpenVersion($fromVersion);
-        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
         /* Get total sqls and write in tmp file. */
         dao::$realTimeFile = $this->getLogFile();
@@ -121,48 +110,55 @@ class upgradeModel extends model
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
         }
 
+        $fromEdition = $this->getEditionByVersion($fromVersion);
+        $this->fromVersion = $fromVersion;
+        $this->fromEdition = $fromEdition;
+
+        /* Execute. */
+        $fromOpenVersion = $this->getOpenVersion($fromVersion);
+        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
-
             if($openVersion == '10_1') $executedXuanxuan = true;
             if($openVersion == '16_4' && !empty($this->config->isINT)) $executedXuanxuan = true;
 
-            /* Execute open. */
+            /* Execute open edition. */
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
             $this->executeOpen($openVersion, $executedXuanxuan);
 
-            /* Execute pro. */
-            foreach($chargedVersions['pro'] as $proVersion)
+            /* Execute charge edition. */
+            foreach($chargedVersions as $edition => $chargedVersion)
             {
-                $this->saveLogs("Execute $proVersion");
-                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
-                $this->executePro($proVersion);
-            }
-
-            /* Execute biz. */
-            foreach($chargedVersions['biz'] as $bizVersion)
-            {
-                $this->saveLogs("Execute $bizVersion");
-                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
-                $this->executeBiz($bizVersion, $executedXuanxuan);
-            }
-
-            /* Execute max. */
-            foreach($chargedVersions['max'] as $maxVersion)
-            {
-                $maxVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
-                $this->saveLogs("Execute $maxVersion");
-                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
-                $this->executeMax($maxVersion);
+                $executeFunction = 'execute' . ucfirst($edition);
+                foreach($chargedVersion as $version)
+                {
+                    if($edition == 'max') $version = array_search($openVersion, $this->config->upgrade->maxVersion);
+                    $this->saveLogs("Execute $version");
+                    $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $version)));
+                    $this->{$executeFunction}($version, $executedXuanxuan);
+                }
             }
         }
 
+        $this->executeOthers($fromEdition);
+    }
+
+    /**
+     * 执行导入模块、刷新项目集和产品信息并且删除补丁。
+     * Import buildin modules, and refresh stats of programs and products, delete path.
+     *
+     * @param  string $fromEdition
+     * @access public
+     * @return void
+     */
+    public function executeOthers(string $fromEdition): void
+    {
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open' or $fromEdition == 'pro')
+            if($fromEdition == 'open' || $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
                 $this->importLiteModules();
