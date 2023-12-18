@@ -19,13 +19,14 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/mr.class.php';
 
-zdTable('action')->gen(0);
-zdTable('relation')->config('relation')->gen(10);
 su('admin');
 
-$mrModel = new mrTest();
+zdTable('action')->gen(0);
+zdTable('mr')->gen(1);
+zdTable('relation')->config('relation')->gen(10);
 
-r($mrModel->createMRLinkedActionTester(2)) && p() && e('0');        // 不存在的合并请求
+$mrModel = new mrTest();
+r($mrModel->createMRLinkedActionTester(2)) && p() && e('0'); // 不存在的合并请求
 
 $result = $mrModel->createMRLinkedActionTester(1);
 r(count($result)) && p() && e('10'); // ID为1的合并请求关联的需求记录动态数量

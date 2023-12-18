@@ -40,7 +40,7 @@ $hostID        = 10;
 $projectIdList = array();
 r($mrTester->getGitlabProjectsTester($hostID, $projectIdList)) && p() && e('0'); // 服务器ID错误
 
-su('user1');
+su('user1', false);
 $hostID        = 1;
 $projectIdList = array();
 r($mrTester->getGitlabProjectsTester($hostID, $projectIdList)) && p('1:id,name') && e('1,Monitoring'); // 非管理员用户，正确的服务器ID和项目ID列表
