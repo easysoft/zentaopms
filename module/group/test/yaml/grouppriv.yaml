@@ -1,0 +1,26 @@
+title: table zt_grouppriv
+desc: "组权限"
+author: automated export
+version: "1.0"
+fields:
+  - field: group
+    note: "分组ID"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: module
+    note: "模块"
+    range: 1-10000
+    prefix: "module"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: method
+    note: "方法"
+    range: 1-10000
+    prefix: "method"
+    postfix: ""
+    loop: 0
+    format: ""

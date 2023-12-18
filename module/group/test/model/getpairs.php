@@ -1,29 +1,24 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
-su('admin');
 
 /**
 
 title=测试 groupModel->getPairs();
+timeout=0
 cid=1
-pid=1
 
-测试查询产品 1   的权限分组 2 的信息 >> 研发
-测试查询产品 194 的权限分组 3 的信息 >> 测试
-测试查询产品 284 的权限分组 4 的信息 >> 项目经理
-测试查询产品 346 的权限分组 5 的信息 >> 产品经理
-测试查询产品 493 的权限分组 6 的信息 >> 研发主管
-测试查询产品 519 的权限分组 7 的信息 >> 产品主管
+- 获取权限分组属性1 @这是一个新的用户分组1
+- 获取project=1的权限分组属性6 @这是一个新的用户分组6
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/group.class.php';
+
+su('admin');
+
+zdTable('group')->config('group')->gen(10);
 
 $group = new groupTest();
 
-r($group->getPairsTest(1))   && p('2') && e('研发');     // 测试查询产品 1   的权限分组 2 的信息
-r($group->getPairsTest(194)) && p('3') && e('测试');     // 测试查询产品 194 的权限分组 3 的信息
-r($group->getPairsTest(284)) && p('4') && e('项目经理'); // 测试查询产品 284 的权限分组 4 的信息
-r($group->getPairsTest(346)) && p('5') && e('产品经理'); // 测试查询产品 346 的权限分组 5 的信息
-r($group->getPairsTest(493)) && p('6') && e('研发主管'); // 测试查询产品 493 的权限分组 6 的信息
-r($group->getPairsTest(519)) && p('7') && e('产品主管'); // 测试查询产品 519 的权限分组 7 的信息
+r($group->getPairsTest())  && p('1')  && e('这是一个新的用户分组1'); // 获取权限分组
+r($group->getPairsTest(1)) && p('6')  && e('这是一个新的用户分组6'); // 获取project=1的权限分组

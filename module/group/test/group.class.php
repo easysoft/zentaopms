@@ -32,10 +32,36 @@ class groupTest
      */
     public function updateTest($groupID, $group)
     {
-        $object = $this->objectModel->update($groupID, (object)$group);
+        $this->objectModel->update($groupID, (object)$group);
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->getByID($groupID);
+    }
+
+    /**
+     * 获取group信息，方便ztf检查
+     * Get group for ztf
+     *
+     * @param  int    $groupID
+     * @access private
+     * @return object
+     */
+    private function getGroup($groupID)
+    {
+        $group = $this->objectModel->getByID($groupID);
+
+        $privs = $this->objectModel->getPrivs($groupID);
+        $privList = array();
+        foreach($privs as $module => $priv)
+        {
+            foreach($priv as $method => $method) $privList[] = $module . '-' . $method;
+        }
+
+        $users = $this->objectModel->getUserPairs($groupID);
+        $group->privs = implode('|', $privList);
+        $group->users = implode('|', array_keys($users));
+
+        return $group;
     }
 
     /**
@@ -46,31 +72,30 @@ class groupTest
      * @access public
      * @return void
      */
-    public function copyTest($groupID, $group)
+    public function copyTest($groupID, $group, $options = array())
     {
-        $objects = $this->objectModel->copy($groupID, (object)$group, array());
+        $newGroupID = $this->objectModel->copy($groupID, (object)$group, $options);
         if(dao::isError()) return dao::getError();
 
-        $newGroupID = $this->objectModel->dao->lastInsertID();
-        return $this->objectModel->getByID($newGroupID);
+        return $this->getGroup($newGroupID);
     }
 
     /**
      * Copy privileges.
      *
-     * @param  string    $fromGroup
-     * @param  string    $toGroup
+     * @param  int    $fromGroupID
+     * @param  int    $toGroupID
      * @access public
      * @return void
      */
-    public function copyPrivTest($fromGroup, $toGroup)
+    public function copyPrivTest($fromGroupID, $toGroupID)
     {
-        $objects = $this->objectModel->copyPriv($fromGroup, $toGroup);
+        $this->objectModel->copyPriv($fromGroupID, $toGroupID);
 
         if(dao::isError()) return dao::getError();
 
-        $fromPrivs = $this->objectModel->getPrivs($fromGroup);
-        $toPrivs   = $this->objectModel->getPrivs($toGroup);
+        $fromPrivs = $this->objectModel->getPrivs($fromGroupID);
+        $toPrivs   = $this->objectModel->getPrivs($toGroupID);
 
         $result = true;
         foreach($fromPrivs as $group => $privs)
@@ -90,19 +115,19 @@ class groupTest
     /**
      * Copy user.
      *
-     * @param  string    $fromGroup
-     * @param  string    $toGroup
+     * @param  int    $fromGroup
+     * @param  int    $toGroup
      * @access public
      * @return void
      */
-    public function copyUserTest($fromGroup, $toGroup)
+    public function copyUserTest($fromGroupID, $toGroupID)
     {
-        $objects = $this->objectModel->copyUser($fromGroup, $toGroup);
+        $this->objectModel->copyUser($fromGroupID, $toGroupID);
 
         if(dao::isError()) return dao::getError();
 
-        $fromUsers = $this->objectModel->getUserPairs($fromGroup);
-        $toUsers   = $this->objectModel->getUserPairs($toGroup);
+        $fromUsers = $this->objectModel->getUserPairs($fromGroupID);
+        $toUsers   = $this->objectModel->getUserPairs($toGroupID);
 
         $result = true;
         foreach($fromUsers as $account => $name)
@@ -125,11 +150,11 @@ class groupTest
      */
     public function getListTest($projectID = 0)
     {
-        $objects = $this->objectModel->getList($projectID = 0);
+        $groups = $this->objectModel->getList($projectID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $groups;
     }
 
     /**
@@ -141,11 +166,11 @@ class groupTest
      */
     public function getPairsTest($projectID = 0)
     {
-        $objects = $this->objectModel->getPairs($projectID = 0);
+        $groups = $this->objectModel->getPairs($projectID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $groups;
     }
 
     /**
@@ -157,27 +182,28 @@ class groupTest
      */
     public function getByIDTest($groupID)
     {
-        $objects = $this->objectModel->getByID($groupID);
+        $group = $this->objectModel->getByID($groupID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $group;
     }
 
     /**
      * Get group by account.
      *
-     * @param  string    $account
+     * @param  string $account
+     * @param  bool   $allVision
      * @access public
      * @return array
      */
-    public function getByAccountTest($account)
+    public function getByAccountTest($account, $allVision = false)
     {
-        $objects = $this->objectModel->getByAccount($account);
+        $groups = $this->objectModel->getByAccount($account, $allVision);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $groups;
     }
 
     /**
@@ -206,10 +232,15 @@ class groupTest
     public function getPrivsTest($groupID)
     {
         $objects = $this->objectModel->getPrivs($groupID);
+        $result = array();
+        foreach($objects as $module => $methods)
+        {
+            $result[$module] = implode('|', $methods);
+        }
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $result;
     }
 
     /**
@@ -226,6 +257,47 @@ class groupTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Get all group memebers.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllGroupMembersTest()
+    {
+        $groupMembers = $this->objectModel->getAllGroupMembers();
+
+        if(dao::isError()) return dao::getError();
+
+        $result = array();
+        foreach($groupMembers as $group => $members)
+        {
+            $result[$group] = implode('|', array_keys($members));
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get object for manage admin group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getObjectForAdminGroupTest()
+    {
+        list($programs, $projects, $products, $executions) = $this->objectModel->getObjectForAdminGroup();
+
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'programs'   => implode('|', $programs),
+            'projects'   => implode('|', $projects),
+            'products'   => implode('|', $products),
+            'executions' => implode('|', $executions)
+        );
     }
 
     /**
@@ -263,16 +335,21 @@ class groupTest
      * Update privilege of a group.
      *
      * @param  int    $groupID
+     * @param  string $nav
+     * @param  string $version
+     * @param  array  $actions
      * @access public
      * @return bool
      */
-    public function updatePrivByGroupTest($groupID, $menu, $version)
+    public function updatePrivByGroupTest($groupID, $nav, $version = '', $actions = array())
     {
-        $objects = $this->objectModel->updatePrivByGroup($groupID, $menu, $version);
+        global $app;
+        $app->post->set('actions', $actions);
+        $this->objectModel->updatePrivByGroup($groupID, $nav, $version);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->getPrivsTest($groupID);
     }
 
     /**
@@ -304,6 +381,21 @@ class groupTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Get project admins.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectAdminsTest()
+    {
+        $admins = $this->objectModel->getProjectAdmins();
+
+        if(dao::isError()) return dao::getError();
+
+        return $admins;
     }
 
     /**

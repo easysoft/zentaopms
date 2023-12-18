@@ -1,31 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
-su('admin');
 
 /**
 
 title=测试 groupModel->getUserPairs();
+timeout=0
 cid=1
-pid=1
 
-测试查询权限分组 3 的用户id和name >> 高层管理2
-测试查询权限分组 3 的用户id和name >> 用户20
-测试查询权限分组 3 的用户id和name >> 开发1
-测试查询权限分组 6 的用户id和name >> 产品主管68
-测试查询权限分组 6 的用户id和name >> 产品主管69
-测试查询权限分组 5 的用户id和name >> 产品主管59
+- 判断分组是否包含正确的account属性user1 @用户1
+- 判断分组是否不包含错误的account属性user2 @` `
+- 判断不存在的分组是否返回空数组 @0
 
 */
-$groupList = array(3,6,5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/group.class.php';
+
+su('admin');
+
+zdTable('user')->gen(100);
+zdTable('group')->gen(5);
+zdTable('usergroup')->config('usergroup')->gen(10);
 
 $group = new groupTest();
 
-r($group->getUserPairsTest($groupList[0])) && p('top2')  && e('高层管理2');  // 测试查询权限分组 3 的用户id和name
-r($group->getUserPairsTest($groupList[0])) && p('top20') && e('用户20');     // 测试查询权限分组 3 的用户id和name
-r($group->getUserPairsTest($groupList[0])) && p('dev1')  && e('开发1');      // 测试查询权限分组 3 的用户id和name
-r($group->getUserPairsTest($groupList[1])) && p('td68')  && e('产品主管68'); // 测试查询权限分组 6 的用户id和name
-r($group->getUserPairsTest($groupList[1])) && p('td69')  && e('产品主管69'); // 测试查询权限分组 6 的用户id和name
-r($group->getUserPairsTest($groupList[2])) && p('td59')  && e('产品主管59'); // 测试查询权限分组 5 的用户id和name
-r($group->getUserPairsTest($groupList[2])) && p('td80')  && e('');           // 测试查询权限分组 5 的用户id和name
+r($group->getUserPairsTest(1)) && p('user1')  && e('用户1'); // 判断分组是否包含正确的account
+r($group->getUserPairsTest(1)) && p('user2')  && e('` `');   // 判断分组是否不包含错误的account
+r($group->getUserPairsTest(6)) && p()         && e('0');     // 判断不存在的分组是否返回空数组

@@ -24,7 +24,6 @@ class group extends control
     public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('user');
         $this->appendResourcePackages();
     }
 
@@ -37,7 +36,6 @@ class group extends control
      */
     public function browse()
     {
-
         $groups     = $this->group->getList();
         $groupUsers = $this->group->getAllGroupMembers();
         foreach($groups as $group)
@@ -238,7 +236,7 @@ class group extends control
         $groupUsers   = $this->group->getUserPairs($groupID);
         $allUsers     = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers   = array_diff_assoc($allUsers, $groupUsers);
-        $outsideUsers = $this->user->getPairs('outside|noclosed|noletter|noempty');
+        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
 
         $this->view->title        = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $this->view->group        = $group;
@@ -268,7 +266,7 @@ class group extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        list($programs, $projects, $products, $executions) = $this->group->getObject4AdminGroup();
+        list($programs, $projects, $products, $executions) = $this->group->getObjectForAdminGroup();
 
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();

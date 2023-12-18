@@ -66,30 +66,34 @@ class groupModel extends model
     }
 
     /**
+     * 复制一个分组。
      * Copy a group.
      *
      * @param  int    $groupID
      * @param  object $group
      * @param  array  $options
      * @access public
-     * @return bool
+     * @return int|false
      */
-    public function copy(int $groupID, object $group, array $options): bool
+    public function copy(int $groupID, object $group, array $options): int|false
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
             ->check('name', 'unique', "vision = '{$this->config->vision}'")
             ->exec();
         if(dao::isError()) return false;
-        if(empty($options)) return true;
 
         $newGroupID = $this->dao->lastInsertID();
+        if(empty($options)) return $newGroupID;
+
         if(in_array('copyPriv', $options)) $this->copyPriv($groupID, $newGroupID);
         if(in_array('copyUser', $options)) $this->copyUser($groupID, $newGroupID);
-        return true;
+
+        return $newGroupID;
     }
 
     /**
+     * 复制分组的权限。
      * Copy privileges.
      *
      * @param  int    $fromGroup
@@ -108,6 +112,7 @@ class groupModel extends model
     }
 
     /**
+     * 复制分组的成员。
      * Copy user.
      *
      * @param  int    $fromGroup
@@ -126,6 +131,7 @@ class groupModel extends model
     }
 
     /**
+     * 获取分组列表。
      * Get group lists.
      *
      * @param  int    $projectID
@@ -142,6 +148,7 @@ class groupModel extends model
     }
 
     /**
+     * 获取分组。
      * Get group pairs.
      *
      * @param  int    $projectID
@@ -157,6 +164,7 @@ class groupModel extends model
     }
 
     /**
+     * 获取一个分组。
      * Get group by id.
      *
      * @param  int    $groupID
@@ -166,12 +174,15 @@ class groupModel extends model
     public function getByID(int $groupID)
     {
         $group = $this->dao->findById($groupID)->from(TABLE_GROUP)->fetch();
+        if(!$group) return null;
+
         if($group->acl) $group->acl = json_decode($group->acl, true);
         if(!isset($group->acl) || !is_array($group->acl)) $group->acl = array();
         return $group;
     }
 
     /**
+     * 获取用户的所有分组。
      * Get group by account.
      *
      * @param  string    $account
@@ -191,7 +202,8 @@ class groupModel extends model
     }
 
     /**
-     * Get the account number in the group.
+     * 获取多个分组包含的所有用户。
+     * Get the accounts in the groups.
      *
      * @param  array  $groupIdList
      * @access public
@@ -205,6 +217,7 @@ class groupModel extends model
     }
 
     /**
+     * 获取一个分组的权限列表。
      * Get privileges of a groups.
      *
      * @param  int    $groupID
@@ -220,6 +233,7 @@ class groupModel extends model
     }
 
     /**
+     * 获取一个分组下的用户Pairs。
      * Get user pairs of a group.
      *
      * @param  int    $groupID
@@ -272,12 +286,13 @@ class groupModel extends model
     }
 
     /**
+     * 为项目管理员分组展示项目集、项目、产品、执行。
      * Get object for manage admin group.
      *
      * @access public
      * @return void
      */
-    public function getObject4AdminGroup()
+    public function getObjectForAdminGroup()
     {
         $objects = $this->dao->select('id, name, path, type, project, grade, parent')->from(TABLE_PROJECT)
             ->where('vision')->eq($this->config->vision)
@@ -285,24 +300,8 @@ class groupModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
-        $productList = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
-            ->where('vision')->eq($this->config->vision)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('shadow')->eq(0)
-            ->fetchAll('id');
-
-        /* Get the list of program sets under administrator permission. */
-        if(!$this->app->user->admin)
-        {
-            $this->app->user->admin = true;
-            $changeAdmin            = true;
-        }
-        $programs = $this->loadModel('program')->getParentPairs('', '', false);
-        if(!empty($changeAdmin)) $this->app->user->admin = false;
-
         $projects   = array();
         $executions = array();
-        $products   = array();
         foreach($objects as $object)
         {
             $type  = $object->type;
@@ -327,13 +326,55 @@ class groupModel extends model
             }
         }
 
+        $programs = $this->getProgramsForAdminGroup();
+        $products = $this->getProductsForAdminGroup($programs);
+        return array($programs, $projects, $products, $executions);
+    }
+
+    /**
+     * 为项目管理员分组展示项目集。
+     * Get programs for admin group.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getProgramsForAdminGroup()
+    {
+        $isAdmin = $this->app->user->admin;
+
+        /* Get the list of program sets under administrator permission. */
+        if(!$this->app->user->admin) $this->app->user->admin = true;
+        $programs = $this->loadModel('program')->getParentPairs('', '', false);
+        if(!$isAdmin) $this->app->user->admin = false;
+
+        return $programs;
+    }
+
+    /**
+     * 为项目管理员分组展示产品列表。
+     * Get products for admin group.
+     *
+     * @param  array  $programs
+     * @access protected
+     * @return array
+     */
+    protected function getProductsForAdminGroup($programs)
+    {
+        $products = array();
+
+        $productList = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
+            ->where('vision')->eq($this->config->vision)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
+            ->fetchAll('id');
+
         foreach($productList as $id => $product)
         {
             if(isset($programs[$product->program]) and $this->config->systemMode == 'ALM') $product->name = $programs[$product->program] . '/' . $product->name;
             $products[$product->id] = $product->name;
         }
 
-        return array($programs, $projects, $products, $executions);
+        return $products;
     }
 
     /**
@@ -384,7 +425,7 @@ class groupModel extends model
         foreach($idList as $id)
         {
             $objects[$id] = $this->dao->select('DISTINCT account')->from(TABLE_PROJECTADMIN)
-                ->where("CONCAT(',', $field, ',')")->like("%$id%")
+                ->where("CONCAT(',', $field, ',')")->like("%,$id,%")
                 ->orWhere($field)->eq('all')
                 ->fetchPairs();
         }
@@ -404,88 +445,6 @@ class groupModel extends model
         $this->dao->delete()->from(TABLE_GROUP)->where('id')->eq($groupID)->exec();
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
-    }
-
-    /**
-     * Update privilege of a group.
-     *
-     * @param  int    $groupID
-     * @param  string $nav
-     * @param  string $version
-     * @access public
-     * @return bool
-     */
-    public function updatePrivByGroup(int $groupID, string $nav, string $version)
-    {
-        /* Delete old. */
-        $privs = array_keys($this->getPrivListByNav($nav, $version));
-
-        $this->dao->delete()->from(TABLE_GROUPPRIV)
-            ->where('`group`')->eq($groupID)
-            ->beginIF(!empty($nav))->andWhere("CONCAT(module, '-', method)")->in($privs)->fi()
-            ->exec();
-
-        $data         = new stdclass();
-        $data->group  = $groupID;
-        $data->module = 'index';
-        $data->method = 'index';
-        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-
-        $hasDepend = false;
-
-        /* Insert new. */
-        if($this->post->actions)
-        {
-            $dependPrivs = array();
-            foreach($this->config->group->package as $packageCode => $packageData)
-            {
-                if(!isset($packageData->privs)) continue;
-                foreach($packageData->privs as $privCode => $priv)
-                {
-                    if(isset($priv['depend'])) $dependPrivs[$privCode] = $priv['depend'];
-                }
-            }
-
-            $insertPrivs = array();
-            foreach($this->post->actions as $moduleName => $moduleActions)
-            {
-                if(empty($moduleName) or empty($moduleActions)) continue;
-
-                foreach($moduleActions as $actionName)
-                {
-                    $data = new stdclass();
-                    $data->group  = $groupID;
-                    $data->module = $moduleName;
-                    $data->method = $actionName;
-
-                    $insertPrivs["{$moduleName}-{$actionName}"] = $data;
-                }
-            }
-
-            foreach($insertPrivs as $key => $priv)
-            {
-                if(!isset($dependPrivs[$key])) continue;
-                foreach($dependPrivs[$key] as $depend)
-                {
-                    if(isset($insertPrivs[$depend])) continue;
-
-                    list($moduleName, $methodName) = explode('-', $depend);
-
-                    $data = new stdclass();
-                    $data->group  = $groupID;
-                    $data->module = $moduleName;
-                    $data->method = $methodName;
-
-                    $insertPrivs[$depend] = $data;
-
-                    $hasDepend = true;
-                }
-            }
-
-            $this->insertPrivs($insertPrivs);
-        }
-
-        return $hasDepend;
     }
 
     /**
@@ -571,6 +530,88 @@ class groupModel extends model
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
         return dao::isError() ? false : true;
+    }
+
+    /**
+     * Update privilege of a group.
+     *
+     * @param  int    $groupID
+     * @param  string $nav
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function updatePrivByGroup(int $groupID, string $nav, string $version = '')
+    {
+        /* Delete old. */
+        $privs = array_keys($this->getPrivListByNav($nav, $version));
+
+        $this->dao->delete()->from(TABLE_GROUPPRIV)
+            ->where('`group`')->eq($groupID)
+            ->beginIF(!empty($nav))->andWhere("CONCAT(module, '-', method)")->in($privs)->fi()
+            ->exec();
+
+        $data         = new stdclass();
+        $data->group  = $groupID;
+        $data->module = 'index';
+        $data->method = 'index';
+        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+        $hasDepend = false;
+
+        /* Insert new. */
+        if($this->post->actions)
+        {
+            $dependPrivs = array();
+            foreach($this->config->group->package as $packageCode => $packageData)
+            {
+                if(!isset($packageData->privs)) continue;
+                foreach($packageData->privs as $privCode => $priv)
+                {
+                    if(isset($priv['depend'])) $dependPrivs[$privCode] = $priv['depend'];
+                }
+            }
+
+            $insertPrivs = array();
+            foreach($this->post->actions as $moduleName => $moduleActions)
+            {
+                if(empty($moduleName) or empty($moduleActions)) continue;
+
+                foreach($moduleActions as $actionName)
+                {
+                    $data = new stdclass();
+                    $data->group  = $groupID;
+                    $data->module = $moduleName;
+                    $data->method = $actionName;
+
+                    $insertPrivs["{$moduleName}-{$actionName}"] = $data;
+                }
+            }
+
+            foreach($insertPrivs as $key => $priv)
+            {
+                if(!isset($dependPrivs[$key])) continue;
+                foreach($dependPrivs[$key] as $depend)
+                {
+                    if(isset($insertPrivs[$depend])) continue;
+
+                    list($moduleName, $methodName) = explode('-', $depend);
+
+                    $data = new stdclass();
+                    $data->group  = $groupID;
+                    $data->module = $moduleName;
+                    $data->method = $methodName;
+
+                    $insertPrivs[$depend] = $data;
+
+                    $hasDepend = true;
+                }
+            }
+
+            $this->insertPrivs($insertPrivs);
+        }
+
+        return $hasDepend;
     }
 
     /**

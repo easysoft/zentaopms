@@ -1,0 +1,23 @@
+title: table zt_project
+desc: "项目"
+author: automated export
+version: "1.0"
+fields:
+  - field: name
+    range: "项目集1,项目1,迭代1,阶段1,看板1,项目2"
+  - field: type
+    range: "program,project,sprint,stage,kanban,project"
+  - field: parent
+    range: "0,1,2{3},1"
+  - field: status
+    range: "wait{3},suspended,closed,doing"
+  - field: openedBy
+    range: "admin,user1"
+  - field: begin
+    range: "20220112 000000:0"
+    type: "timestamp"
+    format: "YY/MM/DD"
+  - field: end
+    range: "20220112 000000:0"
+    type: "timestamp"
+    format: "YY/MM/DD"

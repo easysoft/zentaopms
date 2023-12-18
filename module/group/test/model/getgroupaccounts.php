@@ -1,26 +1,32 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
-su('admin');
 
 /**
 
 title=测试 groupModel->getGroupAccounts();
+timeout=0
 cid=1
-pid=1
 
-测试获取 group 的 account td79 >> td79
-测试获取 group 的 account pm1 >> pm1
-测试获取 group 的 account po75 >> po75
-测试获取 group 的 account top88 >> top88
+- Group1,2 包含 account user1属性user1 @user1
+- Group1,2 包含 account user3属性user2 @user2
+- Group1,2 包含 account user6属性user6 @user6
+- Group1,2 不包含 account user3属性user3 @` `
 
 */
 
-$group = new groupTest();
-$groupIdList = array(1,9,2,12);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/group.class.php';
 
-r($group->getGroupAccountsTest($groupIdList)) && p('td79')  && e('td79');  //测试获取 group 的 account td79
-r($group->getGroupAccountsTest($groupIdList)) && p('pm1')   && e('pm1');   //测试获取 group 的 account pm1
-r($group->getGroupAccountsTest($groupIdList)) && p('po75')  && e('po75');  //测试获取 group 的 account po75
-r($group->getGroupAccountsTest($groupIdList)) && p('top88') && e('top88'); //测试获取 group 的 account top88
+su('admin');
+
+zdTable('user')->gen(100);
+zdTable('group')->gen(5);
+zdTable('usergroup')->config('usergroup')->gen(10);
+
+$group = new groupTest();
+$groupIdList = array(1,2);
+
+r($group->getGroupAccountsTest($groupIdList)) && p('user1')  && e('user1');  // Group1,2 包含 account user1
+r($group->getGroupAccountsTest($groupIdList)) && p('user2')  && e('user2');  // Group1,2 包含 account user3
+r($group->getGroupAccountsTest($groupIdList)) && p('user6')  && e('user6');  // Group1,2 包含 account user6
+r($group->getGroupAccountsTest($groupIdList)) && p('user3')  && e('` `');    // Group1,2 不包含 account user3

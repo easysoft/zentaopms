@@ -1,28 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
-su('admin');
 
 /**
 
 title=测试 groupModel->getByID();
+timeout=0
 cid=1
-pid=1
 
-测试获取ID为 1 的权限分组信息 >> 管理员,admin,系统管理员
-测试获取ID为 2 的权限分组信息 >> 研发,dev,研发人员
-测试获取ID为 3 的权限分组信息 >> 测试,qa,测试人员
-测试获取ID为 4 的权限分组信息 >> 项目经理,pm,项目经理
-测试获取ID为 5 的权限分组信息 >> 产品经理,po,产品经理
+- 获取存在的权限分组
+ - 属性name @这是一个新的用户分组1
+ - 属性role @0
+ - 属性desc @这个一个用户分组描述1
+- 获取不存在的权限分组
+ - 属性name @0
+ - 属性role @0
+ - 属性desc @0
 
 */
-$groupIDList = array(1, 2, 3, 4, 5);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/group.class.php';
+
+su('admin');
+
+zdTable('group')->config('group')->gen(10);
 
 $group = new groupTest();
 
-r($group->getByIDTest($groupIDList[0])) && p('name,role,desc') && e('管理员,admin,系统管理员'); //测试获取ID为 1 的权限分组信息
-r($group->getByIDTest($groupIDList[1])) && p('name,role,desc') && e('研发,dev,研发人员');       //测试获取ID为 2 的权限分组信息
-r($group->getByIDTest($groupIDList[2])) && p('name,role,desc') && e('测试,qa,测试人员');        //测试获取ID为 3 的权限分组信息
-r($group->getByIDTest($groupIDList[3])) && p('name,role,desc') && e('项目经理,pm,项目经理');    //测试获取ID为 4 的权限分组信息
-r($group->getByIDTest($groupIDList[4])) && p('name,role,desc') && e('产品经理,po,产品经理');    //测试获取ID为 5 的权限分组信息
+r($group->getByIDTest(1))  && p('name,role,desc') && e('这是一个新的用户分组1,0,这个一个用户分组描述1'); // 获取存在的权限分组
+r($group->getByIDTest(0))  && p('name,role,desc') && e('0,0,0');                                         // 获取不存在的权限分组

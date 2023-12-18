@@ -1,0 +1,18 @@
+title: table zt_group
+desc: "用户组"
+author: automated export
+version: "1.0"
+fields:
+  - field: project
+    note: "所属项目"
+    range: "0{5},1-10"
+  - field: developer
+    note: ""
+    range: "0,1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: vision
+    note: "vision"
+    range: "rnd{3},lite{1}"
