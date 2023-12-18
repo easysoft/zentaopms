@@ -61,6 +61,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 复制看板区域。
      * Copy kanban regions.
      *
      * @param  object $kanban
@@ -70,7 +71,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function copyRegions($kanban, $copyKanbanID, $from = 'kanban', $param = 'withArchived')
+    public function copyRegions(object $kanban, int $copyKanbanID, string $from = 'kanban', string $param = 'withArchived')
     {
         if(empty($kanban) or empty($copyKanbanID)) return;
 
