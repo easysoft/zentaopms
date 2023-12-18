@@ -12,18 +12,17 @@
 class stage extends control
 {
     /**
+     * 阶段列表页。
      * Browse stages.
      *
      * @param  string $orderBy
-     * @param  string $type
+     * @param  string $type    waterfall|waterfallplus
      * @access public
      * @return void
      */
     public function browse(string $orderBy = "id_asc", string $type = 'waterfall')
     {
-        if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy=$orderBy&type=waterfallplus"));
-
-        $this->stage->setMenu($type);
+        if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy={$orderBy}&type=waterfallplus"));
 
         $this->view->title   = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
