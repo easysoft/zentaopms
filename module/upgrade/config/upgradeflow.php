@@ -40,7 +40,7 @@ $config->upgrade->execFlow['10_0']        = array('functions' => 'fixStorySpecTi
 $config->upgrade->execFlow['10_1']        = array('xxsqls' => "$appRoot/db/xuanxuan.sql");
 $config->upgrade->execFlow['10_3_1']      = array('functions' => 'removeCustomMenu');
 $config->upgrade->execFlow['10_4']        = array('functions' => 'changeTaskParentValue');
-$config->upgrade->execFlow['10_4']        = array('functions' => 'initXuanxuan', 'xxsqls' => "$appRoot/db/upgradexuanxuan2.1.0.sql,$appRoot/db/upgradexuanxuan2.2.0.sql");
+$config->upgrade->execFlow['10_6']        = array('functions' => 'initXuanxuan', 'xxsqls' => "$appRoot/db/upgradexuanxuan2.1.0.sql,$appRoot/db/upgradexuanxuan2.2.0.sql");
 $config->upgrade->execFlow['11_1']        = array('functions' => 'syncXXHttpsConfig', 'xxsqls' => "$appRoot/db/upgradexuanxuan2.3.0.sql");
 $config->upgrade->execFlow['11_2']        = array('functions' => 'processDocLibAcl');
 $config->upgrade->execFlow['11_3']        = array('functions' => 'addPriv11_4');
