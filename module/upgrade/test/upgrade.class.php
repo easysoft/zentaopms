@@ -2,6 +2,8 @@
 declare(strict_types=1);
 class upgradeTest
 {
+    private $objectModel;
+
     public function __construct()
     {
          global $tester;
