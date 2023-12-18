@@ -1007,6 +1007,7 @@ class executionModel extends model
         $begin = $postData->begin;
         $end   = $postData->end;
         if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin); /* The begin date should larger than end. */
+        if(dao::isError()) return false;
 
         /* Check the begin and end date if the execution has a parent, such as a child Stage, Sprint or Kanban. */
         if($oldExecution->parent != 0)
