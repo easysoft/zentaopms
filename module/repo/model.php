@@ -1831,7 +1831,7 @@ class repoModel extends model
             if($getCodePath)
             {
                 $project = $this->loadModel('gitlab')->apiGetSingleProject((int)$repo->serviceHost, (int)$repo->serviceProject);
-                if(isset($project->web_url) && !$repo->path)
+                if(isset($project->web_url) && $repo->path != $project->web_url)
                 {
                     $repo->path = $project->web_url;
                     $this->dao->update(TABLE_REPO)->set('path')->eq($repo->path)->where('id')->eq($repo->id)->exec();
