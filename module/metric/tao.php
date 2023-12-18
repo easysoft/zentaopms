@@ -44,27 +44,6 @@ class metricTao extends metricModel
     }
 
     /**
-     * 根据范围获取度量项。
-     * Fetch metric by scope.
-     *
-     * @param  string $scope
-     * @param  int    $limit
-     * @access protected
-     * @return array
-     */
-    protected function fetchMetricsByScope($scope, $limit = -1)
-    {
-        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
-            ->where('deleted')->eq('0')
-            ->andWhere('scope')->eq($scope)
-            ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->fetchAll();
-
-        return $metrics;
-    }
-
-    /**
      * 根据编号获取度项。
      * Fetch metric by id.
      *
