@@ -2108,15 +2108,11 @@ class metricModel extends model
      * Get default selected date.
      *
      * @param  array $dateLabels
-     * @param  array $filters
      * @access public
      * @return string
      */
-    public function getDefaultDate(array $dateLabels, array $filters = array()): string
+    public function getDefaultDate(array $dateLabels): string
     {
-        $defaultDate = '';
-
-        $dates = array_keys($dateLabels);
-        return (string)current($dates);
+        return (string)current(array_keys($dateLabels));
     }
 }
