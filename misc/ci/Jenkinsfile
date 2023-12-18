@@ -97,7 +97,7 @@ pipeline {
                 [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
                 [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}"] ],
-                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
+                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/release-18.10/src"] ]
               ])
 
               zentaopms.setupEnvAfterCheckoutExt()
