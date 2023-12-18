@@ -994,13 +994,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 分组获取看板组。
      * Get kanban group by regions.
      *
      * @param  array $regions
      * @access public
      * @return array
      */
-    public function getGroupGroupByRegions($regions)
+    public function getGroupGroupByRegions(array $regions): array
     {
         return $this->dao->select('*')->from(TABLE_KANBANGROUP)
             ->where('region')->in($regions)
