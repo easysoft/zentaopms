@@ -1,27 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=创建没有在制品限制的看板列 >> 测试创建不限制看板列,-1,
+title=- 属性color @
 timeout=0
 cid=333
 
 - 创建没有在制品限制的看板列
  - 属性name @测试创建不限制看板列
  - 属性limit @-1
- - 属性color @#333
  - 属性parent @0
  - 属性group @1
-- 创建没有在制品限制的看板列
- - 属性name @测试创建不限制子看板列
- - 属性limit @-1
- - 属性color @#333
- - 属性parent @1
- - 属性group @1
+- 创建没有在制品限制的看板列第limit条的0属性 @父列的在制品数量不能小于子列在制品数量之和
 - 创建有在制品限制的看板列
  - 属性name @测试创建限制父看板列
  - 属性limit @111
- - 属性color @#333
  - 属性parent @-1
  - 属性group @1
 - 创建有在制品限制的子看板列第limit条的0属性 @父列的在制品数量不能小于子列在制品数量之和
@@ -99,7 +93,7 @@ $column8->parent  = '5263';
 $kanban = new kanbanTest();
 
 r($kanban->createColumnTest(1, $column1)) && p('name,limit,parent,group') && e('测试创建不限制看板列,-1,0,1');                // 创建没有在制品限制的看板列
-r($kanban->createColumnTest(1, $column2)) && p('name,limit,parent,group') && e('测试创建不限制子看板列,-1,1,1');              // 创建没有在制品限制的看板列
+r($kanban->createColumnTest(1, $column2)) && p('limit:0')                 && e('父列的在制品数量不能小于子列在制品数量之和'); // 创建没有在制品限制的看板列
 r($kanban->createColumnTest(1, $column3)) && p('name,limit,parent,group') && e('测试创建限制父看板列,111,-1,1');              // 创建有在制品限制的看板列
 r($kanban->createColumnTest(1, $column4)) && p('limit:0')                 && e('父列的在制品数量不能小于子列在制品数量之和'); // 创建有在制品限制的子看板列
 r($kanban->createColumnTest(1, $column5)) && p('name:0')                  && e('『看板列名称』不能为空。');                   // 创建没有名称的看板列

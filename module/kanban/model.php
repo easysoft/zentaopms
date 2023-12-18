@@ -359,7 +359,7 @@ class kanbanModel extends model
         if($mode == 'new')
         {
             if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
-            if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($column->noLimit) and $column->limit <= 0)) dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+            if(!preg_match("/^-?\d+$/", (string)$column->limit) or (!isset($column->noLimit) and $column->limit <= 0)) dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             if(dao::isError()) return false;
         }
 
