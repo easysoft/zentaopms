@@ -56,7 +56,8 @@ class upgrade extends control
     }
 
     /**
-     * Backup.
+     * 提示备份数据库。
+     * Prompt to backup database.
      *
      * @access public
      * @return void
