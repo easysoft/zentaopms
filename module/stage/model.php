@@ -196,14 +196,15 @@ class stageModel extends model
     }
 
     /**
-     *  Get stage total percent
+     * 获取给定模型下的阶段总百分比。
+     * Get total percent of the type.
      *
-     *  @param  string $type
-     *  @return string
+     *  @param  string $type waterfall|waterfallplus
+     *  @return int
      */
-    public function getTotalPercent($type)
+    public function getTotalPercent(string $type): int
     {
-        return $this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
+        return (int)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
     }
 
     /**
