@@ -2082,13 +2082,13 @@ class bugZen extends bug
      *
      * @param  int       $bugID
      * @param  array     $changes
-     * @param  string    $kanbanGroup
      * @param  int       $regionID
      * @param  string    $message
+     * @param  bool      $isInKanban true|false
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterOperate(int $bugID, array $changes = array(), string $message = ''): bool|int
+    protected function responseAfterOperate(int $bugID, array $changes = array(), string $message = '', bool $isInKanban = false): bool|int
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
@@ -2111,7 +2111,7 @@ class bugZen extends bug
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isInModal()) return $this->responseInModal($message);
+        if(isInModal()) return $this->responseInModal($message, $isInKanban);
 
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
@@ -2121,15 +2121,16 @@ class bugZen extends bug
      * Respond after operating in modal.
      *
      * @param  string    $message
+     * @param  bool      $isInKanban true|false
      * @access protected
      * @return void
      */
-    protected function responseInModal(string $message = '')
+    protected function responseInModal(string $message = '', bool $isInKanban = false)
     {
         /* 在执行应用下，编辑看板中的 bug 数据时，更新看板数据。*/
         /* Update kanban data after updating bug in kanban. */
         if(!$message) $message = $this->lang->saveSuccess;
-        if($this->app->tab == 'execution') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
+        if($this->app->tab == 'execution' && $isInKanban) return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
     }

@@ -353,10 +353,11 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $kanbanParams fromColID=,toColID=,fromLaneID=,toLaneID=,regionID=
+     * @param  string $from         taskkanban
      * @access public
      * @return void
      */
-    public function confirm(int $bugID, string $kanbanParams = '')
+    public function confirm(int $bugID, string $kanbanParams = '', string $from = '')
     {
         $oldBug = $this->bug->getByID($bugID);
 
@@ -382,7 +383,7 @@ class bug extends control
             /* Return response after confirming bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message = $this->executeHooks($bugID);
-            return $this->bugZen->responseAfterOperate($bugID, array(), $message);
+            return $this->bugZen->responseAfterOperate($bugID, array(), $message, (!empty($kanbanParams) || $from));
         }
 
         $this->qa->setMenu($oldBug->product, $oldBug->branch);
