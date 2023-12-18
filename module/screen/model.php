@@ -181,7 +181,7 @@ class screenModel extends model
             }
             else if($component)
             {
-                $this->getLatestChart($component);
+                $component = $this->getLatestChart($component);
             }
             else
             {
@@ -210,7 +210,7 @@ class screenModel extends model
         $table = $this->config->objectTables[$type];
         $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
-        if($type == 'metric') return $this->genMetricComponent($chart, $component);
+        if($type == 'metric') return $this->genMetricComponent($chart);
         return $this->genComponentData($chart, $type, $component);
     }
 
@@ -325,9 +325,14 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genMetricComponent($metric, $component = null)
+    public function genMetricComponent($metric)
     {
-        $this->initMetricComponent($metric, $component);
+        $component = new stdclass();
+        $component->id          = $metric->id;
+        $component->sourceID    = $metric->id;
+        $component->title       = $metric->name;
+        $component->type        = 'metric';
+        $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
@@ -335,10 +340,6 @@ class screenModel extends model
         $component->chartConfig->tableOption = $this->getMetricTableOption($metric);
         $component->chartConfig->card        = $this->getMetricCardOption($metric);
         $component->chartConfig->filters     = $this->buildMetricFilters($metric);
-
-        $component->option->chartOption = $component->chartConfig->chartOption;
-        $component->option->tableOption = $component->chartConfig->tableOption;
-        $component->option->card        = $component->chartConfig->card;
 
         return $component;
     }
@@ -1927,41 +1928,18 @@ class screenModel extends model
      */
     public function initComponent($chart, $type, $component = null)
     {
-        if($type == 'metric') return $this->initMetricComponent($chart, $component);
-        if($type == 'chart' || $type == 'pivot') return $this->initChartAndPivotComponent($chart, $type, $component);
-
-        return array($component, false);
-    }
-
-    public function initMetricComponent($metric, $component = null)
-    {
-        if(!$component)                     $component = new stdclass();
-        if(!isset($component->id))          $component->id          = $metric->id;
-        if(!isset($component->sourceID))    $component->sourceID    = $metric->id;
-        if(!isset($component->title))       $component->title       = $metric->name;
-        if(!isset($component->type))        $component->type        = 'metric';
-        if(!isset($component->chartConfig)) $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
-        if(!isset($component->option))      $component->option      = json_decode($this->config->screen->chartOption['metric']);
-
-        return array($component, false);
-    }
-
-    public function initChartAndPivotComponent($chart, $type, $component = null)
-    {
         if(!$component) $component = new stdclass();
         if(!$chart) return $component;
 
-        $chartID   = $chart->id;
-        $chartName = $chart->name;
-        $settings  = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
-        $builtin   = $chart->builtin;
-        $isBuiltin = ($builtin and !in_array($chartID, $this->config->screen->builtinChart));
+        $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
 
-        if(!isset($component->id))       $component->id       = $chartID;
-        if(!isset($component->sourceID)) $component->sourceID = $chartID;
-        if(!isset($component->title))    $component->title    = $chartName;
+        if(!isset($component->id))       $component->id       = $chart->id;
+        if(!isset($component->sourceID)) $component->sourceID = $chart->id;
+        if(!isset($component->title))    $component->title    = $chart->name;
 
-        $chartType = $type == 'pivot' ? 'table' : ($isBuiltin ? $chart->type : $settings[0]->type);
+        if($type == 'chart')  $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'pivot')  $chartType = 'table';
+        if($type == 'metric') $chartType = 'metric';
         $component->type = $chartType;
 
         $typeChanged = false;
