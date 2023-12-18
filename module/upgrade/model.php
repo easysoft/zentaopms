@@ -358,6 +358,7 @@ class upgradeModel extends model
                 $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
                 $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
                 list($field) = explode(' ', $line);
+                if(isset($fields[$field]) and strpos($fields[$field], ' NULL') === false and strpos($line, ' DEFAULT NULL') !== false) $line = str_replace(' DEFAULT NULL', '', $line); // e.g. standard sql like [ `content` text DEFAULT NULL ] , but current db sql like [ `content` text ].
 
                 $execSQL = '';
                 if(!isset($fields[$field]))
