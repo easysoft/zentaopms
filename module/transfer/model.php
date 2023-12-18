@@ -353,44 +353,6 @@ class transferModel extends model
     }
 
     /**
-     * Get showImport datas.
-     *
-     * @param  string $module
-     * @param  string $filter
-     * @access public
-     * @return array
-     */
-    public function format($module = '', $filter = '')
-    {
-        /* Bulid import paris (field => name). */
-        $fields  = $this->getImportFields($module);
-
-        /* Check tmpfile. */
-        $tmpFile = $this->transferZen->checkTmpFile();
-
-        /* If tmpfile not isset create tmpfile. */
-        if(!$tmpFile)
-        {
-            $rows       = $this->transferZen->getRowsFromExcel();
-            $moduleData = $this->processRows4Fields($rows, $fields);
-            $moduleData = $this->getNatureDatas($module, $moduleData, $filter, $fields);
-
-            $this->transferZen->createTmpFile($moduleData);
-        }
-        else
-        {
-            $moduleData = unserialize(file_get_contents($file));
-        }
-
-        $this->mergeConfig($module);
-        $moduleData = $this->processDate($moduleData);
-        if(isset($fields['id'])) unset($fields['id']);
-        $this->session->set($module . 'TemplateFields',  implode(',', array_keys($fields)));
-
-        return $moduleData;
-    }
-
-    /**
      * 将被操作模块与Transfer模块的配置合并。
      * Merge config.
      *
@@ -411,26 +373,6 @@ class transferModel extends model
         $this->moduleConfig->sysLangFields  = isset($moduleConfig->sysLangFields)  ? $moduleConfig->sysLangFields  : $transferConfig->sysLangFields;
         $this->moduleConfig->sysDataFields  = isset($moduleConfig->sysDataFields)  ? $moduleConfig->sysDataFields  : $transferConfig->sysDataFields;
         $this->moduleConfig->datetimeFields = isset($moduleConfig->datetimeFields) ? $moduleConfig->datetimeFields : $transferConfig->datetimeFields;
-    }
-
-    /**
-     * Process datas, convert date to YYYY-mm-dd, convert datetime to YYYY-mm-dd HH:ii:ss.
-     *
-     * @param  array   $datas
-     * @access public
-     * @return array
-     */
-    public function processDate($datas)
-    {
-        foreach($datas as $index => $data)
-        {
-            foreach($data as $field => $value)
-            {
-                if(strpos($this->moduleConfig->dateFields, $field) !== false or strpos($this->moduleConfig->datetimeFields, $field) !== false) $data->$field = $this->loadModel('common')->formatDate($value);
-            }
-            $datas[$index] = $data;
-        }
-        return $datas;
     }
 
     /**
@@ -789,6 +731,7 @@ class transferModel extends model
             {
                 if(empty($cellValue)) continue;
                 if(strpos($this->transferConfig->dateFields, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
+                if(strpos($this->moduleConfig->dateFields, $field) !== false or strpos($this->moduleConfig->datetimeFields, $field) !== false) $datas[$key]->$field = $this->loadModel('common')->formatDate($cellValue);
                 if(is_array($cellValue)) continue;
 
                 if(!empty($fieldList[$field]['from']) and in_array($fieldList[$field]['control'], array('select', 'multiple')))

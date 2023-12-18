@@ -240,7 +240,7 @@ class transferZen extends transfer
 
         /* 格式化数据。*/
         /* Formatting excel data. */
-        $formatDatas = $this->transfer->format($module, $filter);
+        $formatDatas = $this->format($module, $filter);
 
         /* 获取分页后的数据。*/
         /* Get page by datas. */
@@ -431,5 +431,44 @@ class transferZen extends transfer
         }
 
         return $html;
+    }
+
+    /**
+     * 格式化导入导出标准数据格式。
+     * Format standard data format.
+     *
+     * @param  string $module
+     * @param  string $filter
+     * @access public
+     * @return array
+     */
+    public function format(string $module = '', string $filter = '')
+    {
+        /* Bulid import paris (field => name). */
+        $fields  = $this->transferZen->getImportFields($module);
+
+        /* 检查临时文件是否存在并返回完成路径。 */
+        /* Check tmpfile. */
+        $tmpFile = $this->transferZen->checkTmpFile();
+
+        /* 如果临时文件存在,则读取临时文件i，否则就创建临时文件。 */
+        /* If tmp file exists, read tmp file, otherwise create tmp file. */
+        if(!$tmpFile)
+        {
+            $rows       = $this->transferZen->getRowsFromExcel();  // 从Excel中获取数据
+            $moduleData = $this->transferTao->processRows4Fields($rows, $fields);  // 将读取到的数据格式化成关联数组
+            $moduleData = $this->transferTao->getNatureDatas($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
+
+            $this->transferZen->createTmpFile($moduleData); //将格式化后的数据写入临时文件中
+        }
+        else
+        {
+            $moduleData = unserialize(file_get_contents($file));
+        }
+
+        if(isset($fields['id'])) unset($fields['id']);
+        $this->session->set($module . 'TemplateFields',  implode(',', array_keys($fields))); // 将模板字段到SESSION中
+
+        return $moduleData;
     }
 }

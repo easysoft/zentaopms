@@ -11,7 +11,7 @@ su('admin');
 
 /**
 
-title=测试 transfer->initControl();
+title=测试 transfer->initSysDataFields();
 timeout=0
 cid=1
 
