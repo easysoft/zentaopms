@@ -223,26 +223,6 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        $chart = clone($chart);
-        if($type == 'pivot' and $chart)
-        {
-            $chart = $this->loadModel('pivot')->processPivot($chart);
-            $chart->settings = json_encode($chart->settings);
-        }
-
-        if(empty($filters) and !empty($chart->filters))
-        {
-            if($type == 'pivot')
-            {
-                list($sql, $filters) = $this->loadModel($type)->getFilterFormat($chart->sql, json_decode($chart->filters, true));
-                $chart->sql = $sql;
-            }
-            else
-            {
-                $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
-            }
-        }
-
         list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
@@ -275,6 +255,26 @@ class screenModel extends model
                 $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
             }
             return $component;
+        }
+
+        $chart = clone($chart);
+        if($type == 'pivot' and $chart)
+        {
+            $chart = $this->loadModel('pivot')->processPivot($chart);
+            $chart->settings = json_encode($chart->settings);
+        }
+
+        if(empty($filters) and !empty($chart->filters))
+        {
+            if($type == 'pivot')
+            {
+                list($sql, $filters) = $this->loadModel($type)->getFilterFormat($chart->sql, json_decode($chart->filters, true));
+                $chart->sql = $sql;
+            }
+            else
+            {
+                $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
+            }
         }
 
         $component = $this->getChartOption($chart, $component, $filters);
@@ -1723,7 +1723,7 @@ class screenModel extends model
     public function initComponent($chart, $type, $component = null)
     {
         if(!$component) $component = new stdclass();
-        if(!$chart) return $component;
+        if(!$chart) return array($component, false);
 
         $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
 
