@@ -189,6 +189,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 执行单个升级方法。
      * Execute single upgrade method.
      *
      * @param  string $method
@@ -196,7 +197,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function executeUpgradeMethod($method, $params)
+    public function executeUpgradeMethod(string $method, array $params): void
     {
         $this->saveLogs("Run Method {$method}");
 
