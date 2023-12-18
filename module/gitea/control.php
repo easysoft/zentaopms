@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of gitea module of ZenTaoPMS.
  *
@@ -6,7 +7,6 @@
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
- * @version     $Id: ${FILE_NAME} 5144 2020/1/8 8:10 下午 chenqi@cnezsoft.com $
  * @link        https://www.zentao.net
  */
 class gitea extends control
@@ -28,6 +28,7 @@ class gitea extends control
     }
 
     /**
+     * Gitea服务器列表。
      * Browse gitea.
      *
      * @param  string $orderBy
@@ -37,9 +38,8 @@ class gitea extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -49,7 +49,7 @@ class gitea extends control
         foreach($giteaList as $gitea)
         {
             $gitea->isBindUser = true;
-            if(!$this->app->user->admin and !isset($myGiteas[$gitea->id])) $gitea->isBindUser = false;
+            if(!$this->app->user->admin && !isset($myGiteas[$gitea->id])) $gitea->isBindUser = false;
         }
 
         $this->view->title     = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->browse;
@@ -61,6 +61,7 @@ class gitea extends control
     }
 
     /**
+     * 增加一个gitea服务器。
      * Create a gitea.
      *
      * @access public
@@ -70,66 +71,69 @@ class gitea extends control
     {
         if($_POST)
         {
-            $gitea = form::data($this->config->gitea->form->create)->get();
-            $this->checkToken($gitea);
-            $giteaID = $this->loadModel('pipeline')->create($gitea);
+            $gitea  = form::data($this->config->gitea->form->create)->get();
+            $result = $this->checkToken($gitea);
+            if(is_array($result)) return $this->send($result);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $giteaID = $this->loadModel('pipeline')->create($gitea);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $this->loadModel('action')->create('gitea', $giteaID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
+            return $this->sendSuccess(array('locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->lblCreate;
-
         $this->display();
     }
 
     /**
+     * 查看一个gitea服务器。
      * View a gitea.
      * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function view($giteaID)
+    public function view(int $giteaID)
     {
         $gitea = $this->gitea->fetchByID($giteaID);
 
-        $this->view->title      = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->view;
-        $this->view->gitea      = $gitea;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->actions    = $this->loadModel('action')->getList('gitea', $giteaID);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $giteaID);
+        $this->view->title   = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->view;
+        $this->view->gitea   = $gitea;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->actions = $this->loadModel('action')->getList('gitea', $giteaID);
         $this->display();
     }
 
     /**
+     * 编辑一个gitea服务器。
      * Edit a gitea.
      *
      * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function edit($giteaID)
+    public function edit(int $giteaID)
     {
         $oldGitea = $this->gitea->fetchByID($giteaID);
 
         if($_POST)
         {
-            $gitea = form::data($this->config->gitea->form->edit)->get();
-            $this->checkToken($gitea);
+            $gitea  = form::data($this->config->gitea->form->edit)->get();
+            $result = $this->checkToken($gitea);
+            if(is_array($result)) return $this->send($result);
+
             $this->loadModel('pipeline')->update($giteaID, $gitea);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $gitea    = $this->gitea->fetchByID($giteaID);
             $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'edited');
             $changes  = common::createChanges($oldGitea, $gitea);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->edit;
         $this->view->gitea = $oldGitea;
-
         $this->display();
     }
 
@@ -141,7 +145,7 @@ class gitea extends control
      * @access public
      * @return void
      */
-    public function delete($giteaID)
+    public function delete(int $giteaID)
     {
         $oldGitea = $this->loadModel('pipeline')->fetchByID($giteaID);
         $actionID = $this->pipeline->deleteByObject($giteaID, 'gitea');
@@ -164,25 +168,7 @@ class gitea extends control
     }
 
     /**
-     * Check post token has admin permissions.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function checkToken(object $gitea)
-    {
-        $this->dao->update('gitea')->data($gitea)->batchCheck($this->config->gitea->create->requiredFields, 'notempty');
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $result = $this->gitea->checkTokenAccess($gitea->url, $gitea->token);
-
-        if($result === false) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitea->hostError))));
-        if(!$result) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitea->tokenLimit))));
-
-        return true;
-    }
-
-    /**
+     * 绑定gitea用户到禅道用户。
      * Bind gitea user to zentao users.
      *
      * @param  int    $giteaID
@@ -190,22 +176,20 @@ class gitea extends control
      * @access public
      * @return void
      */
-    public function bindUser($giteaID, $type = 'all')
+    public function bindUser(int $giteaID, string $type = 'all')
     {
-        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
-        $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
-
         if($_POST)
         {
-            $this->gitea->bindUser($giteaID);
+            $this->gitea->bindUser($giteaID, $this->post->zentaoUsers, $this->post->giteaUserNames);
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
+            return $this->sendSuccess(array('load' => helper::createLink('space', 'browse')));
         }
 
         $userList      = array();
         $giteaUsers    = $this->gitea->apiGetUsers($giteaID);
+        $matchedResult = $this->giteaZen->getMatchedUsers($giteaID, $giteaUsers);
         $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($giteaID, 'gitea');
-        $matchedResult = $this->gitea->getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers);
+        $zentaoUsers   = $this->loadModel('user')->getRealNameAndEmails(helper::arrayColumn($matchedResult, 'zentaoAccount'));
 
         foreach($giteaUsers as $giteaUser)
         {
@@ -222,11 +206,7 @@ class gitea extends control
             {
                 if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
 
-                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $giteaUser->id)
-                {
-                    $user->status = 'binded';
-                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
-                }
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $giteaUser->id) $user->status = 'binded';
             }
 
             if($type != 'all' && $user->status != $type) continue;
@@ -238,29 +218,28 @@ class gitea extends control
         $this->view->giteaID     = $giteaID;
         $this->view->recTotal    = count($userList);
         $this->view->userList    = $userList;
-        $this->view->userPairs   = $userPairs;
-
+        $this->view->userPairs   = $this->user->getPairs('noclosed|noletter');
         $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 
     /**
-     * Ajax getProjectBranches
+     * 获取分支列表。
+     * Ajax get branches.
      *
      * @param  int    $giteaID
      * @param  string $project
      * @access public
      * @return void
      */
-    public function ajaxGetProjectBranches($giteaID, $project)
+    public function ajaxGetProjectBranches(int $giteaID, string $project)
     {
-        if(!$giteaID or !$project) return $this->send(array('message' => array()));
+        $options = array(array('text' => '', 'value' => ''));
+        if(!$giteaID || !$project) return print(json_encode($options));
 
         $project  = urldecode(base64_decode($project));
         $branches = $this->gitea->apiGetBranches($giteaID, $project);
 
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
             $options[] = array('text' => $branch->name, 'value' => $branch->name);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of gitea module of ZenTaoPMS.
  *
@@ -6,13 +7,11 @@
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
- * @version     $Id: $
  * @link        https://www.zentao.net
  */
 
 class giteaModel extends model
 {
-
     const HOOK_PUSH_EVENT = 'Push Hook';
 
     /* Gitlab access level. */
@@ -21,6 +20,7 @@ class giteaModel extends model
     public $maintainerAccess = 40;
 
     /**
+     * 获取Gitea请求地址信息。
      * Get gitea api base url by gitea id.
      *
      * @param  int    $giteaID
@@ -28,7 +28,7 @@ class giteaModel extends model
      * @access public
      * @return string
      */
-    public function getApiRoot($giteaID, $sudo = true)
+    public function getApiRoot(int $giteaID, bool $sudo = true): string
     {
         $gitea = $this->fetchByID($giteaID);
         if(!$gitea) return '';
@@ -44,29 +44,30 @@ class giteaModel extends model
     }
 
     /**
-     * Bind users.
+     * Gitea用户和禅道用户绑定。
+     * Bind gitea user and zentao user.
      *
      * @param  int    $giteaID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function bindUser($giteaID)
+    public function bindUser(int $giteaID, array $users, array $giteaNames): bool
     {
-        $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $users       = $this->post->zentaoUsers;
-        $giteaNames  = $this->post->giteaUserNames;
         $accountList = array();
         $repeatUsers = array();
         foreach($users as $openID => $user)
         {
             if(empty($user)) continue;
-            if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
+
+            if(isset($accountList[$user])) $repeatUsers[] = $user;
             $accountList[$user] = $openID;
         }
 
+        $userList = $this->loadModel('user')->getRealNameAndEmails($repeatUsers);
+        /* Check user repeat bind. */
         if(count($repeatUsers))
         {
-            dao::$errors = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
+            dao::$errors = sprintf($this->lang->gitea->bindUserError, join(',', helper::arrayColumn($userList, 'realname')));
             return false;
         }
 
@@ -78,79 +79,76 @@ class giteaModel extends model
         foreach($users as $openID => $account)
         {
             $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
-
-            if($existAccount and $existAccount->account != $account)
+            /* If user binded user is change, delete it. */
+            if($existAccount && $existAccount->account != $account)
             {
-                $this->dao->delete()
-                    ->from(TABLE_OAUTH)
+                $this->dao->delete()->from(TABLE_OAUTH)
                     ->where('openID')->eq($openID)
                     ->andWhere('providerType')->eq($user->providerType)
                     ->andWhere('providerID')->eq($user->providerID)
                     ->exec();
-                $this->loadModel('action')->create('giteauser', $giteaID, 'unbind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$existAccount->account]->realname));
+                $this->loadModel('action')->create('giteauser', $giteaID, 'unbind', '', $giteaNames[$openID]);
             }
-            if(!$existAccount or $existAccount->account != $account)
+
+            /* Add zentao user and gitea user binded. */
+            if(!$existAccount || $existAccount->account != $account)
             {
                 if(!$account) continue;
                 $user->account = $account;
                 $user->openID  = $openID;
                 $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
-                $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$account]->realname));
+                $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', $giteaNames[$openID]);
             }
         }
+        return !dao::isError();
     }
 
     /**
+     * 解析翻译接口返回的错误信息。
      * Api error handling.
      *
      * @param  object $response
      * @access public
      * @return bool
      */
-    public function apiErrorHandling($response)
+    public function apiErrorHandling(object $response): bool
     {
         if(!empty($response->error))
         {
             dao::$errors[] = $response->error;
             return false;
         }
-        if(!empty($response->message))
+
+        if(empty($response->message))
         {
-            if(is_string($response->message))
-            {
-                $this->parseApiError($response->message);
-            }
-            else
-            {
-                foreach($response->message as $field => $fieldErrors)
-                {
-                    if(is_string($fieldErrors))
-                    {
-                        $this->parseApiError($response->message);
-                    }
-                    else
-                    {
-                        foreach($fieldErrors as $error)
-                        {
-                            $this->parseApiError($response->message);
-                        }
-                    }
-                }
-            }
+            dao::$errors[] = false;
+            return false;
         }
 
-        if(!$response) dao::$errors[] = false;
+        $errorMsg = array();
+        if(is_string($response->message)) $errorMsg[] = $response->message;
+        if(is_array($response->message))
+        {
+            foreach($response->message as $fieldErrors)
+            {
+                if(is_string($fieldErrors)) $fieldErrors = array($fieldErrors);
+                foreach($fieldErrors as $error) $errorMsg[] = $error;
+            }
+        }
+        $this->parseApiError($error);
+
         return false;
     }
 
     /**
      * 解析api返回的错误信息。
+     * Parse api error.
      *
      * @param  string $message
      * @access public
      * @return void
      */
-    public function parseApiError($message)
+    public function parseApiError(string $message)
     {
         $errorKey = array_search($message, $this->lang->gitea->apiError);
         if($errorKey === false)
@@ -165,6 +163,7 @@ class giteaModel extends model
     }
 
     /**
+     * 检测用户是否有Gitea项目的权限。
      * Check user access.
      *
      * @param  int    $giteaID
@@ -174,7 +173,7 @@ class giteaModel extends model
      * @access public
      * @return bool
      */
-    public function checkUserAccess($giteaID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    public function checkUserAccess(int $giteaID, string $projectID = '', object $project = null, array $groupIDList = array(), string $maxRole = 'maintainer'): bool
     {
         if($this->app->user->admin) return true;
 
@@ -183,106 +182,58 @@ class giteaModel extends model
 
         $accessLevel = $this->config->gitea->accessLevel[$maxRole];
 
-        if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
-        if(isset($project->permissions->group_access->access_level) and $project->permissions->group_access->access_level >= $accessLevel) return true;
-        if(!empty($project->shared_with_groups))
+        /* Check user priv and group priv. */
+        if(isset($project->permissions->project_access->access_level) && $project->permissions->project_access->access_level >= $accessLevel) return true;
+        if(isset($project->permissions->group_access->access_level) && $project->permissions->group_access->access_level >= $accessLevel)     return true;
+        if(empty($project->shared_with_groups)) return false;
+        if(empty($groupIDList))
         {
-            if(empty($groupIDList))
-            {
-                $groups = $this->apiGetGroups($giteaID, 'name_asc', $maxRole);
-                foreach($groups as $group) $groupIDList[] = $group->id;
-            }
+            $groups = $this->apiGetGroups($giteaID, 'name_asc', $maxRole);
+            foreach($groups as $group) $groupIDList[] = $group->id;
+        }
 
-            foreach($project->shared_with_groups as $group)
-            {
-                if($group->group_access_level < $accessLevel) continue;
-                if(in_array($group->group_id, $groupIDList)) return true;
-            }
+        foreach($project->shared_with_groups as $group)
+        {
+            if($group->group_access_level < $accessLevel) continue;
+            if(in_array($group->group_id, $groupIDList)) return true;
         }
 
         return false;
     }
 
     /**
+     * 检测token是否有效。
      * Check token access.
      *
      * @param  string $url
      * @param  string $token
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkTokenAccess($url = '', $token = '')
+    public function checkTokenAccess(string $url = '', string $token = ''): bool
     {
-        $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
-        $url      = sprintf($apiRoot, "/admin/users") . "&limit=1";
-        $response = commonModel::http($url);
-        $users    = json_decode($response);
+        $apiRoot = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
+        $url     = sprintf($apiRoot, "/admin/users") . "&limit=1";
+
+        $users = json_decode(commonModel::http($url));
         if(empty($users)) return false;
-        if(isset($users->message) or isset($users->error)) return null;
+        if(isset($users->message) || isset($users->error)) return false;
         return true;
     }
 
     /**
-     * Get matched gitea users.
-     *
-     * @param  int   $giteaID
-     * @param  array $giteaUsers
-     * @param  array $zentaoUsers
-     * @access public
-     * @return array
-     */
-    public function getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers)
-    {
-        $matches = new stdclass;
-        foreach($giteaUsers as $giteaUser)
-        {
-            foreach($zentaoUsers as $zentaoUser)
-            {
-                if($giteaUser->account == $zentaoUser->account)   $matches->accounts[$giteaUser->account][] = $zentaoUser->account;
-                if($giteaUser->realname == $zentaoUser->realname) $matches->names[$giteaUser->realname][]   = $zentaoUser->account;
-                if($giteaUser->email == $zentaoUser->email)       $matches->emails[$giteaUser->email][]     = $zentaoUser->account;
-            }
-        }
-
-        $bindedUsers  = $this->loadModel('pipeline')->getUserBindedPairs($giteaID, 'gitea', 'openID,account');
-        $matchedUsers = array();
-        foreach($giteaUsers as $giteaUser)
-        {
-            if(isset($bindedUsers[$giteaUser->id]))
-            {
-                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->id];
-                $matchedUsers[$giteaUser->id] = $giteaUser;
-                continue;
-            }
-
-            $matchedZentaoUsers = array();
-            if(isset($matches->accounts[$giteaUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$giteaUser->account]);
-            if(isset($matches->emails[$giteaUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$giteaUser->email]);
-            if(isset($matches->names[$giteaUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$giteaUser->realname]);
-
-            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
-            if(count($matchedZentaoUsers) == 1)
-            {
-                $giteaUser->zentaoAccount     = current($matchedZentaoUsers);
-                $matchedUsers[$giteaUser->id] = $giteaUser;
-            }
-        }
-
-        return $matchedUsers;
-    }
-
-    /**
+     * 通过API获取Gitea项目信息。
      * Get project by api.
      *
      * @param  int    $giteaID
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function apiGetSingleProject($giteaID, $projectID)
+    public function apiGetSingleProject(int $giteaID, string $projectID): object|false
     {
         $apiRoot = $this->getApiRoot($giteaID);
-        if(!$apiRoot) return array();
+        if(!$apiRoot) return false;
 
         $url     = sprintf($apiRoot, "/repos/$projectID");
         $project = json_decode(commonModel::http($url));
@@ -303,6 +254,7 @@ class giteaModel extends model
     }
 
     /**
+     * 通过API获取Gitea项目列表。
      * Get projects by api.
      *
      * @param  int    $giteaID
@@ -310,25 +262,30 @@ class giteaModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjects($giteaID, $sudo = true)
+    public function apiGetProjects(int $giteaID, bool $sudo = true): array
     {
         $apiRoot = $this->getApiRoot($giteaID, $sudo);
         if(!$apiRoot) return array();
 
-        $url        = sprintf($apiRoot, "/repos/search");
-        $allResults = array();
-        for($page = 1; true; $page++)
+        $url      = sprintf($apiRoot, "/repos/search");
+        $page     = 1;
+        $projects = array();
+        while(true)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
-            if(empty($results) || empty($results->data) || !is_array($results->data)) break;
-            $allResults = array_merge($allResults, $results->data);
+            if(empty($results->data) || !is_array($results->data)) break;
+
+            $projects = array_merge($projects, $results->data);
             if(count($results->data) < 50) break;
+
+            $page ++;
         }
 
-        return $allResults;
+        return $projects;
     }
 
     /**
+     * 通过API获取Gitea分组列表。
      * Get groups by api.
      *
      * @param  int    $giteaID
@@ -336,24 +293,29 @@ class giteaModel extends model
      * @access public
      * @return array
      */
-    public function apiGetGroups($giteaID, $sudo = true)
+    public function apiGetGroups(int $giteaID, bool $sudo = true): array
     {
          $apiRoot = $this->getApiRoot($giteaID, $sudo);
          if(!$apiRoot) return array();
 
-         $url        = sprintf($apiRoot, "/orgs");
-         $allResults = array();
-         for($page = 1; true; $page++)
+         $url    = sprintf($apiRoot, "/orgs");
+         $page   = 1;
+         $groups = array();
+         while(true)
          {
              $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
              if(empty($results)) break;
-             $allResults = array_merge($allResults, $results);
+
+             $groups = array_merge($groups, $results);
              if(count($results) < 50) break;
+
+             $page ++;
          }
-         return $allResults;
+         return $groups;
     }
 
     /**
+     * 通过API获取Gitea用户列表。
      * Get gitea user list.
      *
      * @param  int    $giteaID
@@ -361,33 +323,33 @@ class giteaModel extends model
      * @access public
      * @return array
      */
-    public function apiGetUsers($giteaID, $onlyLinked = false)
+    public function apiGetUsers(int $giteaID, bool $onlyLinked = false): array
     {
-        $response = array();
+        $users = array();
         $apiRoot  = $this->getApiRoot($giteaID);
 
-        for($page = 1; true; $page++)
+        $page = 1;
+        while(true)
         {
             $url    = sprintf($apiRoot, "/users/search") . "&page={$page}&limit=50";
             $result = json_decode(commonModel::http($url));
             if(empty($result->data)) break;
 
-            $response = array_merge($response, $result->data);
-            $page += 1;
+            $users = array_merge($users, $result->data);
+            $page ++;
         }
-
-        if(empty($response)) return array();
+        if(empty($users)) return array();
 
         /* Get linked users. */
         $linkedUsers = array();
         if($onlyLinked) $linkedUsers = $this->loadModel('pipeline')->getUserBindedPairs($giteaID, 'gitea', 'openID,account');
 
-        $users = array();
-        foreach($response as $giteaUser)
+        $userList = array();
+        foreach($users as $giteaUser)
         {
-            if($onlyLinked and !isset($linkedUsers[$giteaUser->id])) continue;
+            if($onlyLinked && !isset($linkedUsers[$giteaUser->id])) continue;
 
-            $user = new stdclass;
+            $user = new stdclass();
             $user->id             = $giteaUser->id;
             $user->realname       = $giteaUser->full_name ? $giteaUser->full_name : $giteaUser->username;
             $user->account        = $giteaUser->username;
@@ -396,13 +358,14 @@ class giteaModel extends model
             $user->createdAt      = zget($giteaUser, 'created', '');
             $user->lastActivityOn = zget($giteaUser, 'last_login', '');
 
-            $users[] = $user;
+            $userList[] = $user;
         }
 
-        return $users;
+        return $userList;
     }
 
     /**
+     * 通过API获取Gitea项目分支列表。
      * Get project repository branches by api.
      *
      * @param  int    $giteaID
@@ -410,69 +373,24 @@ class giteaModel extends model
      * @access public
      * @return object
      */
-    public function apiGetBranches($giteaID, $project, $pager = null)
+    public function apiGetBranches(int $giteaID, string $project): array
     {
-        $url = sprintf($this->getApiRoot($giteaID), "/repos/{$project}/branches");
-        $allResults = array();
+        $url      = sprintf($this->getApiRoot($giteaID), "/repos/{$project}/branches");
+        $branches = array();
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
             if(!is_array($results)) break;
-            if(!empty($results)) $allResults = array_merge($allResults, $results);
+
+            if(!empty($results)) $branches = array_merge($branches, $results);
             if(count($results) < 100) break;
         }
-
-        return $allResults;
-    }
-
-    /**
-     * Get Forks of a project by API.
-     *
-     * @param  int    $giteaID
-     * @param  string $projectID
-     * @access public
-     * @return object
-     */
-    public function apiGetForks($giteaID, $projectID)
-    {
-        $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/forks");
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
-     * Get upstream project by API.
-     *
-     * @param  int    $giteaID
-     * @param  string $projectID
-     * @access public
-     * @return void
-     */
-    public function apiGetUpstream($giteaID, $projectID)
-    {
-        $currentProject = $this->apiGetSingleProject($giteaID, $projectID);
-        if(isset($currentProject->parent->full_name)) return $currentProject->parent->full_name;
-        return array();
-    }
-
-    /**
-     * Get branches.
-     *
-     * @param  int    $giteaID
-     * @param  string $project
-     * @access public
-     * @return array
-     */
-    public function getBranches($giteaID, $project)
-    {
-        $rawBranches = $this->apiGetBranches($giteaID, $project);
-
-        $branches = array();
-        foreach($rawBranches as $branch) $branches[] = $branch->name;
 
         return $branches;
     }
 
     /**
+     * 通过API获取Gitea项目分支信息。
      * Get single branch by API.
      *
      * @param  int    $giteaID
@@ -481,7 +399,7 @@ class giteaModel extends model
      * @access public
      * @return object
      */
-    public function apiGetSingleBranch($giteaID, $project, $branchName)
+    public function apiGetSingleBranch(int $giteaID, string $project, string $branchName): object
     {
         $url    = sprintf($this->getApiRoot($giteaID), "/repos/$project/branches/$branchName");
         $branch = json_decode(commonModel::http($url));
@@ -495,20 +413,20 @@ class giteaModel extends model
     }
 
     /**
+     * 通过API获取Gitea项目分支保护信息。
      * Get protect branches of one project.
      *
      * @param  int    $giteaID
      * @param  string $project
      * @param  string $keyword
      * @access public
-     * @return array
+     * @return array|null
      */
-    public function apiGetBranchPrivs($giteaID, $project, $keyword = '')
+    public function apiGetBranchPrivs(int $giteaID, string $project, string $keyword = ''): array|null
     {
         $keyword  = urlencode($keyword);
         $url      = sprintf($this->getApiRoot($giteaID), "/repos/$project/branch_protections");
         $branches = json_decode(commonModel::http($url));
-
         if(!is_array($branches)) return $branches;
 
         $newBranches = array();
@@ -523,6 +441,7 @@ class giteaModel extends model
 
     /**
      * 创建代码库。
+     * Create repository.
      *
      * @param  int    $giteaID
      * @param  string $name
@@ -531,7 +450,7 @@ class giteaModel extends model
      * @access public
      * @return void
      */
-    public function apiCreateRepository($giteaID, $name, $org, $desc)
+    public function apiCreateRepository(int $giteaID, string $name, string $org, string $desc): object
     {
         $data = new stdclass();
         $data->name        = $name;
@@ -541,7 +460,6 @@ class giteaModel extends model
 
         $url    = sprintf($this->getApiRoot($giteaID), "/orgs/{$org}/repos");
         $result = json_decode(commonModel::http($url, $data));
-
         return $result;
     }
 }
