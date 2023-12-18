@@ -9388,6 +9388,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 检查是否包含一致性错误。
      * Check has consistency error or not.
      *
      * @access public
