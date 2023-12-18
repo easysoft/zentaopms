@@ -80,19 +80,23 @@ class stageTest
     }
 
     /**
-     * Test get stages.
+     * 获取阶段列表信息。
+     * Get stage list info.
      *
      * @param  string $orderBy
+     * @param  int    $projectID
+     * @param  string $type      waterfall|waterfallplus
      * @access public
      * @return array
      */
-    public function getStagesTest($orderBy = 'id_desc')
+    public function getStagesTest(string $orderBy = 'id_desc', int $projectID = 0, string $type = ''): array
     {
-        $objects = $this->objectModel->getStages($orderBy = 'id_desc');
+        su('admin', true);
+
+        $stages = $this->objectModel->getStages($orderBy, $projectID, $type);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $stages;
     }
 
     /**

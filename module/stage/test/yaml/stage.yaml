@@ -1,0 +1,18 @@
+title: zt_stage
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    fields:
+    - field: name1
+      range: '需求,设计,开发,测试,发布,总结评审'
+    - field: name2
+      range: '1-100{6}'
+  - field: projectType
+    range: 'waterfall{6},waterfallplus{6}'
+  - field: type
+    range: "request,design,dev,qa,release,review"
+  - field: deleted
+    range: 0
