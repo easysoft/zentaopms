@@ -316,26 +316,6 @@ class screenModel extends model
     }
 
     /**
-     * Generate metric component.
-     *
-     * @param  object $metric
-     * @access public
-     * @return object
-     */
-    public function genMetricComponent($metric)
-    {
-        $component = new stdclass();
-        $component->id          = $metric->id;
-        $component->sourceID    = $metric->id;
-        $component->title       = $metric->name;
-        $component->type        = 'metric';
-        $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
-
-        $component->chartConfig->chartOption = $this->getMetricOption($metric);
-        return $component;
-    }
-
-    /**
      * Get chart option.
      *
      * @param  object $chart
@@ -369,6 +349,8 @@ class screenModel extends model
             case 'waterpolo':
                 if(strpos($chart->settings, 'waterpolo') === false) return $this->buildWaterPolo($component, $chart);
                 return $this->getWaterPoloOption($component, $chart, $filters);
+            case 'metric':
+                return $this->getMetricOption($component, $chart, $filters);
             default:
                 return '';
         }
@@ -1582,22 +1564,15 @@ class screenModel extends model
     /**
      * Get waterpolo option.
      *
-     * @param  object $metric
+     * @param  object $component
+     * @param  object $chart
+     * @param  object $filters
      * @access public
      * @return object
      */
-    public function getMetricOption($metric)
+    public function getMetricOption($component, $chart, $filters)
     {
-        $this->loadModel('metric');
-
-        $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
-        $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
-
-        $resultHeader  = $this->metric->getViewTableHeader($metric);
-        $resultData    = $this->metric->getViewTableData($metric, $result);
-        $allResultData = $this->metric->getViewTableData($metric, $allResult);
-
-        return $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        return $this->setComponentDefaults($component);
     }
 
     /**
