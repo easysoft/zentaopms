@@ -215,7 +215,12 @@ class ai extends control
         if($category === 'collection')
         {
             $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id, $pager);
+            $sortIDs = array_flip($collectedIDs);
             $miniPrograms = $this->ai->getMiniProgramsByID($collectedIDs);
+            $sortedPrograms = array();
+            foreach ($miniPrograms as $program) $sortedPrograms[$sortIDs[$program->id]] = $program;
+            ksort($sortedPrograms);
+            $miniPrograms = $sortedPrograms;
         }
         else if($category === 'discovery')
         {
