@@ -3815,13 +3815,15 @@ class executionModel extends model
      * 判断操作按钮是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object    $execution
-     * @param  string    $action
+     * @param  object $execution
+     * @param  string $action
+     * @param  string $module
      * @access public
      * @return bool
      */
-    public static function isClickable(object $execution, string $action): bool
+    public static function isClickable(object $execution, string $action, string $module = 'execution'): bool
     {
+        if($module == 'programplan') $module = 'execution';
         if(!commonModel::hasPriv('execution', $action)) return false;
 
         $action = strtolower($action);
