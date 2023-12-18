@@ -99,7 +99,7 @@ formPanel
     $productRow,
     formRow
     (
-        setClass(!empty($product) && $product->type != 'normal' && !empty($build->execution) ? '' : 'hidden'),
+        setClass(isset($product->type) && $product->type != 'normal' && !empty($build->execution) ? '' : 'hidden'),
         formGroup
         (
             set::width('1/2'),

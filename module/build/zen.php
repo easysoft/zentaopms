@@ -93,7 +93,7 @@ class buildZen extends build
             $executions[$build->execution] = $execution ? $execution->name : '';
         }
 
-        if(!isset($productGroups[$build->product]))
+        if($build->product && !isset($productGroups[$build->product]))
         {
             $product = $this->product->getById($build->product);
             $product->branch = $build->branch;
@@ -144,7 +144,7 @@ class buildZen extends build
         $this->loadModel('branch');
 
         $product = $this->loadModel('product')->getByID($build->product);
-        if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        if($product && $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $stories = $this->build->getStoryList($build->allStories, (int)$build->branch, $type == 'story' ? $sort : '', $storyPager);
 

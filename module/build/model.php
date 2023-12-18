@@ -465,10 +465,14 @@ class buildModel extends model
         if(dao::isError()) return false;
 
         /* Process and insert build data. */
+        $requiredFields = $this->config->build->create->requiredFields;
+        $project        = $this->loadModel('project')->getByID((int)$build->project);
+        if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
+
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
-            ->batchCheck($this->config->build->create->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->check('name', 'unique', "product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
             ->exec();
@@ -496,7 +500,7 @@ class buildModel extends model
     {
         $oldBuild = $this->fetchByID($buildID);
         $product  = $this->loadModel('product')->getByID((int) $build->product);
-        $branch   = $this->post->branch === false || $product->type == 'normal' ? 0 : $oldBuild->branch;
+        $branch   = $this->post->branch === false || ($product && $product->type) == 'normal' ? 0 : $oldBuild->branch;
         if(empty($oldBuild->execution)) $build = $this->processBuildForUpdate($build, $oldBuild);
 
         $product = $this->loadModel('product')->getByID($build->product);
@@ -507,10 +511,14 @@ class buildModel extends model
         }
         if(dao::isError()) return false;
 
+        $project        = $this->loadModel('project')->getByID((int)$oldBuild->project);
+        $requiredFields = $this->config->build->edit->requiredFields;
+        if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
+
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
-            ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = '{$build->branch}' AND deleted = '0'")
             ->checkFlow()
