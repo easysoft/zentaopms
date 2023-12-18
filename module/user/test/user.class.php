@@ -771,17 +771,15 @@ class userTest
     }
 
     /**
-     * Test get weak users.
+     * 测试获取弱密码用户。
+     * Test get users with weak password.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getWeakUsersTest()
+    public function getWeakUsersTest(): array
     {
-        $users = $this->objectModel->getWeakUsers();
-
-        if(dao::isError()) return dao::getError();
-        return $users;
+        return $this->objectModel->getWeakUsers();
     }
 
     /**
