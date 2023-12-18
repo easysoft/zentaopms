@@ -696,7 +696,7 @@ class mrModel extends model
     public function apiUpdateMR(object $oldMR, object $MR): object
     {
         $host  = $this->loadModel('pipeline')->getByID($oldMR->hostID);
-        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($hostID, $host->type, $MR->assignee);
+        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($host->id, $host->type, $MR->assignee);
 
         $MRObject = new stdclass();
         $MRObject->title = $MR->title;
