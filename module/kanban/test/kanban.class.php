@@ -184,7 +184,8 @@ class kanbanTest
      */
     public function createCardTest($columnID, $card)
     {
-        $_POST['lane']  = 1;
+        $_POST['lane'] = 1;
+        $_POST['uid']  = 'test';
 
         $objectID = $this->objectModel->createCard($columnID, $card);
 
