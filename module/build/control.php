@@ -435,7 +435,7 @@ class build extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->buildZen->buildLinkStorySearchForm($build, $browseType == 'bySearch' ? (int)$param : 0, $product->type);
+        $this->buildZen->buildLinkStorySearchForm($build, $browseType == 'bySearch' ? (int)$param : 0, isset($product->type) ? $product->type : 'normal');
 
         $this->loadModel('story');
         $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
@@ -619,7 +619,7 @@ class build extends control
 
         /* Build the search form. */
         $queryID = $browseType == 'bySearch' ? $param : 0;
-        $this->buildZen->buildLinkBugSearchForm($build, $queryID, $product->type);
+        $this->buildZen->buildLinkBugSearchForm($build, $queryID, isset($product->type) ? $product->type : 'normal');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
