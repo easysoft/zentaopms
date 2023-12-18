@@ -372,4 +372,42 @@ class kanbanTao extends kanbanModel
               ->andWhere('`column`')->eq($colID)
               ->exec();
     }
+
+    /**
+     * 获取产品计划看板的分支
+     * Get branches for product plan kanban.
+     *
+     * @param  object $product
+     * @param  string $branchID
+     * @access public
+     * @return array
+     */
+    protected function getBranchesForPlanKanban(object $product, string $branchID): array
+    {
+        $this->loadModel('branch');
+
+        $branches = array();
+        if($product->type == 'normal')
+        {
+            $branches = array('all' => $this->lang->productplan->allAB);
+        }
+        elseif($branchID == 'all')
+        {
+            $branches = $this->branch->getPairs($product->id, 'active');
+        }
+        elseif($branchID == BRANCH_MAIN)
+        {
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+        }
+        elseif($branchID)
+        {
+            foreach(explode(',', $branchID) as $id)
+            {
+                $branchName = $this->branch->getById($id);
+                $branches[$id] = $branchName;
+            }
+        }
+
+        return $branches;
+    }
 }

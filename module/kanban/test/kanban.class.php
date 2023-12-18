@@ -318,23 +318,19 @@ class kanbanTest
      */
     public function getPlanKanbanTest($productID, $branchID = 0)
     {
-        global $tester;
+        global $tester, $app;
+        $app->rawModule = 'kanban';
+
         $product = $tester->loadModel('product')->getByID($productID);
 
         $tester->loadModel('productplan');
-        $planGroup = $product->type == 'normal' ? $tester->productplan->getList($product->id, 0, 'all', '', 'begin_desc', 'skipparent') : $tester->productplan->getGroupByProduct($product->id, 'skipParent', '', 'begin_desc');
+        $planGroup = $product->type == 'normal' ? $tester->productplan->getList($product->id, '0', 'all', null, 'begin_desc', 'skipparent') : $tester->productplan->getGroupByProduct((array)$product->id, 'skipParent', '', 'begin_desc');
 
         $objects = $this->objectModel->getPlanKanban($product, $branchID, $planGroup);
 
         if(dao::isError()) return dao::getError();
 
-        $laneCount   = 0;
-        $cardCount   = 0;
-        foreach($objects->lanes as $lane)
-        {
-            foreach($lane->items as $item) $cardCount += count($item);
-        }
-        return 'lanes:' . count($objects->lanes) . ', cards:' . $cardCount;
+        return $objects;
     }
 
     /**

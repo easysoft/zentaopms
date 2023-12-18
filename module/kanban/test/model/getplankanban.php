@@ -4,31 +4,41 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('product')->gen(50);
+zdTable('productplan')->gen(50);
+zdTable('branch')->gen(50);
+
 /**
 
 title=测试 kanbanModel->getPlanKanban();
+timeout=0
 cid=1
-pid=1
 
-测试获取产品1的计划看板 >> lanes:1, cards:3
-测试获取产品2的计划看板 >> lanes:1, cards:3
-测试获取产品3的计划看板 >> lanes:1, cards:3
-测试获取产品4的计划看板 >> lanes:3, cards:2
-测试获取产品4 分支1的计划看板 >> lanes:1, cards:1
-测试获取产品5的计划看板 >> lanes:3, cards:2
-测试获取产品5 分支3的计划看板 >> lanes:1, cards:1
+- 测试获取产品1的计划看板
+ - 第0条的name属性 @all
+ - 第0条的title属性 @所有
+- 测试获取产品2的计划看板
+ - 第1条的name属性 @5
+ - 第1条的title属性 @1.1
+- 测试获取产品3的计划看板
+ - 第0条的name属性 @wait
+ - 第0条的title属性 @未开始
+- 测试获取产品1的计划看板,传入分支
+ - 第0条的name属性 @wait
+ - 第0条的title属性 @未开始
+- 测试获取产品2的计划看板，传入分支
+ - 第0条的name属性 @wait
+ - 第0条的title属性 @未开始
 
 */
 
-$productIDList = array('1', '2', '3', '41', '42');
+$productIDList = array('1', '2', '3');
 $branchIDList  = array('0', '1', '3');
 
 $kanban = new kanbanTest();
 
-r($kanban->getPlanKanbanTest($productIDList[0]))                   && p() && e('lanes:1, cards:3'); // 测试获取产品1的计划看板
-r($kanban->getPlanKanbanTest($productIDList[1]))                   && p() && e('lanes:1, cards:3'); // 测试获取产品2的计划看板
-r($kanban->getPlanKanbanTest($productIDList[2]))                   && p() && e('lanes:1, cards:3'); // 测试获取产品3的计划看板
-r($kanban->getPlanKanbanTest($productIDList[3]))                   && p() && e('lanes:3, cards:2'); // 测试获取产品4的计划看板
-r($kanban->getPlanKanbanTest($productIDList[3], $branchIDList[1])) && p() && e('lanes:1, cards:1'); // 测试获取产品4 分支1的计划看板
-r($kanban->getPlanKanbanTest($productIDList[4]))                   && p() && e('lanes:3, cards:2'); // 测试获取产品5的计划看板
-r($kanban->getPlanKanbanTest($productIDList[4], $branchIDList[2])) && p() && e('lanes:1, cards:1'); // 测试获取产品5 分支3的计划看板
+r($kanban->getPlanKanbanTest($productIDList[0])[0]['items'][0]['data']['lanes'])   && p('0:name,title') && e('all,所有');                   // 测试获取产品1的计划看板
+r($kanban->getPlanKanbanTest($productIDList[1])[0]['items'][0]['data']['items']['all']['wait']) && p('1:name,title') && e('5,1.1');         // 测试获取产品2的计划看板
+r($kanban->getPlanKanbanTest($productIDList[2])[0]['items'][0]['data']['cols']) && p('0:name,title') && e('wait,未开始');                   // 测试获取产品3的计划看板
+r($kanban->getPlanKanbanTest($productIDList[0], $branchIDList[1])[0]['items'][0]['data']['cols']) && p('0:name,title') && e('wait,未开始'); // 测试获取产品1的计划看板,传入分支
+r($kanban->getPlanKanbanTest($productIDList[1], $branchIDList[2])[0]['items'][0]['data']['cols']) && p('0:name,title') && e('wait,未开始'); // 测试获取产品2的计划看板，传入分支

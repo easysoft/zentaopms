@@ -712,10 +712,11 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板所有数据。
      * Get kanban data.
      *
-     * @param  int     $kanbanID
-     * @param  mixed   $regionIDList
+     * @param  int    $kanbanID
+     * @param  mixed  $regionIDList
      * @access public
      * @return array
      */
@@ -821,70 +822,40 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取计划看板。
      * Get plan kanban.
      *
      * @param  object $product
-     * @param  int    $branchID
+     * @param  string $branchID
      * @param  array  $planGroup
      * @access public
      * @return array
      */
-    public function getPlanKanban($product, $branchID = 0, $planGroup = '')
+    public function getPlanKanban(object $product, string $branchID = '0', array $planGroup = array()): array
     {
-        $this->loadModel('branch');
         $this->loadModel('productplan');
 
-        $lanes       = array();
-        $columns     = array();
-        $branches    = array();
-        $colorIndex  = 0;
-        $laneOrder   = 1;
-        if($product->type == 'normal')
-        {
-            $branches = array('all' => $this->lang->productplan->allAB);
-        }
-        elseif($branchID == 'all')
-        {
-            $branches = $this->branch->getPairs($product->id, 'active');
-        }
-        elseif($branchID == BRANCH_MAIN)
-        {
-            $branches = array(BRANCH_MAIN => $this->lang->branch->main);
-        }
-        elseif($branchID)
-        {
-            foreach(explode(',', $branchID) as $id)
-            {
-                $branchName = $this->branch->getById($id);
-                $branches[$id] = $branchName;
-            }
-        }
+        $lanes = $columns = $kanbanData = $planList = $lanes = $columns = $columnCards = array();
+        $colorIndex = 0;
+        $laneOrder  = 1;
 
-        $kanbanData  = array();
-        $planList    = array();
-        $lanes       = array();
-        $columns     = array();
-        $columnCards = array();
         $cardActions = array('view', 'createExecution', 'linkStory', 'linkBug', 'edit', 'start', 'finish', 'close', 'activate', 'delete');
+        $branches    = $this->kanbanTao->getBranchesForPlanKanban($product, $branchID);
         foreach($branches as $id => $name)
         {
             if($product->type != 'normal') $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
             if($product->type == 'normal') $plans = $planGroup;
 
-            foreach($plans as $planID => $plan)
+            foreach($plans as $plan)
             {
                 if(empty($plan) or $plan->parent == -1) continue;
                 $plan->isParent = false;
 
-                $item = array();
-                $item['id']          = $plan->id;
-                $item['name']        = $plan->id;
-                $item['title']       = htmlspecialchars_decode($plan->title);
-                $item['status']      = $plan->status;
+                $item = array('id' => $plan->id, 'name' => $plan->id, 'title' => htmlspecialchars_decode($plan->title), 'status' => $plan->status);
                 $item['statusLabel'] = zget($this->lang->productplan->statusList, $plan->status);
                 $item['delay']       = helper::today() > $plan->end ? true : false;
-                $item['desc']        =  strip_tags(htmlspecialchars_decode($plan->desc));
-                $item['dateLine']    =  date('m-d', strtotime($plan->begin)) . ' ' . $this->lang->productplan->to . ' ' . date('m-d', strtotime($plan->end));
+                $item['desc']        = strip_tags(htmlspecialchars_decode($plan->desc));
+                $item['dateLine']    = date('m-d', strtotime($plan->begin)) . ' ' . $this->lang->productplan->to . ' ' . date('m-d', strtotime($plan->end));
                 $item['actionList']  = array();
                 foreach($cardActions as $action)
                 {
@@ -905,10 +876,8 @@ class kanbanModel extends model
         foreach($this->lang->kanban->defaultColumn as $columnType => $columnName) $columns[] = array('id' => $columnType, 'name' => $columnType, 'title' => $columnName);
         foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
 
-        $groupData['key']           = 'planKanban';
-        $groupData['data']['lanes'] = $lanes;
-        $groupData['data']['cols']  = $columns;
-        $groupData['data']['items'] = $planList;
+        $groupData['key']  = 'planKanban';
+        $groupData['data'] = array('lanes' => $lanes, 'cols' => $columns, 'items' => $planList);
         $kanbanData[] = array('items' => array($groupData), 'key' => 'planKanban', 'heading' => array('title' => $this->lang->productplan->all . ' ' . count($planList)));
         return $kanbanData;
     }
