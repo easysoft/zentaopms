@@ -198,6 +198,7 @@ class stage extends control
     }
 
     /**
+     * 删除一个阶段。
      * Delete a stage.
      *
      * @param  int    $stageID
@@ -206,21 +207,10 @@ class stage extends control
      */
     public function delete(int $stageID)
     {
-        $stage = $this->stage->getById($stageID);
-
+        $stage = $this->stage->getByID($stageID);
         $this->stage->delete(TABLE_STAGE, $stageID);
 
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result'] = 'success';
-            $response['load']   = true;
-        }
-
-        return $this->send($response);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->sendSuccess(array('closeModal' => true, 'load' => true));
     }
 }
