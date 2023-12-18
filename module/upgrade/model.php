@@ -21,7 +21,8 @@ class upgradeModel extends model
     public $fromEdition = '';
 
     /**
-     * Construct
+     * 构造函数。
+     * Construct function.
      *
      * @access public
      * @return void
