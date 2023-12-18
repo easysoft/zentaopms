@@ -51,13 +51,13 @@ jsVar('backgroundLang', $lang->solution->background);
 jsVar('isModal', helper::isAjaxRequest('modal'));
 
 $actions = array();
-if(helper::isAjaxRequest('modal'))
+if(!helper::isAjaxRequest('modal'))
 {
     $actions[] = array(
         'text'  => $lang->solution->background,
         'href'  => createLink('install', 'step6'),
         'id'    => 'skipInstallBtn',
-        'class' => 'btn primary',
+        'class' => 'btn primary hidden',
     );
 }
 
@@ -68,12 +68,12 @@ $actions[] = array(
     'onclick' => 'retryInstall(this)'
 );
 
-if(helper::isAjaxRequest('modal'))
+if(!helper::isAjaxRequest('modal'))
 {
     $actions[] = array(
         'text'    => $lang->solution->cancelInstall,
         'id'      => 'cancelInstallBtn',
-        'class'   => 'btn',
+        'class'   => 'btn hidden',
         'onclick' => 'cancelInstall(this)'
     );
 }

@@ -57,6 +57,7 @@ div
             textarea
             (
                 set::name('config'),
+                set::rows(15),
                 html($configContent)
             ),
             cell
