@@ -1,10 +1,17 @@
 <?php
 class stageTest
 {
-    public function __construct()
+    public function __construct(string $account = 'admin')
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('stage');
+        global $tester, $app;
+        $this->objectModel = $tester->loadModel('stage');
+
+        su($account);
+
+        $app->rawModule = 'stage';
+        $app->rawMethod = 'browse';
+        $app->setModuleName('stage');
+        $app->setMethodName('browse');
     }
 
     /**
@@ -133,5 +140,30 @@ class stageTest
         if(dao::isError()) return dao::getError();
 
         return $object;
+    }
+
+    /**
+     * 设置阶段导航。
+     * Set menu.
+     *
+     * @param  string $type   waterfall|waterfallplus
+     * @param  string $method browse|browseplus
+     * @access public
+     * @return string
+     */
+    public function setMenuType(string $type, string $method): string
+    {
+        global $app;
+        $app->rawMethod = $method;
+
+        $this->objectModel->setMenu($type);
+
+        $exclude = '';
+        if(in_array($type, array('waterfall', 'waterfallplus')))
+        {
+            $exclude = $this->objectModel->lang->admin->menuList->model['subMenu'][$type]['exclude'];
+        }
+
+        return $exclude;
     }
 }
