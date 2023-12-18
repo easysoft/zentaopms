@@ -295,21 +295,25 @@ class transferModel extends model
     }
 
     /**
+     * 设置字段是否必填。
      * Init Required.
      *
-     * @param  int    $module
-     * @param  int    $field
+     * @param  string $module
+     * @param  string $field
      * @access public
      * @return void
      */
-    public function initRequired($module, $field)
+    public function initRequired(string $module, string $field)
     {
+        if(!$field) return 'no';
         $this->commonActions($module);
 
+        /* 检查必填字段中是否存在该字段，如果存在返回yes，否则返回no。 */
+        /* Check whether the required field contains the field. If yes, return yes. Otherwise, return no. */
         if(empty($this->moduleConfig->create->requiredFields)) return 'no';
-
         $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
         if(strpos($requiredFields, $field) !== false) return 'yes';
+
         return 'no';
     }
 
