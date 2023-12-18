@@ -10,15 +10,14 @@
 class score extends control
 {
     /**
-     * Ajax action score.
+     * 创建积分。
      * javascript use : $.get(createLink('score', 'ajax', "method=method"));
      *
-     * @param string $method
-     *
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function ajax($method = '')
+    public function ajax(string $method = '')
     {
         $this->score->create('ajax', $method);
     }
