@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of gogs module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Liyuchun <liyuchun@easycorp.ltd>
- * @package     product
- * @version     $Id: ${FILE_NAME} 5144 2022-08-01 liyuchun@easycorp.ltd $
+ * @package     gogs
  * @link        https://www.zentao.net
  */
 class gogs extends control
@@ -27,7 +27,8 @@ class gogs extends control
     }
 
     /**
-     * Browse gogs.
+     * Gogs服务器列表。
+     * Browse gogs list.
      *
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -36,7 +37,7 @@ class gogs extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -47,7 +48,7 @@ class gogs extends control
         foreach($gogsList as $gogs)
         {
             $gogs->isBindUser = true;
-            if(!$this->app->user->admin and !isset($myGogses[$gogs->id])) $gogs->isBindUser = false;
+            if(!$this->app->user->admin && !isset($myGogses[$gogs->id])) $gogs->isBindUser = false;
         }
 
         $this->view->title    = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->browse;
@@ -59,6 +60,7 @@ class gogs extends control
     }
 
     /**
+     * 添加gogs服务器。
      * Create a gogs.
      *
      * @access public
@@ -69,7 +71,9 @@ class gogs extends control
         if($_POST)
         {
             $gogs = form::data($this->config->gogs->form->create)->get();
-            $this->checkToken($gogs);
+            $priv = $this->checkToken($gogs);
+            if(is_array($priv)) return $this->send($priv);
+
             $gogsID = $this->loadModel('pipeline')->create($gogs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -78,17 +82,17 @@ class gogs extends control
         }
 
         $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->lblCreate;
-
         $this->display();
     }
 
     /**
+     * 查看gogs服务器。
      * View a gogs.
      * @param  int    $gogsID
      * @access public
      * @return void
      */
-    public function view($gogsID)
+    public function view(int $gogsID)
     {
         $gogs = $this->gogs->fetchByID($gogsID);
 
@@ -101,13 +105,14 @@ class gogs extends control
     }
 
     /**
+     * 编辑gogs服务器。
      * Edit a gogs.
      *
      * @param  int    $gogsID
      * @access public
      * @return void
      */
-    public function edit($gogsID)
+    public function edit(int $gogsID)
     {
         $oldGogs = $this->gogs->fetchByID($gogsID);
 
@@ -127,7 +132,6 @@ class gogs extends control
 
         $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->edit;
         $this->view->gogs  = $oldGogs;
-
         $this->display();
     }
 
@@ -139,7 +143,7 @@ class gogs extends control
      * @access public
      * @return void
      */
-    public function delete($gogsID)
+    public function delete(int $gogsID)
     {
         $oldGogs  = $this->loadModel('pipeline')->fetchByID($gogsID);
         $actionID = $this->pipeline->deleteByObject($gogsID, 'gogs');
@@ -161,25 +165,6 @@ class gogs extends control
     }
 
     /**
-     * Check post token has admin permissions.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function checkToken(object $gogs)
-    {
-        $this->dao->update('gogs')->data($gogs)->batchCheck($this->config->gogs->create->requiredFields, 'notempty');
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $result = $this->gogs->checkTokenAccess($gogs->url, $gogs->token);
-
-        if($result === false) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gogs->hostError))));
-        if(!$result) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gogs->tokenLimit))));
-
-        return true;
-    }
-
-    /**
      * Bind gogs user to zentao users.
      *
      * @param  int    $gogsID
@@ -189,12 +174,9 @@ class gogs extends control
      */
     public function bindUser($gogsID, $type = 'all')
     {
-        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
-        $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
-
         if($_POST)
         {
-            $this->gogs->bindUser($gogsID);
+            $this->gogs->bindUser($gogsID, $this->post->zentaoUsers, $this->post->gogsUsers);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
@@ -202,7 +184,9 @@ class gogs extends control
         $userList      = array();
         $gogsUsers     = $this->gogs->apiGetUsers($gogsID);
         $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs');
-        $matchedResult = $this->gogs->getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers);
+        $matchedResult = $this->gogsZen->getMatchedUsers($gogsID, $gogsUsers);
+        $bindedUsers   = $this->pipeline->getUserBindedPairs($gogsID, 'gitea');
+        $zentaoUsers   = $this->loadModel('user')->getRealNameAndEmails(helper::arrayColumn($matchedResult, 'zentaoAccount'));
 
         foreach($gogsUsers as $gogsUser)
         {
@@ -219,11 +203,7 @@ class gogs extends control
             {
                 if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
 
-                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gogsUser->id)
-                {
-                    $user->status = 'binded';
-                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
-                }
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gogsUser->id) $user->status = 'binded';
             }
 
             if($type != 'all' && $user->status != $type) continue;
@@ -235,28 +215,28 @@ class gogs extends control
         $this->view->gogsID      = $gogsID;
         $this->view->recTotal    = count($userList);
         $this->view->userList    = $userList;
-        $this->view->userPairs   = $userPairs;
+        $this->view->userPairs   = $this->user->getPairs('noclosed|noletter');
         $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 
     /**
-     * Ajax getProjectBranches
+     * 获取分支列表。
+     * Ajax get branches.
      *
      * @param  int    $gogsID
      * @param  string $project
      * @access public
      * @return void
      */
-    public function ajaxGetProjectBranches($gogsID, $project)
+    public function ajaxGetProjectBranches(int $gogsID, string $project)
     {
-        if(!$gogsID or !$project) return $this->send(array('message' => array()));
+        $options = array(array('text' => '', 'value' => ''));
+        if(!$gogsID || !$project) return print(json_encode($options));
 
         $project  = urldecode(base64_decode($project));
         $branches = $this->gogs->apiGetBranches($gogsID, $project);
 
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
             $options[] = array('text' => $branch->name, 'value' => $branch->name);

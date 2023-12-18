@@ -1,25 +1,26 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of gogs module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     product
- * @version     $Id: $
+ * @package     gogs
  * @link        https://www.zentao.net
  */
 
 class gogsModel extends model
 {
     /**
+     * 获取请求地址信息。
      * Get gogs api base url by gogs id.
      *
      * @param  int    $gogsID
      * @access public
      * @return string
      */
-    public function getApiRoot($gogsID)
+    public function getApiRoot(int $gogsID) string
     {
         $gogs = $this->fetchByID($gogsID);
         if(!$gogs) return '';
@@ -28,33 +29,35 @@ class gogsModel extends model
     }
 
     /**
-     * Bind users.
+     * Gogs用户和禅道用户绑定。
+     * Bind gogs user and zentao user.
      *
      * @param  int    $gogsID
+     * @param  array  $users
+     * @param  array  $gogsNames
      * @access public
      * @return array
      */
-    public function bindUser($gogsID)
+    public function bindUser(int $gogsID, , array $users, array $gogsNames): bool
     {
-        $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $users       = $this->post->zentaoUsers;
-        $gogsNames   = $this->post->gogsUserNames;
         $accountList = array();
         $repeatUsers = array();
         foreach($users as $openID => $user)
         {
             if(empty($user)) continue;
+
             if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
             $accountList[$user] = $openID;
         }
 
+        $userList = $this->loadModel('user')->getRealNameAndEmails($repeatUsers);
         if(count($repeatUsers))
         {
-            dao::$errors[] = sprintf($this->lang->gogs->bindUserError, join(',', $repeatUsers));
+            dao::$errors[] = sprintf($this->lang->gogs->bindUserError, join(',', helper::arrayColumn($userList, 'realname')));
             return false;
         }
 
-        $user = new stdclass;
+        $user = new stdclass();
         $user->providerID   = $gogsID;
         $user->providerType = 'gogs';
 
@@ -62,7 +65,7 @@ class gogsModel extends model
         foreach($users as $openID => $account)
         {
             $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
-
+            /* If user binded user is change, delete it. */
             if($existAccount and $existAccount->account != $account)
             {
                 $this->dao->delete()
@@ -73,6 +76,8 @@ class gogsModel extends model
                     ->exec();
                 $this->loadModel('action')->create('gogsuser', $gogsID, 'unbind', '', sprintf($this->lang->gogs->bindDynamic, $gogsNames[$openID], $zentaoUsers[$existAccount->account]->realname));
             }
+
+            /* Add zentao user and gitea user binded. */
             if(!$existAccount or $existAccount->account != $account)
             {
                 if(!$account) continue;
@@ -82,6 +87,7 @@ class gogsModel extends model
                 $this->loadModel('action')->create('gogsuser', $gogsID, 'bind', '', sprintf($this->lang->gogs->bindDynamic, $gogsNames[$openID], $zentaoUsers[$account]->realname));
             }
         }
+        return !dao::isError();
     }
 
     /**
@@ -91,46 +97,48 @@ class gogsModel extends model
      * @access public
      * @return bool
      */
-    public function apiErrorHandling($response)
+    public function apiErrorHandling(object $response): bool
     {
         if(!empty($response->error))
         {
             dao::$errors[] = $response->error;
             return false;
         }
-        if(!empty($response->message))
+
+        if(empty($response->message))
         {
-            if(is_string($response->message))
+            dao::$errors[] = false;
+            return false;
+        }
+
+        if(is_string($response->message))
+        {
+            $errorKey = array_search($response->message, $this->lang->gogs->apiError);
+            dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gogs->errorLang, $errorKey);
+            return false;
+        }
+
+        foreach($response->message as $field => $fieldErrors)
+        {
+            if(is_string($fieldErrors))
             {
-                $errorKey = array_search($response->message, $this->lang->gogs->apiError);
-                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gogs->errorLang, $errorKey);
+                $errorKey = array_search($fieldErrors, $this->lang->gogs->apiError);
+                if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gogs->errorLang, $errorKey);
             }
             else
             {
-                foreach($response->message as $field => $fieldErrors)
+                foreach($fieldErrors as $error)
                 {
-                    if(is_string($fieldErrors))
-                    {
-                        $errorKey = array_search($fieldErrors, $this->lang->gogs->apiError);
-                        if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gogs->errorLang, $errorKey);
-                    }
-                    else
-                    {
-                        foreach($fieldErrors as $error)
-                        {
-                            $errorKey = array_search($error, $this->lang->gogs->apiError);
-                            if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gogs->errorLang, $errorKey);
-                        }
-                    }
+                    $errorKey = array_search($error, $this->lang->gogs->apiError);
+                    if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gogs->errorLang, $errorKey);
                 }
             }
         }
-
-        if(!$response) dao::$errors[] = false;
         return false;
     }
 
     /**
+     * 检测token是否有效。
      * Check token access.
      *
      * @param  string $url
@@ -138,12 +146,12 @@ class gogsModel extends model
      * @access public
      * @return void
      */
-    public function checkTokenAccess($url = '', $token = '')
+    public function checkTokenAccess(string $url = '', string $token = ''): bool
     {
         $apiRoot = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url     = sprintf($apiRoot, "/user");
         $user    = json_decode(commonModel::http($url));
-        if(empty($user)) return null;
+        if(empty($user)) return false;
 
         /* Check whether the token belongs to the administrator by edit user. */
         $editUserUrl = sprintf($apiRoot, "/admin/users/" . $user->username);
@@ -153,72 +161,24 @@ class gogsModel extends model
 
         $result = commonModel::http($editUserUrl, $data, array(), array(), 'data', 'PATCH');
         $user   = json_decode($result);
-        if(empty($user)) return null;
+        if(empty($user)) return false;
 
         return true;
     }
 
     /**
-     * Get matched gogs users.
-     *
-     * @param  int   $gogsID
-     * @param  array $gogsUsers
-     * @param  array $zentaoUsers
-     * @access public
-     * @return array
-     */
-    public function getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers)
-    {
-        $matches = new stdclass;
-        foreach($gogsUsers as $gogsUser)
-        {
-            foreach($zentaoUsers as $zentaoUser)
-            {
-                if($gogsUser->account == $zentaoUser->account)   $matches->accounts[$gogsUser->account][] = $zentaoUser->account;
-                if($gogsUser->realname == $zentaoUser->realname) $matches->names[$gogsUser->realname][]   = $zentaoUser->account;
-                if($gogsUser->email == $zentaoUser->email)       $matches->emails[$gogsUser->email][]     = $zentaoUser->account;
-            }
-        }
-
-        $bindedUsers  = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs', 'openID,account');
-        $matchedUsers = array();
-        foreach($gogsUsers as $gogsUser)
-        {
-            if(isset($bindedUsers[$gogsUser->id]))
-            {
-                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->id];
-                $matchedUsers[$gogsUser->id] = $gogsUser;
-                continue;
-            }
-
-            $matchedZentaoUsers = array();
-            if(isset($matches->accounts[$gogsUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gogsUser->account]);
-            if(isset($matches->emails[$gogsUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gogsUser->email]);
-            if(isset($matches->names[$gogsUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gogsUser->realname]);
-
-            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
-            if(count($matchedZentaoUsers) == 1)
-            {
-                $gogsUser->zentaoAccount     = current($matchedZentaoUsers);
-                $matchedUsers[$gogsUser->id] = $gogsUser;
-            }
-        }
-
-        return $matchedUsers;
-    }
-
-    /**
+     * 通过API获取Gogs项目信息。
      * Get project by api.
      *
      * @param  int    $gogsID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @access public
-     * @return void
+     * @return object|false
      */
-    public function apiGetSingleProject($gogsID, $projectID)
+    public function apiGetSingleProject(int $gogsID, string $projectID): object|false
     {
         $apiRoot = $this->getApiRoot($gogsID);
-        if(!$apiRoot) return array();
+        if(!$apiRoot) return false;
 
         $url     = sprintf($apiRoot, "/repos/$projectID");
         $project = json_decode(commonModel::http($url));
@@ -237,13 +197,14 @@ class gogsModel extends model
     }
 
     /**
+     * 通过API获取Gogs项目列表。
      * Get projects by api.
      *
      * @param  int    $gogsID
      * @access public
      * @return array
      */
-    public function apiGetProjects($gogsID)
+    public function apiGetProjects(int $gogsID): array
     {
         $apiRoot = $this->getApiRoot($gogsID);
         if(!$apiRoot) return array();
@@ -251,27 +212,31 @@ class gogsModel extends model
         $user = $this->apiGetAdminer($gogsID);
         if(!$user) return array();
 
-        $url        = sprintf($apiRoot, "/users/{$user->username}/repos");
-        $allResults = array();
-        for($page = 1; true; $page++)
+        $url      = sprintf($apiRoot, "/users/{$user->username}/repos");
+        $projects = array();
+        $page     = 1;
+        while(true)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
             if(!is_array($results)) break;
-            if(!empty($results)) $allResults = array_merge($allResults, $results);
+
+            if(!empty($results)) $projects = array_merge($projects, $results);
             if(count($results) < 50) break;
+            $page ++;
         }
 
-        return $allResults;
+        return $projects;
     }
 
     /**
+     * 判断当前用户是否是Gogs管理员。
      * Api get adminer.
      *
      * @param  int    $gogsID
      * @access public
-     * @return void
+     * @return object|null
      */
-    public function apiGetAdminer($gogsID)
+    public function apiGetAdminer(int $gogsID): object|null
     {
         $apiRoot = $this->getApiRoot($gogsID);
         if(!$apiRoot) return array();
@@ -292,26 +257,27 @@ class gogsModel extends model
      */
     public function apiGetUsers($gogsID, $onlyLinked = false)
     {
-        $response = array();
-        $apiRoot  = $this->getApiRoot($gogsID);
-
-        for($page = 1; true; $page++)
+        $users   = array();
+        $apiRoot = $this->getApiRoot($gogsID);
+        $page    = 1;
+        while(true)
         {
             $url    = sprintf($apiRoot, "/admin/users") . "&page={$page}&limit=20";
             $result = json_decode(commonModel::http($url));
             if(empty($result->data)) break;
-            $response = array_merge($response, $result->data);
-            $page += 1;
+
+            $users = array_merge($users, $result->data);
+            $page ++;
         }
 
-        if(empty($response)) return array();
+        if(empty($users)) return array();
 
         /* Get linked users. */
         $linkedUsers = array();
         if($onlyLinked) $linkedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs', 'openID,account');
 
-        $users = array();
-        foreach($response as $gogsUser)
+        $userList = array();
+        foreach($users as $gogsUser)
         {
             if($onlyLinked and !isset($linkedUsers[$gogsUser->id])) continue;
 
@@ -324,36 +290,42 @@ class gogsModel extends model
             $user->createdAt      = zget($gogsUser, 'created', '');
             $user->lastActivityOn = zget($gogsUser, 'login', '');
 
-            $users[] = $user;
+            $userList[] = $user;
         }
 
-        return $users;
+        return $userList;
     }
 
     /**
+     * 通过API获取Gogs项目分支列表。
      * Get project repository branches by api.
      *
      * @param  int    $gogsID
      * @param  string $project
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetBranches($gogsID, $project, $pager = null)
+    public function apiGetBranches(int $gogsID, string $project): array
     {
-        $url = sprintf($this->getApiRoot($gogsID), "/repos/{$project}/branches");
-        $allResults = array();
-        for($page = 1; true; $page++)
+        $url      = sprintf($this->getApiRoot($gogsID), "/repos/{$project}/branches");
+        $branches = array();
+        $page     = 1;
+        while(true)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
             if(!is_array($results)) break;
-            if(!empty($results)) $allResults = array_merge($allResults, $results);
+
+            if(!empty($results)) $branches = array_merge($branches, $results);
             if(count($results) < 100) break;
+
+            $page ++;
         }
 
-        return $allResults;
+        return $branches;
     }
 
     /**
+     * 通过API获取Gogs项目分支信息。
      * Get single branch by API.
      *
      * @param  int    $gogsID
@@ -362,7 +334,7 @@ class gogsModel extends model
      * @access public
      * @return object
      */
-    public function apiGetSingleBranch($gogsID, $project, $branchName)
+    public function apiGetSingleBranch(int $gogsID, string $project, string $branchName): object
     {
         $url    = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branchName");
         $branch = json_decode(commonModel::http($url));
@@ -376,6 +348,7 @@ class gogsModel extends model
     }
 
     /**
+     * 通过API获取Gogs项目分支保护信息。
      * Get protect branches of one project.
      *
      * @param  int    $gogsID
@@ -384,12 +357,11 @@ class gogsModel extends model
      * @access public
      * @return array
      */
-    public function apiGetBranchPrivs($gogsID, $project, $keyword = '')
+    public function apiGetBranchPrivs(int $gogsID, string $project, string $keyword = ''): array
     {
         $keyword  = urlencode($keyword);
         $url      = sprintf($this->getApiRoot($gogsID), "/repos/$project/branch_protections");
         $branches = json_decode(commonModel::http($url));
-
         if(!is_array($branches)) return array();
 
         $newBranches = array();
@@ -403,6 +375,7 @@ class gogsModel extends model
     }
 
     /**
+     * 通过API删除Gogs分支。
      * Api delete branch.
      *
      * @param  int    $gogsID
@@ -411,7 +384,7 @@ class gogsModel extends model
      * @access public
      * @return void
      */
-    public function apiDeleteBranch($gogsID, $project, $branch)
+    public function apiDeleteBranch(int $gogsID, string $project, string $branch): object
     {
         $url = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branch");
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
