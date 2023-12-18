@@ -673,20 +673,21 @@ class kanbanModel extends model
             if(!dao::isError())
             {
                 $cardID = $this->dao->lastInsertID();
-                $this->addKanbanCell($kanbanID, $card->lane, $columnID, 'common', $cardID);
+                $this->addKanbanCell($kanbanID, $card->lane, $columnID, 'common', (string)$cardID);
                 $this->loadModel('action')->create('kanbancard', $cardID, 'created');
             }
         }
     }
 
     /**
+     * 获取看板数据。
      * Get kanban by id.
      *
      * @param  int    $kanbanID
      * @access public
      * @return object
      */
-    public function getByID($kanbanID)
+    public function getByID(int $kanbanID): object
     {
         $kanban = $this->dao->findByID($kanbanID)->from(TABLE_KANBAN)->fetch();
         $kanban = $this->loadModel('file')->replaceImgURL($kanban, 'desc');
