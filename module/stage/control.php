@@ -12,8 +12,8 @@
 class stage extends control
 {
     /**
-     * 阶段列表页。
-     * Browse stages.
+     * 瀑布模型阶段列表页。
+     * Waterfall model stage list page.
      *
      * @param  string $orderBy
      * @param  string $type    waterfall|waterfallplus
@@ -35,22 +35,24 @@ class stage extends control
     }
 
     /**
-     * Browse stages.
+     * 融合瀑布模型阶段列表页。
+     * Waterfall plus model stage list page.
      *
      * @param  string $orderBy
+     * @param  string $type    waterfall|waterfallplus
      * @access public
      * @return void
      */
     public function plusBrowse($orderBy = "id_asc", $type = 'waterfallplus')
     {
-        if($type == 'waterfall') $this->locate($this->createLink('stage', 'browse', "orderBy=$orderBy&type=waterfall"));
+        if($type == 'waterfall') $this->locate($this->createLink('stage', 'browse', "orderBy={$orderBy}&type=waterfall"));
 
         $this->stage->setMenu($type);
 
-        $this->view->stages      = $this->stage->getStages($orderBy, 0, $type);
-        $this->view->orderBy     = $orderBy;
-        $this->view->type        = $type;
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
+        $this->view->orderBy = $orderBy;
+        $this->view->type    = $type;
+        $this->view->title   = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
 
         $this->display('stage', 'browse');
     }
