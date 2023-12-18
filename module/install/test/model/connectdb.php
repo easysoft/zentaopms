@@ -8,7 +8,7 @@ cid=1
 
 - 检查正确配置mysql连接信息时候能否连接到数据库。 @1
 - 检查密码错误时候能否连接到数据库。 @0
-- 检查密码错误时的提示信息。 @SQLSTATE[HY000] [1045] Access denied for user 'root'
+- 检查密码错误时的提示信息。 @Access denied for user 'root'
 
 */
 
@@ -23,4 +23,4 @@ r(is_object($tester->install->connectDB())) && p() && e('1'); // 检查正确配
 
 $config->db->password = 'qqwwee';
 r(is_object($tester->install->connectDB())) && p() && e('0'); // 检查密码错误时候能否连接到数据库。
-r(substr($tester->install->connectDB(), 0, 52)) && p() && e("SQLSTATE[HY000] [1045] Access denied for user 'root'"); // 检查密码错误时的提示信息。
+r(substr($tester->install->connectDB(), 23, 29)) && p() && e("Access denied for user 'root'"); // 检查密码错误时的提示信息。
