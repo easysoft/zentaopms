@@ -262,6 +262,7 @@ $lang->task->deniedNotice              = 'Nur %s kann die Aufgabe %s.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
 $lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = 'Keine Aufagben. ';
+$lang->task->noModule                  = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->task->createDenied              = "Aufgben erstellen it in diesem {$lang->projectCommon} gesperrt";
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';

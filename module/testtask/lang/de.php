@@ -156,6 +156,7 @@ $lang->testtask->titleOfAuto       = "%s automated testing";
 $lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
 $lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Date %s';
 $lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
+$lang->testtask->accessDenied      = 'You have no access to the testtask.';
 
 $lang->testtask->assignedToMe  = 'Meine';
 $lang->testtask->allCases      = 'Alle Fälle';
