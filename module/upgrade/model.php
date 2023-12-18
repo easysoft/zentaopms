@@ -1021,16 +1021,22 @@ class upgradeModel extends model
                         $dbIsInt      = stripos($dbType, 'int') !== false;
                         $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
                         $dbIsText     = stripos($dbType, 'text') !== false;
+                        if($dbIsInt and $dbLength == 0)
+                        {
+                            $intFieldLengths = zget($this->config->upgrade->dbFieldLengths, $dbConfigs[2] == 'unsigned' ? 'unsigned' : 'int', array());
+                            $dbLength = zget($intFieldLengths, $dbType, 0);
+                        }
 
-                        if($dbLength > $stdLength) $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsInt && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
+                        if($dbLength > $stdLength)     $stdConfigs[1] = $dbConfigs[1];
+                        if($stdIsInt && $dbIsText)     $stdConfigs[1] = $dbConfigs[1];
                         if($stdIsVarchar && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
                         if($stdIsText && $dbIsText)
                         {
-                            if($stdType == 'text' && in_array($dbType, array('mediumtext', 'longtext'))) $stdConfigs[1] = $dbConfigs[1];
-                            if($stdType == 'mediumtext' && $dbType == 'longtext') $stdConfigs[1] = $dbConfigs[1];
+                            $textFieldLengths = $this->config->upgrade->dbFieldLengths['text'];
+                            if($textFieldLengths[$stdType] < $textFieldLengths[$dbType]) $stdConfigs[1] = $dbConfigs[1];
                         }
                         if(stripos($stdConfigs[1], 'int') === false && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
+
                         $line = implode(' ', $stdConfigs);
                         if($line == $fields[$field]) continue;
                     }

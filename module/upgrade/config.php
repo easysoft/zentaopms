@@ -989,4 +989,8 @@ $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview
 
 $config->upgrade->missedFlowFieldVersions = array('max4_4_alpha1', 'max4_4_beta1', 'max4_4', 'max4_5', 'biz8_4_alpha1', 'biz8_4_beta1', 'biz8_4', 'biz8_5');
 
+$config->upgrade->dbFieldLengths['int']      = array('tinyint' => 4, 'smallint' => 6, 'mediumint' => 9, 'int' => 11, 'integer' => 11, 'bigint' => 20);
+$config->upgrade->dbFieldLengths['unsigned'] = array('tinyint' => 3, 'smallint' => 5, 'mediumint' => 8, 'int' => 10, 'integer' => 10, 'bigint' => 20);
+$config->upgrade->dbFieldLengths['text']     = array('tinytext' => 8, 'text' => 16, 'mediumtext' => 24, 'longtext' => 32);
+
 include dirname(__FILE__) . DS . 'config' . DS . 'upgradeflow.php';
