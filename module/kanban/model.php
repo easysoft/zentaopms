@@ -883,6 +883,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取专业研发看板。
      * Get a RD kanban data.
      *
      * @param  int    $executionID
@@ -952,12 +953,13 @@ class kanbanModel extends model
      * @access public
      * @return object
      */
-    public function getRegionByID($regionID)
+    public function getRegionByID(int $regionID): object
     {
         return $this->dao->findByID($regionID)->from(TABLE_KANBANREGION)->fetch();
     }
 
     /**
+     * 获取看板区域的键值对。
      * Get ordered region pairs.
      *
      * @param  int    $kanbanID
@@ -966,7 +968,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getRegionPairs($kanbanID, $regionID = 0, $from = 'kanban')
+    public function getRegionPairs(int $kanbanID, int $regionID = 0, string $from = 'kanban'): array
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
@@ -979,15 +981,16 @@ class kanbanModel extends model
     }
 
     /**
+     * 根据区域获取看板ID。
      * Get kanban id by region id.
      *
-     * @param  int $regionID
+     * @param  int    $regionID
      * @access public
      * @return int
      */
-    public function getKanbanIDByRegion($regionID)
+    public function getKanbanIDByRegion(int $regionID): int
     {
-        return $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
+        return (int)$this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
     }
 
     /**
