@@ -9379,12 +9379,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 停止旧的计划任务。
      * Stop old cron.
      *
      * @access public
      * @return void
      */
-    public function stopOldCron()
+    public function stopOldCron(): void
     {
         touch($this->app->getCacheRoot() . 'restartcron');
     }
@@ -9396,7 +9397,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function hasConsistencyError()
+    public function hasConsistencyError(): bool
     {
         $logFile = $this->getConsistencyLogFile();
         if(!file_exists($logFile)) return false;
