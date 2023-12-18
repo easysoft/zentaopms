@@ -244,34 +244,33 @@ class transferModel extends model
     }
 
     /**
+     * 初始化名称字段。
      * Init Title.
      *
-     * @param  int    $module
-     * @param  int    $field
+     * @param  string $module
+     * @param  string $field
      * @access public
-     * @return void
+     * @return string
      */
-    public function initTitle($module, $field)
+    public function initTitle(string $module, string $field = ''): string
     {
-        $title = $field;
+        if(!$field) return '';
 
         $this->commonActions($module);
 
+        /* 如果存在config->dtable->titles,则使用config->dtable->titles。 */
+        /* If exists config->dtable->titles, use config->dtable->titles. */
         if(!empty($this->moduleConfig->fieldList[$field]['title'])) return $this->moduleLang->{$this->moduleConfig->fieldList[$field]['title']};
-        if(isset($this->lang->$module->$field))
-        {
-            $title = $this->lang->$module->$field;
-        }
-        elseif(isset($this->lang->$module->{$field . 'AB'}))
-        {
-            $title = $this->lang->$module->{$field . 'AB'};
-        }
-        elseif(isset($this->lang->transfer->reservedWord[$field]))
-        {
-            $title = $this->lang->transfer->reservedWord[$field];
-        }
 
-        return $title;
+        /* 如果存在该字段的语言项,则使用该语言项。 */
+        /* If exists the field's language item, use it. */
+        if(isset($this->moduleLang->$field)) return $this->moduleLang->$field;
+
+        /* 如果存在该字段的语言项别名,则使用该语言项别名。 */
+        /* If exists the field's language item alias, use it. */
+        if(isset($this->moduleLang->{$field . 'AB'})) return $this->moduleLang->{$field . 'AB'};
+
+        return $field;
     }
 
     /**
