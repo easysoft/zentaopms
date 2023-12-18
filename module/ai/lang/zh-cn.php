@@ -64,6 +64,8 @@ $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
 $lang->ai->maintenanceGroup = '维护分组';
 
+$lang->ai->maintenanceGroupDuplicated = '分组名不能重复';
+
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s不能为空。';
 $lang->ai->validate->dirtyForm     = '%s的参数配置已变动，是否保存并返回？';

@@ -310,6 +310,7 @@ class ai extends control
     {
         if(!empty($_POST))
         {
+            if($this->ai->checkDuplicatedCategory()) return $this->sendError($this->lang->ai->maintenanceGroupDuplicated);
             $this->ai->updateCustomCategories();
         }
 

@@ -493,6 +493,40 @@ class aiModel extends model
     }
 
     /**
+     * Check duplicated category name.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkDuplicatedCategory()
+    {
+        $data = array_filter($_POST);
+        if(empty($data)) return false;
+
+        $categories = array();
+        foreach($data as $value)
+        {
+            if(is_string($value))
+            {
+                if(in_array($value, $categories)) return true;
+                $categories[] = $value;
+            }
+
+            if(is_array($value))
+            {
+                $value = array_filter($value);
+                foreach($value as $v)
+                {
+                    if(in_array($v, $categories)) return true;
+                    $categories[] = $v;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Update custom categories.
      *
      * @access public
@@ -530,6 +564,7 @@ class aiModel extends model
 
             if(is_array($value))
             {
+                $value = array_filter($value);
                 foreach($value as $v)
                 {
                     $category = new stdClass();
