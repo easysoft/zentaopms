@@ -24,3 +24,7 @@ $config->stage->form->edit['type']       = array('type' => 'string',   'required
 $config->stage->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->stage->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 if(isset($config->setPercent) && $config->setPercent == 1) $config->stage->form->edit['percent'] = array('type' => 'float', 'required' => true, 'default' => 0);
+
+$config->stage->form->settype['lang']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->stage->form->settype['keys']   = array('type' => 'array',  'required' => false, 'default' => array());
+$config->stage->form->settype['values'] = array('type' => 'array',  'required' => false, 'default' => array());

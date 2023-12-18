@@ -139,13 +139,14 @@ class stage extends control
     }
 
     /**
+     * 设置阶段的类型。
      * Custom settings stage type.
      *
      * @param  string lang2Set
      * @access public
      * @return void
      */
-    public function setType($lang2Set = '')
+    public function setType(string $lang2Set = '')
     {
         $this->loadModel('custom');
         if(empty($lang2Set)) $lang2Set = $this->app->getClientLang();
@@ -170,21 +171,20 @@ class stage extends control
                 $lang2Set = $dbField->lang;
                 foreach($fieldList as $key => $value)
                 {
-                    if(isset($dbFields[$key]) and $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
+                    if(isset($dbFields[$key]) && $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
                 }
             }
         }
 
         if($_POST)
         {
-            $data = fixer::input('post')->get();
-            $this->custom->deleteItems("lang={$data->lang}&module=stage&section=typeList");
-            if($data->lang == 'all') $this->custom->deleteItems("lang=$currentLang&module=stage&section=typeList");
-
+            $data = form::data()->get();
+            $this->custom->deleteItems("lang={$this->post->lang}&module=stage&section=typeList");
+            if($data->lang == 'all') $this->custom->deleteItems("lang={$currentLang}&module=stage&section=typeList");
             foreach($data->keys as $index => $key)
             {
                 $value = $data->values[$index];
-                if(!$value or !$key) continue;
+                if(!$value || !$key) continue;
                 $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
