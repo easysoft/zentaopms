@@ -572,7 +572,7 @@ class kanbanModel extends model
             $this->removeKanbanCell('common', $importIDList, $oldCardsKanban);
 
             $cards = implode(',', $importIDList);
-            $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
+            $this->addKanbanCell($kanbanID, (int)$targetLaneID, $columnID, 'common', $cards);
 
             return $importIDList;
         }
@@ -618,7 +618,7 @@ class kanbanModel extends model
         if(!dao::isError())
         {
             $cards = implode(',', array_keys($objectCards));
-            $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
+            $this->addKanbanCell($kanbanID, (int)$targetLaneID, $columnID, 'common', $cards);
 
             return $objectCards;
         }
