@@ -160,4 +160,16 @@ class metricTest
 
         return $dataset->$dataSource($fieldList);
     }
+
+    /**
+     * Test getDateLabels()
+     *
+     * @param  string $dateType
+     * @access public
+     * @return array
+     */
+    public function getDateLabels($dateType)
+    {
+        return $this->objectModel->getDateLabels($dateType);
+    }
 }
