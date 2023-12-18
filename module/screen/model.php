@@ -322,19 +322,17 @@ class screenModel extends model
      * Generate metric component.
      *
      * @param  object $metric
-     * @param  object $component
-     * @param  object $filterParams
      * @access public
      * @return object
      */
-    public function genMetricComponent($metric, $component = null, $filterParams = null)
+    public function genMetricComponent($metric, $component = null)
     {
         list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
         $component->chartConfig->chartOption = $this->getMetricChartOption($metric);
-        $component->chartConfig->tableOption = $this->getMetricTableOption($metric, $filterParams);
+        $component->chartConfig->tableOption = $this->getMetricTableOption($metric);
         $component->chartConfig->card        = $this->getMetricCardOption($metric);
         $component->chartConfig->filters     = $this->buildMetricFilters($metric);
 
@@ -1659,11 +1657,10 @@ class screenModel extends model
      * Get option of metric table.
      *
      * @param  object $metric
-     * @param  object $filterParams
      * @access public
      * @return object
      */
-    public function getMetricTableOption($metric, $filterParams = null)
+    public function getMetricTableOption($metric)
     {
         $this->loadModel('metric');
 
@@ -1677,7 +1674,7 @@ class screenModel extends model
 
         $tableOption = new stdclass();
         $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType) : array($groupHeader);
-        $tableOption->data    = $this->filterMetricData($groupData, $filterParams);
+        $tableOption->data    = $groupData;
 
         if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
         $tableOption->scope   = $metric->scope;
@@ -1687,31 +1684,6 @@ class screenModel extends model
         $tableOption->borderBGC     = '#285A8EFF';
         $tableOption->borderSpacing = 1;
         return $tableOption;
-    }
-
-    /**
-     * Filter metric data.
-     *
-     * @param  array  $data
-     * @param  array  $filter
-     * @access public
-     * @return array
-     */
-    public function filterMetricData($data, $filters = null)
-    {
-        if(empty($filters)) return $data;
-
-        $objectPairs = $this->loadModel('metric')->getPairsByScope($filters[0]['field']);
-
-        $filteredData = array();
-        foreach($data as $row)
-        {
-            foreach($filters as $filter)
-            {
-                if($row['scope'] == $objectPairs[$filter['default']]) $filteredData[] =  $row;
-            }
-        }
-        return $filteredData;
     }
 
     /**
