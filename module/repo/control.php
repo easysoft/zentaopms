@@ -1402,7 +1402,7 @@ class repo extends control
                     if($branchID) $this->repo->fixCommit($repoID);
                 }
 
-                if(empty($branchID))
+                if(empty($branchID) || $repo->SCM == 'Gitlab')
                 {
                     $this->repo->markSynced($repoID);
                     return print($this->config->repo->repoSyncLog->finish);

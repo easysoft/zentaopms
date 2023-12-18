@@ -988,7 +988,7 @@ class repoZen extends repo
         }
         else
         {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }
 
