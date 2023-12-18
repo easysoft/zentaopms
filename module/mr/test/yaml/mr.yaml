@@ -15,7 +15,7 @@ fields:
   - field: targetBranch
     range: master
   - field: mriid
-    range: 36
+    range: 36-38
   - field: title
     prefix: test-merge
     range: '[],2-100'
@@ -35,6 +35,8 @@ fields:
     range: 1-10
   - field: jobID
     range: 0-9
+  - field: compileID
+    range: 0-3
   - field: synced
     range: 1
   - field: deleted

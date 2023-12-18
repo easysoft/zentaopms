@@ -427,9 +427,8 @@ class mrModel extends model
         /* Sync MR in ZenTao database whatever status of MR in GitLab. */
         if(isset($rawMR->iid))
         {
+            $newMR    = new stdclass();
             $gitUsers = $this->loadModel('pipeline')->getUserBindedPairs($MR->hostID, $rawMR->gitService, 'openID,account');
-
-            $newMR = new stdclass();
             foreach($this->config->mr->maps->sync as $syncField => $config)
             {
                 $value = '';
@@ -455,9 +454,15 @@ class mrModel extends model
             if(empty($condition)) return false;
 
             /* Update compile status of current MR object */
-            if(isset($MR->needCI) && $MR->needCI == '1') $newMR->compileStatus = empty($MR->compileID) ? 'failed' : $this->loadModel('compile')->getByID($MR->compileID)->status;
+            if(isset($MR->needCI) && $MR->needCI == '1')
+            {
+                $compile = $this->loadModel('compile')->getByMR($MR->id);
+                $newMR->compileStatus = $compile ? $compile->status : 'failed';
+            }
 
             /* Update MR in Zentao database. */
+            $newMR->editedBy   = $this->app->user->account;
+            $newMR->editedDate = helper::now();
             $this->dao->update(TABLE_MR)->data($newMR)
                 ->where('id')->eq($MR->id)
                 ->exec();
@@ -702,7 +707,7 @@ class mrModel extends model
         $MRObject->title = $MR->title;
         if($host->type == 'gitlab')
         {
-            $MRObject->target_branch        = $MR->targetBranch;
+            $MRObject->target_branch        = zget($MR, 'targetBranch', $oldMR->targetBranch);
             $MRObject->description          = $MR->description;
             $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
             $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
