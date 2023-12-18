@@ -210,24 +210,4 @@ class gitlabTest
     {
         return $this->gitlab->apiGetSingleProject($gitlabID, $projectID, $useUser);
     }
-
-    /**
-     * Get gitlab menu.
-     *
-     * @param  int    $gitlabID
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function getGitlabMenuTest($gitlabID, $type = 'project')
-    {
-        $html = $this->gitlab->getGitlabMenu($gitlabID, $type);
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            return key($errors);
-        }
-
-        return substr($html, 0, 4);
-    }
 }

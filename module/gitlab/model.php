@@ -738,15 +738,15 @@ class gitlabModel extends model
      * Delete a gitab project member by api.
      *
      * @param  int    $gitlabID
-     * @param  int    $groupID
+     * @param  int    $projectID
      * @param  int    $memberID
      * @access public
      * @return object|array|null
      */
-    public function apiDeleteProjectMember(int $gitlabID, int $groupID, int $memberID): object|array|null
+    public function apiDeleteProjectMember(int $gitlabID, int $projectID, int $memberID): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/projects/{$groupID}/members/{$memberID}");
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/members/{$memberID}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
@@ -812,9 +812,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $user
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiCreateUser(int $gitlabID, object $user): object|array|null
+    public function apiCreateUser(int $gitlabID, object $user): object|array|null|false
     {
         if(empty($user->name) or empty($user->username) or empty($user->email) or empty($user->password)) return false;
 
@@ -830,9 +830,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $user
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function apiUpdateUser(int $gitlabID, object $user): object|array|null
+    public function apiUpdateUser(int $gitlabID, object $user): object|array|null|false
     {
         if(empty($user->id)) return false;
 
@@ -866,9 +866,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  int    $groupID
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiDeleteGroup(int $gitlabID, int $groupID): object|array|null
+    public function apiDeleteGroup(int $gitlabID, int $groupID): object|array|null|false
     {
         if(empty($groupID)) return false;
 
@@ -884,9 +884,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  object $project
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiUpdateProject(int $gitlabID, object $project): object|array|null
+    public function apiUpdateProject(int $gitlabID, object $project): object|array|null|false
     {
         if(empty($project->id)) return false;
 
