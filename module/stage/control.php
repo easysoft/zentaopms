@@ -58,6 +58,7 @@ class stage extends control
     }
 
     /**
+     * 创建一个阶段。
      * Create a stage.
      *
      * @param  string $type waterfall|waterfallplus
@@ -68,22 +69,12 @@ class stage extends control
     {
         if($_POST)
         {
-            $stageID = $this->stage->create($type);
+            $stageData = form::data()->setDefault('projectType', $type)->get();
+            $stageID   = $this->stage->create($stageData, $type);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(!$stageID)
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
 
             $this->loadModel('action')->create('stage', $stageID, 'Opened');
-
-            $response['result']     = 'success';
-            $response['message']    = $this->lang->saveSuccess;
-            $response['closeModal'] = true;
-            $response['load']       = true;
-            return $this->send($response);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;

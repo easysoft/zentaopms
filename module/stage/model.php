@@ -14,20 +14,17 @@
 class stageModel extends model
 {
     /**
+     * 创建一个阶段。
      * Create a stage.
      *
+     * @param  object   $stage
+     * @param  string   $type  waterfall|waterfallplus
      * @access public
      * @return int|bool
      */
-    public function create($type = 'waterfall')
+    public function create(object $stage, string $type = 'waterfall'): int|bool
     {
-        $stage = fixer::input('post')
-            ->setDefault('projectType', $type)
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::today())
-            ->get();
-
-        if(isset($this->config->setPercent) and $this->config->setPercent == 1)
+        if(isset($this->config->setPercent) && $this->config->setPercent == 1)
         {
             $totalPercent = $this->getTotalPercent($type);
 
