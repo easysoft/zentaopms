@@ -951,6 +951,7 @@ class upgrade extends control
             if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.9',   '<=')) $showPrivTips = true;
             if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.9',   '<=')) $showPrivTips = true;
             if(strpos($fromVersion, 'ipd') !== false and version_compare($fromVersion, 'ipd1.1.1', '<=')) $showPrivTips = true;
+            if($showPrivTips and $this->config->edition == 'open') $showPrivTips = false;
 
             $this->view->title      = $this->lang->upgrade->result;
             $this->view->position[] = $this->lang->upgrade->common;
