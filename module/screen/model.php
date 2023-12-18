@@ -331,18 +331,11 @@ class screenModel extends model
     {
         list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
-        $this->loadModel('metric');
-
-        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
-
-        $resultHeader  = $this->metric->getViewTableHeader($metric);
-        $resultData    = $this->metric->getViewTableData($metric, $result);
-
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
-        $component->chartConfig->chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData);
-        $component->chartConfig->tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
-        $component->chartConfig->card        = $this->getMetricCardOption($metric, $resultData);
+        $component->chartConfig->chartOption = $this->getMetricChartOption($metric);
+        $component->chartConfig->tableOption = $this->getMetricTableOption($metric, $filterParams);
+        $component->chartConfig->card        = $this->getMetricCardOption($metric);
         $component->chartConfig->filters     = $this->buildMetricFilters($metric);
 
         $component->option->chartOption = $component->chartConfig->chartOption;
@@ -1663,9 +1656,18 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getMetricChartOption($metric, $resultHeader, $resultData)
+    public function getMetricChartOption($metric)
     {
-        $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $this->loadModel('metric');
+
+        $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
+        $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+        $resultHeader  = $this->metric->getViewTableHeader($metric);
+        $resultData    = $this->metric->getViewTableData($metric, $result);
+        $allResultData = $this->metric->getViewTableData($metric, $allResult);
+
+        $chartOption = $this->metric->getEchartsOptions($resultHeader, $allResultData);
 
         if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'show' => false, 'titleShow' => false, 'textStyle' => array('color' => '#BFBFBF', 'fontSize' => 16));
         $chartOption['title']['text'] = $metric->name;
@@ -1682,13 +1684,16 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getMetricTableOption($metric, $resultHeader, $resultData, $filterParams = null)
+    public function getMetricTableOption($metric, $filterParams = null)
     {
         $this->loadModel('metric');
 
+        $resultHeader   = $this->metric->getViewTableHeader($metric);
         $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
         $dateType       = $this->metric->getDateTypeByCode($metric->code);
 
+        $result     = $this->metric->getResultByCode($metric->code, array(), 'cron');
+        $resultData = $this->metric->getViewTableData($metric, $result);
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, false);
 
         $tableOption = new stdclass();
@@ -1738,11 +1743,12 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getMetricCardOption(object $metric, $resultData): object
+    public function getMetricCardOption(object $metric): object
     {
         $this->loadModel('metric');
 
         $dateType = $this->metric->getDateTypeByCode($metric->code);
+        $result   = $this->metric->getResultByCode($metric->code, array(), 'cron');
 
         $option = new stdclass();
         $option->displayType = 'normal';
@@ -1752,12 +1758,12 @@ class screenModel extends model
         $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
         $option->scope       = $metric->scope;
         $option->objectPairs = array();
-        $option->data        = $resultData;
+        $option->data        = $this->metric->getViewTableData($metric, $result);
         $option->filterValue = (is_array($option->data) && !empty($option->data)) ? current($option->data) : array();
 
         if($metric->scope != 'system')
         {
-            $objectPairs = $this->metric->getPairsByScope($metric->scope);
+            $objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
             foreach($objectPairs as $value => $label)
             {
                 $option->objectPairs[] = array('label' => $label, 'value' => "$value");
@@ -1985,7 +1991,7 @@ class screenModel extends model
         if(!isset($component->title))       $component->title       = $metric->name;
         if(!isset($component->type))        $component->type        = 'metric';
         if(!isset($component->chartConfig)) $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
-        if(!isset($component->option))      $component->option      = new stdclass();
+        if(!isset($component->option))      $component->option      = json_decode($this->config->screen->chartOption['metric']);
 
         return array($component, false);
     }
@@ -2033,7 +2039,7 @@ class screenModel extends model
 
         if(!isset($component->option) or $typeChanged)
         {
-            $component->option = new stdclass();
+            $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
             $component->option->dataset = new stdclass();
         }
 
