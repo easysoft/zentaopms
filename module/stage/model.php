@@ -128,7 +128,8 @@ class stageModel extends model
     }
 
     /**
-     * Get stages.
+     * 获取阶段列表信息。
+     * Get stage list info.
      *
      * @param  string $orderBy
      * @param  int    $projectID
@@ -136,7 +137,7 @@ class stageModel extends model
      * @access public
      * @return array
      */
-    public function getStages($orderBy = 'id_desc', $projectID = 0, $type = '')
+    public function getStages(string $orderBy = 'id_desc', int $projectID = 0, string $type = ''): array
     {
         if($projectID)
         {
@@ -150,22 +151,21 @@ class stageModel extends model
                 ->orderBy($orderBy)
                 ->fetchAll('id');
         }
-        else
+
+        $stageType = '';
+        if($this->config->systemMode == 'PLM' && $this->app->rawMethod == 'create' && $this->app->rawModule == 'programplan' && $type == 'ipd')
         {
-            $stageType = '';
-            if($this->config->systemMode == 'PLM' and $this->app->rawMethod == 'create' and $this->app->rawModule == 'programplan' and $type == 'ipd')
-            {
-                $project = $this->loadModel('project')->getByID($this->session->project);
-                $stageType = $this->config->project->categoryStages[$project->category];
-            }
-            return $this->dao->select('*')->from(TABLE_STAGE)
-                ->where('deleted')->eq(0)
-                ->andWhere('projectType')->eq($type)
-                ->beginIF(!empty($stageType))->andWhere('type')->in($stageType)->fi()
-                ->orderBy($orderBy)
-                ->fetchAll('id');
+            $project   = $this->loadModel('project')->getByID($this->session->project);
+            $stageType = $this->config->project->categoryStages[$project->category];
         }
-     }
+
+        return $this->dao->select('*')->from(TABLE_STAGE)
+            ->where('deleted')->eq(0)
+            ->andWhere('projectType')->eq($type)
+            ->beginIF(!empty($stageType))->andWhere('type')->in($stageType)->fi()
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+    }
 
     /**
      * Get pairs of stage.
