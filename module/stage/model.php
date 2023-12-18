@@ -179,13 +179,14 @@ class stageModel extends model
     }
 
     /**
-     * Get a stage by id.
+     * 通过ID获取阶段信息。
+     * Get stage info by ID.
      *
-     * @param  int    $stageID
+     * @param  int         $stageID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID($stageID)
+    public function getByID(int $stageID): object|bool
     {
         return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->andWhere('id')->eq((int)$stageID)->fetch();
     }
