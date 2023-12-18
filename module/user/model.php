@@ -1555,14 +1555,17 @@ class userModel extends model
      */
     public function getWeakUsers(): array
     {
-        $users = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll();
-        $weaks = array_unique(array_filter(explode(',', $this->config->safe->weak)));
-        $weaks = array_map(function($weak){return md5(trim($weak));}, $weaks);
+        $weaks = array();
+        foreach(explode(',', $this->config->safe->weak) as $weak)
+        {
+            if($weak) $weaks[$weak] = md5(trim($weak));
+        }
 
         $weakUsers = array();
+        $users     = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll();
         foreach($users as $user)
         {
-            if(in_array($user->password, $weaks))
+            if(isset($weaks[$user->password]) || in_array($user->password, $weaks))
             {
                 $user->weakReason = 'weak';
                 $weakUsers[] = $user;
@@ -1572,7 +1575,7 @@ class userModel extends model
             foreach(array('account', 'phone', 'mobile', 'birthday') as $field)
             {
                 if(empty($user->$field)) continue;
-                if($user->password == md5($user->$field))
+                if($user->password == $user->$field || $user->password == md5($user->$field))
                 {
                     $user->weakReason = $field;
                     $weakUsers[] = $user;
