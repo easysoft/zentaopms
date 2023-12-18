@@ -62,8 +62,8 @@ class mrZen extends mr
         }
 
         $targetBranchList = array();
-        $branchList       = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
-        foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
+        $branchList       = $this->loadModel($scm)->apiGetBranches($MR->hostID, $MR->targetProject);
+        foreach($branchList as $branch) $targetBranchList[$branch->name] = $branch->name;
 
         $jobList = array();
         if($MR->repoID)
