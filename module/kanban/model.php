@@ -345,12 +345,13 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建看板列。
      * Create a column.
      *
-     * @param  int    $regionID
-     * @param  object $column
-     * @param  string $from kanban|execution
-     * @param  string $mode new|copy
+     * @param  int       $regionID
+     * @param  object    $column
+     * @param  string    $from kanban|execution
+     * @param  string    $mode new|copy
      * @access public
      * @return int|false
      */
@@ -474,7 +475,7 @@ class kanbanModel extends model
             return false;
         }
 
-        if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!$childColumn->noLimit and $childColumn->limit <= 0))
+        if(!preg_match("/^-?\d+$/", (string)$childColumn->limit) or (!$childColumn->noLimit and $childColumn->limit <= 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;

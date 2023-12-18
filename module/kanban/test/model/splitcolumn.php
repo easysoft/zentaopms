@@ -2,6 +2,7 @@
 <?php
 
 /**
+
 title=测试 kanbanModel->splitColumn();
 timeout=0
 cid=333
@@ -23,20 +24,20 @@ zdTable('kanbancolumn')->gen(2);
 
 $columnA = new stdclass();
 $columnA->name    = '测试创建子列A';
-$columnA->limit   = '-1';
-$columnA->noLimit = '-1';
+$columnA->limit   = 10;
+$columnA->noLimit = 0;
 $columnA->color   = '#333';
 
 $columnB = new stdclass();
 $columnB->name    = '测试创建子列B';
-$columnB->limit   = '2';
-$columnB->noLimit = '0';
+$columnB->limit   = 2;
+$columnB->noLimit = 0;
 $columnB->color   = '#333';
 
 $columnC = new stdclass();
 $columnC->name    = '测试创建子列C';
-$columnC->limit   = '2';
-$columnC->noLimit = '0';
+$columnC->limit   = 2;
+$columnC->noLimit = 0;
 $columnC->color   = '#333';
 
 $columnD = new stdclass();
