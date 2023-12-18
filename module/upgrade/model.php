@@ -203,14 +203,15 @@ class upgradeModel extends model
     }
 
     /**
+     * 处理企业版数据。
      * Process data for biz.
      *
-     * @param  int   $bizVersion
-     * @param  bool  $executedXuanxuan
+     * @param  string $bizVersion
+     * @param  bool   $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeBiz($bizVersion, $executedXuanxuan)
+    public function executeBiz(string $bizVersion, bool $executedXuanxuan): void
     {
         $this->executeByConfig($bizVersion, $executedXuanxuan);
     }
