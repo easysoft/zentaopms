@@ -495,7 +495,6 @@ class mrModel extends model
      * 创建远程合并请求。
      * Create MR by API.
      *
-     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      * @param  int    $hostID
      * @param  string $projectID
      * @param  object $MR

@@ -172,4 +172,22 @@ class mrTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->fetchAll();
     }
+
+    /**
+     * Test apiCreateMR method.
+     *
+     * @param  int     $hostID
+     * @param  string  $project
+     * @param  object  $params
+     * @access public
+     * @return array|object
+     */
+    public function apiCreateMrTester(int $hostID, string $project, object $params): array|object
+    {
+        $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
+        if(empty($result->iid) && empty($result->id)) return $result;
+
+        $this->objectModel->apiDeleteMR($hostID, $project, empty($result->iid) ? $result->id : $result->iid);
+        return $result;
+    }
 }
