@@ -327,7 +327,7 @@ class screenModel extends model
      */
     public function genMetricComponent($metric, $component = null)
     {
-        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
+        $this->initMetricComponent($metric, $component);
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
