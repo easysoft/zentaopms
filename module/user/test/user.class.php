@@ -610,23 +610,24 @@ class userTest
     }
 
     /**
+     * 测试清除用户失败次数和锁定时间。
      * Test clean user locked time.
      *
      * @param  string $account
      * @access public
-     * @return string
+     * @return array
      */
-    public function cleanLockedTest($account)
+    public function cleanLockedTest(string $account): array
     {
-        global $tester;
+        $result = $this->objectModel->cleanLocked($account);
+        $errors = dao::getError();
 
-        $this->objectModel->cleanLocked($account);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
 
-        if(dao::isError()) return dao::getError();
-
-        $locked = $tester->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch('locked');
-
-        return helper::isZeroDate($locked) ? 'success' : 'fail';
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
