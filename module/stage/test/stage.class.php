@@ -114,19 +114,19 @@ class stageTest
     }
 
     /**
-     * Test get a stage by id.
+     * 通过ID获取阶段信息。
+     * Get stage info by ID.
      *
-     * @param  int    $stageID
+     * @param  int         $stageID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByIDTest($stageID)
+    public function getByIDTest(int $stageID): object|bool
     {
-        $object = $this->objectModel->getByID($stageID);
+        $stage = $this->objectModel->getByID($stageID);
 
         if(dao::isError()) return dao::getError();
-
-        return $object;
+        return $stage;
     }
 
     /**

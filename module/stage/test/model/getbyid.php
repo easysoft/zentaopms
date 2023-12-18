@@ -1,31 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
-su('admin');
-
 /**
 
 title=测试 stageModel->getByID();
 cid=1
-pid=1
 
-测试获取阶段 1 >> 需求,10,request
-测试获取阶段 2 >> 设计,10,design
-测试获取阶段 3 >> 开发,50,dev
-测试获取阶段 4 >> 测试,15,qa
-测试获取阶段 5 >> 发布,10,release
-测试获取阶段 6 >> 总结评审,5,review
+- 测试获取ID=0的阶段 @0
+- 测试获取ID=1的阶段
+ - 属性name @需求1
+ - 属性percent @10
+ - 属性type @request
+- 测试获取ID不存在的阶段 @0
 
 */
 
-$stageIDList = array(1, 2, 3, 4, 5, 6);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/stage.class.php';
 
-$stage = new stageTest();
+zdTable('stage')->config('stage')->gen(1);
+zdTable('user')->gen(5);
 
-r($stage->getByIDTest($stageIDList[0])) && p('name,percent,type') && e('需求,10,request');   // 测试获取阶段 1
-r($stage->getByIDTest($stageIDList[1])) && p('name,percent,type') && e('设计,10,design');    // 测试获取阶段 2
-r($stage->getByIDTest($stageIDList[2])) && p('name,percent,type') && e('开发,50,dev');       // 测试获取阶段 3
-r($stage->getByIDTest($stageIDList[3])) && p('name,percent,type') && e('测试,15,qa');        // 测试获取阶段 4
-r($stage->getByIDTest($stageIDList[4])) && p('name,percent,type') && e('发布,10,release');   // 测试获取阶段 5
-r($stage->getByIDTest($stageIDList[5])) && p('name,percent,type') && e('总结评审,5,review'); // 测试获取阶段 6
+$stageIds = array(0, 1, 2);
+
+$stageTester = new stageTest();
+r($stageTester->getByIDTest($stageIds[0])) && p()                    && e('0');                // 测试获取ID=0的阶段
+r($stageTester->getByIDTest($stageIds[1])) && p('name,percent,type') && e('需求1,10,request'); // 测试获取ID=1的阶段
+r($stageTester->getByIDTest($stageIds[2])) && p()                    && e('0');                // 测试获取ID不存在的阶段
