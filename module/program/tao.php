@@ -267,7 +267,9 @@ class programTao extends programModel
      */
     protected function getTaskStats(array $projectIdList): array
     {
-        /* 1. Get summary of executions to be refreshed. */
+        /* 1. Set execution has no tasks. */
+        $summary = $this->setNoTaskExecution($projectIdList);
+        /* 2. Get summary of executions to be refreshed. */
         $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
@@ -275,7 +277,6 @@ class programTao extends programModel
             ->beginIF(!empty($projectIdList))->andWhere('t1.project')->in($projectIdList)->fi()
             ->fetchAll('id');
 
-        $summary = array();
         foreach($tasks as $task)
         {
             if(empty($task->execution)) continue;
@@ -292,14 +293,14 @@ class programTao extends programModel
             $summary[$task->execution]->totalLeft     += ($task->status == 'closed' or $task->status == 'cancel') ? 0 : $task->left;
         }
 
-        /* 2. Get all parents to be refreshed. */
+        /* 3. Get all parents to be refreshed. */
         $executions = array();
         foreach($summary as $execution) $executions[$execution->execution] = $execution->execution;
         $paths = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchAll();
         $executionPaths = array();
         foreach($paths as $path) $executionPaths[$path->id] = explode(',', trim($path->path, ','));
 
-        /* 3. Compute stats of execution and parents. */
+        /* 4. Compute stats of execution and parents. */
         $stats         = array();
         $projectsPairs = $this->dao->select('id,deleted')->from(TABLE_PROJECT)->fetchPairs();
         foreach($summary as $execution)
@@ -321,6 +322,39 @@ class programTao extends programModel
             }
         }
         return $stats;
+    }
+
+    /**
+     * 设置没有任务的执行数据。
+     * Set execution stat when has no task.
+     *
+     * @param  array     $projectIdList
+     * @access protected
+     * @return array
+     */
+    protected function setNoTaskExecution(array $projectIdList): array
+    {
+        $summary = array();
+        foreach($projectIdList as $projectID)
+        {
+            $executions = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs();
+            foreach($executions as $executionID)
+            {
+                $taskCount = $this->dao->select('id')->from(TABLE_TASK)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('execution')->eq($executionID)
+                    ->count();
+                if(empty($taskCount))
+                {
+                    $summary[$executionID] = new stdclass();
+                    $summary[$executionID]->totalEstimate = 0;
+                    $summary[$executionID]->totalConsumed = 0;
+                    $summary[$executionID]->totalLeft     = 0;
+                    $summary[$executionID]->execution     = $executionID;
+                }
+            }
+        }
+        return $summary;
     }
 
     /**
