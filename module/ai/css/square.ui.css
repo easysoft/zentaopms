@@ -39,6 +39,9 @@
     font-size: 13px;
     font-weight: 400;
     color: var(--color-slate-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .program-text .desc {
