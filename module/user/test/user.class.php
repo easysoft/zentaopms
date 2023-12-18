@@ -1105,20 +1105,16 @@ class userTest
     }
 
     /**
-     * Plus the fail times.
+     * 测试检查用户是否被锁定。
+     * Test check user is locked or not.
      *
-     * @param  string  $account
+     * @param  string $account
      * @access public
-     * @return string
+     * @return bool
      */
-    public function checkLockedTest($account)
+    public function checkLockedTest(string $account): bool
     {
-        global $tester;
-        $result = $this->objectModel->checkLocked($account);
-
-        $result = $result ? 'locked' : 'unlocked';
-
-        return $result;
+        return $this->objectModel->checkLocked($account);
     }
 
     /**
