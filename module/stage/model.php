@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of stage module of ZenTaoPMS.
  *
@@ -28,8 +29,16 @@ class stageModel extends model
         {
             $totalPercent = $this->getTotalPercent($type);
 
-            if(!is_numeric($stage->percent)) return dao::$errors['percent'] = $this->lang->stage->error->notNum;
-            if(round($totalPercent + $stage->percent) > 100) return dao::$errors['percent'] = $this->lang->stage->error->percentOver;
+            if(!is_numeric($stage->percent))
+            {
+                dao::$errors['percent'] = $this->lang->stage->error->notNum;
+                return false;
+            }
+            if(round($totalPercent + $stage->percent) > 100)
+            {
+                dao::$errors['percent'] = $this->lang->stage->error->percentOver;
+                return false;
+            }
         }
 
         $this->dao->insert(TABLE_STAGE)
@@ -44,35 +53,38 @@ class stageModel extends model
     }
 
     /**
+     * 批量创建阶段。
      * Batch create stages.
      *
+     * @param  string  $type   waterfall|waterfallplus
+     * @param  array   $stages
      * @access public
      * @return bool
      */
-    public function batchCreate($type = 'waterfall')
+    public function batchCreate($type = 'waterfall', array $stages = array()): bool
     {
-        $data = fixer::input('post')->get();
-
-        $setPercent = (isset($this->config->setPercent) and $this->config->setPercent == 1) ? true : false;
+        $setPercent = (isset($this->config->setPercent) && $this->config->setPercent == 1) ? true : false;
         if($setPercent)
         {
-            $totalPercent = $this->getTotalPercent($type);
-            if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'] = $this->lang->stage->error->percentOver;
+            $oldTotalPercent = $this->getTotalPercent($type);
+            $totalPercent    = 0;
+            foreach($stages as $stage)
+            {
+                if($totalPercent > 100) break;
+                $totalPercent += (int)$stage->percent;
+            }
+
+            if(round($oldTotalPercent + $totalPercent) > 100)
+            {
+                dao::$errors['message'] = $this->lang->stage->error->percentOver;
+                return false;
+            }
         }
 
         $this->loadModel('action');
-        foreach($data->name as $i => $name)
+        foreach($stages as $rowID => $stage)
         {
-            if(!$name) continue;
-
-            $stage = new stdclass();
-            $stage->name        = $name;
-            $stage->type        = $data->type[$i];
             $stage->projectType = $type;
-            $stage->createdBy   = $this->app->user->account;
-            $stage->createdDate = helper::today();
-            if($setPercent) $stage->percent = $data->percent[$i];
-
             $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()
                 ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
                 ->checkIF($stage->percent != '', 'percent', 'float')
@@ -80,7 +92,7 @@ class stageModel extends model
 
             if(dao::isError())
             {
-                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$i}]"] = $error;
+                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$rowID}]"] = $error;
                 return false;
             }
 

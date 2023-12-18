@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of stage currentModule of ZenTaoPMS.
  *
@@ -83,30 +84,23 @@ class stage extends control
     }
 
     /**
+     * 批量创建阶段。
      * Batch create stages.
      *
-     * @param  string $type
+     * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function batchCreate($type = 'waterfall')
+    public function batchCreate(string $type = 'waterfall')
     {
         $this->stage->setMenu($type);
         if($_POST)
         {
-            $this->stage->batchCreate($type);
+            $stages = form::batchData()->setDefault('projectType', $type)->get();
+            $this->stage->batchCreate($type, $stages);
 
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
-            return $this->send($response);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type")));
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->batchCreate;
