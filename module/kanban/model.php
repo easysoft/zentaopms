@@ -1052,6 +1052,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 根据分组ID获取泳道键值对。
      * Get kanban lane pairs by group id.
      *
      * @param  int    $groupID
@@ -1059,7 +1060,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getLanePairsByGroup($groupID, $orderBy = '`order`_asc')
+    public function getLanePairsByGroup(int $groupID, string $orderBy = '`order`_asc'): array
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq(0)
