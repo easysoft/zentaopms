@@ -117,7 +117,7 @@ class metricTao extends metricModel
      * 根据筛选条件获取度量项数据。
      * Fetch metric by filter.
      *
-     * @param  array    $filters
+     * @param  array  $filters
      * @param  string $stage
      * @access protected
      * @return array
@@ -166,7 +166,7 @@ class metricTao extends metricModel
      * 请求模块数据。
      * Fetch module data.
      *
-     * @param string  $scope
+     * @param string     $scope
      * @access protected
      * @return void
      */
@@ -306,7 +306,7 @@ class metricTao extends metricModel
      * 获取度量数据有效字段。
      * Get metric record fields.
      *
-     * @param  string $code
+     * @param  string    $code
      * @access protected
      * @return array|false
      */
@@ -351,8 +351,8 @@ class metricTao extends metricModel
      * 将度量数据不重复的id插入到临时表中。
      * Insert distinct metric record id to temp table.
      *
-     * @param  string $code
-     * @param  array $fields
+     * @param  string    $code
+     * @param  array     $fields
      * @access protected
      * @return void
      */

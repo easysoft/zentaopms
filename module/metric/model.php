@@ -20,9 +20,9 @@ class metricModel extends model
      * 获取度量数据表的表头。
      * Get header of result table in view.
      *
-     * @param  array $result
+     * @param  object $metric
      * @access public
-     * @return array|false
+     * @return array
      */
     public function getViewTableHeader($metric)
     {
@@ -266,8 +266,10 @@ class metricModel extends model
     }
 
     /**
+     * 获取所有范围的键值对。
      * Get scope pairs.
      *
+     * @param  bool   $all
      * @access public
      * @return array
      */
@@ -339,6 +341,14 @@ class metricModel extends model
         return $metrics;
     }
 
+    /**
+     * 以对象为维度分组度量项。
+     * Group metrics by object.
+     *
+     * @param  array  $metrics
+     * @access public
+     * @return array
+     */
     public function groupMetricByObject($metrics)
     {
         $groupMetrics = array_fill_keys(array_keys($this->lang->metric->objectList), array());
@@ -371,6 +381,14 @@ class metricModel extends model
         return $groupMetrics;
     }
 
+    /**
+     * 根据id列表获取度量项列表。
+     * Get metrics by id list.
+     *
+     * @param  array  $metricIDList
+     * @access public
+     * @return array|false
+     */
     public function getMetricsByIDList($metricIDList)
     {
         return $this->metricTao->fetchMetricsByIDList($metricIDList);
@@ -389,11 +407,28 @@ class metricModel extends model
         return $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq(0)->orderby($orderBy)->fetchAll('id');
     }
 
+    /**
+     * 通过筛选器筛选度量项。
+     * Get metric list by filters.
+     *
+     * @param  array  $filters
+     * @param  string $stage
+     * @access public
+     * @return array|false
+     */
     public function getListByFilter($filters, $stage)
     {
         return $this->metricTao->fetchMetricsWithFilter($filters, $stage);
     }
 
+    /**
+     * 通过我的收藏筛选度量项。
+     * Get metric list by collect.
+     *
+     * @param  string $stage
+     * @access public
+     * @return array|false
+     */
     public function getListByCollect($stage)
     {
         return $this->metricTao->fetchMetricsByCollect($stage);
@@ -462,7 +497,7 @@ class metricModel extends model
      * 根据ID获取旧版度量项信息。
      * Get old metric info by id.
      *
-     * @param  int $measurementID
+     * @param  int   $measurementID
      * @access public
      * @return object|false
      */
@@ -532,10 +567,10 @@ class metricModel extends model
      * Get date field of metric data.
      *
      * @param  string $code
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getMetricRecordDateField(string $code): array
+    public function getMetricRecordDateField(string $code): array
     {
         $record = $this->dao->select("year, month, week, day")
             ->from(TABLE_METRICLIB)
@@ -1073,6 +1108,14 @@ class metricModel extends model
         return $row;
     }
 
+    /**
+     * 检查度量项的计算文件是否存在。
+     * Check if metric's calculator exists.
+     *
+     * @param  object $metric
+     * @access public
+     * @return bool
+     */
     public function checkCalcExists($metric)
     {
         $calcName = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
@@ -1989,11 +2032,11 @@ class metricModel extends model
      * 判断 header 是否有分组（合并单元格）。
      * Judge header whether there are merges cell.
      *
-     * @param  array     $header
-     * @access protected
+     * @param  array  $header
+     * @access public
      * @return array
      */
-    protected function isHeaderGroup($header)
+    public function isHeaderGroup($header)
     {
         if(!$header) return false;
 

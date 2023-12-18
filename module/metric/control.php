@@ -265,6 +265,15 @@ class metric extends control
         return $this->send($optionList);
     }
 
+    /**
+     * 获取度量项的侧边栏。
+     * Get side tree widget by ajax.
+     *
+     * @param  string $scope
+     * @param  string $checkedList
+     * @access public
+     * @return string
+     */
     public function ajaxGetMetricSideTree($scope, $checkedList)
     {
         $checkedList = explode(',', $checkedList);
@@ -341,7 +350,8 @@ class metric extends control
      * 获取数据表格的数据。
      * Get data of datatable.
      *
-     * @param  int $metricID
+     * @param  int    $metricID
+     * @param  string $chartType
      * @access public
      * @return string
      */
