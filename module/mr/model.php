@@ -544,51 +544,6 @@ class mrModel extends model
     }
 
     /**
-     * 通过Api获取合并请求列表。
-     * Get MR list by API.
-     *
-     * @param  int    $hostID
-     * @param  string $projectID
-     * @param  string $scm
-     * @access public
-     * @return array
-     */
-    public function apiGetMRList(int $hostID, string $projectID, string $scm = 'Gitlab'): array
-    {
-        if($scm == 'Gitlab')
-        {
-            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests");
-        }
-        else
-        {
-            $url = sprintf($this->loadModel(strtolower($scm))->getApiRoot($hostID), "/repos/$projectID/pulls");
-        }
-
-        $response = json_decode(commonModel::http($url));
-        if(empty($response) || isset($response->message)) return array();
-
-        if(in_array($scm, array('Gitea', 'Gogs')))
-        {
-            foreach($response as $MR)
-            {
-                if(empty($MR)) continue;
-                $MR->iid   = $scm == 'Gitea' ? $MR->number : $MR->id;
-                $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
-                if($MR->merged) $MR->state = 'merged';
-
-                $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
-                $MR->description       = $MR->body;
-                $MR->target_branch     = $scm == 'Gitea' ? $MR->base->ref : $MR->base->ref;
-                $MR->source_branch     = $scm == 'Gitea' ? $MR->head->ref : $MR->head->ref;
-                $MR->source_project_id = $projectID;
-                $MR->target_project_id = $projectID;
-            }
-        }
-
-        return $response;
-    }
-
-    /**
      * 通过API查看是否有相同的合并请求。
      * Get same opened mr by api.
      *
@@ -625,9 +580,9 @@ class mrModel extends model
      * @param  string $projectID  targetProject
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiGetSingleMR(int $hostID, string $projectID, int $MRID): object
+    public function apiGetSingleMR(int $hostID, string $projectID, int $MRID): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
@@ -659,7 +614,7 @@ class mrModel extends model
             }
         }
 
-        $MR->gitService = $host->type;
+        if($MR) $MR->gitService = $host->type;
         return $MR;
     }
 
