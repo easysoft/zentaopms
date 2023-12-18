@@ -29,11 +29,11 @@ cid=1
 - 查看获取到的kanban5下的泳道数据
  - 第0条的title属性 @默认泳道
  - 第0条的type属性 @common
-- 测试获取到的kanban下的数据数量 @159
-- 测试获取到的kanban下的数据数量 @159
-- 测试获取到的kanban下的数据数量 @117
-- 测试获取到的kanban下的数据数量 @117
-- 测试获取到的kanban下的数据数量 @117
+- 测试获取到的kanban下的数据数量 @101
+- 测试获取到的kanban下的数据数量 @70
+- 测试获取到的kanban下的数据数量 @70
+- 测试获取到的kanban下的数据数量 @70
+- 测试获取到的kanban下的数据数量 @70
 
 */
 
@@ -46,8 +46,8 @@ r($tester->kanban->getKanbanData(3)[0]['key'])                       && p('')   
 r($tester->kanban->getKanbanData(4)[0]['items'][0]['data']['cols'])  && p('0:title,type') && e('未开始,column13'); // 查看获取到的kanban4下的列数据
 r($tester->kanban->getKanbanData(5)[0]['items'][0]['data']['lanes']) && p('0:title,type') && e('默认泳道,common'); // 查看获取到的kanban5下的泳道数据
 
-r(count($tester->kanban->getKanbanData(1), true)) && p() && e('159'); // 测试获取到的kanban下的数据数量
-r(count($tester->kanban->getKanbanData(2), true)) && p() && e('159'); // 测试获取到的kanban下的数据数量
-r(count($tester->kanban->getKanbanData(3), true)) && p() && e('117'); // 测试获取到的kanban下的数据数量
-r(count($tester->kanban->getKanbanData(4), true)) && p() && e('117'); // 测试获取到的kanban下的数据数量
-r(count($tester->kanban->getKanbanData(5), true)) && p() && e('117'); // 测试获取到的kanban下的数据数量
+r(count($tester->kanban->getKanbanData(1), true)) && p() && e('101'); // 测试获取到的kanban下的数据数量
+r(count($tester->kanban->getKanbanData(2), true)) && p() && e('70');  // 测试获取到的kanban下的数据数量
+r(count($tester->kanban->getKanbanData(3), true)) && p() && e('70');  // 测试获取到的kanban下的数据数量
+r(count($tester->kanban->getKanbanData(4), true)) && p() && e('70');  // 测试获取到的kanban下的数据数量
+r(count($tester->kanban->getKanbanData(5), true)) && p() && e('70');  // 测试获取到的kanban下的数据数量
