@@ -1266,6 +1266,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取专业研发看板的列。
      * Get RD column group by regions.
      *
      * @param  array  $regions
@@ -1273,7 +1274,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getRDColumnGroupByRegions($regions, $groupIDList = array())
+    public function getRDColumnGroupByRegions(array $regions, array $groupIDList = array())
     {
         $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
