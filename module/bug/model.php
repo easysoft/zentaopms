@@ -376,7 +376,7 @@ class bugModel extends model
         {
             $this->loadModel('kanban');
             if(!isset($kanbanData['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $oldBug->id);
-            if(isset($kanbanData['toColID']))  $this->kanban->moveCard($oldBug->id, $kanbanData['fromColID'], $kanbanData['toColID'], $kanbanData['fromLaneID'], $kanbanData['toLaneID'], $oldBug->execution);
+            if(isset($kanbanData['toColID']))  $this->kanban->moveCard((int)$oldBug->id, (int)$kanbanData['fromColID'], (int)$kanbanData['toColID'], (int)$kanbanData['fromLaneID'], (int)$kanbanData['toLaneID'], (int)$oldBug->execution);
         }
 
         /* 记录历史记录。*/
