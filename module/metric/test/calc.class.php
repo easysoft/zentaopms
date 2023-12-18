@@ -53,6 +53,35 @@ class metricTest
     }
 
     /**
+     * 测试getByList方法。
+     * Test getByList method.
+     *
+     * @param  string $scope
+     * @param  string $stage
+     * @param  int    $param
+     * @param  string $sort
+     * @access public
+     * @return array|false
+     */
+    public function getList($scope, $stage = 'all', $sort = 'id_desc')
+    {
+        return $this->objectModel->getList($scope, $stage, $param, '', 0, $sort);
+    }
+
+    /**
+     * 测试getScopePairs方法。
+     * Test getScopePairs method.
+     *
+     * @param  bool   $all
+     * @access public
+     * @return array
+     */
+    public function getScopePairs($all = true)
+    {
+        return $this->objectModel->getScopePairs($all);
+    }
+
+    /**
      * 测试根据code获取度量项数据方法。
      * Test get metric by code.
      *
