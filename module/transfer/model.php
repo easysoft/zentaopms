@@ -318,6 +318,7 @@ class transferModel extends model
     }
 
     /**
+     * 初始化系统数据字段列表(project,execution,product,user)。
      * Init system datafields list.
      *
      * @access public
@@ -326,12 +327,13 @@ class transferModel extends model
     public function initSysDataFields()
     {
         $this->commonActions();
-        $dataList = array();
-
+        $dataList      = array();
         $sysDataFields = explode(',', $this->transferConfig->sysDataFields);
 
         foreach($sysDataFields as $field)
         {
+            /* 调用对应模块getPairs方法获取id => name 关联数据。 */
+            /* Call getPairs method of corresponding module to get id => name related data. */
             $dataList[$field] = $this->loadModel($field)->getPairs();
             if(!isset($dataList[$field][0])) $dataList[$field][0] = '';
 
