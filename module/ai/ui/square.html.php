@@ -76,10 +76,12 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
                 setClass('program-text'),
                 div(
                     setClass('title'),
+                    set::title($miniProgram->name),
                     $miniProgram->name
                 ),
                 div(
                     setClass('desc'),
+                    set::title($miniProgram->desc),
                     $miniProgram->desc
                 )
             ),
