@@ -19,6 +19,8 @@ $upgrade = new upgradeTest();
 global $app;
 $path = $app->getCacheRoot() . 'restartcron';
 
+if(!file_exists($app->getCacheRoot())) mkdir($app->getCacheRoot());
+
 if(file_exists($path)) unlink($path);
 
 $upgrade->stopOldCron();
