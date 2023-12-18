@@ -84,7 +84,7 @@ class screen extends control
             return;
         }
 
-        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
 
         $this->view->title  = $screen->name;
         $this->view->screen = $screen;
@@ -104,12 +104,6 @@ class screen extends control
             $this->view->account = $account;
             $this->display();
         }
-    }
-
-    public function ajaxGetScreenScheme($screenID, $year = 0, $month = 0, $dept = 0, $account = '')
-    {
-        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
-        echo(json_encode($screen));
     }
 
     /**
