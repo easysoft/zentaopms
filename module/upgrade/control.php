@@ -137,12 +137,14 @@ class upgrade extends control
     }
 
     /**
-     * Execute the upgrading.
+     * 执行升级的 SQL。
+     * Execute the upgrading sql.
      *
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function execute($fromVersion = '')
+    public function execute(string $fromVersion = '')
     {
         session_write_close();
         $this->session->set('step', '');
@@ -150,6 +152,8 @@ class upgrade extends control
         $this->view->title       = $this->lang->upgrade->result;
         $this->view->fromVersion = $fromVersion;
 
+        /* 手动删除无法自动删除的文件。*/
+        /* Remove files that can not be deleted automatically. */
         $result = $this->upgrade->deleteFiles();
         if($result)
         {
@@ -162,21 +166,22 @@ class upgrade extends control
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+
         $installedVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+
         if($this->config->version != $installedVersion) $this->upgrade->execute($rawFromVersion);
 
         if(!$this->upgrade->isError())
         {
             $this->setting->updateVersion($this->config->version);
 
-            $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
-
             /* Delete all patch actions if upgrade success. */
             $this->loadModel('action')->deleteByType('patch');
 
-            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $rawFromVersion));
-            $selectMode  = true;
-
+            $selectMode = true;
+            $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
+            /* 如果经典管理模式。*/
+            /* If the system mode is classic. */
             if($systemMode == 'classic')
             {
                 $this->setting->setItem('system.common.global.mode', 'light');
@@ -205,7 +210,12 @@ class upgrade extends control
 
                 $selectMode = false;
             }
-            if(version_compare($openVersion, '15_0_rc1', '>=') and $systemMode == 'new')
+
+            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $rawFromVersion));
+
+            /* 从15 版本以后升级。*/
+            /* when upgrade from the vesion is more than 15. */
+            if(version_compare($openVersion, '15_0_rc1', '>=') && $systemMode == 'new')
             {
                 $this->setting->setItem('system.common.global.mode', 'ALM');
                 if(empty($this->config->URAndSR)) $this->setting->setItem('system.common.closedFeatures', 'productUR');
@@ -213,6 +223,8 @@ class upgrade extends control
             }
             if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;
 
+            /* 如果是 ipd 版本，设置相关的配置。*/
+            /* When the edition is ipd. */
             if($this->config->edition == 'ipd' && strpos($fromVersion, 'ipd') === false)
             {
                 $this->setting->setItem('system.common.global.mode', 'PLM');
