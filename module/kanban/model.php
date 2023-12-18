@@ -1096,7 +1096,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getColumnGroupByRegions($regions, $order = 'order', $param = '')
+    public function getColumnGroupByRegions(array $regions, string $order = '`order`', string $param = ''): array
     {
         $columns = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')

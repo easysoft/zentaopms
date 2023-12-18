@@ -70,6 +70,18 @@ class fields
     }
 
     /**
+     * Set a flag to unset field.
+     *
+     * @access public
+     * @return void
+     */
+    public function setNull()
+    {
+        $this->fieldArr[$this->field]['null'] = true;
+        return $this;
+    }
+
+    /**
      * Set field postfix.
      *
      * @param  string    $postfix
@@ -167,6 +179,7 @@ class fields
             if(isset($rule['postfix'])) $ruleArr[$index]['postfix'] = $rule['postfix'];
             if(isset($rule['type']))    $ruleArr[$index]['type']    = $rule['type'];
             if(isset($rule['format']))  $ruleArr[$index]['format']  = $rule['format'];
+            if(isset($rule['null']))    $ruleArr[$index]['null']    = $rule['null'];
 
             $index ++;
         }
@@ -348,7 +361,15 @@ class yaml
         if(!empty($this->fields->fieldArr))
         {
             $fields = $this->fields->setFieldRule($this->fields->fieldArr);
-            foreach($fields as $field) $mergeData['fields'][$field['field']] = $field;
+            foreach($fields as $field)
+            {
+                if(isset($field['null']))
+                {
+                    unset($mergeData['fields'][$field['field']]);
+                    continue;
+                }
+                $mergeData['fields'][$field['field']] = $field;
+            }
         }
         $mergeData['fields'] = array_values($mergeData['fields']);
 
