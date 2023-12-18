@@ -1,3 +1,10 @@
+#featureBar .text {
+    max-width: 6em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .miniprogram-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
