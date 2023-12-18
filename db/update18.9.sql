@@ -10,8 +10,6 @@ ALTER TABLE `zt_review` MODIFY `lastEditedDate` date NULL;
 ALTER TABLE `zt_meeting` MODIFY `minutedDate` datetime NULL;
 ALTER TABLE `zt_meeting` MODIFY `editedDate` datetime NULL;
 
-ALTER TABLE `zt_productplan` MODIFY `mailto` text NULL;
-
 ALTER TABLE `zt_story` MODIFY `submitedBy` varchar(30) DEFAULT '';
 ALTER TABLE `zt_story` MODIFY `demand` mediumint(8) DEFAULT 0;
 ALTER TABLE `zt_story` MODIFY `duration` char(30) DEFAULT '';
