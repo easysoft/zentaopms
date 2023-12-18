@@ -97,29 +97,27 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
-        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen))
-        {
-            $scheme = json_decode($screen->scheme);
+        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $month, $dept, $account);
 
-            foreach($scheme->componentList as $component)
-            {
-                if(!empty($component->isGroup))
-                {
-                    foreach($component->groupList as $key => $groupComponent)
-                    {
-                        if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
-                    }
-                }
-                else
-                {
-                    if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
-                }
-            }
-
-            return $scheme;
-        }
-
-        $editCanvasConfig = $this->config->screen->editCanvasConfig;
+        $config = new stdclass();
+        $config->width            = 1300;
+        $config->height           = 1080;
+        $config->filterShow       = false;
+        $config->hueRotate        = 0;
+        $config->saturate         = 1;
+        $config->contrast         = 1;
+        $config->brightness       = 1;
+        $config->opacity          = 1;
+        $config->rotateZ          = 0;
+        $config->rotateX          = 0;
+        $config->rotateY          = 0;
+        $config->skewX            = 0;
+        $config->skewY            = 0;
+        $config->blendMode        = 'normal';
+        $config->background       = '#001028';
+        $config->selectColor      = true;
+        $config->chartThemeColor  = 'dark';
+        $config->previewScaleType = 'scrollY';
 
         $componentList = json_decode($screen->scheme);
         if(empty($componentList)) $componentList = array();
@@ -130,15 +128,49 @@ class screenModel extends model
             if(!isset($component->attr)) continue;
 
             $height = $component->attr->y + $component->attr->h;
-            if($height > $editCanvasConfig->height) $editCanvasConfig->height = $height;
+            if($height > $config->height) $config->height = $height;
         }
-        $editCanvasConfig->height += 50;
+        $config->height += 50;
 
         $chartData = new stdclass();
-        $chartData->editCanvasConfig = $editCanvasConfig;
-        $chartData->componentList    = $this->buildComponentList($componentList);
+        $chartData->editCanvasConfig    = $config;
+        $chartData->componentList       = $this->buildComponentList($componentList);
+        $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
 
         return $chartData;
+    }
+
+    /**
+     * Generate chartData of new screen.
+     *
+     * @param  object $screen
+     * @param  string $year
+     * @param  string $dept
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function genNewChartData($screen, $year, $month, $dept, $account)
+    {
+        $this->loadModel('pivot');
+        $scheme = json_decode($screen->scheme);
+
+        foreach($scheme->componentList as $component)
+        {
+            if(!empty($component->isGroup))
+            {
+                foreach($component->groupList as $key => $groupComponent)
+                {
+                    if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
+                }
+            }
+            else
+            {
+                if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
+            }
+        }
+
+        return $scheme;
     }
 
     /**

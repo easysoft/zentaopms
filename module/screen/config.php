@@ -4,26 +4,6 @@ $config->screen->builtinChart  = array(10018, 10019, 10020, 10021, 10022, 10211,
 $config->screen->builtinPivot  = array(1000, 1001, 1002);
 $config->screen->phpChart      = array(20002, 20004, 20007, 20010, 20011, 20012, 20013);
 
-$config->screen->editCanvasConfig = new stdclass();
-$config->screen->editCanvasConfig->width            = 1300;
-$config->screen->editCanvasConfig->height           = 1080;
-$config->screen->editCanvasConfig->filterShow       = false;
-$config->screen->editCanvasConfig->hueRotate        = 0;
-$config->screen->editCanvasConfig->saturate         = 1;
-$config->screen->editCanvasConfig->contrast         = 1;
-$config->screen->editCanvasConfig->brightness       = 1;
-$config->screen->editCanvasConfig->opacity          = 1;
-$config->screen->editCanvasConfig->rotateZ          = 0;
-$config->screen->editCanvasConfig->rotateX          = 0;
-$config->screen->editCanvasConfig->rotateY          = 0;
-$config->screen->editCanvasConfig->skewX            = 0;
-$config->screen->editCanvasConfig->skewY            = 0;
-$config->screen->editCanvasConfig->blendMode        = 'normal';
-$config->screen->editCanvasConfig->background       = '#001028';
-$config->screen->editCanvasConfig->selectColor      = true;
-$config->screen->editCanvasConfig->chartThemeColor  = 'dark';
-$config->screen->editCanvasConfig->previewScaleType = 'scrollY';
-
 $config->screen->chartConfig = array();
 $config->screen->chartConfig['cluBarX']     = '{"category" : "Bars", "categoryName" : "柱状图", "chartFrame" : "echarts", "chartKey" : "VBarCommon", "conKey" : "VCBarCommon", "image" : "bar_x.png", "key" : "BarCommon", "package" : "Charts", "title" : "簇状柱形图", "dataset" : {}}';
 $config->screen->chartConfig['cluBarY']     = '{"category" : "Bars", "categoryName" : "柱状图", "chartFrame" : "echarts", "chartKey" : "VBarCrossrange", "conKey" : "VCBarCrossrange", "image" : "bar_y.png", "key" : "BarCrossrange", "package" : "Charts", "title" : "簇状条形图", "dataset" : {}}';
