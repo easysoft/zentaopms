@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     product
+ * @package     gitea
  * @link        https://www.zentao.net
  */
 
@@ -48,6 +48,8 @@ class giteaModel extends model
      * Bind gitea user and zentao user.
      *
      * @param  int    $giteaID
+     * @param  array  $users
+     * @param  array  $giteaNames
      * @access public
      * @return bool
      */
@@ -71,7 +73,7 @@ class giteaModel extends model
             return false;
         }
 
-        $user = new stdclass;
+        $user = new stdclass();
         $user->providerID   = $giteaID;
         $user->providerType = 'gitea';
 
@@ -135,7 +137,7 @@ class giteaModel extends model
                 foreach($fieldErrors as $error) $errorMsg[] = $error;
             }
         }
-        $this->parseApiError($error);
+        foreach($errorMsg as $error) $this->parseApiError($error);
 
         return false;
     }
@@ -226,7 +228,7 @@ class giteaModel extends model
      * Get project by api.
      *
      * @param  int    $giteaID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @access public
      * @return object|false
      */
@@ -371,7 +373,7 @@ class giteaModel extends model
      * @param  int    $giteaID
      * @param  string $project
      * @access public
-     * @return object
+     * @return array
      */
     public function apiGetBranches(int $giteaID, string $project): array
     {
@@ -427,7 +429,7 @@ class giteaModel extends model
         $keyword  = urlencode($keyword);
         $url      = sprintf($this->getApiRoot($giteaID), "/repos/$project/branch_protections");
         $branches = json_decode(commonModel::http($url));
-        if(!is_array($branches)) return $branches;
+        if(!is_array($branches)) return array();
 
         $newBranches = array();
         foreach($branches as $branch)
