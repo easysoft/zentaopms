@@ -117,6 +117,7 @@ class tutorialModel extends model
         $product->activeBugs        = 0;
         $product->latestReleaseDate = 0;
         $product->latestRelease     = 0;
+        $product->plans             = 0;
 
         $productStat[$product->id] = $product;
         return $productStat;
