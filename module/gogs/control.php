@@ -185,7 +185,6 @@ class gogs extends control
         $gogsUsers     = $this->gogs->apiGetUsers($gogsID);
         $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($gogsID, 'gogs');
         $matchedResult = $this->gogsZen->getMatchedUsers($gogsID, $gogsUsers);
-        $bindedUsers   = $this->pipeline->getUserBindedPairs($gogsID, 'gitea');
         $zentaoUsers   = $this->loadModel('user')->getRealNameAndEmails(helper::arrayColumn($matchedResult, 'zentaoAccount'));
 
         foreach($gogsUsers as $gogsUser)

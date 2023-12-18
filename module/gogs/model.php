@@ -20,7 +20,7 @@ class gogsModel extends model
      * @access public
      * @return string
      */
-    public function getApiRoot(int $gogsID) string
+    public function getApiRoot(int $gogsID): string
     {
         $gogs = $this->fetchByID($gogsID);
         if(!$gogs) return '';
@@ -38,7 +38,7 @@ class gogsModel extends model
      * @access public
      * @return array
      */
-    public function bindUser(int $gogsID, , array $users, array $gogsNames): bool
+    public function bindUser(int $gogsID, array $users, array $gogsNames): bool
     {
         $accountList = array();
         $repeatUsers = array();
