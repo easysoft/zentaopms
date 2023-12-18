@@ -98,6 +98,7 @@ $lang->dataview->objects['testrun']     = 'testrun';
 $lang->dataview->objects['testcase']    = 'testcase';
 $lang->dataview->objects['testresult']  = 'result';
 $lang->dataview->objects['casemodule']  = 'case module';
+$lang->dataview->objects['feedback']    = 'Feedback';
 $lang->dataview->objects['action']      = 'Action';
 $lang->dataview->objects['effort']      = 'Effort';
 
