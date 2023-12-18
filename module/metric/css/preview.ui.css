@@ -1,4 +1,5 @@
 #mainMenu {padding-left: unset !important; padding-right: unset !important;}
+.filter-panel .panel-body .divider {opacity: unset;}
 #mainContent {display: flex; padding-top: 0;}
 #mainContent .side {overflow-x: hidden; padding-right: 4px;}
 #mainContent .main {overflow-x: hidden;}
