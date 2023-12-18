@@ -915,7 +915,7 @@ class executionModel extends model
         if(!empty($postData->comment) || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Started', $postData->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Started', isset($postData->comment) ? $postData->comment : '');
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -970,7 +970,7 @@ class executionModel extends model
     {
         $oldExecution = $this->getById($executionID);
 
-        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->suspend['id'], $postData->uid);
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->suspend['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
             ->autoCheck()
             ->checkFlow()
@@ -980,9 +980,9 @@ class executionModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
-        if(!empty($changes) || $postData->comment != '')
+        if(!empty($changes) || $this->post->comment != '')
         {
-            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $postData->comment);
+            $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', isset($postData->comment) ? $postData->comment : '');
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -1105,7 +1105,7 @@ class executionModel extends model
 
         $this->lang->error->ge = $this->lang->execution->ge;
 
-        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->close['id'], $postData->uid);
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->close['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
             ->autoCheck()
             ->check($this->config->execution->close->requiredFields,'notempty')
@@ -1120,10 +1120,10 @@ class executionModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
-        if($postData->comment != '' || !empty($changes))
+        if($this->post->comment != '' || !empty($changes))
         {
             $this->loadModel('action');
-            $actionID = $this->action->create('execution', $executionID, 'Closed', $postData->comment);
+            $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 

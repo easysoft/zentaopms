@@ -1509,7 +1509,10 @@ class projectModel extends model
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
-            $this->product->close($productID);
+
+            $product = new stdclass();
+            $product->status = 'closed';
+            $this->product->close($productID, $product);
         }
 
         $this->loadModel('score')->create('project', 'close', $oldProject);
