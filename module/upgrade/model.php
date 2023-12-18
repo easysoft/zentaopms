@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of upgrade module of ZenTaoPMS.
  *
@@ -33,14 +34,15 @@ class upgradeModel extends model
     }
 
     /**
-     * Get versions to update
+     * 获取升级的版本。
+     * Get versions to update.
      *
      * @param  mixed  $openVersion
-     * @param  string $fromEdition open|pro|biz|max
+     * @param  string $fromEdition open|pro|biz|max|ipd
      * @access public
      * @return array
      */
-    public function getVersionsToUpdate($openVersion, $fromEdition)
+    public function getVersionsToUpdate(string $openVersion, string $fromEdition): array
     {
         $versions = array();
 
@@ -53,25 +55,26 @@ class upgradeModel extends model
         }
         if($fromEdition == 'open') return $versions;
 
-        /* Update pro sql from pro|biz|max. */
+        /* Update pro sql from pro|biz|max|ipd. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
         }
         if($fromEdition == 'pro') return $versions;
 
-        /* Update biz sql from biz|max. */
+        /* Update biz sql from biz|max|ipd. */
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
         }
         if($fromEdition == 'biz') return $versions;
 
-        /* Update max sql only from max. */
+        /* Update max sql from max|ipd. */
         foreach($this->config->upgrade->maxVersion as $max => $open)
         {
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
         }
+        if($fromEdition == 'max') return $versions;
 
         /* Update ipd sql only from ipd. */
         foreach($this->config->upgrade->ipdVersion as $ipd => $open)
