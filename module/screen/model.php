@@ -1615,14 +1615,13 @@ class screenModel extends model
 
         $resultHeader   = $this->metric->getViewTableHeader($metric);
         $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
-        $dateType       = $this->metric->getDateTypeByCode($metric->code);
 
         $result     = $this->metric->getResultByCode($metric->code, array(), 'cron');
         $resultData = $this->metric->getViewTableData($metric, $result);
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, false);
 
         $tableOption = new stdclass();
-        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType) : array($groupHeader);
+        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader) : array($groupHeader);
         $tableOption->data    = $groupData;
         return $tableOption;
     }
@@ -1631,11 +1630,10 @@ class screenModel extends model
      * Get table headers of metric in screen designer.
      *
      * @param  array  $resultHeaders
-     * @param  string $dateType
      * @access public
      * @return object
      */
-    public function getMetricHeaders($resultHeader, $dateType)
+    public function getMetricHeaders($resultHeader)
     {
         $headers = array_fill(0, 2, array());
 
@@ -1643,13 +1641,12 @@ class screenModel extends model
         {
             if($head['name'] == 'scope')
             {
-                if($dateType != 'year') $head['rowspan'] = 2;
+                $head['rowspan'] = 2;
                 $headers[0][] = $head;
             }
             else
             {
-                $row = $dateType == 'year' ? 0 : 1;
-                $headers[$row][] = $head;
+                $headers[1][] = $head;
             }
         }
 
@@ -1664,7 +1661,6 @@ class screenModel extends model
             $headers[0][] = $dateGroup;
         }
 
-        if($dateType == 'year') unset($headers[1]);
         return $headers;
     }
 
