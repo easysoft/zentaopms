@@ -12,7 +12,7 @@ namespace zin;
 
 set::zui(true);
 
-jsVar('nextLink', inlink('step1'));
+jsVar('nextLink', $config->inQuickon ? inlink('step5') : inlink('step1'));
 
 div
 (
