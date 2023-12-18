@@ -333,7 +333,6 @@ class screenModel extends model
 
         $component->chartConfig->chartOption = $this->getMetricChartOption($metric);
         $component->chartConfig->tableOption = $this->getMetricTableOption($metric);
-
         return $component;
     }
 
@@ -1625,8 +1624,6 @@ class screenModel extends model
         $tableOption = new stdclass();
         $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType) : array($groupHeader);
         $tableOption->data    = $groupData;
-        $tableOption->scope   = $metric->scope;
-        if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
         return $tableOption;
     }
 
