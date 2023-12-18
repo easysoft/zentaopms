@@ -52,6 +52,21 @@ class metricTest
     }
 
     /**
+     * 测试 getOldMetricList 方法。
+     * Test getOldMetricList method.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getOldMetricList($orderBy = 'id_desc')
+    {
+        $a = $this->objectModel->getOldMetricList($orderBy);
+        //a($a);
+        return $a;
+    }
+
+    /**
      * 测试 getByCode 方法。
      * Test getByCode method.
      *
