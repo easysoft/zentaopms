@@ -71,7 +71,7 @@ class stageModel extends model
             foreach($stages as $stage)
             {
                 if($totalPercent > 100) break;
-                $totalPercent += (int)$stage->percent;
+                $totalPercent += (float)$stage->percent;
             }
 
             if(round($oldTotalPercent + $totalPercent) > 100)
@@ -104,25 +104,27 @@ class stageModel extends model
     }
 
     /**
+     * 编辑一个阶段。
      * Update a stage.
      *
-     * @param  int    $stageID
+     * @param  int        $stageID
+     * @param  object     $stage
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function update($stageID)
+    public function update(int $stageID, object $stage): bool|array
     {
         $oldStage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq((int)$stageID)->fetch();
+        if(!$oldStage) return false;
 
-        $stage = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::today())
-            ->get();
-
-        if(isset($this->config->setPercent) and $this->config->setPercent == 1)
+        if(isset($this->config->setPercent) && $this->config->setPercent == 1)
         {
             $totalPercent = $this->getTotalPercent($oldStage->projectType);
-            if(round($totalPercent + (float)$stage->percent - $oldStage->percent) > 100) return dao::$errors['percent'] = $this->lang->stage->error->percentOver;
+            if(round($totalPercent + (float)$stage->percent - $oldStage->percent) > 100)
+            {
+                dao::$errors['percent'] = $this->lang->stage->error->percentOver;
+                return false;
+            }
         }
 
         $this->dao->update(TABLE_STAGE)
@@ -212,11 +214,11 @@ class stageModel extends model
      * Get total percent of the type.
      *
      *  @param  string $type waterfall|waterfallplus
-     *  @return int
+     *  @return float
      */
-    public function getTotalPercent(string $type): int
+    public function getTotalPercent(string $type): float
     {
-        return (int)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
+        return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
     }
 
     /**

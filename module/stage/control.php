@@ -109,6 +109,7 @@ class stage extends control
     }
 
     /**
+     * 编辑一个阶段。
      * Edit a stage.
      *
      * @param  int    $stageID
@@ -121,22 +122,14 @@ class stage extends control
         $this->stage->setMenu($stage->projectType);
         if($_POST)
         {
-            $changes = $this->stage->update($stageID);
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            $stageData = form::data()->get();
+            $changes   = $this->stage->update($stageID, $stageData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->loadModel('action')->create('stage', $stageID, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            $response['closeModal'] = true;
-            $response['load']       = true;
-            return $this->send($response);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
