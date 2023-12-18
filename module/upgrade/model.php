@@ -119,14 +119,10 @@ class upgradeModel extends model
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
-            $executedXuanxuan = false;
-            if($openVersion == '10_1') $executedXuanxuan = true;
-            if($openVersion == '16_4' && !empty($this->config->isINT)) $executedXuanxuan = true;
-
             /* Execute open edition. */
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-            $this->executeByConfig($openVersion, $executedXuanxuan);
+            $this->executeByConfig($openVersion);
 
             /* Execute charge edition. */
             foreach($chargedVersions as $edition => $chargedVersion)
@@ -136,7 +132,7 @@ class upgradeModel extends model
                     if($edition == 'max') $version = array_search($openVersion, $this->config->upgrade->maxVersion);
                     $this->saveLogs("Execute $version");
                     $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $version)));
-                    $this->executeByConfig($version, $executedXuanxuan);
+                    $this->executeByConfig($version);
                 }
             }
         }
@@ -172,11 +168,10 @@ class upgradeModel extends model
      * Execute upgrade methods by config.
      *
      * @param  string  $version
-     * @param  bool    $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeByConfig(string $version, bool $executedXuanxuan = false): void
+    public function executeByConfig(string $version): void
     {
         $execConfig  = zget($this->config->upgrade->execFlow, $version, array());
         $functions   = zget($execConfig, 'functions', '');
@@ -189,11 +184,8 @@ class upgradeModel extends model
         if($version == 'pro1_1_1') $this->execSQL($this->getUpgradeFile('pro1.1'));
         if($version == 'pro8_3')   $this->execSQL($this->getUpgradeFile('pro8.2'));
 
-        if($executedXuanxuan)
-        {
-            foreach(array_filter(explode(',', $xxsqls)) as $sqlFile) $this->execSQL($sqlFile);
-            foreach(array_filter(explode(',', $xxfunctions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
-        }
+        if(!empty($xxsqls))      foreach(array_filter(explode(',', $xxsqls)) as $sqlFile)       $this->execSQL($sqlFile);
+        if(!empty($xxfunctions)) foreach(array_filter(explode(',', $xxfunctions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
     }
 
     /**
