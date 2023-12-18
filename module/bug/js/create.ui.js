@@ -18,5 +18,6 @@ $(function()
         const assignedTo = bug.assignedTo;
         if(!assignedTo) setTimeout(function(){loadAssignedToByModule(moduleID, productID)}, 500);
     }
-    loadBuildActions();
+
+    $('#buildBoxActions').closest('.input-group').find('.picker-box').on('inited', function(_, info){loadBuildActions()});
 });

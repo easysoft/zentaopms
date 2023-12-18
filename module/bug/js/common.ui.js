@@ -6,7 +6,7 @@ $(function()
 function changeProduct(event)
 {
     const productID = $(event.target).val();
-    if(!productID) return false;
+    if(productID == undefined) return false;
 
     if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
     {
@@ -171,15 +171,25 @@ function loadProductBranches(productID)
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + bug[tab];
     $.getJSON($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
-        if($('[name="branch"]').length > 0)
+        if(data.length > 0)
         {
-            $('[name="branch"]').zui('picker').destroy();
-            $('[name="product"]').closest('.picker-box').next('.picker-box').remove();
+            if($('#branchPicker').length > 0)
+            {
+                const $branchPicker = $('#branchPicker').zui('picker');
+                $branchPicker.render({items: data, defaultValue: data[0].value});
+                $branchPicker.$.setValue('0');
+            }
+            else
+            {
+                $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value}));
+            }
+            $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
         }
-        $('#branchPicker').remove();
-
-        $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value}));
-        $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
+        else
+        {
+            $('#branchPicker').zui('picker').destroy();
+            $('#branchPicker').remove();
+        }
     });
 }
 

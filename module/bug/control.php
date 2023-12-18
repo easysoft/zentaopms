@@ -1452,7 +1452,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProductMembers(int $productID, string $selectedUser = '', int $branchID = 0)
+    public function ajaxGetProductMembers(int $productID, string $selectedUser = '', string $branchID = '0')
     {
         /* 获取产品的成员。如果产品团队成员为空，返回未关闭的用户。 */
         /* Get product members. If product members is empty, get noclosed users. */

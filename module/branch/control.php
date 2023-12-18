@@ -254,7 +254,7 @@ class branch extends control
     public function ajaxGetBranches(int $productID, string $oldBranch = '0', string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '')
     {
         $product = $this->loadModel('product')->getByID($productID);
-        if(empty($product) || $product->type == 'normal') return false;
+        if(empty($product) || $product->type == 'normal') return print(json_encode(array()));
 
         $branches        = $this->branch->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch);
         $branchTagOption = array();
