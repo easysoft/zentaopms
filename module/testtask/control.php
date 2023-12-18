@@ -652,6 +652,7 @@ class testtask extends control
         $this->view->pager          = $pager;
         $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
         $this->view->setModule      = true;
+        $this->view->showBranch     = false;
         $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
         $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = $canBeChanged;
