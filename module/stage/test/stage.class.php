@@ -114,21 +114,6 @@ class stageTest
     }
 
     /**
-     * Test get pairs of stage.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPairsTest()
-    {
-        $objects = $this->objectModel->getPairs();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Test get a stage by id.
      *
      * @param  int    $stageID

@@ -179,25 +179,6 @@ class stageModel extends model
     }
 
     /**
-     * Get pairs of stage.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPairs()
-    {
-        $stages = $this->getStages();
-
-        $pairs = array();
-        foreach($stages as $stageID => $stage)
-        {
-            $pairs[$stageID] = $stage->name;
-        }
-
-        return $pairs;
-    }
-
-    /**
      * Get a stage by id.
      *
      * @param  int    $stageID
