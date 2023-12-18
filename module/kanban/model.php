@@ -1010,6 +1010,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取区域中的泳道分组。
      * Get lane group by regions.
      *
      * @param  array  $regions
@@ -1017,7 +1018,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getLaneGroupByRegions($regions, $browseType = 'all')
+    public function getLaneGroupByRegions(array $regions, string $browseType = 'all'): array
     {
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
