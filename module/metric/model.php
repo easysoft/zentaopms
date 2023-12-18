@@ -80,9 +80,7 @@ class metricModel extends model
             $record = (array)$record;
             if(isset($record['date'])) $record['calcTime'] = date("Y-m-d H:i", strtotime($record['date']));
 
-            $fieldList = array_keys($record);
-            $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
-            $dateType  = $this->getDateType($dateList);
+            $dateType  = $this->getDateType(array_keys($record));
 
             $row = $this->buildDateCell($record, $dateType);
             if($scope != 'system')
