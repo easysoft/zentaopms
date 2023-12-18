@@ -66,24 +66,31 @@ class stageTest
     }
 
     /**
-     * Test update a stage.
+     * 编辑一个阶段。
+     * Update a stage.
      *
-     * @param  int    $stageID
-     * @param  array  $param
+     * @param  int        $stageID
+     * @param  array      $data
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function updateTest($stageID, $param)
+    public function updateTest(int $stageID, array $data): array|bool
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $oldStage = $this->objectModel->getByID($stageID);
 
-        $objects = $this->objectModel->update($stageID);
+        $name    = isset($oldStage->name) ? $oldStage->name : '';
+        $percent = isset($oldStage->percent) ? $oldStage->percent : 0;
+        $type    = isset($oldStage->type) ? $oldStage->type : '';
 
-        unset($_POST);
+        $stage = new stdclass();
+        $stage->name = isset($data['name']) ? $data['name'] : $name;
+        $stage->percent = isset($data['percent']) ? $data['percent'] : $percent;
+        $stage->type = isset($data['type']) ? $data['type'] : $type;
+
+        $changes = $this->objectModel->update($stageID, $stage);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $changes;
     }
 
     /**
