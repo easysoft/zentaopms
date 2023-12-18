@@ -622,7 +622,7 @@ class groupModel extends model
      */
     public function updatePrivByModule()
     {
-        if($this->post->module == false or $this->post->actions == false or $this->post->groups == false) return false;
+        if($this->post->module == false || $this->post->actions == false || $this->post->groups == false) return false;
 
         $privs = array();
         foreach($this->post->actions as $action)

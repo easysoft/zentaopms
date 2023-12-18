@@ -16,22 +16,6 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/group.class.php';
 
-/*
-global $config;
-
-$config->group = new stdclass();
-$config->group->subset = new stdclass();
-$config->group->subset->test = new stdclass();
-$config->group->subset->test->nav = 'test';
-
-$config->group->package = new stdclass();
-$config->group->package->package1 = new stdclass();
-$config->group->package->package1->subset = 'test';
-$config->group->package->package1->privs['module1-method1'] = array('edtion' => 'open,biz,max,ipd', 'vision' => 'rnd');
-$config->group->package->package1->privs['module2-method2'] = array('edtion' => 'open,biz,max,ipd', 'vision' => 'rnd');
-$config->group->package->package1->privs['module3-method3'] = array('edtion' => 'open,biz,max,ipd', 'vision' => 'rnd');
- */
-
 su('admin');
 
 /*

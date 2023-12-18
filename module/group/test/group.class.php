@@ -345,6 +345,7 @@ class groupTest
     {
         global $app;
         $app->post->set('actions', $actions);
+
         $this->objectModel->updatePrivByGroup($groupID, $nav, $version);
 
         if(dao::isError()) return dao::getError();
@@ -358,13 +359,24 @@ class groupTest
      * @access public
      * @return void
      */
-    public function updatePrivByModuleTest()
+    public function updatePrivByModuleTest($module, $groups, $actions)
     {
-        $objects = $this->objectModel->updatePrivByModule();
+        global $app;
+        $app->post->set('module', $module);
+        $app->post->set('groups', $groups);
+        $app->post->set('actions', $actions);
+
+        $this->objectModel->updatePrivByModule();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $result = array();
+        foreach($groups as $group)
+        {
+            $result[$group] = $this->getPrivsTest($group);
+        }
+
+        return $result;
     }
 
     /**
