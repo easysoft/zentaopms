@@ -1019,24 +1019,30 @@ class upgradeModel extends model
                         $stdIsInt     = stripos($stdType, 'int') !== false;
                         $stdIsVarchar = stripos($stdType, 'varchar') !== false;
                         $stdIsText    = stripos($stdType, 'text') !== false;
+                        $stdIsFloat   = preg_match('/int|float|decimal|double/i', $stdType);
                         $dbIsInt      = stripos($dbType, 'int') !== false;
                         $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
                         $dbIsText     = stripos($dbType, 'text') !== false;
+                        $dbIsFloat    = preg_match('/int|float|decimal|double/i', $dbType);
                         if($dbIsInt and $dbLength == 0)
                         {
                             $intFieldLengths = zget($this->config->upgrade->dbFieldLengths, $dbConfigs[2] == 'unsigned' ? 'unsigned' : 'int', array());
                             $dbLength = zget($intFieldLengths, $dbType, 0);
                         }
 
-                        if($dbLength > $stdLength)     $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsInt && $dbIsText)     $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsVarchar && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
+                        if(($stdIsInt || $stdIsVarchar) && ($dbIsInt || $dbIsVarchar) && $dbLength > $stdLength) $stdConfigs[1] = $dbConfigs[1];   // Only check like int and varchar field type.
+                        if(($stdIsInt || $stdIsVarchar) && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
+                        if($stdIsFloat && $dbIsFloat)
+                        {
+                            if($dbLength && $stdLength && dbLength > $stdLength)  $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float(2,2), and current field type float(3,1)
+                            if($dbLength && $stdLength == 0)                      $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float, and current field type float(3,1)
+                        }
                         if($stdIsText && $dbIsText)
                         {
                             $textFieldLengths = $this->config->upgrade->dbFieldLengths['text'];
                             if($textFieldLengths[$stdType] < $textFieldLengths[$dbType]) $stdConfigs[1] = $dbConfigs[1];
                         }
-                        if(stripos($stdConfigs[1], 'int') === false && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
+                        if(!preg_match('/int|float|decimal|double/i', $stdConfigs[1]) && isset($stdConfigs[2]) && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
 
                         $line = implode(' ', $stdConfigs);
                         if($line == $fields[$field]) continue;
@@ -1070,7 +1076,7 @@ class upgradeModel extends model
 
         $hasError = false;
         $fixSqls  = $this->checkConsistency($version);
-        if($fixSqls) $fixSqls = "SET @@sql_mode= '';" . $fixSqls;
+        if($fixSqls) $fixSqls = "SET @@sql_mode= '';\n" . $fixSqls;
         foreach(explode(';', $fixSqls) as $fixSQL)
         {
             file_put_contents($logFile, $fixSQL, FILE_APPEND);
