@@ -685,7 +685,8 @@ class programplanModel extends model
                 $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
             }
 
-            $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
+            $plan->order = (int)current($orders);
+            $plan->days  = helper::diffDate($plan->end, $plan->begin) + 1;
 
             if($plan->id)
             {
@@ -695,6 +696,7 @@ class programplanModel extends model
                 $oldStage    = $this->getByID($stageID);
                 $planChanged = ($oldStage->name != $plan->name || $oldStage->milestone != $plan->milestone || $oldStage->begin != $plan->begin || $oldStage->end != $plan->end);
 
+                unset($plan->order);
                 if($planChanged) $plan->version = $oldStage->version + 1;
                 $this->dao->update(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
