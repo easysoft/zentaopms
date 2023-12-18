@@ -164,10 +164,10 @@ $lang->install->errorNotInitConfig = '还没有生成配置文件';
 global $app;
 $lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->basePath}config/config.php文件中手动关闭。";
 
-$lang->install->getPriv            = '设置帐号';
-$lang->install->company            = '公司名称';
-$lang->install->account            = '管理员帐号';
-$lang->install->password           = '管理员密码';
+$lang->install->getPriv  = '设置帐号';
+$lang->install->company  = '公司名称';
+$lang->install->account  = '管理员帐号';
+$lang->install->password = '管理员密码';
 
 $lang->install->placeholder = new stdclass();
 $lang->install->placeholder->password = '6位及以上，包含大小写字母，数字。';

@@ -164,10 +164,10 @@ $lang->install->errorNotInitConfig = 'The configuration has not been created.';
 global $app;
 $lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
 
-$lang->install->getPriv            = 'Als Admin setzen';
-$lang->install->company            = 'Firmenname';
-$lang->install->account            = 'Admin Konto';
-$lang->install->password           = 'Admin Passwort';
+$lang->install->getPriv  = 'Als Admin setzen';
+$lang->install->company  = 'Firmenname';
+$lang->install->account  = 'Admin Konto';
+$lang->install->password = 'Admin Passwort';
 
 $lang->install->placeholder = new stdclass();
 $lang->install->placeholder->password = 'The Password should be ≥ 6 characters, combination of uppercase, lowercase letters and numbers.';
