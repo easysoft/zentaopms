@@ -25,7 +25,7 @@ class metricTest
     }
 
     /**
-     * 测试getByID方法。
+     * 测试 getByID  方法。
      * Test getByID method.
      *
      * @param  int          $metricID
@@ -39,8 +39,21 @@ class metricTest
     }
 
     /**
-     * 测试getByID方法。
-     * Test getByID method.
+     * 测试 getMetricsByIDList  方法。
+     * Test getMetricsByIDList method.
+     *
+     * @param  array|string $idList
+     * @access public
+     * @return array
+     */
+    public function getMetricsByIDList($idList)
+    {
+        return $this->objectModel->getMetricsByIDList($idList);
+    }
+
+    /**
+     * 测试 getByCode 方法。
+     * Test getByCode method.
      *
      * @param  string       $code
      * @param  array|string $fieldList
@@ -53,7 +66,7 @@ class metricTest
     }
 
     /**
-     * 测试getByList方法。
+     * 测试 getByList 方法。
      * Test getByList method.
      *
      * @param  string $scope
@@ -69,7 +82,7 @@ class metricTest
     }
 
     /**
-     * 测试getScopePairs方法。
+     * 测试 getScopePairs 方法。
      * Test getScopePairs method.
      *
      * @param  bool   $all
@@ -79,6 +92,33 @@ class metricTest
     public function getScopePairs($all = true)
     {
         return $this->objectModel->getScopePairs($all);
+    }
+
+    /**
+     * 测试 groupMetricByObject 方法。
+     * Test groupMetricByObject method.
+     *
+     * @param  array  $metrics
+     * @param  bool   $isObject true|false  去对象|计数
+     * @param  array  $params   array('group' => '', 'key' => '')
+     * @access public
+     * @return array
+     */
+    public function groupMetricByObject($metrics, $isObject = true, $params = array('group' => 'program', 'key' => 1))
+    {
+        $groupedMetrics = $this->objectModel->groupMetricByObject($metrics);
+
+        if(!isset($params['group']) or !isset($groupedMetrics[$params['group']])) return false;
+
+        $groupMetric = $groupedMetrics[$params['group']];
+        if($isObject)
+        {
+            return (!isset($params['key']) or !isset($groupMetric[$params['key']]))  ? false : $groupMetric[$params['key']];
+        }
+        else
+        {
+            return array('count' => count($groupMetric));
+        }
     }
 
     /**
