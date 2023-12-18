@@ -8,8 +8,8 @@ $metric = new metricTest();
 /**
 
 title=getList
+timeout=0
 cid=1
-pid=1
 
 */
 

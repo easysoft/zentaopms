@@ -170,6 +170,8 @@ class metricTest
      */
     public function getDateLabels($dateType)
     {
-        return $this->objectModel->getDateLabels($dateType);
+        $dateLabel = $this->objectModel->getDateLabels($dateType);
+        if($dateLabel === array()) return 'empty array';
+        return $dateLabel;
     }
 }
