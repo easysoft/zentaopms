@@ -1070,6 +1070,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 根据分组ID获取看板列键值对。
      * Get kanban column pairs by group id.
      *
      * @param  int    $groupID
@@ -1077,7 +1078,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getColumnPairsByGroup($groupID, $orderBy = '`order`_asc')
+    public function getColumnPairsByGroup(int $groupID, string $orderBy = '`order`_asc'): array
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
