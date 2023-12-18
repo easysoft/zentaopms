@@ -24,9 +24,32 @@ class metricTest
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
+    /**
+     * 测试getByID方法。
+     * Test getByID method.
+     *
+     * @param  int          $metricID
+     * @param  array|string $fieldList
+     * @access public
+     * @return void
+     */
     public function getByID($metricID, $fieldList = '*')
     {
         return $this->objectModel->getByID($metricID, $fieldList);
+    }
+
+    /**
+     * 测试getByID方法。
+     * Test getByID method.
+     *
+     * @param  string       $code
+     * @param  array|string $fieldList
+     * @access public
+     * @return void
+     */
+    public function getByCode($code, $fieldList = '*')
+    {
+        return $this->objectModel->getByCode($code, $fieldList);
     }
 
     /**
