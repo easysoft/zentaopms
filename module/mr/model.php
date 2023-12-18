@@ -456,7 +456,7 @@ class mrModel extends model
             /* Update compile status of current MR object */
             if(isset($MR->needCI) && $MR->needCI == '1')
             {
-                $compile = $this->loadModel('compile')->getByMR($MR->id);
+                $compile = $this->loadModel('compile')->getByID($MR->id);
                 $newMR->compileStatus = $compile ? $compile->status : 'failed';
             }
 
