@@ -8064,38 +8064,34 @@ class upgradeModel extends model
     }
 
     /**
-     * Check pivot SQL.
+     * 更新透视表的阶段。
+     * Update pivot stage.
      *
      * @access public
      * @return void
      */
-    public function checkPivotSQL()
+    public function updatePivotStage()
     {
         $this->loadModel('pivot');
         $this->loadModel('chart');
         $this->loadModel('dataview');
-        $pivots    = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
-        $pivotList = array_keys($pivots);
 
-        foreach($pivotList as $pivotID)
+        $pivotList = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
+        foreach($pivotList as $pivotID => $pivot)
         {
-            $pivot   = $this->pivot->getByID($pivotID);
-            $sql     = $this->chart->parseSqlVars($pivot->sql, $pivot->filters);
-            $stage   = $pivot->stage;
-            if($stage == 'draft') continue;
+            if($pivot->stage == 'draft' || empty($pivot->sql)) continue;
+
+            $filters = empty($pivot->filters) ? array() : $pivot->filters;
+            $filters = $this->pivot->setFilterDefault(json_decode($filters, true));
+            $sql     = trim(str_replace(';', '', $pivot->sql));
+            $sql     = $this->chart->parseSqlVars($sql, $filters);
 
             $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
             $stmt = $this->dbh->query($sql);
-            if(!$stmt) /* Fix bug #35559. */
+            if(!$stmt || !$this->dataview->checkUniColumn($sql))
             {
-                $stage = 'draft';
+                $this->dao->update(TABLE_PIVOT)->set('stage')->eq('draft')->where('id')->eq($pivotID)->exec();
             }
-            elseif(!$this->dataview->checkUniColumn($sql))
-            {
-                $stage = 'draft';
-            }
-
-            $this->dao->update(TABLE_PIVOT)->set('stage')->eq($stage)->where('id')->eq($pivotID)->exec();
         }
     }
 

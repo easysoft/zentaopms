@@ -121,7 +121,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['17_4']['params']['addFlowFields']  = array('biz7.4');
     $config->upgrade->execFlow['17_6_2']['functions'] = 'processFeedbackModule';
     $config->upgrade->execFlow['18_3']['functions'] .= ',processDataset,processChart,processReport,processDashboard';
-    $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,checkPivotSQL';
+    $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';

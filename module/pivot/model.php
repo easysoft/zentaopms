@@ -47,7 +47,7 @@ class pivotModel extends model
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            $pivot->filters = $this->setFilterDefault($filters);;
+            $pivot->filters = $this->setFilterDefault($filters);
         }
         else
         {
