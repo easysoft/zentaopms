@@ -171,6 +171,7 @@ formPanel
     $config->systemMode != 'light' ? on::change('#begin, #end, #parent', 'checkDate') : null,
     formRow
     (
+        set::hidden(!empty($globalDisableProgram)),
         formGroup
         (
             set::width('1/2'),

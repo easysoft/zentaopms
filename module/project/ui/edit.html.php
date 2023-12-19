@@ -186,7 +186,7 @@ formPanel
     on::change('[name^=branch]', 'branchChange'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=newProduct]', 'addProduct'),
-    formRow
+    empty($globalDisableProgram) ? formRow
     (
         formGroup
         (
@@ -224,7 +224,7 @@ formPanel
             set::value($project->model),
             set::control('hidden')
         )
-    ),
+    ) : null,
     formGroup
     (
         set::width('1/2'),
