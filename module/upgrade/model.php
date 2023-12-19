@@ -7014,40 +7014,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Update zentao.sql or update18.3.sql file insert pivot data's group.
-     *
-     * @access public
-     * @return bool
-     */
-    public function updatePivotGroup()
-    {
-        $pivotModules = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
-        $pivots = $this->dao->select('*')->from(TABLE_PIVOT)->fetchAll('id');
-        foreach($pivots as $pivotID => $pivot)
-        {
-            $modules = explode(',', $pivot->group);
-
-            /* Upgrade group only pivot written by sql, group is string (possibly use , separated). */
-            $continue = false;
-            foreach($modules as $module)
-            {
-                if(is_numeric($module)) $continue = true;
-            }
-            if($continue) continue;
-
-            $insertGroup = array();
-            foreach($modules as $module)
-            {
-                if($module) $insertGroup[] = $pivotModules[$module];
-            }
-
-            $this->dao->update(TABLE_PIVOT)->set('`group`')->eq(implode(',', $insertGroup))->where('id')->eq($pivotID)->exec();
-        }
-
-        return !dao::isError();
-    }
-
-    /**
      * Add second modules for bi, move buildin chart and pivot to second modules.
      *
      * @access public
