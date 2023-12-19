@@ -408,4 +408,58 @@ class upgradeZen extends upgrade
             if((isset($unlinkSprints[$productID]) && empty($unlinkSprints[$productID])) || !isset($unlinkSprints[$productID])) $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
         }
     }
+
+    /**
+     * 合并按产品分组的产品和迭代。
+     * Merge products and projects group by product.
+     *
+     * @param  string    $projectType
+     * @access protected
+     * @return void
+     */
+    protected function mergeByProduct(string $projectType)
+    {
+        $linkedProducts = array();
+        $linkedSprints  = array();
+        $unlinkSprints  = array();
+        $sprintProducts = array();
+        foreach($_POST['products'] as $productID)
+        {
+            $linkedProducts[$productID] = $productID;
+
+            if(isset($_POST['sprints'][$productID]))
+            {
+                foreach($_POST['sprints'][$productID] as $sprintID)
+                {
+                    $linkedSprints[$sprintID]  = $sprintID;
+                    $sprintProducts[$sprintID] = $productID;
+                    unset($_POST['sprintIdList'][$productID][$sprintID]);
+                }
+                $unlinkSprints += $this->post->sprintIdList[$productID];
+            }
+        }
+
+        /* Create Program. */
+        list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        /* Process productline. */
+        $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
+
+        /* Process merged products and projects. */
+        if($projectType == 'execution')
+        {
+            /* Use historical projects as execution upgrades. */
+            $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
+        }
+        else
+        {
+            /* Use historical projects as project upgrades. */
+            foreach($linkedSprints as $sprint) $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
+
+            /* When upgrading historical data as a project, handle products that are not linked with the project. */
+            $singleProducts = array_diff($linkedProducts, $sprintProducts);
+            if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
+        }
+    }
 }
