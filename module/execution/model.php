@@ -4102,11 +4102,12 @@ class executionModel extends model
         $execution  = $this->getById($executionID);
         $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->andWhere('task')->eq(0)->fetch();
         $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
+        $burnLeft = empty($burn) ? 0 : $burn->left;
 
         $data = fixer::input('post')
             ->add('execution', $executionID)
             ->add('date', $execution->begin)
-            ->add('left', $withLeft ? $this->post->estimate : $burn->left)
+            ->add('left', $withLeft ? $this->post->estimate : $burnLeft)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
             ->remove('withLeft')
             ->get();
