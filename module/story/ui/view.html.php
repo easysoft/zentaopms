@@ -30,7 +30,16 @@ if($this->app->rawModule == 'execution') $tab = 'execution';
 $createStoryLink = $this->createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type");
 
 $versions = array();
-for($i = $story->version; $i >= 1; $i --) $versions[] = array('text' => "#{$i}", 'url' => inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
+for($i = $story->version; $i >= 1; $i --)
+{
+    $versionItem = array('text' => "#{$i}", 'url' => inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
+    if(isInModal())
+    {
+        $versionItem['data-load'] = 'modal';
+        $versionItem['data-target'] = '.modal-content';
+    }
+    $versions[] = $versionItem;
+}
 
 $menus = $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
 foreach($menus['dropMenus'] as $dropMenuKey => $dropItems) menu(setID($dropMenuKey), setClass('menu dropdown-menu'), set::items($dropItems));
