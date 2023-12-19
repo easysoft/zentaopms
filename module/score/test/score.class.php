@@ -34,33 +34,44 @@ class scoreTest
     }
 
     /**
+     * 创建积分日志。
      * Add score logs.
      *
-     * @param string $module
-     * @param string $method
-     * @param string $param
-     * @param string $account
-     * @param string $time
-     *
+     * @param  string      $module
+     * @param  string      $method
+     * @param  int         $param
      * @access public
-     * @return string|object
+     * @return bool|object
      */
-    public function createTest($module = '', $method = '', $param = '', $account = '', $time = '')
+    public function createTest(string $module = '', string $method = '', int $objectID = 0): bool|object
     {
-        global $tester;
-
-        $object = $this->objectModel->create($module, $method, $param, $account, $time);
-
-        if(dao::isError())
+        $this->objectModel->config->global->scoreStatus = true;
+        if(in_array($method, array('confirm', 'resolve')))
         {
-            return dao::getError();
+            $param = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch();
+            if(!$param)
+            {
+                $param = new stdclass();
+                $param->id       = $objectID;
+                $param->openedBy = 'admin';
+                $param->severity = 1;
+            }
+        }
+        elseif($module == 'execution')
+        {
+            $param = $this->objectModel->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch();
+            if(!$param)
+            {
+                $param = new stdclass();
+                $param->id = $objectID;
+            }
         }
         else
         {
-            $object = (!empty((array) $object) and is_object($object)) ? $object : '';
+            $param = $objectID;
         }
 
-        return $object;
+        return $this->objectModel->create($module, $method, $param);
     }
 
     /**
