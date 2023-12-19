@@ -14,6 +14,7 @@ su('admin');
 
 $userTest = new userTest();
 
+/* 安全配置相关功能在 checkPassword 单元测试用例中有详细测试，此处重置为默认值以减少对当前用例的影响。*/
 unset($config->safe->mode);
 unset($config->safe->weak);
 
