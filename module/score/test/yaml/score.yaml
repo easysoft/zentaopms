@@ -1,0 +1,8 @@
+title: zt_score
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: account
+    range: 'admin{10},user1{10}'

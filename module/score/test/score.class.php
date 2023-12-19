@@ -15,22 +15,24 @@ class scoreTest
     }
 
     /**
+     * 获取用户的积分记录。
      * Get user score list.
      *
-     * @param string $account
-     * @param object $pager
-     * @param bool   $needCount
-     *
+     * @param  string $account
+     * @param  object $pager
+     * @param  bool   $needCount
      * @access public
-     * @return array|int
+     * @return array
      */
-    public function getListByAccountTest($account, $pager, $needCount = false)
+    public function getListByAccountTest(string $account, int $recPerPage, int $pageID): array
     {
-        $objects = $this->objectModel->getListByAccount($account, $pager);
+        $this->objectModel->app->loadClass('pager', true);
+        $pager = pager::init(0, $recPerPage, $pageID);
+
+        $scores = $this->objectModel->getListByAccount($account, $pager);
 
         if(dao::isError()) return dao::getError();
-
-        return $needCount ? count($objects) : $objects;
+        return $scores;
     }
 
     /**
