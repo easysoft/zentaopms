@@ -524,49 +524,8 @@ class transferModel extends model
         /* If has cascade field, add cascade field list. */
         if(!empty($this->moduleConfig->cascade))
         {
-            $lists = $this->getCascadeList($module, $lists);
+            $lists = $this->transferTao->getCascadeList($module, $lists);
             $lists['cascade'] = $this->moduleConfig->cascade;
-        }
-
-        return $lists;
-    }
-
-    /**
-     * Get cascade list for export excel.
-     *
-     * @param  int    $module
-     * @param  int    $lists
-     * @access public
-     * @return void
-     */
-    public function getCascadeList($module, $lists)
-    {
-        $this->commonActions($module);
-        if(!isset($this->moduleConfig->cascade)) return $lists;
-
-        $cascadeArray = $this->moduleConfig->cascade;
-
-        foreach($cascadeArray as $field => $linkFiled)
-        {
-            $fieldList     = $field . 'List';
-            $linkFieldList = $linkFiled . 'List';
-            $tmpFieldList  = array();
-            if(!empty($lists[$fieldList]) and !empty($lists[$linkFieldList]))
-            {
-                $table = zget($this->config->objectTables, $field);
-                if(empty($table)) continue;
-
-                $fieldIDList     = array_keys($lists[$fieldList]);
-                $fieldDatas      = $this->dao->select("id, $linkFiled")->from($table)->where('id')->in($fieldIDList)->fetchPairs();
-
-                if(empty($fieldDatas)) continue;
-                foreach($fieldDatas as $id => $linkFieldID)
-                {
-                    $tmpFieldList[$linkFieldID][$id] = $lists[$fieldList][$id];
-                }
-
-                $lists[$fieldList] = $tmpFieldList;
-            }
         }
 
         return $lists;

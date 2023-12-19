@@ -89,4 +89,55 @@ class transferTao extends transferModel
             ->ne('editor')
             ->fetchGroup('objectID');
     }
+
+    /**
+     * 获取级联数据列表。
+     * Get cascade list for export excel.
+     *
+     * @param  array  $module
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    protected function getCascadeList(string $module, array $lists): array
+    {
+        /* 如果没有配置config->cascade，则不需要进行级联操作。*/
+        /* If has not cascade config, do not need to do cascade operation. */
+        $this->commonActions($module);
+        if(!isset($this->moduleConfig->cascade)) return $lists;
+
+        $cascadeArray = $this->moduleConfig->cascade;
+
+        foreach($cascadeArray as $field => $linkField)
+        {
+            $fieldName     = $field . 'List';
+            $linkFieldName = $linkField . 'List';
+            $tmpFieldName  = array();
+
+            if(empty($lists[$fieldName]) and empty($lists[$linkFieldName])) continue;
+
+            /* 根据字段名获取表名。*/
+            /* Get table name by field name. */
+            $table = zget($this->config->objectTables, $field);
+            if(empty($table)) continue;
+
+            /* 根据字段名获取关联数据。*/
+            /* Get ID list by field name. */
+            $fieldIDList = array_keys($lists[$fieldName]);
+            $fieldDatas  = $this->dao->select("id, $linkField")->from($table)->where('id')->in($fieldIDList)->fetchPairs();
+
+            if(empty($fieldDatas)) continue;
+
+            /* 将获取到的数据替换到lists中。*/
+            /* Replace data to lists. */
+            foreach($fieldDatas as $id => $linkFieldID)
+            {
+                $tmpFieldName[$linkFieldID][$id] = $lists[$fieldName][$id];
+            }
+
+            $lists[$fieldName] = $tmpFieldName;
+        }
+
+        return $lists;
+    }
 }

@@ -86,4 +86,36 @@ class transferTest
 
         return $this->objectModel->setListValue($module, $fieldList);
     }
+
+    /**
+     * 测试setListValue
+     * setListValueTest
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getCascadeListTest(string $module = '')
+    {
+        global $tester, $app;
+        $app->methodName = 'ajaxgettbody';
+
+        $_SESSION['testcaseTransferParams']['productID'] = '0';
+        $_SESSION['testcaseTransferParams']['branch']    = '0';
+
+        $object = $tester->loadModel($module);
+        $fields = isset($object->config->$module->exportFields) ? $object->config->$module->exportFields : '';
+
+        $object->config->bug->listFields   = "module,project,execution,story,severity,pri,type,os,browser,openedBuild";
+        if($module == 'testcase')
+        {
+            $app->config->testcase->cascade    = array('story' => 'module');
+            $app->config->testcase->listFields = 'module,type,stage,pri,story,status,branch,results';
+        }
+
+        $fields    = explode(',', $fields);
+        $fieldList = $this->objectModel->initFieldList($module, $fields);
+
+        return $this->objectModel->setListValue($module, $fieldList);
+    }
 }
