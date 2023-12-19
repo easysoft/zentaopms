@@ -2124,12 +2124,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取升级时的错误。
      * Get errors during the upgrading.
      *
      * @access public
      * @return array
      */
-    public function getError()
+    public function getError(): array
     {
         $errors = static::$errors;
         static::$errors = array();

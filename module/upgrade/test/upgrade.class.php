@@ -205,4 +205,19 @@ class upgradeTest
         $this->objectModel::$errors = $errors;
         return $this->objectModel->isError();
     }
+
+    /**
+     * 测试获取升级时的错误。
+     * Test get errors during the upgrading.
+     *
+     * @param  array  $errors
+     * @access public
+     * @return string
+     */
+    public function getErrorTest(array $errors): string
+    {
+        $this->objectModel::$errors = $errors;
+        $return = $this->objectModel->getError();
+        return implode(',', $return);
+    }
 }
