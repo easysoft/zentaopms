@@ -1469,15 +1469,16 @@ class userModel extends model
     }
 
     /**
+     * 获取拥有迭代访问权限的用户列表。
      * Get users who have access to the parent stage.
      *
      * @param  int    $stageID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getParentStageAuthedUsers($stageID = 0)
+    public function getParentStageAuthedUsers(int $stageID = 0): array
     {
-        return $this->dao->select('account')->from(TABLE_USERVIEW)->where("CONCAT(',', sprints, ',')")->like("%,{$stageID},%")->fetchPairs();
+        return $this->dao->select('account')->from(TABLE_USERVIEW)->where("FIND_IN_SET({$stageID}, sprints)")->fetchPairs();
     }
 
     /**
