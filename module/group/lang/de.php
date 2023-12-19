@@ -315,6 +315,7 @@ $lang->group->package->lieu                  = 'Lieu';
 $lang->group->package->holiday               = 'Holiday';
 $lang->group->package->exportOffice          = 'Export Office';
 $lang->group->package->browseFeedback        = 'Browse Feedback';
+$lang->group->package->browseLiteFeedback    = 'Browse Feedback';
 $lang->group->package->manageFeedback        = 'Manage Feedback';
 $lang->group->package->importFeedback        = 'Import Feedback';
 $lang->group->package->handleFeedback        = 'Handle Feedback';
@@ -588,6 +589,5 @@ $lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
 $lang->group->package->browseApplication     = 'Application List';
 $lang->group->package->mangeApplication      = 'Manage Application';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
-$lang->group->package->other                 = 'Other';
 
 include (dirname(__FILE__) . '/resource.php');

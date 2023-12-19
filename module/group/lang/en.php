@@ -315,6 +315,7 @@ $lang->group->package->lieu                  = 'Lieu';
 $lang->group->package->holiday               = 'Holiday';
 $lang->group->package->exportOffice          = 'Export Office';
 $lang->group->package->browseFeedback        = 'Browse Feedback';
+$lang->group->package->browseLiteFeedback    = 'Browse Feedback';
 $lang->group->package->manageFeedback        = 'Manage Feedback';
 $lang->group->package->importFeedback        = 'Import Feedback';
 $lang->group->package->handleFeedback        = 'Handle Feedback';

@@ -315,6 +315,7 @@ $lang->group->package->lieu                  = '个人调休';
 $lang->group->package->holiday               = '节假日';
 $lang->group->package->exportOffice          = '办公导出';
 $lang->group->package->browseFeedback        = '浏览反馈';
+$lang->group->package->browseLiteFeedback    = '浏览反馈';
 $lang->group->package->manageFeedback        = '创建维护反馈';
 $lang->group->package->importFeedback        = '导入导出反馈';
 $lang->group->package->handleFeedback        = '处理反馈';
