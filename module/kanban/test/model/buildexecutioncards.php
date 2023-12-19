@@ -4,12 +4,13 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
-zdTable('story')->gen(10);
-zdTable('bug')->gen(10);
-zdTable('task')->config('task')->gen(10);
-zdTable('kanbanlane')->config('kanbanlane')->gen(10);
-zdTable('kanbancell')->config('kanbancell')->gen(30);
+zdTable('project')->config('kanbanexecution')->gen(5);
+zdTable('kanbanregion')->config('rdkanbanregion')->gen(5);
+zdTable('kanbangroup')->config('rdkanbangroup')->gen(20);
+zdTable('kanbancolumn')->gen(20);
+zdTable('kanbanlane')->config('rdkanbanlane')->gen(10);
+zdTable('kanbancell')->config('rdkanbancell')->gen(20);
+zdTable('task')->config('rdkanbantask')->gen(20);
 
 /**
 
@@ -17,20 +18,36 @@ title=测试 kanbanModel->buildExecutionCards();
 timeout=0
 cid=1
 
+- 构造迭代的任务卡片
+ - 属性id @1
+ - 属性title @任务1
+- 构造阶段的任务卡片
+ - 属性id @2
+ - 属性title @任务2
+- 构造看板的任务卡片
+ - 属性id @3
+ - 属性title @任务3
+- 构造迭代的任务卡片 @0
+- 构造阶段的任务卡片 @0
+- 构造看板的任务卡片 @0
+- 构造迭代的任务卡片 @0
+- 构造阶段的任务卡片 @0
+- 构造看板的任务卡片 @0
+
 */
 
 $executionIdList = array(1, 2, 3);
-$laneIdList      = array(1, 2, 3, 4, 5, 6, 7, 8 ,9);
-$columnTypeList  = array('task', 'story', 'bug');
+$laneIdList      = array(1, 2, 3);
+$colIdList       = array(1, 2, 3);
 $cardIdList      = array(1, 2, 3, 4, 5);
 
 $kanbanTester = new kanbanTest();
-r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $columnTypeList[0], $cardIdList)) && p('cards:task:0')  && e('~~');  // 构造迭代的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $columnTypeList[0], $cardIdList)) && p('cards:task:0')  && e('N/A'); // 构造阶段的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $columnTypeList[0], $cardIdList)) && p('cards:task:0')  && e('N/A'); // 构造看板的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[3], $columnTypeList[1], $cardIdList)) && p('cards:story:0') && e('N/A'); // 构造迭代的需求卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[4], $columnTypeList[1], $cardIdList)) && p('cards:story:0') && e('N/A'); // 构造阶段的需求卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[5], $columnTypeList[1], $cardIdList)) && p('cards:story:0') && e('N/A'); // 构造看板的需求卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[6], $columnTypeList[2], $cardIdList)) && p('cards:bug:0')   && e('N/A'); // 构造迭代的Bug卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[7], $columnTypeList[2], $cardIdList)) && p('cards:bug:0')   && e('N/A'); // 构造阶段的Bug卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[8], $columnTypeList[2], $cardIdList)) && p('cards:bug:0')   && e('N/A'); // 构造看板的Bug卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[0], $cardIdList)[1][1][0]) && p('id,title') && e('1,任务1'); // 构造迭代的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[0], $cardIdList)[2][1][0]) && p('id,title') && e('2,任务2'); // 构造阶段的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[0], $cardIdList)[3][1][0]) && p('id,title') && e('3,任务3'); // 构造看板的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[1], $cardIdList)[1][1][0]) && p('')         && e('0');       // 构造迭代的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[1], $cardIdList)[2][1][0]) && p('')         && e('0');       // 构造阶段的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[1], $cardIdList)[3][1][0]) && p('')         && e('0');       // 构造看板的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[2], $cardIdList)[1][1][0]) && p('')         && e('0');       // 构造迭代的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[2], $cardIdList)[2][1][0]) && p('')         && e('0');       // 构造阶段的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[2], $cardIdList)[3][1][0]) && p('')         && e('0');       // 构造看板的任务卡片

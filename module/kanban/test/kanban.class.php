@@ -1698,19 +1698,21 @@ class kanbanTest
      * @access public
      * @return array
      */
-    public function buildExecutionCardsTest(int $executionID, int $laneID, string $columnType, array $cardIdList): array
+    public function buildExecutionCardsTest(int $executionID, int $laneID, string $colID, array $cardIdList): array
     {
         $lane = $this->objectModel->getLaneById($laneID);
+        $col  = $this->objectModel->getColumnById($colID);
+        $col->lane = $laneID;
 
         $objectGroup['story'] = $this->objectModel->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
         $objectGroup['bug']   = $this->objectModel->loadModel('bug')->getExecutionBugs($executionID);
         $objectGroup['task']  = $this->objectModel->loadModel('execution')->getKanbanTasks($executionID, "id");
 
-        $storyCardMenu = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
-        $bugCardMenu   = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
-        $taskCardMenu  = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
+        $menus['story'] = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
+        $menus['bug']   = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
+        $menus['task']  = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
 
-        return $this->objectModel->buildExecutionCards($lane, array(), $columnType, $cardIdList, $objectGroup, '', $storyCardMenu, $bugCardMenu, $taskCardMenu);
+        return $this->objectModel->buildExecutionCards(array(), $col, $lane->type, $cardIdList, $objectGroup, '', $menus);
     }
 
     /**
