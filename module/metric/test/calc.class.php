@@ -286,6 +286,20 @@ class metricTest
     }
 
     /**
+     * Test getResultByCode.
+     *
+     * @param  string      $code
+     * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string      $type    cron|realtime
+     * @access public
+     * @return array
+     */
+    public function getResultByCode($code, $options = array(), $type = 'realtime')
+    {
+        return $this->objectModel->getResultByCode($code, $options, $type);
+    }
+
+    /**
      * Test getViewTableHeader.
      *
      * @param  string $code

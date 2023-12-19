@@ -619,7 +619,7 @@ class metricModel extends model
      *
      * @param  string      $code
      * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
-     * @param  string      $type
+     * @param  string      $type    cron|realtime
      * @param  object|null $pager
      * @access public
      * @return array
