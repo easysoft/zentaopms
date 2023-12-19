@@ -8771,6 +8771,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 为喧喧表添加adminInvite字段。
      * Add adminInvite field for xuanxuan.
      *
      * @access public
@@ -8780,7 +8781,7 @@ class upgradeModel extends model
     {
         $table  = $this->config->db->prefix . 'im_chat';
         $exists = $this->checkFieldsExists($table, 'adminInvite');
-        if(!$exists) $this->dbh->exec("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+        if(!$exists) $this->dbh->exec("ALTER TABLE {$table} ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
     }
 
     /**

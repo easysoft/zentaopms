@@ -17,7 +17,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/upgrade.class.php';
 
 global $app;
-
 $path     = $app->getTmpRoot() . 'log/';
 $filename = 'consistency.%s.log.php';
 
