@@ -350,14 +350,15 @@ class scoreModel extends model
     }
 
     /**
+     * 获取当前用户昨日的积分总数。
      * Get yesterday's score for user.
      *
      * @access public
      * @return string
      */
-    public function getNotice()
+    public function getNotice(): string
     {
-        if(empty($this->config->global->scoreStatus) or empty($this->app->user->lastTime)) return '';
+        if(empty($this->config->global->scoreStatus) || empty($this->app->user->lastTime)) return '';
         if(date('Y-m-d', $this->app->user->lastTime) == helper::today()) return '';
 
         $this->app->user->lastTime = time();
@@ -366,8 +367,8 @@ class scoreModel extends model
             ->where('time')->between(date('Y-m-d 00:00:00', strtotime('-1 day')), date('Y-m-d 23:59:59', strtotime('-1 day')))
             ->andWhere('account')->eq($this->app->user->account)
             ->fetch('score');
-        if(!$score) return '';
 
+        if(!$score) return '';
         return sprintf($this->lang->score->tips, $score, $this->app->user->score);
     }
 }
