@@ -39,8 +39,11 @@ $giteaProjectID  = 'gitea/unittest';
 $gogsProjectID   = 'easycorp/unittest';
 
 $newMR = new stdclass();
-$newMR->title    = 'test';
-$newMR->assignee = 'user1';
+$newMR->title              = 'test';
+$newMR->assignee           = 'user1';
+$newMR->description        = '';
+$newMR->removeSourceBranch = '0';
+$newMR->squash             = '0';
 
 $oldMR = array();
 $oldMR['gitlab'] = new stdclass();
