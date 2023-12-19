@@ -226,26 +226,21 @@ class userTest
     /**
      * Test create a user.
      *
-     * @param  array $params
+     * @param  object $user
      * @access public
-     * @return void
+     * @return array
      */
-    public function createUserTest($params = array())
+    public function createUserTest(object $user): array
     {
-        $_POST  = $params;
-        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
+        $result = $this->objectModel->create($user);
+        $errors = dao::getError();
 
-        $userID = $this->objectModel->create();
-        unset($_POST);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $this->objectModel->getByID($userID, 'id');
-        }
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
