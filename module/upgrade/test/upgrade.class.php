@@ -282,4 +282,23 @@ class upgradeTest
         global $tester;
         return $tester->dao->select('count(1) as count')->from(TABLE_USERVIEW)->fetch('count');
     }
+
+    /**
+     * 测试存储日志。
+     * Test save logs.
+     *
+     * @param  string $log
+     * @access public
+     * @return string
+     */
+    public function saveLogsTest(string $log): string
+    {
+        $this->objectModel->saveLogs($log);
+        $logFile = $this->getLogFile();
+        $logContent = file_get_contents($logFile);
+        $logContent = explode("\n", $logContent);
+        array_pop($logContent);
+        return substr(array_pop($logContent), 20, 30);
+
+    }
 }

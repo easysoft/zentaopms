@@ -3485,13 +3485,14 @@ class upgradeModel extends model
     }
 
     /**
-     * Save Logs.
+     * 存储日志。
+     * Save logs.
      *
-     * @param  string    $log
+     * @param  string $log
      * @access public
      * @return void
      */
-    public function saveLogs($log)
+    public function saveLogs(string $log): void
     {
         $logFile = $this->getLogFile();
         $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
