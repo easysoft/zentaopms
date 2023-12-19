@@ -246,64 +246,7 @@ class upgrade extends control
             $projectType = isset($_POST['projectType']) ? $_POST['projectType'] : 'project';
             if($type == 'productline')
             {
-                $linkedProducts = array();
-                $linkedSprints  = array();
-                $unlinkSprints  = array();
-                $sprintProducts = array();
-                $singleProducts = array();
-
-                /* Compute checked products and sprints, unchecked products and sprints. */
-                foreach($_POST['products'] as $lineID => $products)
-                {
-                    foreach($products as $productID)
-                    {
-                        $linkedProducts[$productID] = $productID;
-
-                        if(isset($_POST['sprints'][$lineID][$productID]))
-                        {
-                            foreach($_POST['sprints'][$lineID][$productID] as $sprintID)
-                            {
-                                $linkedSprints[$sprintID]  = $sprintID;
-                                $sprintProducts[$sprintID] = $productID;
-                                unset($_POST['sprintIdList'][$lineID][$productID][$sprintID]);
-                            }
-                            $unlinkSprints[$productID] = $this->post->sprintIdList[$lineID][$productID];
-                        }
-                    }
-                }
-
-                /* Create Program. */
-                $result = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
-
-                list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                /* Process merged products and projects. */
-                if($projectType == 'execution')
-                {
-                    /* Use historical projects as execution upgrades. */
-                    $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
-                }
-                else
-                {
-                    /* Use historical projects as project upgrades. */
-                    $singleProducts = array_diff($linkedProducts, $sprintProducts);
-                    foreach($linkedSprints as $sprint)
-                    {
-                        $this->upgrade->processMergedData($programID, zget($projectList, $sprint, array()), $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
-                    }
-                }
-
-                /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
-
-                /* Process unlinked sprint and product. */
-                foreach($linkedProducts as $productID => $product)
-                {
-                    if((isset($unlinkSprints[$productID]) and empty($unlinkSprints[$productID])) || !isset($unlinkSprints[$productID])) $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
-                }
+                $this->upgradeZen->mergeByProductline($projectType);
             }
             elseif($type == 'product')
             {
