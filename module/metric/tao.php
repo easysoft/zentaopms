@@ -157,7 +157,7 @@ class metricTao extends metricModel
         return $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
-            ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
+            ->beginIF($stage != 'all')->andWhere('stage')->eq($stage)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
             ->fetchAll();
     }

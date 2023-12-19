@@ -61,9 +61,7 @@ class metricTest
      */
     public function getOldMetricList($orderBy = 'id_desc')
     {
-        $a = $this->objectModel->getOldMetricList($orderBy);
-        //a($a);
-        return $a;
+        return $this->objectModel->getOldMetricList($orderBy);
     }
 
     /**
@@ -94,6 +92,34 @@ class metricTest
     public function getList($scope, $stage = 'all', $sort = 'id_desc')
     {
         return $this->objectModel->getList($scope, $stage, 0, '', 0, $sort);
+    }
+
+    /**
+     * 测试 getByListByFilter 方法。
+     * Test getByListByFilter method.
+     *
+     * @param  string $scope
+     * @param  string $stage
+     * @access public
+     * @return array|false
+     */
+    public function getListByFilter($scope, $stage = 'all')
+    {
+        return $this->objectModel->getListByFilter($scope, $stage);
+    }
+
+    /**
+     * 测试 getByListByCollect 方法。
+     * Test getByListByCollect method.
+     *
+     * @param  string $scope
+     * @param  string $stage
+     * @access public
+     * @return array|false
+     */
+    public function getListByCollect($stage = 'all')
+    {
+        return $this->objectModel->getListByCollect($stage);
     }
 
     /**
