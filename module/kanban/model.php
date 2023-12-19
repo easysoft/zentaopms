@@ -2395,6 +2395,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 从看板格子中移除卡片。
      * Remove kanban cell.
      *
      * @param  string    $type
@@ -2403,7 +2404,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function removeKanbanCell($type, $removeCardID, $kanbanList)
+    public function removeKanbanCell(string $type, int|array $removeCardID, array $kanbanList)
     {
         $removeIDList = is_array($removeCardID) ? $removeCardID : array($removeCardID);
         foreach($removeIDList as $cardID)
@@ -2433,7 +2434,7 @@ class kanbanModel extends model
         $regionID =  $this->createRDRegion($execution);
         if(dao::isError()) return false;
 
-        $groupID = $this->createGroup($execution->id, $regionID);
+        $this->createGroup($execution->id, $regionID);
         if(dao::isError()) return false;
 
         $this->createRDLane($execution->id, $regionID);
