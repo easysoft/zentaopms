@@ -981,7 +981,10 @@ class upgradeModel extends model
         }
 
         $changes = array();
-        if($stdEngine != $dbEngine) $changes[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
+
+        // MYSQL5.5 dont support InnoDB perfectly, ignore engine changes.
+        // if($stdEngine != $dbEngine) $changes[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
+
         foreach($lines as $line)
         {
             $change = $this->checkFieldConsistency($table, $line, $fields);
@@ -1015,11 +1018,14 @@ class upgradeModel extends model
         /* Dont change if matched. */
         if(isset($fields[$field]) && $line == $fields[$field]) return '';
 
-        /* Add field. */
-        if(!isset($fields[$field])) $execSQL = "ALTER TABLE `$table` ADD $line";
-
-        /* Modify field. */
-        $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]);
+        if(!isset($fields[$field]))
+        {
+            $execSQL = "ALTER TABLE `$table` ADD $line"; // Add field.
+        }
+        else
+        {
+            $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]); // Modify field.
+        }
 
         if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
 
