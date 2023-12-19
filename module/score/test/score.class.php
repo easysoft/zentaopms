@@ -189,4 +189,22 @@ class scoreTest
         $rule = isset($this->objectModel->config->score->rule->{$module}->{$method}) ? $this->objectModel->config->score->rule->{$module}->{$method} : array('score' => 0);
         return $this->objectModel->saveScore($account, $rule, $module, $method);
     }
+
+    /**
+     * 获取当前用户昨日的积分总数。
+     * Get yesterday's score for user.
+     *
+     * @param  string $account
+     * @access public
+     * @return string
+     */
+    public function getNoticeTest(string $account): string
+    {
+        su($account);
+        $this->objectModel->app->user->lastTime = strtotime('-1 day');
+        $this->objectModel->app->user->score    = 100;
+        $this->objectModel->config->global->scoreStatus = true;
+
+        return $this->objectModel->getNotice();
+    }
 }
