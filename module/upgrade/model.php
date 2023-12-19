@@ -2108,12 +2108,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 判断是否出现错误。
      * Judge any error occurs.
      *
      * @access public
      * @return bool
      */
-    public function isError()
+    public function isError(): bool
     {
         return !empty(static::$errors);
     }

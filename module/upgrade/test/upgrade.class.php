@@ -191,4 +191,18 @@ class upgradeTest
         $groupPrivs = $tester->dao->select('count(1) as count')->from(TABLE_GROUPPRIV)->fetch('count');
         return "groups:{$groups},groupPrivs:{$groupPrivs}";
     }
+
+    /**
+     * 测试判断是否出现错误。
+     * Test judge any error occurs.
+     *
+     * @param  array  $errors
+     * @access public
+     * @return bool
+     */
+    public function isErrorTest(array $errors): bool
+    {
+        $this->objectModel::$errors = $errors;
+        return $this->objectModel->isError();
+    }
 }
