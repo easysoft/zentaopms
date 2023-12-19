@@ -2062,13 +2062,14 @@ class kanbanModel extends model
     }
 
     /*
+     * 创建看板。
      * Create a kanban.
      *
      * @param  object $kanban
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function create($kanban)
+    public function create(object $kanban): int|false
     {
         $account = $this->app->user->account;
 
@@ -2090,26 +2091,25 @@ class kanbanModel extends model
 
         $this->kanbanTao->createKanban($kanban);
 
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $kanbanID = $this->dao->lastInsertID();
+        $kanban   = $this->getByID($kanbanID);
+
+        $this->loadModel('action')->create('kanban', $kanbanID, 'created');
+        $this->loadModel('file')->saveUpload('kanban', $kanbanID);
+        $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+        $this->post->copyRegion ? $this->copyRegions($kanban, $this->post->copyKanbanID): $this->createDefaultRegion($kanban);
+
+        if(!empty($kanban->team) or !empty($kanban->whitelist))
         {
-            $kanbanID = $this->dao->lastInsertID();
-            $kanban   = $this->getByID($kanbanID);
-
-            $this->loadModel('action')->create('kanban', $kanbanID, 'created');
-            $this->loadModel('file')->saveUpload('kanban', $kanbanID);
-            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
-
-            $this->post->copyRegion ? $this->copyRegions($kanban, $this->post->copyKanbanID): $this->createDefaultRegion($kanban);
-
-            if(!empty($kanban->team) or !empty($kanban->whitelist))
-            {
-                $type = !empty($kanban->team) ? 'team' : 'whitelist';
-                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
-                $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
-            }
-
-            return $kanbanID;
+            $type = !empty($kanban->team) ? 'team' : 'whitelist';
+            $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
+            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
         }
+
+        return $kanbanID;
     }
 
     /**
@@ -2121,7 +2121,7 @@ class kanbanModel extends model
      * @access public
      * @return bool
      */
-    public function update(int $kanbanID, object $kanban)
+    public function update(int $kanbanID, object $kanban): bool
     {
         $oldKanban = $this->getByID($kanbanID);
 
@@ -2153,6 +2153,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 设置看板。
      * Setting kanban.
      *
      * @param  int    $kanbanID
@@ -2200,9 +2201,9 @@ class kanbanModel extends model
      * @param  int    $kanbanID
      * @param  object $kanban
      * @access public
-     * @return array
+     * @return bool
      */
-    function activate(int $kanbanID, object $kanban)
+    function activate(int $kanbanID, object $kanban): bool
     {
         $oldKanban = $this->getByID($kanbanID);
 
@@ -2227,9 +2228,9 @@ class kanbanModel extends model
      * @param  int    $kanbanID
      * @param  object $kanban
      * @access public
-     * @return array
+     * @return bool
      */
-    function close(int $kanbanID, object $kanban)
+    function close(int $kanbanID, object $kanban): bool
     {
         $oldKanban = $this->getByID($kanbanID);
 
@@ -2251,6 +2252,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 执行看板新增列和泳道。
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID
@@ -2258,7 +2260,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createExecutionLane(int $executionID, string $type = 'all'): void
+    public function createExecutionLane(int $executionID, string $type = 'all')
     {
         foreach($this->config->kanban->default as $type => $lane)
         {
@@ -2276,15 +2278,16 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建执行看板列。
      * Create execution columns.
      *
-     * @param  int|array   $laneID
-     * @param  string      $type story|bug|task
-     * @param  int         $executionID
+     * @param  int|array $laneID
+     * @param  string    $type story|bug|task
+     * @param  int       $executionID
      * @access public
      * @return void
      */
-    public function createExecutionColumns(int|array $laneID, string $type, int $executionID): void
+    public function createExecutionColumns(int|array $laneID, string $type, int $executionID)
     {
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
 
@@ -2326,6 +2329,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 新增看板Cell。
      * Add kanban cell for new lane.
      *
      * @param  int    $kanbanID
@@ -2336,7 +2340,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, string $cardID = ''): void
+    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, string $cardID = '')
     {
         $cell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
@@ -2364,15 +2368,16 @@ class kanbanModel extends model
     }
 
     /**
+     * 向看板空间添加成员。
      * Add space members.
      *
      * @param  int    $spaceID
-     * @param  array  $type team|whitelist
+     * @param  string $type team|whitelist
      * @param  array  $kanbanMembers
      * @access public
      * @return void
      */
-    public function addSpaceMembers($spaceID, $type, $kanbanMembers = array())
+    public function addSpaceMembers(int $spaceID, string $type, array $kanbanMembers = array())
     {
         $space = $this->getSpaceById($spaceID);
         if(empty($space)) return;
