@@ -286,6 +286,19 @@ class metricTest
     }
 
     /**
+     * Test getViewTableHeader.
+     *
+     * @param  string $code
+     * @access public
+     * @return array
+     */
+    public function getViewTableHeader($code)
+    {
+        $metric = $this->objectModel->dao->select('*')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+        return $this->objectModel->getViewTableHeader($metric);
+    }
+
+    /**
      * Test getMetricRecordDateField.
      *
      * @param  string $code
