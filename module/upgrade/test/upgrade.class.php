@@ -240,4 +240,32 @@ class upgradeTest
         foreach($process as $key => $value) $return .= "{$key}:{$value};";
         return trim($return, ';');
     }
+
+    /**
+     * 测试更新BI相关zt_pivot表的sql字段。
+     * Update BI SQL for 18.4.stable new function: dataview model.php checkUniColumn().
+     *
+     * @param  int    $pivotID
+     * @param  string $errorValue
+     * @param  string $rightValue
+     * @param  string $testField
+     * @access public
+     * @return bool
+     */
+    public function updateBISQLTest(int $pivotID, string $errorValue, string $rightValue, string $testField): bool
+    {
+        global $tester;
+
+        /* Init pivot table data. */
+        $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
+        $pivotSQL     = explode(";", file_get_contents($pivotSqlFile));
+        $tester->dao->delete()->from(TABLE_PIVOT)->exec();
+        $tester->dbh->exec($pivotSQL[1]);
+
+        $tester->dao->update(TABLE_PIVOT)->set('sql')->eq($errorValue)->where('id')->eq($pivotID)->exec();
+        $this->objectModel->updateBISQL();
+
+        $pivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
+        return $pivot->$testField == $rightValue;
+    }
 }

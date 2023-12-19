@@ -8033,6 +8033,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 更新BI相关zt_pivot表的sql字段。
      * Update BI SQL for 18.4.stable new function: dataview model.php checkUniColumn().
      *
      * @access public
@@ -8045,8 +8046,8 @@ class upgradeModel extends model
 
         $alpha1SQL = explode(";", file_get_contents($alpha1File));
         $beta1SQL  = explode(";", file_get_contents($beta1File));
-        $execSQL   = array();
 
+        $execSQL = array();
         foreach($alpha1SQL as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
         foreach($beta1SQL  as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
 
