@@ -120,6 +120,8 @@ $config->sonarqube->dtable->issue->fieldList['creationDate']['sortType'] = true;
 $config->sonarqube->dtable->issue->fieldList['actions']['name']  = 'actions';
 $config->sonarqube->dtable->issue->fieldList['actions']['title'] = $lang->actions;
 $config->sonarqube->dtable->issue->fieldList['actions']['type']  = 'actions';
-$config->sonarqube->dtable->issue->fieldList['actions']['menu']  = array('createBug');
-$config->sonarqube->dtable->issue->fieldList['actions']['list']  = $config->sonarqube->actionList;
-$config->sonarqube->dtable->issue->fieldList['actions']['width'] = 60;
+$config->sonarqube->dtable->issue->fieldList['actions']['maxWidth'] = '60';
+
+$config->sonarqube->dtable->issue->fieldList['actions']['actionsMap']['createBug']['icon'] = 'bug';
+$config->sonarqube->dtable->issue->fieldList['actions']['actionsMap']['createBug']['hint'] = $lang->sonarqube->createBug;
+$config->sonarqube->dtable->issue->fieldList['actions']['actionsMap']['createBug']['url']  = 'javascript: saveIssueTitle("{productID}", "{sonarqubeID}", "{issueKey}", \'{message}\')';

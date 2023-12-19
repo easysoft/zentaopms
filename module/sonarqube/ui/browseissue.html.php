@@ -22,6 +22,7 @@ foreach($sonarqubeIssueList as $issue)
     $issue->sonarqubeID = $sonarqube->id ;
     $issue->issueKey    = str_replace('-', '*', $issue->key);
     $issue->message     = htmlspecialchars_decode($issue->message);
+    $issue->actions     = array('createBug');
 
     $issueList[] = $issue;
 }
@@ -29,7 +30,6 @@ foreach($sonarqubeIssueList as $issue)
 $config->sonarqube->dtable->issue->fieldList['message']['link']['url'] = sprintf($config->sonarqube->dtable->issue->fieldList['message']['link']['url'], trim($sonarqube->url, '/'));
 if(!hasPriv('bug', 'create')) unset($config->sonarqube->dtable->issue->fieldList['actions']);
 
-$tableData = initTableData($sonarqubeIssueList, $config->sonarqube->dtable->issue->fieldList, $this->sonarqube);
 featureBar
 (
     backBtn
@@ -63,7 +63,7 @@ featureBar
 dtable
 (
     set::cols($config->sonarqube->dtable->issue->fieldList),
-    set::data($tableData),
+    set::data($sonarqubeIssueList),
     set::sortLink(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqube->id}&projectKey={$replaceKey}&search={$search}&orderBy={name}_{sortType}")),
     set::orderBy($orderBy),
     set::footPager(usePager())

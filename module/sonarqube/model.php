@@ -335,8 +335,9 @@ class sonarqubeModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'execjob')    return !empty($sonarqube->jobID);
-        if($action == 'reportview') return !empty($sonarqube->reportView);
+        global $app;
+        if($action == 'execjob')    return $app->rawModule == 'repo' ? !$sonarqube->exec : !empty($sonarqube->jobID);
+        if($action == 'reportview') return $app->rawModule == 'repo' ? !$sonarqube->report : !empty($sonarqube->reportView);
 
         return true;
     }
