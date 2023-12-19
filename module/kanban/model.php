@@ -1718,6 +1718,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板空间列表。
      * Get space list.
      *
      * @param  string $browseType private|cooperation|public|involved
@@ -1725,7 +1726,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getSpaceList($browseType, $pager = null)
+    public function getSpaceList(string $browseType, object $pager = null): array
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
