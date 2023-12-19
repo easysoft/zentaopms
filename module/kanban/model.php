@@ -1986,14 +1986,15 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板泳道分组。
      * Get lane by region id.
      *
-     * @param  array  $regionID
-     * @param  string $type all|story|task|bug|common
+     * @param  array|int $regionID
+     * @param  string    $type     all|story|task|bug|common
      * @access public
      * @return array
      */
-    public function getLaneGroupByRegion($regionID, $type = 'all')
+    public function getLaneGroupByRegion(array|int $regionID, string $type = 'all'): array
     {
         return $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')

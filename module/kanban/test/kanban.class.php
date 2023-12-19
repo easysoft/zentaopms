@@ -775,7 +775,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        return count($objects[$regionID]);
+        return isset($objects[$regionID]) ? count($objects[$regionID]) : 0;
     }
 
     /**
