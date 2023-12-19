@@ -2800,12 +2800,13 @@ class upgradeModel extends model
     }
 
     /**
-     * Init user view.
+     * 初始化用户视图.
+     * Initialize user view.
      *
      * @access public
      * @return bool
      */
-    public function initUserView()
+    public function initUserView(): bool
     {
         $this->dao->delete()->from(TABLE_USERVIEW)->exec();
         return true;

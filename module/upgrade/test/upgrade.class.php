@@ -268,4 +268,18 @@ class upgradeTest
         $pivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         return $pivot->$testField == $rightValue;
     }
+
+    /**
+     * 测试删除补丁记录。
+     * Test delete patch records.
+     *
+     * @access public
+     * @return int
+     */
+    public function initUserViewTest(): int
+    {
+        $this->objectModel->initUserView();
+        global $tester;
+        return $tester->dao->select('count(1) as count')->from(TABLE_USERVIEW)->fetch('count');
+    }
 }
