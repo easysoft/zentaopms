@@ -313,6 +313,19 @@ class metricTest
     }
 
     /**
+     * Test checkCalcExists.
+     *
+     * @param  object $metric
+     * @access public
+     * @return bool
+     */
+    public function checkCalcExists($metric)
+    {
+        $exists = $this->objectModel->checkCalcExists($metric);
+        return $exists ? 'true' : 'false';
+    }
+
+    /**
      * Test getMetricRecordDateField.
      *
      * @param  string $code
