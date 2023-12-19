@@ -1035,16 +1035,17 @@ class upgrade extends control
     }
 
     /**
+     * 迁移扩展文件。
      * Move Extent files.
      *
      * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function moveExtFiles($fromVersion)
+    public function moveExtFiles(string $fromVersion)
     {
-        $command      = '';
-        $result       = 'success';
+        $command = '';
+        $result  = 'success';
         if(strtolower($this->server->request_method) == 'post')
         {
             if(!empty($_POST['files']))
@@ -1057,11 +1058,11 @@ class upgrade extends control
             if($result == 'success') $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
         }
 
-        $this->view->title        = $this->lang->upgrade->common;
-        $this->view->files        = $this->upgrade->getExtFiles();
-        $this->view->result       = $result;
-        $this->view->command      = $command;
-        $this->view->fromVersion  = $fromVersion;
+        $this->view->title       = $this->lang->upgrade->common;
+        $this->view->files       = $this->upgrade->getExtFiles();
+        $this->view->result      = $result;
+        $this->view->command     = $command;
+        $this->view->fromVersion = $fromVersion;
 
         $this->display();
     }
