@@ -1790,6 +1790,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取有权查看的对象。
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
@@ -1797,7 +1798,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCanViewObjects($objectType = 'kanban', $param = 'all')
+    public function getCanViewObjects(string $objectType = 'kanban', string $param = 'all'): array
     {
         $table   = $this->config->objectTables[$objectType];
         $objects = $this->dao->select('*')->from($table)
