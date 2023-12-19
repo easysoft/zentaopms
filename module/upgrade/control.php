@@ -222,6 +222,7 @@ class upgrade extends control
     }
 
     /**
+     * 归并项目集。
      * Merge program.
      *
      * @param  string $type
@@ -230,7 +231,7 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function mergeProgram($type = 'productline', $programID = 0, $projectType = 'project')
+    public function mergeProgram(string $type = 'productline', int $programID = 0, string $projectType = 'project')
     {
         set_time_limit(0);
 
@@ -416,26 +417,11 @@ class upgrade extends control
         }
 
         /* Get no merged product and project count. */
-        $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedProductCount = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq(0)->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
-        if(empty($noMergedProductCount) and empty($noMergedSprintCount))
-        {
-            $this->upgrade->computeObjectMembers();
-            $this->upgrade->initUserView();
-            $this->upgrade->setDefaultPriv();
-            $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
-
-            /* Set defult hourPoint. */
-            $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
-            if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
-
-            /* Update sprints history. */
-            $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
-            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
-            $this->locate($this->createLink('upgrade', 'mergeRepo'));
-        }
+        if(empty($noMergedProductCount) && empty($noMergedSprintCount)) $this->upgradeZen->upgradeAfterMerged();
 
         $this->view->noMergedProductCount = $noMergedProductCount;
         $this->view->noMergedSprintCount  = $noMergedSprintCount;
@@ -581,9 +567,7 @@ class upgrade extends control
                 ->orderBy('id_desc')
                 ->fetchAll('id');
 
-            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
-                ->where('project')->in(array_keys($noMergedSprints))
-                ->fetchGroup('project', 'product');
+            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
 
             $productPairs = array();
             foreach($projectProducts as $sprintID => $products)

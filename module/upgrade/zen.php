@@ -135,4 +135,28 @@ class upgradeZen extends upgrade
         /* Set default program for product and project with no program. */
         $this->upgrade->relateDefaultProgram($programID);
     }
+
+    /**
+     * 合并后的升级操作。
+     * Upgrade after merged.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function upgradeAfterMerged()
+    {
+        $this->upgrade->computeObjectMembers();
+        $this->upgrade->initUserView();
+        $this->upgrade->setDefaultPriv();
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
+
+        /* Set defult hourPoint. */
+        $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
+        if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
+
+        /* Update sprints history. */
+        $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
+        $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+        $this->locate($this->createLink('upgrade', 'mergeRepo'));
+    }
 }
