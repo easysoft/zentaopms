@@ -486,4 +486,46 @@ class groupTest
         $this->objectModel->sortResource();
         return $this->objectModel->lang->resource;
     }
+
+    /**
+     * Load resource lang.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadResourceLangTest()
+    {
+        $this->objectModel->loadResourceLang();
+        return $this->objectModel->lang;
+    }
+
+    /**
+     * Get priv list by nav.
+     *
+     * @param  string $nav
+     * @param  string $version
+     * @access public
+     * @return array
+     */
+    public function getPrivsByNavTest($nav, $version = '')
+    {
+        $privList = $this->objectModel->getPrivsByNav($nav, $version);
+        $privList = array_combine(array_keys($privList), array_keys($privList));
+
+        return $privList;
+    }
+
+    /**
+     * Get privs by group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
+    public function getPrivsByGroupTest($groupID)
+    {
+        $privList = $this->objectModel->getPrivsByGroup($groupID);
+
+        return $privList;
+    }
 }

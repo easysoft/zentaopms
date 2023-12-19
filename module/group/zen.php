@@ -118,8 +118,8 @@ class groupZen extends group
             $subsets[$subset->code] = $subset;
         }
 
-        $selectPrivs = $this->group->getPrivListByGroup($groupID);
-        $allPrivList = $this->group->getPrivListByNav($nav, $version);
+        $selectPrivs = $this->group->getPrivsByGroup($groupID);
+        $allPrivList = $this->group->getPrivsByNav($nav, $version);
 
         $selectedPrivList = array();
         $packages         = array();

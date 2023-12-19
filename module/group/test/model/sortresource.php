@@ -20,10 +20,6 @@ include dirname(__FILE__, 2) . '/group.class.php';
 
 su('admin');
 
-zdTable('user')->gen(100);
-zdTable('group')->gen(5);
-zdTable('usergroup')->config('usergroup')->gen(10);
-
 $group = new groupTest();
 $resource = $group->sortResourceTest();
 

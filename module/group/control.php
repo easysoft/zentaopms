@@ -327,7 +327,7 @@ class group extends control
      */
     public function ajaxGetPrivByParents(string $selectedSubset, string $selectedPackages)
     {
-        $privs = $this->group->getPrivByParents($selectedSubset, $selectedPackages);
+        $privs = $this->group->getPrivsByParents($selectedSubset, $selectedPackages);
 
         return print(html::select('actions[]', $privs, '', "multiple='multiple' class='form-control'"));
     }

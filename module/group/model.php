@@ -456,7 +456,7 @@ class groupModel extends model
      * @access protected
      * @return bool
      */
-    protected function insertPrivs(array $privs)
+    public function insertPrivs(array $privs)
     {
         $groups = array();
         foreach($privs as $priv) $groups[$priv->group] = $priv->group;
@@ -543,7 +543,7 @@ class groupModel extends model
     public function updatePrivByGroup(int $groupID, string $nav, string $version = '')
     {
         /* Delete old. */
-        $privs = array_keys($this->getPrivListByNav($nav, $version));
+        $privs = array_keys($this->getPrivsByNav($nav, $version));
 
         $this->dao->delete()->from(TABLE_GROUPPRIV)
             ->where('`group`')->eq($groupID)
@@ -899,7 +899,7 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivListByNav(string $nav = '', string $version = ''): array
+    public function getPrivsByNav(string $nav = '', string $version = ''): array
     {
         $privList = array();
         $allPrivs = array();
@@ -959,7 +959,7 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivListByGroup(int $groupID): array
+    public function getPrivsByGroup(int $groupID): array
     {
         return $this->dao->select("CONCAT(module, '-',  method) AS action")->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->fetchPairs();
     }
@@ -972,7 +972,7 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getPrivByParents(string $selectedSubset, string $selectedPackages = ''): array
+    public function getPrivsByParents(string $selectedSubset, string $selectedPackages = ''): array
     {
         $allPrivs = array();
         $privs    = array();
