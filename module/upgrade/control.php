@@ -431,13 +431,15 @@ class upgrade extends control
         $this->loadModel('project');
         $this->view->type = $type;
 
+        /* 获取产品线下的产品和项目。*/
         /* Get products and projects group by product line. */
-        if($type == 'productline') $this->upgradeZen->assignUnmergedProductLines($projectType);
+        if($type == 'productline') $this->upgradeZen->assignProductsAndProjectsGroupByProductline($projectType);
 
+        /* 获取产品下的项目。*/
         /* Get projects group by product. */
-        if($type == 'product') $this->upgradeZen->assignUnmergeProducts($projectType);
+        if($type == 'product') $this->upgradeZen->assignProjectsGroupByProduct($projectType);
 
-        /* Get no merged projects than is not linked product. */
+        /* Get no merged projects that is not linked product. */
         if($type == 'sprint')
         {
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)

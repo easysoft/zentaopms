@@ -161,14 +161,14 @@ class upgradeZen extends upgrade
     }
 
     /**
-     * 获取未合并的产品线。
-     * Get unmerged product line.
+     * 获取产品线下的产品和项目。
+     * Get products and projects group by product line.
      *
      * @param  string    $projectType
      * @access protected
      * @return void
      */
-    protected function assignUnmergedProductLines(string $projectType)
+    protected function assignProductsAndProjectsGroupByProductline(string $projectType)
     {
         $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
@@ -218,14 +218,14 @@ class upgradeZen extends upgrade
     }
 
     /**
-     * 获取未合并的产品。
-     * Get unmerged products.
+     * 获取产品下的项目。
+     * Get projects group by product.
      *
      * @param  string    $projectType
      * @access protected
      * @return void
      */
-    protected function assignUnmergedProducts(string $projectType)
+    protected function assignProjectsGroupByProduct(string $projectType)
     {
         $noMergedSprints = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
