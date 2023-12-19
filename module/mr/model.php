@@ -504,6 +504,8 @@ class mrModel extends model
     public function apiCreateMR(int $hostID, string $projectID, object $MR): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
+        if(!$host) return null;
+
         if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($hostID, $host->type, $MR->assignee);
 
         $MRObject = new stdclass();
@@ -807,9 +809,9 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         if(!$host) return null;
 
+        $apiRoot = $this->loadModel($host->type)->getApiRoot($MR->hostID);
         if($host->type == 'gitlab')
         {
-            $apiRoot    = $this->loadModel('gitlab')->getApiRoot($MR->hostID);
             $approveUrl = sprintf($apiRoot, "/projects/$MR->targetProject/merge_requests/$MR->mriid/approved");
             commonModel::http($approveUrl, null, array(CURLOPT_CUSTOMREQUEST => 'POST'));
 
@@ -818,10 +820,8 @@ class mrModel extends model
         }
         else
         {
-            $apiRoot = $this->loadModel($host->type)->getApiRoot($MR->hostID);
-            $url     = sprintf($apiRoot, "/repos/$MR->targetProject/pulls/$MR->mriid/merge");
-
-            $merge = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
+            $url   = sprintf($apiRoot, "/repos/$MR->targetProject/pulls/$MR->mriid/merge");
+            $merge = $MR->squash == '1' ? 'squash' : 'merge';
             $data  = array('Do' => $merge);
             if($MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
 
@@ -907,9 +907,9 @@ class mrModel extends model
      * @param  string $projectID
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiCreateMRTodo(int $hostID, string $projectID, int $MRID): object
+    public function apiCreateMRTodo(int $hostID, string $projectID, int $MRID): object|null
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/todo");
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST')));
