@@ -1,0 +1,31 @@
+title: table zt_action
+desc: "系统日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: story
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "项目"
+    range: "1-100000"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作"
+    range: linked2release
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: extra
+    note: "附加参数"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
