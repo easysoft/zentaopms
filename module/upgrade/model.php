@@ -2131,12 +2131,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取一致性检查的日志文件。
      * Get upgrade log file.
      *
      * @access public
      * @return string
      */
-    public function getConsistencyLogFile()
+    public function getConsistencyLogFile(): string
     {
         return $this->app->getTmpRoot() . 'log/consistency.' . date('Ymd') . '.log.php';
     }
