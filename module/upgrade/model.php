@@ -380,13 +380,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 为一致性问题执行修复sql。
      * Exec fix sql for consistency.
      *
      * @param  string $version
      * @access public
      * @return void
      */
-    public function fixConsistency($version)
+    public function fixConsistency($version): void
     {
         $logFile = $this->getConsistencyLogFile();
         if(file_exists($logFile)) unlink($logFile);
@@ -394,6 +395,9 @@ class upgradeModel extends model
         $hasError = false;
         $fixSqls  = $this->checkConsistency($version);
         if($fixSqls) $fixSqls = "SET @@sql_mode= '';" . $fixSqls;
+
+        /* 记录执行的sql并且记录执行结果。 */
+        /* Record the executed sql and the result. */
         foreach(explode(';', $fixSqls) as $fixSQL)
         {
             file_put_contents($logFile, $fixSQL, FILE_APPEND);

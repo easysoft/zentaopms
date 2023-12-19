@@ -42,7 +42,7 @@ class upgradeTest
      */
     public function __call(string $method, array $args): mixed
     {
-        return $this->objectModel->$method($args);
+        return call_user_func_array(array($this->objectModel, $method), $args);
     }
 
     /**
