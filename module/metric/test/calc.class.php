@@ -164,6 +164,28 @@ class metricTest
     }
 
     /**
+     * Get root of metric calculator.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRoot()
+    {
+        return $this->objectModel->getCalcRoot();
+    }
+
+    /**
+     * Get path of calculator data set.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatasetPath()
+    {
+        return $this->objectModel->getDatasetPath();
+    }
+
+    /**
      * 计算度量项，并返回计算后的度量项对象。
      * Calculate metric.
      *
