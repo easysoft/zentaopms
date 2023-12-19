@@ -374,9 +374,34 @@ class metricTest
     }
 
     /**
+     * Test getEchartXY.
+     *
+     * @param  array $header
+     * @access public
+     * @return bool
+     */
+    public function getEchartXY($header)
+    {
+        return $this->objectModel->getEchartXY($header);
+    }
+
+    /**
      * Test isSystemMetric.
      *
-     * @param  array $record
+     * @param  array $header
+     * @access public
+     * @return array
+     */
+    public function getChartTypeList($header)
+    {
+        return $this->objectModel->getChartTypeList($header);
+    }
+
+    /**
+     * Test replaceCRLF.
+     *
+     * @param  string $str
+     * @param  string $replace
      * @access public
      * @return bool
      */
