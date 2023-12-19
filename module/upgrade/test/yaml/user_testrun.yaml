@@ -1,0 +1,11 @@
+title: table zt_testrun
+desc: "测试执行"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: lastRunner
+    fields:
+      - field: field1
+        range: user
+      - field: field2
+        range: 1-1000

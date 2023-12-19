@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->hasConsistencyError();
+title=测试 upgradeModel->setURSwitchStatus();
 cid=1
 
 - 开源版版本低于18.2，是否能正常打开开关   @1

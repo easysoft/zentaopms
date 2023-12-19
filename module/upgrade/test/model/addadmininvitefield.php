@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->hasConsistencyError();
+title=测试 upgradeModel->addAdminInviteField();
 cid=1
 
 - 修改后，im_chart表中存在adminInvite字段   @adminInvite

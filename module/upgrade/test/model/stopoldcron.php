@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->hasConsistencyError();
+title=测试 upgradeModel->stopOldCron();
 cid=1
 
 - 删除文件后，调用stopOldCron()，文件若重新生成，返回true   @1
