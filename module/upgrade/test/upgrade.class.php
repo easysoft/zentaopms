@@ -70,4 +70,18 @@ class upgradeTest
     {
         return $this->objectModel->getOpenVersion($version);
     }
+
+    /**
+     * 测试打开UR开关。
+     * Test set UR switch status.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function setURSwitchStatusTest(string $version): bool
+    {
+        $this->objectModel->fromVersion = $version;
+        return $this->objectModel->setURSwitchStatus();
+    }
 }

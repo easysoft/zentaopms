@@ -8150,16 +8150,17 @@ class upgradeModel extends model
     }
 
     /**
+     * 在功能设置中设置UR开关.
      * Set UR switch status in feature switch.
      *
      * @access public
      * @return bool
      */
-    public function setURSwitchStatus()
+    public function setURSwitchStatus(): bool
     {
-        if(is_numeric($this->fromVersion[0]) and version_compare($this->fromVersion, '18.2', '>=')) return true;
-        if(strpos($this->fromVersion, 'biz') !== false and version_compare($this->fromVersion, 'biz8.2', '>=')) return true;
-        if(strpos($this->fromVersion, 'max') !== false and version_compare($this->fromVersion, 'max4.2', '>=')) return true;
+        if(is_numeric($this->fromVersion[0]) && version_compare($this->fromVersion, '18.2', '>=')) return true;
+        if(strpos($this->fromVersion, 'biz') !== false && version_compare($this->fromVersion, 'biz8.2', '>=')) return true;
+        if(strpos($this->fromVersion, 'max') !== false && version_compare($this->fromVersion, 'max4.2', '>=')) return true;
 
         $URSwitchStatus = $this->loadModel('setting')->getItem("owner=system&module=custom&key=URAndSR");
         if(!$URSwitchStatus)
