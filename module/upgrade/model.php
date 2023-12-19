@@ -949,23 +949,24 @@ class upgradeModel extends model
     }
 
     /**
+     * 将 sql 文件解析为 sql 语句。
      * Parse sql file to sqls.
      *
      * @param  string $sqlFile
      * @access public
      * @return array
      */
-    public function parseToSqls($sqlFile)
+    public function parseToSqls(string $sqlFile): array
     {
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
-        $sqls = explode("\n", file_get_contents($sqlFile));
         $sqlList = array();
-        foreach($sqls as $key => $line)
+        $sqls    = explode("\n", file_get_contents($sqlFile));
+        foreach($sqls as $line)
         {
             $line = trim($line);
-            if(!$line) continue;
-            /* Skip sql that is note. */
-            if(!preg_match('/^--|^#|^\/\*/', $line)) $sqlList[] = $line;
+            /* Skip sql that is note and empty sql. */
+            if(!$line || preg_match('/^--|^#|^\/\*/', $line)) continue;
+            $sqlList[] = $line;
         }
 
         return array_filter(explode(';', join("\n", $sqlList)));

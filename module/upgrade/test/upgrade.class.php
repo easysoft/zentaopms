@@ -159,4 +159,19 @@ class upgradeTest
         foreach($projects as $projectID => $projectName) $return .= "{$projectID}:{$projectName};";
         return trim($return, ';');
     }
+
+    /**
+     * 测试将 sql 文件解析为 sql 语句。
+     * Test parse sql file to sqls.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function parseToSqlsTest(string $version): string
+    {
+        $sqlFile = $this->objectModel->getUpgradeFile($version);
+        $sqls    = $this->objectModel->parseToSqls($sqlFile);
+        return substr($sqls[0], 0, 30);
+    }
 }
