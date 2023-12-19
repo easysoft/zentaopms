@@ -432,54 +432,7 @@ class upgrade extends control
         $this->view->type = $type;
 
         /* Get products and projects group by product line. */
-        if($type == 'productline')
-        {
-            $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
-
-            $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->andWhere('vision')->eq('rnd')->orderBy('id_desc')->fetchAll('id');
-            if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=product&programID=0&projectType=$projectType"));
-
-            $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-                ->where('t1.project')->eq(0)
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.vision')->eq('rnd')
-                ->andWhere('t1.type')->eq('sprint')
-                ->andWhere('t2.product')->in(array_keys($noMergedProducts))
-                ->orderBy('t1.id_desc')
-                ->fetchAll('id');
-
-            /* Remove sprint than linked more than two products */
-            $sprintProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
-            foreach($sprintProducts as $sprintID => $products)
-            {
-                if(count($products) > 1) unset($noMergedSprints[$sprintID]);
-            }
-
-            /* Group product by product line. */
-            $lineGroups = array();
-            foreach($noMergedProducts as $product) $lineGroups[$product->line][$product->id] = $product;
-
-            /* Group sprint by product. */
-            $productGroups = array();
-            foreach($noMergedSprints as $sprint)
-            {
-                $sprintProduct = zget($sprintProducts, $sprint->id, array());
-                if(empty($sprintProduct)) continue;
-
-                $productID = key($sprintProduct);
-                $productGroups[$productID][$sprint->id] = $sprint;
-            }
-
-            foreach($productlines as $line)
-            {
-                if(!isset($lineGroups[$line->id])) unset($productlines[$line->id]);
-            }
-
-            $this->view->productlines  = $productlines;
-            $this->view->lineGroups    = $lineGroups;
-            $this->view->productGroups = $productGroups;
-        }
+        if($type == 'productline') $this->upgradeZen->mergeProductLine($projectType);
 
         /* Get projects group by product. */
         if($type == 'product')
