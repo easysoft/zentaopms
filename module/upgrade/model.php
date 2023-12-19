@@ -324,92 +324,31 @@ class upgradeModel extends model
     }
 
     /**
+     * 检查一致性。
      * Check consistency.
      *
      * @param  string $version
      * @access public
      * @return string
      */
-    public function checkConsistency($version = '')
+    public function checkConsistency(string $version = ''): string
     {
-        if(empty($version)) $version = $this->config->installedVersion;
-
-        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion', 'i' => 'ipdVersion');
-        $version      = str_replace('.', '_', $version);
-        $fromEdition  = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
-        $openVersion  = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
-        $openVersion  = str_replace('_', '.', $openVersion);
-        $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
-
-        $alterSQL    = array();
-        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
-        if(!file_exists($standardSQL)) return '';
-
-        $sqls = file_get_contents($standardSQL);
-        if(empty($this->config->isINT))
-        {
-            $xVersion     = $openVersion;
-            $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
-            if(file_exists($xStandardSQL)) $sqls .= "\n" . file_get_contents($xStandardSQL);
-        }
-
-        $tableExists = true;
+        $alterSQL = array();
+        $sqls     = $this->upgradeTao->getStandardSQLs($version);
         foreach(explode(';', $sqls) as $sql)
         {
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE ') !== 0) continue;
 
-            $lines      = explode("\n", $sql);
-            $createHead = array_shift($lines);
-            $createFoot = array_pop($lines);
-
-            preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
-            $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
-
-            preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
-            if(!isset($out[1][0])) continue;
-
-            $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
-            $fields = array();
-            try
-            {
-                $tableExists = true;
-                $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
-                $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
-                $dbSQLHead   = array_shift($dbSQLLines);
-                $dbSQLFoot   = array_pop($dbSQLLines);
-
-                preg_match_all('/ENGINE=(\w+) /', $dbSQLFoot, $out);
-                $dbEengine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
-
-                foreach($dbSQLLines as $dbSQLLine)
-                {
-                    $dbSQLLine = trim($dbSQLLine);
-                    if(!preg_match('/^`([^`]*)` /', $dbSQLLine)) continue;   // Skip no describe field line.
-
-                    $dbSQLLine = rtrim($dbSQLLine, ',');
-                    $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
-                    $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
-
-                    list($field) = explode(' ', $dbSQLLine);
-                    $fields[$field] = rtrim($dbSQLLine, ',');
-                }
-            }
-            catch(PDOException $e)
-            {
-                $errorInfo = $e->errorInfo;
-                $errorCode = $errorInfo[1];
-                if($errorCode == '1146') $tableExists = false;
-            }
-
-            /* If table is not extists, try create this table by create sql. */
+            list($fields, $lines, $table, $tableExists, $changeEngineSQL) = $this->upgradeTao->getFieldsBySQL($sql);
             if(!$tableExists)
             {
                 $alterSQL[] = $sql;
                 continue;
             }
+            if(!$fields) continue;
+            if($changeEngineSQL) $alterSQL[] = $changeEngineSQL;
 
-            if($stdEngine != $dbEengine) $alterSQL[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
             foreach($lines as $line)
             {
                 $line = trim($line);
@@ -418,71 +357,25 @@ class upgradeModel extends model
                 $line = rtrim($line, ',');
                 $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
                 $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
-
                 list($field) = explode(' ', $line);
 
                 $execSQL = '';
                 if(!isset($fields[$field]))
                 {
-                    $execSQL = "ALTER TABLE `$table` ADD $line";
+                    $execSQL = "ALTER TABLE `{$table}` ADD {$line}";
                 }
                 elseif($line != $fields[$field])
                 {
-                    $stdConfigs = explode(' ', $line);
-                    $dbConfigs  = explode(' ', $fields[$field]);
-
-                    if($stdConfigs[1] != $dbConfigs[1])
-                    {
-                        $stdType   = $stdConfigs[1];
-                        $dbType    = $dbConfigs[1];
-                        $stdLength = 0;
-                        $dbLength  = 0;
-
-                        preg_match_all('/^(\w+)(\((\d+)\))?$/', $stdConfigs[1], $stdOutput);
-                        if(!empty($stdOutput[1][0])) $stdType   = $stdOutput[1][0];
-                        if(!empty($stdOutput[3][0])) $stdLength = $stdOutput[3][0];
-
-                        preg_match_all('/^(\w+)(\((\d+)\))?$/', $dbConfigs[1], $dbOutput);
-                        if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
-                        if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
-
-                        $stdIsInt     = stripos($stdType, 'int') !== false;
-                        $stdIsVarchar = stripos($stdType, 'varchar') !== false;
-                        $stdIsText    = stripos($stdType, 'text') !== false;
-                        $dbIsInt      = stripos($dbType, 'int') !== false;
-                        $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
-                        $dbIsText     = stripos($dbType, 'text') !== false;
-                        if($dbIsInt and $dbLength == 0)
-                        {
-                            $intFieldLengths = zget($this->config->upgrade->dbFieldLengths, $dbConfigs[2] == 'unsigned' ? 'unsigned' : 'int', array());
-                            $dbLength = zget($intFieldLengths, $dbType, 0);
-                        }
-
-                        if($dbLength > $stdLength)     $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsInt && $dbIsText)     $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsVarchar && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsText && $dbIsText)
-                        {
-                            $textFieldLengths = $this->config->upgrade->dbFieldLengths['text'];
-                            if($textFieldLengths[$stdType] < $textFieldLengths[$dbType]) $stdConfigs[1] = $dbConfigs[1];
-                        }
-                        if(stripos($stdConfigs[1], 'int') === false && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
-
-                        $line = implode(' ', $stdConfigs);
-                        if($line == $fields[$field]) continue;
-                    }
-
-                    $execSQL = "ALTER TABLE `$table` CHANGE $field $line";
+                    $line = $this->upgradeTao->changeField($line, $fields[$field]);
+                    if($line) $execSQL = "ALTER TABLE `{$table}` CHANGE {$field} {$line}";
                 }
-
                 if($execSQL)
                 {
                     if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
-                    $alterSQL[] = "$execSQL";
+                    $alterSQL[] = $execSQL;
                 }
             }
         }
-
         return implode(";\n", $alterSQL);
     }
 

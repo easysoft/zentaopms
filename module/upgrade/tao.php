@@ -129,4 +129,148 @@ class upgradeTao extends upgradeModel
             if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
         }
     }
+
+    /**
+     * 获取标准的版本 sql 语句。
+     * Get standard sqls by version.
+     *
+     * @param  string $version
+     * @access protected
+     * @return string
+     */
+    protected function getStandardSQLs(string $version): string
+    {
+        if(empty($version)) $version = $this->config->installedVersion;
+
+        $version      = str_replace('.', '_', $version);
+        $openVersion  = $this->getOpenVersion($version);
+        $openVersion  = str_replace('_', '.', $openVersion);
+        $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
+
+        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
+        if(!file_exists($standardSQL)) return '';
+        $sqls = file_get_contents($standardSQL);
+
+        if(empty($this->config->isINT))
+        {
+            $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $openVersion . '.sql';
+            if(file_exists($xStandardSQL)) $sqls .= "\n" . file_get_contents($xStandardSQL);
+        }
+        return $sqls;
+    }
+
+    /**
+     * 根据 sql 语句获取数据库中的字段。
+     * Get fields in database by sql.
+     *
+     * @param  string    $sql
+     * @access protected
+     * @return array
+     */
+    protected function getFieldsBySQL(string $sql): array
+    {
+        $return = array('fields' => array(), 'lines' => array(), 'table' => '', 'tableExists' => true, 'changeEngineSQL' => '');
+        $lines  = explode("\n", $sql);
+
+        /* If table name isn't exist, skip it. . */
+        $createHead = array_shift($lines);
+        preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+        if(!isset($out[1][0])) return array_values($return);
+
+        $return['table'] = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+        try
+        {
+            $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `{$return['table']}`")->fetch(PDO::FETCH_ASSOC);
+            $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
+            $dbSQLFoot   = array_pop($dbSQLLines);
+            preg_match_all('/ENGINE=(\w+) /', $dbSQLFoot, $out);
+            $dbEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
+
+            array_shift($dbSQLLines);
+            foreach($dbSQLLines as $dbSQLLine)
+            {
+                $dbSQLLine = trim($dbSQLLine);
+                if(!preg_match('/^`([^`]*)` /', $dbSQLLine)) continue; // Skip no describe field line.
+
+                $dbSQLLine = rtrim($dbSQLLine, ',');
+                $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
+                $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
+                list($field) = explode(' ', $dbSQLLine);
+                $return['fields'][$field] = rtrim($dbSQLLine, ',');
+            }
+        }
+        catch(PDOException $e)
+        {
+            $errorInfo = $e->errorInfo;
+            $errorCode = $errorInfo[1];
+            if($errorCode == '1146') $return['tableExists'] = false; // If table is not extists, try create this table by create sql.
+        }
+
+        /* If the table engine in the database isn't the standard engine, change the table engine in the database to the standard engine. */
+        $createFoot = array_pop($lines);
+        preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
+        $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
+        if($stdEngine != $dbEngine) $return['changeEngineSQL'] = "ALTER TABLE `{$return['table']}` ENGINE='{$stdEngine}'";
+
+        $return['lines'] = $lines;
+        return array_values($return);
+    }
+
+    /**
+     * 根据标准 sql 语句修改数据库中的字段。
+     * Change fields in database by standard sql.
+     *
+     * @param  string    $stdLine
+     * @param  string    $dbLine
+     * @access protected
+     * @return string
+     */
+    protected function changeField(string $stdLine, string $dbLine): string
+    {
+        /* Get configs. */
+        $stdConfigs = explode(' ', $stdLine);
+        $dbConfigs  = explode(' ', $dbLine);
+        if($stdConfigs[1] != $dbConfigs[1])
+        {
+            /* Get field type. */
+            $stdType   = $stdConfigs[1];
+            $dbType    = $dbConfigs[1];
+            $stdLength = 0;
+            $dbLength  = 0;
+
+            /* Get field type and length. */
+            preg_match_all('/^(\w+)(\((\d+)\))?$/', $stdConfigs[1], $stdOutput);
+            if(!empty($stdOutput[1][0])) $stdType   = $stdOutput[1][0];
+            if(!empty($stdOutput[3][0])) $stdLength = $stdOutput[3][0];
+            preg_match_all('/^(\w+)(\((\d+)\))?$/', $dbConfigs[1], $dbOutput);
+            if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
+            if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
+
+            $stdIsInt     = stripos($stdType, 'int') !== false;
+            $stdIsVarchar = stripos($stdType, 'varchar') !== false;
+            $stdIsText    = stripos($stdType, 'text') !== false;
+            $dbIsInt      = stripos($dbType, 'int') !== false;
+            $dbIsText     = stripos($dbType, 'text') !== false;
+            /* If the type in database is int and the length of type is empty, get the length from the config. */
+            if($dbIsInt && $dbLength == 0)
+            {
+                $intFieldLengths = zget($this->config->upgrade->dbFieldLengths, $dbConfigs[2] == 'unsigned' ? 'unsigned' : 'int', array());
+                $dbLength = zget($intFieldLengths, $dbType, 0);
+            }
+            if($dbLength > $stdLength)     $stdConfigs[1] = $dbConfigs[1]; // If the length in database is longer than the length in standard, use the length in database.
+            if($stdIsInt && $dbIsText)     $stdConfigs[1] = $dbConfigs[1]; // If the type in standard is int and the type in database is text, use text as the type.
+            if($stdIsVarchar && $dbIsText) $stdConfigs[1] = $dbConfigs[1]; // If the type in standard is varchar and the type in database is text, use text as the type.
+            /* If both of the type in standard and in database are text, get the length from the config. */
+            if($stdIsText && $dbIsText)
+            {
+                $textFieldLengths = $this->config->upgrade->dbFieldLengths['text'];
+                if($textFieldLengths[$stdType] < $textFieldLengths[$dbType]) $stdConfigs[1] = $dbConfigs[1];
+            }
+            if(stripos($stdConfigs[1], 'int') === false && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
+
+            $stdLine = implode(' ', $stdConfigs);
+            if($stdLine == $dbLine) return ''; // If the sql is same, won't change it.
+        }
+        return $stdLine;
+    }
 }
