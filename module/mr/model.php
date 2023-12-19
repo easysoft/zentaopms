@@ -650,11 +650,13 @@ class mrModel extends model
      * @param  object $oldMR
      * @param  object $MR
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiUpdateMR(object $oldMR, object $MR): object
+    public function apiUpdateMR(object $oldMR, object $MR): object|null
     {
-        $host  = $this->loadModel('pipeline')->getByID($oldMR->hostID);
+        $host = $this->loadModel('pipeline')->getByID($oldMR->hostID);
+        if(!$host) return null;
+
         if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($host->id, $host->type, $MR->assignee);
 
         $MRObject = new stdclass();
@@ -667,7 +669,7 @@ class mrModel extends model
             $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
             if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
 
-            $url = sprintf($this->loadModel('gitlab')->getApiRoot($oldMR->hostID), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
+            $url = sprintf($this->loadModel('gitlab')->getApiRoot($host->id), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
             return json_decode(commonModel::http($url, $MRObject, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
@@ -676,7 +678,7 @@ class mrModel extends model
             $MRObject->body = $MR->description;
             if(!empty($assignee)) $MRObject->assignee = $assignee;
 
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($oldMR->hostID), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($host->id), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
             $mergeResult = json_decode(commonModel::http($url, $MRObject, array(), array(), 'json', 'PATCH'));
 
             if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;

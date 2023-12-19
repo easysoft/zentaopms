@@ -208,4 +208,23 @@ class mrTest
 
         return $result[0];
     }
+
+    /**
+     * Test apiUpdateMR method.
+     *
+     * @param  int     $hostID
+     * @param  string  $project
+     * @param  object  $params
+     * @access public
+     * @return array|object|null
+     */
+    public function apiUpdateMrTester(object $oldMR, object $newMR): array|object|null
+    {
+        $result = $this->objectModel->apiUpdateMR($oldMR, $newMR);
+        if(empty($result->iid) && empty($result->id)) return $result;
+
+        $this->objectModel->apiUpdateMR($oldMR, $oldMR);
+        $result->oldTitle = $oldMR->title;
+        return $result;
+    }
 }
