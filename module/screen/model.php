@@ -223,10 +223,9 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
-
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
+            if(empty($component)) $component = new stdclass();
             $component->option = new stdclass();
             if($type == 'chart')
             {
@@ -276,6 +275,8 @@ class screenModel extends model
                 $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
             }
         }
+
+        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
         $component = $this->getChartOption($chart, $component, $filters);
         if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
