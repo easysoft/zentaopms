@@ -84,4 +84,18 @@ class upgradeTest
         $this->objectModel->fromVersion = $version;
         return $this->objectModel->setURSwitchStatus();
     }
+
+    /**
+     * 测试删除临时 model 文件。
+     * Test delete tmp model files.
+     *
+     * @access public
+     * @return int
+     */
+    public function deleteTmpModelTest(): int
+    {
+        $this->objectModel->deleteTmpModel();
+        global $tester;
+        return count(glob($tester->app->getTmpRoot() . 'model/*.php'));
+    }
 }

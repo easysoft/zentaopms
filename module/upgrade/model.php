@@ -414,12 +414,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 删除临时 model 文件。
      * Delete tmp model files.
      *
      * @access public
      * @return void
      */
-    public function deleteTmpModel()
+    public function deleteTmpModel(): void
     {
         $tmpModelDir = $this->app->getTmpRoot() . 'model/';
         foreach(glob($tmpModelDir . '/*.php') as $tmpModelFile) unlink($tmpModelFile);
