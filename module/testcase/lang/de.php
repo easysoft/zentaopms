@@ -194,7 +194,7 @@ $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in
 $lang->testcase->reviewList[0] = 'Nein';
 $lang->testcase->reviewList[1] = 'Ja';
 
-$lang->testcase->autoList = array();
+$lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = 'Yes';
 $lang->testcase->autoList['no']   = 'No';
 

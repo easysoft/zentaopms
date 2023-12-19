@@ -194,7 +194,7 @@ $lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平�
 $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';
 
-$lang->testcase->autoList = array();
+$lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = '是';
 $lang->testcase->autoList['no']   = '否';
 
