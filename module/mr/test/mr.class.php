@@ -190,4 +190,22 @@ class mrTest
         $this->objectModel->apiDeleteMR($hostID, $project, empty($result->iid) ? $result->id : $result->iid);
         return $result;
     }
+
+    /**
+     * Test apiGetMRCommits method.
+     *
+     * @param  int     $hostID
+     * @param  string  $project
+     * @param  int     $mriid
+     * @access public
+     * @return array|object
+     */
+    public function apiGetMrCommitsTester(int $hostID, string $project, int $mriid): array|object
+    {
+        $result = $this->objectModel->apiGetMRCommits($hostID, $project, $mriid);
+        if(empty($result)) return array();
+        if(!isset($result[0])) return $result;
+
+        return $result[0];
+    }
 }

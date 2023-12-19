@@ -626,9 +626,9 @@ class mrModel extends model
      * @param  string $projectID  targetProject
      * @param  int    $MRID
      * @access public
-     * @return array
+     * @return array|null
      */
-    public function apiGetMRCommits(int $hostID, string $projectID, int $MRID): array
+    public function apiGetMRCommits(int $hostID, string $projectID, int $MRID): array|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
@@ -640,7 +640,7 @@ class mrModel extends model
             $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID/commits");
         }
 
-        return json_decode(commonModel::http($url));
+        return (array)json_decode(commonModel::http($url));
     }
 
     /**
