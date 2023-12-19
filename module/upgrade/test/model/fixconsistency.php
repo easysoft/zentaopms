@@ -21,7 +21,7 @@ $upgrade = new upgradeTest();
 $consistencyFile = $upgrade->getConsistencyLogFile();
 if(file_exists($consistencyFile)) unlink($consistencyFile);
 
-$versionList = array("18.5");
+$versionList = array("16.0");
 
 $upgrade->fixConsistency($versionList[0]);
 
@@ -39,5 +39,5 @@ r(strpos($firstLine, 'sql_mode') !== false) && p('') && e(1);   //判断是否�
 
 $secondLinePoint = $file->seek(1);
 $secondLine      = $file->current();
-$condition = trim($secondLine) === 'ALTER TABLE `zt_account` CHANGE `extra` `extra` text DEFAULT NULL';  
+$condition = trim($secondLine) === "ALTER TABLE `zt_acl` CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0'";
 r($condition) && p('') && e(1);  //判断是否成功的记录了修复一致性的sql。
