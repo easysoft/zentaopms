@@ -1836,6 +1836,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建看板空间。
      * Create a space.
      *
      * @param  object $space
@@ -1867,6 +1868,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 编辑看板空间。
      * Update a space.
      *
      * @param  object $space
@@ -1907,6 +1909,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 关闭看板空间。
      * Close a space.
      *
      * @param  int    $spaceID
@@ -1935,6 +1938,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 激活看板空间。
      * Activate a space.
      *
      * @param  int    $spaceID
@@ -1959,10 +1963,12 @@ class kanbanModel extends model
             $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
+
         return true;
     }
 
     /**
+     * 获取看板泳道键值对。
      * Get lane pairs by region id.
      *
      * @param  array|int $regionID
@@ -1970,7 +1976,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getLanePairsByRegion($regionID, $type = 'all')
+    public function getLanePairsByRegion(int $regionID, string $type = 'all'): array
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
@@ -3326,9 +3332,9 @@ class kanbanModel extends model
      *
      * @param  int    $spaceID
      * @access public
-     * @return array
+     * @return object
      */
-    public function getSpaceById($spaceID)
+    public function getSpaceById($spaceID): object
     {
         $space = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
         if($space) $space = $this->loadModel('file')->replaceImgURL($space, 'desc');

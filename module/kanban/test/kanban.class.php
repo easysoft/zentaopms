@@ -753,11 +753,6 @@ class kanbanTest
      */
     public function getLanePairsByRegionTest($regionID, $type = 'all')
     {
-        global $tester;
-
-
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
         $objects = $this->objectModel->getLanePairsByRegion($regionID, $type);
 
         if(dao::isError()) return dao::getError();
