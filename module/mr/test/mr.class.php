@@ -250,15 +250,30 @@ class mrTest
      *
      * @param  int     $hostID
      * @param  string  $project
-     * @param  object  $params
+     * @param  int     $mrID
      * @access public
      * @return array|object
      */
-    public function apiCloseMrTester(int $hostID, string $project, object $params): array|object
+    public function apiCloseMrTester(int $hostID, string $project, int $mrID): array|object
     {
-        $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
-        $mrID   = empty($result->iid) ? $result->id : $result->iid;
+        $this->objectModel->apiReopenMR($hostID, $project, $mrID);
         $this->objectModel->apiCloseMR($hostID, $project, $mrID);
         return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
+    }
+
+    /**
+     * Test apiReopenMR method.
+     *
+     * @param  int     $hostID
+     * @param  string  $project
+     * @param  int     $mriid
+     * @access public
+     * @return array|object
+     */
+    public function apiReopenMrTester(int $hostID, string $project, int $mriid): array|object
+    {
+        $this->objectModel->apiCloseMR($hostID, $project, $mriid);
+        $this->objectModel->apiReopenMR($hostID, $project, $mriid);
+        return $this->objectModel->apiGetSingleMR($hostID, $project, $mriid);
     }
 }
