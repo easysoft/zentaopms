@@ -7,6 +7,7 @@ title=测试 mrModel::apiCloseMR();
 timeout=0
 cid=0
 
+- 不存在的主机 @0
 - 重新打开并关闭Gitlab合并请求
  - 属性title @test
  - 属性state @closed
@@ -31,6 +32,7 @@ $hostID = array
     'gitlab' => 1,
     'gitea'  => 4,
     'gogs'   => 5,
+    'error'  => 10
 );
 
 $projectID = array
@@ -46,6 +48,8 @@ $mrID = array
     'gitea'  => 18,
     'gogs'   => 18,
 );
+
+r($mrModel->apiCloseMrTester($hostID['error'], $projectID['gitlab'], $mrID['gitlab'])) && p() && e('0'); // 不存在的主机
 
 r($mrModel->apiCloseMrTester($hostID['gitlab'], $projectID['gitlab'], $mrID['gitlab'])) && p('title,state') && e('test,closed'); // 重新打开并关闭Gitlab合并请求
 r($mrModel->apiCloseMrTester($hostID['gitea'],  $projectID['gitea'],  $mrID['gitea']))  && p('title,state') && e('test,closed'); // 重新打开并关闭Gitea合并请求

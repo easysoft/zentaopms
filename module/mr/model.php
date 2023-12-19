@@ -585,6 +585,8 @@ class mrModel extends model
     public function apiGetSingleMR(int $hostID, string $projectID, int $MRID): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
+        if(!$host) return null;
+
         if($host->type == 'gitlab')
         {
             $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID, false), "/projects/$projectID/merge_requests/$MRID");
@@ -734,11 +736,13 @@ class mrModel extends model
      * @param  string $projectID
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiCloseMR(int $hostID, string $projectID, int $MRID): object
+    public function apiCloseMR(int $hostID, string $projectID, int $MRID): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
+        if(!$host) return null;
+
         if($host->type == 'gitlab')
         {
             $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=close';
@@ -759,11 +763,13 @@ class mrModel extends model
      * @param  string $projectID
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiReopenMR(int $hostID, string $projectID, int $MRID): object
+    public function apiReopenMR(int $hostID, string $projectID, int $MRID): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
+        if(!$host) return null;
+
         if($host->type == 'gitlab')
         {
             $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
@@ -794,11 +800,13 @@ class mrModel extends model
      *
      * @param  object $MR
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiAcceptMR(object $MR): object
+    public function apiAcceptMR(object $MR): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
+        if(!$host) return null;
+
         if($host->type == 'gitlab')
         {
             $apiRoot    = $this->loadModel('gitlab')->getApiRoot($MR->hostID);

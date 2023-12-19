@@ -235,9 +235,9 @@ class mrTest
      * @param  string  $project
      * @param  object  $params
      * @access public
-     * @return array|object
+     * @return array|object|null
      */
-    public function apiDeleteMrTester(int $hostID, string $project, object $params): array|object
+    public function apiDeleteMrTester(int $hostID, string $project, object $params): array|object|null
     {
         $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
         $mrID   = empty($result->iid) ? $result->id : $result->iid;
@@ -252,9 +252,9 @@ class mrTest
      * @param  string  $project
      * @param  int     $mrID
      * @access public
-     * @return array|object
+     * @return array|object|null
      */
-    public function apiCloseMrTester(int $hostID, string $project, int $mrID): array|object
+    public function apiCloseMrTester(int $hostID, string $project, int $mrID): array|object|null
     {
         $this->objectModel->apiReopenMR($hostID, $project, $mrID);
         $this->objectModel->apiCloseMR($hostID, $project, $mrID);
@@ -268,9 +268,9 @@ class mrTest
      * @param  string  $project
      * @param  int     $mriid
      * @access public
-     * @return array|object
+     * @return array|object|null
      */
-    public function apiReopenMrTester(int $hostID, string $project, int $mriid): array|object
+    public function apiReopenMrTester(int $hostID, string $project, int $mriid): array|object|null
     {
         $this->objectModel->apiCloseMR($hostID, $project, $mriid);
         $this->objectModel->apiReopenMR($hostID, $project, $mriid);

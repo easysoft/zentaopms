@@ -7,6 +7,7 @@ title=测试 mrModel::apiGetSingleMR();
 timeout=0
 cid=0
 
+- 查询不存在的主机 @0
 - 查询Gitlab的合并请求
  - 属性title @test-merge（不要关闭或删除）
  - 属性state @opened
@@ -33,7 +34,8 @@ $mrModel = $tester->loadModel('mr');
 $hostID = array(
     'gitlab' => 1,
     'gitea'  => 4,
-    'gogs'   => 5
+    'gogs'   => 5,
+    'error'  => 100
 );
 
 $projectID = array(
@@ -47,6 +49,8 @@ $MRID = array(
     'gitea'  => 11,
     'gogs'   => 7
 );
+
+r($mrModel->apiGetSingleMR($hostID['error'], $projectID['gitlab'], $MRID['gitlab'])) && p() && e('0'); // 查询不存在的主机
 
 r($mrModel->apiGetSingleMR($hostID['gitlab'], $projectID['gitlab'], $MRID['gitlab'])) && p('title,state') && e('test-merge（不要关闭或删除）,opened'); // 查询Gitlab的合并请求
 r($mrModel->apiGetSingleMR($hostID['gitlab'], $projectID['gitlab'], -1))              && p('message')     && e('404 Not found');                       // 查询不存在的Gitlab合并请求
