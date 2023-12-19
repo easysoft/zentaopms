@@ -173,12 +173,12 @@ class gogsModel extends model
      * @param  int    $gogsID
      * @param  string $projectID
      * @access public
-     * @return object|false
+     * @return object|null
      */
-    public function apiGetSingleProject(int $gogsID, string $projectID): object|false
+    public function apiGetSingleProject(int $gogsID, string $projectID): object|null
     {
         $apiRoot = $this->getApiRoot($gogsID);
-        if(!$apiRoot) return false;
+        if(!$apiRoot) return null;
 
         $url     = sprintf($apiRoot, "/repos/$projectID");
         $project = json_decode(commonModel::http($url));

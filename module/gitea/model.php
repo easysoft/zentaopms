@@ -230,12 +230,12 @@ class giteaModel extends model
      * @param  int    $giteaID
      * @param  string $projectID
      * @access public
-     * @return object|false
+     * @return object|null
      */
-    public function apiGetSingleProject(int $giteaID, string $projectID): object|false
+    public function apiGetSingleProject(int $giteaID, string $projectID): object|null
     {
         $apiRoot = $this->getApiRoot($giteaID);
-        if(!$apiRoot) return false;
+        if(!$apiRoot) return null;
 
         $url     = sprintf($apiRoot, "/repos/$projectID");
         $project = json_decode(commonModel::http($url));
