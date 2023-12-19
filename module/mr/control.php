@@ -587,7 +587,7 @@ class mr extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'storyTable')", 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
         }
 
         $this->loadModel('story');
@@ -647,7 +647,7 @@ class mr extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'bugTable')", 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
         }
 
         $this->loadModel('bug');
@@ -705,7 +705,7 @@ class mr extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'taskTable')", 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
         }
 
         /* Set browse type. */
