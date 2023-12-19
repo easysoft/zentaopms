@@ -173,15 +173,7 @@ class group extends control
         $this->view->products   = $this->loadModel('product')->getPairs();
         if(!empty($changeAdmin)) $this->app->user->admin = false;
 
-        $navGroup = array();
-        foreach($this->lang->navGroup as $moduleName => $groupName)
-        {
-            if($groupName == $moduleName) continue;
-            if($moduleName == 'testcase') $moduleName = 'case';
-
-            $navGroup[$groupName][$moduleName] = $moduleName;
-        }
-        $this->view->navGroup = $navGroup;
+        $this->view->navGroup = $this->getNavGroup();
 
         $this->display();
     }

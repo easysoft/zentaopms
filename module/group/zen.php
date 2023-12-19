@@ -92,6 +92,7 @@ class groupZen extends group
         }
     }
     /**
+     * 分组权限管理。
      * Manage priv by package or group.
      *
      * @param  int    $groupID
@@ -181,6 +182,7 @@ class groupZen extends group
     }
 
     /**
+     * 模块权限管理。
      * Manage priv by module.
      *
      * @access public
@@ -225,7 +227,7 @@ class groupZen extends group
         $this->view->groups   = $this->group->getPairs();
         $this->view->subsets  = $subsets;
         $this->view->packages = $packages;
-        $this->view->privs    = $this->group->getPrivByParents(key($subsets));
+        $this->view->privs    = $this->group->getPrivsByParents(key($subsets));
     }
 
     /**
@@ -291,5 +293,26 @@ class groupZen extends group
         }
 
         return $formData;
+    }
+
+    /**
+     * 获取Nav分组。
+     * Get nav group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getNavGroup()
+    {
+        $navGroup = array();
+        foreach($this->lang->navGroup as $moduleName => $groupName)
+        {
+            if($groupName == $moduleName) continue;
+            if($moduleName == 'testcase') $moduleName = 'case';
+
+            $navGroup[$groupName][$moduleName] = $moduleName;
+        }
+
+        return $navGroup;
     }
 }
