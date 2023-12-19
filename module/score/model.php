@@ -25,18 +25,18 @@ class scoreModel extends model
     }
 
     /**
+     * 创建积分日志。
      * Add score logs.
      *
-     * @param string $module
-     * @param string $method
-     * @param string $param
-     * @param string $account
-     * @param string $time
-     *
+     * @param  string            $module
+     * @param  string            $method
+     * @param  int|string|object $param
+     * @param  string            $account
+     * @param  string            $time
      * @access public
      * @return bool|object
      */
-    public function create($module = '', $method = '', $param = '', $account = '', $time = '')
+    public function create(string $module = '', string $method = '', int|string|object $param = '', string $account = '', string $time = ''): bool|object
     {
         if(empty($this->config->score->rule->{$module}->{$method}) || empty($this->config->global->scoreStatus)) return true;
 
@@ -45,22 +45,16 @@ class scoreModel extends model
         $user     = empty($account) ? $this->app->user->account : $account;
         $time     = empty($time) ? helper::now() : $time;
         $extended = isset($this->config->score->ruleExtended[$module][$method]) ? $this->config->score->ruleExtended[$module][$method] : array();
-
         if(is_numeric($param)) $desc .= 'ID:' . $param;
 
         $object = '';
-
         switch($module)
         {
             case 'user':
                 if($method == 'login') $desc = $this->lang->score->methods[$module][$method];
-
                 if($method == 'changePassword')
                 {
-                    if(!empty($extended['strength'][$param]))
-                    {
-                        $rule['score'] = $rule['score'] + $extended['strength'][$param];
-                    }
+                    if(!empty($extended['strength'][$param])) $rule['score'] = $rule['score'] + $extended['strength'][$param];
                     $desc = $this->lang->score->methods[$module][$method];
                 }
                 break;
@@ -69,7 +63,6 @@ class scoreModel extends model
                 {
                     $openedBy = $this->dao->findById($param)->from(TABLE_STORY)->fetch('openedBy');
                     $object   = true;
-
                     if(!empty($openedBy))
                     {
                         $newRule          = $rule;
@@ -82,88 +75,19 @@ class scoreModel extends model
             case 'task':
                 if($method == 'finish')
                 {
-                    $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
-
-                    /* Check child task. */
-                    $parentTask = $this->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($param)->fetch('id');
-                    if(!empty($parentTask)) return true;
-
-                    $task = $this->loadModel('task')->getById($param);
-
-                    if(!empty($extended['pri'][$task->pri]))
-                    {
-                        $rule['score'] = $rule['score'] + $extended['pri'][$task->pri];
-                    }
-
-                    if(!empty($task->estimate))
-                    {
-                        $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10.0 * $task->estimate / $task->consumed));
-                    }
+                    $data = $this->computeTaskScore($module, $method, $param, $rule, $extended);
+                    if(!$data) return true;
+                    list($desc, $rule) = $data;
                 }
                 break;
             case 'bug':
-                if($method == 'createFormCase')
-                {
-                    $desc     = $this->lang->score->modules['testcase'] . 'ID:' . $param;
-                    $openedBy = $this->dao->findById($param)->from(TABLE_CASE)->fetch('openedBy');
-                    if(!empty($openedBy)) $user = $openedBy;
-                }
-
-                if($method == 'saveTplModal') $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
-
-                if($method == 'confirm')
-                {
-                    $user  = $param->openedBy;
-                    $desc .= 'ID:' . $param->id;
-                    if(!empty($extended['severity'][$param->severity]))
-                    {
-                        $rule['score'] = $rule['score'] + $extended['severity'][$param->severity];
-                    }
-                }
-
-                if($method == 'resolve' && !empty($extended['severity'][$param->severity]))
-                {
-                    $rule['score'] = $rule['score'] + $extended['severity'][$param->severity];
-                }
+                list($rule, $desc, $user) = $this->computeBugScore($module, $method, $param, $rule, $desc, $user, $extended);
                 break;
             case 'testTask':
                 if($method == 'runCase') $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
                 break;
             case 'execution':
-                if($method == 'close')
-                {
-                    $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
-                    $timestamp = empty($time) ? time() : strtotime($time);
-                    $object    = true;
-
-                    /* Project PM. */
-                    if(!empty($param->PM))
-                    {
-                        $rule['score'] = $extended['manager']['close'];
-                        if($param->end > date('Y-m-d', $timestamp))
-                        {
-                            $rule['score'] += $extended['manager']['onTime'];
-                        }
-                        $object = $this->saveScore($param->PM, $rule, $module, $method, $desc, $time);
-                    }
-
-                    /* Project team user. */
-                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($param->id)->andWhere('type')->eq('execution')->fetchPairs();
-                    if(!empty($teams))
-                    {
-                        $rule['score'] = $extended['member']['close'];
-                        if($param->end > date('Y-m-d', $timestamp))
-                        {
-                            $rule['score'] += $extended['member']['onTime'];
-                        }
-
-                        foreach($teams as $user)
-                        {
-                            if($user != $param->PM) $object = $this->saveScore($user, $rule, $module, $method, $desc, $time);
-                        }
-                    }
-                }
-
+                if($method == 'close') list($rule, $desc, $object) = $this->computeExecutionScore($module, $method, $param, $user, $time, $rule, $desc, $extended);
                 break;
             case 'search':
                 if($method == 'saveQueryAdvanced') $desc = $this->lang->score->methods[$module][$method];
@@ -173,9 +97,139 @@ class scoreModel extends model
                 break;
         }
 
-        $object = $object === '' ? $this->saveScore($user, $rule, $module, $method, $desc, $time) : $object;
+        return $object === '' ? $this->saveScore($user, $rule, $module, $method, $desc, $time) : $object;
+    }
 
-        return $object;
+    /**
+     * 计算任务积分。
+     * Compute task score.
+     *
+     * @param  string     $module
+     * @param  string     $method
+     * @param  int        $param
+     * @param  array      $rule
+     * @param  array      $extended
+     * @access public
+     * @return array|bool
+     */
+    public function computeTaskScore(string $module, string $method, int $param, array $rule, array $extended): array|bool
+    {
+        if($method != 'finish') return true;
+        $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
+
+        /* Check child task. */
+        $parentTask = $this->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($param)->fetch('id');
+        if(!empty($parentTask)) return false;
+
+        $task = $this->loadModel('task')->getByID($param);
+        if(!$task) return false;
+
+        if(!empty($extended['pri'][$task->pri]))
+        {
+            $rule['score'] = $rule['score'] + $extended['pri'][$task->pri];
+        }
+
+        if(!empty($task->estimate))
+        {
+            $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10.0 * $task->estimate / $task->consumed));
+        }
+
+        return array($desc, $rule);
+    }
+
+    /**
+     * 计算Bug积分。
+     * Compute bug score.
+     *
+     * @param  string            $module
+     * @param  string            $method
+     * @param  string|object|int $param
+     * @param  array             $rule
+     * @param  string            $desc
+     * @param  string            $user
+     * @param  array             $extended
+     * @access public
+     * @return array
+     */
+    public function computeBugScore(string $module, string $method, string|object|int $param, array $rule, string $desc, string $user, array $extended): array
+    {
+        if($method == 'createFormCase')
+        {
+            $desc     = $this->lang->score->modules['testcase'] . 'ID:' . $param;
+            $openedBy = $this->dao->findById($param)->from(TABLE_CASE)->fetch('openedBy');
+            if(!empty($openedBy)) $user = $openedBy;
+        }
+
+        if($method == 'saveTplModal') $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
+
+        if($method == 'confirm')
+        {
+            $user  = $param->openedBy;
+            $desc .= 'ID:' . $param->id;
+            if(!empty($extended['severity'][$param->severity]))
+            {
+                $rule['score'] = $rule['score'] + $extended['severity'][$param->severity];
+            }
+        }
+
+        if($method == 'resolve' && !empty($extended['severity'][$param->severity]))
+        {
+            $rule['score'] = $rule['score'] + $extended['severity'][$param->severity];
+        }
+
+        return array($rule, $desc, $user);
+    }
+
+    /**
+     * 计算执行积分。
+     * Compute execution score.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  object $param
+     * @param  string $user
+     * @param  string $time
+     * @param  array  $rule
+     * @param  string $desc
+     * @param  array  $extended
+     * @access public
+     * @return array
+     */
+    public function computeExecutionScore(string $module, string $method, object $param, string $user, string $time, array $rule, string $desc, array $extended): array
+    {
+        if($method != 'close') return array();
+
+        $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
+        $timestamp = empty($time) ? time() : strtotime($time);
+        $object    = true;
+
+        /* Project PM. */
+        if(!empty($param->PM))
+        {
+            $rule['score'] = $extended['manager']['close'];
+            if($param->end > date('Y-m-d', $timestamp))
+            {
+                $rule['score'] += $extended['manager']['onTime'];
+            }
+            $object = $this->saveScore($param->PM, $rule, $module, $method, $desc, $time);
+        }
+
+        /* Project team user. */
+        $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($param->id)->andWhere('type')->eq('execution')->fetchPairs();
+        if(!empty($teams))
+        {
+            $rule['score'] = $extended['member']['close'];
+            if($param->end > date('Y-m-d', $timestamp))
+            {
+                $rule['score'] += $extended['member']['onTime'];
+            }
+
+            foreach($teams as $user)
+            {
+                if($user != $param->PM) $object = $this->saveScore($user, $rule, $module, $method, $desc, $time);
+            }
+        }
+        return array($rule, $desc, $object);
     }
 
     /**
