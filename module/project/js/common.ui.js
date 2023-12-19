@@ -416,9 +416,9 @@ window.loadBranches = function(product)
         $formRow.find('.form-group').eq(0).find('.newProductBox').removeClass('hidden');
     }
 
-    $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
+    $.getJSON($.createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
     {
-        if(data)
+        if(data.length > 0)
         {
             $formRow.find('.form-group').eq(1).find('.picker-box').empty();
             $formRow.find('.form-group').eq(1).find('.picker-box').append(`<div id='branch${index}'></div>`);
@@ -427,7 +427,6 @@ window.loadBranches = function(product)
             $formRow.find('.form-group').eq(1).removeClass('hidden');
             $formRow.find('.form-group').eq(0).find('.newProductBox').addClass('hidden');
 
-            data = JSON.parse(data);
             new zui.Picker(`#branch${index}`, {
                 items: data,
                 multiple: true,
