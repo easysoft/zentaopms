@@ -336,47 +336,6 @@ class scoreModel extends model
     }
 
     /**
-     * Score reset.
-     *
-     * @param int $lastID
-     *
-     * @access public
-     * @return array
-     */
-    public function reset($lastID = 0)
-    {
-        if($lastID == 0)
-        {
-            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0, `scoreLevel`=0");
-            $this->dao->delete()->from(TABLE_SCORE)->exec();
-            try
-            {
-                $this->dbh->exec('ALTER TABLE ' . TABLE_SCORE . ' auto_increment=1');
-            }
-            catch(Exception $e){}
-        }
-
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->gt($lastID)->orderBy('id_asc')->limit(100)->fetchAll('id');
-        if(empty($actions)) return array('number' => 0, 'status' => 'finish');
-
-        foreach($actions as $action)
-        {
-            $param = $action->objectID;
-            if($action->objectType == 'execution' && $action->action == 'closed') $param = $this->dao->findById($action->objectID)->from(TABLE_PROJECT)->fetch();
-            if($action->objectType == 'bug')
-            {
-                $bug = $this->dao->findById($action->objectID)->from(TABLE_BUG)->fetch();
-                if(!empty($bug->case)) $action->action = 'createFormCase';
-                if($action->action == 'bugconfirmed' || $action->action == 'resolved') $param = $bug;
-            }
-            if($action->objectType == 'case') $action->objectType = 'testcase';
-            $this->create($action->objectType, $this->fixKey($action->action), $param, $action->actor, $action->date);
-        }
-
-        return array('status' => 'more', 'lastID' => max(array_keys($actions)), 'number' => count($actions));
-    }
-
-    /**
      * Fix action type for score.
      *
      * @param string $string

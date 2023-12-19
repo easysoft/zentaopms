@@ -39,31 +39,4 @@ class score extends control
 
         $this->display();
     }
-
-    /**
-     * Initialize score.
-     *
-     * @param int $lastID
-     *
-     * @access public
-     * @return void
-     */
-    public function reset($lastID = 0)
-    {
-        if(helper::isAjaxRequest())
-        {
-            $result = $this->score->reset($lastID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($result['status'] == 'finish')
-            {
-                return $this->send(array('result' => 'finished', 'message' => $this->lang->score->resetFinish));
-            }
-            else
-            {
-                return $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->resetLoading, 'lastID' => $result['lastID'], 'total' => $result['number']));
-            }
-        }
-        $this->display();
-    }
 }
