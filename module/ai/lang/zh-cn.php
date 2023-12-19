@@ -439,6 +439,7 @@ $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
 $lang->ai->miniPrograms->deleteTip           = '确定删除该小程序吗？删除后可以到后台回收站恢复';
 $lang->ai->miniPrograms->disableTip          = '禁用小程序用户将无法使用，是否确认禁用？';
 $lang->ai->miniPrograms->publishTip          = '您确定要发布吗？发布后将在客户端前台小程序广场显示';
+$lang->ai->miniPrograms->unpublishedTip      = '您使用的小程序没有发布';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
@@ -504,6 +505,7 @@ $lang->ai->miniPrograms->clearContext       = '上下文内容已清除';
 $lang->ai->miniPrograms->newChatTip         = '请点击左侧生成按钮，开启新对话';
 $lang->ai->miniPrograms->newVersionTip      = '小程序已于 %s 更新，以上为过往记录';
 $lang->ai->miniPrograms->disabledTip        = '当前小程序已被禁用。';
+$lang->ai->miniPrograms->chatNoResponse     = '会话发生了错误';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';

@@ -138,7 +138,6 @@ function sendMessagesToAI(message)
                 $('.chat').addClass('hidden');
                 $('.chat-nomodel').removeClass('hidden');
                 $('form .footer .btn.primary').attr('disabled', 'disabled');
-                // $('.language-model .btn').attr('disabled', 'disabled');
                 return;
             }
             if(reason === 'unpublished')

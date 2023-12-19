@@ -677,7 +677,9 @@ $(function ()
         const message = $('.prompt-preview-area .preview-container').text();
         if(!message) return;
 
-        $('#generate-result').attr('disabled', 'disabled');
+        const trigger = new $.zui.ModalTrigger({backdrop: 'static'});
+        trigger.show();
+
         $.post(
             createLink('ai', 'miniProgramChat', `id=${appID}`),
             {
@@ -686,7 +688,7 @@ $(function ()
             },
         ).done(function(response)
         {
-            $('#generate-result').removeAttr('disabled');
+            trigger.close();
             response = JSON.parse(response);
             const {message, result} = response;
             if(result === 'success')
@@ -696,9 +698,11 @@ $(function ()
                 return;
             }
 
-            const {reason} = response;
-            $('.preview-container').html(reason);
+            $('.prompt-result-area .preview-container').html(message);
+        }).fail(function()
+        {
+            trigger.close();
+            $('.prompt-result-area .preview-container').html('Network error');
         });
     });
 });
-

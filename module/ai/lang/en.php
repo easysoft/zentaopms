@@ -439,6 +439,7 @@ $lang->ai->miniPrograms->latestPublishedDate = 'Latest Published Date';
 $lang->ai->miniPrograms->deleteTip           = 'Are you sure you want to delete this mini program? It can be restored from the backend recycle bin after deletion.';
 $lang->ai->miniPrograms->disableTip          = 'Disabling the mini program will prevent users from accessing it. Are you sure you want to disable it?';
 $lang->ai->miniPrograms->publishTip          = 'Are you sure you want to publish? After publishing, it will be displayed on the frontend mini program square.';
+$lang->ai->miniPrograms->unpublishedTip      = 'The mini program you are using is not published.';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = 'Please enter a small program name';
@@ -503,6 +504,7 @@ $lang->ai->miniPrograms->clearContext       = 'The context content has been clea
 $lang->ai->miniPrograms->newChatTip         = 'Please click on the Generate button on the left side to start a new conversation.';
 $lang->ai->miniPrograms->newVersionTip      = 'The mini-program has been updated on %s. The above is the past record.';
 $lang->ai->miniPrograms->disabledTip        = 'The current mini program is disabled.';
+$lang->ai->miniPrograms->chatNoResponse     = 'Something went wrong.';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = 'Language Model Configuration';
