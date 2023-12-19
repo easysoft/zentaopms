@@ -67,7 +67,7 @@ $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(!$app->session->upgrading && ($config->version[0] == $config->installedVersion[0] or (is_numeric($config->version[0]) and is_numeric($config->installedVersion[0]))) and version_compare($config->version, $config->installedVersion) <= 0) die(header('location: index.php'));
 
 /* If run in container, upgrade automatically. */
-if($app->isContainer())
+if($app->isContainer() || $app->canAutoUpgrade())
 {
     $upgradeModel = $common->loadModel('upgrade');
     $alterSQL     = $upgradeModel->checkConsistency();

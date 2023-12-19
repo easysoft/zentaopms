@@ -3280,6 +3280,28 @@ class baseRouter
     }
 
     /**
+     * Check app if it can be upgraded automatically.
+     *
+     * @access public
+     * @return bool
+     */
+    public function canAutoUpgrade()
+    {
+        return strtolower(getenv('ZT_AUTO_UPGRADE')) == 'true';
+    }
+
+    /**
+     * Check app if it need check safe file.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasValidSafeFile()
+    {
+        return strtolower(getenv('ZT_CHECK_SAFE_FILE')) == 'true';
+    }
+
+    /**
      * Get main file and ext files.
      *
      * @param  string $moduleName
