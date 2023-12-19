@@ -221,11 +221,13 @@ class story extends control
         {
             if(empty($projectID)) $projectID = $this->session->project;
             $this->loadModel('project')->setMenu($projectID);
+            $this->view->projectID = $projectID;
         }
         elseif($this->app->tab == 'execution')
         {
             if(empty($projectID)) $projectID = $this->session->execution;
             $this->loadModel('execution')->setMenu($projectID);
+            $this->view->executionID = $projectID;
         }
         elseif($this->app->tab == 'qa')
         {

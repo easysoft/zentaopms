@@ -876,7 +876,7 @@ class taskZen extends task
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->view->execution->id);
+        $this->setMenu($this->view->execution->id);
     }
 
     /**
@@ -1868,7 +1868,11 @@ class taskZen extends task
 
         /* Set Menu. */
         $this->execution->setMenu($executionID);
-        if($this->app->tab == 'project') $this->project->setMenu($execution->project);
+        if($this->app->tab == 'project')
+        {
+            $this->project->setMenu($execution->project);
+            $this->view->projectID = $execution->project;
+        }
 
         return $executionID;
     }

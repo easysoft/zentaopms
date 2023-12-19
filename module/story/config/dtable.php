@@ -278,8 +278,9 @@ $config->story->dtable->fieldList['actions']['actionsMap']['close']['hint'] = $l
 $config->story->dtable->fieldList['actions']['actionsMap']['activate']['icon'] = 'active';
 $config->story->dtable->fieldList['actions']['actionsMap']['activate']['hint'] = $lang->story->operateList['activated'];
 
-$config->story->dtable->fieldList['actions']['actionsMap']['change']['icon'] = 'change';
-$config->story->dtable->fieldList['actions']['actionsMap']['change']['hint'] = $lang->story->operateList['changed'];
+$config->story->dtable->fieldList['actions']['actionsMap']['change']['icon']     = 'change';
+$config->story->dtable->fieldList['actions']['actionsMap']['change']['hint']     = $lang->story->operateList['changed'];
+$config->story->dtable->fieldList['actions']['actionsMap']['change']['data-app'] = $app->tab;
 
 $config->story->dtable->fieldList['actions']['actionsMap']['review']['icon'] = 'search';
 $config->story->dtable->fieldList['actions']['actionsMap']['review']['hint'] = $lang->story->operateList['reviewed'];

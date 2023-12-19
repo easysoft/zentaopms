@@ -126,23 +126,26 @@ $config->task->actionList['recordWorkhour']['text']        = $lang->task->record
 $config->task->actionList['recordWorkhour']['url']         = helper::createLink('task', 'recordWorkhour', 'taskID={id}');
 $config->task->actionList['recordWorkhour']['data-toggle'] = 'modal';
 
-$config->task->actionList['edit']['icon'] = 'edit';
-$config->task->actionList['edit']['hint'] = $lang->task->edit;
-$config->task->actionList['edit']['text'] = $lang->task->edit;
-$config->task->actionList['edit']['url']  = helper::createLink('task', 'edit', 'taskID={id}');
+$config->task->actionList['edit']['icon']     = 'edit';
+$config->task->actionList['edit']['hint']     = $lang->task->edit;
+$config->task->actionList['edit']['text']     = $lang->task->edit;
+$config->task->actionList['edit']['url']      = helper::createLink('task', 'edit', 'taskID={id}');
+$config->task->actionList['edit']['data-app'] = $app->tab;
 
 if($config->vision != 'lite')
 {
-    $config->task->actionList['batchCreate']['icon'] = 'split';
-    $config->task->actionList['batchCreate']['hint'] = $lang->task->batchCreate;
-    $config->task->actionList['batchCreate']['text'] = $lang->task->batchCreate;
-    $config->task->actionList['batchCreate']['url']  = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
+    $config->task->actionList['batchCreate']['icon']     = 'split';
+    $config->task->actionList['batchCreate']['hint']     = $lang->task->batchCreate;
+    $config->task->actionList['batchCreate']['text']     = $lang->task->batchCreate;
+    $config->task->actionList['batchCreate']['url']      = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
+    $config->task->actionList['batchCreate']['data-app'] = $app->tab;
 }
 
-$config->task->actionList['create']['icon'] = 'copy';
-$config->task->actionList['create']['hint'] = $lang->task->children;
-$config->task->actionList['create']['text'] = $lang->task->children;
-$config->task->actionList['create']['url']  = helper::createLink('task', 'create', 'projctID={execution}&storyID=0&moduleID=0&taskID={id}');
+$config->task->actionList['create']['icon']     = 'copy';
+$config->task->actionList['create']['hint']     = $lang->task->children;
+$config->task->actionList['create']['text']     = $lang->task->children;
+$config->task->actionList['create']['url']      = helper::createLink('task', 'create', 'projctID={execution}&storyID=0&moduleID=0&taskID={id}');
+$config->task->actionList['create']['data-app'] = $app->tab;
 
 $config->task->actionList['delete']['icon']         = 'trash';
 $config->task->actionList['delete']['hint']         = $lang->task->delete;

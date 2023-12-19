@@ -31,8 +31,8 @@ $importItems = array();
 if(common::canModify('execution', $execution))
 {
     $params          = isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "";
-    $batchCreateLink = $this->createLink('task', 'batchCreate', "executionID={$execution->id}{$params}");
-    $createLink      = $this->createLink('task', 'create',      "executionID={$execution->id}{$params}");
+    $batchCreateLink = $this->createLink('task', 'batchCreate', "executionID={$execution->id}{$params}")  . ($app->tab == 'project' ? '#app=project' : '');
+    $createLink      = $this->createLink('task', 'create',      "executionID={$execution->id}{$params}")  . ($app->tab == 'project' ? '#app=project' : '');
     if(commonModel::isTutorialMode())
     {
         $wizardParams   = helper::safe64Encode("executionID={$execution->id}{$params}");
