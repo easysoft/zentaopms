@@ -944,7 +944,6 @@ class kanbanTest
         global $tester;
         $regions = $tester->dao->select('*')->from(TABLE_KANBANREGION)->where('`kanban`')->eq($execution->id)->fetchAll('id');
         $lanes   = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('`execution`')->eq($execution->id)->andWhere('`type`')->ne('common')->fetchAll('id');
-        $regionIDList = implode($regions, ',');
         $columns = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`region`')->in($regionIDList)->fetchAll('id');
         return count($regions) . ',' . count($lanes) . ',' . count($columns);
     }

@@ -4,17 +4,25 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbanregion')->gen(0);
+zdTable('kanbancolumn')->gen(0);
+zdTable('kanbanlane')->gen(0);
+
 /**
 
 title=测试 kanbanModel->createRDKanban();
+timeout=0
 cid=1
-pid=1
 
-测试创建执行10001的执行看板 >> 1,3,0
-测试创建执行10002的执行看板 >> 1,3,0
-测试创建执行10003的执行看板 >> 1,3,0
-测试创建执行10004的执行看板 >> 1,3,0
-测试创建执行10005的执行看板 >> 1,3,0
+- 测试创建执行10001的执行看板 @1,3,0
+
+- 测试创建执行10002的执行看板 @1,3,0
+
+- 测试创建执行10003的执行看板 @1,3,0
+
+- 测试创建执行10004的执行看板 @1,3,0
+
+- 测试创建执行10005的执行看板 @1,3,0
 
 */
 

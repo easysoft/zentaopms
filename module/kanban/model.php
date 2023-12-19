@@ -2423,21 +2423,22 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建默认的专业研发看板。
      * Create a default RD kanban.
      *
      * @param  object $execution
      * @access public
      * @return void
      */
-    public function createRDKanban($execution)
+    public function createRDKanban(object $execution)
     {
         $regionID =  $this->createRDRegion($execution);
         if(dao::isError()) return false;
 
-        $this->createGroup($execution->id, $regionID);
+        $this->createGroup((int)$execution->id, $regionID);
         if(dao::isError()) return false;
 
-        $this->createRDLane($execution->id, $regionID);
+        $this->createRDLane((int)$execution->id, $regionID);
         if(dao::isError()) return false;
     }
 
@@ -2449,7 +2450,7 @@ class kanbanModel extends model
      * @access public
      * @return int|bool
      */
-    public function createRDRegion($execution)
+    public function createRDRegion(object $execution)
     {
         $region = new stdclass();
         $region->name        = $this->lang->kanbanregion->default;
@@ -2476,7 +2477,7 @@ class kanbanModel extends model
      * @access public
      * @return bool
      */
-    public function createRDLane($executionID, $regionID)
+    public function createRDLane(int $executionID, int $regionID)
     {
         $laneIndex = 0;
         foreach($this->lang->kanban->laneTypeList as $type => $name)
