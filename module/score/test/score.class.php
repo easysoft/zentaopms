@@ -77,20 +77,16 @@ class scoreTest
     }
 
     /**
+     * 修复积分动作类型。
      * Fix action type for score.
      *
-     * @param string $string
-     *
+     * @param  string $action
      * @access public
      * @return string
      */
-    public function fixKeyTest($string)
+    public function fixKeyTest(string $action): string
     {
-        $objects = $this->objectModel->fixKey($string);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->fixKey($action);
     }
 
     /**
