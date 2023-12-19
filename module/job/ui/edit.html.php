@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('frameList', $lang->job->frameList);
 jsVar('repoPairs', $repoPairs);
 jsVar('gitlabRepos', $gitlabRepos);
 jsVar('engine', $job->engine);
@@ -18,6 +17,8 @@ jsVar('job', $job);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 jsVar('dirs', !empty($dirs) ? $dirs : '');
+
+if($job->engine != 'jenkins') unset($lang->job->frameList['sonarqube']);
 
 if($job->customParam)
 {
@@ -167,7 +168,8 @@ formPanel
     (
         set::name('frame'),
         set::label($lang->job->frame),
-        set::items(array()),
+        set::items($lang->job->frameList),
+        set::value($job->frame),
         set::width('1/2'),
         on::change('changeFrame')
     ),

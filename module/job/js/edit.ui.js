@@ -8,7 +8,8 @@ function changeEngine(engine)
     {
         repoItems.push({'text': repos[i], 'value': i});
     }
-    zui.Picker.query('#repo').render({items: repoItems});
+    const picker = $('[name=repo]').zui('picker');
+    if(picker) picker.render({items: repoItems});
 
     if(engine == 'gitlab')
     {
@@ -20,14 +21,6 @@ function changeEngine(engine)
         $('#gitlabServerTR').addClass('hidden');
         $('#jenkinsServerTR').removeClass('hidden');
     }
-
-    var items = [];
-    for(frame in frameList)
-    {
-        if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
-    }
-    zui.Picker.query('#frame').render({items: items});
-    $("[name='frame']").val(job.frame).trigger('change');
 }
 
 function changeFrame(event)
@@ -56,7 +49,7 @@ function changeRepo(event)
     {
         if(data)
         {
-            $productPicker = $('#product').zui('picker');
+            $productPicker = $('[name=product]').zui('picker');
             data = JSON.parse(data);
 
             $productPicker.render({items: data});
@@ -73,7 +66,6 @@ function changeRepo(event)
         {
             if(data.type.indexOf('git') != -1)
             {
-                var engine = $('[name=engine]').val();
                 //if(engine == 'jenkins') $('.reference').removeClass('hidden');
                 $('.reference').addClass('gitRepo');
 
@@ -84,7 +76,7 @@ function changeRepo(event)
                 {
                     if(response.result == 'success')
                     {
-                        $('#reference').zui('picker').render({items: response.refList});
+                        $('[name=reference]').zui('picker').render({items: response.refList});
                     }
                 });
             }
@@ -192,7 +184,7 @@ function changeSonarqubeServer(event)
     $('#projectKeyLabel').remove();
 }
 
-$(document).ready(function()
+$(function()
 {
     changeEngine(engine);
     changeTriggerType(job.triggerType);
