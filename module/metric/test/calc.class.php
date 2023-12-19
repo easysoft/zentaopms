@@ -380,6 +380,18 @@ class metricTest
      * @access public
      * @return bool
      */
+    public function replaceCRLF($str, $replace = ';')
+    {
+        return $this->objectModel->replaceCRLF($str, $replace);
+    }
+
+    /**
+     * Test isSystemMetric.
+     *
+     * @param  array $record
+     * @access public
+     * @return bool
+     */
     public function isSystemMetric($record)
     {
         $result = array((object)$record);
