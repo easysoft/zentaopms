@@ -2162,17 +2162,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Check safe file.
-     *
-     * @access public
-     * @return string|false
-     */
-    public function checkSafeFile()
-    {
-        return $this->loadModel('common')->checkSafeFile();
-    }
-
-    /**
      * Check weither process or not.
      *
      * @access public
