@@ -287,12 +287,13 @@ class scoreModel extends model
     }
 
     /**
+     * 构建积分规则列表。
      * Build rules for list.
      *
      * @access public
      * @return array
      */
-    public function buildRules()
+    public function buildRules(): array
     {
         $allRules = array();
         foreach($this->config->score->rule as $module => $moduleRule)
@@ -304,35 +305,29 @@ class scoreModel extends model
                 $rules['times']  = empty($rule['times']) ? $this->lang->score->noLimit : $rule['times'];
                 $rules['hour']   = empty($rule['hour']) ? $this->lang->score->noLimit : $rule['hour'];
                 $rules['score']  = $rule['score'];
-
-                $desc = '';
-                if(isset($this->lang->score->extended[$module][$method]))
+                $rules['desc']   = '';
+                if(!isset($this->lang->score->extended[$module][$method]))
                 {
-                    $desc     = $this->lang->score->extended[$module][$method];
-                    $descRule = explode('##', $desc);
-                    if(!empty($descRule))
+                    $allRules[] = $rules;
+                    continue;
+                }
+
+                $desc     = $this->lang->score->extended[$module][$method];
+                $descRule = explode('##', $desc);
+                if(!empty($descRule))
+                {
+                    foreach($descRule as $key => $value)
                     {
-                        foreach($descRule as $key => $value)
-                        {
-                            if($key % 2 == 1)
-                            {
-                                $match = explode(',', $value);
-                                if(count($match) == 2)
-                                {
-                                    $score = $this->config->score->ruleExtended[$module][$method][$match[0]][$match[1]];
-                                }
-                                else
-                                {
-                                    $score = $this->config->score->ruleExtended[$module][$method][$match[0]];
-                                }
-                                $desc = str_replace('##' . $value . '##', $score, $desc);
-                            }
-                        }
+                        if($key % 2 != 1) continue;
+
+                        $match = explode(',', $value);
+                        if(count($match) == 2) $score = $this->config->score->ruleExtended[$module][$method][$match[0]][$match[1]];
+                        if(count($match) != 2) $score = $this->config->score->ruleExtended[$module][$method][$match[0]];
+                        $desc = str_replace('##' . $value . '##', (string)$score, $desc);
                     }
                 }
 
                 $rules['desc'] = $desc;
-
                 $allRules[] = $rules;
             }
         }
