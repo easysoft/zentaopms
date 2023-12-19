@@ -336,17 +336,17 @@ class scoreModel extends model
     }
 
     /**
+     * 修复积分动作类型。
      * Fix action type for score.
      *
-     * @param string $string
-     *
+     * @param  string $action
      * @access public
      * @return string
      */
-    public function fixKey($string)
+    public function fixKey(string $action): string
     {
-        $strings = array('created' => 'create', 'opened' => 'create', 'closed' => 'close', 'finished' => 'finish', 'bugconfirmed' => 'confirm', 'resolved' => 'resolve');
-        return isset($strings[$string]) ? $strings[$string] : $string;
+        $actionList = array('created' => 'create', 'opened' => 'create', 'closed' => 'close', 'finished' => 'finish', 'bugconfirmed' => 'confirm', 'resolved' => 'resolve');
+        return isset($actionList[$action]) ? $actionList[$action] : $action;
     }
 
     /**
