@@ -117,4 +117,37 @@ class scoreTest
 
         return $this->objectModel->computeTaskScore('task', $method, $taskID, $rule, $extended);
     }
+
+    /**
+     * 计算Bug积分。
+     * Compute bug score.
+     *
+     * @param  int    $caseID
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function computeBugScoreTest(int $param, string $method): array
+    {
+        $rule     = isset($this->objectModel->config->score->rule->bug->{$method}) ? $this->objectModel->config->score->rule->bug->{$method} : array();
+        $extended = isset($this->objectModel->config->score->ruleExtended['bug'][$method]) ? $this->objectModel->config->score->ruleExtended['bug'][$method] : array();
+
+        if(in_array($method, array('confirm', 'resolve')))
+        {
+            $object = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->eq($param)->fetch();
+            if(!$object)
+            {
+                $object = new stdclass();
+                $object->id       = $param;
+                $object->openedBy = 'admin';
+                $object->severity = 1;
+            }
+        }
+        else
+        {
+            $object = $param;
+        }
+
+        return $this->objectModel->computeBugScore('bug', $method, $object, $rule, '', 'admin', $extended);
+    }
 }
