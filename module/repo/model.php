@@ -2294,9 +2294,9 @@ class repoModel extends model
     {
         $action = strtolower($action);
 
+        if($action == 'execjob')    return common::hasPriv('sonarqube', $action) && !$repo->exec;
+        if($action == 'reportview') return common::hasPriv('sonarqube', $action) && !$repo->report;
         if(!commonModel::hasPriv('repo', $action)) return false;
-        if($action == 'execjob')    return $repo->exec == '';
-        if($action == 'reportview') return $repo->report == '';
 
         return true;
     }
