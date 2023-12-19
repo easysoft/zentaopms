@@ -270,8 +270,8 @@ class upgradeTest
     }
 
     /**
-     * 测试删除补丁记录。
-     * Test delete patch records.
+     * 测试初始化用户视图。
+     * Test initialize user view.
      *
      * @access public
      * @return int
