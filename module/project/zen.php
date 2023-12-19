@@ -131,7 +131,7 @@ class projectZen extends project
 
         if(!empty($rawdata->products))
         {
-            $topProgramID     = (int)$this->loadModel('program')->getTopByID($project->parent);
+            $topProgramID     = (int)$this->loadModel('program')->getTopByID((int)$project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
