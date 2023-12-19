@@ -754,4 +754,48 @@ class kanbanTao extends kanbanModel
 
         return array($cardCount, $cardList);
     }
+
+    /**
+     * 获取看板分组视图的对象键值对。
+     * Get object pairs for group view.
+     *
+     * @param  string $groupBy
+     * @param  array  $groupByList
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    protected function getObjectPairs(string $groupBy, array $groupByList, string $browseType, string $orderBy): array
+    {
+        $objectPairs = array();
+        if(in_array($groupBy, array('module', 'story', 'assignedTo')))
+        {
+            if($groupBy == 'module')
+            {
+                $objectPairs += $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,task,bug')->andWhere('deleted')->eq('0')->andWhere('id')->in($groupByList)->fetchPairs();
+            }
+            elseif($groupBy == 'story')
+            {
+                $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($groupByList)->orderBy($orderBy)->fetchPairs();
+            }
+            else
+            {
+                $objectPairs += $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($groupByList)->fetchPairs();
+                if(isset($groupByList['closed'])) $objectPairs['closed'] = 'Closed';
+            }
+        }
+        else
+        {
+            unset($this->lang->$browseType->{$groupBy . 'List'}[0]);
+            unset($this->lang->$browseType->{$groupBy . 'List'}['']);
+            $objectPairs += $this->lang->$browseType->{$groupBy . 'List'};
+        }
+
+        if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        if(in_array($groupBy, array('assignedTo', 'source'))) $objectPairs[] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        if($browseType == 'bug' and $groupBy == 'type') $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+
+        return $objectPairs;
+    }
 }

@@ -1632,7 +1632,8 @@ class kanbanModel extends model
     }
 
     /**
-     * Build lane data for group kanban.
+     * 构建分组视图的看板泳道。
+     * Build lanes for group kanban.
      *
      * @access public
      * @param  int    $executionID
@@ -1643,11 +1644,10 @@ class kanbanModel extends model
      *
      * @return array
      */
-    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'id_asc')
+    public function getLanes4Group(int $executionID, string $browseType, string $groupBy, array $cardList, string $orderBy = 'id_asc'): array
     {
         $lanes       = array();
         $groupByList = array();
-        $objectPairs = array();
         foreach($cardList as $item)
         {
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
@@ -1661,33 +1661,8 @@ class kanbanModel extends model
             }
         }
 
-        if(in_array($groupBy, array('module', 'story', 'assignedTo')))
-        {
-            if($groupBy == 'module')
-            {
-                $objectPairs += $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,task,bug')->andWhere('deleted')->eq('0')->andWhere('id')->in($groupByList)->fetchPairs();
-            }
-            elseif($groupBy == 'story')
-            {
-                $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($groupByList)->orderBy($orderBy)->fetchPairs();
-                $objects      = $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($groupByList)->orderBy($orderBy)->fetchAll('id');
-            }
-            else
-            {
-                $objectPairs += $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($groupByList)->fetchPairs();
-                if(isset($groupByList['closed'])) $objectPairs['closed'] = 'Closed';
-            }
-        }
-        else
-        {
-            unset($this->lang->$browseType->{$groupBy . 'List'}[0]);
-            unset($this->lang->$browseType->{$groupBy . 'List'}['']);
-            $objectPairs += $this->lang->$browseType->{$groupBy . 'List'};
-        }
-
-        if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
-        if(in_array($groupBy, array('assignedTo', 'source'))) $objectPairs[] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
-        if($browseType == 'bug' and $groupBy == 'type') $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        $objectPairs = $this->getObjectPairs($groupBy, $groupByList, $browseType, $orderBy);
+        if($groupBy == 'story') $objects = $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($groupByList)->orderBy($orderBy)->fetchAll('id');
 
         $laneColor = 0;
         $order     = 1;
