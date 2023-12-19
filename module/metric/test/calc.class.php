@@ -238,6 +238,18 @@ class metricTest
     }
 
     /**
+     * Test getMetricRecordDateField.
+     *
+     * @param  string $code
+     * @access public
+     * @return array
+     */
+    public function getMetricRecordDateField($code)
+    {
+        return $this->objectModel->getMetricRecordDateField($code);
+    }
+
+    /**
      * Test getDateTypeByCode.
      *
      * @param  string $code
