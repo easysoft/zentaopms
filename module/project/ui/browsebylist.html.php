@@ -66,7 +66,7 @@ toolbar
 );
 
 /* zin: Define the sidebar in main content. */
-sidebar
+empty($globalDisableProgram) ? sidebar
 (
     moduleMenu(set(array
     (
@@ -75,7 +75,7 @@ sidebar
         'closeLink'   => $this->createLink('project', 'browse', "programID=0&browseType={$browseType}"),
         'showDisplay' => false
     )))
-);
+) : null;
 
 $canBatchEdit = hasPriv('project', 'batchEdit');
 $footToolbar  = array();
