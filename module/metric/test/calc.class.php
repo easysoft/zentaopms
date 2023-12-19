@@ -217,6 +217,27 @@ class metricTest
     }
 
     /**
+     * Test getDataStatement.
+     *
+     * @param  string $code
+     * @param  string $scope
+     * @param  string $purpose
+     * @access public
+     * @return PDOStatement|string
+     */
+    public function getDataStatement($code, $scope, $purpose)
+    {
+        include_once $this->getBaseCalcPath();
+        include_once $this->objectModel->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
+
+        $calculator = new $code;
+        $dataStatement = $this->objectModel->getDataStatement($calculator);
+
+        if($dataStatement instanceof PDOStatement) return strtolower($dataStatement->queryString);
+        return false;
+    }
+
+    /**
      * Test getDateTypeByCode.
      *
      * @param  string $code
