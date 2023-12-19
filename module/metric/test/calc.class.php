@@ -300,6 +300,18 @@ class metricTest
     }
 
     /**
+     * Test getModuleTreeList.
+     *
+     * @param  string $scope
+     * @access public
+     * @return array|false
+     */
+    public function getModuleTreeList($scope)
+    {
+        return $this->objectModel->getModuleTreeList($scope);
+    }
+
+    /**
      * Test getViewTableHeader.
      *
      * @param  string $code
