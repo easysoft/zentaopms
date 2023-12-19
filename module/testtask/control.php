@@ -561,52 +561,8 @@ class testtask extends control
         $sort = common::appendOrder($orderBy, 't2.id');
 
         /* Get test cases. */
-        $runs  = array();
-        $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
-
-        $scenes     = $this->testcase->getSceneGroups($productID, $task->branch, $moduleID, '', $orderBy, $pager);   // 获取包含子场景和用例的顶级场景树。
-        $recPerPage = $pager->recPerPage;
-        $sceneTotal = $pager->recTotal;
-        $sceneCount = count($scenes);
-
-        /* 场景条数小于每页记录数，继续获取用例。 */
-        if($sceneCount < $recPerPage)
-        {
-            /* 重置 $pager 属性，只获取需要的用例条数。*/
-            $pager->recTotal   = 0;
-            $pager->pageID     = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
-            $pager->recPerPage = $recPerPage - $sceneCount; // 可能存在场景没排满一页，需要用例补全的情况。这里只查询需要补全的记录数。
-
-            if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始
-
-            $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
-
-            /* Process case for check story changed. */
-            $runs = $this->loadModel('story')->checkNeedConfirm($runs);
-            $runs = $this->testcase->appendData($runs, 'run');
-            foreach($runs as $runID => $run)
-            {
-                unset($runs[$runID]);
-                if($run->task != $taskID and $run->scene) continue;
-
-                $run->id      = 'case_' . $run->case;   // Add a prefix to avoid duplication with the scene ID.
-                $run->parent  = 0;
-                $run->grade   = 1;
-                $run->path    = ',' . $run->case . ',';
-                $run->isScene = false;
-                $runs[$run->id] = $run;
-            }
-
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        }
-
-        /* 合并场景和用例的总记录数，并重新计算总页数和当前页码。*/
-        $pager->recTotal   = $sceneTotal + count($runs);
-        $pager->recPerPage = $recPerPage;
-        $pager->pageTotal  = ceil($pager->recTotal / $recPerPage);
-        $pager->pageID     = $pageID;
-
-        $sceneRuns = $this->testcase->processSearchedData($scenes, $runs);
+        $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         /* Build the search form. */
         $this->loadModel('testcase');
@@ -628,16 +584,22 @@ class testtask extends control
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Append bugs and results. */
+        $runs = $this->testcase->appendData($runs, 'run');
+
         $case2RunMap = array();
         foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
 
         $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=datatable&section=testtaskCases&key=showModule");
 
-        $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
-        $this->view->runs           = $sceneRuns;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
+        $this->view->position[] = $this->lang->testtask->cases;
+
         $this->view->productID      = $productID;
         $this->view->productName    = $this->products[$productID];
         $this->view->task           = $task;
+        $this->view->runs           = $runs;
         $this->view->case2RunMap    = $case2RunMap;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->assignedToList = $assignedToList;
