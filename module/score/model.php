@@ -233,19 +233,19 @@ class scoreModel extends model
     }
 
     /**
+     * 保存用户积分。
      * Save user score.
      *
-     * @param string $account
-     * @param array  $rule
-     * @param string $module
-     * @param string $method
-     * @param string $desc
-     * @param string $time
-     *
+     * @param  string      $account
+     * @param  array       $rule
+     * @param  string      $module
+     * @param  string      $method
+     * @param  string      $desc
+     * @param  string      $time
      * @access public
      * @return object|bool
      */
-    public function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $time = '')
+    public function saveScore(string $account = '', array $rule = array(), string $module = '', string $method = '', string $desc = '', string $time = ''): object|bool
     {
         if($rule['score'] == 0) return true;
         if(!empty($rule['times']) || !empty($rule['hour']))
@@ -253,7 +253,6 @@ class scoreModel extends model
             if(empty($rule['hour']))
             {
                 $count = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('module')->eq($module)->andWhere('method')->eq($method)->count();
-                if($count >= $rule['times']) return true;
             }
             else
             {
@@ -263,25 +262,26 @@ class scoreModel extends model
                     ->andWhere('module')->eq($module)
                     ->andWhere('method')->eq($method)
                     ->count();
-                if($count >= $rule['times']) return true;
             }
+            if($count >= $rule['times']) return true;
         }
 
         $user = $this->loadModel('user')->getById($account);
         if(empty($user)) return false;
 
         $data = new stdClass();
-        $data->account  = $account;
-        $data->module   = $module;
-        $data->method   = $method;
-        $data->desc     = $desc;
-        $data->before   = $user->score;
-        $data->score    = $rule['score'];
-        $data->after    = $user->score + $rule['score'];
-        $data->time     = empty($time) ? helper::now() : $time;
-        $this->dao->insert(TABLE_SCORE)->data($data)->exec();
+        $data->account = $account;
+        $data->module  = $module;
+        $data->method  = $method;
+        $data->desc    = $desc;
+        $data->before  = $user->score;
+        $data->score   = (int)$rule['score'];
+        $data->after   = $user->score + $rule['score'];
+        $data->time    = empty($time) ? helper::now() : $time;
 
-        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . (int)$rule['score'])->set("`scoreLevel`=`scoreLevel` + " . (int)$rule['score'])->where('account')->eq($account)->exec();
+        $this->dao->insert(TABLE_SCORE)->data($data)->exec();
+        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . $data->score)->set("`scoreLevel`=`scoreLevel` + " . $data->score)->where('account')->eq($account)->exec();
+        if(dao::isError()) return false;
 
         return $data;
     }
