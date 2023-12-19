@@ -224,13 +224,14 @@ class userTest
     }
 
     /**
+     * 测试创建一个用户。
      * Test create a user.
      *
      * @param  object $user
      * @access public
      * @return array
      */
-    public function createUserTest(object $user): array
+    public function createTest(object $user): array
     {
         $result = $this->objectModel->create($user);
         $errors = dao::getError();
