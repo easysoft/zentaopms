@@ -6960,134 +6960,23 @@ class upgradeModel extends model
     }
 
     /**
-     * Add default modules for dataview.
+     * 处理透视表。
+     * Process dataset.
      *
-     * @param  string $type
      * @access public
-     * @return void|bool
+     * @return bool
      */
     public function processDataset()
     {
         $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
         if(!empty($dataviewData)) return true;
 
-        $this->loadModel('dataset');
-        $this->loadModel('dataview');
-
-        /* Create built-in module. */
-        $builtInModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->builtIn)->fetch('id');
-        if(empty($builtInModuleID))
-        {
-            $group = new stdclass();
-            $group->root   = 0;
-            $group->name   = $this->lang->dataview->builtIn;
-            $group->parent = 0;
-            $group->grade  = 1;
-            $group->order  = 10;
-            $group->type   = 'dataview';
-
-            $this->dao->insert(TABLE_MODULE)->data($group)->exec();
-            $builtInModuleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('id')->eq($builtInModuleID)->exec();
-        }
-
-        $dataview = new stdclass();
-        $dataview->group       = $builtInModuleID;
-        $dataview->createdBy   = 'system';
-        $dataview->createdDate = helper::now();
-
-        /* Process built-in dataset. */
-        foreach($this->lang->dataset->tables as $code => $dataset)
-        {
-            $sameCodeList = $this->dao->select('*')->from(TABLE_DATAVIEW)->where('code')->eq($code)->fetchAll();
-            if(!empty($sameCodeList)) continue;
-
-            $dataview->name = $dataset['name'];
-            $dataview->code = $code;
-            $dataview->view = 'ztv_' . $code;
-
-            $table = $this->dataset->getTableInfo($code);
-            $dataview->sql = $this->dataset->getTableData($table->schema, 'id_desc', 100, true);
-
-            $fields = array();
-            foreach($table->schema->fields as $key => $field)
-            {
-                $relatedField = '';
-                if($field['type'] == 'object' and isset($field['show']))
-                {
-                    $key = str_replace('.', '_', $field['show']);
-                    $relatedField  = substr($field['show'], strpos($field['show'], '.') + 1);
-                    $relatedObject = isset($field['object']) ? $field['object'] : '';
-                    if(!empty($relatedObject) and isset($table->schema->objects[$relatedObject]))
-                    {
-                        foreach($table->schema->objects[$relatedObject] as $fieldID => $fieldName)
-                        {
-                            if($fieldID == $relatedField) continue;
-
-                            $objects  = $table->schema->objects[$relatedObject];
-                            $addField = "{$relatedObject}_{$fieldID}";
-                            $fields[$addField] = array();
-                            $fields[$addField]['name']   = isset($objects[$fieldID]['name']) ? $objects[$fieldID]['name'] : $addField;
-                            $fields[$addField]['field']  = $fieldID;
-                            $fields[$addField]['object'] = $relatedObject;
-                            $fields[$addField]['type']   = 'object';
-                        }
-                    }
-                }
-
-                if(!isset($fields[$key])) $fields[$key] = array();
-                $fields[$key]['name']   = $field['name'];
-                $fields[$key]['field']  = empty($relatedField) ? $key : $relatedField;
-                $fields[$key]['object'] = isset($field['object']) ? $field['object'] : $code;
-                $fields[$key]['type']   = $field['type'];
-
-            }
-            $dataview->fields = json_encode($fields);
-
-            $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
-            $dataviewID = $this->dao->lastInsertID();
-            if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
-        }
+        $this->upgradeTao->ConvertBuildInDataSet();
 
         $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
         if(empty($customDataset)) return true;
 
-        /* Create custom module. */
-        $defaultModuleID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('dataview')->andWhere('name')->eq($this->lang->dataview->default)->fetch('id');
-        if(empty($defaultModuleID))
-        {
-            $group = new stdclass();
-            $group->root   = 0;
-            $group->name   = $this->lang->dataview->default;
-            $group->parent = 0;
-            $group->grade  = 1;
-            $group->order  = 10;
-            $group->type   = 'dataview';
-
-            $this->dao->insert(TABLE_MODULE)->data($group)->exec();
-            $defaultModuleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")->where('id')->eq($defaultModuleID)->exec();
-        }
-
-        $dataview = new stdclass();
-        $dataview->group = $defaultModuleID;
-
-        /* Process custom dataset. */
-        foreach($customDataset as $datasetID => $dataset)
-        {
-            $dataview->name        = $dataset->name;
-            $dataview->code        = 'custom_' . $datasetID;
-            $dataview->view        = 'ztv_custom_' . $datasetID;
-            $dataview->sql         = $dataset->sql;
-            $dataview->fields      = $dataset->fields;
-            $dataview->createdBy   = $dataset->createdBy;
-            $dataview->createdDate = $dataset->createdDate;
-            $dataview->deleted     = $dataset->deleted;
-
-            $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
-            $dataviewID = $this->dao->lastInsertID();
-            if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
-        }
+        $this->upgradeTao->ConvertCustomDataSet($customDataset);
 
         return true;
     }
