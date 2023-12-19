@@ -8377,12 +8377,13 @@ class upgradeModel extends model
     }
 
     /**
+     * processHistoryOfStory方法的别名。
      * Alias for processHistoryOfStory.
      *
      * @access public
      * @return void
      */
-    public function processHistoryDataForMetric()
+    public function processHistoryDataForMetric(): void
     {
         $this->processHistoryOfStory();
     }
