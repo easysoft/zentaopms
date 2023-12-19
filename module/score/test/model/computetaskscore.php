@@ -5,6 +5,15 @@
 title=测试 scoreModel->computeTaskScore();
 cid=1
 
+- 测试空数据 @0
+- 计算完成普通任务的积分第1条的score属性 @3
+- 计算完成子任务的积分第1条的score属性 @2
+- 计算完成任务ID不存在的积分 @0
+- 计算关闭任务ID=0的积分 @1
+- 计算关闭任务ID=1的积分 @1
+- 计算关闭任务ID=7的积分 @1
+- 计算关闭任务ID不存在的积分 @1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
