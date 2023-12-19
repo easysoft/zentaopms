@@ -273,4 +273,29 @@ class upgradeZen extends upgrade
         $this->view->noMergedProducts = $noMergedProducts;
         $this->view->productGroups    = $productGroups;
     }
+
+    /**
+     * 获取未关联产品的迭代。
+     * Get sprints without product.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function assignSprintsWithoutProduct()
+    {
+        $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('type')->eq('sprint')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+        foreach(array_keys($projectProducts) as $sprintID) unset($noMergedSprints[$sprintID]);
+
+        if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
+
+        $this->view->noMergedSprints = $noMergedSprints;
+    }
 }

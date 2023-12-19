@@ -442,20 +442,7 @@ class upgrade extends control
         /* Get no merged projects that is not linked product. */
         if($type == 'sprint')
         {
-            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('project')->eq(0)
-                ->andWhere('vision')->eq('rnd')
-                ->andWhere('type')->eq('sprint')
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id_desc')
-                ->fetchAll('id');
-
-            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
-            foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
-
-            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
-
-            $this->view->noMergedSprints = $noMergedSprints;
+            $this->upgradeZen->assignSprintsWithoutProduct();
             if(!$programID && $systemMode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
         }
 
