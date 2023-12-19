@@ -629,14 +629,15 @@ class upgrade extends control
     }
 
     /**
+     * 选择数据归并的方式。
      * Select the merge mode when upgrading to zentaopms 18.0.
      *
      * @param  string  $fromVersion
-     * @param  string  $mode   light | ALM
+     * @param  string  $mode        light | ALM
      * @access public
      * @return void
      */
-    public function selectMergeMode($fromVersion, $mode = 'light')
+    public function selectMergeMode(string $fromVersion, string $mode = 'light')
     {
         if($_POST)
         {
