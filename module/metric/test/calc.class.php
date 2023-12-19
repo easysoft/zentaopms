@@ -217,7 +217,19 @@ class metricTest
     }
 
     /**
-     * Test getDateType()
+     * Test getDateTypeByCode.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
+    public function getDateTypeByCode($code)
+    {
+        return $this->objectModel->getDateTypeByCode($code);
+    }
+
+    /**
+     * Test getDateType.
      *
      * @param  array  $dateFields
      * @access public
@@ -229,7 +241,7 @@ class metricTest
     }
 
     /**
-     * Test getDateLabels()
+     * Test getDateLabels.
      *
      * @param  string $dateType
      * @access public
