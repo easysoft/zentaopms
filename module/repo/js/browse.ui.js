@@ -97,7 +97,7 @@ window.renderCommentCell = function(result, {col, row})
 $('.downloadZip-btn').on('click', function()
 {
     var link = $.createLink('repo', 'downloadCode', 'repoID=' + repo.id + '&branch=' + branch);
-    window.open(link);
+    $.ajaxSubmit({url: link});
 })
 
 /* Refresh page when repo changed. */
@@ -118,7 +118,7 @@ $('#repo-select').on('change', function()
  * @access public
  * @return void
  */
-window.checkedChange = function(changes)
+window.checkedChange = function()
 {
     checkedIds = getCurrentCheckedIds();
 

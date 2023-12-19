@@ -1503,7 +1503,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
-        $this->locate($url);
+        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}')"));
     }
 
     /**

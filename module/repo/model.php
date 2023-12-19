@@ -1964,7 +1964,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gitea')
         {
-            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, $repo->project);
+            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, (string)$repo->project);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;
@@ -1973,7 +1973,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gogs')
         {
-            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, $repo->project);
+            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, (string)$repo->project);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;
@@ -2219,11 +2219,12 @@ class repoModel extends model
      * Update commit history.
      *
      * @param  int    $repoID
-     * @param  int    $branchID
+     * @param  int    $objectID
+     * @param  string $branchID
      * @access public
      * @return bool
      */
-    public function updateCommit(int $repoID, int $objectID = 0, int $branchID = 0): bool
+    public function updateCommit(int $repoID, int $objectID = 0, string $branchID = ''): bool
     {
         $repo = $this->getByID($repoID);
         if($repo->SCM == 'Gitlab') return true;
@@ -2416,9 +2417,9 @@ class repoModel extends model
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
             $commits = $scm->engine->getCommitsByPath('', '', '', 1, 1);
-            $commit  = $commits[0];
-            if(!empty($commit->committed_date))
+            if($commits && !empty($commits[0]->committed_date))
             {
+                $commit  = $commits[0];
                 $lastCommitDate = date('Y-m-d H:i:s', strtotime($commit->committed_date));
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
             }
