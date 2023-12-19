@@ -667,20 +667,20 @@ class mrModel extends model
         $MRObject->title = $MR->title;
         if($host->type == 'gitlab')
         {
-            $MRObject->target_branch        = zget($MR, 'targetBranch', $oldMR->targetBranch);
-            $MRObject->description          = $MR->description;
-            $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
-            $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
-            if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
+            if(isset($MR->targetBranch))         $MRObject->target_branch        = zget($MR, 'targetBranch', $oldMR->targetBranch);
+            if(isset($MR->description))          $MRObject->description          = $MR->description;
+            if(isset($MR->remove_source_branch)) $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+            if(isset($MR->squash))               $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
+            if(!empty($assignee))                $MRObject->assignee_ids         = $assignee;
 
             $url = sprintf($this->loadModel('gitlab')->getApiRoot($host->id), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
             return json_decode(commonModel::http($url, $MRObject, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
         {
-            $MRObject->base = zget($MR, 'targetBranch', $oldMR->targetBranch);
-            $MRObject->body = $MR->description;
-            if(!empty($assignee)) $MRObject->assignee = $assignee;
+            if(isset($MR->targetBranch)) $MRObject->base     = zget($MR, 'targetBranch', $oldMR->targetBranch);
+            if(isset($MR->description))  $MRObject->body     = $MR->description;
+            if(!empty($assignee))        $MRObject->assignee = $assignee;
 
             $url = sprintf($this->loadModel($host->type)->getApiRoot($host->id), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
             $mergeResult = json_decode(commonModel::http($url, $MRObject, array(), array(), 'json', 'PATCH'));
