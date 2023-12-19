@@ -3173,17 +3173,17 @@ class storyModel extends model
 
         if($type == 'view')
         {
-            $mainMenu[] = commonModel::buildActionItem('story', 'change', $params, $story, array('icon' => 'alter', 'text' => $this->lang->story->change));
+            $mainMenu[] = commonModel::buildActionItem('story', 'change', $params, $story, array('icon' => 'alter', 'text' => $this->lang->story->change, 'data-app' => $this->app->tab));
             if(str_contains('draft,changing', $story->status)) $mainMenu[] = commonModel::buildActionItem('story', 'submitReview', $params . "&storyType=$story->type", $story, array('icon' => 'confirm', 'text' => $this->lang->story->submitReview, 'data-toggle' => 'modal'));
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-            $mainMenu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'class' => 'ajax-submit'));
-            $mainMenu[] = commonModel::buildActionItem('story', 'review', $params . "&from={$this->app->tab}&storyType={$story->type}", $story, array('icon' => 'search', 'text' => $this->lang->story->review));
+            $mainMenu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'class' => 'ajax-submit', 'data-app' => $this->app->tab));
+            $mainMenu[] = commonModel::buildActionItem('story', 'review', $params . "&from={$this->app->tab}&storyType={$story->type}", $story, array('icon' => 'search', 'text' => $this->lang->story->review, 'data-app' => $this->app->tab));
 
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!helper::isAjaxRequest('modal') && $this->config->vision != 'lite')
             {
-                $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide));
+                $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
             }
 
             $mainMenu[] = commonModel::buildActionItem('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, array('icon' => 'hand-right', 'text' => $this->lang->story->assignTo, 'data-toggle' => 'modal'));
@@ -3193,7 +3193,7 @@ class storyModel extends model
             $disabledFeatures = ",{$this->config->disabledFeatures},";
             if(in_array($this->config->edition, array('max', 'ipd')) && $this->app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false)
             {
-				        $mainMenu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
+                $mainMenu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
             }
 
             /* Print testcate actions. */
@@ -3210,8 +3210,8 @@ class storyModel extends model
                 $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create));
             }
 
-            $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit'));
-            $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy'));
+            $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit', 'data-app' => $this->app->tab));
+            $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy', 'data-app' => $this->app->tab));
             if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => helper::createLink('story', 'delete', $params), 'class' => 'ajax-submit', 'icon' => 'trash');
         }
 
