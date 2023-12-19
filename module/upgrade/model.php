@@ -1034,8 +1034,8 @@ class upgradeModel extends model
                         if(($stdIsInt || $stdIsVarchar) && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
                         if($stdIsFloat && $dbIsFloat)
                         {
-                            if($dbLength && $stdLength && dbLength > $stdLength)  $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float(2,2), and current field type float(3,1)
-                            if($dbLength && $stdLength == 0)                      $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float, and current field type float(3,1)
+                            if($dbLength && $stdLength && $dbLength > $stdLength)  $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float(2,2), and current field type float(3,1)
+                            if($dbLength && $stdLength == 0)                       $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float, and current field type float(3,1)
                         }
                         if($stdIsText && $dbIsText)
                         {
