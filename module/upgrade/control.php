@@ -236,7 +236,6 @@ class upgrade extends control
         set_time_limit(0);
 
         $this->session->set('upgrading', true);
-        $this->app->loadLang('program');
         $this->app->loadLang('project');
         $this->app->loadLang('product');
         $this->app->loadConfig('execution');
@@ -244,72 +243,10 @@ class upgrade extends control
         if($_POST)
         {
             $projectType = isset($_POST['projectType']) ? $_POST['projectType'] : 'project';
-            if($type == 'productline')
-            {
-                $this->upgradeZen->mergeByProductline($projectType);
-            }
-            elseif($type == 'product')
-            {
-                $this->upgradeZen->mergeByProduct($projectType);
-            }
-            elseif($type == 'sprint')
-            {
-                $linkedSprints = $this->post->sprints;
-
-                /* Create Program. */
-                list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                if($projectType == 'execution')
-                {
-                    /* Use historical projects as execution upgrades. */
-                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
-                }
-                else
-                {
-                    /* Use historical projects as project upgrades. */
-                    foreach($linkedSprints as $sprint)
-                    {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
-                    }
-                }
-            }
-            elseif($type == 'moreLink')
-            {
-                $linkedSprints = $this->post->sprints;
-
-                /* Create Program. */
-                list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                if($projectType == 'execution')
-                {
-                    /* Use historical projects as execution upgrades. */
-                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
-                }
-                else
-                {
-                    /* Use historical projects as project upgrades. */
-                    foreach($linkedSprints as $sprint)
-                    {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
-                    }
-                }
-
-                /* If is more-link sprints, and as project upgrade, set old relation into new project. */
-                $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->in($linkedSprints)->fetchAll();
-
-                foreach($projectProducts as $projectProduct)
-                {
-                    $data = new stdclass();
-                    $data->project = $projectType == 'execution' ? $projectList : $projectList[$projectProduct->project];
-                    $data->product = $projectProduct->product;
-                    $data->plan    = $projectProduct->plan;
-                    $data->branch  = $projectProduct->branch;
-
-                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
-                }
-            }
+            if($type == 'productline') $this->upgradeZen->mergeByProductline($projectType);
+            if($type == 'product')     $this->upgradeZen->mergeByProduct($projectType);
+            if($type == 'sprint')      $this->upgradeZen->mergeBySprint();
+            if($type == 'moreLink')    $this->upgradeZen->mergeByMoreLink($projectType);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type={$type}&programID={$programID}&projectType={$projectType}")));
         }
@@ -325,9 +262,6 @@ class upgrade extends control
         $this->view->noMergedSprintCount  = $noMergedSprintCount;
 
         $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
-
-        $this->loadModel('project');
-        $this->view->type = $type;
 
         /* 获取产品线下的产品和项目。*/
         /* Get products and projects group by product line. */
@@ -351,6 +285,7 @@ class upgrade extends control
         $currentProgramID = $programID ? $programID : key($programs);
 
         $this->view->title       = $this->lang->upgrade->mergeProgram;
+        $this->view->type        = $type;
         $this->view->programs    = $programs;
         $this->view->programID   = $programID;
         $this->view->projects    = $this->upgrade->getProjectPairsByProgram($currentProgramID);

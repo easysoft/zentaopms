@@ -462,4 +462,76 @@ class upgradeZen extends upgrade
             if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
         }
     }
+
+    /**
+     * 合并没有关联产品的迭代。
+     * Merge sprints without product.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mergeBySprint()
+    {
+        $linkedSprints = $this->post->sprints;
+
+        /* Create Program. */
+        list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if($projectType == 'execution')
+        {
+            /* Use historical projects as execution upgrades. */
+            $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
+        }
+        else
+        {
+            /* Use historical projects as project upgrades. */
+            foreach($linkedSprints as $sprint)
+            {
+                $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+            }
+        }
+    }
+
+    /**
+     * 合并关联多个产品的迭代。
+     * Merge sprints with more than one product.
+     *
+     * @param  string    $projectType
+     * @access protected
+     * @return void
+     */
+    protected function mergeByMoreLink(string $projectType)
+    {
+        $linkedSprints = $this->post->sprints;
+
+        /* Create Program. */
+        list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if($projectType == 'execution')
+        {
+            /* Use historical projects as execution upgrades. */
+            $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
+        }
+        else
+        {
+            /* Use historical projects as project upgrades. */
+            foreach($linkedSprints as $sprint) $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+        }
+
+        /* If is more-link sprints, and as project upgrade, set old relation into new project. */
+        $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->in($linkedSprints)->fetchAll();
+
+        foreach($projectProducts as $projectProduct)
+        {
+            $data = new stdclass();
+            $data->project = $projectType == 'execution' ? $projectList : $projectList[$projectProduct->project];
+            $data->product = $projectProduct->product;
+            $data->plan    = $projectProduct->plan;
+            $data->branch  = $projectProduct->branch;
+
+            $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+        }
+    }
 }
