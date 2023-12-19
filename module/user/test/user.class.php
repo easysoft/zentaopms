@@ -364,28 +364,24 @@ class userTest
     }
 
     /**
+     * 重置用户密码。
      * Reset user password.
      *
-     * @param  array $params
+     * @param  object $user
      * @access public
-     * @return void
+     * @return array
      */
-    public function resetPasswordTest($params = array())
+    public function resetPasswordTest(object $user): array
     {
-        $_POST = $params;
+        $result = $this->objectModel->resetPassword($user);
+        $errors = dao::getError();
 
-        $this->objectModel->resetPassword();
-        unset($_POST);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $account = $params['account'];
-            return $this->objectModel->getByID($account, 'account');
-        }
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
