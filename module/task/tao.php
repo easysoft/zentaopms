@@ -626,7 +626,7 @@ class taskTao extends taskModel
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', !($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))));
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', !($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome', 'finishedbyme'))));
 
         return $tasks;
     }
