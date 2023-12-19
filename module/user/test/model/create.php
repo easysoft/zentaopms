@@ -67,7 +67,7 @@ $user3 = clone $template;
 $user3->password1      = $password;
 $user3->passwordLength = 5;
 $result = $userTest->createTest($user3);
-r($result) && p('result')         && e(0);                     // 密码长度不够，返回 false。
+r($result) && p('result')           && e(0);                   // 密码长度不够，返回 false。
 r($result) && p('errors:password1') && e('密码须6位及以上。'); // 密码长度不够，提示错误信息。
 
 /* 检测两次密码是否相同。*/
@@ -79,32 +79,32 @@ r($result) && p('result')           && e(0);                    // 两次密码�
 r($result) && p('errors:password1') && e('两次密码应该相同。'); // 两次密码不同，提示错误信息。
 
 /* 检测当前用户登录密码。*/
-$user4 = clone $template;
-$user4->verifyPassword = '';
-$result = $userTest->createTest($user4);
+$user5 = clone $template;
+$user5->verifyPassword = '';
+$result = $userTest->createTest($user5);
 r($result) && p('result')                && e(0);                                          // 当前用户登录密码不正确，返回 false。
 r($result) && p('errors:verifyPassword') && e('验证失败，请检查您的系统登录密码是否正确'); // 当前用户登录密码不正确，提示错误信息。
 
 /* 检测创建外部公司。*/
-$user5 = clone $template;
-$user5->type = 'outside';
-$user5->new  = 1;
-$result = $userTest->createTest($user5);
+$user6 = clone $template;
+$user6->type = 'outside';
+$user6->new  = 1;
+$result = $userTest->createTest($user6);
 r($result) && p('result')            && e(0);                        // 创建外部公司，公司名称为空，返回 false。
 r($result) && p('errors:newCompany') && e('『所属公司』不能为空。'); // 创建外部公司，公司名称为空，提示错误信息。
 
-$user5->newCompany = 'newCompany';
-$result = $userTest->createTest($user5);
+$user6->newCompany = 'newCompany';
+$result = $userTest->createTest($user6);
 r($result) && p('result')            && e(2);    // 创建外部公司，公司名称不为空，返回创建的用户 id。
 r($result) && p('errors:newCompany') && e('~~'); // 创建外部公司，公司名称不为空，没有错误信息。
 
 /* 检测必填项。*/
-$user6 = clone $template;
-$user6->account  = '';
-$user6->realname = '';
-$user6->password = '';
-$user6->visions  = '';
-$result = $userTest->createTest($user6);
+$user7 = clone $template;
+$user7->account  = '';
+$user7->realname = '';
+$user7->password = '';
+$user7->visions  = '';
+$result = $userTest->createTest($user7);
 r($result) && p('result')          && e(0);                        // 必填项为空，返回 false。
 r($result) && p('errors:account')  && e('『用户名』不能为空。');   // 用户名为空，提示错误信息。
 r($result) && p('errors:realname') && e('『姓名』不能为空。');     // 姓名为空，提示错误信息。
@@ -112,32 +112,32 @@ r($result) && p('errors:password') && e('『密码』不能为空。');     // �
 r($result) && p('errors:visions')  && e('『界面类型』不能为空。'); // 界面类型为空，提示错误信息。
 
 /* 检测用户名唯一性。*/
-$user7 = clone $template;
-$result = $userTest->createTest($user7);
+$user8 = clone $template;
+$result = $userTest->createTest($user8);
 r($result) && p('result')         && e(0);                                                                                             // 用户名重复，返回 false。
 r($result) && p('errors:account') && e('『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 用户名重复，提示错误信息。
 
 /* 检测用户名是否符合格式要求。*/
-$user8 = clone $template;
-$user8->account = 'user 8';
-$result = $userTest->createTest($user8);
+$user9 = clone $template;
+$user9->account = 'user 8';
+$result = $userTest->createTest($user9);
 r($result) && p('result')         && e(0);                                                    // 用户名不符合格式要求，返回 false。
 r($result) && p('errors:account') && e('『用户名』只能是字母、数字或下划线的组合三位以上。'); // 用户名不符合格式要求，提示错误信息。
 
 /* 检测邮箱是否符合格式要求。*/
-$user9 = clone $template;
-$user9->email = 'email@';
-$result = $userTest->createTest($user9);
+$user10 = clone $template;
+$user10->email = 'email@';
+$result = $userTest->createTest($user10);
 r($result) && p('result')       && e(0);                             // 邮箱不符合格式要求，返回 false。
 r($result) && p('errors:email') && e('『邮箱』应当为合法的EMAIL。'); // 邮箱不符合格式要求，提示错误信息。
 
 /* 检测字段是否符合数据库设置。*/
-$user10 = clone $template;
-$user10->type    = '这是一个很长的用户类型。到底有多长呢？长到超出了数据库设置的长度。';
-$user10->company = 'company';
-$user10->join    = 'join';
-$user10->gender  = 'gender';
-$result = $userTest->createTest($user10);
+$user11 = clone $template;
+$user11->type    = '这是一个很长的用户类型。到底有多长呢？长到超出了数据库设置的长度。';
+$user11->company = 'company';
+$user11->join    = 'join';
+$user11->gender  = 'gender';
+$result = $userTest->createTest($user11);
 r($result) && p('result')         && e(0);                                                 // 字段不符合数据库设置，返回 false。
 r($result) && p('errors:type')    && e('『用户类型』长度应当不超过『30』，且大于『0』。'); // 字符串字段长度超过数据库设置，提示错误信息。
 r($result) && p('errors:company') && e('『所属公司』应当是数字。');                        // 数字字段类型不符合数据库设置，提示错误信息。
@@ -145,11 +145,11 @@ r($result) && p('errors:join')    && e('『入职日期』应当为合法的日�
 r($result) && p('errors:gender')  && e('『性别』不符合格式，应当为:『/f|m/』。');          // 枚举字段类型不符合数据库设置，提示错误信息。
 
 /* 检查事务回滚功能。*/
-$user11 = clone $template;
-$user11->type       = 'outside';
-$user11->new        = 1;
-$user11->newCompany = 'newCompany2';
-$result = $userTest->createTest($user11);
+$user12 = clone $template;
+$user12->type       = 'outside';
+$user12->new        = 1;
+$user12->newCompany = 'newCompany2';
+$result = $userTest->createTest($user12);
 r($result) && p('result')         && e(0);                                                                                             // 创建外部公司成功，用户名重复，返回 false。
 r($result) && p('errors:account') && e('『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 创建外部公司成功，用户名重复，提示错误信息。
 
@@ -157,10 +157,10 @@ $company = $tester->dao->select('*')->from(TABLE_COMPANY)->where('name')->eq($us
 r($company) && p() && e(0); // 事务回滚成功，没有创建公司。
 
 /* 检查生成用户权限组。*/
-$user12 = clone $template;
-$user12->account = 'user2';
-$user12->group   = array(0, 1, 2);
-$result = $userTest->createTest($user12);
+$users13 = clone $template;
+$users13->account = 'user2';
+$users13->group   = array(0, 1, 2);
+$result = $userTest->createTest($users13);
 r($result) && p('result')         && e(3);    // 创建用户成功，返回创建的用户 id。
 r($result) && p('errors:account') && e('~~'); // 创建用户成功，没有错误信息。
 
