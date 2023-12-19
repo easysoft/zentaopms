@@ -415,7 +415,7 @@ class kanbanTao extends kanbanModel
      * 获取专业研发看板分组视图下的看板数据。
      * Get kanban data for group view of RD kanban.
      *
-     * @param  int    $executionID
+     * @param  object $execution
      * @param  string $browseType
      * @param  string $groupBy
      * @param  string $searchValue
@@ -423,18 +423,18 @@ class kanbanTao extends kanbanModel
      * @access public
      * @return array
      */
-    protected function getRDKanbanByGroup(int $executionID, string $browseType, string $orderBy, int $regionID, string $groupBy, string $searchValue): array
+    protected function getRDKanbanByGroup(object $execution, string $browseType, string $orderBy, int $regionID, string $groupBy, string $searchValue): array
     {
         $regionData = array();
         $heading          = new stdclass();
         $heading->title   = $execution->name;
-        $heading->actions = $this->getRDRegionActions($executionID, $regionID);
+        $heading->actions = $this->getRDRegionActions($execution->id, $regionID);
 
-        $regionData['key']               = "region{$executionID}";
-        $regionData['id']                = $executionID;
+        $regionData['key']               = "region{$execution->id}";
+        $regionData['id']                = $execution->id;
         $regionData['heading']           = $heading;
         $regionData['toggleFromHeading'] = true;
-        $regionData['items']             = $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
+        $regionData['items']             = $this->getKanban4Group($execution->id, $browseType, $groupBy, $searchValue, $orderBy);
 
         $kanbanList[] = $regionData;
         return $kanbanList;
@@ -571,5 +571,187 @@ class kanbanTao extends kanbanModel
         }
 
         return $item;
+    }
+
+    /**
+     * 处理看板中多人任务的指派人。
+     * Process assignedTo of multi tasks.
+     *
+     * @param  array  $cardList
+     * @access public
+     * @return array
+     */
+    protected function appendTeamMember(array $cardList): array
+    {
+        $multiTasks = array();
+        foreach($cardList as $id => $task)
+        {
+            if($task->mode == 'multi') $multiTasks[$id] = $task;
+        }
+
+        $taskTeams = $this->dao->select('t1.account,t1.task,t2.realname')->from(TABLE_TASKTEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.task')->in(array_keys($multiTasks))
+            ->orderBy('t1.order')
+            ->fetchGroup('task', 'account');
+        foreach($multiTasks as $taskID => $task)
+        {
+            $teamPairs = array();
+            foreach($taskTeams[$taskID] as $account => $team) $teamPairs[$account] = $team->realname;
+            $task->teamMember  = $teamPairs;
+            $cardList[$taskID] = $task;
+        }
+
+        return $cardList;
+    }
+
+    /**
+     * 构造看板的分组视图。
+     * Build group view of kanban.
+     *
+     * @param  array $lanes
+     * @param  array $columns
+     * @param  array $cardGroup
+     * @param  string $searchValue
+     * @param  string $groupBy
+     * @param  string $browseType
+     * @param  array $menus
+     * @access public
+     * @return array
+     */
+    protected function buildGroupKanban(array $lanes, array $columns, array $cardGroup, string $searchValue, string $groupBy, string $browseType, array $menus): array
+    {
+        $columnList  = array();
+        $laneList    = array();
+        $cardList    = array();
+        $avatarPairs = $this->loadModel('user')->getAvatarPairs();
+        $users       = $this->loadModel('user')->getPairs('noletter');
+        foreach($lanes as $laneID => $lane)
+        {
+            $laneData = array();
+            $laneData['id']     = $groupBy . $laneID;
+            $laneData['type']   = $browseType;
+            $laneData['name']   = $laneData['id'];
+            $laneData['region'] = $lane->execution;
+            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
+            $laneData['color']  = $lane->color;
+            $laneData['order']  = $lane->order;
+
+            if(empty($laneID) and !in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $laneID = '';
+
+            /* Construct kanban column data. */
+            foreach($columns as $column)
+            {
+                $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
+                $columnData = $this->buildGroupColumn($columnList, $column, $laneData, $browseType);
+
+                list($cardCount, $cardData) = $this->buildGroupCard($cardGroup, $cardIdList, $column, (string)$laneID, $groupBy, $browseType, $searchValue, $avatarPairs, $users, $menus);
+
+                $columnData['cards'] += $cardCount;
+                $cardList[$laneData['id']][$column->column] = $cardData;
+                $columnList[$column->column] = $columnData;
+            }
+            $laneList[] = $laneData;
+        }
+
+        foreach($columnList as $column)
+        {
+            if(isset($column['parentName']) && isset($columnList[$column['parentName']])) $columnList[$column['parentName']]['cards'] += $column['cards'];
+        }
+
+        return array($laneList, $columnList, $cardList);
+    }
+
+    /**
+     * 构造看板分组视图的列。
+     * Build column of group view.
+     *
+     * @param  array  $columnsL
+     * @param  object $column
+     * @param  array  $laneData
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    protected function buildGroupColumn(array $columnList, object $column, array $laneData, string $browseType): array
+    {
+        if(!isset($columnList[$column->column]))
+        {
+            $columnData = array();
+            $columnData['id']         = $column->column;
+            $columnData['type']       = $column->columnType;
+            $columnData['name']       = $column->column;
+            $columnData['title']      = $column->columnName;
+            $columnData['color']      = $column->color;
+            $columnData['limit']      = $column->limit;
+            $columnData['region']     = $laneData['region'];
+            $columnData['laneName']   = $column->lane;
+            $columnData['group']      = $browseType;
+            $columnData['cards']      = 0;
+            $columnData['actionList'] = array('setColumn', 'setWIP');
+            if($column->parent > 0) $columnData['parentName'] = $column->parent;
+        }
+        else
+        {
+            $columnData = $columnList[$column->column];
+        }
+
+        return $columnData;
+    }
+
+    /**
+     * 构造看板分组视图的卡片。
+     * Build card of group view.
+     *
+     * @param  array  $cardGroup
+     * @param  array  $cardIdList
+     * @param  object $column
+     * @param  string $laneID
+     * @param  string $groupBy
+     * @param  string $browseType
+     * @param  string $searchValue
+     * @param  array  $avatarPairs
+     * @param  array  $users
+     * @param  array  $menus
+     * @access public
+     * @return array
+     */
+    protected function buildGroupCard(array $cardGroup, array $cardIdList, object $column, string $laneID, string $groupBy, string $browseType, string $searchValue, array $avatarPairs, array $users, array $menus): array
+    {
+        $cardCount = 0;
+        $cardList  = array();
+        $objects   = zget($cardGroup, $column->columnType, array());
+        foreach($cardIdList as $cardID)
+        {
+            $object = zget($objects, $cardID, array());
+
+            if(empty($object)) continue;
+            if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and $object->$groupBy != $laneID) continue;
+            if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
+            if($groupBy == 'assignedTo')
+            {
+                $laneID = (string)$laneID;
+                if(empty($object->$groupBy)) $object->$groupBy = '';
+                if(empty($object->teamMember) and $object->$groupBy != $laneID) continue;
+                if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
+            }
+
+            $cardData = $this->buildExecutionCard($object, $column, $browseType, $searchValue, $menus);
+            if(empty($cardData)) continue;
+
+            $cardData['cardType'] = $browseType;
+            if($groupBy == 'assignedTo' && $object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
+            if($cardData['assignedTo'])
+            {
+                $userAvatar = zget($avatarPairs, $cardData['assignedTo'], '');
+                $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($cardData['assignedTo'], 0, 1, 'utf-8'));
+                $cardData['avatarList'][] = $userAvatar;
+                $cardData['realnames']    = zget($users, $cardData['assignedTo'], '');
+            }
+            $cardList[] = $cardData;
+            $cardCount ++;
+        }
+
+        return array($cardCount, $cardList);
     }
 }

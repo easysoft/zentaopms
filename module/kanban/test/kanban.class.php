@@ -602,10 +602,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        $laneCount   = 0;
-        foreach($objects as $types) $laneCount += count($types['lanes']);
-
-        return 'lanes:' . $laneCount;
+        return $objects;
     }
 
     /**

@@ -900,7 +900,7 @@ class kanbanModel extends model
         $kanbanList = array();
         $execution  = $this->loadModel('execution')->getByID($executionID);
 
-        if($groupBy != 'default' and $groupBy != '') return $this->kanbanTao->getRDKanbanByGroup($executionID, $browseType, $orderBy, $regionID, $groupBy, $searchValue);
+        if($groupBy != 'default' and $groupBy != '') return $this->kanbanTao->getRDKanbanByGroup($execution, $browseType, $orderBy, $regionID, $groupBy, $searchValue);
 
         $regions      = $this->getRegionPairs($executionID, $regionID, 'execution');
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
@@ -1528,17 +1528,18 @@ class kanbanModel extends model
     }
 
     /**
+     * 构造执行看板卡片数据。
      * Build execution card.
      *
      * @param  object $object
-     * @param  array  $column
+     * @param  object $column
      * @param  string $laneType
      * @param  string $searchValue
      * @param  array  $menus        array(story => array, bug => array, task => array)
      * @access public
      * @return array
      */
-    public function buildExecutionCard(object $object, object $column, string $laneType, string $searchValue = '', $menus = array())
+    public function buildExecutionCard(object $object, object $column, string $laneType, string $searchValue = '', $menus = array()): array
     {
         if(empty($object)) return array();
 
@@ -1565,12 +1566,14 @@ class kanbanModel extends model
             $cardData['mode']       = $object->mode;
             if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;
         }
-        if($searchValue != '' and !str_contains($cardData['title'], $searchValue)) array();
+
+        if($searchValue != '' and !str_contains($cardData['title'], $searchValue)) return array();
 
         return $cardData;
     }
 
     /**
+     * 获取执行看板分组视图的数据。
      * Get kanban for group view.
      *
      * @param  int    $executionID
@@ -1582,7 +1585,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'id_asc')
+    public function getKanban4Group(int $executionID, string $browseType, string $groupBy, string $searchValue = '', string $orderBy = 'id_asc'): array
     {
         /* Get card  data. */
         $cardList = array();
@@ -1590,28 +1593,7 @@ class kanbanModel extends model
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
 
-        $multiTasks = array();
-        if($browseType == 'task' and $groupBy == 'assignedTo')
-        {
-            foreach($cardList as $id => $task)
-            {
-                if($task->mode == 'multi') $multiTasks[$id] = $task;
-            }
-        }
-
-        $taskTeams = $this->dao->select('t1.account,t1.task,t2.realname')->from(TABLE_TASKTEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.task')->in(array_keys($multiTasks))
-            ->orderBy('t1.order')
-            ->fetchGroup('task', 'account');
-        foreach($multiTasks as $taskID => $task)
-        {
-            if(!isset($taskTeams[$taskID])) continue;
-
-            $teamPairs = array();
-            foreach($taskTeams[$taskID] as $account => $team) $teamPairs[$account] = $team->realname;
-            $task->teamMember = $teamPairs;
-        }
+        if($browseType == 'task' and $groupBy == 'assignedTo') $cardList = $this->appendTeamMember($cardList);
 
         /* Get objects cards menus. */
         $menus = array();
@@ -1623,20 +1605,7 @@ class kanbanModel extends model
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy);
         if(empty($lanes)) return array();
 
-        $execution = $this->loadModel('execution')->getByID($executionID);
-        $columns   = $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
-            ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
-            ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
-            ->where('t1.kanban')->eq($executionID)
-            ->andWhere('t1.`type`')->eq($browseType)
-            ->beginIF(isset($execution->type) and $execution->type == 'kanban')
-            ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t4.deleted')->eq(0)
-            ->fi()
-            ->groupBy('columnType')
-            ->orderBy('column_asc')
-            ->fetchAll('columnType');
+        $columns = $this->getCols4Group($executionID, $browseType);
 
         $cardGroup = array();
         foreach($columns as $column)
@@ -1650,99 +1619,14 @@ class kanbanModel extends model
 
         /* Build kanban group data. */
         $kanbanGroup = array();
-        $lanesData   = array();
-        $columnsData = array();
-        $cardsData   = array();
-        $avatarPairs = $this->loadModel('user')->getAvatarPairs();
-        $users       = $this->loadModel('user')->getPairs('noletter');
-        foreach($lanes as $laneID => $lane)
-        {
-            $laneData = array();
-            $laneData['id']     = $groupBy . $laneID;
-            $laneData['type']   = $browseType;
-            $laneData['name']   = $laneData['id'];
-            $laneData['region'] = $lane->execution;
-            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
-            $laneData['color']  = $lane->color;
-            $laneData['order']  = $lane->order;
-
-            if(empty($laneID) and !in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $laneID = '';
-
-            /* Construct kanban column data. */
-            foreach($columns as $column)
-            {
-                $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
-
-                if(!isset($columnsData[$column->column]))
-                {
-                    $columnData = array();
-                    $columnData['id']         = $column->column;
-                    $columnData['type']       = $column->columnType;
-                    $columnData['name']       = $column->column;
-                    $columnData['title']      = $column->columnName;
-                    $columnData['color']      = $column->color;
-                    $columnData['limit']      = $column->limit;
-                    $columnData['region']     = $laneData['region'];
-                    $columnData['laneName']   = $column->lane;
-                    $columnData['group']      = $browseType;
-                    $columnData['cards']      = 0;
-                    $columnData['actionList'] = array('setColumn', 'setWIP');
-                    if($column->parent > 0) $columnData['parentName'] = $column->parent;
-                }
-                else
-                {
-                    $columnData = $columnsData[$column->column];
-                }
-
-                $cardCount = 0;
-                $objects   = zget($cardGroup, $column->columnType, array());
-                foreach($cardIdList as $cardID)
-                {
-                    $object = zget($objects, $cardID, array());
-
-                    if(empty($object)) continue;
-                    if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and $object->$groupBy != $laneID) continue;
-                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
-                    if($groupBy == 'assignedTo')
-                    {
-                        $laneID = (string)$laneID;
-                        if(empty($object->$groupBy)) $object->$groupBy = '';
-                        if(empty($object->teamMember) and $object->$groupBy != $laneID) continue;
-                        if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
-                    }
-
-                    $cardData = $this->buildExecutionCard($object, $column, $browseType, $searchValue, $menus);
-                    if(empty($cardData)) continue;
-
-                    $cardData['cardType'] = $browseType;
-                    if($groupBy == 'assignedTo' && $object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
-                    if($cardData['assignedTo'])
-                    {
-                        $userAvatar = zget($avatarPairs, $cardData['assignedTo'], '');
-                        $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($cardData['assignedTo'], 0, 1, 'utf-8'));
-                        $cardData['uavatar']            = $userAvatar;
-                        $cardData['assignedToRealName'] = zget($users, $cardData['assignedTo'], '');
-                    }
-                    $cardsData[$laneData['id']][$column->column][] = $cardData;
-                    $cardCount++;
-                }
-                $columnData['cards'] += $cardCount;
-                $columnsData[$column->column] = $columnData;
-            }
-            $lanesData[] = $laneData;
-        }
-
-        foreach($columnsData as $columnData)
-        {
-            if(isset($columnData['parentName'])) $columnsData[$columnData['parentName']]['cards'] += $columnData['cards'];
-        }
+        list($laneData, $columnData, $cardData) = $this->buildGroupKanban($lanes, $columns, $cardGroup, $searchValue, $groupBy, $browseType, $menus);
 
         $kanbanGroup['id']   = $executionID;
         $kanbanGroup['key']  = 'group' . $executionID;
         $kanbanGroup['data'] = array();
-        $kanbanGroup['data']['lanes'] = $lanesData;
-        $kanbanGroup['data']['cols']  = array_values($columnsData);
-        $kanbanGroup['data']['items'] = $cardsData;
+        $kanbanGroup['data']['lanes'] = $laneData;
+        $kanbanGroup['data']['cols']  = array_values($columnData);
+        $kanbanGroup['data']['items'] = $cardData;
 
         return array($kanbanGroup);
     }
@@ -1828,6 +1712,34 @@ class kanbanModel extends model
         }
 
         return $lanes;
+    }
+
+    /**
+     * 获取分组视图的看板列数据。
+     * Get columns for group kanban.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getCols4Group(int $executionID, string $browseType)
+    {
+        $execution = $this->loadModel('execution')->getByID($executionID);
+
+        return $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
+            ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere('t1.`type`')->eq($browseType)
+            ->beginIF(isset($execution->type) and $execution->type == 'kanban')
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t4.deleted')->eq(0)
+            ->fi()
+            ->groupBy('columnType')
+            ->orderBy('column_asc')
+            ->fetchAll('columnType');
     }
 
     /**
