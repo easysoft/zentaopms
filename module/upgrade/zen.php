@@ -11,7 +11,7 @@ class upgradeZen extends upgrade
      * @access protected
      * @return void
      */
-    protected function afterExecute(string $fromVersion, string $rawFromVersion)
+    protected function afterExecute(string $fromVersion, string $rawFromVersion): void
     {
         $this->loadModel('setting')->updateVersion($this->config->version);
 
@@ -59,15 +59,11 @@ class upgradeZen extends upgrade
      * @access private
      * @return void
      */
-    private function upgradeFromClassicMode()
+    private function upgradeFromClassicMode(): void
     {
         $this->loadModel('setting')->setItem('system.common.global.mode', 'light');
 
-        $programID = $this->loadModel('program')->createDefaultProgram();
-        $this->setting->setItem('system.common.global.defaultProgram', $programID);
-
-        /* Set default program for product and project with no program. */
-        $this->upgrade->relateDefaultProgram($programID);
+        $this->setDefaultProgram();
 
         $_POST['projectType'] = 'execution';
         $this->upgrade->upgradeInProjectMode($programID, 'classic');
@@ -93,12 +89,50 @@ class upgradeZen extends upgrade
      * @access private
      * @return void
      */
-    private function setIpdItems()
+    private function setIpdItems(): void
     {
         $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
         $this->setting->setItem('system.custom.URAndSR', '1');
         $this->setting->setItem('system.common.closedFeatures', '');
         $this->setting->setItem('system.common.disabledFeatures', '');
         $this->upgrade->addORPriv();
+    }
+
+    /**
+     * 设置迭代的概念。
+     * Set sprint concept.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setSprintConcept(): void
+    {
+        $sprintConcept = 0;
+        if(isset($this->config->custom->sprintConcept))
+        {
+            if($this->config->custom->sprintConcept == 2) $sprintConcept = 1;
+        }
+        elseif(isset($this->config->custom->productProject))
+        {
+            $projectConcept = substr($this->config->custom->productProject, strpos($this->config->custom->productProject, '_'));
+            if($projectConcept == 2) $sprintConcept = 1;
+        }
+        $this->loadModel('setting')->setItem('system.custom.sprintConcept', $sprintConcept);
+    }
+
+    /**
+     * 创建默认项目集，并且将项目关联到默认项目集。
+     * Set default program.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function setDefaultProgram(): void
+    {
+        $programID = $this->loadModel('program')->createDefaultProgram();
+        $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+
+        /* Set default program for product and project with no program. */
+        $this->upgrade->relateDefaultProgram($programID);
     }
 }

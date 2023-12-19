@@ -182,6 +182,7 @@ class upgrade extends control
     }
 
     /**
+     * 引导升级到 18 版本。
      * Guide to 18 version.
      *
      * @param  string $fromVersion
@@ -189,38 +190,21 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function to18Guide($fromVersion, $mode = '')
+    public function to18Guide(string $fromVersion, string $mode = '')
     {
         if($_POST || $mode)
         {
-            $mode = fixer::input('post')->get('mode');
+            if($this->post->mode) $mode = $this->post->mode;
+
+            if($this->config->edition == 'ipd') $mode = 'PLM';
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            if($this->config->edition == 'ipd') $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
             $this->loadModel('custom')->disableFeaturesByMode($mode);
 
+            /* 更新迭代的概念。*/
             /* Update sprint concept. */
-            $sprintConcept = 0;
-            if(isset($this->config->custom->sprintConcept))
-            {
-                if($this->config->custom->sprintConcept == 2) $sprintConcept = 1;
-            }
-            elseif(isset($this->config->custom->productProject))
-            {
-                list($productConcept, $projectConcept) = explode('_', $this->config->custom->productProject);
-                if($projectConcept == 2) $sprintConcept = 1;
-            }
-            $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
+            $this->upgradeZen->setSprintConcept();
 
-            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
-            if($mode == 'light')
-            {
-                $programID = $this->loadModel('program')->createDefaultProgram();
-                $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
-
-                /* Set default program for product and project with no program. */
-                $this->upgrade->relateDefaultProgram($programID);
-
-            }
+            if($mode == 'light') $this->upgradeZen->setDefaultProgram();
 
             $this->locate(inlink('selectMergeMode', "fromVersion={$fromVersion}&mode={$mode}"));
         }
