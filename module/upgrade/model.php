@@ -1200,24 +1200,22 @@ class upgradeModel extends model
     }
 
     /**
+     * 为系统管理员添加 or 页面的权限。
      * Add or view priv for adminer.
      *
      * @access public
      * @return void
      */
-    public function addORPriv()
+    public function addORPriv(): void
     {
-        $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchAll();
+        /* Get admin users. */
+        $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchPairs();
+        $admins = explode(',', implode(',', $admins));
+        $admins = array_unique($admins);
+        $users  = $this->dao->select('account,visions')->from(TABLE_USER)->where('account')->in($admins)->fetchPairs();
 
-        foreach($admins as $key => $admin) $admins[$key] = trim($admin->admins, ',');
-
-        $admins = implode(',', $admins);
-
-        $user = $this->dao->select('*')->from(TABLE_USER)
-            ->where('account')->in($admins)
-            ->fetchPairs('account', 'visions');
-
-        foreach($user as $account => $visions)
+        /* Add or to visions. */
+        foreach($users as $account => $visions)
         {
             if(strpos($visions, 'or') === false)
             {
@@ -1227,16 +1225,18 @@ class upgradeModel extends model
         }
 
         include('priv.php');
+        /* Add or groups. */
         foreach($orData as $role => $name)
         {
-            $this->dao->insert(TABLE_GROUP)
-                ->set('vision')->eq('or')
-                ->set('name')->eq($name)
-                ->set('role')->eq($role)
-                ->set('desc')->eq($name)
-                ->exec();
+            $group = new stdclass();
+            $group->vision = 'or';
+            $group->name   = $name;
+            $group->role   = $role;
+            $group->desc   = $name;
+            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
             if(dao::isError()) continue;
-            $groupID = $this->dao->lastInsertID();
+
+            $groupID = (string)$this->dao->lastInsertID();
             $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
             $this->dao->exec($sql);
         }

@@ -174,4 +174,21 @@ class upgradeTest
         $sqls    = $this->objectModel->parseToSqls($sqlFile);
         return substr($sqls[0], 0, 30);
     }
+
+    /**
+     * 测试将 sql 文件解析为 sql 语句。
+     * Test parse sql file to sqls.
+     *
+     * @access public
+     * @return string
+     */
+    public function addORPrivTest(): string
+    {
+        $this->objectModel->addORPriv();
+
+        global $tester;
+        $groups     = $tester->dao->select('count(1) as count')->from(TABLE_GROUP)->fetch('count');
+        $groupPrivs = $tester->dao->select('count(1) as count')->from(TABLE_GROUPPRIV)->fetch('count');
+        return "groups:{$groups},groupPrivs:{$groupPrivs}";
+    }
 }
