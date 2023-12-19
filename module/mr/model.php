@@ -594,6 +594,8 @@ class mrModel extends model
         {
             $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));
+            if(!$MR || isset($MR->message) || isset($MR->errors)) return null;
+
             if(isset($MR->url) || isset($MR->html_url))
             {
                 $diff = $this->apiGetDiffs($hostID, $projectID, $MRID);
