@@ -1063,7 +1063,7 @@ class groupModel extends model
 
                 foreach(array('depend', 'recommend') as $type)
                 {
-                    /* Show related pirvs when select. */
+                    /* Show related privs when select. */
                     if($type == 'recommend' && in_array($privCode, $recommendSelect)) $relatedPrivs[$type][$privCode] = $privCode;
                     if($type == 'depend') $depends[$privCode] = $priv['depend'];
 

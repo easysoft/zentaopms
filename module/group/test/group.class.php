@@ -528,4 +528,47 @@ class groupTest
 
         return $privList;
     }
+
+    /**
+     * Get privs after version.
+     *
+     * @param  string $version
+     * @access public
+     * @return array
+     */
+    public function getPrivsAfterVersionTest($version = '')
+    {
+        $privList = $this->objectModel->getPrivsAfterVersion($version);
+        $privList = explode(',', $privList);
+        $privList = array_combine($privList, $privList);
+
+        return $privList;
+    }
+
+    /**
+     * Get related privs.
+     *
+     * @param  array $allPrivList
+     * @param  array $selectedPrivList
+     * @param  array $recommendSelect
+     * @access public
+     * @return array
+     */
+    public function getRelatedPrivsTest($allPrivList, $selectedPrivList, $recommendSelect)
+    {
+        $privList = $this->objectModel->getRelatedPrivs($allPrivList, $selectedPrivList, $recommendSelect);
+        $depend = array();
+        foreach($privList['depend'] as $priv)
+        {
+            $depend[$priv['id']] = $priv['id'];
+        }
+
+        $recommend = array();
+        foreach($privList['recommend'] as $priv)
+        {
+            $recommend[$priv['id']] = $priv['id'];
+        }
+
+        return array('depend' => $depend, 'recommend' => $recommend);
+    }
 }
