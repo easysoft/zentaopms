@@ -659,7 +659,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($oldMR->hostID);
         if(!$host) return null;
 
-        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($host->id, $host->type, $MR->assignee);
+        if(!empty($MR->assignee)) $assignee = $this->pipeline->getOpenIdByAccount($host->id, $host->type, $MR->assignee);
 
         $MRObject = new stdclass();
         $MRObject->title = $MR->title;

@@ -244,4 +244,21 @@ class mrTest
         $this->objectModel->apiDeleteMR($hostID, $project, $mrID);
         return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
     }
+
+    /**
+     * Test apiCloseMR method.
+     *
+     * @param  int     $hostID
+     * @param  string  $project
+     * @param  object  $params
+     * @access public
+     * @return array|object
+     */
+    public function apiCloseMrTester(int $hostID, string $project, object $params): array|object
+    {
+        $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
+        $mrID   = empty($result->iid) ? $result->id : $result->iid;
+        $this->objectModel->apiCloseMR($hostID, $project, $mrID);
+        return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
+    }
 }
