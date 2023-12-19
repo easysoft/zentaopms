@@ -114,4 +114,19 @@ class upgradeTest
         global $tester;
         return $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($deployStepID)->andWhere('objectType')->eq('deploystep')->fetch();
     }
+
+    /**
+     * 测试获取升级 sql 文件路径。
+     * Test get the upgrade sql file.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function getUpgradeFileTest(string $version): string
+    {
+        $filepath = $this->objectModel->getUpgradeFile($version);
+        global $tester;
+        return str_replace($tester->app->getAppRoot() . 'db' . DS, '', $filepath);
+    }
 }

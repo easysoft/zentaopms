@@ -868,13 +868,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取升级 sql 文件路径。
      * Get the upgrade sql file.
      *
      * @param  string $version
      * @access public
      * @return string
      */
-    public function getUpgradeFile($version)
+    public function getUpgradeFile(string $version): string
     {
         return $this->app->getAppRoot() . 'db' . DS . 'update' . $version . '.sql';
     }
