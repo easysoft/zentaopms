@@ -1056,11 +1056,9 @@ class userModel extends model
         $rights = array();
         if($account == 'guest')
         {
-            $acl  = $this->dao->select('acl')->from(TABLE_GROUP)->where('name')->eq('guest')->fetch('acl');
-            $acls = empty($acl) ? array() : json_decode($acl, true);
-
-            $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
-                ->on('t1.id = t2.`group`')->where('t1.name')->eq('guest');
+            $acls = $this->dao->select('acl')->from(TABLE_GROUP)->where('name')->eq('guest')->fetch('acl');
+            $acls = !empty($acls) ? json_decode($acls, true) : array();
+            $sql  = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')->on('t1.id = t2.`group`')->where('t1.name')->eq('guest');
         }
         else
         {
@@ -1070,6 +1068,7 @@ class userModel extends model
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.role')->ne('projectAdmin')
                 ->andWhere('t1.role')->ne('limited')
+                ->andWhere('t1.project')->eq(0)
                 ->fetchAll();
 
             /* Init variables. */
@@ -1134,6 +1133,7 @@ class userModel extends model
 
         $stmt = $sql->query();
         if(!$stmt) return array('rights' => $rights, 'acls' => $acls);
+
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             if($row['module'] and $row['method']) $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
