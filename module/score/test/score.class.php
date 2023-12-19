@@ -184,4 +184,16 @@ class scoreTest
 
         return $this->objectModel->computeExecutionScore('execution', $method, $execution, 'admin', helper::now(), $rule, '', $extended);
     }
+
+    /**
+     * 构建积分规则列表。
+     * Build rules for list.
+     *
+     * @access public
+     * @return array
+     */
+    public function buildRulesTest(): array
+    {
+        return $this->objectModel->buildRules();
+    }
 }
