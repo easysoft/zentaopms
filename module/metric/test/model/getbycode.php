@@ -1,17 +1,14 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getByCode
+cid=1
+pid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
-
-/**
-
-title=getByCode
-cid=1
-pid=1
-
-*/
 
 r($metric->getByCode('count_of_annual_closed_top_program')) && p('name') && e('按系统统计的年度关闭一级项目集数'); // 获取code为count_of_annual_closed_top_program的度量名称
 r($metric->getByCode('day_of_annual_effort'))               && p('name') && e('按系统统计的年度投入总人天');       // 获取code为day_of_annual_effort的度量名称

@@ -1,18 +1,15 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getDateType
+timeout=0
+cid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 su('admin');
 
 $metric = new metricTest();
-
-/**
-
-title=getDateType
-timeout=0
-cid=1
-
-*/
 
 $day   = array('day');
 $month = array('month');
@@ -31,10 +28,10 @@ $dateList[7] = array('day', 'month', 'week', 'year');
 $dateList[8] = array('product');
 
 r($metric->getDateType($day))         && p('') && e('day');    // 测试传入day
-r($metric->getDateType($month))       && p('') && e('month');  // 测试传入month 
-r($metric->getDateType($week))        && p('') && e('week');   // 测试传入week 
-r($metric->getDateType($year))        && p('') && e('year');   // 测试传入year 
-r($metric->getDateType($dateList[0])) && p('') && e('day');    // 测试传入day,month 
+r($metric->getDateType($month))       && p('') && e('month');  // 测试传入month
+r($metric->getDateType($week))        && p('') && e('week');   // 测试传入week
+r($metric->getDateType($year))        && p('') && e('year');   // 测试传入year
+r($metric->getDateType($dateList[0])) && p('') && e('day');    // 测试传入day,month
 r($metric->getDateType($dateList[1])) && p('') && e('week');   // 测试传入month,week
 r($metric->getDateType($dateList[2])) && p('') && e('week');   // 测试传入week,year
 r($metric->getDateType($dateList[3])) && p('') && e('day');    // 测试传入day,year

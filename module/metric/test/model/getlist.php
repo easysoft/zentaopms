@@ -1,17 +1,14 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getList
+timeout=0
+cid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
-
-/**
-
-title=getList
-timeout=0
-cid=1
-
-*/
 
 r($metric->getList('system', 'all')) && p('0:code') && e('count_of_annual_created_doc');          // 获取系统范围内的所有度量项
 r($metric->getList('system', 'wait')) && p('') && e('0');                                         // 获取系统范围内未发布的度量项

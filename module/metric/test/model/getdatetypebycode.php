@@ -1,20 +1,16 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/calc.class.php';
-su('admin');
-
-$metric = new metricTest();
-
-zdTable('metriclib')->config('metriclib_system_product', true)->gen(80);
-
 /**
-
 title=getDateTypeByCode
 timeout=0
 cid=1
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/calc.class.php';
+su('admin');
+zdTable('metriclib')->config('metriclib_system_product', true)->gen(80);
+
+$metric = new metricTest();
 
 $codeList = array();
 $codeList[0] = 'count_of_bug';

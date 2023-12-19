@@ -1,17 +1,14 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getByID
+cid=1
+pid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
-
-/**
-
-title=getByID
-cid=1
-pid=1
-
-*/
 
 r($metric->getByID(1)) && p('name') && e('按系统统计的所有层级的项目集总数');    // 获取id为1的度量名称
 r($metric->getByID(10)) && p('code') && e('count_of_annual_closed_top_program'); // 获取id为10的度量代号

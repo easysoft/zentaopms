@@ -1,18 +1,14 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/calc.class.php';
-
-$metric = new metricTest();
-
 /**
-
 title=groupMetricByObject
 cid=1
 pid=1
-
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/calc.class.php';
 
+$metric        = new metricTest();
 $systemMetrics = $metric->getList('system', 'all');
 
 r($metric->groupMetricByObject($systemMetrics, true, array('group' => 'doc', 'key' => 0))) && p('code') && e('count_of_annual_created_doc'); // 获取系统度量项文档分组的第3个度量的code

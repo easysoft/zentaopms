@@ -1,17 +1,14 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getMetricsByIDList
+cid=1
+pid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
-
-/**
-
-title=getMetricsByIDList
-cid=1
-pid=1
-
-*/
 
 r($metric->getMetricsByIDList('1,2')) && p('0:code;1:code') && e('count_of_program,count_of_doing_program');      // 使用字符串传入获取metric
 r($metric->getMetricsByIDList(array(1,2))) && p('0:code;1:code') && e('count_of_program,count_of_doing_program'); // 使用数组传入获取metric

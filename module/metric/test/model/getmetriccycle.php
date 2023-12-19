@@ -5,8 +5,6 @@ include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
 
-zdTable('metriclib')->config('metriclib_system_product', true)->gen(80);
-
 /**
 
 title=getMetricCycle

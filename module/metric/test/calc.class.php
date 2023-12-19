@@ -350,6 +350,31 @@ class metricTest
     }
 
     /**
+     * Test isHeaderGroup.
+     *
+     * @param  array $header
+     * @access public
+     * @return bool
+     */
+    public function isHeaderGroup($header)
+    {
+        return $this->objectModel->isHeaderGroup($header);
+    }
+
+    /**
+     * Test isSystemMetric.
+     *
+     * @param  array $record
+     * @access public
+     * @return bool
+     */
+    public function isSystemMetric($record)
+    {
+        $result = array((object)$record);
+        return $this->objectModel->isSystemMetric($result);
+    }
+
+    /**
      * Test getMetricCycle.
      *
      * @param  string $code

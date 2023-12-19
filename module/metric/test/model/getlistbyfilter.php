@@ -1,17 +1,15 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getListByFilter
+cid=1
+pid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
 
-/**
-
-title=getListByFilter
-cid=1
-pid=1
-
-*/
 $filters1 = array('scope' => array('system', 'execution'), 'object' => array('program', 'execution'), 'purpose' => array('scale', 'cost'));
 $filters2 = array('scope' => array('execution'));
 $filters3 = array('object' => array('execution'));

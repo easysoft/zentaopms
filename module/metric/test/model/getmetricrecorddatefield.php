@@ -1,18 +1,15 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getMetricRecordDateField
+timeout=0
+cid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 su('admin');
 
 $metric = new metricTest();
-
-/**
-
-title=getMetricRecordDateField
-timeout=0
-cid=1
-
-*/
 
 $metricList = array();
 $metricList[0] = 'count_of_bug';
