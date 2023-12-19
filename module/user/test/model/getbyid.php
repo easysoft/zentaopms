@@ -8,8 +8,10 @@ pid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
 
+$now = time();
+
 $table = zdTable('user');
-$table->last->range(time());
+$table->last->range($now);
 $table->gen(1);
 
 su('admin');
@@ -27,7 +29,7 @@ r($userTest->getByIDTest('admin', 'account')) && p('account') && e('admin'); // 
 r($userTest->getByIDTest('user1', 'account')) && p('account') && e(0);       // $userID 参数为 user1 ，通过 account 字段获取，用户不存在。
 
 $user = $userTest->getByIDTest('admin', 'account');
-r(substr($user->last, 0, 16) == substr(helper::now(), 0, 16)) && p() && e(1); // $userID 参数为 admin ，通过 account 字段获取，用户存在。
+r(substr($user->last, 0, 19) == date(DT_DATETIME1, $now)) && p() && e(1); // $userID 参数为 admin ，通过 account 字段获取，用户存在。
 
 global $app;
 $app->user = new stdclass();
