@@ -1698,7 +1698,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCols4Group(int $executionID, string $browseType)
+    public function getCols4Group(int $executionID, string $browseType): array
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
 
