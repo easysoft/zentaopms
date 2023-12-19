@@ -1,10 +1,17 @@
 <?php
 class scoreTest
 {
-    public function __construct()
+    public function __construct(string $account = 'admin')
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('score');
+        global $tester, $app;
+        $this->objectModel = $tester->loadModel('score');
+
+        su($account);
+
+        $app->rawModule = 'score';
+        $app->rawMethod = 'index';
+        $app->setModuleName('score');
+        $app->setMethodName('index');
     }
 
     /**
@@ -92,5 +99,22 @@ class scoreTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 计算任务积分。
+     * Compute task score.
+     *
+     * @param  int        $taskID
+     * @param  string     $method
+     * @access public
+     * @return array|bool
+     */
+    public function computeTaskScoreTest(int $taskID, string $method): array|bool
+    {
+        $rule     = $this->objectModel->config->score->rule->task->finish;
+        $extended = isset($this->objectModel->config->score->ruleExtended['task']['finish']) ? $this->objectModel->config->score->ruleExtended['task']['finish'] : array();
+
+        return $this->objectModel->computeTaskScore('task', $method, $taskID, $rule, $extended);
     }
 }
