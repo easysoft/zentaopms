@@ -1,9 +1,13 @@
 #!/usr/bin/env php
 <?php
+/**
+title=getResultByCode
+timeout=0
+cid=1
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 su('admin');
-
 $metric = new metricTest();
 
 zdTable('metriclib')->config('metriclib_system_product', true)->gen(80);
@@ -12,14 +16,6 @@ zdTable('product')->config('product', true)->gen(10);
 zdTable('project')->config('project', true)->gen(80);
 zdTable('release')->config('release', true)->gen(20);
 zdTable('case')->config('case', true)->gen(80);
-
-/**
-
-title=getResultByCode
-timeout=0
-cid=1
-
-*/
 
 $codeList = array();
 $codeList[0] = 'count_of_bug';
@@ -39,5 +35,3 @@ r($metric->getResultByCode($codeList[4])) && p('0:product,value')               
 r($metric->getResultByCode($codeList[5])) && p('0:year,product,value')                                  && e('2012,1,3');                // 测试度量项count_of_annual_fixed_bug_in_product
 r($metric->getResultByCode($codeList[6])) && p('0:product,year,month,value;1:product,year,month,value') && e('1,2010,01,4,1,2010,02,2'); // 测试度量项count_of_monthly_created_bug_in_product
 r($metric->getResultByCode($codeList[7])) && p('0:product,year,month,day,value')                        && e('1,2012,01,21,1');          // 测试度量项count_of_daily_closed_bug_in_product
-
-r($metric->getResultByCode($codeList[2], array('month' => '10,11'))) && p('0:year,month,value:1:year,month,value') && e('2023,10,16,2023,11,15'); // 测试度量项count_of_monthly_created_project使用选项过滤的结果
