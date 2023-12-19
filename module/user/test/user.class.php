@@ -562,24 +562,16 @@ class userTest
     }
 
     /**
+     * 测试获取某些界面下可用的权限组。
      * Test get groups by visions.
      *
-     * @param  string $visions
+     * @param  string|array $visions
      * @access public
-     * @return void
+     * @return array
      */
-    public function getGroupsByVisionsTest($visions)
+    public function getGroupsByVisionsTest(string|array $visions): array
     {
-        $groups = $this->objectModel->getGroupsByVisions($visions);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $groups;
-        }
+        return $this->objectModel->getGroupsByVisions($visions);
     }
 
     /**
