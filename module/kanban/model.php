@@ -1751,15 +1751,15 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板空间键值对。
      * Get space pairs.
      *
      * @param  string $browseType private|cooperation|public|involved
      * @access public
      * @return array
      */
-    public function getSpacePairs($browseType = 'private')
+    public function getSpacePairs(string $browseType = 'private'): array
     {
-        $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
 
         return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
