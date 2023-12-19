@@ -196,4 +196,20 @@ class scoreTest
     {
         return $this->objectModel->buildRules();
     }
+
+    /**
+     * 保存用户积分。
+     * Save user score.
+     *
+     * @param  string      $account
+     * @param  string      $module
+     * @param  string      $method
+     * @access public
+     * @return object|bool
+     */
+    public function saveScoreTest(string $account = '', string $module = '', string $method = ''): object|bool
+    {
+        $rule = isset($this->objectModel->config->score->rule->{$module}->{$method}) ? $this->objectModel->config->score->rule->{$module}->{$method} : array('score' => 0);
+        return $this->objectModel->saveScore($account, $rule, $module, $method);
+    }
 }
