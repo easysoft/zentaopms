@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel->getGiteaProjects();
+title=测试 mrModel::getGiteaProjects();
 timeout=0
 cid=1
 

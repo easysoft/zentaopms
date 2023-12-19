@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel->createMR();
+title=测试 mrModel::createMR();
 timeout=0
 cid=1
 

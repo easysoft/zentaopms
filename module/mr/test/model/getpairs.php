@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel->getPairs();
+title=测试 mrModel::getPairs();
 timeout=0
 cid=1
 

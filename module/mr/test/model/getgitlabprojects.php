@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel->getGitlabProjects();
+title=测试 mrModel::getGitlabProjects();
 timeout=0
 cid=1
 

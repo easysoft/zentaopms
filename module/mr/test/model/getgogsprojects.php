@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel->getGogsProjects();
+title=测试 mrModel::getGogsProjects();
 timeout=0
 cid=1
 

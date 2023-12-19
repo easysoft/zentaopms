@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel::();
+title=测试 mrModel::batchSyncMR();
 timeout=0
 cid=0
 

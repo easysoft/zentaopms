@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 mrModel->createMRLinkedAction();
+title=测试 mrModel::createMRLinkedAction();
 timeout=0
 cid=1
 
