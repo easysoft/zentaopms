@@ -676,7 +676,7 @@ class mrModel extends model
         }
         else
         {
-            $MRObject->base = $MR->targetBranch;
+            $MRObject->base = zget($MR, 'targetBranch', $oldMR->targetBranch);
             $MRObject->body = $MR->description;
             if(!empty($assignee)) $MRObject->assignee = $assignee;
 
