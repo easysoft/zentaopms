@@ -143,4 +143,20 @@ class upgradeTest
         global $tester;
         return str_replace($tester->app->getAppRoot() . 'db' . DS, '', $filepath);
     }
+
+    /**
+     * 测试获取项目集下的项目键值对。
+     * Test get the project of the program it belongs to.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return string
+     */
+    public function getProjectPairsByProgramTest(int $programID): string
+    {
+        $projects = $this->objectModel->getProjectPairsByProgram($programID);
+        $return = '';
+        foreach($projects as $projectID => $projectName) $return .= "{$projectID}:{$projectName};";
+        return trim($return, ';');
+    }
 }

@@ -882,15 +882,16 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取项目集下的项目。
      * Get the project of the program it belongs to.
      *
      * @param  string $programID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getProjectPairsByProgram($programID = 0)
+    public function getProjectPairsByProgram(int $programID = 0): array
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->andWhere('parent')->eq($programID)->fetchPairs('id', 'name');
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->andWhere('parent')->eq($programID)->fetchPairs();
     }
 
     /**
