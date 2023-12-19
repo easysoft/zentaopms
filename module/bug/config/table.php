@@ -14,7 +14,7 @@ $config->bug->dtable->fieldList['product']['display']    = false;
 $config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 
 $config->bug->dtable->fieldList['module']['display']    = false;
-$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => ['rootID' => '$productID', 'type' => 'bug', 'startModule' => 0, 'branch' => 'all']);
+$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => ['rootID' => (int)'$productID', 'type' => 'bug', 'startModule' => 0, 'branch' => 'all']);
 
 $config->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
 $config->bug->dtable->fieldList['title']['type']     = 'title';
@@ -54,7 +54,7 @@ $config->bug->dtable->fieldList['type']['sortType'] = true;
 $config->bug->dtable->fieldList['branch']['title']      = $lang->bug->branch;
 $config->bug->dtable->fieldList['branch']['type']       = 'text';
 $config->bug->dtable->fieldList['branch']['group']      = 3;
-$config->bug->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
+$config->bug->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => ['productID' => (int)'$productID']);
 $config->bug->dtable->fieldList['branch']['sortType']   = true;
 
 $config->bug->dtable->fieldList['project']['title']      = $lang->bug->project;
@@ -66,7 +66,7 @@ $config->bug->dtable->fieldList['project']['sortType']   = true;
 $config->bug->dtable->fieldList['execution']['title']      = $lang->bug->execution;
 $config->bug->dtable->fieldList['execution']['type']       = 'text';
 $config->bug->dtable->fieldList['execution']['group']      = 3;
-$config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs');
+$config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs', 'params' => ['projectID' => 0]);
 $config->bug->dtable->fieldList['execution']['sortType']   = true;
 
 $config->bug->dtable->fieldList['plan']['title']    = $lang->bug->plan;
@@ -78,7 +78,7 @@ $config->bug->dtable->fieldList['openedBuild']['title']      = $lang->bug->opene
 $config->bug->dtable->fieldList['openedBuild']['type']       = 'text';
 $config->bug->dtable->fieldList['openedBuild']['group']      = 3;
 $config->bug->dtable->fieldList['openedBuild']['control']    = 'multiple';
-$config->bug->dtable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => '$productID&$branch&noempty,noterminate,nodone,withbranch');
+$config->bug->dtable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => ['productIdList' => (int)'$productID', 'branch' => '$branch', 'params' => 'noempty,noterminate,nodone,withbranch']);
 $config->bug->dtable->fieldList['openedBuild']['sortType']   = true;
 
 $config->bug->dtable->fieldList['openedBy']['title']    = $lang->bug->abbr->openedBy;
@@ -175,7 +175,7 @@ $config->bug->dtable->fieldList['story']['title']      = $lang->bug->story;
 $config->bug->dtable->fieldList['story']['type']       = 'text';
 $config->bug->dtable->fieldList['story']['link']       = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={story}');
 $config->bug->dtable->fieldList['story']['group']      = 8;
-$config->bug->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' =>'getProductStoryPairs', 'params' => '$productID');
+$config->bug->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' =>'getProductStoryPairs', 'params' => ['productIdList' => (int)'$productID']);
 $config->bug->dtable->fieldList['story']['sortType']   = true;
 
 $config->bug->dtable->fieldList['task']['title']      = $lang->bug->task;

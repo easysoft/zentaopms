@@ -216,11 +216,11 @@ class transferModel extends model
 
         extract($fieldValue['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
 
-        if(!empty($Module) and !empty($method))
+        if(!empty($module) and !empty($method))
         {
             $params = !empty($params) ? $params : '';
             $pairs  = !empty($pairs)  ? $pairs : '';
-            $values = $this->transferTao->getSourceByModuleMethod($model, $Module, $method, $params, $pairs);
+            $values = $this->transferTao->getSourceByModuleMethod($model, $module, $method, $params, $pairs);
         }
         elseif(!empty($lang))
         {
@@ -478,36 +478,50 @@ class transferModel extends model
     }
 
     /**
+     * 设置下拉字段数据。
      * Set list value.
      *
-     * @param  int    $module
-     * @param  int    $fieldList
+     * @param  string $module
+     * @param  array  $fieldList
      * @access public
-     * @return void/array
+     * @return array
      */
-    public function setListValue($module, $fieldList)
+    public function setListValue(string $module, array $fieldList)
     {
         $lists = array();
-        $this->commonActions($module);
+
         if(!empty($this->moduleListFields))
         {
             $listFields = $this->moduleListFields;
+
+            /* 从fieldList和sysLangFields中为下拉字段赋值。*/
+            /* Set value from fieldList and sysLangFields. */
             foreach($listFields as $field)
             {
                 if(empty($field)) continue;
-                $listName = $field . 'List';
+                $listName = $field . 'List'; // 下拉字段以字段名 + List命名。
                 if(!empty($_POST[$listName])) continue;
+
+                $lists[$listName] = array();
                 if(!empty($fieldList[$field]))
                 {
                     $lists[$listName] = $fieldList[$field]['values'];
-                    if(strpos($this->config->$module->sysLangFields, $field)) $lists[$listName] = implode(',', $fieldList[$field]['values']);
+
+                    /* 从语言项里赋值。*/
+                    /* Set value from lang. */
+                    if(strpos($this->moduleConfig->sysLangFields, $field)) $lists[$listName] = implode(',', $fieldList[$field]['values']);
                 }
+
+                /* 将下拉字段赋值给excel->sysDataField。*/
+                /* Set value to excel->sysDataField. */
                 if(is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
             }
 
             $lists['listStyle'] = $listFields;
         }
 
+        /* 如果有级联字段,则加入级联字段列表(如用例的模块和相关需求)。*/
+        /* If has cascade field, add cascade field list. */
         if(!empty($this->moduleConfig->cascade))
         {
             $lists = $this->getCascadeList($module, $lists);

@@ -22,7 +22,7 @@ $config->testcase->dtable->fieldList['title']['data-app']     = $app->tab;
 $config->testcase->dtable->fieldList['branch']['title']      = $lang->testcase->branch;
 $config->testcase->dtable->fieldList['branch']['type']       = 'text';
 $config->testcase->dtable->fieldList['branch']['group']      = 2;
-$config->testcase->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
+$config->testcase->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => ['productID' => (int)'$productID']);
 
 $config->testcase->dtable->fieldList['pri']['title']    = $lang->testcase->pri;
 $config->testcase->dtable->fieldList['pri']['type']     = 'pri';
@@ -57,7 +57,7 @@ $config->testcase->dtable->fieldList['story']['type']       = 'desc';
 $config->testcase->dtable->fieldList['story']['link']       = array('module' => 'story', 'method' => 'view', 'params' => "storyID={story}");
 $config->testcase->dtable->fieldList['story']['group']      = 3;
 $config->testcase->dtable->fieldList['story']['control']    = 'select';
-$config->testcase->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => '$productID&$branch');
+$config->testcase->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => ['productIdList' => (int)'$productID', 'branch' => '$branch']);
 
 $config->testcase->dtable->fieldList['keywords']['title']    = $lang->testcase->keywords;
 $config->testcase->dtable->fieldList['keywords']['type']     = 'text';
@@ -139,11 +139,11 @@ $config->testcase->dtable->fieldList['lastEditedDate']['sortType'] = true;
 
 $config->testcase->dtable->fieldList['product']['title']      = 'product';
 $config->testcase->dtable->fieldList['product']['control']    = 'hidden';
-$config->testcase->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all');
+$config->testcase->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 $config->testcase->dtable->fieldList['product']['display']    = false;
 
 $config->testcase->dtable->fieldList['module']['control']    = 'select';
-$config->testcase->dtable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => '$productID');
+$config->testcase->dtable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => ['productID' => (int)'$productID']);
 $config->testcase->dtable->fieldList['module']['display']    = false;
 
 $config->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
