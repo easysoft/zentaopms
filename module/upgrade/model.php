@@ -8454,15 +8454,15 @@ class upgradeModel extends model
     }
 
     /**
+     * 删除瀑布流通用报表。
      * Delete waterfall general report block.
      *
      * @access public
      * @return true
      */
-    public function deleteGeneralReportBlock()
+    public function deleteGeneralReportBlock(): bool
     {
-        $this->loadModel('setting');
-        $closedBlocks = $this->setting->getItem('owner=system&module=block&key=closed');
+        $closedBlocks = $this->loadModel('setting')->getItem('owner=system&module=block&key=closed');
 
         if(strpos($closedBlocks, 'waterfallgeneralreport') !== false)
         {

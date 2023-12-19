@@ -1,0 +1,14 @@
+title: zt_block
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: account
+    range: admin
+  - field: dashboard
+    range: my
+  - field: module
+    range: product
+  - field: code
+    range: waterfallgeneralreport
+  - field: title
+    range: 测试瀑布报告

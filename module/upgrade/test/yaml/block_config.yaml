@@ -1,0 +1,18 @@
+title: table zt_config
+desc: "系统配置"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: module
+    note: "模块"
+    range: block
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: key
+    note: "键"
+    range: closed
+  - field: value
+    note: "值"
+    range: ",project|waterfallgeneralreport"
