@@ -75,27 +75,6 @@ class scoreTest
     }
 
     /**
-     * Score reset.
-     *
-     * @param int $lastID
-     *
-     * @access public
-     * @return array
-     */
-    public function resetTest($lastID = 0)
-    {
-        $result = $this->objectModel->reset($lastID);
-        while($result['status'] != 'finish')
-        {
-            $result = $this->objectModel->reset($result['lastID']);
-        }
-
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Fix action type for score.
      *
      * @param string $string
