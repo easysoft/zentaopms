@@ -895,13 +895,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 执行一个 sql 文件。
      * Execute a sql.
      *
-     * @param  string  $sqlFile
+     * @param  string $sqlFile
      * @access public
-     * @return void
+     * @return bool
      */
-    public function execSQL($sqlFile)
+    public function execSQL(string $sqlFile): bool
     {
         if(!file_exists($sqlFile)) return false;
 
@@ -909,28 +910,18 @@ class upgradeModel extends model
         static $mysqlVersion;
         if($mysqlVersion === null) $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
 
-        $ignoreCode = '|1050|1054|1060|1091|1061|';
-        $sqls       = $this->parseToSqls($sqlFile);
-
+        $ignoreCode = '|1050|1054|1060|1091|1061|'; // Get ignore code when execing.
+        $sqls       = $this->parseToSqls($sqlFile); // Get sqls in the file.
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
 
-            if($mysqlVersion <= 4.1)
-            {
-                $sql = str_replace('DEFAULT CHARSET=utf8', '', $sql);
-                $sql = str_replace('CHARACTER SET utf8 COLLATE utf8_general_ci', '', $sql);
-            }
+            /* Replace sql that don't meet the version requirements. */
+            if($mysqlVersion <= 4.1) $sql = str_replace(array('DEFAULT CHARSET=utf8', 'CHARACTER SET utf8 COLLATE utf8_general_ci'), '', $sql);
+            if(stripos($sql, 'fulltext') !== false && stripos($sql, 'innodb') !== false && $mysqlVersion < 5.6) $sql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
+            /* Replace constants in SQL. */
+            $sql = str_replace(array('zt_', '__DELIMITER__', '__TABLE__'), array($this->config->db->prefix, ';', $this->config->db->name), $sql);
 
-            $sqlToLower = strtolower($sql);
-            if(strpos($sqlToLower, 'fulltext') !== false and strpos($sqlToLower, 'innodb') !== false and $mysqlVersion < 5.6)
-            {
-                $sql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
-            }
-
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
-            $sql = str_replace('__DELIMITER__', ';', $sql);
-            $sql = str_replace('__TABLE__', $this->config->db->name, $sql);
             try
             {
                 $this->saveLogs($sql);
@@ -954,6 +945,7 @@ class upgradeModel extends model
                 if(strpos($ignoreCode, "|$errorCode|") === false) static::$errors[] = $e->getMessage();
             }
         }
+        return true;
     }
 
     /**
