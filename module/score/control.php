@@ -24,6 +24,7 @@ class score extends control
     }
 
     /**
+     * 展示积分规则。
      * Show score rule.
      *
      * @access public
@@ -35,6 +36,7 @@ class score extends control
 
         $this->view->title = $this->lang->my->scoreRule;
         $this->view->rules = $this->score->buildRules();
+
         $this->display();
     }
 
