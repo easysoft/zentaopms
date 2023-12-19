@@ -2162,18 +2162,19 @@ class upgradeModel extends model
     }
 
     /**
+     * 检查流程。
      * Check weither process or not.
      *
      * @access public
      * @return array
      */
-    public function checkProcess()
+    public function checkProcess(): array
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
         if(strpos($fromVersion, 'ipd') !== false) return $needProcess;
-        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
-        if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
+        if(strpos($fromVersion, 'max') === false && strpos($fromVersion, 'biz') === false && (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
+        if(strpos($fromVersion, 'max') === false && $this->config->systemMode == 'new')
         {
             if(strpos($fromVersion, 'pro') !== false)
             {

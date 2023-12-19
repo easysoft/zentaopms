@@ -220,4 +220,24 @@ class upgradeTest
         $return = $this->objectModel->getError();
         return implode(',', $return);
     }
+
+    /**
+     * 测试检查流程。
+     * Test check weither process or not.
+     *
+     * @param  string $installedVersion
+     * @param  string $systemMode
+     * @access public
+     * @return string
+     */
+    public function checkProcessTest(string $installedVersion, string $systemMode): string
+    {
+        global $tester;
+        $tester->config->installedVersion = $installedVersion;
+        $tester->config->systemMode       = $systemMode;
+        $process = $this->objectModel->checkProcess();
+        $return  = '';
+        foreach($process as $key => $value) $return .= "{$key}:{$value};";
+        return trim($return, ';');
+    }
 }
