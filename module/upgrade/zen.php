@@ -298,4 +298,51 @@ class upgradeZen extends upgrade
 
         $this->view->noMergedSprints = $noMergedSprints;
     }
+
+    /**
+     * 获取关联了多个产品项目。
+     * Get no merged projects that link more than two products.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function assignSprintsWithMoreProducts()
+    {
+        $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('type')->eq('sprint')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+
+        $productPairs = array();
+        foreach($projectProducts as $sprintID => $products)
+        {
+            foreach(array_keys($products) as $productID) $productPairs[$productID] = $productID;
+        }
+
+        $projects = $this->dao->select('t1.*, t2.product AS productID')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.product')->in($productPairs)
+            ->andWhere('t1.vision')->eq('rnd')
+            ->andWhere('t1.type')->eq('project')
+            ->fetchAll('productID');
+
+        foreach($noMergedSprints as $sprintID => $sprint)
+        {
+            $products = zget($projectProducts, $sprintID, array());
+            foreach(array_keys($products) as $productID)
+            {
+                $project = zget($projects, $productID, '');
+                if($project) $sprint->projects[$project->id] = $project->name;
+            }
+
+            if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('vision')->eq('rnd')->fetchPairs();
+        }
+
+        $this->view->noMergedSprints = $noMergedSprints;
+    }
 }

@@ -446,46 +446,8 @@ class upgrade extends control
             if(!$programID && $systemMode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
         }
 
-        /* Get no merged projects that link more then two products. */
-        if($type == 'moreLink')
-        {
-            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('project')->eq(0)
-                ->andWhere('vision')->eq('rnd')
-                ->andWhere('type')->eq('sprint')
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id_desc')
-                ->fetchAll('id');
-
-            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
-
-            $productPairs = array();
-            foreach($projectProducts as $sprintID => $products)
-            {
-                foreach($products as $productID => $data) $productPairs[$productID] = $productID;
-            }
-
-            $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-                ->where('t2.product')->in($productPairs)
-                ->andWhere('t1.vision')->eq('rnd')
-                ->andWhere('t1.type')->eq('project')
-                ->fetchAll('productID');
-
-            foreach($noMergedSprints as $sprintID => $sprint)
-            {
-                $products = zget($projectProducts, $sprintID, array());
-                foreach($products as $productID => $data)
-                {
-                    $project = zget($projects, $productID, '');
-                    if($project) $sprint->projects[$project->id] = $project->name;
-                }
-
-                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('vision')->eq('rnd')->fetchPairs();
-            }
-
-            $this->view->noMergedSprints = $noMergedSprints;
-        }
+        /* Get no merged projects that link more than two products. */
+        if($type == 'moreLink') $this->upgradeZen->assignSprintsWithMoreProducts();
 
         $programs = $this->loadModel('program')->getPairs(true, 'id_asc');
         $currentProgramID = $programID ? $programID : key($programs);
