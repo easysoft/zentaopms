@@ -53,7 +53,7 @@ if(!isset($programList[$project->parent]))
 }
 
 /* Build linked products and plans form row. */
-if($linkedProducts)
+if($linkedProducts && $project->hasProduct && $this->config->vision != 'lite')
 {
     $i = 0;
     foreach($linkedProducts as $product)
