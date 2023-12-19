@@ -1041,6 +1041,72 @@ class userModel extends model
     }
 
     /**
+     * 获取某用户的视图访问权限。
+     * Get user acls.
+     *
+     * @param  string  $account
+     * @access private
+     * @return array
+     */
+    private function getUserAcls(string $account): array
+    {
+        if($account == 'guest')
+        {
+            $acls = $this->dao->select('acl')->from(TABLE_GROUP)->where('name')->eq('guest')->fetch('acl');
+            return !empty($acls) ? json_decode($acls, true) : array();
+        }
+
+        $groups = $this->dao->select('t1.acl, t1.project')->from(TABLE_GROUP)->alias('t1')
+            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.`group`')
+            ->where('t2.account')->eq($account)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.role')->ne('projectAdmin')
+            ->andWhere('t1.role')->ne('limited')
+            ->andWhere('t1.project')->eq(0)
+            ->fetchAll();
+
+        /* Init variables. */
+        $acls         = array('programs' => array(), 'projects' => array(), 'products' => array(), 'sprints' => array(), 'views' => array(), 'actions' => array());
+        $programAllow = $projectAllow = $productAllow = $sprintAllow = $viewAllow = $actionAllow = false;
+
+        /* Authorize by group. */
+        foreach($groups as $group)
+        {
+            /* 只要有一个权限分组没有配置过视图权限，就代表所有视图都没有访问限制。 */
+            if(empty($group->acl)) break;
+
+            $acl = json_decode($group->acl, true);
+
+            /* 只要有一个权限分组的某个配置为空，就代表该配置没有访问限制。 */
+            if(empty($acl['programs'])) $programAllow = true;
+            if(empty($acl['projects'])) $projectAllow = true;
+            if(empty($acl['products'])) $productAllow = true;
+            if(empty($acl['sprints']))  $sprintAllow  = true;
+            if(empty($acl['views']))    $viewAllow    = true;
+            if(empty($acl['actions']))  $actionAllow  = true;
+
+            /* 将所有权限分组的视图访问限制合并。 */
+            if(!$programAllow && !empty($acl['programs'])) $acls['programs'] = array_merge($acls['programs'], $acl['programs']);
+            if(!$projectAllow && !empty($acl['projects'])) $acls['projects'] = array_merge($acls['projects'], $acl['projects']);
+            if(!$productAllow && !empty($acl['products'])) $acls['products'] = array_merge($acls['products'], $acl['products']);
+            if(!$sprintAllow  && !empty($acl['sprints']))  $acls['sprints']  = array_merge($acls['sprints'],  $acl['sprints']);
+            if(!$actionAllow  && !empty($acl['actions']))  $acls['actions']  = array_merge($acls['actions'],  $acl['actions']);
+            if(!$viewAllow    && !empty($acl['views']))    $acls['views']    = array_merge($acls['views'],    $acl['views']);
+        }
+
+        /* 只要有一个权限分组的某个配置为空，就代表该配置没有访问限制。 */
+        if($programAllow) $acls['programs'] = array();
+        if($projectAllow) $acls['projects'] = array();
+        if($productAllow) $acls['products'] = array();
+        if($sprintAllow)  $acls['sprints']  = array();
+        if($viewAllow)    $acls['views']    = array();
+        if($actionAllow)  $acls['actions']  = array();
+        if(empty($acls['actions'])) unset($acls['actions']);
+
+        return $acls;
+    }
+
+    /**
      * 获取某个用户的权限。
      * Get user's rights.
      *
@@ -1051,114 +1117,46 @@ class userModel extends model
     public function authorize(string $account): array
     {
         $account = filter_var($account, FILTER_UNSAFE_RAW);
-        if(!$account) return false;
+        if(!$account) return array();
 
-        $rights = array();
+        $acls = $this->getUserAcls($account);
         if($account == 'guest')
         {
-            $acls = $this->dao->select('acl')->from(TABLE_GROUP)->where('name')->eq('guest')->fetch('acl');
-            $acls = !empty($acls) ? json_decode($acls, true) : array();
-            $sql  = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')->on('t1.id = t2.`group`')->where('t1.name')->eq('guest');
+            $stmt = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')->on('t1.id = t2.`group`')->where('t1.name')->eq('guest')->query();
         }
         else
         {
-            $groups = $this->dao->select('t1.acl, t1.project')->from(TABLE_GROUP)->alias('t1')
-                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.`group`')
-                ->where('t2.account')->eq($account)
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.role')->ne('projectAdmin')
-                ->andWhere('t1.role')->ne('limited')
-                ->andWhere('t1.project')->eq(0)
-                ->fetchAll();
-
-            /* Init variables. */
-            $acls = array();
-            $programAllow = false;
-            $projectAllow = false;
-            $productAllow = false;
-            $sprintAllow  = false;
-            $viewAllow    = false;
-            $actionAllow  = false;
-
-            /* Authorize by group. */
-            foreach($groups as $group)
-            {
-                if(empty($group->acl))
-                {
-                    $programAllow = true;
-                    $projectAllow = true;
-                    $productAllow = true;
-                    $sprintAllow  = true;
-                    $viewAllow    = true;
-                    $actionAllow  = true;
-                    break;
-                }
-
-                $acl = json_decode($group->acl, true);
-                if(empty($acl['programs'])) $programAllow = true;
-                if(empty($acl['projects'])) $projectAllow = true;
-                if(empty($acl['products'])) $productAllow = true;
-                if(empty($acl['sprints']))  $sprintAllow  = true;
-                if(empty($acl['views']))    $viewAllow    = true;
-                if(!isset($acl['actions'])) $actionAllow  = true;
-                if(empty($acls) and !empty($acl))
-                {
-                    $acls = $acl;
-                    continue;
-                }
-
-                /* Merge acls. */
-                if(!empty($acl['programs'])) $acls['programs'] = !empty($acls['programs']) ? array_merge($acls['programs'], $acl['programs']) : $acl['programs'];
-                if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
-                if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
-                if(!empty($acl['sprints']))  $acls['sprints']  = !empty($acls['sprints'])  ? array_merge($acls['sprints'],  $acl['sprints'])  : $acl['sprints'];
-                if(!empty($acl['actions']))  $acls['actions']  = !empty($acls['actions'])  ? array_merge($acl['actions'], $acls['actions']) : $acl['actions'];
-                if(!empty($acl['views']))    $acls['views']    = array_merge($acls['views'], $acl['views']);
-            }
-
-            if($programAllow) $acls['programs'] = array();
-            if($projectAllow) $acls['projects'] = array();
-            if($productAllow) $acls['products'] = array();
-            if($sprintAllow)  $acls['sprints']  = array();
-            if($viewAllow)    $acls['views']    = array();
-            if($actionAllow)  unset($acls['actions']);
-
-            $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')
+            $stmt = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0)
-                ->andWhere('t1.vision')->eq($this->config->vision);
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->query();
         }
 
-        $stmt = $sql->query();
-        if(!$stmt) return array('rights' => $rights, 'acls' => $acls);
+        if(!$stmt) return array('rights' => array(), 'acls' => $acls);
 
+        /* 获取用户拥有的权限列表，而首页是大家都应该有的权限。 */
+        $rights = array('index' => array('index' => 1), 'my' => array('index' => 1));
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
-            if($row['module'] and $row['method']) $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
+            if($row['module'] && $row['method']) $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
 
         /* Get can manage projects by user. */
-        $canManageProjects   = '';
-        $canManagePrograms   = '';
-        $canManageProducts   = '';
-        $canManageExecutions = '';
+        $canManageProjects = $canManagePrograms = $canManageProducts = $canManageExecutions = '';
         if(!$this->app->upgrading)
         {
             $canManageObjects = $this->dao->select('programs,projects,products,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll();
             foreach($canManageObjects as $object)
             {
-                $canManageProjects   .= $object->projects   . ',';
-                $canManageProducts   .= $object->products   . ',';
-                $canManagePrograms   .= $object->programs   . ',';
-                $canManageExecutions .= $object->executions . ',';
+                if($object->projects)   $canManageProjects   .= $object->projects   . ',';
+                if($object->products)   $canManageProducts   .= $object->products   . ',';
+                if($object->programs)   $canManagePrograms   .= $object->programs   . ',';
+                if($object->executions) $canManageExecutions .= $object->executions . ',';
             }
         }
-
-        /* Set basic priv when no any priv. */
-        $rights['index']['index'] = 1;
-        $rights['my']['index']    = 1;
 
         return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects, 'programs' => $canManagePrograms, 'products' => $canManageProducts, 'executions' => $canManageExecutions);
     }
