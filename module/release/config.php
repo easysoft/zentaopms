@@ -70,7 +70,7 @@ $config->release->search['fields']['marker']  = $lang->release->marker;
 $config->release->search['params']['name']    = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->release->search['params']['branch']  = array('operator' => '=',       'control' => 'select', 'values' => array());
 $config->release->search['params']['id']      = array('operator' => '=',       'control' => 'input',  'values' => '');
-$config->release->search['params']['build']   = array('operator' => '=',       'control' => 'select', 'values' => array());
+$config->release->search['params']['build']   = array('operator' => 'include', 'control' => 'select', 'values' => array());
 $config->release->search['params']['status']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->release->statusList);
 $config->release->search['params']['date']    = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->release->search['params']['marker']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->release->markerList);
