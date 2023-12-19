@@ -116,6 +116,20 @@ class upgradeTest
     }
 
     /**
+     * 测试删除补丁记录。
+     * Test delete patch records.
+     *
+     * @access public
+     * @return int
+     */
+    public function deletePatchTest(): int
+    {
+        $this->objectModel->deletePatch();
+        global $tester;
+        return $tester->dao->select('count(1) as count')->from(TABLE_EXTENSION)->where('type')->eq('patch')->orWhere('code')->in('zentaopatch,patch')->fetch('count');
+    }
+
+    /**
      * 测试获取升级 sql 文件路径。
      * Test get the upgrade sql file.
      *

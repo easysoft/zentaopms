@@ -856,12 +856,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 删除补丁记录。
      * Delete the patch record.
      *
      * @access public
      * @return void
      */
-    public function deletePatch()
+    public function deletePatch(): void
     {
         $this->dao->delete()->from(TABLE_EXTENSION)->where('type')->eq('patch')->exec();
         $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->in('zentaopatch,patch')->exec();
