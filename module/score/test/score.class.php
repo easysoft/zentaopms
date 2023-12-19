@@ -150,4 +150,27 @@ class scoreTest
 
         return $this->objectModel->computeBugScore('bug', $method, $object, $rule, '', 'admin', $extended);
     }
+
+    /**
+     * 计算执行积分。
+     * Compute execution score.
+     *
+     * @param  int    $executionID
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function computeExecutionScoreTest(int $executionID, string $method): array
+    {
+        $rule     = isset($this->objectModel->config->score->rule->execution->{$method}) ? $this->objectModel->config->score->rule->execution->{$method} : array();
+        $extended = isset($this->objectModel->config->score->ruleExtended['execution'][$method]) ? $this->objectModel->config->score->ruleExtended['execution'][$method] : array();
+        $execution = $this->objectModel->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+        if(!$execution)
+        {
+            $execution = new stdclass();
+            $execution->id = $executionID;
+        }
+
+        return $this->objectModel->computeExecutionScore('execution', $method, $execution, 'admin', helper::now(), $rule, '', $extended);
+    }
 }

@@ -1,0 +1,50 @@
+title: zt_task
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: project
+    range: 1
+  - field: execution
+    range: 3
+  - field: module
+    range: 0{3},1{3},2{3},3{3}
+  - field: story
+    range: 1,0{9}
+  - field: consumed
+    range: 0,2{4},0{3},3
+  - field: parent
+    range: "0{5},`-1`,6,0{2}"
+  - field: status
+    range: "wait,doing,done,cancel,closed,wait{3},doing"
+  - field: mode
+    range: "[]{7},linear,multi"
+  - field: deleted
+    range: 0{9},1{3}
+  - field: assignedTo
+    range: "[],admin{2},[]{3}"
+  - field: mailto
+    fields:
+      - field: mailto1
+        range: "[]{3},admin,[]{2}"
+        postfix: ","
+      - field: mailto2
+        range: "[]{2},user1{3}"
+  - field: estStarted
+    range: "20201101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: deadline
+    range: "20210101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
+  - field: finishedBy
+    range: "[]{4},admin,[]{4}"
+  - field: finishedDate
+    range: "20210101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: closedReason
+    range: "[]{4},done,[]{4}"
