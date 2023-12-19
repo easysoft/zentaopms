@@ -323,6 +323,18 @@ class metricTest
     }
 
     /**
+     * Test getMetricCycle.
+     *
+     * @param  string $code
+     * @access public
+     * @return string|bool
+     */
+    public function getMetricCycle($record)
+    {
+        return $this->objectModel->getMetricCycle($record);
+    }
+
+    /**
      * Test getDateType.
      *
      * @param  array  $dateFields
