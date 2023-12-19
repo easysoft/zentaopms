@@ -489,7 +489,7 @@ class userModel extends model
      *
      * @param  object $user
      * @access public
-     * @return bool|int
+     * @return false|int
      */
     public function create(object $user): bool|int
     {
