@@ -161,14 +161,14 @@ class upgradeZen extends upgrade
     }
 
     /**
-     * 合并产品线。
-     * Merge product line.
+     * 获取未合并的产品线。
+     * Get unmerged product line.
      *
      * @param  string    $projectType
      * @access protected
      * @return void
      */
-    protected function mergeProductLine(string $projectType)
+    protected function assignUnmergedProductLines(string $projectType)
     {
         $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
 

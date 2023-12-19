@@ -432,7 +432,7 @@ class upgrade extends control
         $this->view->type = $type;
 
         /* Get products and projects group by product line. */
-        if($type == 'productline') $this->upgradeZen->mergeProductLine($projectType);
+        if($type == 'productline') $this->upgradeZen->assignUnmergedProductLines($projectType);
 
         /* Get projects group by product. */
         if($type == 'product') $this->upgradeZen->assignUnmergeProducts($projectType);
