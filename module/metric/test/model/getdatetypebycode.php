@@ -6,7 +6,7 @@ su('admin');
 
 $metric = new metricTest();
 
-zdTable('metriclib')->config('metriclib_getdatetypebycode', true)->gen(80);
+zdTable('metriclib')->config('metriclib_system_product', true)->gen(80);
 
 /**
 

@@ -11,6 +11,8 @@ fields:
   range: count_of_bug{10},count_of_annual_created_product{10},count_of_monthly_created_project{10},count_of_weekly_created_release{10},count_of_case_in_product{10},count_of_annual_fixed_bug_in_product{10},count_of_monthly_created_bug_in_product{10},count_of_daily_closed_bug_in_product{10}
 - field: system
   range: 1{40},0{40}
+- field: product
+  range: "[]{40},1{40}"
 - field: year
   range: "[]{10},2023{30},[]{10},2023{30}"
 - field: month
