@@ -299,6 +299,18 @@ class upgradeTest
         $logContent = explode("\n", $logContent);
         array_pop($logContent);
         return substr(array_pop($logContent), 20, 30);
+    }
 
+    /**
+     * 测试设置项目集默认权限。
+     * Test set program default priv.
+     *
+     * @access public
+     * @return bool
+     */
+    public function setDefaultPrivTest(): bool
+    {
+        $this->objectModel->setDefaultPriv();
+        return true;
     }
 }

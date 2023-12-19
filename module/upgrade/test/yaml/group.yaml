@@ -1,0 +1,7 @@
+title: table zt_group
+desc: "系统配置"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: role
+    range: admin,pm,po,projectAdmin,liteAdmin,liteProject,liteTeam,limited

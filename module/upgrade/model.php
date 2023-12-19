@@ -4121,13 +4121,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 设置项目集默认权限。
      * Set program default priv.
      *
-     * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function setDefaultPriv()
+    public function setDefaultPriv(): void
     {
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('role')->ne('projectAdmin')->fetchPairs();
         foreach($groups as $groupID)
