@@ -880,17 +880,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Gets program key-value pairs.
-     *
-     * @access public
-     * @return string
-     */
-    public function getProgramPairs()
-    {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->orderBy('id_asc')->fetchPairs('id', 'name');
-    }
-
-    /**
      * Get the project of the program it belongs to.
      *
      * @param  string $programID

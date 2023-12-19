@@ -597,7 +597,7 @@ class upgrade extends control
             $this->view->noMergedSprints = $noMergedSprints;
         }
 
-        $programs = $this->upgrade->getProgramPairs();
+        $programs = $this->loadModel('program')->getPairs(true, 'id_asc');
         $currentProgramID = $programID ? $programID : key($programs);
 
         $this->view->title       = $this->lang->upgrade->mergeProgram;
