@@ -1772,12 +1772,13 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板键值对。
      * Get Kanban pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getKanbanPairs()
+    public function getKanbanPairs(): array
     {
         $kanbanIdList = $this->getCanViewObjects('kanban');
 

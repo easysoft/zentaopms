@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 
+zdTable('kanban')->gen(100);
 /**
 
 title=测试 kanbanModel->getKanbanPairs();
@@ -23,7 +24,7 @@ $userList = array('admin', 'po1', 'po2', 'user1', 'user2', 'pm1', 'pm2');
 
 $kanban = new kanbanTest();
 
-r($kanban->getKanbanPairsTest($userList[0])) && p() && e('100'); //获取用户admin可以看到的看板pairs
+r($kanban->getKanbanPairsTest($userList[0])) && p() && e('32');  //获取用户admin可以看到的看板pairs
 r($kanban->getKanbanPairsTest($userList[1])) && p() && e('32');  //获取用户po1可以看到的看板pairs
 r($kanban->getKanbanPairsTest($userList[2])) && p() && e('32');  //获取用户po2可以看到的看板pairs
 r($kanban->getKanbanPairsTest($userList[3])) && p() && e('32');  //获取用户user1可以看到的看板pairs

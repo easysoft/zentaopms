@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbanspace')->gen(100);
+
 /**
 
 title=测试 kanbanModel->getSpacePairs();
