@@ -427,12 +427,13 @@ class upgradeModel extends model
     }
 
     /**
-     * Delete Useless Files
+     * 删除无用的文件。
+     * Delete Useless Files.
      *
      * @access public
      * @return array
      */
-    public function deleteFiles()
+    public function deleteFiles(): array
     {
         $result = array();
         $zfile  = $this->app->loadClass('zfile');
@@ -449,8 +450,9 @@ class upgradeModel extends model
                 if(file_exists($fullPath))
                 {
                     $isDir = is_dir($fullPath);
-                    if(!is_writable($fullPath) or ($isDir and !$zfile->removeDir($fullPath)) or
-                       (!$isDir and !$zfile->removeFile($fullPath)))
+                    /* Get the command to delete files that could not be deleted. */
+                    if(!is_writable($fullPath) || ($isDir && !$zfile->removeDir($fullPath)) ||
+                       (!$isDir && !$zfile->removeFile($fullPath)))
                     {
                         $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
                     }
@@ -463,8 +465,9 @@ class upgradeModel extends model
         $isDir     = is_dir($patchPath);
         if(file_exists($patchPath))
         {
-            if(!is_writable($patchPath) or ($isDir and !$zfile->removeDir($patchPath)) or
-                (!$isDir and !$zfile->removeDir($patchPath)))
+            /* Get the command to delete files that could not be deleted. */
+            if(!is_writable($patchPath) || ($isDir && !$zfile->removeDir($patchPath)) ||
+                (!$isDir && !$zfile->removeDir($patchPath)))
             {
                 $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $patchPath;
             }
