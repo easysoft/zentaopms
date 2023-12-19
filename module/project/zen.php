@@ -260,6 +260,8 @@ class projectZen extends project
         $shadow = $copyProjectID && empty($copyProject->hasProduct) ? 1 : 0;
 
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
+
+        $programID    = (int)$programID;
         $topProgramID = $this->program->getTopByID($programID);
 
         if($model == 'kanban')
