@@ -562,7 +562,15 @@ class testtask extends control
 
         /* Get test cases. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
+        $runs = $this->loadModel('story')->checkNeedConfirm($runs);
+
+        $case2RunMap = array();
+        foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
+        $scenesGroup = $this->testtask->getSceneCases($productID, $runs);
+        $runs        = $scenesGroup['runs'];
+        $scenes      = $scenesGroup['scenes'];
 
         /* Build the search form. */
         $this->loadModel('testcase');
@@ -583,12 +591,6 @@ class testtask extends control
         unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
-        /* Append bugs and results. */
-        $runs = $this->testcase->appendData($runs, 'run');
-
-        $case2RunMap = array();
-        foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
-
         $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=datatable&section=testtaskCases&key=showModule");
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
@@ -599,7 +601,7 @@ class testtask extends control
         $this->view->productID      = $productID;
         $this->view->productName    = $this->products[$productID];
         $this->view->task           = $task;
-        $this->view->runs           = $runs;
+        $this->view->runs           = array_merge($scenes, $runs);
         $this->view->case2RunMap    = $case2RunMap;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->assignedToList = $assignedToList;
