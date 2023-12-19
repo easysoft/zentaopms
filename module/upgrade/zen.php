@@ -216,4 +216,61 @@ class upgradeZen extends upgrade
         $this->view->lineGroups    = $lineGroups;
         $this->view->productGroups = $productGroups;
     }
+
+    /**
+     * 获取未合并的产品。
+     * Get unmerged products.
+     *
+     * @param  string    $projectType
+     * @access protected
+     * @return void
+     */
+    protected function assignUnmergedProducts(string $projectType)
+    {
+        $noMergedSprints = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t2.model')->eq('')
+            ->andWhere('t2.project')->eq(0)
+            ->andWhere('t2.vision')->eq('rnd')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('sprint')
+            ->fetchAll('id');
+
+        /* Remove project that linked more than two products */
+        $sprintProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+        foreach($sprintProducts as $sprintID => $products)
+        {
+            if(count($products) > 1) unset($noMergedSprints[$sprintID]);
+        }
+
+        /* Get products that are not merged by sprints. */
+        $noMergedProducts = array();
+        if($noMergedSprints)
+        {
+            $noMergedProducts = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                ->where('t2.project')->in(array_keys($noMergedSprints))
+                ->andWhere('t1.vision')->eq('rnd')
+                ->fetchAll('id');
+        }
+
+        /* Add products without sprints. */
+        $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetchAll('id');
+
+        if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=sprint&programID=0&projectType=$projectType"));
+
+        /* Group project by product. */
+        $productGroups = array();
+        foreach($noMergedSprints as $sprint)
+        {
+            $sprintProduct = zget($sprintProducts, $sprint->id, array());
+            if(empty($sprintProduct)) continue;
+
+            $productID = key($sprintProduct);
+            $productGroups[$productID][$sprint->id] = $sprint;
+        }
+
+        $this->view->noMergedProducts = $noMergedProducts;
+        $this->view->productGroups    = $productGroups;
+    }
 }
