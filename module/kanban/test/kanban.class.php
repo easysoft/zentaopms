@@ -572,15 +572,11 @@ class kanbanTest
         $columnCount = 0;
         $laneCount   = 0;
         $cardCount   = 0;
-        foreach($objects as $types)
+        foreach($objects as $object)
         {
-            foreach($types['lanes'] as $lane)
-            {
-                if(!isset($lane['cards'])) continue;
-                foreach($lane['cards'] as $card) $cardCount += count($card);
-            }
-            $columnCount += count($types['columns']);
-            $laneCount += count($types['lanes']);
+            if(isset($object['data']['lanes'])) $laneCount += count($object['data']['lanes']);
+            if(isset($object['data']['cols']))  $columnCount += count($object['data']['cols']);
+            if(isset($object['data']['items'])) $cardCount += count($object['data']['items'], true);
         }
         return 'columns:' . $columnCount . ', lanes:' . $laneCount . ', cards:' . $cardCount;
     }

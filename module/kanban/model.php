@@ -1318,6 +1318,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取执行中的看板卡片分组。
      * Get card group by execution id.
      *
      * @param  int    $kanbanID
