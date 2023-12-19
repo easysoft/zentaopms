@@ -6971,7 +6971,7 @@ class upgradeModel extends model
         $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
         if(!empty($dataviewData)) return true;
 
-        $this->upgradeTao->ConvertBuildInDataSet();
+        $this->upgradeTao->ConvertBuiltInDataSet();
 
         $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
         if(empty($customDataset)) return true;
