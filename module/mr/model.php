@@ -708,19 +708,19 @@ class mrModel extends model
     public function apiDeleteMR(int $hostID, string $projectID, int $MRID): object|null
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
+        if(!$host) return null;
+
         if($host->type == 'gitlab')
         {
             $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
         }
-        else
+
+        $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
+        if($rowMR->state == 'opened')
         {
-            $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
-            if($rowMR->state == 'opened')
-            {
-                $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-                return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
-            }
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
         }
 
         return null;

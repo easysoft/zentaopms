@@ -227,4 +227,21 @@ class mrTest
         $result->oldTitle = $oldMR->title;
         return $result;
     }
+
+    /**
+     * Test apiDeleteMR method.
+     *
+     * @param  int     $hostID
+     * @param  string  $project
+     * @param  object  $params
+     * @access public
+     * @return array|object
+     */
+    public function apiDeleteMrTester(int $hostID, string $project, object $params): array|object
+    {
+        $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
+        $mrID   = empty($result->iid) ? $result->id : $result->iid;
+        $this->objectModel->apiDeleteMR($hostID, $project, $mrID);
+        return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
+    }
 }
