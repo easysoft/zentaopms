@@ -8026,7 +8026,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Delete deploystep action where id not in zt_deploy.
+     * 处理devOps上线步骤的历史记录。
+     * Process deploy step action. Delete deploystep action where id not in zt_deploy.
      *
      * @access public
      * @return bool

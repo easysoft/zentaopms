@@ -1,0 +1,48 @@
+title: zt_deploystep
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: deploy
+    range: 1
+  - field: title
+    fields:
+      - field: title1
+        range: '上线步骤'
+      - field: title2
+        range: 1-10
+  - field: begin
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: end
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: stage
+    range: 'wait{3},doing{3},done{4}'
+  - field: content
+    range: ''
+  - field: status
+    range: 'wait{6},done{4}'
+  - field: assignedTo
+    range: 'admin'
+  - field: assignedDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: finishedBy
+    range: '[]{6},admin{4}'
+  - field: finishedDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: createdBy
+    range: 'admin'
+  - field: createdDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    range: 0

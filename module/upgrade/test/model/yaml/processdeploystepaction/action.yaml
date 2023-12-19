@@ -1,0 +1,24 @@
+title: zt_action
+author: Qiyu Xie
+version: "1.0"
+fields:
+- field: objectID
+  range: 1-20
+- field: objectType
+  range: 'deploystep'
+- field: product
+  range: ',0,'
+- field: project
+  range: 0
+- field: execution
+  range: 0
+- field: actor
+  range: admin
+- field: action
+  range: 'created,edited,finished'
+- field: comment
+  range: ''
+- field: extra
+  range: ''
+- field: read
+  range: 0

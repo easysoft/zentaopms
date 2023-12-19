@@ -98,4 +98,20 @@ class upgradeTest
         global $tester;
         return count(glob($tester->app->getTmpRoot() . 'model/*.php'));
     }
+
+    /**
+     * 测试处理devOps上线步骤的历史记录。
+     * Test process deploy step action.
+     *
+     * @param  int deployStepID
+     * @access public
+     * @return object|false
+     */
+    public function processDeployStepActionTest(int $deployStepID): object|false
+    {
+        $this->objectModel->processDeployStepAction();
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($deployStepID)->andWhere('objectType')->eq('deploystep')->fetch();
+    }
 }
