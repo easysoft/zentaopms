@@ -65,6 +65,27 @@ class groupTest
     }
 
     /**
+     * 获取group信息，方便ztf检查
+     * Get group for ztf
+     *
+     * @param  int    $groupID
+     * @access private
+     * @return object
+     */
+    public function insertPrivsTest($privs)
+    {
+        $this->objectModel->insertPrivs($privs);
+
+        $privs = $this->objectModel->dao->select('*')->from(TABLE_GROUPPRIV)->fetchGroup('group');
+        foreach($privs as $group => $privList)
+        {
+            foreach($privList as $key => $priv) $privs[$group][$key] = $priv->module . '-' . $priv->method;
+        }
+
+        return $privs;
+    }
+
+    /**
      * Copy a group.
      *
      * @param  int    $groupID
@@ -388,11 +409,13 @@ class groupTest
      */
     public function updateUserTest($groupID)
     {
-        $objects = $this->objectModel->updateUser($groupID);
+        $this->objectModel->updateUser($groupID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $users = $this->objectModel->getUserPairs($groupID);
+
+        return $users;
     }
 
     /**
@@ -414,16 +437,42 @@ class groupTest
      * Update project admins.
      *
      * @param  int    $groupID
+     * @param  array  $formData
      * @access public
      * @return void
      */
-    public function updateProjectAdminTest($groupID)
+    public function updateViewTest($groupID, $formData)
     {
-        $objects = $this->objectModel->updateProjectAdmin($groupID);
+        $this->objectModel->updateView($groupID, $formData);
 
         if(dao::isError()) return dao::getError();
+        $group = $this->objectModel->getByID($groupID);
+        $acl   = $group->acl;
+        if(isset($acl['actions']))
+        {
+            foreach($acl['actions'] as $module => $methods)
+            {
+                $acl['actions'][$module] = implode('|', $methods);
+            }
+        }
 
-        return $objects;
+        return $acl;
+    }
+
+    /**
+     * Update project admins.
+     *
+     * @param  int    $groupID
+     * @param  array  $formData
+     * @access public
+     * @return void
+     */
+    public function updateProjectAdminTest($groupID, $formData)
+    {
+        $this->objectModel->updateProjectAdmin($groupID, $formData);
+
+        if(dao::isError()) return dao::getError();
+        return $this->getProjectAdminsTest();
     }
 
     /**
@@ -434,10 +483,7 @@ class groupTest
      */
     public function sortResourceTest()
     {
-        $objects = $this->objectModel->sortResource();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        $this->objectModel->sortResource();
+        return $this->objectModel->lang->resource;
     }
 }

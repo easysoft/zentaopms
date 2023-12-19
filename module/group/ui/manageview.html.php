@@ -130,7 +130,6 @@ foreach($lang->mainNav as $module => $title)
     );
 }
 
-
 formPanel
 (
     set::id('manageViewForm'),

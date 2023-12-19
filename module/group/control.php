@@ -133,7 +133,8 @@ class group extends control
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $this->group->updateView($groupID);
+            $formData = $this->buildUpdateViewForm();
+            $this->group->updateView($groupID, $formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = isInModal() ? 'parent' : $this->createLink('group', 'browse');
@@ -160,8 +161,10 @@ class group extends control
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         foreach($executions as $id => $name)
         {
-            if(isset($executionProject[$id])) $executions[$id] = $executionProject[$id] . ' / ' . $name;
+            if(isset($executionProject[$id])) $executions[$id] = $executionProject[$id] . ' / ' . trim($name, '/');
         }
+
+        $this->app->loadLang('action');
 
         $this->view->group      = $group;
         $this->view->programs   = $this->loadModel('program')->getParentPairs('', '', false);
@@ -262,7 +265,7 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $this->group->updateProjectAdmin($groupID);
+            $this->group->updateProjectAdmin($groupID, $this->buildProjectAdminForm());
             return $this->sendSuccess(array('load' => true));
         }
 

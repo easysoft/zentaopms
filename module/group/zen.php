@@ -227,4 +227,69 @@ class groupZen extends group
         $this->view->packages = $packages;
         $this->view->privs    = $this->group->getPrivByParents(key($subsets));
     }
+
+    /**
+     * 构造视野维护的表单。
+     * Build update view form.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildUpdateViewForm()
+    {
+        $formData = array();
+
+        $actions = $this->post->actions;
+        $formData['views']    = isset($actions['views'])    ? $actions['views'] : array();
+        $formData['programs'] = isset($actions['programs']) ? $actions['programs'] : array();
+        $formData['projects'] = isset($actions['projects']) ? $actions['projects'] : array();
+        $formData['products'] = isset($actions['products']) ? $actions['products'] : array();
+        $formData['sprints']  = isset($actions['sprints'])  ? $actions['sprints']  : array();
+        $formData['actions']  = isset($actions['actions'])  ? $actions['actions']  : array();
+
+        $formData['actionallchecker'] = isset($_POST['actionallchecker']);
+
+        return $formData;
+    }
+
+    /**
+     * 构造项目管理员的表单。
+     * Build project admin form.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildProjectAdminForm()
+    {
+        $members       = $this->post->members      ? $this->post->members      : array();
+        $programs      = $this->post->program      ? $this->post->program      : array();
+        $projects      = $this->post->project      ? $this->post->project      : array();
+        $products      = $this->post->product      ? $this->post->product      : array();
+        $executions    = $this->post->execution    ? $this->post->execution    : array();
+        $programAll    = $this->post->programAll   ? $this->post->programAll   : '';
+        $projectAll    = $this->post->projectAll   ? $this->post->projectAll   : '';
+        $productAll    = $this->post->productAll   ? $this->post->productAll   : '';
+        $executionAll  = $this->post->executionAll ? $this->post->executionAll : '';
+
+        $formData = array();
+        foreach($members as $lineID => $accounts)
+        {
+            if(empty($accounts)) continue;
+
+            $formData[$lineID] = array();
+
+            $programs[$lineID]   = isset($programs[$lineID])   ? $programs[$lineID]   : array();
+            $projects[$lineID]   = isset($projects[$lineID])   ? $projects[$lineID]   : array();
+            $products[$lineID]   = isset($products[$lineID])   ? $products[$lineID]   : array();
+            $executions[$lineID] = isset($executions[$lineID]) ? $executions[$lineID] : array();
+
+            $formData[$lineID]['program']   = isset($programAll[$lineID])   ? array('all') : $programs[$lineID];
+            $formData[$lineID]['project']   = isset($projectAll[$lineID])   ? array('all') : $projects[$lineID];
+            $formData[$lineID]['product']   = isset($productAll[$lineID])   ? array('all') : $products[$lineID];
+            $formData[$lineID]['execution'] = isset($executionAll[$lineID]) ? array('all') : $executions[$lineID];
+            $formData[$lineID]['accounts']  = $accounts;
+        }
+
+        return $formData;
+    }
 }

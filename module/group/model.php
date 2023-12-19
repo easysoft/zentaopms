@@ -378,6 +378,7 @@ class groupModel extends model
     }
 
     /**
+     * 获取项目管理员。
      * Get project admins for manage project admin.
      *
      * @access public
@@ -434,6 +435,7 @@ class groupModel extends model
     }
 
     /**
+     * 删除分组。
      * Remove group.
      *
      * @param  int    $groupID
@@ -475,26 +477,23 @@ class groupModel extends model
     }
 
     /**
+     * 更新视野权限。
      * Update view priv.
      *
      * @param  int    $groupID
+     * @param  array  $actions
      * @access public
      * @return bool
      */
-    public function updateView(int $groupID)
+    public function updateView(int $groupID, array $actions)
     {
-        $actions  = $this->post->actions;
-        $oldGroup = $this->getByID($groupID);
-        $projects = isset($actions['projects']) ? $actions['projects'] : array();
-        $sprints  = isset($actions['sprints'])  ? $actions['sprints']  : array();
-
-        /* Add shadow productID when select noProduct project or execution. */
-        if(($projects or $sprints) and isset($actions['products']))
+        /* 如果产品不为空，需要将影子产品追加上。Add shadow productID when select noProduct project or execution. */
+        if(($actions['projects'] || $actions['sprints']) && isset($actions['products']))
         {
             /* Get all noProduct projects and executions . */
             $noProductList       = $this->loadModel('project')->getNoProductList();
             $shadowProductIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
-            $noProductObjects    = array_merge($projects, $sprints);
+            $noProductObjects    = array_merge($actions['projects'], $actions['sprints']);
 
             foreach($noProductObjects as $objectID)
             {
@@ -502,17 +501,16 @@ class groupModel extends model
             }
         }
 
-        $actions['views'] = empty($actions['views']) ? array() : array_keys($actions['views']);
-        $actions['views'] = array_combine($actions['views'], $actions['views']);
-        if(isset($_POST['actionallchecker'])) $actions['views']   = array();
-        if(!isset($actions['actions']))       $actions['actions'] = array();
-
-        if(isset($actions['actions']['project']['started']))   $actions['actions']['project']['syncproject']     = 'syncproject';
-        if(isset($actions['actions']['execution']['started'])) $actions['actions']['execution']['syncexecution'] = 'syncexecution';
-
-        $dynamic = $actions['actions'];
-        if(!isset($_POST['actionallchecker']))
+        /* 设置views。 Set views. */
+        if(!$actions['actionallchecker'])
         {
+            $actions['views'] = empty($actions['views']) ? array() : array_keys($actions['views']);
+            $actions['views'] = array_combine($actions['views'], $actions['views']);
+
+            if(!isset($actions['actions'])) $actions['actions'] = array();
+            if(isset($actions['actions']['project']['started']))   $actions['actions']['project']['syncproject']     = 'syncproject';
+            if(isset($actions['actions']['execution']['started'])) $actions['actions']['execution']['syncexecution'] = 'syncexecution';
+
             $dynamic = array();
             foreach($actions['actions'] as $moduleName => $moduleActions)
             {
@@ -524,15 +522,16 @@ class groupModel extends model
                 $moduleActions = array_keys($moduleActions);
                 $dynamic[$moduleName] = array_combine($moduleActions, $moduleActions);
             }
+            $actions['actions'] = $dynamic;
         }
-        $actions['actions'] = $dynamic;
 
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
-        return dao::isError() ? false : true;
+        return !dao::isError();
     }
 
     /**
+     * 按分组维护权限。
      * Update privilege of a group.
      *
      * @param  int    $groupID
@@ -615,6 +614,7 @@ class groupModel extends model
     }
 
     /**
+     * 按模块维护权限。
      * Update privilege by module.
      *
      * @access public
@@ -642,6 +642,7 @@ class groupModel extends model
     }
 
     /**
+     * 更新用户。
      * Update users.
      *
      * @param  int    $groupID
@@ -683,82 +684,65 @@ class groupModel extends model
     }
 
     /**
+     * 更新项目管理员。
      * Update project admins.
      *
      * @param  int    $groupID
+     * @param  array  $formData
      * @access public
      * @return void
      */
-    public function updateProjectAdmin(int $groupID)
+    public function updateProjectAdmin(int $groupID, array $formData)
     {
-        $this->loadModel('user');
-
         $allUsers = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->fetchPairs();
         $this->dao->delete()->from(TABLE_PROJECTADMIN)->exec();
 
-        $members       = $this->post->members      ? $this->post->members      : array();
-        $programs      = $this->post->program      ? $this->post->program      : array();
-        $projects      = $this->post->project      ? $this->post->project      : array();
-        $products      = $this->post->product      ? $this->post->product      : array();
-        $executions    = $this->post->execution    ? $this->post->execution    : array();
-        $programAll    = $this->post->programAll   ? $this->post->programAll   : '';
-        $projectAll    = $this->post->projectAll   ? $this->post->projectAll   : '';
-        $productAll    = $this->post->productAll   ? $this->post->productAll   : '';
-        $executionAll  = $this->post->executionAll ? $this->post->executionAll : '';
         $noProductList = $this->loadModel('project')->getNoProductList();
         $shadowProductIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
 
-        foreach($members as $lineID => $accounts)
+        foreach($formData as $lineID => $data)
         {
-            $programs[$lineID]   = isset($programs[$lineID])   ? $programs[$lineID]   : array();
-            $projects[$lineID]   = isset($projects[$lineID])   ? $projects[$lineID]   : array();
-            $products[$lineID]   = isset($products[$lineID])   ? $products[$lineID]   : array();
-            $executions[$lineID] = isset($executions[$lineID]) ? $executions[$lineID] : array();
-
-            if(($projects[$lineID] or $executions[$lineID]) and !empty($products[$lineID]))
+            if(!in_array('all', $data['product']))
             {
-                $objects = array_merge($projects[$lineID], $executions[$lineID]);
-                foreach($objects as $objectID)
+                /* 无产品项目的隐藏产品需要添加到product里。 Append products of 'No Product' project,execution. */
+                if($data['project'] || $data['execution'])
                 {
-                    if(isset($noProductList[$objectID])) $products[$lineID][] = $noProductList[$objectID]->product;
+                    $objects = array_merge($data['project'], $data['execution']);
+                    foreach($objects as $objectID)
+                    {
+                        if(isset($noProductList[$objectID])) $data['product'][] = $noProductList[$objectID]->product;
+                    }
                 }
+
+                if((in_array('all', $data['execution']) || in_array('all', $data['project']))) $data['product'] = array_merge($data['product'], $shadowProductIDList);
             }
 
-            if(isset($executionAll[$lineID]) or isset($projectAll[$lineID])) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
-
-            if(empty($accounts)) continue;
-            foreach($accounts as $account)
+            foreach($data['accounts'] as $account)
             {
-                $program   = isset($programAll[$lineID])   ? 'all' : implode(',', $programs[$lineID]);
-                $project   = isset($projectAll[$lineID])   ? 'all' : implode(',', $projects[$lineID]);
-                $product   = isset($productAll[$lineID])   ? 'all' : implode(',', $products[$lineID]);
-                $execution = isset($executionAll[$lineID]) ? 'all' : implode(',', $executions[$lineID]);
-
-                $data = new stdclass();
-                $data->group      = $lineID;
-                $data->account    = $account;
-                $data->programs   = $program;
-                $data->projects   = $project;
-                $data->products   = $product;
-                $data->executions = $execution;
-
-                $this->dao->replace(TABLE_PROJECTADMIN)->data($data)->exec();
+                $projectAdmin = new stdclass();
+                $projectAdmin->group      = $lineID;
+                $projectAdmin->account    = $account;
+                $projectAdmin->programs   = implode(',', $data['program']);
+                $projectAdmin->projects   = implode(',', $data['project']);
+                $projectAdmin->products   = implode(',', $data['product']);
+                $projectAdmin->executions = implode(',', $data['execution']);
+                $this->dao->replace(TABLE_PROJECTADMIN)->data($projectAdmin)->exec();
 
                 $allUsers[$account] = $account;
             }
         }
 
+        $this->loadModel('user');
         foreach($allUsers as $account)
         {
-            if(!$account) continue;
-            $this->user->computeUserView($account, true);
+            if($account) $this->user->computeUserView($account, true);
         }
 
-        if(!dao::isError()) return true;
-        return false;
+        return !dao::isError();
     }
 
     /**
+     * resource排序。
      * Sort resource.
      *
      * @access public
@@ -815,25 +799,7 @@ class groupModel extends model
     }
 
     /**
-     * Check nav have subset.
-     *
-     * @param  string $nav
-     * @param  string $subset
-     * @access public
-     * @return bool
-     */
-    public function checkNavSubset(string $nav, string $subset): bool
-    {
-        if(empty($nav)) return true;
-
-        if($nav == 'general') return !isset($this->config->group->subset->$subset) || !isset($this->config->group->subset->$subset->nav) || $this->config->group->subset->$subset->nav == 'general';
-
-        return isset($this->config->group->subset->$subset)
-            && isset($this->config->group->subset->$subset->nav)
-            && $this->config->group->subset->$subset->nav == $nav;
-    }
-
-    /**
+     * 判断分组操作是否可点击。
      * Judge an action is clickable or not.
      *
      * @param  object $group
@@ -851,6 +817,78 @@ class groupModel extends model
         if($action == 'copy' && $group->role == 'limited') return false;
 
         return true;
+    }
+
+    /**
+     * Load language of resource.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadResourceLang(): void
+    {
+        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+
+        $this->app->loadLang('doc');
+        $this->app->loadLang('api');
+
+        $this->lang->custom->common = $this->lang->group->config;
+        $this->lang->doc->common    = $this->lang->doc->manage;
+        $this->lang->api->common    = $this->lang->api->manage;
+
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
+    }
+
+    /**
+     * Process circular dependency.
+     *
+     * @param array $depends
+     * @param array $privs
+     * @param array $excludes
+     * @access protected
+     * @return array
+     */
+    protected function processDepends(array $depends, array $privs, array $excludes): array
+    {
+        foreach($privs as $priv)
+        {
+            if(!isset($depends[$priv])) continue;
+
+            foreach($depends[$priv] as $dependPriv)
+            {
+                if(isset($privs[$dependPriv]) || in_array($dependPriv, $excludes)) continue;
+                $privs[$dependPriv] = $dependPriv;
+
+                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv], $excludes);
+
+                foreach($dependPrivs as $depend)
+                {
+                    if(!in_array($depend, $excludes)) $privs[$depend] = $depend;
+                }
+            }
+        }
+
+        return $privs;
+    }
+
+    /**
+     * 检查subset是否属于该nav。
+     * Check nav have subset.
+     *
+     * @param  string $nav
+     * @param  string $subset
+     * @access protected
+     * @return bool
+     */
+    protected function checkNavSubset(string $nav, string $subset): bool
+    {
+        if(empty($nav)) return true;
+
+        if($nav == 'general') return !isset($this->config->group->subset->$subset) || !isset($this->config->group->subset->$subset->nav) || $this->config->group->subset->$subset->nav == 'general';
+
+        return isset($this->config->group->subset->$subset)
+            && isset($this->config->group->subset->$subset->nav)
+            && $this->config->group->subset->$subset->nav == $nav;
     }
 
     /**
@@ -912,124 +950,6 @@ class groupModel extends model
         }
 
         return $privList;
-    }
-
-    /**
-     * Load language of resource.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadResourceLang(): void
-    {
-        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
-
-        $this->app->loadLang('doc');
-        $this->app->loadLang('api');
-
-        $this->lang->custom->common = $this->lang->group->config;
-        $this->lang->doc->common    = $this->lang->doc->manage;
-        $this->lang->api->common    = $this->lang->api->manage;
-
-        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->config->vision == 'rnd' and isset($this->lang->baseline)) $this->lang->baseline->common = $this->lang->group->docTemplate;
-    }
-
-    /**
-     * Process circular dependency.
-     *
-     * @param array $depends
-     * @param array $privs
-     * @param array $excludes
-     * @access protected
-     * @return array
-     */
-    protected function processDepends(array $depends, array $privs, array $excludes): array
-    {
-        foreach($privs as $priv)
-        {
-            if(!isset($depends[$priv])) continue;
-
-            foreach($depends[$priv] as $dependPriv)
-            {
-                if(isset($privs[$dependPriv]) || in_array($dependPriv, $excludes)) continue;
-                $privs[$dependPriv] = $dependPriv;
-
-                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv], $excludes);
-
-                foreach($dependPrivs as $depend)
-                {
-                    if(!in_array($depend, $excludes)) $privs[$depend] = $depend;
-                }
-            }
-        }
-
-        return $privs;
-    }
-
-    /**
-     * Get related privs.
-     *
-     * @param  array  $allPrivList
-     * @param  array  $selectedPrivList
-     * @param  array  $recommendSelect
-     * @access public
-     * @return array
-     */
-    public function getRelatedPrivs(array $allPrivList, array $selectedPrivList, array $recommendSelect = array()): array
-    {
-        $this->loadResourceLang();
-
-        $depends = array();
-
-        $privSubsets  = array();
-        $relatedPrivs = array('depend' => array(), 'recommend' => array());
-        foreach($this->config->group->package as $packagePage => $package)
-        {
-            if(!isset($package->privs)) continue;
-
-            foreach($package->privs as $privCode => $priv)
-            {
-                $privSubsets[$privCode] = $package->subset;
-
-                foreach(array('depend', 'recommend') as $type)
-                {
-                    /* Show related pirvs when select. */
-                    if($type == 'recommend' && in_array($privCode, $recommendSelect)) $relatedPrivs[$type][$privCode] = $privCode;
-                    if($type == 'depend') $depends[$privCode] = $priv['depend'];
-
-                    if(!in_array($privCode, $selectedPrivList) || !isset($priv[$type])) continue;
-
-                    foreach($priv[$type] as $relatedPriv)
-                    {
-                        if(!in_array($relatedPriv, $selectedPrivList) && in_array($relatedPriv, $allPrivList)) $relatedPrivs[$type][$relatedPriv] = $relatedPriv;
-                    }
-                }
-            }
-        }
-
-        /* Process circular dependency. */
-        $relatedPrivs['depend'] = $this->processDepends($depends, $relatedPrivs['depend'], $selectedPrivList);
-
-        $subsetPrivs = array('depend' => array(), 'recommend' => array());
-        foreach(array('depend', 'recommend') as $type)
-        {
-            foreach($relatedPrivs[$type] as $relatedPriv)
-            {
-                if($type == 'recommend' && isset($relatedPrivs['depend'][$relatedPriv])) continue; // Don't show depend privs to recommend.
-
-                $subsetName  = $privSubsets[$relatedPriv];
-                $subsetTitle = isset($this->lang->$subsetName) && isset($this->lang->$subsetName->common) ? $this->lang->$subsetName->common : $subsetName;
-                if(!isset($subsetPrivs[$type][$subsetName])) $subsetPrivs[$type][$subsetName] = array('id' => $subsetName, 'text' => $subsetTitle, 'children' => array());
-
-                list($moduleName, $methodName) = explode('-', $relatedPriv);
-                $method = $this->lang->resource->$moduleName->$methodName;
-
-                if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
-                $subsetPrivs[$type][$subsetName]['children'][] = array('id' => $relatedPriv, 'data-module' => $moduleName, 'data-method' => $methodName, 'subset' => $subsetName, 'text' => $this->lang->$moduleName->$method, 'data-id' => $relatedPriv);
-            }
-        }
-
-        return array('depend' => array_values($subsetPrivs['depend']), 'recommend' => array_values($subsetPrivs['recommend']));
     }
 
     /**
@@ -1114,5 +1034,71 @@ class groupModel extends model
         $versionPrivs = ',' . join(',', $changelog) . ',';
 
         return $versionPrivs;
+    }
+
+    /**
+     * Get related privs.
+     *
+     * @param  array  $allPrivList
+     * @param  array  $selectedPrivList
+     * @param  array  $recommendSelect
+     * @access public
+     * @return array
+     */
+    public function getRelatedPrivs(array $allPrivList, array $selectedPrivList, array $recommendSelect = array()): array
+    {
+        $this->loadResourceLang();
+
+        $depends = array();
+
+        $privSubsets  = array();
+        $relatedPrivs = array('depend' => array(), 'recommend' => array());
+        foreach($this->config->group->package as $packagePage => $package)
+        {
+            if(!isset($package->privs)) continue;
+
+            foreach($package->privs as $privCode => $priv)
+            {
+                $privSubsets[$privCode] = $package->subset;
+
+                foreach(array('depend', 'recommend') as $type)
+                {
+                    /* Show related pirvs when select. */
+                    if($type == 'recommend' && in_array($privCode, $recommendSelect)) $relatedPrivs[$type][$privCode] = $privCode;
+                    if($type == 'depend') $depends[$privCode] = $priv['depend'];
+
+                    if(!in_array($privCode, $selectedPrivList) || !isset($priv[$type])) continue;
+
+                    foreach($priv[$type] as $relatedPriv)
+                    {
+                        if(!in_array($relatedPriv, $selectedPrivList) && in_array($relatedPriv, $allPrivList)) $relatedPrivs[$type][$relatedPriv] = $relatedPriv;
+                    }
+                }
+            }
+        }
+
+        /* Process circular dependency. */
+        $relatedPrivs['depend'] = $this->processDepends($depends, $relatedPrivs['depend'], $selectedPrivList);
+
+        $subsetPrivs = array('depend' => array(), 'recommend' => array());
+        foreach(array('depend', 'recommend') as $type)
+        {
+            foreach($relatedPrivs[$type] as $relatedPriv)
+            {
+                if($type == 'recommend' && isset($relatedPrivs['depend'][$relatedPriv])) continue; // Don't show depend privs to recommend.
+
+                $subsetName  = $privSubsets[$relatedPriv];
+                $subsetTitle = isset($this->lang->$subsetName) && isset($this->lang->$subsetName->common) ? $this->lang->$subsetName->common : $subsetName;
+                if(!isset($subsetPrivs[$type][$subsetName])) $subsetPrivs[$type][$subsetName] = array('id' => $subsetName, 'text' => $subsetTitle, 'children' => array());
+
+                list($moduleName, $methodName) = explode('-', $relatedPriv);
+                $method = $this->lang->resource->$moduleName->$methodName;
+
+                if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
+                $subsetPrivs[$type][$subsetName]['children'][] = array('id' => $relatedPriv, 'data-module' => $moduleName, 'data-method' => $methodName, 'subset' => $subsetName, 'text' => $this->lang->$moduleName->$method, 'data-id' => $relatedPriv);
+            }
+        }
+
+        return array('depend' => array_values($subsetPrivs['depend']), 'recommend' => array_values($subsetPrivs['recommend']));
     }
 }
