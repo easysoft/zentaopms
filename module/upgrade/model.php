@@ -2142,12 +2142,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取升级日志文件。
      * Get upgrade log file.
      *
      * @access public
      * @return string
      */
-    public function getLogFile()
+    public function getLogFile(): string
     {
         return $this->app->getTmpRoot() . 'log/upgrade.' . date('Ymd') . '.log.php';
     }
