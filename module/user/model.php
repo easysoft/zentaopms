@@ -1267,7 +1267,7 @@ class userModel extends model
         {
             $groups[$id] = $group->name;
 
-            if($visionCount > 1) $groups[$id] = $visionList[$group->vision] . ' / ' . $group->name;
+            if($visionCount > 1 && !empty($visionList[$group->vision])) $groups[$id] = $visionList[$group->vision] . ' / ' . $group->name;
         }
 
         return $groups;
