@@ -11,15 +11,15 @@ declare(strict_types=1);
 class scoreModel extends model
 {
     /**
+     * 获取用户的积分记录。
      * Get user score list.
      *
      * @param string $account
      * @param object $pager
-     *
      * @access public
      * @return array
      */
-    public function getListByAccount($account, $pager)
+    public function getListByAccount(string $account, object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_SCORE)->where('account')->eq($account)->orderBy('time_desc, id_desc')->page($pager)->fetchAll();
     }
