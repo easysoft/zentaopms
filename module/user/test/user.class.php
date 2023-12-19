@@ -732,21 +732,6 @@ class userTest
     }
 
     /**
-     * Test get user data in json.
-     *
-     * @param  object $user
-     * @access public
-     * @return void
-     */
-    public function getDataInJSONTest($user)
-    {
-        $user = $this->objectModel->getDataInJSON($user);
-
-        if(dao::isError()) return dao::getError();
-        return $user;
-    }
-
-    /**
      * 测试获取弱密码用户。
      * Test get users with weak password.
      *
