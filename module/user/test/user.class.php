@@ -339,28 +339,24 @@ class userTest
     }
 
     /**
-     * Test edit a user password.
+     * 测试更新当前用户的密码。
+     * Test update password of current user.
      *
-     * @param  int   $userID
-     * @param  array $params
+     * @param  object $user
      * @access public
-     * @return void
+     * @return array
      */
-    public function updatePasswordTest($userID, $params = array())
+    public function updatePasswordTest(object $user): array
     {
-        $_POST = $params;
+        $result = $this->objectModel->updatePassword($user);
+        $errors = dao::getError();
 
-        $this->objectModel->updatePassword($userID);
-        unset($_POST);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $this->objectModel->getByID($userID, 'id');
-        }
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
