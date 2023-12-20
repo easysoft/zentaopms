@@ -1041,7 +1041,7 @@ class screenModel extends model
                 if($chart->builtin == '0')
                 {
                     $chart->sql = $this->setFilterSQL($chart);
-                    return $this->getLineChartOption($component, $chart, $filters);
+                    return $this->getLineChartOption($component, $chart, array());
                 }
                 return $this->buildLineChart($component, $chart);
                 break;
@@ -1052,7 +1052,7 @@ class screenModel extends model
                 return $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
-                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, $filters);
+                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, array());
                 return $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
@@ -1075,7 +1075,7 @@ class screenModel extends model
                 return $this->getBarChartOption($component, $chart);
                 break;
             case 'waterpolo':
-                return $this->getWaterPoloOption($component, $chart);
+                return $this->getWaterPoloOption($component, $chart, array());
         }
     }
 
