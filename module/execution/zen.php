@@ -1768,6 +1768,8 @@ class executionZen extends execution
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->where('t1.id')->eq($plan->product)
                 ->fetchAll('id');
+
+            $this->view->plan = $plan;
         }
         if(!empty($project) and $project->stageBy == 'project') $products = $this->loadModel('product')->getProducts($project->id);
 
@@ -1810,7 +1812,10 @@ class executionZen extends execution
                 foreach($branches[$productIndex] as $branchID => $branch)
                 {
                     $linkedBranches[$productIndex][$branchID] = $branchID;
-                    $productPlans[$productIndex] += isset($plans[$productIndex][$branchID]) ? $plans[$productIndex][$branchID] : array();
+                    if(isset($plans[$productIndex][$branchID]))
+                    {
+                        foreach($plans[$productIndex][$branchID] as $plan) $productPlans[$productIndex][$plan->id] = $plan->title;
+                    }
                 }
             }
 

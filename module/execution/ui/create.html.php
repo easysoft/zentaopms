@@ -90,7 +90,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
         $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
         if(!isset($linkedBranches)) $branchIdList = isset($product->branches) ? implode(',', $product->branches) : '';
         if(isset($linkedBranches))  $branchIdList = !empty($linkedBranches[$product->id]) ? $linkedBranches[$product->id] : '';
-        if(empty($productID) || (!empty($productID) || $productID != $product->id))
+        if(empty($productID) || (!empty($productID) && $productID != $product->id))
         {
             $plans  = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
             $planID = isset($product->plans) ? implode(',', $product->plans) : '';
@@ -139,7 +139,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                     (
                         set::name("branch[$i][]"),
                         set::items($branches),
-                        set::value(implode(',', $branchIdList)),
+                        set::value(is_array($branchIdList) ? implode(',', $branchIdList) : $branchIdList),
                         set::disabled($isStage && $project->stageBy == 'project'),
                         set::multiple(true),
                         on::change("branchChange")
