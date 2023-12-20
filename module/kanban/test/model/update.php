@@ -42,6 +42,7 @@ $kanban2 = new stdclass();
 $kanban2->space     = 2;
 $kanban2->name      = '测试编辑看板2';
 $kanban2->owner     = 'po16';
+$kanban2->team      = 'user3';
 $kanban2->whitelist = 'user4';
 $kanban2->desc      = '测试编辑看板2的描述';
 

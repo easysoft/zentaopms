@@ -47,21 +47,26 @@ $desc        = '修改备注';
 $param1 = new stdclass();
 $param1->name  = $nameList[0];
 $param1->owner = $ownerList;
+$param1->type  = 'public';
 
 $param2 = new stdclass();
 $param2->name      = $nameList[1];
 $param2->whitelist = $whitelist;
+$param2->type      = 'cooperation';
 
 $param3 = new stdclass();
 $param3->name = $nameList[2];
 $param3->team = $team;
+$param3->type = 'private';
 
 $param4 = new stdclass();
 $param4->name = $nameList[3];
 $param4->desc = $desc;
+$param4->type = 'public';
 
 $param5 = new stdclass();
 $param5->name = $nameList[4];
+$param5->type = 'public';
 
 $param6 = new stdclass();
 $param6->type  = 'public';

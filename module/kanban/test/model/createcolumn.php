@@ -29,7 +29,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
-zdTable('kanbancolumn')->gen(1);
+zdTable('kanbancolumn')->gen(5);
 
 $column1 = new stdclass();
 $column1->name    = '测试创建不限制看板列';
@@ -38,6 +38,7 @@ $column1->noLimit = '-1';
 $column1->color   = '#333';
 $column1->group   = '1';
 $column1->parent  = '0';
+$column1->order   = 1;
 
 $column2 = new stdclass();
 $column2->name    = '测试创建不限制子看板列';
@@ -46,20 +47,23 @@ $column2->noLimit = '-1';
 $column2->color   = '#333';
 $column2->group   = '1';
 $column2->parent  = '1';
+$column2->order   = 2;
 
 $column3 = new stdclass();
-$column3->name     = '测试创建限制父看板列';
-$column3->limit    = '111';
-$column3->color    = '#333';
-$column3->group    = '1';
-$column3->parent   = '-1';
+$column3->name   = '测试创建限制父看板列';
+$column3->limit  = '111';
+$column3->color  = '#333';
+$column3->group  = '1';
+$column3->parent = '-1';
+$column3->order  = 3;
 
 $column4 = new stdclass();
-$column4->name     = '测试创建限制子看板列';
-$column4->limit    = '11';
-$column4->color    = '#333';
-$column4->group    = '1';
-$column4->parent   = '5263';
+$column4->name   = '测试创建限制子看板列';
+$column4->limit  = '210';
+$column4->color  = '#333';
+$column4->group  = '1';
+$column4->parent = '2';
+$column4->order  = 4;
 
 $column5 = new stdclass();
 $column5->name    = '';
@@ -68,27 +72,31 @@ $column5->noLimit = '-1';
 $column5->color   = '#333';
 $column5->group   = '1';
 $column5->parent  = '0';
+$column5->order   = 5;
 
 $column6 = new stdclass();
 $column6->name    = '测试创建不填写在制品数量的看板列';
-$column6->limit    = '';
+$column6->limit   = '';
 $column6->color   = '#333';
 $column6->group   = '1';
 $column6->parent  = '0';
+$column6->order   = 6;
 
 $column7 = new stdclass();
 $column7->name    = '测试创建在制品数量为0的看板列';
-$column7->limit    = 0;
+$column7->limit   = 0;
 $column7->color   = '#333';
 $column7->group   = '1';
 $column7->parent  = '0';
+$column7->order   = 7;
 
 $column8 = new stdclass();
-$column8->name    = '测试创建在制品数量超出限制的子看板列';
-$column8->limit    = '111';
-$column8->color   = '#333';
-$column8->group   = '1';
-$column8->parent  = '5263';
+$column8->name   = '测试创建在制品数量超出限制的子看板列';
+$column8->limit  = '111';
+$column8->color  = '#333';
+$column8->group  = '1';
+$column8->parent = '3';
+$column8->order  = 8;
 
 $kanban = new kanbanTest();
 

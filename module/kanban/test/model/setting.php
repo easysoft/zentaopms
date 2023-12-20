@@ -35,6 +35,7 @@ $kanban1->showWIP     = '1';
 $kanban1->fluidBoard  = '0';
 $kanban1->colWidth    = '400';
 $kanban1->archived    = '1';
+$kanban1->minColWidth = '280';
 $kanban1->performable = '1';
 $kanban1->alignment   = 'center';
 

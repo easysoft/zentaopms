@@ -15,7 +15,7 @@ cid=1
  - 属性type @private
  - 属性desc @私人空间的描述
  - 属性owner @admin
- - 属性team @,admin
+ - 属性team @po15,admin
  - 属性whitelist @po15
 - 创建协作空间
  - 属性name @测试创建协作空间
@@ -42,6 +42,7 @@ $space1->name            = '测试创建私人空间';
 $space1->owner           = '';
 $space1->desc            = '私人空间的描述';
 $space1->whitelist       = 'po15';
+$space1->team            = 'po15';
 
 $space2 = new stdclass();
 $space2->type            = 'cooperation';
@@ -72,7 +73,7 @@ $space5->desc            = '不填写负责人的公共空间描述';
 $space5->team            = 'user2,user3';
 
 $kanban = new kanbanTest();
-r($kanban->createSpaceTest($space1)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建私人空间|private|私人空间的描述|admin|,admin|po15');               // 创建私人空间
+r($kanban->createSpaceTest($space1)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建私人空间|private|私人空间的描述|admin|po15,admin|po15');               // 创建私人空间
 r($kanban->createSpaceTest($space2)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建协作空间|cooperation|协作空间的描述|po16|po15,admin,po16|~~');     // 创建协作空间
 r($kanban->createSpaceTest($space3)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建公共空间|public|公共空间的描述|user1|user2,user3,admin,user1|~~'); // 创建公共空间
 r($kanban->createSpaceTest($space4)) && p('name:0')                                   && e('『空间名称』不能为空。');                                                  // 创建不填写名称的空间

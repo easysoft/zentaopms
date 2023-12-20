@@ -14,15 +14,15 @@ title=测试 kanbanModel->createRDKanban();
 timeout=0
 cid=1
 
-- 测试创建执行10001的执行看板 @1,3,0
+- 测试创建执行10001的执行看板 @1,3,27
 
-- 测试创建执行10002的执行看板 @1,3,0
+- 测试创建执行10002的执行看板 @1,3,27
 
-- 测试创建执行10003的执行看板 @1,3,0
+- 测试创建执行10003的执行看板 @1,3,27
 
-- 测试创建执行10004的执行看板 @1,3,0
+- 测试创建执行10004的执行看板 @1,3,27
 
-- 测试创建执行10005的执行看板 @1,3,0
+- 测试创建执行10005的执行看板 @1,3,27
 
 */
 
@@ -43,8 +43,8 @@ $execution5->id = '100005';
 
 $kanban = new kanbanTest();
 
-r($kanban->createRDKanbanTest($execution1)) && p() && e('1,3,0'); // 测试创建执行10001的执行看板
-r($kanban->createRDKanbanTest($execution2)) && p() && e('1,3,0'); // 测试创建执行10002的执行看板
-r($kanban->createRDKanbanTest($execution3)) && p() && e('1,3,0'); // 测试创建执行10003的执行看板
-r($kanban->createRDKanbanTest($execution4)) && p() && e('1,3,0'); // 测试创建执行10004的执行看板
-r($kanban->createRDKanbanTest($execution5)) && p() && e('1,3,0'); // 测试创建执行10005的执行看板
+r($kanban->createRDKanbanTest($execution1)) && p() && e('1,3,27'); // 测试创建执行10001的执行看板
+r($kanban->createRDKanbanTest($execution2)) && p() && e('1,3,27'); // 测试创建执行10002的执行看板
+r($kanban->createRDKanbanTest($execution3)) && p() && e('1,3,27'); // 测试创建执行10003的执行看板
+r($kanban->createRDKanbanTest($execution4)) && p() && e('1,3,27'); // 测试创建执行10004的执行看板
+r($kanban->createRDKanbanTest($execution5)) && p() && e('1,3,27'); // 测试创建执行10005的执行看板

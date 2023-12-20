@@ -35,46 +35,59 @@ cid=1
 */
 
 $kanban1 = new stdclass();
-$kanban1->space = 1;
-$kanban1->name  = '测试创建协作看板';
-$kanban1->owner = 'po15';
-$kanban1->team  = 'user3';
-$kanban1->desc  = '测试创建协作看板的描述';
+$kanban1->space       = 1;
+$kanban1->name        = '测试创建协作看板';
+$kanban1->owner       = 'po15';
+$kanban1->team        = 'user3';
+$kanban1->fluidBoard  = '1';
+$kanban1->minColWidth = 300;
+$kanban1->desc        = '测试创建协作看板的描述';
 
 $kanban2 = new stdclass();
-$kanban2->space     = 2;
-$kanban2->name      = '测试创建私人看板';
-$kanban2->owner     = 'po16';
-$kanban2->whitelist = 'user4';
-$kanban2->desc      = '测试创建私人看板的描述';
+$kanban2->space       = 2;
+$kanban2->name        = '测试创建私人看板';
+$kanban2->owner       = 'po16';
+$kanban2->whitelist   = 'user4';
+$kanban2->team        = 'user5';
+$kanban2->fluidBoard  = '1';
+$kanban2->minColWidth = 300;
+$kanban2->desc        = '测试创建私人看板的描述';
 
 $kanban3 = new stdclass();
-$kanban3->space = 3;
-$kanban3->name  = '测试创建公共看板';
-$kanban3->owner = 'po17';
-$kanban3->team  = 'user5';
-$kanban3->desc  = '测试创建公共看板的描述';
+$kanban3->space       = 3;
+$kanban3->name        = '测试创建公共看板';
+$kanban3->owner       = 'po17';
+$kanban3->team        = 'user5';
+$kanban3->fluidBoard  = '1';
+$kanban3->minColWidth = 300;
+$kanban3->desc        = '测试创建公共看板的描述';
 
 $kanban4 = new stdclass();
-$kanban4->space = 3;
-$kanban4->name  = '';
-$kanban4->owner = 'po17';
-$kanban4->team  = 'user5';
-$kanban4->desc  = '测试创建没有名字看板的描述';
+$kanban4->space       = 3;
+$kanban4->name        = '';
+$kanban4->owner       = 'po17';
+$kanban4->team        = 'user5';
+$kanban4->fluidBoard  = '1';
+$kanban4->minColWidth = 300;
+$kanban4->desc        = '测试创建没有名字看板的描述';
 
 $kanban5 = new stdclass();
-$kanban5->space = 0;
-$kanban5->name  = '测试创建没有空间的公共看板';
-$kanban5->owner = 'po17';
-$kanban5->team  = 'user5';
-$kanban5->desc  = '测试创建没有空间的公共看板的描述';
+$kanban5->space       = 0;
+$kanban5->name        = '测试创建没有空间的公共看板';
+$kanban5->owner       = 'po17';
+$kanban5->team        = 'user5';
+$kanban5->fluidBoard  = '1';
+$kanban5->minColWidth = 300;
+$kanban5->desc        = '测试创建没有空间的公共看板的描述';
 
 $kanban6 = new stdclass();
 $kanban6->space = 3;
-$kanban6->name  = '测试创建公共看板';
-$kanban6->owner = 'po17';
-$kanban6->team  = 'user5';
-$kanban6->desc  = '测试创建重名的公共看板的描述';
+$kanban6->name        = '测试创建公共看板';
+$kanban6->owner       = 'po17';
+$kanban6->team        = 'user5';
+$kanban6->fluidBoard  = '1';
+$kanban6->minColWidth = 300;
+$kanban6->desc        = '测试创建重名的公共看板的描述';
 
 $kanban = new kanbanTest();
 

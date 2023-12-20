@@ -29,6 +29,8 @@ $card1->name     = '修改名字';
 $card1->estimate = 3;
 $card1->progress = 20;
 $card1->pri      = 1;
+$card1->begin    = '2022-01-01';
+$card1->end      = '2022-03-01';
 
 $card2 = clone $card1;
 $card2->desc     = '修改描述';

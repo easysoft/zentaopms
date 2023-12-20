@@ -24,11 +24,11 @@ $kanban     = (object)array('id' => 1, 'name' => '测试看板');
 $regionID   = 1;
 $newGroupID = 100001;
 
-$copyColumn1  = (object)array('id' => 1, 'title' => '复制看板列1');
-$copyColumn2  = (object)array('id' => 2, 'title' => '复制看板列2');
-$copyColumn3  = (object)array('id' => 3, 'title' => '复制看板列3');
-$copyColumn4  = (object)array('id' => 4, 'title' => '复制看板列4');
-$emptyColumn  = (object)array('id' => 5, 'title' => '');
+$copyColumn1  = (object)array('id' => 1, 'title' => '复制看板列1', 'parent' => 0, 'limit' => -1);
+$copyColumn2  = (object)array('id' => 2, 'title' => '复制看板列2', 'parent' => 0, 'limit' => -1);
+$copyColumn3  = (object)array('id' => 3, 'title' => '复制看板列3', 'parent' => 0, 'limit' => -1);
+$copyColumn4  = (object)array('id' => 4, 'title' => '复制看板列4', 'parent' => 0, 'limit' => -1);
+$emptyColumn  = (object)array('id' => 5, 'title' => '', 'parent' => 0, 'limit' => -1);
 
 $kanban = new kanbanTest();
 
