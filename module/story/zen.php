@@ -125,7 +125,8 @@ class storyZen extends story
                 $this->view->regionPairs = $regionPairs;
                 $this->view->lanePairs   = $lanePairs;
             }
-            $this->view->executionID = $executionID;
+            if($this->app->tab == 'execution') $this->view->executionID = $executionID;
+            if($this->app->tab == 'project') $this->view->projectID = $executionID;
         }
 
         if($this->app->tab != 'project' && $this->app->tab != 'execution') return;
@@ -636,7 +637,7 @@ class storyZen extends story
         {
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
-        $branch    = current(explode(',', $branch));
+        $branch    = current(explode(',', (string)$branch));
         $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
         $plans     = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired|noclosed', true);
         $reviewers = $this->story->getProductReviewers($productID);
