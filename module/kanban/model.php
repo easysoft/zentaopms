@@ -2874,13 +2874,14 @@ class kanbanModel extends model
     }
 
     /**
-     * Get kanban headerActions.
+     * 获取看板右上角的工具栏。
+     * Get kanban pageToolBar.
      *
      * @param  object $kanban
      * @access public
-     * @return void
+     * @return string
      */
-    public function getHeaderActions($kanban)
+    public function getPageToolBar(object $kanban)
     {
         $actions  = '';
         $actions .= "<a href='javascript:$(\"#kanbanList\").fullscreen();' id='fullScreenBtn' class='toolbar-item ghost btn btn-default'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
@@ -3025,42 +3026,6 @@ class kanbanModel extends model
     public function updateCardColor(int $cardID, string $color)
     {
         $this->dao->update(TABLE_KANBANCARD)->set('`color`')->eq('#' . $color)->where('id')->eq($cardID)->exec();
-    }
-
-    /**
-     * Reset order of lane.
-     *
-     * @param  int    $executionID
-     * @param  int    $type
-     * @param  int    $groupBy
-     * @access public
-     * @return void
-     */
-    public function resetLaneOrder($executionID, $type, $groupBy)
-    {
-        $lanes = $this->dao->select('id,extra')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
-            ->andWhere('type')->eq($type)
-            ->andWhere('groupBy')->eq($groupBy)
-            ->orderBy('extra_asc')
-            ->fetchPairs();
-
-        $laneOrder = 5;
-        $noExtra   = 0;
-
-        foreach($lanes as $laneID => $extra)
-        {
-            if(!$extra)
-            {
-                $noExtra = $laneID;
-                continue;
-            }
-
-            $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($laneID)->exec();
-            $laneOrder += 5;
-        }
-
-        if($noExtra) $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($noExtra)->exec();
     }
 
     /**
@@ -3254,13 +3219,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板空间。
      * Get space by id.
      *
      * @param  int    $spaceID
      * @access public
      * @return object
      */
-    public function getSpaceById($spaceID): object
+    public function getSpaceById(int $spaceID)
     {
         $space = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
         if($space) $space = $this->loadModel('file')->replaceImgURL($space, 'desc');
