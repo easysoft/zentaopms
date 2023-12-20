@@ -1578,19 +1578,19 @@ class kanbanTest
      * @access public
      * @return int
      */
-    public function getKanbanCardMenuTest($executionID, $objecType)
+    public function getKanbanCardMenuTest($executionID, $objectType)
     {
         global $tester;
         /* Get group objects. */
-        if($objecType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($objecType == 'bug')   $objectGroup['bug']   = $tester->loadModel('bug')->getExecutionBugs($executionID);
-        if($objecType == 'task')  $objectGroup['task']  = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($objectType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        if($objectType == 'bug')   $objectGroup['bug']   = $tester->loadModel('bug')->getExecutionBugs($executionID);
+        if($objectType == 'task')  $objectGroup['task']  = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
 
         $objects = array();
         /* Get objects cards menus. */
-        if($objecType == 'story') $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
-        if($objecType == 'bug')   $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
-        if($objecType == 'task')  $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
+        if($objectType == 'story') $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
+        if($objectType == 'bug')   $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
+        if($objectType == 'task')  $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
 
         if(dao::isError()) return dao::getError();
 
