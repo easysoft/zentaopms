@@ -50,11 +50,7 @@ class userModel extends model
 
         foreach($users as $key => $user)
         {
-            if(empty($user->account))
-            {
-                unset($users[$key]);
-                continue;
-            }
+            if(empty($user->account)) continue;
 
             if(strtolower($user->account) == 'guest') dao::$errors["account[{$key}]"][] = $this->lang->user->error->reserved;
             if(isset($accounts[$user->account])) dao::$errors["account[{$key}]"][] = sprintf($this->lang->error->unique, $this->lang->user->account, $user->account);
