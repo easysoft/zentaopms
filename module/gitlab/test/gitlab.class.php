@@ -198,6 +198,46 @@ class gitlabTest
     }
 
     /**
+     * Api get signle branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranchTest($gitlabID, $projectID, $branch)
+    {
+        return $this->gitlab->apiGetSingleBranch($gitlabID, $projectID, $branch);
+    }
+
+    /**
+     * Api get signle user.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $userID
+     * @access public
+     * @return object|array|null
+     */
+    public function apiGetSingleUserTest(int $gitlabID, int $userID): object|array|null
+    {
+        return $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+    }
+
+    /**
+     * Api get signle group.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @access public
+     * @return object|array|null
+     */
+    public function apiGetSingleGroupTest(int $gitlabID, int $groupID): object|array|null
+    {
+        return $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
+    }
+
+    /**
      * Api get signle project.
      *
      * @param  int    $gitlabID
@@ -209,5 +249,21 @@ class gitlabTest
     public function apiGetSingleProjectTest(int $gitlabID, int $projectID, bool $useUser = true)
     {
         return $this->gitlab->apiGetSingleProject($gitlabID, $projectID, $useUser);
+    }
+
+    public function addPushWebhookTest(int $repoID, string $token, int $projectID = 0)
+    {
+        $repo = $this->tester->loadModel('repo')->getByID($repoID);
+        if($projectID) $repo->project = $projectID;
+
+        $result = $this->gitlab->addPushWebhook($repo, $token);
+        if(is_array($result)) $result = true;
+        return $result;
+    }
+
+    public function isWebhookExistsTest(int $repoID, string $url = '')
+    {
+        $repo = $this->tester->loadModel('repo')->getByID($repoID);
+        return $this->gitlab->isWebhookExistsTest($repo, $url);
     }
 }

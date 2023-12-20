@@ -902,9 +902,9 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiDeleteProject(int $gitlabID, int $projectID): object|array|null
+    public function apiDeleteProject(int $gitlabID, int $projectID): object|array|null|false
     {
         if(empty($projectID)) return false;
 
@@ -970,29 +970,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 根据多个版本库多线程获取项目列表。
-     * Multi get projects by repos.
-     *
-     * @param  array $repos
-     * @access public
-     * @return void
-     */
-    public function apiMultiGetProjects(array $repos): void
-    {
-        $requests = array();
-        foreach($repos as $id => $repo)
-        {
-            $requests[$id]['url'] = sprintf($this->getApiRoot($repo->serviceHost, false), "/projects/{$repo->serviceProject}");
-        }
-        $this->app->loadClass('requests', true);
-        $results = requests::request_multiple($requests, array('timeout' => 2));
-        foreach($results as $id => $result)
-        {
-            $this->projects[$repos[$id]->serviceHost][$repos[$id]->serviceProject] = (!empty($result->body) and substr($result->body, 0, 1) == '{') ? json_decode($result->body) : '';
-        }
-    }
-
-    /**
      * 通过api获取一个用户。
      * Get single user by API.
      *
@@ -1023,48 +1000,19 @@ class gitlabModel extends model
     }
 
     /**
-     * 获取gitlab项目最新用户。
-     * Get project users.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @access public
-     * @return object|array|null
-     */
-    public function apiGetProjectUsers(int $gitlabID, int $projectID): object|array|null
-    {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/users");
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
      * 获取gitlab项目最新成员。
      * Get project all members(users and users in groups).
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int   $gitlabID
+     * @param  int   $projectID
+     * @param  int   $userID
      * @access public
      * @return object|array|null
      */
-    public function apiGetProjectMembers(int $gitlabID, int $projectID): object|array|null
+    public function apiGetProjectMembers(int $gitlabID, int $projectID, int $userID = 0): object|array|null
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all");
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
-     * 获取gitlab项目某个成员信息。
-     * Get the member detail in project.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $userID
-     * @access public
-     * @return object|array|null
-     */
-    public function apiGetProjectMember(int $gitlabID, int $projectID, int $userID): object|array|null
-    {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all/$userID");
+        $path = "/projects/{$projectID}/members/all" . ($userID ? "/{$userID}" : '');
+        $url  = sprintf($this->getApiRoot($gitlabID), $path);
         return json_decode(commonModel::http($url));
     }
 
@@ -1085,38 +1033,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 通过API获取项目的分叉。
-     * Get Forks of a project by API.
-     *
-     * @link   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @access public
-     * @return object|array|null
-     */
-    public function apiGetForks(int $gitlabID, int $projectID): object|array|null
-    {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/forks");
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
-     * 获取项目是否fork别的项目而来。
-     * Get upstream project by API.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @access public
-     * @return string|array
-     */
-    public function apiGetUpstream(int $gitlabID, int $projectID): string|array
-    {
-        $currentProject = $this->apiGetSingleProject($gitlabID, $projectID);
-        if(isset($currentProject->forked_from_project)) return $currentProject->forked_from_project;
-        return array();
-    }
-
-    /**
      * 通过api获取项目 hooks。
      * Get hooks.
      *
@@ -1126,30 +1042,10 @@ class gitlabModel extends model
      * @link   https://docs.gitlab.com/ee/api/projects.html#list-project-hooks
      * @return object|array|null
      */
-    public function apiGetHooks(int $gitlabID, int $projectID): object|array|null
+    public function apiGetHooks(int $gitlabID, int $projectID, int $hookID = 0): object|array|null
     {
         $apiRoot  = $this->getApiRoot($gitlabID, false);
-        $apiPath  = "/projects/{$projectID}/hooks";
-        $url      = sprintf($apiRoot, $apiPath);
-
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
-     * 通过api获取指定hook。
-     * Get specific hook by api.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $hookID
-     * @access public
-     * @link   https://docs.gitlab.com/ee/api/projects.html#get-project-hook
-     * @return object|array|null
-     */
-    public function apiGetHook(int $gitlabID, int $projectID, int $hookID): object|array|null
-    {
-        $apiRoot  = $this->getApiRoot($gitlabID, false);
-        $apiPath  = "/projects/$projectID/hooks/$hookID)";
+        $apiPath  = "/projects/{$projectID}/hooks" . ($hookID ? "/{$hookID}" : '');
         $url      = sprintf($apiRoot, $apiPath);
 
         return json_decode(commonModel::http($url));
