@@ -1147,6 +1147,7 @@ class kanbanTest
      */
     public function updateCardTest($cardID, $card)
     {
+        $_POST['uid'] = 'test';
         $this->objectModel->updateCard($cardID, $card);
 
         if(dao::isError()) return dao::getError();
