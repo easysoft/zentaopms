@@ -64,8 +64,8 @@ if(!$product)
 $canModifyProduct = common::canModify('product', $product);
 $canCreate        = $canModifyProduct && hasPriv('story', 'create');
 $canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
-$createLink       = $product ? createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . '#app=execution' : '';
-$batchCreateLink  = $product ? createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . '#app=execution' : '';
+$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
+$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
@@ -78,8 +78,8 @@ if(commonModel::isTutorialMode())
 $createItem      = array('text' => $lang->story->create,      'url' => $createLink);
 $batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
 
-$canLinkStory     = $canModifyProduct && hasPriv('story', 'linkStory');
-$canlinkPlanStory = $canModifyProduct && hasPriv('story', 'importPlanStories');
+$canLinkStory     = $execution->hasProduct && $canModifyProduct && hasPriv('story', 'linkStory');
+$canlinkPlanStory = $execution->hasProduct && $canModifyProduct && hasPriv('story', 'importPlanStories');
 $linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}");
 
 if(commonModel::isTutorialMode())
