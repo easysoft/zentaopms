@@ -3377,16 +3377,17 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取某个对象的看板卡片。
      * Get cards by object id.
      *
-     * @param  string $objectType kanban|region|group|lane|column
-     * @param  int    $objectID
-     * @param  string $archived
-     * @param  string $deleted
+     * @param  string     $objectType kanban|region|group|lane|column
+     * @param  int|string $objectID
+     * @param  string     $archived
+     * @param  string     $deleted
      * @access public
      * @return array
      */
-    public function getCardsByObject($objectType = '', $objectID = 0, $archived = '0', $deleted = '0')
+    public function getCardsByObject(string $objectType = '', int|string $objectID = 0, string $archived = '0', string $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('1 = 1')
