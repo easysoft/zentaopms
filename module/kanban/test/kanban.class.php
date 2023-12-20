@@ -1518,25 +1518,6 @@ class kanbanTest
     }
 
     /**
-     * Test get object group list.
-     *
-     * @param  int    $executionID
-     * @param  string $type
-     * @param  string $groupBy
-     * @access public
-     * @return array
-     */
-    public function getObjectGroupTest($executionID, $type, $groupBy)
-    {
-        $objects = $this->objectModel->getObjectGroup($executionID, $type, $groupBy);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = implode(',', $objects);
-        return $objects;
-    }
-
-    /**
      * Test get card by id.
      *
      * @param  int    $cardID

@@ -763,12 +763,12 @@ class kanbanModel extends model
      * 获取看板区域上的操作按钮。
      * Get region actions.
      *
-     * @param  int    $kanbanID
-     * @param  int    $regionID
+     * @param  int        $kanbanID
+     * @param  int|string $regionID
      * @access public
      * @return array
      */
-    public function getRegionActions(int $kanbanID, int $regionID): array
+    public function getRegionActions($kanbanID, $regionID): array
     {
         $action  = array();
         $actions = array();
@@ -3356,53 +3356,6 @@ class kanbanModel extends model
     public function getLaneById(int $laneID)
     {
         return $this->dao->findById($laneID)->from(TABLE_KANBANLANE)->fetch();
-    }
-
-    /**
-     * Get object group list.
-     *
-     * @param  int    $executionID
-     * @param  string $type
-     * @param  string $groupBy
-     * @access public
-     * @return array
-     */
-    public function getObjectGroup($executionID, $type, $groupBy)
-    {
-        $table = zget($this->config->objectTables, $type);
-
-        if($groupBy == 'story' or $type == 'story')
-        {
-            $selectField = $groupBy == 'story' ? "t1.$groupBy" : "t2.$groupBy";
-            $groupList   = $this->dao->select($selectField)->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-                ->where('t1.project')->eq($executionID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($groupBy . '_desc')
-                ->fetchPairs();
-
-            if($type == 'task')
-            {
-                $unlinkedTask = $this->dao->select('id')->from(TABLE_TASK)
-                    ->where('execution')->eq($executionID)
-                    ->andWhere('parent')->ge(0)
-                    ->andWhere('story')->eq(0)
-                    ->andWhere('deleted')->eq(0)
-                    ->fetch('id');
-                if($unlinkedTask) $groupList[0] = 0;
-            }
-        }
-        else
-        {
-            $groupList = $this->dao->select($groupBy)->from($table)
-                ->where('execution')->eq($executionID)
-                ->beginIF($type == 'task')->andWhere('parent')->ge(0)->fi()
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($groupBy . '_desc')
-                ->fetchPairs();
-        }
-
-        return $groupList;
     }
 
     /**
