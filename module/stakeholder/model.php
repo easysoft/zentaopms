@@ -227,16 +227,17 @@ class stakeholderModel extends model
     }
 
     /**
+     * 获取干系人列表数据。
      * Get stakeholder list.
      *
      * @param  int    $projectID
-     * @param  string $browseType
+     * @param  string $browseType all|inside|outside|key
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStakeholders($projectID, $browseType = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getStakeholders(int $projectID, string $browseType = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
