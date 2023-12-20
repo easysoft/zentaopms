@@ -252,12 +252,13 @@ class stakeholder extends control
     }
 
     /**
-     * Ajax get outside user.
+     * Ajax：获取外部用户。
+     * Ajax: Get outside user.
      *
      * @access public
      * @return void
      */
-    public function ajaxGetOutsideUser($objectID = 0)
+    public function ajaxGetOutsideUser(int $objectID = 0)
     {
         $users        = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
