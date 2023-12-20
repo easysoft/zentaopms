@@ -1408,12 +1408,12 @@ class kanbanTest
     /**
      * Test get kanban group by space id list.
      *
-     * @param  string $spaceIdList
-     * @param  string $kanbanIdList
+     * @param  array $spaceIdList
+     * @param  array $kanbanIdList
      * @access public
      * @return int
      */
-    public function getGroupBySpaceListTest($spaceIdList, $kanbanIdList = '')
+    public function getGroupBySpaceListTest($spaceIdList = array(), $kanbanIdList = array())
     {
         $objects = $this->objectModel->getGroupBySpaceList($spaceIdList, $kanbanIdList);
 

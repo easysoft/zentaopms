@@ -3236,12 +3236,12 @@ class kanbanModel extends model
     /**
      * Get kanban group by space id list.
      *
-     * @param  array|string $spaceIdList
-     * @param  array|string $kanbanIdList
+     * @param  array $spaceIdList
+     * @param  array $kanbanIdList
      * @access public
      * @return array
      */
-    public function getGroupBySpaceList($spaceIdList, $kanbanIdList = '')
+    public function getGroupBySpaceList(array $spaceIdList, array $kanbanIdList = array()): array
     {
         $spaceList = $this->dao->select('*')->from(TABLE_KANBAN)
             ->where('deleted')->eq(0)
