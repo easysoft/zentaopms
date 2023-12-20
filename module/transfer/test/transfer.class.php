@@ -154,4 +154,34 @@ class transferTest
 
         return $this->objectModel->getQueryDatas($module);
     }
+
+    /**
+     * 测试getRows。
+     * Get query datas.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getRowsTest(string $module = '', string $checkedItem = '')
+    {
+        global $tester, $app;
+        $app->methodName = 'export';
+
+        $object = $tester->loadModel($module);
+        $fields = isset($object->config->$module->exportFields) ? $object->config->$module->exportFields : '';
+
+        $_SESSION[$module . 'TransferParams']['executionID'] = 101;
+        if($module == 'testcase')
+        {
+            $app->config->testcase->cascade    = array('story' => 'module');
+            $app->config->testcase->listFields = 'module,type,stage,pri,story,status,branch,results';
+        }
+
+        $fields    = explode(',', $fields);
+        $fieldList = $this->objectModel->initFieldList($module, $fields);
+
+        $this->getQueryDatasTest($module);
+        return $this->objectModel->getRows($module, $fieldList);
+    }
 }

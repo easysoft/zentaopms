@@ -532,27 +532,27 @@ class transferModel extends model
     }
 
     /**
+     * 获取导出数据。
      * Get Rows.
      *
-     * @param  string        $module
-     * @param  object|string|array $fieldList
+     * @param  string       $module
+     * @param  object|array $fieldList
      * @access public
-     * @return void
+     * @return array
      */
-    public function getRows(string $module, object|string|array $fieldList)
+    public function getRows(string $module, object|array $fieldList)
     {
-        $moduleDatas = $this->getQueryDatas($module);
+        $moduleDatas = $this->getQueryDatas($module); // 根据SESSION中的条件查询数据。
 
-        if(is_object($fieldList)) $fieldList = (array) $fieldList;
-        if(isset($fieldList['files'])) $moduleDatas = $this->getFiles($module, $moduleDatas);
+        if(is_object($fieldList))      $fieldList = (array) $fieldList;
+        if(isset($fieldList['files'])) $moduleDatas = $this->getFiles($module, $moduleDatas); // 如果有附件字段则获取附件。
 
+        /* 如果存在rows则用rows中的数据覆盖查询的数据。*/
+        /* If has rows, use rows data to cover query data. */
         $rows = !empty($_POST['rows']) ? $_POST['rows'] : array();
+        foreach($rows as $id => $row) $moduleDatas[$id] = (object) array_merge((array)$moduleDatas[$id], (array)$row);
 
-        foreach($rows as $id => $row)
-        {
-            $moduleDatas[$id] = (object) array_merge((array)$moduleDatas[$id], (array)$row);
-        }
-
+        /* 设置子数据。*/
         /* Deal children datas and multiple tasks. */
         if($moduleDatas) $moduleDatas = $this->updateChildDatas($moduleDatas);
 
@@ -834,16 +834,14 @@ class transferModel extends model
         $children = array();
         foreach($datas as $data)
         {
+            $id = $data->id;
+            if(!empty($data->mode)) $datas[$id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
             if(!empty($data->parent) and isset($datas[$data->parent]))
             {
                 if(!empty($data->name)) $data->name = '>' . $data->name;
                 elseif(!empty($data->title)) $data->title = '>' . $data->title;
-                $children[$data->parent][$data->id] = $data;
-                unset($datas[$data->id]);
-            }
-            if(!empty($data->mode))
-            {
-                $datas[$data->id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
+                $children[$data->parent][$id] = $data;
+                unset($datas[$id]);
             }
         }
 

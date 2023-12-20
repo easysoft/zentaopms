@@ -151,17 +151,17 @@ $config->task->dtable->fieldList['story']['type']       = 'desc';
 $config->task->dtable->fieldList['story']['sortType']   = true;
 $config->task->dtable->fieldList['story']['show']       = true;
 $config->task->dtable->fieldList['story']['group']      = 9;
-$config->task->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => '$executionID&0&all&&&active');
+$config->task->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => ['executionID' => (int)'$executionID', 'productID' => 0, 'branch' => 'all', 'moduleIdList' => '', 'type' => '', 'status' => 'active']);
 
 $config->task->dtable->fieldList['module']['title']      = 'module';
 $config->task->dtable->fieldList['module']['control']    = 'select';
-$config->task->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
+$config->task->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => ['rootID' => (int)'$executionID']);
 $config->task->dtable->fieldList['module']['display']    = false;
 
 $config->task->dtable->fieldList['execution']['title']      = 'execution';
 $config->task->dtable->fieldList['execution']['control']    = 'hidden';
 $config->task->dtable->fieldList['execution']['type']       = 'html';
-$config->task->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
+$config->task->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => ['projectID' => 0]);
 $config->task->dtable->fieldList['execution']['display']    = false;
 
 $config->task->dtable->fieldList['project']['title']      = 'project';
