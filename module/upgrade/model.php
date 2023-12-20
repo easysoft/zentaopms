@@ -6585,13 +6585,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 修复项目集下的项目路径。
      * Fix the project path under the program.
      *
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function fixProjectPath($programID)
+    public function fixProjectPath(int $programID): void
     {
         $this->dao->update(TABLE_PROJECT)
             ->set("path = CONCAT(',{$programID},', id, ',')")->set("`order` = `id` * 5")

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->addAdminInviteField();
+title=测试 upgradeModel->relateDefaultProgram();
 cid=1
 
 - 判断需求的releasedDate是否更新成功,差值在10秒内 @1
