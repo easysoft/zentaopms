@@ -21,6 +21,7 @@
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .project-type-label {padding: 1px 0px;}
 #cards .icon {font-size: 8px;}
+#cards .table-empty-tip .icon {font-size: 14px;}
 #cards .project-name {font-size: 14px; display: inline-block; max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
 #cards .project-infos {font-size: 12px;}
 #cards .project-infos > span {display: inline-block; line-height: 12px; border: 1px solid #E4E9F7;}
