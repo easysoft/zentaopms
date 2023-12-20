@@ -470,6 +470,7 @@ class upgradeTest
     }
 
     /**
+<<<<<<< Updated upstream
      * 测试计算项目、产品、迭代的成员。
      * Test compute project, product and sprint members.
      *
@@ -491,5 +492,16 @@ class upgradeTest
             $return = 'acls:' . implode(',', $acls) . ';' . 'teams:' . implode(',', $teams);
         }
         return $return;
+=======
+     * 测试获取没有合并的迭代的数量。
+     * Get no merged sprint count test.
+     *
+     * @access public
+     * @return int
+     */
+    public function getNoMergedSprintCountTest(): int
+    {
+        return $this->objectModel->getNoMergedSprintCount();
+>>>>>>> Stashed changes
     }
 }
