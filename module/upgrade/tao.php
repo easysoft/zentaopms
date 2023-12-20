@@ -63,12 +63,12 @@ class upgradeTao extends upgradeModel
             foreach($table->schema->fields as $key => $field)
             {
                 $relatedField = '';
-                if($field['type'] == 'object' and isset($field['show']))
+                if($field['type'] == 'object' && isset($field['show']))
                 {
                     $key = str_replace('.', '_', $field['show']);
                     $relatedField  = substr($field['show'], strpos($field['show'], '.') + 1);
                     $relatedObject = isset($field['object']) ? $field['object'] : '';
-                    if(!empty($relatedObject) and isset($table->schema->objects[$relatedObject]))
+                    if(!empty($relatedObject) && isset($table->schema->objects[$relatedObject]))
                     {
                         foreach($table->schema->objects[$relatedObject] as $fieldID => $fieldName)
                         {
@@ -94,7 +94,7 @@ class upgradeTao extends upgradeModel
 
             $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
             $dataviewID = $this->dao->lastInsertID();
-            if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
+            if(!empty($dataview->view) && !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
         }
     }
 
@@ -126,7 +126,7 @@ class upgradeTao extends upgradeModel
 
             $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
             $dataviewID = $this->dao->lastInsertID();
-            if(!empty($dataview->view) and !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
+            if(!empty($dataview->view) && !empty($dataview->sql)) $this->dataview->createViewInDB($dataviewID, $dataview->view, $dataview->sql);
         }
     }
 
