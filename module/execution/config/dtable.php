@@ -226,12 +226,14 @@ $config->execution->importBug->dtable->fieldList['estimate']['control']  = 'inpu
 
 $config->execution->importBug->dtable->fieldList['estStarted']['title']    = $lang->task->estStarted;
 $config->execution->importBug->dtable->fieldList['estStarted']['type']     = 'datetime';
+$config->execution->importBug->dtable->fieldList['estStarted']['width']    = 100;
 $config->execution->importBug->dtable->fieldList['estStarted']['sortType'] = false;
 $config->execution->importBug->dtable->fieldList['estStarted']['type']     = 'control';
 $config->execution->importBug->dtable->fieldList['estStarted']['control']  = 'datePicker';
 
 $config->execution->importBug->dtable->fieldList['deadline']['title']    = $lang->task->deadline;
 $config->execution->importBug->dtable->fieldList['deadline']['type']     = 'datetime';
+$config->execution->importBug->dtable->fieldList['deadline']['width']    = 100;
 $config->execution->importBug->dtable->fieldList['deadline']['sortType'] = false;
 $config->execution->importBug->dtable->fieldList['deadline']['type']     = 'control';
 $config->execution->importBug->dtable->fieldList['deadline']['control']  = 'datePicker';
