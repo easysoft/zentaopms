@@ -4,10 +4,12 @@
 /**
 
 title=测试 mailModel->sendmail();
-cid=1
-pid=1
+cid=0
 
-测试为dev4用户发送邮件通知 >> 0
+- 不传入任何参数 @0
+- 只传入actionID @0
+- 只传入objectID @0
+- 测试为需求2发送邮件通知 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
