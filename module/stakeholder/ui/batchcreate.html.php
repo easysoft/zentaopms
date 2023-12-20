@@ -39,9 +39,16 @@ formBatchPanel
         div(setClass('panel-title text-lg'), $lang->program->createStakeholder),
         inputGroup
         (
-            setClass('selectDeptBox'),
             $lang->execution->selectDept,
-            picker(set::name('dept'), set::items($depts), set::value($dept), setID('dept'), set('data-placeholder', $lang->execution->selectDeptTitle), on::change("setDeptUsers")),
+            picker
+            (
+                set::name('dept'),
+                set::items($depts),
+                set::value($dept),
+                set::width('200px'),
+                setData('placeholder', $lang->execution->selectDeptTitle),
+                on::change("setDeptUsers")
+            ),
         ),
         $project->parent ? btn(set::url($this->createLink('stakeholder', 'batchcreate', "projectID={$projectID}&dept=&parent=$project->parent")), setClass('primary'), $lang->program->importStakeholder) : null
     ),
