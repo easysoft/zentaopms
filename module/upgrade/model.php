@@ -4942,13 +4942,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取非开源版的模块。
      * Get modules that are not open source.
      *
      * @param  array  $allModules
      * @access public
      * @return array
      */
-    public function getEncryptedModules($allModules)
+    public function getEncryptedModules(array $allModules): array
     {
         $encryptModules = array();
         foreach($allModules as $modulePath)
@@ -4960,11 +4961,13 @@ class upgradeModel extends model
                 $extRoot = $modulePath . DS . 'ext';
                 if(!is_dir($extRoot))
                 {
+                    /* If the ext directory doesn't exist, append it to encryptModules. */
                     $encryptModules[] = $module;
                     continue;
                 }
                 else
                 {
+                    /* Get custom files in the control and model directories. */
                     foreach(array('control', 'model') as $dir)
                     {
                         $realPath = $extRoot . DS . $dir;
@@ -4976,6 +4979,7 @@ class upgradeModel extends model
             }
             else
             {
+                /* Check whether control and model are custom files. */
                 foreach(array('control.php', 'model.php') as $file)
                 {
                     $filePath = $modulePath . DS . $file;
@@ -4985,7 +4989,8 @@ class upgradeModel extends model
                 }
             }
 
-            if(empty($customFiles) or $module == 'owt') $encryptModules[$module] = $module;
+            /* If the customFiles is empty or the module is owt, append it to encryptModules. */
+            if(empty($customFiles) || $module == 'owt') $encryptModules[$module] = $module;
         }
         return $encryptModules;
     }
