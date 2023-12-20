@@ -425,6 +425,18 @@ class metricTest
     }
 
     /**
+     * Test getOldMetricByID.
+     *
+     * @param  int   $measurementID
+     * @access public
+     * @return object
+     */
+    public function getOldMetricByID($measurementID)
+    {
+        return $this->objectModel->getOldMetricByID($measurementID);
+    }
+
+    /**
      * Test getMetricCycle.
      *
      * @param  string $code
