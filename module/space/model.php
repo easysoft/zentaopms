@@ -47,6 +47,8 @@ class spaceModel extends model
      */
     public function getSystemSpace($account)
     {
+        if(empty($account)) $account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+
         $k8space = $this->config->k8space;
 
         $sysSpace = $this->dao->select('*')->from(TABLE_SPACE)->where('k8space')->eq($k8space)->andWhere('owner')->eq($account)->fetch();
@@ -73,6 +75,8 @@ class spaceModel extends model
      */
     public function createDefaultSpace($account)
     {
+        if(empty($account)) $account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+
         $default = new stdclass;
         $default->name      = $this->lang->space->defaultSpace;
         $default->k8space   = 'quickon-app';
