@@ -7,7 +7,7 @@ fields:
     note: "用户名"
     fields:
       - field: account1
-        range: admin,guest,user{100},test{100},dev{100},td{100},top{100}
+        range: admin,guest,test{100}
       - field: account2
         range: "[],[],1-100,1-100,1-100,1-100"
   - field: programs

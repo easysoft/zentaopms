@@ -7,12 +7,9 @@ fields:
     note: "用户名"
     fields:
     - field: account1
-      range: test{99},dev{100},pm,po{54},td{100},pd{47},qd{7},top{100},outside{92}
+      range: admin,user{5},test{10000}
     - field: account2
-      range: 2-100,1-100,1,48-100,1-100,1-47,94-100,1-100,2-93
+      range: '[],1-5,1-10000'
   - field: group
     note: "分组名称"
-    range: 3{100},2{200},4{10},5{10},6{2},7{2},8{2},9{5},1{8},12{10}
-  - field: project
-    note:  "项目ID"
-    range:
+    range: 1-10000

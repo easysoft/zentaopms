@@ -2039,7 +2039,7 @@ class userModel extends model
         if(empty($acls)     && !empty($this->session->user->rights['acls']))     $acls     = $this->session->user->rights['acls'];
         if(empty($projects) && !empty($this->session->user->rights['projects'])) $projects = $this->session->user->rights['projects'];
 
-        $userView = $this->computeUserView($account);
+        $userView = $this->computeUserView($account, true);
 
         /* Get opened projects, programs, products and set it to userview. */
         $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('program')->fetchAll('id');

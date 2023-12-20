@@ -5,11 +5,10 @@ include dirname(__FILE__, 2) . '/user.class.php';
 
 su('admin');
 
-$user = zdTable('user');
-$user->gen(20);
-
-$userGroup = zdTable('usergroup');
-$userGroup->gen(100);
+zdTable('user')->gen(20);
+zdTable('group')->config('group')->gen(100);
+zdTable('usergroup')->config('usergroup')->gen(100);
+zdTable('grouppriv')->config('grouppriv')->gen(100);
 
 /**
 
@@ -17,22 +16,25 @@ title=测试 userModel->authorize();
 cid=1
 pid=1
 
-获取用户的权限，返回权限列表，是否有产品首页权限 >> 1
-获取游客的权限，返回权限列表，是否有任务详情的权限 >> 1
-获取不存在的用户的可访问项目，返回空 >> 0
-获取空的用户的权限，返回空 >> 0
+- 获取user2用户的访问权限。
+ - 第rights[index]条的index属性 @1
+ - 第rights[module3]条的method3属性 @1
+- 获取user2用户的可访问项目集、项目、产品。
+ - 第acls[programs]条的0属性 @1
+ - 第acls[programs]条的1属性 @6
+- 获取user2用户的可访问项目集、项目、产品。第acls[projects]条的0属性 @15
+- 获取user2用户的可访问项目集、项目、产品。第acls[products]条的0属性 @20
+- 获取user2用户的可访问视图。
+ - 第acls[views]条的program属性 @program
+ - 第acls[views]条的product属性 @product
+ - 第acls[views]条的project属性 @project
 
 */
 
 $user = new userTest();
 
-$normalUser = $user->authorizeTest('test10');
-r($normalUser['rights'])      && p('product:index') && e('1'); //获取用户的权限，返回权限列表，是否有产品首页权限
-                                                               //
-$guest = $user->authorizeTest('guest');
-r($guest['rights'])           && p('task:view')     && e('1'); //获取游客的权限，返回权限列表，是否有任务详情的权限
-
-$notExistsUser = $user->authorizeTest('sadf!!@#a');
-r($notExistsUser['projects']) && p('')              && e('0'); //获取不存在的用户的可访问项目，返回空
-
-r($user->authorizeTest(''))   && p('')              && e('0'); //获取空的用户的权限，返回空
+r($user->authorizeTest('user2')) && p('rights[index]:index;rights[module3]:method3') && e('1,1');                     // 获取user2用户的访问权限。
+r($user->authorizeTest('user2')) && p('acls[programs]:0,1')                          && e('1,6');                     // 获取user2用户的可访问项目集、项目、产品。
+r($user->authorizeTest('user2')) && p('acls[projects]:0')                            && e('15');                      // 获取user2用户的可访问项目集、项目、产品。
+r($user->authorizeTest('user2')) && p('acls[products]:0')                            && e('20');                      // 获取user2用户的可访问项目集、项目、产品。
+r($user->authorizeTest('user2')) && p('acls[views]:program,product,project')         && e('program,product,project'); // 获取user2用户的可访问视图。

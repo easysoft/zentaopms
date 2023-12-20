@@ -26,7 +26,7 @@ fields:
     format: ""
   - field: project
     note: "所属项目"
-    range: "0"
+    range: "0{100}, 1-100"
   - field: desc
     note: "分组描述"
     range: "1-10000"
@@ -36,7 +36,7 @@ fields:
     format: ""
   - field: acl
     note: "权限"
-    range: "0"
+    range: '`{"views":{"program":"program","product":"product","project":"project"},"programs":{"0":"1","1":"6"},"products":{"0":"20"},"projects":{"0":"15"}}`'
     prefix: ""
     postfix: ""
     loop: 0

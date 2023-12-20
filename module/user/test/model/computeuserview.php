@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/user.class.php';
 
 dao::$cache = array();
 zdTable('user')->gen(10);
-zdTable('userview')->gen(10);
+zdTable('userview')->config('userview')->gen(10);
 zdTable('team')->config('team')->gen(200);
 zdTable('acl')->config('acl')->gen(100);
 zdTable('stakeholder')->config('stakeholder')->gen(100);
@@ -37,10 +37,10 @@ zdTable('project')->config('execution')->gen(20, false);
 zdTable('projectadmin')->config('projectadmin')->gen(30);
 
 $user = new userTest();
-r($user->computeUserViewTest('test1', false))  && p('programs', '-') && e(',1');                              //计算并获取test1账户的可查看项目集列表。
-r($user->computeUserViewTest('test1', false))  && p('products', '-') && e(',1');                              //计算并获取test1账户的可查看产品列表。
-r($user->computeUserViewTest('test1', false))  && p('projects', '-') && e(',11');                             //计算并获取test1账户的可查看项目列表。
-r($user->computeUserViewTest('test1', false))  && p('sprints',  '-') && e(',101');                            //计算并获取test1账户的可查看执行列表。
+r($user->computeUserViewTest('test1', false))  && p('programs', '-') && e(',3');                              //计算并获取test1账户的可查看项目集列表。
+r($user->computeUserViewTest('test1', false))  && p('products', '-') && e(',3');                              //计算并获取test1账户的可查看产品列表。
+r($user->computeUserViewTest('test1', false))  && p('projects', '-') && e(',13');                             //计算并获取test1账户的可查看项目列表。
+r($user->computeUserViewTest('test1', false))  && p('sprints',  '-') && e(',103');                            //计算并获取test1账户的可查看执行列表。
 r($user->computeUserViewTest('admin', true))   && p('programs', '-') && e('2,3,5,6,8,9');                     //计算并获取admin账户的可查看项目集列表。
 r($user->computeUserViewTest('admin', true))   && p('products', '-') && e('11,12,13,14,15,16,17,18,19,20');   //计算并获取admin账户的可查看产品列表。
 r($user->computeUserViewTest('admin', true))   && p('projects', '-') && e('11,12,14,15,17,18,20');            //计算并获取admin账户的可查看项目列表。
