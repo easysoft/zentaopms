@@ -733,9 +733,17 @@ class upgrade extends control
         echo 'ok';
     }
 
+    /**
+     * 处理历史指标数据。
+     * Process history metric data.
+     *
+     * @access public
+     * @return void
+     */
     public function processHistoryDataForMetric()
     {
         $this->upgrade->processHistoryDataForMetric();
+        if(dao::isError()) echo 'fail';
         echo 'ok';
     }
 }
