@@ -8557,4 +8557,28 @@ class upgradeModel extends model
         if(trim($lastTwoLines[0]) == 'HasError') return true;
         return false;
     }
+
+    /**
+     * 获取没有合并的产品数量。
+     * Get no merged product count.
+     *
+     * @access public
+     * @return int
+     */
+    public function getNoMergedProductCount(): int
+    {
+        return $this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
+    }
+
+    /**
+     * 获取没有合并的迭代数量。
+     * Get no merged sprint count.
+     *
+     * @access public
+     * @return int
+     */
+    public function getNoMergedSprintCount(): int
+    {
+        return  $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
+    }
 }

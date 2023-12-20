@@ -247,17 +247,15 @@ class upgrade extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type={$type}&programID={$programID}&projectType={$projectType}")));
         }
 
-        /* Get no merged product and project count. */
-        $noMergedProductCount = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedProductCount = $this->upgrade->getNoMergeProductCount();
+        $noMergedSprintCount  = $this->upgrade->getNoMergeSprintCount();
 
+        /* 当产品和项目都归并完成后，完成后续操作。*/
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) && empty($noMergedSprintCount)) $this->upgradeZen->upgradeAfterMerged();
 
         $this->view->noMergedProductCount = $noMergedProductCount;
         $this->view->noMergedSprintCount  = $noMergedSprintCount;
-
-        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
 
         /* 获取产品线下的产品和项目。*/
         /* Get products and projects group by product line. */
@@ -266,6 +264,8 @@ class upgrade extends control
         /* 获取产品下的项目。*/
         /* Get projects group by product. */
         if($type == 'product') $this->upgradeZen->assignProjectsGroupByProduct($projectType);
+
+        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
 
         /* Get no merged projects that is not linked product. */
         if($type == 'sprint')
