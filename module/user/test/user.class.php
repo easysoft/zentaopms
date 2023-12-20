@@ -276,29 +276,24 @@ class userTest
     }
 
     /**
+     * 测试编辑一个用户。
      * Test edit a user.
      *
-     * @param  int   $userID
-     * @param  array $params
+     * @param  object $user
      * @access public
-     * @return void
+     * @return array
      */
-    public function updateUserTest($userID, $params = array())
+    public function updateTest(object $user): array
     {
-        $_POST = $params;
-        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
+        $result = $this->objectModel->update($user);
+        $errors = dao::getError();
 
-        $this->objectModel->update($userID);
-        unset($_POST);
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $this->objectModel->getByID($userID, 'id');
-        }
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
