@@ -514,7 +514,7 @@ class transferModel extends model
 
                 /* 将下拉字段赋值给excel->sysDataField。*/
                 /* Set value to excel->sysDataField. */
-                if(is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
+                if(isset($this->config->excel->sysDataField) && is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
             }
 
             $lists['listStyle'] = $listFields;
@@ -546,13 +546,11 @@ class transferModel extends model
         if(is_object($fieldList)) $fieldList = (array) $fieldList;
         if(isset($fieldList['files'])) $moduleDatas = $this->getFiles($module, $moduleDatas);
 
-        $rows = !empty($_POST['rows']) ? $_POST['rows'] : '';
-        if($rows)
+        $rows = !empty($_POST['rows']) ? $_POST['rows'] : array();
+
+        foreach($rows as $id => $row)
         {
-            foreach($rows as $id => $row)
-            {
-                $moduleDatas[$id] = (object) array_merge((array)$moduleDatas[$id], (array)$row);
-            }
+            $moduleDatas[$id] = (object) array_merge((array)$moduleDatas[$id], (array)$row);
         }
 
         /* Deal children datas and multiple tasks. */
@@ -593,43 +591,31 @@ class transferModel extends model
     }
 
     /**
+     * 获取查询数据。
      * Get query datas.
      *
      * @param  string $module
      * @access public
-     * @return void
+     * @return array
      */
-    public function getQueryDatas($module = '')
+    public function getQueryDatas(string $module = '')
     {
-        $queryCondition    = $this->session->{$module . 'QueryCondition'};
-        $onlyCondition     = $this->session->{$module . 'OnlyCondition'};
-        $transferCondition = $this->session->{$module . 'TransferCondition'};
+        $moduleDatas    = array();
+        $checkedItem    = $this->post->checkedItem ? $this->post->checkedItem : $this->cookie->checkedItem;
+        $onlyCondition  = $this->session->{$module . 'OnlyCondition'};
+        $queryCondition = $this->session->{$module . 'QueryCondition'};
 
-        $moduleDatas = array();
-
-        if($transferCondition)
-        {
-            $selectKey = 'id';
-            $stmt = $this->dbh->query($transferCondition);
-            while($row = $stmt->fetch())
-            {
-                if($selectKey !== 't1.id' and isset($row->$module) and isset($row->id)) $row->id = $row->$module;
-                $moduleDatas[$row->id] = $row;
-            }
-
-            return $moduleDatas;
-        }
-
+        /* 插入用例场景数据。*/
         /* Fetch the scene's cases. */
         if($module == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
 
-        $checkedItem = $this->post->checkedItem ? $this->post->checkedItem : $this->cookie->checkedItem;
-
-        if($onlyCondition and $queryCondition)
+        /* 根据SESSION中的条件查询数据。*/
+        /* Fetch datas by session condition. */
+        if($onlyCondition && $queryCondition)
         {
-            $table = zget($this->config->objectTables, $module);
-            if(isset($this->config->$module->transfer->table)) $table = $this->config->$module->transfer->table;
             if($module == 'story') $queryCondition = str_replace('story', 'id', $queryCondition);
+
+            $table       = zget($this->config->objectTables, $module); //获取对应的表
             $moduleDatas = $this->dao->select('*')->from($table)->alias('t1')
                 ->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
@@ -639,6 +625,9 @@ class transferModel extends model
         {
             $selectKey = 'id';
             if($module == 'testcase') $module = 'case';
+
+            /* 字段前加入表别名。*/
+            /* Add table alias to field. */
             preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 

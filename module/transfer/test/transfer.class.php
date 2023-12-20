@@ -118,4 +118,40 @@ class transferTest
 
         return $this->objectModel->setListValue($module, $fieldList);
     }
+
+    /**
+     * 测试getQueryDatas。
+     * Get query datas.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getQueryDatasTest(string $module = '', string $checkedItem = '')
+    {
+        global $tester;
+
+        /* 设置是否导出选中数据。*/
+        if($checkedItem)
+        {
+            $_POST['exportType']    = 'selected';
+            $_COOKIE['checkedItem'] = $checkedItem;
+        }
+
+        /* 设置task的查询条件(OnlyCondition/QueryCondition都存在时)。*/
+        if($module == 'task')
+        {
+            $execution = $tester->loadModel('execution');
+            $execution->getTasks(0, 101, array(), 'unclosed', 0, 0, '', null);
+        }
+
+        /* 设置story的查询条件(只有QueryCondition时)。*/
+        if($module == 'story')
+        {
+            $_SESSION['storyOnlyCondition']  = false;
+            $_SESSION['storyQueryCondition'] = "SELECT * FROM `zt_story` WHERE `status` = 'active'";
+        }
+
+        return $this->objectModel->getQueryDatas($module);
+    }
 }
