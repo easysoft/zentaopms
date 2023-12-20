@@ -6689,6 +6689,9 @@ class upgradeModel extends model
         $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
         if(!empty($dataviewData)) return true;
 
+        $this->loadModel('dataset');
+        $this->loadModel('dataview');
+
         $this->upgradeTao->ConvertBuiltInDataSet();
 
         $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
@@ -7890,6 +7893,10 @@ class upgradeModel extends model
     public function fixMissedFlowField()
     {
         if($this->config->edition == 'open' || !in_array($this->fromVersion, $this->config->upgrade->missedFlowFieldVersions)) return;
+
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $this->loadModel('workflowlayout');
 
         $this->upgradeTao->createModules2Workflow();
         $this->upgradeTao->createActions2Workflow();

@@ -39,9 +39,6 @@ class upgradeTao extends upgradeModel
      */
     protected function ConvertBuiltInDataSet(): void
     {
-        $this->loadModel('dataset');
-        $this->loadModel('dataview');
-
         $dataview = new stdclass();
         $dataview->group       = $this->getDataviewGroupID($this->lang->dataview->builtIn);
         $dataview->createdBy   = 'system';
@@ -108,8 +105,6 @@ class upgradeTao extends upgradeModel
      */
     protected function ConvertCustomDataSet(array $customDataset): void
     {
-        $this->loadModel('dataview');
-
         $dataview = new stdclass();
         $dataview->group = $this->getDataviewGroupID($this->lang->dataview->default);
 
@@ -324,8 +319,6 @@ class upgradeTao extends upgradeModel
      */
     protected function createModules2Workflow(): void
     {
-        $this->loadModel('workflow');
-
         $data = new stdclass();
         $data->vision      = 'rnd';
         $data->buildin     = 1;
@@ -361,8 +354,6 @@ class upgradeTao extends upgradeModel
      */
     protected function createActions2Workflow(): void
     {
-        $this->loadModel('workflowaction');
-
         $actions         = $this->config->workflowaction->buildin->actions;
         $actionTypes     = $this->config->workflowaction->buildin->types;
         $actionMethods   = $this->config->workflowaction->buildin->methods;
@@ -425,8 +416,6 @@ class upgradeTao extends upgradeModel
      */
     protected function createLayouts2Workflow(): void
     {
-        $this->loadModel('workflowlayout');
-
         $data = new stdclass();
         foreach($this->config->workflowlayout->buildin->layouts as $module => $moduleLayouts)
         {
