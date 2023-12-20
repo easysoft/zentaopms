@@ -1,0 +1,11 @@
+title: zt_user
+desc: 用户表
+author: Shujie Tian
+version: 1.0
+fields:
+  - field: id
+    range: "1-100"
+  - field: type
+    range: 'inside{10},outside{10}'
+  - field: company
+    range: 1

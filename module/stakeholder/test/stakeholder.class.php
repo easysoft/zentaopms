@@ -110,4 +110,22 @@ class stakeholderTest
         $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($stakeholderID)->andwhere('objectType')->eq('stakeholder')->fetchAll();
         return $objects;
     }
+
+    /**
+     * 获取干系人列表数据。
+     * Get stakeholder list.
+     *
+     * @param  int    $projectID
+     * @param  string $browseType all|inside|outside|key
+     * @param  string $sort
+     * @access public
+     * @return array
+     */
+    public function getStakeholdersTest(int $projectID, string $browseType, string $sort): array
+    {
+        $stakeholders = $this->objectModel->getStakeholders($projectID, $browseType, $sort);
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholders;
+    }
 }

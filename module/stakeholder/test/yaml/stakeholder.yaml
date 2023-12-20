@@ -1,14 +1,24 @@
 title: zt_stakeholder
 desc: 干系人表
-author: automated export
+author: Shujie Tian
 version: 1.0
 fields:
-  - field: objectID
+  - field: id
     range: "1-100"
+  - field: objectID
+    range: "1{10},11{10},60{10}"
+  - field: objectType
+    range: "program{10},project{20}"
   - field: user
     note: "用户名"
     fields:
     - field: account1
-      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+      range: admin,user{19}
     - field: account2
-      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
+      range: "[],1-19"
+  - field: type
+    range: "inside{5},outside{5}"
+  - field: key
+    range: '0,1'
+  - field: deleted
+    range: 0
