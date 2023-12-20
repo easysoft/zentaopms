@@ -20,15 +20,16 @@ formPanel
         set::label($lang->stakeholder->isKey),
         radioList(set::name('key'), set::items($lang->stakeholder->keyList), set::value($stakeholder->key), set::inline(true))
     ),
-    $stakeholder->type == 'outside' ? formGroup
+    $stakeholder->from == 'outside' ? formGroup
     (
         set::width('1/3'),
         setClass('user-info'),
         set::label($lang->stakeholder->name),
         set::name('name'),
-        set::value($stakeholder->name)
+        set::value($stakeholder->name),
+        set::required(true)
     ) : null,
-    $stakeholder->type == 'outside' ? formGroup
+    $stakeholder->from == 'outside' ? formGroup
     (
         set::width('1/3'),
         setClass('user-info'),
@@ -36,7 +37,7 @@ formPanel
         set::name('phone'),
         set::value($stakeholder->phone)
     ) : null,
-    $stakeholder->type == 'outside' ? formGroup
+    $stakeholder->from == 'outside' ? formGroup
     (
         set::width('1/3'),
         setClass('user-info'),
@@ -44,7 +45,7 @@ formPanel
         set::name('qq'),
         set::value($stakeholder->qq)
     ) : null,
-    $stakeholder->type == 'outside' ? formGroup
+    $stakeholder->from == 'outside' ? formGroup
     (
         set::width('1/3'),
         setClass('user-info'),
@@ -52,7 +53,7 @@ formPanel
         set::name('weixin'),
         set::value($stakeholder->weixin)
     ) : null,
-    $stakeholder->type == 'outside' ? formGroup
+    $stakeholder->from == 'outside' ? formGroup
     (
         set::width('1/3'),
         setClass('user-info'),
@@ -60,7 +61,7 @@ formPanel
         set::name('email'),
         set::value($stakeholder->email)
     ) : null,
-    $stakeholder->type == 'outside' ? formGroup
+    $stakeholder->from == 'outside' ? formGroup
     (
         set::width('1/3'),
         setClass('user-info'),
