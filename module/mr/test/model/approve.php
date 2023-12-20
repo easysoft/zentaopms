@@ -7,6 +7,10 @@ title=测试 mrModel::approve();
 timeout=0
 cid=0
 
+- 正常的合并请求审批拒绝属性message @保存成功
+- 正常的合并请求审批通过属性message @保存成功
+- 已合并状态的合并请求审批通过属性message @请勿重复操作
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

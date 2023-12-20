@@ -1024,13 +1024,16 @@ class mrModel extends model
      */
     public function close(object $MR): array
     {
+        $link = helper::createLink('mr', 'view', "mr={$MR->id}");
+        if($MR->status == 'closed') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
+
         $actionID = $this->loadModel('action')->create('mr', $MR->id, 'closed');
         $rawMR    = $this->apiCloseMR($MR->hostID, $MR->targetProject, $MR->mriid);
         $changes  = common::createChanges($MR, $rawMR);
         $this->action->logHistory($actionID, $changes);
 
-        if(isset($rawMR->state) && $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
-        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        if(isset($rawMR->state) && $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'load' => $link);
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => $link);
     }
 
     /**
@@ -1043,13 +1046,16 @@ class mrModel extends model
      */
     public function reopen(object $MR): array
     {
+        $link = helper::createLink('mr', 'view', "mr={$MR->id}");
+        if($MR->status == 'opened') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
+
         $actionID = $this->loadModel('action')->create('mr', $MR->id, 'reopen');
         $rawMR    = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
         $changes  = common::createChanges($MR, $rawMR);
         $this->action->logHistory($actionID, $changes);
 
-        if(isset($rawMR->state) && $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
-        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        if(isset($rawMR->state) && $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => $link);
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => $link);
     }
 
     /**

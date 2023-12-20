@@ -293,4 +293,36 @@ class mrTest
         $this->objectModel->dao->update(TABLE_MR)->set('status')->eq($MR->status)->set('approvalStatus')->eq('')->where('id')->eq($MRID)->exec();
         return $result;
     }
+
+    /**
+     * Test close method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function closeTester(int $MRID): array
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+
+        $result = $this->objectModel->close($MR);
+        if($MR->status != 'closed') $this->objectModel->reopen($MR);
+        return $result;
+    }
+
+    /**
+     * Test reopen method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function reopenTester(int $MRID): array
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+
+        $result = $this->objectModel->reopen($MR);
+        if($MR->status != 'opend') $this->objectModel->close($MR);
+        return $result;
+    }
 }
