@@ -367,4 +367,32 @@ class upgradeTest
         $this->objectModel->fromVersion = $version;
         $this->objectModel->addCreateAction4Story();
     }
+
+    /**
+     * 测试更新透视表中字段的类型。
+     * Test update pivot fields type.
+     *
+     * @access public
+     * @return void
+     */
+    public function updatePivotFieldsTypeTest(int $pivotID, array $changeFields, array $rightValue): bool
+    {
+        global $tester;
+
+        /* Init pivot table data. */
+        $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
+        $pivotSQL     = explode(";", file_get_contents($pivotSqlFile));
+        $tester->dao->delete()->from(TABLE_PIVOT)->exec();
+        $tester->dbh->exec($pivotSQL[1]);
+
+        $tester->dao->update(TABLE_PIVOT)->data($changeFields)->where('id')->eq($pivotID)->exec();
+
+        $this->objectModel->updatePivotFieldsType();
+
+        $afterUpdatePivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
+
+        $result = $afterUpdatePivot->fields == $rightValue[$pivotID]['fields'];
+        if(isset($rightValue[$pivotID]['langs'])) $result = $afterUpdatePivot->langs == $rightValue[$pivotID]['langs'];
+        return  $result;
+    }
 }

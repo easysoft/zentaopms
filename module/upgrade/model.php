@@ -8095,6 +8095,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 更新透视表中字段的类型。
      * Update pivot fields type, pivotID maybe is 1008,1012,1013,1015,1020,1027.
      *
      * @access public
@@ -8125,14 +8126,13 @@ class upgradeModel extends model
         foreach($fieldsPairs as $field)
         {
             $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('fields')->like("%{$field['beforefields']}%")->fetchAll();
-            if(count($pivot) > 1 or count($pivot) == 0) continue;
+            if(count($pivot) != 1) continue;
 
             $pivot = reset($pivot);
 
             $data = new stdclass();
             if(isset($field['fields'])) $data->fields = $field['fields'];
             if(isset($field['langs']))  $data->langs = $field['langs'];
-
             $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
         }
     }
