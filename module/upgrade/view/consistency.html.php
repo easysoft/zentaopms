@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php js::set('version', $version);?>
 <?php js::set('execFixSQL', !empty($alterSQL) && !$hasError);?>
 
 <div class='container'>
@@ -30,4 +29,7 @@
     </div>
   </form>
 </div>
+<script>
+version = "<?php echo $version;?>";
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>
