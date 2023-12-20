@@ -3269,16 +3269,17 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板组。
      * Get group list by region.
      *
-     * @param  int    $region
+     * @param  int    $regionID
      * @access public
      * @return array
      */
-    public function getGroupList($region)
+    public function getGroupList(int $regionID): array
     {
         return $this->dao->select('*')->from(TABLE_KANBANGROUP)
-            ->where('region')->eq($region)
+            ->where('region')->eq($regionID)
             ->orderBy('order')
             ->fetchAll('id');
     }
