@@ -1633,19 +1633,20 @@ class userModel extends model
      * 初始化访问权限所属的数据。
      * Init user view objects.
      *
+     * @param  bool    $force
      * @access private
      * @return array
      */
-    private function initViewObjects(): array
+    private function initViewObjects(bool $force = false): array
     {
         static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
-        if(!$allProducts) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy,reviewer,PMT')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
-        if(!$allProjects) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
-        if(!$allPrograms) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-        if(!$allSprints)  $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
+        if(!$allProducts || $force) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy,reviewer,PMT')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
+        if(!$allProjects || $force) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
+        if(!$allPrograms || $force) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
+        if(!$allSprints  || $force) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
 
-        if(!$teams)
+        if(!$teams || $force)
         {
             $teams = array();
             $stmt  = $this->dao->select('root,type,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
@@ -1653,7 +1654,7 @@ class userModel extends model
         }
 
         /* Get white list. */
-        if(!$whiteList)
+        if(!$whiteList || $force)
         {
             $whiteList = array();
             $stmt      = $this->dao->select('objectID,objectType,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint,product')->query();
@@ -1661,7 +1662,7 @@ class userModel extends model
         }
 
         /* Get stakeholders. */
-        if(!$stakeholders)
+        if(!$stakeholders || $force)
         {
             $stakeholders = array();
             $stmt         = $this->dao->select('objectID,objectType,user')->from(TABLE_STAKEHOLDER)->query();
@@ -1888,7 +1889,7 @@ class userModel extends model
         if(empty($userView) || $force)
         {
             /* Init objects. */
-            list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects();
+            list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
 
             /* Init user view. */
             $userView = new stdclass();
@@ -1927,42 +1928,59 @@ class userModel extends model
     }
 
     /**
-     * Get product teams and stakeholders.
+     * 获取产品关联的项目集干系人。
+     * Get program stakeholder.
      *
-     * @param  array $allProducts
-     * @access public
+     * @param  array   $programProduct
+     * @access private
      * @return array
      */
-    public function getProductMembers($allProducts)
+    private function getProgramStakeholder($programProduct): array
+    {
+        $stakeholderGroups = array();
+        $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('program')
+            ->andWhere('objectID')->in(array_keys($programProduct))
+            ->query();
+
+        while($programStakeholder = $stmt->fetch())
+        {
+            $productIDList = zget($programProduct, $programStakeholder->objectID, array());
+            foreach($productIDList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
+        }
+
+        $stmt = $this->dao->select('id,PM')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('id')->in(array_keys($programProduct))
+            ->query();
+
+        while($programOwner = $stmt->fetch())
+        {
+            $productIDList = zget($programProduct, $programOwner->id, array());
+            foreach($productIDList as $productID) $stakeholderGroups[$productID][$programOwner->PM] = $programOwner->PM;
+        }
+
+        return $stakeholderGroups;
+    }
+
+    /**
+     * Get product teams and stakeholders.
+     *
+     * @param  array   $allProducts
+     * @access private
+     * @return array
+     */
+    private function getProductMembers(array $allProducts): array
     {
         /* Get product and project relation. */
         $projectProducts = array();
-        $productProjects = array();
         $stmt = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->in(array_keys($allProducts))
             ->andWhere('t2.deleted')->eq('0')
             ->query();
-        while($projectProduct = $stmt->fetch())
-        {
-            $productProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
-            $projectProducts[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
-        }
 
-        /* Get linked projects teams. */
-        $teamGroups = array();
-        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('1=1')
-            ->andWhere('type')->eq('project')
-            ->andWhere('root')->in(array_keys($projectProducts))
-            ->andWhere('root')->ne(0)
-            ->query();
-
-        while($team = $stmt->fetch())
-        {
-            $productIdList = zget($projectProducts, $team->root, array());
-            foreach($productIdList as $productID) $teamGroups[$productID][$team->account] = $team->account;
-        }
+        while($projectProduct = $stmt->fetch()) $projectProducts[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
 
         /* Get linked projects stakeholders. */
         $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
@@ -1984,30 +2002,20 @@ class userModel extends model
         {
             if($product->program) $programProduct[$product->program][$product->id] = $product->id;
         }
+        if($programProduct) $stakeholderGroups = array_merge($stakeholderGroups, $this->getProgramStakeholder($programProduct));
 
-        if($programProduct)
+        /* Get linked projects teams. */
+        $teamGroups = array();
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
+            ->andWhere('root')->in(array_keys($projectProducts))
+            ->andWhere('root')->ne(0)
+            ->query();
+
+        while($team = $stmt->fetch())
         {
-            $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
-                ->where('objectType')->eq('program')
-                ->andWhere('objectID')->in(array_keys($programProduct))
-                ->query();
-
-            while($programStakeholder = $stmt->fetch())
-            {
-                $productIdList = zget($programProduct, $programStakeholder->objectID, array());
-                foreach($productIdList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
-            }
-
-            $sql = $this->dao->select('id,PM')->from(TABLE_PROGRAM)
-                ->where('type')->eq('program')
-                ->andWhere('id')->in(array_keys($programProduct))
-                ->query();
-
-            while($programOwner = $sql->fetch())
-            {
-                $productIdList = zget($programProduct, $programOwner->id, array());
-                foreach($productIdList as $productID) $stakeholderGroups[$productID][$programOwner->PM] = $programOwner->PM;
-            }
+            $productIdList = zget($projectProducts, $team->root, array());
+            foreach($productIdList as $productID) $teamGroups[$productID][$team->account] = $team->account;
         }
 
         return array($teamGroups, $stakeholderGroups);
