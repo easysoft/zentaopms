@@ -22,6 +22,7 @@ div
         (
             dtable
             (
+                setID('ajaxmetric' . $metric->id),
                 $viewType == 'multiple' ? set::height(328) : set::height(jsRaw('window.getTableHeight')),
                 set::rowHeight(32),
                 set::bordered(true),

@@ -198,6 +198,7 @@ div
         (
             dtable
             (
+                setID('ajaxmetric' . $metric->id),
                 set::height(328),
                 set::rowHeight(32),
                 set::bordered(true),
