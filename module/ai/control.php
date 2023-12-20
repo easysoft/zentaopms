@@ -168,36 +168,31 @@ class ai extends control
      */
     public function miniProgramChat($id)
     {
+        if(empty($_POST)) return $this->locate($this->createLink('ai', 'browseMiniProgram', "id=$id"));
+
         $miniProgram  = $this->ai->getMiniProgramByID($id);
+        if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->unpublishedTip, 'reason' => 'unpublished'));
 
-        if(!empty($_POST))
+        $history = $this->post->history;
+        $message = $this->post->message;
+        $isRetry = $this->post->retry == 'true';
+
+        $messages = json_decode($history);
+        if(!$isRetry)
         {
-            $messages = array();
-            if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->unpublishedTip, 'reason' => 'unpublished'));
-
-            $history = $this->post->history;
-            $message = $this->post->message;
-            $isRetry = $this->post->retry == 'true';
-
-            $messages = json_decode($history);
-            if(!$isRetry)
-            {
-                $messages[] = (object)array('role' => 'user', 'content' => $message);
-                if(!isset($this->post->test) || $this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'req', $message);
-            }
-            if($this->ai->isModelConfigured())
-            {
-                $response = $this->ai->converse($messages);
-                if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->chatNoResponse , 'reason' => 'no response'));
-
-                if(!isset($this->post->test) || $this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
-                return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/n/j G:i"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
-            }
-            else
-            {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'reason' => 'no model'));
-            }
+            $messages[] = (object)array('role' => 'user', 'content' => $message);
+            if(!isset($this->post->test) || $this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'req', $message);
         }
+        if($this->ai->isModelConfigured())
+        {
+            $response = $this->ai->converse($messages);
+            if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->chatNoResponse , 'reason' => 'no response'));
+
+            if(!isset($this->post->test) || $this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
+            return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/n/j G:i"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
+        }
+
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'reason' => 'no model'));
     }
 
     /**
@@ -219,50 +214,23 @@ class ai extends control
         if($category === '')
         {
             $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
-            $category = empty($collectedIDs)
-                ? 'discovery'
-                : 'collection';
+            $category = empty($collectedIDs) ? 'discovery' : 'collection';
         }
 
-        if($category === 'collection')
-        {
-            $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id, $pager);
-            $sortIDs = array_flip($collectedIDs);
-            $miniPrograms = $this->ai->getMiniProgramsByID($collectedIDs);
-            $sortedPrograms = array();
-            foreach ($miniPrograms as $program) $sortedPrograms[$sortIDs[$program->id]] = $program;
-            ksort($sortedPrograms);
-            $miniPrograms = $sortedPrograms;
-        }
-        else if($category === 'discovery')
-        {
-            $miniPrograms = $this->ai->getMiniPrograms('', 'active', 'createdDate_desc', $pager);
-        }
-        else if($category === 'latest')
-        {
-            $miniPrograms = $this->ai->getLatestMiniPrograms($pager);
-        }
-        else
-        {
-            $miniPrograms = $this->ai->getMiniPrograms($category, 'active', 'createdDate_desc', $pager);
-        }
+        if($category === 'collection') $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id, $pager);
+        elseif($collectedIDs === null) $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
 
-        $usedCustomCategories = $this->ai->getUsedCustomCategories();
-        $categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
-        $usedCustomCategoryList = array();
-        foreach($categoryList as $key => $value)
-        {
-            if(in_array($key, $usedCustomCategories)) $usedCustomCategoryList[$key] = $value;
-        }
-        $squareCategories = $this->lang->ai->miniPrograms->squareCategories;
-        $latestSum = $this->ai->countLatestMiniPrograms();
-        if(empty($collectedIDs)) $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
-        if(empty($collectedIDs)) unset($squareCategories['collection']);
-        if($latestSum == 0)      unset($squareCategories['latest']);
+        if($category === 'collection')     $miniPrograms = $this->ai->getMiniProgramsByID($collectedIDs, true);
+        else if($category === 'discovery') $miniPrograms = $this->ai->getMiniPrograms('', 'active', 'createdDate_desc', $pager);
+        else if($category === 'latest')    $miniPrograms = $this->ai->getLatestMiniPrograms($pager);
+        else                               $miniPrograms = $this->ai->getMiniPrograms($category, 'active', 'createdDate_desc', $pager);
+
+        $squareCategoryArray = $this->ai->getSquareCategoryArray();
+        $usedCategoryArray   = $this->ai->getUsedCategoryArray();
 
         $this->view->collectedIDs = $collectedIDs;
         $this->view->category     = $category;
-        $this->view->categoryList = array_merge($squareCategories, $usedCustomCategoryList);
+        $this->view->categoryList = array_merge($squareCategoryArray, $usedCategoryArray);
         $this->view->pager        = $pager;
         $this->view->miniPrograms = $miniPrograms ?: array();
         $this->view->title        = $this->lang->ai->miniPrograms->common;
@@ -491,7 +459,6 @@ class ai extends control
         $this->view->fields      = $this->ai->getMiniProgramFields($id);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->title       = "{$this->lang->ai->miniPrograms->common}#{$miniProgram->id} $miniProgram->name";
-
         $this->display();
     }
 

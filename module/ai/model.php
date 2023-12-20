@@ -12,6 +12,14 @@
 class aiModel extends model
 {
     /**
+     * Action model.
+     *
+     * @var actionModel
+     * @access public
+     */
+    public $action;
+
+    /**
      * Model config.
      *
      * @var    object
@@ -330,9 +338,15 @@ class aiModel extends model
             ->fetchAll();
     }
 
+    /**
+     * Count latest mini programs.
+     *
+     * @access public
+     * @return int
+     */
     public function countLatestMiniPrograms()
     {
-        return $this->dao->select('COUNT(*) as count')
+        return (int)$this->dao->select('COUNT(*) as count')
             ->from(TABLE_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
@@ -340,6 +354,15 @@ class aiModel extends model
             ->fetch('count');
     }
 
+    /**
+     * Save mini program message.
+     *
+     * @param string $appID
+     * @param string $type
+     * @param string $content
+     * @access public
+     * @return bool
+     */
     public function saveMiniProgramMessage($appID, $type, $content)
     {
         $message = new stdClass();
@@ -355,6 +378,33 @@ class aiModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Delete history messages by id.
+     *
+     * @param string $appID
+     * @param string $userID
+     * @param array  $messageIDs
+     * @access public
+     * @return void
+     */
+    public function deleteHistoryMessagesByID($appID, $userID, $messageIDs)
+    {
+        $this->dao->delete()
+            ->from(TABLE_AIMESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('user')->eq($userID)
+            ->andWhere('id')->notin($messageIDs)
+            ->exec();
+    }
+
+    /**
+     * Get history messages.
+     *
+     * @param string $appID
+     * @param int    $limit
+     * @access public
+     * @return array
+     */
     public function getHistoryMessages($appID, $limit = 20)
     {
         $messages = $this->dao->select('*')
@@ -366,18 +416,12 @@ class aiModel extends model
             ->fetchAll();
 
         $messageIDs = array();
-        foreach ($messages as $message)
+        foreach($messages as $message)
         {
             $message->createdDate = date('Y/n/j G:i', strtotime($message->createdDate));
             $messageIDs[] = $message->id;
         }
-
-        $this->dao->delete()
-            ->from(TABLE_AIMESSAGE)
-            ->where('appID')->eq($appID)
-            ->andWhere('user')->eq($this->app->user->id)
-            ->andWhere('id')->notin($messageIDs)
-            ->exec();
+        $this->deleteHistoryMessagesByID($appID, $this->app->user->id, $messageIDs);
 
         return $messages;
     }
@@ -386,15 +430,23 @@ class aiModel extends model
      * Get mini programs by appid.
      *
      * @param array $ids
+     * @param bool $sort
      * @access public
-     * @return object
+     * @return array
      */
-    public function getMiniProgramsByID($ids)
+    public function getMiniProgramsByID($ids, $sort = false)
     {
-        return $this->dao->select('*')
+        $miniPrograms = $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
             ->where('id')->in($ids)
             ->fetchAll();
+        if(!$sort) return $miniPrograms;
+
+        $sortIDs = array_flip($ids);
+        $sortedPrograms = array();
+        foreach($miniPrograms as $program) $sortedPrograms[$sortIDs[$program->id]] = $program;
+        ksort($sortedPrograms);
+        return $sortedPrograms;
     }
 
     /**
@@ -488,8 +540,48 @@ class aiModel extends model
     {
         $categories = $this->dao->select('distinct `category`')
             ->from(TABLE_MINIPROGRAM)
+            ->where('published')->eq('1')
             ->fetchAll('category');
         return array_keys($categories);
+    }
+
+    /**
+     * Get used category array.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUsedCategoryArray()
+    {
+        $usedCustomCategories = $this->getUsedCustomCategories();
+        $categoryArray = array_merge($this->lang->ai->miniPrograms->categoryList, $this->getCustomCategories());
+
+        $usedCategoryArray = array();
+        foreach($categoryArray as $key => $value)
+        {
+            if(in_array($key, $usedCustomCategories)) $usedCategoryArray[$key] = $value;
+        }
+        return $usedCategoryArray;
+    }
+
+    /**
+     * Get square category array.
+     *
+     * @param array $collectedIDs
+     * @param int   $latestSum
+     * @access public
+     * @return array
+     */
+    public function getSquareCategoryArray($collectedIDs = null, $latestSum = null)
+    {
+        $squareCategoryArray = $this->lang->ai->miniPrograms->squareCategories;
+
+        if($collectedIDs === null) $collectedIDs = $this->getCollectedMiniProgramIDs($this->app->user->id);
+        if($latestSum === null)    $latestSum    = $this->countLatestMiniPrograms();
+
+        if(empty($collectedIDs))   unset($squareCategoryArray['collection']);
+        if($latestSum == 0)        unset($squareCategoryArray['latest']);
+        return $squareCategoryArray;
     }
 
     /**

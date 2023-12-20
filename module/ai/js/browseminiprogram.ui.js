@@ -4,6 +4,7 @@ let firstGenerate = true;
 let messageList = [];
 
 /**
+ * Format datetime.
  *
  * @param {Date?} date
  * @returns {string}
@@ -22,6 +23,11 @@ function formatDateTime(date = new Date())
     return `${formattedDate} ${formattedTime}`;
 }
 
+/**
+ * Get form value map.
+ *
+ * @returns {Map<string, string>}
+ */
 function getFormValue()
 {
     /**
@@ -82,12 +88,20 @@ function checkRequiredFields(requiredFieldNames, fields)
     return true;
 }
 
+/**
+ * Clear error tip.
+ */
 function clearErrorTip()
 {
     $('.form-container').find('.has-error').removeClass('has-error');
     $('.form-container').find('.form-tip').remove();
 }
 
+/**
+ * Send message to ai.
+ *
+ * @param {string} message
+ */
 function sendMessagesToAI(message)
 {
     const curMsgObj = {
@@ -215,6 +229,7 @@ window.aiBrowseMiniProgram.handleRestBtnClick = function()
 let composing = false;
 
 /**
+ * Handle input box enter.
  *
  * @param {KeyboardEvent} event
  */
@@ -250,9 +265,11 @@ window.aiBrowseMiniProgram.handleInputCompositionEnd = function()
 };
 
 /**
+ * Rest input box height.
+ *
  * @param {Event} event
  */
-window.aiBrowseMiniProgram.handleInput = function(event)
+window.aiBrowseMiniProgram.resetInputHeight = function(event)
 {
     /**
      * @type {HTMLTextAreaElement}
@@ -268,6 +285,7 @@ window.aiBrowseMiniProgram.backToSquare = function()
 };
 
 /**
+ * Create message avatar.
  *
  * @param {'ai'|'user'} role
  * @returns {jQuery}
@@ -288,6 +306,7 @@ function createAvatar(role)
 }
 
 /**
+ * Create message time.
  *
  * @param {string} time
  * @returns {jQuery}
@@ -298,6 +317,7 @@ function createMessageTime(time)
 }
 
 /**
+ * Create message content.
  *
  * @param {'user'|'ai'} role
  * @param {string} content
@@ -309,6 +329,7 @@ function createMessageContent(role, content)
 }
 
 /**
+ * Create message body.
  *
  * @param {'user'|'ai'} role
  * @param {string} content
@@ -325,6 +346,7 @@ function createMessageBody(role, content, time)
 }
 
 /**
+ * Create message.
  *
  * @param {'user'|'ai'} role
  * @param {string} content
@@ -340,11 +362,23 @@ function createMessage(role, content, time = formatDateTime())
         .append($body);
 }
 
+/**
+ * Create local notification.
+ *
+ * @param {string} content
+ * @returns {jQuery}
+ */
 function createLocalNotification(content)
 {
     return $(`<div class="local-notification"><span>${content}</span></div>`);
 }
 
+/**
+ * Create server notification.
+ * 
+ * @param {string} content
+ * @returns {jQuery}
+ */
 function createServerNotification(content)
 {
     return $(`<div class="server-notification">${content}</div>`);
@@ -388,7 +422,7 @@ $(function()
     if(!$inputBox.attr('data-bind'))
     {
         $inputBox
-            .on('input', window.aiBrowseMiniProgram.handleInput)
+            .on('input', window.aiBrowseMiniProgram.resetInputHeight)
             .on('keydown', window.aiBrowseMiniProgram.handleInputEnter)
             .on('compositionstart', window.aiBrowseMiniProgram.handleInputCompositionStart)
             .on('compositionend', window.aiBrowseMiniProgram.handleInputCompositionEnd);
