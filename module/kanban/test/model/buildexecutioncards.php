@@ -27,12 +27,24 @@ cid=1
 - 构造看板的任务卡片
  - 属性id @3
  - 属性title @任务3
-- 构造迭代的任务卡片 @0
-- 构造阶段的任务卡片 @0
-- 构造看板的任务卡片 @0
-- 构造迭代的任务卡片 @0
-- 构造阶段的任务卡片 @0
-- 构造看板的任务卡片 @0
+- 构造迭代的任务卡片
+ - 属性id @1
+ - 属性title @任务1
+- 构造阶段的任务卡片
+ - 属性id @2
+ - 属性title @任务2
+- 构造看板的任务卡片
+ - 属性id @3
+ - 属性title @任务3
+- 构造迭代的任务卡片
+ - 属性id @1
+ - 属性title @任务1
+- 构造阶段的任务卡片
+ - 属性id @2
+ - 属性title @任务2
+- 构造看板的任务卡片
+ - 属性id @3
+ - 属性title @任务3
 
 */
 
@@ -45,9 +57,9 @@ $kanbanTester = new kanbanTest();
 r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[0], $cardIdList)[1][1][0]) && p('id,title') && e('1,任务1'); // 构造迭代的任务卡片
 r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[0], $cardIdList)[2][1][0]) && p('id,title') && e('2,任务2'); // 构造阶段的任务卡片
 r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[0], $cardIdList)[3][1][0]) && p('id,title') && e('3,任务3'); // 构造看板的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[1], $cardIdList)[1][1][0]) && p('')         && e('0');       // 构造迭代的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[1], $cardIdList)[2][1][0]) && p('')         && e('0');       // 构造阶段的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[1], $cardIdList)[3][1][0]) && p('')         && e('0');       // 构造看板的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[2], $cardIdList)[1][1][0]) && p('')         && e('0');       // 构造迭代的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[2], $cardIdList)[2][1][0]) && p('')         && e('0');       // 构造阶段的任务卡片
-r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[2], $cardIdList)[3][1][0]) && p('')         && e('0');       // 构造看板的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[1], $cardIdList)[1][2][0]) && p('id,title') && e('1,任务1'); // 构造迭代的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[1], $cardIdList)[2][2][0]) && p('id,title') && e('2,任务2'); // 构造阶段的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[1], $cardIdList)[3][2][0]) && p('id,title') && e('3,任务3'); // 构造看板的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[2], $cardIdList)[1][3][0]) && p('id,title') && e('1,任务1'); // 构造迭代的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[2], $cardIdList)[2][3][0]) && p('id,title') && e('2,任务2'); // 构造阶段的任务卡片
+r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[2], $cardIdList)[3][3][0]) && p('id,title') && e('3,任务3'); // 构造看板的任务卡片
