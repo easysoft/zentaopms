@@ -23,6 +23,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/mr.class.php';
 
 zdTable('pipeline')->gen(5);
+su('admin');
 
 $mrModel = new mrTest();
 
@@ -42,8 +43,8 @@ $projectID = array
 
 $mrID = array
 (
-    'gitlab' => 114,
-    'gitea'  => 18,
+    'gitlab' => 138,
+    'gitea'  => 28,
     'gogs'   => 18,
 );
 

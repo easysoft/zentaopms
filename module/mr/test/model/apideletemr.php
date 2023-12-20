@@ -34,11 +34,11 @@ $gogsProjectID   = 'easycorp/unittest';
 
 $params = new stdClass();
 $params->title              = 'test';
-$params->sourceBranch       = 'test';
+$params->sourceBranch       = 'main';
 $params->targetBranch       = 'master';
 $params->targetProject      = $gitlabProjectID;
 $params->description        = 'This is a test merge request';
-$params->assignee           = 'user1';
+$params->assignee           = '';
 $params->removeSourceBranch = 0;
 $params->squash             = 0;
 

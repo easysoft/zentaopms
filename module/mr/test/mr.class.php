@@ -15,6 +15,11 @@ class mrTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('mr');
+
+        /* Init gitlab mr data. */
+        $this->objectModel->apiReopenMR(1, '3', 36);
+        $this->objectModel->apiCloseMR(1, '3', 38);
+        $this->objectModel->apiCloseMR(1, '3', 138);
     }
 
     /**
@@ -30,6 +35,8 @@ class mrTest
         $result = $this->objectModel->apiCreate();
         if(!$result) return dao::getError();
 
+        $MR = $this->objectModel->fetchByID($result);
+        $this->objectModel->apiDeleteMR($MR->hostID, $MR->sourceProject, $MR->mriid);
         return true;
     }
 
@@ -306,7 +313,7 @@ class mrTest
         $MR = $this->objectModel->fetchByID($MRID);
 
         $result = $this->objectModel->close($MR);
-        if($MR->status != 'closed') $this->objectModel->reopen($MR);
+        if($MR->status != 'closed') $this->objectModel->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
         return $result;
     }
 

@@ -24,6 +24,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/mr.class.php';
 
 zdTable('pipeline')->gen(5);
+su('admin');
 
 $mrModel = new mrTest();
 
@@ -45,8 +46,8 @@ $projectID = array
 $mrID = array
 (
     'gitlab' => 114,
-    'gitea'  => 18,
-    'gogs'   => 18,
+    'gitea'  => 20,
+    'gogs'   => 20,
 );
 
 r($mrModel->apiCloseMrTester($hostID['error'], $projectID['gitlab'], $mrID['gitlab'])) && p() && e('0'); // 不存在的主机

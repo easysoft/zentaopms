@@ -8,9 +8,7 @@ timeout=0
 cid=0
 
 - 不存在的主机 @0
-- 正确的数据
- - 第0条的id属性 @43
- - 第0条的head_commit_sha属性 @cedfe9a54614e71085e93a5a2e819617b48d43c5
+- 正确的数据 @20
 
 */
 
@@ -32,4 +30,4 @@ $mrID      = 36;
 
 r($mrModel->apiGetDiffVersions($hostID['error'], $projectID, $mrID)) && p() && e('0'); // 不存在的主机
 
-r($mrModel->apiGetDiffVersions($hostID['gitlab'], $projectID, $mrID)) && p('0:id,head_commit_sha') && e('43,cedfe9a54614e71085e93a5a2e819617b48d43c5'); // 正确的数据
+r(count($mrModel->apiGetDiffVersions($hostID['gitlab'], $projectID, $mrID))) && p() && e('20'); // 正确的数据

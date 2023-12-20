@@ -17,6 +17,7 @@ include dirname(__FILE__, 2) . '/mr.class.php';
 
 $mr = zdTable('mr')->config('mr');
 $mr->hostID->range('1');
+$mr->mriid->range('0,37,38');
 $mr->sourceProject->range('3');
 $mr->gen(3);
 su('admin');

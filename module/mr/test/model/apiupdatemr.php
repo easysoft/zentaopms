@@ -40,7 +40,7 @@ $gogsProjectID   = 'easycorp/unittest';
 
 $newMR = new stdclass();
 $newMR->title              = 'test';
-$newMR->assignee           = 'user1';
+$newMR->assignee           = '';
 $newMR->description        = '';
 $newMR->removeSourceBranch = '0';
 $newMR->squash             = '0';
