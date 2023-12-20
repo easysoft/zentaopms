@@ -55,27 +55,25 @@ class stakeholderTest
     }
 
     /**
-     * Function edit test by stakeholder
+     * 编辑一个干系人。
+     * Edit a stakeholder.
      *
-     * @param  int   $stakeholderID
-     * @param  array $param
+     * @param  int        $stakeholderID
+     * @param  array      $params
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function editTest($stakeholderID, $param = array())
+    public function editTest($stakeholderID, $params = array()): array|bool
     {
-        $createFields = array('key' => '', 'nature' => '', 'analysis' => '', 'strategy' => '');
+        $postData     = new stdclass();
+        $defaultField = array('key' => 0, 'nature' => '', 'analysis' => '', 'strategy' => '', 'name' => '', 'phone' => '', 'qq' => '', 'weixin' => '', 'email' => '');
+        foreach($defaultField as $field => $defaultValue) $postData->{$field} = $defaultValue;
+        foreach($params as $key => $value) $postData->{$key} = $value;
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->edit($stakeholderID);
-
-        unset($_POST);
+        $changes = $this->objectModel->edit($stakeholderID, $postData);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $changes;
     }
 
     /**

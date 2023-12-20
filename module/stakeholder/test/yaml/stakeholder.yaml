@@ -20,5 +20,7 @@ fields:
     range: "inside{5},outside{5}"
   - field: key
     range: '0,1'
+  - field: from
+    range: "team{5},company{2},outside{3}"
   - field: deleted
     range: 0
