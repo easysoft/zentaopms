@@ -967,10 +967,17 @@ class mr extends control
 
         /* Get tasks by executions. */
         $allTasks = array();
-        foreach($productExecutionIDs as $productExecutionID)
+        if($browseType == 'bysearch')
         {
-            $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-            $allTasks = array_merge($tasks, $allTasks);
+            $allTasks = $this->loadModel('execution')->getTasks(0, 0, array(), $browseType, $queryID, 0, $orderBy, null);
+        }
+        else
+        {
+            foreach($productExecutionIDs as $productExecutionID)
+            {
+                $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+                $allTasks = array_merge($tasks, $allTasks);
+            }
         }
         /* Filter linked tasks. */
         $linkedTaskIDs = array_keys($linkedTasks);
