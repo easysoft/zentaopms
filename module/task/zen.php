@@ -460,7 +460,7 @@ class taskZen extends task
             ->join('mailto', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], (string)$this->post->uid);
     }
 
     /**
@@ -566,7 +566,7 @@ class taskZen extends task
             ->get();
 
         /* Processing image link. */
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], (string)$this->post->uid);
 
         /* Check if the input post data meets the requirements. */
         $this->checkCreateTask($task);
@@ -623,7 +623,7 @@ class taskZen extends task
         $task = form::data()->add('id', $taskID)->get();
         unset($task->comment);
 
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], (string)$this->post->uid);
     }
 
     /**
@@ -641,7 +641,7 @@ class taskZen extends task
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
             ->get();
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], (string)$this->post->uid);
         if($task->left == 0 && empty($oldTask->team))
         {
             $task->status       = 'done';
@@ -682,7 +682,7 @@ class taskZen extends task
             ->remove('comment')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->cancel['id'], (string)$this->post->uid);
     }
 
     /**
@@ -825,7 +825,7 @@ class taskZen extends task
             ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel')
             ->get();
 
-        return  $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], $this->post->uid);
+        return  $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], (string)$this->post->uid);
     }
 
     /**
