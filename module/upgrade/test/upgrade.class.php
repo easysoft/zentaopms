@@ -468,4 +468,28 @@ class upgradeTest
     {
         return $this->objectModel->getNoMergedProductCount();
     }
+
+    /**
+     * 测试计算项目、产品、迭代的成员。
+     * Test compute project, product and sprint members.
+     *
+     * @param  bool   $execute
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return string
+     */
+    public function computeObjectMembersTest(bool $execute = false, int $objectID = 0, string $objectType = ''): string
+    {
+        if($execute) $this->objectModel->computeObjectMembers();
+        $return = '';
+        if($objectID && $objectType)
+        {
+            global $tester;
+            $acls  = $tester->dao->select('account')->from(TABLE_ACL)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetchPairs();
+            $teams = $tester->dao->select('account')->from(TABLE_TEAM)->where('type')->eq($objectType)->andWhere('root')->eq($objectID)->fetchPairs();
+            $return = 'acls:' . implode(',', $acls) . ';' . 'teams:' . implode(',', $teams);
+        }
+        return $return;
+    }
 }
