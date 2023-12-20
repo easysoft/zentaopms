@@ -635,6 +635,8 @@ class userModel extends model
      */
     public function update(object $user): bool
     {
+        $oldUser = $this->getById($user->id, 'id');
+
         $this->checkBeforeCreateOrEdit($user, true);
 
         $this->dao->begin();
@@ -671,14 +673,13 @@ class userModel extends model
 
         /* 更新用户组和用户视图并记录积分和日志。*/
         /* Update user group and user view, and save log and score. */
-        $oldUser = $this->getById($user->id, 'id');
         $this->checkAccountChange($oldUser->account, $user->account);
         $this->checkGroupChange($user);
         $this->loadModel('score')->create('user', 'editProfile');
-        $changes = common::createChanges($user, $oldUser);
+        $changes = common::createChanges($oldUser, $user);
         if($changes)
         {
-            $actionID = $this->action->create('user', $user->id, 'edited');
+            $actionID = $this->loadModel('action')->create('user', $user->id, 'edited');
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -724,7 +725,7 @@ class userModel extends model
             $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
             if(dao::isError()) return false;
 
-            $this->app->user->account = $newAccount;
+            $this->app->company->admins = $admins;
         }
         return !dao::isError();
     }
