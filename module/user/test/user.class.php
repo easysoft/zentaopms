@@ -245,34 +245,28 @@ class userTest
     }
 
     /**
+     * 测试批量创建用户。
      * Test batch create users.
      *
+     * @param  array  $users
+     * @param  string $verifyPassword
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchCreateUserTest($params = array())
+    public function batchCreateTest(array $users, string $verifyPassword): array
     {
-        $_POST  = $params;
-        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
-        $_POST['userType']       = 'inside';
-
         global $tester;
-        $tester->config->user->batchCreate = count($_POST['account']);
+        $tester->config->user->batchCreate = count($users);
 
-        $userIDList = $this->objectModel->batchCreate();
-        unset($_POST);
+        $result = $this->objectModel->batchCreate($users, $verifyPassword);
+        $errors = dao::getError();
 
-        if(dao::isError())
+        foreach($errors as $key => $error)
         {
-            return dao::getError();
+            if(is_array($error)) $errors[$key] = implode('', $error);
         }
-        else
-        {
-            $users = array();
-            foreach($userIDList as $userID) $users[] = $this->objectModel->getByID($userID, 'id');
 
-            return $users;
-        }
+        return array('result' => (is_array($result) && !empty($result)) ? implode(',', $result) : (int)$result, 'errors' => $errors);
     }
 
     /**
