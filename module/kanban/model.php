@@ -143,7 +143,7 @@ class kanbanModel extends model
         }
         elseif($from == 'kanban')
         {
-            $groupID = $this->createGroup($kanban->id, $regionID);
+            $groupID = $this->createGroup((int)$kanban->id, $regionID);
             if(dao::isError()) return false;
 
             $this->createDefaultLane($regionID, $groupID);
@@ -171,16 +171,16 @@ class kanbanModel extends model
     public function copyRegion(object $kanban, int $regionID, int $copyRegionID, string $from = 'kanban', string $param = '')
     {
         /* Gets the groups, lanes and columns of the replication region. */
-        $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
-        $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
-        $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc', $param);
+        $copyGroups      = $this->getGroupGroupByRegions((array)$copyRegionID);
+        $copyLaneGroup   = $this->getLaneGroupByRegions((array)$copyRegionID);
+        $copyColumnGroup = $this->getColumnGroupByRegions((array)$copyRegionID, 'id_asc', $param);
 
         /* Create groups, lanes, and columns. */
         if(empty($copyGroups)) return $regionID;
 
         foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
         {
-            $newGroupID = $this->createGroup($kanban->id, $regionID);
+            $newGroupID = $this->createGroup((int)$kanban->id, $regionID);
             if(dao::isError()) return false;
 
             $copyLanes     = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
@@ -236,7 +236,7 @@ class kanbanModel extends model
             $copyLane->region         = $regionID;
             $copyLane->group          = $newGroupID;
             $copyLane->lastEditedTime = helper::now();
-            $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane, 'copy');
+            $lanePairs[$laneID] = $this->createLane((int)$kanban->id, $regionID, $copyLane, 'copy');
             if(dao::isError()) return false;
         }
 
@@ -368,7 +368,7 @@ class kanbanModel extends model
         if(isset($column->parent) and $column->parent > 0)
         {
             /* Create a child column. */
-            $parentColumn = $this->getColumnByID($column->parent);
+            $parentColumn = $this->getColumnByID((int)$column->parent);
             if($parentColumn->limit != -1)
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
@@ -953,7 +953,7 @@ class kanbanModel extends model
      * @access public
      * @return object
      */
-    public function getRegionByID(int $regionID): object
+    public function getRegionByID(int $regionID)
     {
         return $this->dao->findByID($regionID)->from(TABLE_KANBANREGION)->fetch();
     }

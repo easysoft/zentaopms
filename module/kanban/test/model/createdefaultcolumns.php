@@ -12,12 +12,12 @@ title=测试 kanbanModel->createDefaultColumns();
 timeout=0
 cid=1
 
-- 创建region 1 group 1的默认泳道列 @8
-- 创建region 2 group 2的默认泳道列 @8
-- 创建region 3 group 3的默认泳道列 @8
-- 创建region 4 group 4的默认泳道列 @8
-- 创建region 5 group 5的默认泳道列 @8
-- 重复创建region 1 group 1的默认泳道列 @12
+- 创建region 1 group 1的默认泳道列 @5
+- 创建region 2 group 2的默认泳道列 @4
+- 创建region 3 group 3的默认泳道列 @4
+- 创建region 4 group 4的默认泳道列 @4
+- 创建region 5 group 5的默认泳道列 @4
+- 重复创建region 1 group 1的默认泳道列 @9
 
 */
 

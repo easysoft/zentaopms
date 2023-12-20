@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 kanbanModel->copyColumns();
 timeout=0
 cid=1
@@ -9,6 +11,7 @@ cid=1
 - 正常复制看板列，最后一个看板列的名字第8条的name属性 @复制看板列4
 - 复制空看板列，没有条目被插入 @0
 - 复制空看板列，应该返回错误信息第name条的0属性 @『看板列名称』不能为空。
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

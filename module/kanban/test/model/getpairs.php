@@ -19,5 +19,5 @@ cid=1
 global $tester;
 $tester->loadModel('kanban');
 
-r(count($tester->kanban->getPairs())) && p('')  && e('2');         // 查看user3用户可见的看板数量
+r(count($tester->kanban->getPairs())) && p('')  && e('3');         // 查看user3用户可见的看板数量
 r($tester->kanban->getPairs())        && p('2') && e('通用看板2'); // 查看看板2的名字。

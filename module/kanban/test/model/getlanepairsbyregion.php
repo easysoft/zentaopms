@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
 zdTable('kanbanregion')->gen(10);
+zdTable('kanbanlane')->config('rdkanbanlane')->gen(10);
 
 /**
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 kanbanModel->sortGroup();
 timeout=0
 cid=1
@@ -14,6 +16,7 @@ cid=1
 - 更新不存在的ID，排序不变
  - 属性1 @2
  - 属性101 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

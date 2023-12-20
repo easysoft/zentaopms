@@ -1201,57 +1201,6 @@ class kanbanTest
     }
 
     /**
-     * Test set kanban lane height.
-     *
-     * @param  int    $kanbanID
-     * @param  string $heightType
-     * @param  int    $displayCards
-     * @param  string $from
-     * @access public
-     * @return object
-     */
-    public function setLaneHeightTest($kanbanID, $heightType, $displayCards, $from = 'kanban')
-    {
-        $_POST['heightType']   = $heightType;
-        $_POST['displayCards'] = $displayCards;
-
-        $this->objectModel->setLaneHeight($kanbanID, $from);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        global $tester;
-        $table = $tester->config->objectTables[$from];
-        $object = $tester->dao->select('*')->from($table)->where('id')->eq($kanbanID)->fetch();
-        return $object;
-    }
-
-    /**
-     * Test set column width.
-     *
-     * @param  int    $kanbanID
-     * @param  string $from
-     * @access public
-     * @return object
-     */
-    public function setColumnWidthTest($kanbanID, $fluidBoard, $from = 'kanban')
-    {
-        $_POST['fluidBoard'] = $fluidBoard;
-
-        $this->objectModel->setColumnWidth($kanbanID, $from);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        global $tester;
-        $table = $tester->config->objectTables[$from];
-        $object = $tester->dao->select('*')->from($table)->where('id')->eq($kanbanID)->fetch();
-        return $object;
-    }
-
-    /**
      * Test sort kanban group;
      *
      * @param  int    $region
@@ -1634,29 +1583,6 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         return $result ? 1 : 2;
-    }
-
-    /**
-     * Test import.
-     *
-     * @param  int $kanbanID
-     * @access public
-     * @return object
-     */
-    public function importTest($kanbanID, $import, $importObjectList)
-    {
-        $_POST['import']           = $import;
-        $_POST['importObjectList'] = $importObjectList;
-
-        $this->objectModel->import($kanbanID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        $object = $this->objectModel->getByID($kanbanID);
-        $object->object = !empty($object->object) ? $object->object : 0;
-        return $object;
     }
 
     /**
