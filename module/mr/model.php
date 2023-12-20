@@ -923,9 +923,9 @@ class mrModel extends model
      * @param  string $projectID
      * @param  int    $MRID
      * @access public
-     * @return array
+     * @return array|null
      */
-    public function apiGetDiffVersions(int $hostID, string $projectID, int $MRID): array
+    public function apiGetDiffVersions(int $hostID, string $projectID, int $MRID): array|null
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions");
         return json_decode(commonModel::http($url));
@@ -940,9 +940,9 @@ class mrModel extends model
      * @param  int    $MRID
      * @param  int    $versionID
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiGetSingleDiffVersion(int $hostID, string $projectID, int $MRID, int $versionID): object
+    public function apiGetSingleDiffVersion(int $hostID, string $projectID, int $MRID, int $versionID): object|null
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
         return json_decode(commonModel::http($url));
