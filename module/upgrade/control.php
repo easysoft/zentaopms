@@ -379,7 +379,8 @@ class upgrade extends control
     {
         if($_POST)
         {
-            $this->upgrade->mergeRepo();
+            $postData = form::data($this->config->upgrade->form->mergetRepo)->get();
+            $this->upgrade->mergeRepo(array_keys($postData->repoes), $postData->products);
             return $this->send(array('result' => 'success', 'load' => inlink('mergeRepo')));
         }
 

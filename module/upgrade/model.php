@@ -4051,18 +4051,17 @@ class upgradeModel extends model
     }
 
     /**
+     * 合并代码库。
      * Merge repo.
      *
+     * @param  array  $repoes
+     * @param  string $products
      * @access public
      * @return void
      */
-    public function mergeRepo()
+    public function mergeRepo(array $repoes, string $products): void
     {
-        $data = fixer::input('post')
-            ->join('products', ',')
-            ->get();
-
-        foreach($data->repoes as $repoID => $status) $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
+        foreach($repoes as $repoID) $this->dao->update(TABLE_REPO)->set('product')->eq($products)->where('id')->eq($repoID)->exec();
     }
 
     /**
@@ -4978,7 +4977,7 @@ class upgradeModel extends model
                 fclose($handle);
 
                 /* If the current file isn't encrypted and the file isn't the system file, append it to pluginFiles. */
-                if(strpos($line, '<?php //') === false)
+                if(is_string($line) && strpos($line, '<?php //') === false)
                 {
                     $systemFiles = file_get_contents('systemfiles.txt');
                     $systemFiles = str_replace('/', DS, $systemFiles);
