@@ -339,4 +339,18 @@ class upgradeTest
         $afterUpdatePivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($changeFields['id'])->fetch();
         return $afterUpdatePivot;
     }
+
+    /**
+     * 测试获取自定义的模块。
+     * Test get custom modules.
+     *
+     * @param  array  $allModules
+     * @access public
+     * @return string
+     */
+    public function getCustomModulesTest(array $allModules): string
+    {
+        $return = $this->objectModel->getCustomModules($allModules);
+        return implode(',', $return);
+    }
 }

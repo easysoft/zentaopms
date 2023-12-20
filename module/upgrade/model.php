@@ -5039,22 +5039,25 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取自定义的模块。
      * Get custom modules.
      *
      * @param  array  $allModules
      * @access public
      * @return array
      */
-    public function getCustomModules($allModules)
+    public function getCustomModules(array $allModules): array
     {
+        /* Get system files. */
+        $systemFiles = file_get_contents($this->app->getModuleRoot() . 'upgrade/systemfiles.txt');
+        $systemFiles = str_replace('/', DS, $systemFiles);
+
         $customModules = array();
-        $systemFiles   = file_get_contents('systemfiles.txt');
-        $systemFiles   = str_replace('/', DS, $systemFiles);
         foreach($allModules as $modulePath)
         {
-            $customFiles = array();
-            $module      = basename($modulePath);
-            if(!in_array($module, $this->config->upgrade->openModules) and !preg_match("#$module(/[a-z]*)*(/[a-z]+.[a-z]+)+#", $systemFiles)) $customModules[$module] = $module;
+            $module = basename($modulePath);
+            /* If the module isn't the open module and doesn't exist in the system files, it's the custom module. */
+            if(!in_array($module, $this->config->upgrade->openModules) && !preg_match("#{$module}(/[a-z]*)*(/[a-z]+.[a-z]+)+#", $systemFiles)) $customModules[$module] = $module;
         }
         return $customModules;
     }
