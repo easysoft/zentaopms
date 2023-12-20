@@ -63,6 +63,7 @@ foreach($fields as $field => $attr)
     if($field == 'agentId' || $field == 'appKey' || $field == 'appSecret') $required = true;
     if($field == 'feishuAppId' || $field == 'feishuAppSecret')             $required = true;
     if($field == 'wechatCorpId' || $field == 'wechatCorpSecret' || $field == 'wechatAgentId') $required = true;
+    if($field == 'type') $required = true;
 
     $formItems[] = formRow
     (

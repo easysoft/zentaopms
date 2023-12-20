@@ -126,35 +126,13 @@ class webhookTest
         return $objects;
     }
 
-    public function createTest($webhooks)
+    public function createTest($webhook)
     {
-        $posts = array();
-        $posts['type']             = '';
-        $posts['name']             = '';
-        $posts['url']              = '';
-        $posts['secret']           = '';
-        $posts['agentId']          = '';
-        $posts['appKey']           = '';
-        $posts['appSecret']        = '';
-        $posts['wechatCorpId']     = '';
-        $posts['wechatCorpSecret'] = '';
-        $posts['wechatAgentId']    = '';
-        $posts['feishuAppId']      = '';
-        $posts['feishuAppSecret']  = '';
-        $posts['domain']           = '';
-        $posts['sendType']         = '';
-        $posts['products']         = array();
-        $posts['executions']        = array();
-        $posts['desc']             = '';
-
-        foreach($posts as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
-        foreach($webhooks as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->create();
+        $objectID = $this->objectModel->create($webhook);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $objectID;
     }
 
     /**
