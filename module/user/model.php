@@ -587,6 +587,8 @@ class userModel extends model
      */
     public function batchCreate(array $users, string $verifyPassword): bool|array
     {
+        if(!$users) return false;
+
         $this->checkBeforeBatchCreate($users, $verifyPassword);
         if(dao::isError()) return false;
 
