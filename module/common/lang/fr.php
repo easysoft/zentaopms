@@ -549,6 +549,8 @@ $lang->pager->pageOfTotal  = "Page <strong>{page}</strong> sur <strong>{totalPag
 $lang->pager->totalCountAB = "Total: {recTotal} lignes";
 $lang->pager->pageSizeAB   = "{recPerPage} par page";
 
+$lang->pager->shortPageSize = '<strong>{recPerPage}</strong> / Page';
+
 $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = "Ce n'est pas une valeur de couleur valide";
 

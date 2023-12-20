@@ -389,6 +389,19 @@ class metricZen extends metric
     }
 
     /**
+     * 根据table宽度返回pager extra。
+     * Return pager extra based on the table width.
+     *
+     * @param  string    $tableWidth
+     * @access protected
+     * @return int
+     */
+    public function getPagerExtra($tableWidth)
+    {
+        return ($tableWidth > 300) ? '' : 'shortPageSize';
+    }
+
+    /**
      * 根据后台配置的估算单位对列表赋值。
      * Assign unitList['measure'] by custom hourPoint.
      *

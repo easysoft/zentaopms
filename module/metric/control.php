@@ -85,6 +85,7 @@ class metric extends control
         $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+        $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
 
         $this->view->metrics       = $metrics;
@@ -305,6 +306,7 @@ class metric extends control
         $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+        $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
         $this->view->dtablePager   = $pager;
         $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
@@ -335,6 +337,7 @@ class metric extends control
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+        $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
         $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
 
