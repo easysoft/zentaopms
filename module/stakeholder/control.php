@@ -218,15 +218,15 @@ class stakeholder extends control
     }
 
     /**
-     * Ajax get company user.
+     * Ajax：获取公司用户。
+     * Ajax: Get company user.
      *
-     * @param  string $user
      * @param  int    $programID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetCompanyUser($user = '', $programID = 0, $projectID = 0)
+    public function ajaxGetCompanyUser(int $programID = 0, int $projectID = 0)
     {
         if($programID)
         {
