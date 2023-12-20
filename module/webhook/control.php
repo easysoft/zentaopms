@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of webhook module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Gang Liu <liugang@cnezsoft.com>
+ * @author      Sun Guangming<sunguangming@cnezsoft.com>
  * @package     webhook
  * @version     $Id$
  * @link        https://www.zentao.net
@@ -19,13 +20,14 @@ class webhook extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('message');
     }
 
     /**
+     * Webhook 列表。
      * Browse webhooks.
      *
      * @param  string $orderBy
@@ -35,18 +37,18 @@ class webhook extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Unset selectedDepts cookie. */
         helper::setcookie('selectedDepts', '', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
-        $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title    = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
+        $this->view->webhooks = $this->webhook->getList($orderBy, $pager);
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
         $this->display();
     }
 
