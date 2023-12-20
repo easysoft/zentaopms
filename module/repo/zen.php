@@ -1133,7 +1133,6 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  string    $revision
      * @param  string    $browseType
-     * @param  object    $product
      * @param  string    $orderBy
      * @param  object    $pager
      * @param  int       $queryID
@@ -1141,13 +1140,20 @@ class repoZen extends repo
      * @access protected
      * @return array
      */
-    protected function getLinkTasks(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
+    protected function getLinkTasks(int $repoID, string $revision, string $browseType, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
     {
         $allTasks = array();
-        foreach($productExecutionIDs as $productExecutionID)
+        if($browseType == 'bysearch')
         {
-            $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-            $allTasks = array_merge($tasks, $allTasks);
+            $allTasks = $this->loadModel('execution')->getTasks(0, 0, array(), $browseType, $queryID, 0, $orderBy, null);
+        }
+        else
+        {
+            foreach($productExecutionIDs as $productExecutionID)
+            {
+                $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+                $allTasks = array_merge($tasks, $allTasks);
+            }
         }
 
         /* Filter linked tasks. */
