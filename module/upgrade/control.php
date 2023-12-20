@@ -369,6 +369,7 @@ class upgrade extends control
     }
 
     /**
+     * 合并代码库。
      * Merge Repos.
      *
      * @access public
@@ -395,7 +396,7 @@ class upgrade extends control
         $this->view->title    = $this->lang->upgrade->mergeRepo;
         $this->view->repoes   = $repoes;
         $this->view->products = $products;
-        $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
+        $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq('0')->andWhere('type')->eq('program')->fetchPairs();
 
         $this->display();
     }
