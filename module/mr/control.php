@@ -723,11 +723,14 @@ class mr extends control
         $linkedTasks = $this->mr->getLinkList($MRID, $product->id, 'task');
 
         /* Get tasks by executions. */
-        $allTasks = array();
-        foreach($productExecutionIDs as $productExecutionID)
+        $allTasks = $browseType == 'bysearch' ? $this->loadModel('execution')->getTasks(0, 0, array(), $browseType, $queryID, 0, $orderBy) : array();
+        if($browseType != 'bysearch')
         {
-            $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-            $allTasks = array_merge($tasks, $allTasks);
+            foreach($productExecutionIDs as $productExecutionID)
+            {
+                $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+                $allTasks = array_merge($tasks, $allTasks);
+            }
         }
         /* Filter linked tasks. */
         $linkedTaskIDs = array_keys($linkedTasks);

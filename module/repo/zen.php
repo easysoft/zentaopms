@@ -1068,7 +1068,7 @@ class repoZen extends repo
     protected function getLinkTasks(int $repoID, string $revision, string $browseType, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
     {
         $allTasks = array();
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allTasks = $this->loadModel('execution')->getTasks(0, 0, array(), $browseType, $queryID, 0, $orderBy, null);
         }
