@@ -42,25 +42,7 @@ window.editStage = function()
         result = false;
         $.get($.createLink('programplan', 'ajaxGetStageAttr', 'stageID=' + currentParent), function(attribute)
         {
-            if(attribute != 'mix' && plan.attribute != attribute) zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[attribute])).then((res) => 
-                {
-                    if(res)
-                    {
-                        var $form    = $('#editForm');
-                        var formUrl  = $form.attr('action');
-                        var formData = new FormData($form[0]);
-                        $.ajaxSubmit({url: formUrl, data: formData});
-                    }
-                });
-        });
-    }
-
-    var currentAttribute    = $('[name=attribute]').val();
-    var hasChangedAttribute = (currentAttribute && currentAttribute != 'mix' && plan.attribute != currentAttribute);
-    var hasChangedParent    = ((isTopStage && currentParent != 0) || (!isTopStage && plan.parent != currentParent));
-    if(hasChangedAttribute && !hasChangedParent && !isLeafStage)
-    {
-        zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[currentAttribute])).then((res) => 
+            if(attribute != 'mix' && plan.attribute != attribute) zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[attribute])).then((res) =>
             {
                 if(res)
                 {
@@ -70,6 +52,25 @@ window.editStage = function()
                     $.ajaxSubmit({url: formUrl, data: formData});
                 }
             });
+        });
+    }
+
+    var currentAttribute    = $('[name=attribute]').val();
+    var hasChangedAttribute = (currentAttribute && currentAttribute != 'mix' && plan.attribute != currentAttribute);
+    var hasChangedParent    = ((isTopStage && currentParent != 0) || (!isTopStage && plan.parent != currentParent));
+    if(hasChangedAttribute && !hasChangedParent && !isLeafStage)
+    {
+        result = false;
+        zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[currentAttribute])).then((res) =>
+        {
+            if(res)
+            {
+                var $form    = $('#editForm');
+                var formUrl  = $form.attr('action');
+                var formData = new FormData($form[0]);
+                $.ajaxSubmit({url: formUrl, data: formData});
+            }
+        });
     }
     return result;
 }
