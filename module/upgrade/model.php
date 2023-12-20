@@ -6624,11 +6624,11 @@ class upgradeModel extends model
     /**
      * Relate default program.
      *
-     * @param  int $programID
+     * @param  int    $programID
      * @access public
      * @return bool
      */
-    public function relateDefaultProgram($programID)
+    public function relateDefaultProgram(int $programID): bool
     {
         $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('program')->eq(0)->exec();
 

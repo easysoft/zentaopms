@@ -1,0 +1,8 @@
+title: table zt_product
+desc: "产品"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: program
+    note: "所属项目集"
+    range: 0

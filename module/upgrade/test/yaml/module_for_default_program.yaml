@@ -1,0 +1,9 @@
+title: table zt_module
+desc: "模块"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: type
+    range: line
+  - field: root
+    range: 0
