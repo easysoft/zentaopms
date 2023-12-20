@@ -8307,6 +8307,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 当从12.x升级到18.x时，删除产品线必填字段。
      * Remove product line required fields when 12.x upgrade to 18.x.
      *
      * @access public
@@ -8314,9 +8315,7 @@ class upgradeModel extends model
      */
     public function removeProductLineRequired()
     {
-        $this->loadModel('setting');
-
-        $createRequired = $this->setting->getItem('owner=system&module=product&section=create&key=requiredFields');
+        $createRequired = $this->loadModel('setting')->getItem('owner=system&module=product&section=create&key=requiredFields');
         $editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
 
         $createRequired = str_replace(',line,', ',', ",$createRequired,");
