@@ -332,4 +332,20 @@ class mrTest
         if($MR->status != 'opend') $this->objectModel->close($MR);
         return $result;
     }
+
+    /**
+     * Test link method.
+     *
+     * @param  int    $MRID
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function linkTester(int $MRID, string $type): object|false
+    {
+        $result = $this->objectModel->link($MRID, 1, $type, array(1, 2));
+        if(!$result) return $result;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->orderBy('id_desc')->fetch();
+    }
 }

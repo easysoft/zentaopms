@@ -1115,34 +1115,35 @@ class mrModel extends model
      *
      * @param  int    $MRID
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type       story|task|bug
+     * @param  array  $objects
      * @access public
      * @return bool
      */
-    public function link(int $MRID, int $productID, string $type): bool
+    public function link(int $MRID, int $productID, string $type, array $objects): bool
     {
-        if($type == 'story') $links = $this->post->stories;
-        if($type == 'bug')   $links = $this->post->bugs;
-        if($type == 'task')  $links = $this->post->tasks;
+        if(!isset($this->config->objectTables[$type])) return false;
 
-        /* Get link action text. */
-        $MR             = $this->fetchByID($MRID);
-        $users          = $this->loadModel('user')->getPairs('noletter');
-        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
+        $MR = $this->fetchByID($MRID);
+        if(!$MR) return false;
+
+        /* Set link action text. */
+        $user    = $this->loadModel('user')->getRealNameAndEmails($MR->createdBy);
+        $comment = $MR->createdDate . '::' . zget($user, 'realname', '') . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
         $this->loadModel('action');
-        foreach($links as $linkID)
+        foreach($objects as $objectID)
         {
-            $relation           = new stdclass;
+            $relation = new stdclass();
             $relation->product  = $productID;
             $relation->AType    = 'mr';
             $relation->AID      = $MRID;
             $relation->relation = 'interrated';
             $relation->BType    = $type;
-            $relation->BID      = $linkID;
+            $relation->BID      = $objectID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            $this->action->create($type, (int)$linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create($type, (int)$objectID, 'createmr', '', $comment);
         }
 
         return !dao::isError();

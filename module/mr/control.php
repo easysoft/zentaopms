@@ -583,7 +583,7 @@ class mr extends control
     {
         if(!empty($_POST['stories']))
         {
-            $this->mr->link($MRID, $productID, 'story');
+            $this->mr->link($MRID, $productID, 'story', $this->post->stories);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
@@ -642,7 +642,7 @@ class mr extends control
     {
         if(!empty($_POST['bugs']))
         {
-            $this->mr->link($MRID, $productID, 'bug');
+            $this->mr->link($MRID, $productID, 'bug', $this->post->bugs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -701,7 +701,7 @@ class mr extends control
     {
         if(!empty($_POST['tasks']))
         {
-            $this->mr->link($MRID, $productID, 'task');
+            $this->mr->link($MRID, $productID, 'task', $this->post->tasks);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
