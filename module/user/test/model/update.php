@@ -282,7 +282,7 @@ $user13->realname = 'user13';
 $user13->role     = 'role13';
 $user13->password = $password;
 $result = $userTest->updateTest($user13);
-r($result)    && p('result')                && e(1);                      // 更新当前登录用户成功，返回 true。
-r($app->user) && p('account,realname,role') && e('admin,user13,role13'); // 当前登录用户的用户名是 user13，真实姓名是 user13，角色是 role13。
+r($result)    && p('result')                && e(1);                     // 更新当前登录用户成功，返回 true。
+r($app->user) && p('account,realname,role') && e('admin,user13,role13'); // 当前登录用户的用户名是 admin，真实姓名是 user13，角色是 role13。
 
 r($app->user->password == $password) && p() && e(1); // 当前登录用户的密码是 123456。
