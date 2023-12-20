@@ -4991,6 +4991,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取插件文件.
      * Get plugin files.
      *
      * @param  string $module
@@ -5000,7 +5001,7 @@ class upgradeModel extends model
      * @access public
      * @return array
      */
-    public function getPluginFiles($module, $dir, $realPath, $path)
+    public function getPluginFiles(string $module, string $dir, string $realPath, string $path): array
     {
         $pluginFiles = array();
         $files       = is_file($realPath . DS . $dir) ? array($dir) : glob($realPath . DS . '*');
@@ -5010,24 +5011,24 @@ class upgradeModel extends model
             $filePath = $realPath . DS . $file;
             $fileName = is_file($realPath . DS . $dir) ? $path : $path . DS . $file;
 
-            /* If you are currently pointing to a directory, the files in that directory are traversed. */
             if(is_dir($filePath))
             {
+                /* If you are currently pointing to a directory, the files in that directory will be traversed. */
                 $pluginFiles += $this->getPluginFiles($module, $dir, $filePath, $fileName);
             }
             else
             {
+                /* Get first line in the file. */
                 $handle = fopen($filePath, 'r');
-                $line   = fgets($handle);
                 $line   = fgets($handle);
                 fclose($handle);
 
-                /* Check whether the current file is encrypted. */
-                if(strpos($line, "extension_loaded('ionCube Loader')") === false)
+                /* If the current file isn't encrypted and the file isn't the system file, append it to pluginFiles. */
+                if(strpos($line, '<?php //') === false)
                 {
                     $systemFiles = file_get_contents('systemfiles.txt');
                     $systemFiles = str_replace('/', DS, $systemFiles);
-                    if(strpos($systemFiles, ",$fileName,") !== false) continue;
+                    if(strpos($systemFiles, ",{$fileName},") !== false) continue;
 
                     $pluginFiles[$fileName] = $fileName;
                 }
