@@ -98,7 +98,8 @@ sidebar
         set::modules($moduleTree),
         set::activeKey($moduleID),
         set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
-        set::closeLink(createLink('execution', 'task'))
+        set::closeLink(createLink('execution', 'task')),
+        set::app($app->tab)
     )
 );
 

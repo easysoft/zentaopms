@@ -113,6 +113,7 @@ class moduleMenu extends wg
         $settingLink = $this->prop('settingLink');
         $settingText = $this->prop('settingText');
         $showDisplay = $this->prop('showDisplay');
+        $tab         = $this->prop('app');
         if(!$settingLink && !$showDisplay) return null;
 
         global $app;
@@ -132,6 +133,7 @@ class moduleMenu extends wg
                 set::type('primary-pale'),
                 set::url($settingLink),
                 set::size('md'),
+                $tab ? setData(array('app' => $tab)) : null,
                 $settingText
             ) : null,
             $showDisplay ? btn
