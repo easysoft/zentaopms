@@ -142,34 +142,33 @@ class stakeholder extends control
     }
 
     /**
+     * 编辑一个干系人。
      * Edit a stakeholder.
      *
-     * @param  int $stakeholderID
+     * @param  int    $stakeholderID
      * @access public
      * @return void
      */
-    public function edit($stakeholderID = 0)
+    public function edit(int $stakeholderID = 0)
     {
         $stakeholder = $this->stakeholder->getByID($stakeholderID);
         $this->loadModel('project')->setMenu($stakeholder->objectID);
 
         if($_POST)
         {
-            $changes = $this->stakeholder->edit($stakeholderID);
+            $postData = form::data()->get();
+            $changes  = $this->stakeholder->edit($stakeholderID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Edited');
             $this->action->logHistory($actionID, $changes);
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = $this->createLink('stakeholder', 'browse', "projectID=$stakeholder->objectID");
-            return $this->send($response);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('stakeholder', 'browse', "projectID={$stakeholder->objectID}")));
         }
 
         $users = array();
         if($stakeholder->from == 'team') $users = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
-        elseif($stakeholder->from == 'company')
+        if($stakeholder->from == 'company')
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
             $users   = $this->user->getPairs('noclosed');

@@ -23,3 +23,14 @@ $config->stakeholder->form->create['analysis']    = array('type' => 'string',   
 $config->stakeholder->form->create['strategy']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 $config->stakeholder->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->stakeholder->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
+$config->stakeholder->form->edit['key']      = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->stakeholder->form->edit['name']     = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->edit['phone']    = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->edit['qq']       = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->edit['weixin']   = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->edit['email']    = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->edit['company']  = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->stakeholder->form->edit['nature']   = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->stakeholder->form->edit['analysis'] = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->stakeholder->form->edit['strategy'] = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');

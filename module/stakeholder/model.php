@@ -147,6 +147,7 @@ class stakeholderModel extends model
             $stakeholder->objectType  = 'project';
             $stakeholder->user        = $account;
             $stakeholder->type        = in_array($account, array_keys($members)) ? 'inside' : 'outside';
+            $stakeholder->from        = $stakeholder->type == 'inside' ? 'team' : 'company';
             $stakeholder->createdBy   = $this->app->user->account;
             $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
@@ -181,23 +182,28 @@ class stakeholderModel extends model
     }
 
     /**
+     * 编辑一个干系人。
      * Edit a stakeholder.
      *
-     * @param  int $stakeholderID
+     * @param  int        $stakeholderID
+     * @param  object     $data
      * @access public
-     * @return void
+     * @return bool|array
      */
-    public function edit($stakeholderID)
+    public function edit(int $stakeholderID, object $data): bool|array
     {
         $oldStakeholder = $this->getByID($stakeholderID);
-        $data = fixer::input('post')
-            ->stripTags($this->config->stakeholder->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid')
-            ->get();
+        if(!$oldStakeholder) return false;
 
         $user = new stdclass();
         if($oldStakeholder->from == 'outside')
         {
+            if(empty($data->name))
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->name);
+                return false;
+            }
+
             $user->realname = $data->name;
             $user->phone    = $data->phone;
             $user->qq       = $data->qq;
@@ -208,8 +214,8 @@ class stakeholderModel extends model
         $user->nature   = $data->nature;
         $user->analysis = $data->analysis;
         $user->strategy = $data->strategy;
-
         $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($oldStakeholder->user)->exec();
+        if(dao::isError()) return false;
 
         $stakeholder = new stdclass();
         $stakeholder->key        = $data->key;
@@ -221,8 +227,8 @@ class stakeholderModel extends model
             ->where('id')->eq($stakeholderID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldStakeholder, $stakeholder);
-        return false;
+        if(dao::isError()) return false;
+        return common::createChanges($oldStakeholder, $stakeholder);
     }
 
     /**
