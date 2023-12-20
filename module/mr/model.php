@@ -1111,32 +1111,6 @@ class mrModel extends model
     }
 
     /**
-     * 获取合并请求的提交记录。
-     * Get diff commits of MR.
-     *
-     * @param  object $MR
-     * @access public
-     * @return array|object
-     */
-    public function getDiffCommits(object $MR): array|object
-    {
-        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        if($host->type == 'gogs')
-        {
-            $repo = $this->loadModel('repo')->getByID($MR->repoID);
-            $scm  = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            return $scm->getMRCommits($MR->sourceBranch, $MR->targetBranch);
-        }
-        else
-        {
-            if($host->type == 'gitlab') $url = sprintf($this->loadModel('gitlab')->getApiRoot($MR->hostID), "/projects/{$MR->targetProject}/merge_requests/{$MR->mriid}/commits");
-            if($host->type == 'gitea')  $url = sprintf($this->loadModel('gitea')->getApiRoot($MR->hostID), "/repos/{$MR->targetProject}/pulls/{$MR->mriid}/commits");
-            return json_decode(commonModel::http($url));
-        }
-    }
-
-    /**
      * 合并请求关联对象。
      * Create an mr link.
      *
