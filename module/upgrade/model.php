@@ -5072,13 +5072,15 @@ class upgradeModel extends model
     }
 
     /**
+     * 移动扩展文件。
      * Move extension files.
      *
      * @access public
      * @return array
      */
-    public function moveExtFiles()
+    public function moveExtFiles(): array
     {
+        /* Get files and custom root directory, set response. */
         $data       = fixer::input('post')->get();
         $customRoot = $this->app->appRoot . 'extension' . DS . 'custom';
         $response   = array('result' => 'success');
@@ -5089,6 +5091,7 @@ class upgradeModel extends model
             $fileName = basename($file);
             $fromPath = $this->app->getModuleRoot() . $file;
             $toPath   = $dirRoot . DS . $fileName;
+            /* If the directory doesn't exist and there is no permission to create the directory, set the response and return it. */
             if(!is_dir($dirRoot))
             {
                 if(!mkdir($dirRoot, 0777, true))
@@ -5099,6 +5102,7 @@ class upgradeModel extends model
                     return $response;
                 }
             }
+            /* Copy from-path to to-path, and replace the load path in the to-path files. */
             copy($fromPath, $toPath);
             $this->replaceIncludePath($toPath);
         }
