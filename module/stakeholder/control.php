@@ -186,15 +186,15 @@ class stakeholder extends control
     }
 
     /**
-     * Ajax get members.
+     * Ajax：获取项目集或项目的团队成员。
+     * Ajax: Get team members of the program or project.
      *
-     * @param  string $user
      * @param  int    $programID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetMembers($user = '', $programID = 0, $projectID = 0)
+    public function ajaxGetMembers(int $programID = 0, int $projectID = 0)
     {
         if($programID)
         {
@@ -204,6 +204,7 @@ class stakeholder extends control
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
+
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
         foreach($members as $account => $realname)
         {
@@ -211,7 +212,7 @@ class stakeholder extends control
         }
 
         $items = array();
-        foreach($members as $account => $realname) $items[] = array('value' => $account, 'text' => $realname);
+        foreach($members as $account => $realname) $items[] = array('value' => $account, 'text' => $realname, 'keys' => $realname);
 
         return print(json_encode($items));
     }

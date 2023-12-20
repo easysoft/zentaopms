@@ -5,7 +5,7 @@
  */
 function toggleUser()
 {
-    if($(this).val() == 'team')    var link = $.createLink('stakeholder', 'ajaxGetMembers', 'user=&program=' + programID + '&projectID=' + projectID);
+    if($(this).val() == 'team')    var link = $.createLink('stakeholder', 'ajaxGetMembers', 'program=' + programID + '&projectID=' + projectID);
     if($(this).val() == 'company') var link = $.createLink('stakeholder', 'ajaxGetCompanyUser', 'user=&programID=' + programID + '&projectID=' + projectID);
     if($(this).val() == 'outside') var link = $.createLink('stakeholder', 'ajaxGetOutsideUser', 'objectID=' + programID ? programID : projectID);
     $.getJSON(link, function(users)
