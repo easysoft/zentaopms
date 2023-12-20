@@ -403,17 +403,20 @@ class upgrade extends control
     }
 
     /**
+     * 获取执行sql的进度。
      * Ajax get progress.
      *
      * @param  int    $offset
      * @access public
-     * @return void
+     * @return 1
      */
-    public function ajaxGetProgress($offset = 0)
+    public function ajaxGetProgress(int $offset = 0)
     {
         $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
         $upgradeLogFile  = $this->upgrade->getLogFile();
 
+        /* 计算执行的进度。*/
+        /* Compute progress for executiong sql. */
         $progress = 1;
         if(file_exists($tmpProgressFile) && $offset != 0)
         {
@@ -427,6 +430,8 @@ class upgrade extends control
             $this->session->set('upgradeProgress', $progress);
         }
 
+        /* 显示执行 sql 的日志。*/
+        /* Display the log of execution sql. */
         $log  = !file_exists($upgradeLogFile) ? '' : file_get_contents($upgradeLogFile, false, null, $offset);
         $size = 10 * 1024;
         if(!empty($log) && mb_strlen($log) > $size)
