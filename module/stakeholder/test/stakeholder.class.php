@@ -38,30 +38,20 @@ class stakeholderTest
     }
 
     /**
-     * Function batchCreate test by stakeholder
+     * 批量创建项目的干系人。
+     * Batch create stakeholders for a project.
      *
-     * @param  int   $projectID
-     * @param  array $param
+     * @param  int    $projectID
+     * @param  array  $account
      * @access public
      * @return array
      */
-    public function batchCreateTest($projectID, $param = array())
+    public function batchCreateTest(int $projectID, array $accounts = array()): array
     {
-        $realnames = array();
-        $accounts  = array();
-
-        $createFields = array('realnames' => $realnames, 'accounts' => $accounts);
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $objects = $this->objectModel->batchCreate($projectID);
-
-        unset($_POST);
+        $stakeholderList = $this->objectModel->batchCreate($projectID, $accounts);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $stakeholderList;
     }
 
     /**
