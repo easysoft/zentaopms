@@ -388,7 +388,7 @@ function createFieldNameView(formData)
 function createFieldTypeView(formData)
 {
     const type = formData.get('field-type');
-    const required = formData.get('required') === '1';
+    const required = formData.get('field-required') === '1';
     const $td = $(`<td data-type="${type}"></td>`);
     if(required) $td.addClass('required');
     if(type === 'text')
@@ -620,7 +620,6 @@ $(function ()
     if(!currentPrompt)
     {
         currentFields = defaultFields;
-        console.log(defaultFields);
         currentPrompt = currentFields.pop();
         currentFields = currentFields.map(name =>
         ({
