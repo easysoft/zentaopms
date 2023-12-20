@@ -5149,50 +5149,62 @@ class upgradeModel extends model
     }
 
     /**
+     * 替换文件的加载路径。
      * Replace the load path of the file.
      *
      * @param  string $filePath
      * @access public
      * @return void
      */
-    public function replaceIncludePath($filePath)
+    public function replaceIncludePath(string $filePath): void
     {
-        $content = file_get_contents($filePath);
-        if(strpos(basename($filePath), 'html'))
+        $content = file_get_contents($filePath); // Get file contents.
+        if(strpos(basename($filePath), 'html')) // If the file type is html.
         {
+            /**
+             * Perform a regular expression search and replace.
+             * eg: `include  '../../../common/view/header.lite.html.php'` to `include $app->getModuleRoot() . 'common/view/header.lite.html.php'`
+             */
             $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/)(?!ext/)([a-z]+/)#', '$1' . '$app->getModuleRoot() . ' . '$2$5$6', $content);
 
+            /* Get system files. */
             $systemFiles = file_get_contents('systemfiles.txt');
             $systemFiles = str_replace('/', DS, $systemFiles);
 
+            /* Perform a global regular expression match. eg: `include '../../../common/ext/view/calendar.html.php'` */
             preg_match_all('#(include )(\'|")(../){2,}[a-z]+/ext/[a-z]+/(([a-z]+[.]?)+)#', $content, $matches);
             foreach($matches[0] as $fileName)
             {
+                /* Get file name. eg: `include '../../../common/ext/view/calendar.html.php'` to `common/ext/view/calendar.html.php` as file name. */
                 $fileName = preg_replace("#(include )('|\")((../){2,})#", "", $fileName);
                 if(strpos($systemFiles, $fileName) !== false)
                 {
+                    /* If the file is the system file, replace its include path. eg: `include '../../../common/ext/view/calendar.html.php'` to `include $app->appRoot . 'extension/max/common/ext/view/calendar.html.php'`. */
                     $fileName = basename($fileName);
                     $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/ext/view/' . $fileName . ')#', '$1' . '$app->appRoot . ' . '$2extension/max/$5', $content);
                 }
                 else
                 {
+                    /* If the file isn't the system file, replace its include path. eg: `include '../../../common/ext/view/calendar.html.php'` to `include $app->appRoot . 'extension/custom/common/ext/view/calendar.html.php'`. */
                     $fileName = basename($fileName);
                     $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/ext/view/' . $fileName . ')#', '$1' . '$app->appRoot . ' . '$2extension/custom/$5', $content);
                 }
             }
         }
-        else
+        else // If the file type is php.
         {
+            /* Get module name. */
             $dirPath    = dirname($filePath);
             $dir        = str_replace($this->app->appRoot . 'extension' . DS . 'custom' .DS , '', $dirPath);
             $dirList    = explode(DS,  $dir);
             $moduleName = $dirList[0];
 
+            /* Replace the include path of the control. */
             $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
             $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
             $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
         }
-        file_put_contents($filePath, $content);
+        file_put_contents($filePath, $content); // Save the file.
     }
 
     /**
