@@ -7951,57 +7951,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Process once cycle.
-     *
-     * @access public
-     * @return void
-     */
-    public function processOnceCycle()
-    {
-        $cycleTodos = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('cycle')->eq(1)->fetchAll('id');
-        $onceCycles = array();
-        foreach($cycleTodos as $todo)
-        {
-            $config = json_decode($todo->config);
-            if($config->type != 'day') continue;
-            if(empty($config->specifiedDate)) continue;
-            if(!empty($config->cycleYear)) continue;
-
-            $todo->config = $config;
-            $onceCycles[$todo->id] = $todo;
-        }
-
-        $this->loadModel('todo');
-        $this->loadModel('action');
-
-        $createdTodosByCycle = $this->dao->select('id,type,objectID')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('objectID')->in(array_keys($onceCycles))->fetchAll('objectID');
-        $today = helper::today();
-        $now   = helper::now();
-        foreach($onceCycles as $todo)
-        {
-            if(isset($createdTodosByCycle[$todo->id]))
-            {
-                $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todo->id)->exec();
-                continue;
-            }
-
-            $newTodo = $this->todo->buildCycleTodo($todo);
-            if(isset($todo->assignedTo) && $todo->assignedTo) $newTodo->assignedDate = $now;
-
-            $config = $todo->config;
-            list($year) = explode('-', $todo->date);
-            $newTodo->date   = $year . '-' . sprintf('%02d', $config->specify->month + 1) . '-' . sprintf('%02d', $config->specify->day);
-
-            $todoID = $this->todo->insert($newTodo);
-            if($todoID) $this->action->create('todo', $todoID, 'opened', '', '', $newTodo->account);
-
-            $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todo->id)->exec();
-        }
-
-        return true;
-    }
-
-    /**
      * 在功能设置中设置UR开关.
      * Set UR switch status in feature switch.
      *
