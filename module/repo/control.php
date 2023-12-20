@@ -931,7 +931,7 @@ class repo extends control
 
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID, $productExecutionIDs);
+        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $orderBy, $pager, $queryID, $productExecutionIDs);
         $this->view->product      = $product;
         $this->view->repoID       = $repoID;
         $this->view->revision     = $revision;
