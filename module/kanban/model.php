@@ -665,7 +665,7 @@ class kanbanModel extends model
             $card->assignedDate = $now;
             $card->color        = '#fff';
 
-            $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
+            $this->dao->insert(TABLE_KANBANCARD)->data($card, 'lane')->autoCheck()
                 ->checkIF($card->estimate != '', 'estimate', 'float')
                 ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
                 ->exec();

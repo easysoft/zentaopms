@@ -18,7 +18,7 @@ cid=1
  - 属性column @1
  - 属性lane @1
  - 属性type @common
- - 属性cards @,0,1,2,801,
+ - 属性cards @,2,1,2,801,
 - 批量创建卡片，其中一个没有名称第name条的0属性 @『卡片名称』不能为空。
 - 批量创建卡片 预计为负数属性estimate[1] @预计不能为负数!
 - 批量创建卡片 开始时间大于结束时间属性end[1] @"截止日期"不能小于"预计开始"!
@@ -75,7 +75,7 @@ $cards4[] = $beginGtEnd;
 
 $kanban = new kanbanTest();
 
-r($kanban->batchCreateCardTest($cards1))     && p('kanban|column|lane|type|cards', '|') && e('1|1|1|common|,0,1,2,801,');  // 批量创建正常的卡片
+r($kanban->batchCreateCardTest($cards1))     && p('kanban|column|lane|type|cards', '|') && e('1|1|1|common|,2,1,2,801,');       // 批量创建正常的卡片
 r($kanban->batchCreateCardTest($cards2))     && p('name:0')                             && e('『卡片名称』不能为空。');         // 批量创建卡片，其中一个没有名称
 r($kanban->batchCreateCardTest($cards3))     && p('estimate[1]')                        && e('预计不能为负数!');                // 批量创建卡片 预计为负数
 r($kanban->batchCreateCardTest($cards4))     && p('end[1]')                             && e('"截止日期"不能小于"预计开始"!');  // 批量创建卡片 开始时间大于结束时间
