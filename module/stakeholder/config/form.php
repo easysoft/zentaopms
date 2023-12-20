@@ -21,8 +21,6 @@ $config->stakeholder->form->create['newUser']     = array('type' => 'string',   
 $config->stakeholder->form->create['nature']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 $config->stakeholder->form->create['analysis']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 $config->stakeholder->form->create['strategy']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
-$config->stakeholder->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
-$config->stakeholder->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
 $config->stakeholder->form->edit['key']      = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->stakeholder->form->edit['name']     = array('type' => 'string',   'required' => false, 'default' => '');
