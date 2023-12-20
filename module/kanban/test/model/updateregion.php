@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 kanbanModel->updateRegion();
 timeout=0
 cid=1
@@ -9,6 +11,7 @@ cid=1
 - 更新看板区域名称为空第name条的0属性 @『区域名称』不能为空。
 - 更新看板区域名称为空格字符第name条的0属性 @『区域名称』不能为空。
 - 更新看板区域名称为超长字符串第name条的0属性 @『区域名称』长度应当不超过『255』，且大于『0』。
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

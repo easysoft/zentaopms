@@ -2584,6 +2584,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 编辑看板泳道。
      * Update kanban lane.
      *
      * @param  int    $executionID
@@ -2592,7 +2593,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function updateLane($executionID, $laneType, $cardID = 0)
+    public function updateLane(int $executionID, string $laneType, int $cardID = 0)
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
         if($execution->type == 'kanban')
