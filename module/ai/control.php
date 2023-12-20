@@ -353,16 +353,29 @@ class ai extends control
     }
 
     /**
-     * Change mini program `publish` value.
+     * Publish a mini program.
      *
      * @param string $appID
-     * @param string $published
      * @access public
      * @return void
      */
-    public function publishMiniProgram($appID, $published)
+    public function publishMiniProgram($appID)
     {
-        $result = $this->ai->publishMiniProgram($appID, $published);
+        $result = $this->ai->publishMiniProgram($appID, '1');
+        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        $this->sendError(dao::getError());
+    }
+
+    /**
+     * Unpublish a mini program.
+     *
+     * @param string $appID
+     * @access public
+     * @return void
+     */
+    public function unpublishMiniProgram($appID)
+    {
+        $result = $this->ai->publishMiniProgram($appID, '0');
         if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
         $this->sendError(dao::getError());
     }
@@ -380,7 +393,7 @@ class ai extends control
         {
             $toPublish = $_POST['toPublish'];
             unset($_POST['toPublish']);
-            $this->ai->createTmpMiniProgram($appID);
+            $this->ai->editMiniProgram($appID);
             if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
             return print(js::closeModal('parent', 'this'));
         }
@@ -393,11 +406,44 @@ class ai extends control
     /**
      * Create a mini program.
      *
-     * @param string|null $appID
      * @access public
      * @return void
      */
-    public function createMiniProgram($appID = null)
+    public function createMiniProgram()
+    {
+        if(!empty($_POST))
+        {
+            $toNext = $_POST['toNext'];
+            unset($_POST['toNext']);
+            $requiredFields = array('category' => $this->lang->ai->miniPrograms->category, 'model' => $this->lang->prompt->model, 'name' => $this->lang->prompt->name, 'desc' => $this->lang->ai->miniPrograms->desc);
+            $errors = $this->ai->verifyRequiredFields($requiredFields);
+            if($errors !== false) return $this->sendError($errors);
+
+            $isDuplicated = $this->ai->checkDuplicatedAppName($_POST['name']);
+            if($isDuplicated) return $this->sendError(array('name' => $this->lang->ai->miniPrograms->field->duplicatedNameTip));
+
+            $appID = $this->ai->createMiniProgram();
+            if($appID === false) return $this->sendError(array('message' => $this->lang->fail));
+            if($toNext === '1')  return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$appID")));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'createMiniProgram', "appID=$appID")));
+        }
+
+
+        $this->view->iconName = 'writinghand';
+        $this->view->iconTheme = 7;
+        $this->view->categoryList = $this->ai->getCustomCategories();
+        $this->view->title = $this->lang->ai->miniPrograms->common;
+        $this->display();
+    }
+
+    /**
+     * Create a mini program.
+     *
+     * @param string $appID
+     * @access public
+     * @return void
+     */
+    public function editMiniProgram($appID)
     {
         if(!empty($_POST))
         {
@@ -410,29 +456,21 @@ class ai extends control
             $isDuplicated = $this->ai->checkDuplicatedAppName($_POST['name'], $appID);
             if($isDuplicated) return $this->sendError(array('name' => $this->lang->ai->miniPrograms->field->duplicatedNameTip));
 
-            $id = $this->ai->createTmpMiniProgram($appID);
-            if($id === false) return $this->sendError(array('message' => $this->lang->fail));
-            if($toNext === '1') return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$id")));
-            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'createMiniProgram', "appID=$id")));
+            $result = $this->ai->editMiniProgram($appID);
+            if($result === false) return $this->sendError(array('message' => $this->lang->fail));
+            if($toNext === '1')   return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$appID")));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'editMiniProgram', "appID=$appID")));
         }
 
-        if(!empty($appID))
-        {
-            $miniProgram = $this->ai->getMiniProgramByID($appID);
-            $this->view->name     = $miniProgram->name;
-            $this->view->desc     = $miniProgram->desc;
-            $this->view->model    = $miniProgram->model;
-            $this->view->category = $miniProgram->category;
-            list($this->view->iconName, $this->view->iconTheme) = explode('-', $miniProgram->icon);
-        }
-        else
-        {
-            $this->view->iconName = 'writinghand';
-            $this->view->iconTheme = 7;
-        }
+        $miniProgram = $this->ai->getMiniProgramByID($appID);
+        $this->view->name     = $miniProgram->name;
+        $this->view->desc     = $miniProgram->desc;
+        $this->view->model    = $miniProgram->model;
+        $this->view->category = $miniProgram->category;
+        list($this->view->iconName, $this->view->iconTheme) = explode('-', $miniProgram->icon);
         $this->view->categoryList = $this->ai->getCustomCategories();
         $this->view->title = $this->lang->ai->miniPrograms->common;
-        $this->display();
+        $this->display('ai', 'createMiniProgram');
     }
 
     /**
@@ -473,6 +511,7 @@ class ai extends control
             $this->ai->saveMiniProgramFields($appID);
             if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
         }
+
         $program = $this->ai->getMiniProgramByID($appID);
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
         $this->view->currentPrompt = $program->prompt;

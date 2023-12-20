@@ -724,23 +724,19 @@ class aiModel extends model
     }
 
     /**
-     * Create a temp mini program.
+     * Create a mini program.
      *
-     * @param int $appID
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function createTmpMiniProgram($appID = null)
+    public function createMiniProgram()
     {
         $data = fixer::input('post')->get();
         $data->editedBy    = $this->app->user->account;
         $data->editedDate  = helper::now();
         $data->published   = '0';
-        if(empty($appID))
-        {
-            $data->createdBy   = $this->app->user->account;
-            $data->createdDate = helper::now();
-        }
+        $data->createdBy   = $this->app->user->account;
+        $data->createdDate = helper::now();
         if(!empty($data->iconName) && !empty($data->iconTheme))
         {
             $data->icon = $data->iconName . '-' . $data->iconTheme;
@@ -748,15 +744,34 @@ class aiModel extends model
             unset($data->iconTheme);
         }
 
-        if($appID === null)
+        $this->dao->insert(TABLE_MINIPROGRAM)
+            ->data($data)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $appID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('miniProgram', $appID, 'created');
+        return $appID;
+    }
+
+    /**
+     * Edit a mini program.
+     *
+     * @param string $appID
+     * @access public
+     * @return bool
+     */
+    public function editMiniProgram($appID)
+    {
+        $data = fixer::input('post')->get();
+        $data->editedBy   = $this->app->user->account;
+        $data->editedDate = helper::now();
+        $data->published  = '0';
+        if(!empty($data->iconName) && !empty($data->iconTheme))
         {
-            $this->dao->insert(TABLE_MINIPROGRAM)
-                ->data($data)
-                ->exec();
-            if(dao::isError()) return false;
-            $appID = $this->dao->lastInsertID();
-            $this->loadModel('action')->create('miniProgram', $appID, 'created');
-            return $appID;
+            $data->icon = $data->iconName . '-' . $data->iconTheme;
+            unset($data->iconName);
+            unset($data->iconTheme);
         }
 
         $this->dao->update(TABLE_MINIPROGRAM)
@@ -764,8 +779,9 @@ class aiModel extends model
             ->where('id')->eq($appID)
             ->exec();
         if(dao::isError()) return false;
+
         $this->loadModel('action')->create('miniProgram', $appID, 'edited');
-        return $appID;
+        return true;
     }
 
     /**
@@ -809,9 +825,8 @@ class aiModel extends model
      * @access public
      * @return boolean
      */
-    public function checkDuplicatedAppName($name, $appID)
+    public function checkDuplicatedAppName($name, $appID = '-1')
     {
-        if(empty($appID)) $appID = -1;
         $miniProgram = $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
             ->where('name')->eq($name)

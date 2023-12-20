@@ -46,10 +46,17 @@ function deleteMiniProgram(deleted)
 }
 
 /**
- * Change mini program `published` value.
- * @param {'0'|'1'} published
+ * Publish a mini program.
  */
-function publishMiniProgram(published)
+function publishMiniProgram()
 {
-    window.location.href = createLink('ai', 'publishMiniProgram', `appID=${miniProgramID}&published=${published}`);
+    window.location.href = createLink('ai', 'publishMiniProgram', `appID=${miniProgramID}`);
+}
+
+/**
+ * Unpublish a mini program.
+ */
+function unpublishMiniProgram()
+{
+    window.location.href = createLink('ai', 'unpublishMiniProgram', `appID=${miniProgramID}`);
 }

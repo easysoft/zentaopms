@@ -44,7 +44,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
         <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->disableTip; ?></span>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
-        <button type="button" class="btn btn-primary" onclick="publishMiniProgram('0')" data-dismiss="modal"><?= $lang->confirm; ?></button>
+        <button type="button" class="btn btn-primary" onclick="unpublishMiniProgram()" data-dismiss="modal"><?= $lang->confirm; ?></button>
         <button type="button" class="btn" data-dismiss="modal"><?= $lang->cancel; ?></button>
       </div>
     </div>
@@ -78,7 +78,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
         <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->publishTip; ?></span>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
-        <button type="button" class="btn btn-primary" onclick="publishMiniProgram('1')" data-dismiss="modal"><?= $lang->confirm; ?></button>
+        <button type="button" class="btn btn-primary" onclick="publishMiniProgram()" data-dismiss="modal"><?= $lang->confirm; ?></button>
         <button type="button" class="btn" data-dismiss="modal"><?= $lang->cancel; ?></button>
       </div>
     </div>
@@ -130,7 +130,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                 <?php
                 echo $isPublished
                   ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
-                  : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'createMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
+                  : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
                 ?>
                 <button
                   class="btn iframe"
