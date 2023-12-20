@@ -373,7 +373,7 @@ class upgradeTest
      * Test update pivot fields type.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function updatePivotFieldsTypeTest(int $pivotID, array $changeFields, array $rightValue): bool
     {
@@ -394,5 +394,22 @@ class upgradeTest
         $result = $afterUpdatePivot->fields == $rightValue[$pivotID]['fields'];
         if(isset($rightValue[$pivotID]['langs'])) $result = $afterUpdatePivot->langs == $rightValue[$pivotID]['langs'];
         return  $result;
+    }
+
+    /**
+     * 测试为项目创建项目主库。
+     * Test create doc lib for project.
+     *
+     * @param  object  $project
+     * @access public
+     * @return object
+     */
+    public function createProjectDocLibTest(int $projectID): object
+    {
+         global $tester;
+         $project = $tester->loadModel('project')->getByID($projectID);
+         $this->objectModel->createProjectDocLib($project);
+
+         return $tester->dao->select('*')->from(TABLE_DOCLIB)->where('project')->eq($projectID)->fetch();
     }
 }

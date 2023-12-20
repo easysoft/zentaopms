@@ -450,4 +450,25 @@ class upgradeTao extends upgradeModel
             }
         }
     }
+
+    /**
+     * 为项目创建项目主库。
+     * Create doc lib for project.
+     *
+     * @param  object  $project
+     * @access protected
+     * @return void
+     */
+    protected function createProjectDocLib(object $project): void
+    {
+        $this->app->loadLang('doc');
+
+        $lib = new stdclass();
+        $lib->project = $project->id;
+        $lib->name    = $this->lang->doclib->main['project'];
+        $lib->type    = 'project';
+        $lib->main    = '1';
+        $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+    }
 }

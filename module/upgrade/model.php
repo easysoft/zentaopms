@@ -6474,7 +6474,7 @@ class upgradeModel extends model
             }
             else
             {
-                $this->createProjectDocLib($project);
+                $this->upgradeTao->createProjectDocLib($project);
             }
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
@@ -6552,7 +6552,7 @@ class upgradeModel extends model
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             $project->id = $projectID;
-            $this->createProjectDocLib($project);
+            $this->upgradeTao->createProjectDocLib($project);
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($sprints))->fetchPairs();
             $this->processMergedData($programID, $projectID, null, $productIdList, array_keys($sprints));
@@ -6582,26 +6582,6 @@ class upgradeModel extends model
             ->andWhere('type')->eq('sprint')
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-    }
-
-    /**
-     * Create doc lib for project.
-     *
-     * @param  object  $project
-     * @access public
-     * @return void
-     */
-    public function createProjectDocLib($project)
-    {
-        $this->app->loadLang('doc');
-
-        $lib = new stdclass();
-        $lib->project = $project->id;
-        $lib->name    = $this->lang->doclib->main['project'];
-        $lib->type    = 'project';
-        $lib->main    = '1';
-        $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
-        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
     }
 
     /**
