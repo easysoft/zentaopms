@@ -766,6 +766,8 @@ class userModel extends model
      */
     public function batchUpdate(array $users, string $verifyPassword): bool
     {
+        if(!$users) return false;
+
         $this->checkBeforeBatchUpdate($users, $verifyPassword);
         if(dao::isError()) return false;
 
@@ -778,13 +780,13 @@ class userModel extends model
 
         foreach($users as $id => $user)
         {
-            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq($id)->exec();
+            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq($id)->autoCheck()->exec();
             if(dao::isError()) return $this->rollback();
 
             /* 更新用户组和用户视图并记录日志。*/
             /* Update user group and user view, and save log and score. */
             $oldUser = $oldUsers[$id];
-            $changes = common::createChanges($user, $oldUser);
+            $changes = common::createChanges($oldUser, $user);
             if($changes)
             {
                 $actionID = $this->action->create('user', $id, 'edited');
