@@ -168,7 +168,7 @@ featureBar
             $lang->testcase->onlyAutomated
         )
     ) : null,
-    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase'))? (searchToggle(set::open($browseType == 'bysearch'))) : null
+    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? searchToggle(set::module($this->app->rawMethod == 'testcase' ? 'testcase' : $this->app->rawModule), set::open($browseType == 'bysearch')) : null
 );
 
 $viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $app->tab == 'project' ? createLink('project', 'testcase', "projectID={$projectID}") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
