@@ -291,36 +291,25 @@ class userTest
     }
 
     /**
-     * Test batch edit users.
+     * 测试批量更新用户。
+     * Test batch update users.
      *
-     * @param  array $params
+     * @param  array  $users
+     * @param  string $verifyPassword
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchEditUserTest($params = array())
+    public function batchUpdateTest(array $users, string $verifyPassword): array
     {
-        $_POST = $params;
-        $_POST['verifyPassword'] = 'bac0bbaaf7192f219bebd5387e88c5d7';
+        $result = $this->objectModel->batchUpdate($users, $verifyPassword);
+        $errors = dao::getError();
 
-        $this->objectModel->batchEdit();
-        unset($_POST);
-
-        if(dao::isError())
+        foreach($errors as $key => $error)
         {
-            return dao::getError();
+            if(is_array($error)) $errors[$key] = implode('', $error);
         }
-        else
-        {
-            $users      = array();
-            $userIDList = array_keys($params['account']);
-            foreach($userIDList as $userID)
-            {
-                $user = $this->objectModel->getByID($userID, 'id');
-                $users[$user->id] = $user;
-            }
 
-            return $users;
-        }
+        return array('result' => (int)$result, 'errors' => $errors);
     }
 
     /**
