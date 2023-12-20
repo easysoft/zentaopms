@@ -2959,18 +2959,19 @@ class execution extends control
         $story   = $this->loadModel('story')->getById($storyID, $version, true);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`, shadow')->fetch();
 
-        $this->view->story      = $story;
-        $this->view->product    = $product;
-        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->plan       = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fields('title')->fetch('title');
-        $this->view->bugs       = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->view->fromBug    = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $this->view->cases      = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->view->modulePath = $this->loadModel('tree')->getParents($story->module);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
-        $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
-        $this->view->version    = $version == 0 ? $story->version : $version;
+        $this->view->story       = $story;
+        $this->view->product     = $product;
+        $this->view->branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->plan        = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fields('title')->fetch('title');
+        $this->view->bugs        = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->fromBug     = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $this->view->cases       = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->modulePath  = $this->loadModel('tree')->getParents($story->module);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->executions  = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $this->view->actions     = $this->loadModel('action')->getList('story', $storyID);
+        $this->view->version     = $version == 0 ? $story->version : $version;
+        $this->view->executionID = $this->session->execution;
         $this->display();
     }
 

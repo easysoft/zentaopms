@@ -131,7 +131,7 @@ div
             setClass('text-primary ml-2'),
             set::icon('sitemap'),
             set::hint($lang->story->createCase),
-            set::url(createLink('caselib', 'createCase', "productID={$story->product}&branch={$story->branch}&module=0&from=&param=0&storyID={$story->id}")),
+            set::url(createLink('testcase', 'create', "productID={$story->product}&branch={$story->branch}&module=0&from=execution&param={$executionID}&storyID={$story->id}")),
             set::disabled(!$this->story->isClickable($story, 'createCase')),
             set('data-app', $app->tab)
         ) : null
