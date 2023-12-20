@@ -323,6 +323,7 @@ $lang->story->mustChooseResult     = 'Sélect Résultat';
 $lang->story->mustChoosePreVersion = 'Sélect une version pour revenir en arrière.';
 $lang->story->noStory              = "Aucune story pour l'instant. ";
 $lang->story->noRequirement        = 'No Requirements';
+$lang->story->noRelatedRequirement = "No related requirements.";
 $lang->story->ignoreChangeStage    = 'The status of %s is Draft or Closed. This operation has been filtered.';
 $lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->SRCommon} parent";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected {$lang->productCommon} when editing the linked {$lang->productCommon} of Parent {$lang->SRCommon}.";

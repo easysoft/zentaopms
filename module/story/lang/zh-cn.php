@@ -323,6 +323,7 @@ $lang->story->mustChooseResult      = '必须选择评审意见';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->noStory               = "暂时没有{$lang->SRCommon}。";
 $lang->story->noRequirement         = "暂时没有{$lang->URCommon}。";
+$lang->story->noRelatedRequirement  = "暂无相关{$lang->URCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 状态为草稿或已关闭，本次操作已被过滤。";
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属{$lang->productCommon}会将其下的子{$lang->SRCommon}也移动到所选{$lang->productCommon}下。";
