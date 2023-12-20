@@ -456,4 +456,16 @@ class upgradeTest
 
         return "count:{$objectCount},lastID:{$lastID},fileID:" . implode(',', $files);
     }
+
+    /**
+     * 测试获取没有合并的产品的数量。
+     * Get no merged product count test.
+     *
+     * @access public
+     * @return int
+     */
+    public function getNoMergedProductCountTest(): int
+    {
+        return $this->objectModel->getNoMergedProductCount();
+    }
 }
