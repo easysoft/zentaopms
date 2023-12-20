@@ -15,15 +15,15 @@ cid=1
 - 查看关闭前的字段
  - 属性status @active
  - 属性closedBy @~~
- - 属性closedDate @0000-00-00 00:00:00
+ - 属性closedDate @~~
 - 查看关闭前的字段
  - 属性status @active
  - 属性closedBy @~~
- - 属性closedDate @0000-00-00 00:00:00
+ - 属性closedDate @~~
 - 查看关闭前的字段
  - 属性status @active
  - 属性closedBy @~~
- - 属性closedDate @0000-00-00 00:00:00
+ - 属性closedDate @~~
 - 查看关闭后的字段
  - 属性status @closed
  - 属性closedBy @admin
@@ -46,9 +46,9 @@ $space1 = $tester->kanban->getSpaceById(1);
 $space2 = $tester->kanban->getSpaceById(2);
 $space3 = $tester->kanban->getSpaceById(3);
 
-r($space1) && p('status,closedBy,closedDate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
-r($space2) && p('status,closedBy,closedDate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
-r($space3) && p('status,closedBy,closedDate') && e('active,~~,0000-00-00 00:00:00'); // 查看关闭前的字段
+r($space1) && p('status,closedBy,closedDate') && e('active,~~,~~'); // 查看关闭前的字段
+r($space2) && p('status,closedBy,closedDate') && e('active,~~,~~'); // 查看关闭前的字段
+r($space3) && p('status,closedBy,closedDate') && e('active,~~,~~'); // 查看关闭前的字段
 
 $param1 = new stdclass();
 $param1->status     = 'closed';

@@ -12,7 +12,7 @@ title=测试 kanbanModel->getByID();
 timeout=0
 cid=1
 
-- 查看user3用户可见的看板数量 @2
+- 查看user3用户可见的看板数量 @3
 - 查看看板2的名字。属性2 @通用看板2
 
 */

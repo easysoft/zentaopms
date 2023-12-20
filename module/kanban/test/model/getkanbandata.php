@@ -9,6 +9,8 @@ zdTable('kanbanregion')->gen(20);
 zdTable('kanbancell')->gen(100);
 zdTable('kanbancolumn')->gen(100);
 zdTable('kanbanlane')->gen(100);
+zdTable('kanbangroup')->gen(100);
+zdTable('kanbancard')->gen(100);
 
 /**
 
@@ -29,11 +31,11 @@ cid=1
 - 查看获取到的kanban5下的泳道数据
  - 第0条的title属性 @默认泳道
  - 第0条的type属性 @common
-- 测试获取到的kanban下的数据数量 @101
-- 测试获取到的kanban下的数据数量 @70
-- 测试获取到的kanban下的数据数量 @70
-- 测试获取到的kanban下的数据数量 @70
-- 测试获取到的kanban下的数据数量 @70
+- 测试获取到的kanban下的数据数量 @482
+- 测试获取到的kanban下的数据数量 @482
+- 测试获取到的kanban下的数据数量 @482
+- 测试获取到的kanban下的数据数量 @482
+- 测试获取到的kanban下的数据数量 @482
 
 */
 
