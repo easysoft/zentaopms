@@ -1597,6 +1597,25 @@ class metricModel extends model
     }
 
     /**
+     * 判断是否是按系统统计的度量项。
+     * Determine whether it is metric in system.
+     *
+     * @param  array  $results
+     * @access public
+     * @return bool
+     */
+    public function isSystemMetric($results)
+    {
+        $firstRecord = (object)current($results);
+
+        foreach($this->config->metric->excludeGlobal as $exclude)
+        {
+            if(isset($firstRecord->$exclude)) return false;
+        }
+        return true;
+    }
+
+    /**
      * 获取一个echarts的配置项。
      * Get options of echarts by head and data.
      *
@@ -2062,25 +2081,6 @@ class metricModel extends model
         }
 
         return false;
-    }
-
-    /**
-     * 判断是否是按系统统计的度量项。
-     * Determine whether it is metric in system.
-     *
-     * @param  array  $results
-     * @access public
-     * @return bool
-     */
-    public function isSystemMetric($results)
-    {
-        $firstRecord = (object)current($results);
-
-        foreach($this->config->metric->excludeGlobal as $exclude)
-        {
-            if(isset($firstRecord->$exclude)) return false;
-        }
-        return true;
     }
 
     /**

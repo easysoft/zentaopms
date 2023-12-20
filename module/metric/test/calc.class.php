@@ -412,6 +412,30 @@ class metricTest
     }
 
     /**
+     * Test isDateMetric.
+     *
+     * @param  array $header
+     * @access public
+     * @return bool
+     */
+    public function isDateMetric($header)
+    {
+        return $this->objectModel->isDateMetric($header);
+    }
+
+    /**
+     * Test isObjectMetric.
+     *
+     * @param  array $header
+     * @access public
+     * @return bool
+     */
+    public function isObjectMetric($header)
+    {
+        return $this->objectModel->isObjectMetric($header);
+    }
+
+    /**
      * Test isSystemMetric.
      *
      * @param  array $record
