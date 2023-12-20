@@ -2409,12 +2409,12 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
-        $task->openedDate     = substr($task->openedDate, 0, 19);
-        $task->finishedDate   = substr($task->finishedDate, 0, 19);
-        $task->canceledDate   = substr($task->canceledDate, 0, 19);
-        $task->closedDate     = substr($task->closedDate, 0, 19);
-        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
-        $task->realStarted    = substr($task->realStarted, 0, 19);
+        $task->openedDate     = substr($task->openedDate, 0, 19)     ? substr($task->openedDate, 0, 19)     : '';
+        $task->finishedDate   = substr($task->finishedDate, 0, 19)   ? substr($task->finishedDate, 0, 19)   : '';
+        $task->canceledDate   = substr($task->canceledDate, 0, 19)   ? substr($task->canceledDate, 0, 19)   : '';
+        $task->closedDate     = substr($task->closedDate, 0, 19)     ? substr($task->closedDate, 0, 19)     : '';
+        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19) ? substr($task->lastEditedDate, 0, 19) : '';
+        $task->realStarted    = substr($task->realStarted, 0, 19)    ? substr($task->realStarted, 0, 19)    : '';
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
