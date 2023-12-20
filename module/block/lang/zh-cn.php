@@ -611,7 +611,7 @@ $lang->block->qastatistic->resolvedToday     = '今日解决';
 $lang->block->qastatistic->closedYesterday   = '昨日关闭';
 $lang->block->qastatistic->closedToday       = '今日关闭';
 $lang->block->qastatistic->latestTesttask    = '近期测试单';
-$lang->block->qastatistic->bugStatusStat     = 'Bug状态分布';
+$lang->block->qastatistic->bugStatusStat     = '月度Bug变化情况';
 
 $lang->block->bugstatistic = new stdclass();
 $lang->block->bugstatistic->effective = '有效Bug';

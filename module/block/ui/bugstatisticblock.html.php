@@ -124,7 +124,7 @@ statisticBlock
             echarts
             (
                 set::title(array('text' => $lang->block->qastatistic->bugStatusStat, 'textStyle' => array('fontSize' => '12'))),
-                set::color(array('#66a2ff', '#7adfba', '#9ea3b0')),
+                set::color(array('#66a2ff', '#9ea3b0')),
                 set::tooltip(array('trigger' => 'axis')),
                 set::grid(array('left' => '10px', 'top' => '50px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0', 'top' => '25px', 'textStyle' => array('fontSize' => '11'))),
@@ -139,23 +139,15 @@ statisticBlock
                         (
                             'type'     => 'bar',
                             'barWidth' => '8',
-                            'stack'    => 'Ad',
-                            'name'     => $lang->bug->activate,
+                            'name'     => $lang->bug->createAB,
                             'data'     => array_values($activateBugs)
                         ),
                         array
                         (
-                            'type'  => 'bar',
-                            'name'  => $lang->bug->resolve,
-                            'stack' => 'Ad',
-                            'data'  => array_values($resolveBugs)
-                        ),
-                        array
-                        (
-                            'type'  => 'bar',
-                            'name'  => $lang->bug->close,
-                            'stack' => 'Ad',
-                            'data'  => array_values($closeBugs)
+                            'type'     => 'bar',
+                            'barWidth' => '8',
+                            'name'     => $lang->bug->close,
+                            'data'     => array_values($closeBugs)
                         )
                     )
                 )

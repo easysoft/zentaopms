@@ -2563,7 +2563,6 @@ class blockZen extends block
         }
 
         $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
-        $monthFixedBugGroup   = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
         $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
@@ -2582,14 +2581,6 @@ class blockZen extends block
                 foreach($monthCreatedBugGroup as $data)
                 {
                     if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$group] = $data['value'];
-                }
-            }
-
-            if(!empty($monthFixedBugGroup))
-            {
-                foreach($monthFixedBugGroup as $data)
-                {
-                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $resolveBugs[$group] = $data['value'];
                 }
             }
 
@@ -2876,7 +2867,6 @@ class blockZen extends block
         }
 
         $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
-        $monthFixedBugGroup   = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的解决Bug数。
         $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
@@ -2898,14 +2888,6 @@ class blockZen extends block
                 foreach($monthCreatedBugGroup as $data)
                 {
                     if($group == "{$data['year']}-{$data['month']}") $activateBugs[$group] = $data['value'];
-                }
-            }
-
-            if(!empty($monthFixedBugGroup))
-            {
-                foreach($monthFixedBugGroup as $data)
-                {
-                    if($group == "{$data['year']}-{$data['month']}") $resolveBugs[$group] = $data['value'];
                 }
             }
 

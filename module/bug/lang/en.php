@@ -125,6 +125,7 @@ $lang->bug->batchAssignTo      = 'Batch Assign';
 $lang->bug->resolve            = 'Resolve';
 $lang->bug->resolveAction      = 'Resolve Bug';
 $lang->bug->batchResolve       = 'Batch Resolve';
+$lang->bug->createAB           = 'Add';
 $lang->bug->close              = 'Close';
 $lang->bug->closeAction        = 'Close Bug';
 $lang->bug->batchClose         = 'Batch Close';

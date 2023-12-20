@@ -125,6 +125,7 @@ $lang->bug->batchAssignTo      = 'Affecter par Lot';
 $lang->bug->resolve            = 'Résoudre';
 $lang->bug->resolveAction      = 'Résoudre Bug';
 $lang->bug->batchResolve       = 'Résoudre par Lot';
+$lang->bug->createAB           = 'Add';
 $lang->bug->close              = 'Clôturer';
 $lang->bug->closeAction        = 'Clôturer Bug';
 $lang->bug->batchClose         = 'Fermer par Lot';

@@ -125,6 +125,7 @@ $lang->bug->batchAssignTo      = '批量指派';
 $lang->bug->resolve            = '解决';
 $lang->bug->resolveAction      = '解决Bug';
 $lang->bug->batchResolve       = '批量解决';
+$lang->bug->createAB           = '新增';
 $lang->bug->close              = '关闭';
 $lang->bug->closeAction        = '关闭Bug';
 $lang->bug->batchClose         = '批量关闭';
