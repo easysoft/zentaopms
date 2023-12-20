@@ -1622,7 +1622,7 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
-                if($output['from'] == 'taskkanban')
+                if(isset($output['from']) && $output['from'] == 'taskkanban')
                 {
                     $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                     $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
