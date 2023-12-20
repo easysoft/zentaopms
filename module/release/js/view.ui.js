@@ -6,11 +6,19 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 
     const tabType  = $(this).data('type');
 
-    const url  = $(this).data('url');
-    const form = new FormData();
-    checkedList.forEach((id) => form.append(`${tabType}IdList[]`, id));
+    const url   = $(this).data('url');
+    const form  = new FormData();
+    const field = $(this).hasClass('bug-batch-close') ? 'unlinkBugs[]' : `${tabType}IdList[]`;
+    checkedList.forEach((id) => form.append(field, id));
 
-    $.ajaxSubmit({url, data:form});
+    if($(this).hasClass('load-btn'))
+    {
+        postAndLoadPage(url, form);
+    }
+    else
+    {
+        $.ajaxSubmit({url, data: form});
+    }
 }).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
 {
     const type   = $(this).data('type');

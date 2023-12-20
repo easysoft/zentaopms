@@ -37,7 +37,7 @@ $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
 if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => createLink($releaseModule, 'batchUnlinkStory', "release={$release->id}"));
-if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->story->batchClose,    'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$release->product}"));
+if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn load-btn', 'text' => $lang->story->batchClose,    'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$release->product}"));
 
 /* Table data and setting for resolved bugs tab. */
 jsVar('confirmunlinkbug', $lang->release->confirmUnlinkBug);
@@ -51,7 +51,7 @@ $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($releaseModule, 'batchUnlinkBug', "release={$release->id}"));
-if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->bug->batchClose,      'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "productID={$release->product}"));
+if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn bug-batch-close', 'text' => $lang->bug->batchClose,      'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "release={$release->id}&viewType=release"));
 
 /* Table data and setting for left bugs tab. */
 jsVar('confirmunlinkleftbug', $lang->release->confirmUnlinkBug);
