@@ -577,6 +577,7 @@ class upgrade extends control
     }
 
     /**
+     * 检查扩展。
      * Check extension.
      *
      * @access public
@@ -584,18 +585,21 @@ class upgrade extends control
      */
     public function checkExtension()
     {
-        $this->loadModel('extension');
-        $extensions = $this->extension->getLocalExtensions('installed');
+        /* 如果没有已安装的扩展，跳转到选择版本页面。*/
+        /* If there is no installed extensions, locate to the version selection page. */
+        $extensions = $this->loadModel('extension')->getLocalExtensions('installed');
         if(empty($extensions)) $this->locate(inlink('selectVersion'));
 
         $versions = array();
         foreach($extensions as $code => $extension) $versions[$code] = $extension->version;
 
+        /* 如果没有不兼容的扩展，跳转到选择版本页面。*/
+        /* If there is no incompatible extensions, locate to the version selection page. */
         $incompatibleExts = $this->extension->checkIncompatible($versions);
-        $extensionsName   = array();
         if(empty($incompatibleExts)) $this->locate(inlink('selectVersion'));
 
         $removeCommands = array();
+        $extensionsName = array();
         foreach($incompatibleExts as $extension)
         {
             $this->extension->updateExtension(array('code' => $extension, 'status' => 'deactivated'));
