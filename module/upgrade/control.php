@@ -247,8 +247,8 @@ class upgrade extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type={$type}&programID={$programID}&projectType={$projectType}")));
         }
 
-        $noMergedProductCount = $this->upgrade->getNoMergeProductCount();
-        $noMergedSprintCount  = $this->upgrade->getNoMergeSprintCount();
+        $noMergedProductCount = $this->upgrade->getNoMergedProductCount();
+        $noMergedSprintCount  = $this->upgrade->getNoMergedSprintCount();
 
         /* 当产品和项目都归并完成后，完成后续操作。*/
         /* When all products and projects merged then finish and locate afterExec page. */
