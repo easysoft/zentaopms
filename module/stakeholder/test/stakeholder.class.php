@@ -3,10 +3,10 @@ class stakeholderTest
 {
     public function __construct(string $account = 'admin')
     {
+        su($account);
+
         global $tester, $app;
         $this->objectModel = $tester->loadModel('stakeholder');
-
-        su($account);
 
         $app->rawModule = 'stakeholder';
         $app->rawMethod = 'browse';
@@ -15,30 +15,26 @@ class stakeholderTest
     }
 
     /**
-     * Function create test by stakeholder
+     * 创建一个干系人。
+     * Create a stakeholder.
      *
-     * @param  int   $objectID
-     * @param  array $param
+     * @param  array        $params
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function createTest($objectID, $param = array())
+    public function createTest(array $params= array()): array|object
     {
-        $createFields = array('from' => '', 'key' => '', 'user' => '', 'name' => '', 'phone' => '', 'qq' => '', 'weixin' => '',
-            'email' => '', 'company' => '', 'nature' => '', 'analysis' => '', 'strategy' => '');
+        $defaultFields = array('from' => '', 'key' => 0, 'user' => '', 'name' => '', 'phone' => '', 'qq' => '', 'weixin' => '', 'objectType' => 'project', 'objectID' => 0,
+            'email' => '', 'company' => 0, 'nature' => '', 'analysis' => '', 'strategy' => '', 'newUser' => '', 'newCompany' => '', 'companyName' => '', '');
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $data = new stdclass();
+        foreach($defaultFields as $field => $defaultValue) $data->{$field} = $defaultValue;
+        foreach($params as $key => $value) $data->{$key} = $value;
 
-        $objectID = $this->objectModel->create($objectID);
-
-        unset($_POST);
+        $stakeholderID = $this->objectModel->create($data);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getByID($objectID);
-
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch();
     }
 
     /**
