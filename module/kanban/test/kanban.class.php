@@ -1063,7 +1063,7 @@ class kanbanTest
     public function refreshCardsTest($laneID)
     {
         $lane = $this->objectModel->getLaneByID($laneID);
-        $this->objectModel->refreshCards($lane);
+        $this->objectModel->refreshCards((array)$lane);
 
         if(dao::isError()) return dao::getError();
 
