@@ -6424,7 +6424,7 @@ class upgradeModel extends model
         $now     = helper::now();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
-        $noMergedSprints = $this->getNoMergedSprints();
+        $noMergedSprints = $this->upgradeTao->getNoMergedSprints();
         if(!$noMergedSprints) return true;
 
         foreach($noMergedSprints as $sprint)
@@ -6504,7 +6504,7 @@ class upgradeModel extends model
         $now     = helper::now();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
-        $noMergedSprints = $this->getNoMergedSprints();
+        $noMergedSprints = $this->upgradeTao->getNoMergedSprints();
         if(!$noMergedSprints) return true;
 
         $projects = array();
@@ -6566,22 +6566,6 @@ class upgradeModel extends model
 
         if(dao::isError()) return false;
         return true;
-    }
-
-    /**
-     * Get sprints has not been merged.
-     *
-     * @access public
-     * @return array
-     */
-    public function getNoMergedSprints()
-    {
-        return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('project')->eq(0)
-            ->andWhere('vision')->eq('rnd')
-            ->andWhere('type')->eq('sprint')
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
     }
 
     /**

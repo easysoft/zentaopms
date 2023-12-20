@@ -471,4 +471,21 @@ class upgradeTao extends upgradeModel
         $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
     }
+
+    /**
+     * 获取没有合并的冲刺。
+     * Get sprints has not been merged.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getNoMergedSprints(): array
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('type')->eq('sprint')
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
