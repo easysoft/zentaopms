@@ -807,7 +807,7 @@ class docModel extends model
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
-        $doc->title          = isset($docContent->title) ? $docContent->title : '';
+        $doc->title          = isset($docContent->title) ? $docContent->title : $doc->title;
         $doc->digest         = isset($docContent->digest) ? $docContent->digest : '';
         $doc->content        = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType    = isset($docContent->type) ? $docContent->type : '';

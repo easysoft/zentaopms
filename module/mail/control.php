@@ -221,14 +221,14 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->mail->browse;
 
-        $this->view->queueList = $this->mail->getQueue(null, $orderBy, $pager);
+        $this->view->queueList = $this->mail->getQueue('all', $orderBy, $pager);
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
@@ -243,7 +243,7 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->eq($id)->exec();
         return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()'));
@@ -263,53 +263,5 @@ class mail extends control
         /* Get deleted ID list from query string. */
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($idList)->exec();
         return $this->send(array('result' => 'success', 'callback' => 'loadCurrentPage()'));
-    }
-
-    /**
-     * Sendcloud user.
-     *
-     * @access public
-     * @return void
-     */
-    public function sendcloudUser()
-    {
-        if($this->config->mail->mta != 'sendcloud') return print(js::locate('back'));
-
-        $this->mta = $this->mail->setMTA();
-        if($_POST)
-        {
-            $data = fixer::input('post')->get();
-            $action   = $data->action;
-            $listName = $action == 'delete' ? 'syncedList' : 'unsyncList';
-
-            $users = array_unique($data->$listName);
-            if(empty($users)) return print(js::reload('parent'));
-
-            $realnameAndEmails = $this->loadModel('user')->getRealNameAndEmails($users);
-            $actionedEmail = array();
-            foreach($realnameAndEmails as $realnameAndEmail)
-            {
-                $email = $realnameAndEmail->email;
-                if(isset($actionedEmail[$email])) continue;
-
-                $result = $this->mail->syncSendCloud($action, $email, $realnameAndEmail->realname);
-                if(!$result->result)
-                {
-                    echo js::alert($this->lang->mail->sendCloudFail . str_replace("'", '"', $result->message) . "(CODE: $result->statusCode)");
-                    return print(js::reload('parent'));
-                }
-
-                $actionedEmail[$email] = $email;
-            }
-
-            echo js::alert($this->lang->mail->sendCloudSuccess);
-            return print(js::reload('parent'));
-        }
-
-        $this->view->title      = $this->lang->mail->sendcloudUser;
-
-        $this->view->members = $this->mta->memberList();
-        $this->view->users   = $this->loadModel('user')->getList();
-        $this->display();
     }
 }

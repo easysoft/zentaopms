@@ -310,8 +310,8 @@ class mailModel extends model
     /**
      * Set cc.
      *
-     * @param  string   $ccList
-     * @param  array    $emails
+     * @param  array  $ccList
+     * @param  array  $emails
      * @access public
      * @return void
      */
@@ -455,20 +455,22 @@ class mailModel extends model
     /**
      * Get queue.
      *
-     * @param  string $status
+     * @param  string $status   all|wait|fail
      * @param  string $orderBy
      * @param  object $pager
+     * @param  bool   $mergeByUser
      * @access public
      * @return array
      */
-    public function getQueue(string $status = '', string $orderBy = 'id_desc', object|null $pager = null): array
+    public function getQueue(string $status = 'all', string $orderBy = 'id_desc', object|null $pager = null, bool $mergeByUser = true): array
     {
         $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('mail')
-            ->beginIF($status)->andWhere('status')->eq($status)->fi()
+            ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        if(!$mergeByUser) return $mails;
 
         /* Group mails by toList and ccList. */
         $groupMails = array();
@@ -554,35 +556,6 @@ class mailModel extends model
     }
 
     /**
-     * Sync to sendCloud
-     *
-     * @param  string $action
-     * @param  string $email
-     * @param  string $userName
-     * @access public
-     * @return object
-     */
-    public function syncSendCloud($action, $email, $userName = '')
-    {
-        $result = '';
-        if($action == 'delete')
-        {
-            $result = $this->mta->deleteMember($email);
-        }
-        elseif($action == 'sync')
-        {
-            $member = new stdclass();
-            $member->nickName = $email;
-            $member->email    = $email;
-            $member->userName = $userName;
-
-            $result = $this->mta->addMember($member);
-        }
-
-        return $result;
-    }
-
-    /**
      * Send mail.
      *
      * @param  int $objectID
@@ -590,119 +563,24 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function sendmail($objectID, $actionID)
+    public function sendmail(int $objectID, int $actionID): void
     {
         if(empty($objectID) or empty($actionID)) return;
 
         /* Load module and get vars. */
-        $this->loadModel('action');
-        $action     = $this->action->getById($actionID);
-        $history    = $this->action->getHistory($actionID);
+        $action     = $this->mailZen->getActionForMail($actionID);
         $objectType = $action->objectType;
-        $object     = $objectType == 'kanbancard' ? $this->loadModel('kanban')->getCardByID($objectID) : $this->loadModel($objectType)->getByID($objectID);
-        $nameFields = $this->config->action->objectNameFields[$objectType];
-        $title      = zget($object, $nameFields, '');
-        $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+        $object     = $this->mailZen->getObjectForMail($objectType, $objectID);
+        $title      = $this->mailZen->getObjectTitle($object, $objectType);
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
+
+        if(empty($title)) $action->appendLink = '';
+        if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
         if($objectType == 'review' and empty($object->auditedBy)) return;
 
-        if($objectType == 'doc' && $object->contentType == 'markdown')
-        {
-            $object->content = commonModel::processMarkdown($object->content);
-            $object->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $object->content);
-            $object->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $object->content);
-            $object->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $object->content);
-        }
-
-        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
-        $action->appendLink = '';
-        if(strpos($action->extra, ':') !== false)
-        {
-            list($extra, $id) = explode(':', $action->extra);
-            $action->extra    = $extra;
-            if($title)
-            {
-                $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $title);
-            }
-        }
-
-        if($objectType == 'review') $this->app->loadLang('baseline');
-
-        /* Get mail content. */
-        if($objectType == 'kanbancard') $objectType = 'kanban';
-
-        $modulePath = $this->app->getModulePath('', $objectType);
-        $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
-        chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
-        {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
-            chdir($modulePath . 'ext/view');
-        }
-        ob_start();
-        if($objectType != 'mr') include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-        chdir($oldcwd);
-
-        /* Get the sender. */
-        if($objectType == 'story' or $objectType == 'meeting')
-        {
-            $sendUsers = $this->{$objectType}->getToAndCcList($object, $action->action);
-        }
-        elseif($objectType == 'review')
-        {
-            $sendUsers = array($object->auditedBy, '');
-        }
-        elseif($objectType == 'ticket')
-        {
-            $sendUsers = $this->{$objectType}->getToAndCcList($object, $action);
-        }
-        else
-        {
-            $sendUsers = $this->{$objectType}->getToAndCcList($object);
-        }
-
-        if(!$sendUsers) return;
-        list($toList, $ccList) = $sendUsers;
-
         /* Send it. */
-        if($objectType == 'mr')
-        {
-            $MRLink = common::getSysURL() . helper::createLink('mr', 'view', "id={$object->id}");
-            if($action->action == 'compilepass')
-            {
-                $mailContent = sprintf($this->lang->mr->toCreatedMessage, $MRLink, $title);
-                $this->send($toList, $subject, $mailContent);
-
-                $mailContent = sprintf($this->lang->mr->toReviewerMessage, $MRLink, $title);
-                $this->send($ccList, $subject, $mailContent);
-
-                /* Create a todo item for this MR. */
-                $this->loadModel('mr')->apiCreateMRTodo($object->gitlabID, $object->targetProject, $object->mriid);
-            }
-            elseif($action->action == 'compilefail')
-            {
-                $mailContent = sprintf($this->lang->mr->failMessage, $MRLink, $title);
-                $this->send($toList, $subject, $mailContent, $ccList);
-            }
-        }
-        else
-        {
-            if($objectType == 'ticket')
-            {
-                $emails = $this->loadModel('ticket')->getContactEmails($objectID, $toList, $ccList, $action->action == 'closed');
-                $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
-            }
-            else
-            {
-                $this->send($toList, $subject, $mailContent, $ccList);
-            }
-        }
-        if($this->isError()) error_log(implode("\n", $this->getError()));
+        $this->mailZen->sendBasedOnType($objectType, $object, $action);
     }
 
     /**
@@ -715,7 +593,7 @@ class mailModel extends model
      * @access public
      * @return string
      */
-    public function getSubject($objectType, $object, $title, $actionType)
+    public function getSubject(string $objectType, object $object, string $title, string $actionType): string
     {
         $suffix    = '';
         $subject   = '';
@@ -727,24 +605,21 @@ class mailModel extends model
 
             if($actionType == 'opened') $titleType = 'create';
             if($actionType == 'closed') $titleType = 'close';
-
-            $subject = sprintf($this->lang->testtask->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->name);
+            return sprintf($this->lang->testtask->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->name);
         }
-        elseif($objectType == 'doc')
+
+        if($objectType == 'doc')
         {
             $this->app->loadLang('doc');
 
             if($actionType == 'created') $titleType = 'create';
-            $subject = sprintf($this->lang->doc->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->title);
+            return sprintf($this->lang->doc->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->title);
         }
-        else
-        {
-            if($objectType == 'story' or $objectType == 'bug') $suffix = empty($object->product) ? '' : ' - ' . $this->loadModel('product')->getById($object->product)->name;
-            if($objectType == 'task') $suffix = empty($object->execution) ? '' : ' - ' . $this->loadModel('execution')->getById($object->execution)->name;
 
-            $subject = strtoupper($objectType) . ' #' . $object->id . ' ' . $title . $suffix;
-        }
-        return $subject;
+        if($objectType == 'story' or $objectType == 'bug') $suffix = empty($object->product) ? '' : ' - ' . $this->loadModel('product')->getById($object->product)->name;
+        if($objectType == 'task') $suffix = empty($object->execution) ? '' : ' - ' . $this->loadModel('execution')->getById($object->execution)->name;
+
+        return strtoupper($objectType) . ' #' . $object->id . ' ' . $title . $suffix;
     }
 
     /**

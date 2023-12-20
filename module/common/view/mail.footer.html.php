@@ -39,4 +39,3 @@ if(file_exists($extViewFile))
   　</table>
   </body>
 </html><?php // close tags in mail.header.html.php ?>
-<?php if($onlybody) $_GET['onlybody'] = 'yes';?>
