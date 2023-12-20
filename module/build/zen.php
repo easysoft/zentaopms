@@ -226,7 +226,7 @@ class buildZen extends build
 
         $this->view->title      = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
         $this->view->executions = $executions;
-        $this->view->buildPairs = $this->build->getBuildPairs(array(0), 'all', 'noempty,notrunk', (int)$objectID, $objectType);
+        $this->view->buildPairs = $this->build->getBuildPairs(0, 'all', 'noempty,notrunk', (int)$objectID, $objectType);
         $this->view->builds     = $this->build->getByList(array_keys($this->view->buildPairs));
         $this->view->objectID   = $objectID;
     }
