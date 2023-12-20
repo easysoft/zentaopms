@@ -120,19 +120,20 @@ class stakeholderModel extends model
     }
 
     /**
+     * 批量创建项目的干系人。
      * Batch create stakeholders for a project.
      *
      * @param  int    $projectID
+     * @param  array  $accounts
      * @access public
      * @return array
      */
-    public function batchCreate($projectID)
+    public function batchCreate(int $projectID, array $accounts): array
     {
         $this->loadModel('action');
-        $data = (array)fixer::input('post')->get();
 
         $members  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
-        $accounts = array_unique($data['accounts']);
+        $accounts = array_unique($accounts);
         $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->fetchPairs();
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->exec();
 
@@ -148,7 +149,6 @@ class stakeholderModel extends model
             $stakeholder->type        = in_array($account, array_keys($members)) ? 'inside' : 'outside';
             $stakeholder->createdBy   = $this->app->user->account;
             $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
-
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
 
             $stakeholderID     = $this->dao->lastInsertId();
@@ -161,15 +161,13 @@ class stakeholderModel extends model
         $changedAccounts = array_diff($accounts, $oldAccounts);
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
-
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
-
         $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
 
-        if($stakeholder->objectType == 'program' and $stakeholder->objectID)
+        if(!empty($accounts) && $stakeholder->objectType == 'program' && $stakeholder->objectID)
         {
-            $programID = $stakeholder->objectID;
             /* Update children user view. */
+            $programID     = $stakeholder->objectID;
             $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
             $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
             $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();

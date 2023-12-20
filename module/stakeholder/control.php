@@ -96,19 +96,22 @@ class stakeholder extends control
     }
 
     /**
+     * 批量创建干系人页面。
      * Batch create stakeholders.
      *
      * @param  int    $projectID
      * @param  string $dept
-     * @param  string $dept
+     * @param  int    $parentID
      * @access public
      * @return void
      */
-    public function batchCreate($projectID, $dept = '', $parentID = 0)
+    public function batchCreate(int $projectID, string $dept = '', int $parentID = 0)
     {
         if($_POST)
         {
-            $stakeholderList = $this->stakeholder->batchCreate($projectID);
+            $stakeholderList = $this->stakeholder->batchCreate($projectID, $_POST['accounts']);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('stakeholder', 'browse', "projectID=$projectID")));
         }
@@ -122,16 +125,13 @@ class stakeholder extends control
             $this->loadModel('project')->setMenu($projectID);
         }
 
-        $this->loadModel('user');
         $this->loadModel('dept');
         $this->loadModel('execution');
-        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
-        $this->view->title      = $this->lang->stakeholder->batchCreate;
-
+        $this->view->title              = $this->lang->stakeholder->batchCreate;
         $this->view->project            = $this->loadModel('project')->getByID($this->session->project);
-        $this->view->users              = $this->user->getPairs('all|nodeleted|noclosed');
-        $this->view->deptUsers          = $deptUsers;
+        $this->view->users              = $this->loadModel('user')->getPairs('all|nodeleted|noclosed');
+        $this->view->deptUsers          = $dept === '' ? array() : $this->dept->getDeptUserPairs((int)$dept);
         $this->view->dept               = $dept;
         $this->view->projectID          = $projectID;
         $this->view->depts              = $this->dept->getOptionMenu();
