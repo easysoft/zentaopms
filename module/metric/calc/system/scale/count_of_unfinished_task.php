@@ -28,7 +28,7 @@ class count_of_unfinished_task extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'done') $this->result ++;
+        if(!in_array($row->status, array('done', 'closed', 'cancel'))) $this->result ++;
     }
 
     public function getResult($options = array())
