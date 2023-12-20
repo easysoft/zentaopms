@@ -665,13 +665,14 @@ class upgrade extends control
     }
 
     /**
+     * 获取项目集的状态。
      * Ajax get program status.
      *
-     * @param  int    $projectID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function ajaxGetProgramStatus($programID)
+    public function ajaxGetProgramStatus(int $programID)
     {
         echo $this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status');
     }
