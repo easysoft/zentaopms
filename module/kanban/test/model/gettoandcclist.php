@@ -7,13 +7,15 @@ su('admin');
 /**
 
 title=测试 kanbanModel->getToAndCcList();
+timeout=0
 cid=1
-pid=1
 
-获取id=1的卡片发信人员 >> admin;admin
+- 获取id=1的卡片发信人员
+ -  @admin
+ - 属性1 @admin
 
 */
 $kanban = new kanbanTest();
 
 $card = $kanban->getCardByIDTest('1');
-r($kanban->getToAndCcListTest($card)) && p('0;1') && e('admin;admin'); // 获取id=1的卡片发信人员
+r($kanban->getToAndCcListTest($card)) && p('0,1') && e('admin,admin'); // 获取id=1的卡片发信人员

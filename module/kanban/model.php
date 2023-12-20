@@ -3425,11 +3425,12 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取看板卡片的操作按钮。
      * Get Kanban cards menus by execution id.
      *
      * @param  int    $executionID
      * @param  array  $objects
-     * @param  string $objecType story|bug|task
+     * @param  string $objecType   story|bug|task
      * @access public
      * @return array
      */
@@ -3454,13 +3455,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取卡片的发送人和抄送人。
      * Get toList and ccList.
      *
      * @param  object    $card
      * @access public
      * @return bool|array
      */
-    public function getToAndCcList($card)
+    public function getToAndCcList(object $card): array|bool
     {
         /* Set toList and ccList. */
         $toList = $card->createdBy;
@@ -3486,6 +3488,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 检查操作按钮是否可点。
      * Check if user can execute an action.
      *
      * @param  object $object
@@ -3493,7 +3496,7 @@ class kanbanModel extends model
      * @access public
      * @return bool
      */
-    public function isClickable($object, $action)
+    public function isClickable(object $object, string $action): bool
     {
         $action    = strtolower($action);
         $clickable = commonModel::hasPriv('kanban', $action);
@@ -3542,6 +3545,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 获取泳道的数量。
      * Get kanban lane count.
      *
      * @param  int    $kanbanID
@@ -3549,7 +3553,7 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function getLaneCount($kanbanID, $type = 'common')
+    public function getLaneCount(int $kanbanID, string $type = 'common')
     {
         if($type == 'common' or $type == 'kanban')
         {
@@ -3572,13 +3576,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 检查卡片数量是否合法。
      * Check display card count.
      *
      * @param  int    $count
      * @access public
      * @return bool
      */
-    public function checkDisplayCards($count)
+    public function checkDisplayCards(int $count): bool
     {
         if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT or $count > MAX_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
         return !dao::isError();
@@ -3593,7 +3598,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function getKanbanCallback($kanbanID, $regionID)
+    public function getKanbanCallback(int $kanbanID, int $regionID)
     {
         $kanbanData = $this->getKanbanData($kanbanID, $regionID);
         $kanbanData = reset($kanbanData);
