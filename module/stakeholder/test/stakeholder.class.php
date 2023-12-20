@@ -1,10 +1,17 @@
 <?php
 class stakeholderTest
 {
-    public function __construct()
+    public function __construct(string $account = 'admin')
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('stakeholder');
+        global $tester, $app;
+        $this->objectModel = $tester->loadModel('stakeholder');
+
+        su($account);
+
+        $app->rawModule = 'stakeholder';
+        $app->rawMethod = 'browse';
+        $app->setModuleName('stakeholder');
+        $app->setMethodName('browse');
     }
 
     /**
@@ -127,5 +134,28 @@ class stakeholderTest
 
         if(dao::isError()) return dao::getError();
         return $stakeholders;
+    }
+
+    /**
+     * 更新/插入用户信息。
+     * Update/insert user info.
+     *
+     * @param  array        $params
+     * @access public
+     * @return array|object
+     */
+    public function replaceUserInfoTest($params = array()): array|object
+    {
+        $defaultFields = array('from' => '', 'key' => 0, 'user' => '', 'name' => '', 'phone' => '', 'qq' => '', 'weixin' => '',
+            'email' => '', 'company' => 0, 'nature' => '', 'analysis' => '', 'strategy' => '', 'newUser' => '', 'newCompany' => '', 'companyName' => '');
+
+        $data = new stdclass();
+        foreach($defaultFields as $field => $defaultValue) $data->{$field} = $defaultValue;
+        foreach($params as $key => $value) $data->{$key} = $value;
+
+        $account = $this->objectModel->replaceUserInfo($data);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
     }
 }
