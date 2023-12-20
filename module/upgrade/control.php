@@ -338,14 +338,15 @@ class upgrade extends control
     }
 
     /**
-     * Rename object in upgrade.
+     * 同一个项目集内项目名称不能重复，调整重名的项目名称。
+     * Rename the projects that have the same name in the same program.
      *
-     * @param  string $type  project|product|execution
+     * @param  string $type          project|product|execution
      * @param  string $duplicateList
      * @access public
      * @return void
      */
-    public function renameObject($type = 'project', $duplicateList = '')
+    public function renameObject(string $type = 'project', string $duplicateList = '')
     {
         $this->app->loadLang($type);
         if($_POST)
@@ -360,13 +361,7 @@ class upgrade extends control
         }
 
         $objectGroup = array();
-        if($type == 'project' or $type == 'execution')
-        {
-            $objectGroup = $this->dao->select('id,name')->from(TABLE_PROJECT)
-                ->where('id')->in($duplicateList)
-                ->orderBy('name')
-                ->fetchAll();
-        }
+        if($type == 'project' || $type == 'execution') $objectGroup = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($duplicateList)->orderBy('name')->fetchAll();
 
         $this->view->type        = $type;
         $this->view->objectGroup = $objectGroup;
