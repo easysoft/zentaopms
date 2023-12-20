@@ -521,58 +521,29 @@ class upgrade extends control
      */
     public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no')
     {
+        /* 如果数据库有冲突，显示更改的 sql。*/
+        /* If there is a conflict with the standard database, display the changed sql. */
         $alterSQL = $this->upgrade->checkConsistency($this->config->version);
-        if(!empty($alterSQL))
-        {
-            $logFile  = $this->upgrade->getConsistencyLogFile();
-            $hasError = $this->upgrade->hasConsistencyError();
-            if(file_exists($logFile)) unlink($logFile);
+        if(!empty($alterSQL)) $this->displayConsistency($alterSQL);
 
-            $this->view->title    = $this->lang->upgrade->consistency;
-            $this->view->hasError = $hasError;
-            $this->view->alterSQL = $alterSQL;
-            $this->view->version  = $this->config->version;
-            return $this->display('upgrade', 'consistency');
-        }
-
+        /* 如果有扩展文件并且需要移除文件，显示需要移除的文件。*/
+        /* If there are extendtion files and need to move them, display them. */
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) and $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
+        if(!empty($extFiles) && $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
 
+        /* 移除收费版本目录，如果有错误，显示移除命令。*/
+        /* Remove encrypted directories. */
         $response = $this->upgrade->removeEncryptedDir();
-        if($response['result'] == 'fail')
-        {
-            $this->view->title  = $this->lang->upgrade->common;
-            $this->view->errors = $response['command'];
-            $this->view->result = 'fail';
-
-            return $this->display('upgrade', 'execute');
-        }
+        if($response['result'] == 'fail') $this->displayExecuteError($response['command']);
 
         unset($_SESSION['user']);
 
-        if($processed == 'no')
-        {
-            $this->app->loadLang('install');
-            $this->view->title      = $this->lang->upgrade->result;
+        /* 检查是否还有需要处理的。*/
+        /* Check if there is anything else that needs to be processed. */
+        $needProcess = $this->upgrade->checkProcess();
+        if($processed == 'no') $this->displayExecuteProcess($fromVersion, $needProcess);
 
-            $needProcess = $this->upgrade->checkProcess();
-            $this->view->needProcess = $needProcess;
-            $this->view->fromVersion = $fromVersion;
-            $this->display();
-        }
-        if(empty($needProcess) or $processed == 'yes')
-        {
-            $this->loadModel('setting')->updateVersion($this->config->version);
-
-            $zfile = $this->app->loadClass('zfile');
-            $zfile->removeDir($this->app->getTmpRoot() . 'model/');
-
-            $installFile = $this->app->getAppRoot() . 'www/install.php';
-            $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
-            if(file_exists($installFile)) @unlink($installFile);
-            if(file_exists($upgradeFile)) @unlink($upgradeFile);
-            unset($_SESSION['upgrading']);
-        }
+        if(empty($needProcess) || $processed == 'yes') $this->processAfterExecSuccessfully();
     }
 
     /**

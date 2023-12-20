@@ -540,4 +540,81 @@ class upgradeZen extends upgrade
             $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
     }
+
+    /**
+     * 显示更改冲突的 sql。
+     * Display consistency.
+     * 
+     * @param  string $alterSQL 
+     * @access protected
+     * @return void
+     */
+    protected function displayConsistency(string $alterSQL): void
+    {
+        $logFile  = $this->upgrade->getConsistencyLogFile();
+        if(file_exists($logFile)) unlink($logFile);
+
+        $this->view->title    = $this->lang->upgrade->consistency;
+        $this->view->hasError = $this->upgrade->hasConsistencyError();
+        $this->view->alterSQL = $alterSQL;
+        $this->view->version  = $this->config->version;
+
+        $this->display('upgrade', 'consistency');
+    }
+
+    /**
+     * 显示需要移除的文件。
+     * Display execute Error.
+     *
+     * @param  string    $command
+     * @access protected
+     * @return void
+     */
+    protected function displayExecuteError(array $commands): void
+    {
+        $this->view->title  = $this->lang->upgrade->common;
+        $this->view->errors = $commands;
+        $this->view->result = 'fail';
+
+        $this->display('upgrade', 'execute');
+    }
+
+    /**
+     * 显示待处理的提示。
+     * Display execute process.
+     *
+     * @param  string    $fromVersion
+     * @param  array     $needProcess
+     * @access protected
+     * @return void
+     */
+    protected function displayExecuteProcess(string $fromVersion, array $needProcess): void
+    {
+        $this->view->title       = $this->lang->upgrade->result;
+        $this->view->needProcess = $needProcess;
+        $this->view->fromVersion = $fromVersion;
+
+        $this->display();
+    }
+
+    /**
+     * 升级 sql 执行成功后的操作。
+     * Process after execute sql successfully.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function processAfterExecSuccessfully(): void
+    {
+        $this->loadModel('setting')->updateVersion($this->config->version);
+
+        $zfile = $this->app->loadClass('zfile');
+        $zfile->removeDir($this->app->getTmpRoot() . 'model/');
+
+        $installFile = $this->app->getAppRoot() . 'www/install.php';
+        $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
+        if(file_exists($installFile)) @unlink($installFile);
+        if(file_exists($upgradeFile)) @unlink($upgradeFile);
+        unset($_SESSION['upgrading']);
+    }
 }
