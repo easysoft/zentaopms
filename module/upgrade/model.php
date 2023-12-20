@@ -8228,25 +8228,22 @@ class upgradeModel extends model
     }
 
     /**
-     * Init recent action for new table.
+     * 为18_5, biz8_5, max4_5这三个版本的用户故事添加创建历史记录。
+     * Add create action for story when version is 18_5, biz8_5, max4_5.
      *
      * @access public
      * @return void
      */
-    public function addCreateAction4Story()
+    public function addCreateAction4Story(): void
     {
         if(!in_array($this->fromVersion, array('18_5', 'biz8_5', 'max4_5'))) return;
 
         $stories = $this->dao->select('id,product,openedBy,openedDate,vision')->from(TABLE_STORY)->where('openedDate')->ge('2023-07-12')->fetchAll('id');
         foreach($stories as $story)
         {
-            $firstAction = $this->dao->select('*')->from(TABLE_ACTION)
-                ->where('objectType')->eq('story')
-                ->andWhere('objectID')->eq($story->id)
-                ->orderBy('date,id')
-                ->fetch();
+            $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->eq($story->id)->orderBy('date,id')->fetch();
 
-            if(empty($firstAction) or $firstAction->action != 'opened')
+            if(empty($firstAction) || $firstAction->action != 'opened')
             {
                 $actionDate = $story->openedDate;
                 if($firstAction->date <= $actionDate) $actionDate = date('Y-m-d H:i:s', strtotime($firstAction->date) - 1);

@@ -353,4 +353,18 @@ class upgradeTest
         $return = $this->objectModel->getCustomModules($allModules);
         return implode(',', $return);
     }
+
+    /**
+     * 测试为用户故事添加创建动作。
+     * Test add create action for story.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function addCreateAction4StoryTest(string $version): void
+    {
+        $this->objectModel->fromVersion = $version;
+        $this->objectModel->addCreateAction4Story();
+    }
 }
