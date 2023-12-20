@@ -237,7 +237,7 @@ class storyModel extends model
             ->setDefault('plan,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setDefault('estimate', '')
+            ->setDefault('estimate', 0)
             ->setIF(strlen($this->post->verify) == 0, 'verify', '')
             ->setIF($this->post->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->plan > 0, 'stage', 'planned')
@@ -309,7 +309,7 @@ class storyModel extends model
             if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
             if(strpos($requiredFields, ',estimate,') !== false)
             {
-                if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
+                if(!$story->estimate or strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
                 $requiredFields = str_replace(',estimate,', ',', $requiredFields);
             }
 
