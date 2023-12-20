@@ -1,0 +1,25 @@
+<?php
+$now = helper::now();
+
+global $app, $config;
+
+$config->stakeholder->form = new stdclass();
+
+$config->stakeholder->form->create['from']        = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['user']        = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['name']        = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['objectType']  = array('type' => 'string',   'required' => false, 'default' => $app->tab);
+$config->stakeholder->form->create['key']         = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->stakeholder->form->create['phone']       = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['qq']          = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['weixin']      = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['email']       = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['company']     = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->stakeholder->form->create['companyName'] = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['newCompany']  = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['newUser']     = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['nature']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->stakeholder->form->create['analysis']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->stakeholder->form->create['strategy']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->stakeholder->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->stakeholder->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);

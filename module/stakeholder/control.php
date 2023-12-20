@@ -41,35 +41,30 @@ class stakeholder extends control
     }
 
     /**
+     * 创建一个干系人。
      * Create a stakeholder.
      *
-     * @param  int objectID
+     * @param  int    objectID
      * @access public
      * @return void
      */
-    public function create($objectID = 0)
+    public function create(int $objectID = 0)
     {
         if($_POST)
         {
-            $stakeholderID = $this->stakeholder->create($objectID);
+            $stakeholderData = form::data()
+                ->setDefault('objectID', $objectID)
+                ->get();
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
+            $stakeholderID = $this->stakeholder->create($stakeholderData);
 
-            if(!$stakeholderID or dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
+            if(!$stakeholderID || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
             $moduleName = $this->app->tab == 'program' ? 'program'              : $this->moduleName;
             $methodName = $this->app->tab == 'program' ? 'stakeholder'          : 'browse';
             $param      = $this->app->tab == 'program' ? "programID=$objectID" : "projectID=$objectID";
-            $locate     = $this->createLink($moduleName, $methodName, $param);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($moduleName, $methodName, $param)));
         }
 
         $members = array();

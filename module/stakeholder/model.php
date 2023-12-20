@@ -3,77 +3,17 @@ declare(strict_types=1);
 class stakeholderModel extends model
 {
     /**
+     * 创建一个干系人。
      * Create a stakeholder.
      *
-     * @param  int objectID
+     * @param  object   $data
      * @access public
      * @return int|bool
      */
-    public function create($objectID = 0)
+    public function create(object $data): int|bool
     {
-        $data = fixer::input('post')
-            ->setDefault('objectType', $this->app->tab)
-            ->setDefault('objectID', $objectID)
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::today())
-            ->stripTags($this->config->stakeholder->editor->create['id'], $this->config->allowedTags)
-            ->remove('uid')
-            ->get();
-
-        $account = isset($data->user) ? $data->user : '';
-        if($data->from != 'outside')
-        {
-            if(!$account)
-            {
-                dao::$errors['user'] = $this->lang->stakeholder->userEmpty;
-                return false;
-            }
-            $user = new stdclass();
-            $user->nature   = $data->nature;
-            $user->analysis = $data->analysis;
-            $user->strategy = $data->strategy;
-
-            $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($account)->exec();
-        }
-        else
-        {
-            /* If it's an outsider and it's added for the first time, insert to user table. */
-            if(!$account)
-            {
-                if(!$data->name) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->name);
-                if(!isset($data->newCompany) && !$data->company)    dao::$errors['company'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->company);
-                if(isset($data->newCompany) && !$data->companyName) dao::$errors['company'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->company);
-                if(dao::isError()) return false;
-
-                $companyID = $data->company;
-                if(isset($data->newCompany) && $data->companyName)
-                {
-                    $company = new stdclass();
-                    $company->name = $data->companyName;
-                    $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
-
-                    $companyID = $this->dao->lastInsertID();
-                }
-
-                $user = new stdclass();
-                $user->type     = 'outside';
-                $user->realname = $data->name;
-                $user->account  = mt_rand(1111, 99999);
-                $user->company  = $companyID;
-                $user->phone    = $data->phone;
-                $user->qq       = $data->qq;
-                $user->weixin   = $data->weixin;
-                $user->email    = $data->email;
-                $user->nature   = $data->nature;
-                $user->analysis = $data->analysis;
-                $user->strategy = $data->strategy;
-
-                $this->dao->insert(TABLE_USER)->data($user)->exec();
-                $userID  = $this->dao->lastInsertID();
-                $account = 'u' . $userID;
-                $this->dao->update(TABLE_USER)->set('account')->eq($account)->where('id')->eq($userID)->exec();
-            }
-        }
+        $account = $this->replaceUserInfo($data);
+        if(dao::isError()) return false;
 
         $stakeholder = new stdclass();
         $stakeholder->user        = $account;
@@ -84,38 +24,99 @@ class stakeholderModel extends model
         $stakeholder->type        = $data->from == 'team' ? 'inside' : 'outside';
         $stakeholder->createdBy   = $this->app->user->account;
         $stakeholder->createdDate = helper::today();
+        $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->check('user', 'unique', "objectID = {$stakeholder->objectID} && deleted = '0'")->autoCheck()->exec();
 
-        $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->check('user', 'unique', "objectID = {$stakeholder->objectID} and deleted = '0'")->autoCheck()->exec();
         $stakeholderID = $this->dao->lastInsertID();
+        if(dao::isError()) return false;
 
-        if(!dao::isError())
+        $userList = empty($stakeholder->user) ? array() : array($stakeholder->user);
+        $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $userList);
+
+        /* Update linked products view. */
+        if($stakeholder->objectType == 'project' && $stakeholder->objectID)
         {
-            $userList = empty($stakeholder->user) ? array() : array($stakeholder->user);
-
-            $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $userList);
-
-            /* Update linked products view. */
-            if($stakeholder->objectType == 'project' and $stakeholder->objectID)
-            {
-                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $userList);
-            }
-
-            if($stakeholder->objectType == 'program' and $stakeholder->objectID)
-            {
-                $programID = $stakeholder->objectID;
-                /* Update children user view. */
-                $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-                $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
-                $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
-
-                if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', array($stakeholder->user));
-                if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', array($stakeholder->user));
-                if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($stakeholder->user));
-            }
-
-            return $stakeholderID;
+            $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $userList);
         }
-        return false;
+
+        if($stakeholder->objectType == 'program' && $stakeholder->objectID)
+        {
+            $programID = $stakeholder->objectID;
+
+            /* Update children user view. */
+            $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+            $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+            $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
+
+            if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', array($stakeholder->user));
+            if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', array($stakeholder->user));
+            if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($stakeholder->user));
+        }
+
+        return $stakeholderID;
+    }
+
+    /**
+     * 更新/插入用户信息。
+     * Update/insert user info.
+     *
+     * @param  object      $data
+     * @access public
+     * @return bool|string
+     */
+    public function replaceUserInfo(object $data): bool|string
+    {
+        $account = isset($data->user) ? $data->user : '';
+        if($data->from != 'outside')
+        {
+            if(!$account) return dao::$errors['user'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->user);
+
+            $user = new stdclass();
+            $user->nature   = $data->nature;
+            $user->analysis = $data->analysis;
+            $user->strategy = $data->strategy;
+            $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($account)->exec();
+
+            return $account;
+        }
+
+        if($account) return $account;
+
+        /* If it's an outsider and it's added for the first time, insert to user table. */
+        if(!$data->newUser && !$account) return dao::$errors['user'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->user);
+        if(!$data->name) return dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->name);
+        if(!$data->newCompany && !$data->company)    return dao::$errors['company'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->company);
+        if($data->newCompany && !$data->companyName) return dao::$errors['company'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->company);
+
+        $companyID = $data->company;
+        if(isset($data->newCompany) && $data->companyName)
+        {
+            $company = new stdclass();
+            $company->name = $data->companyName;
+            $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
+            $companyID = $this->dao->lastInsertID();
+        }
+
+        /* Create new user. */
+        $user = new stdclass();
+        $user->type     = 'outside';
+        $user->realname = $data->name;
+        $user->account  = mt_rand(1111, 99999);
+        $user->company  = $companyID;
+        $user->phone    = $data->phone;
+        $user->qq       = $data->qq;
+        $user->weixin   = $data->weixin;
+        $user->email    = $data->email;
+        $user->nature   = $data->nature;
+        $user->analysis = $data->analysis;
+        $user->strategy = $data->strategy;
+        $this->dao->insert(TABLE_USER)->data($user)->exec();
+
+        $userID  = $this->dao->lastInsertID();
+        $account = 'u' . $userID;
+        $this->dao->update(TABLE_USER)->set('account')->eq($account)->where('id')->eq($userID)->exec();
+
+        if(dao::isError()) return false;
+        return $account;
     }
 
     /**
