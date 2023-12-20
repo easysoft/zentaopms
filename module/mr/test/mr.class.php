@@ -276,4 +276,21 @@ class mrTest
         $this->objectModel->apiReopenMR($hostID, $project, $mriid);
         return $this->objectModel->apiGetSingleMR($hostID, $project, $mriid);
     }
+
+    /**
+     * Test approve method.
+     *
+     * @param  int     $MRID
+     * @param  string  $action
+     * @access public
+     * @return array
+     */
+    public function approveTester(int $MRID, string $action): array
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+
+        $result = $this->objectModel->approve($MR, $action);
+        $this->objectModel->dao->update(TABLE_MR)->set('status')->eq($MR->status)->set('approvalStatus')->eq('')->where('id')->eq($MRID)->exec();
+        return $result;
+    }
 }

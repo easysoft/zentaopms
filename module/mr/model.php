@@ -969,7 +969,7 @@ class mrModel extends model
      * Reject or Approve this MR.
      *
      * @param  object $MR
-     * @param  string $action
+     * @param  string $action  approve|reject
      * @param  string $comment
      * @return array
      */
@@ -977,9 +977,9 @@ class mrModel extends model
     {
         $actionID = $this->loadModel('action')->create('mr', $MR->id, $action);
 
-        $oldMR = $MR;
-        if(isset($MR->status) and $MR->status == 'opened')
+        if(isset($MR->status) && $MR->status == 'opened')
         {
+            $oldMR = clone $MR;
             $rawApprovalStatus = zget($MR, 'approvalStatus', '');
             if($action == 'reject'  && $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
             if($action == 'approve' && $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
