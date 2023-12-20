@@ -54,6 +54,7 @@ $config->productplan->actionList['createExecution']['hint']        = $lang->prod
 $config->productplan->actionList['createExecution']['text']        = $lang->productplan->createExecution;
 $config->productplan->actionList['createExecution']['data-target'] = '#createExecutionModal';
 $config->productplan->actionList['createExecution']['data-toggle'] = 'modal';
+$config->productplan->actionList['createExecution']['url']         = array('module' => 'execution', 'method' => 'create');
 
 $config->productplan->actionList['linkStory']['icon'] = 'link';
 $config->productplan->actionList['linkStory']['hint'] = $lang->productplan->linkStory;
