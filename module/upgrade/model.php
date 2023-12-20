@@ -8328,12 +8328,13 @@ class upgradeModel extends model
     }
 
     /**
+     * 将旧的度量指标转换为新的度量指标。
      * Convert old metrics to new metrics.
      *
      * @access public
      * @return bool
      */
-    public function processOldMetrics()
+    public function processOldMetrics(): bool
     {
         $this->loadModel('metric');
         $scopeMap   = $this->config->metric->oldScopeMap;
