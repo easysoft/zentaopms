@@ -3,7 +3,11 @@ author: Yanyi Cao
 version: "1.0"
 fields:
   - field: id
-    range: 1-10
+    range: 1-30
+  - field: product
+    range: 1
+  - field: relation
+    range: interrated
   - field: AType
     range: mr
   - field: AID

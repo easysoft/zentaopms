@@ -1064,7 +1064,7 @@ class mrModel extends model
      *
      * @param  int    $MRID
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $type       story|task|bug
      * @param  string $orderBy
      * @param  object $pager
      * @access public
@@ -1072,39 +1072,22 @@ class mrModel extends model
      */
     public function getLinkList(int $MRID, int $productID, string $type, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $linkIDs = $this->dao->select('BID')->from(TABLE_RELATION)
-            ->where('product')->eq($productID)
-            ->andWhere('relation')->eq('interrated')
-            ->andWhere('AType')->eq('mr')
-            ->andWhere('AID')->eq($MRID)
-            ->andWhere('BType')->eq($type)
-            ->fetchPairs('BID');
-        if(empty($linkIDs)) return array();
+        if(!isset($this->config->objectTables[$type])) return array();
 
         $orderBy = str_replace('name_', 'title_', $orderBy);
-        if($type == 'story')
-        {
-            return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
-                ->from(TABLE_STORY)->alias('t1')
-                ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
-                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.version=t2.version')
-                ->andWhere('t1.id')->in($linkIDs)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            if($type == 'task') $orderBy = str_replace('title_', 'name_', $orderBy);
-            return $this->dao->select('*')->from($this->config->objectTables[$type])
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in($linkIDs)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
+        if($type == 'task') $orderBy = str_replace('title_', 'name_', $orderBy);
+
+        return $this->dao->select('t1.*')->from($this->config->objectTables[$type])->alias('t1')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t1.id=t2.BID')
+            ->where('t2.product')->eq($productID)
+            ->andWhere('t2.relation')->eq('interrated')
+            ->andWhere('t2.AType')->eq('mr')
+            ->andWhere('t2.AID')->eq($MRID)
+            ->andWhere('t2.BType')->eq($type)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -1186,7 +1169,7 @@ class mrModel extends model
             $relation->BID      = $linkID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            $this->action->create($type, $linkID, 'createmr', '', $MRCreateAction);
+            $this->action->create($type, (int)$linkID, 'createmr', '', $MRCreateAction);
         }
 
         return !dao::isError();
