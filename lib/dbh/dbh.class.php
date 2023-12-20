@@ -152,7 +152,7 @@ class dbh
                 $sql = "SHOW DATABASES like '{$this->config->name}'";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM dba_objects WHERE object_type='SCH' AND owner='{$this->config->name}'";
+                $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->config->name}'";
                 break;
             default:
                 $sql = '';
@@ -204,6 +204,7 @@ class dbh
                 return $this->rawQuery($sql);
 
             case 'dm':
+                /*
                 $tableSpace = strtoupper($this->config->name);
                 $res = $this->rawQuery("SELECT * FROM dba_data_files WHERE TABLESPACE_NAME = '$tableSpace'")->fetchAll();
 
@@ -215,8 +216,9 @@ class dbh
                     $this->rawQuery($createTableSpace);
                     $this->rawQuery($createUser);
                 }
+                 */
 
-                $createSchema = "CREATE SCHEMA {$this->config->name} AUTHORIZATION {$this->config->name}";
+                $createSchema = "CREATE SCHEMA {$this->config->name} AUTHORIZATION {$this->config->user}";
                 return $this->rawQuery($createSchema);
 
             default:
