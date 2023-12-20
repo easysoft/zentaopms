@@ -197,6 +197,7 @@ elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->mo
             (
                 set::name("plans[{$planProductID}][]"),
                 set::items(isset($productPlan) ? $productPlan : array()),
+                set::value(isset($plan) ? $plan->id : 0),
                 set::multiple(true),
                 formHidden('products[]', $planProductID),
                 formHidden('branch[0][0]', 0)
