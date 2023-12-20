@@ -2,10 +2,11 @@
 class stakeholder extends control
 {
     /**
+     * 干系人列表页面。
      * Stakeholder list.
      *
      * @param  int    $projectID
-     * @param  string $browseType
+     * @param  string $browseType all|inside|outside|key
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -13,7 +14,7 @@ class stakeholder extends control
      * @access public
      * @return void
      */
-    public function browse($projectID, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $projectID, string $browseType = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('project')->setMenu($projectID);
 
