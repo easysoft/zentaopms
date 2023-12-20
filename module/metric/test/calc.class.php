@@ -382,7 +382,8 @@ class metricTest
      */
     public function getEchartXY($header)
     {
-        return $this->objectModel->getEchartXY($header);
+        list($x, $y) = $this->objectModel->getEchartXY($header);
+        return ($x && $y) ? $x . ',' . $y : '';
     }
 
     /**

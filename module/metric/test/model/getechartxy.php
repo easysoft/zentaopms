@@ -27,4 +27,7 @@ $header3[] = array('name' => 'calcTime', 'title' => '采集时间', 'width' => 1
 
 $header4   = array();
 
-r($metric->getEchartXY($header1)) && p() && e('');
+r($metric->getEchartXY($header1)) && p() && e('calcTime,value');
+r($metric->getEchartXY($header2)) && p() && e('0');
+r($metric->getEchartXY($header3)) && p() && e('scope,value');
+r($metric->getEchartXY($header4)) && p() && e('0');
