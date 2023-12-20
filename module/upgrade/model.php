@@ -4908,13 +4908,15 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取需要移动的扩展文件。
      * Gets the extension file to be moved.
      *
      * @access public
      * @return array
      */
-    public function getExtFiles()
+    public function getExtFiles(): array
     {
+        /* Get all modules and skip modules. */
         $files       = array();
         $allModules  = glob($this->app->moduleRoot . '*');
         $skipModules = $this->getEncryptedModules($allModules);
@@ -4922,10 +4924,12 @@ class upgradeModel extends model
         foreach($allModules as $modulePath)
         {
             $module = basename($modulePath);
-            if(in_array($module, $skipModules)) continue;
+            if(in_array($module, $skipModules)) continue; // If the module is in the skip modules, skip it.
 
+            /* Get directory root path, and directories in the directory root path. */
             $dirRoot = in_array($module, $this->config->upgrade->openModules) ? $modulePath . DS . 'ext' : $modulePath;
             $dirs    = glob($dirRoot . DS . '*');
+            /* Get plugin files in the directories. */
             foreach($dirs as $dirPath)
             {
                 $dir      = basename($dirPath);
