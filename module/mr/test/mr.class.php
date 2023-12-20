@@ -348,4 +348,20 @@ class mrTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * Test unlink method.
+     *
+     * @param  int    $MRID
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function unlinkTester(int $MRID, string $type): object|false
+    {
+        $result = $this->objectModel->unlink($MRID, 1, $type, 1);
+        if(!$result) return $result;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetch();
+    }
 }

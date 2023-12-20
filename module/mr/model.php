@@ -1204,21 +1204,23 @@ class mrModel extends model
      * @param  int    $MRID
      * @param  int    $productID
      * @param  string $type
-     * @param  int    $linkID
+     * @param  int    $objectID
      * @access public
      * @return bool
      */
-    public function unlink(int $MRID, int $productID, string $type, int $linkID): bool
+    public function unlink(int $MRID, int $productID, string $type, int $objectID): bool
     {
+        if(!isset($this->config->objectTables[$type])) return false;
+
         $this->dao->delete()->from(TABLE_RELATION)
             ->where('product')->eq($productID)
             ->andWhere('AType')->eq('mr')
             ->andWhere('AID')->eq($MRID)
             ->andWhere('BType')->eq($type)
-            ->andWhere('BID')->eq($linkID)
+            ->andWhere('BID')->eq($objectID)
             ->exec();
 
-        $this->loadModel('action')->create($type, $linkID, 'deletemr', '', helper::createLink('mr', 'view', "mr={$MRID}"));
+        $this->loadModel('action')->create($type, $objectID, 'deletemr', '', helper::createLink('mr', 'view', "mr={$MRID}"));
         return !dao::isError();
     }
 
