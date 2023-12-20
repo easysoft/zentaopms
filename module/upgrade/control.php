@@ -496,21 +496,19 @@ class upgrade extends control
     }
 
     /**
+     * 获取项目集下的产品线。
      * Get the lines of the program it belongs to.
      *
-     * @param  int   $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function ajaxGetLinesPairsByProgram($programID = 0)
+    public function ajaxGetLinesPairsByProgram(int $programID = 0)
     {
         $lines = $this->loadModel('product')->getLinePairs((int)$programID);
 
         $result = array();
-        foreach($lines as $lineID => $lineName)
-        {
-            $result[] = array('text' => $lineName, 'value' => $lineID);
-        }
+        foreach($lines as $lineID => $lineName) $result[] = array('text' => $lineName, 'value' => $lineID);
 
         return $this->send(array('result' => 'success', 'lines' => $result));
     }
