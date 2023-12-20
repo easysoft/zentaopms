@@ -857,7 +857,7 @@ class upgrade extends control
         $log = array_slice($lines, $offset);
         $finished = ($log and end($log) == 'Finished') ? true : false;
 
-        return print(json_encode(array('log' => implode("<br />", $log) . '<br />', 'finished' => $finished, 'offset' => count($lines))));
+        return print(json_encode(array('log' => implode("<br />", $log) . (empty($log) ? '' : '<br />'), 'finished' => $finished, 'offset' => count($lines))));
     }
 
     /**
