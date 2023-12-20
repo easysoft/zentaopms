@@ -247,6 +247,7 @@ $lang->testcase->noFunction       = '不存在iconv和mb_convert_encoding转码�
 $lang->testcase->noRequire        = "%s行的“%s”是必填字段，不能为空";
 $lang->testcase->noRequireTip     = "“%s”是必填字段，不能为空";
 $lang->testcase->noLibrary        = "现在还没有用例库，请先创建！";
+$lang->testcase->noOtherLibrary   = "目前还没有其他用例库，请维护新的用例库后再试。";
 $lang->testcase->mustChooseResult = '必须选择评审结果';
 $lang->testcase->noModule         = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->testcase->noCase           = '暂时没有用例。';

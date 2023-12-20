@@ -2104,7 +2104,15 @@ class testcase extends control
         }
         if(empty($libraries))
         {
-            echo js::alert($this->lang->testcase->noLibrary);
+            if($toLib)
+            {
+                $tips = $this->lang->testcase->noOtherLibrary;
+            }
+            else
+            {
+                $tips = $this->lang->testcase->noLibrary;
+            }
+            echo js::alert($tips);
             return print(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);

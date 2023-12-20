@@ -247,6 +247,7 @@ $lang->testcase->noFunction       = "Iconv et mb_convert_encoding non trouvés. 
 $lang->testcase->noRequire        = "Ligne %s a“%s ”qui est un champ obligatoire et ne doit pas être vide.";
 $lang->testcase->noRequireTip     = "“%s”is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "Aucune library n'existe. Créez-en une pour commencer.";
+$lang->testcase->noOtherLibrary   = "There are no other use case libraries available at this time, please maintain a new use case library and try again.";
 $lang->testcase->mustChooseResult = 'La Validation du résultat est nécessaire.';
 $lang->testcase->noModule         = "<div>Vous n'avez aucun modules.</div><div>Gérer les modules maintenant.</div>";
 $lang->testcase->noCase           = "Aucun CasTest pour l'instant. ";
