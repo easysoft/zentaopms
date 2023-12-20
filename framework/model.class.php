@@ -86,7 +86,9 @@ class model extends baseModel
     {
         if(empty($objectID)) return false;
         if(empty($moduleName)) $moduleName = $this->getModuleName();
-        $table = $this->config->objectTables[$moduleName];
+
+        $table = zget($this->config->objectTables, $moduleName, '');
+        if(empty($table)) return false;
 
         return $this->dao->findById($objectID)->from($table)->fetch();
     }

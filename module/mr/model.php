@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 class mrModel extends model
 {
-
     /**
      * 获取合并请求列表.
      * Get MR list of gitlab project.

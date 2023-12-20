@@ -1918,20 +1918,18 @@ class docModel extends model
         /* Set toList and ccList. */
         $toList = '';
         $ccList = str_replace(' ', '', trim($doc->mailto, ','));
-        if(empty($toList))
+
+        if(empty($ccList)) return false;
+        if(strpos($ccList, ',') === false)
         {
-            if(empty($ccList)) return false;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
+            $toList = $ccList;
+            $ccList = '';
+        }
+        else
+        {
+            $commaPos = strpos($ccList, ',');
+            $toList   = substr($ccList, 0, $commaPos);
+            $ccList   = substr($ccList, $commaPos + 1);
         }
         return array($toList, $ccList);
     }

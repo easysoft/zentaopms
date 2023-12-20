@@ -291,4 +291,77 @@ class mailTest
 
         return $object;
     }
+
+    /**
+     * Test getAddressees method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $actionID
+     * @access public
+     * @return array|false
+     */
+    public function getAddresseesTest($objectType, $objectID, $actionID)
+    {
+        $object = $this->objectModel->getObjectForMail($objectType, $objectID);
+        if(!$object) return false;
+        $action = $this->objectModel->getActionForMail($actionID);
+        if(!$action) return false;
+
+        return $this->objectModel->getAddressees($objectType, $object, $action);
+    }
+
+    /**
+     * Test getMailContent method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $actionID
+     * @access public
+     * @return array|false
+     */
+    public function getMailContentTest($objectType, $objectID, $actionID)
+    {
+        $object = $this->objectModel->getObjectForMail($objectType, $objectID);
+        if(!$object) return false;
+        $action = $this->objectModel->getActionForMail($actionID);
+        if(!$action) return false;
+
+        return $this->objectModel->getMailContent($objectType, $object, $action);
+    }
+
+    /**
+     * Test getObjectTitle method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return string|false
+     */
+    public function getObjectTitleTest($objectType, $objectID)
+    {
+        $object = $this->objectModel->getObjectForMail($objectType, $objectID);
+        if(!$object) return false;
+
+        return $this->objectModel->getObjectTitle($object, $objectType);
+    }
+
+    /**
+     * Test sendBasedOnType method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $actionID
+     * @access public
+     * @return array|false
+     */
+    public function sendBasedOnTypeTest($objectType, $objectID, $actionID)
+    {
+        $object = $this->objectModel->getObjectForMail($objectType, $objectID);
+        if(!$object) return false;
+        $action = $this->objectModel->getActionForMail($actionID);
+        if(!$action) return false;
+
+        return $this->objectModel->sendBasedOnType($objectType, $object, $action);
+    }
 }

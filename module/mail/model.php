@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of mail module of ZenTaoPMS.
  *
@@ -556,31 +557,31 @@ class mailModel extends model
     }
 
     /**
-     * Send mail.
+     * Send mail by object.
      *
-     * @param  int $objectID
-     * @param  int $actionID
+     * @param  int    $objectID
+     * @param  int    $actionID
      * @access public
-     * @return void
+     * @return string|false
      */
-    public function sendmail(int $objectID, int $actionID): void
+    public function sendmail(int $objectID, int $actionID): string|false
     {
-        if(empty($objectID) or empty($actionID)) return;
+        if(empty($objectID) or empty($actionID)) return false;
 
         /* Load module and get vars. */
-        $action     = $this->mailZen->getActionForMail($actionID);
+        $action     = $this->mailTao->getActionForMail($actionID);
         $objectType = $action->objectType;
-        $object     = $this->mailZen->getObjectForMail($objectType, $objectID);
-        $title      = $this->mailZen->getObjectTitle($object, $objectType);
+        $object     = $this->mailTao->getObjectForMail($objectType, $objectID);
+        $title      = $this->mailTao->getObjectTitle($object, $objectType);
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
 
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
-        if($objectType == 'review' and empty($object->auditedBy)) return;
+        if($objectType == 'review' and empty($object->auditedBy)) return false;
 
         /* Send it. */
-        $this->mailZen->sendBasedOnType($objectType, $object, $action);
+        return $this->mailTao->sendBasedOnType($objectType, $object, $action);
     }
 
     /**
