@@ -8262,4 +8262,17 @@ class upgradeModel extends model
     {
         return  $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
     }
+
+    /**
+     * 删除指标。
+     * Delete Metrics.
+     *
+     * @access public
+     * @return bool
+     */
+    public function deleteMetrics(): bool
+    {
+        $this->dao->delete()->from(TABLE_METRIC)->where('fromID')->ne(0)->exec();
+        return !dao::isError();
+    }
 }

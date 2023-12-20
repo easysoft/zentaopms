@@ -710,22 +710,26 @@ class upgrade extends control
     }
 
     /**
+     * 处理历史指标。
      * Process old metrics in order to easy of test.
      *
-     * @param  bool $isDelete
+     * @param  bool   $isDelete
      * @access public
      * @return void
      */
-    public function processOldMetrics($isDelete = false)
+    public function processOldMetrics(bool $isDelete = false)
     {
         if($isDelete)
         {
-            $this->dao->delete()->from(TABLE_METRIC)->where('fromID')->ne(0)->exec();
+            $this->upgrade->deleteMetrics();
         }
         else
         {
             $this->upgrade->processOldMetrics();
         }
+
+        if(dao::isError()) echo 'fail';
+
         echo 'ok';
     }
 
