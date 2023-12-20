@@ -4,17 +4,31 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbanregion')->gen(0);
+zdTable('kanbancolumn')->gen(0);
+zdTable('kanbanlane')->gen(0);
+
 /**
 
 title=测试 kanbanModel->createRDRegion();
+timeout=0
 cid=1
-pid=1
 
-测试创建执行10001的执行看板区域 >> 默认区域,100001
-测试创建执行10002的执行看板区域 >> 默认区域,100002
-测试创建执行10003的执行看板区域 >> 默认区域,100003
-测试创建执行10004的执行看板区域 >> 默认区域,100004
-测试创建执行10005的执行看板区域 >> 默认区域,100005
+- 测试创建执行10001的执行看板区域
+ - 属性name @默认区域
+ - 属性kanban @100001
+- 测试创建执行10002的执行看板区域
+ - 属性name @默认区域
+ - 属性kanban @100002
+- 测试创建执行10003的执行看板区域
+ - 属性name @默认区域
+ - 属性kanban @100003
+- 测试创建执行10004的执行看板区域
+ - 属性name @默认区域
+ - 属性kanban @100004
+- 测试创建执行10005的执行看板区域
+ - 属性name @默认区域
+ - 属性kanban @100005
 
 */
 

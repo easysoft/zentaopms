@@ -2443,6 +2443,7 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建默认的专业研发看板区域。
      * Create a default RD region.
      *
      * @param  object $execution
@@ -2469,13 +2470,14 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建默认的专业研发看板泳道。
      * Create default RD lanes.
      *
      * @param  int    $executionID
      * @param  int    $regionID
      *
      * @access public
-     * @return bool
+     * @return void
      */
     public function createRDLane(int $executionID, int $regionID)
     {
@@ -2502,22 +2504,24 @@ class kanbanModel extends model
     }
 
     /**
+     * 创建默认值的专业研发看板列。
      * Create default RD columns.
      *
      * @param  int    $regionID
      * @param  int    $groupID
      * @param  int    $laneID
      * @param  string $laneType
+     * @param  int    $executionID
      *
      * @access public
      * @return bool
      */
-    public function createRDColumn($regionID, $groupID, $laneID, $laneType, $executionID)
+    public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID)
     {
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($laneType == 'story') $columnList = $this->lang->kanban->storyColumn;
-        if($laneType == 'bug') $columnList = $this->lang->kanban->bugColumn;
-        if($laneType == 'task') $columnList = $this->lang->kanban->taskColumn;
+        if($laneType == 'bug')   $columnList = $this->lang->kanban->bugColumn;
+        if($laneType == 'task')  $columnList = $this->lang->kanban->taskColumn;
 
         foreach($columnList as $type => $name)
         {

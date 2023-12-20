@@ -4,6 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
+zdTable('kanbanregion')->gen(0);
+zdTable('kanbancolumn')->gen(0);
+zdTable('kanbanlane')->gen(0);
+
 /**
 
 title=测试 kanbanModel->createDefaultLane();
