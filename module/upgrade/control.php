@@ -617,6 +617,7 @@ class upgrade extends control
     }
 
     /**
+     * 更新文件。
      * Ajax update file.
      *
      * @param  string $type
@@ -624,25 +625,27 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function ajaxUpdateFile($type = '', $lastID = 0)
+    public function ajaxUpdateFile(string $type = '', int $lastID = 0)
     {
         set_time_limit(0);
+
         $this->app->loadLang('search');
+
         $result = $this->upgrade->updateFileObjectID($type, $lastID);
+
         $response = array();
+        $response['type']  = $type;
+        $response['count'] = $result['count'];
+
         if($result['type'] == 'finish')
         {
             $response['result']  = 'finished';
-            $response['type']    = $type;
-            $response['count']   = $result['count'];
             $response['message'] = $this->lang->search->buildSuccessfully;
         }
         else
         {
             $response['result']   = 'continue';
             $response['next']     = inlink('ajaxUpdateFile', "type={$result['type']}&lastID={$result['lastID']}");
-            $response['count']    = $result['count'];
-            $response['type']     = $type;
             $response['nextType'] = $result['type'];
             $response['message']  = zget($this->lang->searchObjects, $result['type']) . " <span class='{$result['type']}-num'>0</span>";
         }
