@@ -104,7 +104,7 @@ div(
                 btn(
                     setClass('primary'),
                     setData('dismiss', 'modal'),
-                    on::click('window.aiMiniProgramChat.backToSquare'),
+                    on::click('window.aiBrowseMiniProgram.backToSquare'),
                     $lang->confirm
                 )
             )
@@ -145,7 +145,7 @@ div(
                     setClass('ghost btn-star absolute'),
                     set::size('md'),
                     setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
-                    on::click('window.aiMiniProgramChat.handleStarBtnClick'),
+                    on::click('window.aiBrowseMiniProgram.handleStarBtnClick'),
                     html(html::image("static/svg/{$star}.svg", "class='$star'")),
                     $lang->ai->miniPrograms->collect
                 )
@@ -170,7 +170,7 @@ div(
                         set::disabled($isDeleted),
                         set::icon('trash'),
                         $lang->ai->chatReset,
-                        on::click('window.aiMiniProgramChat.handleRestBtnClick')
+                        on::click('window.aiBrowseMiniProgram.handleRestBtnClick')
                     )
             ),
             empty($formGroups)
@@ -190,7 +190,7 @@ div(
                 setClass('primary block w-full'),
                 set::disabled($isDeleted),
                 $lang->ai->miniPrograms->generate,
-                on::click('window.aiMiniProgramChat.startAIChat')
+                on::click('window.aiBrowseMiniProgram.startAIChat')
             )
         )
     ),
@@ -267,7 +267,7 @@ div(
             html("<textarea placeholder='{$lang->ai->miniPrograms->placeholder->asking}' rows='1' class='chat-input-box'></textarea>"),
             btn(
                 setClass('ghost send-btn'),
-                on::click('window.aiMiniProgramChat.clearInputAndChat'),
+                on::click('window.aiBrowseMiniProgram.clearInputAndChat'),
                 html(<<<END
                     <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13.9398 4C14.1118 4.00003 14.2778 4.07496 14.4063 4.2106C14.5348 4.34623 14.6169 4.53312 14.6371 4.73583L14.642 4.83333V10.1908C14.642 11.7392 13.8036 13.0717 12.659 13.1617L12.5354 13.1667H5.10287L6.71226 15.0775C6.8382 15.2275 6.91131 15.4287 6.91676 15.6403C6.9222 15.8519 6.85957 16.0581 6.74158 16.2169C6.62359 16.3757 6.45909 16.4753 6.2815 16.4953C6.1039 16.5154 5.92652 16.4545 5.78539 16.325L5.71938 16.2558L2.91067 12.9225C2.77903 12.7662 2.70508 12.5543 2.70508 12.3333C2.70508 12.1124 2.77903 11.9004 2.91067 11.7442L5.71938 8.41083C5.84575 8.26138 6.01531 8.17461 6.19362 8.16814C6.37194 8.16168 6.54565 8.23601 6.67946 8.37604C6.81327 8.51607 6.89715 8.71129 6.91407 8.92206C6.93099 9.13283 6.87967 9.34334 6.77055 9.51083L6.71226 9.58917L5.10287 11.5H12.5354C12.8577 11.5 13.1927 11.0192 13.2334 10.3308L13.2376 10.1908V4.83333C13.2376 4.61232 13.3116 4.40036 13.4433 4.24408C13.575 4.0878 13.7536 4 13.9398 4Z" fill="#D8DBDE"/>

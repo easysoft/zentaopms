@@ -137,7 +137,26 @@ class ai extends control
 
     public function view($id)
     {
-        $this->locate($this->createLink('ai', 'miniProgramChat', "id=$id"));
+        $this->locate($this->createLink('ai', 'browseMiniProgram', "id=$id"));
+    }
+
+    /**
+     * Browse mini program by id from square.
+     *
+     * @param string $id
+     * @access public
+     * @return void
+     */
+    public function browseMiniProgram($id)
+    {
+        $miniProgram = $this->ai->getMiniProgramByID($id);
+
+        $this->view->miniProgram  = $miniProgram;
+        $this->view->messages     = $this->ai->getHistoryMessages($id);
+        $this->view->fields       = $this->ai->getMiniProgramFields($id);
+        $this->view->collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
+        $this->view->title        = "{$this->lang->ai->miniPrograms->common}#{$miniProgram->id} $miniProgram->name";
+        $this->display();
     }
 
     /**
@@ -151,9 +170,9 @@ class ai extends control
     {
         $miniProgram  = $this->ai->getMiniProgramByID($id);
 
-        $messages = array();
         if(!empty($_POST))
         {
+            $messages = array();
             if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->unpublishedTip, 'reason' => 'unpublished'));
 
             $history = $this->post->history;
@@ -179,13 +198,6 @@ class ai extends control
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'reason' => 'no model'));
             }
         }
-
-        $this->view->miniProgram  = $miniProgram;
-        $this->view->messages     = $this->ai->getHistoryMessages($id);
-        $this->view->fields       = $this->ai->getMiniProgramFields($id);
-        $this->view->collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
-        $this->view->title        = "{$this->lang->ai->miniPrograms->common}#{$miniProgram->id} $miniProgram->name";
-        $this->display();
     }
 
     /**

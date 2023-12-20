@@ -1,4 +1,4 @@
-if(!window.aiMiniProgramChat) window.aiMiniProgramChat = {};
+if(!window.aiBrowseMiniProgram) window.aiBrowseMiniProgram = {};
 
 let firstGenerate = true;
 let messageList = [];
@@ -32,14 +32,8 @@ function getFormValue()
     {
         const {name} = field;
         const $field = $(`[data-name="${name}"]`);
-        if(!$field.hasClass('picker-box'))
-        {
-            fieldValueMap.set(name, $field.prop('value'));
-        }
-        else
-        {
-            fieldValueMap.set(name, $field.zui('picker').$.value);
-        }
+        if(!$field.hasClass('picker-box')) fieldValueMap.set(name, $field.prop('value'));
+        else                               fieldValueMap.set(name, $field.zui('picker').$.value);
     });
     return fieldValueMap;
 }
@@ -114,7 +108,7 @@ function sendMessagesToAI(message)
     $.post(
         postLink,
         formData,
-        function(response)
+        function (response)
         {
             $inputBox.removeAttr('readonly');
             $sendBtn.removeAttr('disabled');
@@ -152,7 +146,7 @@ function sendMessagesToAI(message)
     $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
 }
 
-window.aiMiniProgramChat.startAIChat = function()
+window.aiBrowseMiniProgram.startAIChat = function()
 {
     clearErrorTip();
     const fields = getFormValue();
@@ -185,11 +179,11 @@ window.aiMiniProgramChat.startAIChat = function()
     sendMessagesToAI(promptStr);
 };
 
-window.aiMiniProgramChat.handleStarBtnClick = function()
+window.aiBrowseMiniProgram.handleStarBtnClick = function()
 {
     const $btn = $(this);
     const url = $btn.attr('data-url');
-    $.get(url, function(response)
+    $.get(url, function (response)
     {
         if(response.status == '1')
         {
@@ -204,7 +198,7 @@ window.aiMiniProgramChat.handleStarBtnClick = function()
     }, 'json');
 };
 
-window.aiMiniProgramChat.handleRestBtnClick = function()
+window.aiBrowseMiniProgram.handleRestBtnClick = function()
 {
     try
     {
@@ -224,17 +218,17 @@ let composing = false;
  *
  * @param {KeyboardEvent} event
  */
-window.aiMiniProgramChat.handleInputEnter = function(event)
+window.aiBrowseMiniProgram.handleInputEnter = function(event)
 {
     console.log(composing, 3);
     if(event.code === 'Enter' && !composing)
     {
         event.preventDefault();
-        window.aiMiniProgramChat.clearInputAndChat();
+        window.aiBrowseMiniProgram.clearInputAndChat();
     }
 };
 
-window.aiMiniProgramChat.clearInputAndChat = function()
+window.aiBrowseMiniProgram.clearInputAndChat = function()
 {
     const $inputBox = $('.chat-input-box');
     const message = $inputBox.val()
@@ -243,13 +237,13 @@ window.aiMiniProgramChat.clearInputAndChat = function()
     sendMessagesToAI(message);
 };
 
-window.aiMiniProgramChat.handleInputCompositionStart = function()
+window.aiBrowseMiniProgram.handleInputCompositionStart = function()
 {
     composing = true;
     console.log(composing, 1);
 };
 
-window.aiMiniProgramChat.handleInputCompositionEnd = function()
+window.aiBrowseMiniProgram.handleInputCompositionEnd = function()
 {
     composing = false;
     console.log(composing, 2);
@@ -258,7 +252,7 @@ window.aiMiniProgramChat.handleInputCompositionEnd = function()
 /**
  * @param {Event} event
  */
-window.aiMiniProgramChat.handleInput = function(event)
+window.aiBrowseMiniProgram.handleInput = function(event)
 {
     /**
      * @type {HTMLTextAreaElement}
@@ -268,7 +262,7 @@ window.aiMiniProgramChat.handleInput = function(event)
     inputBox.style.height = `${(inputBox.scrollHeight + 2)}px`
 };
 
-window.aiMiniProgramChat.backToSquare = function()
+window.aiBrowseMiniProgram.backToSquare = function()
 {
     location.href = $.createLink('ai', 'square', '#app=ai');
 };
@@ -391,12 +385,13 @@ $(function()
     }
 
     const $inputBox = $('.chat-input-box');
-    if(!$inputBox.attr('data-bind')) {
+    if(!$inputBox.attr('data-bind'))
+    {
         $inputBox
-            .on('input', window.aiMiniProgramChat.handleInput)
-            .on('keydown', window.aiMiniProgramChat.handleInputEnter)
-            .on('compositionstart', window.aiMiniProgramChat.handleInputCompositionStart)
-            .on('compositionend', window.aiMiniProgramChat.handleInputCompositionEnd);
+            .on('input', window.aiBrowseMiniProgram.handleInput)
+            .on('keydown', window.aiBrowseMiniProgram.handleInputEnter)
+            .on('compositionstart', window.aiBrowseMiniProgram.handleInputCompositionStart)
+            .on('compositionend', window.aiBrowseMiniProgram.handleInputCompositionEnd);
 
         $inputBox.attr('data-bind', 'true');
     }
