@@ -5111,26 +5111,32 @@ class upgradeModel extends model
     }
 
     /**
+     * 移除收费版本的目录。
      * Remove encrypted directories.
      *
      * @access public
      * @return array
      */
-    public function removeEncryptedDir()
+    public function removeEncryptedDir(): array
     {
+        /* Init response and command. */
+        $response = array('result' => 'success');
+        $command  = array();
+
+        /* Load zfile. */
+        $zfile = $this->app->loadClass('zfile');
+
+        /* Get all modules, skip modules, custom modules. */
         $allModules    = glob($this->app->moduleRoot . '*');
         $skipModules   = $this->getEncryptedModules($allModules);
         $customModules = $this->getCustomModules($allModules);
         $modules       = $skipModules + $customModules;
-        $zfile         = $this->app->loadClass('zfile');
-        $response      = array('result' => 'success');
-        $command       = array();
         foreach($modules as $module)
         {
-            if(in_array($module, $this->config->upgrade->openModules)) continue;
+            if(in_array($module, $this->config->upgrade->openModules)) continue; // If the module is open module, skip it.
 
             $dirPath = $this->app->moduleRoot . $module;
-            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath;
+            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath; // If the directory can't be removed, append the command for deleting a directory.
         }
 
         if(!empty($command))
