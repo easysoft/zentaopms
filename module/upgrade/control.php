@@ -478,21 +478,20 @@ class upgrade extends control
     }
 
     /**
+     * 获取某个项目集下的项目。
      * Get the project of the program it belongs to.
      *
-     * @param  int   $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function ajaxGetProjectPairsByProgram($programID = 0)
+    public function ajaxGetProjectPairsByProgram(int $programID = 0)
     {
         $projects = $this->upgrade->getProjectPairsByProgram($programID);
 
         $result = array();
-        foreach($projects as $projectID => $projectName)
-        {
-            $result[] = array('text' => $projectName, 'value' => $projectID);
-        }
+        foreach($projects as $projectID => $projectName) $result[] = array('text' => $projectName, 'value' => $projectID);
+
         return $this->send(array('result' => 'success', 'projects' => $result));
     }
 
