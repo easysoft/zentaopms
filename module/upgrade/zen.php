@@ -440,8 +440,11 @@ class upgradeZen extends upgrade
         }
 
         /* Create Program. */
-        list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+        $result = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
+
+        list($programID, $projectList, $lineID) = $result;
 
         /* Process productline. */
         $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
@@ -475,8 +478,11 @@ class upgradeZen extends upgrade
         $linkedSprints = $this->post->sprints;
 
         /* Create Program. */
-        list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
+        $result = $this->upgrade->createProgram(array(), $linkedSprints);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
+
+        list($programID, $projectList, $lineID) = $result;
 
         if($projectType == 'execution')
         {
