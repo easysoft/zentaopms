@@ -569,8 +569,8 @@ class testtask extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $scenesGroup = $this->testtask->getSceneCases($productID, $runs);
-        $runs        = $scenesGroup['runs'];
-        $scenes      = $scenesGroup['scenes'];
+        $runs        = !empty($scenesGroup['runs']) ? $scenesGroup['runs'] : array();
+        $scenes      = !empty($scenesGroup['scenes']) ? $scenesGroup['scenes'] : array();
 
         /* Build the search form. */
         $this->loadModel('testcase');
