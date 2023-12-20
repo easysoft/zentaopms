@@ -605,7 +605,7 @@ class userModel extends model
 
             if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
-            $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,group')->exec();
+            $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,group')->autoCheck()->exec();
             if(dao::isError()) return $this->rollback();
 
             $userID = $this->dao->lastInsertID();
