@@ -280,7 +280,7 @@ class metricTao extends metricModel
         $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
         $dataFieldStr = implode(',', $wrapFields);
 
-        $records =  $this->dao->select($dataFieldStr)
+        $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
@@ -295,10 +295,10 @@ class metricTao extends metricModel
             ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
             ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
-            ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
-            ->fetchAll();
+            ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
-        return $records;
+        if($metricScope == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
+        return $stmt->fetchAll();
     }
 
     /**
