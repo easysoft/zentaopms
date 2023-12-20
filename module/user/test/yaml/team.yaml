@@ -1,0 +1,30 @@
+title: table zt_team
+desc: "团队"
+author: automated export
+version: "1.0"
+fields:
+  - field: root
+    note: "项目/执行ID"
+    range: 11-100, 101-200 
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "项目类型"
+    range: project{100},execution{100}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户账号"
+    fields:
+      - field: account1
+        range: admin,user{99}
+      - field: account9
+        range: "[],0-98"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

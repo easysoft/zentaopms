@@ -867,7 +867,6 @@ class userTest
      *
      * @param  object $program
      * @param  string $account
-     * @param  array  $groups
      * @param  array  $teams
      * @param  array  $stakeholders
      * @param  array  $whiteList
@@ -875,9 +874,9 @@ class userTest
      * @access public
      * @return bool
      */
-    public function checkProductPrivTest(object $product, string $account, string $groups = '', array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
+    public function checkProductPrivTest(object $product, string $account, array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        return $this->objectModel->checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins);
+        return $this->objectModel->checkProductPriv($product, $account, $teams, $stakeholders, $whiteList, $admins);
     }
 
     /**

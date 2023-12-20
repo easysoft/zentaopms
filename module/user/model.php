@@ -1629,99 +1629,271 @@ class userModel extends model
     }
 
     /**
+     * 初始化访问权限所属的数据。
+     * Init user view objects.
+     *
+     * @access private
+     * @return array
+     */
+    private function initViewObjects(): array
+    {
+        static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
+
+        if(!$allProducts) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy,reviewer,PMT')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
+        if(!$allProjects) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
+        if(!$allPrograms) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
+        if(!$allSprints)  $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
+
+        if(!$teams)
+        {
+            $teams = array();
+            $stmt  = $this->dao->select('root,type,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
+            while($team = $stmt->fetch()) $teams[$team->type][$team->root][$team->account] = $team->account;
+        }
+
+        /* Get white list. */
+        if(!$whiteList)
+        {
+            $whiteList = array();
+            $stmt      = $this->dao->select('objectID,objectType,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint,product')->query();
+            while($acl = $stmt->fetch()) $whiteList[$acl->objectType][$acl->objectID][$acl->account] = $acl->account;
+        }
+
+        /* Get stakeholders. */
+        if(!$stakeholders)
+        {
+            $stakeholders = array();
+            $stmt         = $this->dao->select('objectID,objectType,user')->from(TABLE_STAKEHOLDER)->query();
+            while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectType][$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
+        }
+
+        return array($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders);
+    }
+
+    /**
+     * 获取用户的可访问项目集。
+     * Get program user view.
+     *
+     * @param  string  $account
+     * @param  array   $allPrograms
+     * @param  array   $manageObjects
+     * @param  array   $stakeholders
+     * @param  array   $whiteList
+     * @param  array   $programStakeholderGroup
+     * @access private
+     * @return string
+     */
+    private function getProgramView(string $account, array $allPrograms, array $manageObjects, array $stakeholders, array $whiteList, array $programStakeholderGroup): string
+    {
+        $programView = '';
+        if(!empty($manageObjects['programs']['isAdmin']))
+        {
+            $programView = join(',', array_keys($allPrograms));
+        }
+        else
+        {
+            $programs       = array();
+            $managePrograms = isset($manageObjects['programs']['list']) ? $manageObjects['programs']['list'] : '';
+            foreach($allPrograms as $programID => $program)
+            {
+                /* 如果是某个项目集的干系人，也可以访问该项目集。 */
+                $programStakeholders = !empty($stakeholders['program'][$programID]) ? $stakeholders['program'][$programID] : array();
+                if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $programID, array());
+
+                /* 如果是某个项目集的白名单用户，也可以访问该项目集。 */
+                $programWhiteList = !empty($whiteList['program'][$programID]) ? $whiteList['program'][$programID] : array();
+                if($this->checkProgramPriv($program, $account, $programStakeholders, $programWhiteList)) $programs[$programID] = $programID;
+
+                /* 如果有某个项目集的管理权限，也可以访问该项目集。 */
+                if(strpos(",$managePrograms,", ",$programID,") !== false) $programs[$programID] = $programID;
+            }
+            $programView = join(',', $programs);
+        }
+
+        return $programView;
+    }
+
+    /**
+     * 获取用户的可访问产品。
+     * Get product user view.
+     *
+     * @param  string $account
+     * @param  array  $allProducts
+     * @param  array  $manageObjects
+     * @param  array  $whiteList
+     * @access private
+     * @return string
+     */
+    private function getProductView(string $account, array $allProducts, array $manageObjects, array $whiteList): string
+    {
+        $productView = '';
+        if(!empty($manageObjects['products']['isAdmin']))
+        {
+            $productView = join(',', array_keys($allProducts));
+        }
+        else
+        {
+            $products       = array();
+            $manageProducts = isset($manageObjects['products']['list']) ? $manageObjects['products']['list'] : '';
+
+            list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
+            foreach($allProducts as $productID => $product)
+            {
+                /* 根据团队、干系人、白名单判断是否可以访问该产品。 */
+                $productTeam        = zget($productTeams, $productID, array());
+                $productStakeholder = zget($productStakeholders, $productID, array());
+                $productWhiteList   = !empty($whiteList['product'][$productID]) ? $whiteList['product'][$productID] : array();
+                if($this->checkProductPriv($product, $account, $productTeam, $productStakeholders, $productWhiteList)) $products[$productID] = $productID;
+
+                /* 如果有某个产品的管理权限，也可以访问该产品。 */
+                if(strpos(",$manageProducts,", ",$productID,") !== false) $products[$productID] = $productID;
+            }
+            $productView = join(',', $products);
+        }
+
+        return $productView;
+    }
+
+    /**
+     * 获取用户的可访问项目。
+     * Get project user view.
+     *
+     * @param  string  $account
+     * @param  array   $allProjects
+     * @param  array   $manageObjects
+     * @param  array   $teams
+     * @param  array   $stakeholders
+     * @param  array   $whiteList
+     * @param  array   $projectStakeholderGroup
+     * @access private
+     * @return string
+     */
+    private function getProjectView(string $account, array $allProjects, array $manageObjects, array $teams, array $stakeholders, array $whiteList, array $projectStakeholderGroup): string
+    {
+        $projectView = '';
+        if(!empty($manageObjects['projects']['isAdmin']))
+        {
+            $projectView = join(',', array_keys($allProjects));
+        }
+        else
+        {
+            $projects       = array();
+            $manageProjects = isset($manageObjects['projects']['list']) ? $manageObjects['projects']['list'] : '';
+            foreach($allProjects as $projectID => $project)
+            {
+                /* 根据团队、干系人、白名单判断是否可以访问该项目。 */
+                $projectTeams        = !empty($teams['project'][$projectID])        ? $teams['project'][$projectID]        : array();
+                $projectStakeholders = !empty($stakeholders['project'][$projectID]) ? $stakeholders['project'][$projectID] : array();
+                $projectWhiteList    = !empty($whiteList['project'][$projectID])    ? $whiteList['project'][$projectID]    : array();
+                if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $projectID, array());
+                if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, $projectWhiteList)) $projects[$projectID] = $projectID;
+
+                /* 如果有某个项目管理权限，也可以访问该项目。 */
+                if(strpos(",$manageProjects,", ",$projectID,") !== false) $projects[$projectID] = $projectID;
+            }
+            $projectView = join(',', $projects);
+        }
+
+        return $projectView;
+    }
+
+    /**
+     * 获取用户的可访问迭代。
+     * Get sprint user view.
+     *
+     * @param  string  $account
+     * @param  array   $allSprints
+     * @param  array   $manageObjects
+     * @param  array   $teams
+     * @param  array   $stakeholders
+     * @param  array   $whiteList
+     * @access private
+     * @return string
+     */
+    private function getSprintView(string $account, array $allSprints, array $manageObjects, array $teams, array $stakeholders, array $whiteList): string
+    {
+        $sprintView = '';
+        if(!empty($manageObjects['executions']['isAdmin']))
+        {
+            $sprintView = join(',', array_keys($allSprints));
+        }
+        else
+        {
+            $sprints          = array();
+            $manageExecutions = isset($manageObjects['executions']['list']) ? $manageObjects['executions']['list'] : '';
+            foreach($allSprints as $sprintID => $sprint)
+            {
+                /* 根据团队、干系人、白名单判断是否可以访问该迭代。 */
+                $sprintTeams        = !empty($teams['execution'][$sprintID])        ? $teams['execution'][$sprintID]        : array();
+                $sprintStakeholders = !empty($stakeholders['execution'][$sprintID]) ? $stakeholders['execution'][$sprintID] : array();
+                $sprintWhiteList    = !empty($whiteList['sprint'][$sprintID])       ? $whiteList['sprint'][$sprintID]       : array();
+                if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, $sprintWhiteList)) $sprints[$sprintID] = $sprintID;
+
+                /* 如果有某个迭代管理权限，也可以访问该迭代。 */
+                if(strpos(",$manageExecutions,", ",$sprintID,") !== false) $sprints[$sprintID] = $sprintID;
+            }
+            $sprintView = join(',', $sprints);
+        }
+
+        return $sprintView;
+    }
+
+    /**
+     * 按照类型分组获取用户管理的对象。
+     * Get management objects by type grouping.
+     *
+     * @param  string  $account
+     * @access private
+     * @return array
+     */
+    private function getManageListGroupByType(string $account): array
+    {
+        $manageObjects = array();
+        $projectAdmins = $this->dao->select('`group`,programs,products,projects,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll('group');
+        foreach($projectAdmins as $projectAdmin)
+        {
+            foreach($projectAdmin as $key => $value)
+            {
+                if(!isset($manageObjects[$key]['list'])) $manageObjects[$key]['list'] = '';
+                if($value == 'all')
+                {
+                    $manageObjects[$key]['isAdmin'] = 1;
+                }
+                else if($value)
+                {
+                    $manageObjects[$key]['list'] .= $value . ',';
+                }
+            }
+        }
+
+        return $manageObjects;
+    }
+
+    /**
+     * 获取用户的可访问对象。
      * Compute user view.
      *
      * @param  string $account
-     * @param  bool   $force
+     * @param  bool   $force    是否重新生成
      * @access public
      * @return object
      */
-    public function computeUserView($account = '', $force = false)
+    public function computeUserView(string $account = '', bool $force = false): object
     {
         if(empty($account)) $account = $this->session->user->account;
-        if(empty($account)) return array();
+        if(empty($account)) return new stdclass();
 
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-        if(empty($userView) or $force)
+        if(empty($userView) || $force)
         {
-            $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
-            $groups  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($account)->fetchPairs('group', 'group');
-            $groups  = ',' . join(',', $groups) . ',';
-
             /* Init objects. */
-            $allProducts = $allPrograms = $allProjects = $allSprints = $teams = $stakeholders = $productWhiteList = $whiteList = null;
-            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy,reviewer,PMT')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
-            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
-            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
-
-            /* Get admins. */
-            $manageObjects = array();
-            $projectAdmins = $this->dao->select('`group`,programs,products,projects,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll('group');
-            foreach($projectAdmins as $projectAdmin)
-            {
-                foreach($projectAdmin as $key => $value)
-                {
-                    $manageObjects[$key]['list'] = isset($manageObjects[$key]['list']) ? $manageObjects[$key]['list'] : '';
-
-                    if($value == 'all')
-                    {
-                        $manageObjects[$key]['isAdmin'] = 1;
-                    }
-                    else
-                    {
-                        $manageObjects[$key]['list'] .= $value . ',';
-                    }
-                }
-            }
-
-            /* Get teams. */
-            if($teams === null)
-            {
-                $teams = array();
-                $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
-                while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
-            }
-
-            /* Get product white list. */
-            if($productWhiteList === null)
-            {
-                $productWhiteList = array();
-                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('product')->query();
-                while($acl = $stmt->fetch()) $productWhiteList[$acl->objectID][$acl->account] = $acl->account;
-            }
-
-            /* Get white list. */
-            if($whiteList === null)
-            {
-                $whiteList = array();
-                $stmt      = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint')->query();
-                while($acl = $stmt->fetch()) $whiteList[$acl->objectID][$acl->account] = $acl->account;
-            }
-
-            /* Get stakeholders. */
-            if($stakeholders === null)
-            {
-                $stakeholders = array();
-                $stmt         = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->query();
-                while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
-            }
-
-            /* Compute parent stakeholders. */
-            $this->loadModel('stakeholder');
-            $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
-            $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
-
-            list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
+            list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects();
 
             /* Init user view. */
             $userView = new stdclass();
             $userView->account  = $account;
-            $userView->programs = array();
-            $userView->products = array();
-            $userView->projects = array();
-            $userView->sprints  = array();
 
+            $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
             if($isAdmin)
             {
                 $userView->programs = join(',', array_keys($allPrograms));
@@ -1731,81 +1903,22 @@ class userModel extends model
             }
             else
             {
-                /* Process program userview. */
-                if(!empty($manageObjects['programs']['isAdmin']))
-                {
-                    $userView->programs = join(',', array_keys($allPrograms));
-                }
-                else
-                {
-                    $programs       = array();
-                    $managePrograms = isset($manageObjects['programs']['list']) ? $manageObjects['programs']['list'] : '';
-                    foreach($allPrograms as $id => $program)
-                    {
-                        $programStakeholders = zget($stakeholders, $id, array());
-                        if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $id, array());
-                        if($this->checkProgramPriv($program, $account, $programStakeholders, zget($whiteList, $id, array()))) $programs[$id] = $id;
-                        if(strpos(",$managePrograms,", ",$id,") !== false) $programs[$id] = $id;
-                    }
-                    $userView->programs = join(',', $programs);
-                }
+                /* Compute parent stakeholders. */
+                $this->loadModel('stakeholder');
+                $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
+                $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
 
-                /* Process product userview. */
-                if(!empty($manageObjects['products']['isAdmin']))
-                {
-                    $userView->products = join(',', array_keys($allProducts));
-                }
-                else
-                {
-                    $products       = array();
-                    $manageProducts = isset($manageObjects['products']['list']) ? $manageObjects['products']['list'] : '';
-                    foreach($allProducts as $id => $product)
-                    {
-                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
-                        if(strpos(",$manageProducts,", ",$id,") !== false) $products[$id] = $id;
-                    }
-                    $userView->products = join(',', $products);
-                }
+                /* 按照类型分组获取当前用户所拥有的的项目管理权限。 */
+                $manageObjects = $this->getManageListGroupByType($account);
 
-                /* Process project userview. */
-                if(!empty($manageObjects['projects']['isAdmin']))
-                {
-                    $userView->projects = join(',', array_keys($allProjects));
-                }
-                else
-                {
-                    $projects       = array();
-                    $manageProjects = isset($manageObjects['projects']['list']) ? $manageObjects['projects']['list'] : '';
-                    foreach($allProjects as $id => $project)
-                    {
-                        $projectTeams        = zget($teams, $id, array());
-                        $projectStakeholders = zget($stakeholders, $id, array());
-                        if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $id, array());
-                        if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
-                        if(strpos(",$manageProjects,", ",$id,") !== false) $projects[$id] = $id;
-                    }
-                    $userView->projects = join(',', $projects);
-                }
-
-                /* Process sprint userview. */
-                if(!empty($manageObjects['executions']['isAdmin']))
-                {
-                    $userView->sprints = join(',', array_keys($allSprints));
-                }
-                else
-                {
-                    $sprints          = array();
-                    $manageExecutions = isset($manageObjects['executions']['list']) ? $manageObjects['executions']['list'] : '';
-                    foreach($allSprints as $id => $sprint)
-                    {
-                        $sprintTeams        = zget($teams, $id, array());
-                        $sprintStakeholders = zget($stakeholders, $sprint->project, array());
-                        if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, zget($whiteList, $id, array()))) $sprints[$id] = $id;
-                        if(strpos(",$manageExecutions,", ",$id,") !== false) $sprints[$id] = $id;
-                    }
-                    $userView->sprints = join(',', $sprints);
-                }
+                /* 分别获取各类型的可浏览ID。 */
+                $userView->programs = $this->getProgramView($account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
+                $userView->products = $this->getProductView($account, $allProducts, $manageObjects, $whiteList);
+                $userView->projects = $this->getProjectView($account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
+                $userView->sprints  = $this->getSprintView($account, $allSprints, $manageObjects, $teams, $stakeholders, $whiteList);
             }
+
+            /* 更新访问权限表。 */
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }
 
@@ -2185,15 +2298,6 @@ class userModel extends model
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($products)) return true;
 
-        /* Get all groups for whiteList. */
-        $allGroups  = $this->dao->select('account, `group`')->from(TABLE_USERGROUP)->fetchAll();
-        $userGroups = array();
-        foreach($allGroups as $group)
-        {
-            if(!isset($userGroups[$group->account])) $userGroups[$group->account] = '';
-            $userGroups[$group->account] .= "{$group->group},";
-        }
-
         list($productTeams, $productStakeholders) = $this->getProductMembers($products);
 
         /* Get white list group. */
@@ -2238,7 +2342,7 @@ class userModel extends model
                 $whiteList    = zget($whiteListGroup, $productID, array());
                 $admins       = zget($productAdmins, $productID, array());
 
-                $hasPriv = $this->checkProductPriv($product, $account, zget($userGroups, $account, ''), $members, $stakeholders, $whiteList, $admins);
+                $hasPriv = $this->checkProductPriv($product, $account, $members, $stakeholders, $whiteList, $admins);
                 if($hasPriv and strpos(",{$view},", ",{$productID},") === false)  $view .= ",{$productID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$productID},") !== false) $view  = trim(str_replace(",{$productID},", ',', ",{$view},"), ',');
             }
@@ -2441,7 +2545,6 @@ class userModel extends model
      *
      * @param  object $product
      * @param  string $account
-     * @param  string $groups
      * @param  array  $linkedProjects
      * @param  array  $teams
      * @param  array  $whiteList
@@ -2449,7 +2552,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProductPriv(object $product, string $account, string $groups, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
+    public function checkProductPriv(object $product, string $account, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if(strpos(",{$product->reviewer},", ',' . $account . ',') !== false)    return true;
