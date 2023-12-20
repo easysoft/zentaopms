@@ -1246,18 +1246,10 @@ class testtaskModel extends model
      */
     public function getSceneCases($productID, $runs, $orderBy = 'id_desc')
     {
-        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
-            ->where('deleted')->eq('0')
-            ->andWhere('product')->eq($productID)
-            ->orderBy('grade_desc, sort_asc')
-            ->fetchAll('id');
-
-        if(!$scenes) return array();
-
-        $sceneCases = array();
         $runs = $this->loadModel('testcase')->appendData($runs, 'run');
         foreach($runs as $id => $run)
         {
+            $run->run     = $run->id;
             $run->id      = 'case_' . $run->case;
             $run->parent  = 0;
             $run->isScene = false;
@@ -1267,6 +1259,16 @@ class testtaskModel extends model
                 unset($runs[$id]);
             }
         }
+
+        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->orderBy('grade_desc, sort_asc')
+            ->fetchAll('id');
+
+        if(!$scenes) return array('scenes' => array(), 'runs' => $runs);
+
+        $sceneCases = array();
 
         $this->dao->setTable(TABLE_CASE);
         $fieldTypes = $this->dao->getFieldsType();
@@ -1942,10 +1944,10 @@ class testtaskModel extends model
                 echo "<span class='$btnTextClass'>" . zget($users, $run->assignedTo) . '</span>';
                 break;
             case 'bugs':
-                echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;
+                echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->run}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;
                 break;
             case 'results':
-                echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a(helper::createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;
+                echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a(helper::createLink('testtask', 'results', "runID={$run->run}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;
                 break;
             case 'stepNumber':
                 echo $run->stepNumber;
@@ -1958,14 +1960,14 @@ class testtaskModel extends model
                     break;
                 }
 
-                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->run,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
-                common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testtask', 'runCase', "id=$run->run", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "id=$run->run", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {
-                    $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+                    $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->run&confirm=yes");
                     echo html::a("javascript:void(0)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn' onclick='ajaxDelete(\"$unlinkURL\", \"casesForm\", confirmUnlink)'");
                 }
 
