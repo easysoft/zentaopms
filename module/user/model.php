@@ -1964,6 +1964,7 @@ class userModel extends model
     }
 
     /**
+     * 获取产品的所属团队和干系人。
      * Get product teams and stakeholders.
      *
      * @param  array   $allProducts
@@ -2022,24 +2023,23 @@ class userModel extends model
     }
 
     /**
+     * 组装最终的用户可访问权限。
      * Grant user view.
      *
-     * @param  string  $account
-     * @param  array   $acls
-     * @param  string  $projects
+     * @param  string $account
+     * @param  array  $acls
+     * @param  string $projects 此人管理的项目列表
      * @access public
      * @return object
      */
-    public function grantUserView($account = '', $acls = array(), $projects = '')
+    public function grantUserView(string $account = '', array $acls = array(), string $projects = ''): object
     {
         if(empty($account)) $account = $this->session->user->account;
         if(empty($account)) return array();
-        if(empty($acls) and !empty($this->session->user->rights['acls']))  $acls     = $this->session->user->rights['acls'];
-        if(!$projects and isset($this->session->user->rights['projects'])) $projects = $this->session->user->rights['projects'];
+        if(empty($acls)     && !empty($this->session->user->rights['acls']))     $acls     = $this->session->user->rights['acls'];
+        if(empty($projects) && !empty($this->session->user->rights['projects'])) $projects = $this->session->user->rights['projects'];
 
-        /* If userview is empty, init it. */
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-        if(empty($userView)) $userView = $this->computeUserView($account);
+        $userView = $this->computeUserView($account);
 
         /* Get opened projects, programs, products and set it to userview. */
         $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('program')->fetchAll('id');
@@ -2054,26 +2054,44 @@ class userModel extends model
         $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
         $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
 
+        /* 合并用户视图权限到用户访问权限。 */
+        $userView = $this->mergeAclsToUserView($account, $userView, $acls, $projects);
+
+        $userView->products = trim($userView->products, ',');
+        $userView->programs = trim($userView->programs, ',');
+        $userView->projects = trim($userView->projects, ',');
+        $userView->sprints  = trim($userView->sprints, ',');
+
+        return $userView;
+    }
+
+    /**
+     * 合并用户视图权限到用户访问权限。
+     * Merge acls to userView.
+     *
+     * @param  string  $account
+     * @param  object  $userView
+     * @param  array   $acls
+     * @param  string  $projects
+     * @access private
+     * @return object
+     */
+    private function mergeAclsToUserView(string $account, object $userView, array $acls, string $projects): object
+    {
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
-        if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
+        if(!isset($isAdmin))                $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
+
+        /* If is project admin, set projectID to userview. */
+        if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
 
         /* 权限分组-视野维护的优先级最高，所以这里进行了替换操作。*/
         /* View management has the highest priority, so there is a substitution. */
-        if(!empty($acls['programs']) and !$isAdmin)
-        {
-            $userView->programs = implode(',', $acls['programs']);
-        }
-        if(!empty($acls['projects']) and !$isAdmin)
-        {
-            /* If is project admin, set projectID to userview. */
-            if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
-            $userView->projects = implode(',', $acls['projects']);
-        }
-        if(!empty($acls['products']) and !$isAdmin)
-        {
-            $userView->products = implode(',', $acls['products']);
-        }
+        if(!empty($acls['programs']) && !$isAdmin) $userView->programs = implode(',', $acls['programs']);
+        if(!empty($acls['projects']) && !$isAdmin) $userView->projects = implode(',', $acls['projects']);
+        if(!empty($acls['products']) && !$isAdmin) $userView->products = implode(',', $acls['products']);
+        if(!empty($acls['sprints'])  && !$isAdmin) $userView->sprints  = implode(',', $acls['sprints']);
 
+        /* 可以看到项目，就能看到项目下公开的迭代。 */
         /* Set opened sprints and stages into userview. */
         $openedSprints = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('acl')->eq('open')
@@ -2083,16 +2101,6 @@ class userModel extends model
 
         $openedSprints     = join(',', array_keys($openedSprints));
         $userView->sprints = rtrim($userView->sprints, ',')  . ',' . $openedSprints;
-
-        if(!empty($acls['sprints']) and !$isAdmin)
-        {
-            $userView->sprints = implode(',', $acls['sprints']);
-        }
-
-        $userView->products = trim($userView->products, ',');
-        $userView->programs = trim($userView->programs, ',');
-        $userView->projects = trim($userView->projects, ',');
-        $userView->sprints  = trim($userView->sprints, ',');
 
         return $userView;
     }

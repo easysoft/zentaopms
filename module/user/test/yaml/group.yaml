@@ -1,0 +1,50 @@
+title: table zt_group
+desc: "用户组"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "分组名称"
+    range: "1-10000"
+    prefix: "这是一个新的用户分组"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: role
+    note: "角色"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: "0"
+  - field: desc
+    note: "分组描述"
+    range: "1-10000"
+    prefix: "这个一个用户分组描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: acl
+    note: "权限"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: developer
+    note: ""
+    range: "1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
