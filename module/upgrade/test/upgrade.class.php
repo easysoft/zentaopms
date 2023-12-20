@@ -313,4 +313,30 @@ class upgradeTest
         $this->objectModel->setDefaultPriv();
         return true;
     }
+
+    /**
+     * 测试更新透视表的阶段。
+     * Test update pivot stage.
+     *
+     * @param  array $changeFields
+     * @access public
+     * @return void
+     */
+    public function updatePivotStageTest(array $changeFields)
+    {
+        global $tester;
+
+        /* Init pivot table data. */
+        $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
+        $pivotSQL     = explode(";", file_get_contents($pivotSqlFile));
+        $tester->dao->delete()->from(TABLE_PIVOT)->exec();
+        $tester->dbh->exec($pivotSQL[1]);
+
+        $tester->dao->update(TABLE_PIVOT)->data($changeFields)->where('id')->eq($changeFields['id'])->exec();
+
+        $this->objectModel->updatePivotStage();
+
+        $afterUpdatePivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($changeFields['id'])->fetch();
+        return $afterUpdatePivot;
+    }
 }

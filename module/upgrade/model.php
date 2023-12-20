@@ -8082,8 +8082,8 @@ class upgradeModel extends model
         {
             if($pivot->stage == 'draft' || empty($pivot->sql)) continue;
 
-            $filters = empty($pivot->filters) ? array() : $pivot->filters;
-            $filters = $this->pivot->setFilterDefault(json_decode($filters, true));
+            $filters = json_decode($pivot->filters, true);
+            $filters = $this->pivot->setFilterDefault(empty($filters) ? array() : $filters);
             $sql     = trim(str_replace(';', '', $pivot->sql));
             $sql     = $this->chart->parseSqlVars($sql, $filters);
 
