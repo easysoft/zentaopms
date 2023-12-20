@@ -1538,7 +1538,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getWaterPoloOption($component, $chart)
+    public function getWaterPoloOption($component, $chart, $filters)
     {
         if(!$chart->settings)
         {
@@ -1553,7 +1553,7 @@ class screenModel extends model
         else
         {
             $setting = json_decode($chart->settings, true)[0];
-            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fieldSettings, true), $setting, $chart->sql, json_decode($chart->filters, true));
+            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fieldSettings, true), $setting, $chart->sql, $filters);
 
             $component->option->dataset = $options['series'][0]['data'][0];
             return $this->setComponentDefaults($component);
