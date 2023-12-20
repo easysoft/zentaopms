@@ -114,6 +114,9 @@ ALTER TABLE `zt_artifactrepo` MODIFY `editedBy` varchar(30) NOT NULL DEFAULT '';
 ALTER TABLE `zt_artifactrepo` MODIFY `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT 0;
 
 ALTER TABLE `zt_space` MODIFY `createdAt` datetime NULL;
+ALTER TABLE `zt_space` MODIFY `name` varchar(200) NOT NULL DEFAULT '';
+ALTER TABLE `zt_space` MODIFY `k8space` char(64) NOT NULL DEFAULT '';
+ALTER TABLE `zt_space` MODIFY `owner` char(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_instance` MODIFY `name` char(50) NOT NULL DEFAULT '';
 ALTER TABLE `zt_instance` MODIFY `logo` varchar(255) NOT NULL DEFAULT '';

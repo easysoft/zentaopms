@@ -15208,9 +15208,9 @@ INSERT INTO `zt_screen`(`id`, `dimension`, `name`, `desc`, `cover`, `scheme`, `s
 -- DROP TABLE IF EXISTS `zt_space`;
 CREATE TABLE `zt_space` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL,
-  `k8space` char(64) NOT NULL,
-  `owner` char(30) NOT NULL,
+  `name` varchar(200) NOT NULL DEFAULT '',
+  `k8space` char(64) NOT NULL DEFAULT '',
+  `owner` char(30) NOT NULL DEFAULT '',
   `default` tinyint(1) NOT NULL DEFAULT 0,
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
