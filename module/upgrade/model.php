@@ -1635,93 +1635,38 @@ class upgradeModel extends model
     }
 
     /**
+     * 更新在编辑器中的文件 objectID。
      * Update file objectID in editor.
      *
+     * @param  string $type
+     * @param  int    $lastID
      * @access public
-     * @return bool
+     * @return array
      */
-    public function updateFileObjectID($type = '', $lastID = 0)
+    public function updateFileObjectID(string $type = '', int $lastID = 0): array
     {
         $limit = 100;
         if(empty($type)) $type = 'comment';
-        $result['type']   = $type;
-        $result['lastID'] = 0;
         if($type == 'comment')
         {
-            $comments = $this->dao->select('id,objectType,objectID,comment')->from(TABLE_ACTION)->where('comment')->like('%data/upload/%')->andWhere('id')->gt($lastID)->orderBy('id')->limit($limit)->fetchAll('id');
-            foreach($comments as $action)
+            $actions = $this->dao->select('id,objectType,objectID,comment')->from(TABLE_ACTION)->where('comment')->like('%data/upload/%')->andWhere('id')->gt($lastID)->orderBy('id')->limit($limit)->fetchAll('id');
+            foreach($actions as $action)
             {
                 $files = array();
                 preg_match_all('/"data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $action->comment, $output);
-                foreach($output[1] as $path)$files[$path] = $path;
+                foreach($output[1] as $path) $files[$path] = $path;
                 $this->dao->update(TABLE_FILE)->set('objectType')->eq($action->objectType)->set('objectID')->eq($action->objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
             }
-            if(count($comments) < $limit)
-            {
-                $result['type']   = 'doc';
-                $result['count']  = count($comments);
-                $result['lastID'] = 0;
-            }
-            else
-            {
-                $result['type']   = 'comment';
-                $result['count']  = count($comments);
-                $result['lastID'] = $action->id;
-            }
+            $result['type']   = 'comment';
+            $result['count']  = count($actions);
+            $result['lastID'] = count($actions) < $limit ? 0 : $action->id;
             return $result;
         }
 
-        $editors['doc']         = array('table' => TABLE_DOCCONTENT,  'fields' => 'doc,`content`,`digest`');
-        $editors['project']     = array('table' => TABLE_PROJECT,     'fields' => 'id,`desc`');
-        $editors['bug']         = array('table' => TABLE_BUG,         'fields' => 'id,`steps`');
-        $editors['release']     = array('table' => TABLE_RELEASE,     'fields' => 'id,`desc`');
-        $editors['productplan'] = array('table' => TABLE_PRODUCTPLAN, 'fields' => 'id,`desc`');
-        $editors['product']     = array('table' => TABLE_PRODUCT,     'fields' => 'id,`desc`');
-        $editors['story']       = array('table' => TABLE_STORYSPEC,   'fields' => 'story,`spec`,`verify`');
-        $editors['testtask']    = array('table' => TABLE_TESTTASK,    'fields' => 'id,`desc`,`report`');
-        $editors['todo']        = array('table' => TABLE_TODO,        'fields' => 'id,`desc`');
-        $editors['task']        = array('table' => TABLE_TASK,        'fields' => 'id,`desc`');
-        $editors['build']       = array('table' => TABLE_BUILD,       'fields' => 'id,`desc`');
-
-        $editor = $editors[$type];
-        $fields = explode(',', $editor['fields']);
-        $cond   = array();
-        foreach($fields as $field)
+        list($objectCount, $lastID) = $this->upgradeTao->updateFileObjects($type, $lastID, $limit);
+        if($objectCount < $limit)
         {
-            if(strpos($field, '`') !== false) $cond[]  = $field . " like '%data/upload/%'";
-            if(strpos($field, '`') === false) $idField = $field;
-        }
-        $objects = $this->dao->select($editor['fields'])->from($editor['table'])
-            ->where($idField)->gt($lastID)
-            ->beginIF($cond)->andWhere('(' . join(' OR ', $cond) . ')')->fi()
-            ->orderBy($idField)
-            ->limit($limit)
-            ->fetchAll($idField);
-        foreach($objects as $object)
-        {
-            $files    = array();
-            $objectID = 0;
-            foreach($fields as $field)
-            {
-                if(strpos($field, '`') === false)
-                {
-                    $objectID = $object->$field;
-                }
-                else
-                {
-                    $field = trim($field, '`');
-                    preg_match_all('/"\/?data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $object->$field, $output);
-                    foreach($output[1] as $path)$files[$path] = $path;
-                }
-            }
-            if($files)
-            {
-                $this->dao->update(TABLE_FILE)->set('objectType')->eq($type)->set('objectID')->eq($objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
-            }
-        }
-        if(count($objects) < $limit)
-        {
-            $editorKeys = array_keys($editors);
+            $editorKeys = array_keys($this->config->upgrade->editors);
             foreach($editorKeys as $i => $objectType)
             {
                 if($type == $objectType)
@@ -1731,14 +1676,14 @@ class upgradeModel extends model
                 }
             }
             $result['type']   = empty($nextType) ? 'finish' : $nextType;
-            $result['count']  = count($objects);
+            $result['count']  = $objectCount;
             $result['lastID'] = 0;
         }
         else
         {
             $result['type']   = $type;
-            $result['count']  = count($objects);
-            $result['lastID'] = $object->$idField;
+            $result['count']  = $objectCount;
+            $result['lastID'] = $lastID;
         }
         return $result;
     }

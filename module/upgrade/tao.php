@@ -488,4 +488,58 @@ class upgradeTao extends upgradeModel
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 更新文件对象。
+     * Update file objects.
+     *
+     * @param  string    $type
+     * @param  int       $lastID
+     * @param  int       $limit
+     * @access protected
+     * @return array
+     */
+    protected function updateFileObjects(string $type, int $lastID, int $limit)
+    {
+        /* Get type editor, fields, and query conditions. */
+        $cond         = array();
+        $editorFields = array();
+        $editor       = $this->config->upgrade->editors[$type];
+        $fields       = explode(',', $editor['fields']);
+        foreach($fields as $field)
+        {
+            if(strpos($field, '`') !== false)
+            {
+                $cond[]         = $field . " like '%data/upload/%'";
+                $editorFields[] = $field;
+            }
+            else
+            {
+                $idField = $field;
+            }
+        }
+
+        /* Get objects. */
+        $objects = $this->dao->select($editor['fields'])->from($editor['table'])
+            ->where($idField)->gt($lastID)
+            ->beginIF($cond)->andWhere('(' . join(' OR ', $cond) . ')')->fi()
+            ->orderBy($idField)
+            ->limit($limit)
+            ->fetchAll($idField);
+        foreach($objects as $object)
+        {
+            $files = array();
+            /* Get files in the editor fields. */
+            foreach($editorFields as $field)
+            {
+                $field = trim($field, '`');
+                preg_match_all('/"\/?data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $object->{$field}, $output);
+                foreach($output[1] as $path) $files[$path] = $path;
+            }
+            /* If the file exists, update the file. */
+            if($files) $this->dao->update(TABLE_FILE)->set('objectType')->eq($type)->set('objectID')->eq($object->{$idField})->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
+        }
+
+        return array(count($objects), isset($object) ? $object->{$idField} : 0);
+    }
 }

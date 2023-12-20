@@ -412,4 +412,48 @@ class upgradeTest
 
          return $tester->dao->select('*')->from(TABLE_DOCLIB)->where('project')->eq($projectID)->fetch();
     }
+
+    /**
+     * 测试更新在编辑器中的文件 objectID。
+     * Test update file objectID in editor.
+     *
+     * @param  string $type
+     * @param  int    $lastID
+     * @access public
+     * @return string
+     */
+    public function updateFileObjectIDTest(string $type, int $lastID): string
+    {
+        global $tester;
+        $tester->dao->update(TABLE_FILE)->set('extra')->eq('editor')->exec();
+
+        $result = $this->objectModel->updateFileObjectID($type, $lastID);
+
+        $return = '';
+        foreach($result as $key => $value) $return .= "{$key}:{$value},";
+        $files = $tester->dao->select('id')->from(TABLE_FILE)->where('extra')->eq('editor')->beginIF($type != '' && $type != 'comment')->andWhere('objectType')->eq($type)->fi()->fetchPairs();
+        return $return . 'files:' . implode(',', $files);
+    }
+
+    /**
+     * 测试更新文件对象。
+     * Test update file objects.
+     *
+     * @param  string $type
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return string
+     */
+    public function updateFileObjectsTest(string $type, int $lastID, int $limit): string
+    {
+        global $tester;
+        $tester->dao->update(TABLE_FILE)->set('extra')->eq('editor')->exec();
+
+        list($objectCount, $lastID) = $this->objectModel->updateFileObjects($type, $lastID, $limit);
+
+        $files = $tester->dao->select('id')->from(TABLE_FILE)->where('objectType')->eq($type)->andWhere('extra')->eq('editor')->fetchPairs();
+
+        return "count:{$objectCount},lastID:{$lastID},fileID:" . implode(',', $files);
+    }
 }

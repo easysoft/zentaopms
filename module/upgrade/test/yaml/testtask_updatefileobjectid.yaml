@@ -1,0 +1,13 @@
+title: table zt_testtask
+desc: "测试单"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: desc
+    range: "100003-999999"
+    prefix: "data/upload/"
+    postfix: "/test"
+  - field: report
+    range: "99998-9999"
+    prefix: "data/upload/"
+    postfix: "/test"

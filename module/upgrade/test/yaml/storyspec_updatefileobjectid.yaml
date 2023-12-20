@@ -1,0 +1,15 @@
+title: table zt_story
+desc: "需求"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: story
+    range: 1-10000
+  - field: spec
+    range: "100003-999999"
+    prefix: "data/upload/"
+    postfix: "/test"
+  - field: verify
+    range: "99998-9999"
+    prefix: "data/upload/"
+    postfix: "/test"

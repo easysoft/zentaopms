@@ -993,4 +993,16 @@ $config->upgrade->dbFieldLengths['int']      = array('tinyint' => 4, 'smallint' 
 $config->upgrade->dbFieldLengths['unsigned'] = array('tinyint' => 3, 'smallint' => 5, 'mediumint' => 8, 'int' => 10, 'integer' => 10, 'bigint' => 20);
 $config->upgrade->dbFieldLengths['text']     = array('tinytext' => 8, 'text' => 16, 'mediumtext' => 24, 'longtext' => 32);
 
+$config->upgrade->editors['doc']         = array('table' => TABLE_DOCCONTENT,  'fields' => 'doc,`content`,`digest`');
+$config->upgrade->editors['project']     = array('table' => TABLE_PROJECT,     'fields' => 'id,`desc`');
+$config->upgrade->editors['bug']         = array('table' => TABLE_BUG,         'fields' => 'id,`steps`');
+$config->upgrade->editors['release']     = array('table' => TABLE_RELEASE,     'fields' => 'id,`desc`');
+$config->upgrade->editors['productplan'] = array('table' => TABLE_PRODUCTPLAN, 'fields' => 'id,`desc`');
+$config->upgrade->editors['product']     = array('table' => TABLE_PRODUCT,     'fields' => 'id,`desc`');
+$config->upgrade->editors['story']       = array('table' => TABLE_STORYSPEC,   'fields' => 'story,`spec`,`verify`');
+$config->upgrade->editors['testtask']    = array('table' => TABLE_TESTTASK,    'fields' => 'id,`desc`,`report`');
+$config->upgrade->editors['todo']        = array('table' => TABLE_TODO,        'fields' => 'id,`desc`');
+$config->upgrade->editors['task']        = array('table' => TABLE_TASK,        'fields' => 'id,`desc`');
+$config->upgrade->editors['build']       = array('table' => TABLE_BUILD,       'fields' => 'id,`desc`');
+
 include dirname(__FILE__) . DS . 'config' . DS . 'upgradeflow.php';

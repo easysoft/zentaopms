@@ -1,0 +1,9 @@
+title: table zt_bug
+desc: "bug"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: steps
+    range: "100000-999999"
+    prefix: "data/upload/"
+    postfix: "/test"

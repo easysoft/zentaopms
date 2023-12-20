@@ -1,0 +1,15 @@
+title: table zt_doccontent
+desc: "文档内容"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: doc
+    range: 1-1000
+  - field: content
+    range: "100003-999999"
+    prefix: "data/upload/"
+    postfix: "/test"
+  - field: digest
+    range: "99998-9999"
+    prefix: "data/upload/"
+    postfix: "/test"

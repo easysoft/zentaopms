@@ -1,0 +1,15 @@
+title: table zt_file
+desc: "文件"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: objectID
+    note: "对象ID"
+    range: 1-11
+  - field: objectType
+    note: "对象类型"
+    range: doc,project,bug,release,productplan,product,story,testtask,todo,task,build
+  - field: pathname
+    note: "路径"
+    range: "100000-100005"
+    postfix: "/test"

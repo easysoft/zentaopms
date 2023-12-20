@@ -1,0 +1,9 @@
+title: table zt_productplan
+desc: "计划"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: desc
+    range: "100000-999999"
+    prefix: "data/upload/"
+    postfix: "/test"

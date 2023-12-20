@@ -1,0 +1,16 @@
+title: table zt_action
+desc: "系统动态"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: objectID
+    note: "对象ID"
+    range: 1-11
+  - field: objectType
+    note: "对象类型"
+    range: doc,project,bug,release,productplan,product,story,testtask,todo,task,build
+  - field: comment
+    note: "评论"
+    range: 100000-999999
+    prefix: '"data/upload/11/'
+    postfix: '/test"'

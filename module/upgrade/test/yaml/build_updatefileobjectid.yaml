@@ -1,0 +1,9 @@
+title: table zt_build
+desc: "版本"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: desc
+    range: "100000-999999"
+    prefix: "data/upload/"
+    postfix: "/test"

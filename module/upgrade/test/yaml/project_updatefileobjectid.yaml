@@ -1,0 +1,11 @@
+title: table zt_project
+desc: "项目"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: desc
+    range: "100000-999999"
+    prefix: "data/upload/"
+    postfix: "/test"
