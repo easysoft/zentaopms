@@ -17,6 +17,7 @@ formPanel
     formGroup
     (
         set::label($lang->stakeholder->expect),
+        set::required(true),
         editor
         (
             set::name('expect'),
@@ -26,6 +27,7 @@ formPanel
     formGroup
     (
         set::label($lang->stakeholder->progress),
+        set::required(true),
         editor
         (
             set::name('progress'),

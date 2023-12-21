@@ -1,6 +1,4 @@
 <?php
-$now = helper::now();
-
 global $app, $config;
 
 $config->stakeholder->form = new stdclass();
@@ -33,3 +31,8 @@ $config->stakeholder->form->edit['nature']   = array('type' => 'string',   'requ
 $config->stakeholder->form->edit['analysis'] = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->stakeholder->form->communicate['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+
+$config->stakeholder->form->expect['userID']   = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->stakeholder->form->expect['project']  = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->stakeholder->form->expect['expect']   = array('type' => 'string', 'required' => true,  'default' => '', 'control' => 'editor');
+$config->stakeholder->form->expect['progress'] = array('type' => 'string', 'required' => true,  'default' => '', 'control' => 'editor');

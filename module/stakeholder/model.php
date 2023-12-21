@@ -437,40 +437,22 @@ class stakeholderModel extends model
     }
 
     /**
-     * Add expect record.
+     * 添加一条期望记录。
+     * Add a expect record.
      *
-     * @param  int    $userID
+     * @param  object   $data
      * @access public
-     * @return void|int
+     * @return int|bool
      */
-    public function expect($userID)
+    public function expect(object $data): int|bool
     {
-        $data = fixer::input('post')
-            ->add('userID', $userID)
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', date('Y-m-d'))
-            ->add('project', $this->session->project)
-            ->stripTags($this->config->stakeholder->editor->expect['id'], $this->config->allowedTags)
-            ->get();
-
-        if(strpos($this->config->stakeholder->expect->requiredFields, 'expect') !== false and !$this->post->expect)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->expect);
-            return false;
-        }
-
-        if(strpos($this->config->stakeholder->expect->requiredFields, 'progress') !== false and !$this->post->progress)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->progress);
-            return false;
-        }
-
         $this->dao->insert(TABLE_EXPECT)->data($data)
             ->autoCheck()
+            ->batchCheck($this->config->stakeholder->expect->requiredFields, 'notempty')
             ->exec();
 
-        if(!dao::isError()) return $this->dao->lastInsertID();
-        return false;
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
     }
 
     /**

@@ -352,25 +352,35 @@ class stakeholder extends control
     }
 
     /**
+     * 添加期望记录。
      * Add expect record.
      *
      * @access public
-     * @param  int  $expectID
+     * @param  int    $stakeholderID
      * @return void
     */
-    public function expect($expectID)
+    public function expect(int $stakeholderID)
     {
-        $user = $this->stakeholder->getByID($expectID);
 
         if(!empty($_POST))
         {
-            $this->stakeholder->expect($user->id);
+            $expectData = form::data()
+                ->add('userID', $stakeholderID)
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', date('Y-m-d'))
+                ->add('project', $this->session->project)
+                ->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->stakeholder->expect($expectData);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
-        $this->view->user       = $user;
+        $this->view->title = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->user  = $this->stakeholder->getByID($stakeholderID);
+
         $this->display();
     }
 
