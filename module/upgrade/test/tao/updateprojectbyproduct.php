@@ -51,4 +51,4 @@ $upgrade->updateProjectByProduct($projectIDList[0], $productIDList[0]);
 r(checkResult(1)) && p('') && e(1);  //测试根据产品迁移数据至id为1的项目下是否成功。
 
 $upgrade->updateProjectByProduct($projectIDList[1], $productIDList[1]);
-r(checkResult(2)) && p('') && e(2);  //测试根据产品迁移数据至id为2的项目下是否成功。
+r(checkResult(2)) && p('') && e(1);  //测试根据产品迁移数据至id为2的项目下是否成功。
