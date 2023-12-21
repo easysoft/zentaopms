@@ -27,6 +27,6 @@ $date2 = strtotime(date('Y-m-d H:i:s', strtotime('-1 month +7 days')));
 global $tester;
 $storys = $tester->dao->select('releasedDate')->from(TABLE_STORY)->where('id')->in(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))->fetchAll();
 
-$condition1 = $date1 - strtotime($storys[0]->releasedDate) < 10;
-$condition2 = $date2 - strtotime($storys[7]->releasedDate) < 10;
+$condition1 = ($date1 - strtotime($storys[0]->releasedDate)) < 10;
+$condition2 = ($date2 - strtotime($storys[7]->releasedDate)) < 10;
 r($condition1 && $condition2) && p('') && e(1);     //判断需求的releasedDate是否更新成功,差值在10秒内
