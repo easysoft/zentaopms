@@ -365,15 +365,16 @@ class repoZen extends repo
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(int $objectID): void
+    protected function buildCreateForm(int $objectID)
     {
-        $repoID = $this->repo->saveState(0, $objectID);
+        $this->repo->saveState(0, $objectID);
 
         $this->app->loadLang('action');
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+            if(empty($products)) return $this->sendError($this->lang->repo->error->noProduct, true);
         }
         else
         {
@@ -402,7 +403,7 @@ class repoZen extends repo
      */
     protected function buildCreateRepoForm(int $objectID): void
     {
-        $repoID = $this->repo->saveState(0, $objectID);
+        $this->repo->saveState(0, $objectID);
 
         $this->app->loadLang('action');
 
