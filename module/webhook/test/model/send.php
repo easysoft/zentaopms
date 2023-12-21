@@ -7,17 +7,17 @@ su('admin');
 /**
 
 title=测试 webhookModel->send();
+timeout=0
 cid=1
-pid=1
 
-传入正常数据的情况，返回true >> 1
-传入正常数据2 >> 1
-传入objectType为空时 >> 1
-传入objectID为空时 >> 1
-传入actionType为空时 >> 1
-传入actionID为空时 >> 1
-传入actor为空时 >> 1
-传入参数不符的情况 >> 1
+- 传入正常数据的情况，返回true @1
+- 传入正常数据2 @1
+- 传入objectType为空时 @1
+- 传入objectID为空时 @1
+- 传入actionType为空时 @1
+- 传入actionID为空时 @1
+- 传入actor为空时 @1
+- 传入参数不符的情况 @1
 
 */
 
@@ -36,7 +36,7 @@ $objectID[0]   = 1;
 $objectID[1]   = 2;
 $objectID[2]   = 3;
 $objectID[3]   = 4;
-$objectID[4]   = '';
+$objectID[4]   = 0;
 
 $actionType = array();
 $actionType[0] = 'common';
@@ -50,7 +50,7 @@ $actionID[0]   = 1;
 $actionID[1]   = 2;
 $actionID[2]   = 3;
 $actionID[3]   = 4;
-$actionID[4]   = '';
+$actionID[4]   = 0;
 
 $actor      = array();
 $actor[0]      = 'admin';

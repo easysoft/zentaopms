@@ -270,6 +270,7 @@ class webhookModel extends model
     }
 
     /**
+     * 发送数据。
      * Send data.
      *
      * @param  string $objectType
@@ -280,7 +281,7 @@ class webhookModel extends model
      * @access public
      * @return bool
      */
-    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function send(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): bool
     {
         static $webhooks = array();
         if(!$webhooks) $webhooks = $this->getList();
@@ -320,13 +321,14 @@ class webhookModel extends model
      * @access public
      * @return string
      */
-    public function buildData($objectType, $objectID, $actionType, $actionID, $webhook)
+    public function buildData(string $objectType, int $objectID, string $actionType, int $actionID, object $webhook)
     {
         /* Validate data. */
         if(!isset($this->lang->action->label)) $this->loadModel('action');
         if(!isset($this->lang->action->label->$actionType)) return false;
         if(empty($this->config->objectTables[$objectType])) return false;
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
+        if(!$action) return false;
 
         if($webhook->products)
         {
@@ -351,23 +353,37 @@ class webhookModel extends model
         $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
         $host           = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : $host;
         $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
+        $action->text   = $text;
 
         $mobile = '';
         $email  = '';
         if(in_array($objectType, $this->config->webhook->needAssignTypes) && !empty($object->assignedTo))
         {
-            foreach($users as $user)
-            {
-                if($user->account == $object->assignedTo)
-                {
-                    $mobile = $user->mobile;
-                    $email  = $user->email;
-                    break;
-                }
-            }
+            $assignedTo = $this->loadModel('user')->getById($object->assignedTo);
+            $mobile     = $assignedTo->mobile;
+            $email      = $assignedTo->email;
         }
-        $action->text = $text;
 
+        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID);
+    }
+
+    /**
+     * 根据webhook类型获取数据。
+     * Get data by type.
+     *
+     * @param  object $webhook
+     * @param  object $action
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
+     * @param  string $email
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function getDataByType(object $webhook, object $action, string $title, string $text, string $mobile, string $email, string $objectType, int $objectID): string
+    {
         if($webhook->type == 'dinggroup' or $webhook->type == 'dinguser')
         {
             $data = $this->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
@@ -394,6 +410,7 @@ class webhookModel extends model
     }
 
     /**
+     * 获取对象详情链接。
      * Get view link.
      *
      * @param  string $objectType
@@ -401,7 +418,7 @@ class webhookModel extends model
      * @access public
      * @return string
      */
-    public function getViewLink($objectType, $objectID)
+    public function getViewLink(string $objectType, int $objectID): string
     {
         $oldOnlyBody = '';
         $tab         = '';
