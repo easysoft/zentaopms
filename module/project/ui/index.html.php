@@ -193,12 +193,12 @@ panel
     setID('cards'),
     setClass('row cell canvas'),
     set::bodyClass('w-full'),
-    div
+    empty($kanbanList) ? div
     (
-        setClass('flex flex-wrap'),
-        empty($kanbanList) ? div
+        setClass('dtable-empty-tip'),
+        div
         (
-            setClass('table-empty-tip w-full'),
+            setClass('row gap-4 items-center'),
             span
             (
                 setClass('text-gray'),
@@ -208,11 +208,13 @@ panel
             (
                 'icon'  => 'plus',
                 'text'  => $lang->project->createKanban,
-                'class' => 'ml-2',
-                'type'  => 'secondary',
+                'class' => 'btn primary-pale border-primary',
                 'url'   => createLink('execution', 'create', "projectID={$project->id}")
             ))) : null
-        ) : $kanbanCards
+        )
+    ) : div(
+        setClass('flex flex-wrap'),
+        $kanbanCards
     ),
     !empty($kanbanList) ? div
     (
