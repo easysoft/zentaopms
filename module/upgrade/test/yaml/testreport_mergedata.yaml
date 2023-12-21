@@ -1,0 +1,19 @@
+title: table zt_testreport
+desc: "测试报告"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: product
+    note: "所属产品"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

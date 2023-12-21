@@ -3747,6 +3747,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 替换产品和项目相关联对象的项目集或者产品id。
      * Replace program or project id for product and project linked objects.
      *
      * @param  int    $programID
@@ -3755,148 +3756,24 @@ class upgradeModel extends model
      * @param  array  $productIdList
      * @param  array  $projectIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function processMergedData($programID, $projectID, $lineID = 0, $productIdList = array(), $sprintIdList = array())
+    public function processMergedData(int $programID, int $projectID, int $lineID = 0, array $productIdList = array(), array $sprintIdList = array()): bool
     {
-        if(!$projectID) return false;
+        if(!$projectID || !$sprintIdList) return false;
 
-        /* No project is created when there are no sprints. */
-        if(!$sprintIdList) return false;
-
-        /* Product linked objects. */
-        $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-
-        /* Compute product acl. */
         if($lineID) $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('id')->eq($lineID)->andWhere('root')->eq('0')->exec();
         $this->computeProductAcl($productIdList, $programID, $lineID);
 
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->upgradeTao->updateProjectByProduct($projectID, $productIdList);
+        $this->upgradeTao->updateProjectByExecution($projectID, $sprintIdList);
+        $this->upgradeTao->moveSprintStoryToProject($projectID, $sprintIdList);
+        $this->upgradeTao->moveSprintCaseToProject($projectID, $sprintIdList);
+        $this->upgradeTao->moveAllCaseToProject($projectID, $sprintIdList);
+        $this->upgradeTao->syncProjectInfoForSprints($projectID, $sprintIdList, $programID, isset($_POST['projectType']) && $_POST['projectType'] == 'execution');
+        $this->upgradeTao->setProjectProductsRelation($projectID, $productIdList, $sprintIdList);
 
-        /* Project linked objects. */
-        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'execution' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_EFFORT)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('objectType')->eq('task')->exec();
-
-        /* Put sprint stories into project story mdoule. */
-        $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
-            ->where('project')->in($sprintIdList)
-            ->fetchAll();
-
-        foreach($sprintStories as $sprintStory)
-        {
-            $projectStory = $sprintStory;
-            $projectStory->project = $projectID;
-            $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
-        }
-
-        /* Sync testcases of executions to projects when classic mode switched to new mode. */
-        $projectCases = $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
-        foreach($projectCases as $projectCase)
-        {
-            $projectCase->project = $projectID;
-            $projectCase->order   = $projectCase->case * 5;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
-        }
-
-        /* Put sprint cases into project case table. */
-        $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
-            ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.task')
-            ->where('t1.execution')->in($sprintIdList)
-            ->fetchAll();
-
-        foreach($sprintCases as $sprintCase)
-        {
-            $sprintCase->order   = $sprintCase->case * 5;
-            $sprintCase->project = $projectID;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
-        }
-
-        /* Compute sprint path, grade and the minimum start date and end date of the project. */
-        $project      = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $sprints      = $this->dao->select('id, type, acl, begin, end')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
-        $minBeginDate = $project->begin;
-        $maxEndDate   = $project->end;
-        foreach($sprints as $sprint)
-        {
-            $data = new stdclass();
-            $data->project = $projectID;
-            $data->parent  = $projectID;
-            $data->grade   = 1;
-            $data->path    = ",{$projectID},{$sprint->id},";
-            $data->type    = 'sprint';
-            $data->acl     = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
-
-            $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
-
-            $minBeginDate = ($sprint->begin < $minBeginDate) ? $sprint->begin : $minBeginDate;
-            $maxEndDate   = $sprint->end > $maxEndDate ? $sprint->end : $maxEndDate;
-        }
-
-        /* Compute project date and status. */
-        $linkedSprintIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetchPairs();
-        $linkedSprintIdList += $sprintIdList;
-        $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
-        $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
-
-        /* Historical projects are used as the start and end dates of the updated projects and programs when performing upgrades. */
-        if($_POST['projectType'] == 'execution')
-        {
-            $data = new stdClass();
-            $data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
-
-            $projectStatus = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('status');
-            if($projectStatus == 'closed')
-            {
-                $data->realEnd    = substr($maxRealEnd, 0, 10);
-                $data->closedDate = $maxRealEnd;
-            }
-
-            if($minBeginDate != $project->begin or $maxEndDate != $project->end)
-            {
-                $data->begin = $minBeginDate;
-                $data->end   = $maxEndDate;
-                $data->days  = $this->computeDaysDelta($data->begin, $data->end);
-            }
-
-            $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
-            $this->dao->update(TABLE_PROGRAM)->data($data)->where('id')->eq($programID)->exec();
-        }
-
-        /* Set product and project relation. */
-        $projectProducts = $this->dao->select('product,branch,plan')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in($sprintIdList)
-            ->andWhere('product')->in($productIdList)
-            ->fetchGroup('product', 'branch');
-
-        foreach($productIdList as $productID)
-        {
-            $data = new stdclass();
-            $data->project = $projectID;
-            $data->product = $productID;
-            if(isset($projectProducts[$productID]))
-            {
-                foreach($projectProducts[$productID] as $branchID => $projectProduct)
-                {
-                    $data->plan   = ($_POST['projectType'] == 'project' and isset($projectProduct->plan)) ? $projectProduct->plan : 0;
-                    $data->branch = $branchID;
-                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
-                }
-            }
-            else
-            {
-                $data->plan   = 0;
-                $data->branch = 0;
-                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            }
-        }
+        return true;
     }
 
     /**

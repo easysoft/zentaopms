@@ -531,4 +531,246 @@ class upgradeTao extends upgradeModel
 
         return array(count($objects), isset($object) ? $object->{$idField} : 0);
     }
+
+    /**
+     * 通过已有的产品获取未关联项目的相关数据，并且关联到项目。
+     * Get data from product and relate to project.
+     *
+     * @param  int       $projectID
+     * @param  array     $productIdList
+     * @access protected
+     * @return void
+     */
+    protected function updateProjectByProduct(int $projectID, array $productIdList): void
+    {
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
+    }
+
+    /**
+     * 通过已有的执行获取为关联项目的相关数据，并且关联到项目。
+     * Get data from product and relate to project.
+     *
+     * @param  int       $projectID
+     * @param  array     $productIdList
+     * @access protected
+     * @return void
+     */
+    protected function updateProjectByExecution(int $projectID, array $sprintIdList): void
+    {
+        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'execution' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('objectType')->eq('task')->exec();
+    }
+
+    /**
+     * 将执行下的所有需求相关转移到项目下。
+     * Move all stories under execution to project.
+     * 
+     * @param  int       $projectID
+     * @param  array     $sprintIdList
+     * @access protected
+     * @return void
+     */
+    protected function moveSprintStoryToProject(int $projectID, array $sprintIdList): void
+    {
+        $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+            ->where('project')->in($sprintIdList)
+            ->fetchAll();
+
+        foreach($sprintStories as $sprintStory)
+        {
+            $projectStory = $sprintStory;
+            $projectStory->project = $projectID;
+            $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
+        }
+    }
+
+    /**
+     * 将执行下的所有用例关联关系转移到项目下。
+     * Move all cases under execution to project.
+     *
+     * @param  int       $projectID
+     * @param  array     $sprintIdList
+     * @access protected
+     * @return void
+     */
+    protected function moveSprintCaseToProject(int $projectID, array $sprintIdList): void
+    {
+        $projectCases = $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)
+            ->where('project')->in($sprintIdList)
+            ->fetchAll();
+
+        foreach($projectCases as $projectCase)
+        {
+            $projectCase->project = $projectID;
+            $projectCase->order   = $projectCase->case * 5;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
+        }
+    }
+
+    /**
+     * 将执行下虽有的测试用例相关都转移到项目下。
+     * 
+     * @param  int       $projectID
+     * @param  array     $sprintIdList
+     * @access protected
+     * @return void
+     */
+    protected function moveAllCaseToProject(int $projectID, array $sprintIdList): void
+    {
+        $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.task')
+            ->where('t1.execution')->in($sprintIdList)
+            ->fetchAll();
+
+        foreach($sprintCases as $sprintCase)
+        {
+            $sprintCase->order   = $sprintCase->case * 5;
+            $sprintCase->project = $projectID;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
+        }
+    }
+
+    /**
+     * 将项目的信息同步给所有的执行。
+     * Sync project info to all executions.
+     *
+     * @param  int       $projectID
+     * @param  array     $sprintIdList
+     * @access protected
+     * @return void
+     */
+    protected function syncProjectInfoForSprints(int $projectID, array $sprintIdList, int $programID, bool $isProjectType = false): void
+    {
+        $project      = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $sprints      = $this->dao->select('id, type, acl, begin, end')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
+        $minBeginDate = $project->begin;
+        $maxEndDate   = $project->end;
+        foreach($sprints as $sprint)
+        {
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->parent  = $projectID;
+            $data->grade   = 1;
+            $data->path    = ",{$projectID},{$sprint->id},";
+            $data->type    = 'sprint';
+            $data->acl     = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
+
+            $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
+
+            $minBeginDate = ($sprint->begin < $minBeginDate) ? $sprint->begin : $minBeginDate;
+            $maxEndDate   = $sprint->end > $maxEndDate ? $sprint->end : $maxEndDate;
+        }
+
+        if($isProjectType)
+        {
+            list($minRealBegan, $maxRealEnd) = $this->getMaxAndMinDateByAction($projectID, $sprintIdList);
+            $this->updateProjectTime($project, $minRealBegan, $maxRealEnd, $minBeginDate, $maxEndDate, $projectID, $programID);
+        }
+    }
+
+    /**
+     * 根据历史记录获取项目的最小开始时间和最大结束时间。
+     * Get min begin date and max end date by action.
+     *
+     * @param  int       $projectID
+     * @param  array     $sprintIdList
+     * @access protected
+     * @return array
+     */
+    protected function getMaxAndMinDateByAction(int $projectID, array $sprintIdList): array
+    {
+
+        $linkedSprintIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetchPairs();
+        $linkedSprintIdList += $sprintIdList;
+        $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
+        $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
+
+        return array($minRealBegan, $maxRealEnd);
+    }
+
+    /**
+     * 更新项目以及项目所属项目集的时间相关数据。
+     * Update project and program time.
+     *
+     * @param object     $project
+     * @param string     $minRealBegan
+     * @param string     $maxRealEnd
+     * @param string     $minBeginDate
+     * @param string     $maxEndDate
+     * @param int        $projectID
+     * @param int        $programID
+     * @access protected
+     * @return void
+     */
+    protected function updateProjectTime(object $project, string $minRealBegan, string $maxRealEnd, string $minBeginDate, string $maxEndDate, int $projectID, int $programID): void
+    {
+        $data = new stdClass();
+        $data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
+
+        $projectStatus = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('status');
+        if($projectStatus == 'closed')
+        {
+            $data->realEnd    = substr($maxRealEnd, 0, 10);
+            $data->closedDate = $maxRealEnd;
+        }
+
+        if($minBeginDate != $project->begin || $maxEndDate != $project->end)
+        {
+            $data->begin = $minBeginDate;
+            $data->end   = $maxEndDate;
+            $data->days  = $this->computeDaysDelta($data->begin, $data->end);
+        }
+
+        $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
+        $this->dao->update(TABLE_PROGRAM)->data($data)->where('id')->eq($programID)->exec();
+    }
+
+    /**
+     * 设置项目和产品的关联关系。
+     * Set relation between project and product.
+     *
+     * @param  int       $projectID
+     * @param  array     $productIdList
+     * @param  array     $sprintIdList
+     * @access protected
+     * @return void
+     */
+    protected function setProjectProductsRelation(int $projectID, array $productIdList, array $sprintIdList, bool $isProjectType = false): void
+    {
+        $projectProducts = $this->dao->select('product,branch,plan')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in($sprintIdList)
+            ->andWhere('product')->in($productIdList)
+            ->fetchGroup('product', 'branch');
+
+        foreach($productIdList as $productID)
+        {
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->product = $productID;
+            if(isset($projectProducts[$productID]))
+            {
+                foreach($projectProducts[$productID] as $branchID => $projectProduct)
+                {
+                    $data->plan   = ($isProjectType && isset($projectProduct->plan)) ? $projectProduct->plan : 0;
+                    $data->branch = $branchID;
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
+            else
+            {
+                $data->plan   = 0;
+                $data->branch = 0;
+                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            }
+        }
+    }
 }
