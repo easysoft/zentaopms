@@ -250,22 +250,25 @@ class webhookModel extends model
     }
 
     /**
-     * Bind ding openID.
+     * 绑定钉钉、飞书、企业微信的用户到禅道。
+     * Bind users of dingding, feishu, weixin to zentao.
      *
      * @param  int    $webhookID
      * @access public
      * @return bool
      */
-    public function bind($webhookID)
+    public function bind(int $webhookID): bool
     {
-        $data = fixer::input('post')->get();
+        $userList = $this->post->userid;
+        if(!$userList) return false;
 
         $this->dao->delete()->from(TABLE_OAUTH)
             ->where('providerType')->eq('webhook')
             ->andWhere('providerID')->eq($webhookID)
-            ->andWhere('account')->in(array_keys($data->userid))
+            ->andWhere('account')->in(array_keys($userList))
             ->exec();
-        foreach($data->userid as $account => $userid)
+
+        foreach($userList as $account => $userid)
         {
             if(empty($userid)) continue;
 
