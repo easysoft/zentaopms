@@ -33,9 +33,9 @@ panel
     h::ul(setID('deptList')),
     div
     (
-        setClass('actions'),
+        setClass('actions mt-3'),
         btn(setClass('primary save'), $lang->save),
-        btn(set::url(createLink('webhook', 'browse')), $lang->goback)
+        btn(set::url(createLink('webhook', 'browse')), $lang->goback, setClass('ml-2'))
     )
 );
 

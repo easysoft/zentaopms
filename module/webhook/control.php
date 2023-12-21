@@ -107,13 +107,14 @@ class webhook extends control
     }
 
     /**
+     * 删除 Webhook。
      * Delete a webhook.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->webhook->delete(TABLE_WEBHOOK, $id);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

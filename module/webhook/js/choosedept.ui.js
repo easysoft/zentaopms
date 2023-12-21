@@ -1,16 +1,3 @@
-if(webhookType == 'feishuuser')
-{
-    $.getJSON(feishuUrl, function(deptTree)
-    {
-        $('#loadPrompt').remove();
-        tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
-    });
-}
-else
-{
-    tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
-}
-
 loadedDept = [];
 window.loadChildDept = function(event, node)
 {
@@ -42,9 +29,9 @@ window.buildTreeItems = function(deptTree, treeItems)
     if(typeof(treeItems) == 'undefined') treeItems = [];
     for(i in deptTree)
     {
-        dept = deptTree[i];
-        treeItem  = {key: dept.id, text: dept.name, onClick: loadChildDept};
-        treeItems = appendItems(treeItems, treeItem, dept.pId);
+        let dept     = deptTree[i];
+        let treeItem = {key: dept.id, text: dept.name, onClick: loadChildDept};
+        treeItems    = appendItems(treeItems, treeItem, dept.pId);
     }
     return treeItems;
 };
@@ -95,3 +82,17 @@ window.submitSelectedDepts = function()
     $('.actions .save').attr('disabled', 'disabled');
     loadPage(link);
 };
+
+if(webhookType == 'feishuuser')
+{
+    $.getJSON(feishuUrl, function(deptTree)
+    {
+        $('#loadPrompt').remove();
+        tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
+    });
+}
+else
+{
+    tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
+    $('#loadPrompt').remove();
+}

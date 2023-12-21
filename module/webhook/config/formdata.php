@@ -4,7 +4,7 @@ $config->webhook->form = new stdclass();
 $config->webhook->form->create = array();
 $config->webhook->form->create['type']             = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => '', 'options' => $lang->webhook->typeList);
 $config->webhook->form->create['name']             = array('type' => 'string', 'control' => 'text',      'required' => true,  'default' => '', 'filter'  => 'trim');
-$config->webhook->form->create['url']              = array('type' => 'string', 'control' => 'text',      'required' => true,  'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['url']              = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->create['secret']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->create['agentId']          = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->create['appKey']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
