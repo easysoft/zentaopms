@@ -56,7 +56,6 @@ foreach($relations as $key => $relation)
 {
     if($relation->product !== $productIDList[1][$key])
     {
-        echo 11;
         $check = false;
         break;
     }
