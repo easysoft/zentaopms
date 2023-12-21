@@ -65,7 +65,7 @@ class treeEditor extends wg
 
                     if($canEdit)   $item['actions']['items'][] = array('key' => 'edit',   'icon' => 'edit',  'id'  => $item['id'], 'editType' => $editType, 'onClick' => jsRaw('(event, item) => window.editItem(item)'));
                     if($canDelete) $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'id'  => $item['id'], 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit','url' => helper::createLink('tree', 'delete', 'module=' . $item['id']));
-                    if($canSplit)  $item['actions']['items'][] = array('key' => 'view',   'icon' => 'split', 'url' => $item['url']);
+                    if($canSplit)  $item['actions']['items'][] = array('key' => 'view',   'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
             }
 

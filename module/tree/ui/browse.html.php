@@ -116,6 +116,7 @@ $parentPath[] = span
     (
         setClass('tree-link'),
         set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=0&branch=$branch")),
+        set('data-app', $app->tab),
         $root->name
     ),
     h::i
@@ -132,6 +133,7 @@ foreach($parentModules as $module)
         (
             setClass('tree-link'),
             set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=$module->id&branch=$branch")),
+            set('data-app', $app->tab),
             $module->name
         ),
         h::i
@@ -211,6 +213,7 @@ div
                 (
                     setClass('flex-1 form-grid'),
                     set::url(helper::createLink('tree', 'manageChild', "root=$root->id&viewType=$viewType")),
+                    set('data-app', $app->tab),
                     $moduleRows,
                     set::actionsClass('justify-start mb-4'),
                     set::submitBtnText($lang->save),
