@@ -150,9 +150,11 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                 <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
                   <i class="icon-publish text-primary"></i>
                 </button>
+                <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
                 <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
                   <i class="icon-ban-circle text-primary"></i>
                 </button>
+                <?php endif; ?>
                 <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>"<?= $isPublished ? ' disabled' : ''; ?>>
                   <i class="icon-trash text-primary"></i>
                 </button>
