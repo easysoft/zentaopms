@@ -1,0 +1,31 @@
+title: repo.
+desc: repo data.
+author: Zeng Gang
+version: "1.0"
+fields:
+- field: id
+  range: [1,2,3,4,5]
+- field: product
+  range: 1
+- field: name
+  range: testHtml,project1,unittest
+- field: path
+  range: "[http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml],[],[/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea]"
+- field: SCM
+  range: Gitlab{2},Gitea
+- field: client
+  range: git
+- field: serviceHost
+  range: 1{2},4
+- field: serviceProject
+  range: "2,1,[gitea/unittest]"
+- field: commits
+  range: 0{2},2
+- field: extra
+  range: 9
+- field: preMerge
+  range: 0
+- field: job
+  range: 0
+- field: deleted
+  range: 0

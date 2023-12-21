@@ -10,8 +10,8 @@ title=测试 gitlabModel::isWebhookExists();
 timeout=0
 cid=1
 
-- 使用repoID为1，不存在的项目id推送webhook @0
-- 使用repoID为1，存在的项目id推送webhook @1
+- 检查url为空的webhook是否存在 @0
+- 用正常的url检查webhook是否存在 @1
 
 */
 

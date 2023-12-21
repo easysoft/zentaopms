@@ -251,6 +251,20 @@ class gitlabTest
         return $this->gitlab->apiGetSingleProject($gitlabID, $projectID, $useUser);
     }
 
+    /**
+     * Api get signle issue.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $issueID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleIssueTest(int $gitlabID, int $projectID, int $issueID)
+    {
+        return $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
+    }
+
     public function addPushWebhookTest(int $repoID, string $token, int $projectID = 0)
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
@@ -265,5 +279,11 @@ class gitlabTest
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
         return $this->gitlab->isWebhookExistsTest($repo, $url);
+    }
+
+    public function getCommitsTest(int $repoID, string $entry = '', string $type = 'dir', object $pager = null, string $begin = '', string $end = '')
+    {
+        $repo = $this->tester->loadModel('repo')->getByID($repoID);
+        return $this->gitlab->getCommits($repo, $entry, $type, $pager, $begin, $end);
     }
 }

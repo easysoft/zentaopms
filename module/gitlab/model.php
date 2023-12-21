@@ -299,7 +299,6 @@ class gitlabModel extends model
      *
      * @param  object $repo
      * @param  string $entry
-     * @param  string $revision
      * @param  string $type
      * @param  object $pager
      * @param  string $begin
@@ -307,7 +306,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object $pager = null, string $begin = '', string $end = ''): array
+    public function getCommits(object $repo, string $entry, string $type = 'dir', object $pager = null, string $begin = '', string $end = ''): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -1093,7 +1092,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
-        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -1271,71 +1270,6 @@ class gitlabModel extends model
         }
 
         return json_decode(commonModel::http($url));
-    }
-
-    /**
-     * 通过api创建issue。
-     * Create issue by api.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  object $object
-     * @access public
-     * @return bool
-     */
-    public function apiCreateIssue(int $gitlabID, int $projectID, string $objectType, int $objectID, object $object): bool
-    {
-        if(!isset($object->id)) $object->id = $objectID;
-
-        $issue = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
-        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-        if(isset($label->name)) $issue->labels = $label->name;
-
-        foreach($this->config->gitlab->skippedFields->issueCreate[$objectType] as $field)
-        {
-            if(isset($issue->$field)) unset($issue->$field);
-        }
-
-        $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/");
-
-        $response = json_decode(commonModel::http($url, $issue));
-        if(!$response) return false;
-
-        return $this->saveIssueRelation($objectType, $object, $gitlabID, $response);
-    }
-
-    /**
-     * 通过api更新issue。
-     * Update issue by gitlab API.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $issueID
-     * @param  string $objectType
-     * @param  object $object
-     * @param  int    $objectID
-     * @access public
-     * @return object|array|null
-     */
-    public function apiUpdateIssue(int $gitlabID, int $projectID, int $issueID, string $objectType, object $object, int $objectID = 0): object|array|null
-    {
-        $oldObject = clone $object;
-
-        /* Get full object when desc is empty. */
-        if(!isset($object->description) or (isset($object->description) and $object->description == '')) $object = $this->loadModel($objectType)->getByID($objectID);
-        foreach($oldObject as $index => $attribute)
-        {
-            if($index != 'description') $object->$index = $attribute;
-        }
-
-        if(!isset($object->id) && !empty($objectID)) $object->id = $objectID;
-        $issue   = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
-        $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
-        return json_decode(commonModel::http($url, $issue, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
