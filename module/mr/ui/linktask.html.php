@@ -15,10 +15,17 @@ $app->loadModuleConfig('repo');
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('mr', 'linkTask', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
-$footToolbar = array('items' => array
-(
-    array('text' => $lang->repo->linkTask, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkTask', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'tasks'));
+$footToolbar = array(
+    'items' => array
+    (
+        array(
+            'text'      => $lang->repo->linkTask,
+            'className' => 'batch-btn ajax-btn',
+            'data-app'  => $app->tab,
+            'data-url'  => helper::createLink('mr', 'linkTask', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
+        )
+    ),
+    'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'tasks'));
 
 searchForm
 (
