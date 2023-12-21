@@ -1084,6 +1084,7 @@ class upgradeModel extends model
 
         $stdDefault = substr($stdField, $defaultPos + 9);
         if($stdDefault == 'NULL') return false; // Default is NULL, don't change.
+        if(strpos($stdField, 'text') !== false && $stdDefault == "''") return false; // Default is '' and text type, don't change.
 
         $defaultPos = stripos($dbField,  ' DEFAULT ');
         if($defaultPos === false) return true; // No default in db, change it.
