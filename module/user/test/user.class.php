@@ -155,29 +155,6 @@ class userTest
     }
 
     /**
-     * Test get user display infos.
-     *
-     * @param  int    $accounts
-     * @param  int    $deptID
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function getUserDisplayInfosTest($accounts, $deptID = 0, $type = 'inside')
-    {
-        $objects = $this->objectModel->getUserDisplayInfos($accounts, $deptID, $type);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $objects;
-        }
-    }
-
-    /**
      * Test get user by id.
      *
      * @param  int|string $userID
