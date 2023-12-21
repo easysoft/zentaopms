@@ -24,7 +24,7 @@ class metricTest
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
-    /**
+   /**
      * 测试 getByID  方法。
      * Test getByID method.
      *
@@ -517,6 +517,42 @@ class metricTest
     public function genDataZoom($dataLength, $initZoom, $axis)
     {
         return $this->objectModel->genDataZoom($dataLength, $initZoom, $axis);
+    }
+
+    /**
+     * Test getCalcRoot.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRootTest()
+    {
+        $path = $this->objectModel->getCalcRoot();
+        return substr($path, -19);
+    }
+
+    /**
+     * Test getDatasetPath.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatasetPathTest()
+    {
+        $path = $this->objectModel->getDatasetPath();
+        return substr($path, -25);
+    }
+
+    /**
+     * Test getBaseCalcPath.
+     *
+     * @access public
+     * @return string
+     */
+    public function getBaseCalcPathTest()
+    {
+        $path = $this->objectModel->getBaseCalcPath();
+        return substr($path, -28);
     }
 
     /**
