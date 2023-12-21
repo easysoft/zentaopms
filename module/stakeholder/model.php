@@ -640,13 +640,14 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get expect details.
+     * 获取给定用户ID的期望信息。
+     * Get the expect information by user ID.
      *
      * @param  int    $userID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getExpectByUser($userID = 0)
+    public function getExpectByUser(int $userID = 0): array
     {
         return $this->dao->select('*')->from(TABLE_EXPECT)
             ->where('userID')->eq($userID)
