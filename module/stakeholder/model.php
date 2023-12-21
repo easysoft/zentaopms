@@ -596,22 +596,6 @@ class stakeholderModel extends model
     }
 
     /**
-     * Build search form.
-     *
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @access public
-     * @return void
-     */
-    public function buildSearchForm($actionURL, $queryID)
-    {
-        $this->config->stakeholder->search['actionURL'] = $actionURL;
-        $this->config->stakeholder->search['queryID']   = $queryID;
-
-        $this->loadModel('search')->setSearchParams($this->config->stakeholder->search);
-    }
-
-    /**
      * 获取给定用户ID的期望信息。
      * Get the expect information by user ID.
      *
