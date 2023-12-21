@@ -1,0 +1,13 @@
+title: oauth
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: account
+    range: user1
+  - field: openID
+    range: 5
+  - field: providerType
+    range: gitea
+  - field: providerID
+    range: 4
+

@@ -31,10 +31,10 @@ class giteaModel extends model
     public function getApiRoot(int $giteaID, bool $sudo = true): string
     {
         $gitea = $this->fetchByID($giteaID);
-        if(!$gitea) return '';
+        if(!$gitea || $gitea->type != 'gitea') return '';
 
         $sudoParam = '';
-        if($sudo == true and !$this->app->user->admin)
+        if($sudo && !$this->app->user->admin)
         {
             $openID = $this->loadModel('pipeline')->getOpenIdByAccount($giteaID, 'gitea', $this->app->user->account);
             if($openID) $sudoParam = "&sudo={$openID}";
