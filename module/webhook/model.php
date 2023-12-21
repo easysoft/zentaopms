@@ -394,7 +394,7 @@ class webhookModel extends model
         }
         elseif($webhook->type == 'wechatgroup' or $webhook->type == 'wechatuser')
         {
-            $data = $this->getWeixinData($title, $text, $mobile);
+            $data = $this->getWeixinData($text, $mobile);
         }
         elseif($webhook->type == 'feishuuser' or $webhook->type == 'feishugroup')
         {
@@ -441,6 +441,7 @@ class webhookModel extends model
     }
 
     /**
+     * 获取发送钉钉的数据。
      * Get hook data for dingding.
      *
      * @param  string $title
@@ -449,7 +450,7 @@ class webhookModel extends model
      * @access public
      * @return object
      */
-    public function getDingdingData($title, $text, $mobile)
+    public function getDingdingData(string $title, string $text, string $mobile): object
     {
         if($mobile) $text .= " @{$mobile}";
 
@@ -474,6 +475,7 @@ class webhookModel extends model
     }
 
     /**
+     * 获取发送bearychat的数据。
      * Get hook data for bearychat.
      *
      * @param  string $text
@@ -484,7 +486,7 @@ class webhookModel extends model
      * @access public
      * @return object
      */
-    public function getBearychatData($text, $mobile, $email, $objectType, $objectID)
+    public function getBearychatData(string $text, string $mobile, string $email, string $objectType, int $objectID): object
     {
         $data = new stdclass();
         $data->text     = $text;
@@ -511,15 +513,15 @@ class webhookModel extends model
     }
 
     /**
+     * 获取发送微信的数据。
      * Get weixin send data.
      *
-     * @param  string $title
      * @param  string $text
      * @param  string $mobile
      * @access public
      * @return object
      */
-    public function getWeixinData($title, $text, $mobile = '')
+    public function getWeixinData(string $text, string $mobile = ''): object
     {
         $data = new stdclass();
         $data->msgtype = 'markdown';
@@ -539,6 +541,7 @@ class webhookModel extends model
     }
 
     /**
+     * 获取发送飞书的数据。
      * Get feishu send data.
      *
      * @param  string $title
@@ -546,7 +549,7 @@ class webhookModel extends model
      * @access public
      * @return object
      */
-    public function getFeishuData($title, $text)
+    public function getFeishuData(string $title, string $text): object
     {
         $data = new stdclass();
         $data->msg_type = 'interactive';

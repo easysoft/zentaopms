@@ -284,15 +284,14 @@ class webhookTest
     /**
      * Get weixin data Test
      *
-     * @param  string $title
      * @param  string $text
      * @param  string $mobile
      * @access public
      * @return array
      */
-    public function getWeixinDataTest($title, $text, $mobile)
+    public function getWeixinDataTest($text, $mobile)
     {
-        $objects = $this->objectModel->getWeixinData($title, $text, $mobile);
+        $objects = $this->objectModel->getWeixinData($text, $mobile);
 
         if(dao::isError()) return dao::getError();
 
