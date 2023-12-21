@@ -393,4 +393,20 @@ class mrTest
         $MR = $this->objectModel->fetchByID($MRID);
         return $this->objectModel->getMRProduct($MR);
     }
+
+    /**
+     * Test logMergedAction method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array|object|false
+     */
+    public function logMergedActionTester(int $MRID): array|object|false
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+        $this->objectModel->logMergedAction($MR);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetch();
+    }
 }
