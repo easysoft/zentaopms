@@ -253,4 +253,19 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $processGroup;
     }
+
+    /**
+     * 获取进度id=>name的键值对。
+     * Get the key-value pair of progress id=>name.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProcessTest(): array
+    {
+        $processPairs = $this->objectModel->getProcess();
+
+        if(dao::isError()) return dao::getError();
+        return $processPairs;
+    }
 }
