@@ -56,25 +56,26 @@ class executionZen extends execution
         $build      = !empty($build) ? $this->loadModel('build')->getById((int)$build) : null;
 
         /* Assign. */
-        $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
-        $this->view->project         = $project;
-        $this->view->orderBy         = $orderBy;
-        $this->view->type            = $type;
-        $this->view->pager           = $pager;
-        $this->view->bugs            = $bugs;
-        $this->view->summary         = $this->loadModel('bug')->summary($bugs);
-        $this->view->moduleTree      = $moduleTree;
-        $this->view->moduleID        = $moduleID;
-        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->buildID         = $build ? $build->id : 0;
-        $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getByID($productID);
-        $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->param           = $param;
-        $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($productID));
-        $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
+        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->bug;
+        $this->view->project          = $project;
+        $this->view->orderBy          = $orderBy;
+        $this->view->type             = $type;
+        $this->view->pager            = $pager;
+        $this->view->bugs             = $bugs;
+        $this->view->summary          = $this->loadModel('bug')->summary($bugs);
+        $this->view->moduleTree       = $moduleTree;
+        $this->view->moduleID         = $moduleID;
+        $this->view->modulePairs      = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->buildID          = $build ? $build->id : 0;
+        $this->view->productID        = $productID;
+        $this->view->product          = $this->product->getByID($productID);
+        $this->view->branchID         = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param            = $param;
+        $this->view->defaultProduct   = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
+        $this->view->builds           = $this->loadModel('build')->getBuildPairs(array($productID));
+        $this->view->projectPairs     = $this->loadModel('project')->getPairsByProgram();
+        $this->view->switcherObjectID = $productID;
     }
 
     /**
