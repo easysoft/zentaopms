@@ -3,9 +3,9 @@ author: Yanyi Cao
 version: "1.0"
 fields:
   - field: id
-    range: 1
+    range: 1-10
   - field: product
-    range: 1
+    range: 1-4,0
   - field: name
     range: unittest1
   - field: encoding

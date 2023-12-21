@@ -380,4 +380,17 @@ class mrTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->orderBy('id_desc')->fetchAll('id');
     }
+
+    /**
+     * Test getMRProduct method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return object|false
+     */
+    public function getMRProductTester(int $MRID): object|false
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+        return $this->objectModel->getMRProduct($MR);
+    }
 }

@@ -1234,20 +1234,10 @@ class mrModel extends model
      */
     public function getMRProduct(object $MR): object|false
     {
-        $product   = false;
-        $productID = 0;
-        if(is_object($MR) && $MR->repoID)
-        {
-            $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
-        }
-        else
-        {
-            $products  = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
-            $productID = array_shift($products);
-        }
+        $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
+        if(!$productID) return false;
 
-        if($productID) $product = $this->loadModel('product')->getById((int)$productID);
-        return $product;
+        return $this->loadModel('product')->getById((int)$productID);
     }
 
     /**
