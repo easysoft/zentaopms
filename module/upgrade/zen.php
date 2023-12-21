@@ -494,10 +494,7 @@ class upgradeZen extends upgrade
         else
         {
             /* Use historical projects as project upgrades. */
-            foreach($linkedSprints as $sprint)
-            {
-                $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
-            }
+            foreach($linkedSprints as $sprint) $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
         }
     }
 
