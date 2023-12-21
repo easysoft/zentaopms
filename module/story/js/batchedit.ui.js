@@ -73,7 +73,7 @@ window.renderRowData = function($row, index, story)
                 items.push({text: branches[branch], value: branch});
             }
             options.items = items;
-            options.onChange = 'loadBranches(' + story.product + ', this)';
+            options.onChange = function(){loadBranches(story.product, this)};
             options.defaultValue = story.branch;
 
             $picker.render(options);

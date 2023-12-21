@@ -884,9 +884,8 @@ class storyZen extends story
         }
 
         $modulePairs = $this->tree->getOptionMenu($productID, 'story', 0, $branches);
-        $moduleList  = $branchProduct ? $modulePairs : array(0 => $modulePairs);
 
-        $modules         = array($productID => $moduleList);
+        $modules         = array($productID => $modulePairs);
         $branchTagOption = array($productID => $branchTagOption);
         $products        = array($productID => $product);
         $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, $branches, 'unexpired', true));
