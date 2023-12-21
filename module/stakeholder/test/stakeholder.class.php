@@ -142,4 +142,20 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
     }
+
+    /**
+     * 获取干系人account => realname键值对。
+     * Get the stakeholder account => realname key-value pair.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getStakeHolderPairsTest(int $objectID): array
+    {
+        $stakeholderPairs = $this->objectModel->getStakeHolderPairs($objectID);
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholderPairs;
+    }
 }
