@@ -1436,7 +1436,15 @@ class story extends control
         $story = $this->story->getById($storyID, $version, true);
 
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'all')));
+        if(!$story)
+        {
+            $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+            if($story)
+            {
+                if(strpos($story->vision, $this->config->vision) === false && $story->status == 'active') return print(js::alert($this->lang->story->storyUnlinkRoadmap) . js::reload('parent'));
+            }
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'all')));
+        }
 
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;

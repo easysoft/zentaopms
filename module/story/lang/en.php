@@ -546,3 +546,4 @@ $lang->story->notice->branch = 'Each branch will establish a requirement. The re
 $lang->story->relievedTwinsRelation     = 'Relieved twins relationship';
 $lang->story->relievedTwinsRelationTips = 'After the twins relationship is terminated, it cannot be restored and the shutdown of the requirement is no longer synchronized.';
 $lang->story->changeRelievedTwinsTips   = 'After the twins relationship is terminated, the twin stories are no longer synchronized.';
+$lang->story->storyUnlinkRoadmap        = 'This story was launched and then removed from the roadmap, and needs to be launched again before it can be viewed in the IPD rnd management page.'

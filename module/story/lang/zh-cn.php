@@ -546,3 +546,4 @@ $lang->story->notice->branch = "每个分支会建立一个需求，需求间互
 $lang->story->relievedTwinsRelation     = '解除孪生关系';
 $lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';
 $lang->story->changeRelievedTwinsTips   = '孪生关系解除后无法恢复，孪生需求间内容不再同步。';
+$lang->story->storyUnlinkRoadmap        = '该用户需求立项通过后又从路标中进行了移除，需要再次立项通过后才能在IPD研发管理界面中查看。';
