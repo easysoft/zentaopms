@@ -1352,7 +1352,7 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $this->project->delete(TABLE_PROJECT, $projectID);
         $this->project->deleteByTableName('zt_doclib', $projectID);
-        $this->loadModel('user')->updateUserView($projectID, 'project');
+        $this->loadModel('user')->updateUserView(array($projectID), 'project');
 
         $response['result']     = 'success';
         $response['closeModal'] = true;

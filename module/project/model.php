@@ -1090,7 +1090,7 @@ class projectModel extends model
         /* Add project admin. */
         $this->projectTao->addProjectAdmin($projectID);
 
-        if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+        if($project->acl != 'open') $this->loadModel('user')->updateUserView(array($projectID), 'project');
 
         if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
 
@@ -1256,7 +1256,7 @@ class projectModel extends model
     {
         if($acl == 'open') return true;
 
-        $this->loadModel('user')->updateUserView($projectID, 'project');
+        $this->loadModel('user')->updateUserView(array($projectID), 'project');
         $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('project')->eq($projectID)
             ->fetchPairs();
@@ -1374,7 +1374,7 @@ class projectModel extends model
 
                 /* When acl is open, white list set empty. When acl is private,update user view. */
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'project', $projectID);
-                if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+                if($project->acl != 'open') $this->loadModel('user')->updateUserView(array($projectID), 'project');
                 $this->executeHooks($projectID);
 
                 if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->execution->syncNoMultipleSprint($projectID);
@@ -1628,7 +1628,7 @@ class projectModel extends model
     {
         $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
 
-        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
+        $this->loadModel('user')->updateUserView(array($projectID), 'project', array($account));
 
         if($removeExecution)
         {

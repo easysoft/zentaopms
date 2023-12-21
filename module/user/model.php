@@ -2006,7 +2006,7 @@ class userModel extends model
         if($programProduct) $stakeholderGroups = array_merge($stakeholderGroups, $this->getProgramStakeholder($programProduct));
 
         /* Get linked projects teams. */
-        $teamGroups = array();
+        $teamsGroup = array();
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->eq('project')
             ->andWhere('root')->in(array_keys($projectProducts))
@@ -2016,10 +2016,10 @@ class userModel extends model
         while($team = $stmt->fetch())
         {
             $productIdList = zget($projectProducts, $team->root, array());
-            foreach($productIdList as $productID) $teamGroups[$productID][$team->account] = $team->account;
+            foreach($productIdList as $productID) $teamsGroup[$productID][$team->account] = $team->account;
         }
 
-        return array($teamGroups, $stakeholderGroups);
+        return array($teamsGroup, $stakeholderGroups);
     }
 
     /**
@@ -2106,362 +2106,364 @@ class userModel extends model
     }
 
     /**
+     * 更新某个对象下的用户可访问视图。
      * Update user view by object type.
      *
-     * @param  int|array  $objectIdList
+     * @param  array  $objectIDList
      * @param  string $objectType
      * @param  array  $users
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateUserView(int|array $objectIdList, string $objectType, array $users = array())
+    public function updateUserView(array $objectIDList, string $objectType, array $users = array()): bool
     {
-        if(is_numeric($objectIdList)) $objectIdList = array($objectIdList);
-        if(!is_array($objectIdList)) return false;
+        if($objectType == 'program') return $this->updateProgramView($objectIDList, $users);
+        if($objectType == 'product') return $this->updateProductView($objectIDList, $users);
+        if($objectType == 'project') return $this->updateProjectView($objectIDList, $users);
+        if($objectType == 'sprint')  return $this->updateSprintView($objectIDList, $users);
 
-        if($objectType == 'program') $this->updateProgramView($objectIdList, $users);
-        if($objectType == 'product') $this->updateProductView($objectIdList, $users);
-        if($objectType == 'project') $this->updateProjectView($objectIdList, $users);
-        if($objectType == 'sprint')  $this->updateSprintView($objectIdList, $users);
+        return false;
     }
 
     /**
+     * 更新项目集下的用户访问视图。
      * Update program user view.
      *
-     * @param  array  $programIdList
-     * @param  array  $users
-     * @access public
-     * @return void
+     * @param  array   $programIDList
+     * @param  array   $users
+     * @access private
+     * @return bool
      */
-    public function updateProgramView(array $programIdList, array $users)
+    private function updateProgramView(array $programIDList, array $users): bool
     {
-        $programs = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path')->from(TABLE_PROJECT)
-            ->where('id')->in($programIdList)
-            ->andWhere('acl')->ne('open')
-            ->fetchAll('id');
-        if(empty($programs)) return true;
+        $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($programIDList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($programs)) return false;
 
-        /* Get self stakeholders. */
-        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($programIdList);
+        $stakeholderGroup       = $this->loadModel('stakeholder')->getStakeholderGroup($programIDList); // Get self stakeholders.
+        $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIDList);        // Get all parent program and subprogram relation.
+        $parentPMGroup          = $this->loadModel('program')->getParentPM($programIDList);             // Get all parent program and subprogram relation.
+        $programAdmins          = $this->loadModel('group')->getAdmins($programIDList, 'programs');     // Get programs's admins.
 
-        /* Get all parent program and subprogram relation. */
-        $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIdList);
-
-        /* Get all parent program and subprogram relation. */
-        $parentPMGroup = $this->loadModel('program')->getParentPM($programIdList);
-
-        /* Get programs's admins. */
-        $programAdmins = $this->loadModel('group')->getAdmins($programIdList, 'programs');
-
-        $whiteListGroup = array();
-        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
-            ->where('objectType')->eq('program')
-            ->andWhere('objectID')->in($programIdList)
-            ->query();
-
+        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('program')->andWhere('objectID')->in($programIDList)->query();
+        $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
-        /* Get auth users. */
-        $authedUsers = array();
-        if(!empty($users)) $authedUsers = $users;
-        if(empty($users))
+        $authedUsers = $users;
+        /* 如果没传users参数，则获取项目集关联的所有人。*/
+        if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($programs, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
+
+        $userViews = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'programs');
+
+        /* Judge auth and update view. */
+        foreach($authedUsers as $account)
         {
+            $view       = isset($userViews[$account]) ? $userViews[$account] : '';
+            $latestView = $view;
             foreach($programs as $program)
             {
-                $stakeholders = zget($stakeholderGroup, $program->id, array());
-                $whiteList    = zget($whiteListGroup, $program->id, array());
-                $admins       = zget($programAdmins, $program->id, array());
-                if($program->acl == 'program')
-                {
-                    $parentIds = explode(',', $program->path);
-                    foreach($parentIds as $parentId)
-                    {
-                        $stakeholders += zget($parentStakeholderGroup, $parentId, array());
-                        $stakeholders += zget($parentPMGroup, $parentId, array());
-                    }
-                }
-                $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders, $whiteList, $admins);
+                $latestView = $this->getLatestUserView($account, $view, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
             }
-        }
-
-        /* Get all programs user view. */
-        $stmt  = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
-        if(empty($users) and $authedUsers)
-        {
-            foreach($programs as $programID => $program) $stmt->orWhere("CONCAT(',', programs, ',')")->like("%,{$programID},%");
-        }
-        $userViews = $stmt->fetchPairs('account', 'programs');
-
-        /* Judge auth and update view. */
-        foreach($userViews as $account => $view)
-        {
-            foreach($programs as $programID => $program)
+            if($view != $latestView)
             {
-                $stakeholders = zget($stakeholderGroup, $program->id, array());
-                $whiteList    = zget($whiteListGroup, $program->id, array());
-                $admins       = zget($programAdmins, $program->id, array());
-                if($program->acl == 'program')
+                if(!isset($userViews[$account]))
                 {
-                    $stakeholders += zget($parentStakeholderGroup, $program->id, array());
-                    $stakeholders += zget($parentPMGroup, $program->id, array());
+                    $userView = new stdclass();
+                    $userView->account  = $account;
+                    $userView->programs = $latestView;
+                    $userView->products = $userView->projects = $userView->sprints = '';
+                    $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
                 }
-
-                $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins);
-                if($hasPriv and strpos(",{$view},", ",{$programID},") === false)  $view .= ",{$programID}";
-                if(!$hasPriv and strpos(",{$view},", ",{$programID},") !== false) $view  = trim(str_replace(",{$programID},", ',', ",{$view},"), ',');
+                else
+                {
+                    $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($latestView)->where('account')->eq($account)->exec();
+                }
             }
-            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($view)->where('account')->eq($account)->exec();
         }
+
+        return true;
     }
 
     /**
-     * Update project view
+     * 更新项目下的用户访问视图。
+     * Update project view.
      *
-     * @param  array $projectIdList
-     * @param  array $users
-     * @access public
-     * @return void
+     * @param  array   $projectIDList
+     * @param  array   $users
+     * @access private
+     * @return bool
      */
-    public function updateProjectView(array $projectIdList, array $users)
+    private function updateProjectView(array $projectIDList, array $users): bool
     {
-        $projects = $this->dao->select('id, PM, PO, QD, RD, openedBy, acl, parent, path, type')->from(TABLE_PROJECT)
-            ->where('id')->in($projectIdList)
-            ->andWhere('acl')->ne('open')
-            ->fetchAll('id');
-        if(empty($projects)) return true;
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($projects)) return false;
 
         /* Get team group. */
-        $teamGroups = array();
-        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->eq('project')
-            ->andWhere('root')->in($projectIdList)
-            ->andWhere('root')->ne(0)
-            ->query();
-
-        while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
+        $stmt        = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($projectIDList)->andWhere('root')->ne(0)->query();
+        $teamsGroups = array();
+        while($team  = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
         /* Get white list group. */
-        $whiteListGroup = array();
-        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
-            ->where('objectType')->eq('project')
-            ->andWhere('objectID')->in($projectIdList)
-            ->query();
-
+        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('project')->andWhere('objectID')->in($projectIDList)->query();
+        $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
-        /* Get self stakeholders. */
-        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
-
-        /* Get projects's admins. */
-        $projectAdmins = $this->loadModel('group')->getAdmins($projectIdList, 'projects');
-
-        /* Get all parent program and subprogram relation. */
-        $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($projectIdList);
+        $stakeholderGroup       = $this->loadModel('stakeholder')->getStakeholderGroup($projectIDList); // Get self stakeholders.
+        $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($projectIDList);        // Get all parent program and subprogram relation.
+        $projectAdmins          = $this->loadModel('group')->getAdmins($projectIDList, 'projects');     // Get projects's admins.
 
         /* Get auth users. */
-        $authedUsers = array();
-        if(!empty($users)) $authedUsers = $users;
-        if(empty($users))
-        {
-            foreach($projects as $project)
-            {
-                $stakeholders = zget($stakeholderGroup, $project->id, array());
-                $teams        = zget($teamGroups, $project->id, array());
-                $whiteList    = zget($whiteListGroup, $project->id, array());
-                $admins       = zget($projectAdmins, $project->id, array());
-                if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
-
-                $authedUsers += $this->getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList, $admins);
-            }
-        }
+        $authedUsers = $users;
+        /* 如果没传users参数，则获取项目关联的所有人。*/
+        if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($projects, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
 
         /* Get all projects user view. */
-        $stmt  = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
-        if(empty($users) and $authedUsers)
-        {
-            foreach($projects as $projectID => $project) $stmt->orWhere("CONCAT(',', projects, ',')")->like("%,{$projectID},%");
-        }
-        $userViews = $stmt->fetchPairs('account', 'projects');
+        $userViews = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'projects');
 
         /* Judge auth and update view. */
-        foreach($userViews as $account => $view)
+        foreach($authedUsers as $account)
         {
-            foreach($projects as $projectID => $project)
+            $view       = isset($userViews[$account]) ? $userViews[$account] : '';
+            $latestView = $view;
+            foreach($projects as $project)
             {
-                $stakeholders = zget($stakeholderGroup, $project->id, array());
-                $teams        = zget($teamGroups, $project->id, array());
-                $whiteList    = zget($whiteListGroup, $project->id, array());
-                $admins       = zget($projectAdmins, $project->id, array());
-                if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
-
-                $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins);
-                if($hasPriv and strpos(",{$view},", ",{$projectID},") === false)  $view .= ",{$projectID}";
-                if(!$hasPriv and strpos(",{$view},", ",{$projectID},") !== false) $view  = trim(str_replace(",{$projectID},", ',', ",{$view},"), ',');
+                $latestView = $this->getLatestUserView($account, $view, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
             }
-            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($view)->where('account')->eq($account)->exec();
-        }
-    }
-
-    /**
-     * Update product user view.
-     *
-     * @param  array  $productIdList
-     * @param  array  $user
-     * @access public
-     * @return void
-     */
-    public function updateProductView(array $productIdList, array $users)
-    {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('acl')->ne('open')->fetchAll('id');
-        if(empty($products)) return true;
-
-        list($productTeams, $productStakeholders) = $this->getProductMembers($products);
-
-        /* Get white list group. */
-        $whiteListGroup = array();
-        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
-            ->where('objectType')->eq('product')
-            ->andWhere('objectID')->in($productIdList)
-            ->query();
-
-        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
-
-        /* Get products' admins. */
-        $productAdmins = $this->loadModel('group')->getAdmins($productIdList, 'products');
-
-        /* Get product view list. */
-        $viewList = array();
-        if(empty($users))
-        {
-            foreach($products as $productID => $product)
+            if($view != $latestView)
             {
-                $teams        = zget($productTeams, $productID, array());
-                $stakeholders = zget($productStakeholders, $productID, array());
-                $whiteList    = zget($whiteListGroup, $productID, array());
-                $admins       = zget($productAdmins, $productID, array());
-                $viewList    += $this->getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins);
-            }
-
-            $users = $viewList;
-        }
-
-        $stmt = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($users);
-        foreach($products as $productID => $product) $stmt->orWhere("CONCAT(',', products, ',')")->like("%,{$productID},%");
-        $userViews = $stmt->fetchPairs('account', 'products');
-
-        /* Process user view. */
-        foreach($userViews as $account => $view)
-        {
-            foreach($products as $productID => $product)
-            {
-                $members      = zget($productTeams, $productID, array());
-                $stakeholders = zget($productStakeholders, $productID, array());
-                $whiteList    = zget($whiteListGroup, $productID, array());
-                $admins       = zget($productAdmins, $productID, array());
-
-                $hasPriv = $this->checkProductPriv($product, $account, $members, $stakeholders, $whiteList, $admins);
-                if($hasPriv and strpos(",{$view},", ",{$productID},") === false)  $view .= ",{$productID}";
-                if(!$hasPriv and strpos(",{$view},", ",{$productID},") !== false) $view  = trim(str_replace(",{$productID},", ',', ",{$view},"), ',');
-            }
-            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('products')->eq($view)->where('account')->eq($account)->exec();
-        }
-    }
-
-    /**
-     * Update sprint view.
-     *
-     * @param  array $sprintIdList
-     * @param  array $users
-     * @access public
-     * @return void
-     */
-    public function updateSprintView(array $sprintIdList, array $users)
-    {
-        $sprints = $this->dao->select('id, project, PM, PO, QD, RD, openedBy, acl, parent, path, grade, type')->from(TABLE_PROJECT)
-            ->where('id')->in($sprintIdList)
-            ->andWhere('acl')->ne('open')
-            ->fetchAll('id');
-        if(empty($sprints)) return true;
-
-        $parentIdList = array();
-        foreach($sprints as $sprint) $parentIdList[$sprint->project] = $sprint->project;
-
-        /* Get team group. */
-        $teamGroups = array();
-        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->in('project,execution')
-            ->andWhere('root')->in(array_merge($sprintIdList, $parentIdList))
-            ->andWhere('root')->ne(0)
-            ->query();
-
-        while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
-
-        /* Get white list group. */
-        $whiteListGroup = array();
-        $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
-            ->where('objectType')->eq('sprint')
-            ->andWhere('objectID')->in($sprintIdList)
-            ->query();
-
-        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
-
-        $projectIdList = array();
-        foreach($sprints as $sprintID => $sprint) $projectIdList[$sprint->project] = $sprint->project;
-
-        /* Get parent project stakeholders. */
-        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
-
-        /* Get executions' admins. */
-        $executionAdmins = $this->loadModel('group')->getAdmins($sprintIdList, 'executions');
-
-        /* Get auth users. */
-        $authedUsers = array();
-        if(!empty($users)) $authedUsers = $users;
-        if(empty($users))
-        {
-            foreach($sprints as $sprint)
-            {
-                $stakeholders = zget($stakeholderGroup, $sprint->project, array());
-                $teams        = zget($teamGroups, $sprint->id, array());
-                $parentTeams  = zget($teamGroups, $sprint->project, array());
-                $whiteList    = zget($whiteListGroup, $sprint->project, array());
-                $admins       = zget($executionAdmins, $sprint->id, array());
-
-                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList, $admins);
-
-                /* If you have parent stage view permissions, you have child stage permissions. */
-                if($sprint->type == 'stage' && $sprint->grade == 2)
+                if(!isset($userViews[$account]))
                 {
-                    $parentStageAuthedUsers = $this->getParentStageAuthedUsers($sprint->parent);
-                    $authedUsers = array_merge($authedUsers, $parentStageAuthedUsers);
+                    $userView = new stdclass();
+                    $userView->account  = $account;
+                    $userView->projects = $latestView;
+                    $userView->products = $userView->programs = $userView->sprints = '';
+                    $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
+                }
+                else
+                {
+                    $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($latestView)->where('account')->eq($account)->exec();
                 }
             }
         }
 
-        /* Get all sprints user view. */
-        $stmt  = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers);
-        if(empty($users) and $authedUsers)
-        {
-            foreach($sprints as $sprintID => $sprint) $stmt->orWhere("CONCAT(',', sprints, ',')")->like("%,{$sprintID},%");
-        }
-        $userViews = $stmt->fetchPairs('account', 'sprints');
+        return true;
+    }
+
+    /**
+     * 更新产品下的用户访问视图。
+     * Update product user view.
+     *
+     * @param  array   $productIDList
+     * @param  array   $user
+     * @access private
+     * @return bool
+     */
+    private function updateProductView(array $productIDList, array $users): bool
+    {
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($products)) return false;
+
+        list($teamsGroup, $stakeholderGroup) = $this->getProductMembers($products);
+
+        /* Get white list group. */
+        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->in($productIDList)->query();
+        $whiteListGroup  = array();
+        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
+
+        $productAdmins = $this->loadModel('group')->getAdmins($productIDList, 'products'); // Get products' admins.
+
+        /* Get auth users. */
+        $authedUsers = $users;
+        /* 如果没传users参数，则获取项目关联的所有人。*/
+        if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($products, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
+
+        /* Get all products user view. */
+        $userViews = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'products');
 
         /* Judge auth and update view. */
-        foreach($userViews as $account => $view)
+        foreach($authedUsers as $account)
         {
-            foreach($sprints as $sprintID => $sprint)
+            $view       = isset($userViews[$account]) ? $userViews[$account] : '';
+            $latestView = $view;
+            foreach($products as $productID => $product)
             {
-                $stakeholders = zget($stakeholderGroup, $sprint->project, array());
-                $teams        = zget($teamGroups, $sprint->id, array());
-                $whiteList    = zget($whiteListGroup, $sprint->id, array());
-                $admins       = zget($executionAdmins, $sprint->id, array());
-
-                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins);
-                if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
-                if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
+                $latestView = $this->getLatestUserView($account, $view, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
             }
-            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($view)->where('account')->eq($account)->exec();
+            if($view != $latestView)
+            {
+                if(!isset($userViews[$account]))
+                {
+                    $userView = new stdclass();
+                    $userView->account  = $account;
+                    $userView->products = $latestView;
+                    $userView->projects = $userView->programs = $userView->sprints = '';
+                    $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
+                }
+                else
+                {
+                    $this->dao->update(TABLE_USERVIEW)->set('products')->eq($latestView)->where('account')->eq($account)->exec();
+                }
+            }
         }
+
+        return true;
+    }
+
+    /**
+     * 更新迭代下的用户访问视图。
+     * Update sprint view.
+     *
+     * @param  array   $sprintIDList
+     * @param  array   $users
+     * @access private
+     * @return bool
+     */
+    private function updateSprintView(array $sprintIDList, array $users): bool
+    {
+        $sprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($sprintIDList)->andWhere('acl')->ne('open')->fetchAll('id');
+        if(empty($sprints)) return false;
+
+        $projectIDList = array();
+        foreach($sprints as $sprint) $projectIDList[$sprint->project] = $sprint->project;
+
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->andWhere('root')->in(array_merge($sprintIDList, $projectIDList))->andWhere('root')->ne(0)->query();
+        $teamsGroup = array();
+        while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
+
+        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('sprint')->andWhere('objectID')->in($sprintIDList)->query();
+        $whiteListGroup  = array();
+        while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
+
+        $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIDList); // Get parent project stakeholders.
+        $executionAdmins  = $this->loadModel('group')->getAdmins($sprintIDList, 'executions');    // Get executions' admins.
+
+        $authedUsers = $users;
+        if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($sprints, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
+        $userViews = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'sprints'); // Get all sprints user view.
+        foreach($authedUsers as $account)
+        {
+            $view       = isset($userViews[$account]) ? $userViews[$account] : '';
+            $latestView = $view;
+            foreach($sprints as $sprint)
+            {
+                $latestView = $this->getLatestUserView($account, $view, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
+            }
+            if($view != $latestView)
+            {
+                if(!isset($userViews[$account]))
+                {
+                    $userView = new stdclass();
+                    $userView->account  = $account;
+                    $userView->sprints  = $latestView;
+                    $userView->projects = $userView->programs = $userView->products = '';
+                    $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
+                }
+                else
+                {
+                    $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($latestView)->where('account')->eq($account)->exec();
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取该对象的关联用户。
+     * Get objects authed users.
+     *
+     * @param  array   $objects
+     * @param  string  $objectType
+     * @param  array   $stakeholderGroup
+     * @param  array   $teamsGroup
+     * @param  array   $whiteListGroup
+     * @param  array   $adminsGroup
+     * @param  array   $parentStakeholderGroup
+     * @param  array   $parentPMGroup
+     * @access private
+     * @return array
+     */
+    private function getObjectsAuthedUsers(array $objects, string $objectType, array $stakeholderGroup, array $teamsGroup, array $whiteListGroup, array $adminsGroup, array $parentStakeholderGroup, array $parentPMGroup): array
+    {
+        $authedUsers = array();
+        foreach($objects as $object)
+        {
+            $stakeholders = zget($stakeholderGroup, $object->id, array());
+            $teams        = zget($teamsGroup,       $object->id, array());
+            $whiteList    = zget($whiteListGroup,   $object->id, array());
+            $admins       = zget($adminsGroup,       $object->id, array());
+            if($objectType == 'sprint') $parentTeams = zget($teamsGroup, $object->project, array());
+            if($objectType == 'program' && $object->acl == 'program')
+            {
+                $parents = explode(',', $object->path);
+                foreach($parents as $parentID)
+                {
+                    $stakeholders += zget($parentStakeholderGroup, $parentID, array());
+                    $stakeholders += zget($parentPMGroup,          $parentID, array());
+                }
+            }
+            else if($objectType == 'project' && $object->acl == 'program')
+            {
+                $stakeholders += zget($parentStakeholderGroup, $object->id, array());
+            }
+
+            if($objectType == 'program') $authedUsers += $this->getProgramAuthedUsers($object, $stakeholders, $whiteList, $admins);
+            if($objectType == 'project') $authedUsers += $this->getProjectAuthedUsers($object, $stakeholders, $teams, $whiteList, $admins);
+            if($objectType == 'product') $authedUsers += $this->getProductViewListUsers($object, $teams, $stakeholders, $whiteList, $admins);
+            if($objectType == 'sprint')  $authedUsers += $this->getSprintAuthedUsers($object, $stakeholders, array_merge($teams, $parentTeams), $whiteList, $admins);
+
+            /* If you have parent stage view permissions, you have child stage permissions. */
+            if($objectType == 'sprint' && $object->type == 'stage' && $object->grade == 2)
+            {
+                $parentStageAuthedUsers = $this->getParentStageAuthedUsers($object->parent);
+                $authedUsers = array_merge($authedUsers, $parentStageAuthedUsers);
+            }
+        }
+
+        return $authedUsers;
+    }
+
+    /**
+     * 获取用户对于该对象的最新访问权限。
+     * Get latest user view.
+     *
+     * @param  string  $account
+     * @param  string  $view
+     * @param  object  $object
+     * @param  string  $objectType
+     * @param  array   $stakeholderGroup
+     * @param  array   $teamsGroup
+     * @param  array   $whiteListGroup
+     * @param  array   $adminsGroup
+     * @param  array   $parentStakeholderGroup
+     * @param  array   $parentPMGroup
+     * @access private
+     * @return string
+     */
+    private function getLatestUserView(string $account, string $view, object $object, string $objectType, array $stakeholderGroup, array $teamsGroup, array $whiteListGroup, array $adminsGroup, array $parentStakeholderGroup, array $parentPMGroup): string
+    {
+        $stakeholders = zget($stakeholderGroup, $object->id, array());
+        $teams        = zget($teamsGroup,       $object->id, array());
+        $whiteList    = zget($whiteListGroup,   $object->id, array());
+        $admins       = zget($adminsGroup,      $object->id, array());
+        if(!empty($object->acl) && $object->acl == 'program')
+        {
+            $stakeholders += zget($parentStakeholderGroup, $object->id, array());
+            if($objectType == 'program')
+            {
+                $stakeholders += zget($parentPMGroup, $object->id, array());
+            }
+        }
+
+        $hasPriv = false;
+        if($objectType == 'program') $hasPriv = $this->checkProgramPriv($object, $account, $stakeholders, $whiteList, $admins);
+        if($objectType == 'project') $hasPriv = $this->checkProjectPriv($object, $account, $stakeholders, $teams, $whiteList, $admins);
+        if($objectType == 'product') $hasPriv = $this->checkProductPriv($object, $account, $teams, $stakeholders, $whiteList, $admins);
+        if($objectType == 'sprint')  $hasPriv = $this->checkSprintPriv($object, $account, $stakeholders, $teams, $whiteList, $admins);
+
+        if($hasPriv  && strpos(",{$view},", ",{$object->id},") === false)  $view .= ",{$object->id}";
+        if(!$hasPriv && strpos(",{$view},", ",{$object->id},") !== false)  $view  = trim(str_replace(",{$object->id},", ',', ",{$view},"), ',');
+
+        return $view;
     }
 
     /**

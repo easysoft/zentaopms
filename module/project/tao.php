@@ -398,7 +398,7 @@ class projectTao extends projectModel
         if(!$project->hasProduct) $this->loadModel('personnel')->updateWhitelist(explode(',', $project->whitelist), 'product', $productID);
         $this->loadModel('action')->create('product', $productID, 'opened');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
 
         /* Link product. */
         $projectProduct = new stdclass();

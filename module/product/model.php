@@ -371,7 +371,7 @@ class productModel extends model
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
-        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
 
         return $productID;
     }
@@ -398,7 +398,7 @@ class productModel extends model
 
         $whitelist = explode(',', $product->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
-        if($oldProduct->acl != $product->acl and $product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+        if($oldProduct->acl != $product->acl and $product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
 
         if($product->type == 'normal' and $oldProduct->type != 'normal') $this->loadModel('branch')->unlinkBranch4Project(array($productID));
         if($product->type != 'normal' and $oldProduct->type == 'normal') $this->loadModel('branch')->linkBranch4Project($productID);

@@ -229,7 +229,7 @@ class personnel extends control
         if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
 
         /* Update user view, and log actions. */
-        $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
+        $this->loadModel('user')->updateUserView(array($acl->objectID), $acl->objectType, array($acl->account));
         $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));

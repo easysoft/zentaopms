@@ -2713,7 +2713,7 @@ class executionModel extends model
 
         /* Update the team members and whitelist of the project. */
         $addedAccounts = $this->updateProjectUsers($executionID, $newProjectID);
-        if($addedAccounts) $this->loadModel('user')->updateUserView($newProjectID, 'project', $addedAccounts);
+        if($addedAccounts) $this->loadModel('user')->updateUserView(array($newProjectID), 'project', $addedAccounts);
 
         /* Sync stories to new project. */
         if($syncStories == 'yes')
@@ -3233,7 +3233,7 @@ class executionModel extends model
 
         if($changedAccountList)
         {
-            $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccountList);
+            $this->loadModel('user')->updateUserView(array($projectID), $projectType, $changedAccountList);
             $linkedProducts = $this->dao->select("t2.id")->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->where('t2.deleted')->eq(0)
@@ -3278,7 +3278,7 @@ class executionModel extends model
             if(empty($teamMember))
             {
                 $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($execution->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
-                $this->loadModel('user')->updateUserView($execution->project, 'project', array($account));
+                $this->loadModel('user')->updateUserView(array($execution->project), 'project', array($account));
 
                 $linkedProducts = $this->loadModel('product')->getProductPairsByProject($execution->project);
                 if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
@@ -4633,7 +4633,7 @@ class executionModel extends model
      */
     public function updateUserView(int $executionID, string $objectType = 'sprint', array $users = array())
     {
-        $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
+        $this->loadModel('user')->updateUserView(array($executionID), $objectType, $users);
 
         $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);

@@ -1915,7 +1915,7 @@ class actionModel extends model
         if(in_array($action->objectType, array('program', 'project', 'execution', 'product')))
         {
             $objectType = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
-            if($object->acl != 'open') $this->loadModel('user')->updateUserView($object->id, $objectType);
+            if($object->acl != 'open') $this->loadModel('user')->updateUserView(array($object->id), $objectType);
 
             /* 恢复隐藏产品。 */
             /* Resotre hidden products. */

@@ -30,7 +30,7 @@ class stakeholderModel extends model
         if(dao::isError()) return false;
 
         $userList = empty($stakeholder->user) ? array() : array($stakeholder->user);
-        $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $userList);
+        $this->loadModel('user')->updateUserView(array($stakeholder->objectID), $stakeholder->objectType, $userList);
 
         /* Update linked products view. */
         if($stakeholder->objectType == 'project' && $stakeholder->objectID)
@@ -162,7 +162,7 @@ class stakeholderModel extends model
         $changedAccounts = array_diff($accounts, $oldAccounts);
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
-        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
+        $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
 
         if(!empty($accounts) && $stakeholder->objectType == 'program' && $stakeholder->objectID)

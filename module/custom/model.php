@@ -961,7 +961,7 @@ class customModel extends model
                 $whitelist = explode(',', $whitelist);
                 $this->personnel->updateWhitelist($whitelist, 'project', $project->id);
 
-                $this->user->updateUserView($project->id, 'project');
+                $this->user->updateUserView(array($project->id), 'project');
                 if(zget($executionGroup, $project->id, ''))
                 {
                     $executions = zget($executionGroup, $project->id);

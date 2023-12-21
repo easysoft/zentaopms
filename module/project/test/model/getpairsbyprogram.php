@@ -23,7 +23,7 @@ cid=1
 */
 
 global $tester;
-$tester->loadModel('user')->updateProjectView(range(1, 50), array('admin'));
+$tester->loadModel('user')->updateUserView(array(range(1, 50)), 'project', array('admin'));
 $tester->loadModel('project');
 
 r(count($tester->project->getPairsByProgram(10, 'all', true))) && p() && e('4');  // 查找管理员可查看的所有项目数量

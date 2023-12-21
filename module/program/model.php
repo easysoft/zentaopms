@@ -707,7 +707,7 @@ class programModel extends model
         $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'program');
         $this->setTreePath($programID);
 
-        if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+        if($program->acl != 'open') $this->loadModel('user')->updateUserView(array($programID), 'program');
 
         return $programID;
     }
@@ -753,7 +753,7 @@ class programModel extends model
             $this->loadModel('user');
             $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'project');
             if($program->whitelist) $this->loadModel('personnel')->updateWhitelist(explode(',', $program->whitelist), 'program', $programID);
-            if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
+            if($program->acl != 'open') $this->user->updateUserView(array($programID), 'program');
 
             /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
             $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchGroup('type', 'id');
@@ -965,7 +965,7 @@ class programModel extends model
      */
     public function updateChildUserView(int $programID = 0, array $accounts = array()): bool
     {
-        $this->loadModel('user')->updateUserView($programID, 'program', $accounts);
+        $this->loadModel('user')->updateUserView(array($programID), 'program', $accounts);
 
         $programList = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
         $projectList = $this->loadModel('project')->getPairsByProgram($programID, 'all', true);

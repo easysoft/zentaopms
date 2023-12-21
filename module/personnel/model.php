@@ -573,7 +573,7 @@ class personnelModel extends model
             $acl->type       = $type;
             $acl->source     = $source;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
-            if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
+            if(!dao::isError()) $this->loadModel('user')->updateUserView(array($acl->objectID), $acl->objectType, array($acl->account));
         }
 
         /* Update whitelist field of the object. */
@@ -595,7 +595,7 @@ class personnelModel extends model
         $this->updateParentWhitelist($objectType, $objectID, $accounts, $source, $updateType, $deletedAccounts, $objectTable);
 
         /* Update user view. */
-        $this->loadModel('user')->updateUserView($objectID, $objectType, $deletedAccounts);
+        $this->loadModel('user')->updateUserView(array($objectID), $objectType, $deletedAccounts);
         return !dao::isError();
     }
 
@@ -712,7 +712,7 @@ class personnelModel extends model
             }
         }
 
-        $this->loadModel('user')->updateUserView($programID, 'program', array($account));
+        $this->loadModel('user')->updateUserView(array($programID), 'program', array($account));
         return !dao::isError();
     }
 
@@ -756,7 +756,7 @@ class personnelModel extends model
                 $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($newViewProjects)->where('account')->eq($account)->exec();
             }
         }
-        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
+        $this->loadModel('user')->updateUserView(array($projectID), 'project', array($account));
         return !dao::isError();
     }
 

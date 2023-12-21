@@ -724,7 +724,7 @@ class programplanModel extends model
                     $this->execution->addProjectMembers($plan->project, array($plan->PM => $member));
                 }
 
-                if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                if($plan->acl != 'open') $this->user->updateUserView(array($stageID), 'sprint');
 
                 /* Record version change information. */
                 if($planChanged) $this->programplanTao->insertProjectSpec($stageID, $plan);
@@ -766,7 +766,7 @@ class programplanModel extends model
                         $this->loadModel('kanban')->createRDKanban($execution);
                     }
 
-                    if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                    if($plan->acl != 'open') $this->user->updateUserView(array($stageID), 'sprint');
 
                     /* Create doc lib. */
                     $lib = new stdclass();
@@ -803,7 +803,7 @@ class programplanModel extends model
                     $this->execution->addProjectMembers($plan->project, $teamMembers);
 
                     $this->setTreePath($stageID);
-                    if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
+                    if($plan->acl != 'open') $this->user->updateUserView(array($stageID), 'sprint');
 
                     /* Record version change information. */
                     $this->programplanTao->insertProjectSpec($stageID, $plan);
