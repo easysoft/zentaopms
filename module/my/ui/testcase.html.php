@@ -34,6 +34,7 @@ if($type == 'openedbyme')
 }
 
 if($type == 'assigntome') $config->my->testcase->dtable->fieldList['title']['link']['params'] .= "&from=testtask&taskID={task}";
+$config->my->testcase->dtable->fieldList['actions']['list']['edit']['url'] = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={id}&comment=false');
 
 $cases = initTableData($cases, $config->my->testcase->dtable->fieldList, $this->testcase);
 $data  = array_values($cases);
