@@ -482,6 +482,19 @@ class metricTest
     }
 
     /**
+     * Test buildDateCell.
+     *
+     * @param  array  $record
+     * @param  string $dateType
+     * @access public
+     * @return object
+     */
+    public function buildDateCell($record, $dateType)
+    {
+        return $this->objectModel->buildDateCell($record, $dateType);
+    }
+
+    /**
      * Test getMetricCycle.
      *
      * @param  string $code
