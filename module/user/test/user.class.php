@@ -494,24 +494,18 @@ class userTest
     }
 
     /**
+     * 测试用户登录。
      * Test login user.
      *
      * @param  object $user
+     * @param  bool   $addAction
+     * @param  bool   $keepLogin
      * @access public
-     * @return void
+     * @return object
      */
-    public function loginTest($user)
+    public function loginTest(object $user, bool $addAction = true, bool $keepLogin = false): bool|object
     {
-        $user = $this->objectModel->login($user);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $user;
-        }
+        return $this->objectModel->login($user, $addAction, $keepLogin);
     }
 
     /**
