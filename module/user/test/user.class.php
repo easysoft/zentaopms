@@ -456,6 +456,20 @@ class userTest
     }
 
     /**
+     * 测试验证用户。
+     * Identify user.
+     *
+     * @param  string $account
+     * @param  string $password
+     * @access public
+     * @return object|bool
+     */
+    public function identifyUserTest(string $account, string $password): object|bool
+    {
+        return $this->objectModel->identifyUser($account, $password);
+    }
+
+    /**
      * Test authorize user.
      *
      * @param  string $account
