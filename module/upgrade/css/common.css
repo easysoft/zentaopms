@@ -9,6 +9,6 @@ body {background: #f1f1f1; padding: 0;}
 .table>thead>tr>th {background-color: transparent;}
 .table.table-form>thead>tr>th, .table.table-form>tbody>tr>th, .table.table-form>tfoot>tr>th, .table.table-form>thead>tr>td, .table.table-form>tbody>tr>td, .table.table-form>tfoot>tr>td {vertical-align: middle;}
 
-#logBox{overflow:hidden; height:400px; display: block; white-space: normal; text-align: left; background: #f5f5f5; margin-bottom: 15px; padding:8px;}
+#logBox{overflow:hidden; height:350px; display: block; white-space: normal; text-align: left; background: #f5f5f5; margin-bottom: 15px; padding:8px;}
 
 @media (max-width: 700px) {.modal-dialog {padding: 0;} .modal-content {box-shadow: none; border-width: 1px 0; border-radius: 0;};}

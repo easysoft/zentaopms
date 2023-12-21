@@ -31,8 +31,6 @@ function updateProgress()
             let element = document.getElementById('logBox');
             if(element.scrollHeight > 20000) element.innerHTML = element.innerHTML.substr(60000); // Remove old log.
             element.scrollTop = element.scrollHeight;
-
-            if(progress == 100) clearInterval(interval);
         }
     });
 }
