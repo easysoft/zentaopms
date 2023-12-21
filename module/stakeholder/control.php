@@ -398,19 +398,19 @@ class stakeholder extends control
     }
 
     /**
-     * Issue details.
+     * 干系人问题列表。
+     * Issue list of stakeholder.
      *
+     * @param  int    $stakeholderID
      * @access public
-     * @param  int  $userID
      * @return void
     */
-    public function userIssue($userID)
+    public function userIssue(int $stakeholderID)
     {
         $this->app->loadLang('issue');
-        $stakeholder = $this->stakeholder->getByID($userID);
+        $stakeholder = $this->stakeholder->getByID($stakeholderID);
 
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
-
+        $this->view->title       = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
         $this->view->stakeholder = $stakeholder;
         $this->view->projectID   = $stakeholder->objectID;
         $this->view->issueList   = $this->stakeholder->getStakeholderIssue($stakeholder->user);
