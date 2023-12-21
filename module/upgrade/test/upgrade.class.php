@@ -504,4 +504,25 @@ class upgradeTest
     {
         return $this->objectModel->getNoMergedSprintCount();
     }
+
+    /**
+     * 测试计算产品的 acl。
+     * Test compute product acl.
+     *
+     * @param  array      $productIdList
+     * @param  int        $programID
+     * @param  int|object $lineID
+     * @access public
+     * @return string
+     */
+    public function computeProductAclTest(array $productIdList = array(), int $programID = 0, int|object $lineID = null): string
+    {
+        $this->objectModel->computeProductAcl($productIdList, $programID, $lineID);
+
+        global $tester;
+        $return = '';
+        $products = $tester->dao->select('id,program,acl,line')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        foreach($products as $product) $return .= "{$product->id}:{$product->program},{$product->acl},{$product->line}; ";
+        return $return;
+    }
 }

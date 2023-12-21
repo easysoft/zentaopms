@@ -3900,21 +3900,22 @@ class upgradeModel extends model
     }
 
     /**
+     * 计算产品的 acl。
      * Compute product acl.
      *
-     * @param  array  $productIdList
-     * @param  int    $programID
-     * @param  int    $lineID
+     * @param  array      $productIdList
+     * @param  int        $programID
+     * @param  int|object $lineID
      * @access public
      * @return void
      */
-    public function computeProductAcl($productIdList = array(), $programID = 0, $lineID = 0)
+    public function computeProductAcl(array $productIdList = array(), int $programID = 0, int|object $lineID = null): void
     {
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
         foreach($products as $product)
         {
-            if($product->program) continue;
+            if($product->program) continue; // Skip the product that belongs to a program.
 
             $data = new stdclass();
             $data->program = $programID;
