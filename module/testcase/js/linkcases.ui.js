@@ -14,5 +14,5 @@ $(document).off('click', '.link-btn').on('click', '.link-btn', function()
         $('#linkCase').closest('tr').removeClass('hidden');
     });
 
-    $('.modal').trigger('to-hide.modal.zui');
+    $(this).closest('.modal').modal('hide');
 });
