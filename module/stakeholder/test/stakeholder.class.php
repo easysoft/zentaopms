@@ -158,4 +158,20 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $stakeholderPairs;
     }
+
+    /**
+     * 获取干系人信息。
+     * Get stakeholder by id.
+     *
+     * @param  int               $stakeholderID
+     * @access public
+     * @return array|object|bool
+     */
+    public function getByIDTest(int $stakeholderID): array|object|bool
+    {
+        $stakeholder = $this->objectModel->getByID($stakeholderID);
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholder;
+    }
 }
