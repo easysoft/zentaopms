@@ -93,10 +93,11 @@ class installModel extends model
      *
      * @param  string $version
      * @param  bool   $saveLog
+     * @param  int    $isClearDB
      * @access public
      * @return bool
      */
-    public function createTable(string $version, bool $saveLog = false): bool
+    public function createTable(string $version, bool $saveLog = false, int $isClearDB = 0): bool
     {
         /* Add exception handling to ensure that all SQL is executed successfully. */
         try
@@ -115,7 +116,7 @@ class installModel extends model
                 {
                     $table = str_replace('DEFAULT CHARSET=utf8', '', $table);
                 }
-                elseif(strpos($table, 'DROP') !== false and $this->post->clearDB != false)
+                elseif(strpos($table, 'DROP') !== false and $isClearDB)
                 {
                     $table = str_replace('--', '', $table);
                 }

@@ -207,7 +207,8 @@ class install extends control
         $config           = json_decode(file_get_contents($this->install->buildDBLogFile('config')));
         $this->config->db = $config->db;
         $version          = $this->install->getDatabaseVersion();
-        if($this->install->createTable($version, true)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
+        $isClearDB        = isset($config->post->clearDB) ? $config->post->clearDB : 0;
+        if($this->install->createTable($version, true, $isClearDB)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
     }
 
     /**
