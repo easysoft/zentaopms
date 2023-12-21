@@ -14,11 +14,11 @@ class sso extends control
     /**
      * SSO login.
      *
-     * @param  string $type
+     * @param  string $type  notify|return
      * @access public
      * @return void
      */
-    public function login($type = 'notify')
+    public function login(string $type = 'notify')
     {
         $referer = empty($_GET['referer']) ? '' : $this->get->referer;
         $locate  = empty($referer) ? getWebRoot() : base64_decode($referer);
@@ -26,101 +26,10 @@ class sso extends control
         $this->app->loadConfig('sso');
         if(!$this->config->sso->turnon) return print($this->locate($locate));
 
-        $userIP = helper::getRemoteIp();
-        $code   = $this->config->sso->code;
-        $key    = $this->config->sso->key;
-        if($type != 'return')
-        {
-            $token  = $this->get->token;
-            $auth   = md5($code . $userIP . $token . $key);
+        if($type != 'return') return $this->ssoZen->locateNotifyLink($locate, $referer);
 
-            $callback = urlencode(common::getSysURL() . inlink('login', "type=return"));
-            $location = $this->config->sso->addr;
-            $isGet = strpos($location, '&') !== false;
-            $requestType = $this->get->requestType;
-            if(isset($requestType)) $isGet = $this->get->requestType == 'GET' ? true : false;
-            if($isGet)
-            {
-                /* Update location when dburl is path_info but need get. */
-                if(strpos($location, '&') === false)
-                {
-                    $index = strripos($location, '/');
-                    $uri = substr($location, 0 ,$index + 1);
-                    $param = str_replace('.html', '', substr($location, $index + 1));
-                    list($module, $method) = explode('-', $param);
-                    $location = $uri . 'index.php?m=' . $module . '&f=' . $method;
-                }
-                $location = rtrim($location, '&') . "&token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
-            }
-            else
-            {
-                /* Update location when dburl is get but need path_info. */
-                if(strpos($location, '&') !== false)
-                {
-                    list($uri, $param) = explode('index.php', $location);
-                    $param = trim($param, "?");
-                    list($module, $method) = explode('&', $param);
-                    $module = substr($module, strpos($module, '=') + 1);
-                    $method = substr($method, strpos($method, '=') + 1);
-                    $location = $uri . $module . '-' . $method . '.html';
-                }
-                $location = rtrim($location, '?') . "?token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
-            }
-
-            if(!empty($_GET['sessionid']))
-            {
-                $sessionConfig = json_decode(base64_decode($this->get->sessionid), false);
-                $location     .= '&' . $sessionConfig->session_name . '=' . $sessionConfig->session_id;
-            }
-            $this->locate($location);
-        }
-
-        if($this->get->status == 'success' and md5($this->get->data) == $this->get->md5)
-        {
-            $last = $this->server->request_time;
-            $data = json_decode(base64_decode($this->get->data));
-
-            $token = $data->token;
-            if($data->auth == md5($code . $userIP . $token . $key))
-            {
-                $user = $this->sso->getBindUser($data->account);
-                if(!$user)
-                {
-                    $this->session->set('ssoData', $data);
-                    $this->locate($this->createLink('sso', 'bind', "referer=" . helper::safe64Encode($locate)));
-                }
-
-                if($this->loadModel('user')->isLogon())
-                {
-                    if($this->session->user && $this->session->user->account == $user->account) return print($this->locate($locate));
-                }
-
-                $this->user->cleanLocked($user->account);
-                /* Authorize him and save to session. */
-                $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
-                $user->rights   = $this->user->authorize($user->account);
-                $user->groups   = $this->user->getGroups($user->account);
-                $user->view     = $this->user->grantUserView($user->account, $user->rights['acls']);
-                $user->last     = date(DT_DATETIME1, $last);
-                $user->lastTime = $user->last;
-                $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
-                if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
-                if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))
-                {
-                    $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
-                    if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
-                }
-
-                $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
-
-                $this->session->set('user', $user);
-                $this->app->user = $this->session->user;
-                $this->loadModel('action')->create('user', $user->id, 'login');
-
-                return print($this->locate($locate));
-            }
-        }
-        $this->locate($this->createLink('user', 'login', empty($referer) ? '' : "referer=$referer"));
+        $this->ssoZen->idenfyFromSSO($locate);
+        return $this->locate($this->createLink('user', 'login', empty($referer) ? '' : "referer=$referer"));
     }
 
     /**
@@ -130,27 +39,19 @@ class sso extends control
      * @access public
      * @return void
      */
-    public function logout($type = 'notify')
+    public function logout(string $type = 'notify')
     {
         if($type != 'return')
         {
-            $code   = $this->config->sso->code;
-            $userIP = helper::getRemoteIp();
-            $token  = $this->get->token;
-            $key    = $this->config->sso->key;
-            $auth   = md5($code . $userIP . $token . $key);
-
+            $userIP   = helper::getRemoteIp();
+            $token    = $this->get->token;
+            $auth     = $this->ssoZen->computeAuth($token);
             $callback = urlencode(common::getSysURL() . inlink('logout', "type=return"));
+
             $location = $this->config->sso->addr;
-            if(strpos($location, '&') !== false)
-            {
-                $location = rtrim($location, '&') . "&token=$token&auth=$auth&userIP=$userIP&callback=$callback";
-            }
-            else
-            {
-                $location = rtrim($location, '?') . "?token=$token&auth=$auth&userIP=$userIP&callback=$callback";
-            }
-            $this->locate($location);
+            $sign     = strpos($location, '&') !== false ? '&' : '?';
+            $location = rtrim($location, $sign) . "{$sign}token={$token}&auth={$auth}&userIP={$userIP}&callback={$callback}";
+            return $this->locate($location);
         }
 
         if($this->get->status == 'success')
@@ -158,9 +59,9 @@ class sso extends control
             session_destroy();
             helper::setcookie('za', false);
             helper::setcookie('zp', false);
-            $this->locate($this->createLink('user', 'login'));
+            return $this->locate($this->createLink('user', 'login'));
         }
-        $this->locate($this->createLink('user', 'logout'));
+        return $this->locate($this->createLink('user', 'logout'));
     }
 
     /**
@@ -183,7 +84,7 @@ class sso extends control
 
             $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
             if(dao::isError()) return print('fail');
-            echo 'success';
+            return print('success');
         }
     }
 
@@ -194,15 +95,12 @@ class sso extends control
      * @access public
      * @return void
      */
-    public function bind($referer = '')
+    public function bind(string $referer = '')
     {
         if(!$this->session->ssoData) return;
 
         $ssoData = $this->session->ssoData;
-        $userIP  = helper::getRemoteIp();
-        $code    = $this->config->sso->code;
-        $key     = $this->config->sso->key;
-        if($ssoData->auth != md5($code . $userIP . $ssoData->token . $key)) return;
+        if($ssoData->auth != $this->computeAuth($ssoData->token)) return;
 
         $this->loadModel('user');
         if($_POST)
@@ -220,7 +118,7 @@ class sso extends control
             $this->app->user = $this->session->user;
             $this->loadModel('action')->create('user', $user->id, 'login');
             unset($_SESSION['ssoData']);
-            return print(js::locate(helper::safe64Decode($referer), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => helper::safe64Decode($referer)));
         }
         $this->view->title = $this->lang->sso->bind;
         $this->view->users = $this->user->getPairs('noclosed|nodeleted');
@@ -295,7 +193,7 @@ class sso extends control
      * @access public
      * @return void
      */
-    public function getTodoList($account = '')
+    public function getTodoList(string $account = '')
     {
         if(!$this->sso->checkKey()) return false;
         $user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($account)->andWhere('deleted')->eq(0)->fetch();
@@ -354,7 +252,7 @@ class sso extends control
      * @access public
      * @return void
      */
-    public function feishuLogin($code = '')
+    public function feishuLogin(string $code = '')
     {
         if($this->config->requestType == 'PATH_INFO')
         {
@@ -422,7 +320,7 @@ class sso extends control
      * @access public
      * @return void
      */
-    public function showError($message = '')
+    public function showError(string $message = '')
     {
         $this->view->title   = $this->lang->sso->deny;
         $this->view->message = $message;

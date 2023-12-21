@@ -17,13 +17,13 @@ class ssoModel extends model
     /**
      * Get bind user.
      *
-     * @param  string    $user
+     * @param  string    $account
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getBindUser($user)
+    public function getBindUser(string $account): object|false
     {
-        return $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($user)->andWhere('deleted')->eq('0')->fetch();
+        return $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($account)->andWhere('deleted')->eq('0')->fetch();
     }
 
     /**
@@ -41,45 +41,13 @@ class ssoModel extends model
      * Bind user.
      *
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function bind()
+    public function bind(): object|false
     {
         $data = fixer::input('post')->get();
-        if($data->bindType == 'bind')
-        {
-            if(empty($data->bindPassword)) return print(js::alert($this->lang->sso->bindNoPassword));
-            $password = md5($data->bindPassword);
-            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->bindUser)->andWhere('password')->eq($password)->andWhere('deleted')->eq('0')->fetch();
-            if(empty($user)) return print(js::alert($this->lang->sso->bindNoUser));
-            $user->ranzhi = $this->session->ssoData->account;
-            $this->dao->update(TABLE_USER)->set('ranzhi')->eq($user->ranzhi)->where('id')->eq($user->id)->exec();
-        }
-        elseif($data->bindType == 'add')
-        {
-            if(!$this->loadModel('user')->checkPassword()) return;
-            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
-            if($user) return print(js::alert($this->lang->sso->bindHasAccount));
-
-            $user = new stdclass();
-            $user->account    = $data->account;
-            $user->password   = md5($data->password1);
-            $user->realname   = $data->realname;
-            $user->gender     = isset($data->gender) ? $data->gender : '';
-            $user->email      = $data->email;
-            $user->ranzhi     = $this->session->ssoData->account;
-            $user->role       = isset($data->role) ? $data->role : '';
-
-            $this->dao->insert(TABLE_USER)->data($user)
-                ->autoCheck()
-                ->batchCheck($this->config->user->create->requiredFields, 'notempty')
-                ->check('account', 'unique')
-                ->check('account', 'account')
-                ->checkIF($user->email != false, 'email', 'email')
-                ->exec();
-        }
-
-        return $user;
+        if($data->bindType == 'bind') return $this->ssoTao->bindZTUser($data);
+        if($data->bindType == 'add')  return $this->ssoTao->addZTUser($data);
     }
 
     /**
