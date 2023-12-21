@@ -504,7 +504,8 @@ class repo extends control
         if($repo->SCM == 'Git' and !is_dir($repo->path))
         {
             $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
-            return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
+            $link  = $this->repo->createLink($this->app->tab == 'execution' ? 'create' : 'maintain', "objectID={$objectID}");
+            return print(js::error($error) . js::locate($link));
         }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
