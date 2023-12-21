@@ -57,6 +57,7 @@ class stakeholder extends control
                 ->get();
 
             $stakeholderID = $this->stakeholder->create($stakeholderData);
+            $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
 
             if(!$stakeholderID || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
@@ -297,26 +298,27 @@ class stakeholder extends control
     }
 
     /**
-     * User details.
+     * 查看干系人详情。
+     * View stakeholder detail.
      *
      * @access public
-     * @param  int  $userID
+     * @param  int    $stakeholderID
      * @return void
     */
-    public function view($userID = 0)
+    public function view(int $stakeholderID = 0)
     {
-        $user = $this->stakeholder->getByID($userID);
+        $stakeholder = $this->stakeholder->getByID($stakeholderID);
 
-        $this->loadModel('project')->setMenu($user->objectID);
-        $this->commonAction($userID, 'stakeholder');
+        $this->loadModel('project')->setMenu($stakeholder->objectID);
+        $this->commonAction($stakeholderID, 'stakeholder');
 
-        if($user->objectType == 'project') $this->view->projectID = $user->objectID;
+        if($stakeholder->objectType == 'project') $this->view->projectID = $stakeholder->objectID;
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
-        $this->view->user       = $user;
+        $this->view->user       = $stakeholder;
         $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
-        $this->view->expects    = $this->stakeholder->getExpectByUser($userID);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('stakeholder', $userID);
+        $this->view->expects    = $this->stakeholder->getExpectByUser($stakeholderID);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('stakeholder', $stakeholderID);
 
         $this->display();
     }

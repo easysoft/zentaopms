@@ -78,12 +78,13 @@ detailBody
         );
     }, $expects),
     /* Histories. */
-    history(),
+    history(set::objectID($user->id)),
     /* Basic information of right side. */
     detailSide(tabs(tabPane
     (
         set::title($lang->stakeholder->basicInfo),
         set::active(true),
+        set::key('basicInfo'),
         tableData
         (
             item(set::name($lang->stakeholder->name),    $user->name),
