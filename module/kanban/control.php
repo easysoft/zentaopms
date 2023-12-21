@@ -462,7 +462,7 @@ class kanban extends control
         if(empty($regions)) return;
         $regionIdList = explode(',', trim($regions, ','));
 
-        $this->kanbanTao->updateRegionSort($regionIdList);
+        $this->kanban->updateRegionSort($regionIdList);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
