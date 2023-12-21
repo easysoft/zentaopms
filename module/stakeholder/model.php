@@ -396,12 +396,13 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get plans.
+     * 获取项目的干预列表信息。
+     * Get intervention list.
      *
      * @access public
      * @return array
      */
-    public function getPlans()
+    public function getPlans(): array
     {
         return $this->dao->select('*')->from(TABLE_INTERVENTION)
             ->where('deleted')->eq(0)
