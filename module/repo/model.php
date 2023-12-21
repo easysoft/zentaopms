@@ -228,8 +228,7 @@ class repoModel extends model
             return false;
         }
 
-        $createRepoFunc = "create{$repo->SCM}Repo";
-        $response = $this->$createRepoFunc($repo, $repo->namespace);
+        $response = $this->createGitlabRepo($repo, $repo->namespace);
 
         $this->loadModel($repo->SCM);
 
@@ -288,32 +287,6 @@ class repoModel extends model
         $result->path           = $response->web_url;
         $result->serviceProject = $response->id;
         $result->extra          = $response->id;
-
-        return $result;
-    }
-
-    /**
-     * 创建gitea远程版本库。
-     * Create gitlab repo.
-     *
-     * @param  object $repo
-     * @param  int    $namespace
-     * @access public
-     * @return object|false
-     */
-    public function createGiteaRepo(object $repo, int $namespaceID): object|false
-    {
-        $namespace = $this->getGroups($repo->serviceHost, $namespaceID);
-
-        $response = $this->loadModel('gitea')->apiCreateRepository($repo->serviceHost, $repo->name, $namespace, $repo->desc);
-
-        if(empty($response->id)) return $response;
-
-        $result = new stdclass();
-        $result->id             = $response->id;
-        $result->path           = $response->html_url;
-        $result->serviceProject = $response->full_name;
-        $result->extra          = '';
 
         return $result;
     }

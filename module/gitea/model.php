@@ -363,28 +363,4 @@ class giteaModel extends model
 
         return $newBranches;
     }
-
-    /**
-     * 创建代码库。
-     * Create repository.
-     *
-     * @param  int    $giteaID
-     * @param  string $name
-     * @param  string $org
-     * @param  string $desc
-     * @access public
-     * @return void
-     */
-    public function apiCreateRepository(int $giteaID, string $name, string $org, string $desc): object
-    {
-        $data = new stdclass();
-        $data->name        = $name;
-        $data->description = $desc;
-        $data->auto_init   = true;
-        $data->template    = false;
-
-        $url    = sprintf($this->getApiRoot($giteaID), "/orgs/{$org}/repos");
-        $result = json_decode(commonModel::http($url, $data));
-        return $result;
-    }
 }
