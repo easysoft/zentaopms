@@ -111,6 +111,7 @@ class tree extends control
         {
             /* Set menu.*/
             $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
+            if($this->app->tab == 'project') $this->view->projectID = $this->session->project;
 
             $rootID = $this->product->getAccessibleProductID($rootID, $products);
             $this->session->set('product', $rootID, $this->app->tab);
@@ -124,9 +125,7 @@ class tree extends control
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
             $this->view->productID      = $rootID;
 
-            $title      = $this->lang->tree->manageProduct;
-            $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
-            $position[] = $this->lang->tree->manageProduct;
+            $title = $this->lang->tree->manageProduct;
         }
         elseif($viewType == 'bug')
         {
