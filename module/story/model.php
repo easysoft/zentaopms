@@ -6208,7 +6208,7 @@ class storyModel extends model
 
         if(isset($story->finalResult))
         {
-            $isChanged = $story->changedBy ? true : false;
+            $isChanged = !empty($story->changedBy) ? true : false;
             if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected', '', $isChanged ? 'changing' : 'draft');
             if($story->finalResult == 'pass')    $this->action->create('story', $story->id, 'ReviewPassed');
             if($story->finalResult == 'clarify') $this->action->create('story', $story->id, 'ReviewClarified');
