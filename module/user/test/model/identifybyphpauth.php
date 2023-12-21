@@ -8,15 +8,9 @@ pid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
 
-$random   = updateSessionRandom();
-$password = md5(123456);
-
+zdTable('user')->gen(2);
 zdTable('company')->gen(1);
 zdTable('group')->gen(3);
-
-$userTable = zdTable('user');
-$userTable->password->range($password);
-$userTable->gen(2);
 
 $userGroupTable = zdTable('usergroup');
 $userGroupTable->account->range('admin{2},user1{2}');
@@ -34,33 +28,37 @@ su('admin');
 global $app;
 
 $userTest = new userTest();
+$random   = updateSessionRandom();
+$password = md5(md5(123456) . $random);
+$admin    = $userTest->getByIdTest('admin');
+$user1    = $userTest->getByIdTest('user1');
 
 /**
  * 检测验证空用户。
  */
 $tester->server->php_auth_user = '';
-$tester->server->php_auth_pw   = md5($password . $random);
+$tester->server->php_auth_pw   = $password;
 r($userTest->identifyByPhpAuthTest()) && p() && e(0); // 空用户验证失败，返回 false。
 
 /**
  * 检测验证 guest 用户。
  */
 $tester->server->php_auth_user = 'guest';
-$tester->server->php_auth_pw   = md5($password . $random);
+$tester->server->php_auth_pw   = $password;
 r($userTest->identifyByPhpAuthTest()) && p() && e(0); // guest 用户验证失败，返回 false。
 
 /**
  * 检测验证不存在的用户。
  */
 $tester->server->php_auth_user = 'user2';
-$tester->server->php_auth_pw   = md5($password . $random);
+$tester->server->php_auth_pw   = $password;
 r($userTest->identifyByPhpAuthTest()) && p() && e(0); // user2 用户验证失败，返回 false。
 
 /**
  * 检测验证 admin 用户。
  */
-$tester->server->php_auth_user = 'admin';
-$tester->server->php_auth_pw   = md5($password . $random);
+$tester->server->php_auth_user = $admin->account;
+$tester->server->php_auth_pw   = md5($admin->password . $random);
 r($userTest->identifyByPhpAuthTest()) && p()          && e(1);       // admin 用户验证成功，返回 true。
 r($app->user)                         && p('account') && e('admin'); // admin 用户验证成功，$app 对象的中的用户是 admin。
 r($tester->session->user)             && p('account') && e('admin'); // admin 用户验证成功，session 中的用户是 admin。
@@ -89,8 +87,8 @@ r($action) && p('objectType,objectID,action') && e('user,1,login'); // 记录日
 /**
  * 检测验证 user1 用户。
  */
-$tester->server->php_auth_user = 'user1';
-$tester->server->php_auth_pw   = md5($password . $random);
+$tester->server->php_auth_user = $user1->account;
+$tester->server->php_auth_pw   = md5($user1->password . $random);
 r($userTest->identifyByPhpAuthTest()) && p()          && e(1);       // user1 用户验证成功，返回 true。
 r($app->user)                         && p('account') && e('user1'); // user1 用户验证成功，$app 对象的中的用户是 user1。
 r($tester->session->user)             && p('account') && e('user1'); // user1 用户验证成功，session 中的用户是 user1。
@@ -117,11 +115,11 @@ $action = $tester->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->lim
 r($action) && p('objectType,objectID,action') && e('user,2,login'); // 记录日志，最后一条日志对象类型是 user，对象 ID 是 2，动作是 login。
 
 /* 检测 user1 用户使用错误密码验证。*/
-$tester->server->php_auth_user = 'user1';
-$tester->server->php_auth_pw   = md5($password);
+$tester->server->php_auth_user = $user1->account;
+$tester->server->php_auth_pw   = md5($user1->password);
 r($userTest->identifyByPhpAuthTest()) && p() && e(0); // user1 用户使用错误密码验证失败，返回 false。
 
 /* 检测 user1 用户使用空密码验证。*/
-$tester->server->php_auth_user = 'user1';
+$tester->server->php_auth_user = $user1->account;
 $tester->server->php_auth_pw   = '';
 r($userTest->identifyByPhpAuthTest()) && p() && e(0); // user1 用户使用空密码验证失败，返回 false。
