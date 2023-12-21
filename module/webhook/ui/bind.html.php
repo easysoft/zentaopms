@@ -119,4 +119,3 @@ modal
 );
 
 render();
-

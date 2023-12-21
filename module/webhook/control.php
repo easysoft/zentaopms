@@ -163,7 +163,8 @@ class webhook extends control
     }
 
     /**
-     * Bind dingtalk userid.
+     * 绑定钉钉、企业微信、飞书的用户。
+     * Bind dingtalk, wechat, feishu user.
      *
      * @param  int    $id
      * @param  int    $recTotal
@@ -172,7 +173,7 @@ class webhook extends control
      * @access public
      * @return void
      */
-    public function bind($id, $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function bind(int $id, int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         if($_POST)
         {
@@ -183,7 +184,7 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser') return $this->send(array('result' => 'success', 'message' => $this->lang->webhook->note->bind, 'load' => $this->createLink('webhook', 'browse')));
+        if(!in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->note->bind, 'locate' => $this->createLink('webhook', 'browse'))));
         $webhook->secret = json_decode($webhook->secret);
 
         /* Get selected depts. */
@@ -192,74 +193,43 @@ class webhook extends control
             helper::setcookie('selectedDepts', $this->get->selectedDepts, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $_COOKIE['selectedDepts'] = $this->get->selectedDepts;
         }
-        $selectedDepts = $this->cookie->selectedDepts ? $this->cookie->selectedDepts : '';
 
-        if($webhook->type == 'dinguser')
-        {
-            $this->app->loadClass('dingapi', true);
-            $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $dingapi->getUsers($selectedDepts);
-        }
-        elseif($webhook->type == 'wechatuser')
-        {
-            $this->app->loadClass('wechatapi', true);
-            $wechatApi = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response  = $wechatApi->getAllUsers();
-        }
-        elseif($webhook->type == 'feishuuser')
-        {
-            $this->app->loadClass('feishuapi', true);
-            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
-            $response  = $feishuApi->getAllUsers($selectedDepts);
-        }
+        $response = $this->webhookZen->getResponse($webhook);
 
         if($response['result'] == 'fail')
         {
-            if($response['message'] == 'nodept') return $this->send(array('result' => 'success', 'message' => $this->lang->webhook->error->noDept, 'load' => $this->createLink('webhook', 'chooseDept', "id={$id}")));
-            return $this->send(array('result' => 'success', 'message' => $response['message'], 'load' => $this->createLink('webhook', 'browse')));
+            if($response['message'] == 'nodept') return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->error->noDept, 'locate' => $this->createLink('webhook', 'chooseDept', "id={$id}"))));
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $response['message'], 'locate' => $this->createLink('webhook', 'browse'))));
         }
 
-        $oauthUsers  = $response['data'];
-        $bindedPairs = $this->webhook->getBoundUsers($id);
-        $useridPairs = array();
-        foreach($oauthUsers as $name => $userid) $useridPairs[$userid] = $name;
+        $oauthUsers = $response['data'];
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $users = $this->loadModel('user')->getByQuery('inside', $query = '', $pager);
 
-        $unbindUsers = array();
-        $bindedUsers = array();
-        foreach($users as $user)
-        {
-            if(isset($bindedPairs[$user->account])) $bindedUsers[$user->account] = $user;
-            if(!isset($bindedPairs[$user->account])) $unbindUsers[$user->account] = $user;
-        }
-        $users = $unbindUsers + $bindedUsers;
-
-        $this->view->title      = $this->lang->webhook->bind;
-
-        $this->view->webhook       = $webhook;
-        $this->view->oauthUsers    = $oauthUsers;
-        $this->view->useridPairs   = $useridPairs;
-        $this->view->users         = $users;
-        $this->view->pager         = $pager;
-        $this->view->bindedUsers   = $bindedPairs;
-        $this->view->selectedDepts = $selectedDepts;
+        $this->view->title       = $this->lang->webhook->bind;
+        $this->view->webhook     = $webhook;
+        $this->view->oauthUsers  = $oauthUsers;
+        $this->view->useridPairs = array_flip($oauthUsers);
+        $this->view->users       = $this->loadModel('user')->getByQuery('inside', '', $pager);
+        $this->view->pager       = $pager;
+        $this->view->bindedUsers = $this->webhook->getBoundUsers($id);
         $this->display();
     }
 
     /**
-     * choose dept.
+     * 选择部门，用于钉钉、企业微信、飞书的用户绑定。
+     * Choose depts for dingtalk, wechat, feishu user bind.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function chooseDept($id)
+    public function chooseDept(int $id)
     {
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser') return $this->send(array('result' => 'success', 'message' => $this->lang->webhook->note->bind, 'load' => $this->createLink('webhook', 'browse')));
+        if(!in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->note->bind, 'locate' => $this->createLink('webhook', 'browse'))));
+
         $webhook->secret = json_decode($webhook->secret);
 
         if($webhook->type == 'dinguser')
@@ -271,7 +241,8 @@ class webhook extends control
 
         if($webhook->type == 'feishuuser') $response = array('result' => 'success', 'data' => array());
 
-        if($response['result'] == 'fail') return $this->send(array('result' => 'success', 'message' => $response['message'], 'load' => $this->createLink('webhook', 'browse')));
+        if($response['result'] == 'fail') return $this->send(array('result' => 'fail', 'load' => array('alert' => $response['message'], 'locate' => $this->createLink('webhook', 'browse'))));
+
         if($response['result'] == 'selected')
         {
             $locateLink  = $this->createLink('webhook', 'bind', "id={$id}");
@@ -280,8 +251,7 @@ class webhook extends control
             return $this->send(array('result' => 'success', 'load' => $locateLink));
         }
 
-        $this->view->title      = $this->lang->webhook->chooseDept;
-
+        $this->view->title       = $this->lang->webhook->chooseDept;
         $this->view->webhookType = $webhook->type;
         $this->view->deptTree    = $response['data'];
         $this->view->webhookID   = $id;
