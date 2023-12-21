@@ -1174,7 +1174,7 @@ class userModel extends model
      */
     public function login(object $user, bool $addAction = true, bool $keepLogin = false): bool|object
     {
-        if(!$user) return false;
+        if(empty($user->account)) return false;
 
         $this->cleanLocked($user->account);
 
