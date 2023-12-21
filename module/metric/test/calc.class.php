@@ -508,6 +508,18 @@ class metricTest
     }
 
     /**
+     * Test parseSqlFunction.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool|string
+     */
+    public function parseSqlFunction($sql)
+    {
+        return $this->objectModel->parseSqlFunction($sql);
+    }
+
+    /**
      * Judge whether a metric has the concept of an object.
      *
      * @param  array  $header
