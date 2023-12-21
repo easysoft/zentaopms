@@ -449,6 +449,20 @@ class metricTest
     }
 
     /**
+     * Test generate data zoom config.
+     *
+     * @param  int    $dataLength
+     * @param  int    $initZoom
+     * @param  stirng $axis
+     * @access public
+     * @return array
+     */
+    public function genDataZoom($dataLength, $initZoom, $axis)
+    {
+        return $this->objectModel->genDataZoom($dataLength, $initZoom, $axis);
+    }
+
+    /**
      * Test getDateLabels.
      *
      * @param  string $dateType

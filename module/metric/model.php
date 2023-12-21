@@ -1756,6 +1756,16 @@ class metricModel extends model
         return $options;
     }
 
+    /**
+     * 生成数据缩放的配置。
+     * Generate data zoom config.
+     *
+     * @param  int    $dataLength
+     * @param  int    $initZoom
+     * @param  stirng $axis
+     * @access public
+     * @return array
+     */
     public function genDataZoom(int $dataLength, int $initZoom = 10, string $axis = 'x')
     {
         $percent = $initZoom / $dataLength * 100;
