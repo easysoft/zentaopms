@@ -1,26 +1,32 @@
 <?php
 class giteaTest
 {
-    public $tester;
+    private $gitea;
 
     public function __construct()
     {
         global $tester;
-        $this->tester = $tester;
-        $this->gitea  = $this->tester->loadModel('gitea');
+        $this->gitea  = $tester->loadModel('gitea');
     }
 
     /**
-     * Get gitea tasks.
+     * Test bindUser method.
      *
-     * @param  int    $id
+     * @param  array  $userList
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getTasks($id)
+    public function bindUserTester(array $userList): array|string
     {
-        $tasks = $this->gitea->getTasks($id);
-        if(empty($tasks)) return 0;
-        return $tasks;
+        $nameList = array();
+        foreach($userList as $openID => $user) $nameList[$openID] = 'Gitea-' . $user;
+
+        $result = $this->gitea->bindUser(1, $userList, $nameList);
+        if(!$result) return dao::getError();
+
+        return $this->gitea->dao->select('*')->from(TABLE_OAUTH)
+            ->where('providerID')->eq(1)
+            ->andWhere('providerType')->eq('gitea')
+            ->fetchAll();
     }
 }

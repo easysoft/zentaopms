@@ -55,52 +55,44 @@ class giteaModel extends model
      */
     public function bindUser(int $giteaID, array $users, array $giteaNames): bool
     {
-        $accountList = array();
         $repeatUsers = array();
-        foreach($users as $openID => $user)
+        $userPairs   = array();
+        foreach($users as $openID => $account)
         {
-            if(empty($user)) continue;
+            if(empty($account)) continue;
 
-            if(isset($accountList[$user])) $repeatUsers[] = $user;
-            $accountList[$user] = $openID;
+            if(in_array($account, $userPairs)) $repeatUsers[] = $account;
+            $userPairs[$openID] = $account;
         }
 
-        $userList = $this->loadModel('user')->getRealNameAndEmails($repeatUsers);
         /* Check user repeat bind. */
-        if(count($repeatUsers))
+        if($repeatUsers)
         {
+            $userList    = $this->loadModel('user')->getRealNameAndEmails($repeatUsers);
             dao::$errors = sprintf($this->lang->gitea->bindUserError, join(',', helper::arrayColumn($userList, 'realname')));
             return false;
         }
 
-        $user = new stdclass();
-        $user->providerID   = $giteaID;
-        $user->providerType = 'gitea';
+        $bindedUsers = $this->dao->select('openID,account')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitea')
+            ->andWhere('providerID')->eq($giteaID)
+            ->fetchPairs();
+        $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitea')->andWhere('providerID')->eq($giteaID)->exec();
 
-        $oldUsers = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq($user->providerType)->andWhere('providerID')->eq($user->providerID)->fetchAll('openID');
-        foreach($users as $openID => $account)
+        $this->loadModel('action');
+        foreach($userPairs as $openID => $account)
         {
-            $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
             /* If user binded user is change, delete it. */
-            if($existAccount && $existAccount->account != $account)
-            {
-                $this->dao->delete()->from(TABLE_OAUTH)
-                    ->where('openID')->eq($openID)
-                    ->andWhere('providerType')->eq($user->providerType)
-                    ->andWhere('providerID')->eq($user->providerID)
-                    ->exec();
-                $this->loadModel('action')->create('giteauser', $giteaID, 'unbind', '', $giteaNames[$openID]);
-            }
+            if(isset($bindedUsers[$openID]) && $bindedUsers[$openID] != $account) $this->action->create('giteauser', $giteaID, 'unbind', '', $giteaNames[$openID]);
 
             /* Add zentao user and gitea user binded. */
-            if(!$existAccount || $existAccount->account != $account)
-            {
-                if(!$account) continue;
-                $user->account = $account;
-                $user->openID  = $openID;
-                $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
-                $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', $giteaNames[$openID]);
-            }
+            $user = new stdclass();
+            $user->providerID   = $giteaID;
+            $user->providerType = 'gitea';
+            $user->account      = $account;
+            $user->openID       = $openID;
+            $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
+            $this->action->create('giteauser', $giteaID, 'bind', '', $giteaNames[$openID]);
         }
         return !dao::isError();
     }
