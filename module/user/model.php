@@ -2721,57 +2721,44 @@ class userModel extends model
     }
 
     /**
+     * 获取和产品相关联的用户。
      * Get product view list users.
      *
      * @param  object $product
-     * @param  array  $linkedProjects
      * @param  array  $teams
+     * @param  array  $stakeholders
      * @param  array  $whiteList
      * @param  array  $admins
      * @access public
      * @return array
      */
-    public function getProductViewListUsers(object $product, array|null $teams = null, array|null $stakeholders = null, array|null $whiteList = null, array|null $admins = null): array
+    public function getProductViewListUsers(object $product, array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): array
     {
         $users = array();
-
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin)      $users[$admin]   = $admin;
-        foreach(explode(',', trim(zget($product, 'reviewer', ''), ',')) as $account) $users[$account] = $account;
-        foreach(explode(',', trim(zget($product, 'PMT', ''), ',')) as $account)      $users[$account] = $account;
-
         $users[$product->PO]        = $product->PO;
         $users[$product->QD]        = $product->QD;
         $users[$product->RD]        = $product->RD;
         $users[$product->createdBy] = $product->createdBy;
         if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
 
-        if($teams === null && $stakeholders === null)
+        foreach(explode(',', trim($this->app->company->admins, ','))    as $admin)   $users[$admin]   = $admin;
+        foreach(explode(',', trim(zget($product, 'reviewer', ''), ',')) as $account) $users[$account] = $account;
+        foreach(explode(',', trim(zget($product, 'PMT', ''), ','))      as $account) $users[$account] = $account;
+
+        if(!$teams || !$stakeholders)
         {
             list($productTeams, $productStakeholders) = $this->getProductMembers(array($product->id => $product));
-            $teams        = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
-            $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
+            if(!$teams)        $teams        = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
+            if(!$stakeholders) $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
         }
 
-        if($whiteList === null)
-        {
-            $whiteList = $this->dao->select('account')->from(TABLE_ACL)
-                ->where('objectType')->eq('product')
-                ->andWhere('objectID')->eq($product->id)
-                ->fetchPairs();
-        }
+        if(!$whiteList) $whiteList = $this->dao->select('account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->eq($product->id)->fetchPairs();
+        if(!$admins)    $admins    = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->where("FIND_IN_SET({$product->id}, products)")->orWhere('products')->eq('all')->fetchPairs();
 
-        if($admins === null)
-        {
-            $admins = $this->dao->select('account')->from(TABLE_PROJECTADMIN)
-                ->where("CONCAT(',', products, ',')")->like("%,$product->id,%")
-                ->orWhere('products')->eq('all')
-                ->fetchPairs();
-        }
-
-        $users += $teams ? $teams : array();
+        $users += $teams        ? $teams        : array();
         $users += $stakeholders ? $stakeholders : array();
-        $users += $whiteList ? $whiteList : array();
-        $users += $admins ? $admins : array();
+        $users += $whiteList    ? $whiteList    : array();
+        $users += $admins       ? $admins       : array();
 
         return $users;
     }
