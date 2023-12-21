@@ -11,7 +11,7 @@ class upgradeZen extends upgrade
      * @access protected
      * @return void
      */
-    protected function afterExecute(string $fromVersion, string $rawFromVersion): void
+    protected function afterExecuteSql(string $fromVersion, string $rawFromVersion): void
     {
         $this->loadModel('setting')->updateVersion($this->config->version);
 

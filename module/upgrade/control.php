@@ -178,7 +178,7 @@ class upgrade extends control
             $this->display();
         }
 
-        $this->upgradeZen->afterExec($fromVersion, $rawFromVersion);
+        $this->upgradeZen->afterExecuteSql($fromVersion, $rawFromVersion);
     }
 
     /**
