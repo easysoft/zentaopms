@@ -631,8 +631,10 @@ class userModel extends model
             }
         }
 
-        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
-        $newGroups = zget($_POST, 'groups', array());
+        $userVisionList = $this->getVisionList();
+        $user           = $this->getById($userID, 'id');
+        $oldGroups      = array_keys($this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false));
+        $newGroups      = zget($_POST, 'groups', array());
         sort($oldGroups);
         sort($newGroups);
 

@@ -56,7 +56,7 @@
     <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
     <?php elseif($project->model == 'agileplus'):?>
     <div class="btn-group dropdown">
-      <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
+      <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='project' onclick='$(this).removeAttr(\"data-toggle\")'");?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <li><?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), $lang->execution->create);?></li>
@@ -64,7 +64,7 @@
       </ul>
     </div>
     <?php else: ?>
-    <?php if(common::hasPriv('execution', 'create') and !$isStage) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
+    <?php if(common::hasPriv('execution', 'create') and !$isStage) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary create-execution-btn' data-app='project' onclick='$(this).removeAttr(\"data-toggle\")'");?>
     <?php endif;?>
   </div>
 </div>
@@ -78,7 +78,7 @@
         <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
         <?php else: ?>
           <?php if(common::hasPriv('execution', 'create')):?>
-          <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-info' data-app='execution'");?>
+          <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-info' data-app='project'");?>
           <?php endif;?>
         <?php endif;?>
       <?php endif;?>
