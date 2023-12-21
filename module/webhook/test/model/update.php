@@ -4,89 +4,72 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/webhook.class.php';
 su('admin');
 
+zdTable('webhook')->gen(1);
+
 /**
 
 title=测试 webhookModel->update();
+timeout=0
 cid=1
-pid=1
 
-我这里创建了一个新的webhook并修改他的信息 >> 1
-这里我只修改了name >> 『Hook地址』不能为空。
-这里修改name为空的情况 >> 『名称』不能为空。
-这里修改secret为空 >> 1
-这里修改domain为空 >> 1
-这里修改products为空 >> 1
-这里修改execution为空 >> 1
-这里修改desc为空 >> 1
+- 修改第一个webhook的name属性name @新加的webhook12
+- 只修改了name属性name @修改后的数据
+- 修改name为空的情况第name条的0属性 @『名称』不能为空。
+- 修改secret为空属性secret @~~
+- 修改domain为空属性domain @~~
+- 修改products为空属性products @~~
+- 修改execution为空属性executions @~~
+- 修改desc为空属性desc @~~
 
 */
 
-$webhook = new webhookTest();
+$webhookTest = new webhookTest();
 
-$create = array();
-$create['type']             = 'dinggroup';
-$create['name']             = '新加的webhook';
-$create['url']              = 'https://www.baidu.com';
-$create['secret']           = 12222;
-$create['agentId']          = '';
-$create['appKey']           = '';
-$create['appSecret']        = '';
-$create['wechatCorpId']     = '';
-$create['wechatCorpSecret'] = '';
-$create['wechatAgentId']    = '';
-$create['feishuAppId']      = '';
-$create['feishuAppSecret']  = '';
-$create['domain']           = 'http://www.zentaopms.com';
-$create['sendType']         = 'sync';
-$create['products']         = array('0' => 100);
-$create['executions']       = array('0' => 700);
-$create['desc']             = '当你老了~~~';
+$webhook = new stdclass();
+$webhook->type       = 'dinggroup';
+$webhook->name       = '新加的webhook12';
+$webhook->url        = 'https://www.baidu.com.';
+$webhook->secret     = '122221';
+$webhook->domain     = 'http://www.zentaopms.com';
+$webhook->products   = '98,100';
+$webhook->executions = '696,700';
+$webhook->desc       = '测试描述';
 
-$update = array();
-$update['type']               = 'dinggroup';
-$update['name']               = '新加的webhook12';
-$update['url']                = 'https://www.baidu.com.';
-$update['secret']             = '122221';
-$update['domain']             = 'http://www.zentaopms.com';
-$update['products']           = array('0' => 100, '1' => 98);
-$update['executions']         = array('0' => 700, '1' => 696);
-$update['desc']               = '当你老了~~~敲不动了';
+$webhook1 = clone $webhook;
+$webhook1->name = '修改后的数据';
 
-$update1 = array();
-$update1['name'] = '修改后的数据';
+$webhook2 = clone $webhook;
+$webhook2->name = '';
 
-$update2 = array();
-$update2['name']       = '';
+$webhook3 = clone $webhook;
+$webhook3->secret = '';
 
-$update3 = $update;
-$update3['secret']     = '';
+$webhook4 = clone $webhook;
+$webhook4->domain = '';
 
-$update4 = $update;
-$update4['domain']     = '';
+$webhook5 = clone $webhook;
+$webhook5->products = '';
 
-$update5 = $update;
-$update5['products']   = array();
+$webhook6 = clone $webhook;
+$webhook6->executions = '';
 
-$update6 = $update;
-$update6['executions'] = array();
+$webhook7 = clone $webhook;
+$webhook7->desc = '';
 
-$update7 = $update;
-$update7['desc']       = '';
+$result1 = $webhookTest->updateTest(1, $webhook);
+$result2 = $webhookTest->updateTest(1, $webhook1);
+$result3 = $webhookTest->updateTest(1, $webhook2);
+$result4 = $webhookTest->updateTest(1, $webhook3);
+$result5 = $webhookTest->updateTest(1, $webhook4);
+$result6 = $webhookTest->updateTest(1, $webhook5);
+$result7 = $webhookTest->updateTest(1, $webhook6);
+$result8 = $webhookTest->updateTest(1, $webhook7);
 
-$result1 = $webhook->updateTest($create, $update);
-$result2 = $webhook->updateTest($create, $update1);
-$result3 = $webhook->updateTest($create, $update2);
-$result4 = $webhook->updateTest($create, $update3);
-$result5 = $webhook->updateTest($create, $update4);
-$result6 = $webhook->updateTest($create, $update5);
-$result7 = $webhook->updateTest($create, $update6);
-$result8 = $webhook->updateTest($create, $update7);
-
-r($result1) && p()         && e('1');                      //我这里创建了一个新的webhook并修改他的信息
-r($result2) && p('url:0')  && e('『Hook地址』不能为空。'); //这里我只修改了name
-r($result3) && p('name:0') && e('『名称』不能为空。');     //这里修改name为空的情况
-r($result4) && p()         && e('1');                      //这里修改secret为空
-r($result5) && p()         && e('1');                      //这里修改domain为空
-r($result6) && p()         && e('1');                      //这里修改products为空
-r($result7) && p()         && e('1');                      //这里修改execution为空
-r($result8) && p()         && e('1');                      //这里修改desc为空
+r($result1) && p('name')       && e('新加的webhook12');    //修改第一个webhook的name
+r($result2) && p('name')       && e('修改后的数据');       //只修改了name
+r($result3) && p('name:0')     && e('『名称』不能为空。'); //修改name为空的情况
+r($result4) && p('secret')     && e('~~');                 //修改secret为空
+r($result5) && p('domain')     && e('~~');                 //修改domain为空
+r($result6) && p('products')   && e('~~');                 //修改products为空
+r($result7) && p('executions') && e('~~');                 //修改execution为空
+r($result8) && p('desc')       && e('~~');                 //修改desc为空

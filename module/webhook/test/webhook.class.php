@@ -136,43 +136,20 @@ class webhookTest
     }
 
     /**
-     * Update Test
+     * Update Test.
      *
-     * @param  array $create
-     * @param  int   $id
+     * @param  int    $id
+     * @param  object $webhook
      * @access public
      * @return int
      */
-    public function updateTest($create, $update)
+    public function updateTest($id, $webhook)
     {
-        global $tester;
-        $webhook1 = $this->createTest($create);
-        $id = $tester->dao->select('id')->from(TABLE_WEBHOOK)->where('name')->eq($create['name'])->fetch('id');
+        $this->objectModel->update($id, $webhook);
 
-        if($id == null)
-        {
-            a($webhook);
-            return;
-        }
-        else{
-            $post = array();
-            $post['type']       = '';
-            $post['name']       = '';
-            $post['url']        = '';
-            $post['secret']     = '';
-            $post['domain']     = '';
-            $post['products']   = array();
-            $post['executions'] = array();
-            $post['desc']       = '';
-            foreach($post as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
-            foreach($update as $key => $value) $_POST[$key] = $value;
+        if(dao::isError()) return dao::getError();
 
-            $objects = $this->objectModel->update($id);
-
-            if(dao::isError()) return dao::getError();
-
-            return $objects;
-        }
+        return $this->objectModel->getByID($id);
     }
 
     /**

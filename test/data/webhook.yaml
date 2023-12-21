@@ -112,20 +112,6 @@ fields:
     prefix: ""
     postfix: ""
     format: "YYYY-MM-DD hh:mm:ss"
-  - field: editedBy
-    note: ""
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: editedDate
-    note: ""
-    range: ""
-    prefix: ""
-    postfix: ""
-    format: ""
   - field: deleted
     note: ""
     range: "0"
