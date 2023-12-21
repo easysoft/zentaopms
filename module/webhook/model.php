@@ -328,7 +328,6 @@ class webhookModel extends model
         if(!isset($this->lang->action->label->$actionType)) return false;
         if(empty($this->config->objectTables[$objectType])) return false;
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
-        a($action);die;
         if(!$action) return false;
 
         if($webhook->products)
