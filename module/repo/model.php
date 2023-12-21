@@ -863,7 +863,7 @@ class repoModel extends model
     public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = ''): array
     {
         if(!isset($repo->id)) return array();
-        if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
+        if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $type, $pager, $begin, $end);
 
         $entry         = ltrim($entry, '/');
         $entry         = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
