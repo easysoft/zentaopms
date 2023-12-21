@@ -112,6 +112,7 @@ class transferModel extends model
     }
 
     /**
+     * 将字段格式化成数组。
      * Init FieldList.
      *
      * @param  string $module
@@ -120,34 +121,30 @@ class transferModel extends model
      * @access public
      * @return array
      */
-    public function initFieldList($module, $fields = '', $withKey = true)
+    public function initFieldList(string $module, string|array $fields, bool $withKey = true)
     {
+        if(!is_array($fields)) $fields = explode(',', $fields);
+
         $this->commonActions($module);
         $this->mergeConfig($module);
-
         $this->transferConfig->sysDataList = $this->initSysDataFields();
-        $transferFieldList = $this->transferConfig->fieldList;
-
-        if(empty($fields)) return false;
-
-        if(!is_array($fields)) $fields = explode(',', $fields);
+        $transferFieldList = $this->transferConfig->fieldList; //生成一个完整的fieldList结构。
 
         $fieldList = array();
         /* build module fieldList. */
         foreach($fields as $field)
         {
             $field = trim($field);
-            if($module == 'bug' and $this->session->currentProductType == 'normal' and $field == 'branch') continue;
-
             $moduleFieldList = isset($this->moduleFieldList[$field]) ? $this->moduleFieldList[$field] : array();
 
+            /* 根据fieldList结构生成每个字段的结构。*/
+            /* Generate each field structure by fieldList structure. */
             foreach($transferFieldList as $transferField => $value)
             {
                 if((!isset($moduleFieldList[$transferField])) or $transferField == 'title')
                 {
                     $moduleFieldList[$transferField] = $this->transferConfig->fieldList[$transferField];
-
-                    if(strpos($this->transferConfig->initFunction, $transferField) !== false)
+                    if(strpos($this->transferConfig->initFunction, $transferField) !== false) //调用初始化方法
                     {
                         $funcName = 'init' . ucfirst($transferField);
                         $moduleFieldList[$transferField] = $this->$funcName($module, $field);
@@ -159,40 +156,15 @@ class transferModel extends model
             $fieldList[$field] = $moduleFieldList;
         }
 
+        /* 抄送给默认多选。*/
+        /* Copy to default multiple. */
         if(!empty($fieldList['mailto']))
         {
             $fieldList['mailto']['control'] = 'multiple';
             $fieldList['mailto']['values']  = $this->transferConfig->sysDataList['user'];
         }
 
-        if($this->config->edition != 'open')
-        {
-            /* Set workflow fields. */
-            $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
-                ->where('module')->eq($module)
-                ->andWhere('buildin')->eq(0)
-                ->fetchAll('id');
-
-            foreach($workflowFields as $field)
-            {
-                if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
-                if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
-                if(empty($field->options)) continue;
-
-                $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
-                $options = $this->workflowfield->getFieldOptions($field, true);
-                if($options)
-                {
-                    $control = $field->control == 'multi-select' ? 'multiple' : 'select';
-                    $fieldList[$field->field]['title']   = $field->name;
-                    $fieldList[$field->field]['control'] = $control;
-                    $fieldList[$field->field]['values']  = $options;
-                    $fieldList[$field->field]['from']    = 'workflow';
-                    $this->config->$module->listFields .=  ',' . $field->field;
-                }
-            }
-        }
-
+        if($this->config->edition != 'open') $fieldList = $this->transferZen->initWorkflowFieldList($module, $fieldList);
         return $fieldList;
     }
 

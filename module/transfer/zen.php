@@ -471,4 +471,42 @@ class transferZen extends transfer
 
         return $moduleData;
     }
+
+    /**
+     * 初始化工作流字段。
+     * Init workflow fieldList.
+     *
+     * @param  string $module
+     * @param  array  $fieldList
+     * @access public
+     * @return void
+     */
+    public function initWorkflowFieldList(string $module, array $fieldList)
+    {
+        $this->loadModel($module);
+        /* Set workflow fields. */
+        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq($module)
+            ->andWhere('buildin')->eq(0)
+            ->fetchAll('id');
+
+        foreach($workflowFields as $field)
+        {
+            if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
+            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
+            if(empty($field->options)) continue;
+
+            $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
+            $options = $this->workflowfield->getFieldOptions($field, true);
+            if($options)
+            {
+                $control = $field->control == 'multi-select' ? 'multiple' : 'select';
+                $fieldList[$field->field]['title']   = $field->name;
+                $fieldList[$field->field]['control'] = $control;
+                $fieldList[$field->field]['values']  = $options;
+                $fieldList[$field->field]['from']    = 'workflow';
+                $this->config->$module->listFields .=  ',' . $field->field;
+            }
+        }
+    }
 }

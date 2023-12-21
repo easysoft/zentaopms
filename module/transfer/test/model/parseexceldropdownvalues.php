@@ -36,7 +36,7 @@ $rows[3]->estimate = 2;
 
 /**
 
-title=测试 transfer->getFiles();
+title=测试 transfer->parseExcelDropdownValues();
 timeout=0
 cid=1
 
