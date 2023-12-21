@@ -263,6 +263,7 @@ class mailTest
         $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('mail')
             ->andWhere('toList')->eq($user)
+            ->orderBy('id')
             ->fetchAll();
 
         $object = $this->objectModel->mergeMails($mails);
