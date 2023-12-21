@@ -1,0 +1,16 @@
+title: table zt_effort
+desc: "任务工时记录"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: project
+    note: "项目ID"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    range: 1-10
+  - field: objectType
+    range: task

@@ -1,0 +1,21 @@
+title: table zt_doclib
+desc: "文档库"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: project
+    note: "项目库"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "执行库"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    range: execution

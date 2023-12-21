@@ -1,0 +1,15 @@
+title: table zt_task
+desc: "任务"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: project
+    note: "所属项目"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "所属执行"
+    range: 1-10

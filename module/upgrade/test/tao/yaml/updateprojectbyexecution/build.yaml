@@ -1,0 +1,9 @@
+title: table zt_build
+author: Wang XuePeng
+desc: ""
+version: "1.0"
+fields:
+  - field: project
+    range: 0
+  - field: execution
+    range: 1-10

@@ -1,0 +1,17 @@
+title: table zt_doc
+desc: "文档"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: project
+    note: "所属项目"
+    range: 0
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: execution
+    note: "所属迭代"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    format: ""

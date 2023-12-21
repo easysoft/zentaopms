@@ -1,0 +1,9 @@
+title: zt_bug
+desc: "Bug表"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: project
+    range: 0
+  - field: execution
+    range: 1-10
