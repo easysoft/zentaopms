@@ -274,49 +274,6 @@ class stakeholder extends control
     }
 
     /**
-     * Ajax get control.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetControl($activityID = 0)
-    {
-        $plan      = $this->dao->select('*')->from(TABLE_INTERVENTION)->where('activity')->eq($activityID)->fetch();
-        $begin     = html::input("begin[$activityID]", isset($plan->begin) ? $plan->begin : '', 'class="form-control form-date"');
-        $realBegin = html::input("realBegin[$activityID]", isset($plan->realBegin) ? $plan->realBegin: '', 'class="form-control form-date"');
-        $status    = html::select("status[$activityID]", $this->lang->stakeholder->planField->stautsList, isset($plan->status) ? $plan->status : '', 'class="form-control"');
-        $situation = html::select("situation[$activityID]", $this->lang->stakeholder->situationList, isset($plan->situation) ? $plan->situation : '', 'class="form-control"');
-
-        $stakeholders = $this->stakeholder->getListByType();
-        $partakeList = isset($plan->partake) ? json_decode($plan->partake) : new stdclass();
-        $insideList  = array("<td style='width: 100px;'></td>");
-        $outsideList = array("<td style='width: 100px;'></td>");
-        if(isset($stakeholders['inside']))
-        {
-            $insideList = array();
-            foreach($stakeholders['inside'] as $user)
-            {
-                $partake = isset($partakeList->{$user->account}) ? $partakeList->{$user->account} : '';
-                $insideList[] = "<td style='width: 100px;'>" . html::select("partake[$activityID][$user->account]", $this->lang->stakeholder->planField->partakeList, $partake, "class='form-control'") . '</td>';
-            }
-        }
-
-        if(isset($stakeholders['outside']))
-        {
-            $outsideList = array();
-            foreach($stakeholders['outside'] as $user)
-            {
-                $partake = isset($partakeList->{$user->account}) ? $partakeList->{$user->account} : '';
-                $outsideList[] = "<td style='width: 100px;'>" . html::select("partake[$activityID][$user->account]", $this->lang->stakeholder->planField->partakeList, $partake, "class='form-control'") . '</td>';
-            }
-        }
-
-        $partakeList = array_merge($insideList, $outsideList);
-
-        echo json_encode(array('begin' => $begin, 'realBegin' => $realBegin, 'status' => $status, 'situation' => $situation, 'partakeList' => $partakeList));
-    }
-
-    /**
      * Deleted user.
      *
      * @access public
