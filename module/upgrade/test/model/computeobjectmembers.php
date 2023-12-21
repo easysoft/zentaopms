@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->updateProjectMembers();
+title=测试 upgradeModel->computeObjectMembers();
 cid=1
 
 - 测试获取 项目 11 的成员 @acls:admin;teams:admin,user12
