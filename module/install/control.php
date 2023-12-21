@@ -352,8 +352,6 @@ class install extends control
             $this->install->updateLang();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->importDemoData) $this->install->importDemoData();
-
             /* 轻量级管理模式创建默认项目集。*/
             /* Lean mode create default program. */
             $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
@@ -364,10 +362,13 @@ class install extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $data = form::data()->get();
+            if($data->importDemoData) $this->install->importDemoData();
+
             $this->loadModel('setting');
             $this->setting->updateVersion($this->config->version);
             $this->setting->setSN();
-            $this->setting->setItem('system.common.global.flow', $this->post->flow);
+            $this->setting->setItem('system.common.global.flow', $data->flow);
             $this->setting->setItem('system.common.safe.mode', '1');
             $this->setting->setItem('system.common.safe.changeWeak', '1');
             $this->setting->setItem('system.common.global.cron', '1');

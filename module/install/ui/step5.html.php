@@ -87,7 +87,8 @@ div
                     checkbox
                     (
                         set::text($lang->install->importDemoData),
-                        set::name('importDemoData')
+                        set::name('importDemoData'),
+                        set::value(1)
                     )
                 )
             )

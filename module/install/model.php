@@ -200,40 +200,30 @@ class installModel extends model
      */
     public function grantPriv(): bool
     {
-        $data = fixer::input('post')->stripTags('company')->get();
-
-        $requiredFields = explode(',', $this->config->install->step5RequiredFields);
-        foreach($requiredFields as $field)
-        {
-            if(empty($data->{$field}))
-            {
-                dao::$errors[$field][] = $this->lang->install->errorEmpty[$field];
-            }
-        }
-        if(dao::isError()) return false;
+        $data = form::data()->get();
 
         $this->loadModel('user');
         $this->app->loadConfig('admin');
 
         /* Check password. */
-        if(!validater::checkReg($this->post->password, '|(.){6,}|'))                       dao::$errors['password'][] = $this->lang->error->passwordrule;
-        if($this->user->computePasswordStrength($this->post->password) < 1)                dao::$errors['password'][] = $this->lang->user->placeholder->passwordStrengthCheck[1];
-        if(strpos(",{$this->config->safe->weak},", ",{$this->post->password},") !== false) dao::$errors['password'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+        if(!validater::checkReg($data->password, '|(.){6,}|'))                       dao::$errors['password'][] = $this->lang->error->passwordrule;
+        if($this->user->computePasswordStrength($data->password) < 1)                dao::$errors['password'][] = $this->lang->user->placeholder->passwordStrengthCheck[1];
+        if(strpos(",{$this->config->safe->weak},", ",{$data->password},") !== false) dao::$errors['password'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
         if(dao::isError()) return false;
 
         /* Insert a company. */
         $company = new stdclass();
         $company->name   = $data->company;
-        $company->admins = ",{$this->post->account},";
+        $company->admins = ",{$data->account},";
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         /* Set admin. */
         $visions = $this->config->edition == 'ipd' ? 'or,rnd,lite' : 'rnd,lite';
         $admin   = new stdclass();
-        $admin->account  = $this->post->account;
-        $admin->realname = $this->post->account;
-        $admin->password = md5($this->post->password);
+        $admin->account  = $data->account;
+        $admin->realname = $data->account;
+        $admin->password = md5($data->password);
         $admin->gender   = 'f';
         $admin->visions  = $visions;
         $this->dao->replace(TABLE_USER)->data($admin)->exec();

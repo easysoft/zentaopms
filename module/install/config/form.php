@@ -18,3 +18,10 @@ $config->install->form->step2['clearDB']     = array('type' => 'int',    'requir
 
 $config->install->form->step4 = array();
 $config->install->form->step4['mode'] = array('type' => 'string', 'required' => true);
+
+$config->install->form->step5 = array();
+$config->install->form->step5['company']        = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->install->form->step5['flow']           = array('type' => 'string', 'required' => true, 'default' => 'full');
+$config->install->form->step5['account']        = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->install->form->step5['password']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->install->form->step5['importDemoData'] = array('type' => 'int', 'required' => false, 'default' => 0);
