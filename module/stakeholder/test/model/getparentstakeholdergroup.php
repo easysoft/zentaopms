@@ -1,38 +1,38 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
-su('admin');
-
-$product = zdTable('project');
-$product->id->range('1-50');
-$product->type->range('project{10},sprint{40}');
-$product->project->range('0{10},1-10{4}');
-$product->parent->range('0{10},1-10{4}');
-$product->acl->range('private');
-$product->gen(50)->fixPath();
-
-zdTable('stakeholder')->config('stakeholder')->gen(50);
-
 /**
 
 title=测试 stakeholderModel->getParentStakeholderGroup();
 cid=1
-pid=1
 
-正常输入项目项目集参数查询 >> user9
-不输入项目集项目参数查询 >> 0
-正常输入项目项目集参数查询统计 >> 2
+- 获取对象ID为0的父对象干系人分组信息 @0
+- 获取项目集ID为1-10的父项目集干系人分组信息第2条的admin属性 @admin
+- 获取项目ID为11的所属项目集干系人分组信息第11条的admin属性 @admin
+- 获取项目ID不存在的所属项目干系人分组信息 @0
+- 获取项目集ID为1-10的父项目集干系人分组信息数量 @10
+- 获取项目ID为11的所属项目集干系人分组信息数量 @10
 
 */
-global $tester;
-$stakeholder = $tester->loadModel('stakeholder');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/stakeholder.class.php';
 
-$objectIDList   = array('11', '31', '100', '1');
-$noObjectIDList = array();
+$projectTable = zdTable('project')->config('project');
+$projectTable->acl->range('private');
+$projectTable->gen(15);
 
-$stakeholders = ($stakeholder->getParentStakeholderGroup($objectIDList));
-r($stakeholders)                                                 && p('11:admin') && e('admin'); //正常输入项目项目集参数查询
-r($stakeholders)                                                 && p('31:user5') && e('user5'); //正常输入项目项目集参数查询
-r($stakeholder->getParentStakeholderGroup($noObjectIDList))      && p()           && e('0');     //不输入项目集项目参数查询
-r(count($stakeholder->getParentStakeholderGroup($objectIDList))) && p()           && e('2');     //正常输入项目项目集参数查询统计
+zdTable('stakeholder')->config('stakeholder')->gen(20);
+zdTable('user')->gen(5);
+
+$objectIds[0] = array();
+$objectIds[1] = range(1, 10);
+$objectIds[2] = array(11);
+$objectIds[3] = array(200, 201, 202);
+
+$stakeholderTester = new stakeholderTest();
+r($stakeholderTester->getParentStakeholderGroupTest($objectIds[0])) && p()           && e('0');     // 获取对象ID为0的父对象干系人分组信息
+r($stakeholderTester->getParentStakeholderGroupTest($objectIds[1])) && p('2:admin')  && e('admin'); // 获取项目集ID为1-10的父项目集干系人分组信息
+r($stakeholderTester->getParentStakeholderGroupTest($objectIds[2])) && p('11:admin') && e('admin'); // 获取项目ID为11的所属项目集干系人分组信息
+r($stakeholderTester->getParentStakeholderGroupTest($objectIds[3])) && p()           && e('0');     // 获取项目ID不存在的所属项目干系人分组信息
+
+r(count($stakeholderTester->getParentStakeholderGroupTest($objectIds[1])[2]))  && p() && e('10'); // 获取项目集ID为1-10的父项目集干系人分组信息数量
+r(count($stakeholderTester->getParentStakeholderGroupTest($objectIds[2])[11])) && p() && e('10'); // 获取项目ID为11的所属项目集干系人分组信息数量

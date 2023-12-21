@@ -201,4 +201,20 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $stakeholderGroup;
     }
+
+    /**
+     * 获取父项目集/父项目的干系人列表。
+     * Get the stakeholder list for the parent program / parent project.
+     *
+     * @param  array  $objectIdList
+     * @access public
+     * @return array
+     */
+    public function getParentStakeholderGroupTest(array $objectIdList): array
+    {
+        $stakeholderGroup = $this->objectModel->getParentStakeholderGroup($objectIdList);
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholderGroup;
+    }
 }
