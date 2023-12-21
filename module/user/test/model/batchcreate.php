@@ -25,17 +25,17 @@ $verify = md5($app->user->password . $random);
 
 $users1 = array
 (
-    (object)array('account' => '', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456', 'type' => 'inside',  'new' => 0, 'newCompany' => 'newCompany', 'group' => array(1, 2)),
+    (object)array('account' => '', 'realname' => 'user1', 'visions' => 'rnd', 'password' => 'Admin123', 'type' => 'inside',  'new' => 0, 'newCompany' => 'newCompany', 'group' => array(1, 2)),
 );
 
 $users2 = array
 (
-    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456', 'type' => 'outside', 'new' => 1, 'newCompany' => 'newCompany', 'group' => array(1, 2), 'gender' => 'gender'),
+    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => 'Admin123', 'type' => 'outside', 'new' => 1, 'newCompany' => 'newCompany', 'group' => array(1, 2), 'gender' => 'gender'),
 );
 
 $users3 = array
 (
-    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456', 'type' => 'outside', 'new' => 1, 'newCompany' => 'newCompany', 'group' => array(1, 2)),
+    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => 'Admin123', 'type' => 'outside', 'new' => 1, 'newCompany' => 'newCompany', 'group' => array(1, 2)),
 );
 
 /**

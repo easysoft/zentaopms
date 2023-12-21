@@ -512,24 +512,6 @@ class userTest
     }
 
     /**
-     * Test get my objects.
-     *
-     * @param  string $account
-     * @param  string $type
-     * @param  string $status
-     * @param  string $orderBy
-     * @access public
-     * @return void
-     */
-    public function getObjectsTest($account, $type, $status, $orderBy)
-    {
-        $myObjects = $this->objectModel->getObjects($account, $type, $status, $orderBy);
-
-        if(dao::isError()) return dao::getError();
-        return $myObjects;
-    }
-
-    /**
      * 测试清除用户失败次数和锁定时间。
      * Test clean user locked time.
      *
