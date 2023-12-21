@@ -240,36 +240,6 @@ class giteaModel extends model
     }
 
     /**
-     * 通过API获取Gitea分组列表。
-     * Get groups by api.
-     *
-     * @param  int    $giteaID
-     * @param  int    $sudo
-     * @access public
-     * @return array
-     */
-    public function apiGetGroups(int $giteaID, bool $sudo = true): array
-    {
-         $apiRoot = $this->getApiRoot($giteaID, $sudo);
-         if(!$apiRoot) return array();
-
-         $url    = sprintf($apiRoot, "/orgs");
-         $page   = 1;
-         $groups = array();
-         while(true)
-         {
-             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
-             if(empty($results)) break;
-
-             $groups = array_merge($groups, $results);
-             if(count($results) < 50) break;
-
-             $page ++;
-         }
-         return $groups;
-    }
-
-    /**
      * 通过API获取Gitea用户列表。
      * Get gitea user list.
      *
@@ -280,10 +250,11 @@ class giteaModel extends model
      */
     public function apiGetUsers(int $giteaID, bool $onlyLinked = false): array
     {
-        $users = array();
         $apiRoot  = $this->getApiRoot($giteaID);
+        if(empty($apiRoot)) return array();
 
-        $page = 1;
+        $page  = 1;
+        $users = array();
         while(true)
         {
             $url    = sprintf($apiRoot, "/users/search") . "&page={$page}&limit=50";
@@ -315,7 +286,6 @@ class giteaModel extends model
 
             $userList[] = $user;
         }
-
         return $userList;
     }
 
