@@ -235,4 +235,22 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $stakeholderGroup;
     }
+
+    /**
+     * 获取项目按照进度分组的活动列表。
+     * Get group activities.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getProcessGroupTest(int $projectID): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $processGroup = $this->objectModel->getProcessGroup();
+
+        if(dao::isError()) return dao::getError();
+        return $processGroup;
+    }
 }

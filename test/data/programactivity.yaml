@@ -75,14 +75,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: createdDate
-    note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: deleted
     note: "是否删除"
     range: 0

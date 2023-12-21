@@ -1,0 +1,17 @@
+title: zt_programactivity
+desc: 活动表
+author: Shujie Tian
+version: 1.0
+fields:
+  - field: id
+    range: 1-100
+  - field: project
+    range: 60
+  - field: execution
+    range: 106-111
+  - field: process
+    range: "1-5{5}"
+  - field: activity
+    range: "1-5{5}"
+  - field: result
+    range: "yes{4},no"
