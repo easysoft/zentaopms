@@ -738,7 +738,7 @@ class userModel extends model
      */
     public function checkGroupChange(object $user): bool
     {
-        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($user->account)->fetchPairs();
+        $oldGroups = array_keys($this->loadModel('group')->getByAccount($user->account, true));
         $newGroups = array_unique(array_filter($user->group));
 
         sort($oldGroups);
