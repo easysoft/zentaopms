@@ -385,6 +385,17 @@ class metricTest
     }
 
     /**
+     * Test getExecutableCalcList.
+     *
+     * @access public
+     * @return array
+     */
+    public function getExecutableCalcList()
+    {
+        return $this->objectModel->getExecutableCalcList();
+    }
+
+    /**
      * Test getEchartXY.
      *
      * @param  array $header
