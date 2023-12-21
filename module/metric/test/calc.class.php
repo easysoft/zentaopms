@@ -396,6 +396,17 @@ class metricTest
     }
 
     /**
+     * Test getCalcInstanceList.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCalcInstanceList()
+    {
+        return $this->objectModel->getCalcInstanceList();
+    }
+
+    /**
      * Test getEchartXY.
      *
      * @param  array $header
