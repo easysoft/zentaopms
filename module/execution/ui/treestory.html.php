@@ -126,13 +126,13 @@ div
             set::disabled(!$this->story->isClickable($story, 'edit')),
             set('data-app', $app->tab)
         ) : null,
-        hasPriv('story', 'createCase') ? btn
+        hasPriv('testcase', 'create') ? btn
         (
             setClass('text-primary ml-2'),
             set::icon('sitemap'),
             set::hint($lang->story->createCase),
             set::url(createLink('testcase', 'create', "productID={$story->product}&branch={$story->branch}&module=0&from=execution&param={$executionID}&storyID={$story->id}")),
-            set::disabled(!$this->story->isClickable($story, 'createCase')),
+            set::disabled($story->type != 'story'),
             set('data-app', $app->tab)
         ) : null
     ),
