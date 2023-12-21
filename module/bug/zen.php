@@ -1226,6 +1226,7 @@ class bugZen extends bug
         $this->view->bug              = $bug;
         $this->view->product          = $product;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->projectID        = $bug->project;
         $this->view->projects         = $projects;
         $this->view->executions       = $executions;
         $this->view->productBugs      = $productBugs;
