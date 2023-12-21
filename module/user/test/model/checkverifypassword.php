@@ -46,4 +46,4 @@ r($result7) && p('errors:verifyPassword') && e('验证失败，请检查您的�
 
 $result8 = $userTest->checkVerifyPasswordTest(md5(md5('123456') . $random));
 r($result8) && p('result') && e(1);                   // 验证密码包含正确的密码和正确的随机数返回 true。
-r($result8) && p('errors:verifyPassword') && e('~~'); // 验证密码包含正确的密码和正确的随机数提示信息。
+r($result8) && p('errors:verifyPassword') && e('` `'); // 验证密码包含正确的密码和正确的随机数提示信息。

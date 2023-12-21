@@ -33,7 +33,7 @@ r($result) && p('errors:password1') && e('『密码』不能为空。'); // 密�
 /* 密码为空，允许密码为空。*/
 $result = $userTest->checkPasswordTest($user1, true);
 r($result) && p('result')           && e(1);    // 密码为空，允许密码为空，返回 true。
-r($result) && p('errors:password1') && e('~~'); // 密码为空，允许密码为空，无错误提示。
+r($result) && p('errors:password1') && e('` `'); // 密码为空，允许密码为空，无错误提示。
 
 $config->safe = new stdclass();
 
@@ -82,14 +82,14 @@ $config->safe->mode = 0;
 unset($config->safe->changeWeak);
 $result = $userTest->checkPasswordTest($user4);
 r($result) && p('result')           && e(1);    // 密码不为空，两次密码相同，未设置修改弱口令密码属性，返回 true。
-r($result) && p('errors:password1') && e('~~'); // 密码不为空，两次密码相同，未设置修改弱口令密码属性，无错误提示。
+r($result) && p('errors:password1') && e('` `'); // 密码不为空，两次密码相同，未设置修改弱口令密码属性，无错误提示。
 
 /* 密码不为空，两次密码相同，修改弱口令密码属性设置为不强制。*/
 $config->safe->mode       = 0;
 $config->safe->changeWeak = 0;
 $result = $userTest->checkPasswordTest($user4);
 r($result) && p('result')           && e(1);    // 密码不为空，两次密码相同，修改弱口令密码属性设为不强制，返回 true。
-r($result) && p('errors:password1') && e('~~'); // 密码不为空，两次密码相同，修改弱口令密码属性设为不强制，无错误提示。
+r($result) && p('errors:password1') && e('` `'); // 密码不为空，两次密码相同，修改弱口令密码属性设为不强制，无错误提示。
 
 /* 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查。*/
 $config->safe->mode       = 0;
@@ -99,7 +99,7 @@ r($result) && p('result')                && e(0);                               
 r($result) && p('errors:password1', '|') && e('密码不能使用【123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123】这些常用弱口令。'); // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，有错误提示。
 $result = $userTest->checkPasswordTest($user5);
 r($result) && p('result')                && e(1);    // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 true。
-r($result) && p('errors:password1', '|') && e('~~'); // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
+r($result) && p('errors:password1', '|') && e('` `'); // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
 
 /* 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查。*/
 $config->safe->mode       = 0;
@@ -109,7 +109,7 @@ r($result) && p('result')                && e(0);                               
 r($result) && p('errors:password1', '|') && e('密码不能使用【123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123】这些常用弱口令。'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，有错误提示。
 $result = $userTest->checkPasswordTest($user7);
 r($result) && p('result')                && e(1);    // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 true。
-r($result) && p('errors:password1', '|') && e('~~'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
+r($result) && p('errors:password1', '|') && e('` `'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
 
 zdTable('config')->config('config')->gen(1); // 生成自定义常用弱口令。
 $tester->loadConfigFromDB();                 // 加载自定义常用弱口令。
@@ -119,7 +119,7 @@ $config->safe->mode       = 0;
 $config->safe->changeWeak = 1;
 $result = $userTest->checkPasswordTest($user4);
 r($result) && p('result')                && e(1);    // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 true。
-r($result) && p('errors:password1', '|') && e('~~'); // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
+r($result) && p('errors:password1', '|') && e('` `'); // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
 $result = $userTest->checkPasswordTest($user5);
 r($result) && p('result')                && e(0);                                                                                                                       // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 false。
 r($result) && p('errors:password1', '|') && e('密码不能使用【password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890】这些常用弱口令。'); // 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，有错误提示。
@@ -129,7 +129,7 @@ $config->safe->mode       = 0;
 $config->safe->changeWeak = 1;
 $result = $userTest->checkPasswordTest($user6);
 r($result) && p('result')                && e(1);    // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，返回 true。
-r($result) && p('errors:password1', '|') && e('~~'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，无错误提示。
+r($result) && p('errors:password1', '|') && e('` `'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，无错误提示。
 $result = $userTest->checkPasswordTest($user7);
 r($result) && p('result')                && e(0);                                                                                                                       // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，返回 false。
 r($result) && p('errors:password1', '|') && e('密码不能使用【password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890】这些常用弱口令。'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，有错误提示。

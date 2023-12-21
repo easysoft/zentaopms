@@ -96,7 +96,7 @@ r($result) && p('errors:newCompany') && e('『所属公司』不能为空。'); 
 $user6->newCompany = 'newCompany';
 $result = $userTest->createTest($user6);
 r($result) && p('result')            && e(2);    // 创建外部公司，公司名称不为空，返回创建的用户 id。
-r($result) && p('errors:newCompany') && e('~~'); // 创建外部公司，公司名称不为空，没有错误信息。
+r($result) && p('errors:newCompany') && e('` `'); // 创建外部公司，公司名称不为空，没有错误信息。
 
 /* 检测必填项。*/
 $user7 = clone $template;
@@ -162,7 +162,7 @@ $users13->account = 'user2';
 $users13->group   = array(0, 1, 2);
 $result = $userTest->createTest($users13);
 r($result) && p('result')         && e(3);    // 创建用户成功，返回创建的用户 id。
-r($result) && p('errors:account') && e('~~'); // 创建用户成功，没有错误信息。
+r($result) && p('errors:account') && e('` `'); // 创建用户成功，没有错误信息。
 
 $groups = $tester->dao->select('*')->from(TABLE_USERGROUP)->fetchAll();
 r(count($groups)) && p()                  && e(2);         // 生成用户权限组成功，返回 2 条记录。
