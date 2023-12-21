@@ -22,7 +22,7 @@ $tester->cookie->set('zp', '');
 $admin = $userModel->getById('admin');
 $user1 = $userModel->getById('user1');
 
-r($tester->cookie->keepkeepLogin) && p() && e('off'); // 未勾选保持登录状态，cookie 中保持登录状态的值是 off。
+r($tester->cookie->keepLogin) && p() && e('off'); // 未勾选保持登录状态，cookie 中保持登录状态的值是 off。
 r($tester->cookie->za)            && p() && e('0');   // 未勾选保持登录状态，cookie 中 za 的值为空。
 r($tester->cookie->zp)            && p() && e('0');   // 未勾选保持登录状态，cookie 中 zp 的值为空。
 
