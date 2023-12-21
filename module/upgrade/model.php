@@ -551,7 +551,7 @@ class upgradeModel extends model
     {
         $alterSQL = array();
 
-        $sqls = $this->getStandardSQL($version);
+        $sqls = $this->getStandardSQLs($version);
         foreach(explode(';', $sqls) as $sql)
         {
             $sql = trim($sql);
