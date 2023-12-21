@@ -446,19 +446,19 @@ class upgrade extends control
     }
 
     /**
+     * 获取修复冲突的记录。
      * Ajax get fix consistency logs.
      *
      * @param  int    $offset
      * @access public
      * @return void
      */
-    public function ajaxGetFixLogs($offset = 0)
+    public function ajaxGetFixLogs(int $offset = 0)
     {
         $logFile  = $this->upgrade->getConsistencyLogFile();
         $lines    = !file_exists($logFile) ? array() : file($logFile);
-
-        $log = array_slice($lines, $offset);
-        $finished = ($log and end($log) == 'Finished') ? true : false;
+        $log      = array_slice($lines, $offset);
+        $finished = ($log && end($log) == 'Finished') ? true : false;
 
         return print(json_encode(array('log' => implode("<br />", $log) . "<br />", 'finished' => $finished, 'offset' => count($lines))));
     }
