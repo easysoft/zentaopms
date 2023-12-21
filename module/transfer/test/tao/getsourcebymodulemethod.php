@@ -23,8 +23,11 @@ title=测试 transfer->getSourceByModuleMethod();
 timeout=0
 cid=1
 
-- 测试获取合并配置后的时间字段属性9 @estStarted
-- 测试传入模块为空时的时间字段 @assignedDate
+- module为空时 @Module is empty
+- 调用模块为空时 @Call module is empty
+- 调用方法为空时 @Method is empty
+- 调用project:getPairs方法属性2 @项目1
+- 调用execution:getByIdList方法并将结果生成id=>name 形式的关联数组属性3 @迭代1
 
 */
 $transfer = new transferTest();
