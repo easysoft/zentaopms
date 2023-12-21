@@ -24,7 +24,9 @@ include dirname(__FILE__, 2) . '/mail.class.php';
 su('admin');
 
 $notify = zdTable('notify');
+$notify->objectType->range('mail');
 $notify->toList->range('1-8')->prefix('user');
+$notify->status->range('wait,fail');
 $notify->gen(9);
 
 $mail = new mailTest();

@@ -25,7 +25,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/mail.class.php';
 su('admin');
 
-zdTable('notify')->gen(11);
+$notify = zdTable('notify');
+$notify->objectType->range('mail');
+$notify->status->range('wait,fail');
+$notify->gen(11);
 
 $mail = new mailTest();
 

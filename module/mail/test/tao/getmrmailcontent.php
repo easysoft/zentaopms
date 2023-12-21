@@ -15,6 +15,7 @@ zdTable('mr')->gen(1);
 global $tester;
 $mailModel = $tester->loadModel('mail');
 $mailModel->config->webRoot = '/';
+$mailModel->config->requestType = 'PATH_INFO';
 $mr = $mailModel->fetchById(1, 'mr');
 
 r($mailModel->getMRMailContent($mr, ''))                  && p() && e('0'); //只传入mr

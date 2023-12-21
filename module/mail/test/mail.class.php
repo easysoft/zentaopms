@@ -211,8 +211,8 @@ class mailTest
         $notifyID = $this->objectModel->addQueue($toList, $subject, $body, $ccList, $includeMe);
         $object   = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($notifyID)->fetch();
 
-        if(!$object)       return '没有数据提交';
         if(dao::isError()) return dao::getError();
+        if(!$object)       return '没有数据提交';
 
         return $object;
     }

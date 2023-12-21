@@ -19,6 +19,7 @@ su('admin');
 zdTable('notify')->gen(0);
 
 $mail = new mailTest();
+$mail->objectModel->app->user->account = 'admin';
 
 $result1 = $mail->addQueueTest('', '');
 $result2 = $mail->addQueueTest('user3', '测试提交队列', '测试发信内容');

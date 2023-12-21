@@ -39,6 +39,7 @@ zdTable('product')->gen(2);
 
 $mail = new mailTest();
 $mail->objectModel->config->webRoot = '/';
+$mail->objectModel->config->requestType = 'PATH_INFO';
 
 r($mail->getMailContentTest('', 0, 0))       && p() && e('0'); //不传入任何参数
 r($mail->getMailContentTest('', 1, 0))       && p() && e('0'); //只传入object
