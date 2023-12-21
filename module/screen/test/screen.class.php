@@ -2,7 +2,9 @@
 class screenTest
 {
 
+    private $objectModel;
     public $componentList = array();
+
     public function __construct()
     {
          global $tester;
@@ -356,5 +358,24 @@ class screenTest
     public function __call($method, $args)
     {
         return call_user_func_array(array($this->objectModel, $method), $args);
+    }
+
+    /**
+     * 测试genChartData。
+     * Test genChartData.
+     *
+     * @param  object $screen
+     * @param  int    $year
+     * @param  int    $dept
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function genChartDataTest(object $screen, int $year = 0, int $dept = 0, string $account = ''): array
+    {
+        $chartData = $this->objectModel->genChartData($screen, $year, $dept, $account);
+        $filter = $this->objectModel->filter;
+
+        return array($chartData, $filter);
     }
 }
