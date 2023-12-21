@@ -45,10 +45,10 @@ r($result) && p('errors:public')   && e('~~'); // 是否公开无错误提示。
 /* 测试数据格式不符合数据库字段设置的情况。*/
 $result = $userTest->updateContactListTest($contact3);
 r($result) && p('result')          && e(0);                                                 // 创建人和列表名称过长，返回 false。
-r($result) && p('errors:account')  && e('『account』长度应当不超过『30』，且大于『0』。');  // 创建人过长。
+r($result) && p('errors:account')  && e('『创建人』长度应当不超过『30』，且大于『0』。');  // 创建人过长。
 r($result) && p('errors:listName') && e('『列表名称』长度应当不超过『60』，且大于『0』。'); // 列表名称过长。
 r($result) && p('errors:userList') && e('~~');                                              // 用户列表无错误提示。
-r($result) && p('errors:public')   && e('『public』应当是数字。');                          // 是否公开应当是数字。
+r($result) && p('errors:public')   && e('『公共联系人』应当是数字。');                          // 是否公开应当是数字。
 
 /* 测试创建成功的情况。*/
 $result = $userTest->updateContactListTest($contact4);
