@@ -10,6 +10,7 @@ function updateProgressInterval()
             logOffset = result.offset;
 
             if(result.log) $('#logBox').append(result.log);
+            $('#progressBox').html(result.progress + '%');
 
             let element = document.getElementById('logBox');
             element.scrollTop = element.scrollHeight;

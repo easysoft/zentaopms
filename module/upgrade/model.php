@@ -164,7 +164,9 @@ class upgradeModel extends model
             }
         }
 
+        $this->saveLogs("Run Method program-refreshStats");
         $this->loadModel('program')->refreshStats(true);
+        $this->saveLogs("Run Method product-refreshStats");
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
     }
@@ -276,7 +278,7 @@ class upgradeModel extends model
         $this->saveLogs("Run Method {$method}");
 
         $class = $this;
-        if(str_contains($method, '-'))
+        if(strpos($method, '-') !== false)
         {
             list($className, $method) = explode('-', $method);
             $class = $this->loadModel($className);
@@ -1185,7 +1187,10 @@ class upgradeModel extends model
         $hasError = false;
         $fixSqls  = $this->checkConsistency($version);
         if($fixSqls) $fixSqls = "SET @@sql_mode= '';\n" . $fixSqls;
-        foreach(explode(';', $fixSqls) as $fixSQL)
+
+        $sqlLines = explode(';', $fixSqls);
+        file_put_contents($logFile, count($sqlLines) . "\n", FILE_APPEND);
+        foreach($sqlLines as $fixSQL)
         {
             file_put_contents($logFile, $fixSQL, FILE_APPEND);
             try
@@ -2004,6 +2009,8 @@ class upgradeModel extends model
      */
     public function addORPriv()
     {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
         $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchAll();
 
         foreach($admins as $key => $admin) $admins[$key] = trim($admin->admins, ',');
@@ -2016,26 +2023,23 @@ class upgradeModel extends model
 
         foreach($user as $account => $visions)
         {
-            if(strpos($visions, 'or') === false)
-            {
-                $visions = 'or,' . $visions;
-                $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
-            }
+            if(strpos($visions, 'or') !== false) continue;
+
+            $visions = 'or,' . $visions;
+            $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
+            $this->saveLogs($this->dao->get());
         }
 
         include('priv.php');
         foreach($orData as $role => $name)
         {
-            $this->dao->insert(TABLE_GROUP)
-                ->set('vision')->eq('or')
-                ->set('name')->eq($name)
-                ->set('role')->eq($role)
-                ->set('desc')->eq($name)
-                ->exec();
+            $this->dao->insert(TABLE_GROUP)->set('vision')->eq('or')->set('name')->eq($name)->set('role')->eq($role)->set('desc')->eq($name)->exec();
+            $this->saveLogs($this->dao->get());
             if(dao::isError()) continue;
             $groupID = $this->dao->lastInsertID();
             $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
             $this->dao->exec($sql);
+            $this->saveLogs($sql);
         }
     }
 

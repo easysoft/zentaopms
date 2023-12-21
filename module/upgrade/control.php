@@ -853,11 +853,17 @@ class upgrade extends control
     {
         $logFile  = $this->upgrade->getConsistencyLogFile();
         $lines    = !file_exists($logFile) ? array() : file($logFile);
+        $total    = (int)array_shift($lines);
+
+        $progress = 0;
+        if($total) $progress = round((count($lines) / $total) * 100);
+        if($progress >= 100) $progress = 99;
 
         $log = array_slice($lines, $offset);
         $finished = ($log and end($log) == 'Finished') ? true : false;
+        if($finished) $progress = 100;
 
-        return print(json_encode(array('log' => implode("<br />", $log) . (empty($log) ? '' : '<br />'), 'finished' => $finished, 'offset' => count($lines))));
+        return print(json_encode(array('log' => implode("<br />", $log) . (empty($log) ? '' : '<br />'), 'finished' => $finished, 'progress' => $progress, 'offset' => count($lines))));
     }
 
     /**
