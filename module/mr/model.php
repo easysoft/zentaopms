@@ -1191,7 +1191,7 @@ class mrModel extends model
             {
                 $relation->BID = $objectID;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-                $this->action->create($type, $objectID, 'createmr', '', $MRCreateAction);
+                $this->action->create($type, (int)$objectID, 'createmr', '', $MRCreateAction);
             }
         }
         return !dao::isError();

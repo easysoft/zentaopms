@@ -364,4 +364,20 @@ class mrTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * Test linkObjects method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function linkObjectsTester(int $MRID): array
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+        $result = $this->objectModel->linkObjects($MR);
+        if(!$result) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->orderBy('id_desc')->fetchAll('id');
+    }
 }
