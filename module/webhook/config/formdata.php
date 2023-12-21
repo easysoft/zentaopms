@@ -36,8 +36,7 @@ $config->webhook->form->edit['feishuAppId']      = array('type' => 'string', 'co
 $config->webhook->form->edit['feishuAppSecret']  = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->edit['domain']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->edit['sendType']         = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => '', 'options'  => $lang->webhook->sendTypeList);
-$config->webhook->form->edit['products']         = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'options'  => array(), 'multiple' => true);
-$config->webhook->form->edit['executions']       = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'options'  => array(), 'multiple' => true);
+$config->webhook->form->edit['products']         = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'filter'  => 'join', 'multiple' => true);
+$config->webhook->form->edit['executions']       = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'filter'  => 'join', 'multiple' => true);
 $config->webhook->form->edit['params']           = array('type' => 'array',  'control' => 'checkList', 'required' => false, 'default' => '', 'options'  => $lang->webhook->paramsList, 'width' => 'full', 'inline' => true);
 $config->webhook->form->edit['desc']             = array('type' => 'string', 'control' => 'editor',    'required' => false, 'default' => '', 'width' => 'full');
-
