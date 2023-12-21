@@ -37,6 +37,8 @@ class treeEditor extends wg
 
     private function buildTree(array $items): array
     {
+        global $app;
+
         $canEdit   = $this->prop('canEdit');
         $canDelete = $this->prop('canDelete');
         $canSplit  = $this->prop('canSplit');
@@ -49,6 +51,8 @@ class treeEditor extends wg
             {
                 if(!isset($item['text'])) $item['text'] = $item['name'];
                 if(!isset($item['url']))  $item['url']  = '';
+
+                $item['titleAttrs']['data-app'] = $app->tab;
 
                 if(isset($item['type']) && $item['type'] == 'product')
                 {

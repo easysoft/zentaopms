@@ -125,7 +125,9 @@ class tree extends control
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
             $this->view->productID      = $rootID;
 
-            $title = $this->lang->tree->manageProduct;
+            $title      = $this->lang->tree->manageProduct;
+            $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
+            $position[] = $this->lang->tree->manageProduct;
         }
         elseif($viewType == 'bug')
         {
