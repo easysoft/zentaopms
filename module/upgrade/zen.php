@@ -63,7 +63,7 @@ class upgradeZen extends upgrade
     {
         $this->loadModel('setting')->setItem('system.common.global.mode', 'light');
 
-        $this->setDefaultProgram();
+        $programID = $this->setDefaultProgram();
 
         $_POST['projectType'] = 'execution';
         $this->upgrade->upgradeInProjectMode($programID, 'classic');
@@ -125,15 +125,17 @@ class upgradeZen extends upgrade
      * Set default program.
      *
      * @access protected
-     * @return void
+     * @return int
      */
-    protected function setDefaultProgram(): void
+    protected function setDefaultProgram(): int
     {
         $programID = $this->loadModel('program')->createDefaultProgram();
         $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
 
         /* Set default program for product and project with no program. */
         $this->upgrade->relateDefaultProgram($programID);
+
+        return $programID;
     }
 
     /**
