@@ -563,4 +563,18 @@ class upgradeTest
         $program     = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
         return "project:{$project->id},{$project->team},{$project->end},{$project->acl}; program:{$program->begin},{$program->end}; actionCount:{$actionCount}";
     }
+
+    /**
+     * 测试计算开始和结束日期中间的工作日数。
+     * Test compute delta between the begin and end date.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return int
+     */
+    public function computeDaysDeltaTest(string $begin, string $end): int
+    {
+        return $this->objectModel->computeDaysDelta($begin, $end);
+    }
 }

@@ -3902,14 +3902,15 @@ class upgradeModel extends model
     }
 
     /**
-     * Compute delta of two days.
+     * 计算开始和结束日期中间的工作日数。
+     * Compute delta between the begin and end date.
      *
      * @param  string begin
      * @param  string end
      * @access public
      * @return int
      */
-    public function computeDaysDelta($begin, $end)
+    public function computeDaysDelta(string $begin, string $end): int
     {
         if($end == LONG_TIME) return 0;
 
@@ -3919,9 +3920,9 @@ class upgradeModel extends model
         for($i = 0; $i < $delta; $i++)
         {
             $week = $week % 7;
-            if($week == 0 or $week == 6) $weekend ++;
+            if($week == 0 || $week == 6) $weekend ++;
 
-            $week++;
+            $week ++;
         }
 
         return $delta - $weekend;
