@@ -183,7 +183,7 @@ class design extends control
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $this->view->stories    = $this->loadModel('story')->getExecutionStoryPairs($projectID);
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
         $this->view->type       = $type;
@@ -319,7 +319,7 @@ class design extends control
 
         $this->view->design  = $design;
         $this->view->project = $project;
-        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories = $this->loadModel('story')->getExecutionStoryPairs($design->project);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
