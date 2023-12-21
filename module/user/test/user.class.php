@@ -1046,12 +1046,13 @@ class userTest
     }
 
     /**
+     * 测试根据 PHP_AUTH_USER 验证用户。
      * Identify user by PHP_AUTH_USER.
      *
      * @access public
      * @return bool
      */
-    public function identifyByPhpAuthTest()
+    public function identifyByPhpAuthTest(): bool
     {
         return $this->objectModel->identifyByPhpAuth();
     }
