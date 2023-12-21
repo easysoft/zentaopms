@@ -4,14 +4,16 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/webhook.class.php';
 su('admin');
 
+zdTable('webhook')->gen(10);
+
 /**
 
 title=测试 webhookModel->getList();
+timeout=0
 cid=1
-pid=1
 
-统计获取list里元素数量 >> 15
-取出其中一个id >> 1
+- 统计获取list里元素数量 @10
+- 取出其中一个id第1条的id属性 @1
 
 */
 
@@ -30,5 +32,5 @@ $decode[1] = '';
 
 $result1 = $webhook->getListTest($orderBy[0]);
 
-r(count($result1)) && p()       && e('15'); //统计获取list里元素数量
+r(count($result1)) && p()       && e('10'); //统计获取list里元素数量
 r($result1)        && p('1:id') && e('1');  //取出其中一个id

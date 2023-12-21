@@ -4,30 +4,27 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/webhook.class.php';
 su('admin');
 
+zdTable('webhook')->gen(2);
+
 /**
 
 title=测试 webhookModel->getByID();
+timeout=0
 cid=1
-pid=1
 
-通过ID查创建人 >> admin
-通过ID查名字 >> 钉钉群机器人
-查ID为2的创建人 >> admin
-查ID为2的名字 >> 钉钉工作消息
-传入不存在的情况 >> 0
+- 通过ID查创建人属性createdBy @admin
+- 通过ID查名字属性name @钉钉群机器人
+- 查ID为2的创建人属性createdBy @admin
+- 查ID为2的名字属性name @钉钉工作消息
+- 传入不存在的情况 @0
 
 */
 
 $webhook = new webhookTest();
 
-$ID = array();
-$ID[0] = 1;
-$ID[1] = 2;
-$ID[2] = 1111;
-
-$result1 = $webhook->getByIDTest($ID[0]);
-$result2 = $webhook->getByIDTest($ID[1]);
-$result3 = $webhook->getByIDTest($ID[2]);
+$result1 = $webhook->getByIDTest(1);
+$result2 = $webhook->getByIDTest(2);
+$result3 = $webhook->getByIDTest(1111);
 
 r($result1) && p('createdBy')   && e('admin');        //通过ID查创建人
 r($result1) && p('name')        && e('钉钉群机器人'); //通过ID查名字

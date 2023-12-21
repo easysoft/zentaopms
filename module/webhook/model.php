@@ -12,30 +12,33 @@
 class webhookModel extends model
 {
     /**
+     * 获取单个webhook。
      * Get a webhook by id.
      *
      * @param  int    $id
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID(int $id)
     {
         return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('id')->eq($id)->fetch();
     }
 
     /**
+     * 获取某种类型的webhook。
      * Get a webhook by type.
      *
      * @param  string $type
      * @access public
      * @return object
      */
-    public function getByType($type)
+    public function getByType(string $type)
     {
         return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
     }
 
     /**
+     * 获取已经绑定的用户。
      * Get a webhook by type.
      *
      * @param  int    $webhookID
@@ -44,21 +47,25 @@ class webhookModel extends model
      * @access public
      * @return object
      */
-    public function getBindAccount($webhookID, $webhookType, $openID)
+    public function getBindAccount(int $webhookID, string $webhookType, string $openID)
     {
-        return $this->dao->select('account')->from(TABLE_OAUTH)->where('providerID')->eq($webhookID)->andWhere('providerType')->eq($webhookType)->andWhere('openID')->eq($openID)->fetch('account');
+        return $this->dao->select('account')->from(TABLE_OAUTH)
+            ->where('providerID')->eq($webhookID)
+            ->andWhere('providerType')->eq($webhookType)
+            ->andWhere('openID')->eq($openID)
+            ->fetch('account');
     }
 
     /**
+     * 获取webhook列表。
      * Get webhook list.
      *
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
@@ -68,6 +75,7 @@ class webhookModel extends model
     }
 
     /**
+     * 获取日志列表。
      * Get log list of a webhook.
      *
      * @param  int    $id

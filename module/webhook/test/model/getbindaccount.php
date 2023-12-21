@@ -4,14 +4,16 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/webhook.class.php';
 su('admin');
 
+zdTable('oauth')->gen(10);
+
 /**
 
 title=测试 webhookModel->getBindAccount();
+timeout=0
 cid=1
-pid=1
 
-按条件查出id=1的关联用户 >> user3
-按条件查出id=空时，关联的用户 >> 0
+- 按条件查出id=1的关联用户 @user3
+- 按条件查出id=空时，关联的用户 @0
 
 */
 

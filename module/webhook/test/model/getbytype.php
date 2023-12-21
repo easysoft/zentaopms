@@ -4,20 +4,22 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/webhook.class.php';
 su('admin');
 
+zdTable('webhook')->gen(10);
+
 /**
 
 title=测试 webhookModel->getByType();
+timeout=0
 cid=1
-pid=1
 
-通过type为dinggroup查id >> 1
-通过type为dinguser查id >> 2
-通过type为wechatgroup查id >> 3
-通过type为wechatuser查id >> 4
-通过type为feishugroup查id >> 5
-通过type为feishuuser查id >> 6
-通过type为default查id >> 7
-传入空的情况 >> 0
+- 通过type为dinggroup查id属性id @1
+- 通过type为dinguser查id属性id @2
+- 通过type为wechatgroup查id属性id @3
+- 通过type为wechatuser查id属性id @4
+- 通过type为feishugroup查id属性id @5
+- 通过type为feishuuser查id属性id @6
+- 通过type为default查id属性id @7
+- 传入空的情况属性id @0
 
 */
 
@@ -34,13 +36,13 @@ $type[6] = 'default';
 $type[7] = '';
 
 $result1 = $webhook->getByTypeTest($type[0]);
-$result2 = $webhook->getbyTypetest($type[1]);
-$result3 = $webhook->getbyTypetest($type[2]);
-$result4 = $webhook->getbyTypetest($type[3]);
-$result5 = $webhook->getbyTypetest($type[4]);
-$result6 = $webhook->getbyTypetest($type[5]);
-$result7 = $webhook->getbyTypetest($type[6]);
-$result8 = $webhook->getbyTypetest($type[7]);
+$result2 = $webhook->getbyTypeTest($type[1]);
+$result3 = $webhook->getbyTypeTest($type[2]);
+$result4 = $webhook->getbyTypeTest($type[3]);
+$result5 = $webhook->getbyTypeTest($type[4]);
+$result6 = $webhook->getbyTypeTest($type[5]);
+$result7 = $webhook->getbyTypeTest($type[6]);
+$result8 = $webhook->getbyTypeTest($type[7]);
 
 r($result1) && p('id') && e('1'); //通过type为dinggroup查id
 r($result2) && p('id') && e('2'); //通过type为dinguser查id
