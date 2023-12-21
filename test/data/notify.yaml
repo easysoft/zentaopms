@@ -12,7 +12,7 @@ fields:
     format: ""
   - field: objectType
     note: "对象类型"
-    range: mail
+    range: mail,webhook
     prefix: ""
     postfix: ""
     loop: 0
@@ -84,7 +84,7 @@ fields:
     loop: 0
   - field: status
     note: "状态"
-    range: wait,fail
+    range: wait,fail,seding
     prefix: ""
     postfix: ""
     loop: 0
