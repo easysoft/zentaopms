@@ -654,6 +654,7 @@ class upgradeTao extends upgradeModel
         $sprints      = $this->dao->select('id, type, acl, begin, end')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
         $minBeginDate = $project->begin;
         $maxEndDate   = $project->end;
+
         foreach($sprints as $sprint)
         {
             $data = new stdclass();

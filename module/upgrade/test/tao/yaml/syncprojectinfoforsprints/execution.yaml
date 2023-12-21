@@ -1,0 +1,10 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 101-200
+  - field: project
+    range: 1-5{2}
+  - field: type
+    range: sprint

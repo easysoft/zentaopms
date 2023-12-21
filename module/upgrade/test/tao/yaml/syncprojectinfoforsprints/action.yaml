@@ -1,0 +1,33 @@
+title: table zt_action
+desc: "系统日志"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: project
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 101-200{2}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作"
+    range: started,closed
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "日期"
+    range: "(-3M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
