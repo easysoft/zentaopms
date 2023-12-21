@@ -653,18 +653,6 @@ class upgrade extends control
     }
 
     /**
-     * Ajax get product name.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProductName($productID)
-    {
-        echo $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-    }
-
-    /**
      * 获取项目集的状态。
      * Ajax get program status.
      *
