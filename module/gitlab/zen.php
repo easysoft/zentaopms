@@ -16,10 +16,11 @@ class gitlabZen extends gitlab
      * Check bind user repeat.
      *
      * @param  array     $zentaoUsers
+     * @param  array     $userPairs
      * @access protected
      * @return array
      */
-    protected function checkUserRepeat(array $zentaoUsers): array
+    protected function checkUserRepeat(array $zentaoUsers, array $userPairs): array
     {
         $accountList = array();
         $repeatUsers = array();

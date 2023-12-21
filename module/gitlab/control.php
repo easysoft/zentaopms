@@ -167,7 +167,7 @@ class gitlab extends control
             $users       = $this->post->zentaoUsers;
             $gitlabNames = $this->post->gitlabUserNames;
 
-            $result = $this->gitlabZen->checkUserRepeat($users);
+            $result = $this->gitlabZen->checkUserRepeat($users, $userPairs);
             if($result['result'] != 'success') return $this->send($result);
 
             $this->gitlabZen->bindUsers($gitlabID, $users, $gitlabNames, $zentaoUsers);
