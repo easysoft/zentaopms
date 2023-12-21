@@ -409,4 +409,19 @@ class mrTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * Test deleteByID method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array|object|false
+     */
+    public function deleteByIDTester(int $MRID): array|object|false
+    {
+        $this->objectModel->deleteByID($MRID);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetchAll('id');
+    }
 }

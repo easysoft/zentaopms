@@ -1361,13 +1361,13 @@ class mrModel extends model
      * 根据ID删除合并请求。
      * Delete MR by ID.
      *
-     * @param  int    $id
+     * @param  int    $MRID
      * @access public
      * @return bool
      */
-    public function deleteByID(int $id): bool
+    public function deleteByID(int $MRID): bool
     {
-        $MR = $this->fetchByID($id);
+        $MR = $this->fetchByID($MRID);
         if(!$MR) return false;
 
         if($MR->synced)
@@ -1377,10 +1377,10 @@ class mrModel extends model
            if(dao::isError()) return false;
         }
 
-        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
+        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-        $this->loadModel('action')->create('mr', $id, 'deleted', '', $MR->title);
-        $this->createMRLinkedAction($id, 'removemr');
+        $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
+        $this->createMRLinkedAction($MRID, 'removemr');
         return !dao::isError();
     }
 }
