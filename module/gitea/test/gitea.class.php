@@ -42,4 +42,17 @@ class giteaTest
         $this->gitea->apiErrorHandling($response);
         return dao::getError();
     }
+
+    /**
+     * Test parseApiError method.
+     *
+     * @param  string $message
+     * @access public
+     * @return array
+     */
+    public function parseApiErrorTester(string $message): array
+    {
+        $this->gitea->parseApiError($message);
+        return dao::getError();
+    }
 }
