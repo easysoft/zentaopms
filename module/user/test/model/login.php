@@ -86,10 +86,10 @@ r($tester->cookie->zp)        && p() && e('0');   // 未勾选保持登录状态
 /**
  * 检测 user1 用户登录后的信息。
  */
-$result = $userTest->loginTest($user3, false, true);         // 不记录日志，勾选保持登录状态。
-r($result)           && p('account,admin') && e('user1,~~'); // 登录成功，返回的用户是 user1，不是超级管理员。
-r($app->user)        && p('account,admin') && e('user1,~~'); // 登录成功，$app 对象的中的用户是 user1，不是超级管理员。
-r($_SESSION['user']) && p('account,admin') && e('user1,~~'); // 登录成功，session 中的用户是 user1，不是超级管理员。
+$result = $userTest->loginTest($user3, false, true);              // 不记录日志，勾选保持登录状态。
+r($result)                && p('account,admin') && e('user1,~~'); // 登录成功，返回的用户是 user1，不是超级管理员。
+r($app->user)             && p('account,admin') && e('user1,~~'); // 登录成功，$app 对象的中的用户是 user1，不是超级管理员。
+r($tester->session->user) && p('account,admin') && e('user1,~~'); // 登录成功，session 中的用户是 user1，不是超级管理员。
 
 /* 检测 user1 用户锁定状态。*/
 $user3 = $userTest->getByIdTest($user3->account);
@@ -119,7 +119,7 @@ $action = $tester->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->lim
 r($action) && p('objectType,objectID,action') && e('user,1,login'); // 未记录日志，最后一条日志是 admin 用户的登录日志。
 
 /* 检测是否保持 user1 登录状态。*/
-$zp = sha1($user3->account . $user3->password . $_SERVER['REQUEST_TIME']);
+$zp = sha1($user3->account . $user3->password . $tester->server->request_time);
 r($tester->cookie->keepLogin) && p() && e('on');    // 勾选保持登录状态，cookie 中保持登录状态的值是 on。
 r($tester->cookie->za)        && p() && e('user1'); // 勾选保持登录状态，cookie 中 za 的值是 user1。
 r($tester->cookie->zp == $zp) && p() && e(1);       // 勾选保持登录状态，cookie 中 zp 的值是 user1 的密码加密后的值。
