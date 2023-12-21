@@ -6339,13 +6339,14 @@ class upgradeModel extends model
     }
 
     /**
+     * 将历史的项目作为执行升级。
      * Historical projects are upgraded by execution.
      *
      * @param  int    $programID
      * @access public
      * @return bool
      */
-    public function upgradeInExecutionMode($programID)
+    public function upgradeInExecutionMode(int $programID): bool
     {
         $this->loadModel('action');
         $now     = helper::now();

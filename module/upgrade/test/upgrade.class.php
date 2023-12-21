@@ -525,4 +525,22 @@ class upgradeTest
         foreach($products as $product) $return .= "{$product->id}:{$product->program},{$product->acl},{$product->line}; ";
         return $return;
     }
+
+    /**
+     * 测试将历史的项目作为执行升级。
+     * Test historical projects are upgraded by execution.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function upgradeInExecutionModeTest(int $programID): array
+    {
+        $_POST['projectType'] = 'execution';
+
+        $this->objectModel->upgradeInExecutionMode($programID);
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id');
+    }
 }
