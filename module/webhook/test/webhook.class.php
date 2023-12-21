@@ -400,11 +400,11 @@ class webhookTest
      */
     public function saveLogTest($webhook, $actionID, $data, $result)
     {
-        $objects = $this->objectModel->saveLog($webhook, $actionID, $data, $result);
+        $this->objectModel->saveLog($webhook, $actionID, $data, $result);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_LOG)->where('objectID')->eq($webhook->id)->andWhere('objectType')->eq('webhook')->fetch();
     }
 
     /**
@@ -418,10 +418,10 @@ class webhookTest
      */
     public function setSentStatusTest($idList, $status, $time = '')
     {
-        $objects = $this->objectModel->setSentStatus($idList, $status, $time);
+        $this->objectModel->setSentStatus($idList, $status, $time);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_NOTIFY)->where('id')->in($idList)->fetchAll('id');
     }
 }

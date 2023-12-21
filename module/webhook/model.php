@@ -739,6 +739,7 @@ class webhookModel extends model
     }
 
     /**
+     * 保存发送日志。
      * Save log.
      *
      * @param  object $webhook
@@ -748,7 +749,7 @@ class webhookModel extends model
      * @access public
      * @return bool
      */
-    public function saveLog($webhook, $actionID, $data, $result)
+    public function saveLog(object $webhook, int $actionID, string $data, string $result): bool
     {
         $log = new stdclass();
         $log->objectType  = 'webhook';
@@ -765,15 +766,16 @@ class webhookModel extends model
     }
 
     /**
+     * 设置消息发送状态。
      * Set sent status.
      *
-     * @param  array  $idList
-     * @param  string $status
-     * @param  string $time
+     * @param  array|string $idList
+     * @param  string       $status
+     * @param  string       $time
      * @access public
      * @return void
      */
-    public function setSentStatus($idList, $status, $time = '')
+    public function setSentStatus(array|string $idList, string $status, string $time = '')
     {
         if(empty($time)) $time = helper::now();
         $this->dao->update(TABLE_NOTIFY)->set('status')->eq($status)->set('sendTime')->eq($time)->where('id')->in($idList)->exec();
