@@ -393,7 +393,7 @@ class ai extends control
             $appID = $this->ai->createMiniProgram();
             if($appID === false) return $this->sendError(array('message' => $this->lang->fail));
             if($toNext === '1')  return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$appID")));
-            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'createMiniProgram', "appID=$appID")));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'editMiniProgram', "appID=$appID")));
         }
 
 

@@ -1,7 +1,7 @@
 let selectedIcon;
 let selectedTheme;
 
-function handleThemeButtonClick(event)
+function changeMiniProgramTheme(event)
 {
     const $icon = $('#preview-icon');
     const $button = $(event.target).closest('button');
@@ -15,7 +15,7 @@ function handleThemeButtonClick(event)
     selectedTheme = $button.index();
 }
 
-function handleIconButtonClick(event)
+function changeMiniProgramIcon(event)
 {
     const $icon = $('#preview-icon');
     const $svg = $(event.target).closest('svg').clone();
@@ -24,7 +24,7 @@ function handleIconButtonClick(event)
     selectedIcon = $svg.prop('id');
 }
 
-function handleSaveButtonClick()
+function saveMiniProgramIcon()
 {
     const $editIcon = $('#ai-edit-icon');
     $editIcon.children().first('svg').remove();
@@ -36,17 +36,17 @@ function handleSaveButtonClick()
     $('input[name="iconName"]').prop('value', selectedIcon);
 }
 
-function handleSaveMiniProgramClick()
+function saveMiniProgram()
 {
     $('[name="toNext"]').prop('value', '0');
 }
 
-function handleNextStepClick()
+function toConfiguredMiniProgram()
 {
     $('[name="toNext"]').prop('value', '1');
 }
 
-function handleOpenModal()
+function toEditMiniProgramIcon()
 {
     const $button = $('#ai-edit-icon');
     const iconName = $button.find('svg').prop('id');
@@ -61,10 +61,10 @@ function handleOpenModal()
 
 $(function()
 {
-    $('#theme-buttons button').on('click', handleThemeButtonClick);
-    $('#icon-buttons svg').on('click', handleIconButtonClick);
-    $('#save-icon-button').on('click', handleSaveButtonClick);
-    $('#save-miniprogram').on('click', handleSaveMiniProgramClick);
-    $('#next-step').on('click', handleNextStepClick);
-    $('#ai-edit-icon').on('click', handleOpenModal);
+    $('#theme-buttons button').on('click', changeMiniProgramTheme);
+    $('#icon-buttons svg').on('click', changeMiniProgramIcon);
+    $('#save-icon-button').on('click', saveMiniProgramIcon);
+    $('#save-miniprogram').on('click', saveMiniProgram);
+    $('#next-step').on('click', toConfiguredMiniProgram);
+    $('#ai-edit-icon').on('click', toEditMiniProgramIcon);
 });
