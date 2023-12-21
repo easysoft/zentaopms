@@ -2130,7 +2130,14 @@ class pivotModel extends model
                 if($field)
                 {
                     $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    if($table)
+                    {
+                        $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
+                        foreach($columns as $id => $column) $columns[$id] = (array)$column;
+                        $fieldList = array_column($columns, 'Field');
+
+                        if(in_array($field, $fieldList)) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    }
                 }
                 break;
             case 'string':
