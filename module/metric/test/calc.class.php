@@ -501,6 +501,19 @@ class metricTest
     }
 
     /**
+     * Test setDefaultOptions.
+     *
+     * @param  array $options
+     * @param  array $dataFields
+     * @access public
+     * @return array
+     */
+    public function setDefaultOptions($options, $dataFields)
+    {
+        return $this->objectModel->setDefaultOptions($options, $dataFields);
+    }
+
+    /**
      * Test getDateLabels.
      *
      * @param  string $dateType
