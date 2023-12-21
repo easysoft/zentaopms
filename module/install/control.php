@@ -139,11 +139,12 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            $return = $this->installZen->checkConfig();
+            $data   = form::data()->get();
+            $return = $this->installZen->checkConfig($data);
             if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '480', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
 
             $myConfig = array();
-            foreach($_POST as $key => $value) $myConfig[$key] = $value;
+            foreach($data as $key => $value) $myConfig[$key] = $value;
             $this->session->set('myConfig', $myConfig);
             return $this->send(array('result' => 'success', 'load' => inlink('showTableProgress')));
         }
@@ -205,7 +206,6 @@ class install extends control
 
         $config           = json_decode(file_get_contents($this->install->buildDBLogFile('config')));
         $this->config->db = $config->db;
-        $_POST            = (array)$config->post;
         $version          = $this->install->getDatabaseVersion();
         if($this->install->createTable($version, true)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
     }

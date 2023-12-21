@@ -50,7 +50,8 @@ div
                             (
                                 set::name('timezone'),
                                 set::items($timezoneList),
-                                set::value($config->timezone)
+                                set::value($config->timezone),
+                                set::required(true)
                             )
                         ),
                         h::td()
@@ -64,7 +65,8 @@ div
                             (
                                 set::name('defaultLang'),
                                 set::items($config->langs),
-                                set::value($app->getClientLang())
+                                set::value($app->getClientLang()),
+                                set::required(true)
                             )
                         ),
                         h::td()
@@ -79,7 +81,8 @@ div
                             (
                                 set::name('dbDriver'),
                                 set::items($lang->install->dbDriverList),
-                                set::value('mysql')
+                                set::value('mysql'),
+                                set::required(true)
                             )
                         ),
                         h::td()
@@ -95,10 +98,13 @@ div
                         h::th($lang->install->dbHost),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbHost'),
-                                set::value($dbHost)
+                                input
+                                (
+                                    set::name('dbHost'),
+                                    set::value($dbHost)
+                                )
                             )
                         ),
                         h::td($lang->install->dbHostNote)
@@ -109,10 +115,13 @@ div
                         h::th($lang->install->dbPort),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbPort'),
-                                set::value($dbPort)
+                                input
+                                (
+                                    set::name('dbPort'),
+                                    set::value($dbPort)
+                                )
                             )
                         )
                     ),
@@ -122,10 +131,13 @@ div
                         h::th($lang->install->dbEncoding),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbEncoding'),
-                                set::value($this->config->db->encoding)
+                                input
+                                (
+                                    set::name('dbEncoding'),
+                                    set::value($this->config->db->encoding)
+                                )
                             )
                         ),
                         h::td()
@@ -136,10 +148,13 @@ div
                         h::th($lang->install->dbUser),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbUser'),
-                                set::value($dbUser)
+                                input
+                                (
+                                    set::name('dbUser'),
+                                    set::value($dbUser)
+                                )
                             )
                         ),
                         h::td()
@@ -150,10 +165,13 @@ div
                         h::th($lang->install->dbPassword),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbPassword'),
-                                set::value($dbPassword)
+                                input
+                                (
+                                    set::name('dbPassword'),
+                                    set::value($dbPassword)
+                                )
                             )
                         ),
                         h::td()
@@ -163,10 +181,13 @@ div
                         h::th($lang->install->dbName),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbName'),
-                                set::value($dbName)
+                                input
+                                (
+                                    set::name('dbName'),
+                                    set::value($dbName)
+                                )
                             )
                         ),
                         h::td()
@@ -176,10 +197,13 @@ div
                         h::th($lang->install->dbPrefix),
                         h::td
                         (
-                            input
+                            formGroup
                             (
-                                set::name('dbPrefix'),
-                                set::value('zt_')
+                                input
+                                (
+                                    set::name('dbPrefix'),
+                                    set::value('zt_')
+                                )
                             )
                         ),
                         h::td
@@ -187,7 +211,8 @@ div
                             checkbox
                             (
                                 set::text($lang->install->clearDB),
-                                set::name('clearDB')
+                                set::name('clearDB'),
+                                set::value(1)
                             )
                         )
                     )

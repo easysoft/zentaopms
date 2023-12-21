@@ -241,18 +241,19 @@ class installZen extends install
      * 检查数据库配置信息的正确性。
      * Check config ok or not.
      *
+     * @param  object $data
      * @access protected
      * @return object
      */
-    protected function checkConfig(): object
+    protected function checkConfig(object $data): object
     {
         $return = new stdclass();
         $return->result = 'ok';
 
         /* Connect to database. */
-        $this->setDBParam();
+        $this->setDBParam($data);
         $this->install->dbh = $this->install->connectDB();
-        if(strpos($this->post->dbName, '.') !== false)
+        if(strpos($data->dbName, '.') !== false)
         {
             /* 如果数据库名字带有.字符的话，则提示错误信息。 */
             $return->result = 'fail';
@@ -281,7 +282,7 @@ class installZen extends install
                 return $return;
             }
         }
-        elseif($this->install->dbh->tableExits(TABLE_CONFIG) && $this->post->clearDB == false)
+        elseif($this->install->dbh->tableExits(TABLE_CONFIG) && empty($data->clearDB))
         {
             /* 如果已经存在config表，并且用户没有勾选清空旧数据库选项的话，则提示错误信息。 */
             $return->result = 'fail';
@@ -347,12 +348,13 @@ class installZen extends install
      * 写入数据库配置信息。
      * Set database params.
      *
+     * @param  object $data
      * @access private
      * @return bool
      */
-    private function setDBParam(): bool
+    private function setDBParam(object $data): bool
     {
-        $this->config->db->driver = $this->post->dbDriver;
+        $this->config->db->driver = $data->dbDriver;
         if($this->config->inQuickon)
         {
             $this->config->db->host     = getenv('ZT_MYSQL_HOST');
@@ -363,16 +365,16 @@ class installZen extends install
         }
         else
         {
-            $this->config->db->host     = $this->post->dbHost;
-            $this->config->db->user     = $this->post->dbUser;
-            $this->config->db->encoding = $this->post->dbEncoding;
-            $this->config->db->password = $this->post->dbPassword;
-            $this->config->db->port     = $this->post->dbPort;
+            $this->config->db->host     = $data->dbHost;
+            $this->config->db->user     = $data->dbUser;
+            $this->config->db->encoding = $data->dbEncoding;
+            $this->config->db->password = $data->dbPassword;
+            $this->config->db->port     = $data->dbPort;
         }
-        $this->config->db->name   = $this->post->dbName;
-        $this->config->db->prefix = $this->post->dbPrefix;
+        $this->config->db->name   = $data->dbName;
+        $this->config->db->prefix = $data->dbPrefix;
 
-        file_put_contents($this->install->buildDBLogFile('config'), json_encode(array('db' => $this->config->db, 'post' => $_POST)));
+        file_put_contents($this->install->buildDBLogFile('config'), json_encode(array('db' => $this->config->db, 'post' => $data)));
 
         return true;
     }
