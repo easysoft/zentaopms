@@ -146,12 +146,12 @@ class webhookModel extends model
      * 获取绑定用户。
      * Get bind users.
      *
-     * @param  int    $webhookID
-     * @param  array  $users
+     * @param  int          $webhookID
+     * @param  array|string $users
      * @access public
      * @return array
      */
-    public function getBoundUsers(int $webhookID, array $users = array())
+    public function getBoundUsers(int $webhookID, array|string $users = array())
     {
         return $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq('webhook')
             ->andWhere('providerID')->eq($webhookID)
