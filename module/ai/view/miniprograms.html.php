@@ -155,9 +155,11 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                   <i class="icon-ban-circle text-primary"></i>
                 </button>
                 <?php endif; ?>
-                <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>"<?= $isPublished ? ' disabled' : ''; ?>>
-                  <i class="icon-trash text-primary"></i>
-                </button>
+                <?php if(common::hasPriv('ai', 'deleteMiniProgram')): ?>
+                  <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>"<?= $isPublished ? ' disabled' : ''; ?>>
+                    <i class="icon-trash text-primary"></i>
+                  </button>
+                <?php endif; ?>
               </td>
             </tr>
           <?php endforeach; ?>
