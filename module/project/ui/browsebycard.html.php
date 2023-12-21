@@ -10,9 +10,31 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('browseType', $browseType);
+jsVar('param', $param);
+jsVar('recTotal', $pager->recTotal);
+jsVar('recPerPage', $pager->recPerPage);
+jsVar('pageID', $pager->pageID);
+
 /* zin: Define the feature bar on main menu. */
+unset($programs[0]);
 featureBar
 (
+    to::before
+    (
+        div
+        (
+            picker
+            (
+                set::name('programID'),
+                set::value($programID),
+                set::items($programs),
+                set::width('200px'),
+                set::placeholder($lang->project->selectProgram),
+                on::change('changeProgram')
+            )
+        )
+    ),
     set::current($browseType),
     set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox

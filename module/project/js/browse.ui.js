@@ -69,3 +69,10 @@ window.confirmDelete = function(projectID, projectName)
         if(res) $.ajaxSubmit({url: $.createLink('project', 'delete', 'projectID=' + projectID)});
     });
 }
+
+window.changeProgram = function()
+{
+    const programID = $('input[name=programID]').val();
+    const link      = $.createLink('project', 'browse', 'programID=' + programID + '&browseType=' + browseType + '&param=' + param + '&orderBy=order_asc&recTotal=' + recTotal + '&recPerPage=' + recPerPage + '&pageID=' + pageID);
+    loadPage(link);
+}
