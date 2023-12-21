@@ -1449,6 +1449,31 @@ class pivotModel extends model
     }
 
     /**
+     * Get sql field order.
+     *
+     * @param  string $field
+     * @param  object $statement sql parser statement[0]
+     * @access public
+     * @return string
+     */
+    public function getSqlFieldOrder($field, $statement)
+    {
+        $order = 'ASC';
+        if(!isset($statement->order)) return $order;
+
+        foreach($statement->order as $orderInfo)
+        {
+            if($orderInfo->expr->expr == $field)
+            {
+                $order = $orderInfo->type;
+                break;
+            }
+        }
+
+        return $order;
+    }
+
+    /**
      * Gen sheet.
      *
      * @param  array  $fields
@@ -1461,6 +1486,10 @@ class pivotModel extends model
      */
     public function genSheet($fields, $settings, $sql, $filters, $langs = array())
     {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
         $groups    = array();
         $sqlGroups = array();
 
@@ -1577,8 +1606,16 @@ class pivotModel extends model
                         }
                     }
 
-                    if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
-                    if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                    if($slice != 'noSlice')
+                    {
+                        $order         = $this->getSqlFieldOrder($slice, $statement);
+                        $sliceOrderSQL = " order by tt.`$slice` $order, $groupList";
+                        $columnSQL     = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $sliceOrderSQL;
+                    }
+                    else
+                    {
+                        $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                    }
                 }
 
                 $columnRows = $this->dao->query($columnSQL)->fetchAll();
