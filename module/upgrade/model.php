@@ -3656,14 +3656,15 @@ class upgradeModel extends model
     }
 
     /**
+     * 创建一个项目。
      * Create a project.
      *
-     * @param  int    $programID
-     * @param  object $data
+     * @param  int      $programID
+     * @param  object   $data
      * @access public
      * @return int|bool
      */
-    public function createProject($programID = 0, $data = null)
+    public function createProject(int $programID = 0, object $data = null): int|bool
     {
         $now     = helper::now();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
@@ -3687,26 +3688,25 @@ class upgradeModel extends model
         $project->lastEditedBy   = $account;
         $project->lastEditedDate = $now;
         $project->acl            = isset($data->projectAcl) ? $data->projectAcl : 'open';
-
-        $programDate = $this->dao->select('begin,end')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($data->begin < $programDate->begin) $this->dao->update(TABLE_PROGRAM)->set('begin')->eq($data->begin)->where('id')->eq($programID)->exec();
-        if($data->end > $programDate->end)     $this->dao->update(TABLE_PROGRAM)->set('end')->eq($data->end)->where('id')->eq($programID)->exec();
-
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
-            ->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")
+            ->check('name', 'unique', "type='project' AND parent='{$programID}' AND deleted='0'")
             ->exec();
         if(dao::isError()) return false;
 
         $projectID = $this->dao->lastInsertId();
-        $this->dao->update(TABLE_PROJECT)
-            ->set('grade')->eq(2)
-            ->set('path')->eq(",{$programID},{$projectID},")
-            ->set('`order`')->eq($projectID * 5)
-            ->where('id')->eq($projectID)
-            ->exec();
+        $this->dao->update(TABLE_PROJECT)->set('grade')->eq(2)->set('path')->eq(",{$programID},{$projectID},")->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
+
+        /* Modify the begin and end of the program to match the begin and end of the project. */
+        $programDate = $this->dao->select('begin,end')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+        if($data->begin < $programDate->begin)                  $this->dao->update(TABLE_PROGRAM)->set('begin')->eq($data->begin)->where('id')->eq($programID)->exec();
+        if(isset($data->end) && $data->end > $programDate->end) $this->dao->update(TABLE_PROGRAM)->set('end')->eq($data->end)->where('id')->eq($programID)->exec();
+
+        $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
+        if($data->projectStatus == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
         /* Create doc lib. */
+        $this->app->loadLang('doc');
         $lib = new stdclass();
         $lib->project = $projectID;
         $lib->name    = $this->lang->doclib->main['project'];
@@ -3714,9 +3714,6 @@ class upgradeModel extends model
         $lib->main    = '1';
         $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
-        $this->action->create('project', $projectID, 'openedbysystem');
-        if($data->projectStatus == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
         return $projectID;
     }
 

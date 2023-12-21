@@ -543,4 +543,24 @@ class upgradeTest
         global $tester;
         return $tester->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id');
     }
+
+    /**
+     * 测试创建一个项目。
+     * Test create a project.
+     *
+     * @param  int           $programID
+     * @param  object        $data
+     * @access public
+     * @return string|array
+     */
+    public function createProjectTest(int $programID = 0, object $data = null): string|array
+    {
+        $projectID = $this->objectModel->createProject($programID, $data);
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        $actionCount = $tester->dao->select('count(1) as count')->from(TABLE_ACTION)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->fetch('count');
+        $project     = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $program     = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+        return "project:{$project->id},{$project->team},{$project->end},{$project->acl}; program:{$program->begin},{$program->end}; actionCount:{$actionCount}";
+    }
 }
