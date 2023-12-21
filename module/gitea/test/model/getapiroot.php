@@ -11,7 +11,7 @@ cid=1
 - 错误的服务器 @0
 - 正确的服务器 @https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082
 - 管理员获取接口地址 @https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082
-- 普通用户获取接口地址 @https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082&sudo=1
+- 普通用户获取接口地址 @https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082&sudo=unittest1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -34,4 +34,4 @@ r($gitea->getApiRoot($giteaID, false))  && p() && e('https://giteadev.qc.oop.cc/
 r($gitea->getApiRoot($giteaID))         && p() && e('https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082'); // 管理员获取接口地址
 
 su('user1', false);
-r($gitea->getApiRoot($giteaID)) && p() && e('https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082&sudo=1'); // 普通用户获取接口地址
+r($gitea->getApiRoot($giteaID)) && p() && e('https://giteadev.qc.oop.cc/api/v1%s?token=6149a6013047301b116389d50db5cbf599772082&sudo=unittest1'); // 普通用户获取接口地址
