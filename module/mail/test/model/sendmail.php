@@ -23,6 +23,7 @@ zdTable('story')->gen(2);
 zdTable('product')->gen(2);
 
 $mail = new mailTest();
+$mail->objectModel->config->webRoot = '/';
 
 r($mail->objectModel->sendmail(0, 0)) && p() && e('0'); //不传入任何参数
 r($mail->objectModel->sendmail(0, 2)) && p() && e('0'); //只传入actionID

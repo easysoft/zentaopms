@@ -345,23 +345,4 @@ class mailTest
 
         return $this->objectModel->getObjectTitle($object, $objectType);
     }
-
-    /**
-     * Test sendBasedOnType method.
-     *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  int    $actionID
-     * @access public
-     * @return array|false
-     */
-    public function sendBasedOnTypeTest($objectType, $objectID, $actionID)
-    {
-        $object = $this->objectModel->getObjectForMail($objectType, $objectID);
-        if(!$object) return false;
-        $action = $this->objectModel->getActionForMail($actionID);
-        if(!$action) return false;
-
-        return $this->objectModel->sendBasedOnType($objectType, $object, $action);
-    }
 }

@@ -562,26 +562,56 @@ class mailModel extends model
      * @param  int    $objectID
      * @param  int    $actionID
      * @access public
-     * @return string|false
+     * @return void
      */
-    public function sendmail(int $objectID, int $actionID): string|false
+    public function sendmail(int $objectID, int $actionID): void
     {
-        if(empty($objectID) or empty($actionID)) return false;
+        if(empty($objectID) or empty($actionID)) return;
 
         /* Load module and get vars. */
         $action     = $this->mailTao->getActionForMail($actionID);
         $objectType = $action->objectType;
         $object     = $this->mailTao->getObjectForMail($objectType, $objectID);
         $title      = $this->mailTao->getObjectTitle($object, $objectType);
+        $subject    = $this->mailTao->getSubject($objectType, $object, $title, $action->action);
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
+
+        if($objectType == 'review' and empty($object->auditedBy)) return;
 
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
-        if($objectType == 'review' and empty($object->auditedBy)) return false;
+        if($objectType == 'kanbancard') $objectType = 'kanban';
+        $addressees = $this->mailTao->getAddressees($objectType, $object, $action);
+        if(!$addressees) return;
+        list($toList, $ccList) = $addressees;
 
         /* Send it. */
-        return $this->mailTao->sendBasedOnType($objectType, $object, $action);
+        if($objectType == 'mr')
+        {
+            $mailContent = $this->mailTao->getMRMailContent($object, $action->action);
+            if($action->action == 'compilefail') $this->send($toList, $subject, $mailContent, $ccList);
+            if($action->action == 'compilepass')
+            {
+                $this->send($toList, $subject, $mailContent);
+                $this->send($ccList, $subject, $this->mailTao->getMRMailContent($object, $action->action, 'cc'));
+
+                /* Create a todo item for this MR. */
+                $this->loadModel('mr')->apiCreateMRTodo($object->hostID, $object->targetProject, $object->mriid);
+            }
+        }
+        else
+        {
+            $emails      = array();
+            $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
+
+            if($objectType == 'review') $this->app->loadLang('baseline');
+            if($objectType == 'ticket') $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
+
+            $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
+        }
+
+        if($this->isError()) error_log(implode("\n", $this->getError()));
     }
 
     /**

@@ -211,6 +211,31 @@ class mailTao extends mailModel
     }
 
     /**
+     * Get MR mail content.
+     *
+     * @param  object     $object
+     * @param  string     $action
+     * @param  string     $role     to|cc
+     * @access protected
+     * @return string
+     */
+    protected function getMRMailContent(object $object, string $action, string $role = 'to'): string
+    {
+        $this->app->loadLang('mr');
+        $title  = $this->getObjectTitle($object, 'mr');
+        $domain = zget($this->config->mail, 'domain', common::getSysURL());
+        $MRLink = $domain . helper::createLink('mr', 'view', "id={$object->id}");
+        if($action == 'compilefail') return sprintf($this->lang->mr->failMessage, $MRLink, $title);
+        if($action == 'compilepass')
+        {
+            $message = $this->lang->mr->toCreatedMessage;
+            if($role == 'cc') $message = $this->lang->mr->toReviewerMessage;
+            return sprintf($message, $MRLink, $title);
+        }
+        return '';
+    }
+
+    /**
      * Get object title for mail.
      *
      * @param  object    $object
@@ -222,66 +247,5 @@ class mailTao extends mailModel
     {
         $nameFields = zget($this->config->action->objectNameFields, $objectType, array());
         return zget($object, $nameFields, '');
-    }
-
-    /**
-     * Send mail based n objectType.
-     *
-     * @param  string    $objectType
-     * @param  object    $object
-     * @param  object    $action
-     * @access protected
-     * @return string|false
-     */
-    protected function sendBasedOnType(string $objectType, object $object, object $action): string|false
-    {
-        $domain  = zget($this->config->mail, 'domain', common::getSysURL());
-        $title   = $this->getObjectTitle($object, $objectType);
-        $subject = $this->getSubject($objectType, $object, $title, $action->action);
-
-        if($objectType == 'kanbancard') $objectType = 'kanban';
-        $addressees = $this->getAddressees($objectType, $object, $action);
-        if(!$addressees) return false;
-
-        list($toList, $ccList) = $addressees;
-        if($objectType == 'mr')
-        {
-            $this->loadModel('mr');
-
-            $MRLink = $domain . helper::createLink('mr', 'view', "id={$object->id}");
-            if($action->action == 'compilepass')
-            {
-                $mailContent = sprintf($this->lang->mr->toCreatedMessage, $MRLink, $title);
-                $this->send($toList, $subject, $mailContent);
-
-                $mailContent = sprintf($this->lang->mr->toReviewerMessage, $MRLink, $title);
-                $this->send($ccList, $subject, $mailContent);
-
-                /* Create a todo item for this MR. */
-                $this->mr->apiCreateMRTodo($object->hostID, $object->targetProject, $object->mriid);
-            }
-            elseif($action->action == 'compilefail')
-            {
-                $mailContent = sprintf($this->lang->mr->failMessage, $MRLink, $title);
-                $this->send($toList, $subject, $mailContent, $ccList);
-            }
-        }
-        else
-        {
-            $mailContent = $this->getMailContent($objectType, $object, $action);
-            if($objectType == 'ticket')
-            {
-                $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
-                $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
-            }
-            else
-            {
-                if($objectType == 'review') $this->app->loadLang('baseline');
-                $this->send($toList, $subject, $mailContent, $ccList);
-            }
-        }
-
-        if($this->isError()) return implode("\n", $this->getError());
-        return '';
     }
 }
