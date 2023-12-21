@@ -1,0 +1,17 @@
+title: zt_expect
+desc: 期望表
+author: Shujie Tian
+version: 1.0
+fields:
+  - field: id
+    range: 1-100
+  - field: userID
+    range: 11-15
+  - field: expect
+    prefix: '期望'
+    range: 1-100
+  - field: progress
+    prefix: '进度'
+    range: 1-100
+  - field: project
+    range: 11
