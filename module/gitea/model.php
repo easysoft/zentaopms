@@ -115,7 +115,7 @@ class giteaModel extends model
 
         if(empty($response->message))
         {
-            dao::$errors[] = false;
+            dao::$errors[] = 'error';
             return false;
         }
 

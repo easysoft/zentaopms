@@ -29,4 +29,17 @@ class giteaTest
             ->andWhere('providerType')->eq('gitea')
             ->fetchAll();
     }
+
+    /**
+     * Test apiErrorHandling method.
+     *
+     * @param  object $response
+     * @access public
+     * @return array
+     */
+    public function apiErrorHandlingTester(object $response): array
+    {
+        $this->gitea->apiErrorHandling($response);
+        return dao::getError();
+    }
 }
