@@ -2767,38 +2767,37 @@ class userModel extends model
      * 获取项目、执行等对象的团队成员。
      * Get team members in object.
      *
-     * @param  string|array|int $objectIds
+     * @param  string|array|int $objects
      * @param  string           $type            project|execution
      * @param  string           $params
      * @param  string|array     $usersToAppended
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs(string|array|int $objectIds, string $type = 'project', string $params = '', string|array $usersToAppended = ''): array
+    public function getTeamMemberPairs(string|array|int $objects, string $type = 'project', string $params = '', string|array $usersToAppended = ''): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
-        if(empty($objectIds) && empty($usersToAppended)) return array();
+        if(empty($objects) && empty($usersToAppended)) return array();
 
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.type')->eq($type)
-            ->andWhere('t1.root')->in($objectIds)
-            ->beginIF($params == 'nodeleted' || empty($this->config->user->showDeleted))
-            ->andWhere('t2.deleted')->eq('0')
-            ->fi()
+            ->andWhere('t1.root')->in($objects)
+            ->beginIF($params == 'nodeleted' || empty($this->config->user->showDeleted))->andWhere('t2.deleted')->eq('0')->fi()
             ->fetchAll($keyField);
 
         if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
 
         if(!$users) return array();
 
+        /* 拼装成用户名为键，真实姓名为值的数组。 */
         foreach($users as $account => $user)
         {
             $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
             if(!empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
+            $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
 
         /* Put the current user first. */
