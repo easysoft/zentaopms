@@ -164,4 +164,25 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $expects;
     }
+
+    /**
+     * 添加一条期望记录。
+     * Add a expect record.
+     *
+     * @param  array        $data
+     * @access public
+     * @return array|object
+     */
+    public function expectTest(array $data): array|object
+    {
+        $defaultFields = array('userID' => 1, 'project' => 11, 'createdBy' => 'admin', 'createdDate' => date('Y-m-d'), 'expect' => '', 'progress' => '');
+        $expectData    = new stdclass();
+        foreach($defaultFields as $field => $defaultValue) $expectData->{$field} = $defaultValue;
+        foreach($data as $key => $value) $expectData->{$key} = $value;
+
+        $expectID = $this->objectModel->expect($expectData);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
+    }
 }
