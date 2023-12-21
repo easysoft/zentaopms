@@ -632,7 +632,6 @@ class userModel extends model
         }
 
         $userVisionList = $this->getVisionList();
-        $user           = $this->getById($userID, 'id');
         $oldGroups      = array_keys($this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false));
         $newGroups      = zget($_POST, 'groups', array());
         sort($oldGroups);
