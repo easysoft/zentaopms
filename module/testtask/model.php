@@ -1246,6 +1246,8 @@ class testtaskModel extends model
      */
     public function getSceneCases($productID, $runs, $orderBy = 'id_desc')
     {
+        $sceneCases = array();
+
         $runs = $this->loadModel('testcase')->appendData($runs, 'run');
         foreach($runs as $id => $run)
         {
@@ -1268,13 +1270,23 @@ class testtaskModel extends model
 
         if(!$scenes) return array('scenes' => array(), 'runs' => $runs);
 
-        $sceneCases = array();
-
         $this->dao->setTable(TABLE_CASE);
         $fieldTypes = $this->dao->getFieldsType();
 
+        /* Set scene path. */
+        $scenePath = '';
+        foreach($scenes as $id => $scene) if(isset($sceneCases[$id])) $scenePath .= ',' . $scene->path;
+
         foreach($scenes as $id => $scene)
         {
+            /* 如果场景下没有用例,则跳过. */
+            /* Check the scene path. */
+            if(strpos($scenePath, ',' . $scene->id . ',') === false)
+            {
+                unset($scenes[$id]);
+                continue;
+            }
+
             /* Set default value for the fields exist in TABLE_CASE but not in TABLE_SCENE. */
             foreach($fieldTypes as $field => $type)
             {
@@ -1292,7 +1304,6 @@ class testtaskModel extends model
             {
                 foreach($sceneCases[$id] as $case)
                 {
-                    $case->id      = 'case_' . $case->id;
                     $case->parent  = $id;
                     $case->grade   = $scene->grade + 1;
                     $case->path    = $scene->path . $case->id . ',';
