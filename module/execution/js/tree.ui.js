@@ -1,6 +1,7 @@
 window.changeDisplay = function()
 {
-    $('#taskTree .tree-item-content.task').toggleClass('hidden', $(this).is(':checked'));
+    $.cookie.set('showStory', $(this).is(':checked') ? 1 : 0, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
 }
 
 window.loadObject = function({event, item})

@@ -4426,8 +4426,8 @@ class executionModel extends model
      */
     public function fillTasksInTree(object $node, int $executionID): object
     {
-        static $taskGroups;
-        if(empty($taskGroups)) $taskGroups = $this->executionTao->getTaskGroups($executionID);
+        static $taskGroups = array();
+        if(empty($taskGroups) && !$this->cookie->showStory) $taskGroups = $this->executionTao->getTaskGroups($executionID);
         if(!empty($node->children))
         {
             foreach($node->children as $i => &$child)
