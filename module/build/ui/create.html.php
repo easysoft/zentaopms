@@ -10,12 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-dropmenu
-(
-    set::module($app->tab),
-    set::tab($app->tab),
-    set::url(createLink($app->tab, 'ajaxGetDropMenuData', "objectID=$projectID&module={$app->rawModule}&method={$app->rawMethod}"))
-);
 /* zin: Set variables to define picker options for form. */
 jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 jsVar('autoRelationTip', $lang->build->notice->autoRelation);
