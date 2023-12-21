@@ -375,7 +375,7 @@ function createLocalNotification(content)
 
 /**
  * Create server notification.
- * 
+ *
  * @param {string} content
  * @returns {jQuery}
  */

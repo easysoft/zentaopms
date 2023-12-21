@@ -32,8 +32,8 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
     <span class="input-group-addon"><?= $lang->ai->miniPrograms->field->option; ?>1</span>
     <input name="option[]" type="text" class="form-control" placeholder="<?= $lang->ai->miniPrograms->placeholder->input; ?>" />
     <span class="input-group-btn">
-      <button type="button" class="btn btn-default btn-icon" onclick="handleAddOptionClick(event)"><i class="icon icon-plus"></i></button>
-      <button type="button" class="btn btn-default btn-icon" onclick="handleRemoveOptionClick(event)"><i class="icon icon-minus"></i></button>
+      <button type="button" class="btn btn-default btn-icon" onclick="addFieldOption(event)"><i class="icon icon-plus"></i></button>
+      <button type="button" class="btn btn-default btn-icon" onclick="removeFieldOption(event)"><i class="icon icon-minus"></i></button>
     </span>
   </div>
 </template>
@@ -49,7 +49,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
         <tr>
           <th><?= $lang->ai->miniPrograms->field->type; ?></th>
           <td>
-            <select name="field-type" class="form-control" onchange="handleFieldTypeChange(event)">
+            <select name="field-type" class="form-control" onchange="changeFieldType(event)">
               <option value="text"><?= $lang->ai->miniPrograms->field->typeList['text']; ?></option>
               <option value="textarea"><?= $lang->ai->miniPrograms->field->typeList['textarea']; ?></option>
               <option value="radio"><?= $lang->ai->miniPrograms->field->typeList['radio']; ?></option>
@@ -70,10 +70,10 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
           <td>
             <div class="radio" style="display: flex; align-items: center; gap: 4px;">
               <label>
-                <input type="radio" name="required" value="1" checked><?= $lang->ai->miniPrograms->field->requiredOptions[1]; ?>
+                <input type="radio" name="field-required" value="1" checked><?= $lang->ai->miniPrograms->field->requiredOptions[1]; ?>
               </label>
               <label>
-                <input type="radio" name="required" value="0"><?= $lang->ai->miniPrograms->field->requiredOptions[0]; ?>
+                <input type="radio" name="field-required" value="0"><?= $lang->ai->miniPrograms->field->requiredOptions[0]; ?>
               </label>
             </div>
           </td>
@@ -92,7 +92,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
       </div>
       <div class="modal-body" style="display: flex; gap: 42px; padding-right: 36px;"></div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none;">
-        <button type="button" class="btn btn-wide btn-primary" onclick="handleSaveFieldClick()"><?= $lang->save; ?></button>
+        <button type="button" class="btn btn-wide btn-primary" onclick="saveNewField()"><?= $lang->save; ?></button>
       </div>
     </div>
   </div>
@@ -106,7 +106,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
       </div>
       <div class="modal-body" style="display: flex; gap: 42px; padding-right: 36px;"></div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none;">
-        <button type="button" class="btn btn-wide btn-primary" onclick="handleSaveEditedFieldClick()"><?= $lang->save; ?></button>
+        <button type="button" class="btn btn-wide btn-primary" onclick="saveEditedField()"><?= $lang->save; ?></button>
       </div>
     </div>
   </div>
@@ -154,7 +154,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
     </header>
     <main class="field-configuration-main">
       <div>
-        <a onclick="handleAddFieldClick()" style="border: 1px dashed #D8DBDE; border-radius: 2px; display: flex; align-items: center; flex-direction: column; padding: 12px; gap: 4px;">
+        <a onclick="toAddField()" style="border: 1px dashed #D8DBDE; border-radius: 2px; display: flex; align-items: center; flex-direction: column; padding: 12px; gap: 4px;">
           <div style="color: #2E7FFF; display: flex; align-items: center; gap: 4px;"><i class="icon icon-plus"></i><span><?= $lang->ai->miniPrograms->field->add; ?></span></div>
           <div style="color: #9EA3B0; font-size: 12divx;"><?= $lang->ai->miniPrograms->field->addTip; ?></div>
         </a>

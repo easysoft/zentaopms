@@ -11,7 +11,7 @@ const words = new Map();
  * @param {Event} event
  * @returns {void}
  */
-function handleFieldTypeChange(event)
+function changeFieldType(event)
 {
     const fieldType = $(event.target).prop('value');
     if(fieldType === 'text' || fieldType === 'textarea')
@@ -49,7 +49,7 @@ function fixOptionsOrder()
  * @param {Event} event
  * @returns {void}
  */
-function handleRemoveOptionClick(event)
+function removeFieldOption(event)
 {
     $(event.target).closest('.input-group').remove();
     fixOptionsOrder();
@@ -61,7 +61,7 @@ function handleRemoveOptionClick(event)
  * @param {Event} event
  * @returns {void}
  */
-function handleAddOptionClick(event)
+function addFieldOption(event)
 {
     const template = document.getElementById('option-template');
     const $clone = $(document.importNode(template.content, true));
@@ -98,7 +98,7 @@ function revertOptions()
  *
  * @returns {void}
  */
-function handleAddFieldClick()
+function toAddField()
 {
     const $modal = $('#add-field-modal');
     const $modalBody = $modal.find('.modal-body');
@@ -141,7 +141,7 @@ function getEditingField($fieldTr)
  * @param {Event} event
  * @returns {void}
  */
-function handleEditFieldClick(event)
+function toEditField(event)
 {
     const $fieldTr = $(event.target).closest('tr');
     $editingField = $fieldTr;
@@ -204,7 +204,7 @@ function handleEditFieldClick(event)
  * @param {Event} event
  * @returns {void}
  */
-function handleRemoveFieldClick(event)
+function toRemoveField(event)
 {
     const result = window.confirm(deleteTip);
     if(!result) return;
@@ -278,7 +278,7 @@ function showFieldNameErrorIfExist($required, form)
  *
  * @returns {void}
  */
-function handleSaveFieldClick()
+function saveNewField()
 {
     const form = document.querySelector('#add-field-modal form');
     const formData = new FormData(form);
@@ -316,7 +316,7 @@ function handleSaveFieldClick()
  *
  * @returns {void}
  */
-function handleSaveEditedFieldClick()
+function saveEditedField()
 {
     const oldName = $editingField.find('.field-name').html();
     const form = document.querySelector('#edit-field-modal form');
@@ -422,13 +422,13 @@ function createFieldTypeView(formData)
 function createFieldButtons()
 {
     return $(`<td style="width: 100px;">
-        <button type="button" class="btn btn-link btn-sm btn-icon" onclick="handleAddFieldClick()">
+        <button type="button" class="btn btn-link btn-sm btn-icon" onclick="toAddField()">
             <i class="icon icon-plus"></i>
         </button>
-        <button type="button" class="btn btn-link btn-sm btn-icon" onclick="handleEditFieldClick(event)">
+        <button type="button" class="btn btn-link btn-sm btn-icon" onclick="toEditField(event)">
             <i class="icon icon-edit"></i>
         </button>
-        <button type="button" class="btn btn-link btn-sm btn-icon" onclick="handleRemoveFieldClick(event)">
+        <button type="button" class="btn btn-link btn-sm btn-icon" onclick="toRemoveField(event)">
             <i class="icon icon-trash"></i>
         </button>
     </td>`);
