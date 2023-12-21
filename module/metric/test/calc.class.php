@@ -374,6 +374,17 @@ class metricTest
     }
 
     /**
+     * Test getExecutableMetric.
+     *
+     * @access public
+     * @return array
+     */
+    public function getExecutableMetric()
+    {
+        return $this->objectModel->getExecutableMetric();
+    }
+
+    /**
      * Test getEchartXY.
      *
      * @param  array $header
