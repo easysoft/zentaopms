@@ -259,18 +259,19 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get stakeholder pairs.
+     * 获取干系人account => realname键值对。
+     * Get the stakeholder account => realname key-value pair.
      *
-     * @param  int    $projectID
+     * @param  int    $objectID
      * @access public
      * @return array
      */
-    public function getStakeHolderPairs($projectID)
+    public function getStakeHolderPairs(int $objectID): array
     {
         return $this->dao->select('t1.user, t2.realname')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($projectID)
+            ->andWhere('t1.objectID')->eq($objectID)
             ->orderBy('t1.id_desc')
             ->fetchPairs();
     }
