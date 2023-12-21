@@ -712,6 +712,7 @@ class webhookModel extends model
     }
 
     /**
+     * 保存发送的通知。
      * Save datas.
      *
      * @param  int    $webhookID
@@ -721,7 +722,7 @@ class webhookModel extends model
      * @access public
      * @return bool
      */
-    public function saveData($webhookID, $actionID, $data, $actor = '')
+    public function saveData(int $webhookID, int $actionID, string $data, string $actor = ''): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
 
