@@ -48,7 +48,8 @@ formPanel
                 (
                     set::name('product'),
                     set::items($products),
-                    set::value($bug->productID)
+                    set::value($bug->productID),
+                    set::required(true)
                 ),
                 $product->type != 'normal' && isset($products[$bug->productID]) ? picker
                 (
@@ -57,7 +58,8 @@ formPanel
                     set::width('100px'),
                     set::name('branch'),
                     set::items($branches),
-                    set::value($bug->branch)
+                    set::value($bug->branch),
+                    set::required(true)
                 ) : null
             )
         ),

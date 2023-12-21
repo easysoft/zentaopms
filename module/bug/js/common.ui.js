@@ -181,7 +181,7 @@ function loadProductBranches(productID)
             }
             else
             {
-                $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value}));
+                $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value, required: true}));
             }
             $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
         }
