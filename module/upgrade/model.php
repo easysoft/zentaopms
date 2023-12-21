@@ -8242,20 +8242,21 @@ class upgradeModel extends model
     }
 
     /**
+     * 安装IPD。
      * Insetall IPD.
      *
      * @access public
      * @return void
      */
-    public function installIPD()
+    public function installIPD(): void
     {
         $fromVersion = $this->fromVersion;
         $ipdinstall  = false;
 
-        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
-        if(strpos($fromVersion, 'pro') !== false)                                                   $ipdinstall = true;
-        if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
-        if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
+        if(is_numeric($fromVersion[0]) && version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
+        if(strpos($fromVersion, 'pro') !== false)                                                  $ipdinstall = true;
+        if(strpos($fromVersion, 'biz') !== false && version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
+        if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
         if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
 
         if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));

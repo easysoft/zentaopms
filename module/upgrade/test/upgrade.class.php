@@ -597,4 +597,18 @@ class upgradeTest
         foreach($projects as $project) $return .= "{$project->id}:{$project->parent},{$project->multiple};";
         return trim($return, ';');
     }
+
+    /**
+     * 测试安装IPD。
+     * Test install IPD.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function installIPDTest(string $version): void
+    {
+        $this->objectModel->fromVersion = $version;
+        $this->objectModel->installIPD();
+    }
 }
