@@ -15,3 +15,6 @@ $config->install->form->step2['dbPassword']  = array('type' => 'string', 'requir
 $config->install->form->step2['dbName']      = array('type' => 'string', 'required' => true);
 $config->install->form->step2['dbPrefix']    = array('type' => 'string', 'required' => true);
 $config->install->form->step2['clearDB']     = array('type' => 'int',    'required' => false, 'default' => 0);
+
+$config->install->form->step4 = array();
+$config->install->form->step4['mode'] = array('type' => 'string', 'required' => true);

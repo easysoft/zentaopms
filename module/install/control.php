@@ -304,8 +304,9 @@ class install extends control
         {
             if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig, 'load' => 'step3'));
 
-            $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode);
-            $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
+            $mode = form::data()->get()->mode;
+            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+            $this->loadModel('custom')->disableFeaturesByMode($mode);
             return $this->send(array('result' => 'success', 'load' => inlink('step5')));
         }
 
