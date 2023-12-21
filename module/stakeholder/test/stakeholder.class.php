@@ -217,4 +217,22 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $stakeholderGroup;
     }
+
+    /**
+     * 获取项目按照人员类型分组的干系人列表。
+     * Get stakeholder group by type.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getListByTypeTest(int $projectID): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $stakeholderGroup = $this->objectModel->getListByType();
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholderGroup;
+    }
 }
