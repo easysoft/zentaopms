@@ -12,6 +12,6 @@ fields:
   - field: openID
     range: 1-98,root{2}
   - field: providerType
-    range: gitlab{98},gitea,gogs
+    range: gitlab,webhook,gitea,gogs
   - field: providerID
     range: 1
