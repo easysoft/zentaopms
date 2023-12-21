@@ -277,7 +277,8 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get self stakeholders by object id list.
+     * 获取按照对象ID分组的干系人列表。
+     * Get stakeholder group by object id.
      *
      * @param  array  $objectIdList
      * @access public
@@ -285,8 +286,7 @@ class stakeholderModel extends model
      */
     public function getStakeholderGroup(array $objectIdList): array
     {
-        $stakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->andWhere('deleted')->eq('0')->fetchAll();
-
+        $stakeholders     = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->andWhere('deleted')->eq('0')->fetchAll();
         $stakeholderGroup = array();
         foreach($stakeholders as $stakeholder)
         {
