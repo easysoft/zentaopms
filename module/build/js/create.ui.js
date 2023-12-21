@@ -18,7 +18,7 @@ $().ready(function()
                 data = JSON.parse(data);
                 const $buildsPicker = $('select[name^=builds]').zui('picker');
                 $buildsPicker.render({items: data, multiple: true});
-                $('#builds').attr('data-placeholder', multipleSelect);
+                $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             }
         });
 
@@ -38,14 +38,14 @@ $().ready(function()
 
         if($(this).val() == 'no')
         {
-            $('#execution').closest('.form-row').removeClass('hidden');
-            $('#builds').closest('.form-row').addClass('hidden');
+            $('input[name=execution]').closest('.form-row').removeClass('hidden');
+            $('select[name^=builds]').closest('.form-row').addClass('hidden');
             loadProducts(executionID);
         }
         else
         {
-            $('#execution').closest('.form-row').addClass('hidden');
-            $('#builds').closest('.form-row').removeClass('hidden');
+            $('input[name=execution]').closest('.form-row').addClass('hidden');
+            $('select[name^=builds]').closest('.form-row').removeClass('hidden');
 
             loadProducts(projectID);
             let productID = $('input[name=product]').val();
@@ -56,7 +56,7 @@ $().ready(function()
                     data = JSON.parse(data);
                     const $buildsPicker = $('select[name^=builds]').zui('picker');
                     $buildsPicker.render({items: data, multiple: true});
-                    $('#builds').attr('data-placeholder', multipleSelect);
+                    $('select[name^=builds]').attr('data-placeholder', multipleSelect);
                 }
             });
         }
@@ -90,7 +90,7 @@ function loadProducts(executionID)
 
         if(data)
         {
-            $('#builds').attr('data-placeholder', multipleSelect);
+            $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             loadBranches(productID);
         }
     });

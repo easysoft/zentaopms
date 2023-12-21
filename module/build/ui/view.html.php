@@ -36,18 +36,23 @@ detailHeader
             set::back('GLOBAL'),
             $lang->goback
         ),
-    ),
-    to::title
-    (
-        entityLabel
+        dropdown
         (
-            set::entityID($build->id),
-            set::level(2),
-            set::text($build->name),
-            set::textClass('text-primary'),
-            set::idClass('id-label')
-        ),
-        $build->deleted ? span(setClass('label danger'), $lang->bug->deleted) : null
+            btn
+            (
+                setClass('ghost text-primary bg-light bg-opacity-50'),
+                entityLabel
+                (
+                    set::entityID($build->id),
+                    set::level(2),
+                    set::text($build->name),
+                    set::textClass('text-primary'),
+                    set::idClass('id-label'),
+                ),
+                $build->deleted ? span(setClass('label danger'), $lang->bug->deleted) : null
+            ),
+            set::items($buildItems),
+        )
     ),
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
