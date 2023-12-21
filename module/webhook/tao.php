@@ -46,7 +46,7 @@ class webhookTao extends webhookModel
      * @access public
      * @return object|false
      */
-    protected function getWechatSecret(object $webhook): object|false
+    protected function getWeixinSecret(object $webhook): object|false
     {
         $webhook->secret = array();
         $webhook->secret['agentId']   = $webhook->wechatAgentId;
