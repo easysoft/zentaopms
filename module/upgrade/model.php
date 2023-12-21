@@ -3766,7 +3766,7 @@ class upgradeModel extends model
         $this->upgradeTao->updateProjectByExecution($projectID, $sprintIdList);
         $this->upgradeTao->moveSprintStoryToProject($projectID, $sprintIdList);
         $this->upgradeTao->moveSprintCaseToProject($projectID, $sprintIdList);
-        $this->upgradeTao->moveAllCaseToProject($projectID, $sprintIdList);
+        $this->upgradeTao->moveAllTestTaskToProject($projectID, $sprintIdList);
         $this->upgradeTao->syncProjectInfoForSprints($projectID, $sprintIdList, $programID, isset($_POST['projectType']) && $_POST['projectType'] == 'execution');
         $this->upgradeTao->setProjectProductsRelation($projectID, $productIdList, $sprintIdList);
 

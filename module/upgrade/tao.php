@@ -623,7 +623,7 @@ class upgradeTao extends upgradeModel
      * @access protected
      * @return void
      */
-    protected function moveAllCaseToProject(int $projectID, array $sprintIdList): void
+    protected function moveAllTestTaskToProject(int $projectID, array $sprintIdList): void
     {
         $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
             ->from(TABLE_TESTTASK)->alias('t1')
