@@ -487,6 +487,32 @@ class metricTest
     }
 
     /**
+     * Judge whether a metric has the concept of an object.
+     *
+     * @param  array  $header
+     * @access public
+     * @return bool
+     */
+    public function isObjectMetric($header)
+    {
+        $isObjectMetric = $this->objectModel->isObjectMetric($header);
+        return $isObjectMetric == true ? 'true' : 'false';
+    }
+
+    /**
+     * Judge whether a metric has the concept of an date.
+     *
+     * @param  array  $header
+     * @access public
+     * @return bool
+     */
+    public function isDateMetric($header)
+    {
+        $isDateMetric = $this->objectModel->isDateMetric($header);
+        return $isDateMetric == true ? 'true' : 'false';
+    }
+
+    /**
      * Test getDateLabels.
      *
      * @param  string $dateType
