@@ -274,33 +274,26 @@ class stakeholder extends control
     }
 
     /**
+     * 删除一个干系人。
      * Deleted user.
      *
      * @access public
-     * @param  int    $userID
-     * @param  string $confirm  yes|no
+     * @param  int     $userID
      * @return void
     */
-    public function delete($userID, $confirm = 'no')
+    public function delete(int $userID)
     {
-        if($confirm == 'no')
-        {
-            $confirmURL = inLink('delete', "userID=$userID&confirm=yes");
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->stakeholder->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
-        }
-        else
-        {
-            $stakeholder = $this->stakeholder->getByID($userID);
-            $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
-            $this->loadModel('user')->updateUserView($this->session->project, 'project');
+        $stakeholder = $this->stakeholder->getByID($userID);
+        $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
+        $this->loadModel('user')->updateUserView($this->session->project, 'project');
 
-            /* Update linked products view. */
-            if($stakeholder->objectType == 'project' and $stakeholder->objectID)
-            {
-                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, array($stakeholder->user));
-            }
-            return $this->send(array('result' => 'success', 'load' => true));
+        /* Update linked products view. */
+        if($stakeholder->objectType == 'project' && $stakeholder->objectID)
+        {
+            $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, array($stakeholder->user));
         }
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**

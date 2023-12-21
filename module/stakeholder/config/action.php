@@ -25,7 +25,7 @@ $config->stakeholder->actionList['edit']['url']  = helper::createLink('stakehold
 $config->stakeholder->actionList['delete']['icon']         = 'trash';
 $config->stakeholder->actionList['delete']['text']         = $lang->delete;
 $config->stakeholder->actionList['delete']['hint']         = $lang->delete;
-$config->stakeholder->actionList['delete']['url']          = helper::createLink('stakeholder', 'delete', 'id={id}&confirm=yes');
+$config->stakeholder->actionList['delete']['url']          = helper::createLink('stakeholder', 'delete', 'id={id}');
 $config->stakeholder->actionList['delete']['className']    = 'ajax-submit';
 $config->stakeholder->actionList['delete']['data-confirm'] = $lang->stakeholder->confirmDelete;
 
