@@ -761,7 +761,7 @@ class baseDAO
         }
         else
         {
-            $sql = $this->processSQL();
+            $sql = $this->dbh->formatSQL($this->processSQL());
         }
 
         try
