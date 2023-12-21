@@ -87,7 +87,7 @@ foreach($allProducts as $productID => $productName)
                 set::name("products[{$index}]"),
                 set::value($productID)
             ) : null,
-            $cannotUnlink ? input
+            $cannotUnlink || isset($allBranches[$productID][$branchID]) ? input
             (
                 set::type('hidden'),
                 set::name("branch[{$index}]"),
