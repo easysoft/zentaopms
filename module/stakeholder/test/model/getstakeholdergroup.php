@@ -1,28 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
-su('admin');
-
-zdTable('stakeholder')->config('stakeholder')->gen(50);
-
 /**
 
 title=测试 stakeholderModel->getStakeholderGroup();
 cid=1
-pid=1
 
-正常查询干系人分组 >> admin
-正常查询干系人分组统计 >> 4
-空数组查询 >> 0
+- 测试传入空的对象ID列表 @0
+- 测试传入对象ID列表第1条的admin属性 @admin
+- 测试传入不存在的对象ID列表 @0
+- 测试传入对象ID列表获取的干系人数量 @10
+- 测试传入对象ID列表获取的干系人数量 @10
 
 */
-global $tester;
-$stakeholder = $tester->loadModel('stakeholder');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/stakeholder.class.php';
 
-$objectIDList   = array('11', '31', '100', '1');
-$noObjectIDList = array();
+zdTable('stakeholder')->config('stakeholder')->gen(20);
+zdTable('user')->gen(5);
 
-r($stakeholder->getStakeholderGroup($objectIDList))        && p('11:user10') && e('user10');//正常查询干系人分组
-r(count($stakeholder->getStakeholderGroup($objectIDList))) && p()            && e('3');    //正常查询干系人分组统计
-r($stakeholder->getStakeholderGroup($noObjectIDList))      && p()            && e('0');    //空数组查询
+$objectIds[0] = array();
+$objectIds[1] = array(1, 11);
+$objectIds[2] = range(16, 20);
+
+$stakeholderTester = new stakeholderTest();
+r($stakeholderTester->getStakeholderGroupTest($objectIds[0])) && p()          && e('0');     // 测试传入空的对象ID列表
+r($stakeholderTester->getStakeholderGroupTest($objectIds[1])) && p('1:admin') && e('admin'); // 测试传入对象ID列表
+r($stakeholderTester->getStakeholderGroupTest($objectIds[2])) && p()          && e('0');     // 测试传入不存在的对象ID列表
+
+r(count($stakeholderTester->getStakeholderGroupTest($objectIds[1])[1]))  && p() && e('10'); // 测试传入对象ID列表获取的干系人数量
+r(count($stakeholderTester->getStakeholderGroupTest($objectIds[1])[11])) && p() && e('10'); // 测试传入对象ID列表获取的干系人数量

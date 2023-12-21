@@ -185,4 +185,20 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
     }
+
+    /**
+     * 获取按照对象ID分组的干系人列表。
+     * Get stakeholder group by object id.
+     *
+     * @param  array  $objectIdList
+     * @access public
+     * @return array
+     */
+    public function getStakeholderGroupTest(array $objectIdList): array
+    {
+        $stakeholderGroup = $this->objectModel->getStakeholderGroup($objectIdList);
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholderGroup;
+    }
 }
