@@ -297,7 +297,8 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get parent stakeholder group by object id list.
+     * 获取父项目集/父项目的干系人列表。
+     * Get the stakeholder list for the parent program / parent project.
      *
      * @param  array  $objectIdList
      * @access public
@@ -320,7 +321,7 @@ class stakeholderModel extends model
 
         if(empty($parents)) return array();
 
-        /* Get all parent stakeholders.*/
+        /* Get all parent stakeholders. */
         $parentStakeholders     = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
         $parentStakeholderGroup = array();
         foreach($parentStakeholders as $parentStakeholder)
