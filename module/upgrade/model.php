@@ -4508,7 +4508,7 @@ class upgradeModel extends model
         $project->model          = 'scrum';
         $project->parent         = $programID;
         $project->status         = $data->projectStatus;
-        $project->team           = empty($data->team) ? $data->team : $data->projectName;
+        $project->team           = !empty($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
         $project->end            = isset($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);
