@@ -328,6 +328,7 @@ class webhookModel extends model
         if(!isset($this->lang->action->label->$actionType)) return false;
         if(empty($this->config->objectTables[$objectType])) return false;
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
+        a($action);die;
         if(!$action) return false;
 
         if($webhook->products)
@@ -566,15 +567,16 @@ class webhookModel extends model
     }
 
     /**
+     * 获取openID列表。
      * Get openID list.
      *
-     * @param  int    $webhookID
-     * @param  int    $actionID
-     * @param  string $toList
+     * @param  int          $webhookID
+     * @param  int          $actionID
+     * @param  string|array $toList
      * @access public
      * @return string
      */
-    public function getOpenIdList($webhookID, $actionID, $toList = '')
+    public function getOpenIdList(int $webhookID, int $actionID, string|array $toList = ''): string
     {
         if($toList)
         {
@@ -609,47 +611,21 @@ class webhookModel extends model
     }
 
     /**
+     * 请求发送数据的接口。
      * Post hook data.
      *
-     * @param  object $webhook
-     * @param  string $sendData
-     * @param  int    $actionID
-     * @param  string $appendUser
+     * @param  object       $webhook
+     * @param  string       $sendData
+     * @param  int          $actionID
+     * @param  string|array $appendUser
      * @access public
      * @return int
      */
-    public function fetchHook($webhook, $sendData, $actionID = 0, $appendUser = '')
+    public function fetchHook(object $webhook, string $sendData, int $actionID = 0, string|array $appendUser = '')
     {
         if(!extension_loaded('curl')) return print(helper::jsonEncode($this->lang->webhook->error->curl));
 
-        if($webhook->type == 'dinguser' || $webhook->type == 'wechatuser' || $webhook->type == 'feishuuser')
-        {
-            if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
-
-            $openIdList = $this->getOpenIdList($webhook->id, $actionID, $appendUser);
-            if(empty($openIdList)) return false;
-            if($webhook->type == 'dinguser')
-            {
-                $this->app->loadClass('dingapi', true);
-                $dingapi = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-                $result  = $dingapi->send($openIdList, $sendData);
-                return json_encode($result);
-            }
-            elseif($webhook->type == 'wechatuser')
-            {
-                $this->app->loadClass('wechatapi', true);
-                $wechatapi = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-                $result  = $wechatapi->send($openIdList, $sendData);
-                return json_encode($result);
-            }
-            elseif($webhook->type == 'feishuuser')
-            {
-                $this->app->loadClass('feishuapi', true);
-                $feishuapi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
-                $result  = $feishuapi->send($openIdList, $sendData);
-                return json_encode($result);
-            }
-        }
+        if(in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->sendToUser($webhook, $sendData, $actionID, $appendUser);
 
         $contentType = "Content-Type: {$webhook->contentType};charset=utf-8";
         if($webhook->type == 'dinggroup' or $webhook->type == 'wechatgroup' or $webhook->type == 'feishugroup') $contentType = "Content-Type: application/json";
@@ -694,6 +670,46 @@ class webhookModel extends model
         if($error)  return $error;
         if($result) return $result;
         return $httpCode;
+    }
+
+    /**
+     * 发送消息到钉钉、飞书、企业微信的用户。
+     * Send to dingding, feishu, weixin users.
+     *
+     * @param  object       $webhook
+     * @param  string       $sendData
+     * @param  int          $actionID
+     * @param  string|array $appendUser
+     * @access public
+     * @return string|false
+     */
+    public function sendToUser(object $webhook, string $sendData, int $actionID, string|array $appendUser): string|false
+    {
+        if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
+
+        $openIdList = $this->getOpenIdList($webhook->id, $actionID, $appendUser);
+        if(empty($openIdList)) return false;
+        if($webhook->type == 'dinguser')
+        {
+            $this->app->loadClass('dingapi', true);
+            $dingapi = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $result  = $dingapi->send($openIdList, $sendData);
+            return json_encode($result);
+        }
+        elseif($webhook->type == 'wechatuser')
+        {
+            $this->app->loadClass('wechatapi', true);
+            $wechatapi = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $result  = $wechatapi->send($openIdList, $sendData);
+            return json_encode($result);
+        }
+        elseif($webhook->type == 'feishuuser')
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuapi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $result  = $feishuapi->send($openIdList, $sendData);
+            return json_encode($result);
+        }
     }
 
     /**

@@ -352,7 +352,7 @@ class webhookTest
         if(!$webhooks) $webhooks = $this->getListTest();
         if(!$webhooks) return true;
 
-        foreach($webhooks as $id => $webhook)
+        foreach($webhooks as $webhook)
         {
             $postData = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
             $objects = $this->objectModel->fetchHook($webhook, $postData, $actionID);
