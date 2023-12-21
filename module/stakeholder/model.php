@@ -367,12 +367,13 @@ class stakeholderModel extends model
     }
 
     /**
+     * 获取项目按照进度分组的活动列表。
      * Get group activities.
      *
      * @access public
      * @return array
      */
-    public function getProcessGroup()
+    public function getProcessGroup(): array
     {
         return $this->dao->select('process, activity')->from(TABLE_PROGRAMACTIVITY)
             ->where('project')->eq($this->session->project)
