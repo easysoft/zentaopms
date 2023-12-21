@@ -385,15 +385,16 @@ class stakeholder extends control
     }
 
     /**
+     * 获取干系人的动态。
      * Common actions of stakeholder module.
      *
      * @param  int    $stakeholderID
      * @access public
      * @return void
      */
-    public function commonAction($stakeholderID, $object)
+    public function commonAction(int $stakeholderID)
     {
-        $this->view->actions = $this->loadModel('action')->getList($object, $stakeholderID);
+        $this->view->actions = $this->loadModel('action')->getList('stakeholder', $stakeholderID);
     }
 
     /**
