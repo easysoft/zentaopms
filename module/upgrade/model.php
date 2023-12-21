@@ -3711,23 +3711,8 @@ class upgradeModel extends model
     {
         $projectType = zget($data, 'projectType', 'project');
 
-        if(empty($data->programName))
-        {
-            dao::$errors['programName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->programName);
-            return false;
-        }
-
-        if(!$this->post->longTime && !$this->post->end && isset($data->begin))
-        {
-            dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
-            return false;
-        }
-
-        if(isset($data->projectName) && $projectType == 'execution' && empty($data->projectName))
-        {
-            dao::$errors['projectName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName);
-            return false;
-        }
+        $this->upgradeTao->checkProgramRequired($data, $projectType);
+        if(dao::isError()) return false;
 
         if($projectType == 'project')
         {
