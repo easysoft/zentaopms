@@ -316,7 +316,7 @@ class ai extends control
     public function deleteMiniProgram($appID, $deleted)
     {
         $result = $this->ai->deleteMiniProgram($appID, $deleted);
-        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'locate' => $this->createLink('ai', 'miniPrograms')));
         $this->sendError(dao::getError());
     }
 
