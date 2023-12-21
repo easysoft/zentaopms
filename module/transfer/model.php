@@ -642,37 +642,6 @@ class transferModel extends model
     }
 
     /**
-     * Get related objects pairs.
-     *
-     * @param  string $module
-     * @param  string $object
-     * @param  string $pairs
-     * @access public
-     * @return void
-     */
-    public function getRelatedObjects($module = '', $object = '', $pairs = '')
-    {
-        /* Get objects. */
-        $datas = $this->getQueryDatas($module);
-
-        /* Get related objects id lists. */
-        $relatedObjectIdList = array();
-        $relatedObjects      = array();
-
-        foreach($datas as $data) $relatedObjectIdList[$data->$object] = $data->$object;
-
-        if($object == 'openedBuild') $object = 'build';
-
-        /* Get related objects title or names. */
-        $table = $this->config->objectTables[$object];
-        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
-
-        if($object == 'build') $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
-
-        return $relatedObjects;
-    }
-
-    /**
      * Get nature datas.
      *
      * @param  int    $module

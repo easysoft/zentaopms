@@ -134,7 +134,7 @@ $config->story->dtable->fieldList['product']['name']       = 'product';
 $config->story->dtable->fieldList['product']['title']      = $lang->story->product;
 $config->story->dtable->fieldList['product']['type']       = 'text';
 $config->story->dtable->fieldList['product']['control']    = 'hidden';
-$config->story->dtable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
+$config->story->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 
 $config->story->dtable->fieldList['module']['name']       = 'module';
 $config->story->dtable->fieldList['module']['title']      = $lang->story->module;
