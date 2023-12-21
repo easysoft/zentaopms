@@ -3632,211 +3632,258 @@ class upgradeModel extends model
     }
 
     /**
-     * Create program.
+     * 手动归并数据。
+     * Manually merge data.
      *
-     * @param  array  $productIdList
      * @param  array  $projectIdList
      * @access public
      * @return int
      */
-    public function createProgram($productIdList = array(), $projectIdList = array())
+    public function createProgram(array $projectIdList = array()): bool|array
     {
-        $this->app->loadLang('program');
-        $data    = fixer::input('post')->get();
-        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+        $data = fixer::input('post')->get();
 
-        $projectType = zget($data, 'projectType', 'project');
+        /* 新增项目集或者更新项目集状态。*/
+        /* Create program or update program status. */
         if(isset($data->newProgram))
         {
-            if(empty($data->programName))
-            {
-                dao::$errors['programName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->programName);
-                return false;
-            }
+            $result = $this->createNewProgram($data, $projectIdList);
+            if(dao::isError()) return false;
+            if(isset($result['result']) && $result['result'] == 'fail') return $result;
 
-            if(!$this->post->longTime and !$this->post->end and isset($data->begin))
-            {
-                dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
-                return false;
-            }
-
-            if(isset($data->projectName) and $projectType == 'execution' and empty($data->projectName))
-            {
-                dao::$errors['projectName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName);
-                return false;
-            }
-
-            if($projectType == 'project')
-            {
-                $projectPairs  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('id')->in($projectIdList)->fetchPairs();
-                $projectNames  = array();
-                $duplicateList = '';
-                foreach($projectPairs as $projectID => $projectName)
-                {
-                    if(isset($projectNames[$projectName]))
-                    {
-                        $duplicateList .= "$projectID,";
-                        $duplicateList .= "{$projectNames[$projectName]},";
-                        continue;
-                    }
-
-                    $projectNames[$projectName] = $projectID;
-                }
-
-                if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
-            }
-
-            /* Insert program. */
-            $program = new stdclass();
-            $program->name          = $data->programName;
-            $program->type          = 'program';
-            $program->status        = $data->programStatus;
-            $program->begin         = isset($data->begin) ? $data->begin : helper::now();
-            $program->end           = isset($data->end) ? $data->end : LONG_TIME;
-            $program->openedBy      = $account;
-            $program->openedDate    = helper::now();
-            $program->openedVersion = $this->config->version;
-            $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
-            $program->days          = $this->computeDaysDelta($program->begin, $program->end);
-            $program->PM            = $projectType == 'project' ? zget($data, 'PM', '') : '';
-            $program->vision        = 'rnd';
-
-            $this->app->loadLang('program');
-            $this->app->loadLang('project');
-            $this->lang->project->name = $this->lang->program->name;
-
-            $this->dao->insert(TABLE_PROJECT)->data($program)
-                ->batchcheck('name,begin', 'notempty')
-                ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-                ->check('name', 'unique', "deleted='0' and type= 'program'")
-                ->exec();
-            if(dao::isError())
-            {
-                $errors = dao::getError();
-                if(isset($errors['name']))
-                {
-                    $errors['programName'] = $errors['name'];
-                    unset($errors['name']);
-                }
-                dao::$errors = $errors;
-                return false;
-            }
-
-            $programID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROGRAM)
-                ->set('grade')->eq(1)
-                ->set('path')->eq(",{$programID},")
-                ->set('`order`')->eq($programID * 5)
-                ->where('id')->eq($programID)
-                ->exec();
-
-            $this->loadModel('action')->create('program', $programID, 'openedbysystem');
-            if($data->programStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
+            $programID = $result;
         }
         else
         {
-            $programID = $data->programID ? $data->programID : $data->programs;
+            $programID = $data->programID ? $data->programID : (int)$data->programs;
             $this->dao->update(TABLE_PROGRAM)->set('status')->eq($data->programStatus)->where('id')->eq($programID)->exec();
-            if($data->programStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+            if($data->programStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
         }
 
+        /* 新增产品线，返回产品线 ID。*/
+        /* Create product line, and return product line ID. */
+        $lineID = 0;
         if(isset($data->newLine))
         {
             if(!empty($data->lineName))
             {
-                /* Insert product line. */
-                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
-                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
-
-                $line = new stdClass();
-                $line->type   = 'line';
-                $line->parent = 0;
-                $line->grade  = 1;
-                $line->name   = $data->lineName;
-                $line->root   = $programID;
-                $line->order  = $maxOrder;
-                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-
-                $lineID = $this->dao->lastInsertID();
-                $path   = ",$lineID,";
-                $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
-
+                $lineID = $this->createNewLine($data->lineName, $programID);
                 if(dao::isError()) return false;
             }
-
-            if(empty($data->lineName)) $lineID = 0;
         }
         else
         {
-            $lineID = !empty($data->lines) ? $data->lines : 0;
+            if(!empty($data->lines)) $lineID = (int)$data->lines;
         }
 
         if(!isset($data->sprints)) return array($programID, 0, $lineID);
 
+        /* 新增项目或者更新项目状态。*/
         $projectList = array();
         if(isset($data->newProject))
         {
-            if(!$this->post->longTime and !$this->post->end)
-            {
-                dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
-                return false;
-            }
+            $result = $this->createNewProject($data, $programID, $projectIdList);
+            if(dao::isError()) return false;
+            if(isset($result['result']) && $result['result'] == 'fail') return $result;
 
-            /* Create a project. */
-            $this->loadModel('action');
-            $this->app->loadLang('doc');
-            $this->lang->project->name = $this->lang->upgrade->projectName;
-            if($projectType == 'execution')
-            {
-                /* Use historical projects as execution upgrades. */
-                $projectList = $this->createProject($programID, $data);
-            }
-            else
-            {
-                /* Use historical projects as project upgrades. */
-                $projects = $this->dao->select('id,name,begin,end,status,PM,acl,team')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
-
-
-                $projectPairs = $this->dao->select('name,id')->from(TABLE_PROJECT)
-                    ->where('deleted')->eq('0')
-                    ->andWhere('type')->eq('project')
-                    ->andWhere('parent')->eq($programID)
-                    ->fetchPairs();
-
-                $duplicateList = '';
-                foreach($projects as $projectID => $project)
-                {
-                    if(isset($projectPairs[$project->name]))
-                    {
-                        $duplicateList .= "$projectID,";
-                        $duplicateList .= "{$projectPairs[$project->name]},";
-                    }
-                }
-
-                if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
-
-                foreach($projectIdList as $projectID)
-                {
-                    $data->projectName   = $projects[$projectID]->name;
-                    $data->begin         = $projects[$projectID]->begin;
-                    $data->end           = $projects[$projectID]->end;
-                    $data->projectStatus = $projects[$projectID]->status;
-                    $data->team          = empty($projects[$projectID]->team) ? $projects[$projectID]->name : $projects[$projectID]->team;
-                    $data->PM            = $projects[$projectID]->PM;
-                    $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
-
-                    $projectList[$projectID] = $this->createProject($programID, $data);
-                }
-            }
+            $projectList = $result;
         }
         else if(!empty($data->projects))
         {
-            $projectList = $data->projects;
+            $projectList = (int)$data->projects;
             $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->projectStatus)->where('id')->eq($projectList)->exec();
-            if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectList, 'openedbysystem');
+            if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectList, 'closedbysystem');
         }
 
         return array($programID, $projectList, $lineID);
+    }
+
+    /**
+     * 创建新的项目集。
+     * Create new program.
+     *
+     * @param  object         $data
+     * @param  array          $projectIdList
+     * @access public
+     * @return bool|int|array
+     */
+    public function createNewProgram(object $data, array $projectIdList): bool|int|array
+    {
+        $projectType = zget($data, 'projectType', 'project');
+
+        if(empty($data->programName))
+        {
+            dao::$errors['programName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->programName);
+            return false;
+        }
+
+        if(!$this->post->longTime && !$this->post->end && isset($data->begin))
+        {
+            dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
+            return false;
+        }
+
+        if(isset($data->projectName) && $projectType == 'execution' && empty($data->projectName))
+        {
+            dao::$errors['projectName'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName);
+            return false;
+        }
+
+        if($projectType == 'project')
+        {
+            $projectPairs  = $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('id')->in($projectIdList)->fetchPairs();
+            $projectNames  = array();
+            $duplicateList = '';
+            foreach($projectPairs as $projectID => $projectName)
+            {
+                if(isset($projectNames[$projectName]))
+                {
+                    $duplicateList .= "$projectID,";
+                    $duplicateList .= "{$projectNames[$projectName]},";
+                    continue;
+                }
+
+                $projectNames[$projectName] = $projectID;
+            }
+
+            if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
+        }
+
+        /* Insert program. */
+        $program = new stdclass();
+        $program->name          = $data->programName;
+        $program->type          = 'program';
+        $program->status        = $data->programStatus;
+        $program->begin         = isset($data->begin) ? $data->begin : helper::now();
+        $program->end           = isset($data->end) ? $data->end : LONG_TIME;
+        $program->openedBy      = isset($this->app->user->account) ? $this->app->user->account : '';
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
+        $program->days          = $this->computeDaysDelta($program->begin, $program->end);
+        $program->PM            = $projectType == 'project' ? zget($data, 'PM', '') : '';
+        $program->vision        = 'rnd';
+
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+        $this->lang->project->name = $this->lang->program->name;
+
+        $this->dao->insert(TABLE_PROJECT)->data($program)
+            ->batchcheck('name,begin', 'notempty')
+            ->checkIF($program->end != '', 'end', 'gt', $program->begin)
+            ->check('name', 'unique', "deleted='0' and type= 'program'")
+            ->exec();
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            if(isset($errors['name']))
+            {
+                $errors['programName'] = $errors['name'];
+                unset($errors['name']);
+            }
+            dao::$errors = $errors;
+            return false;
+        }
+
+        $programID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PROGRAM)->set('grade')->eq(1)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+
+        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+        if($data->programStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
+
+        return $programID;
+    }
+
+    /**
+     * 创建新的产品线。
+     * Create new product line.
+     *
+     * @param  sting    $lineName
+     * @param  int      $programID
+     * @access public
+     * @return bool|int
+     */
+    public function createNewLine(string $lineName, int $programID): bool|int
+    {
+        /* Insert product line. */
+        $maxOrder = $this->dao->select("MAX(`order`) AS maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+        $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+        $line = new stdClass();
+        $line->type   = 'line';
+        $line->parent = 0;
+        $line->grade  = 1;
+        $line->name   = $lineName;
+        $line->root   = $programID;
+        $line->order  = $maxOrder;
+        $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+
+        $lineID = $this->dao->lastInsertID();
+        $path   = ",$lineID,";
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+        if(dao::isError()) return false;
+
+        return $lineID;
+    }
+
+    /**
+     * 创建新的项目。
+     * Create new project.
+     *
+     * @param  object         $data
+     * @param  int            $programID
+     * @param  array          $projectIdList
+     * @access public
+     * @return bool|int|array
+     */
+    public function createNewProject(object $data, int $programID, array $projectIdList): bool|int|array
+    {
+        if(!$this->post->longTime && !$this->post->end)
+        {
+            dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
+            return false;
+        }
+
+        /* Create a project. */
+        $this->lang->project->name = $this->lang->upgrade->projectName;
+
+        /* Use historical projects as execution upgrades. */
+        $projectType = zget($data, 'projectType', 'project');
+        if($projectType == 'execution') return $this->createProject($programID, $data);
+
+        /* Use historical projects as project upgrades. */
+        $projects = $this->dao->select('id,name,begin,end,status,PM,acl,team')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        $projectPairs = $this->dao->select('name,id')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->andWhere('parent')->eq($programID)->fetchPairs();
+
+        $duplicateList = '';
+        foreach($projects as $projectID => $project)
+        {
+            if(isset($projectPairs[$project->name]))
+            {
+                $duplicateList .= "$projectID,";
+                $duplicateList .= "{$projectPairs[$project->name]},";
+            }
+        }
+        if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
+
+        $projectList = array();
+        foreach($projectIdList as $projectID)
+        {
+            if(!isset($projects[$projectID])) continue;
+
+            $data->projectName   = $projects[$projectID]->name;
+            $data->begin         = $projects[$projectID]->begin;
+            $data->end           = $projects[$projectID]->end;
+            $data->projectStatus = $projects[$projectID]->status;
+            $data->team          = empty($projects[$projectID]->team) ? $projects[$projectID]->name : $projects[$projectID]->team;
+            $data->PM            = $projects[$projectID]->PM;
+            $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
+
+            $projectList[$projectID] = $this->createProject($programID, $data);
+        }
+
+        return $projectList;
     }
 
     /**
