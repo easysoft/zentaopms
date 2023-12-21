@@ -29,9 +29,11 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
     }
     ?>
   </div>
-  <div class="btn-toolbar pull-right">
-    <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
-  </div>
+  <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
+    <div class="btn-toolbar pull-right">
+      <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
+    </div>
+  <?php endif; ?>
 </div>
 <div class="modal fade" id="disable-miniprogram">
   <div class="modal-dialog" style="width: 480px;">

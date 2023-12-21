@@ -73,9 +73,11 @@
       <?php if ($miniProgram->deleted) echo "<span class='label label-danger'>{$lang->ai->prompts->deleted}</span>"; ?>
     </div>
   </div>
-  <div class="btn-toolbar pull-right">
-    <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
-  </div>
+  <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
+    <div class="btn-toolbar pull-right">
+      <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
+    </div>
+  <?php endif; ?>
 </div>
 
 <div id="mainContent" class="main-row">
