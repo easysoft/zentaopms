@@ -464,16 +464,18 @@ class upgrade extends control
     }
 
     /**
+     * 为保持数据库一致，执行修复sql。
      * Ajax fix for consistency.
      *
      * @param  string $version
      * @access public
      * @return void
      */
-    public function ajaxFixConsistency($version)
+    public function ajaxFixConsistency(string $version)
     {
         set_time_limit(0);
         session_write_close();
+
         $this->upgrade->fixConsistency($version);
     }
 
