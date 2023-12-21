@@ -1,0 +1,11 @@
+title: zt_intervention
+desc: 干预表
+author: Shujie Tian
+version: 1.0
+fields:
+  - field: id
+    range: 1-100
+  - field: project
+    range: 60
+  - field: activity
+    range: 1-100

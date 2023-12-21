@@ -268,4 +268,22 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $processPairs;
     }
+
+    /**
+     * 获取项目的干预列表信息。
+     * Get intervention list.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getPlansTest(int $projectID): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $plans = $this->objectModel->getPlans();
+
+        if(dao::isError()) return dao::getError();
+        return $plans;
+    }
 }
