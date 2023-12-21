@@ -157,45 +157,6 @@ class giteaModel extends model
     }
 
     /**
-     * 检测用户是否有Gitea项目的权限。
-     * Check user access.
-     *
-     * @param  int    $giteaID
-     * @param  int    $projectID
-     * @param  object $project
-     * @param  string $maxRole
-     * @access public
-     * @return bool
-     */
-    public function checkUserAccess(int $giteaID, string $projectID = '', object $project = null, array $groupIDList = array(), string $maxRole = 'maintainer'): bool
-    {
-        if($this->app->user->admin) return true;
-
-        if($project == null) $project = $this->apiGetSingleProject($giteaID, $projectID);
-        if(!isset($project->id)) return false;
-
-        $accessLevel = $this->config->gitea->accessLevel[$maxRole];
-
-        /* Check user priv and group priv. */
-        if(isset($project->permissions->project_access->access_level) && $project->permissions->project_access->access_level >= $accessLevel) return true;
-        if(isset($project->permissions->group_access->access_level) && $project->permissions->group_access->access_level >= $accessLevel)     return true;
-        if(empty($project->shared_with_groups)) return false;
-        if(empty($groupIDList))
-        {
-            $groups = $this->apiGetGroups($giteaID, 'name_asc', $maxRole);
-            foreach($groups as $group) $groupIDList[] = $group->id;
-        }
-
-        foreach($project->shared_with_groups as $group)
-        {
-            if($group->group_access_level < $accessLevel) continue;
-            if(in_array($group->group_id, $groupIDList)) return true;
-        }
-
-        return false;
-    }
-
-    /**
      * 检测token是否有效。
      * Check token access.
      *
