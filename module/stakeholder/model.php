@@ -382,12 +382,13 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get process pairs.
+     * 获取进度id=>name的键值对。
+     * Get the key-value pair of progress id=>name.
      *
      * @access public
      * @return array
      */
-    public function getProcess()
+    public function getProcess(): array
     {
         return $this->dao->select('id, name')->from(TABLE_PROCESS)
             ->where('deleted')->eq(0)
