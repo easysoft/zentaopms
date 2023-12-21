@@ -766,24 +766,6 @@ class userTest
     }
 
     /**
-     * getSprintAuthedUsersTest
-     *
-     * @param  int    $sprintID
-     * @param  array  $stakeholders
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
-     * @return void
-     */
-    public function getSprintAuthedUsersTest($sprintID, $stakeholders, $teams, $whiteList, $admins)
-    {
-        global $tester;
-        $sprint = $tester->loadModel('execution')->getByID($sprintID);
-        return $this->objectModel->getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins);
-    }
-
-    /**
      * Test get product view list users.
      *
      * @param  int    $productID

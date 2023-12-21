@@ -2649,7 +2649,7 @@ class userModel extends model
     }
 
     /**
-     * 获取和项目相关联的用户。
+     * 获取和项目或者迭代相关联的用户。
      * Get project authed users.
      *
      * @param  object  $project
@@ -2704,6 +2704,7 @@ class userModel extends model
     }
 
     /**
+     * 获取和迭代相关联的用户。
      * Get sprint authed users.
      *
      * @param  object $sprint
