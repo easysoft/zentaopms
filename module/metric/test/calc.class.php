@@ -412,30 +412,6 @@ class metricTest
     }
 
     /**
-     * Test isDateMetric.
-     *
-     * @param  array $header
-     * @access public
-     * @return bool
-     */
-    public function isDateMetric($header)
-    {
-        return $this->objectModel->isDateMetric($header);
-    }
-
-    /**
-     * Test isObjectMetric.
-     *
-     * @param  array $header
-     * @access public
-     * @return bool
-     */
-    public function isObjectMetric($header)
-    {
-        return $this->objectModel->isObjectMetric($header);
-    }
-
-    /**
      * Test isSystemMetric.
      *
      * @param  array $record
@@ -536,5 +512,20 @@ class metricTest
     public function getDefaultDate($dateLabels)
     {
         return $this->objectModel->getDefaultDate($dateLabels);
+    }
+
+    /**
+     * Test getSqlFunctionName.
+     *
+     * @param  array  $dateLabels
+     * @access public
+     * @return string
+     */
+    public function getSqlFunctionName($measurementCode)
+    {
+        $measurement = new stdclass();
+        $measurement->code = $measurementCode;
+
+        return $this->objectModel->getSqlFunctionName($measurement);
     }
 }
