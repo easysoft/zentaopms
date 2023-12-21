@@ -248,7 +248,7 @@ class upgrade extends control
     {
         if($_POST or $mode)
         {
-            $mode = fixer::input('post')->get('mode');
+            if($_POST) $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             if($this->config->edition == 'ipd') $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
             $this->loadModel('custom')->disableFeaturesByMode($mode);
