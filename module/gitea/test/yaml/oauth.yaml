@@ -6,7 +6,8 @@ fields:
     prefix: user
     range: 1-10
   - field: openID
-    range: 1-10
+    prefix: unittest
+    range: 1,[],3-10
   - field: providerType
     range: gitea
   - field: providerID
