@@ -849,4 +849,32 @@ class upgradeTao extends upgradeModel
 
         return true;
     }
+
+    /**
+     * 获取重复的项目名称。
+     * Get duplicate project name.
+     *
+     * @param  array     $projectIdList
+     * @access protected
+     * @return string
+     */
+    protected function getDuplicateProjectName(array $projectIdList): string
+    {
+        $projectPairs  = $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('id')->in($projectIdList)->fetchPairs();
+        $projectNames  = array();
+        $duplicateList = '';
+        foreach($projectPairs as $projectID => $projectName)
+        {
+            if(isset($projectNames[$projectName]))
+            {
+                $duplicateList .= "$projectID,";
+                $duplicateList .= "{$projectNames[$projectName]},";
+                continue;
+            }
+
+            $projectNames[$projectName] = $projectID;
+        }
+
+        return $duplicateList;
+    }
 }

@@ -3716,21 +3716,7 @@ class upgradeModel extends model
 
         if($projectType == 'project')
         {
-            $projectPairs  = $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('id')->in($projectIdList)->fetchPairs();
-            $projectNames  = array();
-            $duplicateList = '';
-            foreach($projectPairs as $projectID => $projectName)
-            {
-                if(isset($projectNames[$projectName]))
-                {
-                    $duplicateList .= "$projectID,";
-                    $duplicateList .= "{$projectNames[$projectName]},";
-                    continue;
-                }
-
-                $projectNames[$projectName] = $projectID;
-            }
-
+            $duplicateList = $this->upgradeTao->getDuplicateProjectName($projectIdList);
             if($duplicateList) return array('result' => 'fail', 'callback' => "loadModal('" . helper::createLink('upgrade', 'renameObject', "type=project&duplicateList={$duplicateList}") . "')");
         }
 
