@@ -2467,122 +2467,145 @@ class userModel extends model
     }
 
     /**
-     * Check program priv
+     * 检查用户是否有此项目集的查看权限。
+     * Check program priv.
      *
-     * @param  object $program
-     * @param  string $account
-     * @param  array  $stakeholders
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
+     * @param  object  $program
+     * @param  string  $account
+     * @param  array   $stakeholders
+     * @param  array   $whiteList
+     * @param  array   $admins
+     * @access private
      * @return bool
      */
-    public function checkProgramPriv(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), $admins = array()): bool
+    private function checkProgramPriv(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), $admins = array()): bool
     {
+        /* 当前用户为管理员则判断为有权限。 */
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
 
+        /* 当前用户为项目集的PM或创建者则判断为有权限。 */
         if($program->PM == $account || $program->openedBy == $account) return true;
 
-        /* Parent program managers. */
+        /* 如果是项目集内公开，则检查所有父项目集的权限。 */
         if($program->parent != 0 && $program->acl == 'program')
         {
             $path    = str_replace(",{$program->id},", ',', "{$program->path}");
             $parents = $this->dao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
-            foreach($parents as $parent) if($parent->PM == $account) return true;
+            foreach($parents as $parent)
+            {
+                /* 当前用户是其中一个父项目集的PM或创建者则判断为有权限。 */
+                if($parent->PM == $account || $parent->openedBy == $account) return true;
+            }
         }
 
-        if($program->acl == 'open') return true;
-
-        if(isset($stakeholders[$account])) return true;
-        if(isset($whiteList[$account]))    return true;
-        if(isset($admins[$account]))       return true;
+        if($program->acl == 'open')        return true; // 如果项目集为公开则判断为有权限。
+        if(isset($stakeholders[$account])) return true; // 如果该用户是项目集的干系人则判断为有权限。
+        if(isset($whiteList[$account]))    return true; // 如果该用户是项目集的白名单成员则判断为有权限。
+        if(isset($admins[$account]))       return true; // 如果该用户是项目集的管理人员则判断为有权限。
 
         return false;
     }
 
     /**
+     * 检查用户是否有此项目或者迭代的查看权限。
      * Check project priv.
      *
-     * @param  object    $project
-     * @param  string    $account
-     * @param  string    $groups
-     * @param  array     $teams
-     * @param  array     $whiteList
-     * @param  array     $admins
-     * @access public
+     * @param  object  $project
+     * @param  string  $account
+     * @param  array   $stakeholders
+     * @param  array   $teams
+     * @param  array   $whiteList
+     * @param  array   $admins
+     * @access private
      * @return bool
      */
-    public function checkProjectPriv(object $project, string $account, array $stakeholders, array $teams, array $whiteList, array $admins = array()): bool
+    private function checkProjectPriv(object $project, string $account, array $stakeholders, array $teams, array $whiteList, array $admins = array()): bool
     {
+        /* 当前用户为管理员则判断为有权限。 */
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
 
-        if($project->acl == 'open')        return true;
-        if(isset($teams[$account]))        return true;
-        if(isset($stakeholders[$account])) return true;
-        if(isset($whiteList[$account]))    return true;
-        if(isset($admins[$account]))       return true;
+        /* 当前用户为项目集的PO、QD、RD、PM则判断为有权限。 */
+        if($project->PO == $account || $project->QD == $account || $project->RD == $account || $project->PM == $account) return true;
 
-        /* Parent program managers. */
+        if($project->acl == 'open')        return true; // 如果项目为公开则判断为有权限。
+        if(isset($stakeholders[$account])) return true; // 如果该用户是项目的干系人则判断为有权限。
+        if(isset($teams[$account]))        return true; // 如果该用户是项目的团队成员则判断为有权限。
+        if(isset($whiteList[$account]))    return true; // 如果该用户是项目的白名单成员则判断为有权限。
+        if(isset($admins[$account]))       return true; // 如果该用户是项目的管理人员则判断为有权限。
+
+        /* 如果是项目类型并且项目集内公开，则检查所有父项目集的权限。 */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
             $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
-            foreach($programs as $program) if($program->PM == $account) return true;
+            foreach($programs as $program)
+            {
+                /* 当前用户是其中一个父项目集的PM或创建者则判断为有权限。 */
+                if($program->PM == $account || $program->openedBy == $account) return true;
+            }
         }
 
-        /* Judge sprint auth. */
-        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private')
+        /* 如果是迭代并且是私有的，则检查所属项目的权限。 */
+        if(($project->type == 'sprint' || $project->type == 'stage' || $project->type == 'kanban') && $project->acl == 'private')
         {
-            $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
-            if(empty($parent)) return false;
-            if($parent->PM == $account or $parent->openedBy == $account) return true;
+            $project = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            if(empty($project)) return false;
+
+            /* 当前用户是所属项目的PM或创建者则判断为有权限。 */
+            if($project->PM == $account || $project->openedBy == $account) return true;
         }
 
         return false;
     }
 
     /**
+     * 检查用户是否有此迭代的查看权限。
      * Check sprint priv.
      *
-     * @param  object    $project
-     * @param  string    $account
-     * @param  string    $groups
-     * @param  array     $teams
-     * @param  array     $whiteList
-     * @param  array     $admins
-     * @access public
+     * @param  object  $project
+     * @param  string  $account
+     * @param  array   $stakeholders
+     * @param  array   $teams
+     * @param  array   $whiteList
+     * @param  array   $admins
+     * @access private
      * @return bool
      */
-    public function checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins = array())
+    private function checkSprintPriv(object $sprint, string $account, array $stakeholders, array $teams, array $whiteList, array $admins = array()): bool
     {
         return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins);
     }
 
     /**
+     * 检查用户是否有此产品的查看权限。
      * Check product priv.
      *
-     * @param  object $product
-     * @param  string $account
-     * @param  array  $linkedProjects
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
+     * @param  object  $product
+     * @param  string  $account
+     * @param  array   $teams
+     * @param  array   $stakeholders
+     * @param  array   $whiteList
+     * @param  array   $admins
+     * @access private
      * @return bool
      */
-    public function checkProductPriv(object $product, string $account, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
+    private function checkProductPriv(object $product, string $account, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
     {
-        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if(strpos(",{$product->reviewer},", ',' . $account . ',') !== false)    return true;
-        if(strpos(",{$product->PMT},", ',' . $account . ',') !== false)         return true;
-        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
+        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true; // 当前用户为管理员则判断为有权限。
+        if(strpos(",{$product->reviewer},",    ',' . $account . ',') !== false) return true; // 当前用户为产品的审批人则判断为有权限。
+        if(strpos(",{$product->PMT},",         ',' . $account . ',') !== false) return true; // 当前用户为产品的PMT则判断为有权限。
+
+        /* 当前产品为公开的则判断为有权限。 */
         if($product->acl == 'open') return true;
 
-        if(isset($teams[$account]))        return true;
-        if(isset($stakeholders[$account])) return true;
-        if(isset($whiteList[$account]))    return true;
-        if(isset($admins[$account]))       return true;
+        /* 当前用户为产品的PO、QD、RD、创建者、反馈者则判断为有权限。 */
+        if($product->PO == $account || $product->QD == $account || $product->RD == $account || $product->createdBy == $account) return true;
+        if(isset($product->feedback) && $product->feedback == $account)                                                         return true;
+
+        if(isset($stakeholders[$account])) return true; // 如果该用户是产品的干系人则判断为有权限。
+        if(isset($teams[$account]))        return true; // 如果该用户是产品的团队成员则判断为有权限。
+        if(isset($whiteList[$account]))    return true; // 如果该用户是产品的白名单成员则判断为有权限。
+        if(isset($admins[$account]))       return true; // 如果该用户是产品的管理人员则判断为有权限。
 
         return false;
     }
@@ -2708,7 +2731,7 @@ class userModel extends model
         $users[$product->createdBy] = $product->createdBy;
         if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
 
-        if($teams === null and $stakeholders === null)
+        if($teams === null && $stakeholders === null)
         {
             list($productTeams, $productStakeholders) = $this->getProductMembers(array($product->id => $product));
             $teams        = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
@@ -2754,14 +2777,14 @@ class userModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
-        if(empty($objectIds) and empty($usersToAppended)) return array();
+        if(empty($objectIds) && empty($usersToAppended)) return array();
 
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.type')->eq($type)
             ->andWhere('t1.root')->in($objectIds)
-            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
+            ->beginIF($params == 'nodeleted' || empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq('0')
             ->fi()
             ->fetchAll($keyField);

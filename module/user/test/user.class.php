@@ -789,69 +789,6 @@ class userTest
     }
 
     /**
-     * Test check program priv.
-     *
-     * @param  object $program
-     * @param  string $account
-     * @param  array  $stakeholders
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
-     * @return bool
-     */
-    public function checkProgramPrivTest(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
-    {
-        return $this->objectModel->checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins);
-    }
-
-    /**
-     * Test check project priv.
-     *
-     * @param  object $project
-     * @param  string $account
-     * @param  array  $stakeholders
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @access public
-     * @return void
-     */
-    public function checkProjectPrivTest(object $project, string $account, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): bool
-    {
-        return $this->objectModel->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins);
-    }
-    /**
-     * Test check sprint priv.
-     *
-     * @param  object $sprint
-     * @param  string $account
-     * @param  array  $stakeholders
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @access public
-     * @return void
-     */
-    public function checkSprintPrivTest($sprint, $account, $stakeholders = array(), $teams = array(), $whiteList = array())
-    {
-        return $this->objectModel->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList);
-    }
-    /**
-     * Test check product priv.
-     *
-     * @param  object $program
-     * @param  string $account
-     * @param  array  $teams
-     * @param  array  $stakeholders
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
-     * @return bool
-     */
-    public function checkProductPrivTest(object $product, string $account, array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
-    {
-        return $this->objectModel->checkProductPriv($product, $account, $teams, $stakeholders, $whiteList, $admins);
-    }
-
-    /**
      * Test get project authed users.
      *
      * @param  int    $projectID
