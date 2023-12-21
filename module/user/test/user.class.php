@@ -1058,12 +1058,13 @@ class userTest
     }
 
     /**
+     * 测试根据 cookie 验证用户。
      * Identify user by cookie.
      *
      * @access public
      * @return bool
      */
-    public function identifyByCookieTest()
+    public function identifyByCookieTest(): bool
     {
         return $this->objectModel->identifyByCookie();
     }
