@@ -48,8 +48,8 @@ r($result) && p('errors:originalPassword') && e('原密码不正确'); // 原密
 
 $result = $userTest->updatePasswordTest($user5);
 r($result) && p('result')           && e(1);    // 密码符合要求，返回 true。
-r($result) && p('errors:0')         && e('` `'); // 密码符合要求，不提示错误信息。
-r($result) && p('errors:password1') && e('` `'); // 密码符合要求，不提示错误信息。
+r($result) && p('errors:0')         && e('``'); // 密码符合要求，不提示错误信息。
+r($result) && p('errors:password1') && e('``'); // 密码符合要求，不提示错误信息。
 
 $resetUser = $userTest->getByIdTest($app->user->account);
 r($resetUser->password == $password) && p() && e(1); // 数据库中的密码修改成功。

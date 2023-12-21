@@ -34,7 +34,7 @@ r($users)        && p('user6')  && e('测试主管'); // user6 账号的角色�
 r($users)        && p('user7')  && e('高层管理'); // user7 账号的角色是 高层管理。
 r($users)        && p('user8')  && e('其他');     // user8 账号的角色是 其他。
 r($users)        && p('user9')  && e('role');     // user9 账号的角色是 role。
-r($users)        && p('user10') && e('` `');       // user10 账号不存在。
+r($users)        && p('user10') && e('``');       // user10 账号不存在。
 
 /* 参数为数组。*/
 $users = $userTest->getUserRolesTest(array('admin', 'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9'));
@@ -49,7 +49,7 @@ r($users)        && p('user6')  && e('测试主管'); // user6 账号的角色�
 r($users)        && p('user7')  && e('高层管理'); // user7 账号的角色是 高层管理。
 r($users)        && p('user8')  && e('其他');     // user8 账号的角色是 其他。
 r($users)        && p('user9')  && e('role');     // user9 账号的角色是 role。
-r($users)        && p('user10') && e('` `');       // user10 账号不存在。
+r($users)        && p('user10') && e('``');       // user10 账号不存在。
 
 /* 参数为字符串。*/
 $users = $userTest->getUserRolesTest('admin, user1, user10');
