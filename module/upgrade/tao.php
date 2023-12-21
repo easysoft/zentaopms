@@ -774,4 +774,47 @@ class upgradeTao extends upgradeModel
             }
         }
     }
+
+    /**
+     * 为作为项目升级构建项目数据。
+     * Build project data when auto upgrading.
+     *
+     * @param  object    $sprint
+     * @param  int       $programID
+     * @param  string    $fromMode
+     * @param  string    $account
+     * @param  string    $now
+     * @access protected
+     * @return object
+     */
+    protected function buildProjectInAutoUpgrade(object $sprint, int $programID, string $fromMode, string $account, string $now): object
+    {
+        $project = new stdclass();
+        $project->name           = $sprint->name;
+        $project->desc           = $sprint->desc;
+        $project->type           = 'project';
+        $project->model          = 'scrum';
+        $project->parent         = $programID;
+        $project->status         = $sprint->status;
+        $project->begin          = $sprint->begin;
+        $project->end            = isset($sprint->end) ? $sprint->end : LONG_TIME;
+        $project->realBegan      = zget($sprint, 'realBegan', '');
+        $project->realEnd        = zget($sprint, 'realEnd', '');
+        $project->PM             = $sprint->PM;
+        $project->auth           = 'extend';
+        $project->openedBy       = $account;
+        $project->openedDate     = $now;
+        $project->openedVersion  = $this->config->version;
+        $project->lastEditedBy   = $account;
+        $project->lastEditedDate = $now;
+        $project->grade          = 2;
+        $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
+        if($fromMode == 'classic')
+        {
+            $project->multiple = '0';
+            $project->code     = $sprint->code;
+            $project->team     = $sprint->team;
+        }
+        return $project;
+    }
 }

@@ -577,4 +577,24 @@ class upgradeTest
     {
         return $this->objectModel->computeDaysDelta($begin, $end);
     }
+
+    /**
+     * 测试将历史的项目作为香米升级。
+     * Test historical projects are upgraded by project.
+     *
+     * @param  int    $programID
+     * @param  string $fromMode
+     * @access public
+     * @return string
+     */
+    public function upgradeInProjectModeTest(int $programID, string $fromMode): string
+    {
+        $this->objectModel->upgradeInProjectMode($programID, $fromMode);
+
+        global $tester;
+        $return   = '';
+        $projects = $tester->dao->select('id,parent,multiple')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll();
+        foreach($projects as $project) $return .= "{$project->id}:{$project->parent},{$project->multiple};";
+        return trim($return, ';');
+    }
 }

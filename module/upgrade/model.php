@@ -6440,6 +6440,7 @@ class upgradeModel extends model
     }
 
     /**
+     * 将历史的项目作为项目升级。
      * Historical projects are upgraded by project.
      *
      * @param  int    $programID
@@ -6447,54 +6448,25 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function upgradeInProjectMode($programID, $fromMode = '')
+    public function upgradeInProjectMode(int $programID, string $fromMode = ''): bool
     {
-        $this->loadModel('action');
-        $now     = helper::now();
-        $account = isset($this->app->user->account) ? $this->app->user->account : '';
-
         $noMergedSprints = $this->upgradeTao->getNoMergedSprints();
         if(!$noMergedSprints) return true;
 
+        $this->loadModel('action');
+        $now     = helper::now();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
         foreach($noMergedSprints as $sprint)
         {
-            $project = new stdclass();
-            $project->name           = $sprint->name;
-            $project->desc           = $sprint->desc;
-            $project->type           = 'project';
-            $project->model          = 'scrum';
-            $project->parent         = $programID;
-            $project->status         = $sprint->status;
-            $project->begin          = $sprint->begin;
-            $project->end            = isset($sprint->end) ? $sprint->end : LONG_TIME;
-            $project->realBegan      = zget($sprint, 'realBegan', '');
-            $project->realEnd        = zget($sprint, 'realEnd', '');
-            $project->days           = $this->computeDaysDelta($project->begin, $project->end);
-            $project->PM             = $sprint->PM;
-            $project->auth           = 'extend';
-            $project->openedBy       = $account;
-            $project->openedDate     = $now;
-            $project->openedVersion  = $this->config->version;
-            $project->lastEditedBy   = $account;
-            $project->lastEditedDate = $now;
-            $project->grade          = 2;
-            $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($fromMode == 'classic')
-            {
-                $project->multiple = '0';
-                $project->code     = $sprint->code;
-                $project->team     = $sprint->team;
-            }
-
+            $project = $this->upgradeTao->buildProjectInAutoUpgrade($sprint, $programID, $fromMode, $account, $now);
+            $project->days = $this->computeDaysDelta($project->begin, $project->end);
             $this->dao->insert(TABLE_PROJECT)->data($project)->exec();
             if(dao::isError()) return false;
 
-            $projectID = $this->dao->lastInsertId();
-
+            $projectID = $this->dao->lastInsertID();
             $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
-            $project->id = $projectID;
             if($fromMode == 'classic')
             {
                 $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
@@ -6503,21 +6475,23 @@ class upgradeModel extends model
             }
             else
             {
+                $project->id = $projectID;
                 $this->upgradeTao->createProjectDocLib($project);
             }
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
-            $this->processMergedData($programID, $projectID, null, $productIdList, array($sprint->id));
+            $this->processMergedData($programID, $projectID, 0, $productIdList, array($sprint->id));
         }
 
+        /* Fix project path and update the module. */
         $this->fixProjectPath($programID);
-
-        $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
         $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('type')->eq('line')->andWhere('root')->eq('0')->exec();
+
+        /* Compute product's acl under the program. */
+        $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
         $this->computeProductAcl($productIdList, $programID, null);
 
-        if(dao::isError()) return false;
-        return true;
+        return !dao::isError();
     }
 
     /**
