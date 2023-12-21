@@ -198,6 +198,7 @@ class gitea extends control
             $user->status          = 'notBind';
             $user->giteaID         = $giteaUser->id;
             $user->giteaEmail      = $giteaUser->email;
+            $user->giteaAccount    = $giteaUser->account;
             $user->giteaUser       = $giteaUser->realname . '@' . $giteaUser->account;
             $user->giteaUserAvatar = $giteaUser->avatar;
 

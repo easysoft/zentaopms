@@ -25,7 +25,7 @@ window.bindUser = function(e)
     postData['giteaUserNames[]'] = [];
     for(i in bindData)
     {
-        postData['giteaUserNames[' + bindData[i].giteaID + ']'] = bindData[i].giteaUser;
+        postData['giteaUserNames[' + bindData[i].giteaID + ']'] = bindData[i].giteaAccount;
         postData['zentaoUsers[' + bindData[i].giteaID + ']'] = formData['zentaoUsers[' + bindData[i].giteaID + ']'];
     }
 
