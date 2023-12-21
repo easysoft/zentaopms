@@ -130,9 +130,12 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
               <td class="c-actions">
                 <?php $isPublished = $miniProgram->published === '1'; ?>
                 <?php
-                echo $isPublished
-                  ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
-                  : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
+                if(common::hasPriv('ai', 'editMiniProgram'))
+                {
+                  echo $isPublished
+                    ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
+                    : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
+                }
                 ?>
                 <button
                   class="btn iframe"

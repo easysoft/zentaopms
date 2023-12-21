@@ -126,9 +126,11 @@
             <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->disable; ?>
           </button>
         <?php else: ?>
-          <a class='btn' title='<?= $lang->ai->prompts->action->edit; ?>' href='<?= $this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id"); ?>'>
-            <i class='icon-edit icon-sm'></i> <?= $lang->ai->prompts->action->edit; ?>
-          </a>
+          <?php if(common::hasPriv('ai', 'editMiniProgram')): ?>
+            <a class='btn' title='<?= $lang->ai->prompts->action->edit; ?>' href='<?= $this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id"); ?>'>
+              <i class='icon-edit icon-sm'></i> <?= $lang->ai->prompts->action->edit; ?>
+            </a>
+          <?php endif; ?>
           <button
             class="btn iframe"
             data-toggle="modal"
