@@ -298,7 +298,7 @@ class upgrade extends control
      * Select the merge mode when upgrading to zentaopms 18.0.
      *
      * @param  string  $fromVersion
-     * @param  string  $mode        light | ALM
+     * @param  string  $mode        light | ALM | PLM
      * @access public
      * @return void
      */
@@ -310,7 +310,7 @@ class upgrade extends control
             if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
             if($mode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
-            if($mode == 'ALM')   $programID = $this->loadModel('program')->createDefaultProgram();
+            if($mode == 'ALM' || $mode == 'PLM') $programID = $this->loadModel('program')->createDefaultProgram();
 
             if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($programID);
             if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($programID);
@@ -460,7 +460,7 @@ class upgrade extends control
         $log      = array_slice($lines, $offset);
         $finished = ($log && end($log) == 'Finished') ? true : false;
 
-        return print(json_encode(array('log' => implode("<br />", $log) . "<br />", 'finished' => $finished, 'offset' => count($lines))));
+        return print(json_encode(array('log' => implode("<br />", $log) . (empty($log) ? '' : '<br />'), 'finished' => $finished, 'offset' => count($lines))));
     }
 
     /**

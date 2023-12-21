@@ -12,7 +12,7 @@ namespace zin;
 
 set::zui(true);
 
-jsVar('version', $version);
+jsVar('version', (string)$version);
 jsVar('execFixSQL', !empty($alterSQL) && !$hasError);
 
 div
