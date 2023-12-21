@@ -814,22 +814,22 @@ class repo extends control
         $this->loadModel('release');
         $this->app->loadLang('productplan');
 
-        $repo    = $this->repo->getByID($repoID);
-        $product = $this->loadModel('product')->getById((int)$repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu((int)$repo->product, 'story');
-        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
+        $repo       = $this->repo->getByID($repoID);
+        $productIds = explode(',', $repo->product);
+        $products   = $this->loadModel('product')->getByIdList($productIds);
+        $modules    = $this->repoZen->getLinkModules($products, 'story');
+        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->repoZen->buildStorySearchForm($repoID, $revision, $queryID, $product, $modules);
+        $this->repoZen->buildStorySearchForm($repoID, $revision, $browseType, $queryID, $products, $modules);
 
         $this->view->modules    = $modules;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allStories = $this->repoZen->getLinkStories($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID);
-        $this->view->product    = $product;
+        $this->view->allStories = $this->repoZen->getLinkStories($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID);
         $this->view->repoID     = $repoID;
         $this->view->revision   = $revision;
         $this->view->browseType = $browseType;
@@ -862,22 +862,22 @@ class repo extends control
         $this->loadModel('release');
         $this->app->loadLang('productplan');
 
-        $repo    = $this->repo->getByID($repoID);
-        $product = $this->loadModel('product')->getById((int)$repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu((int)$product->id, 'bug');
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $repo       = $this->repo->getByID($repoID);
+        $productIds = explode(',', $repo->product);
+        $products   = $this->loadModel('product')->getByIdList($productIds);
+        $modules    = $this->repoZen->getLinkModules($products, 'bug');
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->repoZen->buildBugSearchForm($repoID, $revision, $browseType, $queryID, $product, $modules);
+        $this->repoZen->buildBugSearchForm($repoID, $revision, $browseType, $queryID, $products, $modules);
 
         $this->view->modules     = $modules;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allBugs     = $this->repoZen->getLinkBugs($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID);
-        $this->view->product     = $product;
+        $this->view->allBugs     = $this->repoZen->getLinkBugs($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID);
         $this->view->repoID      = $repoID;
         $this->view->revision    = $revision;
         $this->view->browseType  = $browseType;
@@ -913,26 +913,24 @@ class repo extends control
         /* Set browse type. */
         $browseType = strtolower($browseType);
 
-        $repo    = $this->repo->getByID($repoID);
-        $product = $this->loadModel('product')->getById((int)$repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu((int)$product->id, 'task');
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $repo     = $this->repo->getByID($repoID);
+        $products = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
+        $modules  = $this->repoZen->getLinkModules($products, 'task');
+        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get executions by product. */
-        $productExecutions   = $this->product->getExecutionPairsByProduct($product->id);
-        $productExecutionIDs = array_filter(array_keys($productExecutions));
+        $executionPairs = $this->repoZen->getLinkExecutions($products);
 
         /* Build search form. */
-        $this->repoZen->buildTaskSearchForm($repoID, $revision, $browseType, $queryID, $product, $modules, $productExecutions);
+        $this->repoZen->buildTaskSearchForm($repoID, $revision, $browseType, $queryID, $modules, $executionPairs);
 
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $orderBy, $pager, $queryID, $productExecutionIDs);
-        $this->view->product      = $product;
+        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID, $executionPairs);
         $this->view->repoID       = $repoID;
         $this->view->revision     = $revision;
         $this->view->browseType   = $browseType;

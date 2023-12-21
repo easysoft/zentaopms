@@ -308,7 +308,7 @@ class repoZen extends repo
             if($this->post->name != '' and $this->post->serviceProject != '')
             {
                 $module  = strtolower($scm);
-                $project = $this->loadModel($module)->apiGetSingleProject($this->post->serviceHost, $this->post->serviceProject);
+                $project = $this->loadModel($module)->apiGetSingleProject((int)$this->post->serviceHost, $this->post->serviceProject);
                 if(isset($project->tokenCloneUrl))
                 {
                     $path = $this->app->getAppRoot() . 'www/data/repo/' . $this->post->name . '_' . $module;
@@ -882,40 +882,110 @@ class repoZen extends repo
     }
 
     /**
+     * 获取关联产品模块。
+     * Get link product modules.
+     *
+     * @param  array     $products
+     * @param  string    $type story|task|bug
+     * @access protected
+     * @return array
+     */
+    protected function getLinkModules(array $products, string $type): array
+    {
+        $modules  = array();
+        foreach($products as $productID => $product)
+        {
+            $productModules = $this->loadModel('tree')->getModulePairs($productID, $type);
+            foreach($productModules as $key => $module) $modules[$key] = $product->name . ' / ' . $module;
+        }
+
+        return $modules;
+    }
+
+    /**
+     * 获取关联产品分支。
+     * Get link product branches.
+     *
+     * @param  array     $products
+     * @access protected
+     * @return array
+     */
+    protected function getLinkBranches(array $products): array
+    {
+        $productBranches = array();
+        foreach($products as $product)
+        {
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+                foreach($branches as $branchID => $branchName)
+                {
+                    $branches[$branchID] = $product->name . ' / ' . $branchName;
+                }
+
+                $productBranches += $branches;
+            }
+        }
+
+        return $productBranches;
+    }
+
+    /**
+     * 获取产品关联执行列表。
+     * Get link product executions.
+     *
+     * @param  array     $products
+     * @access protected
+     * @return array
+     */
+    protected function getLinkExecutions(array $products): array
+    {
+        $executions = array();
+        foreach($products as $product)
+        {
+            $productExecutions = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
+            $executions       += $productExecutions;
+        }
+
+        return $executions;
+    }
+
+    /**
      * 构建需求搜索表格。
      * Build story search form.
      *
      * @param  int       $repoID
      * @param  string    $revision
      * @param  int       $queryID
-     * @param  object    $product
+     * @param  array     $products
      * @param  array     $modules
      * @access protected
      * @return void
      */
-    protected function buildStorySearchForm(int $repoID, string $revision, int $queryID, object $product, array $modules): void
+
+    protected function buildStorySearchForm(int $repoID, string $revision, string $browseType, int $queryID, array $products, array $modules): void
     {
         unset($this->lang->story->statusList['closed']);
         $storyStatusList = $this->lang->story->statusList;
 
-        unset($this->config->product->search['fields']['product']);
-        unset($this->config->product->search['params']['product']);
         $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array_keys($products));
         $this->config->product->search['params']['module']['values']  = $modules;
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+        $this->config->product->search['params']['product']['values'] = helper::arrayColumn($products, 'name', 'id');
 
-        if($product->type == 'normal')
+        $productBranches = $this->getLinkBranches($products);
+        if(empty($productBranches))
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
         }
         else
         {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
+            $this->config->product->search['params']['branch']['values'] = $productBranches;
         }
 
         session_start();
@@ -930,26 +1000,55 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  string    $revision
      * @param  string    $browseType
-     * @param  object    $product
+     * @param  array     $productIds
      * @param  string    $orderBy
      * @param  object    $pager
      * @param  int       $queryID
      * @access protected
      * @return array
      */
-    protected function getLinkStories(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID): array
+    protected function getLinkStories(int $repoID, string $revision, string $browseType, array $products, string $orderBy, object $pager, int $queryID): array
     {
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
+        $allStories    = array();
         if($browseType == 'bySearch')
         {
-            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
+            foreach($products as $productID => $product)
+            {
+                $productStories = $this->loadModel('story')->getBySearch($productID, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories));
+                $allStories     = array_merge($allStories, $productStories);
+            }
         }
         else
         {
-            $allStories = $this->loadModel('story')->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories), $pager);
+            foreach($products as $productID => $product)
+            {
+                $productStories = $this->loadModel('story')->getProductStories($productID, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories));
+                $allStories     = array_merge($allStories, $productStories);
+            }
         }
 
-        return $allStories;
+        return $this->getDataPager($allStories, $pager);
+    }
+
+    /**
+     * 获取数据根据分页。
+     *  Get data by pager.
+     *
+     * @param  array     $data
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getDataPager(array $data, object $pager): array
+    {
+        $pager->setRecTotal(count($data));
+        $pager->setPageTotal();
+
+        $dataList = array_chunk($data, $pager->recPerPage);
+        $pageData = empty($dataList) ? array() : $dataList[$pager->pageID - 1];
+
+        return $pageData;
     }
 
     /**
@@ -960,34 +1059,35 @@ class repoZen extends repo
      * @param  string    $revision
      * @param  string    $browseType
      * @param  int       $queryID
-     * @param  object    $product
+     * @param  array     $products
      * @param  array     $modules
      * @access protected
      * @return void
      */
-    protected function buildBugSearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules): void
+    protected function buildBugSearchForm(int $repoID, string $revision, string $browseType, int $queryID, array $products, array $modules): void
     {
-
+        $productIds = array_keys($products);
+        $this->config->bug->search['params']['status']['values']        = array_slice($this->lang->bug->statusList, 1, 1);
         $this->config->bug->search['actionURL']                         = $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['queryID']                           = $queryID;
         $this->config->bug->search['style']                             = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($productIds);
         $this->config->bug->search['params']['module']['values']        = $modules;
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
+        $this->config->bug->search['params']['execution']['values']     = $this->getLinkExecutions($products);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productIds, 'all', '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIds, 'all', '');
+        $this->config->bug->search['params']['product']['values']       = helper::arrayColumn($products, 'name', 'id');
 
-        unset($this->config->bug->search['fields']['product']);
-        unset($this->config->bug->search['params']['product']);
-        if($product->type == 'normal')
+        $productBranches = $this->getLinkBranches($products);
+        if(empty($productBranches))
         {
             unset($this->config->bug->search['fields']['branch']);
             unset($this->config->bug->search['params']['branch']);
         }
         else
         {
-            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
+            $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
+            $this->config->bug->search['params']['branch']['values'] = $productBranches;
         }
         session_start();
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
@@ -1001,25 +1101,35 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  string    $revision
      * @param  string    $browseType
-     * @param  object    $product
+     * @param  array     $products
      * @param  string    $orderBy
      * @param  object    $pager
      * @param  int       $queryID
      * @access protected
      * @return array
      */
-    protected function getLinkBugs(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID): array
+    protected function getLinkBugs(int $repoID, string $revision, string $browseType, array $products, string $orderBy, object $pager, int $queryID): array
     {
         $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
+        $allBugs    = array();
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->loadModel('bug')->getBySearch($product->id, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
+                $allBugs = $this->loadModel('bug')->getBySearch('bug', array_keys($products), 0, 0, 0, $queryID, implode(',', array_keys($linkedBugs)), $orderBy);
+                foreach($allBugs as $bugID => $bug)
+                {
+                    if($bug->status != 'active') unset($allBugs[$bugID]);
+                }
         }
         else
         {
-            $allBugs = $this->loadModel('bug')->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
+            foreach($products as $productID => $product)
+            {
+                $productBugs = $this->loadModel('bug')->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), null, $orderBy);
+                $allBugs     = array_merge($allBugs, $productBugs);
+            }
         }
 
+        $allBugs = $this->getDataPager($allBugs, $pager);
         foreach($allBugs as $bug) $bug->statusText = $this->processStatus('bug', $bug);
         return $allBugs;
     }
@@ -1032,20 +1142,18 @@ class repoZen extends repo
      * @param  string    $revision
      * @param  string    $browseType
      * @param  int       $queryID
-     * @param  object    $product
      * @param  array     $modules
-     * @param  array     $productExecutions
+     * @param  array     $executionPairs
      * @access protected
      * @return void
      */
-    protected function buildTaskSearchForm(int $repoID, string $revision, string $browseType, int $queryID, object $product, array $modules, array $productExecutions): void
+    protected function buildTaskSearchForm(int $repoID, string $revision, string $browseType, int $queryID, array $modules, array $executionPairs): void
     {
         $this->config->execution->search['actionURL']                     = $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
         $this->config->execution->search['queryID']                       = $queryID;
         $this->config->execution->search['style']                         = 'simple';
         $this->config->execution->search['params']['module']['values']    = $modules;
-        $this->config->execution->search['params']['execution']['values'] = $this->loadModel('product')->getExecutionPairsByProduct($product->id);
-        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+        $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executionPairs;
 
         session_start();
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
@@ -1059,26 +1167,36 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  string    $revision
      * @param  string    $browseType
+     * @param  array     $products
      * @param  string    $orderBy
      * @param  object    $pager
      * @param  int       $queryID
-     * @param  array     $productExecutionIDs
+     * @param  array     $executionPairs
      * @access protected
      * @return array
      */
-    protected function getLinkTasks(int $repoID, string $revision, string $browseType, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
+    protected function getLinkTasks(int $repoID, string $revision, string $browseType, array $products, string $orderBy, object $pager, int $queryID, array $executionPairs): array
     {
         $allTasks = array();
+        foreach($executionPairs as $executionID => $executionName)
+        {
+            $tasks     = $this->loadModel('execution')->getTasks(0, $executionID, array(), $browseType, $queryID, 0, $orderBy, null);
+            $allTasks += $tasks;
+        }
+
         if($browseType == 'bysearch')
         {
-            $allTasks = $this->loadModel('execution')->getTasks(0, 0, array(), $browseType, $queryID, 0, $orderBy, null);
-        }
-        else
-        {
-            foreach($productExecutionIDs as $productExecutionID)
+            foreach($allTasks as $key => $task)
             {
-                $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-                $allTasks = array_merge($tasks, $allTasks);
+                if($task->children)
+                {
+                    $allTasks = array_merge($task->children, $allTasks);
+                    unset($task->children);
+                }
+            }
+            foreach($allTasks as $key => $task)
+            {
+                if($task->status == 'closed') unset($allTasks[$key]);
             }
         }
 
@@ -1090,20 +1208,7 @@ class repoZen extends repo
             if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
         }
 
-        /* Page the records. */
-        $pager->setRecTotal(count($allTasks));
-        $pager->setPageTotal();
-        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
-        $count    = 1;
-        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
-        $limitMax = $pager->pageID * $pager->recPerPage;
-        foreach($allTasks as $key => $task)
-        {
-            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
-            $count ++;
-        }
-
-        return $allTasks;
+        return $this->getDataPager($allTasks, $pager);
     }
 
     /**
