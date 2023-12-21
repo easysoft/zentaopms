@@ -123,6 +123,7 @@ class webhook extends control
     }
 
     /**
+     * 查看 Webhook 的日志。
      * Browse logs of a webhook.
      *
      * @param  int    $id
@@ -133,32 +134,18 @@ class webhook extends control
      * @access public
      * @return void
      */
-    public function log($id, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function log(int $id, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
-        $uri   = $this->app->getURI(true);
-        $this->session->set('productList',     $uri, 'product');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
-        $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('executionList',   $uri, 'execution');
-        $this->session->set('taskList',        $uri, 'execution');
-        $this->session->set('buildList',       $uri, 'execution');
-        $this->session->set('bugList',         $uri, 'qa');
-        $this->session->set('caseList',        $uri, 'qa');
-        $this->session->set('testtaskList',    $uri, 'qa');
-        $this->session->set('todoList',        $uri, 'my');
-        $this->session->set('docList',         $uri, 'doc');
-
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $webhook = $this->webhook->getByID($id);
-        $this->view->title      = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
-        $this->view->logs       = $this->webhook->getLogList($id, $orderBy, $pager);
-        $this->view->webhook    = $webhook;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
+        $this->view->logs    = $this->webhook->getLogList($id, $orderBy, $pager);
+        $this->view->webhook = $webhook;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
         $this->display();
     }
 
@@ -258,7 +245,15 @@ class webhook extends control
         $this->display();
     }
 
-    public function ajaxGetFeishuDeptList($webhookID)
+    /**
+     * 获取飞书部门列表，用于飞书的用户绑定。
+     * Get feishu dept list for feishu user bind.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function ajaxGetFeishuDeptList(int $webhookID)
     {
         $webhook = $this->webhook->getById($webhookID);
         $webhook->secret = json_decode($webhook->secret);
@@ -269,18 +264,19 @@ class webhook extends control
             $feishuApi    = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
             $departmentID = $_POST['departmentID'] ? $_POST['departmentID'] : '';
             $depts        = $feishuApi->getChildDeptTree($departmentID);
-            echo json_encode($depts, true);
+            echo json_encode($depts);
         }
         else
         {
             $this->app->loadClass('feishuapi', true);
             $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
             $depts  = $feishuApi->getDeptTree();
-            echo json_encode($depts, true);
+            echo json_encode($depts);
         }
     }
 
     /**
+     * 异步发送数据。
      * Send data by async.
      *
      * @access public
@@ -288,7 +284,7 @@ class webhook extends control
      */
     public function asyncSend()
     {
-        $webhooks = $this->webhook->getList($orderBy = 'id_desc', $pager = null, $decode = false);
+        $webhooks = $this->webhook->getList('id_desc', null, false);
         if(empty($webhooks))
         {
             echo "NO WEBHOOK EXIST.\n";
