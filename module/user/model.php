@@ -2611,6 +2611,44 @@ class userModel extends model
     }
 
     /**
+     * Get program authed users.
+     *
+     * @param  object  $program
+     * @param  array   $stakeholders
+     * @param  array   $whiteList
+     * @param  array   $admins
+     * @access private
+     * @return array
+     */
+    private function getProgramAuthedUsers(object $program, array $stakeholders, array $whiteList, array $admins): array
+    {
+        $users = array();
+        $users[$program->openedBy] = $program->openedBy;
+        $users[$program->PM]       = $program->PM;
+
+        $users += $stakeholders ? $stakeholders : array();
+        $users += $whiteList    ? $whiteList    : array();
+        $users += $admins       ? $admins       : array();
+
+        $admins = explode(',', trim($this->app->company->admins, ','));
+        foreach($admins as $admin) $users[$admin] = $admin;
+
+        /* 如果是项目集内公开，则所有父项目集的PM和创建者都是关系人。 */
+        if($program->parent != 0 && $program->acl == 'program')
+        {
+            $path    = str_replace(",{$program->id},", ',', "{$program->path}");
+            $parents = $this->dao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            foreach($parents as $parent)
+            {
+                $users[$parent->openedBy] = $parent->openedBy;
+                $users[$parent->PM]       = $parent->PM;
+            }
+        }
+
+        return $users;
+    }
+
+    /**
      * 获取和项目相关联的用户。
      * Get project authed users.
      *
@@ -2663,32 +2701,6 @@ class userModel extends model
         }
 
         return $users;
-    }
-
-    /**
-     * Get program authed users.
-     *
-     * @param  object $program
-     * @param  array  $stakeholders
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
-     * @return array
-     */
-    public function getProgramAuthedUsers(object $program, array $stakeholders, array $whiteList, array $admins): array
-    {
-        $users = array();
-
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
-
-        $users[$program->openedBy] = $program->openedBy;
-        $users[$program->PM]       = $program->PM;
-
-        $users += $stakeholders ? $stakeholders : array();
-        $users += $whiteList ? $whiteList : array();
-        $users += $admins ? $admins : array();
-
-        return array_filter($users);
     }
 
     /**
