@@ -78,17 +78,19 @@ class webhook extends control
     }
 
     /**
+     * 编辑 Webhook。
      * Edit a webhook.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         if($_POST)
         {
-            $this->webhook->update($id);
+            $webhook = form::data($this->config->webhook->form->edit)->get();
+            $this->webhook->update($id, $webhook);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
