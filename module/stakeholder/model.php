@@ -348,18 +348,19 @@ class stakeholderModel extends model
     }
 
     /**
+     * 获取干系人信息。
      * Get stakeholder by id.
      *
-     * @param  int    $userID
+     * @param  int         $stakeholderID
      * @access public
-     * @return array
+     * @return object|bool
      */
-    public function getByID($userID)
+    public function getByID(int $stakeholderID): object|bool
     {
         return $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t3.id as company')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
-            ->where('t1.id')->eq($userID)
+            ->where('t1.id')->eq($stakeholderID)
             ->fetch();
     }
 
