@@ -306,7 +306,7 @@ function renderTaskItem(item, $item, col)
         $item.html(renderUserAvatar(item.assignedTo, 'task', item.id, 'md'));
     }
 
-    if(scaleSize <= 1)
+    if(canBeChanged && scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
         if(!$actions.length && item.menus && item.menus.length)
@@ -1238,16 +1238,12 @@ $(function()
         onAction:             handleKanbanAction,
         virtualRenderOptions: {container: '#kanbanContainer>.panel-body,#kanbanContainer'},
         virtualCardList:      true,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop
-        },
         onRenderHeaderCol: renderHeaderCol,
         onRenderLaneName:  renderLaneName,
         onRenderCount:     renderColumnCount,
         sortable:          handleSortCards,
     };
+    if(canBeChanged) commonOptions.droppable = {target: findDropColumns, finish: handleFinishDrop};
 
     /* Create kanban */
     if(groupBy == 'default')
