@@ -334,12 +334,13 @@ class stakeholderModel extends model
     }
 
     /**
+     * 获取项目按照人员类型分组的干系人列表。
      * Get stakeholder group by type.
      *
      * @access public
      * @return array
      */
-    public function getListByType()
+    public function getListByType(): array
     {
         return $this->dao->select('t2.realname as name, t2.account, t1.type, t2.role')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
