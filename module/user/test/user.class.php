@@ -441,19 +441,18 @@ class userTest
     }
 
     /**
+     * 测试验证用户。
      * Identify user.
      *
      * @param  string $account
      * @param  string $password
+     * @param  int    $passwordStrength
      * @access public
-     * @return void
+     * @return object|bool
      */
-    public function identifyTest($account, $password)
+    public function identifyTest(string $account, string $password, int $passwordStrength = 0): object|bool
     {
-        $user = $this->objectModel->identify($account, $password);
-        unset($_POST);
-
-        return $user;
+        return $this->objectModel->identify($account, $password, $passwordStrength);
     }
 
     /**
