@@ -323,7 +323,7 @@ $config->testcase->linkcases->dtable->fieldList['pri']['name']  = 'pri';
 $config->testcase->linkcases->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->testcase->linkcases->dtable->fieldList['pri']['type']  = 'pri';
 
-$config->testcase->linkcases->dtable->fieldList['title']['name']  = 'pri';
+$config->testcase->linkcases->dtable->fieldList['title']['name']  = 'title';
 $config->testcase->linkcases->dtable->fieldList['title']['title'] = $lang->testcase->title;
 $config->testcase->linkcases->dtable->fieldList['title']['type']  = 'title';
 $config->testcase->linkcases->dtable->fieldList['title']['fixed'] = false;
