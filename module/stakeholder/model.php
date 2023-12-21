@@ -437,21 +437,6 @@ class stakeholderModel extends model
     }
 
     /**
-     * Add communication record.
-     *
-     * @param  int    $stakeholderID
-     * @access public
-     * @return void
-     */
-    public function communicate($stakeholderID)
-    {
-        $data = fixer::input('post')
-            ->stripTags($this->config->stakeholder->editor->communicate['id'], $this->config->allowedTags)
-            ->get();
-        $this->loadModel('action')->create('stakeholder', $stakeholderID, 'communicate', $data->comment);
-    }
-
-    /**
      * Add expect record.
      *
      * @param  int    $userID

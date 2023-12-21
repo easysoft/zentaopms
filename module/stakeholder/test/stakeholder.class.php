@@ -77,32 +77,6 @@ class stakeholderTest
     }
 
     /**
-     * Function communicate test by stakeholder
-     *
-     * @param  int $stakeholderID
-     * @param  array $param
-     * @access public
-     * @return array
-     */
-    public function communicateTest($stakeholderID, $param = array())
-    {
-        global $tester;
-        $createFields = array('comment' => '');
-
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->communicate($stakeholderID);
-
-        unset($_POST);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($stakeholderID)->andwhere('objectType')->eq('stakeholder')->fetchAll();
-        return $objects;
-    }
-
-    /**
      * 获取干系人列表数据。
      * Get stakeholder list.
      *

@@ -324,25 +324,30 @@ class stakeholder extends control
     }
 
     /**
+     * 添加沟通记录。
      * Add communication record.
      *
      * @access public
-     * @param  int  $userID
+     * @param  int    $stakeholderID
      * @return void
     */
-    public function communicate($userID)
+    public function communicate(int $stakeholderID)
     {
-        $this->commonAction($userID, 'stakeholder');
         if(!empty($_POST))
         {
-            $this->stakeholder->communicate($userID);
+            $data = form::data()->get();
+            $this->loadModel('action')->create('stakeholder', $stakeholderID, 'communicate', $data->comment);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
-        $this->view->user       = $this->stakeholder->getByID($userID);
-        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
+        $this->commonAction($stakeholderID, 'stakeholder');
+
+        $this->view->title = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->user  = $this->stakeholder->getByID($stakeholderID);
+        $this->view->users = $this->loadModel('user')->getTeamMemberPairs($this->view->user->objectID, 'project', 'nodeleted');
+
         $this->display();
     }
 

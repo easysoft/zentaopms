@@ -31,4 +31,5 @@ $config->stakeholder->form->edit['email']    = array('type' => 'string',   'requ
 $config->stakeholder->form->edit['company']  = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->stakeholder->form->edit['nature']   = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 $config->stakeholder->form->edit['analysis'] = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
-$config->stakeholder->form->edit['strategy'] = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+
+$config->stakeholder->form->communicate['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
