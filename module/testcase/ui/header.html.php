@@ -42,8 +42,8 @@ $canImport           = hasPriv('testcase', 'import');
 $canImportFromLib    = hasPriv('testcase', 'importFromLib');
 $canImportXmind      = hasPriv('testcase', 'importXmind');
 $canCreateCase       = hasPriv('testcase', 'create');
-$canBatchCreateCase  = hasPriv('testcase', 'batchCreate');
-$canCreateScene      = hasPriv('testcase', 'createScene');
+$canBatchCreateCase  = $this->app->tab == 'qa' && hasPriv('testcase', 'batchCreate');
+$canCreateScene      = $this->app->tab == 'qa' && hasPriv('testcase', 'createScene');
 $canImportUnitResult = hasPriv('testtask', 'importUnitResult');
 $canCreate           = $canCreateCase || $canBatchCreateCase || $canCreateScene;
 
