@@ -461,4 +461,16 @@ class metricTest
         if($dateLabel === array()) return 'empty array';
         return $dateLabel;
     }
+
+    /**
+     * Test getDefaultDate.
+     *
+     * @param  array  $dateLabels
+     * @access public
+     * @return string
+     */
+    public function getDefaultDate($dateLabels)
+    {
+        return $this->objectModel->getDefaultDate($dateLabels);
+    }
 }
