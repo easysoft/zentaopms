@@ -225,7 +225,18 @@
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->product->branch;?></th>
-                  <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
+                  <td>
+                    <?php
+                    if(isonlybody())
+                    {
+                        echo $branches[$story->branch];
+                    }
+                    else
+                    {
+                        common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");
+                    }
+                    ?>
+                  </td>
                 </tr>
                 <?php endif;?>
                 <tr>
