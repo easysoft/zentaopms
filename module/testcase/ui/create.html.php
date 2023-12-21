@@ -125,6 +125,7 @@ formPanel
     ),
     formRow
     (
+        setClass('items-center'),
         formGroup
         (
             set::width('1/3'),
@@ -139,9 +140,9 @@ formPanel
                 set::required(true)
             )
         ),
-        formGroup
+        div
         (
-            setClass('ml-2 items-center'),
+            setClass('flex ml-2'),
             checkbox
             (
                 setID('auto'),
