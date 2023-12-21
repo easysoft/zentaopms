@@ -884,18 +884,6 @@ class userTest
     }
 
     /**
-     * Test get person data.
-     *
-     * @param  string $account
-     * @access public
-     * @return void
-     */
-    public function getPersonalDataTest($account)
-    {
-        return $this->objectModel->getPersonalData($account);
-    }
-
-    /**
      * Test get user details for api.
      *
      * @param  array $accountList
