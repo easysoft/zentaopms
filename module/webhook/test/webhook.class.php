@@ -162,24 +162,15 @@ class webhookTest
      */
     public function bindTest($create, $bind)
     {
-        global $tester;
-        $result = $this->createTest($create);
-        $id = $tester->dao->select('id')->from(TABLE_WEBHOOK)->where('name')->eq($create['name'])->fetch('id');
+        $objectID = $this->objectModel->create($create);
 
-        if($id == null)
-        {
-            a($result);
-            return;
-        }else
-        {
-            foreach($bind as $key => $value) $_POST[$key] = $value;
+        foreach($bind as $key => $value) $_POST[$key] = $value;
 
-            $objects = $this->objectModel->bind($id);
+        $result = $this->objectModel->bind($objectID);
 
-            if(dao::isError()) return dao::getError();
+        if(dao::isError()) return dao::getError();
 
-            return $objects;
-        }
+        return $result;
     }
 
     /**

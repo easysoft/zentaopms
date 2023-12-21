@@ -7,33 +7,33 @@ su('admin');
 /**
 
 title=测试 webhookModel->bind();
+timeout=0
 cid=1
-pid=1
 
-绑定admin账号给飞书账号的白袁李（创建了测试用户飞书管理端，然后通过create方法创建了一条数据，关联飞书里的一个用户，页面验证成功绑定） >> 1
+- 查看是否绑定成功 @1
 
 */
 
 $webhook = new webhookTest();
 
-$post = array();
-$post['type']                        = 'feishuuser';
-$post['name']                        = '测试绑定的webhook';
-$post['url']                         = '';
-$post['secret']                      = '';
-$post['agentId']                     = '';
-$post['appKey']                      = '';
-$post['appSecret']                   = '';
-$post['wechatCorpId']                = '';
-$post['wechatCorpSecret']            = '';
-$post['wechatAgentId']               = '';
-$post['feishuAppId']                 = 'cli_a2e1f12e6d785013';
-$post['feishuAppSecret']             = 'Pk4rYTwtFJveepj4JDfPCciSgUqBJYM5';
-$post['domain']                      = 'http://www.zentaopms.com';
-$post['sendType']                    = 'sync';
-$post['products']                    = array('0' => 93);
-$post['executions']                  = array('0' => 690);
-$post['desc']                        = '当你老了~~~';
+$post = new stdclass();
+$post->type              = 'feishuuser';
+$post->name              = '测试绑定的webhook';
+$post->url               = '';
+$post->secret            = '';
+$post->agentId           = '';
+$post->appKey            = '';
+$post->appSecret         = '';
+$post->wechatCorpId      = '';
+$post->wechatCorpSecret  = '';
+$post->wechatAgentId     = '';
+$post->feishuAppId       = 'cli_a2e1f12e6d785013';
+$post->feishuAppSecret   = 'Pk4rYTwtFJveepj4JDfPCciSgUqBJYM5';
+$post->domain            = 'http://www.zentaopms.com';
+$post->sendType          = 'sync';
+$post->products          = '93';
+$post->executions        = '690';
+$post->desc              = '测试描述';
 
 $bind = array();
 $bind['userid'] = array();
@@ -55,4 +55,4 @@ $bind['userid']['user14']            = '';
 
 $result1 = $webhook->bindTest($post, $bind);
 
-r($result1) && p() && e('1'); //绑定admin账号给飞书账号的白袁李（创建了测试用户飞书管理端，然后通过create方法创建了一条数据，关联飞书里的一个用户，页面验证成功绑定）
+r($result1) && p() && e('1'); // 查看是否绑定成功
