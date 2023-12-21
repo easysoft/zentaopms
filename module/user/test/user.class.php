@@ -766,23 +766,6 @@ class userTest
     }
 
     /**
-     * Test get project authed users.
-     *
-     * @param  int    $projectID
-     * @param  array  $stakeholders
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @access public
-     * @return void
-     */
-    public function getProjectAuthedUsersTest($projectID, $stakeholders, $teams, $whiteList)
-    {
-        global $tester;
-        $project = $tester->loadModel('project')->getByID($projectID);
-        return $this->objectModel->getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList);
-    }
-
-    /**
      * Test get program authed users.
      *
      * @param  int    $projectID

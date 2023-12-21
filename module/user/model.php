@@ -2611,22 +2611,20 @@ class userModel extends model
     }
 
     /**
+     * 获取和项目相关联的用户。
      * Get project authed users.
      *
-     * @param  object $project
-     * @param  array  $stakeholders
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
+     * @param  object  $project
+     * @param  array   $stakeholders
+     * @param  array   $teams
+     * @param  array   $whiteList
+     * @param  array   $admins
+     * @access private
      * @return array
      */
-    public function getProjectAuthedUsers(object $project, array $stakeholders, array $teams, array $whiteList, array $admins = array()): array
+    private function getProjectAuthedUsers(object $project, array $stakeholders, array $teams, array $whiteList, array $admins = array()): array
     {
         $users = array();
-
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
-
         $users[$project->openedBy] = $project->openedBy;
         $users[$project->PM]       = $project->PM;
         $users[$project->PO]       = $project->PO;
@@ -2634,11 +2632,14 @@ class userModel extends model
         $users[$project->RD]       = $project->RD;
 
         $users += $stakeholders ? $stakeholders : array();
-        $users += $teams ? $teams : array();
-        $users += $whiteList ? $whiteList : array();
-        $users += $admins ? $admins : array();
+        $users += $teams        ? $teams        : array();
+        $users += $whiteList    ? $whiteList    : array();
+        $users += $admins       ? $admins       : array();
 
-        /* Parent program managers. */
+        $admins = explode(',', trim($this->app->company->admins, ','));
+        foreach($admins as $admin) $users[$admin] = $admin;
+
+        /* 如果是项目类型并且项目集内公开，则所有父项目集的PM和创建者都是关系人。 */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
@@ -2650,8 +2651,8 @@ class userModel extends model
             }
         }
 
-        /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        /* 如果是迭代类型并且是私有的，则所属项目的PM和创建者是关系人。 */
+        if(($project->type == 'sprint' || $project->type == 'stage' || $project->type == 'kanban') && $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if($parent)
