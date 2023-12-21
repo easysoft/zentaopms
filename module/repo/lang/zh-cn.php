@@ -244,6 +244,7 @@ $lang->repo->error->versionError      = '版本格式错误！';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。';
 $lang->repo->error->repoNameInvalid   = '名称应该只包含字母数字，破折号，下划线和点。';
 $lang->repo->error->createdFail       = '创建失败';
+$lang->repo->error->noProduct         = '在开始关联代码库之前，请先关联项目所对应的产品。';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";

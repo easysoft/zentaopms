@@ -420,13 +420,14 @@ class repoZen extends repo
      */
     protected function buildCreateForm(int $objectID): void
     {
-        $repoID = $this->repo->saveState(0, $objectID);
+        $this->repo->saveState(0, $objectID);
 
         $this->app->loadLang('action');
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+            if(empty($products)) print(js::alert($this->lang->repo->error->noProduct));
         }
         else
         {
