@@ -811,6 +811,9 @@ class project extends control
         $type      = strtolower($type);
         $products  = $this->product->getProducts($projectID);
 
+        /* 项目型项目不展示2.5级产品下拉菜单。 */
+        if(!$project->hasProduct) $this->config->excludeSwitcherList[] = 'project-bug';
+
         /* 处理无产品项目、无迭代项目的bug搜索参数，构造搜索表单。 */
         $this->projectZen->processBugSearchParams($project, $type, $param, $projectID, $productID, $branchID, $orderBy, $build, $products);
 
@@ -849,6 +852,10 @@ class project extends control
      */
     public function testcase(int $projectID = 0, int $productID = 0, string $branch = 'all', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* 项目型项目不展示2.5级产品下拉菜单。 */
+        $project = $this->project->getByID($projectID);
+        if(!$project->hasProduct) $this->config->excludeSwitcherList[] = 'project-testcase';
+
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
