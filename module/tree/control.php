@@ -374,6 +374,8 @@ class tree extends control
         $this->lang->tree->menu      = $this->lang->execution->menu;
         $this->lang->tree->menuOrder = $this->lang->execution->menuOrder;
 
+        if($this->app->tab == 'project') $this->view->projectID = $rootID;
+
         unset($executions[$rootID]);
         $parentModules = $this->tree->getParents($currentModuleID);
         $newModule     = (version_compare($execution->openedVersion, '4.1', '>') and $products) ? true : false;
