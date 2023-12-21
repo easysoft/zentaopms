@@ -642,75 +642,42 @@ class transferModel extends model
     }
 
     /**
-     * Get nature datas.
+     * 处理Excel表中下拉框数据。
+     * Deal excel dropdown values.
      *
-     * @param  int    $module
-     * @param  int    $datas
+     * @param  string $module 模块
+     * @param  array  $rows   Excel数据行
      * @param  string $filter
-     * @param  string $fields
+     * @param  array  $fields
      * @access public
-     * @return void
+     * @return array
      */
-    public function getNatureDatas($module, $datas, $filter = '', $fields = '')
+    public function parseExcelDropdownValues(string $module, array $rows, string $filter = '', array $fields = array())
     {
+        $this->commonActions($module);
         $fieldList = $this->initFieldList($module, array_keys($fields), false);
-        $lang = $this->lang->$module;
 
-        foreach($datas as $key => $data)
+        foreach($rows as $key => $data)
         {
+            /* 每行的数据。*/
+            /* Row data. */
             foreach($data as $field => $cellValue)
             {
-                if(empty($cellValue)) continue;
-                if(strpos($this->transferConfig->dateFields, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
-                if(strpos($this->moduleConfig->dateFields, $field) !== false or strpos($this->moduleConfig->datetimeFields, $field) !== false) $datas[$key]->$field = $this->loadModel('common')->formatDate($cellValue);
-                if(is_array($cellValue)) continue;
+                if(empty($cellValue) || is_array($cellValue)) continue;
+                if(strpos($this->transferConfig->dateFields, $field) !== false and helper::isZeroDate($cellValue)) $rows[$key]->$field = ''; // 如果是日期,并且为 0000-00-00,则转换为空
+                if(strpos($this->moduleConfig->dateFields, $field) !== false or strpos($this->moduleConfig->datetimeFields, $field) !== false) $rows[$key]->$field = $this->loadModel('common')->formatDate($cellValue); // 如果是时间类型字段,则转换为时间
 
-                if(!empty($fieldList[$field]['from']) and in_array($fieldList[$field]['control'], array('select', 'multiple')))
-                {
-                    $control = $fieldList[$field]['control'];
-                    if($control == 'multiple')
-                    {
-                        $cellValue = explode("\n", $cellValue);
-                        foreach($cellValue as &$value) $value = array_search($value, $fieldList[$field]['values'], true);
-                        $datas[$key]->$field = implode(',', $cellValue);
-                    }
-                    else
-                    {
-                        $datas[$key]->$field = array_search($cellValue, $fieldList[$field]['values']);
-                    }
-                }
-                elseif(strrpos($cellValue, '(#') === false)
-                {
-                    if(!isset($lang->{$field . 'List'}) or !is_array($lang->{$field . 'List'})) continue;
+                /* 获取字段的控件类型。*/
+                /* Get field control type. */
+                $control = isset($fieldList[$field]['control']) ? $fieldList[$field]['control'] : '';
 
-                    /* When the cell value is key of list then eq the key. */
-                    $listKey = array_keys($lang->{$field . 'List'});
-                    unset($listKey[0]);
-                    unset($listKey['']);
-
-                    $fieldKey = array_search($cellValue, $lang->{$field . 'List'});
-                    if($fieldKey) $datas[$key]->$field = array_search($cellValue, $lang->{$field . 'List'});
-                }
-                else
-                {
-                    $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
-                    $datas[$key]->$field = $id;
-                    $control = !empty($this->moduleFieldList[$field]['control']) ? $this->moduleFieldList[$field]['control'] : '';
-                    if($control == 'multiple')
-                    {
-                        $cellValue = explode("\n", $cellValue);
-                        foreach($cellValue as &$value)
-                        {
-                            $value = trim(substr($value, strrpos($value,'(#') + 2), ')');
-                        }
-                        $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
-                        $datas[$key]->$field = implode(',', $cellValue);
-                    }
-                }
+                /* 如果字段是下拉字段并且在excel里不是下拉框的形式时，根据fieldList->value查找value。*/
+                /* If the field is a dropdown field and the value in excel is not a dropdown box, the value is found by fieldList->value. */
+                if(!in_array($control, array('select', 'multiple'))) continue;
+                $rows[$key]->$field = $this->transferTao->extractElements((string) $cellValue, $field, $fieldList[$field]['values']);
             }
-
         }
-        return $datas;
+        return $rows;
     }
 
     /**

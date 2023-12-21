@@ -184,4 +184,28 @@ class transferTest
         $this->getQueryDatasTest($module);
         return $this->objectModel->getRows($module, $fieldList);
     }
+
+    /**
+     * 测试parseExcelDropdownValues。
+     * Parse excel dropdown values.
+     *
+     * @param  string $module
+     * @param  array  $rows
+     * @access public
+     * @return array
+     */
+    public function parseExcelDropdownValuesTest(string $module, array $rows = array())
+    {
+        global $tester, $app;
+        $app->methodName = 'export';
+        $tester->loadModel($module);
+
+        $_SESSION[$module . 'TransferParams']['productID'] = 1;
+        $app->config->story->templateFields = "product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer";
+        $app->config->story->dtable->fieldList['product']['control'] = 'select';
+        $app->config->story->dtable->fieldList['module']['control']  = 'multiple';
+
+        $fields = $this->objectModel->getImportFields($module);
+        return $this->objectModel->parseExcelDropdownValues($module, $rows, '', $fields);
+    }
 }

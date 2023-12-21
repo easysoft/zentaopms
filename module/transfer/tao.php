@@ -140,4 +140,44 @@ class transferTao extends transferModel
 
         return $lists;
     }
+
+    /**
+     * 解析Excel中下拉框单元格的值。
+     * Parse value of multiple dropdown cells.
+     *
+     * @param  string    $cellValue
+     * @param  string    $field
+     * @param  array     $values
+     * @access protected
+     * @return array
+     */
+    protected function extractElements(string $cellValue, string $field, array $values)
+    {
+        if(empty($values)) return $cellValue;
+
+        /* 多行下拉框和单行下拉框都按照多行处理。*/
+        /* Multiple dropdowns and single dropdowns are processed in multiple rows. */
+        $cellValue = explode("\n", $cellValue);
+        foreach($cellValue as &$value)
+        {
+            /* 解析下拉框的值value(#rawValue)，提取rawValue。*/
+            /* Parse dropdown values value(#rawValue) and extract rawValue. */
+            if(strrpos($value, '(#') !== false)
+            {
+                $value = trim(substr($value, strrpos($value,'(#') + 2), ')');
+            }
+            else
+            {
+                /* 如果value在values中存在则在values中查找（一般为语言项）。*/
+                /* If value exists in values, find it in values (usually as a language item). */
+                $valueKey = array_search($value, $values);
+                $value    = $valueKey ? $valueKey : $value;
+            }
+        }
+
+        /* 过滤掉数组中的空值（null、空字符串、0等）以及值为字符串 '0' 的元素，只保留其他非空元素。*/
+        /* Filter out empty values (null, empty string, 0, etc.) in the array and only keep other non-empty elements. */
+        $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
+        return implode(',', $cellValue);
+    }
 }

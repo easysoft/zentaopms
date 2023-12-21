@@ -140,7 +140,7 @@ $config->story->dtable->fieldList['module']['name']       = 'module';
 $config->story->dtable->fieldList['module']['title']      = $lang->story->module;
 $config->story->dtable->fieldList['module']['type']       = 'text';
 $config->story->dtable->fieldList['module']['control']    = 'select';
-$config->story->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&story&0&all');
+$config->story->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => ['rootID' => '$productID', 'type' => 'story', 'startModule' => 0, 'branch' => 'all']);
 
 $config->story->dtable->fieldList['taskCount']['name']        = 'taskCount';
 $config->story->dtable->fieldList['taskCount']['title']       = 'T';
