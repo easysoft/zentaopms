@@ -155,7 +155,7 @@ class userZen extends user
 
         /* 验证账号和密码。*/
         /* Verify account and password. */
-        $user = $this->user->identify($account, $password, $this->post->passwordStrength);
+        $user = $this->user->identify($account, $password, (int)$this->post->passwordStrength);
 
         /* 登录失败返回错误信息。*/
         /* Return error message if login failed. */

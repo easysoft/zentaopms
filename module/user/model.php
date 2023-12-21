@@ -866,13 +866,13 @@ class userModel extends model
      * 验证用户并设置相关属性。
      * Identify user and set related properties.
      *
-     * @param  string    $account              the user account
-     * @param  string    $password             the user password or auth hash
-     * @param  int|false $passwordStrength     the user password strength
+     * @param  string $account              the user account
+     * @param  string $password             the user password or auth hash
+     * @param  int    $passwordStrength     the user password strength
      * @access public
      * @return bool|object
      */
-    public function identify(string $account, string $password, int|false $passwordStrength = false): bool|object
+    public function identify(string $account, string $password, int $passwordStrength = 0): bool|object
     {
         if(!$account || !$password) return false;
         if(!validater::checkAccount($account)) return false;
@@ -974,7 +974,7 @@ class userModel extends model
 
         /* 如果开启了密码强度检查功能，检查密码是否满足强度要求。*/
         /* If the password strength feature is enabled, check if the password is strong enough. */
-        if(!empty($this->config->safe->mode) && $this->app->moduleName == 'user' && $this->app->methodName == 'login' && $passwordStrength)
+        if(!empty($this->config->safe->mode) && $this->app->moduleName == 'user' && $this->app->methodName == 'login')
         {
             $user->modifyPassword = $passwordStrength < $this->config->safe->mode;
             if($user->modifyPassword)
