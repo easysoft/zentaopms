@@ -84,7 +84,7 @@ class webhookModel extends model
      * @access public
      * @return array
      */
-    public function getLogList($id, $orderBy = 'date_desc', $pager = null)
+    public function getLogList(int $id, string $orderBy = 'date_desc', object $pager = null): array
     {
         $logs = $this->dao->select('*')->from(TABLE_LOG)
             ->where('objectType')->eq('webhook')
@@ -98,8 +98,8 @@ class webhookModel extends model
 
         $this->loadModel('action');
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-
         $users   = $this->loadModel('user')->getPairs('noletter');
+
         foreach($logs as $log)
         {
             if(!isset($actions[$log->action]))
@@ -119,30 +119,7 @@ class webhookModel extends model
                 $object->$field = '';
             }
 
-            $text = '';
-            if(isset($data->markdown->text))
-            {
-                $text = substr($data->markdown->text, 0, strpos($data->markdown->text, '(http'));
-            }
-            elseif(isset($data->markdown->content))
-            {
-                $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
-            }
-            elseif(isset($data->text->content))
-            {
-                $text = substr($data->text->content, 0, strpos($data->text->content, '(http'));
-            }
-            elseif(isset($data->content))
-            {
-                $text = $data->content->text;
-                $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
-            }
-            else
-            {
-                $text = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
-            }
-
-            $log->action    = $text;
+            $log->action    = $this->webhookTao->getActionText($data, $action, $object, $users);
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
             $log->module    = $action->objectType;
             $log->moduleID  = $action->objectID;

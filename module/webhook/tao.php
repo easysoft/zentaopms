@@ -87,4 +87,44 @@ class webhookTao extends webhookModel
 
         return $webhook;
     }
+
+    /**
+     * 获取动作的文本。
+     * Get the text of action.
+     *
+     * @param  object $data
+     * @param  object $action
+     * @param  object $object
+     * @param  array  $users
+     * @access public
+     * @return string
+     */
+    protected function getActionText(object $data, object $action, object $object, array $users): string
+    {
+        $text = '';
+
+        if(isset($data->markdown->text))
+        {
+            $text = substr($data->markdown->text, 0, strpos($data->markdown->text, '(http'));
+        }
+        elseif(isset($data->markdown->content))
+        {
+            $text = substr($data->markdown->content, 0, strpos($data->markdown->content, '(http'));
+        }
+        elseif(isset($data->text->content))
+        {
+            $text = substr($data->text->content, 0, strpos($data->text->content, '(http'));
+        }
+        elseif(isset($data->content))
+        {
+            $text = $data->content->text;
+            $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+        }
+        else
+        {
+            $text = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+        }
+
+        return $text;
+    }
 }

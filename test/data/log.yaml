@@ -54,9 +54,7 @@ fields:
     format: ""
   - field: data
     note: "数据"
-    range: a-z
-    prefix: ""
-    postfix: ""
+    range: '`{"content":{"text":"test(http://test.com)"}}`'
     loop: 0
     format: ""
   - field: result
