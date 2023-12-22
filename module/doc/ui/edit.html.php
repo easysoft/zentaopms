@@ -134,7 +134,7 @@ form
             ),
             formGroup
             (
-                strpos($config->doc->officeTypes, $doc->type) === false ? setClass('hidden') : null,
+                (strpos($config->doc->officeTypes, $doc->type) === false && $doc->type != 'text') ? setClass('hidden') : null,
                 set::label($lang->doc->keywords),
                 set::control('input'),
                 set::name('keywords'),
