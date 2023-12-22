@@ -278,13 +278,15 @@ class gogsModel extends model
      * @param  string $project
      * @param  string $branchName
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function apiGetSingleBranch(int $gogsID, string $project, string $branchName): object
+    public function apiGetSingleBranch(int $gogsID, string $project, string $branchName): object|null
     {
+        if(empty($branchName)) return null;
+
         $url    = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branchName");
         $branch = json_decode(commonModel::http($url));
-        if($branch)
+        if(isset($branch->name))
         {
             $gogs = $this->fetchByID($gogsID);
             $branch->web_url = "{$gogs->url}/$project/src/$branchName";
