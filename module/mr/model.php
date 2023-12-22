@@ -959,7 +959,10 @@ class mrModel extends model
      */
     public function apiGetDiffs(int $hostID, string $projectID, int $MRID): string
     {
-        $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID.diff");
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if(!$host || $host->type == 'gitlab') return '';
+
+        $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID.diff");
         return commonModel::http($url);
     }
 
