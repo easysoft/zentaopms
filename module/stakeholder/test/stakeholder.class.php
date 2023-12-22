@@ -356,4 +356,22 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
     }
+
+    /**
+     * 获取项目下干系人id=>realname的键值对。
+     * Get a key-value pair for stakeholder id=>realname under the project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getStakeholderUsersTest(int $projectID): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $stakeholderUsers = $this->objectModel->getStakeholderUsers();
+
+        if(dao::isError()) return dao::getError();
+        return $stakeholderUsers;
+    }
 }
