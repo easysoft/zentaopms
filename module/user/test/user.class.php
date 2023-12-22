@@ -556,6 +556,20 @@ class userTest
     }
 
     /**
+     * 测试检查是否需要修改密码。
+     * Test check need modify password.
+     *
+     * @param  object $user
+     * @param  int    $passwordStrength
+     * @access public
+     * @return object
+     */
+    public function checkNeedModifyPasswordTest(object $user, int $passwordStrength): object
+    {
+        return $this->objectModel->checkNeedModifyPassword($user, $passwordStrength);
+    }
+
+    /**
      * Test authorize user.
      *
      * @param  string $account
