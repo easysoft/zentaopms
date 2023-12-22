@@ -6,6 +6,7 @@
 #menu .nav > li > a.active,
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, var(--color-primary-500)); color: var(--color-canvas);}
 #menu .nav > li > a > .text {white-space: nowrap;}
+#menu .nav > li > a > .icon {font-size: 18px;}
 
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
 #menuMainNav a {cursor: pointer;}
