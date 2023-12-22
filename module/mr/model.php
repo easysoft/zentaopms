@@ -828,7 +828,7 @@ class mrModel extends model
             if(!isset($rowMR->massage))
             {
                 $rowMR = $this->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
-                if($data['delete_branch_after_merge'] == true) $this->loadModel('gogs')->apiDeleteBranch($MR->hostID, $MR->targetProject, $MR->sourceBranch);
+                if($MR->removeSourceBranch == '1') $this->loadModel('gogs')->apiDeleteBranch($MR->hostID, $MR->targetProject, $MR->sourceBranch);
             }
 
             return $rowMR;
