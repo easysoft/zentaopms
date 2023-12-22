@@ -351,11 +351,11 @@ class giteaModel extends model
      */
     public function apiGetBranchPrivs(int $giteaID, string $project, string $keyword = ''): array|null
     {
-        $keyword  = urlencode($keyword);
         $url      = sprintf($this->getApiRoot($giteaID), "/repos/$project/branch_protections");
         $branches = json_decode(commonModel::http($url));
         if(!is_array($branches)) return array();
 
+        $keyword     = urlencode($keyword);
         $newBranches = array();
         foreach($branches as $branch)
         {
