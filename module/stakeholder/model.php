@@ -430,12 +430,13 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get activity pairs.
+     * 获取活动 id=>name 的键值对。
+     * Get the key-value pair for the activity id=>name.
      *
      * @access public
      * @return array
      */
-    public function getActivities()
+    public function getActivities(): array
     {
         return $this->dao->select('id, name')->from(TABLE_ACTIVITY)
             ->where('deleted')->eq(0)
