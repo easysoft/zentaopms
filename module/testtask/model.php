@@ -2227,7 +2227,7 @@ class testtaskModel extends model
      * @access private
      * @return object
      */
-    private function initSuite(int $product, string $name, string $now)
+    private function initSuite(int $product, string $name, string $now): object
     {
         $suite = new stdclass();
         $suite->product   = $product;
