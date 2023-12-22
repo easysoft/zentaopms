@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->createProject();
+title=测试 upgradeModel->createNewProgram();
 timeout=0
 cid=1
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/upgrade.class.php';
 
 $project = zdTable('project');
 $project->name->range('项目1{2},项目2,项目集1');
-$project->type->range('project');
+$project->type->range('project{3},program');
 $project->gen('3');
 
 $data = new stdclass();
