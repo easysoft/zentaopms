@@ -31,3 +31,6 @@ r($gogsModel->apiDeleteBranch($gogsID, $project, $branch)) && p() && e('0'); // 
 
 $project = 'easycorp/unittest';
 r($gogsModel->apiDeleteBranch($gogsID, $project, $branch)) && p() && e('0'); // 错误的分支名
+
+$branch = 'main';
+r($gogsModel->apiDeleteBranch($gogsID, $project, $branch)) && p('message') && e('branch protected'); // 受保护的分支
