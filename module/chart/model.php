@@ -592,7 +592,16 @@ class chartModel extends model
         return array($group, $metrics, $aggs, $xLabels, $yStats);
     }
 
-    public function genWaterpolo($fields, $settings, $sql, $filters)
+    /**
+     * Generate waterpolo for screen designer.
+     *
+     * @param  string $settings
+     * @param  string $defaultSql
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function genWaterpolo($settings, $sql, $filters)
     {
         $operate = "{$settings['calc']}({$settings['goal']})";
         $sql = "select $operate count from ($sql) tt ";
@@ -629,6 +638,7 @@ class chartModel extends model
 
         $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'color' => array('#2e7fff'), 'outline' => array('show' => false), 'label' => array('fontSize' => 26)));
         $tooltip = array('show' => true);
+
         $options = array('series' => $series, 'tooltip' => $tooltip);
 
         return $options;
