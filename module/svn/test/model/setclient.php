@@ -7,9 +7,9 @@ title=svnModel->setClient();
 timeout=0
 cid=1
 
-- 测试https开头没有用户名密码的svn地址 @/usr/bin/svn --non-interactive --trust-server-cert
-- 测试http开头没有用户名密码的svn地址 @/usr/bin/svn --non-interactive
-- 测试svn开头有用户名密码的svn地址 @/usr/bin/svn --non-interactive --trust-server-cert --username test --password test --no-auth-cache
+- 测试https开头没有用户名密码的svn地址 @svn --non-interactive --trust-server-cert
+- 测试http开头没有用户名密码的svn地址 @svn --non-interactive
+- 测试svn开头有用户名密码的svn地址 @svn --non-interactive --trust-server-cert --username test --password test --no-auth-cache
 
 */
 
