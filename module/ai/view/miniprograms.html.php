@@ -137,16 +137,18 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                     : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
                 }
                 ?>
-                <button
-                  class="btn iframe"
-                  data-toggle="modal"
-                  data-width="800"
-                  data-height="600"<?= $isPublished ? ' disabled' : ''; ?>
-                  title="<?= $lang->ai->prompts->action->test; ?>"
-                  data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
-                >
-                  <i class="icon-menu-backend text-primary"></i>
-                </button>
+                <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
+                  <button
+                    class="btn iframe"
+                    data-toggle="modal"
+                    data-width="800"
+                    data-height="600"<?= $isPublished ? ' disabled' : ''; ?>
+                    title="<?= $lang->ai->prompts->action->test; ?>"
+                    data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
+                  >
+                    <i class="icon-menu-backend text-primary"></i>
+                  </button>
+                <?php endif; ?>
                 <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
                   <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
                     <i class="icon-publish text-primary"></i>

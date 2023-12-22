@@ -131,16 +131,18 @@
               <i class='icon-edit icon-sm'></i> <?= $lang->ai->prompts->action->edit; ?>
             </a>
           <?php endif; ?>
-          <button
-            class="btn iframe"
-            data-toggle="modal"
-            data-width="800"
-            data-height="600"
-            title="<?= $lang->ai->prompts->action->test; ?>"
-            data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
-          >
-            <i class="icon-menu-backend icon-sm"></i> <?= $lang->ai->prompts->action->test; ?>
-          </button>
+          <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
+            <button
+              class="btn iframe"
+              data-toggle="modal"
+              data-width="800"
+              data-height="600"
+              title="<?= $lang->ai->prompts->action->test; ?>"
+              data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
+            >
+              <i class="icon-menu-backend icon-sm"></i> <?= $lang->ai->prompts->action->test; ?>
+            </button>
+          <?php endif; ?>
           <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
             <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>">
               <i class="icon-publish icon-sm"></i> <?= $lang->ai->prompts->action->publish; ?>
