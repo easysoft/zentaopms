@@ -2538,11 +2538,10 @@ class repoModel extends model
         $fileList    = array();
         $endCursor   = '';
         $hasNextPage = true;
-        $fullPath    = trim(str_replace($repo->client, '', $repo->codePath), '/');
         while($hasNextPage)
         {
-            $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {' . $type . '(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {sha name path}}}}}}');
-            $response = $this->gitlab->apiGetByGraphql((int)$repo->serviceHost, $query);
+            $query    = 'query { project(fullPath: "%s") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {' . $type . '(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {sha name path}}}}}}';
+            $response = $this->gitlab->apiGetByGraphql($repo, $query);
 
             if(!$endCursor && !isset($response->data->project->repository)) return array();
 

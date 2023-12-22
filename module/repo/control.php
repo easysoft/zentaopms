@@ -1587,7 +1587,7 @@ class repo extends control
     public function ajaxGetFileCommitInfo()
     {
         $repo   = $this->repo->getByID((int)$this->post->repoID);
-        $commit = $this->loadModel('gitlab')->getFileLastCommit($repo, $this->post->path, $this->post->branch);
+        $commit = $this->loadModel('gitlab')->getFileLastCommit($repo, (string)$this->post->path, (string)$this->post->branch);
         $commit->comment = $this->repo->replaceCommentLink($commit->message);
         echo json_encode($commit);
     }

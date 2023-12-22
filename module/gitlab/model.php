@@ -2845,19 +2845,26 @@ class gitlabModel extends model
      * 通过graphql的api获取数据。
      * Get data by api graphql.
      *
-     * @param  int    $gitlabID
-     * @param  array    $query
+     * @param  object $repo
+     * @param  string $query
      * @access public
      * @return object|array|null
      */
-    public function apiGetByGraphql(int $gitlabID, array $query): object|array|null
+    public function apiGetByGraphql(object $repo, string $query): object|array|null
     {
         static $gitlab;
-        if(empty($gitlab)) $gitlab = $this->getByID($gitlabID);
+        if(empty($gitlab)) $gitlab = $this->getByID((int)$repo->serviceHost);
         if(!$gitlab) return array();
 
+        /* Compatible with HTTP and HTTPS domain. */
+        $repo->client   = str_replace('https://', 'http://', $repo->client);
+        $repo->codePath = str_replace('https://', 'http://', $repo->codePath);
+
+        $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
+        $query    = sprintf($query, $fullPath);
+
         $url = rtrim($gitlab->url, '/') . '/api/graphql' . "?private_token={$gitlab->token}";
-        return json_decode(commonModel::http($url, $query, array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
+        return json_decode(commonModel::http($url, array('query' => $query), array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
     }
 
     /**
@@ -2872,9 +2879,8 @@ class gitlabModel extends model
      */
     public function getFileLastCommit(object $repo, string $path, string $branch = 'HEAD'): object|array|null
     {
-        $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
-        $query    = array('query' => 'query {project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {lastCommit {sha message author {name username} authorName authoredDate}}}}}');
-        $response = $this->apiGetByGraphql($repo->serviceHost, $query);
+        $query    = 'query {project(fullPath: "%s") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {lastCommit {sha message author {name username} authorName authoredDate}}}}}';
+        $response = $this->apiGetByGraphql($repo, $query);
         if(!isset($response->data->project->repository->tree->lastCommit)) return null;
 
         return $response->data->project->repository->tree->lastCommit;
