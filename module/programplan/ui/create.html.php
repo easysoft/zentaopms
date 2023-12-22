@@ -141,7 +141,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
             $field['value']    = $programPlan->attribute;
         }
 
-        if($name == 'acl' && !$enableOptionalAttr)
+        if($name == 'acl' && $planID)
         {
             $field['disabled'] = true;
             $field['value']    = empty($programPlan) ? 'open' : $programPlan->acl;
