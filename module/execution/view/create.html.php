@@ -195,7 +195,7 @@
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox">
             <?php $planProductID = current(array_keys($allProducts));?>
-            <?php echo html::select("plans[$planProductID][]", isset($productPlan) ? $productPlan : array(), '', "class='form-control chosen' multiple");?>
+            <?php echo html::select("plans[$planProductID][]", isset($productPlan) ? $productPlan : array(), isset($productPlan[$plan->id]) ? $plan->id : '', "class='form-control chosen' multiple");?>
             <?php echo html::hidden("products[]", $planProductID);?>
             <?php echo html::hidden("branch[0][0]", '0');?>
           </td>
