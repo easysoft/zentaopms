@@ -788,6 +788,8 @@ class executionModel extends model
         $parents = array();
         foreach($oldExecutions as $oldExecution) $parents[$oldExecution->id] = $oldExecution->parent;
 
+        $parentAttrs = $this->dao->select('id,attribute')->from(TABLE_PROJECT)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchPairs('id');
+
         /* Replace required language. */
         if($this->app->tab == 'project')
         {
@@ -873,16 +875,8 @@ class executionModel extends model
                 if(isset($project->model) and ($project->model == 'waterfall' or  $project->model == 'waterfallplus'))
                 {
                     $this->app->loadLang('stage');
-                    $attribute = $executions[$executionID]->attribute;
-
-                    if(isset($attributeList[$parentID]))
-                    {
-                        $parentAttr = $attributeList[$parentID];
-                    }
-                    else
-                    {
-                        $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
-                    }
+                    $attribute  = $executions[$executionID]->attribute;
+                    $parentAttr = $parentAttrs[$parentID];
 
                     if($parentAttr and $parentAttr != $attribute and $parentAttr != 'mix')
                     {
