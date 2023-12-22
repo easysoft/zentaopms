@@ -143,7 +143,7 @@ class testreportModel extends model
                 $result = zget($results, $caseID, '');
 
                 $case->lastRunner    = $result ? $result->lastRunner : '';
-                $case->lastRunDate   = $result ? $result->date : '';
+                $case->lastRunDate   = $result ? $result->date       : '';
                 $case->lastRunResult = $result ? $result->caseResult : '';
                 $case->status        = ($result && $result->caseResult == 'blocked') ? 'blocked' : 'normal';
             }
