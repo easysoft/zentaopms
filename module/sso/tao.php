@@ -26,8 +26,11 @@ class ssoTao extends ssoModel
             return false;
         }
 
-        $password = md5($data->bindPassword);
-        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->bindUser)->andWhere('password')->eq($password)->andWhere('deleted')->eq('0')->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)
+            ->where('account')->eq($data->bindUser)
+            ->andWhere('password')->eq(md5($data->bindPassword))
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
         if(empty($user))
         {
             dao::$errors[] = $this->lang->sso->bindNoUser;
@@ -49,7 +52,7 @@ class ssoTao extends ssoModel
      */
     protected function addZTUser(object $data): object|false
     {
-        if(!$this->loadModel('user')->checkPassword()) return false;
+        if(!$this->loadModel('user')->checkPassword($data)) return false;
         $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
         if($user)
         {

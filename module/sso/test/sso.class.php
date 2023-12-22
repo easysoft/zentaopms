@@ -10,20 +10,12 @@ class ssoTest
     /**
      * Test create a user.
      *
-     * @param  array  $param
+     * @param  object  $user
      * @access public
-     * @return void
+     * @return array
      */
-    public function createTest($param = array())
+    public function createTest($user)
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $result = $this->objectModel->createUser();
-
-        unset($_POST);
-        if($result['status'] == 'fail') return 'fail';
-
-        $object = $this->objectModel->getBindUser($param['account']);
-        return $object;
+        return $this->objectModel->createUser($user);
     }
 }
