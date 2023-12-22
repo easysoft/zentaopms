@@ -694,10 +694,11 @@ function loadExecutionBuilds(executionID, num)
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control picker-select" multiple=multiple></select>';
-            $('#openedBuild').replaceWith(data);
-            $('#openedBuild').val(oldOpenedBuild);
+            $('#buildBox .input-group-btn').remove();
             $('#pickerDropMenu-pk_openedBuild').remove();
             $('#openedBuild').next('.picker').remove();
+            $('#openedBuild').replaceWith(data);
+            $('#openedBuild').val(oldOpenedBuild);
             notice();
             $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
