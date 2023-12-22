@@ -53,6 +53,9 @@ class ai extends control
         /* Redirect to prompts ifuser has priv. */
         if(commonModel::hasPriv('ai', 'prompts')) return $this->locate($this->createLink('ai', 'prompts'));
 
+        /* Redirect to miniPrograms ifuser has priv. */
+        if(commonModel::hasPriv('ai', 'miniPrograms')) return $this->locate($this->createLink('ai', 'miniPrograms'));
+
         /* Redirect to models ifuser has priv. */
         if(commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
 
