@@ -79,7 +79,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
         : null;
 
     return a(
-        set::href(createLink('ai', 'browseMiniProgram', "id={$miniProgram->id}#app=ai")),
+        common::hasPriv('ai', 'browseMiniProgram') ? set::href(createLink('ai', 'browseMiniProgram', "id={$miniProgram->id}#app=ai")) : null,
         setClass('miniprogram-card'),
         div(
             setClass('program-content'),
