@@ -19,6 +19,37 @@ class transferTest
     }
 
     /**
+     * 生成导出配置
+     * initConfig
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public function initConfig($module = 'story')
+    {
+        global $tester, $app;
+        $app->methodName = 'export';
+        $tester->loadModel($module);
+
+        $_SESSION[$module . 'TransferParams']['productID']   = 1;
+        $_SESSION[$module . 'TransferParams']['executionID'] = 101;
+        $_SESSION[$module . 'TransferParams']['projectID']   = 11;
+
+        switch ($module)
+        {
+            case 'story':
+                $app->config->story->templateFields = "product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer";
+                $app->config->story->dtable->fieldList['product']['control'] = 'select';
+                $app->config->story->dtable->fieldList['module']['control']  = 'multiple';
+                break;
+            case 'task':
+                $app->config->task->templateFields = "project,execution,module,story,pri,estimate,consumed,deadline";
+                break;
+        }
+    }
+
+    /**
      * 根据config:dataSource中配置的方法获取字段数据源。
      * Get source by module method.
      *
@@ -196,14 +227,7 @@ class transferTest
      */
     public function parseExcelDropdownValuesTest(string $module, array $rows = array())
     {
-        global $tester, $app;
-        $app->methodName = 'export';
-        $tester->loadModel($module);
-
-        $_SESSION[$module . 'TransferParams']['productID'] = 1;
-        $app->config->story->templateFields = "product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer";
-        $app->config->story->dtable->fieldList['product']['control'] = 'select';
-        $app->config->story->dtable->fieldList['module']['control']  = 'multiple';
+        $this->initConfig();
 
         $fields = $this->objectModel->getImportFields($module);
         return $this->objectModel->parseExcelDropdownValues($module, $rows, '', $fields);
@@ -220,16 +244,25 @@ class transferTest
      */
     public function initFieldListTest(string $module, bool $withKey = false)
     {
-        global $tester, $app;
-        $app->methodName = 'export';
-        $tester->loadModel($module);
-
-        $_SESSION[$module . 'TransferParams']['productID'] = 1;
-        $app->config->story->templateFields = "product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer";
-        $app->config->story->dtable->fieldList['product']['control'] = 'select';
-        $app->config->story->dtable->fieldList['module']['control']  = 'multiple';
+        $this->initConfig($module);
 
         $fields = $this->objectModel->getImportFields($module);
         return $this->objectModel->initFieldList($module, array_keys($fields), $withKey);
+    }
+
+    /**
+     * 测试initValuesTest。
+     * initValuesTest.
+     *
+     * @param  string $module
+     * @param  bool   $withKey
+     * @param  string $field
+     * @access public
+     * @return array
+     */
+    public function initValuesTest(string $module, bool $withKey = false, string $field = '')
+    {
+        $fieldList = $this->initFieldListTest($module, $withKey);
+        return $fieldList[$field]['values'];
     }
 }

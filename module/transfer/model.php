@@ -169,26 +169,28 @@ class transferModel extends model
     }
 
     /**
-     * Init Values.
+     * 初始化导出字段下拉列表的数据。
+     * Init field values.
      *
-     * @param  int    $model
-     * @param  int    $field
-     * @param  string $fieldValue
-     * @param  int    $withKey
+     * @param  string $model
+     * @param  string $field
+     * @param  array  $object
+     * @param  bool   $withKey 是否需要将键值拼接到Value中
      * @access public
-     * @return void
+     * @return array
      */
-    public function initValues($model, $field, $fieldValue = '', $withKey = true)
+    public function initValues(string $model, string $field, array $object, bool $withKey = true)
     {
-        $values = $fieldValue['values'];
+        $values = $object['values'];
+        if(!$object['dataSource']) return $values;
 
-        if($values and (strpos($this->transferConfig->sysDataFields, $values) !== false)) return $this->transferConfig->sysDataList[$values];
+        /* 解析dataSource。*/
+        /* Parse dataSource. */
+        extract($object['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
 
-        if(!$fieldValue['dataSource']) return $values;
-
-        extract($fieldValue['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
-
-        if(!empty($module) and !empty($method))
+        /* 如果配置了来源方法，则调用该方法。*/
+        /* If config the source method, call the method. */
+        if(!empty($module) && !empty($method))
         {
             $params = !empty($params) ? $params : '';
             $pairs  = !empty($pairs)  ? $pairs : '';
@@ -196,17 +198,20 @@ class transferModel extends model
         }
         elseif(!empty($lang))
         {
+            /* 如果配置了语言字段,返回语言数据。*/
+            /* If config the language field, return language data. */
             $values = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
         }
 
+        /* 如果配置了系统字段,返回系统数据。*/
         /* If empty values put system datas. */
         if(empty($values))
         {
-            if(strpos($this->moduleConfig->sysLangFields, $field) !== false and !empty($this->moduleLang->{$field.'List'})) return $this->moduleLang->{$field.'List'};
-            if(strpos($this->moduleConfig->sysDataFields, $field) !== false and !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
+            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'})) return $this->moduleLang->{$field.'List'};
+            if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
-        if(is_array($values) and $withKey)
+        if(is_array($values) && $withKey)
         {
             unset($values['']);
             foreach($values as $key => $value) $values[$key] = $value . "(#$key)";
