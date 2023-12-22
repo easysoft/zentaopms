@@ -1,0 +1,18 @@
+title: zt_repohistory
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: repo
+    range: 1
+  - field: revision
+    range: 1
+  - field: commit
+    range: 1
+  - field: comment
+    range: '+ Add fiel.'
+  - field: committer
+    range: admin
+  - field: time
+    range: '`2023-12-14 09:04:27`'
