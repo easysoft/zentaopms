@@ -2043,17 +2043,13 @@ class userModel extends model
         $userView = $this->computeUserView($account, true);
 
         /* Get opened projects, programs, products and set it to userview. */
-        $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('program')->fetchAll('id');
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('project')->fetchAll('id');
-        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
+        $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('program')->fetchPairs();
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('project')->fetchPairs();
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchPairs();
 
-        $openedPrograms = join(',', array_keys($openedPrograms));
-        $openedProducts = join(',', array_keys($openedProducts));
-        $openedProjects = join(',', array_keys($openedProjects));
-
-        $userView->programs = rtrim($userView->programs, ',') . ',' . $openedPrograms;
-        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
-        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
+        $userView->programs = rtrim($userView->programs, ',') . ',' . join(',', $openedPrograms);
+        $userView->products = rtrim($userView->products, ',') . ',' . join(',', $openedProducts);
+        $userView->projects = rtrim($userView->projects, ',') . ',' . join(',', $openedProjects);
 
         /* 合并用户视图权限到用户访问权限。 */
         $userView = $this->mergeAclsToUserView($account, $userView, $acls, $projects);
@@ -2100,10 +2096,9 @@ class userModel extends model
             ->where('acl')->eq('open')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->andWhere('project')->in($userView->projects)
-            ->fetchAll('id');
+            ->fetchPairs();
 
-        $openedSprints     = join(',', array_keys($openedSprints));
-        $userView->sprints = rtrim($userView->sprints, ',')  . ',' . $openedSprints;
+        $userView->sprints = rtrim($userView->sprints, ',')  . ',' . join(',', $openedSprints);
 
         return $userView;
     }
