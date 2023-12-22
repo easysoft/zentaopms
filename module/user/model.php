@@ -710,7 +710,7 @@ class userModel extends model
      */
     public function checkAccountChange(string $oldAccount, string $newAccount): bool
     {
-        if($oldAccount == $newAccount) return true;
+        if($oldAccount == $newAccount) return false;
 
         /* 更新用户组和用户视图。*/
         /* Update the user group and user view. */
