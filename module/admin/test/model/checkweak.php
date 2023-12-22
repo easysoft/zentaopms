@@ -19,6 +19,9 @@ include dirname(__FILE__, 2) . '/admin.class.php';
 
 zdTable('user')->config('user')->gen(6);
 
+global $config;
+unset($config->safe->weak); // 防止数据库中设置的弱密码对单元测试造成影响，重置为空。
+
 $admin = new adminTest();
 r($admin->checkWeakTest('user1')) && p() && e('1'); //测试密码使用123456
 r($admin->checkWeakTest('user2')) && p() && e('1'); //测试密码与用户名相同
