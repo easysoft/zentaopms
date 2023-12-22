@@ -613,6 +613,23 @@ class upgradeTest
     }
 
     /**
+     * 测试新建项目集。
+     * Test create program.
+     *
+     * @param  object $data
+     * @param  array  $projectIdList
+     * @access public
+     * @return array|bool
+     */
+    public function createProgramTest(object $data, array $projectIdList): bool|array
+    {
+        foreach($data as $key => $value) $_POST[$key] = $value;
+
+        $result = $this->objectModel->createProgram($projectIdList);
+        return $result;
+    }
+
+    /**
      * 测试新建一个项目集。
      * Test create a program.
      *
