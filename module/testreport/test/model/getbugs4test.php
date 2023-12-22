@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 testreportModel->getBugs4Test();
+cid=1
+pid=1
+
+*/
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
@@ -12,13 +19,6 @@ zdTable('user')->gen(1);
 
 su('admin');
 
-/**
-
-title=测试 testreportModel->getBugs4Test();
-cid=1
-pid=1
-
-*/
 $buildIdList = array(array(1, 2, 3) ,array());
 $product     = array(1, 0);
 $taskID      = 1;
