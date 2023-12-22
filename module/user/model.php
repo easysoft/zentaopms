@@ -1888,43 +1888,42 @@ class userModel extends model
         if(empty($account)) return new stdclass();
 
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-        if(empty($userView) || $force)
+        if(!empty($userView) && !$force) return $userView;
+
+        /* Init objects. */
+        list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
+
+        /* Init user view. */
+        $userView = new stdclass();
+        $userView->account  = $account;
+
+        $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
+        if($isAdmin)
         {
-            /* Init objects. */
-            list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
-
-            /* Init user view. */
-            $userView = new stdclass();
-            $userView->account  = $account;
-
-            $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
-            if($isAdmin)
-            {
-                $userView->programs = join(',', array_keys($allPrograms));
-                $userView->products = join(',', array_keys($allProducts));
-                $userView->projects = join(',', array_keys($allProjects));
-                $userView->sprints  = join(',', array_keys($allSprints));
-            }
-            else
-            {
-                /* Compute parent stakeholders. */
-                $this->loadModel('stakeholder');
-                $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
-                $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
-
-                /* 按照类型分组获取当前用户所拥有的的项目管理权限。 */
-                $manageObjects = $this->getManageListGroupByType($account);
-
-                /* 分别获取各类型的可浏览ID。 */
-                $userView->programs = $this->getProgramView($account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
-                $userView->products = $this->getProductView($account, $allProducts, $manageObjects, $whiteList);
-                $userView->projects = $this->getProjectView($account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
-                $userView->sprints  = $this->getSprintView($account, $allSprints, $manageObjects, $teams, $stakeholders, $whiteList);
-            }
-
-            /* 更新访问权限表。 */
-            $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
+            $userView->programs = join(',', array_keys($allPrograms));
+            $userView->products = join(',', array_keys($allProducts));
+            $userView->projects = join(',', array_keys($allProjects));
+            $userView->sprints  = join(',', array_keys($allSprints));
         }
+        else
+        {
+            /* Compute parent stakeholders. */
+            $this->loadModel('stakeholder');
+            $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
+            $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
+
+            /* 按照类型分组获取当前用户所拥有的的项目管理权限。 */
+            $manageObjects = $this->getManageListGroupByType($account);
+
+            /* 分别获取各类型的可浏览ID。 */
+            $userView->programs = $this->getProgramView($account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
+            $userView->products = $this->getProductView($account, $allProducts, $manageObjects, $whiteList);
+            $userView->projects = $this->getProjectView($account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
+            $userView->sprints  = $this->getSprintView($account, $allSprints, $manageObjects, $teams, $stakeholders, $whiteList);
+        }
+
+        /* 更新访问权限表。 */
+        $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
 
         return $userView;
     }
@@ -2083,15 +2082,17 @@ class userModel extends model
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
         if(!isset($isAdmin))                $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
 
-        /* If is project admin, set projectID to userview. */
-        if(!empty($acls['projects']) && $projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
-
         /* 权限分组-视野维护的优先级最高，所以这里进行了替换操作。*/
         /* View management has the highest priority, so there is a substitution. */
         if(!empty($acls['programs']) && !$isAdmin) $userView->programs = implode(',', $acls['programs']);
-        if(!empty($acls['projects']) && !$isAdmin) $userView->projects = implode(',', $acls['projects']);
         if(!empty($acls['products']) && !$isAdmin) $userView->products = implode(',', $acls['products']);
         if(!empty($acls['sprints'])  && !$isAdmin) $userView->sprints  = implode(',', $acls['sprints']);
+        if(!empty($acls['projects']) && !$isAdmin)
+        {
+            /* If is project admin, set projectID to userview. */
+            if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
+            $userView->projects = implode(',', $acls['projects']);
+        }
 
         /* 可以看到项目，就能看到项目下公开的迭代。 */
         /* Set opened sprints and stages into userview. */
