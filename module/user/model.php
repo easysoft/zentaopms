@@ -273,7 +273,7 @@ class userModel extends model
             ->fetchAll($keyField);
 
         $this->processMoreLink($params, $usersToAppended, $maxCount, count($users));
-        if($usersToAppended) $users += $this->fetchExtraUsers($params, $usersToAppended, $users, $fields, $keyField);
+        if($usersToAppended) $users += $this->fetchExtraUsers($usersToAppended, $fields, $keyField);
         $users = $this->processDisplayValue($users, $params);
         $users = $this->setCurrentUserFirst($users);
 
