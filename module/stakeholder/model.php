@@ -517,19 +517,20 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get stakeholder user.
+     * 获取项目下干系人id=>realname的键值对。
+     * Get a key-value pair for stakeholder id=>realname under the project.
      *
      * @access public
-     * @return object
+     * @return array
      */
-    public function getStakeholderUsers()
+    public function getStakeholderUsers(): array
     {
         return $this->dao->select("t1.id, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.objectID')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
-            ->fetchPairs('id', 'realname');
+            ->fetchPairs();
     }
 
     /**
