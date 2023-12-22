@@ -559,6 +559,18 @@ class metricTest
     }
 
     /**
+     * Test isOldMetric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return bool
+     */
+    public function isOldMetric($metric)
+    {
+        return $this->objectModel->isOldMetric($metric);
+    }
+
+    /**
      * Test getDateLabels.
      *
      * @param  string $dateType
