@@ -7,12 +7,12 @@ fields:
   - field: repo
     range: 1
   - field: revision
-    range: 1
+    range: 0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb
   - field: commit
     range: 1
   - field: comment
-    range: '+ Add fiel.'
+    range: 'Initial commit'
   - field: committer
-    range: admin
+    range: gitea
   - field: time
-    range: '`2023-12-14 09:04:27`'
+    range: '`2023-12-13 09:04:27`'
