@@ -410,4 +410,21 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $issues;
     }
+
+    /**
+     * 判断当前操作按钮是否可以点击。
+     * Judge the action is clickable.
+     *
+     * @param  int    $stakeholderID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(int $stakeholderID, string $action): bool
+    {
+        $stakeholder = $this->objectModel->dao->select('*')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch();
+        if(!$stakeholder) $stakeholder = new stdclass();
+
+        return $this->objectModel->isClickable($stakeholder, $action);
+    }
 }
