@@ -43,14 +43,14 @@ r($testtask->getTaskCases(1, 'bymodule', 0, 1, 'id_asc', $pager, $task3)) && p()
 $cases = $testtask->getTaskCases(1, 'bymodule', 0, 1, 'id_asc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(4); // $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('1,测试用例1,1,normal,1,wait,用户需求1');  // $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('3,测试用例3,1,done,1,blocked,用户需求1'); // $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('1,测试用例1,1,normal,wait,用户需求1');  // $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('3,测试用例3,1,done,blocked,用户需求1'); // $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 $cases = $testtask->getTaskCases(1, 'bymodule', 0, 1, 'id_desc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(4); // $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('9,测试用例9,1,done,1,wait,用户需求1');      // $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('7,测试用例7,1,normal,1,blocked,用户需求1'); // $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('9,测试用例9,1,done,wait,用户需求1');      // $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('7,测试用例7,1,normal,blocked,用户需求1'); // $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 r($testtask->getTaskCases(1, 'all', 0, 1, 'id_asc', $pager, $task1)) && p() && e(0); // $browseType 参数为 all，查看测试单 0 包含用例数。
 r($testtask->getTaskCases(1, 'all', 0, 1, 'id_asc', $pager, $task3)) && p() && e(0); // $browseType 参数为 all，查看测试单 2 包含用例数。
@@ -58,14 +58,14 @@ r($testtask->getTaskCases(1, 'all', 0, 1, 'id_asc', $pager, $task3)) && p() && e
 $cases = $testtask->getTaskCases(1, 'all', 0, 1, 'id_asc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(4); // $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('1,测试用例1,1,normal,1,wait,用户需求1');  // $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('3,测试用例3,1,done,1,blocked,用户需求1'); // $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('1,测试用例1,1,normal,wait,用户需求1');  // $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('3,测试用例3,1,done,blocked,用户需求1'); // $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 $cases = $testtask->getTaskCases(1, 'all', 0, 1, 'id_desc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(4); // $browseType 参数为 all，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('9,测试用例9,1,done,1,wait,用户需求1');      // $browseType 参数为 all，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('7,测试用例7,1,normal,1,blocked,用户需求1'); // $browseType 参数为 all，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('9,测试用例9,1,done,wait,用户需求1');      // $browseType 参数为 all，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('7,测试用例7,1,normal,blocked,用户需求1'); // $browseType 参数为 all，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 r($testtask->getTaskCases(1, 'bysuite', 0, 1, 'id_asc', $pager, $task1)) && p() && e(0); // $browseType 参数为 bysuite，查看测试单 0 包含用例数。
 r($testtask->getTaskCases(1, 'bysuite', 0, 1, 'id_asc', $pager, $task3)) && p() && e(0); // $browseType 参数为 bysuite，查看测试单 2 包含用例数。
@@ -73,14 +73,14 @@ r($testtask->getTaskCases(1, 'bysuite', 0, 1, 'id_asc', $pager, $task3)) && p() 
 $cases = $testtask->getTaskCases(1, 'bysuite', 1, 1, 'id_asc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(5); // $browseType 参数为 bysuite，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('1,测试用例1,1,normal,1,wait,用户需求1');    // $browseType 参数为 bysuite，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('2,测试用例2,1,blocked,1,normal,软件需求2'); // $browseType 参数为 bysuite，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('1,测试用例1,1,normal,wait,用户需求1');    // $browseType 参数为 bysuite，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('2,测试用例2,1,blocked,normal,软件需求2'); // $browseType 参数为 bysuite，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 $cases = $testtask->getTaskCases(1, 'bysuite', 1, 1, 'id_desc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(5); // $browseType 参数为 bysuite，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('9,测试用例9,1,done,1,wait,用户需求1');           // $browseType 参数为 bysuite，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('8,测试用例8,1,blocked,1,investigate,软件需求2'); // $browseType 参数为 bysuite，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('9,测试用例9,1,done,wait,用户需求1');           // $browseType 参数为 bysuite，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('8,测试用例8,1,blocked,investigate,软件需求2'); // $browseType 参数为 bysuite，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 r($testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_asc', $pager, $task1)) && p() && e(0); // $browseType 参数为 assignedtome，查看测试单 0 包含用例数。
 r($testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_asc', $pager, $task3)) && p() && e(0); // $browseType 参数为 assignedtome，查看测试单 2 包含用例数。
@@ -88,14 +88,14 @@ r($testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_asc', $pager, $task3)) &&
 $cases = $testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_asc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(3); // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('1,测试用例1,1,normal,1,wait,用户需求1');  // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('3,测试用例3,1,done,1,blocked,用户需求1'); // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('1,测试用例1,1,normal,wait,用户需求1');  // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('3,测试用例3,1,done,blocked,用户需求1'); // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 $cases = $testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_desc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(3); // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('7,测试用例7,1,normal,1,blocked,用户需求1'); // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('3,测试用例3,1,done,1,blocked,用户需求1');   // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('7,测试用例7,1,normal,blocked,用户需求1'); // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('3,测试用例3,1,done,blocked,用户需求1');   // $browseType 参数为 assignedtome，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 r($testtask->getTaskCases(1, 'bysearch', 0, 1, 'id_asc', $pager, $task1)) && p() && e(0); // $browseType 参数为 bysearch，查看测试单 0 包含用例数。
 r($testtask->getTaskCases(1, 'bysearch', 0, 1, 'id_asc', $pager, $task3)) && p() && e(0); // $browseType 参数为 bysearch，查看测试单 2 包含用例数。
@@ -103,11 +103,11 @@ r($testtask->getTaskCases(1, 'bysearch', 0, 1, 'id_asc', $pager, $task3)) && p()
 $cases = $testtask->getTaskCases(1, 'bysearch', 0, 1, 'id_asc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(5); // $browseType 参数为 bysearch，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('1,测试用例1,1,normal,1,wait,用户需求1');    // $browseType 参数为 bysearch，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('2,测试用例2,1,blocked,1,normal,软件需求2'); // $browseType 参数为 bysearch，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('1,测试用例1,1,normal,wait,用户需求1');    // $browseType 参数为 bysearch，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('2,测试用例2,1,blocked,normal,软件需求2'); // $browseType 参数为 bysearch，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
 
 $cases = $testtask->getTaskCases(1, 'bysearch', 0, 1, 'id_desc', $pager, $task2);
 $cases = array_values($cases);
 r(count($cases)) && p() && e(5); // $browseType 参数为 bysearch，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。
-r($cases) && p('0:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('9,测试用例9,1,done,1,wait,用户需求1');           // $browseType 参数为 bysearch，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
-r($cases) && p('1:id,title,version,status,caseVersion,caseStatus,storyTitle') && e('8,测试用例8,1,blocked,1,investigate,软件需求2'); // $browseType 参数为 bysearch，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('9,测试用例9,1,done,wait,用户需求1');           // $browseType 参数为 bysearch，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('8,测试用例8,1,blocked,investigate,软件需求2'); // $browseType 参数为 bysearch，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。

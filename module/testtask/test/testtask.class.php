@@ -257,15 +257,15 @@ class testtaskTest
      * 测试获取一个产品下的测试单键值对。
      * Test get key-value pairs of testtasks of a product.
      *
-     * @param  int          $productID
-     * @param  int          $executionID
-     * @param  string|array $appendIdList
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  int    $appendTaskID
      * @access public
      * @return int
      */
-    public function getPairsTest(int $productID, int $executionID = 0, string|array $appendIdList = ''): int
+    public function getPairsTest(int $productID, int $executionID = 0, int $appendTaskID = 0): int
     {
-        $pairs = $this->objectModel->getPairs($productID, $executionID, $appendIdList);
+        $pairs = $this->objectModel->getPairs($productID, $executionID, $appendTaskID);
 
         return count($pairs);
     }

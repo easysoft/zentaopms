@@ -33,7 +33,7 @@ class testtaskTao extends testtaskModel
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scope == 'local')->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($scope == 'all')->andWhere('t1.product')->in($this->app->user->view->products)->fi()
-            ->beginIF(strtolower($scope[1]) == 'myinvolved')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.members)")->fi()
+            ->beginIF(strtolower($scope) == 'myinvolved')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.members)")->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(strtolower($status) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
             ->beginIF(strtolower($status) == 'review') // 工作流开启审批的时候才会使用，才会新增字段。

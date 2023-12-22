@@ -1635,8 +1635,9 @@ class testtaskModel extends model
     public function getToAndCcList(object $testtask): false|array
     {
         /* Set toList and ccList. */
-        $toList   = zget($testtask, 'owner', '') . ',' . zget($testtask, 'members', '') . ',';
-        $ccList   = str_replace(' ', '', trim(zget($testtask, 'mailto', ''), ','));
+        $toList = zget($testtask, 'owner', '') . ',' . zget($testtask, 'members', '') . ',';
+        $toList = trim($toList, ',');
+        $ccList = str_replace(' ', '', trim(zget($testtask, 'mailto', ''), ','));
 
         if(empty($toList))
         {

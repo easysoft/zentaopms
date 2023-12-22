@@ -2356,12 +2356,12 @@ class testcaseModel extends model
      * 将 xml 内容转为数组。
      * Convert xml to array.
      *
-     * @param  object $xml
-     * @param  array  $options
-     * @access public
+     * @param  object  $xml
+     * @param  array   $options
+     * @access private
      * @return array
      */
-    function xmlToArray(object $xml, array $options = array()): array
+    private function xmlToArray(object $xml, array $options = array()): array
     {
         $defaults = array(
             'namespaceRecursive' => false, // Get XML doc namespaces recursively
