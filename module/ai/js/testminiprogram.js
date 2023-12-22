@@ -119,13 +119,13 @@ $(function()
     })
 });
 
-function handleSave()
+function saveMiniProgram()
 {
     $('input[name="prompt"]').prop('value', $('#autocomplete-textarea').text());
     $('input[name="toPublish"]').prop('value', '0');
 }
 
-function handlePublish()
+function publishMiniProgram()
 {
     $('input[name="prompt"]').prop('value', $('#autocomplete-textarea').text());
     $('input[name="toPublish"]').prop('value', '1');

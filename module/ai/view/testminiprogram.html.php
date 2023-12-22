@@ -78,8 +78,10 @@ js::set('appID', $appID);
   <input type="text" class="hidden" name="prompt">
   <input type="text" class="hidden" name="toPublish">
   <div class="button-container" style="display: flex; justify-content: center; gap: 24px; padding-top: 16px;">
-    <button type="submit" class="btn btn-wide btn-secondary" onclick="handleSave()"><?= $lang->save; ?></button>
-    <button type="submit" class="btn btn-wide btn-primary" onclick="handlePublish()"><?= $lang->ai->prompts->action->publish; ?></button>
+    <button type="submit" class="btn btn-wide btn-secondary" onclick="saveMiniProgram()"><?= $lang->save; ?></button>
+    <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
+      <button type="submit" class="btn btn-wide btn-primary" onclick="publishMiniProgram()"><?= $lang->ai->prompts->action->publish; ?></button>
+    <?php endif; ?>
   </div>
 </form>
 <?php include '../../common/view/footer.html.php'; ?>

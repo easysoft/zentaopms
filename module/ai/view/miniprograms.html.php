@@ -147,13 +147,15 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                 >
                   <i class="icon-menu-backend text-primary"></i>
                 </button>
-                <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
-                  <i class="icon-publish text-primary"></i>
-                </button>
+                <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
+                  <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
+                    <i class="icon-publish text-primary"></i>
+                  </button>
+                <?php endif; ?>
                 <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
-                <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
-                  <i class="icon-ban-circle text-primary"></i>
-                </button>
+                  <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
+                    <i class="icon-ban-circle text-primary"></i>
+                  </button>
                 <?php endif; ?>
                 <?php if(common::hasPriv('ai', 'deleteMiniProgram')): ?>
                   <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>"<?= $isPublished ? ' disabled' : ''; ?>>

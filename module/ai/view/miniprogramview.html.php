@@ -141,9 +141,11 @@
           >
             <i class="icon-menu-backend icon-sm"></i> <?= $lang->ai->prompts->action->test; ?>
           </button>
-          <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>">
-            <i class="icon-publish icon-sm"></i> <?= $lang->ai->prompts->action->publish; ?>
-          </button>
+          <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
+            <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>">
+              <i class="icon-publish icon-sm"></i> <?= $lang->ai->prompts->action->publish; ?>
+            </button>
+          <?php endif; ?>
           <?php if(common::hasPriv('ai', 'deleteMiniProgram')): ?>
             <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>">
               <i class="icon-trash icon-sm"></i> <?= $lang->ai->prompts->action->delete; ?>
