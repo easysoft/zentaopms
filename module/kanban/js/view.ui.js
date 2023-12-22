@@ -4,6 +4,9 @@ window.getLane = function(lane)
     if(laneCount < 2) lane.minHeight = window.innerHeight - 235;
 }
 
+$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%')});
+$('#kanbanList').on('exitFullscreen', () => {$('#kanbanList > div').css('height', 'calc(100vh - 120px)')});
+
 /*
  * 构造看板泳道上的操作按钮。
  * Build action buttons on the kanban lane.
