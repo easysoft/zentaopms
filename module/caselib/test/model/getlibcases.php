@@ -6,6 +6,7 @@ include dirname(__FILE__, 2) . '/caselib.class.php';
 zdTable('testsuite')->gen(405);
 zdTable('case')->config('libcase')->gen(30);
 zdTable('user')->gen(1);
+zdTable('module')->gen(20)->fixPath();
 
 su('admin');
 

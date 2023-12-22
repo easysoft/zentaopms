@@ -166,7 +166,7 @@ class caselibModel extends model
      * 创建用例库，插入一个用例库对象到数据库。
      * Create a lib case, insert a lib object into database.
      *
-     * @param  object $lib
+     * @param  object    $lib
      * @access public
      * @return int|false
      */
@@ -275,9 +275,9 @@ class caselibModel extends model
      *
      * @param  int    $libID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function createFromImport(int $libID)
+    public function createFromImport(int $libID): bool
     {
         $data = fixer::input('post')->get();
 
@@ -306,5 +306,7 @@ class caselibModel extends model
             if($this->session->fileImport) @unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);
         }
+
+        return true;
     }
 }
