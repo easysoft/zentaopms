@@ -129,6 +129,7 @@ $items[] = array
 $items[] = array
 (
     'name'     => 'title',
+    'control'  => 'colorInput',
     'label'    => $lang->testcase->title,
     'width'    => '240px',
     'required' => true

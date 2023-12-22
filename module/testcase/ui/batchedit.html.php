@@ -125,7 +125,7 @@ else
     (
         'name'     => 'title',
         'label'    => $lang->testcase->title,
-        'control'  => 'input',
+        'control'  => 'colorInput',
         'width'    => '180px',
         'required' => true
     );
