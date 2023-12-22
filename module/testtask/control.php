@@ -562,11 +562,11 @@ class testtask extends control
 
         /* Get test cases. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->loadModel('story')->checkNeedConfirm($runs);
 
         $case2RunMap = array();
         foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $scenesGroup = $this->testtask->getSceneCases($productID, $runs);
         $runs        = !empty($scenesGroup['runs']) ? $scenesGroup['runs'] : array();
