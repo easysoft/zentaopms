@@ -375,4 +375,20 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $stakeholderUsers;
     }
+
+    /**
+     * 通过ID获取期望详情。
+     * Get expect detail by ID.
+     *
+     * @param  int              $expectID
+     * @access public
+     * @return array|object|bool
+     */
+    public function getExpectByIDTest(int $expectID): array|object|bool
+    {
+        $expect = $this->objectModel->getExpectByID($expectID);
+
+        if(dao::isError()) return dao::getError();
+        return $expect;
+    }
 }
