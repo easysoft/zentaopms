@@ -1831,7 +1831,7 @@ class userModel extends model
                 $sprintTeams        = !empty($teams['execution'][$sprintID])        ? $teams['execution'][$sprintID]        : array();
                 $sprintStakeholders = !empty($stakeholders['execution'][$sprintID]) ? $stakeholders['execution'][$sprintID] : array();
                 $sprintWhiteList    = !empty($whiteList['sprint'][$sprintID])       ? $whiteList['sprint'][$sprintID]       : array();
-                if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, $sprintWhiteList)) $sprints[$sprintID] = $sprintID;
+                if($this->checkProjectPriv($sprint, $account, $sprintStakeholders, $sprintTeams, $sprintWhiteList)) $sprints[$sprintID] = $sprintID;
 
                 /* 如果有某个迭代管理权限，也可以访问该迭代。 */
                 if(strpos(",$manageExecutions,", ",$sprintID,") !== false) $sprints[$sprintID] = $sprintID;
@@ -1884,8 +1884,11 @@ class userModel extends model
      */
     public function computeUserView(string $account = '', bool $force = false): object
     {
+        $userView = new stdclass();
+        $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+
         if(empty($account)) $account = $this->session->user->account;
-        if(empty($account)) return new stdclass();
+        if(empty($account)) return $userView;
 
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(!empty($userView) && !$force) return $userView;
@@ -1895,7 +1898,7 @@ class userModel extends model
 
         /* Init user view. */
         $userView = new stdclass();
-        $userView->account  = $account;
+        $userView->account = $account;
 
         $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
         if($isAdmin)
@@ -2412,7 +2415,7 @@ class userModel extends model
             if($objectType == 'program') $authedUsers += $this->getProgramAuthedUsers($object, $stakeholders, $whiteList, $admins);
             if($objectType == 'project') $authedUsers += $this->getProjectAuthedUsers($object, $stakeholders, $teams, $whiteList, $admins);
             if($objectType == 'product') $authedUsers += $this->getProductViewListUsers($object, $teams, $stakeholders, $whiteList, $admins);
-            if($objectType == 'sprint')  $authedUsers += $this->getSprintAuthedUsers($object, $stakeholders, array_merge($teams, $parentTeams), $whiteList, $admins);
+            if($objectType == 'sprint')  $authedUsers += $this->getProjectAuthedUsers($object, $stakeholders, array_merge($teams, $parentTeams), $whiteList, $admins);
 
             /* If you have parent stage view permissions, you have child stage permissions. */
             if($objectType == 'sprint' && $object->type == 'stage' && $object->grade == 2)
@@ -2461,7 +2464,7 @@ class userModel extends model
         if($objectType == 'program') $hasPriv = $this->checkProgramPriv($object, $account, $stakeholders, $whiteList, $admins);
         if($objectType == 'project') $hasPriv = $this->checkProjectPriv($object, $account, $stakeholders, $teams, $whiteList, $admins);
         if($objectType == 'product') $hasPriv = $this->checkProductPriv($object, $account, $teams, $stakeholders, $whiteList, $admins);
-        if($objectType == 'sprint')  $hasPriv = $this->checkSprintPriv($object, $account, $stakeholders, $teams, $whiteList, $admins);
+        if($objectType == 'sprint')  $hasPriv = $this->checkProjectPriv($object, $account, $stakeholders, $teams, $whiteList, $admins);
 
         if($hasPriv  && strpos(",{$view},", ",{$object->id},") === false)  $view .= ",{$object->id}";
         if(!$hasPriv && strpos(",{$view},", ",{$object->id},") !== false)  $view  = trim(str_replace(",{$object->id},", ',', ",{$view},"), ',');
@@ -2559,24 +2562,6 @@ class userModel extends model
         }
 
         return false;
-    }
-
-    /**
-     * 检查用户是否有此迭代的查看权限。
-     * Check sprint priv.
-     *
-     * @param  object  $project
-     * @param  string  $account
-     * @param  array   $stakeholders
-     * @param  array   $teams
-     * @param  array   $whiteList
-     * @param  array   $admins
-     * @access private
-     * @return bool
-     */
-    private function checkSprintPriv(object $sprint, string $account, array $stakeholders, array $teams, array $whiteList, array $admins = array()): bool
-    {
-        return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins);
     }
 
     /**
@@ -2704,23 +2689,6 @@ class userModel extends model
         }
 
         return $users;
-    }
-
-    /**
-     * 获取和迭代相关联的用户。
-     * Get sprint authed users.
-     *
-     * @param  object $sprint
-     * @param  array  $stakeholders
-     * @param  array  $teams
-     * @param  array  $whiteList
-     * @param  array  $admins
-     * @access public
-     * @return array
-     */
-    public function getSprintAuthedUsers(object $sprint, array $stakeholders, array $teams, array $whiteList, array $admins): array
-    {
-        return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins);
     }
 
     /**
