@@ -35,10 +35,12 @@ $giteaID = 4;
 r($giteaModel->apiGetBranches($giteaID, $project)) && p() && e('0'); // 错误的项目ID
 
 $project = 'gitea/unittest';
-r(end($giteaModel->apiGetBranches($giteaID, $project))) && p('name,user_can_push') && e('main,~~'); // 正确的项目ID
+$result  = $giteaModel->apiGetBranches($giteaID, $project);
+r(end($result)) && p('name,user_can_push') && e('main,~~'); // 正确的项目ID
 
 su('user1');
 r($giteaModel->apiGetBranches($giteaID, $project)) && p() && e('0'); // 没有权限的用户
 
 su('user2');
-r(end($giteaModel->apiGetBranches($giteaID, $project))) && p('name,user_can_merge') && e('main,1'); // 有权限的用户
+$result = $giteaModel->apiGetBranches($giteaID, $project);
+r(end($result)) && p('name,user_can_merge') && e('main,1'); // 有权限的用户

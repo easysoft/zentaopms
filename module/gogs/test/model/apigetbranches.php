@@ -31,4 +31,5 @@ $gogsID = 5;
 r($gogsModel->apiGetBranches($gogsID, $project)) && p() && e('0'); // 错误的项目ID
 
 $project = 'easycorp/unittest';
-r(current($gogsModel->apiGetBranches($gogsID, $project))) && p('name;commit:id') && e('main,be26c25279341d11ae37739a17477100c974fa9f'); // 正确的项目ID
+$result  = $gogsModel->apiGetBranches($gogsID, $project);
+r(current($result)) && p('name;commit:id') && e('main,be26c25279341d11ae37739a17477100c974fa9f'); // 正确的项目ID
