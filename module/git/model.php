@@ -235,9 +235,9 @@ class gitModel extends model
      * Set the repos.
      *
      * @access public
-     * @return mixed
+     * @return bool
      */
-    public function setRepos()
+    public function setRepos(): bool
     {
         $repos    = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea');
         $gitRepos = array();

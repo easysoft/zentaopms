@@ -1,31 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/git.class.php';
-su('admin');
 
 /**
 
-title=测试gitModel->setRepo();
+title=gitModel->setRepo();
 timeout=0
 cid=1
 
-- 设置错误版本库参数
- - 属性result @
- - 属性client @
- - 属性repoRoot @
-- 设置正确版本库参数
- - 属性result @1
- - 属性client @1
- - 属性repoRoot @1
+- 查询Git仓库信息
+ - 属性repoRoot @https://gitlabdev.qc.oop.cc/root/unittest1
+ - 属性client @https://gitlabdev.qc.oop.cc
 
 */
 
-$git = new gitTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$repo = new stdclass();
-r($git->setRepo($repo)) && p("result,client,repoRoot") && e(",,");     // 设置错误版本库参数
+zdTable('pipeline')->gen(1);
+zdTable('repo')->config('repo')->gen(1);
+su('admin');
 
-$repo = $tester->dao->select('*')->from(TABLE_REPO)->limit(1)->fetch();
-if(strtolower($repo->SCM) == 'gitlab') $repo = $tester->loadModel('repo')->processGitlab($repo);
-r($git->setRepo($repo)) && p("result,client,repoRoot") && e("1,1,1");     // 设置正确版本库参数
+global $tester;
+$git = $tester->loadModel('git');
+$git->setRepos();
+
+$repo = $git->repos[1];
+$git->setRepo($repo);
+r($git) && p('repoRoot,client') && e('https://gitlabdev.qc.oop.cc/root/unittest1,https://gitlabdev.qc.oop.cc'); // 查询Git仓库信息
