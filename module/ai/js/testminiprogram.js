@@ -89,7 +89,7 @@ $(function()
         const message = $('.prompt-preview-area .preview-container').text();
         if(!message) return;
 
-        const trigger = new $.zui.ModalTrigger({backdrop: 'static'});
+        const trigger = new $.zui.ModalTrigger({backdrop: 'static', name: 'generate-loading'});
         trigger.show();
 
         $.post(

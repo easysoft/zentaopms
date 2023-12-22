@@ -60,7 +60,7 @@ js::set('appID', $appID);
       <div class="prompt-preview-area" style="height: 50%; position: relative;">
         <div class="area-title" style="display: flex; justify-content: space-between;">
           <strong style="font-size: 14px;"><?php echo $lang->ai->miniPrograms->field->prompterPreview; ?></strong>
-          <button id="generate-result" class="btn btn-link" style="color: #2E7FFF; position: absolute; right: 16px; top: 10px;">
+          <button id="generate-result" class="btn btn-link" type="button" style="color: #2E7FFF; position: absolute; right: 16px; top: 10px;">
             <i class="icon-publish text-primary"></i>
             <?php echo $lang->ai->miniPrograms->field->generateResult; ?>
           </button>
