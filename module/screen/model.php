@@ -97,7 +97,7 @@ class screenModel extends model
         $this->filter->charts  = array();
 
         if($screen->id == 5) return new stdclass();
-        if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
+        if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen);
 
         $config = new stdclass();
         $config->width            = 1300;
