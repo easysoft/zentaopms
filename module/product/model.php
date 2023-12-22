@@ -1797,15 +1797,14 @@ class productModel extends model
          * If productStatsTime is before two weeks ago, refresh all products directly.
          * Else only refresh the latest products in action table.
          */
-        $productActions = array();
-        $products       = array();
+        $products = array();
         if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
         {
             $products = $this->dao->select('id')->from(TABLE_PRODUCT)->fetchPairs('id');
         }
         else
         {
-            $productActions = $this->dao->select('distinct product')->from(TABLE_ACTION)
+            $productActions = $this->dao->select('product')->from(TABLE_ACTION)
                 ->where('date')->ge($updateTime)
                 ->andWhere('product')->notin(array(',0,', ',,'))
                 ->fetchPairs('product');
@@ -1813,12 +1812,11 @@ class productModel extends model
 
             foreach($productActions as $productAction)
             {
-                foreach(explode(',', trim($productAction, ',')) as $product)
-                {
-                    $products[$product] = $product;
-                }
+                foreach(explode(',', trim($productAction, ',')) as $product) $products[$product] = $product;
             }
+            $products = array_filter($products);
         }
+        if(empty($products)) return;
 
         /* 1. Get summary and members of products to be refreshed. */
         $stories = $this->dao->select('product, status, `closedReason`, count(id) AS c')
@@ -1902,10 +1900,7 @@ class productModel extends model
         }
 
         /* 2. Refresh stats to db. */
-        foreach($stats as $productID=> $product)
-        {
-            $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
-        }
+        foreach($stats as $productID => $product) $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
 
         /* 3. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.productStatsTime', $now);

@@ -1314,36 +1314,28 @@ class programModel extends model
         $projects = array();
         if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
         {
-            $projects = $this->dao->select('id,project,model,deleted')->from(TABLE_PROJECT)->fetchAll('id');
+            $projects = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id');
         }
         else
         {
-            $projects = $this->dao->select('distinct t1.project,t2.model,t2.deleted')->from(TABLE_ACTION)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.`date`')->ge($updateTime)
-                ->fetchAll('project');
-            if(empty($projects)) return;
+            $projects = $this->dao->select('project')->from(TABLE_ACTION)->where('`date`')->ge($updateTime)->andWhere('project')->ne(0)->fetchPairs('project');
         }
+        if(empty($projects)) return;
+
+        $executionGroup = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('project')->in($projects)->andWhere('deleted')->eq(0)->fetchGroup('project', 'id');
 
         $summary = array();
         /* 1. Execution has no tasks.*/
-        foreach($projects as $project)
+        foreach($projects as $projectID => $project)
         {
-            $executions = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($project->project)->andWhere('deleted')->eq(0)->fetchPairs();
-            foreach($executions as $executionID)
+            $executions = zget($executionGroup, $projectID, array());
+            foreach($executions as $executionID => $execution)
             {
-                $taskCount = $this->dao->select('id')->from(TABLE_TASK)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('execution')->eq($executionID)
-                    ->count();
-                if(empty($taskCount))
-                {
-                    $summary[$executionID] = new stdclass();
-                    $summary[$executionID]->totalEstimate = 0;
-                    $summary[$executionID]->totalConsumed = 0;
-                    $summary[$executionID]->totalLeft     = 0;
-                    $summary[$executionID]->execution     = $executionID;
-                }
+                $summary[$executionID] = new stdclass();
+                $summary[$executionID]->totalEstimate = 0;
+                $summary[$executionID]->totalConsumed = 0;
+                $summary[$executionID]->totalLeft     = 0;
+                $summary[$executionID]->execution     = $executionID;
             }
         }
 
@@ -1352,7 +1344,7 @@ class programModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->ge(0) // Ignore parent task.
-            ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
+            ->beginIF(!empty($projects))->andWhere('t1.project')->in($projects)->fi()
             ->fetchAll('id');
 
         foreach($tasks as $task)
@@ -1375,7 +1367,7 @@ class programModel extends model
         $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.type')->eq('project')
-            ->beginIF(!empty($projects))->andWhere('t1.root')->in(array_keys($projects))->fi()
+            ->beginIF(!empty($projects))->andWhere('t1.root')->in($projects)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t1.root')
             ->fetchPairs('root');
