@@ -696,4 +696,20 @@ class upgradeTest
         $productLine = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
         return $productLine;
     }
+
+    /**
+     * 测试检查必填项。
+     * Test check program required.
+     *
+     * @param  object     $data
+     * @param  string     $projectType
+     * @access public
+     * @return array|bool
+     */
+    public function checkProgramRequiredTest(object $data, string $projectType): array|bool
+    {
+        $this->objectModel->checkProgramRequired($data, $projectType);
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
 }
