@@ -611,4 +611,25 @@ class upgradeTest
         $this->objectModel->fromVersion = $version;
         $this->objectModel->installIPD();
     }
+
+    /**
+     * 测试新建一个项目集。
+     * Test create a program.
+     *
+     * @param  object $data
+     * @param  array  $projectIdList
+     * @access public
+     * @return void
+     */
+    public function createNewProgramTest(object $data, array $projectIdList): array|object
+    {
+        $result = $this->objectModel->createNewProgram($data, $projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        if(is_array($result) && isset($result['result']) && $result['result'] == 'fail') return $result;
+
+        global $tester;
+        $programID = $result;
+        return $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+    }
 }
