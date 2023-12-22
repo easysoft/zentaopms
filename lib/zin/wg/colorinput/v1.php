@@ -58,6 +58,7 @@ class colorInput extends inputControl
                     (
                         set::name($props['colorName']),
                         set::value($props['colorValue']),
+                        set::syncColor('#' . $props['name'])
                     )
                 )
             );
