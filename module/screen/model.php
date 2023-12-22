@@ -1511,6 +1511,7 @@ class screenModel extends model
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
+
                 /* 通过sql查询数据，并且处理数据。 */
                 /* Query data by sql and process data. */
                 if($settings && isset($settings->metric)) $value = $this->screenTao->processRadarData($this->setFilterSQL($chart), $settings, $indicator, $seriesData);

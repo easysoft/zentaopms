@@ -1,0 +1,12 @@
+title: table zt_story
+desc: "需求"
+author: automated export
+version: "1.0"
+fields:
+  - field: estimate
+    note: "预计工时"
+    range: 0-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

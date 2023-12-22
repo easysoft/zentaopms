@@ -1,0 +1,17 @@
+title: table zt_action
+desc: "系统日志"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: objectType
+    range: task
+  - field: objectID
+    range: 1-5{4}
+  - field: actor
+    fields:
+      - field: field1
+        range: user
+      - field: field2
+        range: 1-100{4}
+  - field: action
+    range: wait,doing,done,closed
