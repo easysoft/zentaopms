@@ -367,12 +367,14 @@ class gitModel extends model
      * 将日志从xml格式转换为对象。
      * Convert log from xml format to object.
      *
-     * @param  object $log
+     * @param  array  $log
      * @access public
-     * @return object
+     * @return object|null
      */
-    public function convertLog(object $log): object
+    public function convertLog(array $log): object|null
     {
+        if(empty($log)) return null;
+
         list($hash, $account, $date) = $log;
 
         $account = preg_replace('/^Author:/', '', $account);

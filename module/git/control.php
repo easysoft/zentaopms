@@ -127,9 +127,11 @@ class git extends control
             }
             $logs[$i][] = $line;
         }
+
         foreach($logs as $log)
         {
-            $parsedLogs[] = $this->git->convertLog($log);
+            $log = $this->git->convertLog($log);
+            if($log) $parsedLogs[] = $log;
         }
 
         $this->loadModel('repo');

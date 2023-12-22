@@ -109,7 +109,8 @@ class svn extends control
         $logs = simplexml_load_string($logs);
         foreach($logs->logentry as $entry)
         {
-            $parsedLogs[] = $this->svn->convertLog($entry);
+            $log = $this->svn->convertLog($entry);
+            if($log) $parsedLogs[] = $log;
         }
 
         $this->loadModel('repo');

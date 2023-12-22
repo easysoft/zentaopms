@@ -435,4 +435,49 @@ class svnModel extends model
     {
         echo helper::now() . " $log\n";
     }
+
+    /**
+     * 将日志从xml格式转换为对象。
+     * Convert log from xml format to object.
+     *
+     * @param  array  $log
+     * @access public
+     * @return object|null
+     */
+    public function convertLog(array $log): object|null
+    {
+        if(empty($log)) return null;
+
+        list($hash, $account, $date) = $log;
+
+        $account = preg_replace('/^Author:/', '', $account);
+        $account = trim(preg_replace('/<[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9_\-\.]+>/', '', $account));
+        $date    = trim(preg_replace('/^Date:/', '', $date));
+
+        $count   = count($log);
+        $comment = '';
+        $files   = array();
+        for($i = 3; $i < $count; $i++)
+        {
+            $line = $log[$i];
+            if(preg_match('/^\s{2,}/', $line))
+            {
+                $comment .= $line;
+            }
+            elseif(strpos($line, "\t") !== false)
+            {
+                list($action, $entry) = explode("\t", $line);
+                $entry = '/' . trim($entry);
+                $files[$action][] = $entry;
+            }
+        }
+        $parsedLog = new stdClass();
+        $parsedLog->author    = $account;
+        $parsedLog->revision  = trim(preg_replace('/^commit/', '', $hash));
+        $parsedLog->msg       = trim($comment);
+        $parsedLog->date      = date('Y-m-d H:i:s', strtotime($date));
+        $parsedLog->files     = $files;
+
+        return $parsedLog;
+    }
 }
