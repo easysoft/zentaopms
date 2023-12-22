@@ -1697,7 +1697,7 @@ class repoModel extends model
      */
     public function createActionChanges(object $log, string $repoRoot, string $scm = 'svn'): array
     {
-        if(!$log->files) return array();
+        if(empty($log->files)) return array();
         $diff = '';
 
         $oldSelf = $this->server->PHP_SELF;
