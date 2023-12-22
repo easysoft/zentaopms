@@ -173,9 +173,9 @@ class executionModel extends model
      *
      * @param  object $execution
      * @access public
-     * @return void
+     * @return bool
      */
-    public function removeMenu(object $execution)
+    public function removeMenu(object $execution): bool
     {
         $project = $this->loadModel('project')->fetchByID($execution->project);
         if($execution->type == 'stage' || (!empty($project) && $project->model == 'waterfallplus')) unset($this->lang->execution->menu->settings['subMenu']->products);
@@ -193,6 +193,8 @@ class executionModel extends model
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] && $this->config->edition == 'open') unset($this->lang->execution->menu->view);
+
+        return true;
     }
 
     /**

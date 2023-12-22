@@ -1544,7 +1544,7 @@ class executionTest
         $execution = $this->executionModel->getByID($executionID);
         $this->executionModel->manageMembers($execution, $members);
 
-        $objects = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll();
+        $objects = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->orderBy('id_asc')->fetchAll();
 
         if(dao::isError())
         {

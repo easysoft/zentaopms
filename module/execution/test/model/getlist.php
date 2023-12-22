@@ -2,8 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
+
 zdTable('user')->gen(5);
-su('admin');
+zdTable('group')->gen(0);
+zdTable('userview')->gen(0);
 
 $execution = zdTable('project');
 $execution->id->range('1-10');
@@ -35,6 +37,8 @@ $projectProduct->project->range('2{3}, 3{3}, 4{3}, 5, 6, 7, 8, 9, 10');
 $projectProduct->product->range('1-3');
 $projectProduct->branch->range('0');
 $projectProduct->gen(9);
+
+su('admin');
 
 /**
 
