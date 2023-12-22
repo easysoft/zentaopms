@@ -67,6 +67,17 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
     $star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
     $delete = $star === 'star' ? 'true' : 'false';
 
+    $starBtn = common::hasPriv('ai', 'collectMiniProgram')
+        ? btn(
+            set::size('md'),
+            setClass('ghost btn-star'),
+            setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
+            on::click('window.aiSquare.handleStarBtnClick'),
+            html(html::image("static/svg/{$star}.svg", "class='$star'")),
+            $lang->ai->miniPrograms->collect
+        )
+        : null;
+
     return a(
         set::href(createLink('ai', 'browseMiniProgram', "id={$miniProgram->id}#app=ai")),
         setClass('miniprogram-card'),
@@ -110,14 +121,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
                 setClass(array('invisible' => !$showTag)),
                 $categoryList[$miniProgram->category]
             ),
-            btn(
-                set::size('md'),
-                setClass('ghost btn-star'),
-                setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
-                on::click('window.aiSquare.handleStarBtnClick'),
-                html(html::image("static/svg/{$star}.svg", "class='$star'")),
-                $lang->ai->miniPrograms->collect
-            )
+            $starBtn
         )
     );
 };

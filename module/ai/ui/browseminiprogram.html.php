@@ -112,6 +112,17 @@ div(
     )
 );
 
+$starBtn = common::hasPriv('ai', 'collectMiniProgram')
+    ? btn(
+        setClass('ghost btn-star absolute'),
+        set::size('md'),
+        setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
+        on::click('window.aiBrowseMiniProgram.handleStarBtnClick'),
+        html(html::image("static/svg/{$star}.svg", "class='$star'")),
+        $lang->ai->miniPrograms->collect
+    )
+    : null;
+
 div(
     setClass('mini-program fixed flex'),
     div(
@@ -141,14 +152,7 @@ div(
                     setClass('danger'),
                     $lang->ai->prompts->deleted
                 )
-                : btn(
-                    setClass('ghost btn-star absolute'),
-                    set::size('md'),
-                    setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
-                    on::click('window.aiBrowseMiniProgram.handleStarBtnClick'),
-                    html(html::image("static/svg/{$star}.svg", "class='$star'")),
-                    $lang->ai->miniPrograms->collect
-                )
+                : $starBtn
         ),
         div(
             setClass('body col overflow-hidden', empty($formGroups) ? 'flex-none' : 'flex-1'),
