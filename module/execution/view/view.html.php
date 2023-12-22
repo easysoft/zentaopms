@@ -367,7 +367,7 @@
                         $planIDList = explode(',', $planIDList);
                         foreach($planIDList as $planID)
                         {
-                            if(isset($planGroups[$productID][$planID])) echo '<div class="col-xs-12">' . "<i class='icon icon-calendar text-muted'></i> " . html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroups[$productID][$planID]) . '</div>';
+                            if(isset($planGroups[$productID][$planID])) echo '<div class="col-xs-12">' . "<i class='icon icon-calendar text-muted'></i> " . html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroups[$productID][$planID], '_self', $execution->projectInfo->hasProduct ? '' : "data-app='project'") . '</div>';
                         }
                     }
                 }
