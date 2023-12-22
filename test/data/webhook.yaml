@@ -23,7 +23,7 @@ fields:
     format: ""
   - field: url
     note: ""
-    range: [https://oapi.dinggroup.com/, https://oapi.dingtalk.com/,https://qyapi.weixin.qq.com/cgi-bin/,https://qyapi.weixin.qq.com/cgi-bin/,https://open.feishu.cn/open-apis/, https://open.feishu.cn/open-apis/,http://qita.com/]
+    range: '[https://oapi.dinggroup.com/, https://oapi.dingtalk.com/,https://qyapi.weixin.qq.com/cgi-bin/,https://qyapi.weixin.qq.com/cgi-bin/,https://open.feishu.cn/open-apis/, https://open.feishu.cn/open-apis/,http://qita.com/]'
     prefix: ""
     postfix: ""
     format: ""
