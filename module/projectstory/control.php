@@ -45,6 +45,7 @@ class projectStory extends control
         }
 
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(empty($productID) && count($this->products) == 1) $productID = key($this->products);
 
         /* Set product list for export. */
         $this->session->set('exportProductList',  $this->products);
