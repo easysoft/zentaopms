@@ -55,22 +55,24 @@ featureBar
             set::actions(array()),
             inputGroup
             (
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::name('begin'),
-                    set::value($begin)
+                    set::value($begin),
+                    set::minDate($minDate),
+                    set::maxDate($maxDate),
                 ),
                 span
                 (
                     setClass('input-group-addon'),
                     $lang->project->to
                 ),
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::name('end'),
-                    set::value($end)
+                    set::value($end),
+                    set::minDate($minDate),
+                    set::maxDate($maxDate),
                 ),
                 btn
                 (
