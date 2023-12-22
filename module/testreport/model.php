@@ -236,7 +236,7 @@ class testreportModel extends model
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->groupBy('t1.caseResult')
-            ->orderBy('value DESC')
+            ->orderBy('value DESC, t1.id ASC')
             ->fetchAll('name');
 
         if(!$datas) return array();
@@ -271,7 +271,7 @@ class testreportModel extends model
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->groupBy('t1.lastRunner')
-            ->orderBy('value DESC')
+            ->orderBy('value DESC, t1.id ASC')
             ->fetchAll('name');
 
         if(!$datas) return array();
