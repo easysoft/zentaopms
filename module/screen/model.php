@@ -288,7 +288,7 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    private function completeComponentShowInfo(object $chart, object $component, string $type): void
+    public function completeComponentShowInfo(object $chart, object $component, string $type): void
     {
         $component->option = new stdclass();
         if($type == 'chart') $this->completeChartShowInfo($chart, $component);
@@ -304,7 +304,7 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    private function completeChartShowInfo(object $chart, object $component): void
+    public function completeChartShowInfo(object $chart, object $component): void
     {
         /* 设置图表的title信息。 */
         /* Set chart title info. */
@@ -330,7 +330,7 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    private function completePivotShowInfo(object $chart, object $component): void
+    public function completePivotShowInfo(object $chart, object $component): void
     {
         $component->option->ineffective = 1;
         $component->option->header      = array();
