@@ -304,4 +304,19 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $issues;
     }
+
+    /**
+     * 获取活动 id=>name 的键值对。
+     * Get the key-value pair for the activity id=>name.
+     *
+     * @access public
+     * @return array
+     */
+    public function getActivitiesTest(): array
+    {
+        $activityPairs = $this->objectModel->getActivities();
+
+        if(dao::isError()) return dao::getError();
+        return $activityPairs;
+    }
 }

@@ -38,13 +38,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: parent
-    note: "父流程ID"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: assignedTo
     note: "指派给"
     from: common.user.v1.yaml
@@ -60,25 +53,10 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: subStatus
-    note: "子状态"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: createdBy
     note: "由谁创建"
     from: common.user.v1.yaml
     use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: createdDate
-    note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
@@ -91,26 +69,10 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: editedDate
-    note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: assignedBy
     note: "由谁指派"
     from: common.user.v1.yaml
     use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: assignedDate
-    note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
@@ -125,38 +87,6 @@ fields:
   - field: deleted
     note: "是否删除"
     range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: activitylistBy
-    note: "由谁活动列表 "
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: activitylistDate
-    note: "活动列表日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: outputlistBy
-    note: "由谁文档列表"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: outputlistDate
-    note: "文档列表日期"
-    from: common.date.v1.yaml
-    use: dateA
     prefix: ""
     postfix: ""
     loop: 0
