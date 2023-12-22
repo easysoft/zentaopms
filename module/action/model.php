@@ -27,8 +27,8 @@ class actionModel extends model
      * @param  string           $actionType
      * @param  string|bool      $comment
      * @param  string|int|float $extra        the extra info of this action, according to different modules and actions, can set different extra.
-     * @param  string            $actor
-     * @param  bool              $autoDelete
+     * @param  string           $actor
+     * @param  bool             $autoDelete
      * @access public
      * @return int|bool
      */
@@ -1677,7 +1677,7 @@ class actionModel extends model
                 ->where('id')->ne($action->objectID)
                 ->beginIF($action->objectType == 'program' || $action->objectType == 'project')->andWhere("(name = '{$object->name}' AND parent = {$object->parent})", true)->fi()
                 ->beginIF($action->objectType == 'execution')->andWhere("(name = '{$object->name}' AND project = {$sprintProject})", true)->fi()
-                ->beginIF($action->objectType == 'project' && $object->code)->orWhere("(code = '{$object->code}' and model = '{$object->model}')")->fi()
+                ->beginIF($action->objectType == 'project' && $object->code)->orWhere("(code = '{$object->code}' AND model = '{$object->model}')")->fi()
                 ->beginIF($action->objectType == 'execution' && $object->code)->orWhere("code = '{$object->code}'")->fi()
                 ->markRight(1)
                 ->beginIF($action->objectType == 'program')->andWhere('type')->eq('program')->fi()
@@ -1999,15 +1999,15 @@ class actionModel extends model
         {
             if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
             $productCondition = '';
-            foreach($grantedProducts as $product) $productCondition = empty($productCondition) ? " OR (execution = '0' and project = '0' and (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
+            foreach($grantedProducts as $product) $productCondition = empty($productCondition) ? " OR (execution = '0' AND project = '0' AND (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
             if(!empty($productCondition)) $productCondition .= '))';
         }
         else
         {
-            $productCondition   = " OR (execution = '0' and project = '0' and product like '%,{$productID},%')";
+            $productCondition   = " OR (execution = '0' AND project = '0' AND product LIKE '%,{$productID},%')";
         }
-        $projectCondition   = isset($grantedProjects) ? "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' and project = '{$projectID}')";
-        $executionCondition = isset($grantedExecutions) ? "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' and execution = '{$executionID}')";
+        $projectCondition   = isset($grantedProjects) ? "(execution = '0' AND project != '0' AND project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' AND project = '{$projectID}')";
+        $executionCondition = isset($grantedExecutions) ? "(execution != '0' AND execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' AND execution = '{$executionID}')";
 
         $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
         return $condition;

@@ -2,13 +2,14 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
-su('admin');
 
 zdTable('action')->config('action')->gen(90);
 zdTable('doclib')->gen(1);
 zdTable('doc')->gen(1);
 zdTable('product')->gen(1);
 zdTable('userquery')->config('userquery')->gen(1);
+
+su('admin');
 
 /**
 

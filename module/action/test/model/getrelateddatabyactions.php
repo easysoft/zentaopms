@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/action.class.php';
-su('admin');
 
 zdTable('action')->config('action')->gen(25);
 zdTable('product')->gen(1);
@@ -21,6 +20,12 @@ zdTable('testsuite')->config('testsuite')->gen(2);
 zdTable('testreport')->gen(1);
 zdTable('entry')->config('entry')->gen(1);
 zdTable('webhook')->config('webhook')->gen(1);
+zdTable('doclib')->gen(10);
+zdTable('user')->gen(10);
+zdTable('doc')->gen(10);
+zdTable('todo')->gen(10);
+
+su('admin');
 
 /**
 
