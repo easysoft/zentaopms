@@ -455,7 +455,7 @@ class transferZen extends transfer
         /* If tmp file exists, read tmp file, otherwise create tmp file. */
         if(!$tmpFile)
         {
-            $rows       = $this->transferZen->getRowsFromExcel();  // 从Excel中获取数据
+            $rows       = $this->getRowsFromExcel();  // 从Excel中获取数据
             $moduleData = $this->transferTao->processRows4Fields($rows, $fields);  // 将读取到的数据格式化成关联数组
             $moduleData = $this->transferTao->parseExcelDropdownValues($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
 

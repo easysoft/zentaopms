@@ -251,8 +251,8 @@ class transferTest
     }
 
     /**
-     * 测试initValuesTest。
-     * initValuesTest.
+     * 测试initValues。
+     * initValues.
      *
      * @param  string $module
      * @param  bool   $withKey
@@ -264,5 +264,19 @@ class transferTest
     {
         $fieldList = $this->initFieldListTest($module, $withKey);
         return $fieldList[$field]['values'];
+    }
+
+    /**
+     * 测试getImportFields。
+     * getImportFields.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getImportFieldsTest(string $module)
+    {
+        $this->initConfig($module);
+        return $this->objectModel->getImportFields($module);
     }
 }

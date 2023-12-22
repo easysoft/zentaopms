@@ -180,4 +180,146 @@ class transferTao extends transferModel
         $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
         return implode(',', $cellValue);
     }
+
+    /**
+     * 配置导入字段。
+     * Config import fields.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    protected function getImportFields(string $module = '')
+    {
+        $this->commonActions($module);
+        $moduleLang = $this->moduleLang;
+        $fields     = explode(',', $this->moduleConfig->templateFields); // 获取导入模板字段
+
+        array_unshift($fields, 'id');
+        foreach($fields as $key => $fieldName)
+        {
+            /* 匹配语言项。 */
+            /* Match language item. */
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($moduleLang->$fieldName) ? $moduleLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        /* 获取工作流扩展字段。*/
+        /* Get workflow extend fields. */
+        if($this->config->edition != 'open')
+        {
+            $appendFields = $this->loadModel('workflowaction')->getFields($module, 'showimport', false);
+            foreach($appendFields as $appendField)
+            {
+                /* 不是内置字段并且在导入确认页面展示。 */
+                /* Is not builtin field and show in import confirm page. */
+                if(!$appendField->buildin and $appendField->show) $fields[$appendField->field] = $appendField->name;
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 更新子数据。
+     * Update children datas.
+     *
+     * @param array $datas
+     * @access public
+     * @return array
+     */
+    protected function updateChildDatas(array $datas)
+    {
+        $children = array();
+        foreach($datas as $data)
+        {
+            $id = $data->id;
+            if(!empty($data->mode)) $datas[$id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
+            if(!empty($data->parent) and isset($datas[$data->parent]))
+            {
+                if(!empty($data->name)) $data->name = '>' . $data->name;
+                elseif(!empty($data->title)) $data->title = '>' . $data->title;
+                $children[$data->parent][$id] = $data;
+                unset($datas[$id]);
+            }
+        }
+
+        /* Move child data after parent data. */
+        if(!empty($children))
+        {
+            $position = 0;
+            foreach($datas as $data)
+            {
+                $position ++;
+                if(isset($children[$data->id]))
+                {
+                    array_splice($datas, $position, 0, $children[$data->id]);
+                    $position += count($children[$data->id]);
+                }
+            }
+        }
+
+        return $datas;
+    }
+
+    /**
+     * 处理行数据。
+     * Process rows for fields.
+     *
+     * @param  array  $rows
+     * @param  array  $fields
+     * @access public
+     * @return array
+     */
+    protected function processRows4Fields($rows = array(), $fields = array())
+    {
+        $objectDatas = array();
+
+        foreach($rows as $currentRow => $row)
+        {
+            $tmpArray = new stdClass();
+            foreach($row as $currentColumn => $cellValue)
+            {
+                if($currentRow == 1)
+                {
+                    $field = array_search($cellValue, $fields);
+                    $columnKey[$currentColumn] = $field ? $field : '';
+                    continue;
+                }
+
+                if(empty($columnKey[$currentColumn]))
+                {
+                    $currentColumn++;
+                    continue;
+                }
+
+                $field = $columnKey[$currentColumn];
+                $currentColumn++;
+
+                /* Check empty data. */
+                if(empty($cellValue))
+                {
+                    $tmpArray->$field = '';
+                    continue;
+                }
+
+                $tmpArray->$field = $cellValue;
+            }
+
+            if(!empty($tmpArray->title) and !empty($tmpArray->name)) $objectDatas[$currentRow] = $tmpArray;
+            unset($tmpArray);
+        }
+
+        if(empty($objectDatas))
+        {
+            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($this->lang->excel->noData);
+            return print(js::locate('back'));
+        }
+
+        return $objectDatas;
+    }
 }
