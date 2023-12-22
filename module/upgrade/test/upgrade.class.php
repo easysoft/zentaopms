@@ -619,7 +619,7 @@ class upgradeTest
      * @param  object $data
      * @param  array  $projectIdList
      * @access public
-     * @return void
+     * @return array|object
      */
     public function createNewProgramTest(object $data, array $projectIdList): array|object
     {
@@ -631,5 +631,32 @@ class upgradeTest
         global $tester;
         $programID = $result;
         return $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+    }
+
+    /**
+     * 测试合并项目。
+     * Test merge project.
+     *
+     * @param  object $data
+     * @param  int    $programID
+     * @param  array  $projectIdList
+     * @access public
+     * @return array|object|bool
+     */
+    public function createNewProjectTest(object $data, int $programID, array $projectIdList): array|object|bool
+    {
+        $result = $this->objectModel->createNewProject($data, $programID, $projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        if(is_array($result) && isset($result['result']) && $result['result'] == 'fail') return $result;
+
+        if($data->projectType == 'execution')
+        {
+            $projectID = $result;
+            global $tester;
+            return $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        }
+
+        if($data->projectType == 'project') return $result;
     }
 }
