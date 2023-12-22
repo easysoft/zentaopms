@@ -582,17 +582,18 @@ class stakeholderModel extends model
     }
 
     /**
+     * 判断当前操作按钮是否可以点击。
      * Judge the action is clickable.
      *
-     * @param  object $object stakeholder
+     * @param  object $stakeholder
      * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable(object $object, string $action): bool
+    public static function isClickable(object $stakeholder, string $action): bool
     {
         /* Judge the object whether can be changed. */
-        $canChange = common::canBeChanged('stakeholder', $object);
+        $canChange = common::canBeChanged('stakeholder', $stakeholder);
         if(!$canChange) return false;
 
         /* Special action can be set its own condition. */
