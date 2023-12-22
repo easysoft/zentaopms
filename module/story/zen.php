@@ -976,7 +976,6 @@ class storyZen extends story
         /* Hidden some fields of projects without products. */
         $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
         $teamUsers     = $URS = array();
-        $showFeedback  = in_array($fields['source']['default'], $this->config->story->feedbackSource);
 
         if($storyType == 'story')
         {
@@ -987,20 +986,22 @@ class storyZen extends story
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
+            $hiddenParent = true;
+
             $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
             if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 
             if(empty($project->hasProduct))
             {
                 $teamUsers     = $this->project->getTeamMemberPairs($project->id);
-                $hiddenProduct = $hiddenParent = true;
+                $hiddenProduct = true;
 
                 if($project->model !== 'scrum' or !$project->multiple) $hiddenPlan = true;
                 if($project->model === 'kanban') $hiddenURS  = true;
             }
         }
         if($storyType != 'story') unset($fields['region'], $fields['lane'], $fields['branches'], $fields['modules'], $fields['plans']);
-        if($storyType != 'story' || !$this->config->URSR || $hiddenURS) unset($fields['URS']);
+        if($storyType != 'story' || !$this->config->URAndSR || $hiddenURS) unset($fields['URS']);
         if($hiddenProduct)
         {
             $fields['product']['control']    = 'hidden';
@@ -1076,6 +1077,7 @@ class storyZen extends story
             unset($fields['region']);
             unset($fields['lane']);
         }
+        if($this->app->tab == 'project' || $this->app->tab == 'execution') unset($fields['parent']);
 
         return $fields;
     }
@@ -1734,12 +1736,10 @@ class storyZen extends story
         /* Attach multi-branch or multi-platform field. */
         if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
 
-        foreach(explode(',', $config->story->list->customBatchCreateFields) as $field)
-        {
-            $customFields[$field] = $this->lang->story->$field;
-        }
+        foreach(explode(',', $config->story->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
 
         if($hiddenPlan) unset($customFields['plan']);
+        if($this->app->tab == 'project' || $this->app->tab == 'execution') unset($customFields['parent']);
 
         if($product->type != 'normal')
         {

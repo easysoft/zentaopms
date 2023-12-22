@@ -243,7 +243,7 @@ detailBody
                     count($moduleOptionMenu) == 1 ? btn(set('onclick', "loadProductModules({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
             ),
-            $story->parent >= 0 && $story->type == 'story' ? item
+            $story->parent >= 0 && $story->type == 'story' && $app->tab == 'product' ? item
             (
                 set::trClass(zget($fields['parent'], 'className', '')),
                 set::name($lang->story->parent),
