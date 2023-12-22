@@ -298,24 +298,29 @@ $config->story->dtable->fieldList['actions']['actionsMap']['recall']['icon'] = '
 $config->story->dtable->fieldList['actions']['actionsMap']['recall']['hint'] = $lang->story->operateList['recalled'];
 
 $app->loadLang('testcase');
-$config->story->dtable->fieldList['actions']['actionsMap']['testcase']['icon'] = 'testcase';
-$config->story->dtable->fieldList['actions']['actionsMap']['testcase']['hint'] = $lang->testcase->create;
+$config->story->dtable->fieldList['actions']['actionsMap']['testcase']['icon']     = 'testcase';
+$config->story->dtable->fieldList['actions']['actionsMap']['testcase']['hint']     = $lang->testcase->create;
+$config->story->dtable->fieldList['actions']['actionsMap']['testcase']['data-app'] = $app->tab;
 
-$config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['icon'] = 'split';
-$config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['hint'] = $lang->story->subdivide;
+$config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['icon']     = 'split';
+$config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['hint']     = $lang->story->subdivide;
+$config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['data-app'] = $app->tab;
 
 $config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['icon'] = 'ok';
 $config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['hint'] = $lang->confirm;
 
-$config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon'] = 'split';
-$config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->story->subdivide;
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon']     = 'split';
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint']     = $lang->story->subdivide;
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['data-app'] = $app->tab;
 
 $app->loadLang('task');
-$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['icon'] = 'plus';
-$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['hint'] = $lang->task->create;
+$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['icon']     = 'plus';
+$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['hint']     = $lang->task->create;
+$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['data-app'] = $app->tab;
 
-$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['icon'] = 'pluses';
-$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['hint'] = $lang->task->batchCreate;
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['icon']     = 'pluses';
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['hint']     = $lang->task->batchCreate;
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['data-app'] = $app->tab;
 
 $app->loadLang('execution');
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['icon']        = 'estimate';

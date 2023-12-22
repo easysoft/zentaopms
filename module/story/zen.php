@@ -89,7 +89,15 @@ class storyZen extends story
 
         if(empty($executionID))
         {
-            $this->product->setMenu($productID, $branch);
+            if($this->app->tab == 'project')
+            {
+                $this->project->setMenu($this->session->project);
+                $this->view->projectID = $this->session->project;
+            }
+            else
+            {
+                $this->product->setMenu($productID, $branch);
+            }
             return;
         }
 
