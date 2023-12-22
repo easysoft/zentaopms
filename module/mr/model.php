@@ -1350,7 +1350,8 @@ class mrModel extends model
      */
     public static function isClickable(object $MR, string $action): bool
     {
-        if($action == 'edit' and !$MR->synced) return false;
+        if($action == 'edit' && !$MR->synced) return false;
+
         if($action == 'edit')   return $MR->canEdit != 'disabled';
         if($action == 'delete') return $MR->canDelete != 'disabled';
 
