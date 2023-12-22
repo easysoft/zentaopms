@@ -155,3 +155,6 @@ UPDATE `zt_chart` SET `settings` = '[{\"type\":\"line\",\"xaxis\":[{\"field\":\"
 UPDATE `zt_chart` SET `sql` = "SELECT id FROM (SELECT id,deleted FROM zt_task WHERE `status` NOT IN ('closed','cancel','done')) AS task WHERE task.deleted='0'" WHERE `id` = 1040;
 
 UPDATE `zt_cron` SET `h` = '1', `m` = '0' WHERE `command` = 'moduleName=metric&methodName=updateMetricLib';
+
+UPDATE `zt_pivot` SET `fields` = '{\"account\":{\"object\":\"effort\",\"field\":\"account\",\"type\":\"user\",\"name\":\"account\"},\"consumed\":{\"object\":\"effort\",\"field\":\"consumed\",\"type\":\"object\",\"name\":\"consumed\"},\"date\":{\"object\":\"effort\",\"field\":\"date\",\"type\":\"object\",\"name\":\"date\"},\"dept\":{\"object\":\"user\",\"field\":\"dept\",\"type\":\"string\",\"name\":\"dept\"}}' WHERE `id` = 1023;
+
