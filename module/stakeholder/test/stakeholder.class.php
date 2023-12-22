@@ -358,18 +358,19 @@ class stakeholderTest
     }
 
     /**
-     * 获取项目下干系人id=>realname的键值对。
-     * Get a key-value pair for stakeholder id=>realname under the project.
+     * 获取项目下干系人field=>realname的键值对。
+     * Get a key-value pair for stakeholder field=>realname under the project.
      *
      * @param  int    $projectID
+     * @param  string $field
      * @access public
      * @return array
      */
-    public function getStakeholderUsersTest(int $projectID): array
+    public function getStakeholderUsersTest(int $projectID, string $field = 'id'): array
     {
         global $tester;
         $tester->session->set('project', $projectID);
-        $stakeholderUsers = $this->objectModel->getStakeholderUsers();
+        $stakeholderUsers = $this->objectModel->getStakeholderUsers($field);
 
         if(dao::isError()) return dao::getError();
         return $stakeholderUsers;
