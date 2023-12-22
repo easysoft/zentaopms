@@ -154,8 +154,9 @@ class gogsModel extends model
         $apiRoot = $this->getApiRoot($gogsID);
         if(!$apiRoot) return array();
 
-        $user = $this->apiGetAdminer($gogsID);
-        if(!$user) return array();
+        $url  = sprintf($apiRoot, "/user");
+        $user = json_decode(commonModel::http($url));
+        if(!isset($user->username)) return array();
 
         $url      = sprintf($apiRoot, "/users/{$user->username}/repos");
         $projects = array();
@@ -171,25 +172,6 @@ class gogsModel extends model
         }
 
         return $projects;
-    }
-
-    /**
-     * 判断当前用户是否是Gogs管理员。
-     * Api get adminer.
-     *
-     * @param  int    $gogsID
-     * @access public
-     * @return object|null
-     */
-    public function apiGetAdminer(int $gogsID): object|null
-    {
-        $apiRoot = $this->getApiRoot($gogsID);
-        if(!$apiRoot) return array();
-
-        $url  = sprintf($apiRoot, "/user");
-        $user = json_decode(commonModel::http($url));
-
-        return isset($user->username) ? $user : null;
     }
 
     /**
