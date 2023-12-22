@@ -123,6 +123,18 @@ class metricTest
     }
 
     /**
+     * Test getPairsByScope method.
+     *
+     * @param  string $scope
+     * @access public
+     * @return array|false
+     */
+    public function getPairsByScope($scope)
+    {
+        return $this->objectModel->getPairsByScope($scope);
+    }
+
+    /**
      * 测试 getScopePairs 方法。
      * Test getScopePairs method.
      *
