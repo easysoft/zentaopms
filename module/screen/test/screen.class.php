@@ -166,6 +166,19 @@ class screenTest
     }
 
     /**
+     * 测试setDefaultByDate。
+     * Test setDefaultByDate.
+     *
+     * @param  array $filters
+     * @access public
+     * @return void
+     */
+    public function setDefaultByDateTest(array &$filters): void
+    {
+        $this->objectModel->setDefaultByDate($filters);
+    }
+
+    /**
      * 测试getChartOption。
      * Test getChartOption.
      *
