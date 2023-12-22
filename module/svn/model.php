@@ -11,6 +11,12 @@ declare(strict_types=1);
  */
 class svnModel extends model
 {
+    public function __construct(string $moduleName = '', string $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        putenv('LC_ALL=C');
+    }
     /**
      * The svn binary client.
      *
@@ -263,7 +269,9 @@ class svnModel extends model
         {
             $cmd     = $repo->client . ' --version --quiet';
             $version = `$cmd`;
-            if(version_compare((string)$version, '1.6.0', '>'))
+            if(!$version) return false;
+
+            if(version_compare($version, '1.6.0', '>'))
             {
                 $this->client .= ' --trust-server-cert';
             }

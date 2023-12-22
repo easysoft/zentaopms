@@ -76,17 +76,22 @@ class svnTest
         $noLink = new stdclass();
         $noLink->revision  = 2;
         $noLink->committer = 'test';
+        $noLink->author    = 'test';
+        $noLink->date      = '2023-01-01 00:00:00';
         $noLink->time      = '2023-01-01 00:00:00';
         $noLink->msg       = 'test';
         $noLink->comment   = 'test';
         $noLink->change    = array();
 
         $linked = new stdclass();
-        $linked->revision = 3;
+        $linked->revision  = 3;
         $linked->committer = 'test';
-        $linked->time     = '2023-01-02 00:00:00';
-        $linked->msg      = '* Code for task #1.';
-        $linked->comment  = '* Code for task #1.';
+        $linked->author    = 'test';
+        $linked->date      = '2023-01-02 00:00:00';
+        $linked->time      = '2023-01-02 00:00:00';
+        $linked->msg       = '* Code for task #1.';
+        $linked->comment   = '* Code for task #1.';
+        $linked->change    = array();
         if(strpos($param, 'linked') !== false) $logs[] = $linked;
         if(strpos($param, 'nolink') !== false) $logs[] = $noLink;
 
