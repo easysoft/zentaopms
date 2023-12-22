@@ -153,6 +153,19 @@ class screenTest
     }
 
     /**
+     * 测试setIsQueryScreenFilters。
+     * Test setIsQueryScreenFilters.
+     *
+     * @param  array $filters
+     * @access public
+     * @return void
+     */
+    public function setIsQueryScreenFiltersTest(array &$filters): void
+    {
+        $this->objectModel->setIsQueryScreenFilters($filters);
+    }
+
+    /**
      * 测试getChartOption。
      * Test getChartOption.
      *
