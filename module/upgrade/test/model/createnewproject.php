@@ -35,6 +35,7 @@ $data->projectStatus = 'wait';
 $data->PM            = '';
 $data->begin         = '2023-12-21';
 $data->end           = '';
+$data->longTime      = false;
 
 $projectIdList = array();
 $programID     = 1;
