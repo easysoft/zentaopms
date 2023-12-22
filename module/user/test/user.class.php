@@ -333,6 +333,27 @@ class userTest
     }
 
     /**
+     * 测试检测权限组是否更改。
+     * Test check group change.
+     *
+     * @param  object $user
+     * @access public
+     * @return array
+     */
+    public function checkGroupChangeTest(object $user): array
+    {
+        $result = $this->objectModel->checkGroupChange($user);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * 测试批量更新用户。
      * Test batch update users.
      *
