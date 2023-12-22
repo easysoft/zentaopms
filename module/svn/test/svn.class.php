@@ -48,15 +48,14 @@ class svnTest
      *
      *  @param  int    $repoID
      *  @access public
-     *  @return object|null
+     *  @return object|false
      */
-    public function updateCommitTest(int $repoID): object|null
+    public function updateCommitTest(int $repoID): object|false
     {
         $repo = $this->objectModel->loadModel('repo')->getByID($repoID);
-        $res  = $this->objectModel->updateCommit($repo, array(), false);
-        if(!$res) return null;
+        $this->objectModel->updateCommit($repo, array(), false);
 
-        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->orderBy('id_desc')->fetch();
+        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
     }
 
     /**
