@@ -92,6 +92,7 @@ $lang->dataview->objects['bug']         = $lang->bug->common;
 $lang->dataview->objects['project']     = $lang->project->common;
 $lang->dataview->objects['task']        = $lang->task->common;
 $lang->dataview->objects['team']        = '团队';
+$lang->dataview->objects['user']        = '用户';
 $lang->dataview->objects['execution']   = '阶段';
 $lang->dataview->objects['testtask']    = '测试单';
 $lang->dataview->objects['testrun']     = '测试执行';
