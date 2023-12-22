@@ -58,4 +58,49 @@ class svnTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * Test saveCommits method.
+     *
+     *  @param  int    $repoID
+     *  @param  string $param   linked|job|empty
+     *  @access public
+     *  @return object|null
+     */
+    public function saveCommitsTest(int $repoID, string $param): object|null
+    {
+        $repo = $this->objectModel->loadModel('repo')->getByID($repoID);
+
+        $logs = array();
+        $jobs = array();
+
+        $noLink = new stdclass();
+        $noLink->revision  = 2;
+        $noLink->committer = 'test';
+        $noLink->time      = '2023-01-01 00:00:00';
+        $noLink->msg       = 'test';
+        $noLink->comment   = 'test';
+        $noLink->change    = array();
+
+        $linked = new stdclass();
+        $linked->revision = 3;
+        $linked->committer = 'test';
+        $linked->time     = '2023-01-02 00:00:00';
+        $linked->msg      = '* Code for task #1.';
+        $linked->comment  = '* Code for task #1.';
+        if(strpos($param, 'linked') !== false) $logs[] = $linked;
+        if(strpos($param, 'nolink') !== false) $logs[] = $noLink;
+
+        $job = new stdclass();
+        $job->id      = 1;
+        $job->comment = 'task';
+        if(strpos($param, 'job') !== false) $jobs[] = $job;
+
+        $commit = new stdclass();
+        $commit->commit = 1;
+        $res = $this->objectModel->saveCommits($repo, $logs, $commit, $jobs, false);
+        if(!$res) return dao::getError();
+
+        return $this->objectModel->loadModel('repo')->getByID($repoID);
+    }
 }

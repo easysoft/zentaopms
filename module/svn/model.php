@@ -103,10 +103,10 @@ class svnModel extends model
      * @param  object  $lastInDB
      * @param  array   $commentGroup
      * @param  bool    $printLog
-     * @access private
+     * @access public
      * @return bool
      */
-    private function saveCommits(object $repo, array $logs, object $lastInDB, array $commentGroup, bool $printLog): bool
+    public function saveCommits(object $repo, array $logs, object $lastInDB, array $commentGroup, bool $printLog): bool
     {
         $this->loadModel('repo');
         $version = (int)$lastInDB->commit + 1;
