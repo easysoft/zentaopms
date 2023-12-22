@@ -21,9 +21,9 @@ class caselibModel extends model
      * @param  array  $libraries
      * @param  int    $libID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setLibMenu(array $libraries, int $libID): void
+    public function setLibMenu(array $libraries, int $libID): bool
     {
         /* Set case lib menu. */
         $products = $this->loadModel('product')->getPairs();
@@ -54,6 +54,8 @@ class caselibModel extends model
 
             $this->lang->switcherMenu = $output;
         }
+
+        return true;
     }
 
     /**

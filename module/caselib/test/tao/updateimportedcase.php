@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/caselib.class.php';
 
 su('admin');
 zdTable('case')->gen(10);
+zdTable('story')->gen(10);
 
 /**
 
