@@ -23,9 +23,12 @@ $fnGenerateFields = function() use ($lang, $fields, $stories)
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
     if($stories) $items[] = array('name' => 'uploadImage', 'label' => '', 'control' => 'hidden', 'hidden' => true);
+    unset($fields['color']);
 
     return array_merge($items, array_map(function($name, $field)
     {
+        if($name == 'title') $field['control'] = 'colorInput';
+
         $field['name'] = $name;
         if(!empty($field['options'])) $field['items'] = $field['options'];
         if(!empty($field['default'])) $field['value'] = $field['default'];
