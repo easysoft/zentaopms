@@ -96,7 +96,7 @@ class gogsModel extends model
         $apiRoot = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url     = sprintf($apiRoot, "/user");
         $user    = json_decode(commonModel::http($url));
-        if(empty($user)) return false;
+        if(empty($user) || isset($user->message)) return false;
 
         /* Check whether the token belongs to the administrator by edit user. */
         $editUserUrl = sprintf($apiRoot, "/admin/users/" . $user->username);
