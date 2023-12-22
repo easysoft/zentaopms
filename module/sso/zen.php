@@ -12,6 +12,77 @@ declare(strict_types=1);
 class ssoZen extends sso
 {
     /**
+     * Get feishu accessToken.
+     *
+     * @param  object    $appConfig
+     * @access protected
+     * @return array
+     */
+    protected function getFeishuAccessToken(object $appConfig): array
+    {
+        $appUrl    = $this->config->sso->feishuAppInfoAPI;
+        $appParams = array('app_id' => $appConfig->appId, 'app_secret' => $appConfig->appSecret);
+        $appResult = common::http($appUrl, $appParams, array(), array(), 'json');
+
+        if(empty($appResult)) return array('result' => 'fail', 'message' => $this->lang->sso->feishuResponseEmpty);
+
+        $appInfo = json_decode($appResult);
+        if(!isset($appInfo->msg) || $appInfo->msg != 'ok') return array('result' => 'fail', 'message' => $appResult);
+        return array('result' => 'success', 'token' => $appInfo->app_access_token);
+    }
+
+    /**
+     * Get feishu userToken.
+     *
+     * @param  string    $code
+     * @param  string    $accessToken
+     * @access protected
+     * @return array
+     */
+    protected function getFeishuUserToken(string $code, string $accessToken): array
+    {
+        $tokenUrl     = $this->config->sso->feishuTokenAPI;
+        $tokenHeaders = array('Authorization: Bearer ' . $accessToken);
+        $tokenParams  = array('grant_type' => 'authorization_code', 'code' => $code);
+        $tokenResult  = common::http($tokenUrl, $tokenParams, array(), $tokenHeaders, 'json');
+
+        if(empty($tokenResult)) return array('result' => 'fail', 'message' => $this->lang->sso->feishuResponseEmpty);
+
+        $tokenInfo = json_decode($tokenResult);
+        if(!isset($tokenInfo->msg) or $tokenInfo->msg != 'success') return array('result' => 'fail', 'message' => $tokenResult);
+        return array('result' => 'success', 'token' => $tokenInfo->data->access_token);
+    }
+
+    /**
+     * Get bind feishu user.
+     *
+     * @param  string    $userToken
+     * @param  object    $feishuConfig
+     * @access protected
+     * @return array
+     */
+    protected function getBindFeishuUser(string $userToken, object $feishuConfig): array
+    {
+        $userUrl     = $this->config->sso->feishuUserInfoAPI;
+        $userHeaders = array('Authorization: Bearer ' . $userToken);
+        $userResult  = common::http($userUrl, array(), array(), $userHeaders, 'json');
+
+        if(empty($userResult)) return array('result' => 'fail', 'message' => $this->lang->sso->feishuResponseEmpty);
+
+        $userInfo = json_decode($userResult);
+        if(!isset($userInfo->msg) or $userInfo->msg != 'success') return array('result' => 'fail', 'message' => $userResult);
+
+        $openID = $userInfo->data->open_id;
+
+        /* Get the user relationship bound in webhook. */
+        $account  = $this->loadModel('webhook')->getBindAccount($feishuConfig->id, 'webhook', $openID);
+        if(empty($account)) return array('result' => 'fail', 'message' => $this->lang->sso->unbound);
+
+        $user = $this->loadModel('user')->getById($account);
+        return array('result' => 'success', 'user' => $user);
+    }
+
+    /**
      * Build user data for createUser method.
      *
      * @access protected

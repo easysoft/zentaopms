@@ -242,8 +242,7 @@ class sso extends control
         $appConfig = json_decode($feishuConfig->secret);
         $appID     = $appConfig->appId;
 
-        $url = "https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri=%s&app_id=%s";
-        $url = sprintf($url, $redirectURI, $appID, $state);
+        $url = sprintf($this->config->sso->feishuAuthAPI, $redirectURI, $appID, $state);
         $this->locate($url);
     }
 
@@ -268,51 +267,25 @@ class sso extends control
         $appConfig = json_decode($feishuConfig->secret);
 
         /* Obtain the access credentials of the Feishu app. */
-        $appUrl    = 'https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal';
-        $appParams = array('app_id' => $appConfig->appId, 'app_secret' => $appConfig->appSecret);
-        $appResult = common::http($appUrl, $appParams, array(), array(), 'json');
-
-        if(empty($appResult)) $this->showError($this->lang->sso->feishuResponseEmpty);
-        $appInfo = json_decode($appResult);
-
-        if(!isset($appInfo->msg) or $appInfo->msg != 'ok') $this->showError($appResult);
-        $accessToken = $appInfo->app_access_token;
+        $appResult = $this->ssoZen->getFeishuAccessToken($appConfig);
+        if($appResult['result'] == 'fail') return $this->showError($appResult['message']);
+        $accessToken = $appResult['token'];
 
         /* Verify the identity of the logged in user. */
-        $tokenUrl     = 'https://open.feishu.cn/open-apis/authen/v1/refresh_access_token';
-        $tokenHeaders = array('Authorization: Bearer ' . $accessToken);
-        $tokenParams  = array('grant_type' => 'authorization_code', 'code' => $code);
-        $tokenResult  = common::http($tokenUrl, $tokenParams, array(), $tokenHeaders, 'json');
-
-        if(empty($tokenResult)) $this->showError($this->lang->sso->feishuResponseEmpty);
-        $tokenInfo = json_decode($tokenResult);
-
-        if(!isset($tokenInfo->msg) or $tokenInfo->msg != 'success') $this->showError($tokenResult);
-        $userToken = $tokenInfo->data->access_token;
+        $tokenResult = $this->ssoZen->getFeishuUserToken($code, $accessToken);
+        if($tokenResult['result'] == 'fail') return $this->showError($tokenResult['message']);
+        $accessToken = $tokenResult['token'];
 
         /* Get login user information. */
-        $userUrl     = 'https://open.feishu.cn/open-apis/authen/v1/user_info';
-        $userHeaders = array('Authorization: Bearer ' . $userToken);
-        $userResult  = common::http($userUrl, array(), array(), $userHeaders, 'json');
+        $userResult = $this->ssoZen->getBindFeishuUser($userToken, $feishuConfig);
+        if($userResult['result'] == 'fail') return $this->showError($userResult['message']);
+        $user = $userResult['user'];
 
-        if(empty($userResult)) $this->showError($this->lang->sso->feishuResponseEmpty);
-        $userInfo = json_decode($userResult);
-
-        if(!isset($userInfo->msg) or $userInfo->msg != 'success') $this->showError($userResult);
-        $openID = $userInfo->data->open_id;
-
-        /* Get the user relationship bound in webhook. */
-        $account  = $this->loadModel('webhook')->getBindAccount($feishuConfig->id, 'webhook', $openID);
-        if(empty($account)) $this->showError($this->lang->sso->unbound);
-
-        $user     = $this->loadModel('user')->getById($account);
-        $password = $user->password;
         $this->session->set('rand', '');
-        $user = $this->user->identify($account, $password);
+        $user = $this->loadModel('user')->identify($user->account, $user->password);
         $this->user->login($user);
 
-        $indexUrl = $this->createLink('my', 'index');
-        $this->locate($indexUrl);
+        $this->locate($this->createLink('my', 'index'));
     }
 
     /**
