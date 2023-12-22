@@ -391,4 +391,23 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $expect;
     }
+
+    /**
+     * 获取给定干系人在当前项目下的问题信息。
+     * Get the issue information by account.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getStakeholderIssueTest(int $projectID, string $account): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $issues = $this->objectModel->getStakeholderIssue($account);
+
+        if(dao::isError()) return dao::getError();
+        return $issues;
+    }
 }
