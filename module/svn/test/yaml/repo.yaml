@@ -17,7 +17,7 @@ fields:
   - field: SCM
     range: Subversion{3},Gitlab,Gitea,Gogs
   - field: client
-    range: /usr/bin/svn
+    range: svn
   - field: commits
     range: 10
   - field: account
