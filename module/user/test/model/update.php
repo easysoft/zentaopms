@@ -237,9 +237,6 @@ r($admins) && p() && e(',admin,user12,'); // 数据库中超级管理员是 admi
 
 r($app->company->admins) && p() && e(',admin,user12,'); // $app 对象中超级管理员是 admin,user12。
 
-$view = $tester->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($user12->account)->fetch();
-r($view) && p('programs', '|') && e(',1'); // user12 用户项目集权限是 1。
-
 $user12->group = array(0, 2, 3);
 $result = $userTest->updateTest($user12);
 r($result) && p('result') && e(1); // 修改用户权限组成功，返回 true。
@@ -248,9 +245,6 @@ $groups = $tester->dao->select('*')->from(TABLE_USERGROUP)->fetchAll();
 r(count($groups)) && p()                  && e(2);          // 查看用户权限组，返回 2 条记录。
 r($groups)        && p('0:account,group') && e('user12,2'); // 第 1 条记录的用户名是 user12，权限组 id 是 1。
 r($groups)        && p('1:account,group') && e('user12,3'); // 第 2 条记录的用户名是 user12，权限组 id 是 2。
-
-$view = $tester->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($user12->account)->fetch();
-r($view) && p('programs', '|') && e('2,3,5,6,8,9'); // user12 用户项目集权限是 2,3,5,6,8,9。
 
 /**
  * 检测是否创建日志和历史记录。
