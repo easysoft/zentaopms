@@ -159,6 +159,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('name'),
+        set::control('colorInput'),
         set::label($lang->task->name),
         set::width('240px')
     ),
