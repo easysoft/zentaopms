@@ -1,0 +1,14 @@
+title: table zt_grouppriv
+desc: "分组权限"
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: group
+    note: "分组ID"
+    range: 1-10
+  - field: module
+    note: "模块名"
+    range: 'story{4},task{4},bug{4}'
+  - field: method
+    note: "方法名"
+    range: 'create,edit,view,delete'

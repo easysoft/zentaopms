@@ -1096,7 +1096,7 @@ class commonModel extends model
             {
                 if($this->app->tab == 'project')
                 {
-                    $this->resetProjectPriv(); // 项目目管理员有项目的所有操作权限。
+                    $this->resetProjectPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
@@ -1248,7 +1248,7 @@ class commonModel extends model
     }
 
     /**
-     * 如果用户是项目管理员，则重设项目的权限。
+     * 项目有继承和重新定义两种权限，在此处需要重置权限。
      * Reset project priv.
      *
      * @param  int    $projectID

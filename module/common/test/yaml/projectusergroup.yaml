@@ -1,0 +1,11 @@
+title: table zt_usergroup
+desc: "用户分组"
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    range: 'admin,user1,user2,user3,dev1,dev2,dev3'
+  - field: group
+    note: "分组名称"
+    range: 1-10

@@ -1,0 +1,33 @@
+title: table zt_group
+desc: "项目权限分组"
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "分组名称"
+    range: "1-10"
+    prefix: "这是一个新的项目分组"
+  - field: project
+    note: "所属项目"
+    range: "11-20"
+  - field: desc
+    note: "分组描述"
+    range: "1-10000"
+    prefix: "这个一个用户分组描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: developer
+    note: ""
+    range: "1"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
