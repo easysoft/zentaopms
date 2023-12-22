@@ -1099,7 +1099,14 @@ class storyModel extends model
         $reviewedTwins = array();
         $this->loadModel('action');
 
-        $storyIdList         = array_filter($storyIdList);
+        $storyIdList = array_filter($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos($storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+
         $oldStories          = $this->getByList($storyIdList);
         $hasResult           = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
         $reviewerList        = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
