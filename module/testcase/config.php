@@ -29,12 +29,13 @@ $config->testcase->exportFields = '
     pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunner, lastRunDate, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version, linkCase, files';
 
-$config->testcase->customCreateFields      = 'story,stage,pri,keywords';
-$config->testcase->customBatchCreateFields = 'module,scene,stage,story,pri,precondition,keywords,review';
-$config->testcase->customBatchEditFields   = 'module,scene,story,stage,precondition,status,pri,keywords';
+$config->testcase->list = new stdclass();
+$config->testcase->list->customCreateFields      = 'story,stage,pri,keywords';
+$config->testcase->list->customBatchCreateFields = 'module,scene,stage,story,pri,precondition,keywords,review';
+$config->testcase->list->customBatchEditFields   = 'module,scene,story,stage,precondition,status,pri,keywords';
 
 $config->testcase->custom = new stdclass();
-$config->testcase->custom->createFields      = $config->testcase->customCreateFields;
+$config->testcase->custom->createFields      = $config->testcase->list->customCreateFields;
 $config->testcase->custom->batchCreateFields = 'module,scene,story,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,scene,stage,status,pri,story';
 

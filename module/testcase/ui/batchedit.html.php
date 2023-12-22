@@ -42,7 +42,7 @@ else
 
         $requiredFields[$field] = $field;
 
-        if(strpos(",{$config->testcase->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = $field;
+        if(strpos(",{$config->testcase->list->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = $field;
     }
 
     $items = array();

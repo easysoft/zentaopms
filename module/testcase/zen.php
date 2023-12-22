@@ -968,7 +968,7 @@ class testcaseZen extends testcase
 
         /* 设置自定义字段。 */
         /* Set custom fields. */
-        foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        foreach(explode(',', $this->config->testcase->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
@@ -1001,7 +1001,7 @@ class testcaseZen extends testcase
             $libraries = $this->loadModel('caselib')->getLibraries();
 
             /* Remove story custom fields from caselib */
-            $this->config->testcase->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->customBatchEditFields);
+            $this->config->testcase->list->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->list->customBatchEditFields);
             $this->config->testcase->custom->batchEditFields = str_replace(',story', '', $this->config->testcase->custom->batchEditFields);
 
             /* Set caselib menu. */
@@ -1257,7 +1257,7 @@ class testcaseZen extends testcase
 
         /* 设置自定义字段和展示字段。 */
         /* Set custom fields and show fields. */
-        foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field)
+        foreach(explode(',', $this->config->testcase->list->customBatchCreateFields) as $field)
         {
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->testcase->$field;

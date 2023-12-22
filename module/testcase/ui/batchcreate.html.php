@@ -23,7 +23,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->testcase->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->testcase->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 $hiddenStory = isAjaxRequest('modal') && $story;

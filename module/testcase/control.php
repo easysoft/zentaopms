@@ -269,7 +269,7 @@ class testcase extends control
 
         /* 设置自定义字段。 */
         /* Set custom fields. */
-        foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        foreach(explode(',', $this->config->testcase->list->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;
 

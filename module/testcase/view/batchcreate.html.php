@@ -42,7 +42,7 @@
       if($field)
       {
           $requiredFields[$field] = '';
-          if(strpos(",{$config->testcase->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+          if(strpos(",{$config->testcase->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
   $colspan     = count($visibleFields) + 3;

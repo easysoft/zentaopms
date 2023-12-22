@@ -41,7 +41,7 @@
       if($field)
       {
           $requiredFields[$field] = '';
-          if(strpos(",{$config->testcase->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+          if(strpos(",{$config->testcase->list->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
   ?>
