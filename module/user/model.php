@@ -515,7 +515,6 @@ class userModel extends model
         /* Create user group, update user view and save log. */
         $groups = array_filter($user->group);
         if($groups) $this->createUserGroup($groups, $user->account);
-        $this->computeUserView($user->account);
         $this->loadModel('action')->create('user', $userID, 'Created');
 
         if(dao::isError()) return $this->rollback();
@@ -612,7 +611,6 @@ class userModel extends model
             /* Create user group, update user view and save log. */
             $groups = array_filter($user->group);
             if($groups) $this->createUserGroup($groups, $user->account);
-            $this->computeUserView($user->account);
             $this->action->create('user', $userID, 'Created');
 
             if(dao::isError()) return $this->rollback();
@@ -752,7 +750,6 @@ class userModel extends model
         /* If the group changed, delete the old group, create new group and update user view. */
         $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($user->account)->exec();
         if($newGroups) $this->createUserGroup($newGroups, $user->account);
-        $this->computeUserView($user->account, true);
 
         return !dao::isError();
     }
