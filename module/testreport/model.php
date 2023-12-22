@@ -54,6 +54,7 @@ class testreportModel extends model
              ->check('end', 'ge', $report->begin)
              ->where('id')->eq($report->id)
              ->exec();
+
         if(dao::isError()) return false;
 
         $this->loadModel('file')->processFile4Object('testreport', $oldReport, $report);
@@ -377,12 +378,12 @@ class testreportModel extends model
      */
     public function getChildBuilds(array $builds)
     {
-        $childBuildIdList = '';
-        foreach($builds as $build) $childBuildIdList .= $build->builds . ',';
+        $childBuildIDList = '';
+        foreach($builds as $build) $childBuildIDList .= $build->builds . ',';
 
-        $childBuildIdList = array_unique(array_filter(explode(',', $childBuildIdList)));
-        if(empty($childBuildIdList)) return array();
+        $childBuildIDList = array_unique(array_filter(explode(',', $childBuildIDList)));
+        if(empty($childBuildIDList)) return array();
 
-        return $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($childBuildIdList)->fetchAll('id');
+        return $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($childBuildIDList)->fetchAll('id');
     }
 }
