@@ -311,6 +311,28 @@ class userTest
     }
 
     /**
+     * 测试检测用户名是否更改。
+     * Test check account change.
+     *
+     * @param  string $oldAccount
+     * @param  string $newAccount
+     * @access public
+     * @return array
+     */
+    public function checkAccountChangeTest(string $oldAccount, string $newAccount): array
+    {
+        $result = $this->objectModel->checkAccountChange($oldAccount, $newAccount);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * 测试批量更新用户。
      * Test batch update users.
      *
