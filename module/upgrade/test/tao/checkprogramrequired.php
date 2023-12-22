@@ -27,6 +27,7 @@ $data->programName   = '';
 $data->programStatus = '';
 $data->begin         = '2023-12-21';
 $data->end           = '';
+$data->longTime      = false;
 
 $objectTypeList = array('project', 'execution');
 
