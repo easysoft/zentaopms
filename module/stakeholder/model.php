@@ -502,16 +502,18 @@ class stakeholderModel extends model
     }
 
     /**
-     * Delete expect.
+     * 删除一个期望。
+     * Delete a expect.
      *
      * @param  int    $expectID
-     * @param  object $null
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteExpect($expectID, $null = null)
+    public function deleteExpect(int $expectID): bool
     {
         $this->dao->update(TABLE_EXPECT)->set('deleted')->eq('1')->where('id')->eq($expectID)->exec();
+
+        return !dao::isError();
     }
 
     /**
