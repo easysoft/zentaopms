@@ -261,8 +261,8 @@ class testtaskModel extends model
         if(!$testtask) return false;
 
         $product = $this->dao->select('name,type')->from(TABLE_PRODUCT)->where('id')->eq($testtask->product)->fetch();
-        $testtask->productName   = $product->name;
-        $testtask->productType   = $product->type;
+        $testtask->productName   = !empty($product->name) ? $product->name : '';
+        $testtask->productType   = !empty($product->type) ? $product->type : '';
         $testtask->branch        = 0;
         $testtask->executionName = '';
         $testtask->buildName     = '';

@@ -5,6 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
 
 zdTable('bug')->config('getbugs4test_bug')->gen(40);
+zdTable('testtask')->gen(0);
 zdTable('testtask')->gen(20);
 zdTable('build')->gen(10);
 zdTable('user')->gen(1);
