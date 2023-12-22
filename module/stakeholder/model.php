@@ -463,16 +463,17 @@ class stakeholderModel extends model
     }
 
     /**
+     * 获取期望列表数据。
      * Get expect list.
      *
-     * @param  string $browseType
+     * @param  string $browseType all|bysearch
      * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
-     * @return object
+     * @return array
      */
-    public function getExpectList($browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getExpectList(string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         $stakeholderQuery = '';
         if($browseType == 'bysearch')
@@ -487,7 +488,7 @@ class stakeholderModel extends model
             $stakeholderQuery = $this->session->stakeholderQuery;
         }
 
-        $expects = $this->dao->select('t1.*,t2.key,t3.realname')->from(TABLE_EXPECT)->alias('t1')
+        return $this->dao->select('t1.*,t2.key,t3.realname')->from(TABLE_EXPECT)->alias('t1')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t2')->on('t1.userID=t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t2.user=t3.account')
             ->where('t1.project')->eq($this->session->project)
@@ -498,8 +499,6 @@ class stakeholderModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-
-        return $expects;
     }
 
     /**
