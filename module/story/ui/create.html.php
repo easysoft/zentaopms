@@ -235,7 +235,14 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->story->source),
-            picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']))
+            picker
+            (
+                setID('source'),
+                set::name('source'),
+                set::items($fields['source']['options']),
+                set::required(strpos(",{$this->config->story->create->requiredFields},", ",source,") !== false),
+                set::value($fields['source']['default'])
+            )
         ),
         formGroup
         (

@@ -431,7 +431,7 @@ detailBody
                             setClass('relateStories'),
                             set::title($relation->title),
                             label(setClass('circle size-sm'), $relation->id),
-                            $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal')), $relation->title) : span(setClass('title'), $relation->title),
+                            $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $relation->title) : span(setClass('title'), $relation->title),
                             $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null
                         );
                     }, $relations)),
