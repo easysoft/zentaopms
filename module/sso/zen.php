@@ -118,27 +118,12 @@ class ssoZen extends sso
 
         if($this->loadModel('user')->isLogon() and $this->session->user->account == $user->account) return $this->locate($locate);
 
-        $this->user->cleanLocked($user->account);
-        /* Authorize him and save to session. */
-        $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
-        $user->rights   = $this->user->authorize($user->account);
-        $user->groups   = $this->user->getGroups($user->account);
-        $user->view     = $this->user->grantUserView($user->account, $user->rights['acls']);
         $user->last     = date(DT_DATETIME1, $last);
         $user->lastTime = $user->last;
-        $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
-        if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
-        if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))
-        {
-            $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
-            if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
-        }
-
+        $user = $this->user->checkNeedModifyPassword($user, 0);
         $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
 
-        $this->session->set('user', $user);
-        $this->app->user = $this->session->user;
-        $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->user->login($user);
 
         return $this->locate($locate);
     }

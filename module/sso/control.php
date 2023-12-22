@@ -108,15 +108,9 @@ class sso extends control
             $user = $this->sso->bind();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Authorize him and save to session. */
-            $user->rights = $this->user->authorize($user->account);
-            $user->groups = $this->user->getGroups($user->account);
+            $user->last = date(DT_DATETIME1);
+            $this->user->login($user);
 
-            $user->last  = date(DT_DATETIME1);
-            $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
-            $this->session->set('user', $user);
-            $this->app->user = $this->session->user;
-            $this->loadModel('action')->create('user', $user->id, 'login');
             unset($_SESSION['ssoData']);
             return $this->send(array('result' => 'success', 'load' => helper::safe64Decode($referer)));
         }
