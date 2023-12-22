@@ -112,6 +112,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
             )
         );
 
+        $app->loadLang('user');
         $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw') ? ' ' : '';
         $formItems[] = div
         (
