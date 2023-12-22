@@ -319,4 +319,25 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $activityPairs;
     }
+
+    /**
+     * 获取期望列表数据。
+     * Get expect list.
+     *
+     * @param  int    $projectID
+     * @param  string $browseType all|bysearch
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getExpectListTest(int $projectID, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc'): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $expects = $this->objectModel->getExpectList($browseType, $queryID, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+        return $expects;
+    }
 }
