@@ -168,6 +168,7 @@ detailBody
                 (
                     set::name('lib'),
                     set::items($libraries),
+                    set::required(true),
                     set::value($case->lib)
                 )
             ) : item

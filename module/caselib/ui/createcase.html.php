@@ -25,6 +25,7 @@ formPanel
                 (
                     set::name('lib'),
                     set::items($libraries),
+                    set::required(true),
                     set::value($libID)
                 )
             )
@@ -40,6 +41,7 @@ formPanel
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
+                    set::required(true),
                     set::value($currentModuleID)
                 ),
                 count($moduleOptionMenu) == 1 ? span
