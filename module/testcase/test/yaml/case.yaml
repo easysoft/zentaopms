@@ -1,0 +1,15 @@
+title: table zt_testcase
+desc: "测试用例"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: product
+    range: 1{10},41{10},0{10}
+  - field: branch
+    range: 0{10},1{5},0{15}
+  - field: module
+    range: 0{5},1{5},0{5},12{5},0{5},23{5}
+  - field: lib
+    range: 0,1
+  - field: fromCaseID
+    range: 21-25,0{25}
