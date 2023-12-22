@@ -6,7 +6,7 @@ su('admin');
 
 zdTable('action')->config('action')->gen(25);
 zdTable('product')->config('product')->gen(2);
-zdTable('project')->config('execution')->gen(11);
+zdTable('project')->config('execution')->gen(111);
 zdTable('repo')->config('repo')->gen(3);
 zdTable('pipeline')->gen(1);
 zdTable('projectproduct')->config('projectproduct')->gen(1);
@@ -134,7 +134,7 @@ r($result && !$file->deleted) && p('') && e('1');                               
 $result = $action->undeleteTest($actionIDList[24]);
 $parentPlan = $tester->dao->select('*')->from('zt_productplan')->where('id')->eq('1')->fetch();
 r($result && $parentPlan->parent == '0') && p('') && e('1');                                                                              // 测试还原action 24, objectType productplan 的数据。
-    
+
 $result = $action->undeleteTest($actionIDList[25]);
 $task   = $tester->dao->select('*')->from('zt_task')->where('id')->eq('1')->fetch();
 r($result && $task->parent == '-1') && p('') && e('1');                                                                                   // 测试还原action 25, objectType task 的数据。

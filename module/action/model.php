@@ -1786,7 +1786,7 @@ class actionModel extends model
         $relatedProject = array();
         if($table == TABLE_TODO)
         {
-            $todos = $this->dao->select("id, {$field} AS name, account, private, type, objectID")->from($table)->where('id')->in($objectIdList)->fetchAll();
+            $todos = $this->dao->select("id, {$field} AS name, account, private, type, objectID")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
             foreach($todos as $todo)
             {
                 /* Get related object name. */
@@ -1796,7 +1796,7 @@ class actionModel extends model
         }
         elseif(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false || $objectType == 'project' || $objectType == 'execution')
         {
-            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name; // Get user realname if objectType is gapanalysis.
@@ -1807,7 +1807,7 @@ class actionModel extends model
         {
             if($objectType == 'team') $table = TABLE_PROJECT;
             $objectField = $objectType == 'story' ? 'id,title,type' : 'id,team AS title,type';
-            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->fetchAll();
+            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id] = $object->title;
@@ -1817,12 +1817,12 @@ class actionModel extends model
         }
         elseif($objectType == 'stakeholder') // Get stakeholder realname.
         {
-            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
             foreach($objectName as $id => $name) $objectName[$id] = zget($users, $name);
         }
         else
         {
-            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
         }
         return array($objectName, $relatedProject, $requirements);
     }

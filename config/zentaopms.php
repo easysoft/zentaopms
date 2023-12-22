@@ -654,6 +654,8 @@ $config->objectTables['artifactrepo']   = TABLE_ARTIFACTREPO;
 $config->objectTables['metric']         = TABLE_METRIC;
 $config->objectTables['cron']           = TABLE_CRON;
 $config->objectTables['lang']           = TABLE_LANG;
+$config->objectTables['review']         = TABLE_REVIEW;
+$config->objectTables['effort']         = TABLE_EFFORT;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

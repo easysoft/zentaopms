@@ -23,11 +23,17 @@ class actionTest
      */
     public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $uid = '', string $version = '')
     {
-        global $tester;
+        global $tester, $config;
         if($tester->app->upgrading && !empty($version))
         {
             global $tester;
-            $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
+            $data = new stdclass();
+            $data->value   = $version;
+            $data->key     = 'version';
+            $data->owner   = 'system';
+            $data->module  = 'common';
+            $data->section = 'global';
+            $tester->dao->replace(TABLE_CONFIG)->data($data)->exec();
         }
 
         $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
@@ -440,8 +446,8 @@ class actionTest
         if($period == 'lastmonth')   return $date == date::getLastMonth();
         $func = "get$period";
         extract(date::$func());
-        if($period == 'thisweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
-        if($period == 'lastweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
+        if($period == 'thisweek')    return $date['begin'] == $begin and $date['end'] == $end;
+        if($period == 'lastweek')    return $date['begin'] == $begin and $date['end'] == $end;
     }
 
     /**

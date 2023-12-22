@@ -2,6 +2,8 @@ title: table zt_execution
 author: XuePeng Wang
 version: "1.0"
 fields:
+  - field: id
+    range: 1-700
   - field: name
     note: "名称"
     fields:
