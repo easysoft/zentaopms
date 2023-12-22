@@ -26,6 +26,7 @@ $data->stepType[][1] = 'item';
 
 $caseData = new stdclass();
 $caseData->title = '用例1更新';
+$caseData->lib   = 0;
 
 $forceNotReview = array(true, false);
 
