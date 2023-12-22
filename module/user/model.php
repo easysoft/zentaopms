@@ -309,25 +309,20 @@ class userModel extends model
     }
 
     /**
-     * 获取额外的用户。
-     * Get extra users.
+     * 根据用户名获取额外的用户。
+     * Get extra users by account.
      *
-     * @param  string       $params
      * @param  string|array $usersToAppended
-     * @param  array        $users
      * @param  string       $fields
      * @param  string       $keyField
      * @access public
      * @return array
      */
-    public function fetchExtraUsers(string $params, string|array $usersToAppended, array $users, string $fields, string $keyField): array
+    public function fetchExtraUsers(string|array $usersToAppended, string $fields, string $keyField): array
     {
-        if($usersToAppended) return $users;
+        if(!$usersToAppended) return array();
 
-        return $this->dao->select($fields)->from(TABLE_USER)
-            ->where('account')->in($usersToAppended)
-            ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq('0')->fi()
-            ->fetchAll($keyField);
+        return $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
     }
 
     /**
