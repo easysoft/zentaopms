@@ -18,7 +18,6 @@ foreach($fields as $field => $attr)
 {
     if($field == 'type') continue;
     if($field == 'secret' && $webhook->type != 'dinggroup' && $webhook->type != 'feishugroup') continue;
-    if($field == 'sendType' && !str_contains("|dinggroup|dinguser|wechatgroup|wechatuser|feishuuser|feishugroup|", "|{$webhook->type}|")) continue;
     if($field == 'params' && !str_contains('|bearychat|dinggroup|dinguser|wechatgroup|wechatuser|feishuuser|feishugroup|', "|{$webhook->type}|")) continue;
     if(($field == 'agentId' || $field == 'appKey' || $field == 'appSecret') && $webhook->type != 'dinguser') continue;
     if(($field == 'wechatCorpId' || $field == 'wechatCorpSecret' || $field == 'wechatAgentId') && $webhook->type != 'wechatuser') continue;
