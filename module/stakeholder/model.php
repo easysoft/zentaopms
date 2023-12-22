@@ -564,13 +564,14 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get stakeholder issue.
+     * 获取给定干系人在当前项目下的问题信息。
+     * Get the issue information by account.
      *
-     * @param  int    $account
+     * @param  string $account
      * @access public
-     * @return object
+     * @return array
      */
-    public function getStakeholderIssue($account)
+    public function getStakeholderIssue(string $account): array
     {
         return $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('project')->eq($this->session->project)
