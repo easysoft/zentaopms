@@ -340,4 +340,20 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $expects;
     }
+
+    /**
+     * 删除一个期望。
+     * Delete a expect.
+     *
+     * @param  int               $expectID
+     * @access public
+     * @return object|array|bool
+     */
+    public function deleteExpectTest(int $expectID): object|array|bool
+    {
+        $this->objectModel->deleteExpect($expectID);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->fetch();
+    }
 }
