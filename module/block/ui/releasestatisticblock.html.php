@@ -13,6 +13,7 @@ namespace zin;
 
 $annualMaxReleases   = !empty($releases) ? max($releases) : 0;
 $releaseProgressData = array();
+$spanWidth          = (strlen((string)($annualMaxReleases)) * 0.425 + 0.125) . 'rem';
 $i = 1;
 foreach($releases as $productName => $releaseCount)
 {
@@ -25,11 +26,11 @@ foreach($releases as $productName => $releaseCount)
 
     $releaseProgressData[] = div
     (
-        set::className('flex py-1.5 justify-between'),
+        set::className('flex justify-between'),
         cell
         (
             set::width('calc(30% - 0.5rem)'),
-            set::className('clip'),
+            set::className('clip py-1.5'),
             label
             (
                 set::className($labelClass . '-pale px-1.5 circle'),
@@ -38,20 +39,25 @@ foreach($releases as $productName => $releaseCount)
             span
             (
                 set::className('pl-2 text-' . $nameClass),
+                set::title($productName),
                 $productName
             )
         ),
         cell
         (
             set::width('70%'),
+            setClass('flex items-center py-1.5 border-l'),
             div
             (
-                set::className('progress'),
-                div
-                (
-                    set::className('progress-bar primary'),
-                    setStyle('width', $progress)
-                )
+                width("calc(calc(100% - {$spanWidth}) * " . ($annualMaxReleases ? $releaseCount / $annualMaxReleases : 0) . ')'),
+                setClass('progress progress-bar h-3'),
+                set('role', 'progressbar'),
+                setStyle(array('background' => 'var(--color-primary-300)'))
+            ),
+            span
+            (
+                setClass('pl-0.5'),
+                $releaseCount
             )
         )
     );
