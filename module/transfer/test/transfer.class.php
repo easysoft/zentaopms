@@ -39,12 +39,14 @@ class transferTest
         switch ($module)
         {
             case 'story':
-                $app->config->story->templateFields = "product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer";
+                $app->config->story->templateFields = 'product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer';
+                $app->config->story->listFields     = 'product,branch,module,pri';
                 $app->config->story->dtable->fieldList['product']['control'] = 'select';
                 $app->config->story->dtable->fieldList['module']['control']  = 'multiple';
                 break;
             case 'task':
-                $app->config->task->templateFields = "project,execution,module,story,pri,estimate,consumed,deadline";
+                $app->config->task->templateFields = 'project,execution,module,story,pri,estimate,consumed,deadline';
+                $app->config->task->listFields     = 'project,execution,module,pri';
                 break;
         }
     }
@@ -278,5 +280,24 @@ class transferTest
     {
         $this->initConfig($module);
         return $this->objectModel->getImportFields($module);
+    }
+
+    /**
+     * exportTest
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function exportTest(string $module)
+    {
+        $_POST = array();
+        global $tester;
+        $this->initConfig($module);
+        $_POST['exportFields'] = $tester->config->$module->templateFields;
+        $this->getQueryDatasTest($module);
+        $this->objectModel->export($module);
+        $_POST['count'] = count($_POST['rows']);
+        return $_POST;
     }
 }
