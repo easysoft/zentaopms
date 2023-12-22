@@ -854,7 +854,12 @@ class project extends control
     {
         /* 项目型项目不展示2.5级产品下拉菜单。 */
         $project = $this->project->getByID($projectID);
-        if(!$project->hasProduct) $this->config->excludeSwitcherList[] = 'project-testcase';
+        if(!$project->hasProduct)
+        {
+            $this->config->excludeSwitcherList[] = 'project-testcase';
+            $productPairs = $this->loadModel('product')->getProductPairsByProject($projectID);
+            $productID    = key($productPairs);
+        }
 
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }

@@ -29,7 +29,7 @@ $product       = is_bool($product) ? new stdclass() : $product;
 $canModify           = common::canModify('product', $product);
 $canSwitchCaseType   = $this->app->tab == 'qa';
 $canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
-$canManageModule     = hasPriv('tree', 'browse') && !empty($productID);
+$canManageModule     = hasPriv('tree', 'browse') && !empty($productID) && (!isset($project) || $project->hasProduct);
 $canCreateSuite      = hasPriv('testsuite', 'create');
 $canBrowseUnits      = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase   = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';

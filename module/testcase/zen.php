@@ -586,6 +586,7 @@ class testcaseZen extends testcase
 
             $this->view->switcherParams = "projectID={$projectID}&productID={$productID}&currentMethod=testcase";
             $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
+            $this->view->project        = $this->loadModel('project')->getByID($projectID);
         }
     }
 
