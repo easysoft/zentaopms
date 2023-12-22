@@ -16,7 +16,7 @@ cid=1
 */
 
 zdTable('pipeline')->gen(5);
-zdTable('repo')->gen(1);
+zdTable('repo')->config('repo')->gen(1);
 
 $gitlab = new gitlabTest();
 

@@ -278,12 +278,44 @@ class gitlabTest
     public function isWebhookExistsTest(int $repoID, string $url = '')
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
-        return $this->gitlab->isWebhookExistsTest($repo, $url);
+        return $this->gitlab->isWebhookExists($repo, $url);
     }
 
     public function getCommitsTest(int $repoID, string $entry = '', string $type = 'dir', object $pager = null, string $begin = '', string $end = '')
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
         return $this->gitlab->getCommits($repo, $entry, $type, $pager, $begin, $end);
+    }
+
+    public function deleteIssueTest(string $objectType, int $objectID, int $issueID)
+    {
+        $this->gitlab->deleteIssue($objectType, $objectID, $issueID);
+        $relation = $this->gitlab->getRelationByObject($objectType, $objectID);
+        return $relation ? false : true;
+    }
+
+    public function createZentaoObjectLabelTest(int $gitlabID, int $projectID, string $objectType, string $objectID)
+    {
+        return $this->gitlab->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+    }
+
+    public function webhookCheckTokenTest()
+    {
+        ob_start();
+        $this->gitlab->webhookCheckToken();
+        return ob_get_clean();
+    }
+
+    public function saveIssueRelationTest(string $objectType, int $gitlabID, int $issueID, int $projectID)
+    {
+        $issue = $issueID ? $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID) : new stdclass();
+
+        $object = new stdclass();
+        $object->id        = 18;
+        $object->product   = 1;
+        $object->execution = 1;
+
+        $result = $this->gitlab->saveIssueRelation($objectType, $object, $gitlabID, $issue);
+        return $result ? $this->gitlab->getRelationByObject($objectType, $object->id) : $result;
     }
 }

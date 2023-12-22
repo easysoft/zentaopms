@@ -20,6 +20,7 @@ cid=1
 */
 
 zdTable('pipeline')->gen(5);
+zdTable('oauth')->config('oauth')->gen(5);
 
 $gitlab = new gitlabTest();
 
@@ -34,7 +35,7 @@ r($project3) && p('message') && e('404 Project Not Found'); // 使用不存在�
 
 su('user6');
 $project5 = $gitlab->apiGetSingleProjectTest(1, 2, true);
-$project6 = $gitlab->apiGetSingleProjectTest(1, 4, true);
+$project6 = $gitlab->apiGetSingleProjectTest(1, 19, true);
 $project7 = $gitlab->apiGetSingleProjectTest(1, 5, false);
 r($project5) && p('id')      && e('2');                     // 用普通用户查询有权限正确的project信息
 r($project6) && p('message') && e('404 Project Not Found'); // 用普通用户查询无权限正确的project信息

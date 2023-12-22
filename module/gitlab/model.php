@@ -81,27 +81,11 @@ class gitlabModel extends model
         $sudoParam = '';
         if($sudo == true and !$this->app->user->admin)
         {
-            $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
             if($openID) $sudoParam = "&sudo={$openID}";
         }
 
         return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
-    }
-
-    /**
-     * Get gitlab user id by zentao account.
-     *
-     * @param  int $gitlabID
-     * @access public
-     * @return array
-     */
-    public function getUserIDByZentaoAccount($gitlabID, $zentaoAccount)
-    {
-        return $this->dao->select('openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->andWhere('account')->eq($zentaoAccount)
-            ->fetch('openID');
     }
 
     /**
@@ -199,9 +183,9 @@ class gitlabModel extends model
      * @param  string $objectType
      * @param  int    $objectID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getRelationByObject(string $objectType, int $objectID): object
+    public function getRelationByObject(string $objectType, int $objectID): object|false
     {
         return $this->dao->select('*, extra as gitlabID, BVersion as projectID, BID as issueID')->from(TABLE_RELATION)
             ->where('relation')->eq('gitlab')
@@ -1214,16 +1198,17 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $labelName
      * @access public
-     * @return object|array|null
+     * @return object|array|null|false
      */
-    public function apiDeleteLabel(int $gitlabID, int $projectID, string $labelName): object|array|null
+    public function apiDeleteLabel(int $gitlabID, int $projectID, string $labelName): object|array|null|false
     {
         $labels = $this->apiGetLabels($gitlabID, $projectID);
+        if(!$labels) return false;
+
         foreach($labels as $label)
         {
-            if($label->name == $labelName) $labelID = $label->id;
+            if(isset($label->name) && $label->name == $labelName) $labelID = $label->id;
         }
-
         if(empty($labelID)) return false;
 
         $apiRoot = $this->getApiRoot($gitlabID);
@@ -1583,18 +1568,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Webhook parse note.
-     *
-     * @param  object $body
-     * @access public
-     * @return void
-     */
-    public function webhookParseNote(object $body): void
-    {
-        //@todo
-    }
-
-    /**
      * 通过webhook同步issue。
      * Webhook sync issue.
      *
@@ -1720,97 +1693,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 创建一条gitlab项目和禅道产品的关联信息。
-     * Create relationship between zentao product and  gitlab project.
-     *
-     * @param  array $products
-     * @param  int   $gitlabID
-     * @param  int   $gitlabProjectID
-     * @access public
-     * @return bool
-     */
-    public function saveProjectRelation(array $products, int $gitlabID, int $gitlabProjectID): bool
-    {
-        $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
-
-        $relation            = new stdclass;
-        $relation->execution = 0;
-        $relation->AType     = 'gitlab';
-        $relation->AID       = $gitlabID;
-        $relation->AVersion  = '';
-        $relation->relation  = 'interrated';
-        $relation->BType     = 'gitlabProject';
-        $relation->BID       = $gitlabProjectID;
-        $relation->BVersion  = '';
-        $relation->extra     = '';
-
-        foreach($products as $product)
-        {
-            $relation->project = zget($programs, $product, 0);
-            $relation->product = $product;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-        return true;
-    }
-
-    /**
-     * 删除一个gitlab项目关联信息。
-     * Delete project relation.
-     *
-     * condition: when user deleting a repo.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return bool
-     */
-    public function deleteProjectRelation(int $repoID): bool
-    {
-        $repo = $this->dao->select('product,path as gitlabProjectID,client as gitlabID')->from(TABLE_REPO)
-            ->where('id')->eq($repoID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
-        if(empty($repo)) return false;
-
-        $productIDList = explode(',', $repo->product);
-        foreach($productIDList as $product)
-        {
-            $this->dao->delete()->from(TABLE_RELATION)
-                ->where('product')->eq($product)
-                ->andWhere('AType')->eq('gitlab')
-                ->andWhere('BType')->eq('gitlabProject')
-                ->andWhere('relation')->eq('interrated')
-                ->andWhere('AID')->eq($repo->gitlabID)
-                ->andWhere('BID')->eq($repo->gitlabProjectID)
-                ->exec();
-        }
-        return true;
-    }
-
-    /**
-     * 创建webhook。
-     * Create webhook for zentao.
-     *
-     * @param  array $products
-     * @param  int   $gitlabID
-     * @param  int   $projectID
-     * @access public
-     * @return bool
-     */
-    public function initWebhooks(array $products, int $gitlabID, int $projectID): bool
-    {
-        $gitlab   = $this->getByID($gitlabID);
-        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
-        foreach($products as $index => $product)
-        {
-            $url = sprintf($this->config->gitlab->webhookURL, commonModel::getSysURL(), $product, $gitlabID);
-            foreach($webhooks as $webhook) if($webhook->url == $url) continue;
-            $response = $this->apiCreateHook($gitlabID, $projectID, $url);
-        }
-
-        return true;
-    }
-
-    /**
      * 从禅道和gtilab上删除一个issue。
      * Delete an issue from zentao and gitlab.
      *
@@ -1822,10 +1704,9 @@ class gitlabModel extends model
      */
     public function deleteIssue(string $objectType, int $objectID, int $issueID): void
     {
-        $object   = $this->loadModel($objectType)->getByID($objectID);
         $relation = $this->getRelationByObject($objectType, $objectID);
         if(!empty($relation)) $this->dao->delete()->from(TABLE_RELATION)->where('id')->eq($relation->id)->exec();
-        $this->apiDeleteIssue($relation->gitlabID, $relation->projectID, $issueID);
+        $this->apiDeleteIssue((int)$relation->gitlabID, (int)$relation->projectID, $issueID);
     }
 
     /**
@@ -1881,141 +1762,6 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
         commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
         $this->saveIssueRelation($objectType, $object, $gitlabID, $issue);
-    }
-
-    /**
-     * 解析任务为gitlab issue。
-     * Parse task to issue.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $gitlabProjectID
-     * @param  object $task
-     * @access public
-     * @return object
-     */
-    public function taskToIssue(int $gitlabID, int $gitlabProjectID, object $task): object
-    {
-        $map         = $this->config->gitlab->maps->task;
-        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
-
-        $issue = new stdclass;
-        foreach($map as $taskField => $config)
-        {
-            $value = '';
-            list($field, $optionType, $options) = explode('|', $config);
-
-            if($optionType == 'field') $value = $task->$taskField;
-            if($optionType == 'userPairs') $value = zget($gitlabUsers, $task->$taskField);
-            if($optionType == 'configItems') $value = zget($this->config->gitlab->$options, $task->$taskField, '');
-
-            if($value) $issue->$field = $value;
-        }
-
-        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
-
-        /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
-
-        /* Append this object link in zentao to gitlab issue description. */
-        $zentaoLink         = common::getSysURL() . helper::createLink('task', 'view', "taskID={$task->id}");
-        $issue->description = $issue->description . "\n\n" . $zentaoLink;
-
-        return $issue;
-    }
-
-    /**
-     * 解析需求为gitlab issue。
-     * Parse story to issue.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $gitlabProjectID
-     * @param  object $story
-     * @access public
-     * @return object
-     */
-    public function storyToIssue(int $gitlabID, int $gitlabProjectID, object $story): object
-    {
-        $map         = $this->config->gitlab->maps->story;
-        $issue       = new stdclass;
-        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
-        if(empty($gitlabUsers)) return false;
-
-        foreach($map as $storyField => $config)
-        {
-            $value = '';
-            list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field') $value = $story->$storyField;
-            if($optionType == 'fields') $value = $story->$storyField . "\n\n" . $story->$options;
-            if($optionType == 'userPairs')
-            {
-                $value = zget($gitlabUsers, $story->$storyField);
-            }
-            if($optionType == 'configItems')
-            {
-                $value = zget($this->config->gitlab->$options, $story->$storyField, '');
-            }
-            if($value) $issue->$field = $value;
-        }
-
-        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
-
-        /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
-
-        /* Append this object link in zentao to gitlab issue description */
-        $zentaoLink         = common::getSysURL() . helper::createLink('story', 'view', "storyID={$story->id}");
-        $issue->description = $issue->description . "\n\n" . $zentaoLink;
-
-        return $issue;
-    }
-
-    /**
-     * 解析bug为gitlab issue。
-     * Parse bug to issue.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  object $bug
-     * @access public
-     * @return object
-     */
-    public function bugToIssue(int $gitlabID, int $projectID, object $bug): object
-    {
-        $map         = $this->config->gitlab->maps->bug;
-        $issue       = new stdclass;
-        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
-        if(empty($gitlabUsers)) return false;
-
-        foreach($map as $bugField => $config)
-        {
-            $value = '';
-            list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field') $value = $bug->$bugField;
-            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $bug->$options;
-            if($optionType == 'userPairs')
-            {
-                $value = zget($gitlabUsers, $bug->$bugField);
-            }
-            if($optionType == 'configItems')
-            {
-                $value = zget($this->config->gitlab->$options, $bug->$bugField, '');
-            }
-            if($value) $issue->$field = $value;
-        }
-
-        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
-
-        /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
-
-        /* Append this object link in zentao to gitlab issue description */
-        $zentaoLink         = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");
-        $issue->description = $issue->description . "\n\n" . $zentaoLink;
-
-        return $issue;
     }
 
     /**
