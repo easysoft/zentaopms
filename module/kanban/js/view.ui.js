@@ -465,13 +465,11 @@ window.sortItems = function(event)
                 if(objectType == 'region') link = $.createLink('kanban', 'sortRegion', 'regions=' + orders);
                 if(objectType == 'column') link = $.createLink('kanban', 'sortColumn', 'regionID=' + regionID + '&columns=' + orders);
                 if(objectType == 'lane')   link = $.createLink('kanban', 'sortLane',   'regionID=' + regionID + '&lanes=' + orders);
-                $.getJSON(link, function(result)
+                $.getJSON(link, function()
                 {
-                    if(objectType == 'region') loadCurrentPage();
-                    $('.kanban-list').zui('kanbanlist').$.getKanban(result.regionID).update(result.kanbanData);
+                    loadCurrentPage();
                 });
             }
         });
     });
-
 }

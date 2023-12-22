@@ -547,12 +547,10 @@ class kanban extends control
         if(empty($lanes)) return;
         $lanes = explode(',', trim($lanes, ','));
 
-        $this->kanbanTao->updateLaneSort($regionID, $lanes);
+        $this->kanban->updateLaneSort($regionID, $lanes);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $region   = $this->kanban->getRegionByID($regionID);
-        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -569,12 +567,10 @@ class kanban extends control
         if(empty($columns)) return;
         $columns = explode(',', trim($columns, ','));
 
-        $this->kanbanTao->updateColumnSort($regionID, $columns);
+        $this->kanban->updateColumnSort($regionID, $columns);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $region   = $this->kanban->getRegionByID($regionID);
-        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
