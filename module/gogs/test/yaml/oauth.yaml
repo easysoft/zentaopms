@@ -1,0 +1,14 @@
+title: oauth
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: account
+    prefix: user
+    range: 1-10
+  - field: openID
+    prefix: unittest
+    range: 1,[],3-10
+  - field: providerType
+    range: gogs
+  - field: providerID
+    range: 5
