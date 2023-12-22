@@ -424,4 +424,17 @@ class mrTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetchAll('id');
     }
+
+    /**
+     * Test apiAcceptMR method.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return object|null
+     */
+    public function apiAcceptMrTester(int $MRID): object|null
+    {
+        $MR = $this->objectModel->fetchByID($MRID);
+        return $this->objectModel->apiAcceptMR($MR);
+    }
 }
