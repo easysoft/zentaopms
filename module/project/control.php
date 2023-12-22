@@ -800,7 +800,7 @@ class project extends control
         $this->view->allProducts              = array('0' => '') + $allProducts;
         $this->view->multiBranchProducts      = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->productPlans             = array_filter($productPlansOrder);
-        $this->view->linkedProducts           = $linkedProducts;
+        $this->view->linkedProducts           = $linkedProducts ? $linkedProducts : array('' => '');
         $this->view->branches                 = $branches;
         $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
