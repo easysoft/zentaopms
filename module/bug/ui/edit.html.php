@@ -117,6 +117,7 @@ detailBody
                     (
                         set::name('product'),
                         set::items($products),
+                        set::required(true),
                         set::value($product->id)
                     ),
                     $product->type != 'normal' ? picker
