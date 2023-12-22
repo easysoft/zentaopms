@@ -96,6 +96,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('title'),
+        set::control('colorInput'),
         set::label($lang->bug->title),
         set::width('240px'),
         set::required(true)

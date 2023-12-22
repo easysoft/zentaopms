@@ -64,7 +64,7 @@ $items[] = array
 $items[] = array('name' => 'openedBuild', 'label' => $lang->bug->openedBuild, 'control' => 'picker', 'items' => $builds, 'value' => 'trunk', 'multiple' => true, 'width' => '200px', 'required' => true, 'ditto' => true);
 
 /* Field of title. */
-$items[] = array( 'name' => 'title', 'label' => $lang->bug->title, 'width' => '240px', 'required' => true);
+$items[] = array( 'name' => 'title', 'label' => $lang->bug->title, 'width' => '240px', 'required' => true, 'control' => 'colorInput');
 
 /* Field of region and lane. */
 if(isset($executionType) && $executionType == 'kanban')
