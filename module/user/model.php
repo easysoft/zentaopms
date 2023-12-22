@@ -559,6 +559,8 @@ class userModel extends model
      */
     public function createUserGroup(array $groups, string $account): bool
     {
+        if(empty($groups) || empty($account)) return false;
+
         $userGroup = new stdclass();
         $userGroup->account = $account;
         $userGroup->project = '';
