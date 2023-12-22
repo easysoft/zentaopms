@@ -165,6 +165,7 @@ class gogs extends control
     }
 
     /**
+     * 绑定gogs用户到禅道用户。
      * Bind gogs user to zentao users.
      *
      * @param  int    $gogsID
@@ -172,11 +173,11 @@ class gogs extends control
      * @access public
      * @return void
      */
-    public function bindUser($gogsID, $type = 'all')
+    public function bindUser(int $gogsID, string $type = 'all')
     {
         if($_POST)
         {
-            $this->gogs->bindUser($gogsID, $this->post->zentaoUsers, $this->post->gogsUsers);
+            $this->gogs->bindUser($gogsID, (array)$this->post->zentaoUsers, (array)$this->post->gogsUserNames);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }

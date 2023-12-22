@@ -193,6 +193,7 @@ class gogsModel extends model
     }
 
     /**
+     * 通过API获取Gogs用户列表。
      * Get gogs user list.
      *
      * @param  int    $gogsID
@@ -200,7 +201,7 @@ class gogsModel extends model
      * @access public
      * @return array
      */
-    public function apiGetUsers($gogsID, $onlyLinked = false)
+    public function apiGetUsers(int $gogsID, bool $onlyLinked = false): array
     {
         $users   = array();
         $apiRoot = $this->getApiRoot($gogsID);

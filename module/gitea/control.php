@@ -180,7 +180,7 @@ class gitea extends control
     {
         if($_POST)
         {
-            $this->gitea->bindUser($giteaID, $this->post->zentaoUsers, $this->post->giteaUserNames);
+            $this->gitea->bindUser($giteaID, (array)$this->post->zentaoUsers, (array)$this->post->giteaUserNames);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => helper::createLink('space', 'browse')));
         }
