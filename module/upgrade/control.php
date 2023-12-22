@@ -822,10 +822,13 @@ class upgrade extends control
             $sqlLines = file_get_contents($tmpProgressFile);
             if(empty($sqlLines)) $progress = $this->session->upgradeProgress ? $this->session->upgradeProgress : 1;
             if($sqlLines == 'completed') $progress = 100;
+            if(strpos($sqlLines, '-') !== false)
+            {
+                $sqlLines = explode('-', $sqlLines);
+                $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+            }
 
-            $sqlLines = explode('-', $sqlLines);
-            $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
-            if($progress == 100) $progress = 99;
+            if($progress >= 100) $progress = 99;
             $this->session->set('upgradeProgress', $progress);
         }
 
