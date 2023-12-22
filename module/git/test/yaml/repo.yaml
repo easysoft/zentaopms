@@ -11,7 +11,8 @@ fields:
   - field: encoding
     range: '`utf-8`'
   - field: path
-    range: '`https://gitlabdev.qc.oop.cc/root/unittest1`'
+    prefix: https://gitlabdev.qc.oop.cc/root/unittest1
+    range: '[],1-9'
   - field: SCM
     range: Gitlab
   - field: serviceHost
@@ -30,3 +31,5 @@ fields:
     range: '`2021-02-15 23:54:45`'
   - field: extra
     range: 3
+  - field: deleted
+    range: 0{4},1
