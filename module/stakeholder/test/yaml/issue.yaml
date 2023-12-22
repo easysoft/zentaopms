@@ -1,0 +1,17 @@
+title: zt_issue
+desc: 问题表
+author: Shujie Tian
+version: 1.0
+fields:
+  - field: id
+    range: "1-100"
+  - field: project
+    range: "60{10},11{10}"
+  - field: owner
+    fields:
+    - field: account1
+      range: admin,user{19}
+    - field: account2
+      range: "[],1-19"
+  - field: activity
+    range: '1-10,[]{10}'

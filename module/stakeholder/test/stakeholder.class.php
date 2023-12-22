@@ -286,4 +286,22 @@ class stakeholderTest
         if(dao::isError()) return dao::getError();
         return $plans;
     }
+
+    /**
+     * 获取项目下干系人提出的问题列表。
+     * Get a list of issues owner by stakeholders under the project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getIssuesTest(int $projectID): array
+    {
+        global $tester;
+        $tester->session->set('project', $projectID);
+        $issues = $this->objectModel->getIssues();
+
+        if(dao::isError()) return dao::getError();
+        return $issues;
+    }
 }
