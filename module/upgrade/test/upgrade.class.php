@@ -712,4 +712,17 @@ class upgradeTest
         if(dao::isError()) return dao::getError();
         return true;
     }
+
+    /**
+     * 测试获取重复名称的项目 id 列表。
+     * Test get duplicate project name.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return string
+     */
+    public function getDuplicateProjectNameTest(array $projectIdList): string
+    {
+        return $this->objectModel->getDuplicateProjectName($projectIdList);
+    }
 }
