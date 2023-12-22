@@ -233,7 +233,7 @@ class testreportTest
 
         if(dao::isError()) return dao::getError();
 
-        return implode(',', array_keys($objects));
+        return $objects ? implode(',', array_keys($objects)) : '';
     }
 
     /**

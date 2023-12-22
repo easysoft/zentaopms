@@ -311,8 +311,8 @@ class testreportModel extends model
             ->andWhere('openedDate')->lt("{$begin} 23:59:59")
             ->beginIF(is_array($builds) && $type == 'build')->andWhere('id')->in($bugIdList)->fi()
             ->beginIF(!is_array($builds) && $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59')")->fi()
-            ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")
-            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")
+            ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")->fi()
+            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")->fi()
             ->fetchAll('id');
     }
 
