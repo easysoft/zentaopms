@@ -2198,9 +2198,9 @@ class userModel extends model
         if(empty($projects)) return false;
 
         /* Get team group. */
-        $stmt        = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($projectIDList)->andWhere('root')->ne(0)->query();
-        $teamsGroups = array();
-        while($team  = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->in($projectIDList)->andWhere('root')->ne(0)->query();
+        $teamsGroup = array();
+        while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
         /* Get white list group. */
         $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('project')->andWhere('objectID')->in($projectIDList)->query();
