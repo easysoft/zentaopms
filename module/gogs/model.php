@@ -23,7 +23,7 @@ class gogsModel extends model
     public function getApiRoot(int $gogsID): string
     {
         $gogs = $this->fetchByID($gogsID);
-        if(!$gogs) return '';
+        if(!$gogs || $gogs->type != 'gogs') return '';
 
         return rtrim($gogs->url, '/') . '/api/v1%s' . "?token={$gogs->token}";
     }
@@ -40,101 +40,46 @@ class gogsModel extends model
      */
     public function bindUser(int $gogsID, array $users, array $gogsNames): bool
     {
-        $accountList = array();
         $repeatUsers = array();
-        foreach($users as $openID => $user)
-        {
-            if(empty($user)) continue;
-
-            if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
-            $accountList[$user] = $openID;
-        }
-
-        $userList = $this->loadModel('user')->getRealNameAndEmails($repeatUsers);
-        if(count($repeatUsers))
-        {
-            dao::$errors[] = sprintf($this->lang->gogs->bindUserError, join(',', helper::arrayColumn($userList, 'realname')));
-            return false;
-        }
-
-        $user = new stdclass();
-        $user->providerID   = $gogsID;
-        $user->providerType = 'gogs';
-
-        $oldUsers = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq($user->providerType)->andWhere('providerID')->eq($user->providerID)->fetchAll('openID');
+        $userPairs   = array();
         foreach($users as $openID => $account)
         {
-            $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
-            /* If user binded user is change, delete it. */
-            if($existAccount and $existAccount->account != $account)
-            {
-                $this->dao->delete()
-                    ->from(TABLE_OAUTH)
-                    ->where('openID')->eq($openID)
-                    ->andWhere('providerType')->eq($user->providerType)
-                    ->andWhere('providerID')->eq($user->providerID)
-                    ->exec();
-                $this->loadModel('action')->create('gogsuser', $gogsID, 'unbind', '', sprintf($this->lang->gogs->bindDynamic, $gogsNames[$openID], $zentaoUsers[$existAccount->account]->realname));
-            }
+            if(empty($account)) continue;
 
-            /* Add zentao user and gitea user binded. */
-            if(!$existAccount or $existAccount->account != $account)
-            {
-                if(!$account) continue;
-                $user->account = $account;
-                $user->openID  = $openID;
-                $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
-                $this->loadModel('action')->create('gogsuser', $gogsID, 'bind', '', sprintf($this->lang->gogs->bindDynamic, $gogsNames[$openID], $zentaoUsers[$account]->realname));
-            }
+            if(in_array($account, $userPairs)) $repeatUsers[] = $account;
+            $userPairs[$openID] = $account;
+        }
+
+        /* Check user repeat bind. */
+        if($repeatUsers)
+        {
+            $userList    = $this->loadModel('user')->getRealNameAndEmails($repeatUsers);
+            dao::$errors = sprintf($this->lang->gogs->bindUserError, join(',', helper::arrayColumn($userList, 'realname')));
+            return false;
+        }
+
+        $bindedUsers = $this->dao->select('openID,account')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gogs')
+            ->andWhere('providerID')->eq($gogsID)
+            ->fetchPairs();
+        $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gogs')->andWhere('providerID')->eq($gogsID)->exec();
+
+        $this->loadModel('action');
+        foreach($userPairs as $openID => $account)
+        {
+            /* If user binded user is change, delete it. */
+            if(isset($bindedUsers[$openID]) && $bindedUsers[$openID] != $account) $this->action->create('gogsuser', $gogsID, 'unbind', '', $gogsNames[$openID]);
+
+            /* Add zentao user and gogs user binded. */
+            $user = new stdclass();
+            $user->providerID   = $gogsID;
+            $user->providerType = 'gogs';
+            $user->account      = $account;
+            $user->openID       = $gogsNames[$openID];
+            $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
+            $this->action->create('gogsuser', $gogsID, 'bind', '', $gogsNames[$openID]);
         }
         return !dao::isError();
-    }
-
-    /**
-     * Api error handling.
-     *
-     * @param  object $response
-     * @access public
-     * @return bool
-     */
-    public function apiErrorHandling(object $response): bool
-    {
-        if(!empty($response->error))
-        {
-            dao::$errors[] = $response->error;
-            return false;
-        }
-
-        if(empty($response->message))
-        {
-            dao::$errors[] = false;
-            return false;
-        }
-
-        if(is_string($response->message))
-        {
-            $errorKey = array_search($response->message, $this->lang->gogs->apiError);
-            dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gogs->errorLang, $errorKey);
-            return false;
-        }
-
-        foreach($response->message as $field => $fieldErrors)
-        {
-            if(is_string($fieldErrors))
-            {
-                $errorKey = array_search($fieldErrors, $this->lang->gogs->apiError);
-                if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gogs->errorLang, $errorKey);
-            }
-            else
-            {
-                foreach($fieldErrors as $error)
-                {
-                    $errorKey = array_search($error, $this->lang->gogs->apiError);
-                    if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gogs->errorLang, $errorKey);
-                }
-            }
-        }
-        return false;
     }
 
     /**
