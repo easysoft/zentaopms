@@ -46,6 +46,7 @@ formPanel
                     setID('product'),
                     set::name('product'),
                     set::items($products),
+                    set::required(true),
                     set::value(!empty($case->product) ? $case->product :  $productID)
                 ),
                 picker

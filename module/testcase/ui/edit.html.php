@@ -181,6 +181,7 @@ detailBody
                         setID('product'),
                         set::name('product'),
                         set::items($products),
+                        set::required(true),
                         set::value($case->product)
                     ),
                     picker
@@ -326,11 +327,12 @@ detailBody
                 !$forceNotReview && $case->status == 'wait' ? $lang->testcase->statusList[$case->status] :
                 formGroup
                 (
+                    set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",status,") !== false),
                     picker
                     (
                         set::name('status'),
                         set::items($lang->testcase->statusList),
-                        set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",status,") !== false),
+                        set::required(true),
                         set::value($case->status)
                     )
                 )
