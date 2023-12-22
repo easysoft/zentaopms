@@ -72,7 +72,7 @@ class pageBase extends wg
         {
             $headImports[] = h::importCss($zuiPath . 'zui.zentao.css', setID('zuiCSS'));
             $headImports[] = h::importCss($zuiPath . 'themes/' . $themeName . '.css', setID('zuiTheme'));
-            $headImports[] = h::importJs($zuiPath . 'zui.zentao.umd.cjs', setID('zuiJS'));
+            $headImports[] = h::importJs($zuiPath . 'zui.zentao.js', setID('zuiJS'));
             $headImports[] = h::jsCall('$.setLibRoot', $zuiPath);
 
             $extraCSS = isset($config->zin->extraCSS) ? $config->zin->extraCSS : '';
