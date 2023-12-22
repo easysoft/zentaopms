@@ -224,7 +224,7 @@ class gogsModel extends model
         $userList = array();
         foreach($users as $gogsUser)
         {
-            if($onlyLinked and !isset($linkedUsers[$gogsUser->id])) continue;
+            if($onlyLinked and !isset($linkedUsers[$gogsUser->username])) continue;
 
             $user = new stdclass;
             $user->id             = $gogsUser->id;

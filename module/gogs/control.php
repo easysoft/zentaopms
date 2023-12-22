@@ -194,6 +194,7 @@ class gogs extends control
             $user->status         = 'notBind';
             $user->gogsID         = $gogsUser->id;
             $user->gogsEmail      = $gogsUser->email;
+            $user->gogsAccount    = $gogsUser->account;
             $user->gogsUser       = $gogsUser->realname . '@' . $gogsUser->account;
             $user->gogsUserAvatar = $gogsUser->avatar;
 

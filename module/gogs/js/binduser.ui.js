@@ -25,7 +25,7 @@ window.bindUser = function(e)
     postData['gogsUserNames[]'] = [];
     for(i in bindData)
     {
-        postData['gogsUserNames[' + bindData[i].gogsID + ']'] = bindData[i].gogsUser;
+        postData['gogsUserNames[' + bindData[i].gogsID + ']'] = bindData[i].gogsAccount;
         postData['zentaoUsers[' + bindData[i].gogsID + ']'] = formData['zentaoUsers[' + bindData[i].gogsID + ']'];
     }
 
