@@ -1,0 +1,29 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: type
+    range: sprint
+  - field: status
+    range: closed
+  - field: closedDate
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: end
+    range: "(-2M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: realEnd
+    range: "(-1W)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"
