@@ -659,4 +659,24 @@ class upgradeTest
 
         if($data->projectType == 'project') return $result;
     }
+
+    /**
+     * 测试新建产品线。
+     * Test create new line.
+     *
+     * @param  string       $lineName
+     * @param  int          $programID
+     * @access public
+     * @return array|object
+     */
+    public function createNewLineTest(string $lineName, int $programID): array|object
+    {
+        $result = $this->objectModel->createNewLine($lineName, $programID);
+        if(dao::isError()) return dao::getError();
+
+        $lineID = $result;
+        global $tester;
+        $productLine = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
+        return $productLine;
+    }
 }
