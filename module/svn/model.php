@@ -54,7 +54,7 @@ class svnModel extends model
      * Sync commit info by cron.
      *
      * @access public
-     * @return boo;
+     * @return bool
      */
     public function run(): bool
     {
