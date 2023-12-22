@@ -2084,7 +2084,7 @@ class userModel extends model
         if(!isset($isAdmin))                $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
 
         /* If is project admin, set projectID to userview. */
-        if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
+        if(!empty($acls['projects']) && $projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
 
         /* 权限分组-视野维护的优先级最高，所以这里进行了替换操作。*/
         /* View management has the highest priority, so there is a substitution. */
