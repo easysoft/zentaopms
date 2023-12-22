@@ -83,11 +83,11 @@ class adminModel extends model
         $weaks = array();
         foreach(explode(',', $this->config->safe->weak) as $weak)
         {
-            $weak = md5(trim($weak));
-            $weaks[$weak] = $weak;
+            $weaks[$weak] = md5(trim($weak));
         }
 
         if(isset($weaks[$user->password])) return true;
+        if(in_array($user->password, $weaks)) return true;
         if($user->password == md5($user->account)) return true;
         if($user->phone    && $user->password == md5($user->phone))    return true;
         if($user->mobile   && $user->password == md5($user->mobile))   return true;
