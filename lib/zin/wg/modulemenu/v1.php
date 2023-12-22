@@ -35,9 +35,10 @@ class moduleMenu extends wg
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
 
+        global $app;
         $activeKey  = $this->prop('activeKey');
         $treeItems  = array();
-        $tab        = $this->prop('app');
+        $tab        = $this->prop('app') ? $this->prop('app') : $app->tab;
         $titleAttrs = array('data-app' => $tab);
         if(isInModal()) $titleAttrs['data-load'] = 'modal';
 
@@ -133,7 +134,7 @@ class moduleMenu extends wg
                 set::type('primary-pale'),
                 set::url($settingLink),
                 set::size('md'),
-                $tab ? setData(array('app' => $tab)) : null,
+                setData(array('app' => $tab ? $tab : $app->tab)),
                 $settingText
             ) : null,
             $showDisplay ? btn

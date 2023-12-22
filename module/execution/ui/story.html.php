@@ -155,6 +155,7 @@ sidebar
     moduleMenu(set(array(
         'modules'     => $moduleTree,
         'activeKey'   => $param,
+        'settingLink' => createLink('tree', 'browse', "rootID={$execution->project}&viewType=story"),
         'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0")
     )))
 );
