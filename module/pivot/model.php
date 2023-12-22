@@ -147,7 +147,7 @@ class pivotModel extends model
      * @access public
      * @return bool
      */
-    private function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
+    public function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
     {
         foreach($screenList as $screen)
         {
