@@ -85,58 +85,6 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
-      <!--
-      <?php if($execution->model == 'waterfall' and $story->type == 'requirement'):?>
-        <?php if(!empty($track)):?>
-        <div class="detail">
-          <div class="detail-title"><?php echo $lang->story->track;?></div>
-          <div class="detail-content article-content main-table">
-            <table class="table">
-              <thead>
-                  <tr>
-                    <th class="w-120px"><?php echo $lang->story->story;?></th>
-                    <th class="w-120px"><?php echo $lang->story->design;?></th>
-                    <th class="w-120px"><?php echo $lang->story->case;?></th>
-                    <th class="w-60px"><?php echo $lang->story->repoCommit;?></th>
-                    <th class="w-120px"><?php echo $lang->story->bug;?></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach($track as $storyID => $storyInfo):?>
-                  <tr>
-                     <td style='padding-left: 10px;'><?php echo html::a($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type"), $storyInfo->title, '', "title='$storyInfo->title'");?>
-                     </td>
-                     <td>
-                      <?php foreach($storyInfo->design as $designID => $design):?>
-                      <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?>
-                      <?php endforeach;?>
-                     </td>
-                     <td>
-                       <?php foreach($storyInfo->case as $caseID => $case):?>
-                       <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title, '', "title='$case->title'") . '<br/>';?>
-                       <?php endforeach;?>
-                     </td>
-                     <td>
-                       <?php foreach($storyInfo->revision as $revision => $repoID):?>
-                       <?php
-                       echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
-                       ?>
-                       <?php endforeach;?>
-                     </td>
-                     <td>
-                       <?php foreach($storyInfo->bug as $bugID => $bug):?>
-                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title, '', "title='$bug->title'") . '<br/>';?>
-                       <?php endforeach;?>
-                     </td>
-                  </tr>
-                  <?php endforeach;?>
-                </tbody>
-            </table>
-          </div>
-        </div>
-        <?php endif;?>
-      <?php endif;?>
-      -->
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('story', $story);
@@ -709,6 +657,7 @@
 </div>
 <?php endif;?>
 
+<?php if(in_array($config->edition, array('max', 'ipd'))):?>
 <div class="modal fade" id="importToLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
@@ -744,6 +693,7 @@
     </div>
   </div>
 </div>
+<?php endif;?>
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
