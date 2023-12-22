@@ -411,12 +411,13 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get stakeholder issues.
+     * 获取项目下干系人提出的问题列表。
+     * Get a list of issues owner by stakeholders under the project.
      *
      * @access public
      * @return array
      */
-    public function getIssues()
+    public function getIssues(): array
     {
         $stakeholders = $this->getStakeHolderPairs($this->session->project);
         return $this->dao->select('*')->from(TABLE_ISSUE)
