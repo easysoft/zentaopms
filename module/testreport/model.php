@@ -376,7 +376,7 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getChildBuilds(array $builds)
+    public function getChildBuilds(array $builds): array
     {
         $childBuildIDList = '';
         foreach($builds as $build) $childBuildIDList .= $build->builds . ',';
