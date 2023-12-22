@@ -433,13 +433,14 @@ class repoZen extends repo
         {
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
+        $projects = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
-        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
+        $this->view->projects        = $projects;
+        $this->view->relatedProjects = (in_array($this->app->tab, array('project', 'execution')) && isset($projects[$objectID])) ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
 
