@@ -517,44 +517,6 @@ class stakeholderModel extends model
     }
 
     /**
-     * Edit expect.
-     *
-     * @param  int    $expectID
-     * @access public
-     * @return object
-     */
-    public function editExpect($expectID)
-    {
-        $data = fixer::input('post')
-            ->stripTags($this->config->stakeholder->editor->editexpect['id'], $this->config->allowedTags)
-            ->get();
-
-        if(strpos($this->config->stakeholder->expect->requiredFields, 'userID') !== false and !$this->post->userID)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->common);
-            return false;
-        }
-
-        if(strpos($this->config->stakeholder->expect->requiredFields, 'expect') !== false and !$this->post->expect)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->expect);
-            return false;
-        }
-
-        if(strpos($this->config->stakeholder->expect->requiredFields, 'progress') !== false and !$this->post->progress)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->progress);
-            return false;
-        }
-
-        $oldExpect = $this->getExpectByID($expectID);
-        $this->dao->update(TABLE_EXPECT)->data($data)->where('id')->eq($expectID)->autoCheck()->exec();
-
-        if(dao::isError()) return false;
-        return common::createChanges($oldExpect, $data);
-    }
-
-    /**
      * Get stakeholder user.
      *
      * @access public
