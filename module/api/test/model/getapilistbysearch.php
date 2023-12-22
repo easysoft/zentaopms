@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zdTable('userquery')->gen(0);
 zdTable('api')->gen(50);
 zdTable('apispec')->gen(100);
 
@@ -28,5 +29,5 @@ cid=1
 global $tester;
 $tester->loadModel('api');
 
-r($tester->api->getApiListBySearch(1,1)) && p('0:id,title,path,status') && e('1,BUG接口1,bug-getList,doing'); // 测试获取文档库ID为1的文档列表。
+r($tester->api->getApiListBySearch(1,0)) && p('0:id,title,path,status') && e('1,BUG接口1,bug-getList,doing'); // 测试获取文档库ID为1的文档列表。
 r($tester->api->getApiListBySearch(2,1)) && p('0:id,title,path,status') && e('2,BUG接口2,bug-getList,done');  // 测试获取文档库ID为2的文档列表。
