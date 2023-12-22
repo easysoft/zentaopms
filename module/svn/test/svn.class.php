@@ -42,4 +42,20 @@ class svnTest
         return $logs[count($logs) - 1];
 
     }
+
+    /**
+     * Test updateCommit method.
+     *
+     *  @param  int    $repoID
+     *  @access public
+     *  @return object|null
+     */
+    public function updateCommitTest(int $repoID): object|null
+    {
+        $repo = $this->objectModel->loadModel('repo')->getByID($repoID);
+        $res  = $this->objectModel->updateCommit($repo, array(), false);
+        if(!$res) return null;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->orderBy('id_desc')->fetch();
+    }
 }

@@ -159,15 +159,14 @@ class svnModel extends model
      * @param  object  $repo
      * @param  array   $commentGroup
      * @param  bool    $printLog
-     * @access private
+     * @access public
      * @return void
      */
-    private function updateCommit(object $repo, array $commentGroup, bool $printLog = true)
+    public function updateCommit(object $repo, array $commentGroup, bool $printLog = true)
     {
         /* Load mudule and print log. */
         if($printLog) $this->printLog("begin repo {$repo->name}");
-
-        if(!$this->setRepo($repo)) return false;
+        $this->setRepo($repo);
 
         /* Print log and get lastInDB. */
         if($printLog) $this->printLog("get this repo logs.");
@@ -403,7 +402,7 @@ class svnModel extends model
      * Get repo by url.
      *
      * @param  string $url
-     * @access private
+     * @access public
      * @return object|false
      */
     public function getRepoByURL(string $url): object|false
