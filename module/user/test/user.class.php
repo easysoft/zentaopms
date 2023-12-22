@@ -222,6 +222,27 @@ class userTest
     }
 
     /**
+     * 测试创建一个外部公司。
+     * Test create a company.
+     *
+     * @param  string $companyName
+     * @access public
+     * @return array
+     */
+    public function createCompanyTest(string $companyName): array
+    {
+        $result = $this->objectModel->createCompany($companyName);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * 测试批量创建用户。
      * Test batch create users.
      *
