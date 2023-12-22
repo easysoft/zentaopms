@@ -22,7 +22,6 @@ featureBar
         setClass('primary mr-5 refresh-btn'),
         set::url(createLink('execution', 'computeCFD', "reload=yes&executionID=$executionID")),
         set::icon('refresh'),
-        set('data-toggle', 'modal'),
         $lang->execution->computeCFD
     ) : null,
     li
