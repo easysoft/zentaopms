@@ -106,7 +106,7 @@ class sso extends control
         if($_POST)
         {
             $user = $this->sso->bind();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Authorize him and save to session. */
             $user->rights = $this->user->authorize($user->account);
@@ -120,6 +120,7 @@ class sso extends control
             unset($_SESSION['ssoData']);
             return $this->send(array('result' => 'success', 'load' => helper::safe64Decode($referer)));
         }
+
         $this->view->title = $this->lang->sso->bind;
         $this->view->users = $this->user->getPairs('noclosed|nodeleted');
         $this->view->data  = $ssoData;
@@ -164,7 +165,7 @@ class sso extends control
         {
             $this->dao->update(TABLE_USER)->set('ranzhi')->eq('')->where('ranzhi')->eq($this->post->ranzhiAccount)->exec();
             $this->dao->update(TABLE_USER)->set('ranzhi')->eq($this->post->ranzhiAccount)->where('account')->eq($this->post->zentaoAccount)->exec();
-            if(dao::isError()) return print(dao::getError());
+            if(dao::isError()) return print(implode("\n", dao::getError()));
             return print('success');
         }
     }
@@ -179,7 +180,8 @@ class sso extends control
     {
         if($_POST)
         {
-            $result = $this->sso->createUser();
+            $user   = $this->ssoZen->buildUserForCreate();
+            $result = $this->sso->createUser($user);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $result['id']));
             if($result['status'] != 'success') return print($result['data']);
             return print('success');
@@ -200,8 +202,8 @@ class sso extends control
         if($user) $account = $user->account;
 
         $datas = array();
-        $datas['task'] = $this->dao->select("id, name")->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('status')->in('wait,doing')->andWhere('deleted')->eq(0)->fetchPairs();
-        $datas['bug']  = $this->dao->select("id, title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->andWhere('deleted')->eq(0)->fetchPairs();
+        $datas['task'] = $this->dao->select("id,name")->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('status')->in('wait,doing')->andWhere('deleted')->eq(0)->fetchPairs();
+        $datas['bug']  = $this->dao->select("id,title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->andWhere('deleted')->eq(0)->fetchPairs();
         echo json_encode($datas);
     }
 
@@ -242,7 +244,7 @@ class sso extends control
 
         $url = "https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri=%s&app_id=%s";
         $url = sprintf($url, $redirectURI, $appID, $state);
-        helper::header('location', $url);
+        $this->locate($url);
     }
 
     /**
@@ -310,7 +312,7 @@ class sso extends control
         $this->user->login($user);
 
         $indexUrl = $this->createLink('my', 'index');
-        helper::header('location', $indexUrl);
+        $this->locate($indexUrl);
     }
 
     /**

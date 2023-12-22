@@ -12,6 +12,17 @@ declare(strict_types=1);
 class ssoZen extends sso
 {
     /**
+     * Build user data for createUser method.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildUserForCreate(): object
+    {
+        return form::data($this->config->sso->form->createUser)->setDefault('ranzhi', $this->post->account)->get();
+    }
+
+    /**
      * Idenfy from SSO.
      *
      * @param  string    $locate

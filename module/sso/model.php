@@ -53,22 +53,16 @@ class ssoModel extends model
     /**
      * Create a user from ranzhi.
      *
+     * @param  object $data
      * @access public
-     * @return void
+     * @return array
      */
-    public function createUser()
+    public function createUser(object $data): array
     {
-        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($this->post->account)->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
         if($user) return array('status' => 'fail', 'data' => $this->lang->sso->bindHasAccount);
 
-        $user = new stdclass();
-        $user->account  = $this->post->account;
-        $user->realname = $this->post->realname;
-        $user->email    = $this->post->email;
-        $user->gender   = $this->post->gender;
-        $user->ranzhi   = $this->post->account;
-
-        $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+        $this->dao->insert(TABLE_USER)->data($data)->autoCheck()->exec();
 
         if(dao::isError()) return array('status' => 'fail', 'data' => dao::getError());
         return array('status' => 'success', 'id' => $this->dao->lastInsertId());
