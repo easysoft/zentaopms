@@ -517,36 +517,20 @@ class stakeholderModel extends model
     }
 
     /**
-     * 获取项目下干系人id=>realname的键值对。
-     * Get a key-value pair for stakeholder id=>realname under the project.
+     * 获取项目下干系人field=>realname的键值对。
+     * Get a key-value pair for stakeholder field=>realname under the project.
      *
      * @access public
      * @return array
      */
-    public function getStakeholderUsers(): array
+    public function getStakeholderUsers(string $field = 'id'): array
     {
-        return $this->dao->select("t1.id, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select("t1.{$field}, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.objectID')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
-            ->fetchPairs();
-    }
-
-    /**
-     * Get stakeholder pairs for issue.
-     *
-     * @access public
-     * @return object
-     */
-    public function getStakeholders4Issue()
-    {
-        return $this->dao->select("t1.user, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
-            ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
-            ->where('t1.objectID')->eq($this->session->project)
-            ->andWhere('t1.deleted')->eq('0')
-            ->fetchPairs('user', 'realname');
+            ->fetchPairs($field, 'realname');
     }
 
     /**
