@@ -243,6 +243,28 @@ class userTest
     }
 
     /**
+     * 测试创建用户权限组。
+     * Test create user groups.
+     *
+     * @param  array  $groups
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function createUserGroupTest(array $groups, string $account): array
+    {
+        $result = $this->objectModel->createUserGroup($groups, $account);
+        $errors = dao::getError();
+
+        foreach($errors as $key => $error)
+        {
+            if(is_array($error)) $errors[$key] = implode('', $error);
+        }
+
+        return array('result' => (int)$result, 'errors' => $errors);
+    }
+
+    /**
      * 测试批量创建用户。
      * Test batch create users.
      *
