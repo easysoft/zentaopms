@@ -53,6 +53,53 @@ class transferZen extends transfer
     }
 
     /**
+     * 处理导入分页数据。
+     * Get pagelist for datas.
+     *
+     * @param  array     $datas
+     * @param  int       $pagerID
+     * @access protected
+     * @return void
+     */
+    protected function getPageDatas(array $datas, int $pagerID = 1)
+    {
+        $maxImport = $this->transfer->maxImport; //每页最大导入数
+
+        $result = new stdClass();
+        $result->allCount = count($datas); //所有数据
+        $result->allPager = 1;             //起始页
+        $result->pagerID  = $pagerID;      //当前页
+
+        /* 如果总数大于最大导入数,则分页。*/
+        /* If the total number is greater than the maximum import number, then paging. */
+        if($result->allCount > $this->config->file->maxImport && empty($maxImport))
+        {
+            $result->datas     = $datas;
+            $result->maxImport = $maxImport;
+            return $result;
+        }
+
+        /* 计算总页数。*/
+        /* Calculate total pages. */
+        if($maxImport)
+        {
+            $result->allPager = ceil($result->allCount / $maxImport); //总页数
+            $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true); //获取当前页的数据
+        }
+
+        if(!$maxImport) $this->maxImport = $result->allCount; //设置每页最大导入数
+
+        $result->maxImport = $maxImport;
+        $result->isEndPage = $pagerID >= $result->allPager; //是否是最后一页
+        $result->datas     = $datas;
+
+        $this->session->set('insert', !empty($datas) && isset($datas[0]->id)); //如果存在ID列则在SESSION中标记insert用来判断是否是插入/更新
+
+        if(empty($datas)) return print(js::locate('back'));
+        return $result;
+    }
+
+    /**
      * 将参数转成变量存到SESSION中。
      * Set SESSION by params.
      *

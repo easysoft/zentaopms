@@ -152,8 +152,8 @@ class transfer extends control
         /* 初始化字段列表。*/
         /* Init field list. */
         $fields      = $this->transfer->initFieldList($module, $importFields, false);
-        $formatDatas = $this->transfer->format($module, $filter);
-        $datas       = $this->transfer->getPageDatas($formatDatas, $pagerID);
+        $formatDatas = $this->transferZen->format($module, $filter);
+        $datas       = $this->transferzen->getPageDatas($formatDatas, $pagerID);
         $fields      = $this->transferZen->formatFields($module, $fields);
 
         /* 处理任务统计列的数据。*/

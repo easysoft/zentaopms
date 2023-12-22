@@ -656,49 +656,4 @@ class transferModel extends model
         }
         return $rows;
     }
-
-    /**
-     * Get pagelist for datas.
-     *
-     * @param  int    $datas
-     * @param  int    $pagerID
-     * @access public
-     * @return void
-     */
-    public function getPageDatas($datas, $pagerID = 1)
-    {
-        $result = new stdClass();
-        $result->allCount = count($datas);
-        $result->allPager = 1;
-        $result->pagerID  = $pagerID;
-
-        $maxImport = $this->maxImport;
-        if($result->allCount > $this->config->file->maxImport)
-        {
-            if(empty($maxImport))
-            {
-                $result->maxImport = $maxImport;
-                $result->datas     = $datas;
-                return $result;
-            }
-
-            $result->allPager = ceil($result->allCount / $maxImport);
-            $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
-        }
-
-        if(!$maxImport) $this->maxImport = $result->allCount;
-        $result->maxImport = $maxImport;
-        $result->isEndPage = $pagerID >= $result->allPager;
-        $result->datas     = $datas;
-
-        $this->session->set('insert', true);
-
-        foreach($datas as $data)
-        {
-            if(isset($data->id)) $this->session->set('insert', false);
-        }
-
-        if(empty($datas)) return print(js::locate('back'));
-        return $result;
-    }
 }
