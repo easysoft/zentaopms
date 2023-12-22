@@ -125,6 +125,7 @@ if($execution->projectInfo->hasProduct || $features['plan'])
                         a
                         (
                             set::title($product->name . '/' . $planGroups[$productID][$planID]),
+                            set('data-app', $execution->projectInfo->hasProduct ? '' : 'project'),
                             hasPriv('productplan', 'view') ? set::href(createLink('productplan', 'view', "planID={$planID}")) : null,
                             span($product->name . '/' . $planGroups[$productID][$planID])
                         )
