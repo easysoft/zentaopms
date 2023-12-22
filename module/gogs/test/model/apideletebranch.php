@@ -7,6 +7,12 @@ title=测试 gogsModel::apiDeleteBranch();
 timeout=0
 cid=0
 
+- 项目和分支都为空 @0
+- 错误的项目ID @0
+- 错误的项目ID @0
+- 错误的分支名 @0
+- 受保护的分支属性message @branch protected
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
