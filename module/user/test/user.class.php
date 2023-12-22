@@ -71,6 +71,21 @@ class userTest
     }
 
     /**
+     * 根据用户名获取用户信息。
+     * Get user information by account.
+     *
+     * @param  string|array $usersToAppended
+     * @param  string       $fields
+     * @param  string       $keyField
+     * @access public
+     * @return array
+     */
+    public function fetchExtraUsersTest(string|array $usersToAppended, string $fields, string $keyField): array
+    {
+        return $this->objectModel->fetchExtraUsers($usersToAppended, $fields, $keyField);
+    }
+
+    /**
      * Test get avatar pairs.
      *
      * @param  string $params
