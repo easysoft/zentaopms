@@ -3810,7 +3810,7 @@ class upgradeModel extends model
      */
     public function createNewProject(object $data, int $programID, array $projectIdList): bool|int|array
     {
-        if(!$this->post->longTime && !$this->post->end)
+        if(!$data->longTime && !$data->end)
         {
             dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
             return false;
@@ -3896,7 +3896,7 @@ class upgradeModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $projectID = $this->dao->lastInsertId();
+        $projectID = $this->dao->lastInsertID();
         $this->dao->update(TABLE_PROJECT)->set('grade')->eq(2)->set('path')->eq(",{$programID},{$projectID},")->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
 
         /* Modify the begin and end of the program to match the begin and end of the project. */
