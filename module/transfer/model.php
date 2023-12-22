@@ -392,7 +392,7 @@ class transferModel extends model
                     {
                         $multiple     = '';
                         $separator    = $field == 'mailto' ? ',' : "\n";
-                        $multipleLsit = explode(',', $value);
+                        $multipleLsit = explode(',', (string) $value);
 
                         foreach($multipleLsit as $key => $tmpValue) $multipleLsit[$key] = zget($exportDatas[$field], $tmpValue);
                         $multiple = implode($separator, $multipleLsit);
@@ -533,38 +533,11 @@ class transferModel extends model
         /* Deal children datas and multiple tasks. */
         if($moduleDatas) $moduleDatas = $this->transferTao->updateChildDatas($moduleDatas);
 
+        /* 设置导出用户需求相关相关研发需求数据。*/
         /* Deal linkStories datas. */
-        if($moduleDatas and isset($fieldList['linkStories'])) $moduleDatas = $this->updateLinkStories($moduleDatas);
+        if($moduleDatas and isset($fieldList['linkStories'])) $moduleDatas = $this->transferTao->processLinkStories($moduleDatas);
 
         return $moduleDatas;
-    }
-
-    /**
-     * Update LinkStories datas.
-     *
-     * @param  array $stories
-     * @access public
-     * @return array
-     */
-    public function updateLinkStories($stories)
-    {
-        $productIDList = array();
-        foreach($stories as $story) $productIDList[] = $story->product;
-        $productIDList = array_unique($productIDList);
-
-        $storyDatas = end($stories);
-        $lastType   = $storyDatas->type;
-
-        if($storyDatas->type == 'requirement')
-        {
-            $stories = $this->loadModel('story')->mergePlanTitleAndChildren($productIDList, $stories, $lastType);
-        }
-        elseif($storyDatas->type == 'story')
-        {
-            return $stories;
-        }
-
-        return $stories;
     }
 
     /**

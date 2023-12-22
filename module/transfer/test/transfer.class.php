@@ -39,7 +39,7 @@ class transferTest
         switch ($module)
         {
             case 'story':
-                $app->config->story->templateFields = 'product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer';
+                $app->config->story->templateFields = 'product,branch,module,source,sourceNote,title,spec,verify,keywords,pri,estimate,reviewer,linkStories';
                 $app->config->story->listFields     = 'product,branch,module,pri';
                 $app->config->story->dtable->fieldList['product']['control'] = 'select';
                 $app->config->story->dtable->fieldList['module']['control']  = 'multiple';

@@ -322,4 +322,27 @@ class transferTao extends transferModel
 
         return $objectDatas;
     }
+
+    /**
+     * 设置导出用户需求相关相关研发需求数据。
+     * Process LinkStories datas.
+     *
+     * @param  array $stories
+     * @access protected
+     * @return array
+     */
+    protected function processLinkStories($stories)
+    {
+        $storyDatas = end($stories);
+        $lastType   = $storyDatas->type;
+        if($storyDatas->type == 'story') return $stories;
+
+        /* 获取产品ID列表。*/
+        /* Get product id list. */
+        $productIDList = array();
+        foreach($stories as $story) $productIDList[] = $story->product;
+        $productIDList = array_unique($productIDList);
+
+        return $this->loadModel('story')->mergePlanTitleAndChildren($productIDList, $stories, $lastType);
+    }
 }
