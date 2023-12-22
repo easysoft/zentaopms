@@ -23,7 +23,14 @@ class svnTest
         return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq(2)->fetch();
     }
 
-    public function getRepoLogsTest(int $version): object|bool
+    /**
+     * Test getRepoLogs method.
+     *
+     *  @param  int    $version
+     *  @access public
+     *  @return object|bool|null
+     */
+    public function getRepoLogsTest(int $version): object|bool|null
     {
         $this->objectModel->setRepos();
         ob_start();

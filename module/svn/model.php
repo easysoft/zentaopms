@@ -262,9 +262,9 @@ class svnModel extends model
         $this->client = $repo->client . " --non-interactive";
         if(stripos($repo->path, 'https') === 0 || stripos($repo->path, 'svn') === 0)
         {
-            $cmd = $repo->client . ' --version --quiet';
+            $cmd     = $repo->client . ' --version --quiet';
             $version = `$cmd`;
-            if(version_compare($version, '1.6.0', '>'))
+            if(version_compare((string)$version, '1.6.0', '>'))
             {
                 $this->client .= ' --trust-server-cert';
             }
@@ -406,7 +406,7 @@ class svnModel extends model
      * @access private
      * @return object|false
      */
-    private function getRepoByURL(string $url): object|false
+    public function getRepoByURL(string $url): object|false
     {
         if(empty($this->repos)) $this->setRepos();
         foreach($this->repos as $repo)
