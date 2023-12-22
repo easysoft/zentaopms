@@ -534,13 +534,14 @@ class stakeholderModel extends model
     }
 
     /**
-     * Get expect details.
+     * 通过ID获取期望详情。
+     * Get expect detail by ID.
      *
-     * @param  int    $expectID
+     * @param  int        $expectID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getExpectByID($expectID = 0)
+    public function getExpectByID(int $expectID = 0): object|bool
     {
         return $this->dao->select('*')->from(TABLE_EXPECT)->where('id')->eq($expectID)->andWhere('deleted')->eq('0')->fetch();
     }
