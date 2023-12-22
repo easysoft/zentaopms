@@ -7,10 +7,11 @@ su('admin');
 /**
 
 title=测试gitModel->updatecommit();
+timeout=0
 cid=1
-pid=1
 
-
+- 测试正常的版本库 @1
+- 测试空的版本库 @0
 
 */
 
@@ -22,4 +23,3 @@ r($git->updateCommit($repo)) && p() && e(1);     // 测试正常的版本库
 
 $repo = new stdclass();
 r($git->updateCommit($repo)) && p() && e(0);    // 测试空的版本库
-

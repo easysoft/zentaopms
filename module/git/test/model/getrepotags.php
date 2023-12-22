@@ -7,10 +7,12 @@ su('admin');
 /**
 
 title=测试gitModel->getRepoTags();
+timeout=0
 cid=1
-pid=1
 
-10.0.1.161:51080')->where('id')->eq(1)->exec(); >> id
+- 获取版本库的tags @1
+- 使用空数据 @0
+- 使用错误的版本库 @0
 
 */
 
@@ -30,4 +32,3 @@ $repo = new stdclass();
 $repo->client = '';
 $repo->path   = '';
 r($git->getRepoTags($repo)) && p() && e(0);    // 使用错误的版本库
-

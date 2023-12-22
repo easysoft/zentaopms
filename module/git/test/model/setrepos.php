@@ -7,14 +7,13 @@ su('admin');
 /**
 
 title=测试gitModel->setRepos();
+timeout=0
 cid=1
-pid=1
 
- >> id
+- 设置版本库属性id @1
 
 */
 
 $git = new gitTest();
 $tester->dao->update(TABLE_REPO)->set('synced')->eq(1)->where('id')->eq(1)->exec();
 r($git->setRepos()) && p('id') && e(1);     // 设置版本库
-

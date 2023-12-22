@@ -92,28 +92,14 @@ class gitTest
     /**
      * Get repo logs.
      *
-     * @param  object  $repo
+     * @param  int    $repoID
+     * @param  string $branch
      * @access public
-     * @return int
+     * @return array
      */
-    public function getRepoLogs($repo)
+    public function getRepoLogs(int $repoID, string $branch): array
     {
-        $logs = $this->gitModel->getRepoLogs($repo, '');
-        if(is_array($logs) and count($logs) >= 1) return 1;
-        return 0;
-    }
-
-    /**
-     * Convert log from xml format to object.
-     *
-     * @param  object    $log
-     * @access public
-     * @return object
-     */
-    public function convertLog($log)
-    {
-        $parsedLogs = $this->gitModel->convertLog($log);
-        if(empty($parsedLogs->revision)) $parsedLogs->revision = 0;
-        return $parsedLogs;
+        $repo = $this->gitModel->loadModel('repo')->getByID($repoID);
+        return $this->gitModel->getRepoLogs($repo, $branch);
     }
 }

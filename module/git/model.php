@@ -348,7 +348,7 @@ class gitModel extends model
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $logs = $scm->log('', $fromRevision);
-        if(empty($logs)) return false;
+        if(empty($logs)) return array();
 
         foreach($logs as $log)
         {

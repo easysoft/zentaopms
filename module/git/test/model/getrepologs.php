@@ -1,30 +1,38 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/git.class.php';
-su('admin');
 
 /**
 
 title=测试gitModel->getRepoLogs();
+timeout=0
 cid=1
-pid=1
 
-
+- 分支名为空，返回默认分支的日志
+ - 属性revision @b362ea7aa65515dc35ff3a93423478b2143e771d
+ - 属性msg @Initial commit
+- 分支名为test1，返回空数组属性revision @0
+- 分支名为test1000，返回主干的日志
+ - 属性revision @b362ea7aa65515dc35ff3a93423478b2143e771d
+ - 属性msg @Initial commit
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/git.class.php';
+
+zdTable('repo')->config('repo')->gen(1);
+su('admin');
 
 $git = new gitTest();
 
-$repo = $tester->dao->select('*')->from(TABLE_REPO)->limit(1)->fetch();
-if(strtolower($repo->SCM) == 'gitlab') $repo = $tester->loadModel('repo')->processGitlab($repo);
-r($git->getRepoLogs($repo)) && p() && e(1);     // 获取版本库的tags
+$repoID = 1;
 
-$repo = new stdclass();
-r($git->getRepoLogs($repo)) && p() && e(0);    // 使用空数据
+$branch = '';
+$result = $git->getRepoLogs($repoID, $branch);
+r(end($result)) && p('revision,msg') && e('b362ea7aa65515dc35ff3a93423478b2143e771d,Initial commit'); // 分支名为空，返回默认分支的日志
 
-$repo = new stdclass();
-$repo->client = '';
-$repo->path   = '';
-r($git->getRepoLogs($repo)) && p() && e(0);    // 使用错误的版本库
+$branch = 'test1';
+r($git->getRepoLogs($repoID, $branch)) && p('revision') && e('0'); // 分支名为test1，返回空数组
 
+$branch = 'test1000';
+$result = $git->getRepoLogs($repoID, $branch);
+r(end($result)) && p('revision,msg') && e('b362ea7aa65515dc35ff3a93423478b2143e771d,Initial commit'); // 分支名为test1000，返回主干的日志
