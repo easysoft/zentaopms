@@ -560,7 +560,7 @@ class executionModel extends model
             if(isset($postData->attribute) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
                 $this->app->loadLang('stage');
-                $attribute = $executions[$executionID]->attribute;
+                $attribute = isset($executions[$executionID]->attribute) ? $executions[$executionID]->attribute : $oldExecution->attribute;
 
                 if(isset($attributeList[$parentID]))
                 {
