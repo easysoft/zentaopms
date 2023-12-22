@@ -1,32 +1,27 @@
 <?php
 class gitTest
 {
-    public $tester;
+    public $gitModel;
 
     public function __construct()
     {
         global $tester;
-        $this->tester   = $tester;
-        $this->gitModel = $this->tester->loadModel('git');
+        $this->gitModel = $tester->loadModel('git');
     }
 
     /**
-     * Update commit.
+     * Test updateCommit method.
      *
-     * @param  object $repo
-     * @param  array  $commentGroup
-     * @param  bool   $printLog
-     * @access public
-     * @return bool
+     *  @param  int    $repoID
+     *  @access public
+     *  @return object|false
      */
-    public function updateCommit($repo)
+    public function updateCommitTest(int $repoID): object|false
     {
-        $repoID = isset($repo->id) ? $repo->id : 0;
-        $oldLastSync = $this->tester->dao->select('lastSync')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('lastSync');
-        $result = $this->gitModel->updateCommit($repo, array(), false);
-        if(empty($repoID)) return $result;
-        $newLastSync = $this->tester->dao->select('lastSync')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('lastSync');
-        return $oldLastSync != $newLastSync;
+        $repo = $this->gitModel->loadModel('repo')->getByID($repoID);
+        $this->gitModel->updateCommit($repo, array(), false);
+
+        return $this->gitModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('id_desc')->fetch();
     }
 
     /**
