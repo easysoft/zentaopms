@@ -378,4 +378,42 @@ class screenTest
 
         return array($chartData, $filter);
     }
+
+    /**
+     * 测试buildSelect。
+     * Test buildSelect.
+     *
+     * @param  object $component
+     * @param  string $year
+     * @param  string $dept
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function buildSelectTest(object $component, string $year = '', string $dept = '', string $account = ''): object
+    {
+        if($year)    $this->objectModel->filter->year    = $year;
+        if($dept)    $this->objectModel->filter->dept    = $dept;
+        if($account) $this->objectModel->filter->account = $account;
+        $this->objectModel->buildSelect($component, $year, $dept, $account);
+
+        return $this->objectModel->filter;
+    }
+
+    /**
+     * 初始化过滤条件。
+     * Initialize filter conditions.
+     *
+     * @access public
+     * @return void
+     */
+    public function initFilter(): void
+    {
+        $this->objectModel->filter = new stdclass();
+        $this->objectModel->filter->screen  = '';
+        $this->objectModel->filter->year    = '';
+        $this->objectModel->filter->dept    = '';
+        $this->objectModel->filter->account = '';
+        $this->objectModel->filter->charts  = array();
+    }
 }

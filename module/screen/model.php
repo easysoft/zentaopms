@@ -1004,7 +1004,8 @@ class screenModel extends model
                 /* Build dept data. */
                 $options = array(array('label' => $this->lang->screen->allDepts, 'value' => '0'));
                 $depts = $this->dao->select('id,name')->from(TABLE_DEPT)->where('grade')->eq(1)->fetchAll();
-                $component->option->dataset = array_map(function($dept)use(&$options){array_push($options, array('label' => $dept->name, 'value' => $dept->id));}, $depts);
+                array_map(function($dept)use(&$options){array_push($options, array('label' => $dept->name, 'value' => $dept->id));}, $depts);
+                $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen . "&year=" . $this->filter->year . "&dept=' + value + '&account=')";
                 break;
@@ -1017,7 +1018,8 @@ class screenModel extends model
                 $depts   = array();
                 if($this->filter->dept) $depts = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like(',' . $this->filter->dept . ',%')->fetchPairs();
                 $users = $this->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->beginIF($this->filter->dept)->andWhere('dept')->in($depts)->fi()->fetchAll();
-                $component->option->dataset = array_map(function($user)use(&$options){array_push($options, array('label' => $user->realname, 'value' => $user->account));}, $users);
+                array_map(function($user)use(&$options){array_push($options, array('label' => $user->realname, 'value' => $user->account));}, $users);
+                $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen . "&year=" . $this->filter->year . "&dept=" . $this->filter->dept . "&account=' + value)";
                 break;
