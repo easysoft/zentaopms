@@ -746,7 +746,7 @@ class userModel extends model
         sort($oldGroups);
         sort($newGroups);
 
-        if(join(',', $oldGroups) == join(',', $newGroups)) return true;
+        if(join(',', $oldGroups) == join(',', $newGroups)) return false;
 
         /* 如果权限组发生变化，则删除原有的权限组，重新创建并更新用户视图。*/
         /* If the group changed, delete the old group, create new group and update user view. */
