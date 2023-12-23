@@ -435,13 +435,12 @@ class design extends control
      */
     public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $design    = $this->design->getCommit($designID, $pager);
-        $productID = $this->commonAction($design->project, $design->product, $designID);
-
         /* Init pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init(0, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $design = $this->design->getCommit($designID, $pager);
+        $this->commonAction($design->project, $design->product, $designID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
