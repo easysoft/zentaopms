@@ -320,7 +320,20 @@ class metricTest
      */
     public function getModuleTreeList($scope)
     {
-        return $this->objectModel->getModuleTreeList($scope);
+        $treeList = $this->objectModel->getModuleTreeList($scope);
+        usort($treeList, function($a, $b) {
+            // 先按照 object 属性排序
+            $objectComparison = strcmp($a->object, $b->object);
+
+            // 如果 object 属性相同，则按照 purpose 属性排序
+            if ($objectComparison === 0) {
+                return strcmp($a->purpose, $b->purpose);
+            }
+
+            return $objectComparison;
+        });
+
+        return $treeList;
     }
 
     /**
