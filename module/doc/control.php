@@ -612,6 +612,12 @@ class doc extends control
         $fileIcon    = $this->doc->getFileIcon($files);
         $sourcePairs = $this->doc->getFileSourcePairs($files);
 
+        if($this->app->tab != 'doc')
+        {
+            $objectVar = $this->app->tab . 'ID';
+            $this->view->{$objectVar} = $objectID;
+        }
+
         $this->view->title             = $object->name;
         $this->view->type              = $type;
         $this->view->object            = $object;
