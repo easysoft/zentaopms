@@ -1129,6 +1129,7 @@ class docModel extends model
 
         $query = $this->session->$queryName;
         if(strpos($query, "`lib` = 'all'") !== false) $query = str_replace("`lib` = 'all'", '1', $query);
+        if(strpos($query, "`lib` = ''") !== false) $query = str_replace("`lib` = ''", '1', $query);
         return $query;
     }
 

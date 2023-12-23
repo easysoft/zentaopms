@@ -733,7 +733,7 @@ class doc extends control
         if($libType == 'api') $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
         if($libType != 'api') $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
-        $this->assignApiVarForSpace($type, $browseType, $libType, $libID, $libs, $objectID, $moduleID, $queryID, $orderBy, $param, $recTotal, $recPerPage, $pageID);
+        $this->docZen->assignApiVarForSpace($type, $browseType, $libType, $libID, $libs, $objectID, $moduleID, $queryID, $orderBy, $param, $recTotal, $recPerPage, $pageID);
 
         /* For product drop menu. */
         if(in_array($type, array('product', 'project', 'execution')))
