@@ -193,7 +193,7 @@ class programplanZen extends programplan
         $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
         $defaultFields      = $this->config->programplan->$custom->defaultFields;
 
-        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
+        foreach(explode(',', $this->config->programplan->list->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
 
         $showFields = $this->config->programplan->$custom->createFields;
         foreach(explode(',', $showFields) as $field)
@@ -206,7 +206,7 @@ class programplanZen extends programplan
             if($field)
             {
                 $requiredFields[$field] = '';
-                if(strpos(",{$this->config->programplan->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+                if(strpos(",{$this->config->programplan->list->$customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
             }
         }
 
