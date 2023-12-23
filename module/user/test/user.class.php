@@ -86,6 +86,21 @@ class userTest
     }
 
     /**
+     * 检测处理用户显示名的功能。
+     * Test process display value.
+     *
+     * @param  array  $users
+     * @param  string $params
+     * @access public
+     * @return array
+     */
+    public function processDisplayValueTest(array $users, string $params): array
+    {
+        return $this->objectModel->processDisplayValue($users, $params);
+
+    }
+
+    /**
      * Test get avatar pairs.
      *
      * @param  string $params
