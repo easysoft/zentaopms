@@ -94,7 +94,7 @@ $config->execution->dtable->fieldList['realEnd']['width']    = '106';
 $config->execution->dtable->fieldList['realEnd']['group']    = '3';
 
 $config->execution->dtable->fieldList['totalEstimate']['title']    = $lang->execution->totalEstimate;
-$config->execution->dtable->fieldList['totalEstimate']['name']     = 'totalEstimate';
+$config->execution->dtable->fieldList['totalEstimate']['name']     = 'estimate';
 $config->execution->dtable->fieldList['totalEstimate']['type']     = 'number';
 $config->execution->dtable->fieldList['totalEstimate']['sortType'] = false;
 $config->execution->dtable->fieldList['totalEstimate']['width']    = '64';
@@ -102,7 +102,7 @@ $config->execution->dtable->fieldList['totalEstimate']['group']    = '4';
 $config->execution->dtable->fieldList['totalEstimate']['show']     = true;
 
 $config->execution->dtable->fieldList['totalConsumed']['title']    = $lang->execution->totalConsumed;
-$config->execution->dtable->fieldList['totalConsumed']['name']     = 'totalConsumed';
+$config->execution->dtable->fieldList['totalConsumed']['name']     = 'consumed';
 $config->execution->dtable->fieldList['totalConsumed']['type']     = 'number';
 $config->execution->dtable->fieldList['totalConsumed']['sortType'] = false;
 $config->execution->dtable->fieldList['totalConsumed']['width']    = '64';
@@ -110,7 +110,7 @@ $config->execution->dtable->fieldList['totalConsumed']['group']    = '4';
 $config->execution->dtable->fieldList['totalConsumed']['show']     = true;
 
 $config->execution->dtable->fieldList['totalLeft']['title']    = $lang->execution->totalLeft;
-$config->execution->dtable->fieldList['totalLeft']['name']     = 'totalLeft';
+$config->execution->dtable->fieldList['totalLeft']['name']     = 'left';
 $config->execution->dtable->fieldList['totalLeft']['type']     = 'number';
 $config->execution->dtable->fieldList['totalLeft']['sortType'] = false;
 $config->execution->dtable->fieldList['totalLeft']['width']    = '64';
