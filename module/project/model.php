@@ -1309,6 +1309,10 @@ class projectModel extends model
         /* If this project has multiple stage, check if execution's start and end dates in project's start and end dates. */
         if($oldProject->multiple && !$this->checkDates($projectID, $project)) return false;
 
+        /* 如果没有传入项目管理方式，则用之前的管理方式。*/
+        /* If no project management method is passed, the project management method is used. */
+        if(empty($project->model)) $project->model = $oldProject->model;
+
         /* 更新项目表。*/
         /* Update project table. */
         if(!$this->projectTao->doUpdate($projectID, $project)) return false;
