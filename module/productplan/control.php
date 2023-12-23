@@ -70,7 +70,6 @@ class productplan extends control
         if(!empty($_POST))
         {
             $planData = form::data()->get();
-            if(empty($planData->branch)) $planData->branch = '0';
             $planID   = $this->productplan->create($planData, (int)$this->post->future);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');

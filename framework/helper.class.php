@@ -379,7 +379,7 @@ class helper extends baseHelper
             case 'bool':
                 return (bool)$value;
             case 'array':
-                return array_filter((array)$value);
+                return array_filter((array)$value, function($var){return ($var === '0' || !empty($var));});
             case 'object':
                 return (object)$value;
             case 'datetime':
