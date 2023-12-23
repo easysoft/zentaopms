@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-if(!isonlybody()) include 'featurebar.html.php';
+if(!isInModal()) include 'featurebar.html.php';
 
 $groupName = '';
 foreach($groups as $group) $groupName .= $group->name . ' ';
