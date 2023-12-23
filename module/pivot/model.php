@@ -228,7 +228,7 @@ class pivotModel extends model
      * @access private
      * @return object
      */
-    private function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings, array $objectFields): object
+    public function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings, array $objectFields): object
     {
         $fieldSettingsNew = new stdclass();
 
