@@ -688,4 +688,16 @@ class metricTest
 
         return $this->objectModel->getSqlFunctionName($measurement);
     }
+
+    /**
+     * Test getCollectConf.
+     *
+     * @param  object $metric
+     * @access public
+     * @return string
+     */
+    public function getCollectConfText($metric)
+    {
+        return $this->objectModel->getCollectConfText($metric);
+    }
 }
