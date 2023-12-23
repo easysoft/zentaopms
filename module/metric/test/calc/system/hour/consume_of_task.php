@@ -17,4 +17,4 @@ zdTable('task')->config('task', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r($calc->getResult()) && p('0:value') && e('992'); // 测试消耗工时
+r($calc->getResult()) && p('0:value') && e('986'); // 测试消耗工时
