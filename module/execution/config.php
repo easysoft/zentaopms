@@ -227,6 +227,7 @@ $config->execution->actionList['putoff']['icon']        = 'calendar';
 $config->execution->actionList['putoff']['text']        = $lang->execution->putoff;
 $config->execution->actionList['putoff']['url']         = helper::createLink('execution', 'putoff', "executionID={rawID}");
 $config->execution->actionList['putoff']['data-toggle'] = 'modal';
+$config->execution->actionList['putoff']['data-size']   = 'lg';
 
 $config->execution->view = new stdclass();
 $config->execution->view->operateList['main']   = array('putoff', 'start', 'activate', 'suspend', 'close');
