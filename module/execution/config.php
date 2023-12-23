@@ -194,8 +194,8 @@ $config->execution->actionList['createChildStage']['hint'] = $lang->programplan-
 $config->execution->actionList['createChildStage']['url']  = helper::createLink('programplan', 'create', "projectID={projectID}&productID={product}&executionID={rawID}");
 
 $config->execution->actionList['edit']['icon']        = 'edit';
-$config->execution->actionList['edit']['text']        = $lang->execution->edit;
-$config->execution->actionList['edit']['hint']        = $lang->execution->edit;
+$config->execution->actionList['edit']['text']        = $lang->edit;
+$config->execution->actionList['edit']['hint']        = $lang->edit;
 $config->execution->actionList['edit']['url']         = helper::createLink('execution', 'edit', "executionID={rawID}");
 $config->execution->actionList['edit']['data-size']   = 'lg';
 $config->execution->actionList['edit']['data-toggle'] = 'modal';
@@ -214,8 +214,8 @@ $config->execution->actionList['activate']['data-toggle'] = 'modal';
 
 $config->execution->actionList['delete']['icon']      = 'trash';
 $config->execution->actionList['delete']['className'] = 'ajax-submit';
-$config->execution->actionList['delete']['text']      = $lang->execution->delete;
-$config->execution->actionList['delete']['hint']      = $lang->execution->delete;
+$config->execution->actionList['delete']['text']      = $lang->delete;
+$config->execution->actionList['delete']['hint']      = $lang->delete;
 $config->execution->actionList['delete']['url']       = helper::createLink('execution', 'delete', "executionID={rawID}");
 
 $config->execution->actionList['suspend']['icon']        = 'pause';

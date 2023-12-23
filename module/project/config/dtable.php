@@ -149,7 +149,7 @@ $config->projectExecution->dtable->fieldList['rawID']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->projectExecution->dtable->fieldList['rawID']['width']    = '80';
 
-$config->projectExecution->dtable->fieldList['name']['title']        = $lang->execution->execName;
+$config->projectExecution->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->projectExecution->dtable->fieldList['name']['name']         = 'nameCol';
 $config->projectExecution->dtable->fieldList['name']['fixed']        = 'left';
 $config->projectExecution->dtable->fieldList['name']['flex']         = 1;
@@ -164,7 +164,7 @@ $config->projectExecution->dtable->fieldList['productName']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['productName']['minWidth'] = '160';
 $config->projectExecution->dtable->fieldList['productName']['group']    = '1';
 
-$config->projectExecution->dtable->fieldList['status']['title']     = $lang->execution->execStatus;
+$config->projectExecution->dtable->fieldList['status']['title']     = $lang->project->status;
 $config->projectExecution->dtable->fieldList['status']['name']      = 'status';
 $config->projectExecution->dtable->fieldList['status']['type']      = 'status';
 $config->projectExecution->dtable->fieldList['status']['statusMap'] = $lang->execution->statusList + $lang->task->statusList;
@@ -172,7 +172,7 @@ $config->projectExecution->dtable->fieldList['status']['sortType']  = false;
 $config->projectExecution->dtable->fieldList['status']['width']     = '80';
 $config->projectExecution->dtable->fieldList['status']['group']     = '1';
 
-$config->projectExecution->dtable->fieldList['PM']['title']    = $lang->execution->execPM;
+$config->projectExecution->dtable->fieldList['PM']['title']    = $lang->project->PM;
 $config->projectExecution->dtable->fieldList['PM']['name']     = 'PM';
 $config->projectExecution->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->projectExecution->dtable->fieldList['PM']['sortType'] = false;
