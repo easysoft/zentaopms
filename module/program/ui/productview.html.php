@@ -90,10 +90,9 @@ $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
 /* Closure for generating product line row data. */
 $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$linesCount)
 {
-    if(!isset($line['lineName']) || !isset($line['products']) || !is_array($line['products']) || $config->systemMode != 'ALM') return null;
+    if(!isset($line['lineName']) || !isset($line['products']) || !is_array($line['products']) || $config->systemMode != 'ALM' || $config->systemMode != 'PLM') return null;
 
     /* ALM mode with Product Line. */
-    $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);
     $linesCount++;
 
     $item = new stdClass();
@@ -105,9 +104,9 @@ $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$li
     $item->PM                   = '';
     $item->createdDate          = '';
     $item->createdBy            = '';
-    $item->totalUnclosedStories = $line['unclosedStories'];
-    $item->totalStories         = $totalStories;
-    $item->closedStoryRate      = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100);
+    $item->totalUnclosedStories = $line['totalStories'] - $line['closedStories'];
+    $item->totalStories         = $line['totalStories'];
+    $item->closedStoryRate      = ($line['totalStories'] == 0 ? 0 : round(zget($line, 'finishClosedStories', 0) / $line['totalStories'], 3) * 100);
     $item->totalPlans           = $line['plans'];
     $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
