@@ -80,7 +80,7 @@ class ciModel extends model
      */
     public function getCompileByID(int $compileID): object|false
     {
-        return $this->dao->select('t1.*, t2.pipeline,t2.product,t2.frame,t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.*, t2.pipeline,t2.product,t2.frame,t2.server,t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.server=t3.id')
             ->where('t1.id')->eq($compileID)
@@ -205,18 +205,16 @@ class ciModel extends model
     {
         /* The value of `$compile->pipeline` is like `'{"project":"46","reference":"master"}'` in current design. */
         $pipeline = json_decode($compile->pipeline);
-        $compile->project = isset($pipeline->project) ? $pipeline->project : $compile->pipeline;
+        $compile->project = isset($pipeline->project) ? (int)$pipeline->project : (int)$compile->pipeline;
 
-        $now      = helper::now();
         $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->project, $compile->queue);
         if(!isset($pipeline->id) || isset($pipeline->message)) /* The pipeline is not available. */
         {
-            $pipeline->status = 'create_fail'; /* Set the status to fail. */
-            $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
+            $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq('create_fail')->where('id')->eq($compile->job)->exec();
             return false;
         }
 
-        $jobs = $this->gitlab->apiGetJobs($compile->server, $compile->project, $compile->queue);
+        $now  = helper::now();
         $data = new stdclass;
         $data->status     = $pipeline->status;
         $data->updateDate = $now;

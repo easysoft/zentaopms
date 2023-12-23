@@ -10,7 +10,7 @@ fields:
   - field: job
     range: 1-10
   - field: queue
-    range: 200-205
+    range: '200,20,201,24'
   - field: status
     range: created
   - field: testtask

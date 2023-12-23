@@ -1,0 +1,43 @@
+title: mr
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: hostID
+    range: 1-10
+  - field: sourceProject
+    range: 3-10
+  - field: sourceBranch
+    range: test1
+  - field: targetProject
+    range: 3
+  - field: targetBranch
+    range: master
+  - field: mriid
+    range: 36-38
+  - field: title
+    prefix: test-merge
+    range: '[],2-100'
+  - field: assignee
+    range: admin,user1,user2,user3
+  - field: createdBy
+    range: admin,user1,user2,user3
+  - field: createdDate
+    range: '`2023-12-13 13:14:34`'
+  - field: status
+    range: opened,merged,closed
+  - field: mergeStatus
+    range: can_be_merged,unchecked,checking,cannot_be_merged,cannot_merge_by_fail
+  - field: repoID
+    range: 1-10
+  - field: executionID
+    range: 1-10
+  - field: jobID
+    range: 0-9
+  - field: compileID
+    range: 0-3
+  - field: synced
+    range: 1
+  - field: deleted
+    range: 0{4},1

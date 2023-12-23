@@ -49,9 +49,9 @@ class ciTest
      * @param  int    $jobID
      * @param  int    $MRID
      * @access public
-     * @return string|object
+     * @return object|array
      */
-    public function syncCompileStatusTest(int $compileID, int $MRID = 0)
+    public function syncCompileStatusTest(int $compileID, int $MRID = 0): object|array
     {
         $compile = $this->objectModel->getCompileByID($compileID);
 
@@ -67,19 +67,15 @@ class ciTest
      *
      * @param  int    $jobID
      * @access public
-     * @return string|bool
+     * @return object|array
      */
-    public function syncGitlabTaskStatusTest($jobID)
+    public function syncGitlabTaskStatusTest(int $compileID): object|array
     {
-        global $tester;
-        $tester->loadModel('job')->exec($jobID);
-        $compileID = $tester->dao->select('id')->from(TABLE_COMPILE)->orderBy('id_desc')->fetch('id');
-        $compile   = $this->getCompileByID($compileID);
-
+        $compile = $this->objectModel->getCompileByID($compileID);
         $this->objectModel->syncGitlabTaskStatus($compile);
 
         if(dao::isError()) return dao::getError();
-        return true;
+        return $this->objectModel->loadModel('job')->getByID($compile->job);
     }
 
     /**

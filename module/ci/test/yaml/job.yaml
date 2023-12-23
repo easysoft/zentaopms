@@ -12,9 +12,9 @@ fields:
   - field: product
     range: 1
   - field: server
-    range: 3
+    range: '3,1'
   - field: pipeline
-    range: /job/paramsJob/
+    range: /job/paramsJob/,`{"project":"3","reference":"master"}`
   - field: engine
     range: jenkins,gitlab
   - field: triggerType
