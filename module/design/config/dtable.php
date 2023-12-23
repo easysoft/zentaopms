@@ -71,7 +71,6 @@ $config->design->viewcommit->dtable->fieldList['id']['target']   = '_blank';
 $config->design->viewcommit->dtable->fieldList['id']['sortType'] = false;
 
 $config->design->viewcommit->dtable->fieldList['committer']['title']    = $lang->design->commitBy;
-$config->design->viewcommit->dtable->fieldList['committer']['type']     = 'user';
 $config->design->viewcommit->dtable->fieldList['committer']['sortType'] = false;
 
 $config->design->viewcommit->dtable->fieldList['time']['title']    = $lang->design->commitDate;

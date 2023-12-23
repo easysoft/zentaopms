@@ -24,7 +24,8 @@ function loadCommit()
         return false;
     }
 
-    loadModal($.createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repoID + '&begin=' + begin + '&end=' + end), 'viewCommitModal');
+    var modalTarget = $('#viewCommitModal').length > 0 ? 'viewCommitModal' : 'linkCommitModal';
+    loadModal($.createLink('design', 'linkCommit', "designID=" + designID + '&repoID=' + repoID + '&begin=' + begin + '&end=' + end), modalTarget);
 }
 
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
