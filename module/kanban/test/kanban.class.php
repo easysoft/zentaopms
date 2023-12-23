@@ -824,6 +824,23 @@ class kanbanTest
      * @access public
      * @return object
      */
+    public function createKanbanTest($param)
+    {
+        $this->objectModel->createKanban($param);
+
+        if(dao::isError()) return dao::getError();
+
+        $objectID = $this->objectModel->dao->lastInsertID();
+        return $this->objectModel->getByID($objectID);
+    }
+
+    /**
+     * Test create a kanban.
+     *
+     * @param  object $param
+     * @access public
+     * @return object
+     */
     public function createTest($param)
     {
         $objectID = $this->objectModel->create($param);
