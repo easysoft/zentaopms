@@ -735,26 +735,27 @@ class projectZen extends project
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
 
-        $this->view->title          = $project->name . $this->lang->colon . $this->lang->bug->common;
-        $this->view->bugs           = $bugs;
-        $this->view->build          = $this->loadModel('build')->getById($build);
-        $this->view->buildID        = $this->view->build ? $this->view->build->id : 0;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->type           = $type;
-        $this->view->param          = $param;
-        $this->view->productID      = $productID;
-        $this->view->project        = $project;
-        $this->view->branchID       = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
-        $this->view->builds         = $this->loadModel('build')->getBuildPairs(array($productID));
-        $this->view->users          = $this->user->getPairs('noletter');
-        $this->view->executions     = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
-        $this->view->plans          = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
-        $this->view->stories        = $storyList;
-        $this->view->tasks          = $taskList;
-        $this->view->projectPairs   = $this->project->getPairsByProgram();
-        $this->view->switcherParams = "projectID={$projectID}&productID={$productID}&currentMethod=bug";
-        $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
+        $this->view->title            = $project->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->bugs             = $bugs;
+        $this->view->build            = $this->loadModel('build')->getById($build);
+        $this->view->buildID          = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager            = $pager;
+        $this->view->orderBy          = $orderBy;
+        $this->view->type             = $type;
+        $this->view->param            = $param;
+        $this->view->productID        = $productID;
+        $this->view->project          = $project;
+        $this->view->branchID         = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->builds           = $this->loadModel('build')->getBuildPairs(array($productID));
+        $this->view->users            = $this->user->getPairs('noletter');
+        $this->view->executions       = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
+        $this->view->stories          = $storyList;
+        $this->view->tasks            = $taskList;
+        $this->view->projectPairs     = $this->project->getPairsByProgram();
+        $this->view->switcherParams   = "projectID={$projectID}&productID={$productID}&currentMethod=bug";
+        $this->view->switcherText     = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
+        $this->view->switcherObjectID = $productID;
 
         $this->display();
     }

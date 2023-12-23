@@ -584,9 +584,10 @@ class testcaseZen extends testcase
         {
             $productPairs = $this->product->getProductPairsByProject($projectID);
 
-            $this->view->switcherParams = "projectID={$projectID}&productID={$productID}&currentMethod=testcase";
-            $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
-            $this->view->project        = $this->loadModel('project')->getByID($projectID);
+            $this->view->switcherParams   = "projectID={$projectID}&productID={$productID}&currentMethod=testcase";
+            $this->view->switcherText     = zget($productPairs, $productID, $this->lang->product->all);
+            $this->view->project          = $this->loadModel('project')->getByID($projectID);
+            $this->view->switcherObjectID = $productID;
         }
     }
 
