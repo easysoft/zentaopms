@@ -419,6 +419,23 @@ class metricTest
     }
 
     /**
+     * Test getPieEchartsOptions.
+     *
+     * @param  array  $header
+     * @param  array  $data
+     * @param  string $print
+     * @access public
+     * @return mixed
+     */
+    public function getPieEchartsOptions($header, $data, $print = 'all')
+    {
+        $options = $this->objectModel->getPieEchartsOptions($header, $data);
+        if($print == 'all')    return $options;
+        if($print == 'series') return $options['series'];
+        if($print == 'data')   return $options['series'][0]['data'];
+    }
+
+    /**
      * Test getEchartXY.
      *
      * @param  array $header
