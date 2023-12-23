@@ -571,7 +571,6 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <?php if(common::hasPriv($story->type, 'relation')):?>
                 <tr class='text-top linkStoryTr'>
                   <th><?php echo $lang->story->linkStories;?></th>
                   <td>
@@ -597,7 +596,6 @@
                     </ul>
                   </td>
                 </tr>
-                <?php endif;?>
                 <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
