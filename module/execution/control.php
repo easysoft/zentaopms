@@ -2454,10 +2454,11 @@ class execution extends control
         $objectType = $this->dao->select('`type`')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('type');
         if($objectType != 'project') $objectType = 'execution';
 
-        $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $members = $this->user->getTeamMemberPairs($objectID, $objectType);
+        $members = $this->loadModel('user')->getTeamMemberPairs($objectID, $objectType);
 
-        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control picker-select' multiple"));
+        $selectedMembers = '';
+        foreach($members as $account => $realName) $selectedMembers .= $account . ',';
+        return print(json_encode($selectedMembers);
     }
 
     /**

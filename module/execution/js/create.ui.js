@@ -50,9 +50,14 @@ function setType()
  */
 function loadMembers()
 {
-    $.get($.createLink('execution', 'ajaxGetTeamMembers', 'objectID=' + $('#teams').val()), function(data)
+    let objectID = $('input[name=teams]').val() ? $('input[name=teams]').val() : projectID;
+    $.getJSON($.createLink('execution', 'ajaxGetTeamMembers', 'objectID=' + objectID), function(data)
     {
-        $('#teamMembers').replaceWith(data);
+        if(data)
+        {
+            let membersPicker = $('select[name^=teamMembers]').zui('picker');
+            membersPicker.$.setValue(data);
+        }
     });
 }
 
