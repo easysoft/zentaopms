@@ -1,3 +1,4 @@
+searchValue = '';
 const kanbanDropRules =
 {
     story:
@@ -223,6 +224,11 @@ window.getItem = function(info)
       </div>
     `;
 
+    if(searchValue != '')
+    {
+        info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
+        info.item.title = {html: info.item.title};
+    }
     info.item.titleUrl   = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
 
@@ -468,9 +474,28 @@ window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneI
     refreshKanban(link);
 };
 
+window.debounce = function (callback, delay)
+{
+    let timer;
+    return function() {
+        const context = this;
+        const args = arguments;
+
+        clearTimeout(timer);
+
+        timer = setTimeout(function () {
+            callback.apply(context, args);
+        }, delay);
+    };
+};
+
+$('#taskKanbanSearchInput').on('input', debounce(function(){
+      searchCards($(this).val());
+}, 500));
+
 window.searchCards = function(value, order)
 {
-    const searchValue = value;
+    searchValue = value;
     if(typeof order == 'undefined') order = orderBy;
     refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=' + value + '&orderBy=' + order));
 };

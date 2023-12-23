@@ -170,7 +170,6 @@ row
                 (
                     setID('taskKanbanSearchInput'),
                     set::name('taskKanbanSearchInput'),
-                    set::oninput('searchCards(this.value)'),
                     set::placeholder($lang->execution->pleaseInput)
                 )
             )

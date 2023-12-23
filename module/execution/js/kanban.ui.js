@@ -1,3 +1,4 @@
+searchValue = '';
 window.getLane = function(lane)
 {
     /* 看板只有一个泳道时，铺满全屏。 */
@@ -169,6 +170,12 @@ window.getItem = function(info)
         </div>
         `;
         info.item.content = {html: content};
+    }
+
+    if(searchValue != '')
+    {
+        info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
+        info.item.title = {html: info.item.title};
     }
 }
 
@@ -658,6 +665,7 @@ $('#kanbanSearchInput').on('input', debounce(function(){
 
 window.searchCards = function(value, order)
 {
+    searchValue = value;
     if(typeof order == 'undefined') order = orderBy;
     refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
 };
