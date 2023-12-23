@@ -111,7 +111,7 @@ class dataset
     {
         return $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%', t1.project, '%')")
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("FIND_IN_SET(t2.id,t1.project)")
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
