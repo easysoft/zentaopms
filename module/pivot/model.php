@@ -342,22 +342,6 @@ class pivotModel extends model
 
         /* 为bug生成统计数据。 */
         /* Generate statistics data for bugs. */
-        $bugs = $this->getBugStatistics($bugGroups);
-
-        uasort($bugs, 'sortSummary');
-        return $bugs;
-    }
-
-    /**
-     * 获取bug的统计信息。
-     * Get bug statistics information.
-     *
-     * @param  array  $bugGroups
-     * @access public
-     * @return array
-     */
-    private function getBugStatistics(array $bugGroups): array
-    {
         $bugs = array();
         foreach($bugGroups as $account => $userBugs)
         {
@@ -398,6 +382,7 @@ class pivotModel extends model
             $bugs[] = $bug;
         }
 
+        uasort($bugs, 'sortSummary');
         return $bugs;
     }
 
