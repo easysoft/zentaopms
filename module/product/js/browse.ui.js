@@ -60,6 +60,12 @@ window.renderCell = function(result, info)
     {
         if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
     }
+    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
+    {
+        delete result[0]['props']['data-toggle'];
+        delete result[0]['props']['href'];
+        result[0]['props']['className'] += ' disabled';
+    }
     return result;
 };
 
