@@ -247,13 +247,15 @@ $config->execution->linkStory->dtable->fieldList['id']['sortType'] = true;
 $config->execution->linkStory->dtable->fieldList['id']['fixed']    = 'left';
 $config->execution->linkStory->dtable->fieldList['id']['group']    = 1;
 
-$config->execution->linkStory->dtable->fieldList['title']['title']    = $lang->story->title;
-$config->execution->linkStory->dtable->fieldList['title']['type']     = 'title';
-$config->execution->linkStory->dtable->fieldList['title']['link']     = helper::createLink('story', 'view', 'storyID={id}');
-$config->execution->linkStory->dtable->fieldList['title']['sortType'] = true;
-$config->execution->linkStory->dtable->fieldList['title']['fixed']    = 'left';
-$config->execution->linkStory->dtable->fieldList['title']['group']    = 2;
-$config->execution->linkStory->dtable->fieldList['title']['data-app'] = $app->tab;
+$config->execution->linkStory->dtable->fieldList['title']['title']       = $lang->story->title;
+$config->execution->linkStory->dtable->fieldList['title']['type']        = 'title';
+$config->execution->linkStory->dtable->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}');
+$config->execution->linkStory->dtable->fieldList['title']['sortType']    = true;
+$config->execution->linkStory->dtable->fieldList['title']['fixed']       = 'left';
+$config->execution->linkStory->dtable->fieldList['title']['group']       = 2;
+$config->execution->linkStory->dtable->fieldList['title']['data-app']    = $app->tab;
+$config->execution->linkStory->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->execution->linkStory->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->execution->linkStory->dtable->fieldList['pri']['title']    = $lang->story->pri;
 $config->execution->linkStory->dtable->fieldList['pri']['type']     = 'pri';
