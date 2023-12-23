@@ -424,7 +424,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    private function getWorkloadNoAssign(array $deptUsers, array $users, bool $canViewExecution): array
+    public function getWorkloadNoAssign(array $deptUsers, array $users, bool $canViewExecution): array
     {
         $executions = $this->pivotTao->getNoAssignExecution(array_keys($deptUsers));
         if(empty($executions)) return array();
@@ -486,7 +486,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    private function getWorkLoadAssign(array $deptUsers, array $users, bool $canViewExecution, float $allHour): array
+    public function getWorkLoadAssign(array $deptUsers, array $users, bool $canViewExecution, float $allHour): array
     {
         $tasks = $this->pivotTao->getAssignTask(array_keys($deptUsers));
         if(empty($tasks)) return array();

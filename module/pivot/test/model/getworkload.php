@@ -52,8 +52,6 @@ foreach($result as $row)
 }
 r($result) && p('0:id,isExecutionNameHtml,totalTasks,totalHours,workload;3:id,isExecutionNameHtml,totalTasks,totalHours,workload') && e("2,0,1,2,28.57;10,1,1,5,71.43");    //测试部门id为0，执行状态已分配，工时为7的透视表数据是否正常生成,此返回值包含四条数据。
 
-
-
 $result = $pivot->getWorkload($deptList[0], $assignList[1], $usersList[0], $allHourList[1]);
 foreach($result as $row)
 {
