@@ -334,11 +334,12 @@ class action extends control
      */
     public function ajaxGetList(string $objectType, int $objectID)
     {
+        $this->app->loadLang($objectType);
         $actions = $this->action->getList($objectType, $objectID);
         $actions = $this->action->buildActionList($actions);
         return $this->send($actions);
     }
-    
+
     /**
      * Clear dynamic records older than one month.
      *
