@@ -1322,7 +1322,7 @@ class projectModel extends model
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
-        if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
+        if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);                // 无迭代的非瀑布项目需要更新。
 
         if(dao::isError()) return false;
