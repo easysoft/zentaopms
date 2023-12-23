@@ -1609,6 +1609,31 @@ class kanbanTest
      * 构建迭代看板的卡片数据。
      * Build the card data for the execution Kanban.
      *
+     * @access public
+     * @return array
+     */
+    public function buildExecutionCardTest(int $cardID, int $colID, string $laneType, string $searchValue): array
+    {
+        if($laneType == 'task')
+        {
+            global $tester;
+            $card = $tester->loadModel('task')->getByID($cardID);
+        }
+        else
+        {
+            $card = $this->objectModel->getCardByID($cardID);
+        }
+
+        $col       = $this->objectModel->getColumnById($colID);
+        $col->lane = $col->id;
+
+        return $this->objectModel->buildExecutionCard($card, $col, $laneType, $searchValue);
+    }
+
+    /**
+     * 构建迭代看板的卡片数据。
+     * Build the card data for the execution Kanban.
+     *
      * @param  int    $executionID
      * @param  int    $laneID
      * @param  string $columnType
