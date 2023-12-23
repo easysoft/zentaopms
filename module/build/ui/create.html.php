@@ -62,63 +62,29 @@ if(!empty($multipleProject))
 $productRow = '';
 if(!$hidden)
 {
-    $productBox = '';
-    if(!empty($products) || !$executionID)
-    {
-        $productBox = formGroup(
+    $productRow = formRow(
+        setID('productRow'),
+        set::hidden(empty($products) && $executionID),
+        formGroup(
             set::width('1/2'),
-            setID('productBox'),
             set::name('product'),
             set::label($lang->build->product),
             set::value(empty($product) ? '' : $product->id),
             set::items($products),
             set::required(true),
             on::change('loadBranches')
-    //        on::change('loadArtifactrepo'),
-        );
-
-        $artifactRepoRow[] = formRow
+        )
+    );
+    $noProductRow = formRow(
+        setID('noProductRow'),
+        set::hidden(!empty($products) || !$executionID),
+        formGroup
         (
-            setClass('artifactrepo ' . ((empty($product) || empty($artifactRepos[$product->id])) ? 'hidden' : '')),
-            formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->build->linkArtifactRepo),
-                radioList
-                (
-                    set::name('isArtifactRepo'),
-                    set::items($lang->build->isIntegrated),
-                    set::value('no'),
-                    set::inline(true),
-                    on::click('onShowArtifactRepo')
-                )
-            )
-        );
-        $artifactRepoRow[] = formRow
-        (
-            setClass('artifactrepo-id hidden'),
-            formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->artifactrepo->repoName),
-                set::name('artifactRepoID'),
-                set::items(array()),
-                on::change('onChangeArtifactRepo')
-            )
-        );
-    }
-    else
-    {
-        $productBox = formGroup(
             set::width('1/2'),
             setClass('items-center'),
-            setID('productBox'),
             set::label($lang->build->product),
             html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}", '', true), $app->tab))
-        );
-    }
-    $productRow = formRow(
-        $productBox
+        )
     );
 }
 
@@ -132,6 +98,7 @@ formPanel
     $integratedRow,
     $executionRow,
     $productRow,
+    $noProductRow,
     formRow
     (
         setClass(!empty($product) && $productType != 'normal' ? '' : 'hidden'),

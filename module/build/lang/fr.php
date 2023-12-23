@@ -59,7 +59,7 @@ $lang->build->unlinkBug      = 'Retirer Bug';
 $lang->build->stories        = 'Stories terminées';
 $lang->build->bugs           = 'Bugs Résolus';
 $lang->build->generatedBugs  = 'Bugs signalés';
-$lang->build->noProduct      = " <span id='noProduct' style='color:red'>Ce {$lang->executionCommon} n'est pas associé à un {$lang->productCommon}, le Build ne peut pas être créé. Commencez par <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'>rattacher le projet à un {$lang->productCommon}</a></span>";
+$lang->build->noProduct      = " <span id='noProduct' style='color:red'>Ce {$lang->executionCommon} n'est pas associé à un {$lang->productCommon}, le Build ne peut pas être créé. Commencez par <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe' class='cursor-pointer'>rattacher le projet à un {$lang->productCommon}</a></span>";
 $lang->build->noBuild        = 'Aucun builds.';
 $lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
 $lang->build->linkedBuild    = 'Linked Build';

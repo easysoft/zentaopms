@@ -59,7 +59,7 @@ $lang->build->unlinkBug      = 'Unlink Bug';
 $lang->build->stories        = "Finished {$lang->SRCommon}";
 $lang->build->bugs           = 'Resolved Bugs';
 $lang->build->generatedBugs  = 'Reported Bugs';
-$lang->build->noProduct      = " <span id='noProduct' style='color:red'>This {$lang->executionCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'> link {$lang->productCommon}</a></span>";
+$lang->build->noProduct      = " <span id='noProduct' style='color:red'>This {$lang->executionCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe' class='cursor-pointer'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild        = 'No builds yet.';
 $lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
 $lang->build->linkedBuild    = 'Linked Build';

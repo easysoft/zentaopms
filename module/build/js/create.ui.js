@@ -82,16 +82,27 @@ function loadProducts(executionID)
 
     $.getJSON($.createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
     {
-        const $product       = $('input[name=product]');
-        const $productPicker = $product.zui('picker');
-        const productID      = data.length ? data[0].value : 0;
-        $productPicker.render({items: data});
-        $productPicker.$.setValue(productID);
-
-        if(data)
+        if(data.length > 0)
         {
+            $('#noProductRow').addClass('hidden');
+            $('#productRow').removeClass('hidden');
+
+            const $product       = $('input[name=product]');
+            const $productPicker = $product.zui('picker');
+            const productID      = data.length ? data[0].value : 0;
+            $productPicker.render({items: data});
+            $productPicker.$.setValue(productID);
+
             $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             loadBranches(productID);
+        }
+        else
+        {
+            $('#noProductRow').find('a').attr('data-url', $.createLink('execution', 'manageProducts', 'executionID=' + executionID));
+            $('#noProductRow').removeClass('hidden');
+            $('#productRow').addClass('hidden');
+
+            console.log(executionID);
         }
     });
 

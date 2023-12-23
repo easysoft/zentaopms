@@ -59,7 +59,7 @@ $lang->build->unlinkBug      = '移除Bug';
 $lang->build->stories        = "完成的{$lang->SRCommon}";
 $lang->build->bugs           = '解决的Bug';
 $lang->build->generatedBugs  = '产生的Bug';
-$lang->build->noProduct      = " <span id='noProduct' style='color:red'>该{$lang->executionCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a data-url='%s' data-app='%s' data-toggle='modal'>关联{$lang->productCommon}</a></span>";
+$lang->build->noProduct      = " <span id='noProduct' style='color:red'>该{$lang->executionCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a data-url='%s' data-app='%s' data-toggle='modal' class='cursor-pointer'>关联{$lang->productCommon}</a></span>";
 $lang->build->noBuild        = '暂时没有版本。';
 $lang->build->emptyExecution = $lang->executionCommon . '不能为空。';
 $lang->build->linkedBuild    = '关联版本';
