@@ -917,7 +917,7 @@ class pivotModel extends model
      * @access private
      * @return array
      */
-    private function processGroupRows(array $columns, string $sql, array $filters, array $groups, string $groupList, array $fields, string $showColTotal, array &$cols ,array $langs): array
+    public function processGroupRows(array $columns, string $sql, array $filters, array $groups, string $groupList, array $fields, string $showColTotal, array &$cols ,array $langs): array
     {
         list($sql, $connectSQL, $groupSQL, $orderSQL) = $this->initSql($sql, $filters, $groupList);
         $number       = 0;
@@ -1017,7 +1017,7 @@ class pivotModel extends model
      * @access private
      * @return array
      */
-    public function getMergeData(array $columnRows, array &$groupsRow)
+    private function getMergeData(array $columnRows, array &$groupsRow)
     {
         $rowIndex = 0;
         foreach($columnRows as $key => $row)

@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 pivotModel->processDataVar();
+title=测试 pivotModel->initGroups().
 timeout=0
 cid=1
 
