@@ -9,13 +9,13 @@ fields:
   - field: sourceProject
     range: 3-10
   - field: sourceBranch
-    range: test1
+    range: test100
   - field: targetProject
     range: 3
   - field: targetBranch
-    range: master
+    range: master10
   - field: mriid
-    range: 36-38
+    range: 46-58
   - field: title
     prefix: test-merge
     range: '[],2-100'

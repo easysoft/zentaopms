@@ -88,19 +88,23 @@ class ciTest
      *
      * @param  int    $compileID
      * @param  string $status
+     * @param  string $check
      * @access public
-     * @return string|object
+     * @return object|array
      */
-    public function updateBuildStatusTest($compileID, $status)
+    public function updateBuildStatusTest(int $compileID, string $status, string $check = 'job'): object|array
     {
         $compile = $this->getCompileByID($compileID);
         $this->objectModel->updateBuildStatus($compile, $status);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $compile = $tester->loadModel('compile')->getByID($compileID);
-        return $compile;
+        if($check == 'mr')
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($compileID)->fetch();
+        }
+
+        return $this->objectModel->loadModel('compile')->getByID($compileID);
     }
 
     /**
