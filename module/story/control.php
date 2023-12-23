@@ -403,10 +403,10 @@ class story extends control
         $this->story->getAffectedScope($story);
 
         /* Assign. */
-        $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $story->title;
-        $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
-        $this->view->fields           = $this->storyZen->getFormFieldsForChange($storyID);
-        $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
+        $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->colon . $story->title;
+        $this->view->users        = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
+        $this->view->fields       = $this->storyZen->getFormFieldsForChange($storyID);
+        $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
     }

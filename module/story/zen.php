@@ -717,7 +717,7 @@ class storyZen extends story
         foreach(array_keys($fields) as $field)
         {
             if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
-            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
+            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = $field == 'reviewer' ? $this->lang->story->reviewers : zget($this->lang->story, $field);
         }
 
         $reviewerAndResultPairs = $this->story->getReviewerPairs($storyID, $story->version);
