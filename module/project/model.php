@@ -45,7 +45,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkPriv($projectID)
+    public function checkPriv($projectID): bool
     {
         return !empty($projectID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false));
     }
@@ -1654,9 +1654,9 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  array  $members
      * @access public
-     * @return void
+     * @return bool
      */
-    public function manageMembers(int $projectID, array $members)
+    public function manageMembers(int $projectID, array $members): bool
     {
         $project = $this->projectTao->fetchProjectInfo($projectID);
         $oldJoin = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchPairs();
@@ -1694,6 +1694,8 @@ class projectModel extends model
         }
 
         if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
+
+        return !dao::isError();
     }
 
     /**
@@ -1796,9 +1798,9 @@ class projectModel extends model
      * @param  array  $oldProjectProducts
      * @param  array  $members
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkProducts(int $projectID, array $products, array $oldProjectProducts, array $members)
+    public function linkProducts(int $projectID, array $products, array $oldProjectProducts, array $members): bool
     {
         $this->loadModel('user');
 
@@ -1845,6 +1847,7 @@ class projectModel extends model
                 $existedProducts[$productID][$branchID] = true;
             }
         }
+        return true;
     }
 
     /**
@@ -1901,15 +1904,17 @@ class projectModel extends model
      * @param  int    $projectID
      * @param  array  $users
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateInvolvedUserView(int $projectID, array $users = array()): void
+    public function updateInvolvedUserView(int $projectID, array $users = array()): bool
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
         $this->loadModel('user')->updateUserView($products, 'product', $users);
 
         $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
         if($executions) $this->user->updateUserView($executions, 'sprint', $users);
+
+        return true;
     }
 
     /**
@@ -2005,9 +2010,9 @@ class projectModel extends model
      * Get stats for project kanban.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getStats4Kanban()
+    public function getStats4Kanban(): array
     {
         /* Get execution of the status is doing. */
         $executions        = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');

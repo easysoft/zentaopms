@@ -50,50 +50,50 @@ cid=1
 $projectClass = new project();
 
 $members1[0] = new stdclass();
-$members1[0]->accounts = 'user1';
-$members1[0]->roles    = '研发';
+$members1[0]->account  = 'user1';
+$members1[0]->role     = '研发';
 $members1[0]->days     = 10;
 $members1[0]->hours    = 7.5;
 $members1[0]->limited  = 'no';
 
 $members1[1] = new stdclass();
-$members1[1]->accounts = 'user2';
-$members1[1]->roles    = '测试';
+$members1[1]->account  = 'user2';
+$members1[1]->role     = '测试';
 $members1[1]->days     = 8;
 $members1[1]->hours    = 8.0;
 $members1[1]->limited  = 'yes';
 
 $members1[2] = new stdclass();
-$members1[2]->accounts = 'user3';
-$members1[2]->roles    = '产品经理';
+$members1[2]->account  = 'user3';
+$members1[2]->role     = '产品经理';
 $members1[2]->days     = 5;
 $members1[2]->hours    = 5.0;
 $members1[2]->limited  = 'no';
 
 $members2[0] = new stdclass();
-$members2[0]->accounts = 'user11';
-$members2[0]->roles    = '测试';
+$members2[0]->account  = 'user11';
+$members2[0]->role     = '测试';
 $members2[0]->days     = 300;
 $members2[0]->hours    = 20.5;
 $members2[0]->limited  = 'no';
 
 $members2[1] = new stdclass();
-$members2[1]->accounts = 'user12';
-$members2[1]->roles    = '项目经理';
+$members2[1]->account  = 'user12';
+$members2[1]->role     = '项目经理';
 $members2[1]->days     = 700;
 $members2[1]->hours    = 25;
 $members2[1]->limited  = 'yes';
 
 $members2[2] = new stdclass();
-$members2[2]->accounts = 'user13';
-$members2[2]->roles    = '产品经理';
+$members2[2]->account  = 'user13';
+$members2[2]->role     = '产品经理';
 $members2[2]->days     = 10;
 $members2[2]->hours    = 11.0;
 $members2[2]->limited  = 'no';
 
 $members2[3] = new stdclass();
-$members2[3]->accounts = 'user13';
-$members2[3]->roles    = '产品经理';
+$members2[3]->account  = 'user13';
+$members2[3]->role     = '产品经理';
 $members2[3]->days     = 10;
 $members2[3]->hours    = 11.0;
 $members2[3]->limited  = 'no';

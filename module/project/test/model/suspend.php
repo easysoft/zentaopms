@@ -24,6 +24,7 @@ cid=1
 */
 
 global $tester;
+$_POST['uid'] = '0';
 $tester->loadModel('project');
 
 initData();
