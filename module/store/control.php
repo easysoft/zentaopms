@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of store module of ZenTaoPMS.
  *
@@ -6,7 +7,6 @@
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   store
- * @version   $Id$
  * @link      https://www.zentao.net
  */
 class store extends control
@@ -25,6 +25,7 @@ class store extends control
     }
 
     /**
+     * 应用市场列表。
      * Index page.
      *
      * @access public
@@ -36,26 +37,20 @@ class store extends control
     }
 
     /**
+     * 应用市场应用列表。
      * Browse departments and users of a store.
      *
+     * @param  string $sortType
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     * @param  string $channel
      * @access public
      * @return void
      */
-    public function browse($sortType = 'create_time', $recPerPage = 0, $pageID = 1, $channel = '')
+    public function browse(string $sortType = 'create_time', int $recPerPage = 0, int $pageID = 1)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-        global $config;
         if(empty($recPerPage)) $recPerPage = $this->cookie->pagerStoreBrowse ? $this->cookie->pagerStoreBrowse : 12;
-        if(in_array( $channel, array('stable', 'test')))
-        {
-            $config->CNE->api->channel   = $channel;
-            $config->cloud->api->channel = $channel;
-            $this->session->set('cloudChannel', $channel);
-        }
 
         $keyword        = '';
         $postCategories = array();
@@ -78,10 +73,7 @@ class store extends control
         $pagedCategories = $this->store->getCategories();
         $categories      = array_combine(helper::arrayColumn($pagedCategories->categories, 'id'), helper::arrayColumn($pagedCategories->categories, 'alias'));
 
-        $this->lang->switcherMenu = $this->store->getBrowseSwitcher();
-
         $this->view->title          = $this->lang->store->common;
-        $this->view->position[]     = $this->lang->store->common;
         $this->view->cloudApps      = $pagedApps->apps;
         $this->view->installedApps  = $this->storeZen->getInstalledApps();
         $this->view->categories     = $categories;
@@ -94,19 +86,20 @@ class store extends control
     }
 
     /**
+     * 展示应用详情。
      * Show app detail.
      *
-     * @param  int $id
+     * @param  int    $appID
+     * @param  int    $pageID
+     * @param  int    $recPerPage
      * @access public
      * @return void
      */
-    public function appView($id, $pageID = 1, $recPerPage = 20)
+    public function appView(int $appID, int $pageID = 1, int $recPerPage = 20)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-        $appInfo = $this->store->getAppInfo($id, true);
-        if(empty($appInfo)) return print(js::locate('back', 'parent'));
 
-        $this->lang->switcherMenu = $this->store->getAppViewSwitcher($appInfo);
+        $appInfo = $this->store->getAppInfo($appID, true);
 
         $dynamicResult = $this->store->appDynamic($appInfo, $pageID, $recPerPage);
         $articles = array();
@@ -125,7 +118,7 @@ class store extends control
         $this->view->title        = $appInfo->alias;
         $this->view->position[]   = $appInfo->alias;
         $this->view->cloudApp     = $appInfo;
-        $this->view->components   = null; // Hide custom installation in version 1.0. If want, opened by: $this->store->getAppSettings($id);
+        $this->view->components   = null; // Hide custom installation in version 1.0. If want, opened by: $this->store->getAppSettings($appID);
 
         $this->display();
     }
