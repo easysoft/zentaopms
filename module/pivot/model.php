@@ -856,13 +856,13 @@ class pivotModel extends model
      * 初始化sql。
      * Init sql.
      *
-     * @param  string  $sql
-     * @param  array   $filters
-     * @param  string  $groupList
-     * @access private
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  string $groupList
+     * @access public
      * @return array
      */
-    private function initSql(string $sql, array $filters, string $groupList): array
+    public function initSql(string $sql, array $filters, string $groupList): array
     {
         $sql = str_replace(';', '', $this->initVarFilter($filters, $sql));
 
@@ -882,11 +882,11 @@ class pivotModel extends model
      * 获取connectSQL。
      * Get connectSQL.
      *
-     * @param  array   $filters
-     * @access private
+     * @param  array  $filters
+     * @access public
      * @return string
      */
-    private function getConnectSQL(array $filters): string
+    public function getConnectSQL(array $filters): string
     {
         $connectSQL = '';
         if(!empty($filters) && !isset($filters[0]['from']))
