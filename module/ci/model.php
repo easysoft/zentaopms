@@ -56,13 +56,17 @@ class ciModel extends model
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        $notCompileMR = $this->dao->select('id,jobID')
+        $notCompileMR = $this->dao->select('jobID,id')
             ->from(TABLE_MR)
             ->where('jobID')->gt(0)
             ->andWhere('compileStatus')->eq('created')
             ->fetchPairs();
 
-        foreach($compiles as $compile) $this->syncCompileStatus($compile, $notCompileMR);
+        foreach($compiles as $compile)
+        {
+            $MRID = zget($notCompileMR, $compile->job, 0);
+            $this->syncCompileStatus($compile, $MRID);
+        }
         return !dao::isError();
     }
 
@@ -102,7 +106,9 @@ class ciModel extends model
             $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
             if($response)
             {
-                $buildInfo   = simplexml_load_string($response);
+                $buildInfo = simplexml_load_string($response);
+                if(empty($buildInfo)) return false;
+
                 $buildNumber = strtolower($buildInfo->number);
                 if(empty($buildNumber)) return false;
 
@@ -149,14 +155,12 @@ class ciModel extends model
      * Sync compile status.
      *
      * @param  object $compile
-     * @param  array  $notCompileMR
+     * @param  int    $MRID
      * @access public
      * @return bool
      */
-    public function syncCompileStatus(object $compile, array $notCompileMR = array()): bool
+    public function syncCompileStatus(object $compile, int $MRID = 0): bool
     {
-        $MRID = array_search($compile->job, $notCompileMR);
-
         /* Max retry times is: 3. */
         if($compile->times >= 3)
         {
@@ -168,10 +172,10 @@ class ciModel extends model
         }
 
         if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
+
         $jenkinsServer   = $compile->url;
-        $jenkinsUser     = $compile->account;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
-        $userPWD         = "$jenkinsUser:$jenkinsPassword";
+        $userPWD         = "{$compile->account}:{$jenkinsPassword}";
         $queueUrl        = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
 
         $response = common::http($queueUrl, '', array(CURLOPT_USERPWD => $userPWD));

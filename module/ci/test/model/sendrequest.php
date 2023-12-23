@@ -1,9 +1,5 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/ci.class.php';
-su('admin');
-
 /**
 
 title=测试 ciModel->sendRequest();
@@ -16,6 +12,10 @@ cid=1
 - 错误的路径执行jenkins构建 @0
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/ci.class.php';
+su('admin');
 
 $ci = new ciTest();
 

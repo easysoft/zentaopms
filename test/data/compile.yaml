@@ -52,13 +52,6 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: testtask
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
   - field: tag
     note: ""
     prefix: ""
@@ -67,27 +60,6 @@ fields:
     loopfix: ""
     format: ""
   - field: createdBy
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: createdDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: updateDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: deleted
     note: ""
     prefix: ""
     postfix: ""

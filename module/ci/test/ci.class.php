@@ -47,25 +47,16 @@ class ciTest
      * Sync compile status.
      *
      * @param  int    $jobID
+     * @param  int    $MRID
      * @access public
      * @return string|object
      */
-    public function syncCompileStatusTest($jobID)
+    public function syncCompileStatusTest(int $compileID, int $MRID = 0)
     {
-        global $tester;
-        $tester->loadModel('job')->exec($jobID);
-        $compileID = $tester->dao->select('id')->from(TABLE_COMPILE)->orderBy('id_desc')->fetch('id');
+        $compile = $this->objectModel->getCompileByID($compileID);
 
-        $notCompileMR = $tester->dao->select('id,jobID')
-            ->from(TABLE_MR)
-            ->where('jobID')->gt(0)
-            ->andWhere('compileStatus')->eq('created')
-            ->fetchPairs();
-
-        $compile = $this->getCompileByID($compileID);
-
-        $this->objectModel->syncCompileStatus($compile, $notCompileMR);
-        $compile = $tester->loadModel('compile')->getByID($compileID);
+        $this->objectModel->syncCompileStatus($compile, $MRID);
+        $compile = $this->objectModel->loadModel('compile')->getByID($compileID);
 
         if(dao::isError()) return dao::getError();
         return $compile;
@@ -115,12 +106,12 @@ class ciTest
      * Send request.
      *
      * @param  string $url
-     * @param  array  $data
+     * @param  string $data
      * @param  string $userPWD
      * @access public
-     * @return string
+     * @return int
      */
-    public function sendRequestTest($url, $data, $userPWD)
+    public function sendRequestTest(string $url, object $data, string $userPWD): int
     {
         $result = $this->objectModel->sendRequest($url, $data, $userPWD);
         return $result ? 1 : 0;

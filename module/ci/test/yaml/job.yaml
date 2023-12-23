@@ -1,0 +1,29 @@
+title: job
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    prefix: 流水线
+    range: 1-10
+  - field: repo
+    range: 1-10
+  - field: product
+    range: 1
+  - field: server
+    range: 3
+  - field: pipeline
+    range: /job/paramsJob/
+  - field: engine
+    range: jenkins,gitlab
+  - field: triggerType
+    range: tag
+  - field: lastExec
+    range: '`2023-12-23 11:12:37`'
+  - field: lastStatus
+    range: created
+  - field: lastTag
+    range: release
+  - field: deleted
+    range: 1{4},0

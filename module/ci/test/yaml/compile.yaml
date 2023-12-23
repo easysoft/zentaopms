@@ -1,0 +1,21 @@
+title: compile
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    prefix: 构建
+    range: 1-10
+  - field: job
+    range: 1-10
+  - field: queue
+    range: 200-205
+  - field: status
+    range: created
+  - field: testtask
+    range: 0
+  - field: tag
+    range: release
+  - field: times
+    range: 0,1-4
