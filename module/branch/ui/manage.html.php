@@ -106,6 +106,7 @@ modal
 );
 
 $tableData = initTableData($branchList, $config->branch->dtable->fieldList, $this->branch);
+array_map(function($data){if($data->id == 0) $data->actions = array();}, $tableData); //Remove main branch actions.
 
 $footToolbar  = array();
 if($canBatchEdit)
@@ -139,9 +140,7 @@ dtable
     set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onCheckChange(jsRaw('checkedChange')),
     set::footToolbar($footToolbar),
-    set::footPager(
-        usePager()
-    )
+    set::footPager(usePager())
 );
 
 render();
