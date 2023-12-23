@@ -1,4 +1,5 @@
 .actions-menu {bottom: 12px;}
+.maxh-72{max-height:18rem;}
 .actions-menu.no-divider .divider{display: none;}
 
 .flex-col {flex-direction: column;}

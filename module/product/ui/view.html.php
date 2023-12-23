@@ -292,7 +292,7 @@ div
             history
             (
                 set::commentUrl(createLink('action', 'comment', array('objectType' => 'product', 'objectID' => $product->id))),
-                set::bodyClass('h-72 overflow-y-auto')
+                set::bodyClass('maxh-72 overflow-y-auto')
             )
         )
     )
