@@ -71,6 +71,7 @@ class upgradeModel extends model
         {
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
         }
+        if($fromEdition == 'max') return $versions;
 
         /* Update ipd sql only from ipd. */
         foreach($this->config->upgrade->ipdVersion as $ipd => $open)
