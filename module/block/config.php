@@ -41,6 +41,10 @@ $config->statistic->storyStages = array('wait', 'planned', 'developing', 'testin
 
 $config->block->workMethods = 'task,story,requirement,bug,testcase,testtask,issue,risk,meeting';
 
+$config->block->storyUnitList['0'] = 'H';
+$config->block->storyUnitList['1'] = 'SP';
+$config->block->storyUnitList['2'] = 'FP';
+
 global $lang;
 $config->block->params['default'] = new stdclass();
 $config->block->params['default']->count['name']    = $lang->block->count;

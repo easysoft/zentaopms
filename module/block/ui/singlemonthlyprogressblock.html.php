@@ -26,7 +26,7 @@ blockPanel
                 set::color(array('#2B80FF', '#17CE97')),
                 set::grid(array('left' => '10px', 'top' => '60px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::xAxis(array('type' => 'category', 'data' => array_keys($doneStoryEstimate), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => 0), 'axisLabel' => array('fontSize' => $longBlock ? '8' : '10'))),
-                set::yAxis(array('type' => 'value', 'name' => "({$lang->block->projectstatistic->SP})", 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'), 'axisLabel' => array('showMaxLabel' => true, 'interval' => 'auto'))),
+                set::yAxis(array('type' => 'value', 'name' => "({$config->block->storyUnitList[$config->custom->hourPoint]})", 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'), 'axisLabel' => array('showMaxLabel' => true, 'interval' => 'auto'))),
                 set::series
                 (
                     array

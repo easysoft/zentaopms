@@ -230,7 +230,7 @@ if($block->width == 3)
                         span
                         (
                             setClass('text-gray'),
-                            '(SP)'
+                            '(' . $config->block->storyUnitList[$config->custom->hourPoint] . ')'
                         ),
                         !empty($data->finishedStoryPoint['week']) ? div
                         (

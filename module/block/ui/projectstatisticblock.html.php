@@ -143,7 +143,7 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                 span
                 (
                     setClass('text-gray'),
-                    $lang->block->projectstatistic->{$unit}
+                    $field == 'storyPoints' ? $config->block->storyUnitList[$config->custom->hourPoint] : $lang->block->projectstatistic->{$unit}
                 )
             );
         }
