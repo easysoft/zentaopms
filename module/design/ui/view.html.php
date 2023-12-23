@@ -84,8 +84,12 @@ detailBody
     (
         panel
         (
-            set::title($lang->design->basicInfo),
-            setClass('font-bold text-md mt-2'),
+            set::title
+            (
+                setClass('font-bold text-md'),
+                $lang->design->basicInfo
+            ),
+            setClass('mt-2'),
             set::shadow(false),
             tableData
             (
