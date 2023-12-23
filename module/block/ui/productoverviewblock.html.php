@@ -93,7 +93,7 @@ if($block->width == 3)
             row
             (
                 setClass('mt-4 text-center'),
-                col
+                ($config->systemMode != 'ALM' && $config->systemMode != 'PLM') ? null : col
                 (
                     setClass('w-1/5 gap-2'),
                     div
