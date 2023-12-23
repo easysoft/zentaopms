@@ -24,18 +24,19 @@ su('admin');
 zdTable('kanbanlane')->gen(200);
 
 global $tester;
+$tester->loadModel('kanban');
 $lanes = $tester->dao->select('id, `order`')->from(TABLE_KANBANLANE)->where('region')->eq('1')->fetchPairs();
 
 r($lanes) && p('1,101') && e('5,505'); // 查看更新之前的排序
 
 $laneIDList = array('101', '1');
 
-$tester->loadModel('kanban')->updateLaneSort(1, $laneIDList);
+$tester->kanban->updateLaneSort(1, $laneIDList);
 
 $lanes = $tester->dao->select('id, `order`')->from(TABLE_KANBANLANE)->where('region')->eq('1')->fetchPairs();
 r($lanes) && p('1,101') && e('2,1'); // 查看更新之后的排序
 
 $laneIDList = array('201', '202');
-$tester->loadModel('kanban')->updateLaneSort(1, $laneIDList);
+$tester->kanban->updateLaneSort(1, $laneIDList);
 $lanes = $tester->dao->select('id, `order`')->from(TABLE_KANBANLANE)->where('region')->eq('1')->fetchPairs();
 r($lanes) && p('1,101') && e('2,1'); // 更新不存在的ID，排序不变

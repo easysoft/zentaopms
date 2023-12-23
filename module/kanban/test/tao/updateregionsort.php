@@ -33,18 +33,20 @@ su('admin');
 zdTable('kanbanregion')->gen(5);
 
 global $tester;
+$tester->loadModel('kanban');
+
 $regions = $tester->dao->select('id, `order`')->from(TABLE_KANBANREGION)->fetchPairs();
 
 r($regions) && p('1,2,3,4,5') && e('5,10,15,20,25'); // 查看更新之前的排序
 
 $regionIDList = array('5', '4', '3', '2', '1');
 
-$tester->loadModel('kanban')->updateRegionSort($regionIDList);
+$tester->kanban->updateRegionSort($regionIDList);
 
 $regions = $tester->dao->select('id, `order`')->from(TABLE_KANBANREGION)->fetchPairs();
 r($regions) && p('1,2,3,4,5') && e('5,4,3,2,1'); // 查看更新之后的排序
 
 $regionIDList = array('10', '11', '12', '13', '14');
-$tester->loadModel('kanban')->updateRegionSort($regionIDList);
+$tester->kanban->updateRegionSort($regionIDList);
 $regions = $tester->dao->select('id, `order`')->from(TABLE_KANBANREGION)->fetchPairs();
 r($regions) && p('1,2,3,4,5') && e('5,4,3,2,1'); // 更新不存在的ID，排序不变

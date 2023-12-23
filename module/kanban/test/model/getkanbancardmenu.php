@@ -5,6 +5,8 @@ include dirname(__FILE__, 2) . '/kanban.class.php';
 su('admin');
 
 zdTable('story')->gen(20);
+zdTable('projectstory')->gen(20);
+zdTable('product')->gen(20);
 zdTable('storyreview')->gen(50);
 zdTable('bug')->gen(20);
 zdTable('project')->config('kanbanexecution')->gen(5);
@@ -16,7 +18,7 @@ title=测试 kanbanModel->getKanbanCardMenu();
 timeout=0
 cid=1
 
-- 测试获取执行1 story的操作数量 @11
+- 测试获取执行1 story的操作数量 @0
 - 测试获取执行1 task的操作数量 @24
 - 测试获取执行1 bug的操作数量 @0
 - 测试获取执行2 story的操作数量 @0
@@ -39,7 +41,7 @@ $browseTypeList  = array('story', 'task', 'bug');
 
 $kanban = new kanbanTest();
 
-r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[0])) && p() && e('11'); // 测试获取执行1 story的操作数量
+r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[0])) && p() && e('0'); // 测试获取执行1 story的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[1])) && p() && e('24'); // 测试获取执行1 task的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[2])) && p() && e('0');  // 测试获取执行1 bug的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[1], $browseTypeList[0])) && p() && e('0');  // 测试获取执行2 story的操作数量
