@@ -102,6 +102,8 @@ dtable
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),
     set::createLink($canCreateBug ? createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}") : ''),
-    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}'))
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::modules($modulePairs)
 );
 render();
