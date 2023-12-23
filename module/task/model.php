@@ -3007,6 +3007,7 @@ class taskModel extends model
      */
     public function updateParent(object $task, bool $isParentChanged): void
     {
+        $task->parent = (int)$task->parent;
         $parentTask = $this->fetchByID($task->parent);
 
         $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
