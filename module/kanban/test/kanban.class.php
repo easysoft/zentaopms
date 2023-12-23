@@ -68,6 +68,25 @@ class kanbanTest
     }
 
     /**
+     * Test copy regions.
+     *
+     * @param  object $kanban
+     * @param  int    $copyKanbanID
+     * @param  string $from
+     * @param  string $param
+     * @access public
+     * @return object
+     */
+    public function copyRegionsTest($kanban, $copyKanbanID = 0, $from = 'kanban', $param = 'withArchived')
+    {
+        $this->objectModel->copyRegions($kanban, $copyKanbanID, $from, $param);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getRegionPairs($kanban->id);
+    }
+
+    /**
      * Test copy a region.
      *
      * @param  object $kanban
