@@ -135,6 +135,18 @@ class metricTest
     }
 
     /**
+     * Test getControlOptions method.
+     *
+     * @param  string $scope
+     * @access public
+     * @return array|false
+     */
+    public function getControlOptions($optionType)
+    {
+        return $this->objectModel->getControlOptions($optionType);
+    }
+
+    /**
      * 测试 getScopePairs 方法。
      * Test getScopePairs method.
      *
