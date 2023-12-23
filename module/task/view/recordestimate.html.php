@@ -87,7 +87,7 @@ if(!empty($members) && $task->mode == 'linear')
           <td align='center' class='c-actions'>
             <?php
             $canOperateEffort = $this->task->canOperateEffort($task, $effort);
-            $operateTips      = (empty($taks->team) && !$canOperateEffort) ? $lang->task->effortOperateTips : '';
+            $operateTips      = (empty($task->team) && !$canOperateEffort) ? $lang->task->effortOperateTips : '';
             common::printIcon('task', 'editEstimate', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled', $operateTips ? sprintf($operateTips, $lang->task->update) : '');
             common::printIcon('task', 'deleteEstimate', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $canOperateEffort ? '' : 'disabled', $operateTips ? sprintf($operateTips, $lang->delete) : '');
             ?>
