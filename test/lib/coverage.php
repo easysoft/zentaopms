@@ -35,7 +35,7 @@ class coverage
         if(!is_dir($tracePath)) mkdir($tracePath, 0777, true);
         if(!is_file($this->traceFile))
         {
-            if(is_writable($tracePath)) file_put_contents($this->traceFile, json_encode(array()));
+            if(is_writable($tracePath) && $this->moduleName != 'calc') file_put_contents($this->traceFile, json_encode(array()));
         }
 
         return true;
@@ -224,8 +224,14 @@ class coverage
     {
         if(!$type)       $type       = $this->testType;
         if(!$moduleName) $moduleName = $this->moduleName;
-        $class = new ReflectionClass($moduleName . ucfirst($type));
-        if($type == 'control') $class = new ReflectionClass($moduleName);
+        if($type == 'control')
+        {
+            $class = new ReflectionClass($moduleName);
+        }
+        else
+        {
+            $class = new ReflectionClass($moduleName . ucfirst($type));
+        }
 
         return $class;
     }
