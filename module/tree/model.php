@@ -169,7 +169,7 @@ class treeModel extends model
             if($product and $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                foreach(explode(',', $branch) as $branchID) $branches[$branchID] = $branchPairs[$branchID];
+                foreach(explode(',', (string)$branch) as $branchID) $branches[$branchID] = $branchPairs[$branchID];
             }
         }
 
@@ -179,7 +179,7 @@ class treeModel extends model
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
-            $stmt    = $this->app->dbQuery($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
+            $stmt    = $this->app->dbQuery($this->buildMenuQuery($rootID, $type, $startModule, (string)$branchID, $param));
             $modules = array();
             while($module = $stmt->fetch())
             {
@@ -1266,12 +1266,12 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  string $parent
+     * @param  int    $parent
      * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createBugLink(string $type, object $module, string $parent, array $extra = array()): object
+    public function createBugLink(string $type, object $module, int $parent, array $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
@@ -1299,12 +1299,12 @@ class treeModel extends model
      *
      * @param  string       $type
      * @param  object       $module
-     * @param  string       $parent
+     * @param  int          $parent
      * @param  array|string $extra
      * @access public
      * @return object
      */
-    public function createCaseLink(string $type, object $module, string $parent, array|string $extra = array()): object
+    public function createCaseLink(string $type, object $module, int $parent, array|string $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';

@@ -145,8 +145,8 @@ class execution extends control
         if($browseType == 'byproduct') $productID = (int)$param;
         if(!in_array($browseType, array('bysearch', 'bymodule', 'byproduct')))
         {
-            $moduleID  = $this->cookie->moduleBrowseParam;
-            $productID = $this->cookie->productBrowseParam;
+            $moduleID  = $this->cookie->moduleBrowseParam  ? $this->cookie->moduleBrowseParam  : 0;
+            $productID = $this->cookie->productBrowseParam ? $this->cookie->productBrowseParam : 0;
         }
 
         /* Load pager and get tasks. */
