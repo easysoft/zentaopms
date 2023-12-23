@@ -2804,7 +2804,7 @@ class kanbanModel extends model
     public function setWIP(int $columnID, object $WIP): bool
     {
         $oldColumn = $this->getColumnById($columnID);
-        if(!preg_match("/^-?\d+$/", $WIP->limit) || (!$WIP->noLimit && $WIP->limit <= 0))
+        if(!preg_match("/^-?\d+$/", (string)$WIP->limit) || (!$WIP->noLimit && $WIP->limit <= 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
@@ -3585,7 +3585,7 @@ class kanbanModel extends model
      */
     public function checkDisplayCards(int $count): bool
     {
-        if(!preg_match("/^-?\d+$/", $count) || $count <= DEFAULT_CARDCOUNT || $count > MAX_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+        if(!preg_match("/^-?\d+$/", (string)$count) || $count <= DEFAULT_CARDCOUNT || $count > MAX_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
         return !dao::isError();
     }
 
