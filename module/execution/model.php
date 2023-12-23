@@ -3827,12 +3827,12 @@ class executionModel extends model
     public static function isClickable(object $execution, string $action): bool
     {
         if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create');
-        if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create');
+        if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed';
+        if($action == 'close')    return ($execution->status != 'closed') && empty($execution->isParent);
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
@@ -4725,6 +4725,7 @@ class executionModel extends model
                     if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                     $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
                     if(!$action['disabled']) break;
+                    if($actionName == 'close' && $execution->status != 'closed') break;
                 }
                 if(!empty($action)) $execution->actions[] = $action;
             }
