@@ -390,7 +390,7 @@ class productModel extends model
         $oldProduct = $this->fetchByID($productID);
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $result = $this->productTao->doUpdate($product, $productID, (int)$product->program);
+        $result = $this->productTao->doUpdate($product, $productID, zget($product, 'program', $oldProduct->program));
         if(!$result) return false;
 
         /* Update objectID field of file recode, that upload by editor. */
