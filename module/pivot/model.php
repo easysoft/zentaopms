@@ -2406,35 +2406,88 @@ class pivotModel extends model
 
         if($page)
         {
-            $recTotal     = $end - $start + 1;
-            $itemCountTip = sprintf($this->lang->pivot->recTotalTip, $itemCount);
-
+            $recTotal  = $end - $start + 1;
             $leftPage  = $page - 1;
             $rightPage = $page + 1;
-            $leftPageClass  = $page == 1 ? 'disabled' : '';
-            $rightPageClass = $page == $pageTotal ? 'disabled' : '';
 
-            if($recTotal) $table .= "<div class='table-footer'>
-                <ul class='pager'>
-                  <li><div class='pager-label recTotal'>{$itemCountTip}</div></li>
-                  <li class='pager-item-left first-page $leftPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
-                  </li>
-                  <li class='pager-item-left left-page $leftPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
-                  </li>
-                  <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
-                  <li class='pager-item-right right-page $rightPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
-                  </li>
-                  <li class='pager-item-right last-page $rightPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
-                  </li>
-                </ul>
-              </div>";
+            if($recTotal) $table .= $this->getTablePager($itemCount, $leftPage, $rightPage, $page, $pageTotal);
         }
 
         echo $table;
+    }
+
+    public function getTablePager($itemCount, $leftPage, $rightPage, $page, $pageTotal)
+    {
+        $itemCountTip   = sprintf($this->lang->pivot->recTotalTip, $itemCount);
+        $leftPageClass  = $page == 1 ? 'disabled' : '';
+        $rightPageClass = $page == $pageTotal ? 'disabled' : '';
+
+        $pager = "
+            <div class='table-footer'>
+              <ul class='pager'>
+                <li><div class='pager-label recTotal'>{$itemCountTip}</div></li>
+                <li class='pager-item-left first-page $leftPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+                </li>
+                <li class='pager-item-left left-page $leftPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+                </li>
+                <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
+                <li class='pager-item-right right-page $rightPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+                </li>
+                <li class='pager-item-right last-page $rightPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
+                </li>
+              </ul>
+            </div>";
+
+         return $pager;
+    }
+
+    public function getFullTablePager($recTotal, $recPerPage, $page, $leftPage, $rightPage, $pageTotal, $onclick = 'queryPivotByPager(this)')
+    {
+        $recTotalTip    = sprintf($this->lang->pivot->recTotalTip, $recTotal);
+        $recPerPageTip  = sprintf($this->lang->pivot->recPerPageTip, $recPerPage);
+        $leftPageClass  = $page == 1 ? 'disabled' : '';
+        $rightPageClass = $page == $pageTotal ? 'disabled' : '';
+
+        $dropdownMenu = '';
+        foreach($this->config->pivot->recPerPageList as $perPage)
+        {
+            $active = $perPage == $recPerPage ? 'active' : '';
+            $dropdownMenu .= "<li class='recPerPage {$active}' onclick='{$onclick}'><a href='javascript:;' data-size='{$perPage}'>{$perPage}</a></li>";
+        }
+
+        $pager = "
+            <div class='table-footer'>
+              <ul class='pager'>
+                <li class='hidden current-page' data-page='{$page}'></li>
+                <li class='hidden current-recperpage' data-recperpage='{$recPerPage}'></li>
+                <li><div class='pager-label recTotal'>{$recTotalTip}</div></li>
+                <li>
+                  <div class='btn-group pager-size-menu dropup'>
+                    <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' style='border-radius: 4px;'>{$recPerPageTip}<span class='caret'></span></button>
+                    <ul class='dropdown-menu'>{$dropdownMenu}</ul>
+                  </div>
+                </li>
+                <li class='pager-item-left first-page $leftPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+                </li>
+                <li class='pager-item-left left-page $leftPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+                </li>
+                <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
+                <li class='pager-item-right right-page $rightPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+                </li>
+                <li class='pager-item-right last-page $rightPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
+                </li>
+              </ul>
+            </div>";
+
+         return $pager;
     }
 
     /**

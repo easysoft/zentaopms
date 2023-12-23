@@ -3,6 +3,7 @@ $config->pivot = new stdclass();
 $config->pivot->widthInput = 128;
 $config->pivot->widthDate  = 248;
 $config->pivot->recPerPage = 50;
+$config->pivot->recPerPageList = array(1,5,10,15,20,25,30,35,40,45,50,100,200,500,1000,2000);
 
 $config->pivot->fileType =  array('xlsx' => 'xlsx', 'xls' => 'xls', 'html' => 'html', 'mht' => 'mht');
 
