@@ -33,6 +33,7 @@ jsVar('showFields', $showFields);
 jsVar('toTaskList', !empty($task->id));
 jsVar('blockID', $blockID);
 jsVar('taskID', $taskID ?? 0);
+jsVar('task', $task);
 jsVar('ditto', $lang->task->ditto);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('vision', $config->vision);
@@ -129,56 +130,117 @@ $storyPreviewBtn = span
 );
 
 $teamForm = array();
-for($i = 1; $i <= 3; $i ++)
+if(empty($task->team))
 {
-    $teamForm[] = h::tr
-    (
-        h::td
-        (
-            setClass('team-index'),
-            span
+    for($i = 1; $i <= 3; $i ++)
+    {
+        $teamForm[] = h::tr
             (
-                setClass("team-number"),
-                $i
-            ),
-            icon('angle-down')
-        ),
-        h::td
-        (
-            set::width('240px'),
-            picker
-            (
-                set::name("team[]"),
-                set::items($members)
-            )
-        ),
-        h::td
-        (
-            set::width('135px'),
-            inputControl
-            (
-                input
+                h::td
                 (
-                    set::name("teamEstimate[]"),
-                    set::placeholder($lang->task->estimateAB)
+                    setClass('team-index'),
+                    span
+                    (
+                        setClass("team-number"),
+                        $i
+                    ),
+                    icon('angle-down')
                 ),
-                to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20)
-            )
-        ),
-        h::td
-        (
-            set::width('100px'),
-            setClass('center'),
-            btnGroup
+                h::td
+                (
+                    set::width('240px'),
+                    picker
+                    (
+                        set::name("team[]"),
+                        set::items($members)
+                    )
+                ),
+                h::td
+                (
+                    set::width('135px'),
+                    inputControl
+                    (
+                        input
+                        (
+                            set::name("teamEstimate[]"),
+                            set::placeholder($lang->task->estimateAB)
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
+                ),
+                h::td
+                (
+                    set::width('100px'),
+                    setClass('center'),
+                    btnGroup
+                    (
+                        set::items(array(
+                            array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                            array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
+                        ))
+                    )
+                )
+            );
+    }
+}
+else
+{
+    $i = 0;
+    foreach($task->team as $member)
+    {
+        $i ++;
+        $teamForm[] = h::tr
             (
-                set::items(array(
-                    array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
-                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
-                ))
-            )
-        )
-    );
+                h::td
+                (
+                    setClass('team-index'),
+                    span
+                    (
+                        setClass("team-number"),
+                        $i
+                    ),
+                    icon('angle-down')
+                ),
+                h::td
+                (
+                    set::width('240px'),
+                    picker
+                    (
+                        set::name("team[]"),
+                        set::items($members),
+                        set::value($member->account)
+                    )
+                ),
+                h::td
+                (
+                    set::width('135px'),
+                    inputControl
+                    (
+                        input
+                        (
+                            set::name("teamEstimate[]"),
+                            set::placeholder($lang->task->estimateAB),
+                            set::value($member->estimate)
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
+                ),
+                h::td
+                (
+                    set::width('100px'),
+                    setClass('center'),
+                    btnGroup
+                    (
+                        set::items(array(
+                            array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                            array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
+                        ))
+                    )
+                )
+            );
+    }
 }
 
 $selectStoryRow = '';
@@ -231,7 +293,7 @@ formPanel
                     picker
                     (
                         set::name("mode"),
-                        set::value("linear"),
+                        !empty($task->mode) ? set::value($task->mode) : set::value("linear"),
                         set::items($lang->task->modeList),
                         set::required(true)
                     )

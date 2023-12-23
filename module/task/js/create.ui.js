@@ -7,6 +7,12 @@ $(function()
         $("input[name='after'][value='toTaskList']").prop('checked', true);
     }
 
+    if(task.mode != '')
+    {
+        $('[name="multiple"]').prop('checked', true);
+        toggleTeam();
+    }
+
     setStoryRelated();
 })
 
