@@ -1490,10 +1490,12 @@ class projectZen extends project
         $users    = $this->loadModel('user')->getPairs('noletter');
         foreach($projects as $i => $project)
         {
+            $projectBudget = $project->budget === '' ? '0' : $project->budget;
+
             $project->PM     = zget($users, $project->PM);
             $project->status = $this->processStatus('project', $project);
             $project->model  = zget($this->lang->project->modelList, $project->model);
-            $project->budget = $project->budget != 0 ? $project->budget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
+            $project->budget = $project->budget != 0 ? $projectBudget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
             $project->parent = $project->parentName;
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
