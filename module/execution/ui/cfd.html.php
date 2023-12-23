@@ -61,6 +61,7 @@ featureBar
                     set::value($begin),
                     set::minDate($minDate),
                     set::maxDate($maxDate),
+                    set::todayText($lang->execution->charts->cfd->dateRangeTip)
                 ),
                 span
                 (
@@ -73,6 +74,7 @@ featureBar
                     set::value($end),
                     set::minDate($minDate),
                     set::maxDate($maxDate),
+                    set::todayText($lang->execution->charts->cfd->dateRangeTip)
                 ),
                 btn
                 (
