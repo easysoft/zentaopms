@@ -569,7 +569,7 @@ class pivotModel extends model
      * @access private
      * @return array
      */
-    private function getUserWorkLoad(array $projects, array $teamTasks, float $allHour): array
+    public function getUserWorkLoad(array $projects, array $teamTasks, float $allHour): array
     {
         /* 计算员工的任务数，剩余工时和总任务数。 */
         /* Calculate user's task count, left hours and total task count. */

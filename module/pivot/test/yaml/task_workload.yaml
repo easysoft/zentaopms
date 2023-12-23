@@ -1,0 +1,7 @@
+title: table zt_task
+desc: "任务"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: execution
+    range: 1-4{5}
