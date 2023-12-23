@@ -1705,7 +1705,7 @@ class kanban extends control
         else if($objectType == 'column')
         {
             $column      = $this->kanban->getColumnByID($objectID);
-            $columnPairs = $this->kanban->getColumnPairsByGroup($column->group);
+            $columnPairs = $this->kanban->getColumnPairsByGroup($column->group, false);
             foreach($columnPairs as $columnID => $columnName) $itemList[] = array('id' => $columnID, 'text' => $columnName);
         }
         else if($objectType == 'lane')

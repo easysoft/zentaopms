@@ -1074,15 +1074,17 @@ class kanbanModel extends model
      * Get kanban column pairs by group id.
      *
      * @param  int    $groupID
+     * @param  bool   $withChild
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getColumnPairsByGroup(int $groupID, string $orderBy = '`order`_asc'): array
+    public function getColumnPairsByGroup(int $groupID, bool $withChild = true, string $orderBy = '`order`_asc'): array
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('`group`')->eq($groupID)
+            ->beginIf(!$withChild)->andWhere('parent')->le(0)->fi()
             ->orderBy($orderBy)
             ->fetchPairs();
     }
