@@ -783,13 +783,13 @@ class pivotModel extends model
      * 初始化分组信息。
      * Init groups info.
      *
-     * @param  array   $fields
-     * @param  array   $settings
-     * @param  array   $langs
-     * @access private
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  array  $langs
+     * @access public
      * @return array
      */
-    private function initGroups(array $fields, array $settings, array $langs): array
+    public function initGroups(array $fields, array $settings, array $langs): array
     {
         $groups = $sqlGroups = array();
         $condition  = !empty($settings['filterType']) && $settings['filterType'] == 'query';
