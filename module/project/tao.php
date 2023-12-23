@@ -916,15 +916,19 @@ class projectTao extends projectModel
     {
         if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
 
-        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
-        if(!$executionID) return false;
+        $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch();
+        if(!$execution) return false;
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         $postData = new stdclass();
-        $postData->status = $status;
+        $postData->status  = $status;
+        $postData->begin   = $execution->begin;
+        $postData->end     = $execution->end;
+        $postData->uid     = '';
+        $postData->comment = '';
         if($status == 'close') $postData->realEnd = $project->realEnd;
-        return $this->loadModel('execution')->$status($executionID, $postData);
+        return $this->loadModel('execution')->$status($execution->id, $postData);
     }
 
     /**

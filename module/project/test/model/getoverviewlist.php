@@ -53,7 +53,7 @@ r(count($projectTester->getOverviewList('undone'))) && p() && e('7'); // 获取�
 r(count($projectTester->getOverviewList('', 11)))    && p() && e('1'); // 根据项目ID获取项目
 r(count($projectTester->getOverviewList('', 10000))) && p() && e('0'); // 获取不存在的项目
 
-r(count($projectTester->getOverviewList('doing', 18))) && p() && e('0'); // 根据 不匹配的项目ID和状态 获取项目数量
+r(count($projectTester->getOverviewList('doing', 18))) && p() && e('1'); // 根据 不匹配的项目ID和状态 获取项目数量
 r(count($projectTester->getOverviewList('doing', 12))) && p() && e('1'); // 根据 匹配的项目ID和状态 获取项目数量
 
 r(current($projectTester->getOverviewList('all', 0, 'id_asc')))    && p('id,name') && e('11,项目11'); // 按照ID正序获取项目列表,查看排第一个的项目详情

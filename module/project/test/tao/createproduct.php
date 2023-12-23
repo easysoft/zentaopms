@@ -24,6 +24,8 @@ cid=1
 */
 
 global $tester;
+$_POST['uid'] = '0';
+
 $program      = $tester->loadModel('project')->getByID(1);
 $projectClass = new project();
 

@@ -36,6 +36,8 @@ cid=1
 global $tester;
 $project = new Project();
 
+$_POST['uid'] = '0';
+
 $data = new stdclass();
 $data->parent     = '0';
 $data->name       = '测试更新项目十';

@@ -13,3 +13,5 @@ fields:
       range: '1,0'
     - field: status
       range: 'active'
+    - field: realend
+      range: '2023-12-23'

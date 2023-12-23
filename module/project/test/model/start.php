@@ -17,6 +17,8 @@ cid=1
 global $tester;
 $tester->loadModel('project');
 
+$_POST['uid'] = '0';
+
 $data = new stdclass();
 $data->status    = 'doing';
 $data->realBegan = '2022-10-10';
