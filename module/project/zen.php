@@ -1122,6 +1122,8 @@ class projectZen extends project
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
+        $this->view->allProducts              = $allProducts;
+        $this->view->allBranches              = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal');
     }
 
     /**
@@ -1162,8 +1164,6 @@ class projectZen extends project
         $this->view->branchGroups    = $branchGroups;
         $this->view->linkedBranches  = $linkedBranches;
         $this->view->linkedProducts  = $linkedProducts;
-        $this->view->allProducts     = $allProducts;
-        $this->view->allBranches     = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal');
     }
 
     /**
