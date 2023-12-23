@@ -144,6 +144,7 @@ class dropmenu extends wg
             $text           = isset($lang->admin->menuList->{$currentMenuKey}) ? $lang->admin->menuList->{$currentMenuKey}['name'] : $currentMenuKey;
             $url            = createLink('admin', 'ajaxGetDropMenu', "currentMenuKey={$currentMenuKey}");
             $menuID         = 'admin-menu';
+            $objectID       = $currentMenuKey;
         }
 
         if($tab == 'caselib') $objectID = data('libID');
