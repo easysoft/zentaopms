@@ -194,21 +194,21 @@ $config->projectExecution->dtable->fieldList['end']['width']    = '96';
 $config->projectExecution->dtable->fieldList['end']['group']    = '3';
 
 $config->projectExecution->dtable->fieldList['totalEstimate']['title']    = $lang->execution->totalEstimate;
-$config->projectExecution->dtable->fieldList['totalEstimate']['name']     = 'totalEstimate';
+$config->projectExecution->dtable->fieldList['totalEstimate']['name']     = 'estimate';
 $config->projectExecution->dtable->fieldList['totalEstimate']['type']     = 'number';
 $config->projectExecution->dtable->fieldList['totalEstimate']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['totalEstimate']['width']    = '64';
 $config->projectExecution->dtable->fieldList['totalEstimate']['group']    = '4';
 
 $config->projectExecution->dtable->fieldList['totalConsumed']['title']    = $lang->execution->totalConsumed;
-$config->projectExecution->dtable->fieldList['totalConsumed']['name']     = 'totalConsumed';
+$config->projectExecution->dtable->fieldList['totalConsumed']['name']     = 'consumed';
 $config->projectExecution->dtable->fieldList['totalConsumed']['type']     = 'number';
 $config->projectExecution->dtable->fieldList['totalConsumed']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['totalConsumed']['width']    = '64';
 $config->projectExecution->dtable->fieldList['totalConsumed']['group']    = '4';
 
 $config->projectExecution->dtable->fieldList['totalLeft']['title']    = $lang->execution->totalLeft;
-$config->projectExecution->dtable->fieldList['totalLeft']['name']     = 'totalLeft';
+$config->projectExecution->dtable->fieldList['totalLeft']['name']     = 'left';
 $config->projectExecution->dtable->fieldList['totalLeft']['type']     = 'number';
 $config->projectExecution->dtable->fieldList['totalLeft']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['totalLeft']['width']    = '64';
