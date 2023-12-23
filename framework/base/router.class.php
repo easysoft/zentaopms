@@ -3287,7 +3287,7 @@ class baseRouter
      */
     public function canAutoUpgrade(): bool
     {
-        return strtolower(getenv('ZT_AUTO_UPGRADE')) == 'true';
+        return strtolower((string)getenv('ZT_AUTO_UPGRADE')) == 'true';
     }
 
     /**
@@ -3298,7 +3298,7 @@ class baseRouter
      */
     public function hasValidSafeFile(): bool
     {
-        return strtolower(getenv('ZT_CHECK_SAFE_FILE')) == 'true';
+        return strtolower((string)getenv('ZT_CHECK_SAFE_FILE')) == 'true';
     }
 
     /**
