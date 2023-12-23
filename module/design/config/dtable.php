@@ -57,12 +57,12 @@ $config->design->linkcommit->dtable->fieldList['time']['type']     = 'date';
 $config->design->linkcommit->dtable->fieldList['time']['sortType'] = false;
 
 $config->design->linkcommit->dtable->fieldList['committer']['title']    = $lang->repo->committer;
-$config->design->linkcommit->dtable->fieldList['committer']['type']     = 'user';
 $config->design->linkcommit->dtable->fieldList['committer']['sortType'] = false;
 
 $config->design->linkcommit->dtable->fieldList['comment']['title']    = $lang->repo->comment;
 $config->design->linkcommit->dtable->fieldList['comment']['type']     = 'html';
 $config->design->linkcommit->dtable->fieldList['comment']['sortType'] = false;
+$config->design->linkcommit->dtable->fieldList['comment']['hint']     = true;
 
 $config->design->viewcommit->dtable->fieldList['id']['title']    = $lang->design->submission;
 $config->design->viewcommit->dtable->fieldList['id']['format']   = 'RAWJS<function(val){return `#${val}`;}>RAWJS';
