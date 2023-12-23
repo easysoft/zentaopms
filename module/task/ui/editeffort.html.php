@@ -11,26 +11,12 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('confirmRecord', $lang->task->confirmRecord);
 $readonly = !$effort->isLast || (!empty($task->team) && $effort->left == 0);
 
+modalHeader(set::title($lang->task->editEffort));
 formPanel
 (
-    set::title($lang->task->editEffort),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
     set::shadow(!isAjaxRequest('modal')),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($task->name),
-            set::entityID($task->id),
-            set::reverse(true)
-        )
-    ),
     formGroup
     (
         set::width('1/3'),
