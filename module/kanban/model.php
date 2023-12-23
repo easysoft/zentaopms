@@ -768,7 +768,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getRegionActions($kanbanID, $regionID): array
+    public function getRegionActions(int $kanbanID, int|string $regionID): array
     {
         $action  = array();
         $actions = array();
