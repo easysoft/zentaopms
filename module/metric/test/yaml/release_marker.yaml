@@ -7,6 +7,8 @@ fields:
   range: 1-10000
 - field: product
   range: 1-10{4}
+- field: project
+  range: 1-10{4}
 - field: date
   range: "20100101 000000-20210101 000000:10D"
   type: timestamp

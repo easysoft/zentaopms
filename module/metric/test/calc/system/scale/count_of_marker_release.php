@@ -13,6 +13,8 @@ include dirname(__FILE__, 4) . '/calc.class.php';
 $metric = new metricTest();
 
 zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('project')->config('project', true, 4)->gen(10);
+
 zdTable('release')->config('release_marker', true, 4)->gen(839, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('105'); // 测试839条数据全局里程碑发布数。
