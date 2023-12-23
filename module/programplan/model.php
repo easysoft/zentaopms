@@ -527,7 +527,7 @@ class programplanModel extends model
 
         /* Check weather need to set code and compute same code. */
         $setCode   = isset($this->config->setCode) && $this->config->setCode == 1;
-        $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
+        $sameCodes = $setCode ? $this->checkCodeUnique($code, isset($planIDList) ? $planIDList : '') : false;
 
         /* Prepare the plans user inputted. Process the plan which names not empty only. */
         $project    = $this->loadModel('project')->getByID($projectID);

@@ -1646,6 +1646,7 @@ class executionModel extends model
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
+            $execution->product     = $productID;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
 
             if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
