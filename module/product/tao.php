@@ -77,7 +77,7 @@ class productTao extends productModel
      * @access protected
      * @return array
      */
-    protected function fetchAllProductProjects(int $productID, string $browseType = 'all', string $branch = '0', string $orderBy = 'order_desc', object|null $pager = null): array
+    protected function fetchAllProductProjects(int $productID, string $browseType = 'all', string $branch = 'all', string $orderBy = 'order_desc', object|null $pager = null): array
     {
         return $this->dao->select('DISTINCT t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -105,7 +105,7 @@ class productTao extends productModel
      * @access protected
      * @return array
      */
-    protected function fetchInvolvedProductProjects(int $productID, string $browseType = 'all', string $branch = '0', string $orderBy = 'order_desc', object|null $pager = null): array
+    protected function fetchInvolvedProductProjects(int $productID, string $browseType = 'all', string $branch = 'all', string $orderBy = 'order_desc', object|null $pager = null): array
     {
         return $this->dao->select('DISTINCT t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -181,7 +181,7 @@ class productTao extends productModel
      * @access protected
      * @return array
      */
-    protected function getModulesForSearchForm(int $productID, array $products, string $branch = '', int $projectID = 0): array
+    protected function getModulesForSearchForm(int $productID, array $products, string $branch = 'all', int $projectID = 0): array
     {
         $this->loadModel('tree');
         if($this->app->tab != 'project') return $this->tree->getOptionMenu($productID, 'story', 0, $branch);

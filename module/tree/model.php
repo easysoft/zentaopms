@@ -91,12 +91,12 @@ class treeModel extends model
                 ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') === false)
+                ->beginIF($branch !== 'all' and $branch !== '' and strpos($param, 'noMainBranch') === false)
                 ->andWhere("(branch")->eq(0)
                 ->orWhere('branch')->eq($branch)
                 ->markRight(1)
                 ->fi()
-                ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') !== false)
+                ->beginIF($branch !== 'all' and $branch !== '' and strpos($param, 'noMainBranch') !== false)
                 ->andWhere('branch')->eq($branch)
                 ->fi()
                 ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
@@ -111,12 +111,12 @@ class treeModel extends model
             ->andWhere('type')->in($type)
             ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') === false)
+            ->beginIF($branch !== 'all' and $branch !== '' and strpos($param, 'noMainBranch') === false)
             ->andWhere('(branch')->eq(0)
             ->orWhere('branch')->eq($branch)
             ->markRight(1)
             ->fi()
-            ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false and strpos($param, 'noMainBranch') !== false)
+            ->beginIF($branch !== 'all' and $branch !== '' and strpos($param, 'noMainBranch') !== false)
             ->andWhere('branch')->eq($branch)
             ->fi()
             ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
@@ -410,7 +410,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getTreeMenu(int $rootID, string $type = 'root', int $startModule = 0, array $userFunc = array(), array|string $extra = array(), string $branch = '0'): array
+    public function getTreeMenu(int $rootID, string $type = 'root', int $startModule = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): array
     {
         if($type == 'line') $rootID = 0;
 
