@@ -15,7 +15,7 @@ jsVar('module', $module);
 jsVar('moduleMethod', 'addWhitelist');
 
 $members = !empty($whitelist) ? array_values($whitelist) : array();
-foreach($appendUsers as $account)
+foreach(array_keys($appendUsers) as $account)
 {
     $member = new stdclass();
     $member->account  = $account;
