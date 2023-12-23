@@ -20,4 +20,4 @@ pid=1
 
 r(count($calc->getResult())) && p('') && e('4'); // 测试分组数。
 
-r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('13'); // 测试用户dev。
+r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('6'); // 测试用户dev。
