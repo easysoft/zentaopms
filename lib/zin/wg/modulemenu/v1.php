@@ -13,6 +13,7 @@ class moduleMenu extends wg
         'modules: array',
         'activeKey?: int|string',
         'settingLink?: string',
+        'settingApp?: string=""',
         'closeLink: string',
         'showDisplay?: bool=true',
         'allText?: string',
@@ -114,7 +115,7 @@ class moduleMenu extends wg
         $settingLink = $this->prop('settingLink');
         $settingText = $this->prop('settingText');
         $showDisplay = $this->prop('showDisplay');
-        $tab         = $this->prop('app');
+        $tab         = $this->prop('settingApp');
         if(!$settingLink && !$showDisplay) return null;
 
         global $app;

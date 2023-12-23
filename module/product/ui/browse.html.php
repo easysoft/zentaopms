@@ -27,7 +27,7 @@ foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
 $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
 
 /* Generate sidebar to display module tree menu. */
-$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID)
+$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID, $project)
 {
     global $app;
     $params = $app->rawParams;
@@ -43,7 +43,8 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
             set::modules($moduleTree),
             set::activeKey($moduleID),
             set::closeLink(helper::createLink($app->rawModule, $app->rawMethod, http_build_query($params))),
-            $productID ? set::settingLink(helper::createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID")) : null
+            $productID ? set::settingLink(helper::createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID")) : null,
+            $project->hasProduct ? set::settingApp('product') : null
         )
     );
 };
