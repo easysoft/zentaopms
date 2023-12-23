@@ -17,6 +17,7 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/ci.class.php';
 
+zdTable('pipeline')->gen(5);
 zdTable('repo')->config('repo')->gen(5);
 su('admin');
 

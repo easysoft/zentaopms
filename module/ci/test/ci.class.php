@@ -53,7 +53,12 @@ class ciTest
      */
     public function syncCompileStatusTest(int $compileID, int $MRID = 0): object|array
     {
-        $compile = $this->objectModel->getCompileByID($compileID);
+        $compile = $this->objectModel->dao->select('compile.*, job.engine,job.pipeline, pipeline.name as jenkinsName,job.server,pipeline.url,pipeline.account,pipeline.token,pipeline.password')
+            ->from(TABLE_COMPILE)->alias('compile')
+            ->leftJoin(TABLE_JOB)->alias('job')->on('compile.job=job.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('pipeline')->on('job.server=pipeline.id')
+            ->where('compile.id')->eq($compileID)
+            ->fetch();
 
         $this->objectModel->syncCompileStatus($compile, $MRID);
         $compile = $this->objectModel->loadModel('compile')->getByID($compileID);

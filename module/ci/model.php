@@ -207,6 +207,7 @@ class ciModel extends model
         $pipeline = json_decode($compile->pipeline);
         $compile->project = isset($pipeline->project) ? (int)$pipeline->project : (int)$compile->pipeline;
 
+        $now      = helper::now();
         $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->project, $compile->queue);
         if(!isset($pipeline->id) || isset($pipeline->message)) /* The pipeline is not available. */
         {
@@ -214,7 +215,7 @@ class ciModel extends model
             return false;
         }
 
-        $now  = helper::now();
+        $jobs = $this->gitlab->apiGetJobs($compile->server, $compile->project, $compile->queue);
         $data = new stdclass;
         $data->status     = $pipeline->status;
         $data->updateDate = $now;
