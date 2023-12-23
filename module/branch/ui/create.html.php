@@ -15,15 +15,13 @@ namespace zin;
 formPanel
 (
     set::title(sprintf($lang->branch->create, $lang->product->branchName[$product->type])),
-    set::shadow(!isonlybody()),
+    set::shadow(!isInModal()),
     formGroup
     (
         set::label(sprintf($lang->branch->name, $lang->product->branchName[$product->type])),
         set::required(true),
-        input
-        (
-            set::name('name')
-        )
+        set::name('name'),
+        set::control('input')
     ),
     formGroup
     (
