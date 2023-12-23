@@ -1,6 +1,8 @@
 <?php
 class ciTest
 {
+    private $objectModel;
+
     public function __construct()
     {
         global $tester;
@@ -120,7 +122,7 @@ class ciTest
      */
     public function sendRequestTest($url, $data, $userPWD)
     {
-        $return = $this->objectModel->sendRequest($url, $data, $userPWD);
-        return $return ? 1 : 0;
+        $result = $this->objectModel->sendRequest($url, $data, $userPWD);
+        return $result ? 1 : 0;
     }
 }
