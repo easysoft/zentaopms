@@ -10,16 +10,24 @@ class ciTest
     /**
      * Set menu.
      *
+     * @param  int    $repoID
+     * @param  string $module
      * @access public
      * @return array
      */
-    public function setMenuTest()
+    public function setMenuTest(int $repoID = 0, string $module = '')
     {
-        $_SESSION['repoID'] = 1;
-        $this->objectModel->setMenu();
+        global $app, $lang;
+        $app->moduleName = $module;
 
-        global $lang;
-        return $lang->devops->menu->code;
+        $resetLang = clone $lang->devops->menu;
+
+        if(!$repoID) $_SESSION['repoID'] = 1;
+        $this->objectModel->setMenu($repoID);
+
+        $result = $lang->devops->menu;
+        $lang->devops->menu = $resetLang;
+        return $result;
     }
 
     public function getCompileByID($compileID)

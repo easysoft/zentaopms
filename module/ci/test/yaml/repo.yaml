@@ -1,0 +1,35 @@
+title: repo
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: product
+    range: 1-4,0
+  - field: name
+    range: unittest1
+  - field: encoding
+    range: '`utf-8`'
+  - field: path
+    prefix: https://gitlabdev.qc.oop.cc/root/unittest1
+    range: '[],1-9'
+  - field: SCM
+    range: Gitlab{4},Subversion
+  - field: serviceHost
+    range: 1
+  - field: serviceProject
+    range: 3
+  - field: commits
+    range: 0
+  - field: password
+    range: 6578fc96cd609
+  - field: encrypt
+    range: base64
+  - field: synced
+    range: 1
+  - field: lastCommit
+    range: '`2021-02-15 23:54:45`'
+  - field: extra
+    range: 3
+  - field: deleted
+    range: 0{4},1
