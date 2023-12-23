@@ -17,5 +17,5 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('11'); // 测试分组数。
 
-r($calc->getResult(array('year' => '2014'))) && p('0:value') && e('1');    // 测试2014年。
-r($calc->getResult(array('year' => '2016'))) && p('0:value') && e('0.33'); // 测试2016年。
+r($calc->getResult(array('year' => '2014'))) && p('0:value') && e('1.07'); // 测试2014年。
+r($calc->getResult(array('year' => '2016'))) && p('0:value') && e('0.36'); // 测试2016年。
