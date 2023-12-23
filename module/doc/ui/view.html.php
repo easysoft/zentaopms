@@ -233,7 +233,7 @@ $contentDom = div
     div
     (
         setClass('docFile'),
-        $doc->files ? h::hr() : null,
+        $doc->files ? h::hr(setClass('mt-4')) : null,
         $doc->files ? fileList
         (
             set::files($doc->files)
