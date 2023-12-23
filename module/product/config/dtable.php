@@ -305,3 +305,9 @@ $config->product->all->dtable->fieldList['latestRelease']['minWidth']   = 80;
 $config->product->all->dtable->fieldList['latestRelease']['type']       = 'text';
 $config->product->all->dtable->fieldList['latestRelease']['filterType'] = true;
 $config->product->all->dtable->fieldList['latestRelease']['group']      = 'g9';
+
+if($config->systemMode != 'ALM' && $config->systemMode != 'PLM')
+{
+    unset($config->product->dtable->fieldList['productLine']);
+    unset($config->product->all->dtable->fieldList['productLine']);
+}
