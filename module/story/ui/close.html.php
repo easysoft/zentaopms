@@ -35,7 +35,6 @@ formPanel
         formGroup
         (
             set::name('duplicateStory'),
-            set::required(true),
             set::label($lang->story->duplicateStory),
             set::width('1/2'),
             set::value(''),

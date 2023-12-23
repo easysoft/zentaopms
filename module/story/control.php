@@ -823,6 +823,7 @@ class story extends control
         $storyBranch    = $story->branch > 0 ? $story->branch : '0';
         $branch         = $product->type == 'branch' ? $storyBranch : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
+        if(isset($productStories[$storyID])) unset($productStories[$storyID]);
 
         $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->product        = $product;

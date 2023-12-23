@@ -1329,14 +1329,14 @@ class storyModel extends model
             $duplicateStoryID = $this->dao->select('id')->from(TABLE_STORY)->where('id')->eq($story->duplicateStory)->fetch();
             if(empty($duplicateStoryID))
             {
-                dao::$errors[] = sprintf($this->lang->story->errorDuplicateStory, $story->duplicateStory);
+                dao::$errors['duplicateStory'] = sprintf($this->lang->story->errorDuplicateStory, $story->duplicateStory);
                 return false;
             }
         }
 
         if($story->closedReason == 'duplicate' and empty($story->duplicateStory))
         {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
             return false;
         }
 
