@@ -15,13 +15,18 @@ namespace zin;
  * Define the grouped data list.
  */
 
-$defaultItem = array();
-$defaultItem['id']     = 0;
-$defaultItem['text']   = $lang->product->all;
-$defaultItem['active'] = $productID == 0;
-$defaultItem['type']   = 'product';
+$data = array('normal' => array(), 'closed' => array());
 
-$data = array('normal' => array($defaultItem), 'closed' => array());
+if(count($products) > 1)
+{
+    $defaultItem = array();
+    $defaultItem['id']     = 0;
+    $defaultItem['text']   = $lang->product->all;
+    $defaultItem['active'] = $productID == 0;
+    $defaultItem['type']   = 'product';
+
+    $data['normal'][] = $defaultItem;
+}
 
 foreach($products as $product)
 {

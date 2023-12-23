@@ -609,11 +609,12 @@ class execution extends control
 
         $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $orderBy, $type, $pager);
 
-        $this->view->execution      = $execution;
-        $this->view->productOption  = $productOption;
-        $this->view->branchOption   = $branchOption;
-        $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=testcase";
-        $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
+        $this->view->execution        = $execution;
+        $this->view->productOption    = $productOption;
+        $this->view->branchOption     = $branchOption;
+        $this->view->switcherParams   = "executionID={$executionID}&productID={$productID}&currentMethod=testcase";
+        $this->view->switcherText     = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
+        $this->view->switcherObjectID = $productID;
         $this->display();
     }
 
