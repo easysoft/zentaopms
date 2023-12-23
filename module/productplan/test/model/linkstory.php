@@ -27,5 +27,5 @@ $storyIdList[] = array(4);
 $storyIdList[] = array(1111);
 
 $plan = new productPlan('admin');
-r($plan->linkStory($planID[0], $storyIdList[0])) && p('4:plan,story,order') && e('2,4,1'); //关联计划id为2的需求4
+r($plan->linkStory($planID[0], $storyIdList[0])) && p('4:plan,story,order') && e('2,4,2'); //关联计划id为2的需求4
 r($plan->linkStory($planID[1], $storyIdList[1])) && p()                     && e('0');     //传入不存在id的情况

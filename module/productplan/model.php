@@ -405,7 +405,7 @@ class productplanModel extends model
      */
     public function create(object $plan, int $isFuture): int|false
     {
-        $product = $this->loadModel('product')->getByID($plan->product);
+        $product = $this->loadModel('product')->getByID((int)$plan->product);
         if($product->type != 'normal' && $plan->branch == '')
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
@@ -427,7 +427,7 @@ class productplanModel extends model
         $plan->begin = $isFuture || empty($plan->begin) ? $this->config->productplan->future : $plan->begin;
         $plan->end   = $isFuture || empty($plan->end)   ? $this->config->productplan->future : $plan->end;
 
-        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
+        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], (string)$this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
@@ -484,7 +484,7 @@ class productplanModel extends model
         }
         if(dao::isError()) return false;
 
-        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
+        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
