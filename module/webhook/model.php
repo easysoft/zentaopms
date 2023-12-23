@@ -360,8 +360,11 @@ class webhookModel extends model
         if(in_array($objectType, $this->config->webhook->needAssignTypes) && !empty($object->assignedTo))
         {
             $assignedTo = $this->loadModel('user')->getById($object->assignedTo);
-            $mobile     = $assignedTo->mobile;
-            $email      = $assignedTo->email;
+            if($assignedTo)
+            {
+                $mobile = $assignedTo->mobile;
+                $email  = $assignedTo->email;
+            }
         }
 
         return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID);
