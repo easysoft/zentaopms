@@ -1,7 +1,7 @@
 <?php
 /**
  * 按人员统计的延期任务数。
- * Count of dealyed task in user.
+ * Count of delayed task in user.
  *
  * 范围：user
  * 对象：task
@@ -20,7 +20,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_dealyed_task_in_user extends baseCalc
+class count_of_delayed_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
