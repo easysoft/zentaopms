@@ -781,7 +781,7 @@ class actionTao extends actionModel
                 $action->objectName = reset($pivotNames);
             }
         }
-        if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
+        if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs' || substr($objectType, 0, 2) == 'mr')) $action->objectName = $action->extra;
     }
 
     /**
