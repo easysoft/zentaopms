@@ -50,16 +50,7 @@ window.setStatistics = function(element, checkedIDList)
         {
             const task = row.data;
 
-            if(task.isParent == true) return true;
-
-            if(!task.isParent)
-            {
-                totalEstimate += Number(task.estimate);
-                totalConsumed += Number(task.consumed);
-            }
-
-            if(task.status != 'cancel' && task.status != 'closed' && !task.isParent) totalLeft += Number(task.left);
-
+            totalCount ++;
             if(task.status == 'wait')
             {
                 waitCount ++;
@@ -69,7 +60,15 @@ window.setStatistics = function(element, checkedIDList)
                 doingCount ++;
             }
 
-            totalCount ++;
+            if(task.isParent == true) return true;
+
+            if(!task.isParent)
+            {
+                totalEstimate += Number(task.estimate);
+                totalConsumed += Number(task.consumed);
+            }
+
+            if(task.status != 'cancel' && task.status != 'closed' && !task.isParent) totalLeft += Number(task.left);
         }
     })
 
