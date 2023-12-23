@@ -2458,7 +2458,7 @@ class execution extends control
 
         $selectedMembers = '';
         foreach($members as $account => $realName) $selectedMembers .= $account . ',';
-        return print(json_encode($selectedMembers);
+        return print(json_encode($selectedMembers));
     }
 
     /**
