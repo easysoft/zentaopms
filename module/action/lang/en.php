@@ -139,6 +139,7 @@ $lang->action->objectTypes['gitlab']           = 'GitLab Server';
 $lang->action->objectTypes['gitea']            = 'Gitea Server';
 $lang->action->objectTypes['gogs']             = 'Gogs Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
+$lang->action->objectTypes['nexus']            = 'Nexus';
 $lang->action->objectTypes['mr']               = 'Merge Request';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
 $lang->action->objectTypes['gitlabuser']       = 'GitLab User';
@@ -811,6 +812,11 @@ $lang->action->dynamicAction->gogs['edited']    = 'Edit Gogs Server';
 $lang->action->dynamicAction->gogs['deleted']   = 'Delete Gogs Server';
 $lang->action->dynamicAction->gogs['undeleted'] = 'Undelete Gogs Server';
 
+$lang->action->dynamicAction->nexus['created']   = 'Create Nexus Server';
+$lang->action->dynamicAction->nexus['edited']    = 'Edit Nexus Server';
+$lang->action->dynamicAction->nexus['deleted']   = 'Delete Nexus Server';
+$lang->action->dynamicAction->nexus['undeleted'] = 'Undelete Nexus Server';
+
 $lang->action->dynamicAction->repo['created']   = 'Create Repo';
 $lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
 $lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
@@ -858,8 +864,6 @@ $lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
-$lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
-$lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
 $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&view=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
