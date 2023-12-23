@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of tree module of ZenTaoPMS.
  *
@@ -18,7 +19,7 @@ class treeModel extends model
      * @access public
      * @return object
      */
-    public function getByID($moduleID)
+    public function getByID(int $moduleID)
     {
         return $this->dao->findById((int)$moduleID)->from(TABLE_MODULE)->fetch();
     }
@@ -29,7 +30,7 @@ class treeModel extends model
      * @access public
      * @return object
      */
-    public function getAllModulePairs($type = 'task')
+    public function getAllModulePairs(string $type = 'task')
     {
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('type')->eq('story')
@@ -222,7 +223,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end', $extra = '')
+    public function getModulePairs(int $rootID, string $viewType = 'story', string $showModule = 'end', string $extra = '')
     {
         if($viewType == 'task')
         {
@@ -468,9 +469,9 @@ class treeModel extends model
      * @param  array  $userFunc
      * @param  string $extra
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
+    public function getTaskTreeMenu(int $rootID, int $productID = 0, int $startModule = 0, array $userFunc = array(), string $extra = ''): array
     {
         $extra = array('tip' => true, 'extra' => $extra, 'executionID' => $rootID, 'productID' => $productID);
 
@@ -559,7 +560,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getTaskStructure($rootID, $productID = 0)
+    public function getTaskStructure(int $rootID, int $productID = 0): array
     {
         $extra = array('executionID' => $rootID, 'productID' => $productID, 'tip' => true);
 
@@ -615,6 +616,7 @@ class treeModel extends model
         $stmt       = $this->app->dbQuery($query);
         $taskTrees  = $this->getDataStructure($stmt, 'task', $rootID, $executionModules);
         foreach($taskTrees as $taskModule) $fullTrees[] = $taskModule;
+
         return $fullTrees;
     }
 
@@ -626,7 +628,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getTreeStructure($rootID, $type)
+    public function getTreeStructure(int $rootID, string $type): array
     {
         $stmt = $this->app->dbQuery($this->buildMenuQuery($rootID, $type, $startModule = 0));
         return $this->getDataStructure($stmt, $type, $rootID);
@@ -1202,11 +1204,13 @@ class treeModel extends model
     /**
      * Create the manage link of a module.
      *
-     * @param  object    $module
+     * @param  string $module
+     * @param  object $module
+     * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createManageLink($type, $module, $extra)
+    public function createManageLink(string $type, object $module, array $extra): string
     {
         $branchID = $extra['branchID'];
         $tip = strpos('bug,case', $type) === false ? '' : ' <span style="font-size:smaller;">[' . strtoupper(substr($type, 0, 1)) . ']</span>';
@@ -1238,9 +1242,9 @@ class treeModel extends model
      * @param  int    $parent
      * @param  array  $extra
      * @access public
-     * @return void
+     * @return object
      */
-    public function createTaskManageLink(string $type, object $module, int $parent, array $extra)
+    public function createTaskManageLink(string $type, object $module, int $parent, array $extra): object
     {
         $executionID = $extra['executionID'];
         $productID   = $extra['productID'];
@@ -1267,7 +1271,7 @@ class treeModel extends model
      * @access public
      * @return object
      */
-    public function createBugLink(string $type, object $module, string $parent, array $extra = array())
+    public function createBugLink(string $type, object $module, string $parent, array $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
@@ -1366,11 +1370,13 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createBranchLink($type, $rootID, $branchID, $branch)
+    public function createBranchLink($type, $rootID, $branchID, $branch): string
     {
         if($type == 'story') return html::a(helper::createLink('product', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
         if($type == 'bug')   return html::a(helper::createLink('bug', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
         if($type == 'case')  return html::a(helper::createLink('testcase', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
+
+        return '';
     }
 
     /**
@@ -1381,7 +1387,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createFeedbackLink($type, $module)
+    public function createFeedbackLink(string $type, object $module): string
     {
         return html::a(helper::createLink('feedback', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1394,7 +1400,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createTicketLink($type, $module)
+    public function createTicketLink(string $type, object $module): string
     {
         return html::a(helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1408,7 +1414,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createTrainSkillLink($type, $module, $extra = '')
+    public function createTrainSkillLink(string $type, object $module, string $extra = ''): string
     {
         return html::a(helper::createLink('trainskill', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1422,7 +1428,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createTrainCourseLink($type, $module, $extra = '')
+    public function createTrainCourseLink(string $type, object $module, string $extra = ''): string
     {
         return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1436,7 +1442,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createTrainPostLink($type, $module, $extra = '')
+    public function createTrainPostLink(string $type, object $module, string $extra = ''): string
     {
         return html::a(helper::createLink('trainpost', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1450,7 +1456,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createDashboardLink($type, $module, $extra = '')
+    public function createDashboardLink(string $type, object $module, string $extra = ''): string
     {
         return html::a(helper::createLink('dashboard', 'browse', "type=bymodule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
@@ -1464,7 +1470,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createReportLink($type, $module, $extra)
+    public function createReportLink(string $type, object $module, string $extra): string
     {
         $dimension = zget($extra, 'dimension', 0);
         return html::a(helper::createLink('report', 'browsereport', "dimension={$dimension}&module={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
@@ -1498,11 +1504,11 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $moduleID
      * @param  string $type
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return array
      */
-    public function getSons($rootID, $moduleID, $type = 'root', $branch = 0)
+    public function getSons(int $rootID, int $moduleID, string $type = 'root', string $branch = '0'): array
     {
         $syncConfig = $this->getSyncConfig($type);
 
@@ -1551,9 +1557,9 @@ class treeModel extends model
      * @param  int    $productID
      * @param  int    $moduleID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getTaskSons($rootID, $productID, $moduleID)
+    public function getTaskSons(int $rootID, int $productID, int $moduleID): array
     {
         if($moduleID)
         {
@@ -1584,7 +1590,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getAllChildId($moduleID)
+    public function getAllChildId(int $moduleID): array
     {
         if($moduleID == 0) return array();
 
@@ -1600,9 +1606,9 @@ class treeModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProjectModule($projectID, $productID = 0)
+    public function getProjectModule(int $projectID, int $productID = 0): array
     {
         $modules = array();
         $rootModules = $this->dao->select('path')->from(TABLE_MODULE)
@@ -1628,7 +1634,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getParents($moduleID)
+    public function getParents(int $moduleID): array
     {
         if($moduleID == 0) return array();
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch('path');
@@ -1662,9 +1668,9 @@ class treeModel extends model
      *
      * @param  int    $moduleID
      * @access public
-     * @return void
+     * @return int
      */
-    public function getStoryModule($moduleID)
+    public function getStoryModule(int $moduleID): int
     {
         $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch();
         if(empty($module)) return 0;
@@ -1729,7 +1735,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function updateOrder($orders)
+    public function updateOrder(array $orders): void
     {
         asort($orders);
         $orderInfo = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -1762,7 +1768,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function manageChild($rootID, $type)
+    public function manageChild(int $rootID, string $type): array
     {
         if($type == 'line') $rootID = 0;
 
@@ -1896,9 +1902,9 @@ class treeModel extends model
      * @param  int    $moduleID
      * @param  string $type
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($moduleID, $type = '')
+    public function update(int $moduleID, string $type = ''): bool
     {
         $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
@@ -2003,7 +2009,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function changeRoot($moduleID, $oldRoot, $newRoot, $type)
+    public function changeRoot(int $moduleID, int $oldRoot, int $newRoot, string $type): void
     {
         /* Get all children id list. */
         $childIdList = $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleID,%")->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
@@ -2055,11 +2061,10 @@ class treeModel extends model
      * Delete a module.
      *
      * @param  int    $moduleID
-     * @param  null   $null      compatible with that of model::delete()
      * @access public
-     * @return void
+     * @return bool
      */
-    public function delete($moduleID, $null = null)
+    public function remove(int $moduleID): bool
     {
         $module = $this->getById($moduleID);
         if(empty($module)) return false;
@@ -2133,16 +2138,16 @@ class treeModel extends model
     /**
      * Fix the path, grade fields according to the id and parent fields.
      *
-     * @param  string    $root
-     * @param  string    $type
+     * @param  int    $rootID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function fixModulePath($root, $type)
+    public function fixModulePath(int $rootID, string $type): void
     {
         /* Get all modules grouped by parent. */
         if($type == 'bug' or $type == 'case') $type = 'story,' . $type;
-        $groupModules = $this->dao->select('id, parent, branch')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->in($type)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
+        $groupModules = $this->dao->select('id, parent, branch')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($type)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
         $modules = array();
 
         /* Cycle the groupModules until it has no item any more. */
@@ -2184,15 +2189,13 @@ class treeModel extends model
     /**
      * Check unique module name.
      *
-     * @param  int    $rootID
-     * @param  string $viewType
-     * @param  int    $parentModuleID
+     * @param  object $module
      * @param  array  $modules
      * @param  array  $branches
      * @access public
      * @return bool
      */
-    public function checkUnique($module, $modules = array(), $branches = array())
+    public function checkUnique(object $module, $modules = array(), $branches = array()): bool
     {
         if(empty($branches)) $branches = $this->post->branch;
         if(empty($branches) and isset($module->branch)) $branches = array($module->branch);
@@ -2245,7 +2248,7 @@ class treeModel extends model
      * @access public
      * @return bool
      */
-    public function isMergeModule($rootID, $viewType)
+    public function isMergeModule(int $rootID, string $viewType): bool
     {
         if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
         {
@@ -2272,7 +2275,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getProductStructure($rootID, $viewType, $branchID = 'all', $currentModuleID = 0)
+    public function getProductStructure(int $rootID, string $viewType, string $branchID = 'all', int $currentModuleID = 0): array
     {
         if($viewType == 'line') $rootID = 0;
         $stmt  = $this->app->dbQuery($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
@@ -2287,11 +2290,11 @@ class treeModel extends model
      * @param  string $viewType
      * @param  int    $rootID
      * @param  array  $keepModules
-     * @param  string $branchID
+     * @param  string $branch
      * @access public
      * @return array
      */
-    public function getDataStructure($stmt, $viewType, $rootID, $keepModules = array(), $branchID = 'all')
+    public function getDataStructure(object $stmt, string $viewType, int $rootID, array $keepModules = array(), string $branch = 'all'): array
     {
         $parent = array();
 
@@ -2323,7 +2326,7 @@ class treeModel extends model
             }
             else
             {
-                $module->url = helper::createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=$module->id&branchID=$branchID");
+                $module->url = helper::createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=$module->id&branchID=$branch");
             }
             $parent[$module->parent]->children[] = $module;
         }
@@ -2349,7 +2352,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getDocStructure()
+    public function getDocStructure(): array
     {
         $stmt = $this->app->dbQuery($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`grade`_desc, `order`')->get());
         $parent = array();
@@ -2411,7 +2414,7 @@ class treeModel extends model
       * @access public
       * @return void
       */
-    public function setModuleLang()
+    public function setModuleLang(): void
     {
         $this->lang->module        = new stdclass();
         $this->lang->module->name  = $this->lang->tree->wordName;
@@ -2422,9 +2425,9 @@ class treeModel extends model
      * Create module.
      *
      * @access public
-     * @return bool|object
+     * @return object|false
      */
-    public function createModule()
+    public function createModule(): object|false
     {
         $data = fixer::input('post')
             ->setDefault('name', '')
@@ -2512,7 +2515,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getGroupPairs($dimensionID = 0, $parentGroup = 0, $grade = 2, $type = 'chart')
+    public function getGroupPairs(int $dimensionID = 0, int $parentGroup = 0, int $grade = 2, string $type = 'chart'): array
     {
         $groups = $this->dao->select('id,name,grade,parent')->from(TABLE_MODULE)
             ->where('root')->eq($dimensionID)

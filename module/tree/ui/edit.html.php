@@ -31,7 +31,6 @@ formPanel
     set::submitBtnText($lang->save),
     $showProduct ? formRow
     (
-        set::className($hiddenProduct ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->tree->product),

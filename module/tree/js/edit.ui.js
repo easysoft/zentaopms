@@ -77,7 +77,7 @@ function ajaxLoadModules(productID, branchID, viewType = '', currentModuleID = 0
 {
     if(!viewType) viewType = type;
 
-    var link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + viewType + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=false&extra=excludeModuleID=' + currentModuleID + ',noMainBranch,nodeleted,excludeRelated');
+    var link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + viewType + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&extra=excludeModuleID=' + currentModuleID + ',noMainBranch,nodeleted,excludeRelated');
     $.getJSON(link, function(data)
     {
         $('[name=parent]').zui('picker').render({items: data.items});

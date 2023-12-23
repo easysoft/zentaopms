@@ -1396,7 +1396,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function ajaxGetOptionMenu(int $rootID, int|string $branch = 0, int $rootModuleID = 0, string $returnType = 'html', string $fieldID = ''): bool
+    public function ajaxGetOptionMenu(int $rootID, int|string $branch = 0, int $rootModuleID = 0, string $returnType = 'html', string $fieldID = '')
     {
         $optionMenu = $this->loadModel('tree')->getOptionMenu($rootID, 'case', $rootModuleID, $branch);
 
