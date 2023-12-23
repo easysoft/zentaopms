@@ -396,7 +396,7 @@ class metricZen extends metric
      * @access protected
      * @return int
      */
-    public function getPagerExtra($tableWidth)
+    protected function getPagerExtra($tableWidth)
     {
         return ($tableWidth > 300) ? '' : 'shortPageSize';
     }

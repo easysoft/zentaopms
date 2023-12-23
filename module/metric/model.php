@@ -137,6 +137,16 @@ class metricModel extends model
         return array($header, $data);
     }
 
+    /**
+     * 构建有时间属性的度量项的表格数据。
+     * Build table data for metric with time.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return array
+     */
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
         $dateField = 'dateString';
@@ -189,6 +199,16 @@ class metricModel extends model
         return array($groupHeader, $groupData);
     }
 
+    /**
+     * 构建有对象属性的度量项的表格数据。
+     * Build table data for metric with object.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return array
+     */
     public function getObjectTable($header, $data, $dateType = 'day', $withCalcTime = true)
     {
         $groupHeader = array();
