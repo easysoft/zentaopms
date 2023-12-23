@@ -7,12 +7,14 @@ su('admin');
 /**
 
 title=测试 sonarqubeModel::getCacheFile();
+timeout=0
 cid=1
-pid=1
 
-
+- 使用正确的sonarqubeID,项目key获取缓存文件 @1
 
 */
+
+zdTable('pipeline')->config('pipeline')->gen(5);
 
 $sonarqubeID = 2;
 $projectKey  = 'unit_test';

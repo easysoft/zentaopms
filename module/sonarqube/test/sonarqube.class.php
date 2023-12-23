@@ -13,21 +13,24 @@ class sonarqubeTest
         $result = $this->objectModel->apiCreateProject($sonarqubeID, (object)$project);
 
         if($result === false) $result = 'return false';
-        if(isset($result->errors)) $result = $result->errors;
+        if(isset($result->errors))
+        {
+            $result = $result->errors;
+            if($result[0]->msg == 'Could not create Project with key: "' . $project['projectKey'] . '". A similar key already exists: "' . $project['projectKey'] . '"') return true;
+        }
+        if(isset($result->name) && $result->name == $project['projectName']) return true;
         return $result;
     }
 
     public function createProjectTest($sonarqubeID, $post)
     {
-        $_POST['projectName'] = $post['projectName'];
-        $_POST['projectKey']  = $post['projectKey'];
-
-        $result = $this->objectModel->createProject($sonarqubeID);
+        $result = $this->objectModel->createProject($sonarqubeID, (object)$post);
         $errors = dao::getError();
         if($errors)
         {
-            if(current($errors) == "项目标识的格式不正确。允许的字符为字母、数字、'-'、''、'.'和“：”，至少有一个非数字。") return 'return error';
-            if(current($errors) == false) return 'return false';
+            if(current($errors['name']) == "项目标识的格式不正确。允许的字符为字母、数字、'-'、''、'.'和“：”，至少有一个非数字。") return 'return error';
+            if(current($errors['name']) == false) return 'return false';
+            if(current($errors['name']) == 'Could not create Project with key: "' . $post['projectKey'] . '". A similar key already exists: "' . $post['projectKey'] . '"') return true;
             return $errors;
         }
         else
@@ -52,7 +55,6 @@ class sonarqubeTest
         $result = $this->objectModel->apiGetIssues($sonarqubeID, $projectKey);
 
         if(empty($result)) $result = 'return empty';
-        if(isset($result[0]->message)) $result = true;
         return $result;
     }
 
@@ -61,8 +63,6 @@ class sonarqubeTest
         $result = $this->objectModel->apiGetProjects($sonarqubeID, $keyword);
 
         if(empty($result)) $result = 'return empty';
-        if($keyword == '' and isset($result[0]->name)) $result = true;
-        if($keyword != '' and strpos($result[0]->name, $keyword) !== false) $result = true;
         return $result;
     }
 
@@ -89,7 +89,7 @@ class sonarqubeTest
         return $apiRoot;
     }
 
-    public function getCacheFile($sonarqubeID, $projectKey)
+    public function getCacheFileTest($sonarqubeID, $projectKey)
     {
         $result = $this->objectModel->getCacheFile($sonarqubeID, $projectKey);
 

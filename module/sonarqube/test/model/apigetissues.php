@@ -7,19 +7,22 @@ su('admin');
 /**
 
 title=测试 sonarqubeModel::apiGetIssues();
+timeout=0
 cid=1
-pid=1
 
-通过sonarqubeID,获取SonarQube问题列表 >> 1
-通过sonarqubeID,项目key获取SonarQube问题列表 >> 1
-当sonarqubeID为0时,获取SonarQube问题列表 >> return empty
+- 通过sonarqubeID,项目key获取SonarQube问题列表 @1
+- 通过sonarqubeID,项目key获取SonarQube问题列表数量 @1
+- 当sonarqubeID为0时,获取SonarQube问题列表 @return empty
 
 */
 
+zdTable('pipeline')->config('pipeline')->gen(5);
+
 $sonarqubeID = 2;
-$projectKey  = 'zentaopms';
+$projectKey  = 'bendi';
 
 $sonarqube = new sonarqubeTest();
-r($sonarqube->apiGetIssuesTest($sonarqubeID))              && p() && e('1');            //通过sonarqubeID,获取SonarQube问题列表
-r($sonarqube->apiGetIssuesTest($sonarqubeID, $projectKey)) && p() && e('1');            //通过sonarqubeID,项目key获取SonarQube问题列表
-r($sonarqube->apiGetIssuesTest(0))                         && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube问题列表
+$result = $sonarqube->apiGetIssuesTest($sonarqubeID, $projectKey);
+r(isset($result[0]->message))      && p() && e('1');            //通过sonarqubeID,项目key获取SonarQube问题列表
+r(count($result) > 100)            && p() && e('1');            //通过sonarqubeID,项目key获取SonarQube问题列表数量
+r($sonarqube->apiGetIssuesTest(0)) && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube问题列表

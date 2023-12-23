@@ -7,16 +7,18 @@ su('admin');
 /**
 
 title=测试 sonarqubeModel::getApiBase();
+timeout=0
 cid=1
-pid=1
 
-通过sonarqubeID,获取SonarQube url和header >> http://192.168.1.161:59001/api/%s
-当sonarqubeID为0时,获取SonarQube url和header >> return empty
+- 通过sonarqubeID,获取SonarQube url和header @https://sonardev.qc.oop.cc/api/%s
+- 当sonarqubeID为0时,获取SonarQube url和header @return empty
 
 */
+
+zdTable('pipeline')->gen(5);
 
 $sonarqubeID = 2;
 
 $sonarqube = new sonarqubeTest();
-r($sonarqube->getApiBaseTest($sonarqubeID)) && p() && e('http://192.168.1.161:59001/api/%s'); //通过sonarqubeID,获取SonarQube url和header
+r($sonarqube->getApiBaseTest($sonarqubeID)) && p() && e('https://sonardev.qc.oop.cc/api/%s'); //通过sonarqubeID,获取SonarQube url和header
 r($sonarqube->getApiBaseTest(0))            && p() && e('return empty');                      //当sonarqubeID为0时,获取SonarQube url和header
