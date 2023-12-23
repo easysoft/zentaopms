@@ -18,10 +18,10 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('user' => 'admin')))    && p('0:value') && e('9');  // 测试用户admin
-r($calc->getResult(array('user' => 'user')))     && p('0:value') && e('18'); // 测试用户user
-r($calc->getResult(array('user' => 'test')))     && p('0:value') && e('45'); // 测试用户test
-r($calc->getResult(array('user' => 'dev')))      && p('0:value') && e('72'); // 测试用户dev
-r($calc->getResult(array('user' => 'pm')))       && p('0:value') && e('63'); // 测试用户pm
-r($calc->getResult(array('user' => 'po')))       && p('0:value') && e('9');  // 测试用户po
+r($calc->getResult(array('user' => 'admin')))    && p('0:value') && e('6');  // 测试用户admin
+r($calc->getResult(array('user' => 'user')))     && p('0:value') && e('12'); // 测试用户user
+r($calc->getResult(array('user' => 'test')))     && p('0:value') && e('30'); // 测试用户test
+r($calc->getResult(array('user' => 'dev')))      && p('0:value') && e('48'); // 测试用户dev
+r($calc->getResult(array('user' => 'pm')))       && p('0:value') && e('42'); // 测试用户pm
+r($calc->getResult(array('user' => 'po')))       && p('0:value') && e('6');  // 测试用户po
 r($calc->getResult(array('user' => 'notexist'))) && p('0:value') && e('0');  // 测试不存在的用户

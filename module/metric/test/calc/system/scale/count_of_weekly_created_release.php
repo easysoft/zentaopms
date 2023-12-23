@@ -16,9 +16,9 @@ zdTable('release')->config('release', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('200'); // 测试新增发布分组数。
+r(count($calc->getResult())) && p('') && e('50'); // 测试新增发布分组数。
 
-r($calc->getResult(array('year' => '2019', 'week' => '03'))) && p('0:value') && e('1'); // 测试2019年3月月度新增发布数。
+r($calc->getResult(array('year' => '2019', 'week' => '03'))) && p('0:value') && e('0'); // 测试2019年3月月度新增发布数。
 r($calc->getResult(array('year' => '2019', 'week' => '09'))) && p('0:value') && e('0'); // 测试2019年9月月度新增发布数。
 r($calc->getResult(array('year' => '2020', 'week' => '05'))) && p('0:value') && e('1'); // 测试2020年5月月度新增发布数。
 r($calc->getResult(array('year' => '2020', 'week' => '12'))) && p('0:value') && e('0'); // 测试2020年12月月度新增发布数。

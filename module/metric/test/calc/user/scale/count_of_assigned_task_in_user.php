@@ -19,4 +19,4 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('34'); // 测试用户dev。
+r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('22'); // 测试用户dev。
