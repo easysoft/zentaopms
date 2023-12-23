@@ -324,6 +324,22 @@ class metricTest
     }
 
     /**
+     * Test getResultByCodes.
+     *
+     * @param  string      $codes
+     * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string|null $print
+     * @access public
+     * @return array
+     */
+    public function getResultByCodes($codes, $options = array(), $print = null)
+    {
+        $results = $this->objectModel->getResultByCodes($codes, $options);
+        if($print) return $results[$print];
+        return $results;
+    }
+
+    /**
      * Test getModuleTreeList.
      *
      * @param  string $scope
