@@ -47,12 +47,12 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
-        /* If you do not have permission to access any execution, go to the create execution page. */
-        if(!$this->execution->checkPriv($executionID)) $this->locate($this->createLink('execution', 'create'));
-
         /* Set menu and get execution information. */
         $executionID = $this->taskZen->setMenu($executionID);
         $execution   = $this->execution->getById($executionID);
+
+        /* If you do not have permission to access any execution, go to the create execution page. */
+        if(!$this->execution->checkPriv($executionID)) $this->locate($this->createLink('execution', 'create'));
 
         /* Check whether the execution has permission to create tasks. */
         if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => $this->lang->task->createDenied)));
