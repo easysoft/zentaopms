@@ -93,6 +93,7 @@ $lang->product->closedBugs            = '关闭Bug';
 $lang->product->bugFixedRate          = '修复率';
 $lang->product->unfoldClosed          = '展开已关闭';
 $lang->product->storyDeliveryRate     = "需求交付率";
+$lang->product->storyDeliveryRateTip  = "需求交付率 = 阶段为已发布或关闭原因是已完成需求数 /（研发需求总数 - 关闭原因不是已完成的需求数）* 100%";
 
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";

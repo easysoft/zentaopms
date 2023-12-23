@@ -93,6 +93,7 @@ $lang->product->closedBugs            = 'Closed Bug';
 $lang->product->bugFixedRate          = 'Repair Rate';
 $lang->product->unfoldClosed          = 'Unfold Closed';
 $lang->product->storyDeliveryRate     = "Story Delivery Rate";
+$lang->product->storyDeliveryRateTip  = "Story Delivery Rate = The released or done stories / (Total stories - Closed reason is not done）* 100%";
 
 $lang->product->confirmDelete        = " Möchten Sie {$lang->productCommon} löschen?";
 $lang->product->errorNoProduct       = "Kein {$lang->productCommon} erstellt!";

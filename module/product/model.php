@@ -1023,15 +1023,12 @@ class productModel extends model
         $product->executions = $this->productTao->getStatCountByID('executions',         $productID);
         $product->progress   = $this->productTao->getStatCountByID('progress',           $productID);
 
+        $product->storyDeliveryRate = 0;
         $storyDeliveryRate = $this->loadModel('metric')->getResultByCode('rate_of_delivery_story_in_product', array('product' => $productID));
         if($storyDeliveryRate)
         {
             $storyDeliveryRate = current($storyDeliveryRate);
             $product->storyDeliveryRate = $storyDeliveryRate['value'] * 100;
-        }
-        else
-        {
-            $product->storyDeliveryRate = 0;
         }
 
         return $product;
