@@ -691,7 +691,7 @@ class treeModel extends model
                 $stmt = $this->app->dbQuery($query);
                 while($module = $stmt->fetch())
                 {
-                    if(isset($executionModules[$module->id])) $modules[] = $this->buildTree($module, 'bug', $data->id, $userFunc, $extra, $branch);
+                    if(isset($executionModules[$module->id])) $modules[] = $this->buildTree($module, 'bug', $data->id, $userFunc, $extra, (string)$branch);
                 }
             }
         }
