@@ -2,10 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-su('admin');
-
 zdTable('project')->config('execution')->gen(100)->fixPath();
 zdTable('user')->gen(100);
+
+su('admin');
 
 /**
 

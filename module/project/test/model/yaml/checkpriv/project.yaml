@@ -3,6 +3,8 @@ author: chaideqing
 version: "1.0"
 fields:
     - field: PM
-      range: 'admin'
+      range: 'admin,user1'
     - field: id
       range: '1-8'
+    - field: type
+      range: project

@@ -2015,7 +2015,7 @@ class projectModel extends model
         foreach($executions as $execution)
         {
             if(!empty($execution->projectName)) $execution->projectName = htmlspecialchars_decode($execution->projectName);
-            $doingExecutions[$execution->project][$execution->id] = $execution;
+            $projectExecutions[$execution->project][$execution->id] = $execution;
         }
 
         /* The execution is sorted in reverse order by execution ID. */

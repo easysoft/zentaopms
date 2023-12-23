@@ -28,6 +28,7 @@ global $tester;
 $tester->loadModel('project');
 
 initData();
+$_POST['uid']     = '0';
 $_POST['realEnd'] = '2022-05-03';
 
 $data = new stdclass();

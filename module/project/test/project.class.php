@@ -171,7 +171,7 @@ class Project
 
         if(dao::isError()) return dao::getError();
 
-        return $this->project->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchAll();
+        return $this->project->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_asc')->fetchAll();
     }
 
     /**
@@ -353,14 +353,11 @@ class Project
      * Build table action menu for project browse page.
      *
      * @param  int    $projectID
-     * @param  string $vision
      * @access public
      * @return string
      */
-    public function buildActionListObject(int $projectID, string $vision = 'rnd')
+    public function buildActionListObject(int $projectID)
     {
-        $this->project->config->vision = $vision;
-
         $project = $this->project->getByID($projectID);
         $actions = $this->project->buildActionList($project);
         return current($actions);

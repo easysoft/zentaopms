@@ -22,6 +22,7 @@ cid=1
 
 global $tester;
 $projectClass = new project();
+$_POST['uid'] = '0';
 
 $project = new stdclass();
 $project->parent     = 0;
