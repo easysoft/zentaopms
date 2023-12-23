@@ -1700,7 +1700,7 @@ class storyZen extends story
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         helper::setcookie('preProductID', (string)$productID);
 
-        $defaultStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => 0, 'branch' => $this->view->branchID);
+        $defaultStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => '', 'branch' => $this->view->branchID);
         $batchStories = array();
         $count        = $this->config->story->batchCreate;
         for($batchIndex = 0; $batchIndex < $count; $batchIndex++) $batchStories[] = $defaultStory;
