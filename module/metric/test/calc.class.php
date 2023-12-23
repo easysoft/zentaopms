@@ -725,4 +725,15 @@ class metricTest
     {
         return $this->objectModel->getCollectConfText($metric);
     }
+
+    public function deduplication($code)
+    {
+        $this->objectModel->deduplication($code);
+
+        $recordCount = $this->objectModel->dao->select('count(id) as num')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch('num');
+
+        return $recordCount;
+    }
 }
