@@ -16,4 +16,4 @@ zdTable('product')->config('product', true, 4)->gen(10);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r($calc->getResult()) && p('') && e('140'); // 测试按全局统计的无效研发需求规模数
+r($calc->getResult()) && p('0:value') && e('140'); // 测试按全局统计的无效研发需求规模数

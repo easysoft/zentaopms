@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=scale_of_invalid_story
+title=scale_of_valid_story
 timeout=0
 cid=1
 
@@ -16,4 +16,4 @@ zdTable('product')->config('product', true, 4)->gen(10);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r($calc->getResult()) && p('') && e('140'); // 测试按全局统计的有效研发需求规模数
+r($calc->getResult()) && p('0:value') && e('140'); // 测试按全局统计的有效研发需求规模数
