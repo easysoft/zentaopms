@@ -16,7 +16,7 @@ formPanel
     set::title($lang->design->assignAction),
     set::headingClass('modal-heading'),
     set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
+    set::shadow(false),
     to::headingActions
     (
         entityLabel
@@ -28,7 +28,6 @@ formPanel
             set::reverse(true)
         )
     ),
-    set::shadow(!isonlybody()),
     formGroup
     (
         set::width("1/2"),
