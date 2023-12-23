@@ -39,7 +39,7 @@ formPanel
     formGroup
     (
         setID('reviewerBox'),
-        set::label($lang->story->reviewedBy),
+        set::label($lang->story->reviewers),
         set::width('full'),
         set::required(true),
         inputGroup
