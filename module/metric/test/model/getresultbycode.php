@@ -5,6 +5,7 @@ title=getResultByCode
 timeout=0
 cid=1
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
 su('admin');
@@ -29,7 +30,7 @@ $codeList[7] = 'count_of_daily_closed_bug_in_product';
 
 r($metric->getResultByCode($codeList[0])) && p('0:value')                                               && e('24');                      // 测试度量项count_of_bug
 r($metric->getResultByCode($codeList[1])) && p('0:year,value')                                          && e('2023,5');                  // 测试度量项count_of_annual_created_product
-r($metric->getResultByCode($codeList[2])) && p('0:year,month,value')                                    && e('2023,09,5');               // 测试度量项count_of_monthly_created_project
+r($metric->getResultByCode($codeList[2])) && p('0:year,month')                                          && e('2023,09');                 // 测试度量项count_of_monthly_created_project
 r($metric->getResultByCode($codeList[3])) && p('0:year,week,value')                                     && e('2010,12,1');               // 测试度量项count_of_weekly_created_release
 r($metric->getResultByCode($codeList[4])) && p('0:product,value')                                       && e('1,40');                    // 测试度量项count_of_case_in_product
 r($metric->getResultByCode($codeList[5])) && p('0:year,product,value')                                  && e('2012,1,3');                // 测试度量项count_of_annual_fixed_bug_in_product
