@@ -254,12 +254,14 @@ formPanel
             set::seg(true),
             btn
             (
-                setClass('primary-pale project-type-1'),
+                setClass('project-type-1'),
+                !$copyProjectID || $copyProject->hasProduct ? setClass('primary-pale') : null,
                 set::disabled($copyProjectID),
                 $lang->project->projectTypeList[1]
             ),
             btn(
                 setClass('project-type-0'),
+                $copyProjectID && !$copyProject->hasProduct ? setClass('primary-pale') : null,
                 set::disabled($copyProjectID),
                 $lang->project->projectTypeList[0]
             )
