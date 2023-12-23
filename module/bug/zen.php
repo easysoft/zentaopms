@@ -1432,7 +1432,7 @@ class bugZen extends bug
     {
         $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
         $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
+        $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, 'bug');
         $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
         $this->view->executionType = $execution->type;

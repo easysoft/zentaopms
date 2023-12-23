@@ -125,7 +125,7 @@ class storyZen extends story
                 $output      = $this->story->parseExtra($extra);
                 $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
                 $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+                $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, 'story');
                 $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
                 $this->view->regionID    = $regionID;
@@ -275,7 +275,7 @@ class storyZen extends story
         /* 如果是看板执行，设置看板的view变量。 */
         $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
         $regionID    = !empty($kanbanSetting['regionID']) ? $kanbanSetting['regionID'] : key($regionPairs);
-        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+        $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, 'story');
         $laneID      = !empty($kanbanSetting['laneID']) ? $kanbanSetting['laneID'] : key($lanePairs);
 
         $this->view->executionType = 'kanban';
