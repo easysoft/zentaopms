@@ -2333,10 +2333,10 @@ class execution extends control
             foreach($storyIdList as $storyID)
             {
                 /* Delete related issue in gitlab. */
-                $relation = $this->gitlab->getRelationByObject('story', $storyID);
-                if(!empty($relation)) $this->gitlab->deleteIssue('story', $storyID, $relation->issueID);
+                $relation = $this->gitlab->getRelationByObject('story', (int)$storyID);
+                if(!empty($relation)) $this->gitlab->deleteIssue('story', (int)$storyID, $relation->issueID);
 
-                $this->execution->unlinkStory($executionID, $storyID);
+                $this->execution->unlinkStory($executionID, (int)$storyID);
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
