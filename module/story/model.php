@@ -2209,7 +2209,7 @@ class storyModel extends model
      * Get stories through search.
      *
      * @access public
-     * @param  int         $productID
+     * @param  int|string  $productID
      * @param  int|string  $branch
      * @param  int         $queryID
      * @param  string      $orderBy
@@ -2220,7 +2220,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(int $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function getBySearch(int|string $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
