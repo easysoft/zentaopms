@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of sonarqube module of ZenTaoPMS.
  *
@@ -13,13 +14,14 @@
 class sonarqubeModel extends model
 {
     /**
+     * 获取sonarqube api基础url和头。
      * Get sonarqube api base url and header by id.
      *
-     * @param  int $sonarqubeID
+     * @param  int    $sonarqubeID
      * @access public
      * @return array
      */
-    public function getApiBase($sonarqubeID)
+    public function getApiBase(int $sonarqubeID): array
     {
         $sonarqube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         if(!$sonarqube) return array('', array());
@@ -31,14 +33,15 @@ class sonarqubeModel extends model
     }
 
     /**
-     * check sonarqube valid
+     * 检查sonarqube是否可用。
+     * check sonarqube valid.
      *
-     * @param string $host
-     * @param string $token
+     * @param  string $host
+     * @param  string $token
      * @access public
      * @return array
      */
-    public function apiValidate($host, $token)
+    public function apiValidate(string $host, string $token): array
     {
         $url    = rtrim($host, '/') . "/api/authentication/validate";
         $header = array('Authorization: Basic ' . $token);
@@ -53,15 +56,16 @@ class sonarqubeModel extends model
     }
 
     /**
+     * 获取sonarqube报告。
      * Get sonarqube report.
      *
      * @param  int    $sonarqubeID
      * @param  string $projectKey
      * @param  string $metricKeys
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetReport($sonarqubeID, $projectKey, $metricKeys = '')
+    public function apiGetReport(int $sonarqubeID, string $projectKey, string $metricKeys = ''): object|array|null
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return array();
@@ -72,14 +76,15 @@ class sonarqubeModel extends model
     }
 
     /**
+     * 获取sonarqube项目质量门。
      * Get sonarqube qualitygate by project.
      *
      * @param  int    $sonarqubeID
      * @param  string $projectKey
      * @access public
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetQualitygate($sonarqubeID, $projectKey)
+    public function apiGetQualitygate(int $sonarqubeID, string $projectKey): object|array|null
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return array();
@@ -88,7 +93,8 @@ class sonarqubeModel extends model
         return json_decode(commonModel::http($url, null, array(), $header));
     }
 
-     /**
+    /**
+     * 获取sonarqube问题列表。
      * Get issues of one sonarqube.
      *
      * @param  int    $sonarqubeID
@@ -96,7 +102,7 @@ class sonarqubeModel extends model
      * @access public
      * @return array
      */
-    public function apiGetIssues($sonarqubeID, $projectKey = '')
+    public function apiGetIssues(int $sonarqubeID, string $projectKey = ''): array
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return array();
@@ -118,6 +124,7 @@ class sonarqubeModel extends model
     }
 
     /**
+     * 获取sonarqube项目列表。
      * Get projects of one sonarqube.
      *
      * @param  int    $sonarqubeID
@@ -125,7 +132,7 @@ class sonarqubeModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjects($sonarqubeID, $keyword = '', $projectKey = '')
+    public function apiGetProjects(int $sonarqubeID, string $keyword = '', string $projectKey = ''): array
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return array();
@@ -148,43 +155,45 @@ class sonarqubeModel extends model
     }
 
     /**
+     * api创建sonarqube项目。
      * Create a sonarqube project by api.
      *
      * @param int    $sonarqubeID
      * @param object $project
      * @access public
-     * @return object
+     * @return object|array|null|false
      */
-    public function apiCreateProject($sonarqubeID, $project)
+    public function apiCreateProject(int $sonarqubeID, object $project): object|array|null|false
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return false;
 
         $url    = sprintf($apiRoot, "projects/create?name=" . urlencode($project->projectName) . "&project=" . urlencode($project->projectKey));
-        $result = json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
-        return $result;
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
+
     }
 
 
     /**
+     * api删除sonarqube项目。
      * Delete sonarqube project by api.
      *
      * @param  int    $sonarqubeID
-     * @param  int    $projectKey
+     * @param  string $projectKey
      * @access public
-     * @return bool|object
+     * @return object|array|null|false
      */
-    public function apiDeleteProject($sonarqubeID, $projectKey)
+    public function apiDeleteProject(int $sonarqubeID, string $projectKey): object|array|null|false
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return false;
 
         $url    = sprintf($apiRoot, "projects/delete?project=$projectKey");
-        $result = json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
-        return $result;
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
     }
 
     /**
+     * 创建sonarqube项目。
      * Create a sonarqube project.
      *
      * @param  int    $sonarqubeID
@@ -206,10 +215,12 @@ class sonarqubeModel extends model
             return true;
         }
 
+        if(!$response) return false;
         return $this->apiErrorHandling($response);
     }
 
     /**
+     * api错误处理。
      * Api error handling.
      *
      * @param  object $response
@@ -235,13 +246,14 @@ class sonarqubeModel extends model
     }
 
     /**
+     * api错误转换处理。
      * Convert API error.
      *
-     * @param  array  $message
+     * @param  array|string $message
      * @access public
      * @return string
      */
-    public function convertApiError($message)
+    public function convertApiError(array|string $message): string
     {
         if(is_array($message)) $message = $message[0];
         if(!is_string($message)) return $message;
@@ -264,6 +276,7 @@ class sonarqubeModel extends model
     }
 
     /**
+     * 获取缓存文件。
      * Get cache file.
      *
      * @param  int    $sonarqubeID
@@ -271,7 +284,7 @@ class sonarqubeModel extends model
      * @access public
      * @return string
      */
-    public function getCacheFile($sonarqubeID, $projectKey)
+    public function getCacheFile($sonarqubeID, $projectKey): string
     {
         $cachePath = $this->app->getCacheRoot() . '/' . 'sonarqube';
         if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
@@ -280,6 +293,7 @@ class sonarqubeModel extends model
     }
 
     /**
+     * 获取关联产品。
      * Get linked products.
      *
      * @param  int    $sonarqubeID
@@ -287,7 +301,7 @@ class sonarqubeModel extends model
      * @access public
      * @return string
      */
-    public function getLinkedProducts($sonarqubeID, $projectKey)
+    public function getLinkedProducts($sonarqubeID, $projectKey): string
     {
         return $this->dao->select('t2.product')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')

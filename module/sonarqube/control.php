@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of sonarqube module of ZenTaoPMS.
  *
@@ -16,7 +17,7 @@ class sonarqube extends control
      * @param string $moduleName
      * @param string $methodName
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
@@ -36,6 +37,7 @@ class sonarqube extends control
     }
 
     /**
+     * sonarqube 列表。
      * Browse sonarqube.
      *
      * @param  string $orderBy
@@ -61,6 +63,7 @@ class sonarqube extends control
     }
 
     /**
+     * 展示sonarqube报告。
      * Show sonarqube report.
      *
      * @param  int    $jobID
@@ -103,6 +106,7 @@ class sonarqube extends control
     }
 
     /**
+     * ajax方式获取项目下拉。
      * Ajax get project select.
      *
      * @param  int    $sonarqubeID
@@ -110,7 +114,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
+    public function ajaxGetProjectList(int $sonarqubeID, string $projectKey = '')
     {
         $projectPairs = $this->sonarqube->getProjectPairs($sonarqubeID, $projectKey);
 
@@ -123,6 +127,7 @@ class sonarqube extends control
     }
 
     /**
+     * 创建sonarqube服务器。
      * create a sonarqube.
      *
      * @access public
@@ -147,6 +152,7 @@ class sonarqube extends control
     }
 
     /**
+     * 检查post数据。
      * Check post info.
      *
      * @param  int       $sonarqubeID
@@ -155,11 +161,8 @@ class sonarqube extends control
      */
     protected function checkToken(object $sonarqube, int $sonarqubeID = 0)
     {
-        $this->dao->update('sonarqube')->data($sonarqube)
-            ->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty')
-            ->batchCheck("url", 'URL');
+        $this->sonarqubeZen->checkTokenRequire($sonarqube);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        if(strpos($sonarqube->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->sonarqube->hostError))));
 
         /* Check name and url unique. */
         $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)
@@ -178,6 +181,7 @@ class sonarqube extends control
     }
 
     /**
+     * 编辑sonarqube服务器。
      * Edit a sonarqube.
      *
      * @param  int    $sonarqubeID
@@ -213,6 +217,7 @@ class sonarqube extends control
     }
 
     /**
+     * 删除sonarqube服务器。
      * Delete a sonarqube.
      *
      * @param  int    $sonarqubeID
@@ -243,6 +248,7 @@ class sonarqube extends control
     }
 
     /**
+     * 执行流水线。
      * Exec job.
      *
      * @param  int    $jobID
@@ -255,6 +261,7 @@ class sonarqube extends control
     }
 
     /**
+     * soanrqube 项目列表。
      * Browse sonarqube project.
      *
      * @param  int    $sonarqubeID
@@ -267,9 +274,7 @@ class sonarqube extends control
      */
     public function browseProject(int $sonarqubeID, string $orderBy = 'name_desc', int $recPerPage = 15, int $pageID = 1)
     {
-        $this->app->loadClass('pager', true);
-        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
-
+        $keyword              = fixer::input('post')->setDefault('keyword', '')->get('keyword');
         $sonarqubeProjectList = $this->sonarqube->apiGetProjects($sonarqubeID, $keyword);
         $projectKeyList       = array();
         foreach($sonarqubeProjectList as $sonarqubeProject)
@@ -278,17 +283,7 @@ class sonarqube extends control
             $projectKeyList[] = $sonarqubeProject->key;
         }
 
-         /* Data sort. */
-        list($order, $sort) = explode('_', $orderBy);
-        $orderList = array();
-        foreach($sonarqubeProjectList as $sonarqubeProject) $orderList[] = $sonarqubeProject->$order;
-        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeProjectList);
-
-        /* Pager. */
-        $this->app->loadClass('pager', true);
-        $recTotal = count($sonarqubeProjectList);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
-        $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
+        $sonarqubeProjectList = $this->sonarqubeZen->sortAndPage($sonarqubeProjectList, $orderBy, $recPerPage, $pageID);
 
         /* Get success jobs of sonarqube.*/
         $projectJobPairs = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
@@ -306,7 +301,6 @@ class sonarqube extends control
 
         $this->view->sonarqube            = $sonarqube;
         $this->view->keyword              = urldecode(urldecode($keyword));
-        $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
@@ -317,6 +311,7 @@ class sonarqube extends control
     }
 
     /**
+     * 创建一个sonarqube 项目。
      * Creat a sonarqube project.
      *
      * @param  int     $sonarqubeID
@@ -340,6 +335,7 @@ class sonarqube extends control
     }
 
     /**
+     * 删除一个sonarqube项目。
      * Delete project.
      *
      * @param  int    $sonarqubeID
@@ -360,6 +356,7 @@ class sonarqube extends control
     }
 
     /**
+     * soanrqueb 项目问题列表。
      * Browse sonarqube issue.
      *
      * @param  int    $sonarqubeID
@@ -372,7 +369,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recPerPage = 100, $pageID = 1)
+    public function browseIssue(int $sonarqubeID, string $projectKey = '', bool $search = false, string $orderBy = 'severity_desc', int $recPerPage = 100, int $pageID = 1)
     {
         $projectKey = str_replace('*', '-', $projectKey);
         if(isset($_POST['keyword']))
@@ -388,34 +385,7 @@ class sonarqube extends control
             if($search) $keyword = $this->session->sonarqubeIssueKeyword;
         }
 
-        ini_set('memory_limit', '1024M');
-
-        $cacheFile = $this->sonarqube->getCacheFile($sonarqubeID, $projectKey);
-        if(!$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->sonarqube->cacheTime)
-        {
-            $sonarqubeIssueList = $this->sonarqube->apiGetIssues($sonarqubeID, $projectKey);
-            foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
-            {
-                if(!isset($sonarqubeIssue->line)) $sonarqubeIssue->line = '';
-                if(!isset($sonarqubeIssue->effort)) $sonarqubeIssue->effort = '';
-                $sonarqubeIssue->message      = htmlspecialchars($sonarqubeIssue->message);
-                $sonarqubeIssue->creationDate = date('Y-m-d H:i:s', strtotime($sonarqubeIssue->creationDate));
-
-                list(, $file) = explode(':', $sonarqubeIssue->component);
-                $sonarqubeIssue->file = $file;
-            }
-
-            if($cacheFile && !file_exists($cacheFile . '.lock'))
-            {
-                touch($cacheFile . '.lock');
-                file_put_contents($cacheFile, serialize($sonarqubeIssueList));
-                unlink($cacheFile . '.lock');
-            }
-        }
-        else
-        {
-            $sonarqubeIssueList = unserialize(file_get_contents($cacheFile));
-        }
+        $sonarqubeIssueList = $this->sonarqubeZen->getIssueList($sonarqubeID, $projectKey);
 
         /* Data search. */
         if($keyword)
@@ -427,26 +397,15 @@ class sonarqube extends control
             $sonarqubeIssueList = array_values($sonarqubeIssueList);
         }
 
-         /* Data sort. */
-        list($order, $sort) = explode('_', $orderBy);
-        $orderList = array();
-        foreach($sonarqubeIssueList as $sonarqubeIssue) $orderList[] = $sonarqubeIssue->$order;
-        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeIssueList);
+        $sonarqubeIssueList = $this->sonarqubeZen->sortAndPage($sonarqubeIssueList, $orderBy, $recPerPage, $pageID);
 
         /* Get product. */
         $products  = $this->sonarqube->getLinkedProducts($sonarqubeID, $projectKey);
         $productID = current(explode(',', $products));
 
-        /* Pager. */
-        $this->app->loadClass('pager', true);
-        $recTotal = count($sonarqubeIssueList);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
-        $sonarqubeIssueList = array_chunk($sonarqubeIssueList, $pager->recPerPage);
-
         $this->view->projectKey         = $projectKey;
         $this->view->search             = $search;
         $this->view->keyword            = $keyword;
-        $this->view->pager              = $pager;
         $this->view->title              = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseIssue;
         $this->view->sonarqubeID        = $sonarqubeID;
         $this->view->sonarqube          = $this->loadModel('pipeline')->getByID($sonarqubeID);
