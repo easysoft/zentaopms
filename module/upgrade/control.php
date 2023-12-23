@@ -277,7 +277,7 @@ class upgrade extends control
         /* Get no merged projects that link more than two products. */
         if($type == 'moreLink') $this->upgradeZen->assignSprintsWithMoreProducts();
 
-        $programs = $this->loadModel('program')->getPairs(true, 'id_asc');
+        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchPairs();
         $currentProgramID = $programID ? $programID : key($programs);
 
         $this->view->title       = $this->lang->upgrade->mergeProgram;
