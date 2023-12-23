@@ -411,7 +411,7 @@ class project extends control
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
             /* Link the plan stories. */
-            if(($project->hasProduct) && !empty($this->post->plans)) $this->project->addPlans($projectID, $this->post->plans);
+            if(($project->hasProduct) && $this->post->plans) $this->project->addPlans($projectID, $this->post->plans);
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
