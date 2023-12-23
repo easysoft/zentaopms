@@ -112,6 +112,52 @@ class pivotTao extends pivotModel
     }
 
     /**
+     * 获取产品计划的需求统计信息。
+     * Get product demand statistics information.
+     *
+     * @param  array     $products
+     * @param  array     $plans
+     * @param  array     $plannedStories
+     * @param  array     $unplannedStories
+     * @access protected
+     * @return void
+     */
+    protected function getPlanStatusStatistics(array &$products, array $plans, array $plannedStories, array $unplannedStories): void
+    {
+        /* 统计已经计划过的产品计划的需求状态信息。 */
+        /* Statistics of demand status information for planned product plans. */
+        foreach($plannedStories as $story)
+        {
+            $storyPlans = strpos($story->plan, ',') !== false ? $storyPlans = explode(',', trim($story->plan, ',')) : array($story->plan);
+            foreach($storyPlans as $planID)
+            {
+                if(!isset($plans[$planID])) continue;
+                $plan = $plans[$planID];
+                $products[$plan->product]->plans[$planID]->status[$story->status] = isset($products[$plan->product]->plans[$planID]->status[$story->status]) ? $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
+            }
+        }
+
+        /* 统计还未计划的产品计划的需求状态信息。 */
+        /* Statistics of demand status information for unplanned product plans. */
+        foreach($unplannedStories as $story)
+        {
+            $product = $story->product;
+            if(isset($products[$product]))
+            {
+                if(!isset($products[$product]->plans[0]))
+                {
+                    $products[$product]->plans[0] = new stdClass();
+                    $products[$product]->plans[0]->title = $this->lang->pivot->unplanned;
+                    $products[$product]->plans[0]->begin = '';
+                    $products[$product]->plans[0]->end   = '';
+                }
+                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
+            }
+        }
+    }
+
+
+    /**
      * 获取执行列表。
      * Get execution list.
      *
