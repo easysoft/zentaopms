@@ -50,8 +50,8 @@ $laneType     = array('story', 'bug', 'task');
 
 $kanbanTester = new kanbanTest();
 
-r($kanbanTester->buildExecutionCardTest($cardIdList[0], $columnIdList[0], $laneType[0], ''))     && p('id,title') && e('1,~~');         // 构造看板卡片，查看id和title
+r($kanbanTester->buildExecutionCardTest($cardIdList[0], $columnIdList[0], $laneType[0], ''))     && p('id,title') && e('1,``');         // 构造看板卡片，查看id和title
 r($kanbanTester->buildExecutionCardTest($cardIdList[1], $columnIdList[1], $laneType[1], '测试')) && p('id,title') && e('0,0');          // 构造看板卡片，查看id和title
 r($kanbanTester->buildExecutionCardTest($cardIdList[2], $columnIdList[2], $laneType[2], ''))     && p('id,title') && e('3,开发任务13'); // 构造看板卡片，查看id和title
 r($kanbanTester->buildExecutionCardTest($cardIdList[3], $columnIdList[3], $laneType[0], 'test')) && p('id,title') && e('0,0');          // 构造看板卡片，查看id和title
-r($kanbanTester->buildExecutionCardTest($cardIdList[4], $columnIdList[4], $laneType[1], ''))     && p('id,title') && e('5,~~');         // 构造看板卡片，查看id和title
+r($kanbanTester->buildExecutionCardTest($cardIdList[4], $columnIdList[4], $laneType[1], ''))     && p('id,title') && e('5,``');         // 构造看板卡片，查看id和title
