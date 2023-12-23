@@ -366,7 +366,7 @@ $data = array();
 $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink');
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
-    $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
+    $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
     if($storyType == 'requirement') $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
 }
 
