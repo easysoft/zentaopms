@@ -15,7 +15,7 @@ if(!$longBlock)
 {
     unset($config->block->product->dtable->fieldList['progress']);
     unset($config->block->product->dtable->fieldList['plans']);
-    unset($config->block->product->dtable->fieldList['activeBugs']);
+    unset($config->block->product->dtable->fieldList['unresolvedBugs']);
 }
 
 foreach($productStats as $product)
@@ -26,6 +26,8 @@ foreach($productStats as $product)
         $product->POAvatar  = zget($avatarList, $product->PO);
         $product->POAccount = $product->PO;
     }
+    $product->progress = $product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories * 100);
+    if($product->progress) $product->progress .= '%';
 }
 
 blockPanel
