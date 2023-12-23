@@ -1,5 +1,10 @@
 #!/usr/bin/env php
 <?php
+/**
+title=count_of_delayed_bug_in_user
+timeout=0
+cid=1
+*/
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
@@ -9,14 +14,6 @@ zdTable('bug')->config('bug_resolution_status', $useCommon = true, $levels = 4)-
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
-
-/**
-
-title=count_of_delayed_bug_in_user
-cid=1
-pid=1
-
-*/
 
 r(count($calc->getResult())) && p('') && e('4'); // 测试分组数。
 
