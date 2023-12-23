@@ -46,6 +46,7 @@ class repoZen extends repo
             ->setDefault('product', '')->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
+        if(strpos($repo->client, ' ')) $repo->client = "\"{$repo->client}\"";
 
         $acl = $this->checkACL();
         if(!$acl) return false;
@@ -178,6 +179,7 @@ class repoZen extends repo
             ->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
+        if(strpos($repo->client, ' ')) $repo->client = "\"{$repo->client}\"";
 
         if($repo->path != $oldRepo->path) $repo->synced = 0;
 
@@ -256,12 +258,6 @@ class repoZen extends repo
         if(!$this->post->client)
         {
             dao::$errors['client'] = sprintf($this->lang->error->notempty, $this->lang->repo->client);
-            return false;
-        }
-
-        if(strpos($this->post->client, ' '))
-        {
-            dao::$errors['client'] = $this->lang->repo->error->clientPath;
             return false;
         }
 
@@ -505,6 +501,7 @@ class repoZen extends repo
     protected function buildEditForm(int $repoID, int $objectID): void
     {
         $repo = $this->repo->getByID($repoID);
+        $repo->client = trim($repo->client, '"');
         $this->app->loadLang('action');
 
         $scm = strtolower($repo->SCM);
