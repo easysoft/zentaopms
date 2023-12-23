@@ -6770,12 +6770,12 @@ class upgradeModel extends model
         $this->loadModel('dataset');
         $this->loadModel('dataview');
 
-        $this->upgradeTao->ConvertBuiltInDataSet();
+        $this->upgradeTao->convertBuiltInDataSet();
 
         $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
         if(empty($customDataset)) return true;
 
-        $this->upgradeTao->ConvertCustomDataSet($customDataset);
+        $this->upgradeTao->convertCustomDataSet($customDataset);
 
         return true;
     }

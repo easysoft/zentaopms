@@ -37,7 +37,7 @@ class upgradeTao extends upgradeModel
      * @access protected
      * @return void
      */
-    protected function ConvertBuiltInDataSet(): void
+    protected function convertBuiltInDataSet(): void
     {
         $dataview = new stdclass();
         $dataview->group       = $this->getDataviewGroupID($this->lang->dataview->builtIn);
@@ -103,7 +103,7 @@ class upgradeTao extends upgradeModel
      * @access protected
      * @return void
      */
-    protected function ConvertCustomDataSet(array $customDataset): void
+    protected function convertCustomDataSet(array $customDataset): void
     {
         $dataview = new stdclass();
         $dataview->group = $this->getDataviewGroupID($this->lang->dataview->default);
