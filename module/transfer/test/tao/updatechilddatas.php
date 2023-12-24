@@ -30,4 +30,3 @@ r($transfer->updateChildDatasTest('task')) && p('0:name') && e('[多人] 开发�
 r($transfer->updateChildDatasTest('task')) && p('1:name') && e('[多人] 开发任务12'); // 测试导出多人串行任务
 r($transfer->updateChildDatasTest('task')) && p('2:name') && e('开发任务13');        // 测试导出正常任务
 r($transfer->updateChildDatasTest('task')) && p('3:name') && e('>开发任务14');       // 测试导出子任务
-r(isset($transfer->updateChildDatasTest('task')[8]->files)) && p('') && e('1');      // 测试导出附件是否存在

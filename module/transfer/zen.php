@@ -35,7 +35,7 @@ class transferZen extends transfer
      * 获取Excel中的数据。
      * Get rows from excel.
      *
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getRowsFromExcel(): array
@@ -59,7 +59,7 @@ class transferZen extends transfer
      * @param  array     $datas
      * @param  int       $pagerID
      * @access protected
-     * @return void
+     * @return object
      */
     protected function getPageDatas(array $datas, int $pagerID = 1)
     {
@@ -157,7 +157,7 @@ class transferZen extends transfer
      * @param  string    $module
      * @param  string    $fields
      * @access protected
-     * @return string
+     * @return void
      */
     protected function initTemplateFields(string $module, string $fields = ''): array
     {
@@ -170,7 +170,7 @@ class transferZen extends transfer
         $list = $this->transfer->setListValue($module, $fieldList);
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
-        $fields = $this->transfer->getExportDatas($fieldList);
+        $fields = $this->transfer->generateExportDatas($fieldList);
 
         $this->post->set('fields', $fields['fields']);
         $this->post->set('kind', isset($_POST['kind']) ? $_POST['kind'] : $module);
@@ -215,8 +215,8 @@ class transferZen extends transfer
      * 创建临时文件。
      * Create tmpFile.
      *
-     * @param  array  $objectDatas
-     * @access public
+     * @param  array     $objectDatas
+     * @access protected
      * @return void
      */
     protected function createTmpFile(array $objectDatas)
@@ -235,7 +235,7 @@ class transferZen extends transfer
      * Check tmp file.
      *
      * @access protected
-     * @return void
+     * @return string|false
      */
     protected function checkTmpFile()
     {
@@ -254,7 +254,7 @@ class transferZen extends transfer
      * Check suhosin info.
      *
      * @param  array  $datas
-     * @access public
+     * @access protected
      * @return string
      */
     protected function checkSuhosinInfo(array $datas = array()): string
@@ -277,7 +277,7 @@ class transferZen extends transfer
      * @param  int    $pagerID
      * @param  string $insert
      * @param  string $filter
-     * @access public
+     * @access protected
      * @return object
      */
     protected function readExcel(string $module = '', int $pagerID = 1, string $insert = '', string $filter = ''): object
@@ -291,7 +291,7 @@ class transferZen extends transfer
 
         /* 获取分页后的数据。*/
         /* Get page by datas. */
-        $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);
+        $datas        = $this->getPageDatas($formatDatas, $pagerID);
         $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
         $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
 
@@ -317,7 +317,7 @@ class transferZen extends transfer
      * @param  string $fields
      * @param  int    $pagerID
      * @param  string $module
-     * @access public
+     * @access protected
      * @return string
      */
     protected function buildNextList(array $list = array(), int $lastID = 0, string $fields = '', int $pagerID = 1, string $module = ''): string
@@ -427,10 +427,10 @@ class transferZen extends transfer
      * 处理用例步骤描述和预期结果。
      * Process stepExpect、stepDesc and precondition for testcase.
      *
-     * @param  int    $field
-     * @param  int    $datas
-     * @param  int    $key
-     * @access public
+     * @param  string    $field
+     * @param  array     $datas
+     * @param  int       $key
+     * @access protected
      * @return string
      */
     protected function process4Testcase(string $field, array $datas, int $key = 0): string
@@ -484,19 +484,19 @@ class transferZen extends transfer
      * 格式化导入导出标准数据格式。
      * Format standard data format.
      *
-     * @param  string $module
-     * @param  string $filter
-     * @access public
+     * @param  string    $module
+     * @param  string    $filter
+     * @access protected
      * @return array
      */
-    public function format(string $module = '', string $filter = '')
+    protected function format(string $module = '', string $filter = '')
     {
         /* Bulid import paris (field => name). */
-        $fields  = $this->transferZen->getImportFields($module);
+        $fields  = $this->transferTao->getImportFields($module);
 
         /* 检查临时文件是否存在并返回完成路径。 */
         /* Check tmpfile. */
-        $tmpFile = $this->transferZen->checkTmpFile();
+        $tmpFile = $this->checkTmpFile();
 
         /* 如果临时文件存在,则读取临时文件i，否则就创建临时文件。 */
         /* If tmp file exists, read tmp file, otherwise create tmp file. */
@@ -506,7 +506,7 @@ class transferZen extends transfer
             $moduleData = $this->processRows4Fields($rows, $fields);  // 处理Excel中的数据过滤无效字段
             $moduleData = $this->transferTao->parseExcelDropdownValues($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
 
-            $this->transferZen->createTmpFile($moduleData); //将格式化后的数据写入临时文件中
+            $this->createTmpFile($moduleData); //将格式化后的数据写入临时文件中
         }
         else
         {
@@ -523,12 +523,12 @@ class transferZen extends transfer
      * 初始化工作流字段。
      * Init workflow fieldList.
      *
-     * @param  string $module
-     * @param  array  $fieldList
-     * @access public
+     * @param  string    $module
+     * @param  array     $fieldList
+     * @access protected
      * @return void
      */
-    public function initWorkflowFieldList(string $module, array $fieldList)
+    protected function initWorkflowFieldList(string $module, array $fieldList)
     {
         $this->loadModel($module);
         /* Set workflow fields. */

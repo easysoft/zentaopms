@@ -20,14 +20,9 @@ $config->transfer->sysDataFields  = 'project,execution,product,user';
 $config->transfer->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,resolvedBy,reviewedBy,mailto';
 $config->transfer->textareaFields = 'spec,desc';
 
-$config->transfer->defaultZeroField  = 'severity,pri';
-$config->transfer->defaultEmptyField = '';
-
 $config->transfer->import = new stdClass();
 
 $config->transfer->dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/';
-
-$config->transfer->hasChildDataFields = explode(',', 'task,story');
 
 $config->transfer->requiredFields = array('module', 'pri');
 $config->transfer->actionModule   = array('task');

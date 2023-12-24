@@ -96,7 +96,7 @@ class transferTao extends transferModel
      *
      * @param  array  $module
      * @param  array  $lists
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getCascadeList(string $module, array $lists): array
@@ -186,7 +186,7 @@ class transferTao extends transferModel
      * Config import fields.
      *
      * @param  string $module
-     * @access public
+     * @access protected
      * @return array
      */
     protected function getImportFields(string $module = '')
@@ -225,8 +225,8 @@ class transferTao extends transferModel
      * 更新子数据。
      * Update children datas.
      *
-     * @param array $datas
-     * @access public
+     * @param  array $datas
+     * @access protected
      * @return array
      */
     protected function updateChildDatas(array $datas)
