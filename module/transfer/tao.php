@@ -235,29 +235,29 @@ class transferTao extends transferModel
         foreach($datas as $data)
         {
             $id = $data->id;
-            if(!empty($data->mode)) $datas[$id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
+            if(!empty($data->mode)) $datas[$id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name; //任务类型（多人任务/单人任务）
             if(!empty($data->parent) and isset($datas[$data->parent]))
             {
+                /* 根据name或title获取父数据。*/
+                /* Get parent data by name or title. */
                 if(!empty($data->name)) $data->name = '>' . $data->name;
                 elseif(!empty($data->title)) $data->title = '>' . $data->title;
                 $children[$data->parent][$id] = $data;
                 unset($datas[$id]);
             }
         }
+        if(empty($children)) return $datas;
 
+        /* 如果存在子数据,则将子数据插入到父数据之后。*/
         /* Move child data after parent data. */
-        if(!empty($children))
+        $position = 0;
+        foreach($datas as $data)
         {
-            $position = 0;
-            foreach($datas as $data)
-            {
-                $position ++;
-                if(isset($children[$data->id]))
-                {
-                    array_splice($datas, $position, 0, $children[$data->id]);
-                    $position += count($children[$data->id]);
-                }
-            }
+            $position ++;
+            if(!isset($children[$data->id])) continue;
+
+            array_splice($datas, $position, 0, $children[$data->id]);
+            $position += count($children[$data->id]);
         }
 
         return $datas;
