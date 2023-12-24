@@ -264,66 +264,6 @@ class transferTao extends transferModel
     }
 
     /**
-     * 处理行数据。
-     * Process rows for fields.
-     *
-     * @param  array  $rows
-     * @param  array  $fields
-     * @access public
-     * @return array
-     */
-    protected function processRows4Fields($rows = array(), $fields = array())
-    {
-        $objectDatas = array();
-
-        foreach($rows as $currentRow => $row)
-        {
-            $tmpArray = new stdClass();
-            foreach($row as $currentColumn => $cellValue)
-            {
-                if($currentRow == 1)
-                {
-                    $field = array_search($cellValue, $fields);
-                    $columnKey[$currentColumn] = $field ? $field : '';
-                    continue;
-                }
-
-                if(empty($columnKey[$currentColumn]))
-                {
-                    $currentColumn++;
-                    continue;
-                }
-
-                $field = $columnKey[$currentColumn];
-                $currentColumn++;
-
-                /* Check empty data. */
-                if(empty($cellValue))
-                {
-                    $tmpArray->$field = '';
-                    continue;
-                }
-
-                $tmpArray->$field = $cellValue;
-            }
-
-            if(!empty($tmpArray->title) and !empty($tmpArray->name)) $objectDatas[$currentRow] = $tmpArray;
-            unset($tmpArray);
-        }
-
-        if(empty($objectDatas))
-        {
-            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            echo js::alert($this->lang->excel->noData);
-            return print(js::locate('back'));
-        }
-
-        return $objectDatas;
-    }
-
-    /**
      * 设置导出用户需求相关相关研发需求数据。
      * Process LinkStories datas.
      *

@@ -503,7 +503,7 @@ class transferZen extends transfer
         if(!$tmpFile)
         {
             $rows       = $this->getRowsFromExcel();  // 从Excel中获取数据
-            $moduleData = $this->transferTao->processRows4Fields($rows, $fields);  // 将读取到的数据格式化成关联数组
+            $moduleData = $this->processRows4Fields($rows, $fields);  // 处理Excel中的数据过滤无效字段
             $moduleData = $this->transferTao->parseExcelDropdownValues($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
 
             $this->transferZen->createTmpFile($moduleData); //将格式化后的数据写入临时文件中
@@ -555,5 +555,57 @@ class transferZen extends transfer
                 $this->config->$module->listFields .=  ',' . $field->field;
             }
         }
+    }
+
+    /**
+     * 处理行数据。
+     * Process rows for fields.
+     *
+     * @param  array     $rows
+     * @param  array     $fields
+     * @access protected
+     * @return array
+     */
+    protected function processRows4Fields($rows = array(), $fields = array())
+    {
+        $objectDatas = array();
+        foreach($rows as $currentRow => $row)
+        {
+            $tmpArray = new stdClass();
+            foreach($row as $currentColumn => $cellValue)
+            {
+                /* 第一行是标题字段。*/
+                /* First row is title field. */
+                if($currentRow == 1)
+                {
+                    $field = array_search($cellValue, $fields); //找出要导入的字段
+                    $columnKey[$currentColumn] = $field ? $field : '';
+                    continue;
+                }
+
+                $currentColumn++;
+                if(empty($columnKey[$currentColumn])) continue;
+                $field = $columnKey[$currentColumn];
+
+                /* Check empty data. */
+                $tmpArray->$field = empty($cellValue) ? '' : $cellValue;
+            }
+
+            if(!empty($tmpArray->title) and !empty($tmpArray->name)) $objectDatas[$currentRow] = $tmpArray;
+            unset($tmpArray);
+        }
+
+        if(empty($objectDatas))
+        {
+            /* 删除临时文件和SESSION记录。*/
+            /* Delete tmp file and session record. */
+            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($this->lang->excel->noData);
+            return print(js::locate('back'));
+        }
+
+        return $objectDatas;
     }
 }
