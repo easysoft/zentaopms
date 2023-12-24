@@ -620,7 +620,7 @@ class docModel extends model
         list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
         foreach($docs as $docID => $doc)
         {
-            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu((int)$doc->lib, 'doc', 0, 0, 'nodeleted', 'all', ' > ');
+            if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu((int)$doc->lib, 'doc', 0, 'all', 'nodeleted', 'all', ' > ');
             $doc->moduleName = zget($modules[$doc->lib], $doc->module);
             $doc->moduleName = ltrim($doc->moduleName, '/');
 

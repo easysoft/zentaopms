@@ -820,7 +820,7 @@ class bugZen extends bug
     protected function setOptionMenu(object $bug, object $product): object
     {
         $bug = $this->getBugBranches($bug, $product);
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 'all' : (string)$bug->branch);
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
         $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -1194,7 +1194,7 @@ class bugZen extends bug
         $execution = $this->loadModel('execution')->getByID($bug->execution);
 
         /* Get module option menu. */
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, 'bug', 0, (string)$bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName((array)$bug->module);
 
         /* Get bugs of current product. */
@@ -1416,7 +1416,7 @@ class bugZen extends bug
         $this->view->builds           = $builds;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 0 : (int)$branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 'all' : (string)$branch);
     }
 
     /**
