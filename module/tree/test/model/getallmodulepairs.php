@@ -1,26 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->getAllModulePairs();
+timeout=0
 cid=1
-pid=1
 
-测试获取默认(task)的模块信息 >> 3601
-测试获取默认(task)的模块信息 >> 1501
-测试获取默认(task)的模块信息 >> 1501
-测试获取默认(task)的模块信息 >> 3601
+- 测试获取默认类型的模块数量 @41
+- 测试获取Bug类型的模块数量 @31
+- 测试获取Case类型的模块数量 @66
+- 测试获取Task类型的模块数量 @21
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+su('admin');
+
+zdTable('module')->config('module')->gen(100);
+
 $type = array('bug', 'case', 'task');
 
 $tree = new treeTest();
 
-r($tree->getAllModulePairsTest())         && p() && e('3601'); // 测试获取默认(task)的模块信息
-r($tree->getAllModulePairsTest($type[0])) && p() && e('1501'); // 测试获取默认(task)的模块信息
-r($tree->getAllModulePairsTest($type[1])) && p() && e('1501'); // 测试获取默认(task)的模块信息
-r($tree->getAllModulePairsTest($type[2])) && p() && e('3601'); // 测试获取默认(task)的模块信息
+r($tree->getAllModulePairsTest())        && p() && e('41'); // 测试获取默认类型task的模块数量
+r($tree->getAllModulePairsTest('bug'))   && p() && e('41'); // 测试获取Bug类型的模块数量
+r($tree->getAllModulePairsTest('case'))  && p() && e('41'); // 测试获取Case类型的模块数量
+r($tree->getAllModulePairsTest('task'))  && p() && e('41'); // 测试获取Task类型的模块数量
+r($tree->getAllModulePairsTest('story')) && p() && e('21'); // 测试获取Story类型的模块数量

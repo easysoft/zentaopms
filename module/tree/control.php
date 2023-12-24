@@ -156,7 +156,7 @@ class tree extends control
         }
         elseif($type != 'chart')
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch|nodeleted');
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, (string)$module->branch, 'noMainBranch|nodeleted');
         }
 
         $this->view->name   = $type == 'line' ? $this->lang->tree->line : $this->lang->tree->name;
@@ -229,7 +229,7 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function manageChild($rootID, $viewType)
+    public function manageChild(int $rootID, string $viewType)
     {
         if(!empty($_POST))
         {
@@ -304,7 +304,7 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu(int $rootID, string $viewType = 'story', string $branch = '0', int $rootModuleID = 0, string $returnType = 'html', string $fieldID = '', string $extra = 'nodeleted', int $currentModuleID = 0)
+    public function ajaxGetOptionMenu(int $rootID, string $viewType = 'story', string $branch = 'all', int $rootModuleID = 0, string $returnType = 'html', string $fieldID = '', string $extra = 'nodeleted', int $currentModuleID = 0)
     {
         if($viewType == 'task')
         {
@@ -312,7 +312,7 @@ class tree extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, (int)$branch, $extra);
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch, $extra);
         }
 
         if(strpos($extra, 'excludeModuleID') !== false)
@@ -402,7 +402,7 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetModules(int $productID, string $viewType = 'story', int $branchID = 0, int $number = 0, int $currentModuleID = 0, string $from = '')
+    public function ajaxGetModules(int $productID, string $viewType = 'story', string $branchID = '0', int $number = 0, int $currentModuleID = 0, string $from = '')
     {
         $currentModule   = $this->tree->getById($currentModuleID);
         $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;

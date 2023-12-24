@@ -1,37 +1,26 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->getModulePairs();
+timeout=0
 cid=1
-pid=1
 
-测试获取root 1 type story 的树结构 >> 12
-测试获取root 2 type story 的树结构 >> 12
-测试获取root 3 type story 的树结构 >> 12
-测试获取root 41 type story 的树结构 >> 12
-测试获取root 42 type story 的树结构 >> 12
-测试获取root 43 type story 的树结构 >> 12
-测试获取root 101 type task 的树结构 >> 40
-测试获取root 102 type task 的树结构 >> 40
-测试获取root 103 type task 的树结构 >> 40
+- 测试获取root 1 type story 的树结构 @10
+- 测试获取root 1 type task  的树结构 @10
+- 测试获取root 1 type case  的树结构 @20
+- 测试获取root 1 type bug   的树结构 @20
 
 */
-$root = array(1, 2, 3, 41, 42, 43, 101, 102, 103);
-$type = array('story', 'task');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+
+su('admin');
 
 $tree = new treeTest();
 
-r($tree->getModulePairsTest($root[0], $type[0])) && p() && e('12'); // 测试获取root 1 type story 的树结构
-r($tree->getModulePairsTest($root[1], $type[0])) && p() && e('12'); // 测试获取root 2 type story 的树结构
-r($tree->getModulePairsTest($root[2], $type[0])) && p() && e('12'); // 测试获取root 3 type story 的树结构
-r($tree->getModulePairsTest($root[3], $type[0])) && p() && e('12'); // 测试获取root 41 type story 的树结构
-r($tree->getModulePairsTest($root[4], $type[0])) && p() && e('12'); // 测试获取root 42 type story 的树结构
-r($tree->getModulePairsTest($root[5], $type[0])) && p() && e('12'); // 测试获取root 43 type story 的树结构
-r($tree->getModulePairsTest($root[6], $type[1])) && p() && e('40'); // 测试获取root 101 type task 的树结构
-r($tree->getModulePairsTest($root[7], $type[1])) && p() && e('40'); // 测试获取root 102 type task 的树结构
-r($tree->getModulePairsTest($root[8], $type[1])) && p() && e('40'); // 测试获取root 103 type task 的树结构
+r($tree->getModulePairsTest(1, 'story')) && p() && e('10'); // 测试获取root 1 type story 的树结构
+r($tree->getModulePairsTest(1, 'task'))  && p() && e('10'); // 测试获取root 1 type task  的树结构
+r($tree->getModulePairsTest(1, 'case'))  && p() && e('20'); // 测试获取root 1 type case  的树结构
+r($tree->getModulePairsTest(1, 'bug'))   && p() && e('20'); // 测试获取root 1 type bug   的树结构

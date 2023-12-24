@@ -3,21 +3,27 @@ author: Shujie Tian
 version: "1.0"
 fields:
   - field: id
-    range: 1-100
+    range: 1-10000
   - field: root
-    range: 1-10{10!}
+    range: 1{5},2{5},1{5},41{5}
   - field: branch
     range: 0{5},1-5{5},0{70}
   - field: name
     range: 1-100
     prefix: 模块
   - field: parent
-    range: 0{2},1{1},2{1},0{2},6{3},0{91}
+    range: 0{5},1,2,3,4,5
   - field: path
-    range: "`,1,`,`,2,`,`,1,3,`,`,2,4,`,`,5,`,`,6,`,`,6,7,`,`,6,8,`,`,6,9,`,`,10,`,`,11,`,`,12,`,`,13,`,`,14,`,`,15,`,`,16,`,`,17,`,`,18,`,`,19,`,`,20,`"
+    fields:
+      - field: path1
+        range: "``,``,``,``,``,`,1`,`,2`,`,3`,`,4`,`,5`"
+      - field: path2
+        prefix: ","
+        range: 1-1000
+        postfix: ","
   - field: grade
-    range: 1{2},2{2},1{2},2{3},1{91}
+    range: 1{5},2{5}
   - field: type
-    range: task{10},story{10},doc{10},bug{10}
+    range: task,story,doc,bug,case
   - field: deleted
     range: 0

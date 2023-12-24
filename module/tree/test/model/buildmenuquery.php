@@ -7,20 +7,30 @@ su('admin');
 /**
 
 title=测试 treeModel->buildMenuQuery();
+timeout=0
 cid=1
-pid=1
 
-测试查询root 1 type story 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '1' AND  type  = 'story' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 2 type story 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '2' AND  type  = 'story' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 3 type story 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '3' AND  type  = 'story' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 41 type story 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '41' AND  type  = 'story' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 42 type story 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '42' AND  type  = 'story' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 43 type story 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '43' AND  type  = 'story' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 101 type task 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '101' AND  type  = 'task' AND  deleted  = '0' ORDER BY `grade` desc,`order`,`type` desc
-测试查询root 102 type task 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '102' AND  type  = 'task' AND  deleted  = '0' ORDER BY `grade` desc,`order`,`type` desc
-测试查询root 103 type task 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '103' AND  type  = 'task' AND  deleted  = '0' ORDER BY `grade` desc,`order`,`type` desc
-测试查询root 41 type story startModule 1821的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '41' AND  type  = 'story' AND  path  LIKE ',1821,%' AND  deleted  = '0' ORDER BY `grade` desc,`order`
-测试查询root 41 type story startModule 0 branch 1 的查询语句 >> SELECT * FROM `zt_module` WHERE root  = '41' AND  type  = 'story' AND  path  LIKE ',1982,%' AND  (branch  = '0' OR branch  = '1
+- 测试查询root 1 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '1' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 2 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '2' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 3 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '3' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 41 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 42 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '42' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 43 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '43' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 101 type task 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '101' AND  `type` = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 102 type task 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '102' AND  `type` = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 103 type task 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '103' AND  `type` = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 41 type story startModule 1821的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND  `type` = 'story' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
+
+- 测试查询root 41 type story startModule 0 branch 1 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND  `type` = 'story' AND  (branch  = '0' OR `branch`  = '1') AND  `deleted`  = '0' ORDER BY `grade` desc,`order`
 
 */
 

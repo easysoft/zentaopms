@@ -61,14 +61,14 @@ class treeTest
     /**
      * Test create an option menu in html.
      *
-     * @param  int    $rootID
-     * @param  string $type
-     * @param  int    $startModule
-     * @param  int    $branch
+     * @param  int          $rootID
+     * @param  string       $type
+     * @param  int          $startModule
+     * @param  string|array $branch
      * @access public
      * @return array
      */
-    public function getOptionMenuTest(int $rootID, string $type = 'story', int $startModule = 0, int|string $branch = 0): array
+    public function getOptionMenuTest(int $rootID, string $type = 'story', int $startModule = 0, string|array $branch = 'all'): array
     {
         $objects = $this->objectModel->getOptionMenu($rootID, $type, $startModule, $branch);
 
