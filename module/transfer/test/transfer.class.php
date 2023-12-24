@@ -45,8 +45,9 @@ class transferTest
                 $app->config->story->dtable->fieldList['module']['control']  = 'multiple';
                 break;
             case 'task':
-                $app->config->task->templateFields = 'project,execution,module,story,pri,estimate,consumed,deadline';
-                $app->config->task->listFields     = 'project,execution,module,pri';
+                $app->config->task->templateFields = 'project,execution,module,type,story,pri,estimate,consumed,deadline';
+                $app->config->task->listFields     = 'project,execution,module,pri,type';
+                $app->config->task->dtable->fieldList['project']['control'] = 'select';
                 break;
         }
     }
@@ -283,6 +284,7 @@ class transferTest
     }
 
     /**
+     * 导出测试。
      * exportTest
      *
      * @param  string $module
@@ -299,5 +301,25 @@ class transferTest
         $this->objectModel->export($module);
         $_POST['count'] = count($_POST['rows']);
         return $_POST;
+    }
+
+    /**
+     * 测试generateExportDatas。
+     * generateExportDatasTest.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function generateExportDatasTest(string $module)
+    {
+        $_POST = array();
+        global $tester;
+        $this->initConfig($module);
+        $_POST['exportFields'] = $tester->config->$module->templateFields;
+        $this->getQueryDatasTest($module);
+        $this->objectModel->export($module);
+        $_POST['count'] = count($_POST['rows']);
+        return $_POST['rows'];
     }
 }

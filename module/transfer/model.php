@@ -11,23 +11,36 @@ declare(strict_types=1);
  */
 class transferModel extends model
 {
-    /* transfer Module configs. */
-    public $transferConfig;
-
-    /* From module configs. */
-    public $moduleConfig;
-
-    /* From module lang. */
-    public $moduleLang;
-
+    /* 最大导入数量。*/
+    /* The max import number. */
     public $maxImport;
 
-    public $moduleFieldList;
+    /* Transfer模块的配置。*/
+    /* Transfer module config. */
+    public $transferConfig;
 
+    /* 导入字段。*/
+    /* Import fields. */
     public $templateFields;
 
+    /* 导出字段。*/
+    /* Export fields. */
     public $exportFields;
 
+    /* 模块配置。*/
+    /* Module config. */
+    public $moduleConfig;
+
+    /* 模块语言项。*/
+    /* Module language. */
+    public $moduleLang;
+
+    /* 模块字段列表。*/
+    /* Module field list. */
+    public $moduleFieldList;
+
+    /* 模块下拉字段列表。*/
+    /* Module list fields. */
     public $moduleListFields;
 
     /**
@@ -99,7 +112,7 @@ class transferModel extends model
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
         /* Get export rows and fields datas. */
-        $exportDatas = $this->getExportDatas($fieldList, $rows);
+        $exportDatas = $this->generateExportDatas($fieldList, $rows);
 
         $fields = $exportDatas['fields'];
         $rows   = !empty($exportDatas['rows']) ? $exportDatas['rows'] : array();
@@ -319,7 +332,6 @@ class transferModel extends model
             if($field == 'user')
             {
                 $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
-
                 unset($dataList[$field]['']);
 
                 if(!in_array(strtolower($this->app->methodName), array('ajaxgettbody', 'ajaxgetoptions', 'showimport'))) foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
@@ -353,17 +365,16 @@ class transferModel extends model
     }
 
     /**
-     * Get ExportDatas.
+     * 生成导出数据。
+     * Generate export datas.
      *
      * @param  array  $fieldList
      * @param  array  $rows
      * @access public
      * @return array
      */
-    public function getExportDatas($fieldList, $rows = array())
+    public function generateExportDatas(array $fieldList, array $rows = array())
     {
-        if(empty($fieldList)) return array();
-
         $exportDatas    = array();
         $dataSourceList = array();
 
@@ -376,21 +387,22 @@ class transferModel extends model
                 $dataSourceList[]  = $key;
             }
         }
-
         if(empty($rows)) return $exportDatas;
 
         $exportDatas['user'] = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
 
-        foreach($rows as $id => $values)
+        foreach($rows as $id => $row)
         {
-            foreach($values as $field => $value)
+            foreach($row as $field => $value)
             {
                 if(isset($fieldList[$field]['from']) and $fieldList[$field]['from'] == 'workflow') continue;
                 if(in_array($field, $dataSourceList))
                 {
-                    if($fieldList[$field]['control'] == 'multiple')
+                    /* 处理下拉框数据。*/
+                    /* Deal dropdown values. */
+                    if($fieldList[$field]['control'] == 'select') $rows[$id]->$field = isset($exportDatas[$field][$value]) ? $exportDatas[$field][$value] : $value; // 单选下拉
+                    if($fieldList[$field]['control'] == 'multiple') // 多选下拉
                     {
-                        $multiple     = '';
                         $separator    = $field == 'mailto' ? ',' : "\n";
                         $multipleLsit = explode(',', (string) $value);
 
@@ -398,17 +410,15 @@ class transferModel extends model
                         $multiple = implode($separator, $multipleLsit);
                         $rows[$id]->$field = $multiple;
                     }
-                    else
-                    {
-                        $rows[$id]->$field = zget($exportDatas[$field], $value, $value);
-                    }
                 }
                 elseif(strpos($this->config->transfer->userFields, $field) !== false)
                 {
+                    /* 处理用户字段。*/
                     /* if user deleted when export set userFields is itself. */
                     $rows[$id]->$field = zget($exportDatas['user'], $value);
                 }
 
+                /* 处理为空字段的情况。*/
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
                 if(is_string($value) and ($value == '0' or substr($value, 0, 4) == '0000')) $rows[$id]->$field = '';
             }
