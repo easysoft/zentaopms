@@ -1559,7 +1559,7 @@ class testcaseModel extends model
         $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
         if(count($branches) <= 1) return $modules;
 
-        foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+        foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'case', 0, (string)$branchID);
         return $modules;
     }
 
@@ -1889,19 +1889,17 @@ class testcaseModel extends model
      * 获取场景菜单。
      * Get scene menu.
      *
-     * @param  int        $productID
-     * @param  int        $moduleID
-     * @param  int|string $branch
-     * @param  int        $startScene
-     * @param  int        $currentScene
-     * @param  bool       $emptyMenu
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @param  int    $startScene
+     * @param  int    $currentScene
+     * @param  bool   $emptyMenu
      * @access public
      * @return array
      */
-    public function getSceneMenu(int $productID, int $moduleID = 0, int|string $branch = 0, int $startScene = 0, int $currentScene = 0, bool $emptyMenu = false): array
+    public function getSceneMenu(int $productID, int $moduleID = 0, string $branch = 'all', int $startScene = 0, int $currentScene = 0, bool $emptyMenu = false): array
     {
-        if(empty($branch)) $branch = 0;
-
         $branches = array($branch => '');
         if($branch != 'all')
         {
@@ -2590,7 +2588,7 @@ class testcaseModel extends model
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
 
         $libCases = $this->loadModel('caselib')->getLibCases($libID, 'all');
-        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, (string)$branch);
         if($returnType == 'items')
         {
             $moduleItems = array();

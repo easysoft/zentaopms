@@ -279,7 +279,7 @@ class testcaseZen extends testcase
             $productBranches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
 
-            if(!empty($branches)) $branch = key($branches);
+            if(!empty($branches)) $branch = (string)key($branches);
         }
         else
         {
@@ -288,11 +288,11 @@ class testcaseZen extends testcase
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, (string)$branch);
+        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
 
         $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
-        $this->view->modules  = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
-        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->modules  = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
+        $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
         $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         $this->view->parent   = (int)$this->cookie->lastCaseScene;
         $this->view->product  = $product;
@@ -311,13 +311,13 @@ class testcaseZen extends testcase
     protected function assignEditSceneVars(object $oldScene): void
     {
         $productID = $oldScene->product;
-        $branchID  = $oldScene->branch;
+        $branchID  = (string)$oldScene->branch;
         $moduleID  = $oldScene->module;
         $parentID  = $oldScene->parent;
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, (string)$branchID);
+        $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branchID);
 
         $product = $this->product->getByID($productID);
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
@@ -2327,14 +2327,15 @@ class testcaseZen extends testcase
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $projectID
+     * @param  int    $projectID
+     * @param  int    $moduleID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    private function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $projectID = 0, int $moduleID = 0, int|string $branch = 0): void
+    private function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $projectID = 0, int $moduleID = 0, string $branch = 'all'): void
     {
-        /* 获取产品列表。*/
-        /* Get productList. */
+        /* 获取产品列表。Get productList. */
         if($this->app->tab == 'project' && !$productID)
         {
             $productList = $products;
@@ -2412,13 +2413,13 @@ class testcaseZen extends testcase
      * 获取 xmind 导出的数据。
      * Get export data.
      *
-     * @param  int        $productID
-     * @param  int        $moduleID
-     * @param  int|string $branch
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
      * @access protected
      * @return array
      */
-    protected function getXmindExport(int $productID, int $moduleID, int|string $branch): array
+    protected function getXmindExport(int $productID, int $moduleID, string $branch): array
     {
         $caseList   = $this->testcase->getCaseListForXmindExport($productID, $moduleID);
         $stepList   = $this->testcase->getStepByProductAndModule($productID, $moduleID);
@@ -2433,13 +2434,13 @@ class testcaseZen extends testcase
      * 导出xmind格式用例时获取模块列表。
      * Get module list for xmind export.
      *
-     * @param  int        $productID
-     * @param  int        $moduleID
-     * @param  int|string $branch
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
      * @access public
      * @return array
      */
-    private function getModuleListForXmindExport(int $productID, int $moduleID, int|string $branch): array
+    private function getModuleListForXmindExport(int $productID, int $moduleID, string $branch): array
     {
         if($moduleID)
         {
@@ -2449,7 +2450,7 @@ class testcaseZen extends testcase
             return array($module->id => $module->name);
         }
 
-        $moduleList = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 0 : $branch);
+        $moduleList = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : $branch);
         unset($moduleList['0']);
 
         return $moduleList;
@@ -2873,12 +2874,12 @@ class testcaseZen extends testcase
 
         $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
         $branches  = $this->loadModel('branch')->getPairs($product->id, '' , $projectID);
-        $modules   = $product->type == 'normal' ? $this->tree->getOptionMenu($product->id, 'case', 0, 0) : array();
+        $modules   = $product->type == 'normal' ? $this->tree->getOptionMenu($product->id, 'case', 0, 'all') : array();
 
         foreach($branches as $branchID => $branchName)
         {
             $branches[$branchID] = $branchName . "(#$branchID)";
-            $modules += $this->tree->getOptionMenu($product->id, 'case', 0, $branchID);
+            $modules += $this->tree->getOptionMenu($product->id, 'case', 0, (string)$branchID);
         }
 
         $rows = array();
