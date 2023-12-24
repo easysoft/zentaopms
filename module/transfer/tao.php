@@ -275,7 +275,7 @@ class transferTao extends transferModel
     {
         $storyDatas = end($stories);
         $lastType   = $storyDatas->type;
-        if($storyDatas->type == 'story') return $stories;
+        if(empty($storyDatas->type) || $storyDatas->type == 'story') return $stories;
 
         /* 获取产品ID列表。*/
         /* Get product id list. */
