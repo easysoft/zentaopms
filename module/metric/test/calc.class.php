@@ -690,6 +690,41 @@ class metricTest
     }
 
     /**
+     * Test initActionBtn.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function initActionBtn($metric)
+    {
+        $metrics = $this->objectModel->initActionBtn(array($metric));
+
+        $actions = current($metrics)->actions;
+        foreach($actions as $key => $action)
+        {
+            $actions[$key]['disabled'] = $action['disabled'] ? 'yes' : 'no';
+        }
+        return $actions;
+    }
+
+    /**
+     * Test processPostParams.
+     *
+     * @param  array $keys
+     * @param  array $values
+     * @access public
+     * @return array
+     */
+    public function processPostParams($keys, $values)
+    {
+        $_POST = array();
+        $_POST['varName']    = $keys;
+        $_POST['queryValue'] = $values;
+        return $this->objectModel->processPostParams();
+    }
+
+    /**
      * Test getDateLabels.
      *
      * @param  string $dateType

@@ -2029,24 +2029,6 @@ class metricModel extends model
     }
 
     /**
-     * 获取度量数据的日期类型。
-     * Get date type of metric data.
-     *
-     * @param  array    $dateFields
-     * @access public
-     * @return string
-     */
-    public function getDateByDateType(string $dateType): string
-    {
-        if($dateType == 'day')   $sub = '-7 days';
-        if($dateType == 'week')  $sub = '-1 month';
-        if($dateType == 'month') $sub = '-1 year';
-        if($dateType == 'year')  $sub = '-3 years';
-
-        return date('Y-m-d', strtotime($sub));
-    }
-
-    /**
      * 解析SQL函数。
      * Parsing SQL function.
      *
