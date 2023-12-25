@@ -486,17 +486,18 @@ class zanode extends control
     }
 
     /**
-     * Check service status by ajax.
+     * 获取宿主机服务状态。
+     * AJAX: Get service status.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function ajaxGetServiceStatus($hostID)
+    public function ajaxGetServiceStatus(int $hostID)
     {
         $node          = $this->zanode->getNodeById($hostID);
         $serviceStatus = $this->zanode->getServiceStatus($node);
-        if ($node->status != 'running')
+        if($node->status != 'running')
         {
             $serviceStatus['ZenAgent'] = 'unknown';
             $serviceStatus['ZTF']      = 'unknown';
@@ -508,14 +509,15 @@ class zanode extends control
     }
 
     /**
-     * Install service by ajax.
+     * 安装服务。
+     * AJAX: Install service by ajax.
      *
      * @param  int    $nodeID
      * @param  string $service
      * @access public
      * @return void
      */
-    public function ajaxInstallService($nodeID, $service)
+    public function ajaxInstallService(int $nodeID, string $service)
     {
         $node   = $this->zanode->getNodeById($nodeID);
         $result = $this->zanode->installService($node, $service);
@@ -524,14 +526,15 @@ class zanode extends control
     }
 
     /**
-     * Ajax: get ZTF script.
+     * 获取ZTF脚本。
+     * AJAX: Get ZTF script.
      *
      * @param string $type
      * @param int    $objectID
      * @access public
      * @return void
      */
-    public function ajaxGetZTFScript($type = 'product', $objectID = 0)
+    public function ajaxGetZTFScript(string $type = 'product', int $objectID = 0)
     {
         $script = array();
         if($type == '')        $script = $this->zanode->getAutomationByID($objectID);
@@ -540,14 +543,14 @@ class zanode extends control
     }
 
     /**
-     * Ajax: run ZTF script.
+     * 执行ZTF脚本。
+     * AJAX: Run ZTF script.
      *
      * @param  int    $scriptID
-     * @param  string $taskID
      * @access public
      * @return void
      */
-    public function ajaxRunZTFScript($scriptID = 0, $taskID = 0)
+    public function ajaxRunZTFScript(int $scriptID = 0)
     {
         if($_POST)
         {
@@ -556,20 +559,8 @@ class zanode extends control
             $script     = $this->zanode->getAutomationByID($scriptID);
             $cases      = $this->loadModel('testcase')->getByList($caseIDList);
 
-            $runs = array();
-            if($taskID)
-            {
-                $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
-                ->where('`case`')->in($caseIDList)
-                ->andWhere('task')->eq($taskID)->fi()
-                ->fetchPairs('case', 'id');
-            }
-
-            $caseIDListArray = explode(',', $caseIDList);
-            $runIDListArray  = explode(',', $runIDList);
-            $case2RunMap     = array();
-
-            foreach($caseIDListArray as $index => $caseID) $case2RunMap[$caseID] = empty($runIDListArray[$index]) ? 0 : $runIDListArray[$index];
+            $case2RunMap = array();
+            foreach($caseIDList as $index => $caseID) $case2RunMap[$caseID] = empty($runIDList[$index]) ? 0 : $runIDList[$index];
 
             foreach($cases as $id => $case)
             {
@@ -584,7 +575,8 @@ class zanode extends control
     }
 
     /**
-     * Ajax：get nodes.
+     * 获取执行节点。
+     * AJAX：Get nodes.
      *
      * @access public
      * @return void
