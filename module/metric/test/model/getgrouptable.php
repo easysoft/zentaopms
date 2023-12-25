@@ -12,14 +12,14 @@ $metric = new metricTest();
 
 $resultHeader1[] = array('name' => 'value', 'title' => '数值', 'width' => 96);
 $resultHeader1[] = array('name' => 'calcTime', 'title' => '采集时间', 'width' => 128);
-$resultData1[] = (object) array('value' => 2, 'calcTime' => '2021-11-23 0:01');
-$resultData1[] = (object) array('value' => 2, 'calcTime' => '2021-12-22 1:23');
-$resultData1[] = (object) array('value' => 2, 'calcTime' => '2021-12-23 1:11');
-$resultData1[] = (object) array('value' => 2, 'calcTime' => '2022-9-23 2:22');
-$resultData1[] = (object) array('value' => 2, 'calcTime' => '2022-10-23 0:01');
-$resultData1[] = (object) array('value' => 2, 'calcTime' => '2022-11-23 0:00');
-$resultData1[] = (object) array('value' => 3, 'calcTime' => '2023-10-21 0:02');
-$resultData1[] = (object) array('value' => 1, 'calcTime' => '2023-11-23 0:00');
+$resultData1[] = (object) array('value' => 2, 'dateString' => '2021-11-23', 'calcTime' => '2021-11-23 0:01');
+$resultData1[] = (object) array('value' => 2, 'dateString' => '2021-12-22', 'calcTime' => '2021-12-22 1:23');
+$resultData1[] = (object) array('value' => 2, 'dateString' => '2021-12-23', 'calcTime' => '2021-12-23 1:11');
+$resultData1[] = (object) array('value' => 2, 'dateString' => '2022-9-23',  'calcTime' => '2022-9-23 2:22');
+$resultData1[] = (object) array('value' => 2, 'dateString' => '2022-10-23', 'calcTime' => '2022-10-23 0:01');
+$resultData1[] = (object) array('value' => 2, 'dateString' => '2022-11-23', 'calcTime' => '2022-11-23 0:00');
+$resultData1[] = (object) array('value' => 3, 'dateString' => '2023-10-23', 'calcTime' => '2023-10-21 0:02');
+$resultData1[] = (object) array('value' => 1, 'dateString' => '2023-11-23', 'calcTime' => '2023-11-23 0:00');
 
 $resultHeader2[] = array('name' => 'scope', 'title' => '产品名称', 'width' => 160);
 $resultHeader2[] = array('name' => 'date', 'title' => '日期', 'width' => 96);
@@ -49,7 +49,7 @@ $resultData3[] = (object) array('date' => '2023-11-12', 'dateString' => '2023-11
 $resultData3[] = (object) array('date' => '2023-11-13', 'dateString' => '2023-11-13', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 
 r($metric->getGroupTable($resultHeader1, $resultData1)) && p('0:name;1:name') && e('date,value');                 // 传入resultHeader1和resultData1，获取header
-r($metric->getGroupTable($resultHeader1, $resultData1, false, false)) && p('0:value;1:value') && e('2,2');        // 传入resultHeader1和resultData1，获取data
+r($metric->getGroupTable($resultHeader1, $resultData1, false, false)) && p('0:value;1:value') && e('1,3');        // 传入resultHeader1和resultData1，获取data
 
 r($metric->getGroupTable($resultHeader2, $resultData2)) && p('0:name;1:name') && e('scope,2023');                                      // 传入resultHeader2和resultData2，获取header
 r($metric->getGroupTable($resultHeader2, $resultData2, false, false)) && p('0:scope,2023;1:scope,2022') && e('开源,3;ddddw,9');        // 传入resultHeader2和resultData2，获取data
