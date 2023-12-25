@@ -3810,7 +3810,7 @@ class upgradeModel extends model
      */
     public function createNewProject(object $data, int $programID, array $projectIdList): bool|int|array
     {
-        if(!$data->longTime && !$data->end)
+        if(!isset($data->longTime) && !$data->end)
         {
             dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
             return false;

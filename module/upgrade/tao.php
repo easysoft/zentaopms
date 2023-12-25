@@ -835,7 +835,7 @@ class upgradeTao extends upgradeModel
             return false;
         }
 
-        if(!$data->longTime && !$data->end && isset($data->begin))
+        if(!isset($data->longTime) && !$data->end && isset($data->begin))
         {
             dao::$errors['end'][] = sprintf($this->lang->error->notempty, $this->lang->upgrade->end);
             return false;
