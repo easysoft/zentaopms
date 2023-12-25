@@ -331,29 +331,18 @@ class zanode extends control
     }
 
     /**
+     * 销毁执行节点。
      * Desctroy node.
      *
-     * @param  int    $nodeID
-     * @param  string $confirm
+     * @param  int $nodeID
      * @return void
      */
-    public function destroy($nodeID, $confirm = 'no')
+    public function destroy(int $nodeID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->zanode->confirmDelete, inlink('destroy', "zanodeID={$nodeID}&confirm=yes")));
-        }
-
         $error = $this->zanode->destroy($nodeID);
+        if(!empty($error)) return $this->sendError($error, true);
 
-        if(!empty($error))
-        {
-            return print(js::alert($error));
-        }
-        else
-        {
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent.parent'));
-        }
+        return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
     }
 
     /**

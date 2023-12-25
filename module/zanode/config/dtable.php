@@ -93,10 +93,11 @@ $config->zanode->dtable->fieldList['actions']['list']['createImage']['hint']    
 $config->zanode->dtable->fieldList['actions']['list']['createImage']['url']         = array('module' => 'zanode', 'method' => 'createImage', 'params' => 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['createImage']['data-toggle'] = 'modal';
 
-$config->zanode->dtable->fieldList['actions']['list']['destroy']['icon']      = 'trash';
-$config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']      = $lang->zanode->destroy;
-$config->zanode->dtable->fieldList['actions']['list']['destroy']['url']       = array('module' => 'zanode', 'method' => 'destory', 'params' => 'zanodeID={id}');
-$config->zanode->dtable->fieldList['actions']['list']['destroy']['className'] = 'ajax-submit';
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['icon']         = 'trash';
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']         = $lang->zanode->destroy;
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['url']          = array('module' => 'zanode', 'method' => 'destory', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['class']        = 'ajax-submit';
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['data-confirm'] = $lang->zanode->confirmDelete;
 
 $config->zanode->snapshotDtable = new stdclass();
 
