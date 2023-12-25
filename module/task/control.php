@@ -1708,6 +1708,7 @@ class task extends control
             unset($_POST['assignedTo']);
             $this->loadModel('action');
 
+            if(empty($taskIDList)) return print(js::reload('parent'));
             $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
