@@ -295,10 +295,11 @@ class upgrade extends control
      * @param  string $type
      * @param  int    $programID
      * @param  string $projectType project|execution
+     * @param  string $fromVersion project|execution
      * @access public
      * @return void
      */
-    public function mergeProgram($type = 'productline', $programID = 0, $projectType = 'project')
+    public function mergeProgram($type = 'productline', $programID = 0, $projectType = 'project', $fromVersion = '')
     {
         set_time_limit(0);
 
@@ -477,7 +478,7 @@ class upgrade extends control
                 }
             }
 
-            return print(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType"), 'parent'));
+            return print(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType&fromVersion=$fromVersion"), 'parent'));
         }
 
         /* Get no merged product and project count. */
@@ -499,7 +500,7 @@ class upgrade extends control
             /* Update sprints history. */
             $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
             $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
-            return print(js::locate($this->createLink('upgrade', 'mergeRepo')));
+            return print(js::locate($this->createLink('upgrade', 'mergeRepo', "fromVersion=$fromVersion")));
         }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
@@ -516,7 +517,7 @@ class upgrade extends control
             $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->andWhere('vision')->eq('rnd')->orderBy('id_desc')->fetchAll('id');
-            if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=product&programID=0&projectType=$projectType"));
+            if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=product&programID=0&projectType=$projectType&fromVersion=$fromVersion"));
 
             $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
@@ -598,7 +599,7 @@ class upgrade extends control
             /* Add products without sprints. */
             $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetchAll('id');
 
-            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=sprint&programID=0&projectType=$projectType"));
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=sprint&programID=0&projectType=$projectType&fromVersion=$fromVersion"));
 
             /* Group project by product. */
             $productGroups = array();
@@ -629,7 +630,7 @@ class upgrade extends control
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
             foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
 
-            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
+            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink&programID=0&projectType=project&fromVersion=$fromVersion"));
 
             $this->view->noMergedSprints = $noMergedSprints;
             if(!$programID && $systemMode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
@@ -706,7 +707,7 @@ class upgrade extends control
         if($_POST)
         {
             $mergeMode = $this->post->projectType;
-            if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
+            if($mergeMode == 'manually') $this->locate(inlink('mergeProgram', "type=productline&programID=0&projectType=project&fromVersion=$fromVersion"));
 
             if($mode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
             if($mode == 'ALM')   $programID = $this->loadModel('program')->createDefaultProgram();
@@ -774,15 +775,16 @@ class upgrade extends control
     /**
      * Merge Repos.
      *
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function mergeRepo()
+    public function mergeRepo($fromVersion = '')
     {
         if($_POST)
         {
             $this->upgrade->mergeRepo();
-            return print(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
+            return print(js::locate($this->createLink('upgrade', 'mergeRepo', "fromVersion=$fromVersion"), 'parent'));
         }
 
         $repoes   = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
