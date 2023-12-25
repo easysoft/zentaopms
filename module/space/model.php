@@ -105,7 +105,7 @@ class spaceModel extends model
      * Get app list in space by space id.
      *
      * @param  int    $spaceID
-     * @param  string $status
+     * @param  string $status     all|running|stopped|abnormal
      * @param  string $searchName
      * @param  object $pager
      * @access public
