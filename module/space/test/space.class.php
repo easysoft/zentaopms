@@ -45,4 +45,20 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $defaultSpace;
     }
+
+    /**
+     * 获取用户的默认空间。
+     * Get user's default space by user account.
+     *
+     * @param  string            $account
+     * @access public
+     * @return bool|array|object
+     */
+    public function defaultSpaceTest(string $account): bool|array|object
+    {
+        $defaultSpace = $this->objectModel->defaultSpace($account);
+
+        if(dao::isError()) return dao::getError();
+        return $defaultSpace;
+    }
 }
