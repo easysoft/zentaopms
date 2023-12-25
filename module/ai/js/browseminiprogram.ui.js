@@ -386,6 +386,8 @@ function createServerNotification(content)
 
 $(function()
 {
+    $('#heading .toolbar-item').attr('data-app', 'ai');
+
     $('#to-language-model').prop('href', $.createLink('ai', 'models'));
     $('#reload-current').on('click', () =>
     {

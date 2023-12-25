@@ -21,3 +21,8 @@ window.aiSquare.handleStarBtnClick = function(e)
         }
     }, 'json');
 };
+
+$(function()
+{
+    $('#heading .toolbar-item').attr('data-app', 'ai');
+});
