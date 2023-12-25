@@ -346,17 +346,19 @@ class zanode extends control
     }
 
     /**
+     * 远程操控执行节点。
      * Bring up novmc management view.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function getVNC($nodeID)
+    public function getVNC(int $nodeID)
     {
         $node = $this->zanode->getNodeByID($nodeID);
         $vnc  = $this->zanode->getVncUrl($node);
 
+        /* 记录操作日志。*/
         /* Add action log. */
         if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $nodeID, 'getVNC');
 
