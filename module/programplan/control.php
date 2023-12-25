@@ -127,8 +127,7 @@ class programplan extends control
         $viewData->programPlan   = $programPlan;
         $viewData->productList   = $productList;
         $viewData->project       = $project;
-        $viewData->plans         = $plans;
-        $viewData->executions    = $executions;
+        $viewData->plans         = !empty($executions) ? $executions : $plans;
 
         $this->programplanZen->buildCreateView($viewData);
     }

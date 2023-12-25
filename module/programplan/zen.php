@@ -43,7 +43,7 @@ class programplanZen extends programplan
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
         $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $viewData->project->model) : array();
         $this->view->programPlan        = $viewData->programPlan;
-        $this->view->plans              = empty($viewData->executions) ? $viewData->plans : $viewData->executions;
+        $this->view->plans              = $viewData->plans;
         $this->view->planID             = $viewData->planID;
         $this->view->type               = 'lists';
         $this->view->executionType      = $viewData->executionType;
