@@ -392,6 +392,20 @@ class metricTest
     }
 
     /**
+     * Test buildOperateMenu.
+     *
+     * @param  object $metric
+     * @param  string $key
+     * @access public
+     * @return array
+     */
+    public function buildOperateMenu($metric, $key)
+    {
+        $menuList = $this->objectModel->buildOperateMenu($metric);
+        return $menuList[$key];
+    }
+
+    /**
      * Test checkCalcExists.
      *
      * @param  object $metric
