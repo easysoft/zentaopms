@@ -1,6 +1,8 @@
 <?php
 class actionTest
 {
+    private $objectModel;
+
     public function __construct()
     {
          global $tester;
@@ -776,5 +778,19 @@ class actionTest
         if(dao::isError()) return dao::getError();
 
         return $object;
+    }
+
+    /**
+     * 魔术方法，可以调用一些比较简单的方法。
+     * Magic methods can refer to some relatively simple methods.
+     *
+     * @param  string $method
+     * @param  array $args
+     * @access public
+     * @return mixed
+     */
+    public function __call(string $method, array $args): mixed
+    {
+        return call_user_func_array(array($this->objectModel, $method), $args);
     }
 }
