@@ -36,3 +36,7 @@ $config->zanode->form->createSnapshot['desc'] = array('type' => 'string', 'requi
 $config->zanode->form->editSnapshot = array();
 $config->zanode->form->editSnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
 $config->zanode->form->editSnapshot['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
+
+$config->zanode->form->ajaxUpdateImage = array();
+$config->zanode->form->ajaxUpdateImage['status'] = array('type' => 'string', 'required' => false);
+$config->zanode->form->ajaxUpdateImage['path']   = array('type' => 'string', 'required' => false);

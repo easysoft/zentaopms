@@ -525,6 +525,20 @@ class zanodemodel extends model
     }
 
     /**
+     * 更新导出镜像的状态。
+     * Update Image status.
+     *
+     * @param  int $imageID
+     * @access public
+     * @return void
+     */
+    public function updateImageStatus(int $imageID): void
+    {
+        $data = form::data()->get();
+        $this->dao->update(TABLE_IMAGE)->data($data)->where('id')->eq($imageID)->autoCheck()->exec();
+    }
+
+    /**
      * Get vm list.
      *
      * @param  string $browseType

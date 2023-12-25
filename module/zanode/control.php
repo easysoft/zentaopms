@@ -449,7 +449,8 @@ class zanode extends control
     }
 
     /**
-     * Ajax get task status.
+     * 获取导出镜像的状态。
+     * AJAX: Get task status.
      *
      * @param  int    $nodeID
      * @param  int    $taskID
@@ -458,7 +459,7 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTaskStatus($nodeID, $taskID = 0, $type = '', $status = '')
+    public function ajaxGetTaskStatus(int $nodeID, int $taskID = 0, string $type = '', string $status = '')
     {
         $node   = $this->zanode->getNodeByID($nodeID);
         $result = $this->zanode->getTaskStatus($node, $taskID, $type, $status);
@@ -466,28 +467,21 @@ class zanode extends control
     }
 
     /**
-     * Update image.
+     * 更新导出镜像状态。
+     * AJAX: Update image.
      *
      * @param  int    $imageID
      * @access public
      * @return void
      */
-    public function ajaxUpdateImage($imageID = 0)
+    public function ajaxUpdateImage(int $imageID = 0)
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
-            $this->dao->update(TABLE_IMAGE)->data($data)->where('id')->eq($imageID)->autoCheck()->exec();
+            $this->zanode->updateImageStatus($imageID);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            $response = array();
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            return $this->send($response);
+            return $this->sendSuccess(array('load' => true));
         }
     }
 
