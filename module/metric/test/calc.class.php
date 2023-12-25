@@ -187,6 +187,20 @@ class metricTest
     }
 
     /**
+     * Test processRecordQuery.
+     *
+     * @param  array  $query
+     * @param  string $key
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function processRecordQuery($query, $key, $type = 'common')
+    {
+        return $this->objectModel->processRecordQuery($query, $key, $type);
+    }
+
+    /**
      * 测试根据code获取度量项数据方法。
      * Test get metric by code.
      *
