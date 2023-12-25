@@ -421,7 +421,7 @@ if(common::hasPriv('execution', 'manageMembers'))
 }
 
 $docLibDom = array();
-if(common::hasPriv('execution', 'doc'))
+if(common::hasPriv('execution', 'doc') && $execution->type != 'kanban')
 {
     $docLibCount = 0;
     foreach($docLibs as $libID => $docLib)
@@ -444,7 +444,7 @@ if(common::hasPriv('execution', 'doc'))
     }
 }
 
-if($canBeChanged && common::hasPriv('doc', 'createLib'))
+if($canBeChanged && common::hasPriv('doc', 'createLib') && $execution->type != 'kanban')
 {
     $docLibDom[] = div
     (
