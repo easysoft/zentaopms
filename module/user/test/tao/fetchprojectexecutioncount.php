@@ -22,6 +22,9 @@ $userTest = new userTest();
 
 $projectIdList = array(1, 2, 3, 4);
 
+$stories = $userTest->fetchProjectExecutionCountTest(array());
+r(count($stories)) && p()  && e(0); // 传入空数组，返回空数组。
+
 $config->vision = 'rnd';
 $executions = $userTest->fetchProjectExecutionCountTest($projectIdList);
 r(count($executions)) && p()  && e(2); // 研发综合界面下有 2 个项目。
