@@ -18,7 +18,7 @@
 #menuMoreList {background: var(--zt-menu-bg, var(--color-gray-800)); padding: 8px 0;}
 #menuMoreList > .menu-item {padding: 1px 12px!important; height: 32px!important;}
 
-.hide-menu #menu {width: var(--zt-menu-fold-width, 40px);}
+.hide-menu #menu {width: var(--zt-menu-fold-width, 40px)!important;}
 .hide-menu #menu .nav > li {padding: 4px}
 .hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
 .hide-menu #menu .nav > li > a {justify-content: center;}
@@ -26,10 +26,10 @@
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
 #apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: var(--zt-apps-bar-height, 40px); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
-.hide-menu #apps {left: var(--zt-menu-fold-width, 40px);}
+.hide-menu #apps {left: var(--zt-menu-fold-width, 40px)!important;}
 
 #appsBar {position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: var(--zt-apps-bar-height, 40px); background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s;}
-.hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px);}
+.hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px)!important;}
 #appTabs {position: absolute; left: 4px; right: 360px; top: 0; bottom: 0; user-select: none;}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .7;}
 #appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
