@@ -4031,7 +4031,7 @@ class upgradeModel extends model
             }
 
             $whitelist += zget($whitelistACL, $product->id, array());
-            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
+            $this->personnel->updateWhitelist(array_keys($whitelist), 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
         /* Update the sprint members. */
@@ -4048,7 +4048,7 @@ class upgradeModel extends model
             }
 
             $whitelist += zget($whitelistACL, $sprint->id, array());
-            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade', 'increase');
+            $this->personnel->updateWhitelist(array_keys($whitelist), 'sprint', $sprint->id, 'whitelist', 'upgrade', 'increase');
         }
     }
 
