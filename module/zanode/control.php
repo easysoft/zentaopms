@@ -335,6 +335,7 @@ class zanode extends control
      * Desctroy node.
      *
      * @param  int $nodeID
+     * @access public
      * @return void
      */
     public function destroy(int $nodeID)
@@ -406,6 +407,7 @@ class zanode extends control
      *
      * @param  int  $nodeID
      * @param  int  $snapshotID
+     * @access public
      * @return void
      */
     public function restoreSnapshot(int $nodeID, int $snapshotID)
@@ -417,21 +419,18 @@ class zanode extends control
     }
 
     /**
-     * Ajax get template pairs by api.
+     * 获取镜像。
+     * AJAX: Get template pairs by api.
      *
      * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function ajaxGetImages($hostID)
+    public function ajaxGetImages(int $hostID)
     {
+        $options       = array();
         $templatePairs = $this->loadModel('zahost')->getImagePairs($hostID);
-
-        $options = array();
-        foreach($templatePairs as $key => $template)
-        {
-            $options[] = array('text' => $template, 'value' => $key);
-        }
+        foreach($templatePairs as $key => $template) $options[] = array('text' => $template, 'value' => $key);
         return print(json_encode($options));
     }
 

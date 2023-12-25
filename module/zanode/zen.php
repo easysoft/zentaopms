@@ -17,6 +17,7 @@ class zanodeZen extends zanode
      *
      * @param  int    $nodeID
      * @param  string $type boot|destroy|suspend|reboot|resume
+     * @access protected
      * @return void
      */
     protected function handleNode(int $nodeID, string $type)
