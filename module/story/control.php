@@ -243,7 +243,7 @@ class story extends control
         $this->view->productID        = $this->view->product->id;
         $this->view->products         = $this->product->getPairs();
         $this->view->story            = $story;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, (string)$story->branch);
         $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
