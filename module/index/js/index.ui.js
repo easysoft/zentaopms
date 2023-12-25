@@ -689,19 +689,19 @@ function initAppsMenu(items)
 }
 
 /** Update apps menu. */
-function updateAppsMenu()
+function updateAppsMenu(includeAppsToolbar)
 {
     loadCurrentPage(
     {
-        selector: 'appsItems()',
+        selector: (includeAppsToolbar ? '#appsToolbar>*,' : '') + 'appsItems()',
         onRender: function(info)
         {
             if(info.name === 'appsItems')
             {
                 initAppsMenu(info.data);
                 refreshMenu();
+                return true;
             }
-            return true;
         }
     });
 }
@@ -716,7 +716,7 @@ function changeAppsLang(lang)
             app.iframe.contentWindow.changeAppLang(lang);
         }
     });
-    updateAppsMenu();
+    updateAppsMenu(true);
 }
 
 function changeAppsTheme(theme)
