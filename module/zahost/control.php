@@ -86,6 +86,7 @@ class zahost extends control
     }
 
     /**
+     * 创建宿主机。
      * Create host.
      *
      * @access public
@@ -95,22 +96,18 @@ class zahost extends control
     {
         if($_POST)
         {
-            $hostID = $this->zahost->create();
-            if(dao::isError())
-            {
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-            elseif($hostID === false)
-            {
-                return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
-            }
+            $hostInfo = form::data($this->config->zahost->form->create)->get();
+            $hostInfo->secret = md5($hostInfo->name . time());
 
-            $viewLink = $this->createLink('zahost', 'view', "hostID=$hostID");
+            $hostID = $this->zahost->create($hostInfo);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($hostID === false) return $this->send(array('result' => 'fail', 'message' => array('extranet' => array($this->lang->zahost->netError))));
+
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.loadHosts()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $viewLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('zahost', 'view', "hostID=$hostID")));
         }
 
-        $this->view->title      = $this->lang->zahost->create;
+        $this->view->title = $this->lang->zahost->create;
         $this->display();
     }
 

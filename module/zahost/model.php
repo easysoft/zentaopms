@@ -26,24 +26,12 @@ class zahostModel extends model
     /**
      * Create a host.
      *
+     * @param  object   $hostInfo
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create(object $hostInfo)
     {
-        $hostInfo = fixer::input('post')
-            ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
-            ->trim('extranet')
-            ->get();
-
-        $this->dao->table      = 'zahost';
-        $hostInfo->type        = 'zahost';
-        $hostInfo->status      = 'wait';
-        $hostInfo->createdBy   = $this->app->user->account;
-        $hostInfo->createdDate = helper::now();
-        $hostInfo->zap         = $this->config->zahost->defaultPort;
-        $hostInfo->secret      = md5($hostInfo->name . time());
-
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
