@@ -88,7 +88,7 @@ formPanel
                     ),
                     a
                     (
-                        setData(array('on' => 'click', 'call' => 'loadProductModules', 'params' => $productID)),
+                        set('onclick', "loadProductModules({$productID})"),
                         icon('refresh')
                     )
                 ) : null
