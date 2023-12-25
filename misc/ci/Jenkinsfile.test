@@ -40,8 +40,10 @@ pipeline {
             env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
 
             sh(returnStdout: false, script: '''curl $JOB_URL$BUILD_ID/api/json > .job.json''')
-            env.CHANGED_MODULES= sh(returnStdout: true, script: '''jq -r ".changeSets[].items[] | .affectedPaths[]" < .job.json | grep 'module/' | awk -F '/' '{print "/apps/zentao/"$1"/"$2}' | sort -u | xargs''').trim()
-            env.CHANGED_MODULE_AUTHORS = sh(returnStdout: true, script: '''jq -r '.changeSets[].items[] | select(any(.affectedPaths[]; startswith("module"))) | .author.fullName' < .job.json | sort -u | paste -s -d "," - ''').trim()
+            env.CHANGED_MODULES= sh(returnStdout: true, script: '''git diff-tree --no-commit-id --name-only -r HEAD | grep 'module/' | awk -F '/' '{print "/apps/zentao/"$1"/"$2}' | sort -u | xargs''').trim()
+            //env.CHANGED_MODULES= sh(returnStdout: true, script: '''jq -r ".changeSets[].items[] | .affectedPaths[]" < .job.json | grep 'module/' | awk -F '/' '{print "/apps/zentao/"$1"/"$2}' | sort -u | xargs''').trim()
+            env.CHANGED_MODULE_AUTHORS = sh(returnStdout: true, script: '''git log -1 --pretty=format:'%ae' | cut -d '@' -f 1 ''').trim()
+            //env.CHANGED_MODULE_AUTHORS = sh(returnStdout: true, script: '''jq -r '.changeSets[].items[] | select(any(.affectedPaths[]; startswith("module"))) | .author.fullName' < .job.json | sort -u | paste -s -d "," - ''').trim()
         }
         sh 'env'
       }
