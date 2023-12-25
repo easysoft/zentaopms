@@ -2034,7 +2034,12 @@ class taskTest
      */
     public function getExportTasksTest(string $orderBy, bool $taskOnlyCondition = false, bool $taskQueryCondition = false, string $exportType = ''): array
     {
-        if($taskOnlyCondition)  $this->objectModel->session->set('taskOnlyCondition', '1=1');
+        if($taskOnlyCondition)
+        {
+            $this->objectModel->session->set('taskOnlyCondition', '1=1');
+            $this->objectModel->session->set('taskQueryCondition', '1=1');
+        }
+
         if($taskQueryCondition) $this->objectModel->session->set('taskQueryCondition', '1=1');
         if($exportType)
         {
