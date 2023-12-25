@@ -149,41 +149,22 @@ class zahost extends control
 
 
     /**
+     * 删除宿主机。
      * Delete host.
      *
      * @param  int    $hostID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($hostID, $confirm = 'no')
+    public function delete(int $hostID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "hostID=$hostID&confirm=yes")));
-        }
+        $this->zahost->delete(TABLE_ZAHOST, $hostID);
 
-        $this->dao->update(TABLE_ZAHOST)->set('deleted')->eq(1)->where('id')->eq($hostID)->exec();
-        $this->loadModel('action')->create('zahost', $hostID, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        /* if ajax request, send result. */
-        if($this->server->ajax)
-        {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            $this->send($response);
-        }
+        if(isInModal()) return $this->send(array('result' => 'success', 'load' => true));
 
-        if(isInModal()) return print(js::reload('parent.parent'));
-        return print(js::locate($this->createLink('zahost', 'browse'), 'parent'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('zahost', 'browse')));
     }
 
     /**

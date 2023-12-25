@@ -52,10 +52,11 @@ $config->zahost->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->zahost->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->zahost->edit;
 $config->zahost->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('zahost', 'edit', 'hostID={hostID}');
 
-$config->zahost->dtable->fieldList['actions']['list']['delete']['icon']      = 'trash';
-$config->zahost->dtable->fieldList['actions']['list']['delete']['hint']      = $lang->zahost->delete;
-$config->zahost->dtable->fieldList['actions']['list']['delete']['url']       = helper::createLink('zahost', 'delete', 'hostID={hostID}');
-$config->zahost->dtable->fieldList['actions']['list']['delete']['className'] = 'ajax-submit';
+$config->zahost->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->zahost->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->zahost->delete;
+$config->zahost->dtable->fieldList['actions']['list']['delete']['url']          = helper::createLink('zahost', 'delete', 'hostID={hostID}');
+$config->zahost->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+$config->zahost->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $lang->zahost->confirmDelete;
 
 $config->zahost->imageDtable = new stdclass();
 
