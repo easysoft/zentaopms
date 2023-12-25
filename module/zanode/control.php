@@ -250,17 +250,17 @@ class zanode extends control
      */
     public function createImage(int $nodeID = 0)
     {
-        $task        = '';
-        $node        = $this->zanode->getNodeByID($nodeID);
-        $customImage = $this->zanode->getCustomImage($nodeID, 'created,inprogress');
-        if($customImage) $task = $this->zanode->getTaskStatus($node, $customImage->id, 'exportVm');
-
         if($_POST)
         {
             $this->zanode->createImage($nodeID);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true));
         }
+
+        $task        = '';
+        $node        = $this->zanode->getNodeByID($nodeID);
+        $customImage = $this->zanode->getCustomImage($nodeID, 'created,inprogress');
+        if($customImage) $task = $this->zanode->getTaskStatus($node, $customImage->id, 'exportVm');
 
         $this->view->task = $task;
         $this->view->node = $node;
@@ -272,28 +272,20 @@ class zanode extends control
      * 创建快照。
      * Create snapshot.
      *
-     * @param  int    $zanodeID
+     * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function createSnapshot($nodeID = 0)
+    public function createSnapshot(int $nodeID = 0)
     {
-        $node = $this->zanode->getNodeByID($nodeID);
-
         if($_POST)
         {
             $this->zanode->createSnapshot($nodeID);
-
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->node = $node;
+        $this->view->node = $this->zanode->getNodeByID($nodeID);
         $this->display();
     }
 

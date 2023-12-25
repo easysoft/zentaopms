@@ -213,7 +213,7 @@ class zanodemodel extends model
      */
     public function createSnapshot($zanodeID = 0)
     {
-        $data = fixer::input('post')->get();
+        $data = form::data()->get();
 
         if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
         if(dao::isError()) return false;
