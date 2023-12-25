@@ -1,0 +1,19 @@
+title: table zt_module
+desc: "模块"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: root
+    note: "根目录"
+    range: 88
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "对象类型"
+    range: story
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -121,7 +121,7 @@ class actionTao extends actionModel
                 break;
             case 'module':
                 $module = $this->dao->select('type,root')->from(TABLE_MODULE)->where('id')->eq($actionType != 'deleted' ? $extra : $objectID)->fetch();
-                if(!empty($module) && $module->type == 'story') $product = $module->root;
+                if(!empty($module) && $module->type == 'story') $product = array($module->root);
                 break;
             case 'review':
                 list($product, $project) = $this->getReviewRelated($objectType, $objectID);
