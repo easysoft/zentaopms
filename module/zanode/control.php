@@ -13,6 +13,7 @@ class zanode extends control
 {
 
     /**
+     * 执行节点列表页。
      * Browse ZenAgent Node page.
      *
      * @param  string   $browseType
@@ -24,18 +25,19 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'all', string $param = '', string $orderBy = 't1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $browseType = strtolower($browseType);
 
-        $this->app->loadClass('pager', $static = true);
+        /* 加载分页器。*/
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
 
-        $queryID  = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $pager    = pager::init($recTotal, $recPerPage, $pageID);
-        $nodeList = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
-        $hosts    = $this->loadModel('zahost')->getPairs('host');
-
+        /* 构建搜索表单。*/
         /* Build the search form. */
+        $hosts     = $this->loadModel('zahost')->getPairs('host');
         $actionURL = $this->createLink('zanode', 'browse', "browseType=bySearch&queryID=myQueryID");
         $this->config->zanode->search['actionURL'] = $actionURL;
         $this->config->zanode->search['queryID']   = $queryID;
@@ -54,7 +56,7 @@ class zanode extends control
 
         $this->view->title       = $this->lang->zanode->common;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->nodeList    = $nodeList;
+        $this->view->nodeList    = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
