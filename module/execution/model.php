@@ -5414,13 +5414,13 @@ class executionModel extends model
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions text-left">';
 
-        $title = '';
-        $disabled = '';
+        $title    = '';
+        $disabled = $execution->status == 'wait' ? '' : 'disabled';
         $this->app->loadLang('stage');
         if($project and $project->model == 'ipd')
         {
             $title    = ($execution->ipdStage['canStart'] or $execution->ipdStage['isFirst']) ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
-            $disabled = $execution->ipdStage['canStart'] ? '' : 'disabled';
+            $disabled = $execution->ipdStage['canStart'] ? $disabled : 'disabled';
         }
         echo common::buildIconButton('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title, '', empty($disabled));
 
