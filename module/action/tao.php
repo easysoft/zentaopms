@@ -232,7 +232,7 @@ class actionTao extends actionModel
     }
 
     /**
-     * 获取用例相关的产品、项目、执行。
+     * 获取分支相关的产品、项目、执行。
      * Get case related product, project, execution.
      *
      * @param  string    $objectType
@@ -250,7 +250,7 @@ class actionTao extends actionModel
             $product = $result->product;
             $project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->in($result->build)->fetch('project');
         }
-        return array($product, $project);
+        return array(array($product), $project);
     }
 
     /**
