@@ -1,0 +1,19 @@
+title: zt_space
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 1-100
+    prefix: 空间
+  - field: owner
+    fields:
+    - field: account1
+      range: admin,user{9}
+    - field: account2
+      range: "[],1-9"
+  - field: k8space
+    range: 'k8space'
+  - field: deleted
+    range: 0
