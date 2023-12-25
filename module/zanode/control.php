@@ -315,30 +315,19 @@ class zanode extends control
     }
 
     /**
+     * 删除快照。
      * Delete Snapshot.
      *
      * @param  int    $snapshotID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteSnapshot($snapshotID, $confirm = 'no')
+    public function deleteSnapshot(int $snapshotID)
     {
-        if($confirm == 'no')
-        {
-            return $this->send(array('load' => array('confirm' => $this->lang->zanode->confirmDeleteSnapshot, 'confirmed' => array('url' => inlink('deleteSnapshot', "snapshotID={$snapshotID}&confirm=yes")))));
-        }
-
         $result = $this->zanode->deleteSnapshot($snapshotID);
+        if($result !== true) return $this->sendError($result, true);
 
-        if($result !== true)
-        {
-            return print(js::alert($result));
-        }
-        else
-        {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->zanode->actionSuccess, 'load' => true));
-        }
+        return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
     }
 
     /**
