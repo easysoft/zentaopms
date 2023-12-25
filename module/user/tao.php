@@ -75,7 +75,7 @@ class userTao extends userModel
     {
         if(!$projectIdList) return array();
 
-        return $this->dao->select('t1.project, SUM(t3.estimate) AS estimate')->from(TABLE_PROJECT)->alias('t1')
+        return $this->dao->select('t1.project, SUM(IFNULL(t3.estimate, 0)) AS estimate')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.project')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.deleted')->eq('0')
