@@ -24,6 +24,7 @@ class jenkinsModel extends model
     public function getTasks(int $jenkinsID, int $depth = 0): array
     {
         $jenkins = $this->loadModel('pipeline')->getByID($jenkinsID);
+        if(!$jenkins) return array();
 
         $jenkinsServer   = $jenkins->url;
         $jenkinsUser     = $jenkins->account;

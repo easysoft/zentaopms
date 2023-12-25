@@ -11,17 +11,17 @@ class jenkinsTest
     }
 
     /**
-     * Get jenkins tasks.
+     * 测试获取流水线列表。
+     * Test get jenkins tasks.
      *
-     * @param  int    $id
+     * @param  int    $jenkinsID
+     * @param  int    $depth
      * @access public
      * @return array
      */
-    public function getTasks($id)
+    public function getTasks(int $jenkinsID, int $depth = 0)
     {
-        $tasks = $this->jenkins->getTasks($id);
-        if(empty($tasks)) return 0;
-        return $tasks;
+        return $this->jenkins->getTasks($jenkinsID, $depth);
     }
 
     /**
