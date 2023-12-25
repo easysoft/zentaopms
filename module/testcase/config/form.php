@@ -76,6 +76,7 @@ $config->testcase->form->batchEdit['module']       = array('required' => false, 
 $config->testcase->form->batchEdit['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchEdit['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchEdit['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
+$config->testcase->form->batchEdit['color']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['type']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
