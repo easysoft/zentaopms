@@ -154,8 +154,8 @@ formPanel
     on::click('.removeLine', 'removeLine'),
     on::click('.project-type-1', 'changeType(1)'),
     on::click('.project-type-0', 'changeType(0)'),
-    on::click('.project-stageBy-0', 'changeStageBy(0)'),
-    on::click('.project-stageBy-1', 'changeStageBy(1)'),
+    on::click('.project-stageBy-project', 'changeStageBy("project")'),
+    on::click('.project-stageBy-product', 'changeStageBy("product")'),
     on::click('[type=submit]', 'removeAllTips'),
     on::click('#name, #code, #end, #days', 'removeTips'),
     on::change('#end, #days', 'removeTips'),
@@ -521,18 +521,18 @@ formPanel
             (
                 set::seg(true),
                 btn(
-                    setClass('primary-pale project-stageBy-0'),
+                    setClass('primary-pale project-stageBy-project'),
                     set::disabled($copyProjectID),
-                    $lang->project->stageByList[0]
+                    $lang->project->stageByList['project']
                 ),
                 btn
                 (
-                    setClass('project-stageBy-1'),
+                    setClass('project-stageBy-product'),
                     set::disabled($copyProjectID),
-                    $lang->project->stageByList[1]
+                    $lang->project->stageByList['product']
                 )
             ),
-            formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : '0')
+            formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : 'project')
         )
     ) : null,
     formGroup

@@ -41,7 +41,7 @@ function changeType(type)
 function changeStageBy(type)
 {
     if($('.project-stageBy-' + type).hasClass('disabled')) return;
-    $('.project-stageBy-1, .project-stageBy-0').removeClass('primary-pale');
+    $('.project-stageBy-project, .project-stageBy-product').removeClass('primary-pale');
     $('.project-stageBy-' + type).addClass('primary-pale');
     $('input[name=stageBy]').val(type);
 }

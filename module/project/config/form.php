@@ -15,6 +15,7 @@ $config->project->form->create['parent']     = array('type' => 'int',    'requir
 $config->project->form->create['name']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
 $config->project->form->create['multiple']   = array('type' => 'int',    'required' => false, 'default' => 1);
 $config->project->form->create['hasProduct'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->project->form->create['stageBy']    = array('type' => 'string', 'required' => false, 'default' => 'project');
 $config->project->form->create['PM']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budget']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budgetUnit'] = array('type' => 'string', 'required' => false, 'default' => 'CNY');

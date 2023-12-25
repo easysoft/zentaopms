@@ -26,7 +26,7 @@ DELETE FROM `zt_block` where `module` = 'project' and `code` = 'projectteam';
 ALTER TABLE `zt_todo`  CHANGE `idvalue` `objectID` mediumint(8) unsigned default '0' NOT NULL AFTER `type`;
 ALTER TABLE `zt_todo` CHANGE `config` `config` VARCHAR(1000) NOT NULL  DEFAULT '';
 
-ALTER TABLE `zt_project` ADD `stageBy` enum('project', 'product') NOT NULL DEFAULT 'product' AFTER `division`;
+ALTER TABLE `zt_project` ADD `stageBy` enum('project', 'product') NOT NULL DEFAULT 'project' AFTER `division`;
 UPDATE `zt_project` SET `stageBy` = 'project' WHERE `division` = '0';
 UPDATE `zt_project` SET `stageBy` = 'product' WHERE `division` = '1';
 ALTER TABLE `zt_project` DROP `division`;

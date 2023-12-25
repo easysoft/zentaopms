@@ -203,8 +203,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = "{$lang->projectCommon}s Ownedbyme";
 $lang->project->typeList['other'] = "Other {$lang->projectCommon}s";
 
-$lang->project->stageByList['0'] = "Create by {$lang->projectCommon}";
-$lang->project->stageByList['1'] = "Create by {$lang->productCommon}";
+$lang->project->stageByList['project'] = "Create by {$lang->projectCommon}";
+$lang->project->stageByList['product'] = "Create by {$lang->productCommon}";
 
 $lang->project->stageBySwitchList['0'] = 'Close';
 $lang->project->stageBySwitchList['1'] = "Open";

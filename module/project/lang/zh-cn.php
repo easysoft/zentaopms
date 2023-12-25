@@ -203,8 +203,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = "我负责的{$lang->projectCommon}";
 $lang->project->typeList['other'] = "其他{$lang->projectCommon}";
 
-$lang->project->stageByList['0'] = "按{$lang->projectCommon}创建";
-$lang->project->stageByList['1'] = "按{$lang->productCommon}创建";
+$lang->project->stageByList['project'] = "按{$lang->projectCommon}创建";
+$lang->project->stageByList['product'] = "按{$lang->productCommon}创建";
 
 $lang->project->stageBySwitchList['0'] = '关闭';
 $lang->project->stageBySwitchList['1'] = "开启";

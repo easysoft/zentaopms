@@ -14,10 +14,11 @@ jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
+jsVar('projectID', $project->id);
 jsVar('BRANCH_MAIN', BRANCH_MAIN);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 
-$noticeSwitch = ($project->stageBy == 'product' and count($linkedProducts) == 1 and empty($executions) and in_array($project->model, array('waterfall', 'waterfallplus')));
+$noticeSwitch = ($project->stageBy == 'project' and count($linkedProducts) == 1 and empty($executions) and in_array($project->model, array('waterfall', 'waterfallplus')));
 jsVar('linkedProducts', array_keys($linkedProducts));
 jsVar('noticeSwitch', $noticeSwitch);
 jsVar('noticeDivsion', $lang->project->noticeDivsion);

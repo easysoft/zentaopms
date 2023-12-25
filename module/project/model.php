@@ -1758,7 +1758,7 @@ class projectModel extends model
             $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
             $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
-            if(!empty($_POST['stageBy']))
+            if(isset($_POST['stageBy']) and $_POST['stageBy'] == 'product')
             {
                 $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
             }
@@ -1889,7 +1889,7 @@ class projectModel extends model
         }
 
         $this->user->updateUserView($productIdList, 'product', $members);
-        if($projectID > 0 and !empty($_POST['stageBy']))
+        if($projectID > 0 and isset($_POST['stageBy']) and $_POST['stageBy'] == 'product')
         {
             $this->dao->update(TABLE_PROJECT)->set('stageBy')->eq('product')->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->exec();
         }
