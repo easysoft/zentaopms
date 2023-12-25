@@ -39,22 +39,4 @@ class jenkinsTest
         foreach($jobs as $jobID => $job) $return .= "{$jobID}:{$job},";
         return trim($return, ',');
     }
-
-    /**
-     * Create a jenkins.
-     *
-     * @access public
-     * @return object|string
-     */
-    public function create()
-    {
-        $jenkinsID = $this->jenkins->create();
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            return key($errors);
-        }
-
-        return $this->tester->loadModel('pipeline')->getById($jenkinsID);
-    }
 }
