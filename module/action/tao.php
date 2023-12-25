@@ -105,7 +105,7 @@ class actionTao extends actionModel
                 list($product, $project) = $this->getReleaseRelated($objectType, $objectID);
                 break;
             case 'task':
-                list($product, $project, $execution) = $this->getTaskReleated($objectType, $objectID);
+                list($product, $project, $execution) = $this->getTaskRelated($objectType, $objectID);
                 break;
             case 'kanbancolumn':
                 $execution = $extra;
@@ -262,7 +262,7 @@ class actionTao extends actionModel
      * @access protected
      * @return array
      */
-    protected function getTaskReleated(string $objectType, int $objectID): array
+    protected function getTaskRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
         $project = $execution = 0;

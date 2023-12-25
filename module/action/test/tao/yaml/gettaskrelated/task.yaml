@@ -1,0 +1,14 @@
+title: table zt_task
+desc: "任务"
+author: automated export
+version: "1.0"
+fields:
+  - field: story
+    note: "相关需求"
+    range: 0{2},1{3}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    range: 11
