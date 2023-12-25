@@ -56,12 +56,14 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
+    set::orderBy($orderBy),
+    set::sortLink(createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}")),
     set::checkable(true),
     set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
     set::showToolbarOnChecked(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array(
-        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra")
+        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra")
     )))
 );
 

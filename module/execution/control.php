@@ -2129,13 +2129,14 @@ class execution extends control
      * @param  int    $objectID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function linkStory(int $objectID = 0, string $browseType = '', int $param = 0, int $recPerPage = 50, int $pageID = 1, string $extra = '')
+    public function linkStory(int $objectID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recPerPage = 50, int $pageID = 1, string $extra = '')
     {
         $this->loadModel('story');
         $this->loadModel('product');
@@ -2171,13 +2172,7 @@ class execution extends control
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, $this->post->stories ? $this->post->stories : array());
             $this->execution->linkStory($objectID, $this->post->stories ? $this->post->stories : array(), $extra);
 
-            if(isInModal())
-            {
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($object->type == 'kanban') return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "refreshKanban()"));
-                return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "refreshKanban()"));
-            }
+            if(isInModal()) return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "refreshKanban()"));
 
             return $this->sendSuccess(array('load' => $browseLink));
         }
@@ -2221,8 +2216,8 @@ class execution extends control
         $queryID      = ($browseType == 'bySearch') ? (int)$param : 0;
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
-        if($browseType == 'bySearch') $allStories = $this->story->getBySearch(implode(',', array_keys($products)), '', $queryID, 'id_desc', $objectID);
-        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', 'story', 'id_desc', false, '', null);
+        if($browseType == 'bySearch') $allStories = $this->story->getBySearch(implode(',', array_keys($products)), '', $queryID, $orderBy, $objectID);
+        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', 'story', $orderBy, false, '', null);
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);
         foreach($allStories as $id => $story)
         {
@@ -2253,6 +2248,7 @@ class execution extends control
         $this->view->param        = $param;
         $this->view->extra        = $extra;
         $this->view->object       = $object;
+        $this->view->orderBy      = $orderBy;
         $this->view->productPairs = $productPairs;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;

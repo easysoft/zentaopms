@@ -282,7 +282,7 @@ $config->execution->linkStory->dtable->fieldList['module']['group']    = 6;
 
 $config->execution->linkStory->dtable->fieldList['planTitle']['title']    = $lang->story->plan;
 $config->execution->linkStory->dtable->fieldList['planTitle']['type']     = 'text';
-$config->execution->linkStory->dtable->fieldList['planTitle']['sortType'] = true;
+$config->execution->linkStory->dtable->fieldList['planTitle']['sortType'] = false;
 $config->execution->linkStory->dtable->fieldList['planTitle']['group']    = 7;
 
 $config->execution->linkStory->dtable->fieldList['branch']['title']    = '';
