@@ -36,4 +36,9 @@ ALTER TABLE `zt_task` MODIFY `color` char(7) NOT NULL DEFAULT '';
 ALTER TABLE `zt_task` MODIFY `desc` mediumtext NULL;
 ALTER TABLE `zt_task` MODIFY `version` smallint(6) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_task` MODIFY `assignedTo` varchar(30) NOT NULL DEFAULT '';
-ALTER TABLE `zt_task` MODIFY `planDuration` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `project` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `execution` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `consumed` float unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `openedBy` varchar(30) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_effort` MODIFY `extra` text NULL;
