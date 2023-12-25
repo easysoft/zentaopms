@@ -640,25 +640,21 @@ class zanodemodel extends model
     }
 
     /**
-     * Get node list by hostID.
+     * 通过宿主机ID获取执行节点。
+     * Get node list by hostID
      *
-     * @param  string $browseType
-     * @param  int    $param
+     * @param  int    $hostID
      * @param  string $orderBy
-     * @param  object $pager
+     * @access public
      * @return array
      */
-    public function getListByHost($hostID, $orderBy = 'id_desc')
+    public function getListByHost(int $hostID, string $orderBy = 'id_desc'): array
     {
         if(!$hostID) return array();
 
-        $list = $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status, heartbeat')->from(TABLE_ZAHOST)
-            ->where('deleted')->eq(0)
-            ->andWhere('parent')->eq($hostID)
-            ->orderBy($orderBy)
-            ->fetchAll();
-
+        $list = $this->zanodeTao->getSubZahostListByID($hostID, $orderBy);
         $host = $this->loadModel('zahost')->getByID($hostID);
+
         foreach($list as $node)
         {
             $node->heartbeat = empty($node->heartbeat) ? '' : $node->heartbeat;

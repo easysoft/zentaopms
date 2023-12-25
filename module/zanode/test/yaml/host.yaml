@@ -11,9 +11,15 @@ fields:
   - field: osName
     range: linux
   - field: status
-    range: online
+    range: online{3},running,ready,wait,wait,online{2},running,ready,wait
   - field: provider
     range: native
+  - field: parent
+    range: 0{2},1-2{5}
+  - field: heartbeat
+    range: "(-2M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: extranet
     fields:
       - field: field1
