@@ -26,5 +26,5 @@ $config->zanode->form->edit['osName']   = array('type' => 'string', 'required' =
 $config->zanode->form->edit['desc']     = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
 $config->zanode->form->createImage = array();
-$config->zanode->form->createImage['name'] = array('type' => 'string', 'required' => false, 'filter' => 'trim');
+$config->zanode->form->createImage['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
 $config->zanode->form->createImage['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');

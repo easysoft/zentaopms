@@ -241,7 +241,7 @@ class zanode extends control
     }
 
     /**
-     * 创建快照。
+     * 导出镜像。
      * Create custom image.
      *
      * @param  int    $nodeID
@@ -269,6 +269,7 @@ class zanode extends control
     }
 
     /**
+     * 创建快照。
      * Create snapshot.
      *
      * @param  int    $zanodeID
