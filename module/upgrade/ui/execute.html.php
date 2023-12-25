@@ -43,7 +43,16 @@ div
                     implode("\n", $errors)
                 )
             ) : null,
-            formPanel
+            in_array($result, array('fail', 'sqlFail')) ? div
+            (
+                setClass('mt-4'),
+                $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
+                btn
+                (
+                    on::click('window.reloadPage(this)'),
+                    $lang->refresh
+                )
+            ) : formPanel
             (
                 on::click('button[type=submit]', "submitConfirm"),
                 set::width('800px'),
