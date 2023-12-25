@@ -129,6 +129,8 @@ class userTao extends userModel
      */
     public function fetchExecutionTaskCount(string $account, array $executionIdList): array
     {
+        if(!$executionIdList) return array();
+
         return $this->dao->select('execution, COUNT(1) AS count')
             ->from(TABLE_TASK)
             ->where('parent')->lt(1)
