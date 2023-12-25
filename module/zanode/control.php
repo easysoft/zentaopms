@@ -290,27 +290,24 @@ class zanode extends control
     }
 
     /**
+     * 编辑快照。
      * Edit Snapshot.
      *
-     * @param int $snapshotID
+     * @param  int $snapshotID
      * @access public
      * @return void
      */
-    public function editSnapshot($snapshotID)
+    public function editSnapshot(int $snapshotID)
     {
         $snapshot = $this->zanode->getImageByID($snapshotID);
+
         if($_POST)
         {
             $this->zanode->editSnapshot($snapshotID);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
             $this->loadModel('action')->create('zanode', $snapshot->host, 'editSnapshot', '', $snapshot->localName ? $snapshot->localName : $snapshot->name);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->snapshot = $snapshot;
