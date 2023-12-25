@@ -12,10 +12,11 @@
 class zahost extends control
 {
     /**
+     * 展示宿主机列表。
      * View host list.
      *
      * @param  string $browseType
-     * @param  string $param
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -23,18 +24,11 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $browseType = strtolower($browseType);
-        $param      = (int)$param;
-
         $this->app->session->set('zahostList', $this->app->getURI(true));
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $hostList = $this->zahost->getList($browseType, $param, $orderBy, $pager);
-        $nodeList = $this->zahost->getHostNodeGroup();
-
+        /* 构建搜索表单。*/
         /* Build the search form. */
         $actionURL = $this->createLink('zahost', 'browse', "browseType=bySearch&param=myQueryID");
         $this->config->zahost->search['actionURL'] = $actionURL;
@@ -42,6 +36,8 @@ class zahost extends control
         $this->config->zahost->search['onMenuBar'] = 'no';
         $this->loadModel('search')->setSearchParams($this->config->zahost->search);
 
+        /* 是否展示帮助信息。*/
+        /* Whether to show the help. */
         $showFeature = false;
         $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
         if(strpos(",$accounts,", $this->app->user->account) === false)
@@ -51,9 +47,14 @@ class zahost extends control
             $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
         }
 
+        $browseType = strtolower($browseType);
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         $this->view->title       = $this->lang->zahost->common;
-        $this->view->hostList    = $hostList;
-        $this->view->nodeList    = $nodeList;
+        $this->view->hostList    = $this->zahost->getList($browseType, $param, $orderBy, $pager);
+        $this->view->nodeList    = $this->zahost->getHostNodeGroup();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
         $this->view->pager       = $pager;
         $this->view->param       = $param;
