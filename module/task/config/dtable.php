@@ -185,7 +185,7 @@ $config->task->dtable->fieldList['mailto']['group']    = 9;
 $config->task->dtable->fieldList['actions']['type']     = 'actions';
 $config->task->dtable->fieldList['actions']['width']    = '160px';
 $config->task->dtable->fieldList['actions']['list']     = $config->task->actionList;
-$config->task->dtable->fieldList['actions']['menu']     = array(array('confirmStoryChange'), array('start|restart', 'finish', 'close', 'recordWorkhour', 'edit', 'batchCreate'));
+$config->task->dtable->fieldList['actions']['menu']     = array(array('confirmStoryChange'), array('start', 'finish', 'close', 'recordWorkhour', 'edit', 'batchCreate'));
 $config->task->dtable->fieldList['actions']['required'] = true;
 
 /* Record effort page. */
