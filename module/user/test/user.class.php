@@ -73,6 +73,22 @@ class userTest
 
     /**
      * 测试根据用户和状态获取项目列表。
+     * Test get projects by user and status.
+     *
+     * @param  string $account
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getProjectsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->objectModel->getProjects($account, $status, $orderBy, $pager);
+    }
+
+    /**
+     * 测试根据用户和状态获取项目列表。
      * Test fetch projects by user and status.
      *
      * @param  string $account
