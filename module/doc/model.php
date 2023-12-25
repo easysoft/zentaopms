@@ -227,7 +227,7 @@ class docModel extends model
         if($lib->execution) $lib->type = 'execution';
         if($lib->type == 'execution' && $lib->execution && !$lib->project)
         {
-            $execution    = $this->loadModel('execution')->getByID($lib->execution);
+            $execution    = $this->loadModel('execution')->getByID((int)$lib->execution);
             $lib->project = $execution->project;
         }
         if($libType == 'api')
