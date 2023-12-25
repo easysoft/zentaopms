@@ -176,61 +176,66 @@ class zanode extends control
     }
 
     /**
-     * start Node.
+     * 开始执行节点。
+     * Start Node.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function start($nodeID)
+    public function start(int $nodeID)
     {
         $this->handleNode($nodeID, 'boot');
     }
 
     /**
-     * shutdown Node.
+     * 关闭执行节点。
+     * Shutdown Node.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function close($nodeID)
+    public function close(int $nodeID)
     {
         $this->handleNode($nodeID, 'destroy');
     }
 
     /**
+     * 休眠执行节点。
      * Suspend Node.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function suspend($nodeID)
+    public function suspend(int $nodeID)
     {
         $this->handleNode($nodeID, 'suspend');
     }
 
     /**
+     * 重启执行节点。
      * Reboot Node.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function reboot($nodeID)
+    public function reboot(int $nodeID)
     {
         $this->handleNode($nodeID, 'reboot');
     }
 
     /**
+     * 恢复执行节点。
      * Resume Node.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function resume($nodeID)
+    public function resume(int $nodeID)
     {
         $this->handleNode($nodeID, 'resume');
     }
