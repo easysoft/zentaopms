@@ -18,6 +18,11 @@ $(function()
     });
 
     $('#dropMenu').css('z-index', 9999);
+
+    $("input[name^='uploadImage']").each(function()
+    {
+        $(this).closest('td').siblings("td[id^='buildBox']").find('select').data('zui.picker').setValue('trunk');
+    })
 })
 
 /**
