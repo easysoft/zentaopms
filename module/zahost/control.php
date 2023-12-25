@@ -66,26 +66,22 @@ class zahost extends control
     }
 
     /**
+     * 展示宿主机详情。
      * View host.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function view($id, $orderBy = 'id_desc')
+    public function view(int $id)
     {
         $zahost = $this->zahost->getById($id);
 
-        $this->view->title      = $this->lang->zahost->view;
-        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->zahost->common);
-        $this->view->position[] = $this->lang->zahost->view;
-
-        $this->view->zahost     = $zahost;
-        $this->view->orderBy    = $orderBy;
-        $this->view->nodeList   = $this->loadModel("zanode")->getListByHost($this->view->zahost->id, $orderBy);
-        $this->view->initBash   = sprintf($this->config->zahost->initBash, $zahost->secret, getWebRoot(true));
-        $this->view->actions    = $this->loadModel('action')->getList('zahost', $id);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->title    = $this->lang->zahost->view;
+        $this->view->zahost   = $zahost;
+        $this->view->nodeList = $this->loadModel('zanode')->getListByHost($id);
+        $this->view->initBash = sprintf($this->config->zahost->initBash, $zahost->secret, getWebRoot(true));
+        $this->view->actions  = $this->loadModel('action')->getList('zahost', $id);
         $this->display();
     }
 
