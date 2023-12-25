@@ -3,9 +3,8 @@
 
 /**
 
-title=测试jenkinsModel->gitTasks();
+title=测试jenkinsModel->getTasks();
 cid=1
-pid=1
 
 - 测试获取流水线 1 列表 depth 0 @0
 - 测试获取流水线 1 列表 depth 1 @0
