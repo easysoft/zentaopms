@@ -89,13 +89,14 @@ class zanode extends control
     }
 
     /**
+     * 创建执行节点。
      * Create node.
      *
      * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function create($hostID = 0)
+    public function create(int $hostID = 0)
     {
         if(!empty($_POST))
         {

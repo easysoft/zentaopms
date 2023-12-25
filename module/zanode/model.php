@@ -55,7 +55,7 @@ class zanodemodel extends model
      */
     public function create()
     {
-        $data = fixer::input('post')
+        $data = form::data()
             ->setIF($this->post->hostType == 'physics', 'parent', 0)
             ->setIF($this->post->hostType == 'physics', 'osName', $this->post->osNamePhysics)
             ->get();
