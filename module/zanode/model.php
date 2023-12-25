@@ -722,9 +722,10 @@ class zanodemodel extends model
 
 
     /**
+     * 通过ID获取host。
      * Get Host by id.
      *
-     * @param  int $id
+     * @param  int    $id
      * @access public
      * @return object
      */
