@@ -46,9 +46,6 @@ class jenkins extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jenkinsID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
-
-        $this->view->title = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
-        $this->display();
     }
 
     /**
