@@ -3164,7 +3164,7 @@ EOF;
         }
 
         /* Check the execution is closed. */
-        $productModuleList = array('story', 'bug', 'testtask');
+        $productModuleList = array('story', 'bug', 'testtask', 'testreport');
         if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
         {
             if(!isset($executionsStatus[$object->execution]))
