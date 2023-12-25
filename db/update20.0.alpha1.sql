@@ -30,6 +30,7 @@ ALTER TABLE `zt_project` ADD `stageBy` enum('project', 'product') NOT NULL DEFAU
 UPDATE `zt_project` SET `stageBy` = 'project' WHERE `division` = '0';
 UPDATE `zt_project` SET `stageBy` = 'product' WHERE `division` = '1';
 ALTER TABLE `zt_project` DROP `division`;
+ALTER TABLE `zt_project` CHANGE `minColWidth` `minColWidth` smallint NOT NULL DEFAULT '264' AFTER `colWidth`;
 
 ALTER TABLE `zt_bug` CHANGE `linkBug` `relatedBug` varchar(255) NOT NULL DEFAULT '';
 

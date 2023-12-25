@@ -334,8 +334,8 @@ $lang->kanbancolumn->confirmArchive     = 'Are you sure to archive this column? 
 $lang->kanbancolumn->confirmDelete      = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
 $lang->kanbancolumn->confirmDeleteChild = 'Are you sure to delete this column? After deleting a column, all cards in the column will be moved to the parent column.';
 $lang->kanbancolumn->confirmRestore     = 'Are you sure you want to restore this Kanban column? After restoring the Kanban column, the Kanban column and all tasks in the Kanban column will be restored to the previous position at the same time.';
-$lang->kanbancolumn->fixedTip           = 'Fixed column width must >= 200px.';
-$lang->kanbancolumn->autoTip            = 'Minimum column width must >= 200px.';
+$lang->kanbancolumn->fixedTip           = 'Fixed column width must >= 264px.';
+$lang->kanbancolumn->autoTip            = 'Minimum column width must >= 264px.';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name         = $lang->kanban->laneName;
