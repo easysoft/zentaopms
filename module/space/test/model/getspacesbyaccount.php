@@ -5,6 +5,23 @@
 title=测试 spaceModel->getSpacesByAccount();
 cid=1
 
+- 获取用户名为空的空间列表 @0
+- 获取用户名为admin的空间列表
+ - 第0条的name属性 @空间1
+ - 第0条的k8space属性 @k8space
+ - 第0条的owner属性 @admin
+ - 第0条的default属性 @0
+- 获取用户名为user1的空间列表
+ - 第0条的name属性 @空间2
+ - 第0条的k8space属性 @k8space
+ - 第0条的owner属性 @user1
+ - 第0条的default属性 @0
+- 获取用户名为test的空间列表 @0
+- 获取用户名为空的空间数量 @0
+- 获取用户名为admin的空间数量 @1
+- 获取用户名为user1的空间数量 @1
+- 获取用户名为test的空间数量 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
