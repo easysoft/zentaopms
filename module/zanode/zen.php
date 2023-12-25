@@ -19,7 +19,7 @@ class zanodeZen extends zanode
      * @param  string $type boot|destroy|suspend|reboot|resume
      * @return void
      */
-    protected function handleNode(int $nodeID, string $type): void
+    protected function handleNode(int $nodeID, string $type)
     {
         $node = $this->getNodeByID($nodeID);
 
