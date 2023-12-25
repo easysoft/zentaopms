@@ -187,6 +187,22 @@ class metricTest
     }
 
     /**
+     * Test getGroupTable.
+     *
+     * @param  array  $query
+     * @param  string $key
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getGroupTable($header, $data, $withCalcTime = true, $returnHeader = true)
+    {
+        list($header, $data) = $this->objectModel->getGroupTable($header, $data, $withCalcTime);
+
+        return $returnHeader ? $header : $data;
+    }
+
+    /**
      * Test processRecordQuery.
      *
      * @param  array  $query
@@ -389,6 +405,63 @@ class metricTest
     {
         $metric = $this->objectModel->dao->select('*')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
         return $this->objectModel->getViewTableHeader($metric);
+    }
+
+    /**
+     * Test isFirstGenerate.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isFirstGenerate()
+    {
+        $isFirst = $this->objectModel->isFirstGenerate();
+        $this->objectModel->dao->delete()->from(TABLE_METRICLIB)->exec();
+
+        return $isFirst;
+    }
+
+    /**
+     * Test processImplementTips.
+     *
+     * @param  array $filters
+     * @access public
+     * @return bool
+     */
+    public function processImplementTips($code)
+    {
+        $this->objectModel->processImplementTips($code);
+
+        $tips = $this->objectModel->lang->metric->implement->instructionTips;
+        foreach($tips as $tip)
+        {
+            if(strpos($tip, '{code}') !== false) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Test buildFilterCheckList.
+     *
+     * @param  array $filters
+     * @access public
+     * @return array
+     */
+    public function buildFilterCheckList($filters)
+    {
+        $filterItems = $this->objectModel->buildFilterCheckList($filters);
+
+        $result = array();
+        foreach(array('scope', 'object', 'purpose') as $object)
+        {
+            $checkedCount = 0;
+            if(isset($filterItems[$object]['items']))
+            {
+                foreach($filterItems[$object]['items'] as $item) if($item['checked']) $checkedCount ++;
+            }
+            $result[$object] = $checkedCount;
+        }
+        return $result;
     }
 
     /**
