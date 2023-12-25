@@ -126,7 +126,7 @@ $config->execution->dtable->fieldList['progress']['group']    = '4';
 $config->execution->dtable->fieldList['progress']['show']     = true;
 
 $config->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
-$config->execution->dtable->fieldList['burn']['name']     = 'burn';
+$config->execution->dtable->fieldList['burn']['name']     = 'burns';
 $config->execution->dtable->fieldList['burn']['type']     = 'burn';
 $config->execution->dtable->fieldList['burn']['sortType'] = false;
 $config->execution->dtable->fieldList['burn']['width']    = '88';
