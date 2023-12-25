@@ -73,4 +73,3 @@ if($task) modalHeader(set::title($lang->zanode->createImage));
 );
 
 render();
-

@@ -160,7 +160,7 @@ class zanodemodel extends model
      */
     public function createImage($zanodeID = 0)
     {
-        $data = fixer::input('post')->get();
+        $data = form::data()->get();
 
         if(empty($data->name)) dao::$errors['message'][] = $this->lang->zanode->imageNameEmpty;
         if(dao::isError()) return false;
@@ -193,7 +193,6 @@ class zanodemodel extends model
         );
 
         $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
-
 
         if(!empty($result) and $result->code == 'success')
         {

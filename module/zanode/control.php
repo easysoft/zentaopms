@@ -241,13 +241,14 @@ class zanode extends control
     }
 
     /**
+     * 创建快照。
      * Create custom image.
      *
      * @param  int    $nodeID
      * @access public
      * @return void
      */
-    public function createImage($nodeID = 0)
+    public function createImage(int $nodeID = 0)
     {
         $task        = '';
         $node        = $this->zanode->getNodeByID($nodeID);
@@ -257,19 +258,13 @@ class zanode extends control
         if($_POST)
         {
             $this->zanode->createImage($nodeID);
-
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->task = $task;
         $this->view->node = $node;
-        $this->view->rate = !empty($task->rate) ? $task->rate : 0;
+        $this->view->rate = isset($task->rate) ? $task->rate : 0;
         $this->display();
     }
 
