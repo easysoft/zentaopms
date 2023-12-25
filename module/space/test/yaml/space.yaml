@@ -13,7 +13,9 @@ fields:
       range: admin,user{9}
     - field: account2
       range: "[],1-9"
+  - field: default
+    range: '0,1'
   - field: k8space
-    range: 'k8space'
+    range: "`quickon-system`,`quickon-app`"
   - field: deleted
     range: 0
