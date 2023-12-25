@@ -16,3 +16,12 @@ $config->zanode->form->create['osName']        = array('type' => 'string', 'requ
 $config->zanode->form->create['osNamePre']     = array('type' => 'string', 'required' => false);
 $config->zanode->form->create['osNamePhysics'] = array('type' => 'string', 'required' => false);
 $config->zanode->form->create['desc']          = array('type' => 'string', 'required' => false, 'control' => 'editor');
+
+
+$config->zanode->form->edit = array();
+$config->zanode->form->edit['name']     = array('type' => 'string', 'required' => false, 'filter' => 'trim');
+$config->zanode->form->edit['extranet'] = array('type' => 'string', 'required' => false, 'filter' => 'trim');
+$config->zanode->form->edit['memory']   = array('type' => 'float',  'required' => false);
+$config->zanode->form->edit['diskSize'] = array('type' => 'float',  'required' => false);
+$config->zanode->form->edit['osName']   = array('type' => 'string', 'required' => false);
+$config->zanode->form->edit['desc']     = array('type' => 'string', 'required' => false, 'control' => 'editor');

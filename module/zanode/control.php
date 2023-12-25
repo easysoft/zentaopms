@@ -102,7 +102,7 @@ class zanode extends control
         {
             $nodeID = $this->zanode->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "id=$nodeID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "id=$nodeID")));
         }
 
         $this->view->title     = $this->lang->zanode->create;
@@ -113,13 +113,14 @@ class zanode extends control
     }
 
     /**
+     * 编辑执行节点。
      * Edit node.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         if($_POST)
         {
@@ -132,8 +133,8 @@ class zanode extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         $zanode = $this->zanode->getNodeByID($id);
@@ -142,8 +143,8 @@ class zanode extends control
         $this->view->zanode = $zanode;
         if($zanode->type == 'node')
         {
-            $this->view->host  = $this->zanode->getHostByID($this->view->zanode->parent);
-            $this->view->image = $this->zanode->getImageByID($this->view->zanode->image);
+            $this->view->host  = $this->zanode->getHostByID($zanode->parent);
+            $this->view->image = $this->zanode->getImageByID($zanode->image);
         }
         $this->display();
     }
