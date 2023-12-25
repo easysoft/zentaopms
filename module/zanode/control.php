@@ -370,11 +370,11 @@ class zanode extends control
     }
 
     /**
+     * 快照列表。
      * Browse snapshot.
      *
      * @param int    $nodeID
      * @param string $browseType
-     * @param int    $param
      * @param string $orderBy
      * @param int    $recTotal
      * @param int    $recPerPage
@@ -382,21 +382,18 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function browseSnapshot($nodeID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseSnapshot(int $nodeID, string $browseType = 'all', string $orderBy = 'id', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('zahost');
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        $snapshotList = $this->zanode->getSnapshotList($nodeID, $orderBy, $pager);
 
         $this->view->title        = $this->lang->zanode->browseSnapshot;
         $this->view->nodeID       = $nodeID;
         $this->view->node         = $this->zanode->getNodeByID($nodeID);
-        $this->view->snapshotList = $snapshotList;
+        $this->view->snapshotList = $this->zanode->getSnapshotList($nodeID, $orderBy, $pager);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager        = $pager;
-        $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
 
