@@ -1284,7 +1284,7 @@ class testcaseZen extends testcase
         $this->view->showFields      = $showFields;
         $this->view->story           = $story;
         $this->view->storyPairs      = $storyPairs;
-        $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+        $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->currentModuleID = $moduleID;
     }
 
