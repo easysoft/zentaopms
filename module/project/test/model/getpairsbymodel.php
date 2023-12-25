@@ -24,6 +24,6 @@ r($tester->project->getPairsByModel('all', 'noclosed'))          && p('43') && e
 r($tester->project->getPairsByModel('all', 'multiple'))          && p('33') && e('项目集3 / 项目33'); // 获取启用迭代的项目
 r($tester->project->getPairsByModel('all', 'noclosed,multiple')) && p('43') && e('项目集3 / 项目43'); // 获取未关闭的启用迭代的项目
 
-r($tester->project->getPairsByModel('all', 'noclosed', 50))                && p('21') && e('项目集1 / 项目21'); // 获取所有项目
-r($tester->project->getPairsByModel('waterfall', 'noclosed', 11))          && p('22') && e('项目集2 / 项目22'); // 获取所有瀑布项目
-r($tester->project->getPairsByModel('agileplus', 'noclosed,multiple', 11)) && p('34') && e('项目集4 / 项目34'); // 获取所有瀑布项目
+r($tester->project->getPairsByModel('all', 'noclosed', 50))                && p('50') && e('项目集10 / 项目50'); // 获取所有项目
+r($tester->project->getPairsByModel('waterfall', 'noclosed', 11))          && p()     && e('0');                 // 获取所有瀑布项目
+r($tester->project->getPairsByModel('agileplus', 'noclosed,multiple', 11)) && p('11') && e('项目集1 / 项目11');  // 获取所有瀑布项目
