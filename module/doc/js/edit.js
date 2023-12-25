@@ -4,6 +4,16 @@ $(function()
     var contentHeight = $(document).height() - 92;
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea').height(contentHeight);}, 100);
     setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
+    if(contentType == 'markdown' && $(document).height() > $(window).height())
+    {
+        setTimeout(function()
+        {
+            var markdownContentHeight = $(window).height() - $('#headerBox').height() - $('#appsBar').height() - 40;
+            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap').css('max-height', markdownContentHeight + 'px');
+            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar').css('display', 'block');
+            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar div').height(contentHeight - markdownContentHeight);
+        }, 100);
+    }
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 
     $('#saveDraft').click(function()
