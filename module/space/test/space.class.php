@@ -100,4 +100,20 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $instances;
     }
+
+    /**
+     * 根据ID获取空间。
+     * Get space by id.
+     *
+     * @param  int               $spaceID
+     * @access public
+     * @return array|object|bool
+     */
+    public function getByIDTest(int $spaceID): array|object|bool
+    {
+        $space = $this->objectModel->getByID($spaceID);
+
+        if(dao::isError()) return dao::getError();
+        return $space;
+    }
 }
