@@ -25,6 +25,22 @@ class jenkinsTest
     }
 
     /**
+     * 测试获取 Jenkins 流水线。
+     * Test get jobs by jenkins .
+     *
+     * @param  int    $jenkinsID
+     * @access public
+     * @return string
+     */
+    public function getJobPairsTest(int $jenkinsID): string
+    {
+        $jobs = $this->jenkins->getJobPairs($jenkinsID);
+        $return = '';
+        foreach($jobs as $jobID => $job) $return .= "{$jobID}:{$job},";
+        return trim($return, ',');
+    }
+
+    /**
      * Create a jenkins.
      *
      * @access public
