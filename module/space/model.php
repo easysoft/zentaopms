@@ -133,11 +133,11 @@ class spaceModel extends model
      * 根据ID获取空间。
      * Get space by id.
      *
-     * @param  int    $spaceID
+     * @param  int          $spaceID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID(int $spaceID): ?object
+    public function getByID(int $spaceID): object|false
     {
         return $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
