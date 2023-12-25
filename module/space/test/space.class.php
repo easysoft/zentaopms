@@ -29,4 +29,20 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $spaceList;
     }
+
+    /**
+     * 创建默认空间。
+     * Create default space by account.
+     *
+     * @param  string            $account
+     * @access public
+     * @return bool|array|object
+     */
+    public function createDefaultSpaceTest(string $account): bool|array|object
+    {
+        $defaultSpace = $this->objectModel->createDefaultSpace($account);
+
+        if(dao::isError()) return dao::getError();
+        return $defaultSpace;
+    }
 }
