@@ -405,13 +405,14 @@ class build extends control
      * @param  int    $buildID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkStory(int $buildID = 0, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function linkStory(int $buildID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -441,11 +442,11 @@ class build extends control
         $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, 'id', $executionID, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $build->allStories, $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionID, $build->product, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getExecutionStories($executionID, $build->product, $orderBy, 'byBranch', $build->branch, 'story', $build->allStories, $pager);
         }
 
         $this->view->allStories   = $allStories;
@@ -455,6 +456,7 @@ class build extends control
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
         $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
         $this->display();
     }
 

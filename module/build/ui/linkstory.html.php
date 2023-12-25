@@ -37,6 +37,8 @@ dtable
     set::id('unlinkStoryList'),
     set::userMap($users),
     set::cols($cols),
+    set::orderBy($orderBy),
+    set::sortLink(createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param&orderBy={name}_{sortType}")),
     set::data(array_values($allStories)),
     set::extraHeight('+144'),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
