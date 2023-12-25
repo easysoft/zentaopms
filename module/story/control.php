@@ -3136,6 +3136,13 @@ class story extends control
     {
         $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'active,launched', 'id_desc', 0, '', 'requirement');
 
+        /* 获取当前项目下研发中的需求。*/
+        /* Get developing requirements.*/
+        if($this->config->vision and $this->app->tab == 'project')
+        {
+            $developingURS = $this->story->getExecutionStoryPairs($this->session->project, $productID, $branchID, 0, '', 'developing', 'requirement');
+            $URS = array_merge($developingURS, $URS);
+        }
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }
 
