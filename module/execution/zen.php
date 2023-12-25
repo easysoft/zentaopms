@@ -1586,7 +1586,7 @@ class executionZen extends execution
         {
             $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
         }
-        elseif($module == 'testreport' && $method == 'create')
+        elseif(($module == 'testreport' && $method == 'create') || ($module == 'execution' && $method == 'cases'))
         {
             $link = helper::createLink('execution', 'testtask', "executionID=%s");
         }
