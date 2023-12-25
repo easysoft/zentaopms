@@ -785,7 +785,7 @@ class programModel extends model
      */
     public function close(object $program, object $oldProgram): array|bool
     {
-        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->close['id'], $this->post->uid);
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->close['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($program)
             ->autoCheck()
             ->checkIF($program->realEnd != '', 'realEnd', 'le', helper::today())
@@ -816,7 +816,7 @@ class programModel extends model
         }
 
         if(!helper::isZeroDate($oldProgram->realBegan)) $program->realBegan = helper::today();
-        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->activate['id'], $this->post->uid);
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->activate['id'], (string)$this->post->uid);
 
         $this->dao->update(TABLE_PROJECT)->data($program)
             ->autoCheck()
