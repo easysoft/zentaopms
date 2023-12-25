@@ -1136,7 +1136,7 @@ class storyModel extends model
                 if(!empty($story->plan)) $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
             }
 
-            $changed = $story->parent != $oldStory->parent;
+            $changed = (isset($story->parent) && $story->parent != $oldStory->parent);
             if($oldStory->parent > 0)
             {
                 $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
@@ -1157,7 +1157,7 @@ class storyModel extends model
                 }
             }
 
-            if($story->parent > 0)
+            if(isset($story->parent) && $story->parent > 0)
             {
                 $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
                 $this->dao->update(TABLE_STORY)->set('parent')->eq(-1)->where('id')->eq($story->parent)->exec();
@@ -1228,8 +1228,7 @@ class storyModel extends model
                 if(in_array($changeStoryID, $removeStories))
                 {
                     $linkStories = str_replace(",$storyID,", ',', ",$changeStory,");
-                    $linkStories = trim($linkStories, ',');
-                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
+                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(trim($linkStories, ','))->where('id')->eq((int)$changeStoryID)->exec();
                 }
             }
 
