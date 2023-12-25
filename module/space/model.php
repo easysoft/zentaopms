@@ -79,7 +79,7 @@ class spaceModel extends model
 
     /**
      * 创建默认空间。
-     * Create default space by account
+     * Create default space by account.
      *
      * @param  string $account
      * @access public
