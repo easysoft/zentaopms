@@ -22,3 +22,18 @@ ALTER TABLE `zt_feedback` ADD COLUMN `keywords` varchar(255) NOT NULL DEFAULT ''
 
 DELETE FROM `zt_cron` WHERE command='moduleName=measurement&methodName=initCrontabQueue';
 DELETE FROM `zt_cron` WHERE command='moduleName=measurement&methodName=execCrontabQueue';
+
+ALTER TABLE `zt_burn` MODIFY `execution` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_burn` MODIFY `estimate` float NOT NULL DEFAULT '0';
+ALTER TABLE `zt_burn` MODIFY `left` float NOT NULL DEFAULT '0';
+ALTER TABLE `zt_burn` MODIFY `consumed` float NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_task` MODIFY `design` mediumint(8) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `designVersion` smallint(6) unsigned NOT NULL DEFAULT '1';
+ALTER TABLE `zt_task` MODIFY `left` float unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `subStatus` varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_task` MODIFY `color` char(7) NOT NULL DEFAULT '';
+ALTER TABLE `zt_task` MODIFY `desc` mediumtext NULL;
+ALTER TABLE `zt_task` MODIFY `version` smallint(6) NOT NULL DEFAULT '0';
+ALTER TABLE `zt_task` MODIFY `assignedTo` varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_task` MODIFY `planDuration` int(11) NOT NULL DEFAULT '0';
