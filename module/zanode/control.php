@@ -67,6 +67,7 @@ class zanode extends control
     }
 
     /**
+     * 在宿主机详情页中展示执行节点列表。
      * Browse ZenAgent Node list in zahost view.
      *
      * @param  int    $hostID
@@ -74,12 +75,9 @@ class zanode extends control
      * @access public
      * @return void
      */
-    public function nodeList($hostID, $orderBy = 'id_desc')
+    public function nodeList(int $hostID, string $orderBy = 'id_desc')
     {
-        if(!commonModel::hasPriv('zanode', 'browse'))
-        {
-            $this->loadModel('common')->deny('zanode', 'browse', false);
-        }
+        if(!commonModel::hasPriv('zanode', 'browse')) $this->loadModel('common')->deny('zanode', 'browse', false);
 
         $this->view->title    = $this->lang->zanode->common;
         $this->view->nodeList = $this->zanode->getListByHost($hostID, $orderBy);
