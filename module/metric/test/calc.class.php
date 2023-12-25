@@ -878,6 +878,13 @@ class metricTest
         return $this->objectModel->getCollectConfText($metric);
     }
 
+    /**
+     * Test deduplication.
+     *
+     * @param  object $code
+     * @access public
+     * @return string
+     */
     public function deduplication($code)
     {
         $this->objectModel->deduplication($code);
@@ -887,5 +894,48 @@ class metricTest
             ->fetch('num');
 
         return $recordCount;
+    }
+
+    /**
+     * Test fetchMetrics.
+     *
+     * @param  string $scope
+     * @param  string $stage
+     * @param  string $object
+     * @param  string $purpose
+     * @param  string $query
+     * @param  string $sort
+     * @access public
+     * @return array
+     */
+    public function fetchMetrics($scope, $stage = 'all', $object = '', $purpose = '', $query = '', $sort = 'id_desc')
+    {
+        return $this->objectModel->fetchMetrics($scope, $stage, $object, $purpose, $query, $sort);
+    }
+
+    /**
+     * Test fetchMetricsByScope.
+     *
+     * @param  string $scope
+     * @param  int    $limit
+     * @access public
+     * @return string
+     */
+    public function fetchMetricsByScope($scope, $limit = -1)
+    {
+        return $this->objectModel->fetchMetricsByScope($scope, $limit);
+    }
+
+    /**
+     * Test fetchMetricByID.
+     *
+     * @param  string       $code
+     * @param  string|array $fields
+     * @access public
+     * @return string
+     */
+    public function fetchMetricByID($code, $fields = '*')
+    {
+        return $this->objectModel->fetchMetricByID($code, $fields);
     }
 }
