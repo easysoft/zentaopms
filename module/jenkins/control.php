@@ -88,7 +88,7 @@ class jenkins extends control
      * @access public
      * @return void
      */
-    public function delete($jenkinsID)
+    public function delete(int $jenkinsID)
     {
         $jobs = $this->jenkins->getJobPairs($jenkinsID);
         if(!empty($jobs)) return $this->sendError($this->lang->jenkins->error->linkedJob, true);
