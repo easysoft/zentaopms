@@ -467,9 +467,9 @@ class buildModel extends model
         /* Process and insert build data. */
         $requiredFields = $this->config->build->create->requiredFields;
         $project        = $this->loadModel('project')->getByID((int)$build->project);
-        if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
+        if($project && !$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
 
-        $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
+        $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], (string)$this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -515,7 +515,7 @@ class buildModel extends model
         $requiredFields = $this->config->build->edit->requiredFields;
         if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
 
-        $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
+        $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -597,7 +597,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($storyIdList as $storyID) $this->action->create('story', $storyID, 'linked2build', '', $buildID);
+        foreach($storyIdList as $storyID) $this->action->create('story', (int)$storyID, 'linked2build', '', $buildID);
         $this->action->create('build', $buildID, 'linkstory', '', implode(',', $storyIdList));
         return !dao::isError();
     }

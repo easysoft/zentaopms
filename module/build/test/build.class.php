@@ -185,6 +185,7 @@ class buildTest
             'filePath' => '',
             'desc'     => '',
             'branch'   => '',
+            'project'  => 11,
         );
 
         foreach($param as $key => $value) $createFields[$key] = $value;
