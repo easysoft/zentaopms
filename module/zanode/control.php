@@ -185,7 +185,7 @@ class zanode extends control
      */
     public function start(int $nodeID)
     {
-        $this->handleNode($nodeID, 'boot');
+        $this->zanodeZen->handleNode($nodeID, 'boot');
     }
 
     /**
@@ -198,7 +198,7 @@ class zanode extends control
      */
     public function close(int $nodeID)
     {
-        $this->handleNode($nodeID, 'destroy');
+        $this->zanodeZen->handleNode($nodeID, 'destroy');
     }
 
     /**
@@ -211,7 +211,7 @@ class zanode extends control
      */
     public function suspend(int $nodeID)
     {
-        $this->handleNode($nodeID, 'suspend');
+        $this->zanodeZen->handleNode($nodeID, 'suspend');
     }
 
     /**
@@ -224,7 +224,7 @@ class zanode extends control
      */
     public function reboot(int $nodeID)
     {
-        $this->handleNode($nodeID, 'reboot');
+        $this->zanodeZen->handleNode($nodeID, 'reboot');
     }
 
     /**
@@ -237,28 +237,7 @@ class zanode extends control
      */
     public function resume(int $nodeID)
     {
-        $this->handleNode($nodeID, 'resume');
-    }
-
-    /**
-     * Boot node.
-     *
-     * @param  int    $nodeID
-     * @param  string $type
-     * @return void
-     */
-    public function handleNode($nodeID, $type)
-    {
-        $error = $this->zanode->handleNode($nodeID, $type);
-
-        if($error)
-        {
-            return print(js::alert($error) . js::reload('parent'));
-        }
-        else
-        {
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent'));
-        }
+        $this->zanodeZen->handleNode($nodeID, 'resume');
     }
 
     /**

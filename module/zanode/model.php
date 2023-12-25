@@ -434,47 +434,6 @@ class zanodemodel extends model
         return $error;
     }
 
-
-    /**
-     * Action Node.
-     *
-     * @param  int $id
-     * @param  string $type
-     * @return string
-     */
-    public function handleNode($id, $type)
-    {
-        $node = $this->getNodeByID($id);
-
-        if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
-        {
-            return sprintf($this->lang->zanode->busy, $this->lang->zanode->statusList[$node->status]);
-        }
-
-        /* Prepare create params. */
-        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
-        $path     = '/api/v1/kvm/' . $node->name . '/' . $type;
-        $param    = array('vmUniqueName' => $node->name);
-
-        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
-        $data   = json_decode($result, true);
-
-        if(empty($data)) return $this->lang->zanode->notFoundAgent;
-
-        if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);
-
-        if($type != 'reboot')
-        {
-            $status = $type == 'suspend' ? 'suspend' : 'running';
-            if($type == 'destroy') $status = 'shutoff';
-
-            $this->dao->update(TABLE_ZAHOST)->set('status')->eq($status)->where('id')->eq($id)->exec();
-        }
-
-        $this->loadModel('action')->create('zanode', $id, ucfirst($type));
-        return '';
-    }
-
     /**
      * Destroy Node.
      *
