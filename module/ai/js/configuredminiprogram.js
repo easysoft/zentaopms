@@ -617,19 +617,6 @@ $(function ()
         updateButtonStatus();
     });
 
-    if(!currentPrompt)
-    {
-        currentFields = defaultFields;
-        currentPrompt = currentFields.pop();
-        currentFields = currentFields.map(name =>
-        ({
-            name,
-            required: '0',
-            type: 'text',
-            placeholder: '',
-        }));
-    }
-
     currentFields.forEach(field =>
     {
         const formData = new FormData();

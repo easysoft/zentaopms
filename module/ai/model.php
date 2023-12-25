@@ -829,6 +829,8 @@ class aiModel extends model
         $data->published   = '0';
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
+        $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
+
         if(!empty($data->iconName) && !empty($data->iconTheme))
         {
             $data->icon = $data->iconName . '-' . $data->iconTheme;
@@ -839,9 +841,25 @@ class aiModel extends model
         $this->dao->insert(TABLE_MINIPROGRAM)
             ->data($data)
             ->exec();
+        $appID = $this->dao->lastInsertID();
+
+        $defaultFields = $this->lang->ai->miniPrograms->field->default;
+        for($i = 0; $i < 3; $i++)
+        {
+            $field = new stdClass();
+            $field->appID       = $appID;
+            $field->name        = $defaultFields[$i];
+            $field->type        = 'text';
+            $field->placeholder = $this->lang->ai->miniPrograms->placeholder->input;
+            $field->options     = null;
+            $field->required    = '0';
+            $this->dao->insert(TABLE_MINIPROGRAMFIELD)
+                ->data($field)
+                ->exec();
+        }
+
         if(dao::isError()) return false;
 
-        $appID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('miniProgram', $appID, 'created');
         return $appID;
     }

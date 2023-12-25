@@ -399,7 +399,6 @@ class ai extends control
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'editMiniProgram', "appID=$appID")));
         }
 
-
         $this->view->iconName = 'writinghand';
         $this->view->iconTheme = 7;
         $this->view->categoryList = $this->ai->getCustomCategories();

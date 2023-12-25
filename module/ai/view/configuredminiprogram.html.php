@@ -23,7 +23,6 @@ js::set('publishConfirm', $lang->ai->miniPrograms->publishConfirm);
 js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
 js::set('currentFields', $currentFields);
 js::set('currentPrompt', $currentPrompt);
-js::set('defaultFields', $lang->ai->miniPrograms->field->default);
 js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
 ?>
 
