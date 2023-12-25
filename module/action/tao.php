@@ -159,7 +159,7 @@ class actionTao extends actionModel
                 }
                 break;
             case 'estimated':
-                $project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
+                $project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($extra)->fetch('project');
                 $execution = (int)$extra;
                 break;
             default:
