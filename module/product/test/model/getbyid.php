@@ -1,18 +1,54 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getById();
+cid=0
+
+- 测试获取产品1的信息
+ - 属性name @正常产品1
+ - 属性code @code1
+ - 属性type @normal
+ - 属性PO @po1
+ - 属性QD @test1
+ - 属性RD @dev1
+- 测试获取产品2的信息
+ - 属性name @正常产品2
+ - 属性code @code2
+ - 属性type @normal
+ - 属性PO @po2
+ - 属性QD @test2
+ - 属性RD @dev2
+- 测试获取产品3的信息
+ - 属性name @正常产品3
+ - 属性code @code3
+ - 属性type @normal
+ - 属性PO @po3
+ - 属性QD @test3
+ - 属性RD @dev3
+- 测试获取产品4的信息
+ - 属性name @正常产品4
+ - 属性code @code4
+ - 属性type @normal
+ - 属性PO @po4
+ - 属性QD @test4
+ - 属性RD @dev4
+- 测试获取产品5的信息
+ - 属性name @正常产品5
+ - 属性code @code5
+ - 属性type @normal
+ - 属性PO @po5
+ - 属性QD @test5
+ - 属性RD @dev5
+- 测试获取不存在产品的信息 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('user')->gen(5);
 zdTable('product')->gen(10);
-
-/**
-
-title=productModel->getById();
-timeout=0
-cid=1
-
-*/
 
 $productIdList = array(1, 2, 3, 4, 5, 1000001);
 

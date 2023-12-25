@@ -1,15 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
 
 /**
 
 title=productModel->buildRoadmapForUI();
-cid=1
-pid=1
+cid=0
+
+- 空数据 @0
+- 分支没有数据 @0
+- 执行$data[$year][0] @1
+- 执行$data[$year][1] @5
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
 
 $product = $tester->loadModel('product');
 

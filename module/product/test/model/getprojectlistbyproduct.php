@@ -1,9 +1,24 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=productModel->getProjectListByProduct();
-cid=1
+cid=0
+
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 0, 'all', '', false, 'order_desc'  @0
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', false, 'order_desc'  @17
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '0', false, 'order_desc'  @17
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'undone', '', false, 'order_desc'  @12
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'wait', 'all', false, 'order_desc'  @5
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', false, 'order_desc', $pager  @17
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', false, 'order_desc', $pager  @5
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', true, 'order_desc'  @4
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '0', true, 'order_desc'  @4
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'undone', '', true, 'order_desc'  @4
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'wait', 'all', true, 'order_desc'  @2
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', true, 'order_desc', $pager  @4
+- 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', true, 'order_desc', $pager  @4
 
 */
 

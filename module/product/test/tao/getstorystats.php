@@ -1,10 +1,35 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=productTao->getStoryStats();
-timeout=0
-cid=1
+cid=0
+
+- 测试系统中所有产品下的需求统计信息
+ - 第1条的draft属性 @0
+ - 第1条的active属性 @1
+ - 第1条的changing属性 @1
+ - 第1条的reviewing属性 @0
+ - 第1条的finished属性 @0
+ - 第1条的closed属性 @0
+ - 第1条的total属性 @2
+- 测试产品id为1-10的产品下的需求统计信息
+ - 第2条的draft属性 @0
+ - 第2条的active属性 @1
+ - 第2条的changing属性 @1
+ - 第2条的reviewing属性 @0
+ - 第2条的finished属性 @0
+ - 第2条的closed属性 @0
+ - 第2条的total属性 @2
+- 测试产品id为11-20的产品下的需求统计信息
+ - 第11条的draft属性 @0
+ - 第11条的active属性 @1
+ - 第11条的changing属性 @1
+ - 第11条的reviewing属性 @0
+ - 第11条的finished属性 @0
+ - 第11条的closed属性 @0
+ - 第11条的total属性 @2
 
 */
 

@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productTao->getProjectPairsByProductIdList();
+cid=0
+
+- 不传入产品 ID。 @0
+- 用超级管理员账号，传入单个产品数组，确认获取条目数。 @10
+- 用超级管理员账号，传入多个产品数组，确认获取条目数。 @20
+- 用超级管理员账号，传入产品数组中含有不存在的产品，确认获取条目数。 @10
+- 不用超级管理员账号，传入单个产品数组，确认获取条目数。 @3
+- 不用超级管理员账号，传入多个产品数组，确认获取条目数。 @3
+- 不用超级管理员账号，传入产品数组中含有不存在的产品，确认获取条目数。 @3
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -17,14 +32,6 @@ $projectproduct->product->range('1-4');
 $projectproduct->project->range('11-70');
 $projectproduct->branch->range('0{2},1,0');
 $projectproduct->gen(50);
-
-/**
-
-title=测试productTao->getProjectPairsByProductIdList();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $product = $tester->loadModel('product');

@@ -1,15 +1,27 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
 
 /**
 
 title=测试通过项目查询产品信息 productModel->getProductPairsByProject();
-timeout=0
-cid=1
+cid=0
+
+- 测试获取项目11 状态为all的产品信息属性1 @正常产品1
+- 测试获取项目12 状态为all的产品信息属性2 @正常产品2
+- 测试获取项目13 状态为all的产品信息属性3 @正常产品3
+- 测试获取项目14 状态为all的产品信息属性4 @正常产品4
+- 测试获取项目15 状态为all的产品信息属性5 @正常产品5
+- 测试获取不存在的项目状态为all的产品信息 @0
+- 测试获取项目11 状态为unclosed的产品信息属性1 @正常产品1
+- 测试获取项目12 状态为unclosed的产品信息属性2 @正常产品2
+- 测试获取项目13 状态为unclosed的产品信息属性3 @正常产品3
+- 测试获取项目14 状态为unclosed的产品信息属性4 @正常产品4
+- 测试获取项目15 状态为unclosed的产品信息属性5 @正常产品5
+- 测试获取不存在的项目状态为unclosed的产品信息 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('project')->gen(50);
 zdTable('user')->gen(5);

@@ -1120,9 +1120,24 @@ class productTest
         return $_SESSION['storysearchParams']['queryID'];
     }
 
+    /**
+     * formatDataForListTest
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function formatDataForListTest($productID)
     {
         $product = $this->objectModel->getStats(array($productID));
+        if(isset($product[$productID]))
+        {
+            $product[$productID]->totalStories = 30;
+            $product[$productID]->finishedStories = 15;
+            $product[$productID]->unresolvedBugs = 20;
+            $product[$productID]->fixedBugs = 10;
+        }
+
         if(!$product) return false;
 
         return $this->objectModel->formatDataForList($product[$productID], array());

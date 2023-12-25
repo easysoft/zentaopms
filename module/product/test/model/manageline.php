@@ -1,17 +1,32 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
-
-zdTable('module')->config('module')->gen(3);
 
 /**
 
 title=productModel->manageLine();
-cid=1
-pid=1
+cid=0
+
+- 不传入数据。
+ - 第1条的root属性 @1
+ - 第1条的name属性 @产品线1
+- 查看修改后的结果，比较 id = 1 的结果。
+ - 属性root @1
+ - 属性name @新产品线1
+- 查看修改后的结果，比较 id = 2 的结果。
+ - 属性root @2
+ - 属性name @新产品线2
+- 查看修改后的结果，比较 id = 3 的结果。
+ - 属性root @3
+ - 属性name @新产品线3
+- 查看修改后的结果，比较 id = 4 的结果。
+ - 属性root @1
+ - 属性name @新产品线4
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
+
+zdTable('module')->config('module')->gen(3);
 
 $product = new productTest('admin');
 

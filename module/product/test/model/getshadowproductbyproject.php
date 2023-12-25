@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getShadowProductByProject();
+cid=0
+
+- 不传入项目编写。 @0
+- 传入正常的项目编号。
+ - 属性name @正常产品1
+ - 属性shadow @1
+- 传入不存在关联关系的项目编号。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -10,14 +23,6 @@ $projectProduct = zdTable('projectproduct');
 $projectProduct->project->range('1');
 $projectProduct->product->range('1');
 $projectProduct->gen(1);
-
-/**
-
-title=productModel->getShadowProductByProject();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $product = $tester->loadModel('product');

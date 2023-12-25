@@ -1,17 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
-
-zdTable('product')->gen(10);
 
 /**
 
 title=productModel->buildOperateMenu();
-timeout=0
-cid=1
+cid=0
+
+- 检查是否有关闭链接。第0条的text属性 @关闭
+- 检查是否有编辑和删除链接。 @2
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
+
+zdTable('product')->gen(10);
 
 global $tester;
 $productModel = $tester->loadModel('product');

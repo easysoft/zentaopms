@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->getListBySearch();
+cid=0
+
+- 测试通过空的搜索条件筛选产品数据第1条的name属性 @产品1
+- 测试通过搜索条件筛选产品数据第1条的name属性 @产品1
+- 测试通过不存在的搜索条件筛选产品数据第1条的name属性 @产品1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('user')->gen(5);
@@ -10,14 +21,6 @@ $userquery->sql->range("`(( 1   AND `name`  LIKE '%产品%' ) AND ( 1  ))`");
 $userquery->module->range('product');
 $userquery->gen(1);
 su('admin');
-
-/**
-
-title=测试productModel->getListBySearch();
-cid=1
-pid=1
-
-*/
 
 $queryIdList = array(0, 1, 2);
 

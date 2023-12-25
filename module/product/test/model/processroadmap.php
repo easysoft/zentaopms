@@ -1,15 +1,25 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
 
 /**
 
 title=productModel->processRoadmap();
-cid=1
-pid=1
+cid=0
+
+- 测试获取产品1下的发布roadmap
+ - 第0条的id属性 @1
+ - 第1条的id属性 @11
+ - 第2条的id属性 @21
+ - 第3条的id属性 @31
+- 测试获取产品2下的发布roadmap第0条的id属性 @7
+- 测试获取产品3下的发布roadmap第0条的id属性 @3
+- 测试获取产品4下的发布roadmap第0条的id属性 @9
+- 测试获取产品5下的发布roadmap第0条的id属性 @5
+- 测试获取不存在产品下的发布roadmap @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('product')->gen(50);
 zdTable('build')->gen(50);

@@ -1,5 +1,49 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->getList();
+cid=0
+
+- 获取项目集1下的所有产品
+ - 第1条的name属性 @产品1
+ - 第1条的program属性 @1
+- 获取项目集1下的未关闭产品
+ - 第1条的name属性 @产品1
+ - 第1条的program属性 @1
+- 获取项目集1下的我参与产品
+ - 第1条的name属性 @产品1
+ - 第1条的program属性 @1
+- 获取项目集1下的激活产品
+ - 第1条的name属性 @产品1
+ - 第1条的program属性 @1
+- 获取项目集1下的已关闭产品
+ - 第21条的name属性 @产品21
+ - 第21条的program属性 @1
+- 获取项目集1下的10条所有产品
+ - 第21条的name属性 @产品21
+ - 第21条的program属性 @1
+- 获取项目集1下的产品线1的所有产品
+ - 第1条的name属性 @产品1
+ - 第1条的line属性 @1
+- 获取项目集1下的所有非影子产品
+ - 第1条的name属性 @产品1
+ - 第1条的shadow属性 @0
+- 获取项目集1下的所有影子产品
+ - 第26条的name属性 @产品26
+ - 第26条的shadow属性 @1
+- 获取项目集1下的所有产品数量 @30
+- 获取项目集1下的未关闭产品数量 @20
+- 获取项目集1下的我参与产品数量 @10
+- 获取项目集1下的激活产品数量 @20
+- 获取项目集1下的已关闭产品数量 @10
+- 获取项目集1下的10条所有产品数量 @10
+- 获取项目集1下的产品数量线1的所有产品数量 @10
+- 获取项目集1下的所有非影子产品数量 @25
+- 获取项目集1下的所有影子产品数量 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('user')->gen(5);
@@ -8,14 +52,6 @@ zdTable('product')->config('product')->gen(30);
 zdTable('project')->config('program')->gen(10);
 zdTable('projectproduct')->config('projectproduct')->gen(30);
 su('admin');
-
-/**
-
-title=测试productModel->getList();
-timeout=0
-cid=1
-
-*/
 
 $programID  = 1;
 $statusList = array('all', 'noclosed', 'involved', 'normal', 'closed');

@@ -1,15 +1,27 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
 
 /**
 
 title=测试productModel->checkPriv();
-cid=1
-pid=1
+cid=0
+
+- 测试admin能否看到产品1 @1
+- 测试admin能否看到产品2 @1
+- 测试admin能否看到产品3 @1
+- 测试admin能否看到产品4 @1
+- 测试admin能否看到产品5 @1
+- 测试admin能否看到不存在的产品 @1
+- 测试po1能否看到产品1 @1
+- 测试po1能否看到产品2 @1
+- 测试po1能否看到产品3 @1
+- 测试po1能否看到产品4 @1
+- 测试po1能否看到产品5 @1
+- 测试po1能否看到不存在的产品 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
 
 $productIdList = array(1, 2, 3, 4, 5, 1000001);
 

@@ -1,5 +1,24 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getstatsproducts();
+cid=0
+
+- 测试传入空的产品ID列表 @0
+- 测试传入存在的产品ID列表第1条的name属性 @产品1
+- 测试传入不存在的产品ID列表 @0
+- 测试获取追加项目集信息空的产品ID列表 @0
+- 测试获取追加项目集信息存在的产品ID列表
+ - 第1条的programName属性 @项目集1
+ - 第1条的programPM属性 @admin
+- 测试获取追加项目集信息不存在的产品ID列表 @0
+- 测试传入空的产品ID列表且按照项目集排序 @0
+- 测试传入存在的产品ID列表且按照项目集排序第1条的name属性 @产品1
+- 测试传入不存在的产品ID列表且按照项目集排序 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('user')->gen(5);
@@ -9,14 +28,6 @@ $program->PM->range('admin');
 $program->gen(10);
 
 su('admin');
-
-/**
-
-title=productModel->getstatsproducts();
-timeout=0
-cid=1
-
-*/
 
 $productIdList[0] = array();
 $productIdList[1] = range(1, 10);

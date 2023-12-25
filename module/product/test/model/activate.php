@@ -1,9 +1,39 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试productModel->activate();
-cid=1
-pid=1
+cid=0
+
+- 测试未关闭产品1 @0
+- 测试未关闭产品2 @0
+- 测试未关闭产品3 @0
+- 测试未关闭产品4 @0
+- 测试未关闭产品5 @0
+- 测试关闭的产品1
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @normal
+- 测试关闭的产品2
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @normal
+- 测试关闭的产品3
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @normal
+- 测试关闭的产品4
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @normal
+- 测试关闭的产品5
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @normal
+- 测试不存在的产品11 @0
+- 测试不存在的产品0 @0
+- 测试不存在的产品-1 @0
 
 */
 

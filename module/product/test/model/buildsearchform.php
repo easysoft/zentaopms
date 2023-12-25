@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->buildSearchForm();
+cid=0
+
+- 正确的执行，正确的queryID @1
+- 错误的执行，正确的queryID @0
+- 正确的执行，错误的queryID @0
+- 错误的执行，错误的queryID @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -25,14 +37,6 @@ $query->sql->range("`(( 1   AND `name`  LIKE '%需求%' ) AND ( 1  )) AND delete
 $query->gen(1);
 
 su('admin');
-
-/**
-
-title=测试productModel->buildSearchForm();
-timeout=0
-cid=1
-
-*/
 
 $productIdList = array(1, 0);
 $queryIdList   = array(0, 1);

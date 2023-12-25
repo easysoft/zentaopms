@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->getPagerProductsWithProgramIn();
+cid=0
+
+- 执行$result[1000]
+ - 属性id @1000
+ - 属性program @1
+- 执行$result[1001]
+ - 属性id @1001
+ - 属性program @2
+- 执行$result[1002]
+ - 属性id @1002
+ - 属性program @3
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -20,18 +37,6 @@ function initData()
     $program->gen(5);
 }
 initData();
-
-/**
-
-title=productTao->getPagerProductsWithProgramIn();
-cid=1
-pid=1
-
-- 步骤1 @1000,0
-- 步骤2 @1001,2
-- 步骤3 @1002,3
-
-*/
 
 $productIDs = array(1000, 1001, 1002);
 

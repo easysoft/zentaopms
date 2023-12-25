@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 productModel::checkAccess;
-cid=1
+cid=0
+
+- 不传入ID @1
+- 传入存在ID的值 @6
+- 不传入ID，读取session信息 @6
+- 传入正确的ID @10
 
 */
 
@@ -11,7 +17,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('product')->gen(10);
 su('admin');
-
 
 global $tester;
 $tester->loadModel('product');

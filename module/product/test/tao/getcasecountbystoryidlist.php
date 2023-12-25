@@ -1,18 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->getCaseCountByStoryIdList();
+cid=0
+
+- 测试传入空的需求ID列表 @5
+- 测试传入需求ID列表属性1 @1
+- 测试传入不存在需求ID列表 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('case')->config('case')->gen(30);
 zdTable('user')->gen(5);
 su('admin');
-
-/**
-
-title=productTao->getCaseCountByStoryIdList();
-timeout=0
-cid=1
-
-*/
 
 $storyIdList[0] = array();
 $storyIdList[1] = range(1, 10);

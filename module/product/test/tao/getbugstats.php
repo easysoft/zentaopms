@@ -1,10 +1,26 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=productTao->getBugStats();
-timeout=0
-cid=1
+cid=0
+
+- 测试系统中所有产品下的Bug统计信息
+ - 第1条的unresolved属性 @3
+ - 第1条的fixed属性 @0
+ - 第1条的closed属性 @0
+ - 第1条的total属性 @3
+- 测试系统中产品1-10下的Bug统计信息
+ - 第2条的unresolved属性 @3
+ - 第2条的fixed属性 @0
+ - 第2条的closed属性 @0
+ - 第2条的total属性 @3
+- 测试系统中产品11-20下的Bug统计信息
+ - 第11条的unresolved属性 @3
+ - 第11条的fixed属性 @0
+ - 第11条的closed属性 @0
+ - 第11条的total属性 @3
 
 */
 

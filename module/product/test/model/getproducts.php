@@ -1,5 +1,25 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getProducts();
+cid=0
+
+- 测试获取项目11 状态为all的产品信息第1条的name属性 @正常产品1
+- 测试获取项目12 状态为all的产品信息第2条的name属性 @正常产品2
+- 测试获取项目13 状态为all的产品信息第3条的name属性 @正常产品3
+- 测试获取项目14 状态为all的产品信息第4条的name属性 @正常产品4
+- 测试获取项目15 状态为all的产品信息第5条的name属性 @正常产品5
+- 测试获取不存在的项目状态为all的产品信息 @0
+- 测试获取项目11 状态为unclosed的产品信息第1条的name属性 @正常产品1
+- 测试获取项目12 状态为unclosed的产品信息第2条的name属性 @正常产品2
+- 测试获取项目13 状态为unclosed的产品信息第3条的name属性 @正常产品3
+- 测试获取项目14 状态为unclosed的产品信息第4条的name属性 @正常产品4
+- 测试获取项目15 状态为unclosed的产品信息第5条的name属性 @正常产品5
+- 测试获取不存在的项目状态为unclosed的产品信息 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -7,14 +27,6 @@ zdTable('user')->gen(5);
 zdTable('product')->gen(10);
 zdTable('project')->gen(20);
 zdTable('projectproduct')->gen(50);
-
-/**
-
-title=productModel->getProducts();
-cid=1
-pid=1
-
-*/
 
 $projectIdList = array(11, 12, 13, 14, 15, 1000001);
 $statusList    = array('all', 'noclosed');

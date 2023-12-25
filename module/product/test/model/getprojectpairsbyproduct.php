@@ -1,5 +1,26 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->getProjectPairsByProduct();
+cid=0
+
+- 不传入产品 ID。 @0
+- 传入不存在产品 ID。 @0
+- 用超级管理员，传入产品 ID，确认获取条目数。 @10
+- 用超级管理员，传入产品 ID，确认获取非关闭项目的条目数。 @10
+- 用超级管理员，传入产品 ID 和追加查询的项目，确认获取非关闭项目的条目数。 @10
+- 用超级管理员，传入产品 ID，确认获取启用执行非关闭项目的条目数。 @7
+- 用超级管理员，传入产品 ID 和所有分支，确认获取条目数。 @10
+- 用超级管理员，传入产品 ID 和存在分支，确认获取条目数。 @10
+- 用超级管理员，传入产品 ID 和不存在分支，确认获取条目数。 @0
+- 用超级管理员，传入产品 ID，确认获取条目数。 @3
+- 用超级管理员，传入产品 ID，确认获取非关闭项目的条目数。 @3
+- 用超级管理员，传入产品 ID 和追加查询的项目，确认获取非关闭项目的条目数。 @4
+- 用超级管理员，传入产品 ID，确认获取启用执行非关闭项目的条目数。 @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -21,14 +42,6 @@ $projectproduct->product->range('1-4');
 $projectproduct->project->range('11-70');
 $projectproduct->branch->range('0{2},1,0');
 $projectproduct->gen(50);
-
-/**
-
-title=测试productModel->getProjectPairsByProduct();
-timeout=0
-cid=1
-
-*/
 
 global $tester;
 $product = $tester->loadModel('product');

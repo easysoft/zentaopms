@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->getPagerProductsIn();
+cid=0
+
+- 执行$result
+ - 属性id @1009
+ - 属性order @10
+- 执行$result[10000]属性empty @0
+- 执行$result
+ - 属性id @1007
+ - 属性order @8
+- 执行$result @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -15,19 +31,6 @@ function initData()
     $product->gen(10);
 }
 initData();
-
-/**
-
-title=productTao->getPagerProductsIn();
-cid=1
-pid=1
-
-- 步骤1降序排序      @1009,10
-- 步骤2不存在的数据  @0
-- 步骤3升序排序      @1007,8
-- 步骤4分页取2行数据 @2
-
-*/
 
 $productIDs = array(1007, 1008, 1009, 10000);
 
@@ -53,4 +56,3 @@ $pager = new pager(0, 2, 1);
 
 $result = $product->objectModel->getPagerProductsIn($productIDs, $pager, 'order_desc');
 r(count($result)) && p('') && e('2');
-

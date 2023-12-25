@@ -1,16 +1,15 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 productModel::accessDenied();
-timeout=0
-cid=1
+cid=0
 
 - 权限不足跳转 @fail
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 global $tester;
 $tester->app->moduleName = 'product';

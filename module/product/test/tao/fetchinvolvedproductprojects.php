@@ -1,5 +1,35 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->fetchInvolvedProductProjects();
+cid=0
+
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 0, 'all', '', 'order_desc'  @0
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc'  @8
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '0', 'order_desc'  @8
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'undone', '', 'order_desc'  @8
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'wait', 'all', 'order_desc'  @5
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc', $pager  @8
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc', $pager  @5
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc'  @3
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '0', 'order_desc'  @3
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'undone', '', 'order_desc'  @2
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'wait', 'all', 'order_desc'  @0
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc', $pager  @3
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc'  @7
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '0', 'order_desc'  @7
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'undone', '', 'order_desc'  @6
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'wait', 'all', 'order_desc'  @2
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc', $pager  @7
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc'  @7
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '0', 'order_desc'  @7
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'undone', '', 'order_desc'  @6
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'wait', 'all', 'order_desc'  @2
+- 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc', $pager  @7
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -30,14 +60,6 @@ $projectproduct = zdTable('projectproduct');
 $projectproduct->product->range('1-2');
 $projectproduct->project->range('1-50');
 $projectproduct->gen(50);
-
-/**
-
-title=测试productModel->fetchPairs();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $product = $tester->loadModel('product');

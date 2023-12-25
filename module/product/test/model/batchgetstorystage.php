@@ -1,13 +1,27 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
 
 /**
+
 title=测试批量获取需求阶段 productModel->batchGetStoryStage();
-cid=1
-pid=1
- */
+cid=0
+
+- 获取需求ID1,2,3的需求阶段
+ - 属性1 @wait
+ - 属性2 @planned
+ - 属性3 @projected
+- 获取需求ID4,5,6的需求阶段
+ - 属性4 @developing
+ - 属性5 @developed
+ - 属性6 @testing
+- 获取需求ID7,8,9的需求阶段
+ - 属性7 @tested
+ - 属性8 @verified
+ - 属性9 @released
+
+*/
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('storystage')->gen(50);
 

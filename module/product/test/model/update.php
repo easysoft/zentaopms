@@ -1,18 +1,45 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->update();
+cid=0
+
+- 测试更新产品名称
+ - 第0条的field属性 @name
+ - 第0条的old属性 @正常产品2
+ - 第0条的new属性 @john
+- 测试更新产品代号
+ - 第0条的field属性 @code
+ - 第0条的old属性 @code2
+ - 第0条的new属性 @newcode1
+- 测试更新产品类型
+ - 第0条的field属性 @type
+ - 第0条的old属性 @normal
+ - 第0条的new属性 @branch
+- 测试还原产品类型
+ - 第0条的field属性 @type
+ - 第0条的old属性 @branch
+ - 第0条的new属性 @normal
+- 测试不更改产品名称
+ - 第0条的field属性 @acl
+ - 第0条的old属性 @open
+ - 第0条的new属性 @private
+- 测试不更改产品名称
+ - 第0条的field属性 @whitelist
+ - 第0条的new属性 @,test1,dev1,pm1
+- 测试不更改产品名称 @0
+- 测试不更改产品代号 @0
+- 测试同一项目集下产品名称不能重复第name条的0属性 @『产品名称』已经有『john』这条记录了。
+- 测试同一项目集下产品代号不能重复第code条的0属性 @『产品代号』已经有『newcode1』这条记录了。
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 su('admin');
 
 zdTable('product')->gen(50);
-
-/**
-
-title=测试productModel->update();
-cid=1
-pid=1
-
-*/
 
 $product = new productTest('admin');
 

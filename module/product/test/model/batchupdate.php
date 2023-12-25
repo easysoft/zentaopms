@@ -1,17 +1,45 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
-
-zdTable('product')->gen(10);
 
 /**
 
 title=测试 productModel->batchUpdate();
-cid=1
-pid=1
+cid=0
+
+- 执行$changes
+ - 属性field @program
+ - 属性old @0
+ - 属性new @1
+- 执行$changes
+ - 属性field @name
+ - 属性old @正常产品1
+ - 属性new @批量修改产品1
+- 执行$changes
+ - 属性field @type
+ - 属性old @normal
+ - 属性new @branch
+- 执行$changes
+ - 属性field @acl
+ - 属性old @open
+ - 属性new @private
+- 验证唯一。
+ - 属性result @fail
+ - 属性message @product:2『产品名称』已经有『批量修改产品1』这条记录了。\n
+- 不传任何数据。 @0
+- 执行$changes
+ - 属性field @type
+ - 属性old @branch
+ - 属性new @normal
+- 执行$changes
+ - 属性field @acl
+ - 属性old @private
+ - 属性new @open
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
+
+zdTable('product')->gen(10);
 
 $product = new productTest('admin');
 

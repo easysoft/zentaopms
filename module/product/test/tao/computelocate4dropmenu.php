@@ -1,14 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试productModel->computeLocate4DropMenu();
-timeout=0
-cid=1
+cid=0
+
+- 执行product模块的computeLocate4DropMenu方法
+ -  @product
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @product
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @story
+ - 属性1 @create
+- 执行product模块的computeLocate4DropMenu方法
+ -  @product
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @product
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @bug
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @bug
+ - 属性1 @view
+- 执行product模块的computeLocate4DropMenu方法
+ -  @bug
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @testcase
+ - 属性1 @browse
+- 执行product模块的computeLocate4DropMenu方法
+ -  @testcase
+ - 属性1 @browse
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 global $tester;
 $product = $tester->loadModel('product');

@@ -1,17 +1,67 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zdTable('user')->gen;
-su('admin');
 
 /**
 
 title=productModel->getProductLink();
-timeout=0
-cid=1
+cid=0
+
+- 当前页面是product-roadmap，切换1.5级导航时跳转链接。 @/product-roadmap-%s.html
+- 当前页面是product-roadmap，包含分支，切换1.5级导航时跳转链接。 @/product-roadmap-%s-%s.html
+- 当前页面是bug-view，切换1.5级导航时跳转链接。 @/bug-browse-%s-all-.html
+- 当前页面是bug-view，传入extra参数，切换1.5级导航时跳转链接。 @/bug-browse-%s-all-projectID=1.html
+- 当前页面是bug-view，传入extra参数，并包含分支，切换1.5级导航时跳转链接。 @/bug-browse-%s-%s-projectID=1.html
+- 当前页面是project-testcase，传入extra参数，切换1.5级导航时跳转链接。 @/project-testcase-1-%s-all-all.html
+- 当前页面是product-project，切换1.5级导航时跳转链接。 @/product-project-all-%s.html
+- 当前页面是product-dynamic，切换1.5级导航时跳转链接。 @/product-dynamic-%s-.html
+- 当前页面是project-bug，切换1.5级导航时跳转链接。 @/project-bug--%s.html
+- 当前页面是qa-index，切换1.5级导航时跳转链接。 @/bug-browse-%s.html
+- 当前页面是story-report，切换1.5级导航时跳转链接。 @/story-report-%s-all-.html
+- 当前页面是testcase-browse，切换1.5级导航时跳转链接。 @/testcase-browse-%s-all.html
+- 当前页面是testreport-create，切换1.5级导航时跳转链接。 @/testreport-create--testtask-%s.html
+- 当前页面是testreport-edit，切换1.5级导航时跳转链接。 @/testreport-browse-%s.html
+- 当前页面是testtask-browseUnits，切换1.5级导航时跳转链接。 @/testtask-browseUnits-%s-newest-id_desc-0-0-1.html
+- 当前页面是testtask-browse，切换1.5级导航时跳转链接。 @/testtask-browse-%s-all-.html
+- 当前页面是execution-bug，切换1.5级导航时跳转链接。 @/execution-bug--%s.html
+- 当前页面是execution-testcase，切换1.5级导航时跳转链接。 @/execution-testcase--%s.html
+- 当前页面是product-doc，切换1.5级导航时跳转链接。 @/product-doc-%s.html
+- 当前页面是product-view，切换1.5级导航时跳转链接。 @/product-view-%s.html
+- 当前页面是product-create，切换1.5级导航时跳转链接。 @/product-browse-%s-.html
+- 当前页面是product-showImport，切换1.5级导航时跳转链接。 @/product-browse-%s-.html
+- 当前页面是product-browse，切换1.5级导航时跳转链接。 @/product-browse-%s-all--0.html
+- 当前页面是product-index，切换1.5级导航时跳转链接。 @/product-browse-%s-all--0.html
+- 当前页面是product-all，切换1.5级导航时跳转链接。 @/product-browse-%s-all--0.html
+- 当前页面是ticket-browse，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
+- 当前页面是ticket-view，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
+- 当前页面是ticket-edit，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
+- 当前页面是feedback-view，切换1.5级导航时跳转链接。 @/feedback-admin-byProduct-%s.html
+- 当前页面是productplan-create，切换1.5级导航时跳转链接。 @/productplan-create-%s.html
+- 当前页面是productplan-view，切换1.5级导航时跳转链接。 @/productplan-view-%s.html
+- 当前页面是release-create，切换1.5级导航时跳转链接。 @/release-create-%s.html
+- 当前页面是release-view，切换1.5级导航时跳转链接。 @/release-view-%s.html
+- 当前页面是testsuite-create，切换1.5级导航时跳转链接。 @/testsuite-create-%s.html
+- 当前页面是testsuite-view，切换1.5级导航时跳转链接。 @/testsuite-browse-%s.html
+- 当前页面是design-view，切换1.5级导航时跳转链接。 @/design-browse-%s.html
+- 当前页面是execution-view，切换1.5级导航时跳转链接。 @/execution-view--%s.html
+- 当前页面是programplan-view，切换1.5级导航时跳转链接。 @/programplan-browse-%s-%s-gantt.html
+- 当前页面是project-view，切换1.5级导航时跳转链接。 @/project-view--%s.html
+- 当前页面是tree-browse，切换1.5级导航时跳转链接。 @/tree-browse-%s--0.html
+- 当前页面是ticket-create，切换1.5级导航时跳转链接。 @/ticket-create-%s.html
+- 当前页面是testtask-create，切换1.5级导航时跳转链接。 @/testtask-browse-%s-all.html
+- 当前页面是api-browse，切换1.5级导航时跳转链接。 @/doc-productSpace-%s.html
+- 当前页面是doc-browse，切换1.5级导航时跳转链接。 @/doc-productSpace-%s.html
+- 当前页面是productplan-browse，切换1.5级导航时跳转链接。 @/productplan-browse-%s.html
+- 当前页面是release-browse，切换1.5级导航时跳转链接。 @/release-browse-%s.html
+- 当前页面是release-browse，切换1.5级导航时跳转链接。 @/roadmap-browse-%s.html
+- 当前页面是feedback-view，在运营管理界面，切换1.5级导航时跳转链接。 @/feedback-browse-byProduct-%s.html
+- 当前页面是testcase-groupcase，在项目视图下，切换1.5级导航时跳转链接。 @/testcase-groupcase-%s-all--1.html#app=project
+- 当前页面是testcase-zerocase，在项目视图下，切换1.5级导航时跳转链接。 @/testcase-zerocase-%s-all--1.html#app=project
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('user')->gen;
+su('admin');
 
 global $tester;
 $productModel = $tester->loadModel('product');
@@ -31,7 +81,7 @@ r($productModel->getProductLink('product',     'dynamic'))     && p() && e('/pro
 r($productModel->getProductLink('project',     'bug'))         && p() && e('/project-bug--%s.html');                              //当前页面是project-bug，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('qa',          'index'))       && p() && e('/bug-browse-%s.html');                                //当前页面是qa-index，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('story',       'report'))      && p() && e('/story-report-%s-all-.html');                         //当前页面是story-report，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('testcase',    'browse'))      && p() && e('/testcase-browse-%s-all.html');                      //当前页面是testcase-browse，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('testcase',    'browse'))      && p() && e('/testcase-browse-%s-all.html');                       //当前页面是testcase-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testreport',  'create'))      && p() && e('/testreport-create--testtask-%s.html');               //当前页面是testreport-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testreport',  'edit'))        && p() && e('/testreport-browse-%s.html');                         //当前页面是testreport-edit，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testtask',    'browseUnits')) && p() && e('/testtask-browseUnits-%s-newest-id_desc-0-0-1.html'); //当前页面是testtask-browseUnits，切换1.5级导航时跳转链接。
@@ -43,7 +93,7 @@ r($productModel->getProductLink('product',     'view'))        && p() && e('/pro
 r($productModel->getProductLink('product',     'create'))      && p() && e('/product-browse-%s-.html');                           //当前页面是product-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('product',     'showImport'))  && p() && e('/product-browse-%s-.html');                           //当前页面是product-showImport，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('product',     'browse'))      && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-browse，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('product',     'index'))       && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-index，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('product',     'index'))       && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-index，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('product',     'all'))         && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-all，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('ticket',      'browse'))      && p() && e('/ticket-browse-byProduct-%s.html');                   //当前页面是ticket-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('ticket',      'view'))        && p() && e('/ticket-browse-byProduct-%s.html');                   //当前页面是ticket-view，切换1.5级导航时跳转链接。

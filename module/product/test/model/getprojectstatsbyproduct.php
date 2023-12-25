@@ -1,5 +1,26 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=produ0tModel->getProjectStatsByProduct();
+cid=0
+
+- 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 0, 'all', '', false, 'order_desc'  @0
+- 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 1, 'all', '', false, 'order_desc'
+ - 第11条的totalConsumed属性 @36
+ - 第11条的totalEstimate属性 @16
+ - 第11条的totalLeft属性 @6
+ - 第11条的progress属性 @85.70
+ - 第11条的teamCount属性 @0
+- 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 1, 'all', '', true, 'order_desc'
+ - 第61条的totalConsumed属性 @45
+ - 第61条的totalEstimate属性 @40
+ - 第61条的totalLeft属性 @34
+ - 第61条的progress属性 @56.90
+ - 第61条的teamCount属性 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -31,17 +52,9 @@ $stakeholder->from->range('');
 $stakeholder->gen(20);
 
 $projectproduct = zdTable('projectproduct');
-$projectproduct->product->range('1-2');
+$projectproduct->product->range('1{4},2{4}');
 $projectproduct->project->range('11,60,61,100');
 $projectproduct->gen(8);
-
-/**
-
-title=productModel->getProjectStatsByProductTest();
-cid=1
-pid=1
-
-*/
 
 $product = new productTest('admin');
 

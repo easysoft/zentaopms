@@ -1,16 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->formatDataForList();
+cid=0
+
+- 正常产品
+ - 属性name @正常产品1
+ - 属性type @product
+- 错误的产品 @0
+- 不存在的产品 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('product')->gen(3);
-
-/**
-title=测试productModel->formatDataForList();
-cid=1
-pid=1
-
-*/
 
 $product = new productTest();
 

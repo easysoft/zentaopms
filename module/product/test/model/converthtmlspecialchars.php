@@ -1,14 +1,18 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试productModel->convertHtmlSpecialChars();
-timeout=0
-cid=1
+cid=0
+
+- 不传入任何数据。 @0
+- 检查转换后的产品名称。 @a's product
+- 检查转换后的项目名称。 @"<a>b</a>" project
+- 检查转换后的计划名称。 @a's plan
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 global $tester;
 $productModel = $tester->loadModel('product');

@@ -1,16 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zdTable('module')->config('lines', $useCommon = true)->gen(20);
 
 /**
 
 title=productModel->getLines();
-cid=1
-pid=1
+cid=0
+
+- 测试不传参数的情况 @20
+- 测试传入空数组的情况 @20
+- 测试获取项目集1的产品线 @5
+- 测试获取项目集1,2的产品线 @10
+- 测试获取项目集1,2,3的产品线 @15
+- 测试获取项目集1,2,3,4的产品线 @20
+- 测试获取项目集1,2,3,4,5的产品线 @20
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('module')->config('lines', $useCommon = true)->gen(20);
 $product = $tester->loadModel('product');
 
 $programIdList1 = array();

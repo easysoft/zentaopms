@@ -1,19 +1,30 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->getExecutionList();
+cid=0
+
+- 测试项目跟产品的ID列表都为空的情况 @0
+- 测试项目ID列表不为空，产品ID列表为空的情况 @0
+- 测试项目ID列表不存在，产品ID列表为空的情况 @0
+- 测试项目ID列表为空，产品ID列表不为空的情况 @0
+- 测试项目ID列表不为空，产品ID列表不为空的情况
+ - 第103条的productID属性 @7
+ - 第103条的project属性 @11
+- 测试项目ID列表不存在，产品ID列表不为空的情况 @0
+- 测试项目ID列表为空，产品ID列表不存在的情况 @0
+- 测试项目ID列表不为空，产品ID列表不存在的情况 @0
+- 测试项目ID列表不存在，产品ID列表不存在的情况 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('project')->config('program')->gen(30);
 zdTable('projectproduct')->config('projectproduct')->gen(30);
 zdTable('user')->gen(5);
 su('admin');
-
-/**
-
-title=productTao->getExecutionList();
-timeout=0
-cid=1
-
-*/
 
 $projectIdList[0] = array();
 $projectIdList[1] = array(11, 60 ,100);

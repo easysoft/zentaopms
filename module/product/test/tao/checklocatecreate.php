@@ -1,15 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=productTao->checkLocateCreate();
-cid=1
-pid=1
+cid=0
 
+- 没有任何产品 @1
+- 已经存在产品 @0
+- 访问的方法是product-create @0
+- 访问的方法是product-index @0
+- 访问的方法是product-showerrornone @0
+- 访问的方法是product-ajaxgetdropmenu @0
+- 访问的方法是product-kanban @0
+- 访问的方法是product-kanban @0
+- 访问的方法是product-manageline @0
+- 访问的方法是product-export @0
+- 访问的方法是product-ajaxgetplans @0
+- 在移动端访问的product-browse页面 @0
+- 通过接口访问的product-browse页面 @0
+- 在PC中访问的product-browse页面 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 global $tester;
 $productTao = $tester->loadModel('product');

@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getCaseCoveragePairs();
+cid=0
+
+- 执行$pairs[1] @30
+- 执行$pairs[7] @30
+- 执行$pairs[10] @20
+- 执行$pairs[1000] @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -8,13 +20,6 @@ zdTable('story')->config('story')->gen(100);
 zdTable('case')->gen(100);
 zdTable('user')->gen(5);
 su('admin');
-
-/**
-title=productModel->getCaseCoveragePairs();
-timeout=0
-cid=1
-
- */
 
 $tester = new productTest('admin');
 

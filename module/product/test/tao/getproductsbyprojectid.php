@@ -1,5 +1,49 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->getProductsByProjectID();
+cid=0
+
+- 获取敏捷项目关联的产品数据
+ - 第0条的name属性 @产品1
+ - 第0条的status属性 @normal
+- 获取瀑布项目关联的产品数据
+ - 第0条的name属性 @产品2
+ - 第0条的status属性 @normal
+- 获取看板项目关联的产品数据
+ - 第0条的name属性 @产品4
+ - 第0条的status属性 @normal
+- 获取敏捷项目关联的未关闭产品数据
+ - 第0条的name属性 @产品1
+ - 第0条的status属性 @normal
+- 获取瀑布项目关联的未关闭产品数据
+ - 第0条的name属性 @产品2
+ - 第0条的status属性 @normal
+- 获取看板项目关联的未关闭产品数据
+ - 第0条的name属性 @产品4
+ - 第0条的status属性 @normal
+- 获取敏捷项目关联的所有产品数据
+ - 第0条的name属性 @产品1
+ - 第0条的status属性 @normal
+- 获取瀑布项目关联的所有产品数据
+ - 第0条的name属性 @产品2
+ - 第0条的status属性 @normal
+- 获取看板项目关联的所有产品数据
+ - 第0条的name属性 @产品4
+ - 第0条的status属性 @normal
+- 获取敏捷项目关联的产品数据
+ - 第0条的name属性 @产品1
+ - 第0条的status属性 @normal
+- 获取瀑布项目关联的产品数据
+ - 第0条的name属性 @产品2
+ - 第0条的status属性 @normal
+- 获取看板项目关联的产品数据
+ - 第0条的name属性 @产品4
+ - 第0条的status属性 @normal
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -7,14 +51,6 @@ zdTable('user')->gen(5);
 zdTable('product')->config('product')->gen(10);
 zdTable('projectproduct')->config('projectproduct')->gen(10);
 su('admin');
-
-/**
-
-title=productTao->buildExecutionPairs();
-timeout=0
-cid=1
-
-*/
 
 $projectIdList = array(11, 60, 100);
 $appendID      = '10';

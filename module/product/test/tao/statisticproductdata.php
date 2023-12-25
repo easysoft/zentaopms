@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->statisticProductData();
+cid=0
+
+- 测试传入空数组 @0
+- 测试传入存在的产品
+ - 第10条的id属性 @10
+ - 第10条的name属性 @产品10
+- 测试传入不存在的产品 @0
+- 测试传入空数组 @0
+- 测试传入存在的产品
+ - 第30条的id属性 @30
+ - 第30条的name属性 @产品30
+- 测试传入不存在的产品 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -14,15 +32,6 @@ zdTable('projectproduct')->gen(30);
 zdTable('bug')->gen(20);
 zdTable('doc')->gen(20);
 zdTable('user')->gen(5);
-
-
-/**
- *
-title=测试productModel->statisticProductData();
-timeout=0
-cid=1
-
-*/
 
 $productIdList[0] = array();
 $productIdList[1] = range(1, 50);

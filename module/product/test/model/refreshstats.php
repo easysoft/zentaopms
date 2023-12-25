@@ -1,10 +1,23 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试productModel->getRoadmapOfReleases();
-timeout=0
-cid=1
+cid=0
+
+- 刷新产品的统计信息
+ - 第1条的draftStories属性 @0
+ - 第1条的activeStories属性 @1
+ - 第1条的changingStories属性 @1
+ - 第1条的reviewingStories属性 @0
+ - 第1条的finishedStories属性 @0
+ - 第1条的closedStories属性 @0
+ - 第1条的totalStories属性 @2
+ - 第1条的unresolvedBugs属性 @3
+ - 第1条的closedBugs属性 @0
+ - 第1条的fixedBugs属性 @0
+ - 第1条的totalBugs属性 @3
 
 */
 

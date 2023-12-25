@@ -1,18 +1,24 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getStoryStatusCountByID();
+cid=0
+
+- 测试获取空产品ID下的需求数据属性draft @0
+- 测试获取产品1下的需求数据属性draft @1
+- 测试获取不存在产品下的需求数据属性draft @0
+- 测试获取空产品ID下的用需数据属性draft @0
+- 测试获取产品1下的用需数据属性draft @0
+- 测试获取不存在产品下的用需数据属性draft @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('story')->config('story')->gen(100);
 zdTable('user')->gen(5);
 su('admin');
-
-/**
-
-title=productModel->getStoryStatusCountByID();
-timeout=0
-cid=1
-
- */
 
 $productIdList = array(0, 1, 100);
 

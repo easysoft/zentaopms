@@ -1,18 +1,34 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->isClickable();
+cid=0
+
+- 产品1状态为为normal,action为start @1
+- 产品2状态为为normal,action为start @1
+- 产品3状态为为normal,action为start @1
+- 产品1状态为为normal,action为close @1
+- 产品2状态为为normal,action为close @1
+- 产品3状态为为normal,action为close @1
+- 产品4状态为为closed,action为start @1
+- 产品5状态为为closed,action为start @1
+- 产品6状态为为closed,action为start @1
+- 产品4状态为为closed,action为close @0
+- 产品5状态为为closed,action为close @0
+- 产品6状态为为closed,action为close @0
+- 产品1状态为为normal,action为START @1
+- 产品2状态为为normal,action为CLOSE @1
+- 产品4状态为为closed,action为START @1
+- 产品5状态为为closed,action为CLOSE @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 su('admin');
 
 zdTable('product')->config('product')->gen(6);
-
-/**
-
-title=测试productModel->isClickable();
-timeout=0
-cid=1
-
-*/
 $product = new productTest('admin');
 
 $normalProducts = array(1, 2, 3);

@@ -1,19 +1,34 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试productModel->deleteLine();
+cid=0
+
+- 测试删除产品线1
+ - 属性name @产品线1
+ - 属性deleted @1
+- 测试删除产品线2
+ - 属性name @产品线2
+ - 属性deleted @1
+- 测试删除产品线3
+ - 属性name @产品线3
+ - 属性deleted @1
+- 测试删除产品线4
+ - 属性name @产品线4
+ - 属性deleted @1
+- 测试删除产品线5
+ - 属性name @产品线5
+ - 属性deleted @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('user')->gen(5);
 zdTable('product')->gen(10);
 zdTable('module')->config('lines')->gen(30);
-
-/**
-
-title=测试productModel->deleteLine();
-timeout=0
-cid=1
-
-*/
 
 $lineIdList = range(1, 5);
 

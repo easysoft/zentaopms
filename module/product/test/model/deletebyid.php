@@ -1,18 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->deleteByID();
+cid=0
+
+- 执行$products[3]->deleted @0
+- 执行$doclib @1
+- 执行$products[3]->deleted @1
+- 执行$doclib @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
 zdTable('product')->gen(10);
 zdTable('doclib')->gen(10);
-
-/**
- *
-title=productTao->deleteByID();
-timeout=0
-cid=1
-
- */
 
 $product = new productTest('admin');
 

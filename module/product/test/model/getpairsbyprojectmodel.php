@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getPairsByProjectModel();
+cid=0
+
+- 用超级管理员账号，测试获取model为空产品数量属性name @0
+- 用超级管理员账号，测试获取model为all产品数量属性name @50
+- 用超级管理员账号，测试获取model为scrum产品数量属性name @10
+- 用超级管理员账号，测试获取model为waterfall产品数量属性name @10
+- 用超级管理员账号，测试获取model为kanban产品数量属性name @10
+- 用普通账号，测试获取model为all产品数量属性name @30
+- 用普通账号，测试获取model为scrum产品数量属性name @6
+- 用普通账号，测试获取model为waterfall产品数量属性name @6
+- 用普通账号，测试获取model为kanban产品数量属性name @6
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -9,14 +26,6 @@ $projectProduct = zdTable('projectproduct');
 $projectProduct->project->range('11-100');
 $projectProduct->product->range('1-50');
 $projectProduct->gen(90);
-
-/**
-
-title=productModel->getPairsByProjectModel();
-timeout=0
-cid=1
-
-*/
 
 $modelList = array('all', 'scrum', 'waterfall', 'kanban');
 

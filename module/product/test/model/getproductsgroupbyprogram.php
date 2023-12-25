@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getProductsGroupByProgram();
+cid=0
+
+- 检查获取项目集条目数。 @10
+- 检查项目集 0 的产品名称。 @/正常产品1
+- 检查项目集 5 的产品名称。 @项目集5/正常产品6
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -8,14 +19,6 @@ $project = zdTable('project');
 $project->id->range('1-10');
 $project->type->range('program');
 $project->gen(10);
-
-/**
-
-title=productModel->getProductsGroupByProgram();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $product = $tester->loadModel('product');

@@ -1,17 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zdTable('user')->gen(5);
-su('admin');
 
 /**
 
 title=productTao->formatAppendParam();
-timeout=0
-cid=1
+cid=0
+
+- 执行productTao模块的formatAppendParam方法，参数是''  @0
+- 执行productTao模块的formatAppendParam方法，参数是array  @0
+- 执行productTao模块的formatAppendParam方法，参数是'1'  @1
+- 执行productTao模块的formatAppendParam方法，参数是'1, '  @1
+- 执行productTao模块的formatAppendParam方法，参数是'1, 1'  @1
+- 执行productTao模块的formatAppendParam方法，参数是'1, 2'  @1,2
+
+- 执行productTao模块的formatAppendParam方法，参数是'1, a'  @1
+- 执行productTao模块的formatAppendParam方法，参数是array  @1
+- 执行productTao模块的formatAppendParam方法，参数是array  @1
+- 执行productTao模块的formatAppendParam方法，参数是array  @1,2
+
+- 执行productTao模块的formatAppendParam方法，参数是array  @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('user')->gen(5);
+su('admin');
 
 global $tester;
 $productTao = $tester->loadModel('product');

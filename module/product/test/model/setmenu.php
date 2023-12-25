@@ -1,17 +1,57 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
-
-zdTable('product')->gen(50);
 
 /**
 
 title=测试productModel->setMenu();
-timeout=0
-cid=1
+cid=0
+
+- 执行product模块的setMenuTest方法
+ - 属性idReplaced @1
+ - 属性branchReplaced @0
+ - 属性hasBranch @1
+ - 属性requirement @0
+- 执行product模块的setMenuTest方法，参数是1
+ - 属性idReplaced @1
+ - 属性branchReplaced @0
+ - 属性hasBranch @0
+ - 属性requirement @0
+- 执行product模块的setMenuTest方法，参数是0, '', 'requirement'
+ - 属性idReplaced @1
+ - 属性branchReplaced @0
+ - 属性hasBranch @1
+ - 属性requirement @1
+- 执行product模块的setMenuTest方法，参数是1, '', 'requirement'
+ - 属性idReplaced @1
+ - 属性branchReplaced @0
+ - 属性hasBranch @0
+ - 属性requirement @1
+- 执行product模块的setMenuTest方法，参数是0, 'all'
+ - 属性idReplaced @1
+ - 属性branchReplaced @0
+ - 属性hasBranch @1
+ - 属性requirement @0
+- 执行product模块的setMenuTest方法，参数是41, 'all'
+ - 属性idReplaced @1
+ - 属性branchReplaced @1
+ - 属性hasBranch @1
+ - 属性requirement @0
+- 执行product模块的setMenuTest方法，参数是0, 0, 'requirement'
+ - 属性idReplaced @1
+ - 属性branchReplaced @0
+ - 属性hasBranch @1
+ - 属性requirement @1
+- 执行product模块的setMenuTest方法，参数是41, 0, 'requirement'
+ - 属性idReplaced @1
+ - 属性branchReplaced @1
+ - 属性hasBranch @1
+ - 属性requirement @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/product.class.php';
+
+zdTable('product')->gen(50);
 
 $product = new productTest('admin');
 

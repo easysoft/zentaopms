@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productTao->getStatisticByType();
+cid=0
+
+- 获取计划数量属性1 @3
+- 获取发布数量属性2 @3
+- 获取bug数量属性3 @3
+- 获取未解决bug数量属性1 @3
+- 获取活跃bug数量属性2 @1
+- 获取已解决bug数量属性2 @1
+- 获取已关闭bug数量属性1 @1
+- 获取本周bug数量属性2 @2
+- 获取未指派bug数量属性3 @1
+- 获取最新发布第0条的name属性 @产品发布9
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 $bug = zdTable('bug');
@@ -19,14 +37,6 @@ $release->gen(10);
 
 zdTable('user')->gen(5);
 su('admin');
-
-/**
-
-title=productTao->getStatisticByType();
-timeout=0
-cid=1
-
-*/
 
 global $tester;
 $product = $tester->loadModel('product');

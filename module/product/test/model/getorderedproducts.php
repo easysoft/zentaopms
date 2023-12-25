@@ -1,19 +1,32 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=productModel->getOrderedProducts();
+cid=0
+
+- 测试获取状态为all的产品数量 @30
+- 测试获取状态为normal的产品数量 @20
+- 测试获取状态为closed的产品数量 @10
+- 测试获取状态为all的5条产品 @5
+- 测试获取状态为all的10条产品 @10
+- 测试获取状态为normal的10产品 @10
+- 测试获取状态为normal的25条产品 @20
+- 测试获取状态为closed的5条产品 @5
+- 测试获取状态为closed的15条产品 @10
+- 测试获取状态为all的关联项目1的产品 @6
+- 测试获取状态为normal的关联项目2的产品 @6
+- 测试获取状态为closed的关联项目3的产品 @6
+- 测试获取状态为closed的管线不存在的项目的产品 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 su('admin');
 
 zdTable('projectproduct')->config('projectproduct')->gen(30);
 zdTable('product')->config('product')->gen(30);
-
-/**
-
-title=productModel->getOrderedProducts();
-cid=0
-pid=1
-
-*/
 
 $product = new productTest('admin');
 
