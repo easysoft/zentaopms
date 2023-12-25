@@ -4318,17 +4318,17 @@ class taskModel extends model
         $canEdit           = common::hasPriv('task', 'edit');
         $canBatchCreate    = ($this->config->vision != 'lite' and common::hasPriv('task', 'batchCreate'));
 
-        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
-        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
-        $menu .= $this->buildMenu('task', 'finish', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
-        $menu .= $this->buildMenu('task', 'close',  $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
+        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'finish', $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'close',  $params, $task, 'browse', '', '', 'iframe', true);
 
         if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
 
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true, 'data-toggle="modal"');
+        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse', 'edit', '', '', false, 'data-app="execution"');
         if($this->config->vision != 'lite')
         {
