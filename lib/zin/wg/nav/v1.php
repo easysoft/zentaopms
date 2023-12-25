@@ -18,6 +18,7 @@ class nav extends wg
         return new actionItem
         (
             set('name', 'nav'),
+            set('outerClass', 'item'),
             $item instanceof item ? inherit($item) : set($item)
         );
     }

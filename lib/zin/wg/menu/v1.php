@@ -16,6 +16,7 @@ class menu extends wg
         return actionItem
         (
             set('name', 'menu'),
+            set('outerClass', 'item'),
             inherit($item)
         );
     }
