@@ -13,7 +13,9 @@ declare(strict_types=1);
 class jenkins extends control
 {
     /**
+     * Jenkins 模块初始化。
      * jenkins constructor.
+     *
      * @param string $moduleName
      * @param string $methodName
      */
