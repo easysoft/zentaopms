@@ -9,8 +9,10 @@ foreach($lang->search->operators as $value => $text) $operators[] = array('value
 $conditions = array();
 foreach($fieldParams as $name => $param)
 {
+    if(!isset($fields[$name])) continue;
+
     $condition = new stdClass();
-    $condition->text            = isset($fields[$name]) ? $fields[$name] : '';
+    $condition->text            = $fields[$name];
     $condition->name            = $name;
     $condition->control         = $param['control'];
     $condition->defaultOperator = $param['operator'];
