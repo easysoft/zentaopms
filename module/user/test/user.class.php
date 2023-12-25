@@ -130,6 +130,20 @@ class userTest
     }
 
     /**
+     * 测试获取某个用户参与的执行和执行中指派给他的任务数的键值对。
+     * Get the executions that the user joined and the task count of the execution.
+     *
+     * @param  string $account
+     * @param  array  $executionIdList
+     * @access public
+     * @return
+     */
+    public function fetchExecutionTaskCountTest(string $account, array $executionIdList): array
+    {
+        return $this->objectTao->fetchExecutionTaskCount($account, $executionIdList);
+    }
+
+    /**
      * 根据用户名获取用户信息。
      * Get user information by account.
      *
