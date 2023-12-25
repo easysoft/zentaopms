@@ -1663,7 +1663,7 @@ class bugZen extends bug
         {
             if(!isset($productPlanList[$product->id])) $productPlanList[$product->id] = array();
 
-            $branches = 0;
+            $branches = '0';
             if($product->type != 'normal')
             {
                 $branchPairs   = $this->loadModel('branch')->getPairs($product->id, 'withClosed');
