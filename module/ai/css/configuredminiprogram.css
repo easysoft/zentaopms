@@ -22,7 +22,7 @@
 .field-configuration-main {padding: 24px;}
 
 .prompt-preview-area .preview-container,
-.prompt-result-area .preview-container {overflow-wrap: break-word; border: 1px solid #D8DBDE; background: #f8f8f8; position: absolute; left: 24px; right: 24px; bottom: 24px; padding: 8px;}
+.prompt-result-area .preview-container {word-break: break-word; border: 1px solid #D8DBDE; background: #f8f8f8; position: absolute; left: 24px; right: 24px; bottom: 24px; padding: 8px; overflow-y: auto;}
 .prompt-preview-area .preview-container {top: 64px;}
 .prompt-result-area .preview-container  {top: 34px;}
 
