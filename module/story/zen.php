@@ -646,7 +646,7 @@ class storyZen extends story
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
         $branch    = current(explode(',', (string)$branch));
-        $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
+        $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? '0' : $branch);
         $plans     = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired|noclosed', true);
         $reviewers = $this->story->getProductReviewers($productID);
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
