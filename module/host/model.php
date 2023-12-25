@@ -1,17 +1,18 @@
 <?php
 /**
- * The model file of ops module of ZenTaoCMS.
+ * The model file of host module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jiangxiu Peng <pengjiangxiu@cnezsoft.com>
- * @package     ops
+ * @package     module
  * @version     $Id$
  * @link        https://www.zentao.net
  */
 class hostModel extends model
 {
     /**
+     * 获取主机列表。
      * Get host list.
      *
      * @param  string $browseType
@@ -21,11 +22,11 @@ class hostModel extends model
      * @access public
      * @return array
      */
-    public function getList($browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $query      = '';
-        $modules    = '';
         $browseType = strtolower($browseType);
+
+        $query = '';
         if($browseType == 'bysearch')
         {
             /* Concatenate the conditions for the query. */
@@ -48,13 +49,11 @@ class hostModel extends model
             }
             $query = $this->session->hostQuery;
         }
-        elseif($browseType == 'bymodule')
-        {
-            $modules = $param ? $this->loadModel('tree')->getAllChildId($param) : '0';
-        }
 
-        $orderBy = str_replace('t1.', '', $orderBy);
-        $host = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
+        $modules = 0;
+        if($browseType == 'bymodule' && $param) $modules = $this->loadModel('tree')->getAllChildId($param);
+
+        return $this->dao->select('*')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('normal')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
@@ -62,63 +61,13 @@ class hostModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        return $host;
-    }
-
-    /**
-     * Get pairs by services.
-     *
-     * @param  string $services
-     * @access public
-     * @return array
-     */
-    public function getPairsByService($services)
-    {
-        $servers = $this->dao->select('id,hosts')->from(TABLE_SERVICE)->where('id')->in($services)->andWhere('hosts')->ne('')->fetchPairs('id', 'hosts');
-        $hostIdList = array_unique(explode(',', join(',', $servers)));
-
-        return $this->dao->select('id,name')->from(TABLE_HOST)
-            ->where('deleted')->eq('0')
-            ->andWhere('`id`')->in($hostIdList)
-            ->andWhere('type')->eq('normal')
-            ->orderBy('`group`')
-            ->fetchPairs('id', 'name');
-    }
-
-    /**
-     * Get pairs.
-     *
-     * @param  string  $moduleIdList
-     * @param  string  $idFrom
-     * @access public
-     * @return array
-     */
-    public function getPairs($moduleIdList = 0)
-    {
-        $modules = array();
-        if($moduleIdList)
-        {
-            $this->loadModel('tree');
-            foreach(explode(',', $moduleIdList) as $moduleID)
-            {
-                if(empty($moduleID)) continue;
-                $modules += $this->tree->getAllChildId($moduleID);
-            }
-        }
-
-        return $this->dao->select("id,name")->from(TABLE_HOST)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('normal')
-            ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
-            ->orderBy('`group`')
-            ->fetchPairs('id', 'name');
     }
 
     /**
      * 创建主机。
      * create a host.
      *
-     * @param  object   $formData
+     * @param  object $formData
      * @access public
      * @return bool
      */
@@ -129,6 +78,7 @@ class hostModel extends model
 
         $hostID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('host', $hostID, 'created');
+
         return !dao::isError();
     }
 
@@ -152,6 +102,7 @@ class hostModel extends model
             $actionID = $this->loadModel('action')->create('host', $formData->id, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
+
         return !dao::isError();
     }
 
@@ -169,160 +120,144 @@ class hostModel extends model
         if(dao::isError()) return false;
 
         $this->loadModel('action')->create('host', $formData->id, $formData->status, $formData->reason);
+
         return !dao::isError();
     }
 
     /**
+     * 获取物理拓扑图所需的数据结构。
      * Get tree map of server room.
      *
      * @access public
-     * @return string
+     * @return array
      */
-    public function getServerroomTreemap()
+    public function getServerroomTreemap(): array
     {
-        /* Get host list. */
         $this->app->loadLang('serverroom');
-        $stmt = $this->dao->select('t1.id,t1.name,t3.id as roomID,t3.city,t3.name as roomName,t1.extranet')->from(TABLE_HOST)->alias('t1')
-            ->leftJoin(TABLE_SERVERROOM)->alias('t3')->on('t1.serverRoom=t3.id')
+
+        /* Get host list. */
+        $stmt = $this->dao->select('t1.id,t1.name,t2.id as roomID,t2.city,t2.name as roomName,t1.extranet')->from(TABLE_HOST)->alias('t1')
+            ->leftJoin(TABLE_SERVERROOM)->alias('t2')->on('t1.serverRoom=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq('normal')
-            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.serverRoom')->ne(0)
-            ->orderBy('t3.city,t3.id,t1.id')
+            ->orderBy('t2.city,t2.id,t1.id')
             ->query();
 
         /* Group host by city and server room. */
         $hostGroup = array();
-        while($host = $stmt->fetch())
-        {
-            $hostGroup[$host->city][$host->roomID][] = $host;
-        }
-        $treeMap = array();
-        foreach($hostGroup as $city => $rooms)
-        {
-            $children = array();
-            $children['text']      = zget($this->lang->serverroom->cityList, $city);
-            $children['collapsed'] = false;
-            $children['children']  = array();
+        while($host = $stmt->fetch()) $hostGroup[$host->city][$host->roomID][] = $host;
 
-            foreach($rooms as $roomID => $cabinets)
-            {
-                $host = reset($cabinets);
-                if(is_array($host)) $host = reset($host);
-
-                $subChildren = array();
-                $subChildren['text']      = htmlspecialchars($host->roomName);
-                $subChildren['collapsed'] = false;
-                $subChildren['children']  = array();
-
-                foreach($cabinets as $cabinet => $hosts)
-                {
-                    if(is_array($hosts))
-                    {
-                        $hostNameList = array();
-                        foreach($hosts as $host) $hostNameList[] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
-                        $subChildren['children'][] = array(
-                            'text'      => htmlspecialchars($cabinet),
-                            'collapsed' => false,
-                            'children'  => $hostNameList
-                        );
-                    }
-                    else
-                    {
-                        $subChildren['children'][] = array('text' => htmlspecialchars($hosts->name), 'hostid' => $hosts->id);
-                    }
-                }
-                $children['children'][] = $subChildren;
-            }
-
-            $treeMap[] = $children;
-        }
+        $treeMap = $this->processTreemap($hostGroup);
         return $treeMap;
     }
 
     /**
+     * 获取分组拓扑图所需的数据结构。
      * Get tree map by group.
      *
      * @access public
-     * @return string
+     * @return array
      */
-    public function getGroupTreemap()
+    public function getGroupTreemap(): array
     {
-        /* Get host list by group. */
         $this->app->loadLang('serverroom');
-        $hostGroups = $this->dao->select('id,name,`group`,extranet')->from(TABLE_HOST)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('normal')
-            ->fetchGroup('group', 'id');
 
-        /* Get module list by host group. */
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($hostGroups))->fetchAll();
-        $paths   = array();
-        foreach($modules as $module)
-        {
-            foreach(explode(',', trim($module->path)) as $path) $paths[$path] = $path;
-        }
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('id')->in($paths)
-            ->orderBy('grade_desc,`order`,id')
-            ->fetchAll();
+        /* Get host list by group. */
+        $hosts   = $this->dao->select('id,name,`group`,extranet')->from(TABLE_HOST)->where('deleted')->eq(0)->andWhere('type')->eq('normal')->fetchGroup('group', 'id');
+        $modules = $this->getTreeModules(0, $hosts);
 
         $treemap = array();
-        foreach($modules as $module)
-        {
-            if(!isset($treemap[$module->parent])) $treemap[$module->parent] = array('text' => '', 'collapsed' => false, 'children' => array());
-            $treemap[$module->parent]['text'] = htmlspecialchars($module->name);
-            if(isset($treemap[$module->id]))
-            {
-                $treemap[$module->parent]['children'][] = $treemap[$module->id];
-                unset($treemap[$module->id]);
-            }
-
-            if(isset($hostGroups[$module->id]))
-            {
-                $treemap[$module->id] = array('text' => $module->name, 'collapsed' => false, 'children' => array());
-                foreach($hostGroups[$module->id] as $host)
-                {
-                    $treemap[$module->id]['children'][] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
-                }
-            }
-        }
-
-        if(isset($treemap[0]) or isset($hostGroups[0]))
-        {
-            if(isset($treemap[0])) $groupTree = $treemap[0];
-
-            if(isset($hostGroups[0]))
-            {
-                foreach($hostGroups[0] as $host) $groupTree['children'][] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
-            }
-            $treemap[0] = $groupTree;
-        }
-
-        $treeData['text']      = '/';
-        $treeData['collapsed'] = false;
-        $treeData['children']  = array_values($treemap);
-        return $treeData;
+        $treemap['text']      = '/';
+        $treemap['collapsed'] = false;
+        $treemap['children']  = $this->processTreemap($modules);
+        return $treemap;
     }
 
     /**
-     * 判断列表页操作按钮是否可点击。
+     * 判断操作按钮是否可点击。
      * Judge an action is clickable or not.
      *
-     * @param object $host
-     * @param string $action
+     * @param  object $host
+     * @param  string $action
      * @static
      * @access public
      * @return bool
      */
-    public static function isClickable($host, $action)
+    public static function isClickable(object $host, string $action): bool
     {
-        if(!$host->id)                                return false;
-        if (!common::hasPriv('host', 'changeStatus')) return false;
+        if(!$host->id) return false;
 
-        if($host->status == 'online'  && $action == 'online')  return false;
-        if($host->status == 'offline' && $action == 'offline') return false;
+        if($action == 'online')  return $host->status != 'online';
+        if($action == 'offline') return $host->status != 'offline';
+        if($action == 'delete')  return $host->deleted == '0';
+        if($action == 'edit')    return $host->deleted == '0';
 
         return true;
+    }
+
+    /**
+     * 处理成树形图需要的数据结构。
+     * Process to treemap data.
+     *
+     * @param  array   $datas
+     * @access private
+     * @return array
+     */
+    private function processTreemap(array $datas): array
+    {
+        $treeMap = array();
+        foreach($datas as $key => $data)
+        {
+            $text = '';
+            $host = is_array($data) ? reset($data) : $data;
+            if(is_array($host))  $text = zget($this->lang->serverroom->cityList, $key);
+            if(is_object($host)) $text = is_array($data) ? $host->roomName : $host->name;
+
+            $children = array();
+            $children['text'] = htmlspecialchars($text);
+            if(is_array($data))
+            {
+                $children['collapsed'] = false;
+                $children['children']  = $this->processTreemap($data);
+            }
+            elseif(!empty($data->children))
+            {
+                $children['collapsed'] = false;
+                $children['children']  = $this->processTreemap($data->children);
+            }
+            else
+            {
+                $children['hostid'] = $data->id;
+            }
+
+            $treeMap[] = $children;
+        }
+
+        return $treeMap;
+    }
+
+    /**
+     * 获取树状结构的模块数据。
+     * Get tree modules.
+     *
+     * @param  int     $rootID
+     * @param  array   $hosts
+     * @access private
+     * @return array
+     */
+    private function getTreeModules(int $rootID, array $hosts): array
+    {
+        $treemap = array();
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('parent')->eq($rootID)->andWhere('type')->eq('host')->orderBy('`order`,id')->fetchAll();
+        foreach($modules as $module)
+        {
+            $module->children = $this->getTreeModules($module->id, $hosts);
+            $treemap[] = $module;
+        }
+        if(!empty($hosts[$rootID])) $treemap = array_merge($treemap, $hosts[$rootID]);
+
+        return $treemap;
     }
 }

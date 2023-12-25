@@ -15,11 +15,7 @@ h::importCss($app->getWebRoot() . 'theme/zui/treemap/min.css');
 h::importJs($app->getWebRoot() . 'js/zui/treemap/min.js');
 
 $config->host->featureBar[$type]['active'] = true;
-featureBar
-(
-    set::items($config->host->featureBar),
-    li(searchToggle())
-);
+featureBar(set::items($config->host->featureBar));
 
 treemap
 (
