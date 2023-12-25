@@ -82,7 +82,7 @@ class userTao extends userModel
             ->andWhere('t1.multiple')->eq('1')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->in('sprint,stage,kanban')
-            ->andWhere('t1.id')->in($projectIdList)
+            ->andWhere('t1.project')->in($projectIdList)
             ->groupBy('t1.project')
             ->fetchPairs();
     }
