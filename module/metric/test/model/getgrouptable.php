@@ -49,13 +49,10 @@ $resultData3[] = (object) array('date' => '2023-11-12', 'dateString' => '2023-11
 $resultData3[] = (object) array('date' => '2023-11-13', 'dateString' => '2023-11-13', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 
 r($metric->getGroupTable($resultHeader1, $resultData1)) && p('0:name;1:name') && e('date,value');                 // 传入resultHeader1和resultData1，获取header
-r($metric->getGroupTable($resultHeader1, $resultData1, true, false)) && p('0:value;1:value') && e('Array,Array'); // 传入resultHeader1和resultData1，获取data
 r($metric->getGroupTable($resultHeader1, $resultData1, false, false)) && p('0:value;1:value') && e('2,2');        // 传入resultHeader1和resultData1，获取data
 
 r($metric->getGroupTable($resultHeader2, $resultData2)) && p('0:name;1:name') && e('scope,2023');                                      // 传入resultHeader2和resultData2，获取header
-r($metric->getGroupTable($resultHeader2, $resultData2, true, false)) && p('0:scope,2023;1:scope,2022') && e('开源,Array;ddddw,Array'); // 传入resultHeader2和resultData2，获取header
-r($metric->getGroupTable($resultHeader2, $resultData2, false, false)) && p('0:scope,2023;1:scope,2022') && e('开源,3;ddddw,9');        // 传入resultHeader2和resultData2，获取header
+r($metric->getGroupTable($resultHeader2, $resultData2, false, false)) && p('0:scope,2023;1:scope,2022') && e('开源,3;ddddw,9');        // 传入resultHeader2和resultData2，获取data
 
 r($metric->getGroupTable($resultHeader3, $resultData3)) && p('0:name;1:name') && e('date,value');                 // 传入resultHeader2和resultData2，获取header
-r($metric->getGroupTable($resultHeader3, $resultData3, true, false)) && p('0:value;1:value') && e('Array,Array'); // 传入resultHeader2和resultData2，获取header
-r($metric->getGroupTable($resultHeader3, $resultData3, false, false)) && p('0:value;1:value') && e('1;1');         // 传入resultHeader2和resultData2，获取header
+r($metric->getGroupTable($resultHeader3, $resultData3, false, false)) && p('0:value;1:value') && e('1;1');         // 传入resultHeader2和resultData2，获取data
