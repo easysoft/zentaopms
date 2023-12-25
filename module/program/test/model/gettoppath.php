@@ -1,18 +1,17 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
 /**
 
 title=测试 programModel::getTopPairs();
 cid=1
-pid=1
-
-传入一个path，返回最顶级path >> 2
-传入一个path，返回最顶级path >> 100
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('project')->config('program')->gen(15);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('program');
