@@ -401,32 +401,19 @@ class zanode extends control
     }
 
     /**
+     * 还原快照。
      * Restore node.
      *
-     * @param  int    $nodeID
-     * @param  int    $snapshotID
-     * @param  string $confirm
+     * @param  int  $nodeID
+     * @param  int  $snapshotID
      * @return void
      */
-    public function restoreSnapshot($nodeID, $snapshotID, $confirm = 'no')
+    public function restoreSnapshot(int $nodeID, int $snapshotID)
     {
-        if($confirm == 'no')
-        {
-            return $this->send(array('load' => array('confirm' => $this->lang->zanode->confirmRestore, 'confirmed' => array('url' => inlink('restoreSnapshot', "nodeID={$nodeID}&snapshotID={$snapshotID}&confirm=yes")))));
-        }
-
         $this->zanode->restoreSnapshot($nodeID, $snapshotID);
+        if(dao::isError()) return $this->sendError(dao::getError());
 
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            if(is_array($errors)) $errors = implode(',', $errors);
-            return $this->send(array('result' => 'fail', 'message' => $errors));
-        }
-        else
-        {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->zanode->actionSuccess, 'load' => true));
-        }
+        return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
     }
 
     /**
