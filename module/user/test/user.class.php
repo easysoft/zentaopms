@@ -114,6 +114,22 @@ class userTest
     }
 
     /**
+     * 测试根据用户和状态获取执行列表。
+     * Test fetch executions by user and status.
+     *
+     * @param  string $account
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->objectTao->fetchExecutions($account, $status, $orderBy, $pager);
+    }
+
+    /**
      * 根据用户名获取用户信息。
      * Get user information by account.
      *
