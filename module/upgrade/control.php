@@ -234,6 +234,8 @@ class upgrade extends control
     public function mergeProgram(string $type = 'productline', int $programID = 0, string $projectType = 'project')
     {
         set_time_limit(0);
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
         $this->session->set('upgrading', true);
 
         if($_POST)
