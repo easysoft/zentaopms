@@ -186,6 +186,7 @@ class design extends control
         $this->view->stories    = $this->loadModel('story')->getExecutionStoryPairs($projectID);
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
         $this->view->type       = $type;
         $this->view->typeList   = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
