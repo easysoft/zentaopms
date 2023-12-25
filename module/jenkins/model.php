@@ -123,10 +123,10 @@ class jenkinsModel extends model
      */
     public function getApiUserPWD(object $jenkins): string
     {
-            $jenkinsUser     = $jenkins->account;
-            $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
-            $userPWD         = "$jenkinsUser:$jenkinsPassword";
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+        $userPWD         = "$jenkinsUser:$jenkinsPassword";
 
-            return $userPWD;
+        return $userPWD;
     }
 }

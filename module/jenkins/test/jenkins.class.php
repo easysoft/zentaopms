@@ -39,4 +39,19 @@ class jenkinsTest
         foreach($jobs as $jobID => $job) $return .= "{$jobID}:{$job},";
         return trim($return, ',');
     }
+
+    /**
+     * 测试获取jenkins api 密码串。
+     * Test get jenkins api userpwd string.
+     *
+     * @param  int    $jenkinsID
+     * @access public
+     * @return array
+     */
+    public function getApiUserPWDTest(int $jenkinsID)
+    {
+        global $tester;
+        $jenkins = $tester->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($jenkinsID)->fetch();
+        return $this->jenkins->getApiUserPWD($jenkins);
+    }
 }
