@@ -419,7 +419,7 @@ class zanode extends control
     }
 
     /**
-     * 获取镜像。
+     * 获取镜像列表。
      * AJAX: Get template pairs by api.
      *
      * @param  int    $hostID
@@ -435,13 +435,14 @@ class zanode extends control
     }
 
     /**
-     * Ajax get template info.
+     * 获取镜像信息。
+     * AJAX: Get template info.
      *
      * @param  int    $imageID
      * @access public
      * @return void
      */
-    public function ajaxGetImage($imageID)
+    public function ajaxGetImage(int $imageID)
     {
         $template = $this->loadModel('zahost')->getImageByID($imageID);
         return print(json_encode($template));
