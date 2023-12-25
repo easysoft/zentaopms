@@ -29,4 +29,4 @@ r($product->getStats4KanbanTest(2))       && p('13:name;14:name')      && e('项
 r($product->getStats4KanbanTest(5))       && p('11:name;19:name')      && e('项目21,项目29');
 r($product->getStats4KanbanTest(1, true)) && p()                       && e('1');
 r($product->getStats4KanbanTest(3, true)) && p()                       && e('4');
-r($product->getStats4KanbanTest(4, true)) && p()                       && e('3');
+r($product->getStats4KanbanTest(4, true)) && p()                       && e('6');

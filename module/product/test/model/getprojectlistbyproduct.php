@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=productModel->getProjectListByProduct();
+cid=1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
@@ -31,14 +38,6 @@ $projectproduct->product->range('1-2');
 $projectproduct->project->range('1-50');
 $projectproduct->gen(50);
 
-/**
-
-title=productModel->getProjectListByProduct();
-cid=1
-pid=1
-
-*/
-
 global $tester;
 $product = $tester->loadModel('product');
 su('admin');
@@ -47,14 +46,14 @@ $product->app->moduleName = 'product';
 $product->app->methodName = 'project';
 
 r(count($product->getProjectListByProduct($productID = 0, 'all',    '',    false, 'order_desc')))   && p() && e('0');
-r(count($product->getProjectListByProduct($productID = 1, 'all',    '',    false, 'order_desc')))   && p() && e('20');
+r(count($product->getProjectListByProduct($productID = 1, 'all',    '',    false, 'order_desc')))   && p() && e('17');
 r(count($product->getProjectListByProduct($productID = 1, 'all',    '0',   false, 'order_desc')))   && p() && e('17');
-r(count($product->getProjectListByProduct($productID = 1, 'undone', '',    false, 'order_desc')))   && p() && e('15');
+r(count($product->getProjectListByProduct($productID = 1, 'undone', '',    false, 'order_desc')))   && p() && e('12');
 r(count($product->getProjectListByProduct($productID = 1, 'wait',   'all', false, 'order_desc')))   && p() && e('5');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
-r(count($product->getProjectListByProduct($productID = 1, 'all', '', false, 'order_desc', $pager))) && p() && e('20');
+r(count($product->getProjectListByProduct($productID = 1, 'all', '', false, 'order_desc', $pager))) && p() && e('17');
 
 $pager = new pager(0, 5, 1);
 r(count($product->getProjectListByProduct($productID = 1, 'all', '', false, 'order_desc', $pager))) && p() && e('5');

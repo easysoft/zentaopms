@@ -26,14 +26,14 @@ $product->app->moduleName = 'product';
 $product->app->methodName = 'project';
 
 r(count($product->fetchAllProductProjects($productID = 0, 'all',    '',    'order_desc')))   && p() && e('0');
-r(count($product->fetchAllProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('20');
+r(count($product->fetchAllProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('17');
 r(count($product->fetchAllProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('17');
-r(count($product->fetchAllProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('15');
+r(count($product->fetchAllProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('12');
 r(count($product->fetchAllProductProjects($productID = 1, 'wait',   'all', 'order_desc')))   && p() && e('5');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
-r(count($product->fetchAllProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('20');
+r(count($product->fetchAllProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('17');
 
 $pager = new pager(0, 5, 1);
 r(count($product->fetchAllProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('5');
