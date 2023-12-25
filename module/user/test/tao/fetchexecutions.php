@@ -50,44 +50,44 @@ r(count($projects)) && p() && e(1); // 运营管理界面下 admin 用户参与�
 
 $config->vision = 'rnd';
 $projects = $userTest->fetchExecutionsTest('admin');
-r(count($projects)) && p() && e(6); // 研发综合页面下 admin 用户参与的执行有 6 个。
+r(count($projects)) && p() && e(6); // 研发综合界面下 admin 用户参与的执行有 6 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'doing');
-r(count($projects)) && p() && e(1); // 研发综合页面下 admin 用户参与的执行中，进行中的有 1 个。
+r(count($projects)) && p() && e(1); // 研发综合界面下 admin 用户参与的执行中，进行中的有 1 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'wait');
-r(count($projects)) && p() && e(1); // 研发综合页面下 admin 用户参与的执行中，未开始的有 1 个。
+r(count($projects)) && p() && e(1); // 研发综合界面下 admin 用户参与的执行中，未开始的有 1 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'suspended');
-r(count($projects)) && p() && e(2); // 研发综合页面下 admin 用户参与的执行中，已挂起的有 2 个。
+r(count($projects)) && p() && e(2); // 研发综合界面下 admin 用户参与的执行中，已挂起的有 2 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'closed');
-r(count($projects)) && p() && e(2); // 研发综合页面下 admin 用户参与的执行中，已关闭的有 2 个。
+r(count($projects)) && p() && e(2); // 研发综合界面下 admin 用户参与的执行中，已关闭的有 2 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'done');
-r(count($projects)) && p() && e(2); // 研发综合页面下 admin 用户参与的执行中，已完成的有 2 个。
+r(count($projects)) && p() && e(2); // 研发综合界面下 admin 用户参与的执行中，已完成的有 2 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'undone');
-r(count($projects)) && p() && e(4); // 研发综合页面下 admin 用户参与的执行中，未完成的有 4 个。
+r(count($projects)) && p() && e(4); // 研发综合界面下 admin 用户参与的执行中，未完成的有 4 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'openedbyme');
-r(count($projects)) && p() && e(5); // 研发综合页面下 admin 用户参与的执行中，由自己创建的有 5 个。
+r(count($projects)) && p() && e(5); // 研发综合界面下 admin 用户参与的执行中，由自己创建的有 5 个。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'all', 'id_asc');
-r(array_keys($projects)) && p('0') && e(2); // 研发综合页面下 admin 用户参与的执行中，按 ID 升序排列，第 1 个 id 是 2。
-r(array_keys($projects)) && p('1') && e(3); // 研发综合页面下 admin 用户参与的执行中，按 ID 升序排列，第 1 个 id 是 3。
+r(array_keys($projects)) && p('0') && e(2); // 研发综合界面下 admin 用户参与的执行按 ID 升序排列，第 1 个 id 是 2。
+r(array_keys($projects)) && p('1') && e(3); // 研发综合界面下 admin 用户参与的执行按 ID 升序排列，第 1 个 id 是 3。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'all', 'id_desc');
-r(count($projects))      && p()    && e(6); // 研发综合页面下 admin 用户参与的执行中有 6 个。
-r(array_keys($projects)) && p('0') && e(9); // 研发综合页面下 admin 用户参与的执行中，按 ID 降序排列，第 1 个 id 是 9。
-r(array_keys($projects)) && p('1') && e(8); // 研发综合页面下 admin 用户参与的执行中，按 ID 降序排列，第 1 个 id 是 8。
+r(count($projects))      && p()    && e(6); // 研发综合界面下 admin 用户参与的执行有 6 个。
+r(array_keys($projects)) && p('0') && e(9); // 研发综合界面下 admin 用户参与的执行按 ID 降序排列，第 1 个 id 是 9。
+r(array_keys($projects)) && p('1') && e(8); // 研发综合界面下 admin 用户参与的执行按 ID 降序排列，第 1 个 id 是 8。
 
 $projects = $userTest->fetchExecutionsTest('admin', 'all', 'id_desc', $pager);
-r(count($projects)) && p() && e(5); // 研发综合页面下 admin 用户参与的执行，分页查看第 1 页有 5 个。
+r(count($projects)) && p() && e(5); // 研发综合界面下分页查看 admin 用户参与的执行，第 1 页有 5 个。
 
 $pager = new pager(0, 5, 2);
 $projects = $userTest->fetchExecutionsTest('admin', 'all', 'id_desc', $pager);
-r(count($projects)) && p() && e(1); // 研发综合页面下 admin 用户参与的执行，分页查看第 2 页有 1 个。
+r(count($projects)) && p() && e(1); // 研发综合界面下分页查看 admin 用户参与的执行，第 2 页有 1 个。
 
 /**
  * 检测 user1 用户参与的执行。
@@ -96,8 +96,8 @@ su('user1');
 
 $app->user->view->sprints = '13,14,15,16,17,18';
 $projects = $userTest->fetchExecutionsTest('user1');
-r(count($projects)) && p() && e(4); // 设置用户执行视图为 13、14、15、16、17、18，研发综合页面下 user1 用户参与的执行有 4 个。
+r(count($projects)) && p() && e(4); // 设置用户执行视图为 13、14、15、16、17、18，研发综合界面下 user1 用户参与的执行有 4 个。
 
 $app->user->view->sprints = '15,16,17,18';
 $projects = $userTest->fetchExecutionsTest('user1');
-r(count($projects)) && p() && e(2); // 设置用户执行视图为 15、16、17、18，研发综合页面下 user1 用户参与的执行有 2 个。
+r(count($projects)) && p() && e(2); // 设置用户执行视图为 15、16、17、18，研发综合界面下 user1 用户参与的执行有 2 个。
