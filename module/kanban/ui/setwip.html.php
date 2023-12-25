@@ -28,7 +28,7 @@ formPanel
         formGroup
         (
             set::label($lang->kanban->WIPStage),
-            input(set::name('WIPStage'), set::value(\zget($lang->kanban->{$column->laneType . 'Column'}, $column->type, '')), set::disabled(true))
+            input(set::name('WIPStage'), set::value(zget($lang->story->stageList, $stage, '')), set::disabled(true))
         )
     ) : null,
     formRow

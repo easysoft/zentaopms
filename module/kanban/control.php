@@ -1381,6 +1381,7 @@ class kanban extends control
      */
     public function setWIP(int $columnID, int $executionID = 0, string $from = 'kanban')
     {
+        $this->app->loadLang('story');
         $column = $this->kanban->getColumnById($columnID);
         if(!$column) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'kanban', "executionID=$executionID"))));
 
