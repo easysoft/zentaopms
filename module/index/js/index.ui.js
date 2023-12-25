@@ -34,7 +34,6 @@ const apps =
     /** @type {Record<string, ZentaoOpenedApp>} */
     openedMap: {},
     defaultCode: '',
-    lastCode: '',
     zIndex: 10,
     frameContent: null,
     oldPages: new Set(oldPages)
@@ -264,22 +263,28 @@ function updateApp(code, url, title, type)
 
 /**
  * Get last opened app
- * @param {boolean} [onlyShowed] If set to true then only get last app from apps are showed
  * @returns {object} The opened app info object
  */
-function getLastApp(onlyShowed)
+function getLastApp()
 {
     let lastShowIndex = 0;
     let lastApp = null;
     $.each(apps.openedMap, function(_code, app)
     {
-        if((!onlyShowed || app.show) && lastShowIndex < app.zIndex && !app.closed)
+        if(lastShowIndex < app.zIndex && !app.closed)
         {
             lastShowIndex = app.zIndex;
             lastApp = app;
         }
     });
     return lastApp;
+}
+
+/** Get last opened app code. */
+function getLastAppCode()
+{
+    const lastApp = getLastApp();
+    return lastApp ? lastApp.code : null;
 }
 
 /**
@@ -289,7 +294,7 @@ function getLastApp(onlyShowed)
  */
 function closeApp(code)
 {
-    code = code || apps.lastCode;
+    code = code || getLastAppCode();
     const app = apps.openedMap[code];
     if(!app) return;
 
@@ -323,7 +328,7 @@ function closeApp(code)
  */
 function hideApp(code)
 {
-    code = code || apps.lastCode;
+    code = code || getLastAppCode();
     const app = apps.openedMap[code];
     if(!app) return;
 
@@ -332,7 +337,6 @@ function hideApp(code)
     if(!app.closed) triggerAppEvent(code, 'hideapp', app);
 
     app.$app.hide();
-    apps.lastCode = null;
 
     /* Active last app */
     const lastApp = getLastApp(true) || getLastApp();
@@ -767,14 +771,14 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     if(!code) return;
 
     const app   = apps.openedMap[code];
-    const items = [{text: lang.open, disabled: app && apps.lastCode === code, onClick: function(){showApp(code)}}];
+    const items = [{text: lang.open, disabled: app && getLastAppCode() === code, onClick: function(){showApp(code)}}];
     if(app)
     {
         items.push({text: lang.reload, onClick: function(){reloadApp(code)}});
         if(code !== 'my') items.push({text: lang.close, onClick: function(){closeApp(code)}});
     }
 
-    zui.ContextMenu.show({element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}});
+    zui.ContextMenu.show({hideOthersOnShow: true, key: 'openedAppMenu', element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}});
     event.preventDefault();
 });
 
