@@ -15,6 +15,10 @@ $task = zdTable('task');
 $task->mode->range('multi');
 $task->gen(6);
 
+zdTable('team')->gen(0);
+zdTable('taskteam')->gen(0);
+zdTable('effort')->gen(0);
+
 $user = zdTable('user')->gen(50);
 
 $taskIDList     = array(1,2,3,4,5,6);
