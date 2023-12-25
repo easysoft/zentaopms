@@ -736,6 +736,7 @@ class zanodemodel extends model
     }
 
     /**
+     * 通过ip获取host。
      * Get Host by IP.
      *
      * @param  string $ip
