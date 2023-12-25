@@ -77,4 +77,27 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $systemSpace;
     }
+
+    /**
+     * 获取用户空间的应用列表。
+     * Get app list in space by space id.
+     *
+     * @param  int    $spaceID
+     * @param  string $status
+     * @param  string $searchName
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function getSpaceInstancesTest(int $spaceID, string $status = 'all', string $searchName = '', int $recPerPage = 20, int $pageID = 1): array
+    {
+        $this->objectModel->app->loadClass('pager', true);
+
+        $pager     = new pager(0, $recPerPage, $pageID);
+        $instances = $this->objectModel->getSpaceInstances($spaceID, $status, $searchName);
+
+        if(dao::isError()) return dao::getError();
+        return $instances;
+    }
 }

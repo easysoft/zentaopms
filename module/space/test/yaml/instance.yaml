@@ -1,0 +1,17 @@
+title: zt_instance
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 1-100
+    prefix: 应用
+  - field: space
+    range: 1-5
+  - field: status
+    range: 'running,stopped,abnormal'
+  - field: appID
+    range: 1-5
+  - field: version
+    range: 1
