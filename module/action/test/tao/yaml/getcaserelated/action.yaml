@@ -1,0 +1,25 @@
+title: table zt_action
+desc: "系统日志"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: case
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: "1-100000"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作"
+    range: linked2testtask,unlinkedfromtesttask,assigned,run,created,closed,opened
+    postfix: ""
+    loop: 0
+    format: ""
