@@ -699,6 +699,7 @@ function loadExecutionBuilds(executionID, num)
             $('#openedBuild').next('.picker').remove();
             $('#openedBuild').replaceWith(data);
             $('#openedBuild').val(oldOpenedBuild);
+            $('#buildBoxActions').insertBefore('#buildBox .input-group-btn');
             notice();
             $("#openedBuild").picker({optionRender: markReleasedBuilds});
         })
