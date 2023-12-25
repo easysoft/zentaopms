@@ -290,7 +290,7 @@ class bugZen extends bug
         $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
         if(!empty($this->post->lane)) $laneID = $this->post->lane;
 
-        $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
+        $columnID = $this->loadModel('kanban')->getColumnIDByLaneID((int)$laneID, 'unconfirmed');
         if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
         return array((int)$laneID, (int)$columnID);
@@ -2056,7 +2056,7 @@ class bugZen extends bug
             $laneID = !empty($bug->laneID) ? $bug->laneID : zget($output, 'laneID', 0);
             unset($bug->laneID);
 
-            $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
+            $columnID = $this->loadModel('kanban')->getColumnIDByLaneID((int)$laneID, 'unconfirmed');
             if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
