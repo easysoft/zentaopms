@@ -88,6 +88,18 @@ class userTest
     }
 
     /**
+     * 测试获取某个用户参与的项目和项目包含的执行数键值对。
+     *
+     * @param  array  $projectidList
+     * @access public
+     * @return array
+     */
+    public function fetchProjectExecutionCountTest(array $projectIdList): array
+   {
+        return $this->objectTao->fetchProjectExecutionCount($projectIdList);
+    }
+
+    /**
      * 根据用户名获取用户信息。
      * Get user information by account.
      *
