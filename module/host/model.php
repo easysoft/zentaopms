@@ -54,8 +54,9 @@ class hostModel extends model
      */
     public function getList($browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
-        $query   = '';
-        $modules = '';
+        $query      = '';
+        $modules    = '';
+        $browseType = strtolower($browseType);
         if($browseType == 'bysearch')
         {
             /* Concatenate the conditions for the query. */
@@ -145,107 +146,44 @@ class hostModel extends model
     }
 
     /**
-     * Create a host.
+     * 创建主机。
+     * create a host.
      *
+     * @param  object   $formData
      * @access public
-     * @return int|bool
+     * @return bool
      */
-    public function create()
+    public function create(object $formData): bool
     {
-        $hostInfo = fixer::input('post')
-            ->setDefault('hardwareType', 'server')
-            ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
-            ->get();
-
-        $hostInfo->admin      = intval($hostInfo->admin);
-        $hostInfo->serverRoom = intval($hostInfo->serverRoom);
-        $this->dao->update(TABLE_HOST)->data($hostInfo)
-            ->batchCheck($this->config->host->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+        $this->dao->insert(TABLE_HOST)->data($formData)->batchCheck($this->config->host->create->requiredFields, 'notempty')->autoCheck()->exec();
         if(dao::isError()) return false;
 
-        $intFields = explode(',', $this->config->host->create->intFields);
-        foreach($intFields as $field)
-        {
-            if(!preg_match("/^-?\d+$/", $hostInfo->{$field}))
-            {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->int, $this->lang->host->{$field});
-                return false;
-            }
-        }
-
-        $ipFields = explode(',', $this->config->host->create->ipFields);
-        foreach($ipFields as $field)
-        {
-            if(!preg_match('/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/', $hostInfo->{$field}))
-            {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
-                return false;
-            }
-        }
-
-        $hostInfo->type        = 'normal';
-        $hostInfo->createdBy   = $this->app->user->account;
-        $hostInfo->createdDate = helper::now();
-        $this->dao->insert(TABLE_HOST)->data($hostInfo)->autoCheck()->exec();
-        if(!dao::isError())
-        {
-            $hostID = $this->dao->lastInsertID();
-            $this->loadModel('action')->create('host', $hostID, 'created');
-            return true;
-        }
-
-        return false;
+        $hostID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('host', $hostID, 'created');
+        return !dao::isError();
     }
 
     /**
+     * 更新主机。
      * Update a host.
      *
-     * @param  int    $id
-     * @param  int    $hostID
+     * @param  object $formData
      * @access public
-     * @return array|bool
+     * @return bool
      */
-    public function update($id)
+    public function update(object $formData): bool
     {
-        $oldHost  = $this->getById($id);
-        $hostInfo = fixer::input('post')
-            ->setDefault('hardwareType', 'server')
-            ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
-            ->get();
-
-        $hostInfo->admin      = intval($hostInfo->admin);
-        $hostInfo->serverRoom = intval($hostInfo->serverRoom);
-
-        $this->dao->update(TABLE_HOST)->data($hostInfo)
-            ->batchCheck($this->config->host->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+        $oldHost = $this->getById($formData->id);
+        $this->dao->update(TABLE_HOST)->data($formData)->batchCheck($this->config->host->create->requiredFields, 'notempty')->autoCheck()->where('id')->eq($formData->id)->exec();
         if(dao::isError()) return false;
 
-        $intFields = explode(',', $this->config->host->create->intFields);
-        foreach($intFields as $field)
+        $changes = common::createChanges($oldHost, $formData);
+        if($changes)
         {
-            if(!preg_match("/^-?\d+$/", $hostInfo->{$field}))
-            {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->int, $this->lang->host->{$field});
-                return false;
-            }
+            $actionID = $this->loadModel('action')->create('host', $formData->id, 'Edited');
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
-
-        $ipFields = explode(',', $this->config->host->create->ipFields);
-        foreach($ipFields as $field)
-        {
-            if(!preg_match('/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/', $hostInfo->{$field}))
-            {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
-                return false;
-            }
-        }
-
-        $hostInfo->editedBy   = $this->app->user->account;
-        $hostInfo->editedDate = helper::now();
-        $this->dao->update(TABLE_HOST)->data($hostInfo)->autoCheck()->where('id')->eq($id)->exec();
-        return common::createChanges($oldHost, $hostInfo);
+        return !dao::isError();
     }
 
     /**

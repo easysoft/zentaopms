@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Symfony\Component\Yaml\Inline;
 
@@ -17,19 +18,20 @@ use function zin\isAjaxRequest;
 class host extends control
 {
     /**
-     * View host.
+     * 主机列表页面。
+     * Browse host.
      *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $browseType = strtolower($browseType);
-        $param      = (int)$param;
-
         $this->app->session->set('hostList', $this->app->getURI(true));
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -48,26 +50,24 @@ class host extends control
         $this->config->host->search['params']['group']['values'] = $groups;
         $this->loadModel('search')->setSearchParams($this->config->host->search);
 
-        $this->loadModel('tree');
         $this->view->title      = $this->lang->host->common;
         $this->view->hostList   = $hostList;
-        $this->view->pager      = $pager;
-        $this->view->accounts   = $accounts;
         $this->view->rooms      = $rooms;
+        $this->view->accounts   = $accounts;
         $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->view->moduleTree = $this->tree->getHostTreeMenu();
         $this->view->optionMenu = $groups;
-
-        $this->view->position[] = $this->lang->host->common;
-
         $this->display();
     }
 
     /**
+     * 创建主机。
      * Create host.
      *
+     * @param  string $osName
      * @access public
      * @return void
      */
@@ -75,32 +75,27 @@ class host extends control
     {
         if($_POST)
         {
-            $id = $this->host->create();
+            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->get();
+            $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->host->create($formData);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->defaultParams = array(
-            'zap' => '8085',
-            'pri'       => '100',
-            'bridgeID'  => 'br0',
-        );
-
         $this->view->title      = $this->lang->host->create;
         $this->view->osName     = $osName;
-        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
-        $this->view->position[] = $this->lang->host->create;
-
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
-
         $this->display();
     }
 
     /**
-     * Create host.
+     * 编辑主机。
+     * Edit host.
      *
      * @access public
      * @return void
@@ -109,29 +104,22 @@ class host extends control
     {
         if($_POST)
         {
-            $changes = $this->host->update($id);
+            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+            $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('host', $id, 'Edited');
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
+            $this->host->update($formData);
 
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
         }
 
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->title      = $this->lang->host->edit;
-        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
-        $this->view->position[] = $this->lang->host->edit;
-
         $this->view->host       = $this->host->getById($id);
         $this->view->osName     = $osName ? $osName : $this->view->host->osName;
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
+        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
-
         $this->display();
     }
 
