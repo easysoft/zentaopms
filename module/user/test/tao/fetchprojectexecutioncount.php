@@ -24,12 +24,12 @@ $projectIdList = array(1, 2, 3, 4);
 
 $config->vision = 'rnd';
 $executions = $userTest->fetchProjectExecutionCountTest($projectIdList);
-r(count($executions)) && p()  && e(2);
-r($executions)        && p(1) && e(4);
-r($executions)        && p(2) && e(4);
+r(count($executions)) && p()  && e(2); // 研发综合界面下有 2 个项目。
+r($executions)        && p(1) && e(4); // 项目 1 的执行总数为 4。
+r($executions)        && p(2) && e(4); // 项目 2 的执行总数为 4。
 
 $config->vision = 'lite';
 $executions = $userTest->fetchProjectExecutionCountTest($projectIdList);
-r(count($executions)) && p()  && e(2);
-r($executions)        && p(3) && e(4);
-r($executions)        && p(4) && e(2);
+r(count($executions)) && p()  && e(2); // 运营管理界面下有 2 个项目。
+r($executions)        && p(3) && e(4); // 项目 3 的执行总数为 4。
+r($executions)        && p(4) && e(2); // 项目 4 的执行总数为 2。
