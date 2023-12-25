@@ -6,6 +6,7 @@ class userTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('user');
+        $this->objectTao   = $tester->loadTao('user');
     }
 
     /**
@@ -68,6 +69,22 @@ class userTest
         {
             return $objects;
         }
+    }
+
+    /**
+     * 测试根据用户和状态获取项目列表。
+     * Test fetch projects by user and status.
+     *
+     * @param  string $account
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function fetchProjectsTest(string $account, string $status = 'all', string $orderBy = 'id', object $pager = null): array
+    {
+        return $this->objectTao->fetchProjects($account, $status, $orderBy, $pager);
     }
 
     /**
