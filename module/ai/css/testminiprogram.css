@@ -13,6 +13,6 @@ textarea.field-type {height: 32px;}
 .table-form {table-layout: auto;}
 .table-form th {width: auto!important;}
 
-.preview-container {border: 1px solid #D8DBDE; background: #f8f8f8; top: 50px; position: absolute; bottom: 16px; left: 16px; right: 16px; padding: 5px 8px;}
+.preview-container {border: 1px solid #D8DBDE; background: #f8f8f8; top: 50px; position: absolute; bottom: 16px; left: 16px; right: 16px; padding: 5px 8px; word-break: break-all;}
 
 #autocomplete-textarea {overflow-y: auto; position: absolute; top: 32px; left: 16px; right: 16px; bottom: 16px; height: auto; width: auto;}
