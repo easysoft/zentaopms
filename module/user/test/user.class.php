@@ -88,6 +88,22 @@ class userTest
     }
 
     /**
+     * 测试获取某个用户参与的项目和项目中指派给他的任务数的键值对。
+     * Test get executions that the user joined and the task count of the execution.
+     *
+     * @param  string $account
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->objectModel->getExecutions($account, $status, $orderBy, $pager);
+    }
+
+    /**
      * 测试根据用户和状态获取项目列表。
      * Test fetch projects by user and status.
      *
