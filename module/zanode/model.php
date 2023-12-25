@@ -553,7 +553,7 @@ class zanodemodel extends model
     public function update($id)
     {
         $oldHost              = $this->getNodeById($id);
-        $hostInfo             = fixer::input('post')->get();
+        $hostInfo             = form::data()->get();
         $hostInfo->editedBy   = $this->app->user->account;
         $hostInfo->editedDate = helper::now();
 

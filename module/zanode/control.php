@@ -150,13 +150,14 @@ class zanode extends control
     }
 
     /**
+     * 执行节点详情。
      * View Node.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function view($id)
+    public function view(int $id)
     {
         $node = $this->zanode->getNodeByID($id);
         $vnc  = $this->zanode->getVncUrl($node);
