@@ -71,6 +71,19 @@ class releaseZen extends release
     {
         $productID = $this->post->product ? $this->post->product : $productID;
         $branch    = $this->post->branch ? $this->post->branch : $branch;
+        if(empty($projectID))
+        {
+            $product = $this->loadModel('product')->getById($productID);
+            if($product->shadow)
+            {
+                $projectID = $this->dao->select('t2.id')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')
+                    ->on('t1.project=t2.id')
+                    ->where('t1.product')->eq($productID)
+                    ->andWhere('t2.type')->eq('project')
+                    ->fetch('id');
+            }
+        }
 
         $release = form::data()
             ->add('product', (int)$productID)
