@@ -1532,9 +1532,6 @@ class testcase extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'linkBugs', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
-        $objectID  = 0;
-        if($this->app->tab == 'project')   $objectID = $case->project;
-        if($this->app->tab == 'execution') $objectID = $case->execution;
 
         /* Unset search field 'plan' in single project. */
         unset($this->config->bug->search['fields']['product']);
@@ -1544,7 +1541,7 @@ class testcase extends control
             if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
         }
 
-        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL);
 
         /* Get cases to link. */
         $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
