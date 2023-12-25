@@ -61,4 +61,20 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $defaultSpace;
     }
+
+    /**
+     * 获取用户的系统空间。
+     * Get system space.
+     *
+     * @param  string            $account
+     * @access public
+     * @return bool|array|object
+     */
+    public function getSystemSpaceTest(string $account): bool|array|object
+    {
+        $systemSpace = $this->objectModel->getSystemSpace($account);
+
+        if(dao::isError()) return dao::getError();
+        return $systemSpace;
+    }
 }
