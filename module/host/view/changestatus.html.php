@@ -2,7 +2,7 @@
 <?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $reason;?></h2>
+    <h2><?php echo $lang->host->reason;?></h2>
   </div>
   <form method='post' target='hiddenwin'>
     <table class='table table-form' id='tabReason'>

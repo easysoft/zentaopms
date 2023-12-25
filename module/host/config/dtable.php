@@ -64,14 +64,13 @@ $config->host->actionList['online']['icon']        = 'arrow-up';
 $config->host->actionList['online']['text']        = $lang->host->online;
 $config->host->actionList['online']['hint']        = $lang->host->online;
 $config->host->actionList['online']['data-toggle'] = 'modal';
-$config->host->actionList['online']['url']         = helper::createLink('host', 'changeStatus', 'id={id}&status=offline');
-
+$config->host->actionList['online']['url']         = helper::createLink('host', 'changeStatus', 'id={id}&status=online');
 
 $config->host->actionList['offline']['icon']        = 'arrow-down';
 $config->host->actionList['offline']['text']        = $lang->host->offline;
 $config->host->actionList['offline']['hint']        = $lang->host->offline;
 $config->host->actionList['offline']['data-toggle'] = 'modal';
-$config->host->actionList['offline']['url']         = helper::createLink('host', 'changeStatus', 'id={id}&status=online');
+$config->host->actionList['offline']['url']         = helper::createLink('host', 'changeStatus', 'id={id}&status=offline');
 
 $config->host->actionList['edit']['icon']        = 'edit';
 $config->host->actionList['edit']['text']        = $lang->edit;

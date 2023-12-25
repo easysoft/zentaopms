@@ -15,7 +15,7 @@ namespace zin;
 formPanel
 (
     set::id('hostChangeStatusForm'),
-    set::title($reason),
+    set::title($this->lang->host->reason),
     formRow
     (
         formGroup

@@ -12,37 +12,6 @@
 class hostModel extends model
 {
     /**
-     * Get host by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getById($id)
-    {
-        $host = $this->dao->select('*,id as hostID')->from(TABLE_HOST)
-            ->where('id')->eq($id)
-            ->fetch();
-
-        return $host;
-    }
-
-    /**
-     * Get hosts by id list.
-     *
-     * @param  int    $idList
-     * @access public
-     * @return array
-     */
-    public function getByIdList($idList)
-    {
-        return $this->dao->select('*,id as hostID')->from(TABLE_HOST)
-            ->where('id')->in($idList)
-            ->andWhere('deleted')->eq('0')
-            ->fetchAll('id');
-    }
-
-    /**
      * Get host list.
      *
      * @param  string $browseType
@@ -173,7 +142,7 @@ class hostModel extends model
      */
     public function update(object $formData): bool
     {
-        $oldHost = $this->getById($formData->id);
+        $oldHost = $this->fetchByID($formData->id);
         $this->dao->update(TABLE_HOST)->data($formData)->batchCheck($this->config->host->create->requiredFields, 'notempty')->autoCheck()->where('id')->eq($formData->id)->exec();
         if(dao::isError()) return false;
 
@@ -187,16 +156,20 @@ class hostModel extends model
     }
 
     /**
+     * 改变主机的状态。
      * Update a host status.
      *
-     * @param  int    $hostID
-     * @param  int    $status
+     * @param  object $formData
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateStatus($hostID, $status)
+    public function updateStatus(object $formData): bool
     {
-        $this->dao->update(TABLE_HOST)->set('status')->eq($status)->where('id')->eq($hostID)->exec();
+        $this->dao->update(TABLE_HOST)->data($formData, 'reason')->where('id')->eq($formData->id)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('host', $formData->id, $formData->status, $formData->reason);
+        return !dao::isError();
     }
 
     /**

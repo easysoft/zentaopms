@@ -36,10 +36,8 @@ class host extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $hostList = $this->host->getList($browseType, $param, $orderBy, $pager);
-        $rooms    = $this->loadModel('serverroom')->getPairs();
-        $accounts = array(0 => '') + $this->loadModel('account')->getPairs();
-        $groups   = array('', '') + $this->loadModel('tree')->getOptionMenu(0, 'host');
+        $rooms  = $this->loadModel('serverroom')->getPairs();
+        $groups = $this->loadModel('tree')->getOptionMenu(0, 'host');
 
         /* Build the search form. */
         $actionURL = $this->createLink('host', 'browse', "browseType=bySearch&queryID=myQueryID");
@@ -51,9 +49,9 @@ class host extends control
         $this->loadModel('search')->setSearchParams($this->config->host->search);
 
         $this->view->title      = $this->lang->host->common;
-        $this->view->hostList   = $hostList;
+        $this->view->hostList   = $this->host->getList($browseType, $param, $orderBy, $pager);
         $this->view->rooms      = $rooms;
-        $this->view->accounts   = $accounts;
+        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->param      = $param;
         $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
@@ -71,7 +69,7 @@ class host extends control
      * @access public
      * @return void
      */
-    public function create($osName = 'linux')
+    public function create(string $osName = 'linux')
     {
         if($_POST)
         {
@@ -97,10 +95,12 @@ class host extends control
      * 编辑主机。
      * Edit host.
      *
+     * @param  int    $id
+     * @param  string $osName
      * @access public
      * @return void
      */
-    public function edit($id, $osName = '')
+    public function edit(int $id, string $osName = '')
     {
         if($_POST)
         {
@@ -115,7 +115,7 @@ class host extends control
         }
 
         $this->view->title      = $this->lang->host->edit;
-        $this->view->host       = $this->host->getById($id);
+        $this->view->host       = $this->host->fetchByID($id);
         $this->view->osName     = $osName ? $osName : $this->view->host->osName;
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->accounts   = $this->loadModel('account')->getPairs();
@@ -123,103 +123,81 @@ class host extends control
         $this->display();
     }
 
-    public function view($id)
+    /**
+     * 主机详情页面。
+     * View a host.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function view(int $id)
     {
         $this->view->title      = $this->lang->host->view;
-        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->host->common);
-        $this->view->position[] = $this->lang->host->view;
-
-        $this->view->host       = $this->host->getById($id);
+        $this->view->host       = $this->host->fetchByID($id);
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
+        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->view->actions    = $this->loadModel('action')->getList('host', $id);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->display();
     }
 
-    public function delete($id)
+    /**
+     * 删除主机。
+     * Delete a host.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function delete(int $id)
     {
-        $this->dao->update(TABLE_HOST)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create('host', $id, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
+        $this->host->delete(TABLE_HOST, $id);
 
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError(true);
-        }
-        else
-        {
-            $response['result']     = 'success';
-            $response['message']    = '';
-            $response['load']       = inLink('browse');
-            $response['closeModal'] = true;
-
-            if(helper::isAjaxRequest('modal')) return print(js::execute("loadCurrentPage();$('.modal').removeClass('show')"));
-        }
-        $this->send($response);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
     }
 
-    public function changeStatus($id, $status)
+    /**
+     * 上架或者下架主机。
+     * Change host status.
+     *
+     * @param  int    $id
+     * @param  string $status offline|online
+     * @access public
+     * @return void
+     */
+    public function changeStatus(int $id, string $status = 'online')
     {
-        $hostStatus = $status == 'offline' ? 'online' : 'offline';
-        $reasonKey  = $hostStatus . 'Reason';
-        $reason     = $this->lang->host->{$reasonKey};
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        $this->lang->host->reason = zget($this->lang->host, $status . 'Reason', $this->lang->host->reason);
+        if($_POST)
         {
-            $postData = fixer::input('post')->skipSpecial('reason')->get();
-            if(empty($postData->reason))
-            {
-                dao::$errors['reason'][] = sprintf($this->lang->error->notempty, $reason);
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+            $formData = form::data($this->config->host->form->changeStatus)->add('id', $id)->add('status', $status)->get();
 
-            $this->host->updateStatus($id, $hostStatus);
+            $this->host->updateStatus($formData);
 
-            $this->loadModel('action')->create('host', $id, $hostStatus, $postData->reason);
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->title  = $this->lang->host->{$hostStatus};
-        $this->view->reason = $reason;
+        $this->view->title = zget($this->lang->host, $status);
         $this->display();
     }
 
-    public function treemap($type = 'serverroom')
+    /**
+     * 展示物理拓扑图和分组拓扑图。
+     * Show host treemap.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function treemap(string $type = 'serverroom')
     {
-        $this->view->title = $this->lang->host->featureBar['browse'][$type];
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->host->common);
-        $this->view->position[] = $this->lang->host->featureBar['browse'][$type];
-
-        /* Build the search form. */
-        $actionURL = $this->createLink('host', 'browse', "browseType=bySearch&queryID=myQueryID");
-        $this->config->host->search['actionURL'] = $actionURL;
-        $this->config->host->search['queryID']   = 0;
-        $this->config->host->search['onMenuBar'] = 'no';
-        $this->config->host->search['params']['serverRoom']['values'] = $this->loadModel('serverroom')->getPairs();
-        $this->config->host->search['params']['group']['values'] = $this->loadModel('tree')->getOptionMenu(0, 'host');
-        $this->loadModel('search')->setSearchParams($this->config->host->search);
-
-        $func = "get{$type}Treemap";
+        $func = 'get' . ucfirst($type) . 'Treemap';
+        $this->view->title   = $this->lang->host->featureBar['browse'][$type];
         $this->view->treemap = $this->host->$func();
         $this->view->type    = $type;
         $this->display();
-    }
-
-    public function ajaxGetByModule($moduleIdList, $defaultHosts = '')
-    {
-        $hosts = $this->host->getPairs($moduleIdList);
-        die(html::select('hosts[]', $hosts, $defaultHosts, "class='form-control chosen' multiple"));
-    }
-
-    public function ajaxGetByService($serviceID)
-    {
-        $hosts = $serviceID ? $this->host->getPairsByService($serviceID) : $this->host->getPairs();
-        $hosts = array(0 => '') + $hosts;
-        die(html::select('hosts[]', $hosts, '', "class='form-control chosen' multiple"));
-    }
-
-    public function ajaxGetOSVersion($field)
-    {
-        die(html::select('osVersion', $this->lang->host->{$field . 'List'}, '', "class='form-control chosen'"));
     }
 }

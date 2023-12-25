@@ -46,3 +46,6 @@ $config->host->form->edit['extranet']     = array('type' => 'string', 'required'
 $config->host->form->edit['provider']     = array('type' => 'string', 'required' => true,   'default' => '');
 $config->host->form->edit['status']       = array('type' => 'string', 'required' => false,  'default' => '');
 $config->host->form->edit['hardwareType'] = array('type' => 'string', 'required' => false,  'default' => 'server');
+
+$config->host->form->changeStatus = array();
+$config->host->form->changeStatus['reason'] = array('type' => 'string', 'required' => true, 'default' => '', 'control' => 'editor');
