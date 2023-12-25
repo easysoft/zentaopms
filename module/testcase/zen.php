@@ -873,7 +873,7 @@ class testcaseZen extends testcase
      */
     private function assignModuleOptionMenuForEdit(object $case): void
     {
-        $moduleOptionMenu = $this->tree->getOptionMenu($case->product, $viewType = 'case', $startModuleID = 0, $case->branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($case->product, 'case', 0, (string)$case->branch);
 
         if($case->lib && $case->fromCaseID)
         {
