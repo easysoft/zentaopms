@@ -116,4 +116,23 @@ class spaceTest
         if(dao::isError()) return dao::getError();
         return $space;
     }
+
+    /**
+     * 获取应用市场应用对应的外部应用。
+     * Get External app By store app.
+     *
+     * @param  string $domain
+     * @access public
+     * @return array|object|bool
+     */
+    public function getExternalAppByAppTest(string $domain): array|object|bool
+    {
+        $instance = new stdclass();
+        $instance->domain = $domain;
+
+        $pipeline = $this->objectModel->getExternalAppByApp($instance);
+
+        if(dao::isError()) return dao::getError();
+        return $pipeline;
+    }
 }

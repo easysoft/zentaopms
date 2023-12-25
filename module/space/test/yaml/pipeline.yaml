@@ -1,0 +1,20 @@
+title: zt_pipeline
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 'gitLab,SonarQube,gitea,Gogs,Jenkins'
+  - field: type
+    range: 'gitlab,sonarqube,gitea,gogs,jenkins'
+  - field: url
+    range: 'https://gitlabdev.qc.oop.cc/,https://sonardev.qc.oop.cc/,https://giteadev.qc.oop.cc/,https://gogsdev.qc.oop.cc/,https://jenkinsdev.qc.oop.cc/'
+  - field: account
+    range: 'root,sonar,gitea,gogs-admin,jenkins'
+  - field: password
+    range: 'lacu7BIH0LIccmmnvQAK,kkGAzE1p9pOoqJA9bLIh,PcUoWaHQ5iJze9yEOVbi,EH03prX2VQeg8dakQgsh,1rY7RVDA2BVkjO50OjMJ'
+  - field: createdBy
+    range: system
+  - field: deleted
+    range: 0
