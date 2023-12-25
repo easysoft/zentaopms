@@ -104,7 +104,7 @@ class repoTest
 
         if(!empty($objects))
         {
-            return $objects[0]->name;
+            return $objects;
         }
         else
         {
@@ -139,7 +139,7 @@ class repoTest
     public function updateTest($repoID, $data, $isPipelineServer)
     {
         $repo   = $this->objectModel->getByID($repoID);
-        $result = $this->objectModel->update($data, $repoID, $isPipelineServer);
+        $result = $this->objectModel->update($data, $repo, $isPipelineServer);
 
         if(dao::isError()) return dao::getError();
         if($result === false) return 'changeServerProject';
@@ -212,8 +212,9 @@ class repoTest
         return $objects;
     }
 
-    public function getBranchesTest($repo, $printLabel = false)
+    public function getBranchesTest(int $repoID, bool $printLabel = false)
     {
+        $repo = $this->objectModel->getByID($repoID);
         $objects = $this->objectModel->getBranches($repo, $printLabel);
 
         if(dao::isError()) return dao::getError();
@@ -331,6 +332,7 @@ class repoTest
 
     public function createLinkTest($method, $params = '', $viewType = '', $onlybody = false)
     {
+        $this->objectModel->config->webRoot = '';
         $objects = $this->objectModel->createLink($method, $params, $viewType, $onlybody);
 
         if(dao::isError()) return dao::getError();
@@ -412,12 +414,14 @@ class repoTest
 
     public function addLinkTest($comment, $type)
     {
+        $this->objectModel->config->webRoot = '';
+
         $rules     = $this->objectModel->processRules();
         $objectReg = '/' . $rules[$type . 'Reg'] . '/i';
-        if(preg_match_all($objectReg, $comment, $result))
+        if(preg_match_all($objectReg, $comment, $results))
         {
-            $links = $this->objectModel->addLink($result, $type);
-            foreach($links as $link) return $link;
+            $links = $this->objectModel->addLink($results, $type);
+            foreach($links as $link) return rtrim($link);
         }
 
         return 'empty';
@@ -540,8 +544,11 @@ class repoTest
         return $objects;
     }
 
-    public function getCloneUrlTest($repo)
+    public function getCloneUrlTest(int $repoID)
     {
+        $repo = $this->objectModel->getByID($repoID);
+        if(!$repo) $repo = new stdclass();
+
         $objects = $this->objectModel->getCloneUrl($repo);
 
         if(dao::isError()) return dao::getError();

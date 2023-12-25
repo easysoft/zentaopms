@@ -7,8 +7,11 @@ su('admin');
 /**
 
 title=测试 repoModel->getHistory();
+timeout=0
 cid=1
-pid=1
+
+- 查询全部提交信息属性1 @d5789b703dc09c44be1e89a991c3506de1f678e3
+- 传空数据查询信息 @empty
 
 */
 

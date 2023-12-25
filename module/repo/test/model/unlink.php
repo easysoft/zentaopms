@@ -16,8 +16,9 @@ cid=1
 */
 
 zdTable('repo')->config('repo', true)->gen(4);
+zdTable('repohistory')->config('repohistory')->gen(1);
 
-$revision = '398062532b051dac820345f8952c84f957dd9fa0';
+$revision = 'c808480afe22d3a55d94e91c59a8f3170212ade0';
 $links = array(1, 2);
 
 $repo = new repoTest();

@@ -1,0 +1,52 @@
+title: table zt_repohistory
+desc: "版本历史"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: repo
+    note: "代码库ID"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: revision
+    note: "查看版本"
+    range: c808480afe22d3a55d94e91c59a8f3170212ade0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: commit
+    note: "提交"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: comment
+    note: "注释"
+    range: 1-10000
+    prefix: "代码注释"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: committer
+    note: "作者"
+    range: 1-10000
+    prefix: "提交者"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: time
+    note: "提交时间"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

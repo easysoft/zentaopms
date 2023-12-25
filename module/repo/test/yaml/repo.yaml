@@ -1,28 +1,33 @@
-title: zt_repo
-author: Gang Zeng
+title: repo.
+desc: repo data.
+author: Zeng Gang
 version: "1.0"
 fields:
-  - field: id
-    range: 1-5
-  - field: product
-    range: 1
-  - field: name
-    range: "723test,Demo,本地git,svn"
-  - field: path
-    range: 42
-  - field: SCM
-    range: "Gitlab,Gitea,Git,Subversion"
-  - field: client
-    range: "/usr/bin/git{3},/usr/bin/svn{1}"
-  - field: serviceHost
-    range: "1,4"
-  - field: serviceProject
-    range: "42,root/Demo,[]{2}"
-  - field: extra
-    range: 42
-  - field: preMerge
-    range: 1
-  - field: job
-    range: 1
-  - field: deleted
-    range: 0
+- field: id
+  range: [1,2,3,4,5]
+- field: product
+  range: 1
+- field: name
+  range: testHtml,project1,unittest,testSvn
+- field: path
+  range: "[http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml],[],[/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea]"
+- field: SCM
+  range: Gitlab{2},Gitea,Subversion
+- field: client
+  range: "/usr/bin/git{3},/usr/bin/svn{1}"
+- field: serviceHost
+  range: 1{2},4
+- field: serviceProject
+  range: "2,1,[gitea/unittest]"
+- field: commits
+  range: 0{2},2
+- field: synced
+  range: 1
+- field: extra
+  range: 9
+- field: preMerge
+  range: 0
+- field: job
+  range: 0
+- field: deleted
+  range: 0

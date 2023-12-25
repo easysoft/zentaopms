@@ -7,10 +7,21 @@ su('admin');
 /**
 
 title=测试 repoModel->getCloneUrl();
+timeout=0
 cid=1
-pid=1
+
+- 执行$result1属性http @
+- 执行$result2属性http @
+- 执行$result3属性http @
+- 执行$result4属性http @
+- 执行$result5属性http @
+- 执行$result6属性http @
+- 执行$result7属性http @
 
 */
+
+zdTable('pipeline')->gen(5);
+zdTable('repo')->config('repo')->gen(5);
 
 $repo = new repoTest();
 $result1 = $repo->getCloneUrlTest(1);

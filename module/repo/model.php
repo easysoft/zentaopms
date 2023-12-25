@@ -356,7 +356,7 @@ class repoModel extends model
             $repo->gitService = $data->serviceHost;
             $repo->project    = $data->serviceProject;
 
-            $token = time();
+            $token = uniqid();
             $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
             if($res === false)
             {
@@ -706,7 +706,7 @@ class repoModel extends model
         if(empty($matches)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
 
         $conditions = array();
-        foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='{$matched['project']}')";
+        foreach($matches as $matched) $conditions[] = "(`serviceHost`='{$matched['gitlab']}' and `serviceProject`='{$matched['project']}')";
 
         $matchedRepos = $this->repoTao->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
         if(empty($matchedRepos)) return array('result' => 'fail', 'message' => 'No matched gitlab.');

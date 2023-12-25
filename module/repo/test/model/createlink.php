@@ -17,6 +17,7 @@ cid=1
 */
 
 $repo = new repoTest();
+$repo->objectModel->config->requestType = 'PATH_INFO';
 
 $method = 'showSyncCommit';
 $params = array('repoID=1&entry=ZXh0ZW50aW9u', 'repoID=5&file=YWJjLnBocA==', 'repoID=13&root=bW9kdWxlJTJGcmVwbyUyRmpz');
