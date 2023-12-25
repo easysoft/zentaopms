@@ -28,30 +28,7 @@ class jenkins extends control
     }
 
     /**
-     * Jenkins 列表。
-     * Browse jenkinss.
-     *
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
-    {
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $this->view->title       = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->browse;
-        $this->view->jenkinsList = $this->loadModel('pipeline')->getList('jenkins', $orderBy, $pager);
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-
-        $this->display();
-    }
-
-    /**
+     * 创建一个jenkins服务器。
      * Create a jenkins.
      *
      * @access public
@@ -71,7 +48,6 @@ class jenkins extends control
         }
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
-
         $this->display();
     }
 
