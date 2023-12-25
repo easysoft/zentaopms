@@ -1236,7 +1236,7 @@ class testcase extends control
     {
         if(!empty($_POST))
         {
-            $libID = $this->post->lib;
+            $libID = (int)$this->post->lib;
             if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->testcase->caselib)));
 
             list($cases, $steps, $files) = $this->testcaseZen->buildDataForImportToLib($caseID, $libID);
