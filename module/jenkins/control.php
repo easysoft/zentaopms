@@ -47,7 +47,7 @@ class jenkins extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
+        $this->view->title = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
         $this->display();
     }
 
