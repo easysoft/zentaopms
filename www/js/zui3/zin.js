@@ -426,10 +426,18 @@
             success(data)
             {
                 const response = this.response;
-                if(isInAppTab && response && response.redirected && currentCode !== $.apps.getAppCode(response.url))
+                if(response && response.redirected)
                 {
-                    $.apps.openApp(response.url, response.url.includes('#app=') ? null : currentCode);
-                    return;
+                    if(!isInAppTab)
+                    {
+                        location.href = response.url;
+                        return;
+                    }
+                    if(isInAppTab && currentCode !== $.apps.getAppCode(response.url))
+                    {
+                        $.apps.openApp(response.url, response.url.includes('#app=') ? null : currentCode);
+                        return;
+                    }
                 }
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
