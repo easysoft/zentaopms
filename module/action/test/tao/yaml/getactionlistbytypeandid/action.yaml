@@ -1,0 +1,25 @@
+title: table zt_action
+desc: "系统日志"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: project,testtask,build,story,requirement,case,testcase,module{5},bug,testsuite
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "动作"
+    range: created{8},deleted{4},created,created
+    postfix: ""
+    loop: 0
+    format: ""
