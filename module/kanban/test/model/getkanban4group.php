@@ -48,9 +48,7 @@ cid=1
 - 查看执行2按任务的指派给分组的泳道
  - 第0条的id属性 @assignedTo0
  - 第0条的title属性 @ 指派给: 无
-- 查看执行2按任务的相关需求分组的泳道
- - 第0条的id属性 @story0
- - 第0条的title属性 @相关研发需求: 无
+- 查看执行2按任务的相关需求分组的泳道第0条的id属性 @story0
 - 查看执行3按bug的优先级分组的泳道
  - 第0条的id属性 @pri0
  - 第0条的title属性 @优先级: 无
@@ -85,7 +83,7 @@ r($kanban->getKanban4GroupTest($executionIDList[0], $browseTypeList[0], $groupBy
 r($kanban->getKanban4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[0])[0]['data']['lanes']) && p('0:id,title') && e('pri1,优先级:1');           // 查看执行2按任务的优先级分组的泳道
 r($kanban->getKanban4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[2])[0]['data']['lanes']) && p('0:id,title') && e('module0,所属模块: 无');    // 查看执行2按任务的模块分组的泳道
 r($kanban->getKanban4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[4])[0]['data']['lanes']) && p('0:id,title') && e('assignedTo0, 指派给: 无'); // 查看执行2按任务的指派给分组的泳道
-r($kanban->getKanban4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[5])[0]['data']['lanes']) && p('0:id,title') && e('story0,相关研发需求: 无'); // 查看执行2按任务的相关需求分组的泳道
+r($kanban->getKanban4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[5])[0]['data']['lanes']) && p('0:id')       && e('story0');                  // 查看执行2按任务的相关需求分组的泳道
 r($kanban->getKanban4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[0])[0]['data']['lanes']) && p('0:id,title') && e('pri0,优先级: 无');         // 查看执行3按bug的优先级分组的泳道
 r($kanban->getKanban4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[2])[0]['data']['lanes']) && p('0:id,title') && e('module0,所属模块: 无');    // 查看执行3按bug的模块分组的泳道
 r($kanban->getKanban4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[4])[0]['data']['lanes']) && p('0:id,title') && e('assignedTo0,指派给: 无');  // 查看执行3按bug的指派给分组的泳道

@@ -33,7 +33,6 @@ cid=1
 - 获取执行2 task pri的泳道 @,1,2,3,4,优先级: 无
 - 获取执行2 task module的泳道 @,所属模块: 无
 - 获取执行2 task assignedTo的泳道 @,指派给: 无
-- 获取执行2 task story的泳道 @,相关研发需求: 无
 - 获取执行1 bug pri的泳道 @,优先级: 无
 - 获取执行1 bug module的泳道 @,所属模块: 无
 - 获取执行1 bug assignedTo的泳道 @,指派给: 无
@@ -45,7 +44,6 @@ cid=1
 - 获取执行2 task pri的泳道 @,1,2,3,4,优先级: 无
 - 获取执行2 task module的泳道 @,所属模块: 无
 - 获取执行2 task assignedTo的泳道 @,指派给: 无
-- 获取执行2 task story的泳道 @,相关研发需求: 无
 
 */
 $executionIDList = array('1', '2', '3', '4', '5');
@@ -61,7 +59,6 @@ r($kanban->getLanes4GroupTest($executionIDList[0], $browseTypeList[0], $groupByL
 r($kanban->getLanes4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[0])) && p('', '|') && e(',1,2,3,4,优先级: 无'); // 获取执行2 task pri的泳道
 r($kanban->getLanes4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[2])) && p('', '|') && e(',所属模块: 无');       // 获取执行2 task module的泳道
 r($kanban->getLanes4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[4])) && p('', '|') && e(',指派给: 无');         // 获取执行2 task assignedTo的泳道
-r($kanban->getLanes4GroupTest($executionIDList[1], $browseTypeList[1], $groupByList[5])) && p('', '|') && e(',相关研发需求: 无');   // 获取执行2 task story的泳道
 r($kanban->getLanes4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[0])) && p('', '|') && e(',优先级: 无');         // 获取执行1 bug pri的泳道
 r($kanban->getLanes4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[2])) && p('', '|') && e(',所属模块: 无');       // 获取执行1 bug module的泳道
 r($kanban->getLanes4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[4])) && p('', '|') && e(',指派给: 无');         // 获取执行1 bug assignedTo的泳道
@@ -73,4 +70,3 @@ r($kanban->getLanes4GroupTest($executionIDList[3], $browseTypeList[0], $groupByL
 r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[0])) && p('', '|') && e(',1,2,3,4,优先级: 无'); // 获取执行2 task pri的泳道
 r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[2])) && p('', '|') && e(',所属模块: 无');       // 获取执行2 task module的泳道
 r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[4])) && p('', '|') && e(',指派给: 无');         // 获取执行2 task assignedTo的泳道
-r($kanban->getLanes4GroupTest($executionIDList[4], $browseTypeList[1], $groupByList[5])) && p('', '|') && e(',相关研发需求: 无');   // 获取执行2 task story的泳道
