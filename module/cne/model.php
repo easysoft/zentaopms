@@ -938,7 +938,7 @@ class cneModel extends model
      * @access public
      * @return array|false
      */
-    public function getCustomItems(object $instance) array|false
+    public function getCustomItems(object $instance): array|false
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
