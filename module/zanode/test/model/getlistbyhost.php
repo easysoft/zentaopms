@@ -36,6 +36,6 @@ $zanode = new zanodeTest();
 $hostIDList  = array(0, 1, 2);
 $orderByList = array('', 'heartbeat_desc');
 
-r($zanode->getListByHost($hostIDList[0], $orderByList[0])) && p('') && e(0);   //传入空的hostID，返回值应该为空数组。
+r($zanode->getListByHost($hostIDList[0], $orderByList[0])) && p('') && e(0);                                                                  //传入空的hostID，返回值应该为空数组。
 r($zanode->getListByHost($hostIDList[2], $orderByList[0])) && p('0:id,status;2:id,status;4:id,status') && e('8,online;10,shutoff;12,wait');   //id为2下的所有执行节点数据是否正确，是否按照默认的id排序。
 r($zanode->getListByHost($hostIDList[2], $orderByList[1])) && p('0:id,status;2:id,status;4:id,status') && e('12,wait;10,shutoff;8,online');   //id为2下的所有执行节点数据是否正确，是否按照heartbeat降序排序。

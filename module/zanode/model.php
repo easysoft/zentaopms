@@ -463,22 +463,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Get ZenAgent Node created action record by node ID.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getNodeCreateActionByID($id)
-    {
-        return $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq('zanode')
-            ->andWhere('objectID')->eq($id)
-            ->andWhere('action')->eq('created')
-            ->fetch();
-    }
-
-    /**
      * Callback update host data.
      *
      * @access public
@@ -637,13 +621,14 @@ class zanodemodel extends model
     }
 
     /**
-     * Get node pairs.
+     * 获取执行节点的id-name键值对。
+     * Get node id-name pairs.
      *
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPairs($orderBy = 'id_desc')
+    public function getPairs(string $orderBy = 'id_desc'): array
     {
         return $this->dao->select('*')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)

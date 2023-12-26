@@ -1,0 +1,18 @@
+title: zt_host
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: name
+    fields:
+      - field: field1
+        range: node{5},physics{5}
+      - field: field2
+        range: 1-5{2}
+  - field: type
+    range: node{5},physics{5}
+  - field: heartbeat
+    range: "(-2M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
