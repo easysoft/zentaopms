@@ -116,18 +116,23 @@ class artifactrepo extends control
         $this->display();
     }
 
-    public function delete(int $artifactRepoID, string $confirm = 'no')
+    /**
+     * 删除一个制品库。
+     * Delete a artifactrepo.
+     *
+     * @param  int    $artifactRepoID
+     * @access public
+     * @return void
+     */
+    public function delete(int $artifactRepoID)
     {
-        if($confirm == 'yes')
-        {
-            $linkBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('artifactRepoID')->eq($artifactRepoID)->fetch();
-            if($linkBuild) return $this->send(array('result' => 'fail', 'message' => $this->lang->artifactrepo->deleteError));
+        $linkBuild = $this->artifactrepo->getLinkBuild($artifactRepoID);
+        if($linkBuild) return $this->send(array('result' => 'fail', 'message' => $this->lang->artifactrepo->deleteError));
 
-            $this->artifactrepo->delete(TABLE_ARTIFACTREPO, $artifactRepoID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->artifactrepo->delete(TABLE_ARTIFACTREPO, $artifactRepoID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'load' => true));
-        }
+        return $this->send(array('result' => 'success', 'load' => true));
 
     }
 

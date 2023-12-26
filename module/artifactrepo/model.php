@@ -148,4 +148,17 @@ class artifactrepoModel extends model
 
         return $artifactRepos;
     }
+
+    /**
+     * 获取制品库关联的版本信息。
+     * Get the build information linked with the artifactrepo.
+     *
+     * @param  int          $artifactRepoID
+     * @access public
+     * @return object|false
+     */
+    public function getLinkBuild(int $artifactRepoID): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)->where('artifactRepoID')->eq($artifactRepoID)->fetch();
+    }
 }

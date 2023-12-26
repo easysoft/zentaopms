@@ -38,4 +38,4 @@ $config->artifactrepo->dtable->fieldList['actions']['list']['delete']['icon']   
 $config->artifactrepo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->artifactrepo->delete;
 $config->artifactrepo->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
 $config->artifactrepo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $lang->artifactrepo->confirmDelete;
-$config->artifactrepo->dtable->fieldList['actions']['list']['delete']['url']          = array('module' => 'artifactrepo', 'method' => 'delete', 'params' => 'id={id}&confirm=yes');
+$config->artifactrepo->dtable->fieldList['actions']['list']['delete']['url']          = array('module' => 'artifactrepo', 'method' => 'delete', 'params' => 'id={id}');
