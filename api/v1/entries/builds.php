@@ -49,6 +49,7 @@ class buildsEntry extends entry
     public function post($projectID = 0)
     {
         if(!$projectID) $projectID = $this->param('project', 0);
+        if(!$projectID and isset($this->requestBody->project)) $projectID = $this->requestBody->project;
 
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->sendError(404, 'Error project id');
