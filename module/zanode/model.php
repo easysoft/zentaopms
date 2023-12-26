@@ -601,15 +601,16 @@ class zanodemodel extends model
     }
 
     /**
+     * 获取自定义的镜像。
      * Get custom image.
      *
      * @param  int          $nodeID
      * @param  string|array $status
      * @param  string       $orderBy
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getCustomImage($nodeID = 0, $status = '', $orderBy = 'id_desc')
+    public function getCustomImage(int $nodeID = 0, string|array $status = '', string $orderBy = 'id_desc'): object|false
     {
         return $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('`from`')->eq($nodeID)
