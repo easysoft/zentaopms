@@ -138,4 +138,20 @@ class zanodeTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
     }
+
+    /**
+     * 测试创建默认的快照。
+     * Test create default snapshot.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return object
+     */
+    public function createDefaultSnapshotTest(int $nodeID): object|array
+    {
+        $snapshotID = $this->createDefaultSnapshot($nodeID);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+    }
 }

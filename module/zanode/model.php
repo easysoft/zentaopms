@@ -126,7 +126,7 @@ class zanodemodel extends model
      * @param  object $node
      * @param  object $snapshot
      * @access public
-     * @return false|bool
+     * @return false|int
      */
     public function createSnapshot(object $node, object $snapshot): false|int
     {
@@ -157,57 +157,37 @@ class zanodemodel extends model
         return false;
     }
 
-    public function createDefaultSnapshot($zanodeID = 0)
+    /**
+     * 创建默认的快照。
+     * Create default snapshot.
+     *
+     * @param  int    $zanodeID
+     * @access public
+     * @return bool
+     */
+    public function createDefaultSnapshot(int $zanodeID = 0): bool
     {
-        $node  = $this->getNodeByID($zanodeID);
-        if($node->status != 'running') dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
-        if(dao::isError()) return false;
-
-        $newSnapshot = new stdClass();
-        $newSnapshot->host        = $node->id;
-        $newSnapshot->name        = 'defaultSnap';
-        $newSnapshot->desc        = '';
-        $newSnapshot->status      = 'creating';
-        $newSnapshot->osName      = $node->osName;
-        $newSnapshot->memory      = 0;
-        $newSnapshot->disk        = 0;
-        $newSnapshot->fileSize    = 0;
-        $newSnapshot->from        = 'snapshot';
-        $newSnapshot->createdBy   = 'system';
-        $newSnapshot->createdDate = helper::now();
-
-        $this->dao->insert(TABLE_IMAGE)
-            ->data($newSnapshot)
-            ->autoCheck()
-            ->exec();
-
-        if(dao::isError()) return false;
-
-        $newID = $this->dao->lastInsertID();
-
-        /* Prepare create params. */
-        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
-        $param    = array(array(
-            'name'    => $newSnapshot->name,
-            'task'    => $newID,
-            'type'    => 'createSnap',
-            'vm'      => $node->name
-        ));
-
-        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
-
-
-        if(!empty($result) and $result->code == 'success')
+        $node = $this->getNodeByID($zanodeID);
+        if($node->status != 'running')
         {
-            $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
-
-            return $newID;
+            dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
+            return false;
         }
 
-        $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($newID)->exec();
-        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->app->lang->fail;
+        $defaultSnapshot = new stdClass();
+        $defaultSnapshot->host        = $node->id;
+        $defaultSnapshot->name        = 'defaultSnap';
+        $defaultSnapshot->desc        = '';
+        $defaultSnapshot->status      = 'creating';
+        $defaultSnapshot->osName      = $node->osName;
+        $defaultSnapshot->memory      = 0;
+        $defaultSnapshot->disk        = 0;
+        $defaultSnapshot->fileSize    = 0;
+        $defaultSnapshot->from        = 'snapshot';
+        $defaultSnapshot->createdBy   = 'system';
+        $defaultSnapshot->createdDate = helper::now();
 
-        return false;
+        $this->createSnapshot($node, $defaultSnapshot);
     }
 
     /**
