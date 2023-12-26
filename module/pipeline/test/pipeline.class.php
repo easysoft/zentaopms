@@ -38,21 +38,25 @@ class pipelineTest
     }
 
     /**
+     * 获取服务器列表。
      * Get pipeline list.
      *
-     * @param  string $type jenkins|gitlab
+     * @param  string $type       jenkins|gitlab
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function getListTest($type = 'jenkins', $orderBy = 'id_desc', $pager = null)
+    public function getListTest(string $type = 'jenkins', string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
     {
-        $objects = $this->objectModel->getList($type, $orderBy, $pager);
+        $this->objectModel->app->loadClass('pager', true);
+
+        $pager        = new pager(0, $recPerPage, $pageID);
+        $pipelineList = $this->objectModel->getList($type, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $pipelineList;
     }
 
     /**
