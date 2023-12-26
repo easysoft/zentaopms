@@ -394,7 +394,7 @@ window.loadBranches = function(product)
     {
         let productID = $(this).val();
         if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id'))
         {
             zui.Modal.alert(errorSameProducts);
             $(`#${product.id}`).zui('picker').$.setValue(0);
