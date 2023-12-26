@@ -60,24 +60,6 @@ class pipelineTest
     }
 
     /**
-     * Get pipeline pairs
-     *
-     * @param  int    $data
-     * @access public
-     * @return array
-     */
-    public function getPairs($data)
-    {
-        $objects = $this->objectModel->getPairs($data['type']);
-
-        if(empty($objects))    return '没有获取到数据';
-        if(isset($data['id'])) return $objects[$data['id']];
-        if(dao::isError())     return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Create a pipeline.
      *
      * @param  int    $type
@@ -166,5 +148,21 @@ class pipelineTest
 
         if(dao::isError()) return dao::getError();
         return $pipeline;
+    }
+
+    /**
+     * 获取服务器列表。
+     * Get pipeline pairs.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getPairsTest(string $type): array
+    {
+        $pipelinePairs = $this->objectModel->getPairs($type);
+
+        if(dao::isError())  return dao::getError();
+        return $pipelinePairs;
     }
 }

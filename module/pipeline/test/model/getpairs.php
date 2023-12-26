@@ -1,27 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pipeline.class.php';
-su('admin');
-
 /**
 
 title=测试 pipelineModel->getPairs();
 cid=1
-pid=1
 
-id为1且type为gitlab的pipeline名称 >> gitlab服务器
-id为2且type为sonarqube的pipeline名称 >> sonarqube服务器
-获取不存在的type >> 没有获取到数据
+- 获取type为空的流水线信息属性1 @gitLab
+- 获取type为gitlab的流水线信息属性1 @gitLab
+- 获取type为test的流水线信息 @0
+- 获取type为空的流水线信息 @20
+- 获取type为gitlab的流水线信息 @4
+- 获取type为test的流水线信息 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/pipeline.class.php';
 
-$pipeline = new pipelineTest();
+zdTable('user')->gen(5);
+zdTable('pipeline')->config('pipeline')->gen(20);
 
-$data[0] = array('type' => 'gitlab', 'id' => 1);
-$data[1] = array('type' => 'sonarqube', 'id' => 2);
-$data[2] = array('type' => 'testType');
+$types = array('', 'gitlab', 'test');
 
-r($pipeline->getPairs($data[0])) && p() && e('gitlab服务器');    //id为1且type为gitlab的pipeline名称
-r($pipeline->getPairs($data[1])) && p() && e('sonarqube服务器'); //id为2且type为sonarqube的pipeline名称
-r($pipeline->getPairs($data[2])) && p() && e('没有获取到数据');  //获取不存在的type
+$pipelineTester = new pipelineTest();
+r($pipelineTester->getPairsTest($types[0])) && p('1') && e('gitLab'); // 获取type为空的流水线信息
+r($pipelineTester->getPairsTest($types[1])) && p('1') && e('gitLab'); // 获取type为gitlab的流水线信息
+r($pipelineTester->getPairsTest($types[2])) && p(0)   && e('0');      // 获取type为test的流水线信息
+
+r(count($pipelineTester->getPairsTest($types[0]))) && p(0) && e('20'); // 获取type为空的流水线信息
+r(count($pipelineTester->getPairsTest($types[1]))) && p(0) && e('4');  // 获取type为gitlab的流水线信息
+r(count($pipelineTester->getPairsTest($types[2]))) && p(0) && e('0');  // 获取type为test的流水线信息
