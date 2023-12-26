@@ -897,6 +897,24 @@ class metricTest
     }
 
     /**
+     * Test insertMetricLib.
+     *
+     * @param  array    $records
+     * @access public
+     * @return int
+     */
+    public function insertMetricLib($records)
+    {
+        $this->objectModel->insertMetricLib($records);
+
+        $recordCount = $this->objectModel->dao->select('count(id) as num')
+            ->from(TABLE_METRICLIB)
+            ->fetch('num');
+
+        return $recordCount;
+    }
+
+    /**
      * Test fetchMetrics.
      *
      * @param  string $scope
