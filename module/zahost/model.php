@@ -139,18 +139,17 @@ class zahostModel extends model
     }
 
     /**
-     * Get image by name.
+     * 根据镜像名称和宿主机编号获取镜像。
+     * Get image by name and host.
      *
-     * @param  string $imageName
-     * @param  int    $hostID
+     * @param  string       $imageName
+     * @param  int          $hostID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getImageByNameAndHostID($imageName, $hostID)
+    public function getImageByNameAndHostID(string $imageName, int $hostID): object|false
     {
-        return $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('host')->eq($hostID)
-            ->andWhere('name')->eq($imageName)->fetch();
+        return $this->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->andWhere('name')->eq($imageName)->fetch();
     }
 
     /**
