@@ -919,7 +919,7 @@ class metricTest
      * @param  string $scope
      * @param  int    $limit
      * @access public
-     * @return string
+     * @return array
      */
     public function fetchMetricsByScope($scope, $limit = -1)
     {
@@ -937,5 +937,29 @@ class metricTest
     public function fetchMetricByID($code, $fields = '*')
     {
         return $this->objectModel->fetchMetricByID($code, $fields);
+    }
+
+    /**
+     * Test fetchMetricsByIDList.
+     *
+     * @param  string|array $idList
+     * @access public
+     * @return array
+     */
+    public function fetchMetricsByIDList($idList)
+    {
+        return $this->objectModel->fetchMetricsByIDList($idList);
+    }
+
+    /**
+     * Test fetchMetricByCode.
+     *
+     * @param  string $code
+     * @access public
+     * @return object
+     */
+    public function fetchMetricByCode($code)
+    {
+        return $this->objectModel->fetchMetricByCode($code);
     }
 }
