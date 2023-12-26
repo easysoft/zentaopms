@@ -154,4 +154,21 @@ class zanodeTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
     }
+
+    /**
+     * 测试编辑快照。
+     * Test edit snapshot.
+     *
+     * @param int    $snapshotID
+     * @param object $data
+     * @access public
+     * @return void
+     */
+    public function editSnapshotTest(int $snapshotID, object $data): object|array
+    {
+        $this->editSnapshot($snapshotID, $data);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+    }
 }

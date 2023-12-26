@@ -120,10 +120,10 @@ $config->zanode->snapshotDtable->fieldList['actions']['title'] = $lang->actions;
 $config->zanode->snapshotDtable->fieldList['actions']['type']  = 'actions';
 $config->zanode->snapshotDtable->fieldList['actions']['menu']  = array('editSnapshot', 'restoreSnapshot', 'deleteSnapshot');
 
-$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['icon']        = 'edit';
-$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['hint']        = $lang->zanode->editSnapshot;
-$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['className']   = 'editSnapshot';
-$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['url']         = array('module' => 'zanode', 'method' => 'editSnapshot', 'params' => 'snapshotID={id}');
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['icon']      = 'edit';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['hint']      = $lang->zanode->editSnapshot;
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['className'] = 'editSnapshot';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['url']       = array('module' => 'zanode', 'method' => 'editSnapshot', 'params' => 'snapshotID={id}');
 
 $config->zanode->snapshotDtable->fieldList['actions']['list']['restoreSnapshot']['icon']         = 'restart';
 $config->zanode->snapshotDtable->fieldList['actions']['list']['restoreSnapshot']['hint']         = $lang->zanode->restoreSnapshot;

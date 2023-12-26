@@ -33,10 +33,10 @@ $config->zanode->form->createsnapshot = array();
 $config->zanode->form->createsnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
 $config->zanode->form->createsnapshot['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
-$config->zanode->form->editSnapshot = array();
-$config->zanode->form->editSnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
-$config->zanode->form->editSnapshot['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
+$config->zanode->form->editsnapshot = array();
+$config->zanode->form->editsnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
+$config->zanode->form->editsnapshot['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
-$config->zanode->form->ajaxUpdateImage = array();
-$config->zanode->form->ajaxUpdateImage['status'] = array('type' => 'string', 'required' => false);
-$config->zanode->form->ajaxUpdateImage['path']   = array('type' => 'string', 'required' => false);
+$config->zanode->form->ajaxupdateimage = array();
+$config->zanode->form->ajaxupdateimage['status'] = array('type' => 'string', 'required' => false);
+$config->zanode->form->ajaxupdateimage['path']   = array('type' => 'string', 'required' => false);

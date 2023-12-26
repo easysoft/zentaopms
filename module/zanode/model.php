@@ -191,22 +191,16 @@ class zanodemodel extends model
     }
 
     /**
-     * Edit Snapshot.
+     * 编辑快照。
+     * Edit snapshot.
      *
-     * @param int $snapshotID
+     * @param int    $snapshotID
+     * @param object $data
      * @access public
-     * @return bool
+     * @return void
      */
-    public function editSnapshot($snapshotID)
+    public function editSnapshot(int $snapshotID, object $data): void
     {
-        $data = form::data()->get();
-
-        if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
-        if(dao::isError()) return false;
-
-        if(is_numeric($data->name)) dao::$errors['name'] = sprintf($this->lang->error->code, $this->lang->zanode->name);
-        if(dao::isError()) return false;
-
         $newSnapshot = new stdClass();
         $newSnapshot->localName = $data->name;
         $newSnapshot->desc      = $data->desc;
@@ -216,7 +210,6 @@ class zanodemodel extends model
             ->where('id')->eq($snapshotID)
             ->autoCheck()
             ->exec();
-        return true;
     }
 
     /**

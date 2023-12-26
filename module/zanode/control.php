@@ -311,7 +311,10 @@ class zanode extends control
 
         if($_POST)
         {
-            $this->zanode->editSnapshot($snapshotID);
+            $formData = form::data()->get();
+            if(is_numeric($formData->name)) return $this->sendError(array('name' => sprintf($this->lang->error->code, $this->lang->zanode->name)));
+
+            $this->zanode->editSnapshot($snapshotID, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('zanode', $snapshot->host, 'editSnapshot', '', $snapshot->localName ? $snapshot->localName : $snapshot->name);
