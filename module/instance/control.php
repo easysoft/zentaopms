@@ -367,21 +367,6 @@ class instance extends control
     }
 
     /**
-     * 自定义安装应用。
-     * Install app by custom settings.
-     *
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function customInstall(int $id)
-    {
-        // Disable custom installation in version 1.0.
-        $storeUrl = $this->createLink('store', 'appview', "id=$id");
-        return js::execute("window.parent.location.href='{$storeUrl}';");
-    }
-
-    /**
      * 安装应用。
      * Install app.
      *

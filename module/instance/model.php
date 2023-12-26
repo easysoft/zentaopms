@@ -1619,58 +1619,6 @@ class InstanceModel extends model
         return $newList;
     }
 
-    /*
-     * Get instance switcher.
-     *
-     * @param  object  $instance
-     * @access public
-     * @return string
-     */
-    public function getSwitcher($instance)
-    {
-        $instanceLink = helper::createLink('instance', 'view', "id=$instance->id");
-
-        $output  = "<div class='btn-group header-btn'>";
-        $output .= html::a($instanceLink, $instance->appName, '', 'class="btn"');
-        $output .= "</div>";
-
-        return $output;
-    }
-
-    /**
-     * Get switcher of custom installation page of store.
-     *
-     * @param  object $app
-     * @access public
-     * @return array
-     */
-    public function getInstallSwitcher($app)
-    {
-        $output  = $this->loadModel('store')->getAppViewSwitcher($app);
-        $output .= "<div class='btn-group header-btn'>";
-        $output .= html::a(helper::createLink('instance', 'install', "id=$app->id"), $this->lang->instance->installApp, '', 'class="btn"');
-        $output .= "</div>";
-
-        return $output;
-    }
-
-    /**
-     * Get switcher of custom installation page of store.
-     *
-     * @param  object $app
-     * @access public
-     * @return array
-     */
-    public function getCustomInstallSwitcher($app)
-    {
-        $output  = $this->loadModel('store')->getAppViewSwitcher($app);
-        $output .= "<div class='btn-group header-btn'>";
-        $output .= html::a(helper::createLink('instance', 'custominstall', "id=$app->id"), $this->lang->instance->customInstall, '', 'class="btn"');
-        $output .= "</div>";
-
-        return $output;
-    }
-
     /**
      * Get senior app list. The instance can be switched to senior App.
      *
