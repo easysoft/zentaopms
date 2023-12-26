@@ -6,9 +6,9 @@ class zahostTao extends zahostModel
      * 将没有插入到 image 表的镜像数据插入到 image 表中。
      * Insert image list.
      *
-     * @param  array     $imageList 
-     * @param  int       $hostID 
-     * @param  array     $downloadedImageList 
+     * @param  array     $imageList
+     * @param  int       $hostID
+     * @param  array     $downloadedImageList
      * @access protected
      * @return bool
      */
@@ -32,5 +32,40 @@ class zahostTao extends zahostModel
         }
 
         return $refreshPageData;
+    }
+
+    /**
+     * 获取当前的下载任务。
+     * Get current download task.
+     *
+     * @param  int         $imageID
+     * @param  array       $statusGroupTasks
+     * @access protected
+     * @return null|object
+     */
+    protected function getCurrentTask(int $imageID, object $statusGroupTasks): null|object
+    {
+        $currentTask = null;
+        $finished    = false;
+        foreach($statusGroupTasks as $groupTasks)
+        {
+            if($finished) break;
+            foreach($groupTasks as $task)
+            {
+                if($finished) break;
+                if($task->task != $imageID) continue;
+
+                $task->endDate = substr($task->endDate, 0, 19);
+                if(empty($currentTask) || strtotime($task->endDate) > strtotime($currentTask->endDate)) $currentTask = $task;
+
+                if($task->status == 'inprogress')
+                {
+                    $currentTask = $task;
+                    $finished    = true;
+                    break;
+                }
+            }
+        }
+        return $currentTask;
     }
 }

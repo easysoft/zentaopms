@@ -250,50 +250,27 @@ class zahostModel extends model
     }
 
     /**
+     * 查询镜像的状态。
      * Query image download progress.
      *
      * @param  object $image
      * @access public
-     * @return object Return Status code.
+     * @return object
      */
-    public function queryDownloadImageStatus($image)
+    public function queryDownloadImageStatus(object $image)
     {
+        if(!empty($this->imageStatusList)) $result = $this->imageStatusList;
+
         if(empty($this->imageStatusList))
         {
-            $host   = $this->getById($image->host);
+            $host   = $this->getByID($image->host);
             $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/getStatus';
+            $result = $this->imageStatusList = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
 
-            $this->imageStatusList = $result = json_decode(commonModel::http($apiUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
-            if(!$result or $result->code != 'success') return $image->status;
-        }else{
-            $result = $this->imageStatusList;
+            if(!$result || $result->code != 'success') return $image;
         }
 
-        $currentTask = null;
-        $is_finish   = false;
-        foreach($result->data as $status => $group)
-        {
-            if($is_finish) break;
-            foreach($group as $task)
-            {
-                if($is_finish) break;
-                if($task->task == $image->id)
-                {
-                    $task->endDate = substr($task->endDate, 0, 19);
-                    if(empty($currentTask) || strtotime($task->endDate) > strtotime($currentTask->endDate))
-                    {
-                        $currentTask = $task;
-                    }
-                    if($task->status == 'inprogress')
-                    {
-                        $currentTask = $task;
-                        $is_finish   = true;
-                        break;
-                    }
-                }
-            }
-        }
-
+        $currentTask = $this->zahostTao->getCurrentTask($image->id, $result->data);
         if($currentTask)
         {
             $image->rate   = $currentTask->rate;
@@ -301,10 +278,7 @@ class zahostModel extends model
 
             if(!empty($result->data->inprogress) && $currentTask->task != $result->data->inprogress[0]->task && $currentTask->status == 'created') $image->status = 'pending';
 
-            $this->dao->update(TABLE_IMAGE)
-                ->set('status')->eq($image->status)
-                ->set('path')->eq(!empty($currentTask->path) ? $currentTask->path : '')
-                ->where('id')->eq($image->id)->exec();
+            $this->dao->update(TABLE_IMAGE)->set('status')->eq($image->status)->set('path')->eq(zget($currentTask, 'path', ''))->where('id')->eq($image->id)->exec();
 
             $image->taskID = $currentTask->id;
         }
