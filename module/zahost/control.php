@@ -178,43 +178,42 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function browseImage(int $hostID, string $browseType = 'all', int $param = 0, string $orderBy = 'id', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseImage(int $hostID, string $orderBy = 'id', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('imageList', $this->app->getURI(true));
 
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->zahost->image->browseImage;
-        $this->view->hostID     = $hostID;
-        $this->view->browseType = $browseType;
-        $this->view->param      = $param;
-        $this->view->imageList  = $this->zahost->getImageList($hostID, $browseType, $param, $orderBy, $pager);
-        $this->view->pager      = $pager;
-        $this->view->orderBy    = $orderBy;
+        $this->view->title     = $this->lang->zahost->image->browseImage;
+        $this->view->hostID    = $hostID;
+        $this->view->imageList = $this->zahost->getImageList($hostID, $orderBy, $pager);
+        $this->view->pager     = $pager;
+        $this->view->orderBy   = $orderBy;
 
         $this->display();
     }
 
     /**
-     * Create template.
+     * 创建镜像。
+     * Create Iamge.
      *
+     * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function createImage($hostID)
+    public function createImage(int $hostID)
     {
-        $host = $this->zahost->getById($hostID);
         if($_POST)
         {
             $this->zahost->createImage();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inLink('browseTemplate', "id={$hostID}")));
         }
 
         $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
-        $this->view->host         = $host;
+        $this->view->host         = $this->zahost->getByID($hostID);
         $this->display();
     }
 
