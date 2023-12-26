@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 treeModel->getTaskTreeModules();
+timeout=0
+cid=1
+
+- 测试获取 execution 1 parent false story 的树 @1,11,31
+
+- 测试获取 execution 2 parent true story 的树 @2,12,32
+
+- 测试获取 execution 3 parent false bug 的树 @3
+- 测试获取 execution 4 parent false case 的树 @4,14
+
+- 测试获取 execution 4 parent false  的树 @4,34
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/tree.class.php';
 su('admin');
@@ -47,21 +64,14 @@ $module->root->range('1-30');
 $module->type->range('story{30},task{30},case{30},bug{30}');
 $module->gen(120);
 
-/**
-
-title=测试 treeModel->getTaskTreeModules();
-cid=1
-pid=1
-
-*/
 $executionID = array(1, 2, 3, 4);
 $parent      = array(false, true);
 $linkObject  = array('story', 'case', 'bug', '');
 
 $tree = new treeTest();
 
-r($tree->getTaskTreeModulesTest($executionID[0], $parent[0], $linkObject[0])) && p() && e('1,31'); // 测试获取 execution 1 parent false story 的树
-r($tree->getTaskTreeModulesTest($executionID[1], $parent[1], $linkObject[0])) && p() && e('2,32'); // 测试获取 execution 2 parent true story 的树
-r($tree->getTaskTreeModulesTest($executionID[2], $parent[0], $linkObject[2])) && p() && e('3');    // 测试获取 execution 3 parent false bug 的树
-r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[1])) && p() && e('4');    // 测试获取 execution 4 parent false case 的树
-r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[3])) && p() && e('4,34'); // 测试获取 execution 4 parent false  的树
+r($tree->getTaskTreeModulesTest($executionID[0], $parent[0], $linkObject[0])) && p() && e('1,11,31'); // 测试获取 execution 1 parent false story 的树
+r($tree->getTaskTreeModulesTest($executionID[1], $parent[1], $linkObject[0])) && p() && e('2,12,32'); // 测试获取 execution 2 parent true story 的树
+r($tree->getTaskTreeModulesTest($executionID[2], $parent[0], $linkObject[2])) && p() && e('3');       // 测试获取 execution 3 parent false bug 的树
+r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[1])) && p() && e('4,14');    // 测试获取 execution 4 parent false case 的树
+r($tree->getTaskTreeModulesTest($executionID[3], $parent[0], $linkObject[3])) && p() && e('4,34');    // 测试获取 execution 4 parent false  的树

@@ -178,6 +178,124 @@ class treeTest
     }
 
     /**
+     * Test get tree menu.
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getTreeMenuTest($rootID, $type)
+    {
+        $objects = $this->objectModel->getTreeMenu($rootID, $type, 0, array('treeModel', 'createStoryLink'));
+
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($objects as $object) $modules[] = $object->id;
+
+        return implode('|', $modules);
+    }
+
+    /**
+     * Test get task tree menu.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getTaskTreeMenuTest($rootID, $productID = 0)
+    {
+        $objects = $this->objectModel->getTaskTreeMenu($rootID, $productID, 0, array('treeModel', 'createTaskLink'));
+
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($objects as $object) $modules[] = $object->id;
+
+        return implode('|', $modules);
+    }
+
+    /**
+     * Test get bug tree menu.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getBugTreeMenuTest($rootID, $productID = 0)
+    {
+        $objects = $this->objectModel->getBugTreeMenu($rootID, $productID, 0, array('treeModel', 'createBugLink'));
+
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($objects as $object) $modules[] = $object->name;
+
+        return implode('|', $modules);
+    }
+
+    /**
+     * Test get case tree menu.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getCaseTreeMenuTest($rootID, $productID = 0)
+    {
+        $objects = $this->objectModel->getCaseTreeMenu($rootID, $productID, 0, array('treeModel', 'createCaseLink'));
+
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($objects as $object) $modules[] = $object->name;
+
+        return implode('|', $modules);
+    }
+
+    /**
+     * Test get project story tree menu.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProjectStoryTreeMenuTest($rootID)
+    {
+        $objects = $this->objectModel->getProjectStoryTreeMenu($rootID, 0, array('treeModel', 'createStoryLink'));
+
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($objects as $object) $modules[] = $object->id;
+
+        return implode('|', $modules);
+    }
+
+    /**
+     * Test get host tree menu.
+     *
+     * @access public
+     * @return string
+     */
+    public function getHostTreeMenuTest()
+    {
+        $objects = $this->objectModel->getHostTreeMenu();
+
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($objects as $object) $modules[] = $object->id;
+
+        return implode('|', $modules);
+    }
+
+    /**
      * Test get execution modules.
      *
      * @param  int    $executionID
@@ -198,23 +316,22 @@ class treeTest
     /**
      * Test create story link.
      *
-     * @param  int     $moduleID
+     * @param  int    $moduleID
+     * @param  int    $parent
      * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createStoryLinkTest($moduleID, $extra = array())
+    public function createStoryLinkTest($moduleID, $parent = 0, $extra = array())
     {
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
-        $link = $this->objectModel->createStoryLink($type, $module, $extra);
+        $link = $this->objectModel->createStoryLink($type, $module, $parent, $extra);
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*(projectstory|execution|product).*(title='.*').*/", '$1 $2', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**
@@ -243,41 +360,41 @@ class treeTest
      * Test create requirment link.
      *
      * @param  int    $moduleID
+     * @param  int    $parent
+     * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createRequirementLinkTest($moduleID)
+    public function createRequirementLinkTest($moduleID, $parent = 0, $extra = array())
     {
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
-        $link = $this->objectModel->createBugLink($type, $module);
+        $link = $this->objectModel->createRequirementLink($type, $module, $parent, $extra);
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*(title='.*').*/", '$1', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**
      * Test create manage link.
      *
+     * @param  string $type
      * @param  int    $moduleID
-     * @param  array $extra
+     * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createManageLinkTest($moduleID, $extra)
+    public function createManageLinkTest($type, $moduleID, $extra = array())
     {
-        $type   = 0;
         $module = $this->objectModel->getByID($moduleID);
 
         $link = $this->objectModel->createManageLink($type, $module, $extra);
 
         if(dao::isError()) return dao::getError();
 
-        return substr($link, 0, 15);
+        return $link;
     }
 
     /**

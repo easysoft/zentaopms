@@ -5,25 +5,25 @@ fields:
   - field: id
     range: 1-10000
   - field: root
-    range: 1{5},2{5},1{5},41{5}
+    range: 1{15},41{5}
   - field: branch
-    range: 0{5},1-5{5},0{70}
+    range: 0
   - field: name
     range: 1-100
     prefix: 模块
   - field: parent
-    range: 0{5},1,2,3,4,5
+    range: 0{5},1,2,3,4,5,0{8},16,17
   - field: path
     fields:
       - field: path1
-        range: "``,``,``,``,``,`,1`,`,2`,`,3`,`,4`,`,5`"
+        range: "``,``,``,``,``,`,1`,`,2`,`,3`,`,4`,`,5`,``,``,``,``,``,``,``,``,`,16`,`,17`"
       - field: path2
         prefix: ","
         range: 1-1000
         postfix: ","
   - field: grade
-    range: 1{5},2{5}
+    range: 1{5},2{5},1{8},2{2}
   - field: type
-    range: task,story,doc,bug,case
+    range: task,story,doc,bug,case,task,story,doc,bug,case,task,story,doc,bug,case,story,bug,task,story,bug
   - field: deleted
     range: 0

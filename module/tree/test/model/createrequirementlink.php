@@ -1,34 +1,37 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->createRequirementLink();
+timeout=0
 cid=1
-pid=1
 
-测试创建module 1821 的RequirementLink >> title='产品模块1'
-测试创建module 1822 的RequirementLink >> title='产品模块2'
-测试创建module 1981 的RequirementLink >> title='产品模块161'
-测试创建module 1982 的RequirementLink >> title='产品模块162'
-测试创建module 1621 的RequirementLink >> title='模块1601'
-测试创建module 1622 的RequirementLink >> title='模块1602'
-测试创建module 21 的RequirementLink >> title='模块1'
-测试创建module 22 的RequirementLink >> title='模块2'
+- 测试获取module 1 的 requirement link属性url @product-browse-1-all-byModule-1-requirement.html
+- 测试获取module 2 的 requriement link属性url @product-browse-1-all-byModule-2-requirement.html
+- 测试获取module 1 branchID 1 的 requriement link属性url @product-browse-1-1-byModule-1-requirement.html
+- 测试获取module 1 projectID 1 的 requriement link属性url @execution-story-1-requirement-order_desc-byModule-1.html
+- 测试获取module 1 executionID 1 的 requriement link属性url @product-browse-1-0-byModule-1-requirement.html
 
 */
-$moduleID = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+su('admin');
+
+global $config;
+$config->requestType = 'PATH_INFO';
+
+zdTable('module')->config('module')->gen(20);
 
 $tree = new treeTest();
 
-r($tree->createRequirementLinkTest($moduleID[0])) && p() && e("title='产品模块1'");   // 测试创建module 1821 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[1])) && p() && e("title='产品模块2'");   // 测试创建module 1822 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[2])) && p() && e("title='产品模块161'"); // 测试创建module 1981 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[3])) && p() && e("title='产品模块162'"); // 测试创建module 1982 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[4])) && p() && e("title='模块1601'");    // 测试创建module 1621 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[5])) && p() && e("title='模块1602'");    // 测试创建module 1622 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[6])) && p() && e("title='模块1'");       // 测试创建module 21 的RequirementLink
-r($tree->createRequirementLinkTest($moduleID[7])) && p() && e("title='模块2'");       // 测试创建module 22 的RequirementLink
+$extra1 = array('branchID'    => '1');
+$extra2 = array('projectID'   => '1');
+$extra2 = array('executionID' => '1');
+
+r($tree->createRequirementLinkTest(1)) && p('url') && e("product-browse-1-all-byModule-1-requirement.html");      // 测试获取module 1 的 requirement link
+r($tree->createRequirementLinkTest(2)) && p('url') && e("product-browse-1-all-byModule-2-requirement.html");      // 测试获取module 2 的 requriement link
+
+r($tree->createRequirementLinkTest(1, 0, $extra1)) && p('url') && e("product-browse-1-1-byModule-1-requirement.html");           // 测试获取module 1 branchID 1 的 requriement link
+r($tree->createRequirementLinkTest(1, 0, $extra2)) && p('url') && e("execution-story-1-requirement-order_desc-byModule-1.html"); // 测试获取module 1 projectID 1 的 requriement link
+r($tree->createRequirementLinkTest(1, 0, $extra3)) && p('url') && e("product-browse-1-0-byModule-1-requirement.html");           // 测试获取module 1 executionID 1 的 requriement link

@@ -119,7 +119,6 @@ class tree extends control
         $this->view->execution       = $execution;
         $this->view->allProject      = $executions;
         $this->view->newModule       = $newModule;
-        $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'), 'allModule');
         $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
