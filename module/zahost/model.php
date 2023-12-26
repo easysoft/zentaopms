@@ -420,14 +420,15 @@ class zahostModel extends model
     }
 
     /**
+     * 获取宿主机的执行节点。
      * Get zanode group by zahost.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getHostNodeGroup()
+    public function getNodeGroupHost(): array
     {
-        return $this->dao->select('t1.id as hostID, t2.*')->from(TABLE_ZAHOST)->alias('t1')
+        return $this->dao->select('t1.id AS hostID, t2.*')->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t2.parent = t1.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t1.deleted')->eq('0')

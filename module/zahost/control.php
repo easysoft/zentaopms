@@ -55,7 +55,7 @@ class zahost extends control
 
         $this->view->title       = $this->lang->zahost->common;
         $this->view->hostList    = $this->zahost->getList($browseType, $param, $orderBy, $pager);
-        $this->view->nodeList    = $this->zahost->getHostNodeGroup();
+        $this->view->nodeList    = $this->zahost->getNodeGroupHost();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
         $this->view->pager       = $pager;
         $this->view->param       = $param;
