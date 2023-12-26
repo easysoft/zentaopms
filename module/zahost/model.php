@@ -24,6 +24,86 @@ class zahostModel extends model
     }
 
     /**
+     * 根据 ID 获取宿主机。
+     * Get host by id.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return object
+     */
+    public function getByID(int $hostID): object|false
+    {
+        $host = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
+        if(!$host) return false;
+
+        if(empty($host->heartbeat)) $host->heartbeat = '';
+        if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online') $host->status = 'offline';
+
+        return $host;
+    }
+
+    /**
+     * 获取宿主机的键值对。
+     * Get host pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairs(): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_ZAHOST)->where('deleted')->eq('0')->andWhere('type')->eq('zahost')->orderBy('`group`')->fetchPairs();
+    }
+
+    /**
+     * 获取宿主机的列表。
+     * Get host list.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
+    {
+        $query = '';
+        if($browseType == 'bysearch')
+        {
+            /* Concatenate the conditions for the query. */
+            if($this->session->zahostQuery == false) $this->session->set('zahostQuery', ' 1 = 1');
+            if($param)
+            {
+                $this->session->set('zahostQuery', ' 1 = 1');
+
+                $query = $this->loadModel('search')->getQuery($param);
+                if($query)
+                {
+                    $this->session->set('zahostQuery', $query->sql);
+                    $this->session->set('zahostForm', $query->form);
+                }
+            }
+            $query = $this->session->zahostQuery;
+        }
+
+        $hostList = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('zahost')
+            ->beginIF($query)->andWhere($query)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+
+        foreach($hostList as $host)
+        {
+            if(empty($host->heartbeat)) $host->hertbeat = '';
+            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online') $host->status = 'offline';
+        }
+
+        return $hostList;
+    }
+
+    /**
      * 创建宿主机。
      * Create a host.
      *
@@ -191,6 +271,19 @@ class zahostModel extends model
     }
 
     /**
+     * 获取镜像键值对。
+     * Get image pairs by host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getImagePairs(int $hostID): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_IMAGE)->where('host')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
+    }
+
+    /**
      * create image.
      *
      * @param  int    $hostID
@@ -340,86 +433,6 @@ class zahostModel extends model
     }
 
     /**
-     * 根据 ID 获取宿主机。
-     * Get host by id.
-     *
-     * @param  int    $hostID
-     * @access public
-     * @return object
-     */
-    public function getByID(int $hostID): object|false
-    {
-        $host = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
-        if(!$host) return false;
-
-        if(empty($host->heartbeat)) $host->heartbeat = '';
-        if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online') $host->status = 'offline';
-
-        return $host;
-    }
-
-    /**
-     * 获取宿主机的键值对。
-     * Get host pairs.
-     *
-     * @access public
-     * @return array
-     */
-    public function getPairs(): array
-    {
-        return $this->dao->select('id, name')->from(TABLE_ZAHOST)->where('deleted')->eq('0')->andWhere('type')->eq('zahost')->orderBy('`group`')->fetchPairs();
-    }
-
-    /**
-     * 获取宿主机的列表。
-     * Get host list.
-     *
-     * @param  string $browseType
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
-    {
-        $query = '';
-        if($browseType == 'bysearch')
-        {
-            /* Concatenate the conditions for the query. */
-            if($this->session->zahostQuery == false) $this->session->set('zahostQuery', ' 1 = 1');
-            if($param)
-            {
-                $this->session->set('zahostQuery', ' 1 = 1');
-
-                $query = $this->loadModel('search')->getQuery($param);
-                if($query)
-                {
-                    $this->session->set('zahostQuery', $query->sql);
-                    $this->session->set('zahostForm', $query->form);
-                }
-            }
-            $query = $this->session->zahostQuery;
-        }
-
-        $hostList = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('zahost')
-            ->beginIF($query)->andWhere($query)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-
-        foreach($hostList as $host)
-        {
-            if(empty($host->heartbeat)) $host->hertbeat = '';
-            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online') $host->status = 'offline';
-        }
-
-        return $hostList;
-    }
-
-    /**
      * 获取宿主机的执行节点。
      * Get zanode group by zahost.
      *
@@ -433,19 +446,6 @@ class zahostModel extends model
             ->where('t2.deleted')->eq('0')
             ->andWhere('t1.deleted')->eq('0')
             ->fetchGroup('hostID', 'id');
-    }
-
-    /**
-     * 获取镜像键值对。
-     * Get image pairs by host.
-     *
-     * @param  int    $hostID
-     * @access public
-     * @return array
-     */
-    public function getImagePairs(int $hostID): array
-    {
-        return $this->dao->select('id, name')->from(TABLE_IMAGE)->where('host')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
     }
 
     /**
