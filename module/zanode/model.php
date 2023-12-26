@@ -894,17 +894,16 @@ class zanodemodel extends model
     }
 
     /**
+     * 通过 product id 获取自动化设置。
      * Get automation by product id.
      *
-     * @param  int    $productID
+     * @param  int          $productID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getAutomationByProduct($productID = 0)
+    public function getAutomationByProduct(int $productID = 0): object|bool
     {
-        return $this->dao->select('*')->from(TABLE_AUTOMATION)
-            ->where('product')->eq($productID)
-            ->fetch();
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)->where('product')->eq($productID)->fetch();
     }
 
     /**
