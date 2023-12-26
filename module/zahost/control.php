@@ -269,29 +269,26 @@ class zahost extends control
     }
 
     /**
+     * 取消镜像下载。
      * Sent cancel download image request to Host.
      *
-     * @param  int    $hostID
-     * @param  string $imageName
+     * @param  int    $imageID
      * @access public
      * @return object
      */
-    public function cancelDownload($imageID, $confirm = 'no')
+    public function cancelDownload(int $imageID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->zahost->cancelDelete, inlink('cancelDownload', "id=$imageID&confirm=yes")));
-        }
         $image = $this->zahost->getImageByID($imageID);
 
         $this->zahost->cancelDownload($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isInModal()) return print(js::reload('parent'));
-        return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $image->host)), 'parent'));
+        if(isInModal()) return $this->send(array('result' => 'success', 'reload' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('zahost', 'browseImage', array("hostID" => $image->host))));
     }
 
     /**
+     * Ajax 方式获取镜像列表。
      * Get image list by ajax.
      *
      * @param  int    $hostID

@@ -81,7 +81,8 @@ $config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['hin
 $config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['url']       = array('module' => 'zahost', 'method' => 'downloadImage', 'params' => 'hostID={hostID}&imageID={id}');
 $config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['className'] = 'ajax-submit';
 
-$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['icon']      = 'ban-circle';
-$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['hint']      = $lang->zahost->cancel;
-$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['url']       = array('module' => 'zahost', 'method' => 'cancelDownload', 'params' => 'imageID={id}');
-$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['className'] = 'ajax-submit';
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['icon']         = 'ban-circle';
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['hint']         = $lang->zahost->cancel;
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['url']          = array('module' => 'zahost', 'method' => 'cancelDownload', 'params' => 'imageID={id}');
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['className']    = 'ajax-submit';
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['data-confirm'] = $lang->zahost->cancelDelete;
