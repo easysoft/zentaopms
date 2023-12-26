@@ -26,8 +26,8 @@ class artifactrepoModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.id')->eq($artifactRepoID)
             ->fetch();
-        $artifactRepo->url .= '/repository/' . $artifactRepo->repoName;
 
+        if($artifactRepo) $artifactRepo->url .= '/repository/' . $artifactRepo->repoName;
         return $artifactRepo;
     }
 
@@ -107,14 +107,15 @@ class artifactrepoModel extends model
      * 更新一个制品库。
      * Update a artifact repo.
      *
-     * @param  object $artifactRepo
-     * @param  int    $artifactRepoID
+     * @param  object      $artifactRepo
+     * @param  int         $artifactRepoID
      * @access public
-     * @return viod
+     * @return array|false
      */
-    public function update(object $artifactRepo, $artifactRepoID): array|false
+    public function update(object $artifactRepo, int $artifactRepoID): array|false
     {
         $oldArtifactRepo = $this->getByID($artifactRepoID);
+        if(!$oldArtifactRepo) return false;
 
         $this->dao->update(TABLE_ARTIFACTREPO)->data($artifactRepo)
             ->autoCheck()
