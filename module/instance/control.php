@@ -41,43 +41,38 @@ class instance extends control
     public function view(int $id, string $type = 'store', string $tab = 'baseinfo')
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-        if($type === 'store')
-        {
-            $this->storeView($id, $tab);
-        }
-        else
-        {
-            $instance = $this->loadModel('gitea')->fetchByID($id);
-            $instance->status      = '';
-            $instance->source      = 'user';
-            $instance->externalID  = $instance->id;
-            $instance->runDuration = 0;
-            $instance->appName     = $instance->type;
-            $instance->createdAt   = $instance->createdDate;
 
-            $instanceMetric = new stdclass();
-            $instanceMetric->cpu    = 0;
-            $instanceMetric->memory = 0;
+        if($type === 'store') return $this->storeView($id, $tab);
 
-            $this->view->title           = $instance->name;
-            $this->view->instance        = $instance;
-            $this->view->cloudApp        = array();
-            $this->view->seniorAppList   = array();
-            $this->view->actions         = $this->loadModel('action')->getList($instance->type, $id);
-            $this->view->defaultAccount  = '';
-            $this->view->instanceMetric  = $instanceMetric;
-            $this->view->currentResource = '';
-            $this->view->customItems     = array();
-            $this->view->backupList      = array();
-            $this->view->hasRestoreLog   =  false;
-            $this->view->latestBackup    = array();
-            $this->view->dbList          = array();
-            $this->view->domain          = '';
-        }
+        $instance = $this->loadModel('gitea')->fetchByID($id);
+        $instance->status      = '';
+        $instance->source      = 'user';
+        $instance->externalID  = $instance->id;
+        $instance->runDuration = 0;
+        $instance->appName     = $instance->type;
+        $instance->createdAt   = $instance->createdDate;
 
-        $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->tab   = $tab;
-        $this->view->type  = $type;
+        $instanceMetric = new stdclass();
+        $instanceMetric->cpu    = 0;
+        $instanceMetric->memory = 0;
+
+        $this->view->title           = $instance->name;
+        $this->view->instance        = $instance;
+        $this->view->cloudApp        = array();
+        $this->view->seniorAppList   = array();
+        $this->view->actions         = $this->loadModel('action')->getList($instance->type, $id);
+        $this->view->defaultAccount  = '';
+        $this->view->instanceMetric  = $instanceMetric;
+        $this->view->currentResource = '';
+        $this->view->customItems     = array();
+        $this->view->backupList      = array();
+        $this->view->hasRestoreLog   =  false;
+        $this->view->latestBackup    = array();
+        $this->view->dbList          = array();
+        $this->view->domain          = '';
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->tab             = $tab;
+        $this->view->type            = $type;
         $this->display();
     }
 
@@ -150,7 +145,7 @@ class instance extends control
         $this->view->currentResource = $currentResource;
         $this->view->customItems     = $customItems;
         $this->view->backupList      = $backupList;
-        $this->view->hasRestoreLog   =  $hasRestoreLog;
+        $this->view->hasRestoreLog   = $hasRestoreLog;
         $this->view->latestBackup    = $latestBackup;
         $this->view->dbList          = $dbList;
         $this->view->domain          = $this->cne->getDomain($instance);
