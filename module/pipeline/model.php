@@ -126,6 +126,7 @@ class pipelineModel extends model
      * Update a server.
      *
      * @param  int    $id
+     * @param  object $server
      * @access public
      * @return bool
      */
