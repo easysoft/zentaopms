@@ -288,39 +288,6 @@ class zahost extends control
     }
 
     /**
-     * Ajax 方式获取镜像列表。
-     * Get image list by ajax.
-     *
-     * @param  int    $hostID
-     * @param  int    $templateID
-     * @access public
-     * @return void
-     */
-    public function ajaxImageList()
-    {
-        $imageList = array('1' => 'Ubuntu20');
-        if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => $imageList));
-
-        return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
-    }
-
-    /**
-     * Introduction.
-     *
-     * @access public
-     * @return void
-     */
-    public function introduction()
-    {
-        $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
-        $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
-
-        $this->view->title = $this->lang->zahost->automation->title;
-        $this->display();
-    }
-
-    /**
      * Check service status by ajax.
      *
      * @param  int    $hostID
