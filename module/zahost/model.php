@@ -149,22 +149,21 @@ class zahostModel extends model
     }
 
     /**
-     * Get image files from ZAgent server.
+     * 获取宿主机的镜像列表。
+     * Get image list of host.
      *
-     * @param  object $hostID
+     * @param  int    $hostID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
+    public function getImageList(int $hostID, string $orderBy = 'id', object $pager = null)
     {
         $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
         if(empty($imageList)) return array();
 
-        $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('host')->eq($hostID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('name');
+        $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->orderBy($orderBy)->page($pager)->fetchAll('name');
 
         $refreshPageData = false;
         foreach($imageList as $remoteImage)
