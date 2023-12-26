@@ -25,6 +25,23 @@ class zanodeTest
     }
 
     /**
+     * 测试自动化设置。
+     * Test set automation setting.
+     *
+     * @param  object       $object
+     * @access public
+     * @return object|array
+     */
+    public function setAutomationSettingTest(object $object): object|array
+    {
+        $resultID = $this->setAutomationSetting($object);
+        if(dao::isError()) return dao::getError();
+        $return = $this->objectModel->getScriptByID($resultID);
+        return $return;
+        return $this->objectModel->getScriptByID($resultID);
+    }
+
+    /**
      * 测试判断按钮是否可点击。
      * Test judge an action is clickable or not.
      *

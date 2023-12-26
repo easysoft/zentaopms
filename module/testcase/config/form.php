@@ -122,3 +122,9 @@ $config->testcase->form->showImport['stage']        = array('required' => false,
 $config->testcase->form->showImport['desc']         = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->showImport['expect']       = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->showImport['stepType']     = array('required' => false, 'type' => 'array',  'default' => array());
+
+$config->testcase->form->automation = common::formConfig('testcase', 'automation');
+$config->testcase->form->automation['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->automation['node']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->automation['scriptPath']   = array('required' => true,  'type' => 'string', 'default' => '');
+$config->testcase->form->automation['shell']        = array('required' => true,  'type' => 'string', 'default' => '', 'control' => 'editor');

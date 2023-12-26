@@ -1301,7 +1301,12 @@ class testcase extends control
 
         if($_POST)
         {
-            $this->zanode->setAutomationSetting();
+            $automation = form::data($this->config->testcase->form->automation)
+                ->setIF($this->post->id, 'id', $this->post->id)
+                ->setDefault('createdBy', $this->app->user->account)
+                ->setdefault('createddate', helper::now())
+                ->get();
+            $this->zanode->setAutomationSetting($automation);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

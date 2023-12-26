@@ -921,25 +921,18 @@ class zanodemodel extends model
     }
 
     /**
+     * 自动化设置。
      * Set automation setting.
      *
+     * @param  object    $object
      * @access public
-     * @return int|bool
+     * @return int|false
      */
-    public function setAutomationSetting()
+    public function setAutomationSetting(object $object): int|bool
     {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->remove('syncToZentao')
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', $now)
-            ->setDefault('node', 0)
-            ->remove('uid')
-            ->get();
-
         $this->dao->replace(TABLE_AUTOMATION)
-            ->data($data)
-            ->batchcheck('node,scriptPath', 'notempty')
+            ->data($object)
+            ->batchCheck('node,scriptPath', 'notempty')
             ->autoCheck()
             ->exec();
 
