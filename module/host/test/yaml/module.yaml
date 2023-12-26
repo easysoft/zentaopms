@@ -1,0 +1,24 @@
+title: table zt_module
+desc: "模块"
+author: Wang yuting
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+  - field: root
+    note: "根目录"
+    range: 0
+  - field: branch
+    note: "分支"
+    range: 0
+  - field: name
+    note: "模块名称"
+    range: 1-10000
+    prefix: "这是一个模块"
+  - field: parent
+    note: "父ID"
+    range: 0{10},1-10{2},11-30,0{10000}
+  - field: type
+    note: "对象类型"
+    range: host

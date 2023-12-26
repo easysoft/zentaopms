@@ -92,8 +92,10 @@ class hostModel extends model
      */
     public function update(object $formData): bool
     {
+        if(empty($formData->id)) return false;
+
         $oldHost = $this->fetchByID($formData->id);
-        $this->dao->update(TABLE_HOST)->data($formData)->batchCheck($this->config->host->create->requiredFields, 'notempty')->autoCheck()->where('id')->eq($formData->id)->exec();
+        $this->dao->update(TABLE_HOST)->data($formData)->batchCheck($this->config->host->edit->requiredFields, 'notempty')->autoCheck()->where('id')->eq($formData->id)->exec();
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldHost, $formData);
@@ -116,6 +118,8 @@ class hostModel extends model
      */
     public function updateStatus(object $formData): bool
     {
+        if(empty($formData->id) || empty($formData->status) || empty($formData->reason)) return false;
+
         $this->dao->update(TABLE_HOST)->data($formData, 'reason')->where('id')->eq($formData->id)->exec();
         if(dao::isError()) return false;
 
@@ -136,7 +140,7 @@ class hostModel extends model
         $this->app->loadLang('serverroom');
 
         /* Get host list. */
-        $stmt = $this->dao->select('t1.id,t1.name,t2.id as roomID,t2.city,t2.name as roomName,t1.extranet')->from(TABLE_HOST)->alias('t1')
+        $stmt = $this->dao->select('t1.id,t1.id as hostID,t1.name,t2.id as roomID,t2.city,t2.name as roomName,t1.extranet')->from(TABLE_HOST)->alias('t1')
             ->leftJoin(TABLE_SERVERROOM)->alias('t2')->on('t1.serverRoom=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq('normal')
@@ -165,7 +169,7 @@ class hostModel extends model
         $this->app->loadLang('serverroom');
 
         /* Get host list by group. */
-        $hosts   = $this->dao->select('id,name,`group`,extranet')->from(TABLE_HOST)->where('deleted')->eq(0)->andWhere('type')->eq('normal')->fetchGroup('group', 'id');
+        $hosts   = $this->dao->select('id,id as hostID,name,`group`,extranet')->from(TABLE_HOST)->where('deleted')->eq(0)->andWhere('type')->eq('normal')->fetchGroup('group', 'id');
         $modules = $this->getTreeModules(0, $hosts);
 
         $treemap = array();
@@ -227,9 +231,9 @@ class hostModel extends model
                 $children['collapsed'] = false;
                 $children['children']  = $this->processTreemap($data->children);
             }
-            else
+            elseif(!empty($data->hostID))
             {
-                $children['hostid'] = $data->id;
+                $children['hostid'] = $data->hostID;
             }
 
             $treeMap[] = $children;

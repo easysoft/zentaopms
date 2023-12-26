@@ -1,0 +1,44 @@
+title: zt_host
+author: Wang yuting
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: name
+    fields:
+      - field: name1
+        range: 主机 
+      - field: name2
+        range: 1-1000
+  - field: admin
+    range: 1-1000
+  - field: group
+    range: 1-1000
+  - field: serverRoom
+    range: 1-1000
+  - field: type
+    range: normal
+  - field: hostType
+    range: physical,virtual
+  - field: cpuBrand
+    range: intel,amd
+  - field: cpuModel
+    range: 1-100
+  - field: cpuNumber
+    range: 1-100
+  - field: cpuCores
+    range: 1-100
+  - field: memory
+    range: 1-100
+  - field: diskSize
+    range: 1-100
+  - field: status
+    range: online,offline
+  - field: intranet
+    range: 127.0.0.1
+  - field: extranet
+    range: 127.0.0.1
+  - field: osName
+    range: linux,windows,solaris,netware,esx,other
+  - field: hardwareType
+    range: server
