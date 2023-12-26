@@ -611,7 +611,7 @@ class storyModel extends model
             $story->source     = $stories->source[$i];
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
-            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : '';
+            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : 0;
             $story->spec       = $stories->spec[$i];
             $story->verify     = $stories->verify[$i];
             $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');
@@ -640,7 +640,7 @@ class storyModel extends model
 
                 if(!isset($story->$field)) continue;
                 if(!empty($story->$field)) continue;
-                if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
+                if($field == 'estimate' and $story->estimate and strlen(trim($story->estimate)) != 0) continue;
 
                 dao::$errors["{$field}$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
             }
