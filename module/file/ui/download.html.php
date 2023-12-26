@@ -32,7 +32,7 @@ else
         if(extension_loaded('mbstring'))
         {
             $encoding = mb_detect_encoding($fileContent, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
-            if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
+            if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, (string)$encoding, $config->charset);
         }
         else
         {
