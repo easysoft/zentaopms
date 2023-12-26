@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_feedback
 timeout=0
 cid=1
+
+- 测试全局范围反馈总数第0条的value属性 @54
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

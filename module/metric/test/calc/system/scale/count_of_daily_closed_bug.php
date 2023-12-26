@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_closed_bug
 timeout=0
 cid=1
+
+- 测试分组数。 @222
+- 测试2016.02.09第0条的value属性 @1
+- 测试2016.02.19第0条的value属性 @1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

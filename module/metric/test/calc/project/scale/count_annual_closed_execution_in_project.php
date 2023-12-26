@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_annual_closed_execution_in_project
 timeout=0
 cid=1
+
+- 测试分组数。 @32
+- 测试项目2。第0条的value属性 @10
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

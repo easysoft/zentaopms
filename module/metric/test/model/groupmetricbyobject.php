@@ -1,9 +1,20 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=groupMetricByObject
+timeout=0
 cid=1
-pid=1
+
+- 获取系统度量项文档分组的第3个度量的code属性code @count_of_annual_created_doc
+- 获取系统度量项文档分组的第3个度量的code属性code @0
+- 获取系统度量项docc分组的第一个度量的code属性code @0
+- 获取系统度量项文档分组的求和属性count @2
+- 获取系统度量项产品分组的求和属性count @5
+- 获取系统度量项项目分组的求和属性count @22
+- 获取系统度量项projectt分组的求和属性count @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

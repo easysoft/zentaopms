@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_created_release
 timeout=0
 cid=1
+
+- 测试新增发布分组数。 @132
+- 测试2019年3月月度新增发布数。第0条的value属性 @1
+- 测试2019年9月月度新增发布数。第0条的value属性 @1
+- 测试2020年5月月度新增发布数。第0条的value属性 @2
+- 测试2020年12月月度新增发布数。第0条的value属性 @1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

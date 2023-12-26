@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_fixed_bug_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @21
+- 测试2013.03。第0条的value属性 @1
+- 测试2013.04。第0条的value属性 @2
+- 测试2012.09。第0条的value属性 @1
+- 测试不存在的产品。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,9 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getDataStatement
 timeout=0
 cid=1
+
+- 测试count_of_bug @select t1.id from `zt_bug` as t1  left join `zt_product` as t2  on t1.product=t2.id  where t1.deleted  = '0' and  t2.deleted  = '0' and  t2.shadow  = '0'
+- 测试count_of_annual_created_product @select t1.createddate from `zt_product` as t1  where t1.deleted  = '0' and  t1.shadow  = '0' and  not find_in_set('or', t1.vision)  and  not find_in_set('lite', t1.vision)
+
+- 测试count_of_case_in_product @select t1.product from `zt_case` as t1  left join `zt_product` as t2  on t1.product=t2.id  where t1.deleted  = '0' and  t2.deleted  = '0' and  t2.shadow  = '0' and  not find_in_set('or', t2.vision)  and  not find_in_set('lite', t2.vision)
+
+- 测试count_of_annual_fixed_bug_in_product @select t1.product,t1.resolution,t1.closeddate from `zt_bug` as t1  left join `zt_product` as t2  on t1.product=t2.id  where t1.deleted  = '0' and  t2.deleted  = '0' and  t2.shadow  = '0'
+
+- 测试count_of_daily_closed_bug_in_product @select t1.product,t1.status,t1.closeddate from `zt_bug` as t1  left join `zt_product` as t2  on t1.product=t2.id  where t1.deleted  = '0' and  t2.deleted  = '0' and  t2.shadow  = '0'
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

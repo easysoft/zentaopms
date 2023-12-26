@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=case_coverage_of_projected_story_in_product
 timeout=0
 cid=1
+
+- 测试产品1的已立项研发需求用例覆盖率数。第0条的value属性 @0.34
+- 测试产品2的已立项研发需求用例覆盖率数。第0条的value属性 @0
+- 测试产品3的已立项研发需求用例覆盖率数。第0条的value属性 @0.34
+- 测试产品4的已立项研发需求用例覆盖率数。第0条的value属性 @0
+- 测试产品5的已立项研发需求用例覆盖率数。第0条的value属性 @0.32
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

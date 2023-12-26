@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=consume_of_task_in_project
 timeout=0
 cid=1
+
+- 测试分组数。 @90
+- 测试项目11的任务消耗工时数。第0条的value属性 @5
+- 测试项目12的任务消耗工时数。第0条的value属性 @5
+- 测试项目13的任务消耗工时数。第0条的value属性 @5
+- 测试不存在项目的任务消耗工时数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

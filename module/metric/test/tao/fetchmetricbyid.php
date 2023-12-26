@@ -1,9 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=fetchMetricByID
+timeout=0
 cid=1
-pid=1
+
+- 获取codeList[1]的范围 @system
+- 获取codeList[2]的范围 @product
+- 获取codeList[3]的范围 @project
+- 获取codeList[4]的范围 @execution
+- 获取codeList[5]的范围 @user
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

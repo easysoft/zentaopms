@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=scale_of_annual_delivered_story
 timeout=0
 cid=1
+
+- 测试分组数 @10
+- 测试2019年交付的研发需求规模。第0条的value属性 @49
+- 测试2019年交付的研发需求规模。第0条的value属性 @49
+- 测试2020年交付的研发需求规模。第0条的value属性 @33
+- 测试2020年交付的研发需求规模。第0条的value属性 @33
+- 测试不存在的产品的需求规模。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

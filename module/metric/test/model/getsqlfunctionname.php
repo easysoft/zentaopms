@@ -1,9 +1,19 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getSqlFunctionName
 timeout=0
 cid=1
+
+- 测试获取函数名pgmURInitScale @qc_pgmurinitscale
+- 测试获取函数名pgmSRInitScale @qc_pgmsrinitscale
+- 测试获取函数名pgmPlanScale @qc_pgmplanscale
+- 测试获取函数名pgmRequestPlanDays @qc_pgmrequestplandays
+- 测试获取函数名pgmTestRealDays @qc_pgmtestrealdays
+- 测试获取函数名pgmRealEstHours @qc_pgmrealesthours
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

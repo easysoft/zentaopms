@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_submitted_code_issues_in_codebase
 timeout=0
 cid=1
+
+- 测试分组数。 @6
+- 测试代码库ID是2的问题数。第0条的value属性 @2
 
 */
 

@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_invalid_story_in_execution
 timeout=0
 cid=1
+
+- 测试分组数。 @6
+- 测试项目4。第0条的value属性 @4
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

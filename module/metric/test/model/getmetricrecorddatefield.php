@@ -1,9 +1,30 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getMetricRecordDateField
 timeout=0
 cid=1
+
+- 测试度量项count_of_bug的日期类型 @0
+- 测试度量项count_of_annual_created_product的日期类型 @year
+- 测试度量项count_of_monthly_created_project的日期类型
+ -  @year
+ - 属性1 @month
+- 测试度量项count_of_weekly_created_release的日期类型
+ -  @year
+ - 属性1 @week
+- 测试度量项count_of_case_in_product的日期类型 @0
+- 测试度量项count_of_annual_fixed_bug_in_product的日期类型 @year
+- 测试度量项count_of_monthly_created_bug_in_product的日期类型
+ -  @year
+ - 属性1 @month
+- 测试度量项count_of_daily_closed_bug_in_product的日期类型
+ -  @year
+ - 属性1 @month
+ - 属性2 @day
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

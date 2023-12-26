@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=rate_of_annual_delivered_story
 timeout=0
 cid=1
+
+- 测试2011年研发需求交付率。第0条的value属性 @1
+- 测试2014年研发需求交付率。第0条的value属性 @1
+- 测试2015年研发需求交付率。第0条的value属性 @1
+- 测试错误的年份。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_case_in_product
 timeout=0
 cid=1
+
+- 测试分组数 @10
+- 测试2010年产品1新增的用例数第0条的value属性 @37
+- 测试2019年产品5新增的用例数第0条的value属性 @31
+- 测试2012年产品7新增的用例数第0条的value属性 @32
+- 测试不存在的产品的新增用例数 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

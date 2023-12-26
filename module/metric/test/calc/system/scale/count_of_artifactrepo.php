@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_artifactrepo
 timeout=0
 cid=1
+
+- 测试制品库数量。第0条的value属性 @8
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

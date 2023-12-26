@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_projected_story_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @5
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

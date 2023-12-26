@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_unclosed_story
 timeout=0
 cid=1
+
+- 测试839条数据全局未关闭研发需求数。第0条的value属性 @189
+- 测试500条数据全局未关闭研发需求数。第0条的value属性 @117
+- 测试1252条数据全局未关闭研发需求数。第0条的value属性 @288
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,9 +1,33 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getGroupTable
+timeout=0
 cid=1
-pid=1
+
+- 传入resultHeader1和resultData1，获取header
+ - 第0条的name属性 @date
+ - 第1条的name属性 @value
+- 传入resultHeader1和resultData1，获取data
+ - 第0条的value属性 @1
+ - 第1条的value属性 @3
+- 传入resultHeader2和resultData2，获取header
+ - 第0条的name属性 @scope
+ - 第1条的name属性 @2023
+- 传入resultHeader2和resultData2，获取data
+ - 第0条的scope属性 @开源
+ - 第0条的2023属性 @3
+ - 第1条的scope属性 @ddddw
+ - 第1条的2022属性 @9
+- 传入resultHeader2和resultData2，获取header
+ - 第0条的name属性 @date
+ - 第1条的name属性 @value
+- 传入resultHeader2和resultData2，获取data
+ - 第0条的value属性 @1
+ - 第1条的value属性 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

@@ -1,9 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=parseSqlFunction
+timeout=0
 cid=1
-pid=1
+
+- 执行metric模块的parseSqlFunction方法，参数是$func1  @function1
+- 执行metric模块的parseSqlFunction方法，参数是$func2  @function2
+- 执行metric模块的parseSqlFunction方法，参数是$func3  @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_closed_bug_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @95
+- 测试2015.11。第0条的value属性 @3
+- 测试2015.12。第0条的value属性 @4
+- 测试2016.02。第0条的value属性 @3
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

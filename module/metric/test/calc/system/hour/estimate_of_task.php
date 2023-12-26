@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=estimate_of_task
 timeout=0
 cid=1
+
+- 测试预计工时第0条的value属性 @986
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

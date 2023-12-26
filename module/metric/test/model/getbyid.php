@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getByID
+timeout=0
 cid=1
-pid=1
+
+- 获取id为1的度量名称属性name @按系统统计的所有层级的项目集总数
+- 获取id为10的度量代号属性code @count_of_annual_closed_top_program
+- 获取id为100并指定fieldList后检测名称不应该存在属性name @~~
+- 获取一个不存在的度量属性name @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=left_of_task_in_execution
 timeout=0
 cid=1
+
+- 测试分组数。 @10
+- 测试执行11的任务预计工时数。第0条的value属性 @108
+- 测试执行12的任务预计工时数。第0条的value属性 @76
+- 测试执行13的任务预计工时数。第0条的value属性 @96
+- 测试不存在执行的任务预计工时数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

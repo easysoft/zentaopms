@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_created_bug
 timeout=0
 cid=1
+
+- 测试月度新增Bug分组数。 @76
+- 测试2017年1月新增Bug数第0条的value属性 @0
+- 测试2018年3月新增Bug数第0条的value属性 @3
+- 测试2023年4月新增Bug数第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

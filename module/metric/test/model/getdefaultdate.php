@@ -1,9 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getDefaultDate
 timeout=0
 cid=1
+
+- 测试传入年度筛选器标签 @3
+- 测试传入月度筛选器标签 @6
+- 测试传入周度筛选器标签 @4
+- 测试传入日度筛选器标签 @7
+- 测试传入空数组 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

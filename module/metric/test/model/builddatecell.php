@@ -1,9 +1,33 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=buildDateCell
+timeout=0
 cid=1
-pid=1
+
+- buildDateCell 传入 nodate
+ - 属性date @2023-11-12
+ - 属性dateString @2023-11-12
+ - 属性calcTime @2023-11-12
+- buildDateCell 传入 day
+ - 属性date @2023-12-21
+ - 属性dateString @2023-12-21
+ - 属性calcTime @2023-11-12
+- buildDateCell 传入 week
+ - 属性date @2023年第52周
+ - 属性dateString @2023-52
+ - 属性calcTime @2023-11-12
+- buildDateCell 传入 month
+ - 属性date @2023年12月
+ - 属性dateString @2023-12
+ - 属性calcTime @2023-11-12
+- buildDateCell 传入 year
+ - 属性date @2023年
+ - 属性dateString @2023
+ - 属性calcTime @2023-11-12
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

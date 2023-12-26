@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getChartTypeList
+timeout=0
 cid=1
-pid=1
+
+- 获取header1的chartType数量 @4
+- 获取header2的chartType数量 @3
+- 获取header3的chartType数量 @3
+- 获取header3的chartType数量 @4
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

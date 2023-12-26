@@ -1,9 +1,30 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getListByFilter
+timeout=0
 cid=1
-pid=1
+
+- 执行metric模块的getListByFilter方法，参数是$filters1 
+ - 第0条的code属性 @count_of_program
+ - 第1条的code属性 @count_of_doing_program
+- 执行metric模块的getListByFilter方法，参数是$filters1  @24
+- 执行metric模块的getListByFilter方法，参数是$filters2 
+ - 第0条的code属性 @count_of_story_in_execution
+ - 第1条的code属性 @count_of_finished_story_in_execution
+- 执行metric模块的getListByFilter方法，参数是$filters2  @15
+- 执行metric模块的getListByFilter方法，参数是$filters3 
+ - 第0条的code属性 @count_of_execution
+ - 第1条的code属性 @count_of_wait_execution
+- 执行metric模块的getListByFilter方法，参数是$filters3  @22
+- 执行metric模块的getListByFilter方法，参数是$filters4 
+ - 第0条的code属性 @count_of_program
+ - 第1条的code属性 @count_of_doing_program
+- 执行metric模块的getListByFilter方法，参数是$filters4, 'wait'  @0
+- 执行metric模块的getListByFilter方法，参数是$filters4  @204
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

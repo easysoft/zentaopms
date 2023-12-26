@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=isFirstGenerate
+timeout=0
 cid=1
-pid=1
+
+- 第一次获取，此时表里有数据 @0
+- 第二次获取，经过第一次表已经被清空 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

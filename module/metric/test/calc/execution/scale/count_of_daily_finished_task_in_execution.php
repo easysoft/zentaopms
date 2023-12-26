@@ -1,10 +1,20 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_finished_task_in_execution
 timeout=0
 cid=1
+
+- 测试分组数。 @44
+- 测试执行11的分组数 @5
+- 测试执行12的分组数 @5
+- 测试执行13的分组数 @5
+- 测试执行20的分组数 @4
+- 测试执行11在2010年1月21日的完成任务数第0条的value属性 @1
+- 测试执行11在2016年8月17日的完成任务数第0条的value属性 @1
+- 测试执行11在2012年3月11日的完成任务数第0条的value属性 @1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

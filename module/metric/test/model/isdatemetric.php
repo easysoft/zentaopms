@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=isDateMetric
 timeout=0
 cid=1
+
+- 测试系统度量项 @false
+- 测试有日期的度量项 @true
+- 测试有对象但没有日期的度量项 @false
+- 测试传入空值 @false
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

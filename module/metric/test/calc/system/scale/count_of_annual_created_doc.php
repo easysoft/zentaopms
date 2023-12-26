@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_doc
 timeout=0
 cid=1
+
+- 测试年度新增文档分组数。 @11
+- 测试2017年新增文档数第0条的value属性 @19
+- 测试2018年新增文档数第0条的value属性 @18
+- 测试2023年新增文档数第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

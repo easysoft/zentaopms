@@ -1,9 +1,32 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getPieEchartsOptions
 timeout=0
 cid=1
+
+- 测试数据集1的legend
+ - 第legend条的orient属性 @vertical
+ - 第legend条的left属性 @left
+ - 第legend条的type属性 @scroll
+- 测试数据集3的legend
+ - 第legend条的orient属性 @vertical
+ - 第legend条的left属性 @left
+ - 第legend条的type属性 @scroll
+- 测试数据集1的series第0条的type属性 @pie
+- 测试数据集3的series第0条的type属性 @pie
+- 测试数据集1的series的第1条data
+ - 第0条的name属性 @2023-1-1
+ - 第0条的value属性 @1
+- 测试数据集1的series的第2条data
+ - 第1条的name属性 @2023-1-2
+ - 第1条的value属性 @2
+- 测试数据集1的series的第3条data
+ - 第2条的name属性 @2023-1-3
+ - 第2条的value属性 @3
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

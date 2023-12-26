@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=scale_of_invalid_story
 timeout=0
 cid=1
+
+- 测试按全局统计的无效研发需求规模数第0条的value属性 @140
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

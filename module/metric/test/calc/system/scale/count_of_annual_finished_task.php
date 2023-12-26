@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_finished_task
 timeout=0
 cid=1
+
+- 测试分组数。 @11
+- 测试2014年。第0条的value属性 @6
+- 测试2017年。第0条的value属性 @3
+- 测试不存在。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

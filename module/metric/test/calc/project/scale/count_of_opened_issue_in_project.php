@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_opened_issue_in_project
 timeout=0
 cid=1
+
+- 测试分组数。 @12
+- 测试项目2。第0条的value属性 @15
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

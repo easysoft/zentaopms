@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_finished_task_in_execution
 timeout=0
 cid=1
+
+- 测试分组数。 @10
+- 测试执行11的已完成任务数。第0条的value属性 @5
+- 测试执行12的已完成任务数。第0条的value属性 @5
+- 测试执行13的已完成任务数。第0条的value属性 @5
+- 测试不存在执行的已完成任务数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

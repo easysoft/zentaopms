@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_finished_story
 timeout=0
 cid=1
+
+- 测试按产品的月度完成需求分组数。 @38
+- 测试2019年1月完成的需求数。第0条的value属性 @0
+- 测试2019年6月完成的需求数。第0条的value属性 @1
+- 测试2020年8月完成的需求数。第0条的value属性 @1
+- 测试2020年10月完成的需求数。第0条的value属性 @1
+- 测试不存在的产品的需求数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_fixed_bug
 timeout=0
 cid=1
+
+- 测试356条数据Bug数。第0条的value属性 @4
+- 测试652条数据Bug数。第0条的value属性 @7
+- 测试1265条数据Bug数。第0条的value属性 @14
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

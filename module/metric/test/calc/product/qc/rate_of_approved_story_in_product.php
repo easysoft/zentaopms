@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=rate_of_approved_story_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @5
+- 测试。第0条的value属性 @0.2
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

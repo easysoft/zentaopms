@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=count_of_reviewing_story_in_user
 timeout=0
 cid=1
+
+- 测试分组数。 @6
+- 测试用户dev。第0条的value属性 @6
+
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';

@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_closed_program
 timeout=0
 cid=1
+
+- 测试356条项目集数。第0条的value属性 @180
+- 测试652条项目集数。第0条的value属性 @328
+- 测试1265条项目集数。第0条的value属性 @633
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

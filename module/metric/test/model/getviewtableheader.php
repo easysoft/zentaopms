@@ -12,6 +12,67 @@ title=getViewTableHeader
 timeout=0
 cid=1
 
+- 测试度量项count_of_bug
+ - 第0条的name属性 @value
+ - 第0条的title属性 @数值
+ - 第1条的name属性 @calcTime
+ - 第1条的title属性 @采集时间
+- 测试度量项count_of_annual_created_product
+ - 第0条的name属性 @date
+ - 第0条的title属性 @日期
+ - 第1条的name属性 @value
+ - 第1条的title属性 @数值
+ - 第2条的name属性 @calcTime
+ - 第2条的title属性 @采集时间
+- 测试度量项count_of_monthly_created_project
+ - 第0条的name属性 @date
+ - 第0条的title属性 @日期
+ - 第1条的name属性 @value
+ - 第1条的title属性 @数值
+ - 第2条的name属性 @calcTime
+ - 第2条的title属性 @采集时间
+- 测试度量项count_of_weekly_created_release
+ - 第0条的name属性 @date
+ - 第0条的title属性 @日期
+ - 第1条的name属性 @value
+ - 第1条的title属性 @数值
+ - 第2条的name属性 @calcTime
+ - 第2条的title属性 @采集时间
+- 测试度量项count_of_case_in_product
+ - 第0条的name属性 @scope
+ - 第0条的title属性 @产品名称
+ - 第1条的name属性 @value
+ - 第1条的title属性 @数值
+ - 第2条的name属性 @calcTime
+ - 第2条的title属性 @采集时间
+- 测试度量项count_of_annual_fixed_bug_in_product
+ - 第0条的name属性 @scope
+ - 第0条的title属性 @产品名称
+ - 第1条的name属性 @date
+ - 第1条的title属性 @日期
+ - 第2条的name属性 @value
+ - 第2条的title属性 @数值
+ - 第3条的name属性 @calcTime
+ - 第3条的title属性 @采集时间
+- 测试度量项count_of_monthly_created_bug_in_product
+ - 第0条的name属性 @scope
+ - 第0条的title属性 @产品名称
+ - 第1条的name属性 @date
+ - 第1条的title属性 @日期
+ - 第2条的name属性 @value
+ - 第2条的title属性 @数值
+ - 第3条的name属性 @calcTime
+ - 第3条的title属性 @采集时间
+- 测试度量项count_of_daily_closed_bug_in_product
+ - 第0条的name属性 @scope
+ - 第0条的title属性 @产品名称
+ - 第1条的name属性 @date
+ - 第1条的title属性 @日期
+ - 第2条的name属性 @value
+ - 第2条的title属性 @数值
+ - 第3条的name属性 @calcTime
+ - 第3条的title属性 @采集时间
+
 */
 
 $metricList = array();

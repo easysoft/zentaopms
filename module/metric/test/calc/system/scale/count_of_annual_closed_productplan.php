@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_closed_productplan
 timeout=0
 cid=1
+
+- 测试年度关闭产品计划分组数。 @11
+- 测试2017年关闭产品计划数第0条的value属性 @21
+- 测试2019年关闭产品计划数第0条的value属性 @19
+- 测试2023年关闭产品计划数第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

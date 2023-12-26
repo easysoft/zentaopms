@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=scale_of_weekly_finished_story
 timeout=0
 cid=1
+
+- 测试分组数 @7
+- 测试2013年第16周的需求数。第0条的value属性 @7
+- 测试2017年第7周的需求数。第0条的value属性 @9
+- 测试错误的周数。第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

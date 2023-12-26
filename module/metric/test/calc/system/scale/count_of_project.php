@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_project
 timeout=0
 cid=1
+
+- 测试项目全局范围内项目总数第0条的value属性 @100
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

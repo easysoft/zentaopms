@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_delivered_story
 timeout=0
 cid=1
+
+- 测试按产品的年度交付研发需求分组数。 @10
+- 测试2019年交付的研发需求数。第0条的value属性 @22
+- 测试2019年交付的研发需求数。第0条的value属性 @22
+- 测试2020年交付的研发需求数。第0条的value属性 @8
+- 测试2020年交付的研发需求数。第0条的value属性 @8
+- 测试不存在的产品的需求数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

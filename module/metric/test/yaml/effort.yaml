@@ -12,7 +12,7 @@ fields:
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
 - field: consumed
-  range: 1{2},2{3},{3},4{5},1.5{6},2.5{7}
+  range: 1{2},2{3},3{3},4{5},1.5{6},2.5{7}
 - field: deleted
   range: 0{1},1{1}
 ...

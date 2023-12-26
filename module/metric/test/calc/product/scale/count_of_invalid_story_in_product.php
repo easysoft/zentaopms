@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_invalid_story_in_product
 timeout=0
 cid=1
+
+- 测试分组数 @5
+- 测试产品1无效需求数第0条的value属性 @60
+- 测试产品3无效需求数第0条的value属性 @60
+- 测试已删除产品4无效需求数第0条的value属性 @0
+- 测试不存在产品的无效需求数 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

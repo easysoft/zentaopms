@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_unfinished_task
 timeout=0
 cid=1
+
+- 测试未完成任务总数第0条的value属性 @132
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

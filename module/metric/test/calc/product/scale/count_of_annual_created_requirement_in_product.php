@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_requirement_in_product
 timeout=0
 cid=1
+
+- 测试按产品的年度新增用户需求分组数。 @8
+- 测试2017年产品7新增的用户需求数。第0条的value属性 @6
+- 测试2018年产品9新增的用户需求数。第0条的value属性 @20
+- 测试已删除产品8新增的用户需求数。第0条的value属性 @0
+- 测试不存在的产品的用户需求数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

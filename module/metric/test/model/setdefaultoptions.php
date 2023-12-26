@@ -1,9 +1,37 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=setDefaultOptions
 timeout=0
 cid=1
+
+- 测试传入options的情况1
+ - 属性product @1
+ - 属性year @2023
+- 测试传入options的情况2
+ - 属性product @2
+ - 属性year @2023
+- 测试不传入options的情况1
+ - 属性dateType @year
+ - 属性dateLabel @3
+- 测试不传入options的情况2
+ - 属性dateType @month
+ - 属性dateLabel @6
+- 测试不传入options的情况3
+ - 属性dateType @week
+ - 属性dateLabel @4
+- 测试不传入options的情况4
+ - 属性dateType @day
+ - 属性dateLabel @7
+- 测试不传入options的情况5
+ - 属性dateType @day
+ - 属性dateLabel @7
+- 测试不传入options的情况6
+ - 属性dateType @week
+ - 属性dateLabel @4
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

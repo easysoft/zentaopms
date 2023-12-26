@@ -1,9 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=replaceCRLF
 timeout=0
 cid=1
+
+- 替换str1的换行符 @hello R Zentao ZentaoPHP R R Rhello world.
+- 替换str1的换行符 @hello ~ Zentao ZentaoPHP ~ ~ ~hello world.
+- 替换str2的换行符 @hello \n\r
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_feedback_in_product
 timeout=0
 cid=1
+
+- 测试按产品的年度新增反馈分组数。 @46
+- 测试2015年产品9新增的反馈数。第0条的value属性 @4
+- 测试2016年产品9新增的反馈数。第0条的value属性 @2
+- 测试已删除产品8新增的反馈数。 @0
+- 测试不存在的产品的反馈数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

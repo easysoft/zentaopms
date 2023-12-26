@@ -1,9 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=processPostParams
+timeout=0
 cid=1
-pid=1
+
+- 传入varName1和queryValue1
+ - 属性var1 @query1
+ - 属性var2 @query2
+ - 属性var3 @query3
+- 传入varName2和queryValue2
+ - 属性var1 @~~
+ - 属性var2 @query2
+ - 属性var3 @query3
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

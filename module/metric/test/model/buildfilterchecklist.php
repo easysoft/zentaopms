@@ -1,9 +1,29 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=buildFilterCheckList
+timeout=0
 cid=1
-pid=1
+
+- 测试filter1筛选器返回的选中数
+ - 属性scope @1
+ - 属性object @0
+ - 属性purpose @0
+- 测试filter2筛选器返回的选中数
+ - 属性scope @0
+ - 属性object @2
+ - 属性purpose @0
+- 测试filter3筛选器返回的选中数
+ - 属性scope @0
+ - 属性object @0
+ - 属性purpose @2
+- 测试filter4筛选器返回的选中数
+ - 属性scope @2
+ - 属性object @3
+ - 属性purpose @2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_suspended_project
 timeout=0
 cid=1
+
+- 测试全局范围内挂起的项目数第0条的value属性 @25
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

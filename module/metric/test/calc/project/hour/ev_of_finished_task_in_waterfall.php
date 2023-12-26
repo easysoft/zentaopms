@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=ev_of_finished_task_in_waterfall
 timeout=0
 cid=1
+
+- 测试分组数。 @5
+- 测试项目7。第0条的value属性 @38.4
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

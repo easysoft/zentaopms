@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_resolved_bug_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @176
+- 测试某月10日解决的bug数 @10
+- 测试某月30日解决的bug数 @4
+- 测试2012-02-05解决的bug数第0条的value属性 @1
+- 测试2012-03-21解决的bug数第0条的value属性 @1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,9 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getList
 timeout=0
 cid=1
+
+- 获取系统范围内的所有度量项第0条的code属性 @count_of_annual_created_doc
+- 获取系统范围内未发布的度量项 @0
+- 获取系统范围内发布的度量项第1条的code属性 @count_of_doc
+- 获取项目范围内所有的，以id_desc的度量项第0条的code属性 @ac_of_all_in_waterfall
+- 获取项目范围内所有的，以id_asc的度量项第0条的code属性 @planned_period_of_project
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

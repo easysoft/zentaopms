@@ -1,9 +1,46 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getResultByCode
 timeout=0
 cid=1
+
+- 测试度量项count_of_bug第0条的value属性 @24
+- 测试度量项count_of_annual_created_product
+ - 第0条的year属性 @2023
+ - 第0条的value属性 @5
+- 测试度量项count_of_monthly_created_project
+ - 第0条的year属性 @2023
+ - 第0条的month属性 @09
+- 测试度量项count_of_weekly_created_release
+ - 第0条的year属性 @2010
+ - 第0条的week属性 @12
+ - 第0条的value属性 @1
+- 测试度量项count_of_case_in_product
+ - 第0条的product属性 @1
+ - 第0条的value属性 @40
+- 测试度量项count_of_annual_fixed_bug_in_product
+ - 第0条的year属性 @2012
+ - 第0条的product属性 @1
+ - 第0条的value属性 @3
+- 测试度量项count_of_monthly_created_bug_in_product
+ - 第0条的product属性 @1
+ - 第0条的year属性 @2010
+ - 第0条的month属性 @01
+ - 第0条的value属性 @4
+ - 第1条的product属性 @1
+ - 第1条的year属性 @2010
+ - 第1条的month属性 @02
+ - 第1条的value属性 @2
+- 测试度量项count_of_daily_closed_bug_in_product
+ - 第0条的product属性 @1
+ - 第0条的year属性 @2012
+ - 第0条的month属性 @01
+ - 第0条的day属性 @21
+ - 第0条的value属性 @1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

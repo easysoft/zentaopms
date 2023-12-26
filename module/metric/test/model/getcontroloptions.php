@@ -1,9 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getControlOptions
 timeout=0
 cid=1
+
+- 测试user对象数 @11
+- 测试product对象数 @5
+- 测试传入错误参数的结果 @1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

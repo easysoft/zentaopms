@@ -1,9 +1,33 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=fetchMetricByCode
+timeout=0
 cid=1
-pid=1
+
+- 获取codeList[1]的id,scale,product
+ - 属性id @13
+ - 属性purpose @scale
+ - 属性object @product
+- 获取codeList[2]的id,scale,product
+ - 属性id @137
+ - 属性purpose @scale
+ - 属性object @productplan
+- 获取codeList[3]的id,scale,product
+ - 属性id @197
+ - 属性purpose @scale
+ - 属性object @execution
+- 获取codeList[4]的id,scale,product
+ - 属性id @236
+ - 属性purpose @scale
+ - 属性object @story
+- 获取codeList[5]的id,scale,product
+ - 属性id @254
+ - 属性purpose @scale
+ - 属性object @bug
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

@@ -1,9 +1,27 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=isSystemMetric
+timeout=0
 cid=1
-pid=1
+
+- 测试records[1]是否是系统度量项 @1
+- 测试records[2]是否是系统度量项 @0
+- 测试records[3]是否是系统度量项 @0
+- 测试records[4]是否是系统度量项 @0
+- 测试records[5]是否是系统度量项 @0
+- 测试records[6]是否是系统度量项 @1
+- 测试records[7]是否是系统度量项 @1
+- 测试records[8]是否是系统度量项 @0
+- 测试records[9]是否是系统度量项 @0
+- 测试records[10]是否是系统度量项 @1
+- 测试records[11]是否是系统度量项 @1
+- 测试records[12]是否是系统度量项 @1
+- 测试records[13]是否是系统度量项 @1
+- 测试records[14]是否是系统度量项 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

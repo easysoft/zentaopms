@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_release
 timeout=0
 cid=1
+
+- 测试839条数据全局发布数。第0条的value属性 @210
+- 测试500条数据全局发布数。第0条的value属性 @125
+- 测试1252条数据全局发布数。第0条的value属性 @313
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

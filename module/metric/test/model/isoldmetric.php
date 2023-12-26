@@ -1,9 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=isOldMetric
+timeout=0
 cid=1
-pid=1
+
+- 测试度量项0是否是旧版度量项 @1
+- 测试度量项1是否是旧版度量项 @0
+- 测试度量项2是否是旧版度量项 @0
+- 测试度量项3是否是旧版度量项 @0
+- 测试度量项4是否是旧版度量项 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

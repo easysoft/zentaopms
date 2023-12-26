@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_story
 timeout=0
 cid=1
+
+- 测试按产品的年度新增需求分组数。 @11
+- 测试2019年新增的需求数。第0条的value属性 @20
+- 测试2020年新增的需求数。第0条的value属性 @16
+- 测试不存在的产品的需求数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

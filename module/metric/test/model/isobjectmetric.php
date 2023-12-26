@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=isObjectMetric
 timeout=0
 cid=1
+
+- 测试系统度量项 @false
+- 测试有对象的度量项 @true
+- 测试另一个有对象的度量项 @true
+- 测试传入空值 @false
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

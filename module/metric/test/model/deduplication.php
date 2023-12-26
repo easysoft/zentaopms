@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=deduplication
+timeout=0
 cid=1
-pid=1
+
+- 测试去重后count_of_bug的数据条数 @2
+- 测试去重后count_of_case_in_product的数据条数 @4
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

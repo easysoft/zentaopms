@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_run_case
 timeout=0
 cid=1
+
+- 测试分组数。 @144
+- 测试2020.12.4。第0条的value属性 @1
+- 测试2020.12.14。第0条的value属性 @1
+- 测试2020.12.24。第0条的value属性 @1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

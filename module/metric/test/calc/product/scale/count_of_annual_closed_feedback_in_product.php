@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_closed_feedback_in_product
 timeout=0
 cid=1
+
+- 测试按产品的年度关闭反馈分组数。 @24
+- 测试2019年产品5关闭的反馈数。第0条的value属性 @1
+- 测试2020年产品5关闭的反馈数。第0条的value属性 @0
+- 测试2005年产品5关闭的反馈数。 @0
+- 测试已删除产品4关闭的反馈数。 @0
+- 测试不存在的产品的反馈数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=left_period_of_project
 timeout=0
 cid=1
+
+- 测试分组数。 @100
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

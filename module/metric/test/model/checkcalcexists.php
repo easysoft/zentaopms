@@ -1,9 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=checkCalcExists
 timeout=0
 cid=1
+
+- 测试存在的度量项 count_of_bug @true
+- 测试存在的度量项 count_of_annual_created_product @true
+- 测试存在的度量项 count_of_monthly_created_project @true
+- 测试存在的度量项 count_of_case_in_product @true
+- 测试存在的度量项 count_of_daily_closed_bug_in_product @true
+- 测试错误的代号 @false
+- 测试错误的范围 @false
+- 测试错误的目的 @false
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

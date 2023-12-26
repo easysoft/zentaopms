@@ -1,9 +1,34 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getDateLabels
 timeout=0
 cid=1
+
+- 测试传入year的情况
+ - 属性3 @近3年
+ - 属性5 @近5年
+ - 属性10 @近10年
+ - 属性all @全部
+- 测试传入month的情况
+ - 属性6 @近6个月
+ - 属性12 @近12个月
+ - 属性24 @近24个月
+ - 属性36 @近36个月
+- 测试传入week的情况
+ - 属性4 @近4周
+ - 属性8 @近8周
+ - 属性12 @近12周
+ - 属性16 @近16周
+- 测试传入day的情况
+ - 属性7 @近7天
+ - 属性14 @近14天
+ - 属性21 @近21天
+ - 属性28 @近28天
+- 测试传入nodate的情况 @empty array
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

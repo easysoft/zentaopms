@@ -8,8 +8,23 @@ $metric = new metricTest();
 /**
 
 title=getMetricCycle
+timeout=0
 cid=1
-pid=1
+
+- 测试record[1]的收集周期 @year
+- 测试record[2]的收集周期 @0
+- 测试record[3]的收集周期 @0
+- 测试record[4]的收集周期 @0
+- 测试record[5]的收集周期 @month
+- 测试record[6]的收集周期 @week
+- 测试record[7]的收集周期 @year
+- 测试record[8]的收集周期 @0
+- 测试record[9]的收集周期 @0
+- 测试record[10]的收集周期 @0
+- 测试record[11]的收集周期 @week
+- 测试record[12]的收集周期 @day
+- 测试record[13]的收集周期 @month
+- 测试record[14]的收集周期 @day
 
 */
 

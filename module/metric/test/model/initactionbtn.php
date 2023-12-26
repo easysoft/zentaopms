@@ -1,9 +1,28 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=initActionBtn
+timeout=0
 cid=1
-pid=1
+
+- 执行metric模块的initActionBtn方法，参数是$metric1 
+ - 第0条的name属性 @edit
+ - 第0条的disabled属性 @no
+ - 第1条的name属性 @implement
+ - 第1条的disabled属性 @no
+ - 第2条的name属性 @delist
+ - 第2条的disabled属性 @no
+- 执行metric模块的initActionBtn方法，参数是$metric2 
+ - 第0条的name属性 @edit
+ - 第0条的disabled属性 @no
+ - 第1条的name属性 @implement
+ - 第1条的disabled属性 @no
+ - 第2条的name属性 @delist
+ - 第2条的disabled属性 @yes
+ - 第3条的name属性 @delete
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

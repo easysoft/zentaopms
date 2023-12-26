@@ -1,9 +1,19 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=getEchartXY
+timeout=0
 cid=1
-pid=1
+
+- 执行metric模块的getEchartXY方法，参数是$header1  @calcTime,value
+
+- 执行metric模块的getEchartXY方法，参数是$header2  @0
+- 执行metric模块的getEchartXY方法，参数是$header3  @scope,value
+
+- 执行metric模块的getEchartXY方法，参数是$header4  @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

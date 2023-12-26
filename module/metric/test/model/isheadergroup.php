@@ -1,9 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=isHeaderGroup
+timeout=0
 cid=1
-pid=1
+
+- 测试header1是否带分组 @1
+- 测试header2是否带分组 @0
+- 测试header3是否带分组 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';

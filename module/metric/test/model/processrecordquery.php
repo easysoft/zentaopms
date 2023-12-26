@@ -1,9 +1,56 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=processRecordQuery
+timeout=0
 cid=1
-pid=1
+
+- 获取query1的scope字段 @1,2
+
+- 获取query2的scope字段 @0
+- 获取query2的dateBegin字段
+ - 属性year @2023
+ - 属性month @202312
+ - 属性week @202349
+ - 属性day @20231204
+- 获取query2的dateEnd字段
+ - 属性year @2023
+ - 属性month @202312
+ - 属性week @202351
+ - 属性day @20231221
+- 获取query2的dateLabel字段
+ - 第0条的year属性 @2023
+ - 第0条的month属性 @202312
+ - 第0条的week属性 @202349
+ - 第0条的day属性 @20231204
+ - 第1条的year属性 @2023
+ - 第1条的month属性 @202312
+ - 第1条的week属性 @202351
+ - 第1条的day属性 @20231221
+- 获取query3的scope字段 @3
+- 获取query3的dateBegin字段
+ - 属性year @0
+ - 属性month @0
+ - 属性week @0
+ - 属性day @0
+- 获取query3的dateEnd字段
+ - 属性year @0
+ - 属性month @0
+ - 属性week @0
+ - 属性day @0
+- 获取query3的dateLabel字段
+ - 第0条的year属性 @1970
+ - 第0条的month属性 @197001
+ - 第0条的week属性 @197001
+ - 第0条的day属性 @19700101
+- 获取query4的calcDate字段
+ - 属性year @2023
+ - 属性month @202312
+ - 属性week @202351
+ - 属性day @20231224
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
