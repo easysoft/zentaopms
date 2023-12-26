@@ -32,15 +32,16 @@ class ciTest
         return $result;
     }
 
-    public function getCompileByID($compileID)
+    /**
+     * Test getCompileByID method.
+     *
+     * @param  int    $compileID
+     * @access public
+     * @return object|false
+     */
+    public function getCompileByIdTest(int $compileID): object|false
     {
-        global $tester;
-        return $tester->dao->select('compile.*, job.engine,job.pipeline, pipeline.name as jenkinsName,job.server,pipeline.url,pipeline.account,pipeline.token,pipeline.password')
-            ->from(TABLE_COMPILE)->alias('compile')
-            ->leftJoin(TABLE_JOB)->alias('job')->on('compile.job=job.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('pipeline')->on('job.server=pipeline.id')
-            ->where('compile.id')->eq($compileID)
-            ->fetch();
+        return $this->objectModel->getCompileByID($compileID);
     }
 
     /**
@@ -94,7 +95,7 @@ class ciTest
      */
     public function updateBuildStatusTest(int $compileID, string $status, string $check = 'job'): object|array
     {
-        $compile = $this->getCompileByID($compileID);
+        $compile = $this->objectModel->getCompileByID($compileID);
         $this->objectModel->updateBuildStatus($compile, $status);
 
         if(dao::isError()) return dao::getError();
