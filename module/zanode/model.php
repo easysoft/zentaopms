@@ -908,16 +908,16 @@ class zanodemodel extends model
     }
 
     /**
+     * 通过 id 获取自动化设置。
      * Get automation by id.
      *
-     * @param  int $id
-     * @return object
+     * @param  int          $id
+     * @access public
+     * @return object|false
      */
-    public function getAutomationByID($id)
+    public function getAutomationByID(int $id): object|bool
     {
-        return $this->dao->select('*')->from(TABLE_AUTOMATION)
-            ->where('id')->eq($id)
-            ->fetch();
+        return $this->dao->select('*')->from(TABLE_AUTOMATION)->where('id')->eq($id)->fetch();
     }
 
     /**
