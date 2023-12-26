@@ -162,39 +162,16 @@ class zahostModel extends model
      * @access public
      * @return array
      */
-    public function getImageList(int $hostID, string $orderBy = 'id', object $pager = null)
+    public function getImageList(int $hostID, string $orderBy = 'id', object $pager = null): array
     {
         $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
         if(empty($imageList)) return array();
 
         $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->orderBy($orderBy)->page($pager)->fetchAll('name');
 
-        $refreshPageData = false;
-        foreach($imageList as $remoteImage)
-        {
-            $downloadedImage = zget($downloadedImageList, $remoteImage->name, '');
-            if(empty($downloadedImage))
-            {
-                $refreshPageData = true;
-                $remoteImage->status = 'notDownloaded';
-                $remoteImage->from   = 'zentao';
-                $remoteImage->osName = $remoteImage->os;
-                $remoteImage->host   = $hostID;
-                $remoteImage->status = 'notDownloaded';
+        $refreshPageData = $this->zahostTao->insertImageList($imageList, $hostID, $downloadedImageList);
 
-                unset($remoteImage->os);
-                $this->dao->insert(TABLE_IMAGE)->data($remoteImage, 'desc')->autoCheck()->exec();
-            }
-        }
-
-        if($refreshPageData)
-        {
-            $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('host')->eq($hostID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('name');
-        }
+        if($refreshPageData) $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->orderBy($orderBy)->page($pager)->fetchAll('name');
 
         foreach($downloadedImageList as $image)
         {
