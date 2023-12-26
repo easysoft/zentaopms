@@ -46,7 +46,6 @@ detailBody
     on::click('#refresh',        'clickRefresh'),
     on::click('#allBuilds',      'loadAllBuilds'),
     on::click('#allUsers',       'loadAllUsers'),
-    on::click('#refreshMailto',  'refreshContact'),
     set::isForm(true),
     sectionList
     (

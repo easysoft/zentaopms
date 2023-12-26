@@ -114,41 +114,10 @@ function changeRegion(event)
     });
 }
 
-function changeContact(event)
-{
-    const contactID = $(event.target).val();
-    const link     = $.createLink('user', 'ajaxGetContactUsers', 'listID=' + contactID);
-    $.getJSON(link, function(users)
-    {
-        let $mailtoPicker = $('[name^="mailto"]').zui('picker');
-        let mailtoItems   = $mailtoPicker.options.items;
-        let mailtoUsers   = $('[name^="mailto"]').val();
-        users.forEach(user => {
-            mailtoItems.push(user);
-            mailtoUsers.push(user.value);
-
-        });
-        $mailtoPicker.render({items: mailtoItems});
-        $mailtoPicker.$.setValue(mailtoUsers);
-    });
-}
-
 function refreshModule(event)
 {
     const productID = $('[name="product"]').val();
     loadProductModules(productID);
-}
-
-function refreshContact(event)
-{
-    const link = $.createLink('user', 'ajaxGetContactList');
-    $.getJSON(link, function(contacts)
-    {
-        let contactID      = $('[name="contactListMenu"]').val();
-        let $contactPicker = $('[name="contactListMenu"]').zui('picker');
-        $contactPicker.render({items: contacts});
-        $contactPicker.$.setValue(contactID);
-    });
 }
 
 function refreshProductBuild(event)
