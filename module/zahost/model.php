@@ -126,13 +126,14 @@ class zahostModel extends model
     }
 
     /**
+     * 根据编号获取镜像。
      * Get image by ID.
      *
-     * @param  int    $imageID
+     * @param  int          $imageID
      * @access public
-     * @return object
+     * @return false|object
      */
-    public function getImageByID($imageID)
+    public function getImageByID(int $imageID):false|object
     {
         return $this->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
     }
