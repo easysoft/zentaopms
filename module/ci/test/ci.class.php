@@ -121,4 +121,24 @@ class ciTest
         $result = $this->objectModel->sendRequest($url, $data, $userPWD);
         return $result ? 1 : 0;
     }
+
+    /**
+     * Test checkCompileStatus method.
+     *
+     * @param  int    $compileID
+     * @access public
+     * @return object|array|false
+     */
+    public function checkCompileStatusTest(int $compileID): object|array|false
+    {
+        $this->objectModel->checkCompileStatus($compileID);
+        if(dao::isError()) return dao::getError();
+
+        if($compileID)
+        {
+            return $this->objectModel->loadModel('compile')->getByID($compileID);
+        }
+
+        return $this->objectModel->dao->select('id, name, status')->from(TABLE_COMPILE)->where('deleted')->eq('0')->fetchAll('id');
+    }
 }
