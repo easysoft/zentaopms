@@ -962,4 +962,42 @@ class metricTest
     {
         return $this->objectModel->fetchMetricByCode($code);
     }
+
+    /**
+     * Test fetchMetricsWithFilter.
+     *
+     * @param  array  $filters
+     * @param  string $stage
+     * @access public
+     * @return array
+     */
+    public function fetchMetricsWithFilter($filters, $stage = 'all')
+    {
+        return $this->objectModel->fetchMetricsWithFilter($filters, $stage);
+    }
+
+    /**
+     * Test fetchMetricsByCollect.
+     *
+     * @param  string $stage
+     * @access public
+     * @return object
+     */
+    public function fetchMetricsByCollect($stage)
+    {
+        return $this->objectModel->fetchMetricsByCollect($stage);
+    }
+
+    /**
+     * Test fetchModules.
+     *
+     * @param  string $scope
+     * @access public
+     * @return object
+     */
+    public function fetchModules($scope)
+    {
+        return $this->objectModel->fetchModules($scope);
+    }
 }
+
