@@ -304,6 +304,7 @@ class zahost extends control
     }
 
     /**
+     * Ajax 方式获取镜像列表。
      * Ajax：get hosts.
      *
      * @access public
@@ -314,10 +315,7 @@ class zahost extends control
         $hostList = $this->zahost->getPairs();
 
         $options = array();
-        foreach($hostList as $key => $host)
-        {
-            $options[] = array('text' => $host, 'value' => $key);
-        }
+        foreach($hostList as $key => $host) $options[] = array('text' => $host, 'value' => $key);
         return print(json_encode($options));
     }
 }
