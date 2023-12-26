@@ -46,6 +46,10 @@ pipeline {
     SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
 
+    OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
+    QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+    QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
+
     MIRROR = "true"
 
     // 默认从job参数里读取，打开后覆盖
@@ -97,7 +101,7 @@ pipeline {
                 [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
                 [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}"] ],
-                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/release-18.10/src"] ]
+                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
               ])
 
               zentaopms.setupEnvAfterCheckoutExt()
@@ -115,6 +119,7 @@ pipeline {
               j.SaveHeadReport('./.head.md')
 
               // update custom envoronment here
+              env.PLUGIN_SAFE_EXIST = sh(returnStatus: true, script: 'test -d $SRC_ZENTAOEXT_PATH/zentaopro/safe')
 
               // send start msg
               def mdPath = "start.md"
@@ -168,7 +173,6 @@ pipeline {
                 }
                 script {
                   buildPkg.uploadSource()
-                  env.PLUGIN_SAFE_EXIST = sh(returnStatus: true, script: 'test -d $SRC_ZENTAOEXT_PATH/zentaopro/safe')
                 }
 
               }
@@ -192,7 +196,19 @@ pipeline {
                 }
                 script {
                   env.UPLOADED_PLUGIN_SAFE = 'true'
-                  buildPkg.uploadSAFe(["php5.4_5.6", "php7.0", "php7.1", "php7.2_7.4", "php8.1"])
+                  def versions = ["php5.4_5.6", "php7.0", "php7.1", "php7.2_7.4", "php8.1"]
+                  buildPkg.uploadSAFe(versions)
+                  if (env.BUILD_KIND=="release") {
+                    sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir -pv $MAX_VERSION/safe $IPD_VERSION/safe'
+                    for (v in versions) {
+                      sh "mv $ZENTAO_RELEASE_PATH/safe.max." + v + ".zip ./release/upload/$MAX_VERSION/safe/safe-$MAX_VERSION-" + v + ".zip"
+                      sh "mv $ZENTAO_RELEASE_PATH/safe.ipd." + v + ".zip ./release/upload/$IPD_VERSION/safe/safe-$IPD_VERSION-" + v + ".zip"
+                    }
+                    container('jnlp') {
+                      sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                      sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+                    }
+                  }
                 }
 
               }
@@ -204,12 +220,6 @@ pipeline {
     }
 
     stage("Publish") {
-      environment {
-        OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
-        QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-        QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
-      }
-
       stages {
         stage("Merge and Upload") {
           when { expression { return params.publish_biz } }
@@ -601,3 +611,4 @@ pipeline {
   }
 
 }
+
