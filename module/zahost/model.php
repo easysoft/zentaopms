@@ -478,11 +478,10 @@ class zahostModel extends model
      */
     public static function isClickable(object $object, string $action): bool
     {
-        if($action == 'browseImage') return $object->status != 'wait';
-        if($action == 'delete') return $object->canDelete;
-
+        if($action == 'delete')         return $object->canDelete;
+        if($action == 'browseImage')    return $object->status != 'wait';
         if($action == 'cancelDownload') return $object->status == 'notDownloaded' || !in_array($object->status, array('inprogress', 'created')) ? false : true;
-        if($action == 'downloadImage') return in_array($object->status, array("completed", "inprogress", "created"))  || $object->from == 'user' ? false : true;
+        if($action == 'downloadImage')  return in_array($object->status, array('completed', 'inprogress', 'created')) || $object->from == 'user' ? false : true;
 
         return true;
     }
