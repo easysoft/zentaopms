@@ -39,7 +39,7 @@ $config->features->apiSQL = false;
 r($tester->api->sql($sql)) && p('status,message') && e('fail,因为安全原因，该功能被禁用。可以到config目录，修改配置项 $config->features->apiSQL，打开此功能。'); //在没启用配置的时候调用sql接口。
 
 $config->features->apiSQL = true;
-r($tester->api->sql($sql)) && p('status,message') && e('fail,` `');                         //SQL语句为空时调用sql接口。
+r($tester->api->sql($sql)) && p('status,message') && e('fail,~~');                         //SQL语句为空时调用sql接口。
 
 $sql = 'delete from zt_api';
 r($tester->api->sql($sql)) && p('status,message') && e('fail,SQL查询接口只允许SELECT查询'); //SQL语句不符合规范时调用sql接口。
