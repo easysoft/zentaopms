@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
+ * @author    Sun Guangming <sunguangming@easycorp.ltd>
  * @package   instance
  * @version   $Id$
  * @link      https://www.zentao.net
@@ -44,12 +44,12 @@ class instance extends control
 
         if($type === 'store')
         {
-            $this->storeView($id, $tab);
+            $this->instanceZen->storeView($id, $tab);
         }
         else
         {
             $instance = $this->loadModel('gitea')->fetchByID($id);
-            $instance->status      = '';
+            $instance->status      = 'running';
             $instance->source      = 'user';
             $instance->externalID  = $instance->id;
             $instance->runDuration = 0;
@@ -62,69 +62,16 @@ class instance extends control
 
             $this->view->title           = $instance->name;
             $this->view->instance        = $instance;
-            $this->view->cloudApp        = array();
-            $this->view->seniorAppList   = array();
             $this->view->actions         = $this->loadModel('action')->getList($instance->type, $id);
             $this->view->defaultAccount  = '';
             $this->view->instanceMetric  = $instanceMetric;
-            $this->view->currentResource = '';
-            $this->view->customItems     = array();
             $this->view->dbList          = array();
-            $this->view->domain          = '';
         }
 
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->view->tab   = $tab;
         $this->view->type  = $type;
         $this->display();
-    }
-
-    /**
-     * 查看商店应用详情。
-     * Show instance view.
-     *
-     * @param  int    $id
-     * @param  string $tab
-     * @access public
-     * @return void
-     */
-    protected function storeView(int $id, string $tab = 'baseinfo')
-    {
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-
-        $instance = $this->instance->getByID($id);
-        if(empty($instance)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->instanceNotExists, 'locate' => $this->createLink('space', 'browse'))));
-
-        $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
-
-        $instance = $this->instance->freshStatus($instance);
-
-        $instanceMetric = $this->cne->instancesMetrics(array($instance));
-        $instanceMetric = $instanceMetric[$instance->id];
-
-        $dbList          = $this->cne->appDBList($instance);
-        $currentResource = $this->cne->getAppConfig($instance);
-        $customItems     = $this->cne->getCustomItems($instance);
-
-        if($instance->status == 'running') $this->instance->saveAuthInfo($instance);
-        if(in_array($instance->chart, $this->config->instance->devopsApps))
-        {
-            $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
-            $pipeline = $this->loadModel('pipeline')->getByUrl($url);
-            $instance->externalID = !empty($pipeline) ? $pipeline->id : 0;
-        }
-
-        $this->view->title           = $instance->appName;
-        $this->view->instance        = $instance;
-        $this->view->cloudApp        = $this->loadModel('store')->getAppInfoByChart($instance->chart, $instance->channel, false);
-        $this->view->seniorAppList   = $tab == 'baseinfo' ? $this->instance->seniorAppList($instance, $instance->channel) :  array();
-        $this->view->actions         = $this->loadModel('action')->getList('instance', $id);
-        $this->view->defaultAccount  = $this->cne->getDefaultAccount($instance);
-        $this->view->instanceMetric  = $instanceMetric;
-        $this->view->currentResource = $currentResource;
-        $this->view->customItems     = $customItems;
-        $this->view->dbList          = $dbList;
-        $this->view->domain          = $this->cne->getDomain($instance);
     }
 
     /**

@@ -9,7 +9,7 @@ $('#mainContent').on('click', '.db-management', function()
         {
             url: $.createLink('instance', 'ajaxDBAuthUrl'),
             method: 'POST', data: {dbName, dbType, instanceID},
-            onSuccess: (response) => 
+            onSuccess: (response) =>
             {
                 if(response.result == 'success')
                 {

@@ -12,6 +12,45 @@ declare(strict_types=1);
 class instanceZen extends instance
 {
     /**
+     * 查看商店应用详情。
+     * Show instance view.
+     *
+     * @param  int    $id
+     * @param  string $tab
+     * @access public
+     * @return void
+     */
+    protected function storeView(int $id, string $tab = 'baseinfo')
+    {
+        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
+        $instance = $this->instance->getByID($id);
+        if(empty($instance)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->instanceNotExists, 'locate' => $this->createLink('space', 'browse'))));
+
+        $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
+
+        $instance = $this->instance->freshStatus($instance);
+
+        $instanceMetric = $this->cne->instancesMetrics(array($instance));
+        $instanceMetric = $instanceMetric[$instance->id];
+
+        if($instance->status == 'running') $this->instance->saveAuthInfo($instance);
+        if(in_array($instance->chart, $this->config->instance->devopsApps))
+        {
+            $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
+            $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+            $instance->externalID = !empty($pipeline) ? $pipeline->id : 0;
+        }
+
+        $this->view->title           = $instance->appName;
+        $this->view->instance        = $instance;
+        $this->view->actions         = $this->loadModel('action')->getList('instance', $id);
+        $this->view->defaultAccount  = $this->cne->getDefaultAccount($instance);
+        $this->view->instanceMetric  = $instanceMetric;
+        $this->view->dbList          = $this->cne->appDBList($instance);
+    }
+
+    /**
      * 自动保存devops应用授权信息。
      * Auto save auth info of devops.
      *
