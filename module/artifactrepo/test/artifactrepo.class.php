@@ -121,4 +121,25 @@ class artifactrepoTest
         if(dao::isError()) return dao::getError();
         return $serverRepos;
     }
+
+    /**
+     * 更新版本库状态。
+     * Update artifact repo status.
+     *
+     * @param  int    $id
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function updateStatusTest(int $id, string $status): array
+    {
+        $oldArtifactrepo = $this->objectModel->getByID($id);
+        $result          = $this->objectModel->updateStatus($id, $status);
+
+        if(!$oldArtifactrepo) return array();
+        if(dao::isError()) return dao::getError();
+
+        $newArtifactrepo = $this->objectModel->getByID($id);
+        return common::createChanges($oldArtifactrepo, $newArtifactrepo);
+    }
 }
