@@ -161,4 +161,20 @@ class artifactrepoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUILD)->where('artifactRepoID')->eq($artifactRepoID)->fetch();
     }
+
+    /**
+     * 更新版本库状态。
+     * Update artifact repo status.
+     *
+     * @param  int       $artifactRepoID
+     * @param  string    $status
+     * @access protected
+     * @return bool
+     */
+    public function updateStatus(int $artifactRepoID, string $status): bool
+    {
+        $this->dao->update(TABLE_ARTIFACTREPO)->set('status')->eq($status)->where('id')->eq($artifactRepoID)->exec();
+
+        return !dao::isError();
+    }
 }

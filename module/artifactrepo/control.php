@@ -153,6 +153,12 @@ class artifactrepo extends control
         return print(json_encode($repos['data']));
     }
 
+    /**
+     * 更新制品库状态。
+     *
+     * @access public
+     * @return void
+     */
     public function ajaxUpdateArtifactRepos()
     {
         $artifactRepos = $this->artifactrepo->getList();
@@ -171,7 +177,7 @@ class artifactrepo extends control
                 $serverRepo->onlineStatus = $serverRepo->online ? 'online' : 'offline';
                 if($serverRepo->name == $repo->repoName && $serverRepo->onlineStatus != $repo->status)
                 {
-                    $this->artifactrepoZen->updateStatus($repo->id, $serverRepo->onlineStatus);
+                    $this->artifactrepo->updateStatus($repo->id, $serverRepo->onlineStatus);
                     $hasUpdate = true;
                 }
             }
