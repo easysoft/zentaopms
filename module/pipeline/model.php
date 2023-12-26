@@ -96,8 +96,9 @@ class pipelineModel extends model
      * 创建服务器。
      * Create a server.
      *
+     * @param  object    $server
      * @access public
-     * @return bool
+     * @return int|false
      */
     public function create(object $server): int|false
     {
