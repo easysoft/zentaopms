@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$app->loadLang('story');
-
 /* Get min stage. */
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
@@ -33,6 +31,59 @@ $reviewedBy = explode(',', $story->reviewedBy);
 if(count($reviewedBy) > 1)
 {
     foreach($reviewedBy as $account) $reviewed .= ' ' . zget($users, trim($account));
+}
+
+$moduleTitle = '';
+$moduleItems = array();
+if(empty($modulePath))
+{
+    $moduleTitle .= '/';
+    $moduleItems[] = '/';
+}
+else
+{
+    foreach($modulePath as $key => $module)
+    {
+        $moduleTitle .= $module->name;
+        if(!common::hasPriv('product', 'browse'))
+        {
+            $moduleItems[] = $module->name;
+        }
+        else
+        {
+            $arrow = '';
+            if(isset($modulePath[$key + 1]))
+            {
+                $moduleTitle .= '/';
+                $arrow        = $lang->arrow;
+            }
+
+            $moduleItems[] = a
+            (
+                setClass('text-primary'),
+                set::href(createLink('product', 'browse', "productID={$story->product}&branch={$story->branch}&browseType=byModule&param={$module->id}")),
+                html($module->name . $arrow)
+            );
+        }
+    }
+}
+
+$mailtoList = array();
+$mailto     = explode(',', $story->mailto);
+if(empty($mailto))
+{
+    $mailtoList[] = $lang->noData;
+}
+else
+{
+    foreach($mailto as $account)
+    {
+        $mailtoList[] = span
+            (
+                setClass('mr-1'),
+                zget($users, trim($account))
+            );
+    }
 }
 
 div
@@ -132,7 +183,7 @@ div
         (
             setClass('text-primary ml-2'),
             set::icon('sitemap'),
-            set::hint($lang->story->createCase),
+            set::hint($lang->testcase->create),
             set::url(createLink('testcase', 'create', "productID={$story->product}&branch={$story->branch}&module=0&from=execution&param={$executionID}&storyID={$story->id}")),
             set::disabled($story->type != 'story'),
             set('data-app', $app->tab)
@@ -181,7 +232,7 @@ div
                 set::title($moduleTitle),
                 $moduleItems
             ),
-            ($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan) ? item
+            ($story->type != 'requirement' and $story->parent != -1) ? item
             (
                 set::trClass('plan-line'),
                 set::name($lang->story->plan),
