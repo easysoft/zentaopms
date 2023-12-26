@@ -218,21 +218,25 @@ class zahost extends control
     }
 
     /**
+     * 下载镜像。
      * Sent download image request to Host.
      *
      * @param  int    $hostID
-     * @param  int $imageID
+     * @param  int    $imageID
      * @access public
      * @return object
      */
-    public function downloadImage($hostID, $imageID)
+    public function downloadImage(int $hostID, int $imageID)
     {
         $image = $this->zahost->getImageByID($imageID);
+
         $this->zahost->downloadImage($image);
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isInModal()) return print(js::reload('parent'));
-        return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $hostID)), 'parent'));
+        if(isInModal()) return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('zahost', 'browseImage', array("hostID" => $hostID))));
     }
 
     /**
