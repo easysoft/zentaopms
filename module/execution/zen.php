@@ -1542,7 +1542,7 @@ class executionZen extends execution
     {
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport');
         if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report'))) $method = $module;
-        if(in_array($module, $executionModules) && in_array($method, array('view', 'edit'))) $method = $module;
+        if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
         if(in_array($module, $executionModules + array('story', 'product'))) $module = 'execution';
 
         if($module == 'story') $method = 'story';
