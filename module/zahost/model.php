@@ -52,35 +52,27 @@ class zahostModel extends model
     }
 
     /**
+     * 更新宿主机。
      * Update a host.
      *
-     * @param  int    $hostID
+     * @param  object     $hostInfo
      * @access public
      * @return array|bool
      */
     public function update($hostInfo)
     {
-        $oldHost = $this->getById($hostInfo->id);
-
-        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
-            ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float')
-            ->check('name', 'unique', "id != $hostInfo->id and type in ('vhost', 'zahost')")
-            ->autoCheck();
-
-        if(dao::isError()) return false;
-
         $ping = $this->checkAddress($hostInfo->extranet);
-
-        if(!$ping)
-        {
-            return false;
-        }
+        if(!$ping) dao::$errors['extranet'][] = $this->lang->zahost->netError;
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)->autoCheck()
+            ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
-            ->where('id')->eq($hostInfo->id)->exec();
+            ->check('name', 'unique', "id != $hostInfo->id and type in ('vhost', 'zahost')")
+            ->where('id')->eq($hostInfo->id)
+            ->exec();
+
+        $oldHost = $this->getByID($hostInfo->id);
         return common::createChanges($oldHost, $hostInfo);
     }
 
