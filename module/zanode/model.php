@@ -619,6 +619,7 @@ class zanodemodel extends model
     }
 
     /**
+     * 获取快照列表。
      * Get snapshot list.
      *
      * @param  int    $nodeID
@@ -627,7 +628,7 @@ class zanodemodel extends model
      * @access public
      * @return array
      */
-    public function getSnapshotList($nodeID, $orderBy = 'id', $pager = null)
+    public function getSnapshotList(int $nodeID, string $orderBy = 'id', object $pager = null): array
     {
         $snapshotList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('host')->eq($nodeID)
@@ -638,7 +639,7 @@ class zanodemodel extends model
 
         foreach($snapshotList as $name => $snapshot)
         {
-            if($snapshot->status == 'creating' and (time() - strtotime($snapshot->createdDate)) > 600)
+            if($snapshot->status == 'creating' && (time() - strtotime($snapshot->createdDate)) > 600)
             {
                 if($snapshot->name == 'defaultSnap' && $snapshot->createdBy == "system")
                 {

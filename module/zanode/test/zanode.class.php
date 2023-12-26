@@ -92,4 +92,20 @@ class zanodeTest
         $nodeID = $this->create($data);
         return $this->objectModel->dao->select('*')->from(TABLE_HOST)->where('id')->eq($nodeID)->fetch();
     }
+
+    /**
+     * 测试获取快照列表。
+     * Test get snapshot list.
+     *
+     * @access public
+     * @return string
+     */
+    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', object $pager = null): string
+    {
+        $snapshotList = $this->getSnapshotList($nodeID, $orderBy, $pager);
+
+        $return = '';
+        foreach($snapshotList as $name => $snapshot) $return .= "{$snapshot->id}:{$name},{$snapshot->status};";
+        return trim($return, ';');
+    }
 }

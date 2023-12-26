@@ -1,0 +1,19 @@
+title: zt_image
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: host
+    range: 1-10
+  - field: name
+    prefix: defaultSnap
+    range: "``{10},1-10"
+  - field: from
+    range: snapshot{3},zentao
+  - field: status
+    range: creating{4},wait
+  - field: createdDate
+    range: "(-10D)-(+10D):-70S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: createdBy
+    range: system,admin
