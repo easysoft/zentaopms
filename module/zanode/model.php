@@ -36,6 +36,7 @@ class zanodemodel extends model
     const SNAPSHOT_REMOVE_PATH = '/api/v1/kvm/removeSnap';
 
     /**
+     * 设置语言项。
      * Set lang;
      *
      * @access public
@@ -48,105 +49,42 @@ class zanodemodel extends model
     }
 
     /**
+     * 创建执行节点。
      * Create an Node.
      *
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create(): int|bool
     {
         $data = form::data()
+            ->setDefault('type', 'node')
+            ->setDefault('createdDate', helper::now())
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('status', static::STATUS_RUNNING)
+            ->setIF($this->post->hostType != 'physics', 'hostType', '')
             ->setIF($this->post->hostType == 'physics', 'parent', 0)
             ->setIF($this->post->hostType == 'physics', 'osName', $this->post->osNamePhysics)
+            ->setIF($this->post->hostType == 'physics', 'secret', md5($this->post->name . time()))
+            ->setIF($this->post->hostType == 'physics', 'status', 'offline')
             ->get();
 
-        $data->type = 'node';
+        $checkResult = $this->zanodeTao->checkFields4Create($data);
+        if(!$checkResult) return false;
 
-        if($data->hostType == 'physics')
+        if($data->hostType != 'physics')
         {
-            $data->secret = md5($data->name . time());
-            $data->status = 'offline';
-        }
-        else
-        {
-            $data->hostType = '';
-        }
+            $result = $this->zanodeTao->linkAgentService($data);
+            if(!$result) return false;
 
-        /* Batch check fields. */
-        $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->batchCheck($data->hostType != 'physics' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
-
-        if(dao::isError()) return false;
-
-        unset($data->osNamePhysics);
-        if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
-        {
-            dao::$errors[] = $this->lang->zanode->nameValid;
-            return false;
+            $data->mac = $result->data->mac;
+            $data->vnc = (int)$result->data->vnc;
         }
 
-        /* If name already exists return error. */
-        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->eq('node')->fetch();
-        if($node) return dao::$errors[] = $this->lang->zanode->nameUnique;
-
-        if($data->hostType == 'physics')
-        {
-            $ping = $this->loadModel('zahost')->checkAddress($data->extranet);
-            if(!$ping)
-            {
-                dao::$errors[] = $this->lang->zanode->netError;
-                return false;
-            }
-        }
-        else
-        {
-            /* Get image. */
-            $image = $this->getImageByID($data->image);
-
-            /* Get host info. */
-            $host = $this->getHostByID($data->parent);
-
-            /* Prepare create params. */
-            $agnetUrl = 'http://' . $host->extranet . ':' . $host->zap;
-            $param    = array(
-                'os'     => $image->osName,
-                'path'   => $image->path,
-                'name'   => $data->name,
-                'cpu'    => (int)$data->cpuCores,
-                'disk'   => (int)$data->diskSize,
-                'memory' => (int)$data->memory,
-            );
-
-            $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN"), 'data', 'POST', 10));
-
-            if(empty($result))
-            {
-                dao::$errors[] = $this->lang->zanode->notFoundAgent;
-                return false;
-            }
-            if($result->code != 'success')
-            {
-                dao::$errors[] = $this->lang->zanode->createVmFail;
-                return false;
-            }
-
-            /* Prepare create ZenAgent Node data. */
-            $data->parent = $host->id;
-            $data->mac    = $result->data->mac;
-            $data->vnc    = (int)$result->data->vnc;
-        }
-
-        $data->status      = static::STATUS_RUNNING;
-        $data->createdBy   = $this->app->user->account;
-        $data->createdDate = helper::now();
-
-        /* Save ZenAgent Node. */
-        $this->dao->insert(TABLE_ZAHOST)->data($data)->autoCheck()->exec();
+        $this->dao->insert(TABLE_ZAHOST)->data($data, 'osNamePhysics,osNamePre')->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $nodeID = $this->dao->lastInsertID();
-
-        /* update action log. */
         $this->loadModel('action')->create('zanode', $nodeID, 'Created');
         return $nodeID;
     }

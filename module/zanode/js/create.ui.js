@@ -8,16 +8,16 @@ function onChangeType()
 {
     if($('[name=hostType]').val() == 'physics')
     {
-        $('#parent').closest('.form-row').hide();
-        $('#image').closest('.form-row').hide();
+        $("[name^='parent']").closest('.form-row').hide();
+        $("[name^='image']").closest('.form-row').hide();
         $('#extranet').closest('.form-row').removeClass('hidden');
         $('#osName').closest('.form-row').addClass('hidden');
         $('#osNamePhysicsContainer').removeClass('hidden');
     }
     else
     {
-        $('#parent').closest('.form-row').show();
-        $('#image').closest('.form-row').show();
+        $("[name^='parent']").closest('.form-row').show();
+        $("[name^='image']").closest('.form-row').show();
         $('#extranet').closest('.form-row').addClass('hidden');
         $('#osName').closest('.form-row').removeClass('hidden');
         $('#osNamePhysicsContainer').addClass('hidden');

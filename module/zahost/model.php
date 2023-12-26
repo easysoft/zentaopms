@@ -114,8 +114,8 @@ class zahostModel extends model
 
         foreach(array(80, 443, $this->config->zahost->defaultPort) as $port)
         {
-            $fp = fsockopen($address, $port, $errno, $errstr, 3);
-            if ($fp) return true;
+            $fp = @fsockopen($address, $port, $errno, $errstr, 3);
+            if($fp) return true;
         }
 
         return false;
