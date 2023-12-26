@@ -1662,7 +1662,7 @@ class executionModel extends model
             /* Process the burns. */
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
-            foreach($burnData as $data) $execution->burns[] = $data->value;
+            foreach($burnData as $data) $execution->burns[] = (float)$data->value;
 
             if(isset($executionTasks) && isset($executionTasks[$execution->id])) $execution->tasks = $executionTasks[$execution->id];
 
