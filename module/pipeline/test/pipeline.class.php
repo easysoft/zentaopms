@@ -185,4 +185,22 @@ class pipelineTest
         if(dao::isError()) return dao::getError();
         return $pairs;
     }
+
+    /**
+     * 根据服务器ID和禅道账号获取禅道用户绑定的第三方账号。
+     * Get user binded third party accounts.
+     *
+     * @param  int          $providerID
+     * @param  string       $providerType  gitlab, gitea, gogs
+     * @param  string       $zentaoAccount
+     * @access public
+     * @return array|string
+     */
+    public function getOpenIdByAccountTest(int $providerID, string $providerType, string $zentaoAccount): array|string
+    {
+        $openID = $this->objectModel->getOpenIdByAccount($providerID, $providerType, $zentaoAccount);
+
+        if(dao::isError()) return dao::getError();
+        return $openID;
+    }
 }
