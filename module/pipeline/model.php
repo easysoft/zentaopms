@@ -28,11 +28,11 @@ class pipelineModel extends model
     }
 
     /**
-     * 根据名称及类型获取一条流水线记录
+     * 根据名称及类型获取一条流水线记录。
      * Get a pipeline by name and type.
      *
-     * @param  string $name
-     * @param  string $type
+     * @param  string       $name
+     * @param  string       $type
      * @access public
      * @return object|false
      */
