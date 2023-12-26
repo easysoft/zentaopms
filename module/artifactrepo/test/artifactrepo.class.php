@@ -53,4 +53,24 @@ class artifactrepoTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_ARTIFACTREPO)->where('id')->eq($artifactRepoID)->fetch();
     }
+
+    /**
+     * 更新一个制品库。
+     * Update a artifact repo.
+     *
+     * @param  int        $id
+     * @param  array      $data
+     * @access public
+     * @return array|bool
+     */
+    public function updateTest(int $id, array $data): array|bool
+    {
+        $artifactRepo = new stdclass();
+        foreach($data as $key => $value) $artifactRepo->{$key} = $value;
+
+        $changes = $this->objectModel->update($artifactRepo, $id);
+
+        if(dao::isError()) return dao::getError();
+        return $changes;
+    }
 }
