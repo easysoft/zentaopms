@@ -8,11 +8,11 @@ $(function()
     {
         setTimeout(function()
         {
-            var markdownContentHeight = $(window).height() - $('#headerBox').height() - $('#appsBar').height() - 40;
-            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap').css('max-height', markdownContentHeight + 'px');
+            var visibleHeight = $(window).height() - $('#headerBox').height() - $('#appsBar').height() - 40;
+            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap').css('max-height', visibleHeight + 'px');
             $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar').css('display', 'block');
-            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar div').height(contentHeight - markdownContentHeight);
-        }, 100);
+            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar div').height(contentHeight);
+        }, 200);
     }
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 
