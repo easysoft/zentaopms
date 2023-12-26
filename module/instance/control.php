@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of instance module of ZenTaoPMS.
  *
@@ -19,7 +20,7 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('action');
@@ -28,16 +29,16 @@ class instance extends control
     }
 
     /**
+     * 查看应用详情。
      * Show instance view.
      *
-     * @param  int $id
-     * @param  int $recTotal
-     * @param  int $recPerPage
-     * @param  int $page
+     * @param  int    $id
+     * @param  string $type
+     * @param  string $tab
      * @access public
      * @return void
      */
-    public function view($id, $type = 'store', $tab ='baseinfo' )
+    public function view(int $id, string $type = 'store', string $tab = 'baseinfo')
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if($type === 'store')
@@ -81,16 +82,15 @@ class instance extends control
     }
 
     /**
+     * 查看商店应用详情。
      * Show instance view.
      *
-     * @param  int $id
-     * @param  int $recTotal
-     * @param  int $recPerPage
-     * @param  int $page
+     * @param  int    $id
+     * @param  string $tab
      * @access public
      * @return void
      */
-    protected function storeView($id, $tab ='baseinfo' )
+    protected function storeView(int $id, string $tab = 'baseinfo')
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         $this->loadModel('system');
@@ -158,13 +158,14 @@ class instance extends control
     }
 
     /**
+     * 展示、保存应用配置。
      * Display or save auto backup settings.
      *
      * @param  int    $instanceID
      * @access public
      * @return void
      */
-    public function backupSettings($instanceID)
+    public function backupSettings(int $instanceID)
     {
         $instance = $this->instance->getByID($instanceID);
 
@@ -197,13 +198,14 @@ class instance extends control
     }
 
     /**
+     * 还原应用配置。
      * Display or save auto restore settings.
      *
      * @param  int    $instanceID
      * @access public
      * @return void
      */
-    public function restoreSettings($instanceID)
+    public function restoreSettings(int $instanceID)
     {
         $instance = $this->instance->getByID($instanceID);
 
@@ -234,13 +236,14 @@ class instance extends control
     }
 
     /**
+     * 自动备份。
      * Cron task of auto backup.
      *
      * @param  string $key
      * @access public
      * @return void
      */
-    public function autoBackup($key)
+    public function autoBackup(string $key)
     {
         if($this->config->instance->enableAutoRestore) return; // Only one of auto backup and auto restore can be enabled.
 
@@ -252,13 +255,14 @@ class instance extends control
     }
 
     /**
+     * 自动还原。
      * Cron task of auto restore.
      *
      * @param  string $key
      * @access public
      * @return void
      */
-    public function autoRestore($key)
+    public function autoRestore(string $key)
     {
         if(!$this->config->instance->enableAutoRestore) return; // Only one of auto backup and auto restore can be enabled.
 
@@ -270,13 +274,14 @@ class instance extends control
     }
 
     /**
-     * Edit instance app name.
+     * 设置应用。
+     * Setting instance.
      *
-     * @param  int $id
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function setting($id)
+    public function setting(int $id)
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $currentResource = new stdclass;
@@ -326,7 +331,7 @@ class instance extends control
      * @access public
      * @return void
      */
-    public function toSenior($instanceID, $seniorAppID, $confirm = 'no')
+    public function toSenior(int $instanceID, int $seniorAppID, string $confirm = 'no')
     {
         $instance = $this->instance->getByID($instanceID);
         $cloudApp = $this->store->getAppInfo($seniorAppID, $instance->channel, false);
@@ -354,7 +359,7 @@ class instance extends control
      * @access public
      * @return mixed
      */
-    public function upgrade($id)
+    public function upgrade(int $id)
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($id);
@@ -506,13 +511,14 @@ class instance extends control
     }
 
     /**
-     * (Not used at present.) Install app by custom settings.
+     * 自定义安装应用。
+     * Install app by custom settings.
      *
-     * @param int $id
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function customInstall($id)
+    public function customInstall(int $id)
     {
         // Disable custom installation in version 1.0.
         $storeUrl = $this->createLink('store', 'appview', "id=$id");
@@ -520,6 +526,7 @@ class instance extends control
     }
 
     /**
+     * 安装应用。
      * Install app.
      *
      * @param  int    $appID
@@ -612,13 +619,15 @@ class instance extends control
     }
 
     /**
+     * 卸载应用。
      * Uninstall app instance.
      *
-     * @param  int $instanceID
+     * @param  int    $instanceID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxUninstall($instanceID, $type = '')
+    public function ajaxUninstall(int $instanceID, string $type = '')
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         if($type !== 'store')
@@ -647,13 +656,14 @@ class instance extends control
     }
 
     /**
+     * 启动应用实例。
      * Start app instance.
      *
-     * @param  int $instanceID
+     * @param  int    $instanceID
      * @access public
      * @return void
      */
-    public function ajaxStart($instanceID)
+    public function ajaxStart(int $instanceID)
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($instanceID);
@@ -668,13 +678,14 @@ class instance extends control
     }
 
     /**
+     * 停止应用实例。
      * Stop app instance.
      *
-     * @param  int $instanceID
+     * @param  int    $instanceID
      * @access public
      * @return void
      */
-    public function ajaxStop($instanceID)
+    public function ajaxStop(int $instanceID)
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance = $this->instance->getByID($instanceID);
@@ -688,6 +699,7 @@ class instance extends control
     }
 
     /**
+     * 查看应用的运行状态。
      * Query status of app instance.
      *
      * @access public
@@ -704,6 +716,7 @@ class instance extends control
     }
 
     /**
+     * 备份应用。
      * Backup instnacd by ajax.
      *
      * @param  int    $instanceID
@@ -725,6 +738,7 @@ class instance extends control
     }
 
     /**
+     * 还原应用。
      * Restore instance by ajax
      *
      * @access public
@@ -753,13 +767,14 @@ class instance extends control
     }
 
     /**
+     * 删除备份。
      * Delete backup by ajax.
      *
      * @param  int    $backupID
      * @access public
      * @return void
      */
-    public function ajaxDeleteBackup($backupID)
+    public function ajaxDeleteBackup(int $backupID)
     {
         $success = $this->instance->deleteBackup($backupID, $this->app->user);
         if(!$success) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'deleteFail')));
@@ -768,6 +783,7 @@ class instance extends control
     }
 
     /**
+     * 授权数据库。
      * Generate database auth parameters and jump to login page.
      *
      * @access public
@@ -801,6 +817,7 @@ class instance extends control
     }
 
     /**
+     * 调整实例内存大小。
      * Adjust instance memory size by ajax.
      *
      * @param  int    $instanceID
@@ -828,13 +845,14 @@ class instance extends control
     }
 
     /**
+     * 启用/禁用LDAP。
      * Switch LDAP between enable and disable by ajax.
      *
      * @param  int    $instanceID
      * @access public
      * @return void
      */
-    public function ajaxSwitchLDAP($instanceID)
+    public function ajaxSwitchLDAP(int $instanceID)
     {
         $instance = $this->instance->getByID($instanceID);
         $postData = fixer::input('post')->get();
@@ -848,6 +866,7 @@ class instance extends control
     }
 
     /**
+     * 启用/禁用SMTP。
      * Switch SMTP between enable and disable by ajax.
      *
      * @param  int    $instanceID
@@ -868,6 +887,7 @@ class instance extends control
     }
 
     /**
+     * 更新自定义配置。
      * Update custom settings by ajax. For example: env variables.
      *
      * @param  int    $instanceID
@@ -896,6 +916,7 @@ class instance extends control
     }
 
     /**
+     * 删除过期的demo实例。
      * Delete expired demo instance by cron.
      *
      * @access public
@@ -911,13 +932,14 @@ class instance extends control
     }
 
     /**
-     *  Get instance info for q tool in console.
+     * 获取实例信息。
+     * Get instance info for q tool in console.
      *
      * @param  int    $id
      * @access public
      * @return mixed
      */
-    public function apiDetail($id)
+    public function apiDetail(int $id)
     {
         if(!$this->checkCneToken())
         {
@@ -938,6 +960,7 @@ class instance extends control
     }
 
     /**
+     * 获取实例列表。
      * Get instances list by account through api for q tool.
      *
      * @access public
@@ -974,6 +997,7 @@ class instance extends control
     }
 
     /**
+     * 通过API安装应用。
      * Install app by api for q tool.
      *
      * @access public
@@ -1018,6 +1042,7 @@ class instance extends control
     }
 
     /**
+     * 检查CNE token。
      * Check CNE token.
      *
      * @access private
