@@ -548,7 +548,7 @@ class storyModel extends model
         $productID = (int)$productID;
         $now       = helper::now();
         $mails     = array();
-        $stories   = fixer::input('post')->get();
+        $stories   = fixer::input('post')->setDefault('type', 'story')->get();
 
         $saveDraft = false;
         if(isset($stories->status))
@@ -575,11 +575,14 @@ class storyModel extends model
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : '';
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
-            $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
+            $source = (empty($stories->source[$i]) || $stories->source[$i] == 'ditto') ? $source : $stories->source[$i];
             $stories->module[$i] = (int)$module;
             $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
             $stories->source[$i] = $source;
+            if(empty($stories->category[$i]))   $stories->category[$i] = '';
+            if(empty($stories->sourceNote[$i])) $stories->sourceNote[$i] = '';
+            if(empty($stories->verify[$i]))     $stories->verify[$i] = '';
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
