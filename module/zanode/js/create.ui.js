@@ -34,7 +34,7 @@ function onHostChange(event)
         {
             data = JSON.parse(data);
 
-            $imagePicker = $('#image').zui('picker');
+            $imagePicker = $("[name^='image']").zui('picker');
             $imagePicker.render({items: data});
             $imagePicker.$.clear();
             onImageChange();
