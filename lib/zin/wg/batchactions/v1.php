@@ -23,14 +23,14 @@ class batchActions extends wg
                 setClass($this->prop('actionClass')),
                 btn
                 (
-                    icon('plus', set::size('lg')),
-                    setClass('bg-white ring-0 rounded bg-opacity-20 add-btn'),
+                    setClass('ghost add-btn'),
+                    set::icon('plus icon-lg'),
                     on::click('addItem')
                 ),
                 btn
                 (
-                    icon('close', set::size('lg')),
-                    setClass('bg-white ring-0 rounded bg-opacity-20 del-btn'),
+                    setClass('ghost del-btn'),
+                    set::icon('close icon-lg'),
                     on::click('removeItem')
                 )
             )
