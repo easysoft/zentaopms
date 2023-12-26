@@ -22,14 +22,14 @@ class count_of_monthly_created_release_in_product extends baseCalc
 {
     public $dataset = 'getProductReleases';
 
-    public $fieldList = array('t1.id', 't1.product', 't1.createdDate');
+    public $fieldList = array('t1.id', 't1.product', 't1.date');
 
     public $result = array();
 
     public function calculate($row)
     {
         $product     = $row->product;
-        $createdDate = $row->createdDate;
+        $createdDate = $row->date;
 
         if(empty($createdDate)) return false;
 

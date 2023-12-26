@@ -22,14 +22,14 @@ class count_of_weekly_created_release extends baseCalc
 {
     public $dataset = 'getReleases';
 
-    public $fieldList = array('t1.createdDate');
+    public $fieldList = array('t1.date');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $year = $this->getYear($row->createdDate);
-        $week = $this->getWeek($row->createdDate);
+        $year = $this->getYear($row->date);
+        $week = $this->getWeek($row->date);
 
         if(!$year) return false;
 
