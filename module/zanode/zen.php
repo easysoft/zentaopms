@@ -22,7 +22,7 @@ class zanodeZen extends zanode
      */
     protected function handleNode(int $nodeID, string $type)
     {
-        $node = $this->getNodeByID($nodeID);
+        $node = $this->zanode->getNodeByID($nodeID);
 
         if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
         {

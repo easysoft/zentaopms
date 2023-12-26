@@ -108,4 +108,34 @@ class zanodeTest
         foreach($snapshotList as $name => $snapshot) $return .= "{$snapshot->id}:{$name},{$snapshot->status};";
         return trim($return, ';');
     }
+
+    /**
+     * 测试创建快照。
+     * Test create snapshot.
+     *
+     * @param  int    $nodeID
+     * @param  array $snapshot
+     * @access public
+     * @return object
+     */
+    public function createSnapshotTest(int $nodeID, array $data): object|array
+    {
+        $node = $this->getNodeByID($nodeID);
+
+        $snapshot = new stdClass();
+        $snapshot->host        = $node->id;
+        $snapshot->name        = $data['name'];
+        $snapshot->desc        = $data['desc'];
+        $snapshot->status      = 'creating';
+        $snapshot->osName      = $node->osName;
+        $snapshot->memory      = 0;
+        $snapshot->disk        = 0;
+        $snapshot->fileSize    = 0;
+        $snapshot->from        = 'snapshot';
+
+        $snapshotID = $this->createSnapshot($node, $snapshot);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+    }
 }
