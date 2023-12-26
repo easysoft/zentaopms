@@ -110,11 +110,12 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
 }
 
 $parentPath = array();
-$parentPath[] = span
+$parentPath[] = div
 (
+    setClass('row flex-nowrap items-center'),
     a
     (
-        setClass('tree-link'),
+        setClass('tree-link text-clip'),
         set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=0&branch=$branch")),
         set('data-app', $app->tab),
         $root->name
@@ -127,11 +128,12 @@ $parentPath[] = span
 );
 foreach($parentModules as $module)
 {
-    $parentPath[] = span
+    $parentPath[] = div
     (
+        setClass('row flex-nowrap items-center'),
         a
         (
-            setClass('tree-link'),
+            setClass('tree-link text-clip'),
             set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=$module->id&branch=$branch")),
             set('data-app', $app->tab),
             $module->name
@@ -146,7 +148,7 @@ foreach($parentModules as $module)
 
 div
 (
-    setClass('flex gap-x-4 mb-3'),
+    setClass('row gap-4'),
     !isInModal() ? backBtn
     (
         set::icon('back'),
@@ -162,10 +164,13 @@ div
 
 div
 (
-    setClass('flex gap-x-4'),
-    div
+    setClass('row gap-4'),
+    sidebar
     (
-        setClass('sidebar sidebar-left w-1/3'),
+        set::toggleBtn(false),
+        set::width(400),
+        set::minWidth(350),
+        set::maxWidth(550),
         panel
         (
             set::title($title),
@@ -173,20 +178,15 @@ div
             (
                 btn
                 (
-                    set
-                    (
-                        array
-                        (
-                            'class'       => 'btn primary size-sm',
-                            'url'         => createLink('tree', 'viewHistory', "productID=$rootID"),
-                            'data-toggle' => 'modal'
-                        )
-                    ),
+                    setClass('primary size-sm'),
+                    set::url('tree', 'viewHistory', "productID=$rootID"),
+                    toggle::modal(),
                     $lang->history
                 )
             ) : null,
             treeEditor
             (
+                set('selected', $currentModuleID),
                 set('type', $viewType),
                 set('items', $tree),
                 set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
@@ -196,17 +196,19 @@ div
     ),
     div
     (
-        setClass('w-2/3'),
+        setClass('flex-auto'),
         panel
         (
+            setClass('pb-4'),
             set::title($manageTitle),
             div
             (
                 setClass('flex'),
                 div
                 (
-                    setClass('p-1 tree-item-content'),
+                    setClass('pr-2 tree-item-content row items-center'),
                     setStyle('max-width', '380px'),
+                    setStyle('padding-bottom', '48px'),
                     $parentPath
                 ),
                 form
@@ -215,18 +217,18 @@ div
                     set::url(helper::createLink('tree', 'manageChild', "root=$root->id&viewType=$viewType")),
                     set('data-app', $app->tab),
                     $moduleRows,
-                    set::actionsClass('justify-start mb-4'),
+                    set::actionsClass('justify-start'),
                     set::submitBtnText($lang->save),
-                    formGroup
+                    input
                     (
-                        setClass('hidden'),
+                        set::type('hidden'),
                         set::name('parentModuleID'),
                         set::value($currentModuleID),
                         set::control('hidden')
                     ),
-                    formGroup
+                    input
                     (
-                        setClass('hidden'),
+                        set::type('hidden'),
                         set::name('maxOrder'),
                         set::value($maxOrder),
                         set::control('hidden')

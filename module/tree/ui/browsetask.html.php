@@ -114,11 +114,12 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
 }
 
 $parentPath = array();
-$parentPath[] = span
+$parentPath[] = div
 (
+    setClass('row flex-nowrap items-center'),
     a
     (
-        setClass('tree-link'),
+        setClass('tree-link text-clip'),
         set('href', helper::createLink('tree', 'browsetask', "rootID=$root->id&productID=$productID")),
         $root->name
     ),
@@ -130,11 +131,12 @@ $parentPath[] = span
 );
 foreach($parentModules as $module)
 {
-    $parentPath[] = span
+    $parentPath[] = div
     (
+        setClass('row flex-nowrap items-center'),
         a
         (
-            setClass('tree-link'),
+            setClass('tree-link text-clip'),
             set('href', helper::createLink('tree', 'browsetask', "rootID=$root->id&productID=$productID&module=$module->id")),
             $module->name
         ),
@@ -165,15 +167,19 @@ div
 
 div
 (
-    setClass('flex gap-x-4'),
-    div
+    setClass('row gap-4'),
+    sidebar
     (
-        setClass('sidebar sidebar-left basis-2/6'),
+        set::width(400),
+        set::minWidth(350),
+        set::maxWidth(550),
+        set::toggleBtn(false),
         panel
         (
             set::title($title),
             treeEditor
             (
+                set('selected', $currentModuleID),
                 set('type', 'task'),
                 set('items', $tree),
                 set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
@@ -183,16 +189,18 @@ div
     ),
     div
     (
-        setClass('basis-4/6'),
+        setClass('flex-auto'),
         panel
         (
+            setClass('pb-4'),
             set::title($execution->multiple ? $lang->tree->manageTaskChild : $lang->tree->manageProjectChild),
             div
             (
                 setClass('flex'),
                 div
                 (
-                    setClass('p-1 tree-item-content'),
+                    setClass('pr-2 tree-item-content row items-center'),
+                    setStyle('padding-bottom', '48px'),
                     $parentPath
                 ),
                 form
@@ -203,16 +211,16 @@ div
                     set::actions(array('submit', 'cancel')),
                     set::back('execution-task'),
                     set::actionsClass('justify-start'),
-                    formGroup
+                    input
                     (
-                        setClass('hidden'),
+                        set::type('hidden'),
                         set::name('parentModuleID'),
                         set::value($currentModuleID),
                         set::control('hidden')
                     ),
-                    formGroup
+                    input
                     (
-                        setClass('hidden'),
+                        set::type('hidden'),
                         set::name('maxOrder'),
                         set::value($maxOrder),
                         set::control('hidden')
