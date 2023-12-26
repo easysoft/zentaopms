@@ -1,9 +1,45 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=fetchMetricsWithFilter
+timeout=0
 cid=1
-pid=1
+
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters1 
+ - 第0条的id属性 @1
+ - 第0条的purpose属性 @scale
+ - 第0条的code属性 @count_of_program
+ - 第1条的id属性 @2
+ - 第1条的purpose属性 @scale
+ - 第1条的code属性 @count_of_doing_program
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters1  @24
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters2 
+ - 第0条的id属性 @234
+ - 第0条的purpose属性 @scale
+ - 第0条的code属性 @count_of_story_in_execution
+ - 第1条的id属性 @235
+ - 第1条的purpose属性 @scale
+ - 第1条的code属性 @count_of_finished_story_in_execution
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters2  @15
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters3 
+ - 第0条的id属性 @45
+ - 第0条的purpose属性 @scale
+ - 第0条的code属性 @count_of_execution
+ - 第1条的id属性 @46
+ - 第1条的purpose属性 @scale
+ - 第1条的code属性 @count_of_wait_execution
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters3  @22
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters4 
+ - 第0条的id属性 @33
+ - 第0条的purpose属性 @hour
+ - 第0条的code属性 @estimate_of_annual_closed_project
+ - 第1条的id属性 @34
+ - 第1条的purpose属性 @hour
+ - 第1条的code属性 @consume_of_annual_closed_project
+- 执行metric模块的fetchMetricsWithFilter方法，参数是$filters4  @19
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/calc.class.php';
