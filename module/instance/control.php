@@ -94,11 +94,9 @@ class instance extends control
     protected function storeView(int $id, string $tab = 'baseinfo')
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-        $this->loadModel('system');
-        $this->app->loadLang('system');
 
         $instance = $this->instance->getByID($id);
-        if(empty($instance)) return print(js::alert($this->lang->instance->instanceNotExists) . js::locate($this->createLink('space', 'browse')));
+        if(empty($instance)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->instanceNotExists, 'locate' => $this->createLink('space', 'browse'))));
 
         $instance->latestVersion = $this->store->appLatestVersion($instance->appID, $instance->version);
 
@@ -108,7 +106,7 @@ class instance extends control
         $instanceMetric = $instanceMetric[$instance->id];
 
         $backupList   = array();
-        $latestBackup = new stdclass;
+        $latestBackup = new stdclass();
         if($tab == 'backup') $backupList = $this->instance->backupList($instance);
         if(count($backupList)) $latestBackup = reset($backupList);
 
@@ -154,7 +152,6 @@ class instance extends control
         $this->view->latestBackup    = $latestBackup;
         $this->view->dbList          = $dbList;
         $this->view->domain          = $this->cne->getDomain($instance);
-        $this->view->tab             = $tab;
     }
 
     /**
