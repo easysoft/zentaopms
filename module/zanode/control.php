@@ -286,7 +286,9 @@ class zanode extends control
     {
         if($_POST)
         {
-            $this->zanode->createSnapshot($nodeID);
+            $node     = $this->zanode->getNodeByID($nodeID);
+            $snapshot = $this->zanodeZen->prepareCreateSnapshotExtras($node);
+            $this->zanode->createSnapshot($node, $snapshot);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true));
         }

@@ -84,4 +84,33 @@ class zanodeZen extends zanode
 
         return $data;
     }
+
+    /**
+     * 处理创建快照请求数据。
+     * Processing request data for creating snapshot.
+     *
+     * @param  int nodeID
+     * @access protected
+     * @return object
+     */
+    protected function prepareCreateSnapshotExtras(object $node): object
+    {
+        $data = form::data()->get();
+        if(is_numeric($data->name)) return $this->sendError(array('name' => sprintf($this->lang->error->code, $this->lang->zanode->name)));
+
+        $snapshot = new stdClass();
+        $snapshot->host        = $node->id;
+        $snapshot->name        = $data->name;
+        $snapshot->desc        = $data->desc;
+        $snapshot->status      = 'creating';
+        $snapshot->osName      = $node->osName;
+        $snapshot->memory      = 0;
+        $snapshot->disk        = 0;
+        $snapshot->fileSize    = 0;
+        $snapshot->from        = 'snapshot';
+        $snapshot->createdBy   = $this->app->user->account;
+        $snapshot->createdDate = helper::now();
+
+        return $snapshot;
+    }
 }

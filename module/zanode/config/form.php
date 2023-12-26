@@ -29,9 +29,9 @@ $config->zanode->form->createimage = array();
 $config->zanode->form->createimage['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
 $config->zanode->form->createimage['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
-$config->zanode->form->createSnapshot = array();
-$config->zanode->form->createSnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
-$config->zanode->form->createSnapshot['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
+$config->zanode->form->createsnapshot = array();
+$config->zanode->form->createsnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
+$config->zanode->form->createsnapshot['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
 $config->zanode->form->editSnapshot = array();
 $config->zanode->form->editSnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
