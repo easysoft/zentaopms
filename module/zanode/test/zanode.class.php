@@ -36,9 +36,9 @@ class zanodeTest
     {
         $resultID = $this->setAutomationSetting($object);
         if(dao::isError()) return dao::getError();
-        $return = $this->objectModel->getScriptByID($resultID);
+        $return = $this->objectModel->getAutomationByID($resultID);
         return $return;
-        return $this->objectModel->getScriptByID($resultID);
+        return $this->objectModel->getAutomationByID($resultID);
     }
 
     /**

@@ -762,19 +762,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Get automation by id.
-     *
-     * @param  int $id
-     * @return object
-     */
-    public function getScriptByID($id)
-    {
-        return $this->dao->select('*')->from(TABLE_AUTOMATION)
-            ->where('id')->eq($id)
-            ->fetch();
-    }
-
-    /**
      * Get vnc url.
      *
      * @param  object      $node
