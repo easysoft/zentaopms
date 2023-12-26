@@ -154,11 +154,11 @@ class api extends router
      *
      * Parse params of route to regular expression.
      *
-     * @param  string $m
+     * @param  array     $m
      * @access protected
      * @return string
      */
-    protected function matchesCallback(string $m)
+    protected function matchesCallback(array $m)
     {
         $this->paramNames[] = $m[1];
         return '(?P<' . $m[1] . '>[^/]+)';
@@ -201,7 +201,7 @@ class api extends router
             }
 
             $entry    = strtolower($this->entry);
-            $filename = $this->appRoot . "api/$this->version/entries/$entry.php";
+            $filename = $this->moduleRoot . "api/$this->version/entries/$entry.php";
 
             if(file_exists($filename)) include($filename);
 
