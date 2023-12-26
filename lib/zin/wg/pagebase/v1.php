@@ -87,7 +87,14 @@ class pageBase extends wg
 
         if($config->debug)
         {
-            $js[] = h::createJsVarCode('window.zin', array('page' => $this->toJSON(), 'definedProps' => wg::$definedPropsMap, 'wgBlockMap' => wg::$wgToBlockMap, 'config' => jsRaw('window.config')));
+            $zinDebugData = array('config' => jsRaw('window.config'));
+            if($config->debug > 5)
+            {
+                $zinDebugData['page']         = $this->toJSON();
+                $zinDebugData['definedProps'] = wg::$definedPropsMap;
+                $zinDebugData['wgBlockMap']   = wg::$wgToBlockMap;
+            }
+            $js[] = h::createJsVarCode('window.zin', $zinDebugData);
             $js[] = 'console.log("[ZIN] ", window.zin);';
         }
         else
