@@ -1,0 +1,17 @@
+title: table zt_space
+desc: "应用空间"
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: k8space
+    range: "quickon,app,test"
+  - field: owner
+    range: "admin,user1,user2,user3"
+  - field: name
+    fields:
+    - field: name1
+      range: "默认空间"
+    - field: name2
+      range: 1-10000

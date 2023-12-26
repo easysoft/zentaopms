@@ -1,0 +1,32 @@
+title: table zt_solution
+desc: "解决方案"
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: name
+    fields:
+    - field: name1
+      range: "解决方案"
+    - field: name2
+      range: 1-10000
+  - field: appName
+    range: "Subversion,禅道开源版,adminer,禅道企业版,禅道旗舰版"
+  - field: appID
+    range: 1-100
+  - field: appVersion
+    range: "1.0,10.0.1,1.14.2,4.8.1,8.9,15.5 "
+  - field: version
+    range: "2023.12.1201,2023.12.1202,2023.12.1203"
+  - field: chart
+    range: "subversion,zentao,adminer,zentao-biz,zentao-max"
+  - field: cover
+    range: "cover"
+    postfix: 1-1000
+  - field: status
+    range: "wait,doing"
+  - field: source
+    range: 'cloud'
+  - field: channel
+    range: 'stable'

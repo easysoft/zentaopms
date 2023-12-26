@@ -1,8 +1,29 @@
----
 title: table zt_instance
-author: automated export
+desc: "应用实例"
+author: Sun Guangming
 version: "1.0"
 fields:
-- field: id
-  range: 1-1000
-...
+  - field: id
+    range: 1-10000
+  - field: space
+    range: 1-100
+  - field: solution
+    range: 1-100
+  - field: name
+    range: "Subversion,禅道开源版,adminer,禅道企业版,禅道旗舰版"
+  - field: appVersion
+    range: "1.0,10.0.1,1.14.2,4.8.1,8.9,15.5 "
+  - field: chart
+    range: "subversion,zentao,adminer,zentao-biz,zentao-max"
+  - field: logo
+    range: "img.qucheng.com/app/s/svn-icon.png,img.qucheng.com/app/z/zentao-icon.svg,img.qucheng.com/app/a/adminer-icon.svg,img.qucheng.com/app/a/adminer-icon.svg"
+  - field: version
+    range: "2023.12.1201,2023.12.1202,2023.12.1203"
+  - field: desc
+    range: "禅道 项目管理软件 是国产的开源项目管理软件，专注研发项目管理，内置需求管理、任务管理、bug管理、缺陷管理、用例管理、计划发布等功能，实现了软件的完整生命周期管理。"
+    prefix: 1-10
+    postfix: "a-z"
+  - field: source
+    range: 'cloud'
+  - field: channel
+    range: 'stable'
