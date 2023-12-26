@@ -171,6 +171,7 @@ $lang->action->objectTypes['domain']           = '域名';
 $lang->action->objectTypes['artifactrepo']     = '制品库';
 $lang->action->objectTypes['prompt']           = '提词';
 $lang->action->objectTypes['metric']           = '度量';
+$lang->action->objectTypes['miniprogram']      = '小程序';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -874,6 +875,7 @@ $lang->action->label->domian       = '域名|domian|view|id=%s';
 $lang->action->label->service      = '服务|service|view|id=%s';
 $lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
 $lang->action->label->prompt       = '提词|ai|promptview|id=%s';
+$lang->action->label->miniprogram  = '小程序|ai|miniprogramview|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

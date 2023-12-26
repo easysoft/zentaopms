@@ -171,6 +171,7 @@ $lang->action->objectTypes['domain']           = 'Domain';
 $lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
 $lang->action->objectTypes['prompt']           = 'Prompt';
 $lang->action->objectTypes['metric']           = 'Metric';
+$lang->action->objectTypes['miniprogram']      = 'Mini Program';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -874,6 +875,7 @@ $lang->action->label->domian       = 'Domain|domian|view|id=%s';
 $lang->action->label->service      = 'Service|service|view|id=%s';
 $lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
 $lang->action->label->prompt       = 'Prompt|ai|promptview|id=%s';
+$lang->action->label->miniprogram  = 'Mini Program|ai|miniprogramview|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
