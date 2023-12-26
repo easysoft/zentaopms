@@ -79,13 +79,14 @@ class zahostModel extends model
     }
 
     /**
+     * 检查宿主机的IP/域名是否可用。
      * Ping ip/domain.
      *
-     * @param  string    $address
+     * @param  string $address
      * @access public
      * @return bool
      */
-    public function ping($address)
+    public function ping(string $address): bool
     {
         if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
 
@@ -102,6 +103,7 @@ class zahostModel extends model
     }
 
     /**
+     * 检查宿主机的IP/域名是否可用。
      * Telnet ip/domain.
      *
      * @param  string $address
