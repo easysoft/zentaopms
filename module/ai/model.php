@@ -884,13 +884,18 @@ class aiModel extends model
             unset($data->iconTheme);
         }
 
+        $old = $this->getMiniProgramByID($appID);
+
         $this->dao->update(TABLE_MINIPROGRAM)
             ->data($data)
             ->where('id')->eq($appID)
             ->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('miniProgram', $appID, 'edited');
+        $data->id = $appID;
+        $changes = common::createChanges($old, $data);
+        $actionID = $this->loadModel('action')->create('miniProgram', $appID, 'edited');
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         return true;
     }
 
@@ -915,16 +920,21 @@ class aiModel extends model
             ->where('appID')->eq($appID)
             ->exec();
 
+        $oldFields = $this->getMiniProgramFields($appID);
+        $newFields = array();
         $fields = $data->fields;
         foreach($fields as $field)
         {
             if(is_array($field['options'])) $field['options'] = implode(',', $field['options']);
+            $newFields[] = $field;
             $this->dao->insert(TABLE_MINIPROGRAMFIELD)
                 ->data($field)
                 ->exec();
         }
 
-        $this->loadModel('action')->create('miniProgram', $appID, 'edited');
+        $changes = common::createChanges($oldFields, $newFields);
+        $actionID = $this->loadModel('action')->create('miniProgram', $appID, 'edited');
+        $this->action->logHistory($actionID, $changes);
     }
 
     /**
