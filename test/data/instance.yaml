@@ -1,0 +1,8 @@
+---
+title: table zt_instance
+author: automated export
+version: "1.0"
+fields:
+- field: id
+  range: 1-1000
+...
