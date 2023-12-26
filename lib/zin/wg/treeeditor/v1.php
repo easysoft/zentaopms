@@ -69,6 +69,7 @@ class treeEditor extends wg
                 $item['titleAttrs']['data-app'] = $app->tab;
                 $item['titleAttrs']['title']    = $item['text'];
 
+                $item['innerClass'] = 'py-0';
                 $item['titleClass'] = 'text-clip';
                 $item['selected']   = !empty($selected) && $selected == $item['id'];
 
