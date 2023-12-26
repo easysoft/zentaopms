@@ -64,6 +64,10 @@ $lang->ai->browseMiniProgram      = '查看AI小程序详情';
 $lang->ai->publishMiniProgram     = '发布AI小程序';
 $lang->ai->unpublishMiniProgram   = '禁用AI小程序';
 $lang->ai->deleteMiniProgram      = '删除AI小程序';
+$lang->ai->exportMiniProgram      = '导出AI小程序';
+$lang->ai->importMiniProgram      = '导入AI小程序';
+$lang->ai->export                 = '导出';
+$lang->ai->import                 = '导入';
 
 $lang->ai->chatPlaceholderMessage = 'Hi，我是 AI 助手阿道，您可以问我任何问题。';
 $lang->ai->chatPlaceholderInput   = '问问阿道…';

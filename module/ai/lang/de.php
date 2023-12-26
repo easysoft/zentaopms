@@ -64,6 +64,10 @@ $lang->ai->browseMiniProgram      = 'View AI Mini Program Details';
 $lang->ai->publishMiniProgram     = 'Publish AI Mini Program';
 $lang->ai->unpublishMiniProgram   = 'Disable AI Mini Program';
 $lang->ai->deleteMiniProgram      = 'Delete AI Mini Program';
+$lang->ai->exportMiniProgram      = 'Export AI Mini Program';
+$lang->ai->importMiniProgram      = 'Import AI Mini Program';
+$lang->ai->export                 = 'Export';
+$lang->ai->import                 = 'Import';
 
 $lang->ai->chatPlaceholderMessage = 'Hi, I\'m Adao, your AI assistant at ZenTao!';
 $lang->ai->chatPlaceholderInput   = 'type here...';

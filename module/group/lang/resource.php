@@ -1875,6 +1875,8 @@ $lang->resource->ai->browseMiniProgram      = 'browseMiniProgram';
 $lang->resource->ai->publishMiniProgram     = 'publishMiniProgram';
 $lang->resource->ai->unpublishMiniProgram   = 'unpublishMiniProgram';
 $lang->resource->ai->deleteMiniProgram      = 'deleteMiniProgram';
+$lang->resource->ai->exportMiniProgram      = 'exportMiniProgram';
+$lang->resource->ai->importMiniProgram      = 'importMiniProgram';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';

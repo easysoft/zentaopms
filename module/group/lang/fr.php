@@ -571,6 +571,7 @@ $lang->group->package->browseMiniProgram     = 'Browse Mini Programs';
 $lang->group->package->miniProgramSquare     = 'AI Mini Program Square';
 $lang->group->package->publishMiniProgram    = 'Publish and Unpublish AI Mini Programs';
 $lang->group->package->deleteMiniProgram     = 'Delete AI Mini Programs';
+$lang->group->package->impAndExpMiniProgram  = 'Import and Export Mini Programs';
 $lang->group->package->dashboard             = 'Dashboard';
 $lang->group->package->resource              = 'Resource';
 $lang->group->package->manageServiceProvider = 'Provider';

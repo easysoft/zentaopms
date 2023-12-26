@@ -571,6 +571,7 @@ $lang->group->package->browseMiniProgram     = '浏览小程序';
 $lang->group->package->miniProgramSquare     = 'AI小程序广场';
 $lang->group->package->publishMiniProgram    = 'AI小程序上下架';
 $lang->group->package->deleteMiniProgram     = '删除AI小程序';
+$lang->group->package->impAndExpMiniProgram  = '导入导出AI小程序';
 $lang->group->package->dashboard             = '仪表盘';
 $lang->group->package->resource              = '资源';
 $lang->group->package->manageServiceProvider = '服务商管理';

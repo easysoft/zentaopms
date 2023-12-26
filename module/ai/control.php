@@ -489,6 +489,16 @@ class ai extends control
         $this->display();
     }
 
+    public function exportMiniProgram($appID)
+    {
+
+    }
+
+    public function importMiniProgram($appID)
+    {
+        
+    }
+
     /**
      * Test connection to API endpoint.
      *

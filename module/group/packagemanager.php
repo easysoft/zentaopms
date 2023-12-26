@@ -3880,6 +3880,13 @@ $config->group->package->deleteMiniProgram->subset  = 'ai';
 $config->group->package->deleteMiniProgram->privs   = array();
 $config->group->package->deleteMiniProgram->privs['ai-deleteMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram', 'ai-testMiniProgram', 'ai-editMiniProgram'));
 
+$config->group->package->impAndExpMiniProgram = new stdclass();
+$config->group->package->impAndExpMiniProgram->order  = 2191;
+$config->group->package->impAndExpMiniProgram->subset = 'ai';
+$config->group->package->impAndExpMiniProgram->privs  = array();
+$config->group->package->impAndExpMiniProgram->privs['ai-exportMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-importMiniProgram'));
+$config->group->package->impAndExpMiniProgram->privs['ai-importMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-createMiniProgram'), 'recommend' => array('ai-exportMiniProgram'));
+
 $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;
 $config->group->package->resource->subset = 'ops';
