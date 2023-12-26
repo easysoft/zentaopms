@@ -27,5 +27,5 @@ $story = new stdclass();
 $story->product = 1;
 $story->parent  = 0;
 
-r((array)$storyModel->doUpdateParentStatus(1, 'active')) && p('status,closedBy') && e('active,``');
+r((array)$storyModel->doUpdateParentStatus(1, 'active')) && p('status,closedBy') && e('active,~~');
 r((array)$storyModel->doUpdateParentStatus(2, 'closed')) && p('status,closedBy') && e('closed,admin');

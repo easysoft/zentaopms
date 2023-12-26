@@ -63,4 +63,4 @@ $_POST['importObjectList'] = array();
 
 $tester->kanban->setting(2, $kanban2);
 $kanban = $tester->kanban->getById(2);
-r($kanban) && p('showWIP|fluidBoard|colWidth|archived|performable|alignment|object', '|') && e('0|1|264|0|0|left|``'); // 查看设置后的看板信息
+r($kanban) && p('showWIP|fluidBoard|colWidth|archived|performable|alignment|object', '|') && e('0|1|264|0|0|left|~~'); // 查看设置后的看板信息

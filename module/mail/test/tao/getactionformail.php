@@ -40,7 +40,7 @@ $action1 = $mailModel->getActionForMail(1);
 $action2 = $mailModel->getActionForMail(2);
 
 r($mailModel->getActionForMail(0))  && p() && e('0');      //传入空参数
-r($action1)  && p('id,extra,appendLink') && e('1,``,``');  //检查 id=1 的数据的id,extra,appendLink字段
+r($action1)  && p('id,extra,appendLink') && e('1,~~,~~');  //检查 id=1 的数据的id,extra,appendLink字段
 r($action1->history[0])  && p('id,action') && e('1,1');    //检查 id=1 的数据所属history的id,action字段
 r($action2)  && p('id,extra,appendLink') && e('2,Fix,1');  //检查 id=2 的数据的id,extra,appendLink字段
 r($action2->history[0])  && p('id,action') && e('2,2');    //检查 id=2 的数据所属history的id,action字段

@@ -26,6 +26,6 @@ su('admin');
 
 $group = new groupTest();
 
-r($group->getPrivsByNavTest('my'))            && p('my-todo,todo-view,mail-index') && e('my-todo,todo-view,` `');   // 验证my菜单的权限
+r($group->getPrivsByNavTest('my'))            && p('my-todo,todo-view,mail-index') && e('my-todo,todo-view,~~');   // 验证my菜单的权限
 r($group->getPrivsByNavTest('admin'))         && p('mail-index,cron-index')        && e('mail-index,cron-index');   // 验证admin菜单的权限
-r($group->getPrivsByNavTest('admin', '18.0')) && p('editor-edit,mail-index')       && e('editor-edit,``');          // 验证admin菜单在18版本后的权限
+r($group->getPrivsByNavTest('admin', '18.0')) && p('editor-edit,mail-index')       && e('editor-edit,~~');          // 验证admin菜单在18版本后的权限
