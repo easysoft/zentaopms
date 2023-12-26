@@ -356,8 +356,13 @@ function renderColumnCount($count, count, col)
         return;
     }
 
-    var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
-    $count.html(text + '<i class="icon icon-arrow-up" data-toggle="tooltip" data-original-title="' + kanbanLang.limitExceeded + '"></i>');
+    var text     = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
+    var limitTip = '';
+    if(col.limit >= 0 && count > col.limit)
+    {
+        limitTip = 'data-original-title="' + kanbanLang.limitExceeded + '"';
+    }
+    $count.html(text + '<i class="icon icon-arrow-up" data-toggle="tooltip" ' + limitTip + '"></i>');
 
     if(col.limit != -1 && col.limit < count)
     {
