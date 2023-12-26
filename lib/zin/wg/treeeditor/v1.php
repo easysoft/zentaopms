@@ -12,6 +12,7 @@ class treeEditor extends wg
         'class?: string',
         'sortable?: array',
         'onSort?: function',
+        'selected?: string',
         'canUpdateOrder?: bool=false',
         'canEdit?: bool=false',
         'canDelete?: bool=false',
@@ -23,15 +24,27 @@ class treeEditor extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): zui
+    protected function build(): wg
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
         $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'onSort'));
-        return zui::tree
+        $id = $this->prop('id');
+
+        if(empty($id))
+        {
+            global $app;
+            $id = "treeEditor-{$app->rawModule}-{$app->rawMethod}";
+        }
+        return div
         (
-            set::_id($this->prop('id')),
-            set::_tag('menu'),
-            set($treeProps)
+            setStyle('--menu-selected-bg', 'none'),
+            zui::tree
+            (
+                set::_id($id),
+                set::_tag('menu'),
+                set::preserve($id),
+                set($treeProps)
+            )
         );
     }
 
@@ -43,6 +56,7 @@ class treeEditor extends wg
         $canDelete = $this->prop('canDelete');
         $canSplit  = $this->prop('canSplit');
         $editType  = $this->prop('type');
+        $selected  = $this->prop('selected');
 
         foreach($items as $key => $item)
         {
@@ -53,6 +67,10 @@ class treeEditor extends wg
                 if(!isset($item['url']))  $item['url']  = '';
 
                 $item['titleAttrs']['data-app'] = $app->tab;
+                $item['titleAttrs']['title']    = $item['text'];
+
+                $item['titleClass'] = 'text-clip';
+                $item['selected']   = !empty($selected) && $selected == $item['id'];
 
                 if(isset($item['type']) && $item['type'] == 'product')
                 {
@@ -63,9 +81,9 @@ class treeEditor extends wg
                     $item['actions'] = array();
                     $item['actions']['items'] = array();
 
-                    if($canEdit)   $item['actions']['items'][] = array('key' => 'edit',   'icon' => 'edit',  'id'  => $item['id'], 'editType' => $editType, 'onClick' => jsRaw('(event, item) => window.editItem(item)'));
-                    if($canDelete) $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'id'  => $item['id'], 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit','url' => helper::createLink('tree', 'delete', 'module=' . $item['id']));
-                    if($canSplit)  $item['actions']['items'][] = array('key' => 'view',   'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
+                    if($canEdit)   $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $editType));
+                    if($canDelete) $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'url' => createLink('tree', 'delete', 'module=' . $item['id']));
+                    if($canSplit)  $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
             }
 
