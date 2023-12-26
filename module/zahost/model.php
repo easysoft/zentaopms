@@ -371,6 +371,7 @@ class zahostModel extends model
     }
 
     /**
+     * 获取宿主机的列表。
      * Get host list.
      *
      * @param  string $browseType
@@ -380,33 +381,28 @@ class zahostModel extends model
      * @access public
      * @return array
      */
-    public function getList($browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
         {
             /* Concatenate the conditions for the query. */
+            if($this->session->zahostQuery == false) $this->session->set('zahostQuery', ' 1 = 1');
             if($param)
             {
+                $this->session->set('zahostQuery', ' 1 = 1');
+
                 $query = $this->loadModel('search')->getQuery($param);
                 if($query)
                 {
                     $this->session->set('zahostQuery', $query->sql);
                     $this->session->set('zahostForm', $query->form);
                 }
-                else
-                {
-                    $this->session->set('zahostQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->zahostQuery == false) $this->session->set('zahostQuery', ' 1 = 1');
             }
             $query = $this->session->zahostQuery;
         }
 
-        $list = $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
+        $hostList = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('zahost')
             ->beginIF($query)->andWhere($query)->fi()
@@ -414,16 +410,13 @@ class zahostModel extends model
             ->page($pager)
             ->fetchAll();
 
-        foreach($list as $host)
+        foreach($hostList as $host)
         {
-            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
-            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
-            {
-                $host->status = 'offline';
-            }
+            if(empty($host->heartbeat)) $host->hertbeat = '';
+            if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online') $host->status = 'offline';
         }
 
-        return $list;
+        return $hostList;
     }
 
     /**
