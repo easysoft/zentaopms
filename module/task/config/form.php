@@ -151,7 +151,7 @@ $config->task->form->start['status']         = array('type' => 'string',   'requ
 $config->task->form->start['consumed']       = array('type' => 'float',    'required' => false, 'default' => 0);
 $config->task->form->start['left']           = array('type' => 'float',    'required' => false, 'default' => 0);
 $config->task->form->start['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');
-$config->task->form->start['realStarted']    = array('type' => 'date',     'required' => false, 'default' => null);
+$config->task->form->start['realStarted']    = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->task->form->start['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->task->form->start['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 

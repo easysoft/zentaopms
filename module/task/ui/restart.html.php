@@ -77,9 +77,11 @@ else
         (
             set::width('1/3'),
             set::label($lang->task->realStarted),
-            set::name('realStarted'),
-            set::control('date'),
-            set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
+            datetimePicker
+            (
+                set::name('realStarted'),
+                set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
+            )
         ),
         formRow
         (
