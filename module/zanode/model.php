@@ -527,22 +527,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Get node list.
-     *
-     * @param  string $orderBy
-     * @access public
-     * @return array
-     */
-    public function getList($orderBy = 'id_desc')
-    {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->in('node,physics')
-            ->orderBy($orderBy)
-            ->fetchAll('id');
-    }
-
-    /**
      * 获取执行节点的id-name键值对。
      * Get node id-name pairs.
      *

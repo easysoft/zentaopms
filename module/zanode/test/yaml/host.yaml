@@ -8,6 +8,8 @@ fields:
     range: server
   - field: hostType
     range: virtual
+  - field: type
+    range: node,physics
   - field: osName
     range: linux
   - field: status
