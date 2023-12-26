@@ -312,27 +312,26 @@ class zahostModel extends model
     }
 
     /**
+     * 取消镜像下载。
      * Send cancel download image command to HOST.
      *
-     * @param  object    $image
+     * @param  object $image
      * @access public
      * @return bool
      */
-    public function cancelDownload($image)
+    public function cancelDownload(object $image): bool
     {
-        $zaInfo = $this->queryDownloadImageStatus($image);
-        $host   = $this->getById($image->host);
+        $image  = $this->queryDownloadImageStatus($image);
+        $host   = $this->getByID($image->host);
         $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/download/cancel';
 
-        $apiParams['id']  = intval($zaInfo->taskID);
+        $apiParams = array();
+        $apiParams['id'] = intval($image->taskID);
 
         $response = json_decode(commonModel::http($apiUrl, $apiParams, array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
-
-        if($response and $response->code == 'success')
+        if($response && $response->code == 'success')
         {
-            $this->dao->update(TABLE_IMAGE)
-                ->set('status')->eq('canceled')
-                ->where('id')->eq($image->id)->exec();
+            $this->dao->update(TABLE_IMAGE)->set('status')->eq('canceled')->where('id')->eq($image->id)->exec();
             return true;
         }
 
