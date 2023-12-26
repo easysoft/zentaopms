@@ -7,27 +7,34 @@ class pipelineTest
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct(string $account = 'admin')
     {
-        global $tester;
+        su($account);
 
+        global $tester, $app;
         $this->objectModel = $tester->loadModel('pipeline');
+
+        $app->rawModule = 'pipeline';
+        $app->rawMethod = 'index';
+        $app->setModuleName('pipeline');
+        $app->setMethodName('index');
     }
 
+
     /**
+     * 根据id获取一条服务器记录。
      * Get a pipeline by id.
      *
-     * @param  int    $id
+     * @param  int          $id
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByIDTest($id)
+    public function getByIDTest(int $id): object|false
     {
-        $objects = $this->objectModel->getByID($id);
+        $pipeline = $this->objectModel->getByID($id);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $pipeline;
     }
 
     /**
