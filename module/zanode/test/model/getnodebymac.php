@@ -9,10 +9,10 @@ cid=1
 
 - 测试获取 mac 地址 mac1 的节点
  - 属性id @1
- - 属性status @online
+ - 属性status @offline
 - 测试获取 mac 地址 mac1 的节点mac 地址 mac2 的节点
  - 属性id @2
- - 属性status @online
+ - 属性status @offline
 - 测试获取 mac 地址 mac1 的节点mac 地址 mac3 的节点
  - 属性id @3
  - 属性status @wait
@@ -41,8 +41,8 @@ $zanode = new zanodeTest();
 
 $mac = array('mac1', 'mac2', 'mac3', 'mac4', 'mac7', 'mac10',  'mac1000');
 
-r($zanode->getNodeByMac($mac[0])) && p('id,status') && e('1,online');   // 测试获取 mac 地址 mac1 的节点
-r($zanode->getNodeByMac($mac[1])) && p('id,status') && e('2,online');   // 测试获取 mac 地址 mac1 的节点mac 地址 mac2 的节点
+r($zanode->getNodeByMac($mac[0])) && p('id,status') && e('1,offline');  // 测试获取 mac 地址 mac1 的节点
+r($zanode->getNodeByMac($mac[1])) && p('id,status') && e('2,offline');  // 测试获取 mac 地址 mac1 的节点mac 地址 mac2 的节点
 r($zanode->getNodeByMac($mac[2])) && p('id,status') && e('3,wait');     // 测试获取 mac 地址 mac1 的节点mac 地址 mac3 的节点
 r($zanode->getNodeByMac($mac[3])) && p('id,status') && e('4,wait');     // 测试获取 mac 地址 mac4 的节点
 r($zanode->getNodeByMac($mac[4])) && p('id,status') && e('7,wait');     // 测试获取 mac 地址 mac7 的节点

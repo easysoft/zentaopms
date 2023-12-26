@@ -656,37 +656,23 @@ class zanodemodel extends model
     }
 
     /**
+     * 通过 id 获取执行节点。
      * Get Node by id.
      *
-     * @param  int $id
-     * @return object
+     * @param  int          $id
+     * @access public
+     * @return object|false
      */
-    public function getNodeByID($id)
+    public function getNodeByID(int $id): object|bool
     {
-        $node = $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.hostType='', t3.osName, t1.osName) osName, if(t1.hostType='', t2.tokenSN, t1.tokenSN) tokenSN, if(t1.hostType='', t2.secret, t1.secret) secret")->from(TABLE_ZAHOST)
-            ->alias('t1')
+        $node = $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.hostType='', t3.osName, t1.osName) osName, if(t1.hostType='', t2.tokenSN, t1.tokenSN) tokenSN, if(t1.hostType='', t2.secret, t1.secret) secret")
+            ->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($id)
             ->fetch();
-
-            $node->heartbeat = empty($node->heartbeat) ? '' : $node->heartbeat;
-            $host            = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : clone $node;
-            $host->status    = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
-
-        if($node->status == 'running' || $node->status == 'ready' || $node->status == 'online')
-        {
-            if(empty($host) || $host->status != 'online')
-            {
-                $node->status = self::STATUS_SHUTOFF;
-            }
-            elseif(time() - strtotime($node->heartbeat) > 60)
-            {
-                $node->status = $node->hostType == '' ? 'wait' : 'offline';
-            }
-        }
-
-        return $node;
+        if(empty($node)) return false;
+        return $this->processNodeStatus($node);
     }
 
     /**
@@ -701,11 +687,23 @@ class zanodemodel extends model
     {
         $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('mac')->eq($mac)->fetch();
         if(empty($node)) return false;
+        return $this->processNodeStatus($node);
+    }
 
-        $host = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : $node;
+    /**
+     * 计算执行节点的状态。
+     * Process node status.
+     *
+     * @param  object    $node
+     * @access protected
+     * @return object
+     */
+    protected function processNodeStatus(object $node): object
+    {
+        $host = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : clone $node;
         $host->status = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
 
-        if($node->status == 'running' || $node->status == 'ready')
+        if($node->status == 'running' || $node->status == 'ready' || $node->status == 'online')
         {
             if(empty($host) || $host->status != 'online')
             {
@@ -713,7 +711,7 @@ class zanodemodel extends model
             }
             elseif(time() - strtotime($node->heartbeat) > 60)
             {
-                $node->status = 'wait';
+                $node->status = $node->hostType == '' ? 'wait' : 'offline';
             }
         }
 
