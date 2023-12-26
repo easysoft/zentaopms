@@ -73,4 +73,20 @@ class artifactrepoTest
         if(dao::isError()) return dao::getError();
         return $changes;
     }
+
+    /**
+     * 获取制品库关联的版本信息。
+     * Get the build information linked with the artifactrepo.
+     *
+     * @param  int                $id
+     * @access public
+     * @return object|false|array
+     */
+    public function getLinkBuildTest(int $id): object|false|array
+    {
+        $build = $this->objectModel->getLinkBuild($id);
+
+        if(dao::isError()) return dao::getError();
+        return $build;
+    }
 }
