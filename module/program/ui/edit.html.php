@@ -159,15 +159,7 @@ formPanel
         set::id('whitelistRow'),
         set::className($program->acl == 'open' ? 'hidden' : ''),
         set::label($lang->whitelist),
-        picker
-        (
-            set::width('3/4'),
-            set::name('whitelist[]'),
-            set::label($lang->whitelist),
-            set::multiple(true),
-            set::items($pmUsers),
-            set::value($program->whitelist)
-        )
+        whitelist(set::items($pmUsers), set::value($program->whitelist))
     )
 );
 

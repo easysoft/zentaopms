@@ -81,13 +81,7 @@ formPanel
         formGroup
         (
             set::label($lang->whitelist),
-            picker
-            (
-                set::name('whitelist'),
-                set::multiple(true),
-                set::items($users),
-                set::value($space->whitelist)
-            )
+            whitelist(set::items($users), set::value($space->whitelist))
         )
     )
 );

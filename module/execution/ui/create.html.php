@@ -487,12 +487,7 @@ formPanel
     (
         set::label($lang->whitelist),
         set::id('whitelistBox'),
-        picker
-        (
-            set::name('whitelist[]'),
-            set::items($users),
-            set::multiple(true)
-        )
+        whitelist(set::itmes($users))
     )
 );
 

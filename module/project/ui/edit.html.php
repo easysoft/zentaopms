@@ -530,13 +530,7 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->whitelist),
-        picker
-        (
-            set::name('whitelist[]'),
-            set::value($project->whitelist),
-            set::items($users),
-            set::multiple(true)
-        )
+        whitelist(set::items($users), set::value($project->whitelist))
     ),
     formGroup
     (

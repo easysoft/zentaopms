@@ -290,13 +290,7 @@ formPanel
         formGroup
         (
             set::label($lang->whitelist),
-            picker
-            (
-                set::name('whitelist'),
-                set::items($users),
-                set::multiple(true),
-                set::value(isset($copyKanban->whitelist) ? $copyKanban->whitelist : '')
-            )
+            whitelist(set::items($users), set::value(isset($copyKanban->whitelist) ? $copyKanban->whitelist : ''))
         ),
         input(setClass('hidden'), set::name('copyKanbanID'), set::value($copyKanbanID)),
         input(setClass('hidden'), set::name('copyRegion'), set::value($copyRegion))

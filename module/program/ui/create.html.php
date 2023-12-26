@@ -148,9 +148,8 @@ formPanel
         formGroup
         (
             set::width('3/4'),
-            set::name('whitelist[]'),
             set::label($lang->whitelist),
-            set::control(array('type' => 'picker', 'multiple' => true, 'items' => $users))
+            whitelist(set::items($users))
         )
     )
 );

@@ -104,13 +104,7 @@ formPanel
         formGroup
         (
             set::label($lang->whitelist),
-            picker
-            (
-                set::name('whitelist'),
-                set::items($users),
-                set::multiple(true),
-                set::value($kanban->whitelist)
-            )
+            whitelist(set::items($users), set::value($kanban->whitelist))
         )
     )
 );

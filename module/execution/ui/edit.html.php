@@ -613,12 +613,7 @@ formPanel
         set::label($lang->whitelist),
         set::id('whitelistBox'),
         set::className($execution->acl == 'open' ? 'hidden' : ''),
-        picker
-        (
-            set::name('whitelist'),
-            set::items($users),
-            set::multiple(true)
-        )
+        whitelist(set::items($users), set::value($execution->whitelist))
     )
 );
 
