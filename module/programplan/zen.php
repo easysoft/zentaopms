@@ -11,17 +11,87 @@ declare(strict_types=1);
 class programplanZen extends programplan
 {
     /**
+     * Check legally date.
+     *
+     * @param  object      $plan
+     * @param  object      $project
+     * @param  object|null $parent
+     * @access private
+     * @return void
+     */
+    private function checkLegallyDate(object $plan, object $project, object|null $parent): void
+    {
+        $beginIsZeroDate = helper::isZeroDate($plan->begin);
+        $endIsZeroDate   = helper::isZeroDate($plan->end);
+        if($beginIsZeroDate) dao::$errors['begin'] = $this->lang->programplan->emptyBegin;
+        if($endIsZeroDate)   dao::$errors['end']   = $this->lang->programplan->emptyEnd;
+        if(!$beginIsZeroDate and !$endIsZeroDate and $plan->end < $plan->begin) dao::$errors['end'] = $this->lang->programplan->error->planFinishSmall;
+
+        if(!empty($parent))
+        {
+            if(!$beginIsZeroDate and $plan->begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
+            if(!$endIsZeroDate and $plan->end > $parent->end)       dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
+        }
+        if(!$beginIsZeroDate and $plan->begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->errorBegin, $project->begin);
+        if(!$endIsZeroDate and $plan->end > $project->end)       dao::$errors['end']   = sprintf($this->lang->programplan->errorEnd, $project->end);
+    }
+
+    /**
      * Process formData before use it to create programplan.
      *
-     * @param  object $formData
+     * @param  int       $projectID
+     * @param  int       $parentID
      * @access protected
-     * @return object
+     * @return array
      */
-    protected function beforeCreate(object $formData): object
+    protected function buildPlansForCreate(int $projectID, int $parentID): array
     {
-        $formData->setIF(empty($formData->data->code), 'code', array());
-        $formData->setIF(empty($formData->data->output), 'output', array());
-        return $formData;
+        $project = $this->loadModel('project')->getByID($projectID);
+        if($parentID) $parentStage = $this->programplan->getByID($parentID);
+
+        $fields = $this->config->programplan->form->create;
+        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
+        {
+            $field = trim($field);
+            if(isset($fields[$field])) $fields[$field]['required'] = true;
+        }
+
+        $totalPercent = 0;
+        $names  = $codes = array();
+        $plans  = form::batchData($fields)->get();
+        $orders = $this->programplan->computeOrders(array(), $plans);
+        foreach($plans as $plan)
+        {
+            $plan->days       = helper::diffDate($plan->end, $plan->begin) + 1;
+            $plan->project    = $projectID;
+            $plan->parent     = $parentID ? $parentID : $projectID;
+            $plan->order      = (int)array_shift($orders);
+            $plan->hasProduct = $project->hasProduct;
+            if(!empty($parentID) and !empty($parentStage) and $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
+            if(!empty($parentID) and !empty($parentStage)) $plan->acl = $parentStage->acl;
+
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
+                $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
+            }
+
+            /* Check duplicated names to avoid to save same names. */
+            if(in_array($plan->name, $names)) dao::$errors['name'] = empty($plan->type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
+            if(isset($plan->code))
+            {
+                if(in_array($plan->code, $codes)) dao::$errors['code'] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
+                if(empty($plan->code))            dao::$errors['code'] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
+            }
+
+            $totalPercent += $plan->percent;
+            $names[]       = $plan->name;
+            if(!empty($plan->code)) $codes[] = $plan->code;
+
+            $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null);
+        }
+        if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+        return $plans;
     }
 
     /**

@@ -306,6 +306,7 @@ class programTao extends programModel
         foreach($summary as $execution)
         {
             $executionID = $execution->execution;
+            if(!isset($executionPaths[$executionID])) continue;
             foreach($executionPaths[$executionID] as $nodeID)
             {
                 if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalLeftNotDel' => 0, 'totalConsumedNotDel' => 0);

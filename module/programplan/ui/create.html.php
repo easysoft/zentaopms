@@ -97,13 +97,6 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
-    /* If enabled set stage code, then append 'code' field to the required fields list. */
-    if(isset($config->setCode) && $config->setCode == 1)
-    {
-        $requiredFields = array_merge($requiredFields, array('code'=> true));
-        $fields['code']['required'] = true;
-    }
-
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
 
     $renderFields = implode(',', array_keys($requiredFields));
@@ -114,25 +107,14 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         $field['name'] = $name;
 
         /* Convert 'options' to 'items'. */
-        if(!empty($field['options']))
-        {
-            $field['items'] = $field['options'];
-        }
+        if(!empty($field['options'])) $field['items'] = $field['options'];
         unset($field['options']);
 
         /* Assgn item data to PM field. */
-        if($name == 'PM')
-        {
-            $field['items'] = $PMUsers;
-        }
+        if($name == 'PM') $field['items'] = $PMUsers;
 
-        /* Form field name is plural nouns, so remove the suffix 's' */
-        $name = trim($name, 's');
         /* Set hidden attribute. */
-        if(!str_contains($renderFields, ",$name,"))
-        {
-            $field['hidden'] = true;
-        }
+        if(!str_contains($renderFields, ",$name,")) $field['hidden'] = true;
 
         /* Sub-stage. */
         if($name == 'attribute' && !$enableOptionalAttr)
@@ -172,11 +154,8 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         {
             $item = new stdClass();
 
-            $item->name = $stage->name;
-            if(isset($config->setCode) && $config->setCode == 1)
-            {
-                $item->code = isset($stage->code) ? $stage->code : '';
-            }
+            $item->name      = $stage->name;
+            $item->code      = isset($stage->code) ? $stage->code : '';
             $item->percent   = $stage->percent;
             $item->attribute = $stage->type;
             $item->acl       = 'open';
@@ -193,14 +172,11 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     {
         $item = new stdClass();
 
-        $item->disabled   = !isset($plan->setMilestone);
-        $item->planIDList = $plan->id;
-        $item->type       = $plan->type;
-        $item->name       = $plan->name;
-        if(isset($config->setCode) && $config->setCode == 1)
-        {
-            $item->code = $plan->code;
-        }
+        $item->disabled     = !isset($plan->setMilestone);
+        $item->id           = $plan->id;
+        $item->type         = $plan->type;
+        $item->name         = $plan->name;
+        $item->code         = $plan->code;
         $item->PM           = $plan->PM;
         $item->percent      = $plan->percent;
         $item->attribute    = $plan->attribute;
@@ -212,11 +188,11 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->realEnd      = $plan->realEnd;
         $item->desc         = $plan->desc;
         $item->setMilestone = isset($plan->setMilestone) ? $plan->setMilestone : false;
+        $item->order        = $plan->order;
         if(in_array($config->edition, array('max', 'ipd')) && $executionType == 'stage')
         {
             $item->output = empty($plan->output) ? 0 : explode(',', $plan->output);
         }
-        $item->order     = $plan->order;
 
         $items[] = $item;
     }

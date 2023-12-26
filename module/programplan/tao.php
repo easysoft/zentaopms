@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 class programplanTao extends programplanModel
 {
-
     /**
      * 更新项目阶段。
      * update program plan.
@@ -551,13 +550,15 @@ class programplanTao extends programplanModel
      */
     protected function computeOrders(array $orders, array $plans):array
     {
-        if(!isset($orders)) $orders = array();
+        if(empty($orders)) $orders = array();
         asort($orders);
-        if(count($orders) < count($plans))
+
+        $planCount = count($plans);
+        if(count($orders) < $planCount)
         {
             $orderIndex = empty($orders) ? 0 : count($orders);
-            $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
-            for($i = $orderIndex; $i < count($plans); $i ++)
+            $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->limit(1)->fetch('id');
+            for($i = $orderIndex; $i < $planCount; $i ++)
             {
                 $lastID ++;
                 $orders[$i] = $lastID * 5;
@@ -705,6 +706,86 @@ class programplanTao extends programplanModel
                 }
             }
         }
+    }
 
+    /**
+     * Get linkProducts for create.
+     *
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function getLinkProductsForCreate(int $projectID, int $productID): array
+    {
+        $project = $this->fetchByID($projectID, 'project');
+
+        $linkProducts = array();
+        $linkBranches = array();
+        $productList  = $this->loadModel('product')->getProducts($projectID);
+        if($project->stageBy)
+        {
+            $linkProducts = array(0 => $productID);
+            if(!empty($productList)) $linkBranches = array(0 => $productList[$productID]->branches);
+        }
+        else
+        {
+            $linkProducts = array_keys($productList);
+            foreach($linkProducts as $index => $productID)
+            {
+                if(!empty($productList)) $linkBranches[$index] = $productList[$productID]->branches;
+            }
+        }
+
+        return array('products' => $linkProducts, 'branch' => $linkBranches);
+    }
+
+    /**
+     * 插入阶段数据。
+     * Insert stage.
+     * @param  object    $plan
+     * @param  object    $project
+     * @param  int       $productID
+     * @param  int       $parentID
+     * @access protected
+     * @return int|false
+     */
+    protected function insertStage(object $plan, object $project, int $productID, int $parentID): int|false
+    {
+        $account = $this->app->user->account;
+
+        unset($plan->id);
+        $plan->status        = 'wait';
+        $plan->stageBy       = $project->stageBy;
+        $plan->version       = 1;
+        $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
+        $plan->team          = substr($plan->name,0, 30);
+        $plan->openedBy      = $account;
+        $plan->openedDate    = helper::now();
+        $plan->openedVersion = $this->config->version;
+        if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
+        $this->dao->insert(TABLE_PROJECT)->data($plan)->exec();
+
+        if(dao::isError()) return false;
+
+        $stageID = (int)$this->dao->lastInsertID();
+        $this->insertProjectSpec($stageID, $plan);
+
+        /* Ipd project create default review points. */
+        if($project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $productID, $plan->attribute);
+
+        if($plan->type == 'kanban')
+        {
+            $execution = $this->execution->getByID($stageID);
+            $this->loadModel('kanban')->createRDKanban($execution);
+        }
+
+        $this->loadModel('execution')->createMainLib($project->id, $stageID);
+        $this->execution->addExecutionMembers($stageID, array($account, $plan->PM));
+
+        $this->setTreePath($stageID);
+        $this->computeProgress($stageID, 'create');
+
+        return $stageID;
     }
 }

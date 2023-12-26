@@ -82,10 +82,10 @@ class programplan extends control
         $this->productID = $this->commonAction($projectID, $productID);
         if($_POST)
         {
-            $formData = form::data($this->config->programplan->form->create);
-            $formData = $this->programplanZen->beforeCreate($formData);
+            $plans = $this->programplanZen->buildPlansForCreate($projectID, $planID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->programplan->create($formData, $projectID, $this->productID, $planID);
+            $this->programplan->create($plans, $projectID, $this->productID, $planID);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -147,7 +147,7 @@ class programplan extends control
 
         if($_POST)
         {
-            $formData = form::data($this->config->programplan->edit->form);
+            $formData = form::data($this->config->programplan->form->edit);
 
             $postData = $this->programplanZen->beforeEdit($formData);
             $postData->id = $planID;

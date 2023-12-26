@@ -3214,6 +3214,8 @@ class executionModel extends model
      */
     public function addProjectMembers(int $projectID = 0, array $members = array())
     {
+        if(empty($members)) return;
+
         $projectType = 'project';
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 

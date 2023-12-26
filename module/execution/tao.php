@@ -545,8 +545,11 @@ class executionTao extends executionModel
         $roles       = $this->loadModel('user')->getUserRoles(array_values($members));
         $today       = helper::today();
         $teamMembers = array();
+        $oldTeams    = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchPairs();
         foreach($members as $account)
         {
+            if(isset($oldTeams[$account])) continue;
+
             $member = new stdClass();
             $member->root    = $executionID;
             $member->type    = 'execution';
@@ -592,7 +595,7 @@ class executionTao extends executionModel
         $lib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-        if(dao::isError())return false;
+        if(dao::isError()) return false;
         return $this->dao->lastInsertID();
     }
 }
