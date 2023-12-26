@@ -3,7 +3,11 @@ author: Shujie Tian
 version: "1.0"
 fields:
   - field: account
-    range: 'root,sonar,gitea,gogs-admin,jenkins'
+    fields:
+    - field: account1
+      range: admin,user{9}
+    - field: account2
+      range: "[],1-9"
   - field: openID
     range: 1-100
   - field: providerType
