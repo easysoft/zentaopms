@@ -13,12 +13,13 @@ class sidebar extends wg
         'parent?:string',
         'preserve?:string',
         'dragToResize?:bool',
+        'toggleBtn?:bool',
         'onToggle?:function'
     );
 
     protected function build(): wg
     {
-        list($side, $showToggle, $width, $preserve, $parent, $maxWidth, $minWidth, $dragToResize, $onToggle) = $this->prop(array('side', 'showToggle', 'width', 'preserve', 'parent', 'maxWidth', 'minWidth', 'dragToResize', 'onToggle'));
+        list($side, $showToggle, $width, $preserve, $parent, $maxWidth, $minWidth, $dragToResize, $onToggle, $toggleBtn) = $this->prop(array('side', 'showToggle', 'width', 'preserve', 'parent', 'maxWidth', 'minWidth', 'dragToResize', 'onToggle', 'toggleBtn'));
         if($preserve === null)
         {
             global $app;
@@ -28,7 +29,7 @@ class sidebar extends wg
         (
             setClass('sidebar'),
             width($width),
-            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth, 'dragToResize' => $dragToResize, 'onToggle' => $onToggle)),
+            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth, 'dragToResize' => $dragToResize, 'onToggle' => $onToggle, 'toggleBtn' => $toggleBtn)),
             set($this->getRestProps()),
             $this->children()
         );
