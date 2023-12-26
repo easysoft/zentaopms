@@ -25,9 +25,9 @@ $config->zanode->form->edit['diskSize'] = array('type' => 'float',  'required' =
 $config->zanode->form->edit['osName']   = array('type' => 'string', 'required' => false);
 $config->zanode->form->edit['desc']     = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
-$config->zanode->form->createImage = array();
-$config->zanode->form->createImage['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
-$config->zanode->form->createImage['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
+$config->zanode->form->createimage = array();
+$config->zanode->form->createimage['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
+$config->zanode->form->createimage['desc'] = array('type' => 'string', 'required' => false, 'control' => 'editor');
 
 $config->zanode->form->createSnapshot = array();
 $config->zanode->form->createSnapshot['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');

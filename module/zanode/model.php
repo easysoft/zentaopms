@@ -107,7 +107,7 @@ class zanodemodel extends model
             'vm'      => $node->name
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(!empty($result) and $result->code == 'success')
         {
