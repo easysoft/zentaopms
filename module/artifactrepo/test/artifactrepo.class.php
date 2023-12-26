@@ -89,4 +89,20 @@ class artifactrepoTest
         if(dao::isError()) return dao::getError();
         return $build;
     }
+
+    /**
+     * 根据id获取制品库。
+     * Get artifactrepo by id.
+     *
+     * @param  int                $id
+     * @access public
+     * @return object|false|array
+     */
+    public function getByIDTest(int $id): object|false|array
+    {
+        $artifactRepo = $this->objectModel->getByID($id);
+
+        if(dao::isError()) return dao::getError();
+        return $artifactRepo;
+    }
 }
