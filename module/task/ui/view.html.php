@@ -326,7 +326,12 @@ detailBody
                     item
                     (
                         set::name($lang->task->pri),
-                        priLabel($task->pri, set::text($lang->task->priList))
+                        priLabel
+                        (
+                            setClass('align-sub'),
+                            $task->pri,
+                            set::text($lang->task->priList)
+                        )
                     )
                 )
             ),
