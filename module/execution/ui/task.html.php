@@ -23,8 +23,8 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreate      = hasPriv('task', 'create');
 $canBatchCreate = hasPriv('task', 'batchCreate');
-$canImportTask  = hasPriv('task', 'importTask');
-$canImportBug   = hasPriv('task', 'importBug');
+$canImportTask  = hasPriv('execution', 'importTask');
+$canImportBug   = hasPriv('execution', 'importBug');
 
 $this->loadModel('task');
 $importItems = array();
