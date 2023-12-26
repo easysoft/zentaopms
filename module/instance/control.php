@@ -564,48 +564,6 @@ class instance extends control
     }
 
     /**
-     * 启用/禁用LDAP。
-     * Switch LDAP between enable and disable by ajax.
-     *
-     * @param  int    $instanceID
-     * @access public
-     * @return void
-     */
-    public function ajaxSwitchLDAP(int $instanceID)
-    {
-        $instance = $this->instance->getByID($instanceID);
-        $postData = fixer::input('post')->get();
-
-        if($this->instance->switchLDAP($instance, $postData->enableLDAP == 'true'))
-        {
-            $this->send(array('result' => 'success', 'message' => ''));
-        }
-
-        $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->switchLDAPFailed));
-    }
-
-    /**
-     * 启用/禁用SMTP。
-     * Switch SMTP between enable and disable by ajax.
-     *
-     * @param  int    $instanceID
-     * @access public
-     * @return void
-     */
-    public function ajaxSwitchSMTP($instanceID)
-    {
-        $instance = $this->instance->getByID($instanceID);
-        $postData = fixer::input('post')->get();
-
-        if($this->instance->switchSMTP($instance, $postData->enableSMTP == 'true'))
-        {
-            $this->send(array('result' => 'success', 'message' => ''));
-        }
-
-        $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->switchSMTPFailed));
-    }
-
-    /**
      * 更新自定义配置。
      * Update custom settings by ajax. For example: env variables.
      *
@@ -632,22 +590,6 @@ class instance extends control
         }
 
         $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->setEnvFailed));
-    }
-
-    /**
-     * 删除过期的demo实例。
-     * Delete expired demo instance by cron.
-     *
-     * @access public
-     * @return void
-     */
-    public function deleteExpiredDemoInstance()
-    {
-        if(empty($this->config->demoAccounts)) return $this->send(array('result' => 'fail', 'message' => 'This api is only for demo enviroment.'));
-
-        $this->instance->deleteExpiredDemoInstance();
-
-        $this->send(array('result' => 'success', 'message' => ''));
     }
 
     /**

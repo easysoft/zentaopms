@@ -147,50 +147,6 @@ class InstanceModel extends model
     }
 
     /**
-     * Get instance list that has been enabled LDAP.
-     *
-     * @access public
-     * @return array
-     */
-    public function getListEnabledLDAP()
-    {
-        $instances = $this->dao->select('*')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->andWhere('length(ldapSnippetName) > 0')->fetchAll('id');
-
-        $spaces = $this->dao->select('*')->from(TABLE_SPACE)
-            ->where('deleted')->eq(0)
-            ->andWhere('id')->in(helper::arrayColumn($instances, 'space'))
-            ->fetchAll('id');
-
-        foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
-
-        return $instances;
-    }
-
-    /**
-     * Count instance which is enabled LDAP.
-     *
-     * @access public
-     * @return int
-     */
-    public function countLDAP()
-    {
-        $count = $this->dao->select('count(*) as ldapQty')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->andWhere('length(ldapSnippetName) > 0')->fetch();
-        return $count->ldapQty;
-    }
-
-    /**
-     * Count instance which is enabled SMTP.
-     *
-     * @access public
-     * @return int
-     */
-    public function countSMTP()
-    {
-        $count = $this->dao->select('count(*) as Qty')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->andWhere('length(smtpSnippetName) > 0')->fetch();
-        return $count->Qty;
-    }
-
-    /**
      * Get quantity of total installed services.
      *
      * @access public
@@ -221,95 +177,6 @@ class InstanceModel extends model
         $instance = $this->getByID($instanceID);
         $pinned = $instance->pinned == '0' ? '1' : '0';
         $this->dao->update(TABLE_INSTANCE)->set('pinned')->eq($pinned)->where('id')->eq($instanceID)->exec();
-    }
-
-    /**
-     * Switch LDAP between enable and disable.
-     *
-     * @param  object $instance
-     * @param  bool   $enableSMTP
-     * @access public
-     * @return bool
-     */
-    public function switchSMTP($instance, $enableSMTP)
-    {
-        $this->loadModel('system');
-        $snippetName = $this->system->smtpSnippetName();
-
-        $settings = new stdclass;
-        if($enableSMTP)
-        {
-            $settings->settings_snippets = [$snippetName];
-        }
-        else
-        {
-            $settings->settings_snippets = [$snippetName . '-'];
-        }
-
-        $success = $this->cne->updateConfig($instance, $settings);
-        if(!$success)
-        {
-            dao::$errors[] = $this->lang->instance->errors->failToAdjustMemory;
-            return false;
-        }
-
-        if($enableSMTP)
-        {
-            $this->dao->update(TABLE_INSTANCE)->set('smtpSnippetName')->eq($snippetName)->where('id')->eq($instance->id)->exec();
-            $this->action->create('instance', $instance->id, 'enableSMTP');
-        }
-        else
-        {
-            $this->dao->update(TABLE_INSTANCE)->set('smtpSnippetName')->eq('')->where('id')->eq($instance->id)->exec();
-            $this->action->create('instance', $instance->id, 'disableSMTP');
-        }
-
-        return true;
-    }
-
-    /**
-     * Switch LDAP between enable and disable.
-     *
-     * @param  object $instance
-     * @param  bool   $enableLDAP
-     * @access public
-     * @return bool
-     */
-    public function switchLDAP($instance, $enableLDAP)
-    {
-        $this->loadModel('system');
-        $snippetName = $this->system->ldapSnippetName();
-
-        $settings = new stdclass;
-        $settings->force_restart = true;
-        if($enableLDAP)
-        {
-            $settings->settings_snippets = [$snippetName];
-        }
-        else
-        {
-            $settings->settings_snippets = [$snippetName . '-'];
-        }
-
-        $success = $this->cne->updateConfig($instance, $settings);
-        if(!$success)
-        {
-            dao::$errors[] = $this->lang->instance->errors->failToAdjustMemory;
-            return false;
-        }
-
-        if($enableLDAP)
-        {
-            $this->dao->update(TABLE_INSTANCE)->set('ldapSnippetName')->eq($snippetName)->where('id')->eq($instance->id)->exec();
-            $this->action->create('instance', $instance->id, 'enableLDAP');
-        }
-        else
-        {
-            $this->dao->update(TABLE_INSTANCE)->set('ldapSnippetName')->eq('')->where('id')->eq($instance->id)->exec();
-            $this->action->create('instance', $instance->id, 'disableLDAP');
-        }
-
-        return true;
     }
 
     /**
@@ -1193,57 +1060,6 @@ class InstanceModel extends model
     }
 
     /**
-     * Restore instance by data from k8s cluster.
-     *
-     * @access public
-     * @return void
-     */
-    public function restoreInstanceList()
-    {
-        $k8AppList  = $this->cne->instancelist();
-        $k8NameList = array_keys($k8AppList);
-
-        //软删除不存在的数据
-        $this->dao->update(TABLE_INSTANCE)->set('deleted')->eq(1)->where('k8name')->notIn($k8NameList)->exec();
-        foreach($k8AppList as $k8App)
-        {
-            $existInstance = $this->dao->select('id')->from(TABLE_INSTANCE)->where('k8name')->eq($k8App->name)->fetch();
-            if($existInstance) continue;
-
-            $this->loadModel('store');
-            $marketApp = $this->store->getAppInfo(0, false, $k8App->chart, $k8App->version,  $k8App->channel);
-            if(empty($marketApp)) continue;
-
-            $instanceData = new stdclass;
-            $instanceData->appId        = $marketApp->id;
-            $instanceData->appName      = $marketApp->alias;
-            $instanceData->name         = $marketApp->alias;
-            $instanceData->logo         = $marketApp->logo;
-            $instanceData->desc         = $marketApp->desc;
-            $instanceData->introduction = isset($marketApp->introduction) ? $marketApp->introduction : $marketApp->desc;
-            $instanceData->source       = 'cloud';
-            $instanceData->channel      = $k8App->channel;
-            $instanceData->chart        = $k8App->chart;
-            $instanceData->appVersion   = $marketApp->app_version;
-            $instanceData->version      = $k8App->version;
-            $instanceData->k8name       = $k8App->name;
-            $instanceData->status       = 'stopped';
-
-            $parsedK8Name = $this->parseK8Name($k8App->name);
-
-            $instanceData->createdBy = $k8App->username ? $k8App->username : $parsedK8Name->createdBy;
-            $instanceData->createdAt =  $parsedK8Name->createdAt;
-
-            $space = $this->dao->select('id,k8space')->from(TABLE_SPACE)->where('k8space')->eq($k8App->namespace)->fetch();
-            if(empty($space)) $space = $this->loadModel('space')->defaultSpace($instanceData->createdBy);
-
-            $instanceData->space = $space->id;
-
-            $this->dao->insert(TABLE_INSTANCE)->data($instanceData)->exec();
-        }
-    }
-
-    /**
      * Parse K8Name to get more data: chart, created time, user name.
      *
      * @param  string $k8Name
@@ -1265,33 +1081,6 @@ class InstanceModel extends model
         $parsedData->createdAt = date('Y-m-d H:i:s', strtotime($createdAt));
 
         return $parsedData;
-    }
-
-    /**
-     * Delete expired instances if run in demo mode.
-     *
-     * @access public
-     * @return void
-     */
-    public function deleteExpiredDemoInstance()
-    {
-        $demoAccounts = array_filter(explode(',', $this->config->demoAccounts));
-
-        $instanceList = $this->dao->select('*')->from(TABLE_INSTANCE)
-            ->where('deleted')->eq(0)
-            ->andWhere('createdBy')->in($demoAccounts)
-            ->fetchAll();
-        if(empty($instanceList)) return;
-
-        $spaceList = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->in(helper::arrayColumn($instanceList, 'space'))->fetchAll('id');
-
-        foreach($instanceList as $instance)
-        {
-            $instance->spaceData = zget($spaceList, $instance->space);
-            if(empty($instance->spaceData)) continue;
-
-            $this->uninstall($instance);
-        }
     }
 
     /**
