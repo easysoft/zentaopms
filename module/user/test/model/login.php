@@ -53,7 +53,7 @@ r($tester->session->user) && p('account,admin') && e('admin,1'); // 登录成功
 
 /* 检测 admin 用户锁定状态。*/
 $user2 = $userTest->getByIdTest($user2->account);
-r($user2)                                  && p('account,fails,locked') && e('admin,0,``'); // 数据库中记录的 admin 用户登录失败次数为 0，锁定时间为空。
+r($user2)                                  && p('account,fails,locked') && e('admin,0,~~'); // 数据库中记录的 admin 用户登录失败次数为 0，锁定时间为空。
 r($tester->session->loginFails)            && p()                       && e(0);            // session 中未记录登录失败次数。
 r($tester->session->{'admin.loginLocked'}) && p()                       && e(0);            // session 中未记录 admin 用户锁定时间。
 
@@ -87,13 +87,13 @@ r($tester->cookie->zp)        && p() && e('0');   // 未勾选保持登录状态
  * 检测 user1 用户登录后的信息。
  */
 $result = $userTest->loginTest($user3, false, true);              // 不记录日志，勾选保持登录状态。
-r($result)                && p('account,admin') && e('user1,``'); // 登录成功，返回的用户是 user1，不是超级管理员。
-r($app->user)             && p('account,admin') && e('user1,``'); // 登录成功，$app 对象的中的用户是 user1，不是超级管理员。
-r($tester->session->user) && p('account,admin') && e('user1,``'); // 登录成功，session 中的用户是 user1，不是超级管理员。
+r($result)                && p('account,admin') && e('user1,~~'); // 登录成功，返回的用户是 user1，不是超级管理员。
+r($app->user)             && p('account,admin') && e('user1,~~'); // 登录成功，$app 对象的中的用户是 user1，不是超级管理员。
+r($tester->session->user) && p('account,admin') && e('user1,~~'); // 登录成功，session 中的用户是 user1，不是超级管理员。
 
 /* 检测 user1 用户锁定状态。*/
 $user3 = $userTest->getByIdTest($user3->account);
-r($user3)                                  && p('account,fails,locked') && e('user1,0,``'); // 数据中记录的 user1 用户登录失败次数为 0，锁定时间为空。
+r($user3)                                  && p('account,fails,locked') && e('user1,0,~~'); // 数据中记录的 user1 用户登录失败次数为 0，锁定时间为空。
 r($tester->session->loginFails)            && p()                       && e(0);            // session 中未记录登录失败次数。
 r($tester->session->{'user1.loginLocked'}) && p()                       && e(0);            // session 中未记录 user1 用户锁定时间。
 

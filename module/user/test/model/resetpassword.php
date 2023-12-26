@@ -43,8 +43,8 @@ r($result) && p('errors:password1') && e('两次密码应该相同。'); // admi
 
 $result = $userTest->resetPasswordTest($user5);
 r($result) && p('result')           && e(1);    // user1 用户存在，且密码符合要求，返回 true。
-r($result) && p('errors:0')         && e('``'); // user1 用户存在，且密码符合要求，不提示错误信息。
-r($result) && p('errors:password1') && e('``'); // user1 用户存在，且密码符合要求，不提示错误信息。
+r($result) && p('errors:0')         && e('~~'); // user1 用户存在，且密码符合要求，不提示错误信息。
+r($result) && p('errors:password1') && e('~~'); // user1 用户存在，且密码符合要求，不提示错误信息。
 
 $resetUser = $userTest->getByIdTest($user5->account);
 r($resetUser->password == $password) && p() && e(1); // user1 用户密码重置成功。

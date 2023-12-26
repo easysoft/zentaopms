@@ -61,8 +61,8 @@ $config->vision = 'rnd';
 $executions = $userTest->getExecutionsTest('admin');
 r(count($executions)) && p() && e(5); // 研发综合界面下 admin 用户参与的执行有 5 个。
 
-r($executions) && p('6:status,delay,projectName,assignedToMeTasks')  && e('wait,``,项目1,3');      // 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 3。
+r($executions) && p('6:status,delay,projectName,assignedToMeTasks')  && e('wait,~~,项目1,3');      // 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 3。
 r($executions) && p('7:status,delay,projectName,assignedToMeTasks')  && e('wait,1,项目2,2');       // 执行 7 的状态为 wait，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 2。
 r($executions) && p('8:status,delay,projectName,assignedToMeTasks')  && e('doing,1,项目2,1');      // 执行 8 的状态为 doing，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 1。
-r($executions) && p('9:status,delay,projectName,assignedToMeTasks')  && e('suspended,``,项目2,1'); // 执行 9 的状态为 suspended，没有延期，项目名称为项目 2，指派给 admin 的任务数是 1。
-r($executions) && p('10:status,delay,projectName,assignedToMeTasks') && e('closed,``,项目3,1');    // 执行 10 的状态为 closed，没有延期，项目名称为项目 3，指派给 admin 的任务数是 1。
+r($executions) && p('9:status,delay,projectName,assignedToMeTasks')  && e('suspended,~~,项目2,1'); // 执行 9 的状态为 suspended，没有延期，项目名称为项目 2，指派给 admin 的任务数是 1。
+r($executions) && p('10:status,delay,projectName,assignedToMeTasks') && e('closed,~~,项目3,1');    // 执行 10 的状态为 closed，没有延期，项目名称为项目 3，指派给 admin 的任务数是 1。

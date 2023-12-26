@@ -16,13 +16,13 @@ $usersToAppend = array('user1', 'user2', 'user3');
 $userModel = $tester->loadModel('user');
 
 $userModel->processMoreLink($params, $usersToAppend, 0, 0);
-r($config->user) && p('moreLink') && e('``'); // maxCount 参数为 0，更多链接为空。
+r($config->user) && p('batchCreate,moreLink') && e('10,~~'); // maxCount 参数为 0，更多链接为空。
 
 $userModel->processMoreLink($params, $usersToAppend, 1, 2);
-r($config->user) && p('moreLink') && e('``'); // maxCount 参数不为 0 且小于 userCount 参数，更多链接为空。
+r($config->user) && p('moreLink') && e('~~'); // maxCount 参数不为 0 且小于 userCount 参数，更多链接为空。
 
 $userModel->processMoreLink($params, $usersToAppend, 2, 1);
-r($config->user) && p('moreLink') && e('``'); // maxCount 参数不为 0 且大于 userCount 参数，更多链接为空。
+r($config->user) && p('moreLink') && e('~~'); // maxCount 参数不为 0 且大于 userCount 参数，更多链接为空。
 
 $config->webRoot     = '/';
 $config->requestType = 'GET';

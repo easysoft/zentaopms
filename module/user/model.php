@@ -293,9 +293,9 @@ class userModel extends model
      * @param  int          $maxCount
      * @param  int          $userCount
      * @access public
-     * @return void
+     * @return bool
      */
-    public function processMoreLink(string $params, string|array $usersToAppended, int $maxCount, int $userCount): void
+    public function processMoreLink(string $params, string|array $usersToAppended, int $maxCount, int $userCount): bool
     {
         unset($this->config->user->moreLink);
         if($maxCount && $maxCount == $userCount)
@@ -306,6 +306,8 @@ class userModel extends model
             $moreLink = helper::createLink('user', 'ajaxGetMore');
             $this->config->user->moreLink = $moreLink . (strpos($moreLink, '?') === false ? '?' : '&') . "params=" . base64_encode($moreLinkParams);
         }
+
+        return true;
     }
 
     /**
@@ -1200,13 +1202,14 @@ class userModel extends model
      *
      * @param  object $user
      * @access public
-     * @return void
+     * @return bool
      */
-    public function keepLogin(object $user): void
+    public function keepLogin(object $user): bool
     {
         helper::setcookie('keepLogin', 'on');
         helper::setcookie('za', $user->account);
         helper::setcookie('zp', sha1($user->account . $user->password . $this->server->request_time));
+        return true;
     }
 
     /**
@@ -2883,15 +2886,17 @@ class userModel extends model
      * Set the first super admin as current user.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function su()
+    public function su(): bool
     {
         $company = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch();
         $admins  = explode(',', trim($company->admins, ','));
         if(empty($admins[0])) helper::end('No admin users.');
 
         $this->app->user = $this->getById($admins[0]);
+
+        return true;
     }
 
     /**

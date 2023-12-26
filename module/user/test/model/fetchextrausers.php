@@ -29,10 +29,10 @@ $users = $userTest->fetchExtraUsersTest(array('admin', 'user1'), 'id, account', 
 r(count($users)) && p()             && e(2);       // usersToAppended 参数为数组，包含 2 个用户，指定查找 id 和 account 字段，返回 2 个用户。
 r($users)        && p('0:id')       && e(1);       // 返回的第 1 个用户的 id 字段值为 1。
 r($users)        && p('0:account')  && e('admin'); // 返回的第 1 个用户的 account 字段值为 admin。
-r($users)        && p('0:realname') && e('``');    // 返回的第 1 个用户没有 realname 字段。
+r($users)        && p('0:realname') && e('~~');    // 返回的第 1 个用户没有 realname 字段。
 r($users)        && p('1:id')       && e(2);       // 返回的第 2 个用户的 id 字段值为 2。
 r($users)        && p('1:account')  && e('user1'); // 返回的第 2 个用户的 account 字段值为 user1。
-r($users)        && p('0:realname') && e('``');    // 返回的第 2 个用户没有 realname 字段。
+r($users)        && p('0:realname') && e('~~');    // 返回的第 2 个用户没有 realname 字段。
 
 $users = $userTest->fetchExtraUsersTest(array('admin', 'user1'), 'id, account', 'id');
 r(count($users))      && p()    && e(2); // usersToAppended 参数为数组，包含 2 个用户，指定查找 id 和 account 字段，指定以 id 字段为键，返回 2 个用户。

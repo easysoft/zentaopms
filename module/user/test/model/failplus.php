@@ -40,14 +40,14 @@ r($userModel->failPlus($account3))             && p() && e(1); // 用户名合�
 r($_SESSION['loginFails'])                     && p() && e(2); // 用户名合法且存在时，session 中失败次数为 2 。
 r(isset($_SESSION["{$account3}.loginLocked"])) && p() && e(0); // 用户名合法且存在时，session 中失败次数未达到最大失败次数限制，session 中该账号锁定时间为空 。
 $user = $userModel->dao->select('fails, locked')->from(TABLE_USER)->where('account')->eq($account3)->fetch();
-r($user)                                       && p('fails, locked') && e('1,``'); // 用户名合法且存在时，$account3 账号未达到最大失败次数限制，数据库中失败次数为 1 ，账号未锁定。
+r($user)                                       && p('fails, locked') && e('1,~~'); // 用户名合法且存在时，$account3 账号未达到最大失败次数限制，数据库中失败次数为 1 ，账号未锁定。
 
 /* 第二次测试用户名合法且存在的情况，未达到最大失败次数限制。*/
 r($userModel->failPlus($account3))             && p() && e(2);                 // 用户名合法且存在时，第二次失败返回 2 。
 r($_SESSION['loginFails'])                     && p() && e(3);                 // 用户名合法且存在时，session 中失败次数为 3 。
 r($_SESSION["{$account3}.loginLocked"] == date('Y-m-d H:i:s')) && p() && e(1); // 用户名合法且存在时，session 中失败次数达到最大失败次数限制，session 中该账号锁定时间为当前时间 。
 $user = $userModel->dao->select('fails, locked')->from(TABLE_USER)->where('account')->eq($account3)->fetch();
-r($user)                                       && p('fails, locked') && e('2,``'); // 用户名合法且存在时，$account3 账号未达到最大失败次数限制，数据库中失败次数为 2 ，账号未锁定。
+r($user)                                       && p('fails, locked') && e('2,~~'); // 用户名合法且存在时，$account3 账号未达到最大失败次数限制，数据库中失败次数为 2 ，账号未锁定。
 
 /* 第三次测试用户名合法且存在的情况，达到最大失败次数限制。*/
 r($userModel->failPlus($account3))             && p() && e(3);                 // 用户名合法且存在时，第三次失败返回 3 。
