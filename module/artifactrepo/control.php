@@ -12,6 +12,7 @@
 class artifactrepo extends control
 {
     /**
+     * 制品库列表页面。
      * Browse artifactrepo.
      *
      * @param  int    $param
