@@ -142,4 +142,21 @@ class ciTest
 
         return $this->objectModel->dao->select('id, name, status')->from(TABLE_COMPILE)->where('deleted')->eq('0')->fetchAll('id');
     }
+
+    /**
+     * Test saveCompile method.
+     *
+     * @param  int    $compileID
+     * @param  string $response
+     * @access public
+     * @return string
+     */
+    public function saveCompileTest(int $compileID, string $response): string
+    {
+        $compile = $this->objectModel->getCompileByID($compileID);
+        $this->objectModel->saveCompile($response, $compile, "{$compile->account}:{$compile->token}", $compile->url);
+
+        $compile = $this->objectModel->getCompileByID($compileID);
+        return str_contains($compile->logs, 'Finished');
+    }
 }
