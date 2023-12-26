@@ -684,19 +684,19 @@ class zanodemodel extends model
     }
 
     /**
+     * 通过 mac 地址获取执行节点。
      * Get Node by mac address.
      *
-     * @param  string $mac
-     * @return object
+     * @param  string       $mac
+     * @access public
+     * @return object|false
      */
-    public function getNodeByMac($mac)
+    public function getNodeByMac(string $mac): object|bool
     {
-        $node = $this->dao->select('*')->from(TABLE_ZAHOST)
-            ->where('mac')->eq($mac)
-            ->fetch();
-        if(empty($node)) return $node;
+        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('mac')->eq($mac)->fetch();
+        if(empty($node)) return false;
 
-        $host         = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : $node;
+        $host = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : $node;
         $host->status = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
 
         if($node->status == 'running' || $node->status == 'ready')
