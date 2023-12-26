@@ -103,8 +103,9 @@ class ciModel extends model
         if($compile->engine != 'gitlab') $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         if(strripos($response, "404") > -1)
         {
-            $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->pipeline, $compile->queue);
-            $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
+            $jenkinsServer = strpos($compile->pipeline, '/job/') === 0 ? $jenkinsServer . $compile->pipeline : $jenkinsServer . '/job/' . $compile->pipeline;
+            $infoUrl       = sprintf("%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->queue);
+            $response      = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
@@ -115,7 +116,7 @@ class ciModel extends model
                 if(empty($result)) return false;
                 $this->updateBuildStatus($compile, $result);
 
-                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->pipeline, $buildNumber);
+                $logUrl   = sprintf('%s/%s/consoleText', $jenkinsServer, $buildNumber);
                 $response = common::http($logUrl, '', array(CURLOPT_USERPWD => $userPWD));
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
             }
