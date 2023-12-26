@@ -1,0 +1,16 @@
+title: zt_artifactrepo
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    prefix: '制品库'
+    range: 1-100
+  - field: products
+    range: 1-5
+  - field: serverID
+    range: 1-6
+  - field: repoName
+    prefix: '代码库'
+    range: 1-100
