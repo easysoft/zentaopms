@@ -1,18 +1,29 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('story')->gen(10);
-zdTable('storyspec')->gen(30);
-
 /**
 
 title=测试 storyModel->activate();
 cid=1
 pid=1
 
+- 查看激活之前的需求状态属性status @draft
+- 查看激活之前的需求状态属性status @active
+- 查看激活之前的需求状态属性status @closed
+- 查看激活之前的需求状态属性status @changing
+- 查看激活之后的需求状态属性status @active
+- 查看激活之后的需求状态属性status @active
+- 查看激活之后的需求状态属性status @active
+- 查看激活之后的需求状态属性status @active
+
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('story')->gen(10);
+zdTable('storyreview')->gen(0);
+zdTable('action')->gen(0);
+zdTable('storyspec')->gen(30);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('story');
@@ -42,4 +53,3 @@ r($afterActivate1)  && p('status') && e('active');  //查看激活之后的需�
 r($afterActivate2)  && p('status') && e('active');  //查看激活之后的需求状态
 r($afterActivate3)  && p('status') && e('active');  //查看激活之后的需求状态
 r($afterActivate4)  && p('status') && e('active');  //查看激活之后的需求状态
-

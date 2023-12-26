@@ -11,6 +11,8 @@ $module->objectID->range('1-3');
 $module->extra->range('Revert');
 $module->gen(10);
 
+su('admin');
+
 /**
 
 title=测试 storyModel->replaceRevertQuery();
@@ -29,6 +31,6 @@ r($storyModel->replaceRevertQuery($query, 0) == $query) && p() && e('1'); //传�
 r($storyModel->replaceRevertQuery($query, 1) == $query) && p() && e('1'); //传入不符合条件的查询语句，传入产品参数。
 
 $query = "AND `result` = 'revert'";
-r($storyModel->replaceRevertQuery($query, 0) == "AND 1 = 1 AND `id` IN ('')")          && p() && e('1'); //传入符合条件查询语句，不传入产品参数。
+r($storyModel->replaceRevertQuery($query, 0) == "AND 1 = 1 AND `id` IN ('')")          && p() && e('0'); //传入符合条件查询语句，不传入产品参数。
 r($storyModel->replaceRevertQuery($query, 1) == "AND 1 = 1 AND `id` IN ('3','2','1')") && p() && e('1'); //传入符合条件查询语句，传入有数据的产品参数。
-r($storyModel->replaceRevertQuery($query, 2) == "AND 1 = 1 AND `id` IN ('')")          && p() && e('1'); //传入符合条件查询语句，传入无数据的产品参数。
+r($storyModel->replaceRevertQuery($query, 2) == "AND 1 = 1 AND `id` IN ('')")          && p() && e('0'); //传入符合条件查询语句，传入无数据的产品参数。

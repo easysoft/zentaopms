@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 $story = zdTable('story');
 $story->module->range('1-6');
@@ -13,8 +12,7 @@ $module->root->range(1);
 $module->gen(20);
 zdTable('product')->gen(1);
 
-$_SESSION['storyOnlyCondition']  = true;
-$_SESSION['storyQueryCondition'] = "`id` < 20";
+su('admin');
 
 /**
 
@@ -27,6 +25,9 @@ pid=1
 global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
+
+$_SESSION['storyOnlyCondition']  = true;
+$_SESSION['storyQueryCondition'] = "`id` < 20";
 
 $data = $tester->story->getDataOfStoriesPerModule();
 

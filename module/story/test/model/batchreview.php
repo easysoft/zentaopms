@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 $story = zdTable('story');
 $story->product->range(1);
@@ -29,6 +28,8 @@ $storyReview->reviewer->range('admin');
 $storyReview->version->range('1');
 $storyReview->gen(30);
 
+su('admin');
+
 /**
 
 title=测试 storyModel->batchReview();
@@ -47,10 +48,10 @@ $twin       = $story->objectModel->fetchByID(30);
 $review2    = $story->batchReviewTest($storyIdList2, 'reject', 'done');
 $reviewList = $story->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll('story');
 
-r($review1[1]) && p('status') && r('active');
-r($twin)       && p('status') && r('active');
-r($review2[2]) && p('status') && r('closed');
-r($reviewList[1])  && p('reviewer,result') && r('admin,pass');
-r($reviewList[2])  && p('reviewer,result') && r('admin,reject');
-r($reviewList[28]) && p('reviewer,result') && r('admin,pass');
-r($reviewList[30]) && p('reviewer,result') && r('admin,pass');
+r($review1[1]) && p('status') && e('active');
+r($twin)       && p('status') && e('active');
+r($review2[2]) && p('status') && e('closed');
+r($reviewList[1])  && p('reviewer,result') && e('admin,pass');
+r($reviewList[2])  && p('reviewer,result') && e('admin,reject');
+r($reviewList[28]) && p('reviewer,result') && e('admin,pass');
+r($reviewList[30]) && p('reviewer,result') && e('admin,pass');

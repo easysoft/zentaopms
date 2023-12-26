@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 storyModel->isSuperReview();
+title=测试 storyModel->isSuperReviewer();
 cid=1
 pid=1
 

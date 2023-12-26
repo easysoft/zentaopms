@@ -31,18 +31,18 @@ $_SESSION['storyOnlyCondition']  = true;
 $_SESSION['storyQueryCondition'] = ' `id` < 10';
 
 $postData->exportType = 'selected';
-$stories1 = $tester->story->getExportStories('id_desc', 'story', $postData);
+$stories1 = $tester->story->getExportStories('id_desc', 'story', clone($postData));
 
 $postData->exportType = 'all';
-$stories2 = $tester->story->getExportStories('id_desc', 'story', $postData);
+$stories2 = $tester->story->getExportStories('id_desc', 'story', clone($postData));
 
 $_SESSION['storyOnlyCondition']  = false;
 $_SESSION['storyQueryCondition'] = "SELECT * FROM `zt_story` WHERE `status` = 'active'";
 $postData->exportType = 'selected';
-$stories3 = $tester->story->getExportStories('id_desc', 'story', $postData);
+$stories3 = $tester->story->getExportStories('id_desc', 'story', clone($postData));
 
 $postData->exportType = 'all';
-$stories4 = $tester->story->getExportStories('id_desc', 'story', $postData);
+$stories4 = $tester->story->getExportStories('id_desc', 'story', clone($postData));
 
 r(count($stories1)) && p() && e('2');  //查看只保存导出条件，导出选中需求数
 r(count($stories2)) && p() && e('9');  //查看只保存导出条件，导出全部需求数

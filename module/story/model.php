@@ -383,7 +383,7 @@ class storyModel extends model
         if(strpos($orderBy, 'module') !== false)
         {
             $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
-            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*, t3.path')
                 ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
@@ -1098,13 +1098,14 @@ class storyModel extends model
         $account       = $this->app->user->account;
         $reviewedTwins = array();
         $this->loadModel('action');
+        $this->app->loadLang('product');
 
         $storyIdList = array_filter($storyIdList);
         foreach($storyIdList as $index => $storyID)
         {
             /* 处理选中的子需求的ID，截取-后的子需求ID。*/
             /* Process selected child story ID. */
-            if(strpos($storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
         }
 
         $oldStories          = $this->getByList($storyIdList);
@@ -1984,6 +1985,7 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($order)
             ->fetchAll();
+
         if(!$stories) return array();
         return $this->formatStories($stories, $type, $limit);
     }
@@ -3801,7 +3803,7 @@ class storyModel extends model
         $rejectCount  = 0;
         $revertCount  = 0;
         $clarifyCount = 0;
-        $reviewRule   = $this->config->story->reviewRules;
+        $reviewRule   = !empty($this->config->story->reviewRules) ? $this->config->story->reviewRules : '';
         foreach($reviewerList as $result)
         {
             $passCount    = $result == 'pass'    ? $passCount    + 1 : $passCount;

@@ -13,7 +13,7 @@ cid=1
 pid=1
 
 */
-global $tester;
+global $tester, $config;
 $tester->loadModel('story');
 include($tester->story->app->basePath . DS . 'module' . DS . 'story' . DS . 'control.php');
 $tester->story->app->user->admin = true;
@@ -24,6 +24,7 @@ $requirement = $tester->story->fetchById(1);
 $story       = $tester->story->fetchById(2);
 $execution   = $tester->story->loadModel('project')->fetchById(11);
 
+$config->requestType = 'PATH_INFO';
 $requirementOperateMenu1 = $tester->story->buildOperateMenu($requirement, 'view', null, 'requirement');
 $storyOperateMenu1       = $tester->story->buildOperateMenu($story, 'view', null, 'story');
 

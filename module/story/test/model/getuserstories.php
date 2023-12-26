@@ -28,8 +28,9 @@ pid=1
 
 */
 
-global $tester;
+global $tester, $app;
 $tester->loadModel('story');
+$app->methodName = 'getUserStories';
 $tester->app->loadClass('pager', $static = true);
 $pager = new pager(0, 10, 1);
 $tester->story->dao->update(TABLE_STORY)->set('reviewedBy')->eq('')->where('id')->ge('400')->exec();
@@ -45,8 +46,8 @@ r($assignUser2Stories)            && p('6:title,type,assignedTo,stage')   && e('
 r(count($openedByUser2Stories))   && p()                                  && e('10');                               //获取由User2创建的需求数量，每页10条
 r($openedByUser2Stories)          && p('38:title,type,openedBy,stage')    && e('软件需求38,story,user2,released');  //获取由User2创建的ID为38的需求详情
 r(count($closedByTest3Stories))   && p()                                  && e('41');                               //获取由Test3关闭的所有需求数量
-r($closedByTest3Stories)          && p('203:title,type,closedBy,stage')   && e('用户需求203,requirement,test3,``'); //获取由Test3关闭的ID为203的需求详情
+r($closedByTest3Stories)          && p('203:title,type,closedBy,stage')   && e('用户需求203,requirement,test3,~~'); //获取由Test3关闭的ID为203的需求详情
 r(count($emptyReviewedByStories)) && p()                                  && e('6');                                //获取无评审人的需求数量
-r($emptyReviewedByStories)        && p('402:title,type,reviewedBy,stage') && e('软件需求402,story,``,wait');        //获取无评审人的ID为402的需求详情
+r($emptyReviewedByStories)        && p('402:title,type,reviewedBy,stage') && e('软件需求402,story,~~,wait');        //获取无评审人的ID为402的需求详情
 r(count($emptyReviewByStories))   && p()                                  && e('12');                               //获取admin评审人的需求数量
 r($emptyReviewByStories)          && p('4:title,type,reviewedBy,stage')   && e('软件需求4,story,admin,planned');    //获取admin评审人的ID为2的需求详情

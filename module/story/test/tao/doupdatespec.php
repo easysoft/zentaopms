@@ -39,21 +39,26 @@ $data->title       = 'teststory';
 $data->spec        = 'testspec';
 $data->verify      = 'testverify';
 $data->version     = 1;
-r($storyTest->doUpdateSpecTest(1, $data)) && p('title,spec,verify') && e('teststory,testspec,testverify');
+$data->deleteFiles = array();
+$oldData = $tester->loadModel('story')->getByID(1);
+r($storyTest->doUpdateSpecTest(1, $data, $oldData)) && p('title,spec,verify') && e('teststory,testspec,testverify');
 
 $data->title       = 'teststory1';
 $data->spec        = 'testspec1';
 $data->verify      = 'testverify1';
-r($storyTest->doUpdateSpecTest(1, $data)) && p('title,spec,verify') && e('teststory1,testspec1,testverify1');
+r($storyTest->doUpdateSpecTest(1, $data, $oldData)) && p('title,spec,verify') && e('teststory1,testspec1,testverify1');
 
 $data->deleteFiles = array(1);
-r($storyTest->doUpdateSpecTest(2, $data)) && p('title,spec,verify,files') && e('teststory1,testspec1,testverify1,~~');
+$oldData = $tester->loadModel('story')->getByID(2);
+r($storyTest->doUpdateSpecTest(2, $data, $oldData)) && p('title,spec,verify,files') && e('teststory1,testspec1,testverify1,~~');
 
-unset($data->deleteFiles);
-r($storyTest->doUpdateSpecTest(3, $data, $addedFiles)) && p('title|spec|verify|files', '|') && e('teststory1|testspec1|testverify1|8,9,2');
+$data->deleteFiles = array();
+$oldData = $tester->loadModel('story')->getByID(3);
+r($storyTest->doUpdateSpecTest(3, $data, $oldData, $addedFiles)) && p('title|spec|verify|files', '|') && e('teststory1|testspec1|testverify1|8,9,2');
 
 $data->deleteFiles = array(3);
-r($storyTest->doUpdateSpecTest(4, $data, $addedFiles)) && p('title|spec|verify|files', '|') && e('teststory1|testspec1|testverify1|8,9');
+$oldData = $tester->loadModel('story')->getByID(4);
+r($storyTest->doUpdateSpecTest(4, $data, $oldData, $addedFiles)) && p('title|spec|verify|files', '|') && e('teststory1|testspec1|testverify1|8,9');
 
 $storySpec = $storyTest->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq('5')->fetch();
 r($storySpec) && p('title|spec|verify|files', '|') && e('teststory1|testspec1|testverify1|8,9');

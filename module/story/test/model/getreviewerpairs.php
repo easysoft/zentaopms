@@ -22,7 +22,7 @@ pid=1
 global $tester;
 $storyModel = $tester->loadModel('story');
 
-r($storyModel->getReviewerPairs(1, 1)) && p('admin') && e('~~');
 r($storyModel->getReviewerPairs(1, 2)) && p('user2') && e('rejust');
+r($storyModel->getReviewerPairs(1, 1)) && p('admin') && e('~~');
 r($storyModel->getReviewerPairs(2, 1)) && p('admin') && e('~~');
 r($storyModel->getReviewerPairs(2, 2)) && p('user1') && e('pass');

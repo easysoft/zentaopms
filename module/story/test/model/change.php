@@ -17,12 +17,14 @@ pid=1
 
 $story  = new storyTest();
 $story1 = new stdclass();
-$story1->title    = '测试需求1变更标题';
-$story1->spec     = '测试需求1的变更描述';
-$story1->verify   = '测试需求1的变更验收标准';
-$story1->estimate = 1;
-$story1->reviewer = array();
-$story1->version  = 4;
+$story1->title              = '测试需求1变更标题';
+$story1->spec               = '测试需求1的变更描述';
+$story1->verify             = '测试需求1的变更验收标准';
+$story1->deleteFiles        = array();
+$story1->reviewerHasChanged = '';
+$story1->estimate           = 1;
+$story1->reviewer           = array();
+$story1->version            = 4;
 
 $story2 = clone $story1;
 $story2->reviewer = array('admin', 'test2');

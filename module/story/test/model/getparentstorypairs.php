@@ -32,7 +32,7 @@ global $tester;
 $tester->loadModel('story');
 $stories = $tester->story->getParentStoryPairs(5);
 
-r($stories) && p('0') && e('~~'); // 第一个元素是 0 => ''
+r($stories) && p('91,0') && e('用户需求91,~~'); // 第91个元素和第0个元素的值
 
 array_pop($stories); /* remove empty item at array top. */
 r(count($stories)) && p() && e(5);  // 获取符合条件的需求数

@@ -9,6 +9,7 @@ $story->version->range(1);
 $story->assignedTo->range('``');
 $story->gen(20);
 zdTable('storyspec')->gen(20);
+zdTable('user')->gen(20);
 
 /**
 

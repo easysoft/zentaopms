@@ -26,6 +26,7 @@ $story->status  = 'draft';
 $oldStory = new stdclass();
 $oldStory->status  = 'draft';
 $oldStory->version = '1';
+$oldStory->twins   = '';
 
 $storyModel->superReview(1, $oldStory, $story, 'pass');
 $reviewers = $storyModel->dao->select('*')->from(TABLE_STORYREVIEW)->where('story')->eq(1)->fetchAll();

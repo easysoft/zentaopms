@@ -1,13 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 zdTable('story')->gen(20);
 
-$_SESSION['storyOnlyCondition']  = true;
-$_SESSION['storyQueryCondition'] = "`id` < 20";
-
+su('admin');
 /**
 
 title=测试 storyModel->getDataOfStoriesPerAssignedTo();
@@ -19,6 +16,9 @@ pid=1
 global $tester;
 $tester->loadModel('story');
 $tester->loadModel('report');
+
+$_SESSION['storyOnlyCondition']  = true;
+$_SESSION['storyQueryCondition'] = "`id` < 20";
 
 $data = $tester->story->getDataOfStoriesPerAssignedTo();
 

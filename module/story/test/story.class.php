@@ -412,7 +412,7 @@ class storyTest
     public function closeTest(int $storyID, object $postData)
     {
         $this->objectModel->close($storyID, $postData);
-        return $this->objectModel->getByID($storyID);
+        return $this->objectModel->fetchByID($storyID);
     }
 
     /**
@@ -529,7 +529,7 @@ class storyTest
         $task->openedDate   = date('Y-m-d H:i:s');
         $task->version      = 1;
         $task->project      = 11;
-        $task->execution    = 101;
+        $task->execution    = 12;
         $task->left         = 0;
         $task->storyVersion = 1;
         $task->desc         = '';
@@ -559,6 +559,7 @@ class storyTest
      */
     public function assignTest($storyID, $assignedTo)
     {
+        $_POST['uid']        = '0';
         $_POST['assignedTo'] = $assignedTo;
         $this->objectModel->assign($storyID);
         unset($_POST);
@@ -807,7 +808,7 @@ class storyTest
      */
     public function doUpdateReviewerTest(int $storyID, array $reviewer): array
     {
-        $this->objectModel->doUpdateReviewer($storyID, $reviewer);
+        $this->objectModel->doUpdateReviewer($storyID, (object)$reviewer);
         return $this->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->fetchAll();
     }
 
@@ -836,13 +837,14 @@ class storyTest
      *
      * @param  int    $storyID
      * @param  object $story
+     * @param  object $oldStory
      * @param  array  $addedFiles
      * @access public
      * @return object|array
      */
-    public function doUpdateSpecTest(int $storyID, object $story, array $addedFiles = array()): object|array
+    public function doUpdateSpecTest(int $storyID, object $story, object $oldStory, array $addedFiles = array()): object|array
     {
-        $this->objectModel->doUpdateSpec($storyID, $story, $addedFiles);
+        $this->objectModel->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();

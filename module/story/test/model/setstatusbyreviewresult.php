@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('story')->gen(20);
 su('admin');
 
 /**
@@ -25,11 +27,13 @@ global $tester;
 $storyModel = $tester->loadModel('story');
 
 $story = new stdclass();
+$story->id     = 1;
 $story->status = 'draft';
 
 $oldStory = new stdclass();
 $oldStory->status  = 'draft';
 $oldStory->version = '3';
+$oldStory->twins   = '';
 
 r($storyModel->setStatusByReviewResult($story, $oldStory, 'pass')) && p('status,finalResult') && e('active,pass');
 

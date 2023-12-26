@@ -30,9 +30,10 @@ pid=1
 
 */
 
-global $tester;
+global $tester, $app;
+$app->methodName = 'getPlanStories';
 $tester->loadModel('story');
-$tester->app->loadClass('pager', $static = true);
+$app->loadClass('pager', $static = true);
 $pager = new pager(0, 10, 1);
 
 $plan1Stories = $tester->story->getPlanStories(1, 'all', 'id_desc', $pager);

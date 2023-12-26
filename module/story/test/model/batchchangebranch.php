@@ -9,8 +9,10 @@ $story->product->range('1{3},2{3}');
 $story->branch->range('0{3},0-4');
 $story->plan->range('``{3},2,``,3');
 $story->status->range('draft,active,closed');
+$story->version->range('1');
 $story->gen(6);
 zdTable('storyspec')->gen(20);
+zdTable('product')->gen(20);
 
 /**
 

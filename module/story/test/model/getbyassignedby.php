@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=storyModel->getByAssignedbyme();
+title=storyModel->getByAssignedby();
 cid=1
 pid=1
 

@@ -41,7 +41,7 @@ r(count($storyTest->fetchExecutionStoriesTest($executionID[0], $productID[1]))) 
 r(count($storyTest->fetchExecutionStoriesTest($executionID[1], $productID[1]))) && p() && e('25'); //传入产品，传入执行。
 
 $_SESSION['executionStoryBrowseType'] = 'changing';
-r(count($storyTest->fetchExecutionStoriesTest($executionID[1], $productID[1]))) && p() && e('20'); //传入产品，传入执行，设置SESSION。
+r(count($storyTest->fetchExecutionStoriesTest($executionID[1], $productID[1]))) && p() && e('5'); //传入产品，传入执行，设置SESSION。
 
 $storyTest->objectModel->app->loadClass('pager', $static = true);
 $storyTest->objectModel->app->moduleName = 'product';

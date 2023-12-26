@@ -4,8 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
-zdTable('product')->gen(2);
-zdTable('project')->gen(2);
+zdTable('product')->gen(20);
+zdTable('project')->gen(20);
 zdTable('bug')->gen(2);
 zdTable('relation')->gen(0);
 zdTable('storyreview')->gen(0);
@@ -41,6 +41,7 @@ $data->source      = '';
 $data->sourceNote  = '';
 $data->feedbackBy  = '';
 $data->notifyEmail = '';
+$data->type        = 'story';
 $data->parent      = 0;
 $data->title       = 'test story';
 $data->color       = '';

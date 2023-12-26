@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 zdTable('storyspec')->gen(60);
+zdTable('product')->gen(20);
 $story = zdTable('story');
 $story->product->range(1);
 $story->parent->range('0{18},`-1`,19');
@@ -37,6 +38,6 @@ $stories1 = $tester->loadModel('story')->getStories2Link(1, 'linkStories', 'bySe
 $stories2 = $tester->loadModel('story')->getStories2Link(2);
 
 r(count($stories1)) && p()                 && e('9');             // 获取需求1可关联的需求数量
-r(count($stories2)) && p()                 && e('7');             // 获取需求2可关联的需求数量
+r(count($stories2)) && p()                 && e('3');             // 获取需求2可关联的需求数量
 r($stories1)        && p('12:type,product') && e('story,1');       // 获取需求1可关联的需求id、product
 r($stories2)        && p('2:type,product') && e('requirement,1'); // 获取需求2可关联的需求id、product

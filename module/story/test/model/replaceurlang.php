@@ -18,11 +18,11 @@ $beforeLang = clone $tester->story->lang->story;
 $tester->story->replaceURLang('requirement');
 $afterLang = clone $tester->story->lang->story;
 
-r($beforeLang) && p('create') && e('提软需');  //查看更换语言之前的create
-r($afterLang)  && p('create') && e('提用需');  //查看更换语言之前的create
+r($beforeLang) && p('create') && e('提研发需求');  //查看更换语言之前的create
+r($afterLang)  && p('create') && e('提用户需求');  //查看更换语言之前的create
 
-r($beforeLang) && p('common') && e('软需');    //查看更换语言之前的common
-r($afterLang)  && p('common') && e('用需');    //查看更换语言之前的common
+r($beforeLang) && p('common') && e('研发需求');    //查看更换语言之前的common
+r($afterLang)  && p('common') && e('用户需求');    //查看更换语言之前的common
 
-r($beforeLang) && p('title') && e('软需名称'); //查看更换语言之前的title
-r($afterLang)  && p('title') && e('用需名称'); //查看更换语言之前的title
+r($beforeLang) && p('title') && e('研发需求名称'); //查看更换语言之前的title
+r($afterLang)  && p('title') && e('用户需求名称'); //查看更换语言之前的title

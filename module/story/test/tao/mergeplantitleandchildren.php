@@ -6,10 +6,12 @@ $productplan = zdTable('productplan');
 $productplan->title->range('计划1,计划2');
 $productplan->createdDate->range('`' . date('Y-m-d') . '`');
 $productplan->gen(2);
+
 zdTable('story')->gen(20);
+
 $relation = zdTable('relation');
-$relation->AID->range('1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18,9,19');
-$relation->BID->range('11,1,12,2,13,3,14,4,15,5,16,6,17,7,18,8,19,9');
+$relation->AID->range('11,1,12,2,13,3,14,4,15,5,16,6,17,7,18,8,19,9');
+$relation->BID->range('1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18,9,19');
 $relation->gen(18);
 
 /**
@@ -43,7 +45,7 @@ $stories[15]->plan   = '0';
 r($storyModel->mergePlanTitleAndChildren(0, array())) && p() && e('0'); //不传入任何数据。
 r($storyModel->mergePlanTitleAndChildren(1, array())) && p() && e('0'); //只传入产品。
 
-$mergedStories = $storyModel->mergePlanTitleAndChildren(1, $stories);
+$mergedStories = $storyModel->mergePlanTitleAndChildren(1, $stories, 'requirement');
 r($mergedStories[12]->planTitle)           && p() && e('计划1');      //传入产品和需求，查看planTitle字段。
-r(isset($mergedStories[13]->children[14])) && p() && e('1');          //传入产品和需求，查看子需求是否存在。
-r($mergedStories[15]->parentName)          && p() && e('用户需求11'); //传入产品和需求，查看parentName字段。
+r(isset($mergedStories[13]->children[3]))  && p() && e('1');          //传入产品和需求，查看子需求是否存在。
+r($mergedStories[15]->linkStories)         && p() && e('用户需求5');  //传入产品和需求，查看parentName字段。
