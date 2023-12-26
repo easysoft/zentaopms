@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 zanodemodel->getAutomationByID().
+title=测试 zanodemodel->getAutomationByProduct().
 cid=1
 
 - 测试获取 id 1 的自动化设置
