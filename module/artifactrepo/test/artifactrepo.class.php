@@ -105,4 +105,20 @@ class artifactrepoTest
         if(dao::isError()) return dao::getError();
         return $artifactRepo;
     }
+
+    /**
+     * 获取服务器上仓库列表。
+     * Get server repos.
+     *
+     * @param  int    $serverID
+     * @access public
+     * @return array
+     */
+    public function getServerReposTest(int $serverID): array
+    {
+        $serverRepos = $this->objectModel->getServerRepos($serverID);
+
+        if(dao::isError()) return dao::getError();
+        return $serverRepos;
+    }
 }
