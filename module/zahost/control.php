@@ -288,15 +288,16 @@ class zahost extends control
     }
 
     /**
+     * Ajax 方式获取服务状态。
      * Check service status by ajax.
      *
      * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function ajaxGetServiceStatus($hostID)
+    public function ajaxGetServiceStatus(int $hostID)
     {
-        $host          = $this->zahost->getById($hostID);
+        $host          = $this->zahost->getByID($hostID);
         $serviceStatus = $this->zahost->getServiceStatus($host);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
