@@ -524,9 +524,6 @@ class actionModel extends model
                         $action->newVersion = zget($extra->data, 'newVersion', '');
                         $action->oldAppName = zget($extra->data, 'oldAppName', '');
                         $action->newAppName = zget($extra->data, 'newAppName', '');
-                        $enableAutoBackup   = zget($extra->data, 'autoBackup', 0);
-
-                        if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
                     }
 
                     if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;

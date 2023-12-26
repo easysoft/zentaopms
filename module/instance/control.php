@@ -69,9 +69,7 @@ class instance extends control
             $this->view->instanceMetric  = $instanceMetric;
             $this->view->currentResource = '';
             $this->view->customItems     = array();
-            $this->view->backupList      = array();
             $this->view->hasRestoreLog   =  false;
-            $this->view->latestBackup    = array();
             $this->view->dbList          = array();
             $this->view->domain          = '';
         }
@@ -105,27 +103,6 @@ class instance extends control
         $instanceMetric = $this->cne->instancesMetrics(array($instance));
         $instanceMetric = $instanceMetric[$instance->id];
 
-        $backupList   = array();
-        $latestBackup = new stdclass();
-        if($tab == 'backup') $backupList = $this->instance->backupList($instance);
-        if(count($backupList)) $latestBackup = reset($backupList);
-
-        $hasRestoreLog = false;
-        foreach($backupList as $backup)
-        {
-            $backup->latest_restore_time   = 0;
-            $backup->latest_restore_status = '';
-            foreach($backup->restores as $restore)
-            {
-                $hasRestoreLog = true;
-                if($restore->create_time > $backup->latest_restore_time)
-                {
-                    $backup->latest_restore_time   = $restore->create_time;
-                    $backup->latest_restore_status = $restore->status;
-                }
-            }
-        }
-
         $dbList          = $this->cne->appDBList($instance);
         $currentResource = $this->cne->getAppConfig($instance);
         $customItems     = $this->cne->getCustomItems($instance);
@@ -147,49 +124,9 @@ class instance extends control
         $this->view->instanceMetric  = $instanceMetric;
         $this->view->currentResource = $currentResource;
         $this->view->customItems     = $customItems;
-        $this->view->backupList      = $backupList;
         $this->view->hasRestoreLog   = $hasRestoreLog;
-        $this->view->latestBackup    = $latestBackup;
         $this->view->dbList          = $dbList;
         $this->view->domain          = $this->cne->getDomain($instance);
-    }
-
-    /**
-     * 自动备份。
-     * Cron task of auto backup.
-     *
-     * @param  string $key
-     * @access public
-     * @return void
-     */
-    public function autoBackup(string $key)
-    {
-        if($this->config->instance->enableAutoRestore) return; // Only one of auto backup and auto restore can be enabled.
-
-        $this->app->saveLog('Run auto backup at: ' . date('Y-md-d H:i:s'));
-
-        if($key != helper::readKey()) return;
-
-        $this->instance->autoBackup();
-    }
-
-    /**
-     * 自动还原。
-     * Cron task of auto restore.
-     *
-     * @param  string $key
-     * @access public
-     * @return void
-     */
-    public function autoRestore(string $key)
-    {
-        if(!$this->config->instance->enableAutoRestore) return; // Only one of auto backup and auto restore can be enabled.
-
-        $this->app->saveLog('Run auto restore at: ' . date('Y-md-d H:i:s'));
-
-        if($key != helper::readKey()) return;
-
-        $this->instance->autoRestore();
     }
 
     /**
@@ -609,73 +546,6 @@ class instance extends control
         $statusList = $this->instance->batchFresh($instances);
 
         return $this->send(array('result' => 'success', 'data' => $statusList));
-    }
-
-    /**
-     * 备份应用。
-     * Backup instnacd by ajax.
-     *
-     * @param  int    $instanceID
-     * @access public
-     * @return void
-     */
-    public function ajaxBackup($instanceID)
-    {
-        $instance = $this->instance->getByID($instanceID);
-        $success = $this->instance->backup($instance, $this->app->user);
-        if(!$success)
-        {
-            $this->action->create('instance', $instance->id, 'backup', '', json_encode(array('result' => array('result' => 'fail'))));
-            return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'backupFail')));
-        }
-
-        $this->action->create('instance', $instance->id, 'backup', '', json_encode(array('result' => array('result' => 'success'))));
-        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'backupSuccess')));
-    }
-
-    /**
-     * 还原应用。
-     * Restore instance by ajax
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxRestore()
-    {
-        $postData = fixer::input('post')
-            ->trim('instanceID')
-            ->trim('backupName')->get();
-
-        if(empty($postData->instanceID) || empty($postData->backupName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->wrongRequestData));
-
-        $instance = $this->instance->getByID($postData->instanceID);
-        if(empty($instance))return print(js::alert($this->lang->instance->instanceNotExists) . js::locate($this->createLink('space', 'browse')));
-
-        $success = $this->instance->restore($instance, $this->app->user, $postData->backupName);
-        if(!$success)
-        {
-            $this->action->create('instance', $instance->id, 'restore', '', json_encode(array('result' => array('result' => 'fail'))));
-            return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'restoreFail')));
-        }
-
-        $this->action->create('instance', $instance->id, 'restore', '', json_encode(array('result' => array('result' => 'success'))));
-        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'restoreSuccess')));
-    }
-
-    /**
-     * 删除备份。
-     * Delete backup by ajax.
-     *
-     * @param  int    $backupID
-     * @access public
-     * @return void
-     */
-    public function ajaxDeleteBackup(int $backupID)
-    {
-        $success = $this->instance->deleteBackup($backupID, $this->app->user);
-        if(!$success) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'deleteFail')));
-
-        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess')));
     }
 
     /**
