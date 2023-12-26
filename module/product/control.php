@@ -790,8 +790,9 @@ class product extends control
             if($program) $fileName = $program->name;
         }
         if(!$programID || !$fileName) $fileName = $this->lang->product->common;
+        $fileName .= isset($this->lang->product->featureBar['all'][$status]) ?  '-' . $this->lang->product->featureBar['all'][$status] : '';
 
-        $this->view->fileName = $fileName . '-' . $this->lang->product->featureBar['all'][$status];
+        $this->view->fileName = $fileName;
         $this->display();
     }
 
