@@ -179,11 +179,11 @@ class pipelineModel extends model
                 ->fetch();
             if($job) return false;
         }
-        $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create($type, $id, 'deleted', '');
 
-        $actionID = $this->dao->lastInsertID();
-        return $actionID;
+        $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
+
+        $this->loadModel('action')->create($type, $id, 'deleted', '');
+        return $this->dao->lastInsertID();
     }
 
     /**
