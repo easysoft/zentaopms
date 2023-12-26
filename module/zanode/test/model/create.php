@@ -6,6 +6,11 @@ declare(strict_types=1);
 title=测试 zanodeModel->create().
 cid=1
 
+- 测试创建一个执行节点
+ - 属性name @zanode1
+ - 属性type @node
+ - 属性status @running
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
