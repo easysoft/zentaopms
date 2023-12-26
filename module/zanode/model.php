@@ -425,24 +425,24 @@ class zanodemodel extends model
     }
 
     /**
+     * 更新一个执行节点。
      * Update Node.
      *
-     * @param  int $id
+     * @param  int        $id
+     * @param  object     $hostInfo
      * @return array|bool
      */
-    public function update($id)
+    public function update(int $id, object $hostInfo): array|bool
     {
-        $oldHost              = $this->getNodeById($id);
-        $hostInfo             = form::data()->get();
-        $hostInfo->editedBy   = $this->app->user->account;
-        $hostInfo->editedDate = helper::now();
+        $oldHost = $this->getNodeById($id);
 
-        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
-            ->batchCheck($this->config->zanode->edit->requiredFields, 'notempty');
+        $this->dao->update(TABLE_ZAHOST)
+            ->data($hostInfo)
+            ->batchCheck($this->config->zanode->edit->requiredFields, 'notempty')
+            ->where('id')->eq($id)
+            ->exec();
+
         if(dao::isError()) return false;
-
-        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)->autoCheck()
-            ->where('id')->eq($id)->exec();
         return common::createChanges($oldHost, $hostInfo);
     }
 

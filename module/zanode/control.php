@@ -124,7 +124,12 @@ class zanode extends control
     {
         if($_POST)
         {
-            $changes = $this->zanode->update($id);
+            $hostInfo = form::data($this->config->zanode->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->add('editedDate', helper::now())
+                ->get();
+
+            $changes = $this->zanode->update($id, $hostInfo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
