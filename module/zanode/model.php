@@ -583,23 +583,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Get Node image list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getimageList($orderBy = 'id_desc', $pager = null)
-    {
-        return $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('from')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-    }
-
-    /**
      * 获取自定义的镜像。
      * Get custom image.
      *
