@@ -71,10 +71,8 @@ class artifactrepo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
-        $nexusList = $this->loadModel('pipeline')->getPairs('nexus');
-
         $this->view->title     = $this->lang->artifactrepo->create;
-        $this->view->nexusList = $nexusList;
+        $this->view->nexusList = $this->loadModel('pipeline')->getPairs('nexus');
         $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->display();
