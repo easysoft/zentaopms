@@ -68,5 +68,29 @@ class instanceZen extends instance
             if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $times, $name))) return $name . '-' . $times;
         }
     }
+
+    /**
+     * 检查安装应用时数据合法性
+     * Check for install.
+     *
+     * @param  object $customData
+     * @access public
+     * @return void
+     */
+    protected function checkForInstall(object $customData)
+    {
+        if(isset($this->config->instance->keepDomainList[$customData->customDomain]) || $this->instance->domainExists($customData->customDomain)) return $this->send(array('result' => 'fail', 'message' => $customData->customDomain . $this->lang->instance->errors->domainExists));
+
+        if(!$customData->customName)
+        {
+            dao::$errors['customName'] = sprintf($this->lang->error->notempty, $this->lang->instance->name);
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
+        if(!$this->instance->checkAppNameUnique($customData->customName))   return $this->send(array('result' => false, 'message' => array('customName' => sprintf($this->lang->error->repeat, $this->lang->instance->name, $customData->customName))));
+
+        if(!validater::checkLength($customData->customDomain, 20, 2))       return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->domainLength));
+        if(!validater::checkREG($customData->customDomain, '/^[a-z\d]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongDomainCharacter));
+    }
 }
 

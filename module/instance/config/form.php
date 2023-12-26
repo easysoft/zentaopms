@@ -17,3 +17,13 @@ $config->instance->form->edit['account']    = array('type' => 'string', 'require
 $config->instance->form->edit['password']   = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->instance->form->edit['editedBy']   = array('type' => 'string', 'required' => false, 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->instance->form->edit['editedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->instance->form->install = array();
+$config->instance->form->install['storeAppType'] = array('type' => 'string', 'required' => false,  'default' => '');
+$config->instance->form->install['type']         = array('type' => 'string', 'required' => false,  'default' => '');
+$config->instance->form->install['customName']   = array('type' => 'string', 'required' => true,   'default' => '');
+$config->instance->form->install['customDomain'] = array('type' => 'string', 'required' => false,  'default' => '');
+$config->instance->form->install['version']      = array('type' => 'string', 'required' => false,  'default' => '');
+$config->instance->form->install['dbType']       = array('type' => 'string', 'required' => false,  'default' => '');
+$config->instance->form->install['dbService']    = array('type' => 'string', 'required' => false,  'default' => '', 'filter' => 'trim');
+$config->instance->form->install['app_version']  = array('type' => 'string', 'required' => false,  'default' => '');

@@ -535,34 +535,17 @@ class instance extends control
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $cloudApp = $this->store->getAppInfo($appID);
-        if(empty($cloudApp)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->noAppInfo));
+        if(empty($cloudApp)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->errors->noAppInfo)));
 
         $versionList = $this->store->appVersionList($cloudApp->id);
         $mysqlList   = $this->cne->sharedDBList('mysql');
         $pgList      = $this->cne->sharedDBList('postgresql');
         if(!empty($_POST))
         {
-            $customData = fixer::input('post')
-                ->trim('customName')->setDefault('customName', '')
-                ->trim('customDomain')->setDefault('customDomain', '')
-                ->trim('version')->setDefault('version', '')
-                ->trim('dbType')->setDefault('dbType', 'unsharedDB')
-                ->trim('dbService')
-                ->setDefault('app_version', '')
-                ->get();
+            $customData = form::data($this->config->instance->form->install)->get();
             if($customData->version && isset($versionList[$customData->version])) $customData->app_version = $versionList[$customData->version]->app_version;
 
-            if(isset($this->config->instance->keepDomainList[$customData->customDomain]) || $this->instance->domainExists($customData->customDomain)) return $this->send(array('result' => 'fail', 'message' => $customData->customDomain . $this->lang->instance->errors->domainExists));
-
-            if(!$customData->customName)
-            {
-                dao::$errors['customName'] = sprintf($this->lang->error->notempty, $this->lang->instance->name);
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-            if(!$this->instance->checkAppNameUnique($customData->customName)) return $this->send(array('result' => false, 'message' => array('customName' => sprintf($this->lang->error->repeat, $this->lang->instance->name, $customData->customName))));
-
-            if(!validater::checkLength($customData->customDomain, 20, 2))      return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->domainLength));
-            if(!validater::checkREG($customData->customDomain, '/^[a-z\d]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongDomainCharacter));
+            $this->instanceZen->checkForInstall($customData);
 
             if($checkResource == 'true')
             {
@@ -586,7 +569,7 @@ class instance extends control
             {
                 $sharedDB = zget($mysqlList, $customData->dbService);
             }
-            elseif(isset($cloudApp->dependencies->postgresql)  && $customData->dbType == 'sharedDB')
+            elseif(isset($cloudApp->dependencies->postgresql) && $customData->dbType == 'sharedDB')
             {
                 $sharedDB = zget($pgList, $customData->dbService);
             }
@@ -594,20 +577,14 @@ class instance extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!$instance) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->notices['installFail']));
 
-            unset($_GET['onlybody']);
             return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['installSuccess'], 'load' => $this->createLink('instance', 'view', "id=$instance->id"), 'closeModal' => true));
         }
-
-        $this->lang->switcherMenu = $this->instance->getInstallSwitcher($cloudApp);
-
-        $this->view->position[] = $this->view->title;
-
-        $this->view->title       = $this->lang->instance->install . $cloudApp->alias;
-        $this->view->cloudApp    = $cloudApp;
 
         $this->view->versionList = array();
         foreach($versionList as $version) $this->view->versionList[$version->version] = $version->app_version . " ({$version->version})";
 
+        $this->view->title       = $this->lang->instance->install . $cloudApp->alias;
+        $this->view->cloudApp    = $cloudApp;
         $this->view->thirdDomain = $this->instance->randThirdDomain();
         $this->view->mysqlList   = $this->instance->dbListToOptions($mysqlList);
         $this->view->pgList      = $this->instance->dbListToOptions($pgList);
