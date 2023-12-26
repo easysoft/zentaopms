@@ -1036,17 +1036,13 @@ class zanodemodel extends model
      */
     public static function isClickable(object $node, string $action): bool
     {
-        if($action == 'resume')  return $node->status == 'suspend' && $node->hostType != 'physics' && $node->status != 'running' && $node->status != 'wait';
-        if($action == 'suspend') return $node->status != 'suspend' && $node->hostType != 'physics' && $node->status == 'running';
+        $action = strtolower($action);
 
-        if($action == 'start')  return $node->status == 'shutoff' && $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring'));
-        if($action == 'close')  return $node->status != 'shutoff' && $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring'));
-
-        if($action == 'getVNC') return $node->hostType == '' && in_array($node->status ,array('running', 'launch', 'wait'));
-        if($action == 'reboot') return $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff'));
-
-        if($action == 'createSnapshot') return $node->hostType != 'physics' && $node->status == 'running';
-        if($action == 'createImage')    return $node->hostType != 'physics' && $node->status == 'running';
+        if($action == 'resume') return $node->status == 'suspend' && $node->hostType != 'physics';
+        if($action == 'start')  return $node->status == 'shutoff' && $node->hostType != 'physics';
+        if($action == 'getvnc') return $node->hostType == '' && in_array($node->status, array('running', 'launch', 'wait'));
+        if($action == 'close'   || $action == 'reboot') return $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff'));
+        if($action == 'suspend' || $action == 'createsnapshot' || $action == 'createimage') return $node->status == 'running' && $node->hostType != 'physics';
 
         return true;
     }

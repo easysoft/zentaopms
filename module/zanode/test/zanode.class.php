@@ -23,4 +23,22 @@ class zanodeTest
     {
         return $this->objectModel->$name(...$arguments);
     }
+
+    /**
+     * 测试判断按钮是否可点击。
+     * Test judge an action is clickable or not.
+     *
+     * @param  string $action
+     * @param  string $status
+     * @param  string $hostType
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(string $action, string $status, string $hostType): bool
+    {
+        $node = new stdclass();
+        $node->status   = $status;
+        $node->hostType = $hostType;
+        return $this->isClickable($node, $action);
+    }
 }
