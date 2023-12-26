@@ -322,7 +322,7 @@ class installZen extends install
         <?php
         \$config->installed       = true;
         \$config->debug           = false;
-        \$config->requestType     = '{$this->config->requestType}';
+        \$config->requestType     = 'PATH_INFO';
         \$config->timezone        = '$timezone';
         \$config->db->driver      = '{$this->config->db->driver}';
         \$config->db->host        = '$dbHost';
