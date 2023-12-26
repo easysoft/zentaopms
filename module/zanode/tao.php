@@ -8,10 +8,10 @@ class zanodeTao extends zanodeModel
      *
      * @param  int    $hostID
      * @param  string $orderBy
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getSubZahostListByID(int $hostID, string $orderBy): array
+    protected function getSubZahostListByID(int $hostID, string $orderBy): array
     {
         return $this->dao->select('id, name, vnc, cpuCores, memory, diskSize, osName, status, heartbeat')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
