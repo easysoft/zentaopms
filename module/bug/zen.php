@@ -947,7 +947,7 @@ class bugZen extends bug
         /* 设置模块 ID。*/
         /* Set module id. */
         $moduleID = 0;
-        if($this->cookie->bugModule)  $moduleID = $this->cookie->bugModule;
+        if($this->cookie->bugModule)  $moduleID = (int)$this->cookie->bugModule;
         if($browseType == 'bymodule') $moduleID = $param;
 
         /* 设置搜索查询 ID。*/
