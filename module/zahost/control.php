@@ -165,6 +165,7 @@ class zahost extends control
     }
 
     /**
+     * 显示镜像列表。
      * Show image list page.
      *
      * @param  int    $hostID
@@ -177,21 +178,20 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function browseImage($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseImage(int $hostID, string $browseType = 'all', int $param = 0, string $orderBy = 'id', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->session->set('imageList', $this->app->getURI(true));
+        $this->session->set('imageList', $this->app->getURI(true));
+
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $imageList = $this->zahost->getImageList($hostID, $browseType, $param, $orderBy, $pager);
-
         $this->view->title      = $this->lang->zahost->image->browseImage;
         $this->view->hostID     = $hostID;
-        $this->view->imageList  = $imageList;
-        $this->view->pager      = $pager;
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->imageList  = $this->zahost->getImageList($hostID, $browseType, $param, $orderBy, $pager);
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
 
         $this->display();
     }
