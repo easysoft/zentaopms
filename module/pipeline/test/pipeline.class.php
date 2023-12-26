@@ -147,4 +147,20 @@ class pipelineTest
         if(dao::isError()) return dao::getError();
         return $pipeline;
     }
+
+    /**
+     * 根据url获取渠成创建的代码库。
+     * Get a pipeline by url which created by quickon.
+     *
+     * @param  string $url
+     * @access public
+     * @return object|false|array
+     */
+    public function getByUrlTest(string $url): object|false|array
+    {
+        $pipeline = $this->objectModel->getByUrl($url);
+
+        if(dao::isError()) return dao::getError();
+        return $pipeline;
+    }
 }
