@@ -436,15 +436,16 @@ class zahostModel extends model
     }
 
     /**
+     * 获取镜像键值对。
      * Get image pairs by host.
      *
      * @param  int    $hostID
      * @access public
      * @return array
      */
-    public function getImagePairs($hostID)
+    public function getImagePairs(int $hostID): array
     {
-        return $this->dao->select('id,name')->from(TABLE_IMAGE)->where('host')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_IMAGE)->where('host')->eq($hostID)->andWhere('status')->eq('completed')->fetchPairs();
     }
 
     /**
