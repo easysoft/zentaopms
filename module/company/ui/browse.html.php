@@ -19,16 +19,16 @@ featureBar
 
 toolbar
 (
-    btngroup
+    btn
     (
-        btn
-        (
-            set::icon('cog-outline'),
-            setClass('btn ghost'),
-            set::url(createLink('custom', 'set', 'module=user&field=roleList')),
-            setData(array('app' => 'admin')),
-            $lang->company->manageRole
-        ),
+        set::icon('cog-outline'),
+        setClass('btn ghost'),
+        set::url(createLink('custom', 'set', 'module=user&field=roleList')),
+        setData('app', 'admin'),
+        $lang->company->manageRole
+    ),
+    btnGroup
+    (
         btn
         (
             setClass('btn primary create-user-btn'),
@@ -88,4 +88,3 @@ dtable
 );
 
 render();
-
