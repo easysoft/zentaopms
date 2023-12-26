@@ -79,21 +79,27 @@ class pipelineTest
     }
 
     /**
-     * Update a pipeline.
+     * 更新服务器。
+     * Update a server.
      *
-     * @param  int    $id
+     * @param  int        $id
+     * @param  array      $data
      * @access public
-     * @return bool
+     * @return array|bool
      */
-    public function updateTest($id)
+    public function updateTest(int $id, array $data): array|bool
     {
-        $objects = $this->objectModel->update($id);
+        $oldObject = $this->objectModel->getByID($id);
+
+        $server = new stdclass();
+        foreach($data as $key => $value) $server->{$key}  = $value;
+
+        $this->objectModel->update($id, $server);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getByID($id);
-
-        return $objects;
+        $object = $this->objectModel->getByID($id);
+        return $object ? common::createChanges($oldObject, $object) : array();
     }
 
     /**
