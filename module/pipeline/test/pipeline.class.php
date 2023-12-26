@@ -60,24 +60,22 @@ class pipelineTest
     }
 
     /**
-     * Create a pipeline.
+     * 创建服务器。
+     * Create a server.
      *
-     * @param  int    $type
-     * @param  int    $param
+     * @param  string       $type
+     * @param  array        $object
      * @access public
-     * @return void
+     * @return array|object
      */
-    public function createTest($type, $param)
+    public function createTest(string $type, object $object)
     {
-        foreach($param as $k => $v) $_POST[$k] = $v;
-        $objects = $this->objectModel->create($type);
-        unset($_POST);
+        $object->type = $type;
+
+        $pipelineID = $this->objectModel->create($object);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getById($objects);
-
-        return $objects;
+        return $this->objectModel->getByID($pipelineID);
     }
 
     /**
