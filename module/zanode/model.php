@@ -570,17 +570,16 @@ class zanodemodel extends model
     }
 
     /**
-     * Get Image.
+     * 通过 id 获取镜像。
+     * Get Image by id.
      *
-     * @param  int $id
+     * @param  int          $id
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getImageByID($id)
+    public function getImageByID(int $id): object|bool
     {
-        return $this->dao->select('*')->from(TABLE_IMAGE)
-            ->where('id')->eq($id)
-            ->fetch();
+        return $this->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($id)->fetch();
     }
 
     /**
