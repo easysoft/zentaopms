@@ -240,36 +240,29 @@ class zahost extends control
     }
 
     /**
+     * 查询镜像下载进度。
      * Query downloading progress of images of host.
      *
      * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function ajaxImageDownloadProgress($hostID)
+    public function ajaxImageDownloadProgress(int $hostID)
     {
         $statusList = array();
 
         $imageList = $this->zahost->getImageList($hostID);
         foreach($imageList as $image)
         {
-            $image      = $this->zahost->queryDownloadImageStatus($image);
-            $statusName = zget($this->lang->zahost->image->statusList, $image->status,'');
+            $this->zahost->queryDownloadImageStatus($image);
 
-            if($image->status == 'inprogress')
-            {
-                 $status = $image->rate * 100 . '%';
-            }
-            elseif($image->status == 'completed')
-            {
-                $status = '100%';
-            }
-            else
-            {
-                $status = '';
-            }
+            $statusName = zget($this->lang->zahost->image->statusList, $image->status, '');
 
-            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $status, 'path' => $image->path);
+            $progress = '';
+            if($image->status == 'inprogress') $progress = $image->rate * 100 . '%';
+            if($image->status == 'completed')  $progress = '100%';
+
+            $statusList[$image->id] = array('statusCode' => $image->status, 'status' => $statusName, 'progress' => $progress, 'path' => $image->path);
         }
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $statusList));
