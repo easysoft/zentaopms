@@ -64,17 +64,14 @@ class zahostModel extends model
      * @access public
      * @return array|bool
      */
-    public function update($hostID)
+    public function update($hostInfo)
     {
-        $oldHost              = $this->getById($hostID);
-        $hostInfo             = fixer::input('post')->get();
-        $hostInfo->editedBy   = $this->app->user->account;
-        $hostInfo->editedDate = helper::now();
+        $oldHost = $this->getById($hostInfo->id);
 
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('diskSize,memory', 'float')
-            ->check('name', 'unique', "id != $hostID and type in ('vhost', 'zahost')")
+            ->check('name', 'unique', "id != $hostInfo->id and type in ('vhost', 'zahost')")
             ->autoCheck();
 
         if(dao::isError()) return false;
@@ -89,7 +86,7 @@ class zahostModel extends model
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)->autoCheck()
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
-            ->where('id')->eq($hostID)->exec();
+            ->where('id')->eq($hostInfo->id)->exec();
         return common::createChanges($oldHost, $hostInfo);
     }
 

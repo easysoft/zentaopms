@@ -104,7 +104,7 @@ class zahost extends control
             if($hostID === false) return $this->send(array('result' => 'fail', 'message' => array('extranet' => array($this->lang->zahost->netError))));
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.loadHosts()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('zahost', 'view', "hostID=$hostID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('zahost', 'view', "hostID=$hostID")));
         }
 
         $this->view->title = $this->lang->zahost->create;
@@ -112,25 +112,22 @@ class zahost extends control
     }
 
     /**
+     * 编辑宿主机。
      * Edit host.
      *
      * @param  int    $hostID
      * @access public
      * @return void
      */
-    public function edit($hostID)
+    public function edit(int $hostID)
     {
         if($_POST)
         {
-            $changes = $this->zahost->update($hostID);
-            if(dao::isError())
-            {
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-            elseif($changes === false)
-            {
-                return $this->send(array('result' => 'fail', 'message' => array("extranet" => array($this->lang->zahost->netError))));
-            }
+            $hostInfo = form::data($this->config->zahost->form->edit)->add('id', $hostID)->get();
+            $changes  = $this->zahost->update($hostInfo);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($changes === false) return $this->send(array('result' => 'fail', 'message' => array('extranet' => array($this->lang->zahost->netError))));
 
             if(!empty($changes))
             {
@@ -138,8 +135,8 @@ class zahost extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         $this->view->title = $this->lang->zahost->editAction;
