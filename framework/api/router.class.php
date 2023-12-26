@@ -133,14 +133,7 @@ class api extends router
             {
                 if(!isset($paramValues[$name])) continue;
 
-                if(isset($this->paramNamesPath[$name]))
-                {
-                    $this->params[$name] = explode('/', urldecode($paramValues[$name]));
-                }
-                else
-                {
-                    $this->params[$name] = urldecode($paramValues[$name]);
-                }
+                $this->params[$name] = urldecode($paramValues[$name]);
             }
             return;
         }
@@ -201,7 +194,7 @@ class api extends router
             }
 
             $entry    = strtolower($this->entry);
-            $filename = $this->moduleRoot . "api/$this->version/entries/$entry.php";
+            $filename = $this->appRoot . "api/$this->version/entries/$entry.php";
 
             if(file_exists($filename)) include($filename);
 
