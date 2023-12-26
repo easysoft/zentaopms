@@ -58,4 +58,38 @@ class zanodeTest
         $node->hostType = $hostType;
         return $this->isClickable($node, $action);
     }
+
+    /**
+     * 测试检查创建字段。
+     * Test check fields of create.
+     *
+     * @param  array $testData
+     * @access public
+     * @return array|bool
+     */
+    public function checkFields4CreateTest(array $testData): array|bool
+    {
+        $data = new stdclass();
+        $data->type     = 'node';
+        $data->status   = 'running';
+
+        foreach($testData as $key => $value) $data->$key = $value;
+        $result = $this->checkFields4Create($data);
+        if(!$result) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试创建执行节点。
+     * Test create an Node.
+     *
+     * @access public
+     * @return int|bool
+     */
+    public function createTest(object $data): object|array
+    {
+        $nodeID = $this->create($data);
+        return $this->objectModel->dao->select('*')->from(TABLE_HOST)->where('id')->eq($nodeID)->fetch();
+    }
 }

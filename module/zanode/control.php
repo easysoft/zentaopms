@@ -100,7 +100,8 @@ class zanode extends control
     {
         if(!empty($_POST))
         {
-            $nodeID = $this->zanode->create();
+            $data   = $this->zanodeZen->prepareCreateExtras();
+            $nodeID = $this->zanode->create($data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "id=$nodeID")));
         }

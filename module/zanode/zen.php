@@ -48,4 +48,40 @@ class zanodeZen extends zanode
         $this->loadModel('action')->create('zanode', $nodeID, ucfirst($type));
         return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
     }
+
+    /**
+     * 处理创建 zanode 请求数据。
+     * Processing request data for creating zanode.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function prepareCreateExtras(): object
+    {
+        $data = form::data()
+            ->setDefault('type', 'node')
+            ->setDefault('createdDate', helper::now())
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('status', 'running')
+            ->setIF($this->post->hostType != 'physics', 'hostType', '')
+            ->setIF($this->post->hostType == 'physics', 'parent', 0)
+            ->setIF($this->post->hostType == 'physics', 'osName', $this->post->osNamePhysics)
+            ->setIF($this->post->hostType == 'physics', 'secret', md5($this->post->name . time()))
+            ->setIF($this->post->hostType == 'physics', 'status', 'offline')
+            ->get();
+
+        $checkResult = $this->zanode->checkFields4Create($data);
+        if(!$checkResult) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if($data->hostType != 'physics')
+        {
+            $result = $this->zanode->linkAgentService($data);
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $data->mac = $result->data->mac;
+            $data->vnc = (int)$result->data->vnc;
+        }
+
+        return $data;
+    }
 }

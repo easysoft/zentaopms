@@ -1,0 +1,12 @@
+title: zt_host
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: type
+    range: node
+  - field: name
+    fields:
+      - field: name1
+        range: zanode
+      - field: name2
+        range: 1-1000

@@ -52,35 +52,12 @@ class zanodemodel extends model
      * 创建执行节点。
      * Create an Node.
      *
+     * @param  object $data
      * @access public
      * @return int|bool
      */
-    public function create(): int|bool
+    public function create(object $data): int|bool
     {
-        $data = form::data()
-            ->setDefault('type', 'node')
-            ->setDefault('createdDate', helper::now())
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('status', static::STATUS_RUNNING)
-            ->setIF($this->post->hostType != 'physics', 'hostType', '')
-            ->setIF($this->post->hostType == 'physics', 'parent', 0)
-            ->setIF($this->post->hostType == 'physics', 'osName', $this->post->osNamePhysics)
-            ->setIF($this->post->hostType == 'physics', 'secret', md5($this->post->name . time()))
-            ->setIF($this->post->hostType == 'physics', 'status', 'offline')
-            ->get();
-
-        $checkResult = $this->zanodeTao->checkFields4Create($data);
-        if(!$checkResult) return false;
-
-        if($data->hostType != 'physics')
-        {
-            $result = $this->zanodeTao->linkAgentService($data);
-            if(!$result) return false;
-
-            $data->mac = $result->data->mac;
-            $data->vnc = (int)$result->data->vnc;
-        }
-
         $this->dao->insert(TABLE_ZAHOST)->data($data, 'osNamePhysics,osNamePre')->autoCheck()->exec();
         if(dao::isError()) return false;
 
@@ -992,5 +969,90 @@ class zanodemodel extends model
         if($action == 'suspend' || $action == 'createsnapshot' || $action == 'createimage') return $node->status == 'running' && $node->hostType != 'physics';
 
         return true;
+    }
+
+    /**
+     * 检查创建字段。
+     * Check fields of create.
+     *
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
+    public function checkFields4Create(object $data): bool
+    {
+        /* 检查必填项。*/
+        /* Check required fields. */
+        $this->dao->update(TABLE_ZAHOST)->data($data)
+            ->batchCheck($data->hostType != 'physics' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
+        if(dao::isError()) return false;
+
+        /* 检查名称格式。*/
+        /* Check the style of name. */
+        if(!preg_match("/^(?!_)(?!-)(?!\.)[a-zA-Z0-9\_\.\-]+$/", $data->name))
+        {
+            dao::$errors['name'] = $this->lang->zanode->nameValid;
+            return false;
+        }
+
+        /* 检查名称的唯一性。*/
+        /* If name already exists return error. */
+        $node = $this->dao->select('*')->from(TABLE_ZAHOST)->where('name')->eq($data->name)->andWhere('type')->eq('node')->fetch();
+        if($node)
+        {
+            dao::$errors['name'] = $this->lang->zanode->nameUnique;
+            return false;
+        }
+
+        /* 检查网络状态。*/
+        /* Check the status of network. */
+        if($data->hostType == 'physics')
+        {
+            $ping = $this->loadModel('zahost')->checkAddress($data->extranet);
+            if(!$ping)
+            {
+                dao::$errors['extranet'] = $this->lang->zanode->netError;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 连接Agent服务。
+     * Link agent service.
+     *
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
+    public function linkAgentService(object $data): false|object
+    {
+        $image    = $this->getImageByID($data->image);
+        $host     = $this->getHostByID($data->parent);
+        $agentUrl = 'http://' . $host->extranet . ':' . $host->zap;
+        $param    = array(
+            'os'     => $image->osName,
+            'path'   => $image->path,
+            'name'   => $data->name,
+            'cpu'    => (int)$data->cpuCores,
+            'disk'   => (int)$data->diskSize,
+            'memory' => (int)$data->memory,
+        );
+        $result = json_decode(commonModel::http($agentUrl . static::KVM_CREATE_PATH, json_encode($param), array(), array("Authorization:$host->tokenSN"), 'data', 'POST', 10));
+
+        if(empty($result))
+        {
+            dao::$errors['image'] = $this->lang->zanode->notFoundAgent;
+            return false;
+        }
+        if($result->code != 'success')
+        {
+            dao::$errors['image'] = $this->lang->zanode->createVmFail;
+            return false;
+        }
+
+        return $result;
     }
 }
