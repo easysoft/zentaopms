@@ -359,19 +359,15 @@ class zahostModel extends model
     }
 
     /**
-     * Get pairs.
+     * 获取宿主机的键值对。
+     * Get host pairs.
      *
-     * @param  string  $idFrom
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs(): array
     {
-        return $this->dao->select("id,name")->from(TABLE_ZAHOST)
-            ->where('deleted')->eq('0')
-            ->andWhere('type')->eq('zahost')
-            ->orderBy('`group`')
-            ->fetchPairs('id', 'name');
+        return $this->dao->select('id, name')->from(TABLE_ZAHOST)->where('deleted')->eq('0')->andWhere('type')->eq('zahost')->orderBy('`group`')->fetchPairs();
     }
 
     /**
