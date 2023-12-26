@@ -6769,10 +6769,11 @@ class storyModel extends model
      * @param  array    $options
      * @param  object   $execution
      * @param  string   $storyType
+     * @param  int      $parentID
      * @access public
      * @return array
      */
-    public function generateRow($stories, $cols, $options, $execution, $storyType)
+    public function generateRow($stories, $cols, $options, $execution, $storyType, $parentID = 0)
     {
         $users         = zget($options, 'users',         array());
         $branches      = zget($options, 'branchOption',  array());
@@ -6932,8 +6933,14 @@ class storyModel extends model
                 $data->parent   = 0;
             }
 
+            if($parentID && $data->isParent)
+            {
+                $data->isParent = false;
+                $data->parent   = $parentID;
+            }
+
             $rows[] = $data;
-            if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType));
+            if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType, $story->id));
         }
         return $rows;
     }
