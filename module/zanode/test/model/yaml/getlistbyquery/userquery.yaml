@@ -1,0 +1,11 @@
+title: table zt_userquery
+desc: "用户查询"
+author: automated export
+version: "1.0"
+fields:
+  - field: sql
+    note: "SQL条件"
+    range: "(( 1   AND `name`  LIKE '%aa%' ) AND ( 1  )) AND t1.deleted = '0'"
+    postfix: ""
+    loop: 0
+    format: ""

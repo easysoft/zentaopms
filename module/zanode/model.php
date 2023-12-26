@@ -461,15 +461,17 @@ class zanodemodel extends model
     }
 
     /**
-     * Get vm list.
+     * 获取执行节点列表。
+     * Get zanode list.
      *
      * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  object $pager
+     * @access public
      * @return array
      */
-    public function getListByQuery($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $pager = null)
+    public function getListByQuery(string $browseType = 'all', int $param = 0, string $orderBy = 't1.id_desc', $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -479,12 +481,12 @@ class zanodemodel extends model
                 $query = $this->loadModel('search')->getQuery($param);
                 if($query)
                 {
-                    $this->session->set('nodeQuery', $query->sql);
-                    $this->session->set('nodeForm',  $query->form);
+                    $this->session->set('zanodeQuery', $query->sql);
+                    $this->session->set('zanodeForm',  $query->form);
                 }
                 else
                 {
-                    $this->session->set('nodeQuery', ' 1 = 1');
+                    $this->session->set('zanodeQuery', ' 1 = 1');
                 }
             }
             else
@@ -496,47 +498,29 @@ class zanodemodel extends model
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        $list = $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) extranet,if(t1.hostType='', t3.osName, t1.osName) osName")->from(TABLE_ZAHOST)->alias('t1')
-            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
-            ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere("t1.type = 'node'")
-            ->beginIF($query)->andWhere($query)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-
-        $hostIDList = array();
-        foreach($list as $l) $hostIDList[] = $l->parent;
-        $hosts = $this->dao->select('id,status,heartbeat')->from(TABLE_ZAHOST)
-            ->where('id')->in(array_unique($hostIDList))
-            ->fetchAll('id');
+        $list       = $this->zanodeTao->getZaNodeListByQuery($query, $orderBy, $pager);
+        $hostIDList = array_column($list, 'parent');
+        $hosts      = $this->zanodeTao->getHostsByIDList(array_unique($hostIDList));
 
         foreach($list as $l)
         {
-            $l->heartbeat    = empty($l->heartbeat) ? '' : $l->heartbeat;
-            $host            = $l->hostType == '' ? zget($hosts, $l->parent) : clone $l;
-            $host->status    = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
-            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
+            $l->heartbeat = empty($l->heartbeat) ? '' : $l->heartbeat;
+            $host         = $l->hostType == '' ? zget($hosts, $l->parent) : clone $l;
+            if(is_object($host))
+            {
+                $host->status    = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
+                $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
+            }
 
             if($l->status == 'running' || $l->status == 'ready')
             {
-                if(empty($host))
+                if(!is_object($host))
                 {
                     $l->status = self::STATUS_SHUTOFF;
                     continue;
                 }
 
-                if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60)
-                {
-                    $l->status = $l->hostType == '' ? 'wait' : 'offline';
-                    continue;
-                }
-
-                if(time() - strtotime($l->heartbeat) > 60)
-                {
-                    $l->status = $l->hostType == '' ? 'wait' : 'offline';
-                }
+                if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $l->status = $l->hostType == '' ? 'wait' : 'offline';
             }
         }
         return $list;

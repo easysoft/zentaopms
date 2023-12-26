@@ -1,0 +1,26 @@
+title: zt_host
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: name
+    fields:
+      - field: field1
+        range: node{5},physics{5}
+      - field: field2
+        range: 1-4{2},aa{2}
+  - field: image
+    range: 1-10
+  - field: type
+    range: node
+  - field: parent
+    range: 0{3},1-3{3},100
+  - field: hostType
+    range: virtual{3},``{10}
+  - field: heartbeat
+    range: "(-10S)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: status
+    range: running,ready,wait,running{3},wait{3},ready{3},running
