@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 chartModel->isClickable().
+title=测试 zanodemodel->isClickable().
 cid=1
 
 - 测试对象node状态 suspend hostType physics 的 resume 按钮是否可点击 @0

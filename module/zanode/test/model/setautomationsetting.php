@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 chartModel->isClickable().
+title=测试 zanodemodel->setAutomationSetting().
 cid=1
 
 - 测试自动化设置 node1 新增
