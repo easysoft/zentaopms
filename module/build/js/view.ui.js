@@ -46,7 +46,7 @@ window.onSearchLinks = function(type, result)
     return false;
 };
 
-$(document).on('click', '.linkObjectBtn', function()
+$(document).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
 {
     const $this       = $(this);
     const type        = $this.data('type');
