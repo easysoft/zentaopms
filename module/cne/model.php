@@ -426,9 +426,9 @@ class cneModel extends model
      *
      * @param  array  $instances
      * @access public
-     * @return object
+     * @return array
      */
-    public function instancesMetrics(array $instances): object
+    public function instancesMetrics(array $instances): array
     {
         $instancesMetrics = array();
 
@@ -936,9 +936,9 @@ class cneModel extends model
      *
      * @param  object       $instance
      * @access public
-     * @return object|false
+     * @return array|false
      */
-    public function getCustomItems(object $instance): object|false
+    public function getCustomItems(object $instance) array|false
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
