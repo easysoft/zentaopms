@@ -130,4 +130,21 @@ class pipelineTest
 
         return $objects;
     }
+
+    /**
+     * 根据名称及类型获取一条流水线记录。
+     * Get a pipeline by name and type.
+     *
+     * @param  string $name
+     * @param  string $type
+     * @access public
+     * @return object|false|array
+     */
+    public function getByNameAndTypeTest(string $name, string $type): object|false|array
+    {
+        $pipeline = $this->objectModel->getByNameAndType($name, $type);
+
+        if(dao::isError()) return dao::getError();
+        return $pipeline;
+    }
 }
