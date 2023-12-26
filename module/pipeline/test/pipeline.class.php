@@ -167,4 +167,22 @@ class pipelineTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->getByID($id);
     }
+
+    /**
+     * 获取禅道用户绑定的第三方账号。
+     * Get user binded third party accounts.
+     *
+     * @param  int    $providerID
+     * @param  string $providerType gitlab, gitea, gogs
+     * @param  string $fields
+     * @access public
+     * @return array
+     */
+    public function getUserBindedPairsTest(int $providerID, string $providerType, string $fields = ''): array
+    {
+        $pairs = $this->objectModel->getUserBindedPairs($providerID, $providerType, $fields);
+
+        if(dao::isError()) return dao::getError();
+        return $pairs;
+    }
 }

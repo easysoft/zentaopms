@@ -1,0 +1,12 @@
+title: zt_oauth
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: account
+    range: 'root,sonar,gitea,gogs-admin,jenkins'
+  - field: openID
+    range: 1-100
+  - field: providerType
+    range: 'gitlab'
+  - field: providerID
+    range: 1
