@@ -142,4 +142,20 @@ class artifactrepoTest
         $newArtifactrepo = $this->objectModel->getByID($id);
         return common::createChanges($oldArtifactrepo, $newArtifactrepo);
     }
+
+    /**
+     * 通过产品ID获取制品库信息。
+     * Get artifactrepo by product ID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getReposByProductTest(int $productID): array
+    {
+        $artifactrepoList = $this->objectModel->getReposByProduct($productID);
+
+        if(dao::isError()) return dao::getError();
+        return $artifactrepoList;
+    }
 }
