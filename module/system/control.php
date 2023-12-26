@@ -65,7 +65,7 @@ class system extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($total, $recPerPage, $pageID);
 
-        $instances        = $this->loadModel('instance')->getByAccount($this->app->user->account, $pager, '', '', 'running');
+        $instances        = $this->loadModel('instance')->getList($pager, '', '', 'running');
         $instancesMetrics = $this->cne->instancesMetrics($instances);
 
         foreach($instances as $instance)

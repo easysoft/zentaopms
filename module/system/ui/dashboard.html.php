@@ -65,7 +65,7 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), $this->instance->totalServices()),
+                        div(setClass('text-4xl font-semibold text-primary'), $this->instance->getServiceCount()),
                         $lang->system->serviceQuantity
                     )
                 )

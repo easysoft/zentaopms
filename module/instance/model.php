@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @version   $Id$
  * @link      https://www.zentao.net
  */
-class InstanceModel extends model
+class instanceModel extends model
 {
     /**
      * Construct method: load CNE model, and set primaryDomain.
@@ -26,26 +26,24 @@ class InstanceModel extends model
     }
 
     /**
+     * 获取应用实例。
      * Get by id.
      *
-     * @param  int $id
+     * @param  int         $id
      * @access public
      * @return object|null
      */
-    public function getByID($id)
+    public function getByID(int $id): object|null
     {
         $instance = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('id')->eq($id)
             ->andWhere('deleted')->eq(0)
             ->fetch();
+
         if(!$instance) return null;
 
         $instance->spaceData = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($instance->space)->fetch();
-        if($instance->solution)
-        {
-            $solution = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($instance->solution)->fetch();
-            $instance->solutionData = $solution;
-        }
+        if($instance->solution) $instance->solutionData = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($instance->solution)->fetch();
 
         return $instance;
     }
@@ -111,20 +109,18 @@ class InstanceModel extends model
     /**
      * Get instances list by account.
      *
-     * @param  string $account
      * @param  object $pager
+     * @param  string $pinned
+     * @param  string $searchParam
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getByAccount($account = '', $pager = null, $pinned = '', $searchParam = '', $status = 'all')
+    public function getList($pager = null, string $pinned = '', string $searchParam = '', string $status = 'all')
     {
-        // $defaultSpace = $this->loadModel('space')->defaultSpace($account ? $account : $this->app->user->account);
-
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
             ->where('instance.deleted')->eq(0)
-            // ->andWhere('space.id')->eq($defaultSpace->id)
-            // ->beginIF($account)->andWhere('space.owner')->eq($account)->fi()
             ->beginIF($pinned)->andWhere('instance.pinned')->eq((int)$pinned)->fi()
             ->beginIF($searchParam)->andWhere('instance.name')->like("%{$searchParam}%")->fi()
             ->beginIF($status != 'all')->andWhere('instance.status')->eq($status)->fi()
@@ -152,7 +148,7 @@ class InstanceModel extends model
      * @access public
      * @return int
      */
-    public function totalServices()
+    public function getServiceCount(): int
     {
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
@@ -166,26 +162,12 @@ class InstanceModel extends model
     }
 
     /**
-     * Pin instance to navigation page or Unpin instance.
-     *
-     * @param  int    $instanceID
-     * @access public
-     * @return void
-     */
-    public function pinToggle($instanceID)
-    {
-        $instance = $this->getByID($instanceID);
-        $pinned = $instance->pinned == '0' ? '1' : '0';
-        $this->dao->update(TABLE_INSTANCE)->set('pinned')->eq($pinned)->where('id')->eq($instanceID)->exec();
-    }
-
-    /**
      * Count old domain.
      *
      * @access public
      * @return int
      */
-    public function countOldDomain()
+    public function countOldDomain(): int
     {
         /* REPLACE(domain, .$sysDomain, '') used for special case: new domain is a.com and old domain is b.a.com, domain of instance is c.b.a.com, */
         $sysDomain = $this->loadModel('cne')->sysDomain();
@@ -860,30 +842,6 @@ class InstanceModel extends model
     }
 
     /**
-     * Parse K8Name to get more data: chart, created time, user name.
-     *
-     * @param  string $k8Name
-     * @access public
-     * @return object
-     */
-    public function parseK8Name($k8Name)
-    {
-        $datePosition = strripos($k8Name, '-');
-        $createdAt    = trim(substr($k8Name, $datePosition), '-');
-
-        $createdBy       = trim(substr($k8Name, 0, $datePosition), '-');
-        $accountPosition = strripos($createdBy, '-');
-        $createdBy       = trim(substr($createdBy, $accountPosition), '-');
-
-        $parsedData = new stdclass;
-        $parsedData->chart     = trim(substr($k8Name, 0, $accountPosition));
-        $parsedData->createdBy = trim($createdBy, '-');
-        $parsedData->createdAt = date('Y-m-d H:i:s', strtotime($createdAt));
-
-        return $parsedData;
-    }
-
-    /**
      * Filter memory options that smaller then current memory size.
      *
      * @param  object $resources
@@ -901,28 +859,6 @@ class InstanceModel extends model
         }
 
         return $options;
-    }
-
-    /**
-     * Print suggested memory size by current memory usage. Show suggested messge when memory usage more than 90%.
-     *
-     * @param  object $memUsage
-     * @param  array  $memoryOptions
-     * @access public
-     * @return void
-     */
-    public function printSuggestedMemory($memUsage, $memoryOptions)
-    {
-        if($memUsage->rate < 90) return;
-
-        foreach($memoryOptions as  $size => $memText)
-        {
-            if($size > ($memUsage->limit / 1024))
-            {
-                printf($this->lang->instance->adjustMemorySize, $memText);
-                return ;
-            }
-        }
     }
 
     /**
@@ -973,205 +909,6 @@ class InstanceModel extends model
         return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
     }
 
-    /*
-     * Print action buttons with icon.
-     *
-     * @param  object $instance
-     * @access public
-     * @return void
-     */
-    public function printIconActions($instance)
-    {
-        $actionHtml = '';
-
-        $disableStart = !$this->canDo('start', $instance);
-        $actionHtml  .= html::commonButton("<i class='icon-play'></i>", "instance-id='{$instance->id}' title='{$this->lang->instance->start}'" . ($disableStart ? ' disabled ' : ''), "btn-start btn btn-lg btn-action");
-
-        $disableStop = !$this->canDo('stop', $instance);
-        $actionHtml .= html::commonButton('<i class="icon-off"></i>', "instance-id='{$instance->id}' title='{$this->lang->instance->stop}'" . ($disableStop ? ' disabled ' : ''), 'btn-stop btn btn-lg btn-action');
-
-        if(empty($instance->solution))
-        {
-            $disableUninstall = !$this->canDo('uninstall', $instance);
-            $actionHtml      .= html::commonButton('<i class="icon-trash"></i>', "instance-id='{$instance->id}' title='{$this->lang->instance->uninstall}'" . ($disableUninstall ? ' disabled ' : ''), 'btn-uninstall btn btn-lg btn-action');
-        }
-
-        if($instance->domain)
-        {
-            $disableVisit = !$this->canDo('visit', $instance);
-            $actionHtml  .= html::a($this->url($instance), '<i class="icon icon-menu-my"></i>', '_blank', "title='{$this->lang->instance->visit}' class='btn btn-lg btn-action btn-link'" . ($disableVisit ? ' disabled style="pointer-events: none;"' : ''));
-        }
-
-        echo $actionHtml;
-    }
-
-    /*
-     * Print action buttons with text.
-     *
-     * @param  object $instance
-     * @access public
-     * @return void
-     */
-    public function printTextActions($instance)
-    {
-        $actionHtml = '';
-
-        $disableStart = !$this->canDo('start', $instance);
-        $actionHtml  .= html::commonButton($this->lang->instance->start, "instance-id='{$instance->id}' title='{$this->lang->instance->start}'" . ($disableStart ? ' disabled ' : ''), "btn-start btn label label-outline label-primary label-lg");
-
-        $disableStop = !$this->canDo('stop', $instance);
-        $actionHtml .= html::commonButton($this->lang->instance->stop, "instance-id='{$instance->id}' title='{$this->lang->instance->stop}'" . ($disableStop ? ' disabled ' : ''), 'btn-stop btn label label-outline label-warning label-lg');
-
-        if(empty($instance->solution))
-        {
-            $disableUninstall = !$this->canDo('uninstall', $instance);
-            $actionHtml      .= html::commonButton($this->lang->instance->uninstall, "instance-id='{$instance->id}' title='{$this->lang->instance->uninstall}'" . ($disableUninstall ? ' disabled ' : ''), 'btn-uninstall btn label  label-outline label-danger label-lg');
-        }
-
-        if($instance->domain)
-        {
-            $disableVisit = !$this->canDo('visit', $instance);
-            $actionHtml  .= html::a($this->url($instance), $this->lang->instance->visit, '_blank', "title='{$this->lang->instance->visit}' class='btn btn-primary label-lg'" . ($disableVisit ? ' disabled style="pointer-events: none;"' : ''));
-        }
-
-        echo $actionHtml;
-    }
-
-    /**
-     * Print backup button of instance.
-     *
-     * @param  object $instance
-     * @access public
-     * @return void
-     */
-    public function printBackupBtn($instance)
-    {
-        $disabled = $instance->status == 'running' ? '' : 'disabled';
-        $title    = empty($disabled) ? $this->lang->instance->backup->create : $this->lang->instance->backupOnlyRunning;
-        $btn      = html::commonButton($this->lang->instance->backup->create, "instance-id='{$instance->id}' title='{$title}' {$disabled}", "btn-backup btn btn-primary");
-
-        echo $btn;
-    }
-
-    /**
-     * Print restore button of instance.
-     *
-     * @param  object $instance
-     * @param  object $backup
-     * @access public
-     * @return void
-     */
-    public function printRestoreBtn($instance, $backup)
-    {
-        $disabled = $instance->status == 'running' && strtolower($backup->status) == 'completed' ? '' : 'disabled';
-        $title    = empty($disabled) ? $this->lang->instance->backup->restore : $this->lang->instance->restoreOnlyRunning;
-        $btn      = html::commonButton($this->lang->instance->backup->restore, "instance-id='{$instance->id}' title='{$title}' {$disabled} backup-name='{$backup->name}'", "btn-restore btn btn-info");
-
-        echo $btn;
-    }
-
-    /**
-     * Print button for managing database.
-     *
-     * @param  object $db
-     * @param  object $instance
-     * @access public
-     * @return void
-     */
-    public function printDBAction($db, $instance)
-    {
-        $disabled = $db->ready ? '' : 'disabled';
-        $btnHtml  = html::commonButton($this->lang->instance->management, "{$disabled} data-db-name='{$db->name}' data-db-type='{$db->db_type}' data-id='{$instance->id}'", 'db-login btn btn-primary');
-
-        echo $btnHtml;
-    }
-
-    /**
-     * Print message of action log of instance.
-     *
-     * @param  object $instance
-     * @param  object $log
-     * @access public
-     * @return string
-     */
-    public function printLog($instance, $log)
-    {
-        if(empty($this->userPairs)) $this->userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $action  = zget($this->lang->instance->actionList, $log->action, $this->lang->actions);
-        $logText = zget($this->userPairs, $log->actor) . ' ' . sprintf($action, $instance->name, $log->comment);
-
-        $extra = json_decode($log->extra);
-        if(empty($extra) or !isset($extra->data))
-        {
-            return $logText;
-        }
-
-        switch($log->action)
-        {
-            case 'editname':
-                $oldName  = zget($extra->data, 'oldName', '');
-                $newName  = zget($extra->data, 'newName', '');
-                $logText .= ', ' . sprintf($this->lang->instance->nameChangeTo, $oldName, $newName);
-                break;
-            case 'upgrade':
-                $oldVersion = zget($extra->data, 'oldVersion', '');
-                $newVersion = zget($extra->data, 'newVersion', '');
-                $logText   .= ', ' . sprintf($this->lang->instance->versionChangeTo, $oldVersion, $newVersion);
-                break;
-            default:
-        }
-
-        return $logText;
-    }
-
-    /*
-     * Convert CPU digital to readable format.
-     *
-     * @param  array  $cpuList
-     * @access public
-     * @return array
-     */
-    public function getCpuOptions($cpuList)
-    {
-        $newList = array();
-        foreach($cpuList as $cpuValue) $newList[$cpuValue] = $cpuValue . $this->lang->instance->cpuCore;
-        return $newList;
-    }
-
-    /*
-     * Convert memory digital to readable format.
-     *
-     * @param  array  $memList
-     * @access public
-     * @return array
-     */
-    public function getMemOptions($memList)
-    {
-        $newList = array();
-        foreach($memList as $memValue) $newList[$memValue] = helper::formatKB(intval($memValue));
-        return $newList;
-    }
-
-    /**
-     * Get senior app list. The instance can be switched to senior App.
-     *
-     * @param  object $instance
-     * @param  string $channel
-     * @access public
-     * @return array
-     */
-    public function seniorAppList($instance, $channel)
-    {
-        $appList = array();
-        foreach(zget($this->config->instance->seniorChartList, $instance->chart, array()) as $chart)
-        {
-            $cloudApp = $this->loadModel('store')->getAppInfoByChart($chart, $channel, false);
-            if($cloudApp) $appList[] = $cloudApp;
-        }
-
-        return $appList;
-    }
-
     /**
      * Check the free memory of cluster is enough to install app.
      *
@@ -1216,21 +953,6 @@ class InstanceModel extends model
         if($action == 'edit')          return false;
         if($action == 'bindUser')      return $instance->status == 'running' && in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
 
-        return true;
-    }
-
-    /**
-     * 判断按钮是否显示。
-     * Adjust the action display.
-     *
-     * @param  object $instance
-     * @param  string $action
-     * @access public
-     * @return bool
-     */
-    public function isDisplay(object $instance, string $action): bool
-    {
-        if($action !== 'visit' && !commonModel::hasPriv('instance', 'manage')) return false;
         return true;
     }
 
