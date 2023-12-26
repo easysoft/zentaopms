@@ -34,4 +34,23 @@ class artifactrepoTest
         if(dao::isError()) return dao::getError();
         return $artifactrepoList;
     }
+
+    /**
+     * 创建一个制品库。
+     * Create a artifact repo.
+     *
+     * @param  array        $data
+     * @access public
+     * @return array|object
+     */
+    public function createTest(array $data): array|object
+    {
+        $artifactRepo = new stdClass();
+
+        foreach($data as $key => $value) $artifactRepo->{$key} = $value;
+        $artifactRepoID = $this->objectModel->create($artifactRepo);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_ARTIFACTREPO)->where('id')->eq($artifactRepoID)->fetch();
+    }
 }
