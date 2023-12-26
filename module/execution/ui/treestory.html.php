@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadLang('story');
+
 /* Get min stage. */
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
