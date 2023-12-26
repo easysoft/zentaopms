@@ -220,28 +220,28 @@ class zahostModel extends model
     }
 
     /**
-     * Send download image command to HOST.
+     * 下载镜像。
+     * Download image.
      *
-     * @param  object    $image
+     * @param  object $image
      * @access public
      * @return bool
      */
-    public function downloadImage($image)
+    public function downloadImage(object $image): bool
     {
-        $host   = $this->getById($image->host);
+        $host   = $this->getByID($image->host);
         $apiUrl = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/download/add';
 
+        $apiParams = array();
         $apiParams['md5']  = $image->md5;
         $apiParams['url']  = $image->address;
         $apiParams['task'] = intval($image->id);
 
         $response = json_decode(commonModel::http($apiUrl, array($apiParams), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$host->tokenSN"), 'json'));
 
-        if($response and $response->code == 'success')
+        if($response && $response->code == 'success')
         {
-            $this->dao->update(TABLE_IMAGE)
-                ->set('status')->eq('created')
-                ->where('id')->eq($image->id)->exec();
+            $this->dao->update(TABLE_IMAGE)->set('status')->eq('created')->where('id')->eq($image->id)->exec();
             return true;
         }
 
