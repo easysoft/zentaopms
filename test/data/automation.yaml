@@ -1,0 +1,27 @@
+title: table zt_automation
+desc: "自动化设置"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: node
+    note: "执行节点"
+    range: 1-10000{2}
+  - field: product
+    note: "产品"
+    range: 1-10000{2}
+  - field: scriptPath
+    note: "脚本目录"
+    prefix: scriptPath
+    range: 1-10000
+  - field: shell
+    note: "shell 命令"
+    prefix: shell
+    range: 1-10000
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
