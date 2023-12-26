@@ -10,7 +10,7 @@ fields:
     range: 1-10000{2}
   - field: product
     note: "产品"
-    range: 1-10000{2}
+    range: 1-10000
   - field: scriptPath
     note: "脚本目录"
     prefix: scriptPath
