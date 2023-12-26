@@ -25,6 +25,63 @@ class jenkinsTest
     }
 
     /**
+     * 测试根据深度获取流水线。
+     * Test get jobs by depth.
+     *
+     * @param  int    $depth
+     * @access public
+     * @return string
+     */
+    public function getDepthJobsTest(int $depth = 1): string
+    {
+        $userPWD       = "jenkins:11eb8b38c99143c7c6d872291e291abff4";
+        $jenkinsServer = 'https://jenkinsdev.qc.oop.cc/';
+        $response      = common::http($jenkinsServer . '/api/json/items/list' . ($depth ? "?depth=1" : ''), '', array(CURLOPT_USERPWD => $userPWD));
+        $response      = json_decode($response);
+
+        $tasks  = $this->jenkins->getDepthJobs($response->jobs, $userPWD, $depth);
+        $return = '';
+        foreach($tasks as $folder => $subTasks)
+        {
+            if(is_array($subTasks))
+            {
+                $return .= $this->getJobsByTest($subTasks);
+            }
+            else
+            {
+                $return .= "{$folder}:{$subTasks},";
+            }
+        }
+        return trim($return, ',');
+    }
+
+    /**
+     * 测试获取流水线下的目录名称和文件名称。
+     * Test get the directory name and file name under the pipeline.
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return string
+     */
+    protected function getJobsByTest(array $tasks): string
+    {
+        $return = '';
+        foreach($tasks as $folder => $subTasks)
+        {
+            if(is_array($subTasks))
+            {
+                if(empty($subTasks)) $return .= "{$folder}:0,";
+                $return .= $this->getJobsByTest($subTasks);
+            }
+            else
+            {
+                $return .= "{$folder}:{$subTasks},";
+            }
+        }
+        return $return;
+    }
+
+    /**
      * 测试获取 Jenkins 流水线。
      * Test get jobs by jenkins .
      *

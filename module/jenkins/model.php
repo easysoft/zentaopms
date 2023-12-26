@@ -60,7 +60,7 @@ class jenkinsModel extends model
      * @access protected
      * @return array
      */
-    protected function getDepthJobs(array $jobs, string $userPWD, int $depth = 1): array
+    public function getDepthJobs(array $jobs, string $userPWD, int $depth = 1): array
     {
         if($depth > 4) return array();
 
@@ -71,7 +71,7 @@ class jenkinsModel extends model
 
             $isJob = true;
             if(stripos($job->_class, '.multibranch') !== false || stripos($job->_class, '.folder') !== false || stripos($job->_class, '.OrganizationFolder') !== false) $isJob = false;
-            if(!empty($job->buildable) and $job->buildable == true) $isJob = true;
+            if(!empty($job->buildable) && $job->buildable == true) $isJob = true;
 
             if($isJob)
             {
