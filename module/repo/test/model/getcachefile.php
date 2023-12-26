@@ -7,11 +7,19 @@ su('admin');
 /**
 
 title=测试 repoModel->getCacheFile();
+timeout=0
 cid=1
-pid=1
+
+- 执行repo模块的getCacheFileTest方法  @
 
 */
 
-$repo = new repoTest();
+zdTable('pipeline')->gen(5);
+zdTable('repo')->config('repo')->gen(5);
 
-r($repo->getCacheFileTest()) && p() && e();
+$repoID   = 1;
+$path     = '';
+$revision = '';
+
+$repo = new repoTest();
+r($repo->getCacheFileTest($repoID, $path, $revision)) && p() && e('1'); //测试生成缓存文件

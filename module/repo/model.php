@@ -663,8 +663,9 @@ class repoModel extends model
         $repo->acl = json_decode($repo->acl);
         if(empty($repo->acl)) $repo->acl = new stdclass();
         if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
+
         $repo->serviceHost    = (int)$repo->serviceHost;
-        $repo->serviceProject = (int)$repo->serviceProject;
+        $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
         return $repo;
     }
 
@@ -1823,7 +1824,7 @@ class repoModel extends model
         }
 
         $repo->gitService = (int)$repo->serviceHost;
-        $repo->project    = (int)$repo->serviceProject;
+        $repo->project    = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
         return $repo;
     }
 
@@ -1919,7 +1920,7 @@ class repoModel extends model
      */
     public function getCloneUrl(object $repo): object
     {
-        if(empty($repo)) return new stdclass();
+        if(empty($repo->id)) return new stdclass();
 
         $url = new stdClass();
         if($repo->SCM == 'Subversion')
@@ -2279,13 +2280,13 @@ class repoModel extends model
      * Get gitlab projects.
      *
      * @param  int    $gitlabID
-     * @param  string $filter
+     * @param  string $projectFilter
      * @access public
      * @return array
      */
-    public function getGitlabProjects(int $gitlabID, string $filter = ''): array
+    public function getGitlabProjects(int $gitlabID, string $projectFilter = ''): array
     {
-        $showAll = ($filter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
+        $showAll = ($projectFilter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
         if($this->app->user->admin or $showAll)
         {
             $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, 'true', 0, 0, false);
@@ -2295,11 +2296,11 @@ class repoModel extends model
             $gitlabUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
             if(!$gitlabUser) $this->app->control->send(array('message' => array()));
 
-            $projects    = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            $projects    = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $projectFilter ? 'false' : 'true');
             $groupIDList = array(0 => 0);
             $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
-            if($filter == 'IS_DEVELOPER')
+            if($projectFilter == 'IS_DEVELOPER')
             {
                 foreach($projects as $key => $project)
                 {
@@ -2321,10 +2322,11 @@ class repoModel extends model
      */
     public function getGroups(int $serverID, int|string $groupID = 0): string|array|false
     {
-        $server       = $this->loadModel('pipeline')->getByID($serverID);
-        $getGroupFunc = 'get' . $server->type . 'Groups';
+        $server = $this->loadModel('pipeline')->getByID($serverID);
+        if(empty($server->type)) return false;
 
-        $groups = $this->$getGroupFunc($serverID);
+        $getGroupFunc = 'get' . $server->type . 'Groups';
+        $groups       = $this->$getGroupFunc($serverID);
 
         if($groupID !== 0)
         {

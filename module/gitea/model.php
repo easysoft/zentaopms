@@ -240,6 +240,32 @@ class giteaModel extends model
     }
 
     /**
+     * 通过api获取组列表。
+     * Get groups by api.
+     *
+     * @param  int    $giteaID
+     * @param  int    $sudo
+     * @access public
+     * @return array
+     */
+    public function apiGetGroups(int $giteaID, bool $sudo = true): array
+    {
+         $apiRoot = $this->getApiRoot($giteaID, $sudo);
+         if(!$apiRoot) return array();
+
+         $url        = sprintf($apiRoot, "/orgs");
+         $allResults = array();
+         for($page = 1; true; $page++)
+         {
+             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+             if(empty($results)) break;
+             $allResults = array_merge($allResults, $results);
+             if(count($results) < 50) break;
+         }
+         return $allResults;
+    }
+
+    /**
      * 通过API获取Gitea用户列表。
      * Get gitea user list.
      *

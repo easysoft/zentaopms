@@ -7,8 +7,10 @@ su('admin');
 /**
 
 title=测试 repoModel->setMenu();
+timeout=0
 cid=1
-pid=1
+
+- 执行repo模块的setMenuTest方法  @
 
 */
 

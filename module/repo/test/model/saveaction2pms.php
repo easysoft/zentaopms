@@ -7,8 +7,10 @@ su('admin');
 /**
 
 title=测试 repoModel->saveAction2PMS();
+timeout=0
 cid=1
-pid=1
+
+- 执行repo模块的saveAction2PMSTest方法  @
 
 */
 

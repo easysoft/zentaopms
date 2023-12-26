@@ -267,15 +267,6 @@ class repoTest
         return $objects;
     }
 
-    public function getCacheFileTest($repoID, $path, $revision)
-    {
-        $objects = $this->objectModel->getCacheFile($repoID, $path, $revision);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function getProductsByRepoTest($repoID)
     {
         $objects = $this->objectModel->getProductsByRepo($repoID);
@@ -547,12 +538,20 @@ class repoTest
     public function getCloneUrlTest(int $repoID)
     {
         $repo = $this->objectModel->getByID($repoID);
-        if(!$repo) $repo = new stdclass();
 
         $objects = $this->objectModel->getCloneUrl($repo);
 
         if(dao::isError()) return dao::getError();
 
+        if(empty((array)$objects)) return 'empty';
         return $objects;
+    }
+
+    public function getCacheFileTest(int $repoID, string $path, string $revision)
+    {
+        $result = $this->objectModel->getCacheFile($repoID, $path, $revision);
+
+        if(strPos($result, 'repo/' . $repoID . '/' ) !== false) return true;
+        return $result;
     }
 }

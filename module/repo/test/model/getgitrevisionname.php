@@ -7,8 +7,10 @@ su('admin');
 /**
 
 title=测试 repoModel->getGitRevisionName();
+timeout=0
 cid=1
-pid=1
+
+- 执行repo模块的getGitRevisionNameTest方法  @
 
 */
 
