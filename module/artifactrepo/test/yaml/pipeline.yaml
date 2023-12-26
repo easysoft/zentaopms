@@ -9,7 +9,7 @@ fields:
   - field: type
     range: 'nexus,gitlab,sonarqube,gitea,gogs,jenkins'
   - field: url
-    range: 'https://nexus3dev.qc.oop.cc/,https://gitlabdev.qc.oop.cc/,https://sonardev.qc.oop.cc/,https://giteadev.qc.oop.cc/,https://gogsdev.qc.oop.cc/,https://jenkinsdev.qc.oop.cc/'
+    range: '`https://nexus3dev.qc.oop.cc/`,`https://gitlabdev.qc.oop.cc/`,`https://sonardev.qc.oop.cc/`,`https://giteadev.qc.oop.cc/`,`https://gogsdev.qc.oop.cc/`,`https://jenkinsdev.qc.oop.cc/`'
   - field: account
     range: 'admin,root,sonar,gitea,gogs-admin,jenkins'
   - field: password
