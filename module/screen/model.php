@@ -234,13 +234,13 @@ class screenModel extends model
     /**
      * Generate metric component.
      *
-     * @param  object $metric
-     * @param  object $component
-     * @param  object $filterParams
+     * @param  object      $metric
+     * @param  object|null $component
+     * @param  array       $filterParams
      * @access public
      * @return object
      */
-    public function genMetricComponent($metric, $component = null, $filterParams = null)
+    public function genMetricComponent($metric, $component = null, $filterParams = array())
     {
         list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
@@ -1593,6 +1593,8 @@ class screenModel extends model
      * Get option of metric chart.
      *
      * @param  object $metric
+     * @param  array  $resultHeader
+     * @param  array  $resultData
      * @access public
      * @return object
      */
@@ -1611,11 +1613,13 @@ class screenModel extends model
      * Get option of metric table.
      *
      * @param  object $metric
-     * @param  object $filterParams
+     * @param  array $resultHeader
+     * @param  array $resultData
+     * @param  array $filterParams
      * @access public
      * @return object
      */
-    public function getMetricTableOption($metric, $resultHeader, $resultData, $filterParams = null)
+    public function getMetricTableOption($metric, $resultHeader, $resultData, $filterParams = array())
     {
         $this->loadModel('metric');
 
@@ -1642,16 +1646,19 @@ class screenModel extends model
      * Filter metric data.
      *
      * @param  array  $data
-     * @param  array  $filter
+     * @param  array  $filters
      * @access public
      * @return array
      */
-    public function filterMetricData($data, $filters = null)
+    public function filterMetricData($data, $filters = array())
     {
+        $filters = array_filter($filters, function($item) 
+        {
+            return $item['default'] !== null;
+        });
         if(empty($filters)) return $data;
 
         $objectPairs = $this->loadModel('metric')->getPairsByScope($filters[0]['field']);
-
         $filteredData = array();
         foreach($data as $row)
         {

@@ -141,6 +141,8 @@ class screen extends control
 
                 foreach($filters as $index => $filter)
                 {
+                    if($filterParams[$index]['default'] === null) continue;
+
                     $default = isset($filterParams[$index]['default']) ? $filterParams[$index]['default'] : null;
                     $filterType = $filter['type'];
                     if($filterType == 'date' or $filterType == 'datetime')
@@ -188,7 +190,7 @@ class screen extends control
 
             if($type == 'metric')
             {
-                $chartData = $this->screen->genMetricComponent($chart, $component, $filterParams);
+                $chartData = $this->screen->genMetricComponent($chart, $component, (array)$filterParams);
             }
             else
             {
