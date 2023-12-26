@@ -10,11 +10,11 @@ cid=1
 
 - 获取ID为1的主机的id,type,extranet
  - 属性id @1
- - 属性type @normal
+ - 属性type @node
  - 属性extranet @10.0.0.1
 - 获取ID为10的主机的id,type,extranet
  - 属性id @10
- - 属性type @normal
+ - 属性type @physics
  - 属性extranet @10.0.0.10
 - 获取ID为0的主机，ID为0的主机不存在,返回false @0
 
@@ -29,6 +29,6 @@ $ipList = array(1, 10, 0);
 
 $zanode = new zanodeTest();
 
-r($zanode->getHostByID($ipList[0])) && p('id,type,extranet') && e('1,normal,10.0.0.1');     //获取ID为1的主机的id,type,extranet
-r($zanode->getHostByID($ipList[1])) && p('id,type,extranet') && e('10,normal,10.0.0.10');   //获取ID为10的主机的id,type,extranet
+r($zanode->getHostByID($ipList[0])) && p('id,type,extranet') && e('1,node,10.0.0.1');       //获取ID为1的主机的id,type,extranet
+r($zanode->getHostByID($ipList[1])) && p('id,type,extranet') && e('10,physics,10.0.0.10');  //获取ID为10的主机的id,type,extranet
 r($zanode->getHostByID($ipList[2])) && p('') && e('0');                                     //获取ID为0的主机，ID为0的主机不存在,返回false

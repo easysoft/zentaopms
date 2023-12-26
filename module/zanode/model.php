@@ -471,7 +471,7 @@ class zanodemodel extends model
      * @access public
      * @return array
      */
-    public function getListByQuery(string $browseType = 'all', int $param = 0, string $orderBy = 't1.id_desc', $pager = null): array
+    public function getListByQuery(string $browseType = 'all', int $param = 0, string $orderBy = 't1.id_desc', object $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -498,32 +498,32 @@ class zanodemodel extends model
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        $list       = $this->zanodeTao->getZaNodeListByQuery($query, $orderBy, $pager);
-        $hostIDList = array_column($list, 'parent');
-        $hosts      = $this->zanodeTao->getHostsByIDList(array_unique($hostIDList));
+        $nodeList  = $this->zanodeTao->getZaNodeListByQuery($query, $orderBy, $pager);
+        $hosts = $this->zanodeTao->getHostsByIDList(array_unique(array_column($nodeList, 'parent')));
 
-        foreach($list as $l)
+        foreach($nodeList as $node)
         {
-            $l->heartbeat = empty($l->heartbeat) ? '' : $l->heartbeat;
-            $host         = $l->hostType == '' ? zget($hosts, $l->parent) : clone $l;
+            $node->heartbeat = empty($node->heartbeat) ? '' : $node->heartbeat;
+            $host            = $node->hostType == '' ? zget($hosts, $node->parent) : clone $node;
             if(is_object($host))
             {
                 $host->status    = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
                 $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
             }
 
-            if($l->status == 'running' || $l->status == 'ready')
+            if($node->status == 'running' || $node->status == 'ready')
             {
                 if(!is_object($host))
                 {
-                    $l->status = self::STATUS_SHUTOFF;
+                    $node->status = self::STATUS_SHUTOFF;
                     continue;
                 }
 
-                if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $l->status = $l->hostType == '' ? 'wait' : 'offline';
+                if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $node->status = $node->hostType == '' ? 'wait' : 'offline';
             }
         }
-        return $list;
+
+        return $nodeList;
     }
 
     /**
@@ -536,11 +536,11 @@ class zanodemodel extends model
      */
     public function getPairs(string $orderBy = 'id_desc'): array
     {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)
+        return $this->dao->select('id,name')->from(TABLE_ZAHOST)
             ->where('deleted')->eq(0)
             ->andWhere('type')->in('node,physics')
             ->orderBy($orderBy)
-            ->fetchPairs('id', 'name');
+            ->fetchPairs();
     }
 
     /**
