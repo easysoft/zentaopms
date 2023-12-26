@@ -222,7 +222,7 @@ $config->projectExecution->dtable->fieldList['progress']['width']    = '64';
 $config->projectExecution->dtable->fieldList['progress']['group']    = '4';
 
 $config->projectExecution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
-$config->projectExecution->dtable->fieldList['burn']['name']     = 'burn';
+$config->projectExecution->dtable->fieldList['burn']['name']     = 'burns';
 $config->projectExecution->dtable->fieldList['burn']['type']     = 'burn';
 $config->projectExecution->dtable->fieldList['burn']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['burn']['width']    = '88';
