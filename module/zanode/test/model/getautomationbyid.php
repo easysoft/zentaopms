@@ -15,13 +15,13 @@ cid=1
  - 属性shell @shell1
 - 测试获取 id 3 的自动化设置
  - 属性id @3
- - 属性product @2
+ - 属性product @3
  - 属性node @2
  - 属性scriptPath @scriptPath3
  - 属性shell @shell3
 - 测试获取 id 5 的自动化设置
  - 属性id @5
- - 属性product @3
+ - 属性product @5
  - 属性node @3
  - 属性scriptPath @scriptPath5
  - 属性shell @shell5
@@ -43,7 +43,7 @@ $zanode = new zanodeTest();
 $id = array(1, 3, 5, 0, 111);
 
 r($zanode->getAutomationByID($id[0])) && p('id,product,node,scriptPath,shell') && e('1,1,1,scriptPath1,shell1'); // 测试获取 id 1 的自动化设置
-r($zanode->getAutomationByID($id[1])) && p('id,product,node,scriptPath,shell') && e('3,2,2,scriptPath3,shell3'); // 测试获取 id 3 的自动化设置
-r($zanode->getAutomationByID($id[2])) && p('id,product,node,scriptPath,shell') && e('5,3,3,scriptPath5,shell5'); // 测试获取 id 5 的自动化设置
+r($zanode->getAutomationByID($id[1])) && p('id,product,node,scriptPath,shell') && e('3,3,2,scriptPath3,shell3'); // 测试获取 id 3 的自动化设置
+r($zanode->getAutomationByID($id[2])) && p('id,product,node,scriptPath,shell') && e('5,5,3,scriptPath5,shell5'); // 测试获取 id 5 的自动化设置
 r($zanode->getAutomationByID($id[3])) && p()                                   && e('0');                        // 测试获取 空的 id 0 的自动化设置
 r($zanode->getAutomationByID($id[4])) && p()                                   && e('0');                        // 测试获取 不存在的 id 111 的自动化设置
