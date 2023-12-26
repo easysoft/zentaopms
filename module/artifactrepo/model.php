@@ -40,7 +40,7 @@ class artifactrepoModel extends model
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
         $artifactRepos = $this->dao->select('t1.*, t2.id AS pipelineID, t2.url')->from(TABLE_ARTIFACTREPO)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.serverID = t2.id')
@@ -48,6 +48,7 @@ class artifactrepoModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         foreach($artifactRepos as $repo)
         {
             $repo->url .= '/repository/' . $repo->repoName . '/';
