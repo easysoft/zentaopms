@@ -387,23 +387,20 @@ class zahostModel extends model
     }
 
     /**
+     * 根据 ID 获取宿主机。
      * Get host by id.
      *
      * @param  int    $hostID
      * @access public
      * @return object
      */
-    public function getById($hostID)
+    public function getByID(int $hostID): object|false
     {
-        $host = $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
-            ->where('id')->eq($hostID)
-            ->fetch();
-        $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
+        $host = $this->dao->select('*, id AS hostID')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
+        if(!$host) return false;
 
-        if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
-        {
-            $host->status = 'offline';
-        }
+        if(empty($host->heartbeat)) $host->heartbeat = '';
+        if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online') $host->status = 'offline';
 
         return $host;
     }
