@@ -24,37 +24,31 @@ class zahostModel extends model
     }
 
     /**
+     * 创建宿主机。
      * Create a host.
      *
      * @param  object   $hostInfo
      * @access public
      * @return int|bool
      */
-    public function create(object $hostInfo)
+    public function create(object $hostInfo): int|bool
     {
-        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
+        $ping = $this->checkAddress($hostInfo->extranet);
+        if(!$ping) dao::$errors['extranet'][] = $this->lang->zahost->netError;
+
+        $this->dao->insert(TABLE_ZAHOST)->data($hostInfo)->autoCheck()
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('cpuCores,diskSize', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->check('name', 'unique', "type='zahost'")
-            ->autoCheck();
+            ->exec();
+
         if(dao::isError()) return false;
 
-        $ping = $this->checkAddress($hostInfo->extranet);
-        if(!$ping)
-        {
-            return false;
-        }
-
-        $this->dao->insert(TABLE_ZAHOST)->data($hostInfo)->autoCheck()->exec();
         $hostID = $this->dao->lastInsertID();
-        if(!dao::isError())
-        {
-            $this->loadModel('action')->create('zahost', $hostID, 'created');
-            return $hostID;
-        }
+        $this->loadModel('action')->create('zahost', $hostID, 'created');
 
-        return false;
+        return $hostID;
     }
 
     /**
