@@ -131,7 +131,7 @@ class ciModel extends model
                 $response  = common::http($buildUrl, '', array(CURLOPT_USERPWD => $userPWD));
                 $buildInfo = json_decode($response);
 
-                if($buildInfo->building)
+                if(!empty($buildInfo->building))
                 {
                     $this->updateBuildStatus($compile, 'building');
                 }
