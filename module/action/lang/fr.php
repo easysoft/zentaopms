@@ -319,7 +319,6 @@ $lang->action->desc->disableldap             = '$date, disabled by <strong>$acto
 $lang->action->desc->enablesmtp              = '$date, enabled by <strong>$actor</strong> of SMTP。' . "\n";
 $lang->action->desc->disablesmtp             = '$date, disabled by <strong>$actor</strong> of SMTP。' . "\n";
 $lang->action->desc->updatecustom            = '$date, updated by <strong>$actor</strong> of custom settings.' . "\n";
-$lang->action->desc->tosenior                = '$date, upgraded from <strong>$oldAppName</strong> to <strong>$newAppName</strong> by <strong>$actor</strong> .' . "\n";
 
 $lang->action->desc->delist  = '$date, delist by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->publish = '$date, publish by <strong>$actor</strong>.' . "\n";
@@ -338,7 +337,6 @@ $lang->action->label->enableldap              = 'enable LDAP ';
 $lang->action->label->disableldap             = 'disable LDAP ';
 $lang->action->label->enablesmtp              = 'enable SMTP ';
 $lang->action->label->disablesmtp             = 'disable SMTP ';
-$lang->action->label->tosenior                = 'upgrade to senior ';
 $lang->action->label->revert                  = 'revert ';
 $lang->action->label->created                 = 'a créé ';
 $lang->action->label->opened                  = 'a ouvert ';

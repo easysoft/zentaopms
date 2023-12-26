@@ -319,7 +319,6 @@ $lang->action->desc->disableldap             = '$date, 由 <strong>$actor</stron
 $lang->action->desc->enablesmtp              = '$date, 由 <strong>$actor</strong> 启用了SMTP。' . "\n";
 $lang->action->desc->disablesmtp             = '$date, 由 <strong>$actor</strong> 禁用了SMTP。' . "\n";
 $lang->action->desc->updatecustom            = '$date, 由 <strong>$actor</strong> 修改了自定义配置。' . "\n";
-$lang->action->desc->tosenior                = '$date, 由 <strong>$actor</strong> 升级服务到高级版，从 <strong>$oldAppName</strong> 升级到 <strong>$newAppName</strong> 。' . "\n";
 
 $lang->action->desc->delist  = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->publish = '$date, 由 <strong>$actor</strong> 发布。' . "\n";
@@ -338,7 +337,6 @@ $lang->action->label->enableldap              = '启用了LDAP';
 $lang->action->label->disableldap             = '禁用了LDAP';
 $lang->action->label->enablesmtp              = '启用了SMTP';
 $lang->action->label->disablesmtp             = '禁用了SMTP';
-$lang->action->label->tosenior                = '升级了高级版';
 $lang->action->label->revert                  = '还原了';
 $lang->action->label->created                 = '创建了';
 $lang->action->label->opened                  = '创建了';

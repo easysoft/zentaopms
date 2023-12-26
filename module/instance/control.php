@@ -69,7 +69,6 @@ class instance extends control
             $this->view->instanceMetric  = $instanceMetric;
             $this->view->currentResource = '';
             $this->view->customItems     = array();
-            $this->view->hasRestoreLog   =  false;
             $this->view->dbList          = array();
             $this->view->domain          = '';
         }
@@ -124,7 +123,6 @@ class instance extends control
         $this->view->instanceMetric  = $instanceMetric;
         $this->view->currentResource = $currentResource;
         $this->view->customItems     = $customItems;
-        $this->view->hasRestoreLog   = $hasRestoreLog;
         $this->view->dbList          = $dbList;
         $this->view->domain          = $this->cne->getDomain($instance);
     }
@@ -174,36 +172,6 @@ class instance extends control
 
         $this->view->currentResource = $currentResource;
         $this->view->instance        = $instance;
-
-        $this->display();
-    }
-
-    /**
-     * Upgrade to senior serial.
-     *
-     * @param  int    $instanceID
-     * @param  int    $seniorAppID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function toSenior(int $instanceID, int $seniorAppID, string $confirm = 'no')
-    {
-        $instance = $this->instance->getByID($instanceID);
-        $cloudApp = $this->store->getAppInfo($seniorAppID, $instance->channel, false);
-        if(empty($cloudApp)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->noAppInfo));
-
-        if($confirm == 'yes')
-        {
-            $success = $this->instance->upgradeToSenior($instance, $cloudApp);
-            if($success) $this->send(array('result' => 'success', 'message' => '', 'locate' => $this->inLink('view', "id=$instance->id")));
-
-            $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        }
-
-        $this->view->title    = $this->lang->instance->upgradeToSenior;
-        $this->view->instance = $instance;
-        $this->view->cloudApp = $cloudApp;
 
         $this->display();
     }

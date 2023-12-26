@@ -1107,53 +1107,6 @@ class InstanceModel extends model
         return true;
     }
 
-    /**
-     * Upgrade to senior App.
-     *
-     * @param  object $instance
-     * @param  object $seniorApp
-     * @access public
-     * @return bool
-     */
-    public function upgradeToSenior($instance, $seniorApp)
-    {
-        $instance->chart   = $seniorApp->chart;
-        $instance->version = $seniorApp->version;
-
-        $settings = new stdclass;
-        $settings->settings_map = new stdclass;
-        $settings->settings_map->nameOverride = $this->parseK8Name($instance->k8name)->chart;
-
-        $settings->settings_map->global = new stdclass;
-        $settings->settings_map->global->stopped = false;
-
-        if(!$this->cne->updateConfig($instance, $settings))
-        {
-            dao::$errors[] = $this->lang->instance->errors->failToSenior;
-            return false;
-        }
-
-        $seniorData = new stdclass;
-        $seniorData->chart      = $seniorApp->chart;
-        $seniorData->version    = $seniorApp->version;
-        $seniorData->appVersion = $seniorApp->app_version;
-        $seniorData->appID      = $seniorApp->id;
-        $seniorData->appName    = $seniorApp->alias;
-        $seniorData->name       = $instance->name . "($seniorApp->alias)";
-
-        $this->dao->update(TABLE_INSTANCE)->data($seniorData)->where('id')->eq($instance->id)->exec();
-
-        $logExtra = new stdclass;
-        $logExtra->result = 'success';
-        $logExtra->data = new stdclass;
-        $logExtra->data->oldAppName = $instance->appName;
-        $logExtra->data->newAppName = $seniorApp->alias;
-
-        $this->action->create('instance', $instance->id, 'tosenior', '', json_encode($logExtra));
-
-        return true;
-    }
-
     /*
      * Query and update instances status.
      *
@@ -1575,15 +1528,6 @@ class InstanceModel extends model
                 $oldVersion = zget($extra->data, 'oldVersion', '');
                 $newVersion = zget($extra->data, 'newVersion', '');
                 $logText   .= ', ' . sprintf($this->lang->instance->versionChangeTo, $oldVersion, $newVersion);
-                break;
-            case 'tosenior':
-                $oldAppName = zget($extra->data, 'oldAppName', '');
-                $newAppName = zget($extra->data, 'newAppName', '');
-                $logText   .= ', ' . sprintf($this->lang->instance->toSeniorSerial, $oldAppName, $newAppName);
-                break;
-            case 'saveautobackupsettings':
-                $enableAutoBackup = zget($extra->data, 'autoBackup', 0);
-                $logText         .= ': ' . ($enableAutoBackup ? $this->lang->instance->enableAutoBackup : $this->lang->instance->disableAutoBackup);
                 break;
             default:
         }
