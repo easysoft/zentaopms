@@ -1,3 +1,5 @@
 .text-center th {text-align: center;}
 .text-center div {justify-content: center;}
 .projectTd .input-group-addon, .productTd .input-group-addon, .executionTd .input-group-addon  {padding: 0px 14px}
+#sidebar {margin-top: 40px}
+#sidebar .module-menu-header.is-fixed {width: 155px}

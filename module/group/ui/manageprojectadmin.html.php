@@ -12,6 +12,7 @@ namespace zin;
 
 sidebar
 (
+    set::id('sidebar'),
     moduleMenu(set(array(
         'modules'     => $deptTree,
         'activeKey'   => $deptID,
@@ -62,7 +63,7 @@ if($projectAdmins)
             h::td
             (
                 setClass("$hiddenProgram text-center"),
-                checkbox 
+                checkbox
                 (
                     set::name("programAll[$group->group]"),
                     set::items(array(1 => '')),
@@ -244,7 +245,7 @@ else
         h::td
         (
             setClass("$hiddenProgram text-center"),
-            checkbox 
+            checkbox
             (
                 set::name('programAll[1]'),
                 set::items(array(1 => ''))
