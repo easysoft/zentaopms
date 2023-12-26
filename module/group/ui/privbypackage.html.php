@@ -145,125 +145,78 @@ else
         }
     }
 
-    function getPrivsItems($privs, $moduleName, $packageID, $groupPrivs)
+    function getPrivsItemsHtml($privs, $moduleName, $packageID, $groupPrivs)
     {
         global $lang;
-        $privsBox = array();
+        $html = '';
         foreach($privs as $privID => $priv)
         {
             if(!empty($lang->$moduleName->menus) && ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;
             $privMethod = isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '';
-            $privsBox[] = div
-                (
-                    setClass('group-item'),
-                    set('data-id', $privID),
-                    set('data-module', $moduleName),
-                    set('data-package', $packageID),
-                    set('data-divid', "{$moduleName}{$packageID}"),
-                    div
-                    (
-                        setClass('checkbox-primary'),
-                        checkbox
-                        (
-                            set::name("actions[{$priv->module}][]"),
-                            setID("actions[{$priv->module}]{$priv->method}"),
-                            set::value($priv->method),
-                            set::checked($priv->method == $privMethod),
-                            set::text($priv->name),
-                            set('data-id', $privID)
-                        )
-                    )
-                );
+
+            $checked = $priv->method == $privMethod;
+            $checkID = "actions[{$priv->module}]{$priv->method}";
+            $html .= "<div class='group-item' data-module='$moduleName' data-package='$packageID' data-divid='{$moduleName}{$packageID}' data-id='$privID'><div class='checkbox-primary'>";
+            $html .= "<input type='checkbox' id='$checkID' value='$priv->method' name='actions[{$priv->module}][]' data-id='$privID'". ($checked ? ' checked' : '') . ">";
+            $html .= "<label for='$checkID'>$priv->name</label>";
+            $html .= '</div></div>';
         }
 
-        return $privsBox;
+        return $html;
     };
 
-    $getPackagesBox = function($subsetName, $packages, $groupPrivs)
+    $getPackagesBoxHtml = function($subsetName, $packages, $groupPrivs)
     {
         global $lang;
-        $packagesBox = array();
+        $html = '';
         foreach($packages as $packageID => $package)
         {
             $packagePrivs  = $package->allCount;
             $packageSelect = $package->selectCount;
-            $packagesBox[] = array
-                (
-                    div
-                    (
-                        setClass('package'),
-                        set('data-module', $subsetName),
-                        set('data-package', $packageID),
-                        set('all-privs', $packagePrivs),
-                        set('select-privs', $packageSelect),
-                        set('data-divid', "{$subsetName}{$packageID}"),
-                        div
-                        (
-                            setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
-                            checkbox
-                            (
-                                setID("allCheckerModule{$subsetName}Package{$packageID}"),
-                                set::value(1),
-                                set::checked($packagePrivs == $packageSelect),
-                                set::text($lang->group->package->$packageID),
-                                set::labelClass(!empty($packageSelect) && $packagePrivs != $packageSelect ? 'text-left checkbox-indeterminate-block' : 'text-left')
-                            )
-                        ),
-                        h::i(setClass('priv-toggle icon'))
-                    ),
-                    div
-                    (
-                        setClass('privs hidden'),
-                        set('data-module', $subsetName),
-                        set('data-package', $packageID),
-                        set('data-divid', "{$subsetName}{$packageID}"),
-                        div(setClass('arrow')),
-                        div
-                        (
-                            setClass('popover-content'),
-                            getPrivsItems($package->privs, $subsetName, $packageID, $groupPrivs)
-                        )
-                    )
-                );
+
+            $checked = $packagePrivs == $packageSelect;
+            $checkID = "allCheckerModule{$subsetName}Package{$packageID}";
+
+            $html .= "<div class='package' data-module='$subsetName' data-package='$packageID' all-privs='$packagePrivs' select-privs='$packageSelect' data-divid='{$subsetName}{$packageID}'>";
+            $html .= "<div class='checkbox-primary checkbox-inline checkbox-left check-all'>";
+            $html .= "<input type='checkbox' id='$checkID' value='1'". ($checked ? ' checked' : '') . ">";
+            $html .= "<label class='" . (!empty($packageSelect) && $packagePrivs != $packageSelect ? 'text-left checkbox-indeterminate-block' : 'text-left') . "' for='$checkID'>{$lang->group->package->$packageID}</label>";
+            $html .= '</div>';
+            $html .= '<i class="icon priv-toggle"></i>';
+            $html .= '</div>';
+
+            $html .= "<div class='privs hidden' data-module='$subsetName' data-package='$packageID' data-divid='{$subsetName}{$packageID}'>";
+            $html .= '<div class="arrow"></div>';
+            $html .= '<div class="popover-content">';
+            $html .= getPrivsItemsHtml($package->privs, $subsetName, $packageID, $groupPrivs);
+            $html .= '</div>';
+            $html .= '</div>';
         }
-        return $packagesBox;
+        return $html;
     };
 
-    $privBody = null;
+    $privBodyHtml = array();
     foreach($subsets as $subsetName => $subset)
     {
         if($subset->allCount == 0) continue;
         $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;
 
-        $privBody[] = h::tr
-            (
-                setClass(cycle('even, bg-gray')),
-                h::th
-                (
-                    setClass('text-middle text-left module'),
-                    set('data-module', $subsetName),
-                    set('all-privs', $subset->allCount),
-                    set('select-privs', $subset->selectCount),
-                    div
-                    (
-                        setClass('checkbox-primary checkbox-inline checkbox-left check-all'),
-                        checkbox
-                        (
-                            setID("allChecker{$subsetName}"),
-                            set::labelClass($subset->selectCount && $subset->selectCount != $subset->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left'),
-                            set::value(1),
-                            set::checked($subset->selectCount && $subset->selectCount == $subset->allCount),
-                            set::text($subsetTitle)
-                        )
-                    )
-                ),
-                h::td
-                (
-                    setClass('td-sm text-middle text-left package-column'),
-                    set('data-module', $subsetName),
-                    $getPackagesBox($subsetName, $packages[$subsetName], $groupPrivs)
-                )
-            );
+        $privBodyHtml[] = '<tr>';
+
+        $checked = $subset->selectCount && $subset->selectCount == $subset->allCount;
+        $checkID = "allChecker{$subsetName}";
+        $privBodyHtml[] = "<th class='text-middle text-left module' data-module='$subsetName' all-privs='$subset->allCount' select-privs='$subset->selectCount'>";
+        $privBodyHtml[] = '<div class="checkbox-inline checkbox-left check-all"><div class="checkbox-primary">';
+        $privBodyHtml[] = "<input type='checkbox' id='$checkID' value='1'" . ($checked ? ' checked' : '') . ">";
+        $privBodyHtml[] = "<label for='$checkID' class='" . ($subset->selectCount && $subset->selectCount != $subset->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left') . "'>{$subsetTitle}</label>";
+        $privBodyHtml[] = '</div></div>';
+        $privBodyHtml[] = '</th>';
+
+        $privBodyHtml[] = "<td class='td-sm text-middle text-left package-column' data-module='$subsetName'>";
+        $privBodyHtml[] = $getPackagesBoxHtml($subsetName, $packages[$subsetName], $groupPrivs);
+        $privBodyHtml[] = '</td>';
+
+        $privBodyHtml[] = '</tr>';
     }
 
     $dependTree = null;
@@ -341,7 +294,7 @@ else
         )
     );
 
-    form
+    formBase
     (
         setID('managePrivForm'),
         formHidden('actions[][]', ''),
@@ -353,7 +306,7 @@ else
             setClass('flex'),
             div
             (
-                setClass('main main-content'),
+                setClass('main main-content canvas'),
                 div
                 (
                     setClass('btn-group'),
@@ -373,7 +326,7 @@ else
                 h::table
                 (
                     setID('privPackageList'),
-                    setClass('table table-hover table-striped table-bordered'),
+                    setClass('table table-striped table-bordered'),
                     h::thead
                     (
                         h::tr
@@ -390,10 +343,7 @@ else
                             )
                         )
                     ),
-                    h::tbody
-                    (
-                        $privBody
-                    )
+                    h::tbody(html($privBodyHtml))
                 )
             ),
             div

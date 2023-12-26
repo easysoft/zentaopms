@@ -10,10 +10,7 @@
 #mainContainer {gap: 16px; height: calc(100vh - 165px);}
 #mainContainer > .main {flex: 1 1 75%; overflow-y: auto; padding: 0px; border: 1px solid #FFF; box-sizing: content-box;}
 #mainContainer > .side {flex: 1 1 25%;}
-#mainContainer .main .btn-group {position: absolute; visibility: hidden; display: inline-block; z-index: 2; top: 75px;}
-#mainContainer .main .btn-group .switchBtn {padding: 6px 10px;}
-#mainContainer .main .btn-group .switchBtn:first-child {border-radius: 4px 0px 0px 4px;}
-#mainContainer .main .btn-group .switchBtn:last-child {border-radius: 0px 4px 4px 0px;}
+#mainContainer .main .btn-group {position: absolute; visibility: hidden; display: inline-block; z-index: 2; top: 66px;}
 #mainContainer .table {table-layout: fixed;}
 .side .priv-panel {padding: 16px;}
 .side .priv-panel {background: #fff; padding: 10px 16px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
@@ -69,15 +66,13 @@
 /* Manage priv by group. */
 
 #privList td.menus {border-right: 0; padding-right: 0; width: 170px !important;}
-#privList td.menus + td {border-left: 0; padding-left: 0px; padding}
+#privList td.menus + td {border-left: 0; padding-left: 0px;}
 #privList .menus .checkbox-primary {float: left; width: 160px;}
 #privList .menus .checkbox-primary:first-child {float: left; width: auto;}
 #privList .menus a {margin-left: 10px;}
 
 #privList {margin-bottom: 0px;}
 #privList tr {border-bottom-width: 0;}
-#privList tr > td {background-color: #FFF;}
-#privList tr:hover > td {background-color: #FFF;}
 #privList th.module {width: 142px; min-width: 142px; background-color: #EDEEF28C; font-weight: 600;}
 #privList th.package {width: 142px; min-width: 142px; background-color: #F4F5F78C; font-weight: 600;}
 #privList th .checkbox-inline input {margin-left: 0px;}

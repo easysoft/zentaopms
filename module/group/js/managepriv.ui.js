@@ -309,7 +309,7 @@ function positionBtn()
 {
     let btnLeft = $('.main.main-content > table').width() - 75;
     let pagePadding = $('#mainContainer').css('padding-left');
-    $('.main.main-content > .btn-group').css('left', `calc(${btnLeft}px + ${pagePadding})`).css('visibility', 'unset');
+    $('.main.main-content > .btn-group').css('left', `calc(${btnLeft}px + ${pagePadding} - 8px)`).css('visibility', 'unset');
 }
 
 /**
