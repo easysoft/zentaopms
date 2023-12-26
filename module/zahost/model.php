@@ -110,7 +110,7 @@ class zahostModel extends model
      * @access public
      * @return bool
      */
-    public function checkAddress($address)
+    public function checkAddress(string $address): bool
     {
         $address = str_replace(array('https://', 'http://'), '', $address);
 
