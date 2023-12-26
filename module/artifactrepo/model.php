@@ -134,18 +134,23 @@ class artifactrepoModel extends model
         return $changes;
     }
 
-    public function getReposByProduct(int $productID)
+    /**
+     * 通过产品ID获取制品库信息。
+     * Get artifactrepo by product ID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getReposByProduct(int $productID): array
     {
         $artifactRepos = $this->dao->select('t1.*, t2.id AS pipelineID, t2.url')->from(TABLE_ARTIFACTREPO)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.serverID = t2.id')
             ->where('products')->like("%,{$productID},%")
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
-        foreach($artifactRepos as $repo)
-        {
-            $repo->url .= '/repository/' . $repo->repoName;
-        }
 
+        foreach($artifactRepos as $repo) $repo->url .= '/repository/' . $repo->repoName;
         return $artifactRepos;
     }
 
