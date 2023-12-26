@@ -378,30 +378,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Callback update host data.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function updateHostByCallback()
-    {
-        $data = array();
-        $data['status']    = isset($_POST['status']) ? $_POST['status'] : '';
-        $data['agentPort'] = isset($_POST['port']) ? $_POST['port'] : '';
-        $ip                = isset($_POST['ip']) ? $_POST['ip'] : '';
-
-        if(empty($ip)) return false;
-
-        $host = $this->getHostByIP($ip);
-        if(empty($host)) return 'Not Found';
-
-        $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->where('id')->eq($host->id)
-            ->exec();
-        return true;
-    }
-
-    /**
      * 更新一个执行节点。
      * Update Node.
      *
