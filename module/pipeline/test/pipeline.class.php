@@ -103,25 +103,6 @@ class pipelineTest
     }
 
     /**
-     * Delete one record.
-     *
-     * @param  string $id     the id to be deleted
-     * @param  string $object the action object
-     * @access public
-     * @return int
-     */
-    public function deleteTest($id, $object = 'gitlab')
-    {
-        $objects = $this->objectModel->deleteByObject($id, $object);
-
-        if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getById($id);
-
-        return $objects;
-    }
-
-    /**
      * 根据名称及类型获取一条流水线记录。
      * Get a pipeline by name and type.
      *
@@ -168,5 +149,22 @@ class pipelineTest
 
         if(dao::isError())  return dao::getError();
         return $pipelinePairs;
+    }
+
+    /**
+     * 删除服务器。
+     * Delete one record.
+     *
+     * @param  int               $id
+     * @param  string            $type
+     * @access public
+     * @return array|object|bool
+     */
+    public function deleteByObjectTest(int $id, string $type): array|object|bool
+    {
+        $this->objectModel->deleteByObject($id, $type);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getByID($id);
     }
 }
