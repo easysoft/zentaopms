@@ -220,6 +220,9 @@ class zanodemodel extends model
         if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
         if(dao::isError()) return false;
 
+        if(is_numeric($data->name)) dao::$errors['name'] = sprintf($this->lang->error->code, $this->lang->zanode->name);
+        if(dao::isError()) return false;
+
         $node  = $this->getNodeByID($zanodeID);
 
         if($node->status != 'running') dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
@@ -337,7 +340,10 @@ class zanodemodel extends model
         $data = fixer::input('post')->get();
 
         if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
-        if(dao::isError())     return false;
+        if(dao::isError()) return false;
+
+        if(is_numeric($data->name)) dao::$errors['name'] = sprintf($this->lang->error->code, $this->lang->zanode->name);
+        if(dao::isError()) return false;
 
         $newSnapshot = new stdClass();
         $newSnapshot->localName = $data->name;
