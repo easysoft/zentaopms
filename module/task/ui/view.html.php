@@ -42,7 +42,7 @@ detailHeader
             ) : span(setStyle(array('color' => $task->color)), $task->name)
         )
     ),
-    !isAjaxRequest('modal') && common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
+    !isAjaxRequest('modal') && common::hasPriv('task', 'create', $task) ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
 
 /* Construct suitable actions for the current task. */
@@ -53,11 +53,11 @@ foreach($config->task->view->operateList['main'] as $operate)
 {
     if($operate == 'createBranch')
     {
-        if(empty($hasRepo) || !common::hasPriv('repo', $operate) || !empty($task->linkedBranch)) continue;
+        if(empty($hasRepo) || !common::hasPriv('repo', $operate) || !empty($task->linkedBranch) || !common::canModify('execution', $execution)) continue;
     }
     else
     {
-        if(!common::hasPriv('task', $operate)) continue;
+        if(!common::hasPriv('task', $operate, $task)) continue;
         if(!$this->task->isClickable($task, $operate)) continue;
 
         if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
@@ -70,7 +70,7 @@ foreach($config->task->view->operateList['main'] as $operate)
 $commonActions = array();
 foreach($config->task->view->operateList['common'] as $operate)
 {
-    if(!common::hasPriv('task', $operate)) continue;
+    if(!common::hasPriv('task', $operate, $task)) continue;
     if($operate == 'view' && $task->parent <= 0) continue;
 
     $settings = $config->task->actionList[$operate];
