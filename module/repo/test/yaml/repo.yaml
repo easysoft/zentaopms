@@ -6,7 +6,7 @@ fields:
 - field: id
   range: [1,2,3,4,5]
 - field: product
-  range: 1
+  range: "1,2,3,4"
 - field: name
   range: testHtml,project1,unittest,testSvn
 - field: path

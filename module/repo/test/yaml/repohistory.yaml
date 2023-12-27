@@ -5,36 +5,35 @@ version: "1.0"
 fields:
   - field: id
     note: "ID"
-    range: 1
+    range: 1-1000
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: repo
     note: "代码库ID"
-    range: 1
+    range: "1,3{2}"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: revision
     note: "查看版本"
-    range: c808480afe22d3a55d94e91c59a8f3170212ade0
+    range: "c808480afe22d3a55d94e91c59a8f3170212ade0,d30919bdb9b4cf8e2698f4a6a30e41910427c01c,0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: commit
     note: "提交"
-    range: 1-10000
+    range: "1,2,1"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: comment
     note: "注释"
-    range: 1-10000
-    prefix: "代码注释"
+    range: "[代码注释],[更新 LICENSE],[Initial commit]"
     postfix: ""
     loop: 0
     format: ""
@@ -47,6 +46,4 @@ fields:
     format: ""
   - field: time
     note: "提交时间"
-    range: "(M)-(w)"
-    type: timestamp
-    format: "YYYY-MM-DD hh:mm:ss"
+    range: "[2023-12-13 19:00:25],[2023-12-18 19:00:25],[2023-12-13 13:04:27]"

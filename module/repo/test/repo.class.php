@@ -231,7 +231,7 @@ class repoTest
         return $objects;
     }
 
-    public function getLatestCommitTest($repoID)
+    public function getLatestCommitTest(int $repoID)
     {
         $objects = $this->objectModel->getLatestCommit($repoID);
 
@@ -285,13 +285,24 @@ class repoTest
         return $objects;
     }
 
-    public function saveOneCommitTest($repoID, $commit, $version, $branch = '')
+    public function saveOneCommitTest(int $repoID, int $version, string $branch = '')
     {
-        $objects = $this->objectModel->saveOneCommit($repoID, $commit, $version, $branch = '');
+        global $dao;
+        $dao->exec('truncate table zt_repohistory');
+
+        $repo = $this->objectModel->getByID($repoID);
+        $logs = $this->objectModel->getUnsyncedCommits($repo);
+
+        foreach($logs as $log)
+        {
+            $result = $this->objectModel->saveOneCommit($repoID, $log, $version, $branch);
+            break;
+        }
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        if($branch) return $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->fetch();
+        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetch();
     }
 
     public function saveExistCommits4BranchTest($repoID, $branch)
@@ -303,13 +314,13 @@ class repoTest
         return $objects;
     }
 
-    public function updateCommitCountTest($repoID, $count)
+    public function updateCommitCountTest(int $repoID, int $count)
     {
         $objects = $this->objectModel->updateCommitCount($repoID, $count);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getByID($repoID);
     }
 
     public function getUnsyncedCommitsTest($repo)
@@ -346,7 +357,7 @@ class repoTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchAll('id');
     }
 
     public function encodePathTest($path = '')
@@ -552,6 +563,16 @@ class repoTest
         $result = $this->objectModel->getCacheFile($repoID, $path, $revision);
 
         if(strPos($result, 'repo/' . $repoID . '/' ) !== false) return true;
+        return $result;
+    }
+
+    public function filterProjectTest(int $repoID)
+    {
+        $repo     = $this->objectModel->getByID($repoID);
+        $products = !empty($repo->product) ? explode(',', $repo->product) : array();
+        $projects = !empty($repo->projects) ? explode(',', $repo->projects) : array();
+
+        $result = $this->objectModel->filterProject($products, $projects);
         return $result;
     }
 }
