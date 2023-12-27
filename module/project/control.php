@@ -313,7 +313,7 @@ class project extends control
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $browseType  = strtolower($browseType);
-        if(!in_array($browseType, array('all', 'undone'))) unset($this->config->project->dtable->fieldList['status']);
+        if(!in_array($browseType, array('all', 'undone', 'bysearch'))) unset($this->config->project->dtable->fieldList['status']);
 
         $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
 
