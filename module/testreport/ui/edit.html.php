@@ -184,6 +184,7 @@ panel
     (
         set::cols($config->testreport->story->dtable->fieldList),
         set::data(array_values($stories)),
+        set::emptyTip($lang->story->noStory),
         set::userMap($users)
     ),
     div(set::className('my-6')),
@@ -191,6 +192,7 @@ panel
     (
         set::cols($config->testreport->bug->dtable->fieldList),
         set::data(array_values($bugs)),
+        set::emptyTip($lang->bug->notice->noBug),
         set::userMap($users)
     )
 );

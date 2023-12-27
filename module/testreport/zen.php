@@ -164,6 +164,8 @@ class testreportZen extends testreport
             $this->view->title       = $task->name . $this->lang->testreport->create;
             $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
         }
+        $this->app->loadLang('bug');
+        $this->app->loadLang('story');
 
         $reportData = array('begin' => $begin, 'end' => $end, 'builds' => $builds, 'tasks' => $tasks, 'owner' => $owner, 'stories' => $stories, 'bugs' => $bugs, 'execution' => $execution, 'productIdList' => $productIdList);
         return $reportData;
