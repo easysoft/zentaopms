@@ -89,7 +89,7 @@ else
 
     $content = ul
     (
-        setClass('timeline'),
+        setClass('timeline list-none pl-0'),
         $content
     );
 }

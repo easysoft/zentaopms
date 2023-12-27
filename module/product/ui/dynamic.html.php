@@ -90,7 +90,7 @@ foreach($dateGroups as $date => $actions)
 
 $content = ul
 (
-    setClass('timeline'),
+    setClass('timeline list-none pl-0'),
     $dynamicsGroup
 );
 
