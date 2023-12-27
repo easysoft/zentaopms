@@ -3058,7 +3058,7 @@ class execution extends control
 
         $lastEditedTime = $this->execution->getLaneMaxEditedTime($executionID);
         $enterTime      = date('Y-m-d H:i:s', $enterTime);
-        if(in_array(true, array(is_null($lastEditedTime), strtotime($lastEditedTime) < 0, $lastEditedTime > $enterTime, $groupBy != 'default', !empty($searchValue))))
+        if(in_array(true, array(empty($lastEditedTime), strtotime($lastEditedTime) < 0, $lastEditedTime > $enterTime, $groupBy != 'default', !empty($searchValue))))
         {
             $kanbanGroup = $from == 'taskkanban' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
