@@ -356,7 +356,7 @@ elseif(!empty($project) && !empty($project->hasProduct))
                 (
                     set::width('1/4'),
                     setClass('ml-px'),
-                    set::hidden(!$hasBranch),
+                    $hasBranch ? null : setClass('hidden'),
                     inputGroup
                     (
                         $lang->product->branchName['branch'],
