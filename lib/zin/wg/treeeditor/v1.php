@@ -19,11 +19,6 @@ class treeEditor extends wg
         'canSplit?: bool=true'
     );
 
-    public static function getPageJS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function build(): wg
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
