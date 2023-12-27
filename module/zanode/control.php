@@ -508,7 +508,7 @@ class zanode extends control
     public function ajaxGetServiceStatus(int $hostID)
     {
         $node          = $this->zanode->getNodeById($hostID);
-        $serviceStatus = $this->zanode->getServiceStatus($node);
+        $serviceStatus = $this->zanodeZen->getServiceStatus($node);
         if($node->status != 'running')
         {
             $serviceStatus['ZenAgent'] = 'unknown';

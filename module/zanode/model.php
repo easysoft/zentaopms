@@ -663,34 +663,6 @@ class zanodemodel extends model
     }
 
     /**
-     * 获取宿主机中zagent、nginx、websockify、novnc的运行及安装状态.
-     * Get service status from host.
-     *
-     * @param  object $node
-     * @access public
-     * @return array
-     */
-    public function getServiceStatus($node)
-    {
-        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array('services' => 'all')), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
-
-        if(empty($result->data->ztfStatus) || $result->code != 'success')
-        {
-            $result = new stdclass;
-            $result->data = $this->lang->zanode->init->serviceStatus;
-
-            return $result->data;
-        }
-
-        $result->data = array(
-            'ZenAgent' => 'ready',
-            'ZTF'      => $result->data->ztfStatus,
-        );
-
-        return $result->data;
-    }
-
-    /**
      * 执行节点安装应用（支持ztf,zendata）.
      * Install service to node by name.
      *
