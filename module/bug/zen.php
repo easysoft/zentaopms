@@ -221,6 +221,7 @@ class bugZen extends bug
         /* 如果是多分支产品时，设置分支的 cookie。*/
         /* Set branch cookie if product is multi-branch. */
         helper::setcookie('preBranch', $branch);
+        $this->session->set('branch', $branch, 'qa');
 
         return $branch;
     }

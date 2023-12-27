@@ -89,9 +89,6 @@ class testtask extends control
         $this->session->set('testtaskList', $uri, 'qa');
         $this->session->set('reportList',   $uri, 'qa');
         $this->session->set('buildList',    $uri, 'execution');
-        $this->session->set('branch', $branch, 'qa');
-
-        $this->loadModel('qa')->setMenu($productID, $branch);
 
         /* 预处理部分变量供查询使用。*/
         /* Prepare variables for query. */
@@ -101,7 +98,14 @@ class testtask extends control
         $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
         $sort      = common::appendOrder($orderBy);
         $product   = $this->product->getById($productID);
-        if($product->type == 'normal') $branch = 'all';
+
+        /* 处理分支。 */
+        /* Process branch. */
+        $branch = $this->testtaskZen->getBrowseBranch($branch, $product->type);
+
+        /* 设置1.5级菜单。  */
+        /* Set 1.5 level menu. */
+        $this->loadModel('qa')->setMenu($productID, $branch);
 
         /* 从数据库中查询符合条件的测试单。*/
         /* Query the testtasks from the database. */

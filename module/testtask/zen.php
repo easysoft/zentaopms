@@ -29,6 +29,29 @@ class testtaskZen extends testtask
     }
 
     /**
+     * 获取列表页面的 branch 参数。
+     * Get browse branch param.
+     *
+     * @param  string    $branch
+     * @param  string    $productType
+     * @access protected
+     * @return string
+     */
+    protected function getBrowseBranch(string $branch, string $productType): string
+    {
+        if($productType == 'normal') return 'all';
+
+        if($this->cookie->preBranch !== '' && $branch === '') $branch = (string)$this->cookie->preBranch;
+
+        /* 如果是多分支产品时，设置分支的 cookie。*/
+        /* Set branch cookie if product is multi-branch. */
+        helper::setcookie('preBranch', $branch);
+        $this->session->set('branch', $branch, 'qa');
+
+        return $branch;
+    }
+
+    /**
      * 设置测试单用例列表页面搜索表单的参数。
      * Set congiruration of search form in cases page of testtask.
      *

@@ -93,7 +93,7 @@ class testcase extends control
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
-        $branch     = $this->cookie->preBranch && $this->cookie->preBranch !== '' && $branch === '' ? $this->cookie->preBranch : $branch;
+        $branch     = ($this->cookie->preBranch || $this->cookie->preBranch === '0') && $this->cookie->preBranch !== '' && $branch === '' ? $this->cookie->preBranch : $branch;
         $browseType = strtolower($browseType);
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
         $suiteID    = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
