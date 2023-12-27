@@ -282,6 +282,7 @@ class instanceModel extends model
     }
 
     /**
+     * 更新应用实例的状态。
      * Update instance status.
      *
      * @param  int    $int
@@ -289,7 +290,7 @@ class instanceModel extends model
      * @access public
      * @return int
      */
-    public function updateStatus($id, $status)
+    public function updateStatus(int $id, string $status)
     {
         $instanceData = new stdclass;
         $instanceData->status = trim($status);
@@ -297,6 +298,7 @@ class instanceModel extends model
     }
 
     /**
+     * 更新应用实例。
      * Update instance by id.
      *
      * @param  int    $id
@@ -304,7 +306,7 @@ class instanceModel extends model
      * @access public
      * @return void
      */
-    public function updateByID($id, $newInstance)
+    public function updateByID(int $id, object $newInstance)
     {
         return $this->dao->update(TABLE_INSTANCE)->data($newInstance)
             ->autoCheck()
