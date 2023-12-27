@@ -58,21 +58,6 @@ class storeModel extends model
     }
 
     /**
-     * Get app info by App chart from cloud market.
-     *
-      @param  string $chart
-     * @param  string $channel
-     * @param  bool   $analysis
-     * @param  string $version
-     * @access public
-     * @return object|null
-     */
-    public function getAppInfoByChart($chart, $channel, $analysis, $version = '')
-    {
-        return $this->getAppInfo(0, $analysis, $chart, $version,  $channel);
-    }
-
-    /**
      * Get app info from cloud market.
      *
      * @param  int     $id
@@ -201,26 +186,6 @@ class storeModel extends model
     }
 
     /**
-     * Get the latest version of QuCheng platform.
-     *
-     * @access public
-     * @return object
-     */
-    public function platformLatestVersion()
-    {
-        $versionList = $this->getUpgradableVersions($this->config->platformVersion, 0, $this->config->edition == 'open' ? 'qucheng' : 'qucheng-biz', $this->config->cloud->api->channel);
-
-        $latestVersion = $this->pickHighestVersion($versionList);
-        if(!empty($latestVersion) && version_compare(str_replace('-', '.', $latestVersion->version), str_replace('-', '.', $this->config->platformVersion), '>')) return $latestVersion;
-
-        $latestVersion = new stdclass;
-        $latestVersion->app_version = getenv('APP_VERSION');
-        $latestVersion->version     = $this->config->platformVersion;
-
-        return $latestVersion;
-    }
-
-    /**
      * Get the latest versions of app from cloud market.
      *
      * @param  int    $appID
@@ -305,57 +270,6 @@ class storeModel extends model
     }
 
     /**
-     * Get switcher of browse page of store.
-     *
-     * @access public
-     * @return string
-     */
-    public function getBrowseSwitcher()
-    {
-        $title = $this->lang->store->cloudStore;
-
-        if($this->config->cloud->api->switchChannel) $title .= '（' . ($this->config->cloud->api->channel == 'stable' ? $this->lang->store->stableChannel : $this->lang->store->testChannel) . '）';
-
-        $output = "<div class='btn-group header-btn'>";
-        if($this->config->cloud->api->switchChannel)
-        {
-            $stableActive = $this->config->cloud->api->channel == 'stable' ? 'active' : '';
-            $testActive   = $this->config->cloud->api->channel != 'stable' ? 'active' : '';
-
-            $output .= "<a href='javascript:;' class='btn'  data-toggle='dropdown'>{$title}<span class='caret' style='margin-bottom: -1px;margin-left:5px;'></span></a>";
-            $output .= "<ul class='dropdown-menu'>";
-            $output .= "<li class='{$stableActive}'>" . html::a(helper::createLink('store', 'browse', 'sortType=update_time&perPage=20&pageID=1&channel=stable'), $this->lang->store->stableChannel) ."</li>";
-            $output .= "<li class='{$testActive}'>" . html::a(helper::createLink('store', 'browse', 'sortType=update_time&perPage=20&pageID=1&channel=test'), $this->lang->store->testChannel) ."</li>";
-            $output .= "</ul>";
-        }
-        else
-        {
-            $output .= "<a href='javascript:;' class='btn'  data-toggle='dropdown'>{$title}</a>";
-        }
-
-        $output .= "</div>";
-
-        return $output;
-    }
-
-    /**
-     * Get switcher of app view page of store.
-     *
-     * @param  object $app
-     * @access public
-     * @return string
-     */
-    public function getAppViewSwitcher($app)
-    {
-        $output  = $this->getBrowseSwitcher();
-        $output .= "<div class='btn-group header-btn'>";
-        $output .= html::a(helper::createLink('store', 'appview', "id=$app->id"), $app->alias, '', 'class="btn"');
-        $output .= "</div>";
-
-        return $output;
-    }
-
-    /**
      * Get app dynamic news from Qucheng offical site.
      *
      * @param  object $cloudApp
@@ -373,34 +287,6 @@ class storeModel extends model
         if($result && $result->code == 200) return $result->data;
 
         return null;
-    }
-
-    /**
-     * Get solution list.
-     *
-     * @param  string $sortBy    possible vlues: id,name,create_time,update_time
-     * @param  string $keyword
-     * @param  int    $page
-     * @param  int    $pageSize
-     * @access public
-     * @return object
-     */
-    public function searchSolutions($sortBy = '', $keyword = '', $page = 1, $pageSize = 20)
-    {
-        $apiUrl  = $this->config->cloud->api->host;
-        $apiUrl .= '/api/market/solution/list?channel='. $this->config->cloud->api->channel;
-        $apiUrl .= "&sort=" . rawurlencode(trim($sortBy));
-        $apiUrl .= "&q=" . rawurlencode(trim($keyword));
-        $apiUrl .= "&page=$page";
-        $apiUrl .= "&page_size=$pageSize";
-
-        $result = commonModel::apiGet($apiUrl, array(), $this->config->cloud->api->headers);
-        if($result->code == 200) return $result->data;
-
-        $pagedApps = new stdclass;
-        $pagedApps->apps  = array();
-        $pagedApps->total = 0;
-        return $pagedApps;
     }
 
     /**
@@ -426,6 +312,7 @@ class storeModel extends model
 
         return $solution;
     }
+
     /**
      * Get solution config.
      *
