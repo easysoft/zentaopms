@@ -1,7 +1,7 @@
 .file {padding-top: 2px;}
-ul.files-list {margin-bottom: unset}
+ul.files-list {margin-bottom: unset; list-style: none; padding-left: 0;}
 .files-list>li>a {display: inline; word-wrap: break-word; color: #313c52; line-height: 24px}
-.files-list>li>.right-icon {opacity: 1;} 
+.files-list>li>.right-icon {opacity: 1;}
 .fileAction {color: #0c64eb !important;}
 .renameFile {display: flex;}
 .renameFile .input-group {margin-left: 10px;}
