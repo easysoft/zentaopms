@@ -22,6 +22,7 @@ include dirname(__FILE__, 2) . '/design.class.php';
 
 zdTable('file')->gen(0);
 zdTable('repo')->config('repo')->gen(1);
+zdTable('pipeline')->gen(1);
 zdTable('repohistory')->config('repohistory')->gen(3);
 zdTable('design')->config('design')->gen(1);
 zdTable('relation')->gen(0);
