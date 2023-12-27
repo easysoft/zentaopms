@@ -1915,7 +1915,7 @@ class bugZen extends bug
         {
             $this->loadModel('kanban');
 
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', $bugID);
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', (string)$bugID);
             if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($executionID, 'bug');
         }
 
@@ -2060,7 +2060,7 @@ class bugZen extends bug
             $columnID = $this->loadModel('kanban')->getColumnIDByLaneID((int)$laneID, 'unconfirmed');
             if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
 
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', (string)$bug->id);
             if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($bug->execution, 'bug');
         }
 
