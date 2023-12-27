@@ -22,5 +22,5 @@ $type = array('wait', '');
 
 $message = new messageTest();
 
-r($message->getMessagesTest($type[0])) && p() && e('1,3,5');        // 测试获取status为 wait 的数据信息
+r($message->getMessagesTest($type[0])) && p() && e('1,4,10');       // 测试获取status为 wait 的数据信息
 r($message->getMessagesTest($type[1])) && p() && e('1,2,3,4,5,10'); // 测试获取数据信息
