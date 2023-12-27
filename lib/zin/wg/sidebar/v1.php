@@ -6,7 +6,7 @@ class sidebar extends wg
 {
     protected static array $defineProps = array(
         'side?:string="left"',
-        'width?:string|number=40',
+        'width?:string|number=160',
         'maxWidth?:string|number=360',
         'minWidth?:string|number=160',
         'showToggle?:bool=true',
