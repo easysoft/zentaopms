@@ -12,18 +12,6 @@
 class zahostModel extends model
 {
     /**
-     * Set lang;
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->app->lang->host = $this->lang->zahost;
-    }
-
-    /**
      * 根据 ID 获取宿主机。
      * Get host by id.
      *
