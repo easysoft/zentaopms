@@ -20,11 +20,14 @@ class users extends wg
         'value?: string',                   // 控件默认值。
         'items?: array',                    // picker 列表项或表项获取方法。
         'menu?: array',                     // picker 附加的菜单选项。
+        'toolbar?: boolean|array',          // picker 列表工具栏。
         'multiple?: boolean|number=false',  // picker 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
         'contactList?: boolean=true'        // 是否显示联系人列表。
     );
 
     protected static array $defaultProps = array(
+        'menu' => array('checkbox' => true),
+        'toolbar' => true,
         'multiple' => true
     );
 
@@ -45,7 +48,7 @@ class users extends wg
         return inputGroup
         (
             $this->prop('label', null),
-            picker(set($this->props->pick(array('id', 'name', 'value', 'items', 'menu', 'multiple')))),
+            picker(set($this->props->pick(array('id', 'name', 'value', 'items', 'toolbar', 'menu', 'multiple')))),
             $this->prop('contactList') ? contactList() : null
         );
     }
