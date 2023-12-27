@@ -65,11 +65,11 @@ class instanceModel extends model
     /**
      * Get by id list.
      *
-     * @param  array $idList
+     * @param  array  $idList
      * @access public
      * @return array
      */
-    public function getByIdList($idList)
+    public function getByIdList(array $idList)
     {
         $instances = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('id')->in($idList)
