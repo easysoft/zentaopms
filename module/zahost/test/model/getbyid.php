@@ -29,4 +29,4 @@ $zahost = new zahostTest();
 $hostIDList = array('1', '2');
 
 r($zahost->getByIDTest($hostIDList[0])) && p('id,name,type') && e('1,宿主机1,zahost');  //查询 ID 为 1 的主机
-r($zahost->getByIDTest($hostIDList[1])) && p('') && e('~~');                             //查询 ID 为 2 不存在的主机
+r($zahost->getByIDTest($hostIDList[1])) && p('') && e('~~');                            //查询 ID 为 2 不存在的主机
