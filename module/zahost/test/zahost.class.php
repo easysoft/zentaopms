@@ -32,6 +32,28 @@ class zahostTest
      */
     public function getPairsTest(): array
     {
-        return $this->objectModel->getPairs();
+        $hostPairs = $this->objectModel->getPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return $hostPairs;
+    }
+
+    /**
+     * 测试获取主机列表。
+     * Get host list test.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getListTest(string $browseType, int $param): array
+    {
+        $hosts = $this->objectModel->getList($browseType, $param);
+
+        if(dao::isError()) return dao::getError();
+
+        return $hosts;
     }
 }
