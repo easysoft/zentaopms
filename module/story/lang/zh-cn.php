@@ -482,6 +482,10 @@ $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
 
+$lang->story->ipdCategoryList['zhanlue']         = '战略';
+$lang->story->ipdCategoryList['maintainability'] = '可维护性';
+$lang->story->ipdCategoryList['packing']         = '包装';
+
 $lang->story->changeTip = "只有激活状态的{$lang->SRCommon}，才能进行变更";
 
 $lang->story->reviewTip = array();

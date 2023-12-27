@@ -482,6 +482,10 @@ $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
 
+$lang->story->ipdCategoryList['zhanlue']         = 'strategic';
+$lang->story->ipdCategoryList['maintainability'] = 'maintainability';
+$lang->story->ipdCategoryList['packing']         = 'packing';
+
 $lang->story->changeTip = 'Only active can be changed.';
 
 $lang->story->reviewTip = array();

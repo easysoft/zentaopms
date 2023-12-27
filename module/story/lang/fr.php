@@ -482,6 +482,10 @@ $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
 
+$lang->story->ipdCategoryList['zhanlue']         = 'strategic';
+$lang->story->ipdCategoryList['maintainability'] = 'maintainability';
+$lang->story->ipdCategoryList['packing']         = 'packing';
+
 $lang->story->changeTip = "Seules les exigences de l'état actif peuvent être modifiées.";
 
 $lang->story->reviewTip = array();

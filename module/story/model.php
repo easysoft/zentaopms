@@ -6830,7 +6830,7 @@ class storyModel extends model
                 if($col->name == 'feedbackBy')   $data->feedbackBy   = $story->feedbackBy;
                 if($col->name == 'notifyEmail')  $data->notifyEmail  = $story->notifyEmail;
                 if($col->name == 'closedReason') $data->closedReason = zget($this->lang->story->reasonList, $story->closedReason, '');
-                if($col->name == 'category')     $data->category     = zget($this->lang->story->categoryList, $story->category);
+                if($col->name == 'category')     $data->category     = isset($this->lang->story->categoryList[$story->category]) ? zget($this->lang->story->categoryList, $story->category) : zget($this->lang->story->ipdCategoryList, $story->category);
                 if($col->name == 'duration')     $data->duration     = zget($this->lang->demand->durationList, $story->duration);
                 if($col->name == 'BSA')          $data->BSA          = zget($this->lang->demand->bsaList, $story->BSA);
                 if($col->name == 'taskCount')    $data->taskCount    = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
