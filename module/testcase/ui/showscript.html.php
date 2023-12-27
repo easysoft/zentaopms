@@ -25,7 +25,7 @@ foreach($lines as $key => $line)
     (
         h::td
         (
-            setClass('align-top text-right border-r lighter-pale px-1 py-0'),
+            setClass('align-top text-right border-r gray-pale px-1 py-0'),
             ++$key
         ),
         h::td

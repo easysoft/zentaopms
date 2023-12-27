@@ -319,7 +319,7 @@ div
                 ),
                 !empty($config->setCode) && !empty($project->code) ? label
                 (
-                    setClass('label lighter-pale ml-2 flex-none'),
+                    setClass('label gray-pale ml-2 flex-none'),
                     $project->code
                 ) : null,
                 label

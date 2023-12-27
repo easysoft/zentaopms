@@ -137,12 +137,12 @@ div
                     ),
                     !$hiddenCode ? label
                     (
-                        setClass('light-outline ml-2 flex-none'),
+                        setClass('gray-300-outline ml-2 flex-none'),
                         $product->code
                     ) : null,
                     $product->type != 'normal' ? label
                     (
-                        setClass('light-outline ml-2 text-warning flex-none'),
+                        setClass('gray-300-outline ml-2 text-warning flex-none'),
                         $lang->product->typeList[$product->type]
                     ) : null,
                     $product->deleted ? label

@@ -245,7 +245,7 @@ panel
                     ),
                     span
                     (
-                        setClass('label lighter-pale rounded-full ml-2 px-1'),
+                        setClass('label gray-pale rounded-full ml-2 px-1'),
                         zget($lang->productplan->statusList, $product->newPlan->status)
                     )
                 )
@@ -289,7 +289,7 @@ panel
                     ),
                     span
                     (
-                        setClass('label rounded-full ml-2 ' . ($product->newRelease->status == 'normal' ? 'success-pale' : 'lighter-pale')),
+                        setClass('label rounded-full ml-2 ' . ($product->newRelease->status == 'normal' ? 'success-pale' : 'gray-pale')),
                         zget($lang->release->statusList, $product->newRelease->status)
                     )
                 )

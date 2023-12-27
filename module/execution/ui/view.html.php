@@ -254,7 +254,7 @@ div
                 ),
                 !empty($config->setCode) && !empty($execution->code) ? label
                 (
-                    setClass('light-outline mx-2 flex-none'),
+                    setClass('gray-300-outline mx-2 flex-none'),
                     $execution->code
                 ) : null,
                 $execution->deleted ? label

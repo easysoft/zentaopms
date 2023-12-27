@@ -47,7 +47,7 @@ class dynamic extends wg
             $objectID = $dynamic->objectID && strpos(',module,chartgroup,', ",$dynamic->objectType,") !== false && strpos(',created,edited,moved,', "$dynamic->action") !== false ? trim($dynamic->extra, ',') : $dynamic->objectID;
             $objectLabel[] = $objectID ? span
             (
-                setClass('label light-outline mx-2 font-sm'),
+                setClass('label gray-300-outline mx-2 font-sm'),
                 $objectID
             ) : null;
 
