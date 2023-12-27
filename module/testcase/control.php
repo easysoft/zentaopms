@@ -181,16 +181,7 @@ class testcase extends control
         }
 
         $sceneCount = count($scenes);
-        $caseCount  = count($cases);
-        if($this->cookie->onlyScene)
-        {
-            $summary = sprintf($this->lang->testcase->summaryScene, $sceneCount);
-        }
-        else
-        {
-            $summary = sprintf($this->lang->testcase->summary, $sceneCount, $caseCount);
-        }
-
+        $caseCount  = 0;
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
@@ -201,6 +192,16 @@ class testcase extends control
             $case->grade   = 1;
             $case->path    = ',' . $case->id . ',';
             $case->isScene = false;
+            if(!$case->scene) $caseCount++;
+        }
+
+        if($this->cookie->onlyScene)
+        {
+            $summary = sprintf($this->lang->testcase->summaryScene, $sceneCount);
+        }
+        else
+        {
+            $summary = sprintf($this->lang->testcase->summary, $sceneCount, $caseCount);
         }
 
         /* Build the search form. */
