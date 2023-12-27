@@ -374,123 +374,47 @@ class programplanTao extends programplanModel
     protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex): void
     {
         $this->app->loadLang('task');
-        $taskPri   = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
         $today     = helper::today();
         $taskTeams = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
         $users     = $this->loadModel('user')->getPairs('noletter');
 
         foreach($tasks as $task)
         {
-            $execution = zget($plans, $task->execution, array());
-            $pri       = zget($this->lang->task->priList, $task->pri);
-            $priIcon   = sprintf($taskPri, $task->pri, $pri, $pri);
-
-            $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
-            $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
-            $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
-            $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
-
-            $start = $estStart;
-            $end   = $estEnd;
-            if(empty($start) and $execution) $start = $execution->begin;
-            if(empty($end)   and $execution) $end   = $execution->end;
-            if($start > $end) $end = $start;
-
-            $data = new stdclass();
-            $data->id            = $task->execution . '-' . $task->id;
-            $data->type          = 'task';
-            $data->text          = $priIcon . $task->name;
-            $data->percent       = '';
-            $data->status        = $this->processStatus('task', $task);
-            $data->owner_id      = $task->assignedTo;
-            $data->attribute     = '';
-            $data->milestone     = '';
-            $data->begin         = $start;
-            $data->deadline      = $end;
-            $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
-            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
-            $data->pri           = $task->pri;
-            $data->parent        = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
-            $data->open          = true;
-            $progress            = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
-            $data->progress      = $progress;
-            $data->taskProgress  = ($progress * 100) . '%';
-            $data->start_date    = $start;
-            $data->endDate       = $end;
-            $data->duration      = 1;
-            $data->estimate      = $task->estimate;
-            $data->consumed      = $task->consumed;
-            $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
-            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
-            $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
-            $data->bar_height    = $this->lang->execution->gantt->bar_height;
+            $dateLimit    = $this->getTaskDateLimit($task, zget($plans, $task->execution, null));
+            $data         = $this->buildTaskDataForGantt($task, $dateLimit);
+            $data->id     = $task->execution . '-' . $task->id;
+            $data->parent = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
 
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $end and $execution->status != 'closed')
+            if($today > $dateLimit['end'] and $execution->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, substr($end, 0, 10));
+                $data->delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? $task->finishedDate : $today, $dateLimit['end']);
             }
 
             /* If multi task then show the teams. */
-            if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
-            {
-                $teams     = array_keys($taskTeams[$task->id]);
-                $assigneds = array();
-                foreach($teams as $assignedTo) $assigneds[] = zget($users, $assignedTo);
-                $data->owner_id = implode(',', $assigneds);
-            }
-
-            if($data->endDate > $data->start_date) $data->duration = helper::diffDate(substr($data->endDate, 0, 10), substr($data->start_date, 0, 10)) + 1;
-            if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-            if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
+            if($task->mode == 'multi' and !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             foreach($stageIndex as $index => $stage)
             {
-                if($stage['planID'] == $task->execution)
-                {
-                    $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
-                    $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                    $stageIndex[$index]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                if($stage['planID'] != $task->execution) continue;
+                if(!isset($stageIndex[$index])) continue;
 
-                    $parent = $stage['parent'];
-                    if(isset($stageIndex[$parent]))
-                    {
-                        $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
-                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                        $stageIndex[$parent]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
-                    }
-                }
+                $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
+                $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
+                $stageIndex[$index]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+
+                if(!isset($stageIndex[$parent])) continue;
+
+                $parent = $stage['parent'];
+                $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
+                $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
+                $stageIndex[$parent]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
             }
         }
-    }
-
-    /**
-     * 设置关联任务数据。
-     * Set relation task data.
-     *
-     * @param  array   $planIdList
-     * @param  array   $datas
-     * @access protected
-     * @return array
-     */
-    protected function setRelationTask(array $planIdList, array $datas): array
-    {
-        $datas['links'] = array();
-        if($this->config->edition == 'open') return $datas;
-        $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
-        foreach($relations as $relation)
-        {
-            $link['source']   = $relation->execution . '-' . $relation->pretask;
-            $link['target']   = $relation->execution . '-' . $relation->task;
-            $link['type']     = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
-            $datas['links'][] = $link;
-        }
-
-        return $datas;
     }
 
     /**
@@ -504,7 +428,7 @@ class programplanTao extends programplanModel
      * @access protected
      * @return array
      */
-    protected function getStageList(int $executionID, int $productID, string $browseType, $orderBy = 'id_asc')
+    protected function getStageList(int $executionID, int $productID, string $browseType, string $orderBy = 'id_asc'): array
     {
         if(empty($executionID)) return array();
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
@@ -549,7 +473,7 @@ class programplanTao extends programplanModel
      * @access protected
      * @return array
      */
-    protected function computeOrders(array $orders, array $plans):array
+    protected function computeOrders(array $orders, array $plans): array
     {
         if(empty($orders)) $orders = array();
         asort($orders);
@@ -618,6 +542,29 @@ class programplanTao extends programplanModel
     }
 
     /**
+     * Get point end date.
+     *
+     * @param  int     $planID
+     * @param  object  $point
+     * @param  array   $reviewDeadline
+     * @access private
+     * @return string
+     */
+    private function getPointEndDate(int $planID, object $point, array $reviewDeadline): string
+    {
+        if($point->end and !helper::isZeroDate($point->end)) return $point->end;
+
+        $end = $reviewDeadline[$planID]['stageEnd'];
+        if(strpos($point->category, "DCP") !== false) return $this->getReviewDeadline($end, 2);
+        if(strpos($point->category, "TR") !== false)
+        {
+            if(isset($reviewDeadline[$planID]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$planID]['taskEnd'])) return $reviewDeadline[$planID]['taskEnd'];
+            return $this->getReviewDeadline($end);
+        }
+        return $end;
+    }
+
+    /**
      * 构建IPD版本的甘特图数据。
      * Build gantt's data for ipd edition.
      *
@@ -627,17 +574,17 @@ class programplanTao extends programplanModel
      * @param  string    $selectCustom
      * @param  array     $reviewDeadline
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function buildGanttData4IPD(array $datas, int $projectID, int $productID, string $selectCustom, array $reviewDeadline)
+    protected function buildGanttData4IPD(array $datas, int $projectID, int $productID, string $selectCustom, array $reviewDeadline): array
     {
         $this->loadModel('review');
         $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
-        ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
-        ->where('t1.deleted')->eq('0')
-        ->andWhere('t1.project')->eq($projectID)
-        ->andWhere('t1.product')->eq($productID)
-        ->fetchAll('id');
+            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.project')->eq($projectID)
+            ->andWhere('t1.product')->eq($productID)
+            ->fetchAll('id');
 
         foreach($datas['data'] as $plan)
         {
@@ -649,67 +596,18 @@ class programplanTao extends programplanModel
                 if(!isset($point->status)) $point->status = '';
 
                 $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
-                if(in_array($point->category, $categories))
-                {
-                    if($point->end and !helper::isZeroDate($point->end))
-                    {
-                        $end = $point->end;
-                    }
-                    else
-                    {
-                        $end = $reviewDeadline[$plan->id]['stageEnd'];
-                        if(strpos($point->category, "TR") !== false)
-                        {
-                            if(isset($reviewDeadline[$plan->id]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$plan->id]['taskEnd']))
-                            {
-                                $end = $reviewDeadline[$plan->id]['taskEnd'];
-                            }
-                            else
-                            {
-                                $end = $this->getReviewDeadline($end);
-                            }
-                        }
-                        elseif(strpos($point->category, "DCP") !== false)
-                        {
-                            $end = $this->getReviewDeadline($end, 2);
-                        }
-                    }
+                if(!in_array($point->category, $categories)) continue;
 
-                    $data = new stdclass();
-                    $data->id            = $plan->id . '-' . $point->category . '-' . $point->id;
-                    $data->reviewID      = $point->reviewID;
-                    $data->type          = 'point';
-                    $data->text          = "<i class='icon-seal'></i> " . $point->title;
-                    $data->name          = $point->title;
-                    $data->attribute     = '';
-                    $data->milestone     = '';
-                    $data->owner_id      = '';
-                    $data->rawStatus     = $point->status;
-                    $data->status        = $point->status ? zget($this->lang->review->statusList, $point->status) : $this->lang->programplan->wait;
-                    $data->status        = "<span class='status-{$point->status}'>" . $data->status . '</span>';
-                    $data->begin         = $end;
-                    $data->deadline      = $end;
-                    $data->realBegan     = $point->createdDate;
-                    $data->realEnd       = $point->lastReviewedDate;;
-                    $data->parent        = $plan->id;
-                    $data->open          = true;
-                    $data->start_date    = $end;
-                    $data->endDate       = $end;
-                    $data->duration      = 1;
-                    $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
-                    $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
-                    $data->textColor     = $this->lang->execution->gantt->stage->textColor;
-                    $data->bar_height    = $this->lang->execution->gantt->bar_height;
-
-                    if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-
-                    if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$data->id] = $data;
-                }
+                $dataID = "{$plan->id}-{$point->category}-{$point->id}";
+                if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$dataID] = $this->buildPointDataForGantt($plan->id, $point, $reviewDeadline);
             }
         }
+
+        return $datas;
     }
 
     /**
+     * 获取创建时的关联产品。
      * Get linkProducts for create.
      *
      * @param  int       $projectID
@@ -788,5 +686,284 @@ class programplanTao extends programplanModel
         $this->computeProgress($stageID, 'create');
 
         return $stageID;
+    }
+
+    /**
+     * 根据任务列表，构建任务分组。
+     * Build task group by assignedTo.
+     *
+     * @param  array     $task
+     * @access protected
+     * @return array
+     */
+    protected function buildTaskGroup(array $tasks): array
+    {
+        $taskGroup  = array();
+        $multiTasks = array();
+        foreach($tasks as $taskID => $task)
+        {
+            $taskGroup[$task->assignedTo][$taskID] = $task;
+            if($task->mode == 'multi') $multiTasks[$taskID] = $task->assignedTo;
+        }
+        if(empty($multiTasks)) return $taskGroup;
+
+        $taskTeams = $this->dao->select('t1.*,t2.realname')->from(TABLE_TASKTEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.task')->in(array_keys($multiTasks))
+            ->orderBy('t1.order')
+            ->fetchGroup('task', 'id');
+        foreach($taskTeams as $taskID => $team)
+        {
+            $assignedTo = $multiTasks[$taskID];
+            foreach($team as $member)
+            {
+                $account = $member->account;
+                if($account == $assignedTo) continue;
+                if(!isset($taskGroup[$account])) $taskGroup[$account] = array();
+
+                $taskGroup[$account][$taskID] = clone $tasks[$taskID];
+                $taskGroup[$account][$taskID]->id         = $taskID . '_' . $account;
+                $taskGroup[$account][$taskID]->realID     = $taskID;
+                $taskGroup[$account][$taskID]->assignedTo = $account;
+                $taskGroup[$account][$taskID]->realname   = $member->realname;
+            }
+        }
+
+        return $taskGroup;
+    }
+
+    /**
+     * Guild point data for gantt.
+     *
+     * @param  int       $planID
+     * @param  object    $point
+     * @param  array     $reviewDeadline
+     * @access protected
+     * @return object
+     */
+    protected function buildPointDataForGantt(int $planID, object $point, array $reviewDeadline): object
+    {
+        $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
+        $data = new stdclass();
+        $data->id            = $planID . '-' . $point->category . '-' . $point->id;
+        $data->reviewID      = $point->reviewID;
+        $data->type          = 'point';
+        $data->text          = "<i class='icon-seal'></i> " . $point->title;
+        $data->name          = $point->title;
+        $data->attribute     = '';
+        $data->milestone     = '';
+        $data->owner_id      = '';
+        $data->rawStatus     = $point->status;
+        $data->status        = $point->status ? zget($this->lang->review->statusList, $point->status) : $this->lang->programplan->wait;
+        $data->status        = "<span class='status-{$point->status}'>" . $data->status . '</span>';
+        $data->begin         = $end;
+        $data->deadline      = $end;
+        $data->realBegan     = $point->createdDate;
+        $data->realEnd       = $point->lastReviewedDate;;
+        $data->parent        = $planID;
+        $data->open          = true;
+        $data->start_date    = $end;
+        $data->endDate       = $end;
+        $data->duration      = 1;
+        $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
+        $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
+        $data->textColor     = $this->lang->execution->gantt->stage->textColor;
+        $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+        if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
+
+        return $data;
+    }
+
+    /**
+     * 构建甘特图的分组数据。
+     * Build group data for gantt.
+     *
+     * @param  int       $groupID
+     * @param  string    $group
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
+    protected function buildGroupDataForGantt(int $groupID, string $group, array $users): object
+    {
+        $groupName = $group;
+        $groupName = zget($users, $group);
+
+        $dataGroup                = new stdclass();
+        $dataGroup->id            = $groupID;
+        $dataGroup->type          = 'group';
+        $dataGroup->text          = $groupName;
+        $dataGroup->percent       = '';
+        $dataGroup->attribute     = '';
+        $dataGroup->milestone     = '';
+        $dataGroup->owner_id      = $group;
+        $dataGroup->status        = '';
+        $dataGroup->begin         = '';
+        $dataGroup->deadline      = '';
+        $dataGroup->realBegan     = '';
+        $dataGroup->realEnd       = '';
+        $dataGroup->parent        = 0;
+        $dataGroup->open          = true;
+        $dataGroup->progress      = '';
+        $dataGroup->taskProgress  = '';
+        $dataGroup->color         = $this->lang->execution->gantt->stage->color;
+        $dataGroup->progressColor = $this->lang->execution->gantt->stage->progressColor;
+        $dataGroup->textColor     = $this->lang->execution->gantt->stage->textColor;
+        $dataGroup->bar_height    = $this->lang->execution->gantt->bar_height;
+
+        return $dataGroup;
+    }
+
+    /**
+     * 构建甘特图的任务数据。
+     * Build task data for gantt.
+     *
+     * @param  int       $groupID
+     * @param  object    $task
+     * @param  array     $dateLimit  array('start' => $start, 'end' => $end, 'realBegan' => $realBegan, 'realEnd' => $realEnd);
+     * @param  array     $tasksMap
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskDataForGantt(object $task, array $dateLimit, int $groupID = 0, array $tasksMap = array()): object
+    {
+        $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
+        $pri      = zget($this->lang->task->priList, $task->pri);
+        $priIcon  = sprintf($taskPri, $task->pri, $pri, $pri);
+        $progress = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+
+        $data = new stdclass();
+        $data->id           = $task->id;
+        $data->type         = 'task';
+        $data->text         = $priIcon . $task->name;
+        $data->percent      = '';
+        $data->status       = $this->processStatus('task', $task);
+        $data->owner_id     = $task->assignedTo;
+        $data->attribute    = '';
+        $data->milestone    = '';
+        $data->begin        = $dateLimit['start'];
+        $data->deadline     = $dateLimit['end'];
+        $data->realBegan    = $dateLimit['realBegan'] ? substr($dateLimit['realBegan'], 0, 10) : '';
+        $data->realEnd      = $dateLimit['realEnd'] ? substr($dateLimit['realEnd'], 0, 10) : '';
+        $data->pri          = $task->pri;
+        $data->parent       = ($task->parent > 0 and $task->assignedTo != '' and !empty($tasksMap[$task->parent]->assignedTo)) ? $task->parent : $groupID;
+        $data->open         = true;
+        $data->progress     = $progress;
+        $data->taskProgress = ($progress * 100) . '%';
+        $data->start_date   = $dateLimit['start'];
+        $data->endDate      = $dateLimit['end'];
+        $data->duration     = 1;
+        $data->estimate     = $task->estimate;
+        $data->consumed     = $task->consumed;
+        $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+        $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+        $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
+        $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
+        if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
+        if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
+
+        return $data;
+    }
+
+    /**
+     * 构建甘特图的关系链接
+     * Build gantt links.
+     *
+     * @param  array     $planIdList
+     * @access protected
+     * @return array
+     */
+    protected function buildGanttLinks(array $planIdList): array
+    {
+        if($this->config->edition == 'open') array();
+
+        $links = array();
+        $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
+        foreach($relations as $relation)
+        {
+            $link           = array();
+            $link['source'] = $relation->execution . '-' . $relation->pretask;
+            $link['target'] = $relation->execution . '-' . $relation->task;
+            $link['type']   = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
+            $links[]        = $link;
+        }
+        return $links;
+    }
+
+    /**
+     * 设置阶段统计数据。
+     * Set stage summary.
+     *
+     * @param  array     $ganttData
+     * @param  array     $stages
+     * @access protected
+     * @return array
+     */
+    protected function setStageSummary(array $ganttData, array $stages): array
+    {
+        foreach($stages as $groupKey => $stage)
+        {
+            $progress = empty($stage['totalReal']) ? 0 : round($stage['totalConsumed'] / $stage['totalReal'], 3);
+            $ganttData['data'][$groupKey]->progress     = $progress;
+            $ganttData['data'][$groupKey]->taskProgress = ($progress * 100) . '%';
+            $ganttData['data'][$groupKey]->estimate     = $stage['totalEstimate'];
+            $ganttData['data'][$groupKey]->consumed     = $stage['totalConsumed'];
+        }
+        return $ganttData;
+    }
+
+    /**
+     * 获取任务任务限制。获取该任务在甘特图中的开始，结束时间。
+     * Get task date limit.
+     *
+     * @param  object      $task
+     * @param  object|null $execution
+     * @access protected
+     * @return array
+     */
+    protected function getTaskDateLimit(object $task, object|null $execution): array
+    {
+        $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
+        $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
+        $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
+        $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
+
+        $start = $realBegan ? $realBegan : $estStart;
+        $end   = $realEnd   ? $realEnd   : $estEnd;
+        if(empty($start) and $execution) $start = $execution->begin;
+        if(empty($end)   and $execution) $end   = $execution->end;
+        if($start > $end) $end = $start;
+
+        return array('start' => $start, 'end' => $end, 'realBegan' => $realBegan, 'realEnd' => $realEnd);
+    }
+
+    /**
+     * Get five days ago.
+     *
+     * @param  string $date
+     * @param  int    $date
+     * @access public
+     * @return string
+     */
+    public function getReviewDeadline(string $date, int $counter = 5): string
+    {
+        if(helper::isZeroDate($date)) return '';
+
+        $this->loadModel('holiday');
+        $weekendDays = array(6, 7);
+        $timestamp   = strtotime($date);
+        $index       = 0;
+        while($index < $counter)
+        {
+            $timestamp  -= 24 * 3600;
+            $weekday     = date('N', $timestamp);
+            $currentDate = date('Y-m-d', $timestamp);
+            if(!in_array($weekday, $weekendDays) and !$this->holiday->isHoliday($currentDate)) $index ++;
+        }
+
+        return date('Y-m-d', $timestamp);
     }
 }

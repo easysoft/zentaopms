@@ -247,16 +247,11 @@ class programplan extends control
     public function ajaxGetAttribute(int $stageID, string $attribute, string $projectModel = ''): int
     {
         $this->app->loadLang('stage');
+        if($projectModel == 'ipd') $this->lang->stage->typeList = $this->lang->stage->ipdTypeList;
 
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
 
-        if($projectModel == 'ipd') $this->lang->stage->typeList = $this->lang->stage->ipdTypeList;
-
-        if(empty($stageAttribute) || $stageAttribute == 'mix')
-        {
-            return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
-        }
-
+        if(empty($stageAttribute) || $stageAttribute == 'mix') return print(html::select('attribute', $this->lang->stage->typeList, $attribute, "class='form-control chosen'"));
         return print(zget($this->lang->stage->typeList, $stageAttribute));
     }
 
@@ -271,9 +266,6 @@ class programplan extends control
     public function ajaxGetStageAttr(int $stageID): int
     {
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
-
-        if(!$stageAttribute) return print(js::error(dao::getError()));
-
         return print($stageAttribute);
     }
 }
