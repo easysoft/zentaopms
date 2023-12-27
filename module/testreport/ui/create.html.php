@@ -150,14 +150,13 @@ formPanel
             set::label($lang->testreport->goal),
             span
             (
+                setClass('flex items-center'),
+                html($execution->desc),
                 icon
                 (
                     'help',
-                    set('data-toggle', 'tooltip'),
-                    set('id', 'goalTip'),
-                    set('class', 'text-light')
+                    toggle::tooltip(array('title' => $lang->testreport->goalTip))
                 ),
-                html($execution->desc)
             )
         )
     ) : null,
