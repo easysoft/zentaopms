@@ -315,19 +315,6 @@ class instanceModel extends model
             ->where('id')->eq($id)->exec();
     }
 
-
-    /**
-     * Soft delete instance by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function softDeleteByID($id)
-    {
-        return $this->dao->update(TABLE_INSTANCE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-    }
-
     /**
      * If actions are allowed to do.
      *
