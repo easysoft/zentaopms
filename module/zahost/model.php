@@ -202,7 +202,7 @@ class zahostModel extends model
      * @access public
      * @return false|object
      */
-    public function getImageByID(int $imageID):false|object
+    public function getImageByID(int $imageID): false|object
     {
         return $this->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
     }
