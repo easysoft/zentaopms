@@ -21,7 +21,7 @@ class solutionModel extends model
      */
     public function getByID(int $solutionID): ?object
     {
-        $solution  = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($solutionID)->fetch();
+        $solution = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($solutionID)->fetch();
         if(!$solution) return null;
 
         $solution->instances = array();

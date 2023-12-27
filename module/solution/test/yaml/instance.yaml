@@ -1,0 +1,66 @@
+---
+title: instance
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-4
+  - field: space
+    range: '1{2},2{2}'
+  - field: solution
+    range: '1{3},2'
+  - field: name
+    range: '`Jenkins`,`GitLab`,`GitLab`,`Jenkins`'
+  - field: appID
+    range: '`59`,`58`,`58`,`59`'
+  - field: appName
+    range: '`Jenkins`,`GitLab`,`GitLab`,`Jenkins`'
+  - field: appVersion
+    range: '`2.401.3`,`15.3.4`,`15.3.4`,`2.401.3`'
+  - field: chart
+    range: '`jenkins`,`gitlab`,`gitlab`,`jenkins`'
+  - field: logo
+    range: '`//img.qucheng.com/app/j/jenkins-icon.svg`,`//img.qucheng.com/app/g/gitlab-icon.svg`,`//img.qucheng.com/app/g/gitlab-icon.svg`,`//img.qucheng.com/app/j/jenkins-icon.svg`'
+  - field: version
+    range: '`2023.10.901`'
+  - field: desc
+    range: '`Jenkins是国际上流行的免费开源软件项目,是基于Java开发持续集成工具,用于监控持续重复的工作,旨在提供一个开放的易用的软件平台,使软件的持续集成自动化，大大节约人力和时效。`,`GitLab是由GitLab
+      Inc.开发，使用MIT许可证的基于网络的Git仓库管理工具，且具有wiki和issue跟踪功能。使用Git作为代码管理工具，并在此基础上搭建起来的web服务。`,`GitLab是由GitLab
+      Inc.开发，使用MIT许可证的基于网络的Git仓库管理工具，且具有wiki和issue跟踪功能。使用Git作为代码管理工具，并在此基础上搭建起来的web服务。`,`Jenkins是国际上流行的免费开源软件项目,是基于Java开发持续集成工具,用于监控持续重复的工作,旨在提供一个开放的易用的软件平台,使软件的持续集成自动化，大大节约人力和时效。`'
+  - field: introduction
+    range: '`基于Java开发的一款持续集成工具`,`GitLab 一款基于Git的一体化软件开发平台。`,`GitLab 一款基于Git的一体化软件开发平台。`,`基于Java开发的一款持续集成工具`'
+  - field: source
+    range: '`cloud`'
+  - field: channel
+    range: '`stable`'
+  - field: k8name
+    range: '`jenkins-20231019112830`,`gitlab-20231019131424`,`gitlab-20231025104407`,`jenkins-20231025104735`'
+  - field: status
+    range: '`running`,`starting`,,'
+  - field: pinned
+    range: "0"
+  - field: domain
+    range: '`jvud.devops.corp.cc`,`gmip.devops.corp.cc`,`9krd.devops.corp.cc`,`adkm.devops.corp.cc`'
+  - field: smtpSnippetName
+    range: ""
+  - field: ldapSnippetName
+    range: ""
+  - field: ldapSettings
+    range: ""
+  - field: dbSettings
+    range: '`{"ingress":{"enabled":true,"host":"jvud.devops.corp.cc"},"global":{"ingress":{"enabled":true,"host":"jvud.devops.corp.cc"}},"ci":{"enabled":true},"mysql":{"enabled":false,"auth":{"user":"user_52","password":"vmqA3pzlswbB","host":"qucheng-mysql.quickon-system.svc","port":3306,"database":"db_52","dbservice":{"name":"qucheng-mysql","namespace":"quickon-system"}}}}`,`{"ingress":{"enabled":true,"host":"gmip.devops.corp.cc"},"global":{"ingress":{"enabled":true,"host":"gmip.devops.corp.cc"}},"ci":{"enabled":true},"mysql":{"enabled":false,"auth":{"user":"user_53","password":"cjPmBztaTYvy","host":"qucheng-mysql.quickon-system.svc","port":3306,"database":"db_53","dbservice":{"name":"qucheng-mysql","namespace":"quickon-system"}}}}`,`{"ingress":{"enabled":true,"host":"9krd.devops.corp.cc"},"global":{"ingress":{"enabled":true,"host":"9krd.devops.corp.cc"}},"ci":{"enabled":true},"mysql":{"enabled":false,"auth":{"user":"user_54","password":"GTFyIESAUjsP","host":"qucheng-mysql.quickon-system.svc","port":3306,"database":"db_54","dbservice":{"name":"qucheng-mysql","namespace":"quickon-system"}}}}`,`{"ingress":{"enabled":true,"host":"adkm.devops.corp.cc"},"global":{"ingress":{"enabled":true,"host":"adkm.devops.corp.cc"}},"ci":{"enabled":true},"mysql":{"enabled":false,"auth":{"user":"user_55","password":"wvKn8a7JyxcZ","host":"qucheng-mysql.quickon-system.svc","port":3306,"database":"db_55","dbservice":{"name":"qucheng-mysql","namespace":"quickon-system"}}}}`'
+  - field: autoBackup
+    range: "0"
+  - field: backupKeepDays
+    range: '`1`'
+  - field: autoRestore
+    range: "0"
+  - field: env
+    range: ""
+  - field: createdBy
+    range: '`wwccss`'
+  - field: createdAt
+    range: '`2023-10-19 11:28:30`,`2023-10-19 13:14:24`,`2023-10-25 10:44:07`,`2023-10-25 10:47:35`'
+  - field: deleted
+    range: "0"
+...
