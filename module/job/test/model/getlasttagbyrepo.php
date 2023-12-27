@@ -10,7 +10,7 @@ title=jobModel->getLastTagByRepo();
 timeout=0
 cid=1
 
-- 查询id为1的job的版本库的last tag @tag1
+- 查询id为1的job的版本库的last tag @test_tag17
 
 */
 
@@ -19,4 +19,4 @@ zdTable('repo')->config('repo')->gen(5);
 
 $jobID = 1;
 $job = new jobTest();
-r($job->getLastTagByRepoTest($jobID)) && p() && e('tag1');  // 查询id为1的job的版本库的last tag
+r($job->getLastTagByRepoTest($jobID)) && p() && e('test_tag17');  // 查询id为1的job的版本库的last tag

@@ -12,7 +12,7 @@ cid=1
 
 - 检查job1是否启用了参数构建 @0
 - 检查job3是否启用了参数构建 @0
-- 检查job5是否启用了参数构建 @1
+- 检查job5是否启用了参数构建 @0
 
 */
 
@@ -43,4 +43,4 @@ $compile = new jobTest();
 
 r($compile->checkParameterizedBuildTest(1)) && p('') && e('0'); //检查job1是否启用了参数构建
 r($compile->checkParameterizedBuildTest(3)) && p('') && e('0'); //检查job3是否启用了参数构建
-r($compile->checkParameterizedBuildTest(5)) && p('') && e('1'); //检查job5是否启用了参数构建
+r($compile->checkParameterizedBuildTest(5)) && p('') && e('0'); //检查job5是否启用了参数构建

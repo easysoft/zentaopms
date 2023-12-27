@@ -185,6 +185,9 @@ class jobTest
             $job['jkServer'] = $job['server'];
             $job['jkTask']   = $job['pipeline'];
         }
+        unset($job['editedDate']);
+        unset($job['lastExec']);
+        unset($job['lastSyncDate']);
 
         $result = $this->objectModel->update($jobID, (object)$job);
         if(dao::isError()) return dao::getError();
