@@ -11,6 +11,7 @@ $(function()
             var visibleHeight = $(window).height() - $('#headerBox').height() - $('#appsBar').height() - 40;
             $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap').css('max-height', visibleHeight + 'px');
             $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar').css('display', 'block');
+            $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar').height(visibleHeight);
             $('#contentBox .CodeMirror.cm-s-paper.CodeMirror-wrap .CodeMirror-vscrollbar div').height(contentHeight);
         }, 200);
     }
