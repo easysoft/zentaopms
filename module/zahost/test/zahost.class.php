@@ -6,7 +6,22 @@ class zahostTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('zahost');
+
         $tester->loadModel('host');
+    }
+
+    /**
+     * 魔术方法，调用zahost模型中的方法。
+     * Magic method, call the method in the zahost model.
+     *
+     * @param  string $name
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->objectModel->$name(...$arguments);
     }
 
     /**
