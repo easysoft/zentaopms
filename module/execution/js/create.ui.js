@@ -38,7 +38,7 @@ function refreshPage()
  */
 function setType()
 {
-    const type = $('#type').val();
+    const type = $('input[name=type]').val();
     loadPage($.createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=&planID=0&confirm=no&productID=0&extra=type=' + type));
 }
 

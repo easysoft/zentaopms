@@ -33,6 +33,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
             set::label($lang->execution->method),
             set::items($lang->execution->typeList),
             set::value($execution->type),
+            set::required(true),
             on::change('setType')
         ),
         formGroup
