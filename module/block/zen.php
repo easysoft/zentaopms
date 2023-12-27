@@ -365,7 +365,7 @@ class blockZen extends block
                 foreach($data->release as $release)
                 {
                     $release->title     = $this->lang->block->zentaodynamic->release;
-                    $release->label     = formatTime($data->publicclass->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))];
+                    $release->label     = formatTime($release->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($release->time))];
                     $release->linklabel = false;
                     $dynamics[] = $release;
                 }
