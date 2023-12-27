@@ -810,7 +810,7 @@ class treeModel extends model
 
         while($module = $stmt->fetch())
         {
-            $treeMenu = $this->buildTree($module, '', 0, array('treeModel', 'createHostLink'));
+            $treeMenu = $this->buildTree($module, '', '0', array('treeModel', 'createHostLink'));
             if($module->parent == 0) $treeMenu->parent = $module->root;
 
             $menu[] = $treeMenu;
