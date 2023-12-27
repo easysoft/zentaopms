@@ -159,7 +159,7 @@ class solutionModel extends model
                 return false;
             }
 
-            if(!$this->checkInstallStatus($solution->id)) return false;
+            if($solution->status != 'installing') return false;
             $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
             $instance = $this->installApp($cloudApp, $settings);
         }
@@ -381,7 +381,9 @@ class solutionModel extends model
         $this->loadModel('instance');
         for($times = 0; $times < 50; $times++)
         {
-            if(!$this->checkInstallStatus($solutionID)) return false;
+            $solution = $this->getByID($solutionID);
+            if(!$solution || $solution->status != 'installing') return false;
+
             $this->dao->update(TABLE_SOLUTION)->set('updatedDate')->eq(date("Y-m-d H:i:s"))->where('id')->eq($solutionID)->exec();
 
             sleep(12);
@@ -391,21 +393,6 @@ class solutionModel extends model
             if($instance->status == 'running') return $instance;
         }
 
-        return false;
-    }
-
-    /**
-     * 检查解决方案安装状态。
-     * Check solution status.
-     *
-     * @param  int    $solutionID
-     * @access public
-     * @return bool
-     */
-    public function checkInstallStatus(int $solutionID): bool
-    {
-        $solution = $this->getByID($solutionID);
-        if($solution && $solution->status == 'installing') return true;
         return false;
     }
 
