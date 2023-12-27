@@ -185,6 +185,7 @@ class instanceModel extends model
     }
 
     /**
+     * 自定义域名后，更新所有应用实例的域名。
      * Update all instances domain by customized domain.
      *
      * @access public
@@ -207,13 +208,14 @@ class instanceModel extends model
     }
 
     /**
+     * 更新应用实例域名。
      * Update domain.
      *
      * @param  object $instance
      * @access public
      * @return bool
      */
-    public function updateDomain($instance)
+    public function updateDomain(object $instance): bool
     {
         /* If domain of instance is same with system domain, not need to update. */
         $sysDomain = $this->cne->sysDomain();
