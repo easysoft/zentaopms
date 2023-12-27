@@ -395,8 +395,8 @@ class searchModel extends model
         $index->objectType = $objectType;
         $index->objectID   = $object->{$fields->id};
         $index->title      = $object->{$fields->title};
-        $index->addedDate  = isset($object->{$fields->addedDate}) ? $object->{$fields->addedDate} : '0000-00-00 00:00:00';
-        $index->editedDate = isset($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : '0000-00-00 00:00:00';
+        $index->addedDate  = !empty($object->{$fields->addedDate})  ? $object->{$fields->addedDate}  : NULL;
+        $index->editedDate = !empty($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : NULL;
         $index->vision     = isset($object->vision) ? $object->vision : 'rnd';
 
         $index->content = '';

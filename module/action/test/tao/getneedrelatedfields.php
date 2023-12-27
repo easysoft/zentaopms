@@ -87,6 +87,7 @@ zdTable('team')->gen(1);
 zdTable('module')->config('module')->gen(1);
 zdTable('review')->gen(1);
 zdTable('testtask')->gen(1);
+zdTable('build')->gen(0);
 
 $actionTest = new actionTest();
 
@@ -101,7 +102,7 @@ r($actionTest->getNeedRelatedFields($objectTypeList[2],  $objectIDList[2],  $act
 r($actionTest->getNeedRelatedFields($objectTypeList[3],  $objectIDList[3],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('1,0,101');    //测试获取id为1的testcase的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[4],  $objectIDList[4],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('1,0,101');    //测试获取id为1的case的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[6],  $objectIDList[6],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('0,0,0');      //测试获取id为1的kanbanlane的相关字段
-r($actionTest->getNeedRelatedFields($objectTypeList[7],  $objectIDList[7],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('~~,11,0');    //测试获取id为1的release的相关字段
+r($actionTest->getNeedRelatedFields($objectTypeList[7],  $objectIDList[7],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('1,~~,0');    //测试获取id为1的release的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[8],  $objectIDList[8],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('~~,11,101');  //测试获取id为1的task的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[9],  $objectIDList[9],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('0,0,1111');   //测试获取id为1的kanbancolumn的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[10], $objectIDList[10], $actionType[0], $extraList[0])) && p('0:0;1;2') && e('0,0,1');      //测试获取id为1的team的相关字段
