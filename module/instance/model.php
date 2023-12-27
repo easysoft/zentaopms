@@ -56,20 +56,21 @@ class instanceModel extends model
      * @access public
      * @return object
      */
-    public function getByUrl(string $url)
+    public function getByUrl(string $url): object
     {
         $url = str_replace(array('https://', 'http://'), '', trim($url));
         return $this->dao->select('id')->from(TABLE_INSTANCE)->where('domain')->eq($url)->fetch();
     }
 
     /**
+     * 根据ID列表获取应用实例列表。
      * Get by id list.
      *
      * @param  array  $idList
      * @access public
      * @return array
      */
-    public function getByIdList(array $idList)
+    public function getByIdList(array $idList): array
     {
         $instances = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('id')->in($idList)
@@ -87,14 +88,15 @@ class instanceModel extends model
     }
 
     /**
+     * 根据解决方案ID获取应用实例列表。
      * Get instance list by solution.
      *
      * @param  object $solution
      * @param  string $chart
      * @access public
-     * @return array
+     * @return object|null
      */
-    public function instanceOfSolution($solution, $chart)
+    public function instanceOfSolution(object $solution, string $chart): object|null
     {
         $instance = $this->dao->select('id')->from(TABLE_INSTANCE)->where('deleted')->eq(0)
             ->andWhere('solution')->eq($solution->id)
@@ -103,7 +105,7 @@ class instanceModel extends model
 
         if($instance) return $this->getByID($instance->id);
 
-        return array();
+        return null;
     }
 
     /**
