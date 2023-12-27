@@ -24,5 +24,5 @@ r($customTester->parseItemParamTest($paramString[5])) && p('lang,module,section,
 r($customTester->parseItemParamTest($paramString[4])) && p('lang,module,section,key,vision') && e('zh-cn,custom,URSRList,1,~~');  // 测试参数为lang,key,section,module
 r($customTester->parseItemParamTest($paramString[3])) && p('lang,module,section,key,vision') && e('zh-cn,~~,URSRList,1,~~');      // 测试参数为lang,key,section
 r($customTester->parseItemParamTest($paramString[2])) && p('lang,module,section,key,vision') && e('zh-cn,custom,~~,~~,~~');       // 测试参数为lang,module
-r($customTester->parseItemParamTest($paramString[1])) && p('lang,module,section,key,vision') && e('zh-cn,N/A,N/A,N/A,N/A');       // 测试参数为lang
-r($customTester->parseItemParamTest($paramString[0])) && p('lang,module,section,key,vision') && e('N/A,N/A,N/A,N/A,N/A');         // 测试参数为空
+r($customTester->parseItemParamTest($paramString[1])) && p('lang,module,section,key,vision') && e('zh-cn,~~,~~,~~,~~');           // 测试参数为lang
+r($customTester->parseItemParamTest($paramString[0])) && p('lang,module,section,key,vision') && e('~~,~~,~~,~~,~~');              // 测试参数为空

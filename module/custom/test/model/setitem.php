@@ -26,6 +26,6 @@ r($customTester->setItemTest($path[2], $value[1])) && p('lang,module,key,value')
 r($customTester->setItemTest($path[3], $value[0])) && p('lang,module,key,value') && e('zh-cn,story,feature,功能');      // 测试path中.出现的个数为3，value正常存在，能保存
 r($customTester->setItemTest($path[3], $value[1])) && p('lang,module,key,value') && e('zh-cn,story,feature,~~');        // 测试path中.出现的个数为3，value为空，能保存
 r($customTester->setItemTest($path[4], $value[0])) && p('lang,module,key,value') && e('zh-cn,story,feature,功能');      // 测试path中.出现的个数为4，value正常存在，能保存
-r($customTester->setItemTest($path[4], $value[1])) && p('lang,module,key,value') && e('zh-cn,story,feature,N/A');       // 测试path中.出现的个数为5，value为空，能保存
+r($customTester->setItemTest($path[4], $value[1])) && p('lang,module,key,value') && e('zh-cn,story,feature,~~');       // 测试path中.出现的个数为5，value为空，能保存
 
 zdTable('lang')->gen(0);
