@@ -14,7 +14,6 @@ title=测试 transfer->initValues();
 timeout=0
 cid=1
 
-sed: can't read /home/z/repo/master/zentaopms/test/config/my.php: No such file or directory
 - 测试初始化导出任务时所属项目字段属性11 @项目11
 - 测试初始化导出任务时优先级字段属性1 @1
 

@@ -237,6 +237,24 @@ class transferTest
     }
 
     /**
+     * 测试extractElements。
+     * Extract elements.
+     *
+     * @param  string $module
+     * @param  array  $rows
+     * @access public
+     * @return array
+     */
+    public function extractElementsTest(string $module, array $rows = array())
+    {
+        /* parseExcelDropdownValues里调用了extractElements 这里直接调用arseExcelDropdownValues 。*/
+        $this->initConfig();
+
+        $fields = $this->objectModel->getImportFields($module);
+        return $this->objectModel->parseExcelDropdownValues($module, $rows, '', $fields);
+    }
+
+    /**
      * 测试initFieldList。
      * initFieldListTest.
      *

@@ -17,6 +17,9 @@ title=测试 transfer->generateExportDatas();
 timeout=0
 cid=1
 
+- 测试导出任务类型第41条的type属性 @开发
+- 测试导出任务所属项目第41条的project属性 @项目11(#11)
+
 */
 
 $transfer = new transferTest();

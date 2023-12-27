@@ -47,6 +47,9 @@ title=测试 transfer->getCascadeList();
 timeout=0
 cid=1
 
+- 查看planTitle字段。第12条的planTitle属性 @计划1
+- 查看parentName字段第14条的parentName属性 @用户需求13
+
 */
 global $tester;
 $transfer = $tester->loadModel('transfer');

@@ -11,7 +11,7 @@ su('admin');
 
 /**
 
-title=测试 transfer->initFieldListTest();
+title=测试 transfer->initFieldList();
 timeout=0
 cid=1
 

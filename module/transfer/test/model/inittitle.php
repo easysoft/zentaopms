@@ -10,7 +10,6 @@ title=测试 transfer->initTitle();
 timeout=0
 cid=1
 
-sed: can't read /home/z/repo/master/zentaopms/test/config/my.php: No such file or directory
 - 测试获取task模块id字段语言项 @编号
 - 测试获取bug模块product字段语言项 @所属产品
 - 测试当获取不到对应的语言项时 @notIsset
