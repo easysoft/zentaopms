@@ -34,6 +34,7 @@ class groupZen extends group
         /* Privs in resource but not in package. */
         foreach($this->lang->resource as $module => $methodList)
         {
+            if(!$methodList) continue;
             foreach($methodList as $method => $methodLang)
             {
                 if(isset($allPrivs[$module . '-' . $method])) continue;
