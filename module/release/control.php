@@ -199,7 +199,7 @@ class release extends control
     public function view(int $releaseID, string $type = 'story', string $link = 'false', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $release = $this->release->getByID($releaseID, true);
-        if(!$release) return sendError($this->lang->notFound, $this->createLink('product', 'index'));
+        if(!$release) return $this->sendError($this->lang->notFound, $this->createLink('product', 'index'));
 
         $uri = $this->app->getURI(true);
         if(!empty($release->build)) $this->session->set('buildList', $uri, 'project');
