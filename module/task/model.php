@@ -138,13 +138,16 @@ class taskModel extends model
             $oldTask = zget($oldTasks, $taskID);
 
             /* Record effort. */
-            $record = new stdclass();
-            $record->account  = $currentAccount;
-            $record->task     = $taskID;
-            $record->date     = $today;
-            $record->left     = $task->left;
-            $record->consumed = $task->consumed;
-            $this->addTaskEffort($record);
+            if(!empty($task->consumed))
+            {
+                $record = new stdclass();
+                $record->account  = $currentAccount;
+                $record->task     = $taskID;
+                $record->date     = $today;
+                $record->left     = $task->left;
+                $record->consumed = $task->consumed;
+                $this->addTaskEffort($record);
+            }
 
             /* Update Kanban and story stage. */
             if($oldTask->story) $this->story->setStage($oldTask->story);
