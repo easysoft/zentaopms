@@ -21,10 +21,10 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$canCreate      = hasPriv('task', 'create');
-$canBatchCreate = hasPriv('task', 'batchCreate');
-$canImportTask  = hasPriv('execution', 'importTask');
-$canImportBug   = hasPriv('execution', 'importBug');
+$canCreate      = common::canModify('execution', $execution) && hasPriv('task', 'create');
+$canBatchCreate = common::canModify('execution', $execution) && hasPriv('task', 'batchCreate');
+$canImportTask  = common::canModify('execution', $execution) && hasPriv('execution', 'importTask');
+$canImportBug   = common::canModify('execution', $execution) && hasPriv('execution', 'importBug');
 
 $this->loadModel('task');
 $importItems = array();
@@ -118,8 +118,8 @@ if($canBatchAction)
     {
         $batchItems = array
         (
-            array('text' => $lang->close,        'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchClose  ? '' : 'hidden'), 'data-url' => createLink('task', 'batchClose')),
-            array('text' => $lang->task->cancel, 'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchCancel ? '' : 'hidden'), 'data-url' => createLink('task', 'batchCancel'))
+            array('text' => $lang->close,        'innerClass' => 'batch-btn ajax-btn not-open-url', 'disabled' => !$canBatchClose, 'data-url' => createLink('task', 'batchClose')),
+            array('text' => $lang->task->cancel, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'disabled' => !$canBatchCancel, 'data-url' => createLink('task', 'batchCancel'))
         );
     }
 
@@ -143,11 +143,11 @@ if($canBatchAction)
 
     if($canBatchClose || $canBatchCancel || $canBatchEdit)
     {
-        $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
+        $editClass = $canBatchEdit ? 'batch-btn' : '';
         $footToolbar['items'][] = array(
             'type'  => 'btn-group',
             'items' => array(
-                array('text' => $lang->edit, 'className' => "btn size-sm {$editClass}", 'btnType' => 'secondary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
+                array('text' => $lang->edit, 'className' => "btn size-sm {$editClass}", 'disabled' => !$canBatchEdit , 'btnType' => 'secondary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
                 array('caret' => 'up', 'className' => 'btn btn-caret size-sm  not-open-url', 'btnType' => 'secondary', 'items' => $batchItems, 'data-placement' => 'top-start')
             )
         );

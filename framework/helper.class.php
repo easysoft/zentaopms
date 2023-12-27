@@ -710,7 +710,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         }
     }
 
-    if(!$method || !common::hasPriv($module, $method)) return $isClickable;
+    if(!$method || !common::hasPriv($module, $method, $item)) return $isClickable;
 
     $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
 
