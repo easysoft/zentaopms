@@ -177,4 +177,21 @@ class zanodeTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
     }
+
+    /**
+     * 测试将执行节点还原到此快照。
+     * Test restore zanode to snapshot.
+     *
+     * @param  int    $zanodeID
+     * @param  int    $snapshotID
+     * @access public
+     * @return bool
+     */
+    public function restoreSnapshotTest(int $zanodeID = 0, int $snapshotID = 0)
+    {
+        $result = $this->restoreSnapshot($zanodeID, $snapshotID);
+        if(!$result) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($zanodeID)->fetch();
+    }
 }

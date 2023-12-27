@@ -425,7 +425,7 @@ class zanode extends control
     public function restoreSnapshot(int $nodeID, int $snapshotID)
     {
         $this->zanode->restoreSnapshot($nodeID, $snapshotID);
-        if(dao::isError()) return $this->sendError(dao::getError());
+        if(dao::isError()) return $this->sendError(dao::getError(), true);
 
         return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
     }

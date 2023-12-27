@@ -207,31 +207,32 @@ class zanodemodel extends model
     }
 
     /**
-     * Restore Snapshot to zanode.
+     * 将执行节点还原到此快照。
+     * Restore zanode to snapshot.
      *
      * @param  int    $zanodeID
      * @param  int    $snapshotID
      * @access public
      * @return bool
      */
-    public function restoreSnapshot($zanodeID = 0, $snapshotID = 0)
+    public function restoreSnapshot(int $zanodeID = 0, int $snapshotID = 0)
     {
         $node = $this->getNodeByID($zanodeID);
         $snap = $this->getImageByID($snapshotID);
 
-        $snap->status = ($snap->status == 'restoring' && time() - strtotime($snap->restoreDate) > 600) ? 'restore_failed' : $snap->status;
+        /* 检查快照的状态。*/
+        /* Check snapshot status. */
+        $snap->status = $snap->status == 'restoring' && time() - strtotime($snap->restoreDate) > 600 ? 'restore_failed' : $snap->status;
         if(!in_array($snap->status, array('completed', 'restoring', 'restore_failed', 'restore_completed'))) dao::$errors = $this->lang->zanode->snapStatusError;
         if($snap->status == 'restoring') dao::$errors = $this->lang->zanode->snapRestoring;
         if(dao::isError()) return false;
 
-        //update snapshot status
-        $this->dao->update(TABLE_IMAGE)
-        ->set('status')->eq('restoring')
-        ->set('restoreDate')->eq(helper::now())
-        ->where('id')->eq($snapshotID)->exec();
+        /* 更新快照状态。*/
+        /* Update snapshot status. */
+        $this->dao->update(TABLE_IMAGE)->set('status')->eq('restoring')->set('restoreDate')->eq(helper::now())->where('id')->eq($snapshotID)->exec();
 
-
-        /* Prepare create params. */
+        /* 执行还原命令。*/
+        /* Execute the restore command. */
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
         $param    = array(array(
             'name'    => $snap->name,
@@ -239,9 +240,10 @@ class zanodemodel extends model
             'type'    => 'revertSnap',
             'vm'      => $node->name
         ));
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param, JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
-        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
-
+        /* 若执行成功修改执行节点的状态。*/
+        /* Change node status when success. */
         if(!empty($result) and $result->code == 'success')
         {
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq('restoring')->where('id')->eq($node->id)->exec();
@@ -249,8 +251,10 @@ class zanodemodel extends model
             return true;
         }
 
+        /* 执行失败时修改快照状态为完成。*/
+        /* Change status to completed when fail. */
         $this->dao->update(TABLE_IMAGE)->set('status')->eq('completed')->where('id')->eq($snapshotID)->exec();
-        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->zanode->apiError['fail'];
+        dao::$errors[] = !empty($result) && !empty($result->msg) ? $result->msg : $this->lang->zanode->apiError['fail'];
         return false;
     }
 
