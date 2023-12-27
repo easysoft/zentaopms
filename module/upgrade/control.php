@@ -295,7 +295,7 @@ class upgrade extends control
      * @param  string $type
      * @param  int    $programID
      * @param  string $projectType project|execution
-     * @param  string $fromVersion project|execution
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
@@ -794,7 +794,7 @@ class upgrade extends control
             $this->dao->delete()->from(TABLE_BLOCK)->exec();
             $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('blockInited')->exec();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-            return print(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
+            return print(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=$fromVersion&processed=no")));
         }
 
         $this->view->title    = $this->lang->upgrade->mergeRepo;
