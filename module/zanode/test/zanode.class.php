@@ -114,13 +114,19 @@ class zanodeTest
      * Test create snapshot.
      *
      * @param  int    $nodeID
-     * @param  array $snapshot
+     * @param  string $nodeIP
+     * @param  int    $hzap
+     * @param  string $token
+     * @param  array $data
      * @access public
      * @return object
      */
-    public function createSnapshotTest(int $nodeID, array $data): object|string
+    public function createSnapshotTest(int $nodeID, string $nodeIP, int $hzap, string $token, array $data): object|string
     {
         $node = $this->getNodeByID($nodeID);
+        $node->ip      = $nodeIP;
+        $node->hzap    = $hzap;
+        $node->tokenSN = $token;
 
         $snapshot = new stdClass();
         $snapshot->host        = $node->id;
