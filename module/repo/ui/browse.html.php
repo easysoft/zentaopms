@@ -272,6 +272,9 @@ $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAll
 sidebar
 (
     set::side('right'),
+    set::width(500),
+    set::maxWidth(500),
+    set::preserve(false),
     dtable
     (
         set::id('repo-comments-table'),
