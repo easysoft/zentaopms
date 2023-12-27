@@ -663,43 +663,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Get task status by zagent api.
-     *
-     * @param  object     $node
-     * @param  int        $taskID
-     * @param  string     $type
-     * @param  string     $status
-     * @access public
-     * @return array|bool
-     */
-    public function getTaskStatus($node, $taskID = 0, $type = '', $status = '')
-    {
-        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_STATUS_PATH;
-        $result   = json_decode(commonModel::http($agnetUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->tokenSN"), 'json', 'POST', 10));
-
-        if(empty($result) or $result->code != 'success') return false;
-        $data = $result->data;
-        if(empty($data)) return array();
-
-        if($status and !$taskID and isset($data->$status)) return $data->$status;
-
-        if(!$taskID) return $data;
-
-        foreach($data as $status => $tasks)
-        {
-            if(empty($tasks)) continue;
-
-            foreach($tasks as $task)
-            {
-                if(!empty($tasks['inprogress']) && $task->task != $tasks['inprogress'][0]->task && $task->status == 'created') $task->status = 'pending';
-                if($type == $task->type and $taskID == $task->task) return $task;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * 获取宿主机中zagent、nginx、websockify、novnc的运行及安装状态.
      * Get service status from host.
      *

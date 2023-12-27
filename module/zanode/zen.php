@@ -113,4 +113,40 @@ class zanodeZen extends zanode
 
         return $snapshot;
     }
+
+    /**
+     * 获取导出镜像状态。
+     * Get task status by zagent api.
+     *
+     * @param  object     $node
+     * @param  int        $taskID
+     * @param  string     $type
+     * @param  string     $status
+     * @access protected
+     * @return false|array
+     */
+    protected function getTaskStatus(object $node, int $taskID = 0, string $type = '', string $status = ''): false|array
+    {
+        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . '/api/v1/task/getStatus';
+        $result   = json_decode(commonModel::http($agnetUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->tokenSN"), 'json', 'POST', 10));
+        if(empty($result) || $result->code != 'success') return false;
+
+        $data = $result->data;
+        if(empty($data)) return array();
+
+        if($status && !$taskID && isset($data->$status)) return $data->$status;
+        if(!$taskID) return $data;
+
+        foreach($data as $status => $tasks)
+        {
+            if(empty($tasks)) continue;
+
+            foreach($tasks as $task)
+            {
+                if(!empty($tasks['inprogress']) && $task->task != $tasks['inprogress'][0]->task && $task->status == 'created') $task->status = 'pending';
+                if($type == $task->type && $taskID == $task->task) return $task;
+            }
+        }
+        return $result;
+    }
 }

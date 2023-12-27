@@ -258,7 +258,7 @@ class zanode extends control
     {
         if($_POST)
         {
-            $imageData = form::data($this->config->zanode->form->createImage)->get();
+            $imageData = form::data()->get();
             $this->zanode->createImage($nodeID, $imageData);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true));
@@ -267,7 +267,7 @@ class zanode extends control
         $task        = '';
         $node        = $this->zanode->getNodeByID($nodeID);
         $customImage = $this->zanode->getCustomImage($nodeID, 'created,inprogress');
-        if($customImage) $task = $this->zanode->getTaskStatus($node, $customImage->id, 'exportVm');
+        if($customImage) $task = $this->zanodeZen->getTaskStatus($node, $customImage->id, 'exportVm');
 
         $this->view->task = $task;
         $this->view->node = $node;
@@ -474,7 +474,7 @@ class zanode extends control
     public function ajaxGetTaskStatus(int $nodeID, int $taskID = 0, string $type = '', string $status = '')
     {
         $node   = $this->zanode->getNodeByID($nodeID);
-        $result = $this->zanode->getTaskStatus($node, $taskID, $type, $status);
+        $result = $this->zanodeZen->getTaskStatus($node, $taskID, $type, $status);
         return print(json_encode($result));
     }
 
