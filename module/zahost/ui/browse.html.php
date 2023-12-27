@@ -13,6 +13,7 @@ namespace zin;
 jsVar('webRoot', getWebRoot());
 jsVar('undeletedNotice', $lang->zahost->undeletedNotice);
 jsVar('uninitNotice', $lang->zahost->uninitNotice);
+jsVar('showFeature', $showFeature);
 
 $createItem = array('text' => $lang->zahost->create, 'url' => createLink('zahost', 'create'), 'icon' => 'plus', 'class' => 'btn primary');
 

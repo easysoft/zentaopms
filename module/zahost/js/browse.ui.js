@@ -22,3 +22,9 @@ window.afterRender = function()
     $('.dtable-cell-content .toolbar button.disabled.browseImage').attr('title', uninitNotice);
     $('.dtable-cell-content .toolbar button.disabled.ajax-submit').attr('title', undeletedNotice);
 }
+
+if(showFeature)
+{
+    var encodedHelpPageUrl = 'https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao';
+    window.open(encodedHelpPageUrl);
+}
