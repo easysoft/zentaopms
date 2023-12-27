@@ -158,5 +158,5 @@ UPDATE `zt_chart` SET `sql` = "SELECT t1.name,t1.id,t2.`year`,IF(YEAR(t1.created
 
 UPDATE `zt_cron` SET `h` = '1', `m` = '0' WHERE `command` = 'moduleName=metric&methodName=updateMetricLib';
 
-UPDATE `zt_pivot` SET `fields` = '{\"account\":{\"object\":\"effort\",\"field\":\"account\",\"type\":\"user\",\"name\":\"account\"},\"consumed\":{\"object\":\"effort\",\"field\":\"consumed\",\"type\":\"object\",\"name\":\"consumed\"},\"date\":{\"object\":\"effort\",\"field\":\"date\",\"type\":\"object\",\"name\":\"date\"},\"dept\":{\"object\":\"user\",\"field\":\"dept\",\"type\":\"string\",\"name\":\"dept\"}}' WHERE `id` = 1023;
+UPDATE `zt_pivot` SET `fields` = '{\"account\":{\"object\":\"effort\",\"field\":\"account\",\"type\":\"user\",\"name\":\"account\"},\"consumed\":{\"object\":\"effort\",\"field\":\"consumed\",\"type\":\"object\",\"name\":\"consumed\"},\"date\":{\"object\":\"effort\",\"field\":\"date\",\"type\":\"object\",\"name\":\"date\"},\"dept\":{\"object\":\"user\",\"field\":\"dept\",\"type\":\"string\",\"name\":\"dept\"}}' WHERE `name` = '{\"zh-cn\":\"\\u65e5\\u5fd7\\u6c47\\u603b\\u8868\",\"zh-tw\":\"\\u65e5\\u8a8c\\u532f\\u7e3d\\u8868\",\"en\":\"Effort Summary\",\"de\":\"Effort Summary\",\"fr\":\"Effort Summary\"}';
 
