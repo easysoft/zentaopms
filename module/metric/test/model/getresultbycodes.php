@@ -11,11 +11,11 @@ cid=1
 - 测试第一组度量项的count_of_annual_created_product
  - 第0条的year属性 @2023
  - 第0条的value属性 @5
-- 测试第二粗度量项的count_of_monthly_created_project
+- 测试第二组度量项的count_of_monthly_created_project
  - 第0条的year属性 @2023
  - 第0条的month属性 @09
- - 第0条的value属性 @3
-- 测试第二粗度量项的count_of_weekly_created_release
+ - 第0条的value属性 @2
+- 测试第二组度量项的count_of_weekly_created_release
  - 第0条的year属性 @2010
  - 第0条的week属性 @12
  - 第0条的value属性 @1
@@ -55,8 +55,8 @@ $codeList[2] = array('count_of_case_in_product',  'count_of_annual_fixed_bug_in_
 r($metric->getResultByCodes($codeList[0], '', 'count_of_bug')) && p('0:value') && e('24');                             // 测试第一组度量项的count_of_bug
 r($metric->getResultByCodes($codeList[0], '', 'count_of_annual_created_product')) && p('0:year,value') && e('2023,5'); // 测试第一组度量项的count_of_annual_created_product
 
-r($metric->getResultByCodes($codeList[1], '', 'count_of_monthly_created_project')) && p('0:year,month,value') && e('2023,09,3'); // 测试第二粗度量项的count_of_monthly_created_project
-r($metric->getResultByCodes($codeList[1], '', 'count_of_weekly_created_release')) && p('0:year,week,value') && e('2010,12,1');   // 测试第二粗度量项的count_of_weekly_created_release
+r($metric->getResultByCodes($codeList[1], '', 'count_of_monthly_created_project')) && p('0:year,month,value') && e('2023,09,2'); // 测试第二组度量项的count_of_monthly_created_project
+r($metric->getResultByCodes($codeList[1], '', 'count_of_weekly_created_release')) && p('0:year,week,value') && e('2010,12,1');   // 测试第二组度量项的count_of_weekly_created_release
 
 r($metric->getResultByCodes($codeList[2], '', 'count_of_case_in_product')) && p('0:product,value') && e('1,40');                                  // 测试第三组度量项的count_of_case_in_product
 r($metric->getResultByCodes($codeList[2], '', 'count_of_annual_fixed_bug_in_product')) && p('0:product,year,value') && e('1,2012,3');             // 测试第三组度量项的count_of_annual_fixed_bug_in_product
