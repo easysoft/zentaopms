@@ -745,16 +745,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Sync cases in dir to zentao.
-     *
-     * @access public
-     * @return void
-     */
-    public function syncCasesToZentao($path)
-    {
-    }
-
-    /**
      * 判断按钮是否可点击。
      * Judge an action is clickable or not.
      *
