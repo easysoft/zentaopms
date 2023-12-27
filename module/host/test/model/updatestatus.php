@@ -31,7 +31,7 @@ $host = new stdclass();
 $host->status = 'online';
 r($tester->host->updatestatus($host)) && p() && e('0'); // 测试对象没有ID时候能否成功上架主机
 
-$host->id     = '22';
+$host->id     = 22;
 $host->reason = '上架原因';
 r($tester->host->updatestatus($host)) && p() && e('1'); // 测试对象有ID时能否成功上架主机
 r($tester->host->fetchByID('22')) && p('id,status') && e('22,online');

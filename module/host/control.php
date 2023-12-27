@@ -1,10 +1,5 @@
 <?php
 declare(strict_types=1);
-
-use Symfony\Component\Yaml\Inline;
-
-use function zin\isAjaxRequest;
-
 /**
  * The control file of host of ZenTaoPMS.
  *

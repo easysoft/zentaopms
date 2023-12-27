@@ -28,7 +28,7 @@ $host = new stdclass();
 $host->name = '主机222';
 r($tester->host->update($host)) && p() && e('0'); // 测试对象没有ID时候能否成功更新主机
 
-$host->id = '22';
+$host->id = 22;
 r($tester->host->update($host)) && p() && e('1'); // 测试对象有ID时能否成功更新主机
 
 $host->name = '';
