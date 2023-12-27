@@ -538,8 +538,8 @@ class mrModel extends model
                 if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
                 if(!$mergeResult->mergeable) $mergeResult->merge_status = 'cannot_be_merged';
             }
-            if(isset($mergeResult->state) and $mergeResult->state == 'open') $mergeResult->state = 'opened';
-            if(isset($mergeResult->merged) and $mergeResult->merged) $mergeResult->state = 'merged';
+            if(isset($mergeResult->state) && $mergeResult->state == 'open') $mergeResult->state = 'opened';
+            if(isset($mergeResult->merged) && $mergeResult->merged) $mergeResult->state = 'merged';
             return $mergeResult;
         }
     }

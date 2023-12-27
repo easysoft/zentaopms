@@ -266,66 +266,6 @@ class ciModel extends model
     }
 
     /**
-     * 构建成功创建合并请求。
-     * Create merge request when compile success.
-     *
-     * @param  object $relateMR
-     * @access public
-     * @return bool
-     */
-    public function syncMR(object $relateMR): bool
-    {
-        $MRObject                       = new stdclass();
-        $MRObject->target_project_id    = $relateMR->targetProject;
-        $MRObject->source_branch        = $relateMR->sourceBranch;
-        $MRObject->target_branch        = $relateMR->targetBranch;
-        $MRObject->title                = $relateMR->title;
-        $MRObject->description          = $relateMR->description;
-        $MRObject->remove_source_branch = $relateMR->removeSourceBranch == '1' ? true : false;
-        if($relateMR->assignee)
-        {
-            $gitlabAssignee = $this->loadModel('pipeline')->getOpenIdByAccount($relateMR->gitlabID, 'gitlab', $relateMR->assignee);
-            if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
-        }
-
-        /**
-        * Another open merge request already exists for this source branch.
-        * The type of variable `$rawMR->message` is array.
-        */
-        $newMR = new stdclass();
-        $newMR->mergeStatus   = 'can_be_merged';
-        $newMR->compileStatus = 'success';
-        $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->gitlabID, $relateMR->sourceProject, $MRObject);
-        if(isset($rawMR->message) && !isset($rawMR->iid))
-        {
-            $errorMessage = $rawMR->message;
-            $rawMR        = $this->mr->apiGetSameOpened($relateMR->gitlabID, $relateMR->sourceProject, $MRObject->source_branch, $MRObject->target_project_id, $MRObject->target_branch);
-            if(empty($rawMR) or !isset($rawMR->iid))
-            {
-                $errorMessage     = $this->mr->convertApiError($errorMessage);
-                $newMR->syncError = sprintf($this->lang->mr->apiError->createMR, $errorMessage);
-            }
-        }
-        elseif(!isset($rawMR->iid))
-        {
-            $newMR->syncError = $this->lang->mr->createFailedFromAPI;
-        }
-
-        if(!empty($rawMR->iid))
-        {
-            $newMR->mriid     = $rawMR->iid;
-            $newMR->status    = $rawMR->state;
-            $newMR->synced    = '1';
-            $newMR->syncError = '';
-        }
-
-        $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
-        $this->mr->linkObjects($relateMR);
-
-        return !dao::isError();
-    }
-
-    /**
      * 更新流水线构建状态。
      * Update ci build status.
      *
@@ -354,7 +294,16 @@ class ciModel extends model
         }
         elseif(isset($relateMR->synced) && $relateMR->synced == '0')
         {
-            $this->syncMR($relateMR);
+            $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->hostID, $relateMR->sourceProject, $relateMR);
+            if(!empty($rawMR->iid))
+            {
+                $newMR = new stdclass();
+                $newMR->mriid     = $rawMR->iid;
+                $newMR->status    = $rawMR->state;
+                $newMR->synced    = '1';
+                $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
+                $this->mr->linkObjects($relateMR);
+            }
         }
 
         return !dao::isError();
