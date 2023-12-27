@@ -45,10 +45,10 @@ class backBtn extends btn
         $backs = array(
             'task'           => 'execution-task,my-work,my-contribute,execution-tree',
             'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,',
-            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,',
-            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,',
+            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,',
+            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,',
             'testsuite'      => 'testsuite-browse,testsuite-view,',
-            'testtask'       => 'testtask-browse,testtask-cases,',
+            'testtask'       => 'testtask-browse,testtask-cases,qa-index,',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view',
