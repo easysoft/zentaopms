@@ -1091,6 +1091,7 @@ class execution extends control
                 ->setDefault('branch', $this->post->branch)
                 ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
                 ->cleanInt('id,project')
+                ->remove('contactList')
                 ->get();
 
             $changes = $this->execution->update($executionID, $postData, $formData);
