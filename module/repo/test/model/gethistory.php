@@ -10,13 +10,16 @@ title=测试 repoModel->getHistory();
 timeout=0
 cid=1
 
-- 查询全部提交信息属性1 @d5789b703dc09c44be1e89a991c3506de1f678e3
+- 查询全部提交信息属性revision @2e0dd521b4a29930d5670a2c142a4400d7cffc1a
 - 传空数据查询信息 @empty
 
 */
 
+zdTable('repo')->config('repo')->gen(4);
+zdTable('repohistory')->gen(0);
+
 global $tester, $dao;
-$repo      = $tester->loadModel('repo')->getRepoByID(1);
+$repo      = $tester->loadModel('repo')->getByID(1);
 $logs      = $tester->repo->getUnsyncedCommits($repo);
 $revision  = 1;
 $revisions = array();
@@ -29,8 +32,6 @@ foreach($logs as $log)
 
 $repoTest = new repoTest();
 
-r($repoTest->getHistoryTest(1, $revisions)) && p('1') && e('d5789b703dc09c44be1e89a991c3506de1f678e3'); //查询全部提交信息
-r($repoTest->getHistoryTest(1, array()))    && p('')  && e('empty');                                    //传空数据查询信息
-
-$dao->exec('truncate table zt_repohistory');
-$dao->exec('truncate table zt_repobranch');
+$result = $repoTest->getHistoryTest(1, $revisions);
+r(array_shift($result))                     && p('revision') && e('2e0dd521b4a29930d5670a2c142a4400d7cffc1a'); //查询全部提交信息
+r($repoTest->getHistoryTest(1, array()))    && p('')         && e('empty');                                    //传空数据查询信息

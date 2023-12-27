@@ -10,10 +10,18 @@ title=测试 repoModel->getGitRevisionName();
 timeout=0
 cid=1
 
-- 执行repo模块的getGitRevisionNameTest方法  @
+- commit参数为空获取提交记录名称 @d30919bdb9
+- 获取提交记录名称 @d30919bdb9<span title="第2次提交"> (2) </span>
 
 */
 
-$repo = new repoTest();
+zdTable('repo')->config('repo')->gen(4);
+zdTable('repohistory')->config('repohistory')->gen(3);
 
-r($repo->getGitRevisionNameTest()) && p() && e();
+$repo = $tester->loadModel('repo');
+
+$revision = 'd30919bdb9b4cf8e2698f4a6a30e41910427c01c';
+$commit   = 2;
+
+r($repo->getGitRevisionName($revision, 0))       && p() && e('d30919bdb9'); //commit参数为空获取提交记录名称
+r($repo->getGitRevisionName($revision, $commit)) && p() && e('d30919bdb9<span title="第2次提交"> (2) </span>'); //获取提交记录名称
