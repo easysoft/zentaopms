@@ -1269,8 +1269,9 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
-        $mode   .= $this->cookie->executionMode;
-        $orderBy = $this->config->execution->orderBy;
+        $mode        .= $this->cookie->executionMode;
+        $orderBy      = $this->config->execution->orderBy;
+        $projectModel = '';
         if($projectID)
         {
             $projectModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
@@ -1309,7 +1310,7 @@ class executionModel extends model
 
         $projectPairs = strpos($mode, 'withobject') !== false ? $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id') : array();
 
-        return $this->executionTao->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
+        return $this->executionTao->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs, $projectModel);
     }
 
     /**

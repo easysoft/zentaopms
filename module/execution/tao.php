@@ -20,10 +20,11 @@ class executionTao extends executionModel
      * @param  array     $executions
      * @param  array     $parents
      * @param  array     $projectPairs
+     * @param  string    $projectModel
      * @access protected
      * @return array
      */
-    protected function buildExecutionPairs(string $mode = '', array $allExecutions = array(), array $executions = array(), array $parents = array(), array $projectPairs = array()): array
+    protected function buildExecutionPairs(string $mode = '', array $allExecutions = array(), array $executions = array(), array $parents = array(), array $projectPairs = array(), string $projectModel = ''): array
     {
         $executionPairs = array();
         $noMultiples    = array();
