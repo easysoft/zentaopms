@@ -109,7 +109,8 @@ class instanceModel extends model
     }
 
     /**
-     * Get instances list by account.
+     * 获取应用实例列表。
+     * Get instances list.
      *
      * @param  object $pager
      * @param  string $pinned
@@ -118,7 +119,7 @@ class instanceModel extends model
      * @access public
      * @return array
      */
-    public function getList($pager = null, string $pinned = '', string $searchParam = '', string $status = 'all')
+    public function getList(object $pager = null, string $pinned = '', string $searchParam = '', string $status = 'all')
     {
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
