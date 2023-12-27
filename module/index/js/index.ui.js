@@ -252,7 +252,7 @@ function updateApp(code, url, title, type)
         app.currentTitle = title;
     }
 
-    if(prevState && prevState.code === code && prevState.url === url) return;
+    if(prevState && prevState.code === code && prevState.url === url) return prevState;
 
     app.currentUrl = url;
     window.history.pushState(state, title, url);
