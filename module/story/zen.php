@@ -576,7 +576,7 @@ class storyZen extends story
         $branchTagOption = array();
         foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
 
-        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($story->product, 'story', 0, $story->branch);
+        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($story->product, 'story', 0, (string)$story->branch);
         if($product->type == 'normal' and !empty($story->branch)) $moduleOptionMenu += $this->tree->getModulesName(array($story->module));
 
         $storyBranch    = $story->branch > 0 ? $story->branch : '0';
@@ -944,7 +944,7 @@ class storyZen extends story
     {
         $productID  = $this->view->productID;
         $branch     = $this->view->branch;
-        $optionMenu = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
+        $optionMenu = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
 
         $moduleID = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $moduleID = isset($optionMenu[$moduleID]) ? $moduleID : 0;
