@@ -13,6 +13,10 @@ namespace zin;
 jsVar('workHour', $lang->execution->workHour);
 jsVar('+type', str_replace(',', '%2C', $type));
 jsVar('executionID', $executionID);
+jsVar('watermark', $lang->execution->watermark);
+jsVar('burnXUnit', $lang->execution->burnXUnit);
+jsVar('burnYUnit', $lang->execution->burnYUnit);
+jsVar('executionName', $execution->name);
 
 $weekend      = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
 $delay        = strpos($type, 'withdelay') !== false ? 'nodelay' : 'withdelay';
@@ -100,8 +104,19 @@ featureBar
     ) : null
 );
 
+toolbar
+(
+    btn
+    (
+        setClass('btn primary'),
+        $lang->export,
+        on::click('downloadBurn')
+    )
+);
+
 panel
 (
+    setID('burnPanel'),
     h2
     (
         setClass('flex items-center justify-center'),
