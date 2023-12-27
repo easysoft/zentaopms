@@ -332,7 +332,7 @@ class ciModel extends model
      * 根据ztf结果更新测试单。
      * Save test task for ztf.
      *
-     * @param  string $testType
+     * @param  string $testType  unit|func
      * @param  int    $productID
      * @param  int    $compileID
      * @param  int    $taskID
@@ -340,17 +340,20 @@ class ciModel extends model
      * @access public
      * @return bool
      */
-    public function saveTestTaskForZtf(string $testType, int $productID, int $compileID, int $taskID = 0, string $name = ''): bool
+    public function saveTestTaskForZtf(string $testType = 'unit', int $productID = 0, int $compileID = 0, int $taskID = 0, string $name = ''): bool
     {
         $this->loadModel('testtask');
         if(!empty($taskID))
         {
-            $testtask  = $this->testtask->getByID($taskID);
+            $testtask = $this->testtask->getByID($taskID);
+            if(!$testtask) return false;
+
             $this->dao->update(TABLE_TESTTASK)->set('auto')->eq(strtolower($testType))->where('id')->eq($taskID)->exec();
-            $productID = $testtask->product;
         }
         else
         {
+            if(empty($productID)) return false;
+
             $lastProject = $this->dao->select('t2.id,t2.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($productID)
@@ -364,8 +367,8 @@ class ciModel extends model
             $testtask->product     = $productID;
             $testtask->name        = !empty($name) ? $name : sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
             $testtask->owner       = $this->app->user->account;
-            $testtask->project     = $lastProject->project;
-            $testtask->execution   = $lastProject->id;
+            $testtask->project     = $lastProject ? $lastProject->project : 0;
+            $testtask->execution   = $lastProject ? $lastProject->id : 0;
             $testtask->build       = 'trunk';
             $testtask->auto        = strtolower($testType);
             $testtask->begin       = date('Y-m-d');

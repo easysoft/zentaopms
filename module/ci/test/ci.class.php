@@ -159,4 +159,21 @@ class ciTest
         $compile = $this->objectModel->getCompileByID($compileID);
         return str_contains($compile->logs, 'Finished');
     }
+
+    /**
+     * Test saveTestTaskForZtf method.
+     *
+     * @param  int    $productID
+     * @param  int    $taskID
+     * @param  string $name
+     * @access public
+     * @return object|false
+     */
+    public function saveTestTaskForZtfTest(int $productID, int $taskID = 0, string $name = ''): object|false
+    {
+        $this->objectModel->saveTestTaskForZtf('unit', $productID, 1, $taskID, $name);
+        if($taskID) return $this->objectModel->loadModel('testtask')->getByID($taskID);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_TESTTASK)->orderBy('id_desc')->fetch();
+    }
 }
