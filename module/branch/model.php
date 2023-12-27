@@ -606,6 +606,7 @@ class branchModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->limit(1)
             ->fetch();
+
         return empty($project);
     }
 

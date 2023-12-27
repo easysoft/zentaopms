@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/branch.class.php';
 
 zdTable('product')->config('product')->gen(10);
 zdTable('branch')->config('branch')->gen(10);
+zdTable('project')->config('execution')->gen(30);
 zdTable('projectproduct')->config('projectproduct')->gen(30);
 zdTable('productplan')->config('productplan')->gen(30);
 zdTable('release')->config('release')->gen(30);
