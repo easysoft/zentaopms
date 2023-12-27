@@ -118,7 +118,7 @@ class zanodeTest
      * @access public
      * @return object
      */
-    public function createSnapshotTest(int $nodeID, array $data): object|array
+    public function createSnapshotTest(int $nodeID, array $data): object|string
     {
         $node = $this->getNodeByID($nodeID);
 

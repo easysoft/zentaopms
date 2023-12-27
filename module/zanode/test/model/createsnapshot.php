@@ -20,4 +20,4 @@ su('admin');
 $zanode = new zanodeTest();
 
 $snapshot = array('name' => 'snapshot1', 'desc' => '这是快照1的描述');
-r($zanode->createSnapshotTest(1, $snapshot)) && p(0) && e('失败'); //因为没有固定的服务器连接结果均失败
+r($zanode->createSnapshotTest(1, $snapshot)) && p() && e('失败'); //因为没有固定的服务器连接结果均失败
