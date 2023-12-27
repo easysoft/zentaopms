@@ -207,20 +207,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
-          <?php if($config->systemMode == 'PLM'):?>
-          <tr id='feedbackBox' class='hidden'>
-            <th><?php echo $lang->story->feedbackBy;?></th>
-            <td colspan='2'>
-              <?php echo html::input('feedbackBy', '', "class='form-control'");?>
-            </td>
-            <td colspan="2" class="sourceTd">
-              <div class="input-group">
-                <div class='input-group-addon'><?php echo $lang->story->notifyEmail;?></div>
-                <?php echo html::input('notifyEmail', '', "class='form-control'");?>
-              </div>
-            </td>
-          </tr>
-          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewers;?></th>
