@@ -90,4 +90,19 @@ class zahostTest
 
         return $return;
     }
+
+    /**
+     * 测试检查宿主机的IP/域名是否能 ping 通。
+     * Test ping address.
+     *
+     * @param  string $address
+     * @access public
+     * @return string
+     */
+    public function pingTest(string $address): string
+    {
+        $ping = $this->objectModel->ping($address);
+        if($ping) return 'yes';
+        return 'no';
+    }
 }
