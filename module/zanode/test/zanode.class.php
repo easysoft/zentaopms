@@ -139,10 +139,13 @@ class zanodeTest
         $snapshot->fileSize    = 0;
         $snapshot->from        = 'snapshot';
 
+        sleep(20);
         $snapshotID = $this->createSnapshot($node, $snapshot);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        $createdSnapshot = $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
+        $this->deleteSnapshot($snapshotID);
+        return $createdSnapshot;
     }
 
     /**
