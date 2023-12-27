@@ -133,7 +133,7 @@ class docMenu extends wg
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $moduleName,
-                'selected'    => zget($setting, 'active', $itemID == $activeKey),
+                'selected'    => !empty($itemID) && zget($setting, 'active', $itemID == $activeKey),
                 'actions'     => $this->getActions($setting)
             );
 
@@ -455,7 +455,8 @@ class docMenu extends wg
                     (
                         setClass($menuLink ? 'pt-3' : ''),
                         setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                        zui::tree(set::_tag('ul'), $treeProps)
+                        setStyle('--menu-selected-bg', 'none'),
+                        zui::tree(set::_tag('menu'), $treeProps)
                     ),
                     $this->buildBtns()
                 )
