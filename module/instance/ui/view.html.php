@@ -19,8 +19,8 @@ jsVar('instanceStatus', $instance->status);
 jsVar('instanceType',   $type);
 
 $instance->appName = strtolower($instance->appName);
-$cpuInfo    = $this->instance->printCpuUsage($instance, $instanceMetric->cpu, 'array');
-$memoryInfo = $this->instance->printMemUsage($instance, $instanceMetric->memory, 'array');
+$cpuInfo    = $this->instance->printCpuUsage($instance, (object)$instanceMetric->cpu);
+$memoryInfo = $this->instance->printMemUsage($instance, (object)$instanceMetric->memory);
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
 
 if($type !== 'store')
