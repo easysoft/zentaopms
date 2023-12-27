@@ -1694,7 +1694,7 @@ class task extends control
      */
     public function batchClose($confirm = 0)
     {
-        if($this->post->taskIDList or $confirm)
+        if(!empty($_POST['taskIDList']) or $confirm)
         {
             $taskIDList = $this->post->taskIDList;
             if(!isset($_POST['taskIDList']) && !empty($_SESSION['batchCloseTaskIDList']))
