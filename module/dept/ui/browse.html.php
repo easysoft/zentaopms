@@ -83,7 +83,7 @@ jsVar('deleteTip', $lang->dept->confirmDelete);
 
 sidebar
 (
-    width('400px'),
+    set::width(400),
     set::showToggle(false),
     panel
     (
