@@ -49,11 +49,13 @@ class solutionModel extends model
         $selectedApps = array();
         foreach($orderedCategories as $category)
         {
-            $chart = zget($postedCharts, $category);
+            $chart = zget($postedCharts, $category, '');
+            if(empty($chart)) continue;
 
             $selectedApps[$category] = $this->pickAppFromSchema($components, $category, $chart, $cloudSolution);
             if(empty($selectedApps[$category])) unset($selectedApps[$category]);
         }
+        if(empty($selectedApps)) return null;
 
         if(!isset($this->app->user->account))
         {
@@ -76,7 +78,7 @@ class solutionModel extends model
         $solution->source       = 'cloud';
         $solution->components   = json_encode($selectedApps);
         $solution->createdBy    = $this->app->user->account;
-        $solution->createdAt    = date('Y-m-d H:i:s');
+        $solution->createdAt    = helper::now();
         $solution->channel      = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
 
         $this->dao->insert(TABLE_SOLUTION)->data($solution)->exec();
