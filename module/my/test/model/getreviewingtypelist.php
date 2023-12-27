@@ -19,9 +19,12 @@ pid=1
 
 */
 
+global $config;
+$config->edition = 'open';
+
 $my = new myTest();
 
 $account = array('admin', 'user1');
 
-r($my->getReviewingTypeListTest($account[0])) && p() && e('all:全部,demand:需求池需求,story:需求,testcase:用例'); // 测试获取用户 admin 的待评审类型。
+r($my->getReviewingTypeListTest($account[0])) && p() && e('all:全部,story:需求,testcase:用例'); // 测试获取用户 admin 的待评审类型。
 r($my->getReviewingTypeListTest($account[1])) && p() && e('all:全部');                                            // 测试获取用户 user1 的待评审类型。

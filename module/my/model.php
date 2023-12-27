@@ -60,56 +60,6 @@ class myModel extends model
     }
 
     /**
-     * 获取我的产品。
-     * Get my charged products.
-     *
-     * @param  string $type undone|ownbyme
-     * @access public
-     * @return object
-     */
-    public function getProducts(string $type = 'undone'): object
-    {
-        $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
-            ->beginIF($type == 'ownbyme')->andWhere('t1.PO')->eq($this->app->user->account)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->orderBy('t1.order_asc')
-            ->fetchAll('id');
-
-        list($summaryStories, $plans, $releases, $executions) = $this->getProductRelatedData(array_keys($products));
-
-        $allCount      = count($products);
-        $unclosedCount = 0;
-        foreach($products as $key => $product)
-        {
-            $product->plans      = isset($plans[$product->id]) ? $plans[$product->id] : 0;
-            $product->releases   = isset($releases[$product->id]) ? $releases[$product->id] : 0;
-            if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
-            $product->storyEstimateCount = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->estimateCount : 0;
-            $product->storyTotal         = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->total : 0;
-            $product->storyFinishedTotal = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedTotal : 0;
-            $product->storyLeftTotal     = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->leftTotal : 0;
-            $product->storyFinishedRate  = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedRate : 0;
-            $product->latestExecution    = isset($executions[$product->id])     ? $executions[$product->id] : '';
-            if($product->status != 'closed') $unclosedCount ++;
-            if($product->status == 'closed') unset($products[$key]);
-        }
-
-        /* Sort by storyCount, get 5 records */
-        $products = json_decode(json_encode($products), true);
-        array_multisort(helper::arrayColumn($products, 'storyEstimateCount'), SORT_DESC, $products);
-        $products = array_slice($products, 0, 5);
-
-        $data = new stdClass();
-        $data->allCount      = $allCount;
-        $data->unclosedCount = $unclosedCount;
-        $data->products      = array_values($products);
-        return $data;
-    }
-
-    /**
      * 获取产品相关统计。
      * Get product related data.
      *
@@ -815,14 +765,15 @@ class myModel extends model
      * @param  int    $queryID
      * @param  string $actionURL
      * @access public
-     * @return void
+     * @return bool
      */
-    public function buildTicketSearchForm(int $queryID, string $actionURL): void
+    public function buildTicketSearchForm(int $queryID, string $actionURL): bool
     {
+        if($this->config->edition == 'open')  return false;
+
         $this->loadModel('ticket');
 
-        $grantProducts = array();
-        if($this->config->edition != 'open') $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+        $grantProducts = $this->loadModel('feedback')->getGrantProducts();
 
         $this->config->ticket->search['module']    = 'workTicket';
         $this->config->ticket->search['queryID']   = $queryID;
@@ -832,6 +783,8 @@ class myModel extends model
         $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array_keys($grantProducts), 'all', 'releasetag');
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
+
+        return true;
     }
 
     /**

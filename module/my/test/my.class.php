@@ -365,9 +365,9 @@ class myTest
      * @param  int    $queryID
      * @param  string $actionURL
      * @access public
-     * @return array
+     * @return bool
      */
-    public function buildTicketSearchFormTest(int $queryID, string $actionURL): array
+    public function buildTicketSearchFormTest(int $queryID, string $actionURL): bool
     {
         global $tester;
         if(!isset($tester->config->ticket))
@@ -377,10 +377,7 @@ class myTest
             $tester->config->ticket->search['fields'] = array();
         }
         if(!isset($tester->config->ticket->search)) $tester->config->ticket->search = array();
-        $this->objectModel->buildTicketSearchForm($queryID, $actionURL);
-
-        if(dao::isError()) return dao::getError();
-        return $tester->config->ticket->search;
+        return $this->objectModel->buildTicketSearchForm($queryID, $actionURL);
     }
 
     /**

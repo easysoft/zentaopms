@@ -22,5 +22,5 @@ $queryID   = array(0, 1);
 $actionURL = array('actionURL1', 'actionURL2');
 $config1 = $my->buildTicketSearchFormTest($queryID[0], $actionURL[0]);
 $config2 = $my->buildTicketSearchFormTest($queryID[1], $actionURL[1]);
-r($config1) && p('module,queryID,actionURL') && e('workTicket,0,actionURL1'); // 测试获取queryID 1 actionURL actionURL1 的搜索表单
-r($config2) && p('module,queryID,actionURL') && e('workTicket,1,actionURL2'); // 测试获取queryID 0 actionURL actionURL2 的搜索表单
+r($config1) && p() && e('0'); // 测试获取queryID 1 actionURL actionURL1 的搜索表单
+r($config2) && p() && e('0'); // 测试获取queryID 0 actionURL actionURL2 的搜索表单
