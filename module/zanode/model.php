@@ -77,7 +77,7 @@ class zanodemodel extends model
      */
     public function createImage(int $zanodeID, object $data): int|bool
     {
-        $node  = $this->getNodeByID($zanodeID);
+        $node = $this->getNodeByID($zanodeID);
         if(!$node) return false;
 
         $newImage = new stdClass();
@@ -94,14 +94,14 @@ class zanodemodel extends model
         $newID = $this->dao->lastInsertID();
 
         /* Prepare create params. */
-        $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
+        $agentUrl = 'http://' . $node->ip . ':' . $node->hzap;
         $param    = array(
             'backing' => $data->name,
             'task'    => $newID,
             'vm'      => $node->name
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
+        $result = json_decode(commonModel::http($agentUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(!empty($result) && $result->code == 'success')
         {
@@ -291,13 +291,14 @@ class zanodemodel extends model
     }
 
     /**
+     * 销毁一个执行节点。
      * Destroy Node.
      *
-     * @param  int $id
+     * @param  int    $id
      * @access public
      * @return string
      */
-    public function destroy($id)
+    public function destroy(int $id): string
     {
         $node = $this->getNodeByID($id);
 
@@ -313,7 +314,6 @@ class zanodemodel extends model
             if($data['code'] != 'success') return zget($this->lang->zanode->apiError, $data['code'], $data['msg']);
         }
 
-        /* delete ZenAgent Node. */
         $this->dao->delete()->from(TABLE_ZAHOST)->where('id')->eq($id)->exec();;
         $this->loadModel('action')->create('zanode', $id, 'deleted');
         return '';
