@@ -919,10 +919,10 @@ class actionModel extends model
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
 
-        if(isset($this->session->calllbackActionList[$actionID]))
+        if(isset($this->session->callbackActionList[$actionID]))
         {
-            $callbackMethod = $this->session->calllbackActionList[$actionID];
-            unset($this->session->calllbackActionList[$actionID]);
+            $callbackMethod = $this->session->callbackActionList[$actionID];
+            unset($this->session->callbackActionList[$actionID]);
             if(method_exists($this, $callbackMethod)) call_user_func_array(array($this, $callbackMethod), array($actionID));
         }
     }
