@@ -6,6 +6,7 @@ class zahostTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('zahost');
+        $tester->loadModel('host');
     }
 
     /**
@@ -55,5 +56,22 @@ class zahostTest
         if(dao::isError()) return dao::getError();
 
         return $hosts;
+    }
+
+    /**
+     * 测试创建主机。
+     * Test create host.
+     *
+     * @param  object $hostInfo
+     * @access public
+     * @return array|object
+     */
+    public function createTest(object $hostInfo): array|object
+    {
+        $return = $this->objectModel->create($hostInfo);
+        if(dao::isError()) return dao::getError();
+
+        $hostID = $return;
+        return $this->objectModel->getByID($hostID);
     }
 }
