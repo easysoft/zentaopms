@@ -36,7 +36,7 @@ to::header
 
 formPanel
 (
-    !$productID ?  formGroup
+    $productID ? formHidden('product', $productID) : formGroup
     (
         set::label($lang->testcase->product),
         set::required(true),
@@ -46,7 +46,7 @@ formPanel
             set::items($products),
             on::change('#product', 'loadProduct')
         )
-    ) : null,
+    ),
     formGroup
     (
         set::label($lang->zanode->common),
@@ -58,7 +58,7 @@ formPanel
                 setID('node'),
                 set::name('node'),
                 set::items($nodeList),
-                set::value(!empty($automation->node) ? $automation->node : '')
+                set::value(isset($automation->node) ? $automation->node : '')
             ),
             div
             (
@@ -78,7 +78,7 @@ formPanel
         set::label($lang->zanode->scriptPath),
         set::required(true),
         set::name('scriptPath'),
-        set::value(!empty($automation->scriptPath) ? $automation->scriptPath : ''),
+        set::value(isset($automation->scriptPath) ? $automation->scriptPath : ''),
         set::placeholder($lang->zanode->scriptTips)
     ),
     formGroup
@@ -87,23 +87,12 @@ formPanel
         editor
         (
             set::name('shell'),
-            set::value(!empty($automation->shell) ? $automation->shell : ''),
+            set::value(isset($automation->shell) ? $automation->shell : ''),
             set::rows(6),
             set::placeholder($lang->zanode->shellTips)
         )
     ),
-    $productID ? input
-    (
-        set::type('hidden'),
-        set::name('product'),
-        set::value($productID)
-    ) : null,
-    $automation ? input
-    (
-        set::type('hidden'),
-        set::name('id'),
-        set::value($automation->id)
-    ) : null,
+    formHidden('id', isset($automation->id) ? $automation->id : 0),
     set::actions(array('submit')),
     set::submitBtnText($lang->save)
 );

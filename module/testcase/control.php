@@ -1295,32 +1295,32 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function automation($productID = 0)
+    public function automation(int $productID = 0)
     {
-        $this->loadModel('zanode');
-
         if($_POST)
         {
-            $automation = form::data($this->config->testcase->form->automation)
-                ->setIF($this->post->id, 'id', $this->post->id)
-                ->setDefault('createdBy', $this->app->user->account)
-                ->setdefault('createddate', helper::now())
-                ->get();
-            $this->zanode->setAutomationSetting($automation);
+            /* 设置语言项以便 form 类检查必填项时输出正确的字段名。*/
+            /* Set language item for form class to check required fields. */
+            $this->loadModel('zanode');
+            $this->lang->testcase->scriptPath = $this->lang->zanode->scriptPath;
+            $this->lang->testcase->node       = $this->lang->zanode->common;
 
+            $automation = form::data($this->config->testcase->form->automation)
+                ->add('createdBy', $this->app->user->account)
+                ->add('createddate', helper::now())
+                ->get();
+
+            $this->zanode->setAutomationSetting($automation);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            // if($this->post->syncToZentao) $this->zanode->syncCasesToZentao($this->post->scriptPath);
-            // if($this->post->node) $node = $this->zanode->getNodeByID($this->post->node);
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('testcase', 'browse', "productID={$this->post->product}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "productID={$automation->product}")));
         }
 
-        $this->view->title      = $this->lang->zanode->automation;
-        $this->view->automation = $this->zanode->getPairs();
-        $this->view->nodeList   = $this->zanode->getAutomationByProduct($productID);
+        $this->view->title      = $this->lang->testcase->automation;
+        $this->view->automation = $this->loadModel('zanode')->getAutomationByProduct($productID);
+        $this->view->nodeList   = $this->zanode->getPairs();
+        $this->view->products   = $productID ? array() : $this->product->getPairs('', 0, '', 'all');
         $this->view->productID  = $productID;
-        $this->view->products   = $this->product->getPairs('', 0, '', 'all');
 
         $this->display();
     }
