@@ -779,7 +779,9 @@ class testcaseZen extends testcase
         $this->view->title            = "CASE #$case->id $case->title - " . $libraries[$case->lib];
         $this->view->isLibCase        = true;
         $this->view->libraries        = $libraries;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, 'caselib', 0);
+        $this->view->libName          = $libraries[$case->lib];
+        $this->view->libID            = $case->lib;
     }
 
     /**
