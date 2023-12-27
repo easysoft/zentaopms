@@ -1010,11 +1010,13 @@ class projectZen extends project
         $changes         = array_merge(array_diff($formerIds, $currentIds), array_diff($currentIds, $formerIds));
         if($changes) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($this->post->products) ? implode(',', $this->post->products) : '');
 
+        $this->loadModel('execution');
+
         /* 如果是无迭代项目，更新关联产品。*/
         /* IF multiple is 0 Update associated products. */
         if(empty($project->multiple))
         {
-            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
+            $executionID = $this->execution->getNoMultipleID($projectID);
             if($executionID) $this->execution->updateProducts($executionID);
         }
 
