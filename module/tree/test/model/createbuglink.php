@@ -1,35 +1,35 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->createBugLink();
+timeout=0
 cid=1
-pid=1
 
-测试创建module 1821 的buglink >> title='产品模块1'
-测试创建module 1822 的buglink >> title='产品模块2'
-测试创建module 1981 的buglink >> title='产品模块161'
-测试创建module 1982 的buglink >> title='产品模块162'
-测试创建module 1621 的buglink >> title='模块1601'
-测试创建module 1622 的buglink >> title='模块1602'
-测试创建module 21 的buglink >> title='模块1'
-测试创建module 22 的buglink >> title='模块2'
+- 测试创建module 4  的buglink属性url @bug-browse-1--byModule-4.html
+- 测试创建module 20 的buglink属性url @bug-browse-41--byModule-20.html
+- 测试创建module 4, tab=project, type=closed 的buglink属性url @project-bug-0-1-0--0-closed-4.html
+- 测试创建module 4, tab=project, branchID=2 的buglink属性url @project-bug-0-1-2--0-all-4.html
+- 测试创建module 4, tab=execution, orderBy=title_desc的buglink属性url @execution-bug-0-1-0-title_desc-0-all-4.html
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+su('admin');
 
-$moduleID = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);
+zdTable('module')->config('module')->gen(20);
 
+global $app;
 $tree = new treeTest();
 
-r($tree->createBugLinkTest($moduleID[0])) && p() && e("title='产品模块1'");   // 测试创建module 1821 的buglink
-r($tree->createBugLinkTest($moduleID[1])) && p() && e("title='产品模块2'");   // 测试创建module 1822 的buglink
-r($tree->createBugLinkTest($moduleID[2])) && p() && e("title='产品模块161'"); // 测试创建module 1981 的buglink
-r($tree->createBugLinkTest($moduleID[3])) && p() && e("title='产品模块162'"); // 测试创建module 1982 的buglink
-r($tree->createBugLinkTest($moduleID[4])) && p() && e("title='模块1601'");    // 测试创建module 1621 的buglink
-r($tree->createBugLinkTest($moduleID[5])) && p() && e("title='模块1602'");    // 测试创建module 1622 的buglink
-r($tree->createBugLinkTest($moduleID[6])) && p() && e("title='模块1'");       // 测试创建module 21 的buglink
-r($tree->createBugLinkTest($moduleID[7])) && p() && e("title='模块2'");       // 测试创建module 22 的buglink
+$extra1 = array('type' => 'closed');
+$extra2 = array('branchID' => 2);
+$extra3 = array('orderBy' => 'title_desc');
+
+r($tree->createBugLinkTest(4))  && p('url') && e("bug-browse-1--byModule-4.html");   // 测试创建module 4  的buglink
+r($tree->createBugLinkTest(20)) && p('url') && e("bug-browse-41--byModule-20.html"); // 测试创建module 20 的buglink
+
+r($tree->createBugLinkTest(4, 'project',   $extra1)) && p('url') && e("project-bug-0-1-0--0-closed-4.html");          // 测试创建module 4, tab=project, type=closed 的buglink
+r($tree->createBugLinkTest(4, 'project',   $extra2)) && p('url') && e("project-bug-0-1-2--0-all-4.html");             // 测试创建module 4, tab=project, branchID=2 的buglink
+r($tree->createBugLinkTest(4, 'execution', $extra3)) && p('url') && e("execution-bug-0-1-0-title_desc-0-all-4.html"); // 测试创建module 4, tab=execution, orderBy=title_desc的buglink

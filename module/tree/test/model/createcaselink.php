@@ -1,44 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->createCaseLink();
+timeout=0
 cid=1
-pid=1
 
-测试创建module 1821 的caselink >> title='产品模块1'
-测试创建module 1822 的caselink >> title='产品模块2'
-测试创建module 1983 branch 0 的caselink >> title='产品模块162'
-测试创建module 1983 branch 1 的caselink >> title='产品模块162'
-测试创建module 1983 branch 2 的caselink >> title='产品模块162'
-测试创建module 1983 branch 0 的caselink >> title='产品模块163'
-测试创建module 1983 branch 1 的caselink >> title='产品模块163'
-测试创建module 1983 branch 2 的caselink >> title='产品模块163'
-测试创建module 1621 的caselink >> title='模块1601'
-测试创建module 1622 的caselink >> title='模块1602'
-测试创建module 21 的caselink >> title='模块1'
-测试创建module 22 的caselink >> title='模块2'
+- 测试创建module 4  的buglink属性url @testcase-browse-1-0-byModule-5.html
+- 测试创建module 20 的buglink属性url @testcase-browse-1-0-byModule-10.html
+- 测试创建module 4, tab=project, type=closed 的buglink属性url @project-testcase--1-all-byModule-5.html
+- 测试创建module 4, tab=execution, orderBy=title_desc的buglink属性url @execution-testcase-1-1-all-byModule-5.html
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+su('admin');
 
-$moduleID = array(1821, 1822, 1982, 1983, 1621, 1622, 21, 22);
-$extra    = array(0, 1, 2);
+zdTable('module')->config('module')->gen(20);
 
+global $app;
 $tree = new treeTest();
 
-r($tree->createCaseLinkTest($moduleID[0]))                                 && p() && e("title='产品模块1'");   // 测试创建module 1821 的caselink
-r($tree->createCaseLinkTest($moduleID[1]))                                 && p() && e("title='产品模块2'");   // 测试创建module 1822 的caselink
-r($tree->createCaseLinkTest($moduleID[2], array('branchID' => $extra[0]))) && p() && e("title='产品模块162'"); // 测试创建module 1983 branch 0 的caselink
-r($tree->createCaseLinkTest($moduleID[2], array('branchID' => $extra[1]))) && p() && e("title='产品模块162'"); // 测试创建module 1983 branch 1 的caselink
-r($tree->createCaseLinkTest($moduleID[2], array('branchID' => $extra[2]))) && p() && e("title='产品模块162'"); // 测试创建module 1983 branch 2 的caselink
-r($tree->createCaseLinkTest($moduleID[3], array('branchID' => $extra[0]))) && p() && e("title='产品模块163'"); // 测试创建module 1983 branch 0 的caselink
-r($tree->createCaseLinkTest($moduleID[3], array('branchID' => $extra[1]))) && p() && e("title='产品模块163'"); // 测试创建module 1983 branch 1 的caselink
-r($tree->createCaseLinkTest($moduleID[3], array('branchID' => $extra[2]))) && p() && e("title='产品模块163'"); // 测试创建module 1983 branch 2 的caselink
-r($tree->createCaseLinkTest($moduleID[4]))                                 && p() && e("title='模块1601'");    // 测试创建module 1621 的caselink
-r($tree->createCaseLinkTest($moduleID[5]))                                 && p() && e("title='模块1602'");    // 测试创建module 1622 的caselink
-r($tree->createCaseLinkTest($moduleID[6]))                                 && p() && e("title='模块1'");       // 测试创建module 21 的caselink
-r($tree->createCaseLinkTest($moduleID[7]))                                 && p() && e("title='模块2'");       // 测试创建module 22 的caselink
+$extra = array('projectID' => '1');
+
+r($tree->createCaseLinkTest(5))  && p('url') && e("testcase-browse-1-0-byModule-5.html");   // 测试创建module 4  的buglink
+r($tree->createCaseLinkTest(10)) && p('url') && e("testcase-browse-1-0-byModule-10.html"); // 测试创建module 20 的buglink
+
+r($tree->createCaseLinkTest(5, 'project',   $extra)) && p('url') && e("project-testcase--1-all-byModule-5.html");          // 测试创建module 4, tab=project, type=closed 的buglink
+r($tree->createCaseLinkTest(5, 'execution', $extra)) && p('url') && e("execution-testcase-1-1-all-byModule-5.html"); // 测试创建module 4, tab=execution, orderBy=title_desc的buglink

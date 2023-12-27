@@ -317,12 +317,12 @@ class treeTest
      * Test create story link.
      *
      * @param  int    $moduleID
-     * @param  int    $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createStoryLinkTest($moduleID, $parent = 0, $extra = array())
+    public function createStoryLinkTest($moduleID, $parent = '0', $extra = array())
     {
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
@@ -338,34 +338,31 @@ class treeTest
      * Test create task link.
      *
      * @param  int    $moduleID
-     * @param  int    $extra
      * @access public
      * @return string
      */
-    public function createTaskLinkTest($moduleID, $extra)
+    public function createTaskLinkTest($moduleID)
     {
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
-        $link = $this->objectModel->createTaskLink($type, $module, $extra);
+        $link = $this->objectModel->createTaskLink($type, $module);
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*task.(\d*).*byModule.(\d*).*(title='.*').*/", '$1 $2 $3', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**
      * Test create requirment link.
      *
      * @param  int    $moduleID
-     * @param  int    $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createRequirementLinkTest($moduleID, $parent = 0, $extra = array())
+    public function createRequirementLinkTest($moduleID, $parent = '0', $extra = array())
     {
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
@@ -378,66 +375,27 @@ class treeTest
     }
 
     /**
-     * Test create manage link.
+     * Test reate link of a bug.
      *
-     * @param  string $type
      * @param  int    $moduleID
-     * @param  array  $extra
+     * @param  string $tab
+     * @param  arraty $extra
      * @access public
      * @return string
      */
-    public function createManageLinkTest($type, $moduleID, $extra = array())
+    public function createBugLinkTest($moduleID, $tab = 'qa', $extra = array())
     {
+        global $app;
+        $app->tab = $tab;
+
+        $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
-        $link = $this->objectModel->createManageLink($type, $module, $extra);
+        $link = $this->objectModel->createBugLink($type, $module, '0', $extra);
 
         if(dao::isError()) return dao::getError();
 
         return $link;
-    }
-
-    /**
-     * Test create task manage link.
-     *
-     * @param  int    $moduleID
-     * @param  array  $extra
-     * @access public
-     * @return string
-     */
-    public function createTaskManageLinkTest($moduleID, $extra)
-    {
-        $type   = '';
-        $module = $this->objectModel->getByID($moduleID);
-
-        $link = $this->objectModel->createTaskManageLink($type, $module, $extra);
-
-        if(dao::isError()) return dao::getError();
-
-        $string = preg_replace("/((.*) <a.*tree.([a-z]*).*>([\x{4e00}-\x{9fa5}]*)<\/a>.*)|( <input .* \/>)/u", '$2 $3 $4', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
-    }
-
-    /**
-     * Test reate link of a bug.
-     *
-     * @param  int    $moduleID
-     * @access public
-     * @return string
-     */
-    public function createBugLinkTest($moduleID)
-    {
-        $type   = '';
-        $module = $this->objectModel->getByID($moduleID);
-
-        $link = $this->objectModel->createBugLink($type, $module);
-
-        if(dao::isError()) return dao::getError();
-
-        $string = preg_replace("/.*(title='.*').*/", '$1', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
     }
 
     /**
@@ -448,18 +406,19 @@ class treeTest
      * @access public
      * @return string
      */
-    public function createCaseLinkTest($moduleID, $extra = array('branchID' => 0))
+    public function createCaseLinkTest($moduleID, $tab = 'qa', $extra = array('branchID' => 0))
     {
+        global $app;
+        $app->tab = $tab;
+
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
-        $link = $this->objectModel->createCaseLink($type, $module, $extra);
+        $link = $this->objectModel->createCaseLink($type, $module, '0', $extra);
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*(title='.*').*/", '$1', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**
@@ -479,9 +438,7 @@ class treeTest
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*(title='.*').*/", '$1', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**
@@ -500,9 +457,7 @@ class treeTest
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*(title='.*').*/", '$1', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**

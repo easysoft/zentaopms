@@ -471,7 +471,7 @@ class treeModel extends model
         {
             if($onlyGetLinked && !isset($executionModules[$module->id]) && empty($product->shadow)) continue;
 
-            $data = $this->buildTree($module, $type, 0, $userFunc, $extra, $branch);
+            $data = $this->buildTree($module, $type, '0', $userFunc, $extra, $branch);
             if($data) $modules[] = $data;
         }
 
@@ -607,7 +607,7 @@ class treeModel extends model
         {
             $data = new stdclass();
             $data->id     = uniqid();
-            $data->parent = 0;
+            $data->parent = '0';
             $data->name   = is_object($product) ? $product->name : $product;
             $data->url    = helper::createLink($moduleName, $methodName, "{$param}productID=$productID");
             $modules[] = $data;
@@ -707,7 +707,7 @@ class treeModel extends model
                 $stmt = $this->app->dbQuery($query);
                 while($module = $stmt->fetch())
                 {
-                    if(isset($executionModules[$module->id])) $modules[] = $this->buildTree($module, 'case', $data->id, $userFunc, $extra, $branch);
+                    if(isset($executionModules[$module->id])) $modules[] = $this->buildTree($module, 'case', $data->id, $userFunc, $extra, (string)$branch);
                 }
             }
         }
@@ -754,8 +754,8 @@ class treeModel extends model
             if($productNum > 1)
             {
                 $data = new stdclass();
-                $data->id     = $id;
-                $data->parent = 0;
+                $data->id     = (string)$id;
+                $data->parent = '0';
                 $data->name   = $product;
                 $data->url    = $link;
 
@@ -781,7 +781,7 @@ class treeModel extends model
                     /* Ignore unused modules. */
                     if(!isset($executionModules[$module->id])) continue;
 
-                    $treeMenu = $this->buildTree($module, 'story', 0, $userFunc, $extra);
+                    $treeMenu = $this->buildTree($module, 'story', '0', $userFunc, $extra);
                     if($productNum > 1 && $module->parent == 0) $treeMenu->parent = $module->root;
                     $menu[] = $treeMenu;
                 }
@@ -909,14 +909,14 @@ class treeModel extends model
      *
      * @param  object     $module
      * @param  string     $type
-     * @param  int|string $parent
+     * @param  string     $parent
      * @param  array      $userFunc
      * @param  array      $extra
      * @param  int        $branch
      * @access protected
      * @return object|false
      */
-    protected function buildTree(object $module, string $type, int|string $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
+    protected function buildTree(object $module, string $type, string $parent = '0', array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
     {
         /* Add for task #1945. check the module has case or no. */
         if((isset($extra['rootID']) && isset($extra['branch']) && $branch === 'null') || ($type == 'case' && is_numeric($extra)))
@@ -968,7 +968,6 @@ class treeModel extends model
             $extra['branchID'] = $branch;
         }
 
-        if($type != 'case' && $type != 'bug') $parent = (int)$parent;
         return call_user_func($userFunc, $type, $module, $parent, $extra);
     }
 
@@ -1068,16 +1067,16 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  int    $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createStoryLink(string $type, object $module, int $parent = 0, array $extra = array()): object
+    public function createStoryLink(string $type, object $module, string $parent = '0', array $extra = array()): object
     {
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
         $data->name   = $module->name;
 
         if(isset($extra['projectID']) && !empty($extra['projectID']))
@@ -1104,16 +1103,16 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  parent $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createRequirementLink(string $type, object $module, int $parent = 0, array $extra = array()): object
+    public function createRequirementLink(string $type, object $module, string $parent = '0', array $extra = array()): object
     {
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
         $data->name   = $module->name;
 
         if(isset($extra['projectID']) && !empty($extra['projectID']))
@@ -1147,32 +1146,10 @@ class treeModel extends model
     public function createTaskLink(string $type, object $module): object
     {
         $data = new stdclass();
-        $data->id     = $module->id;
-        $data->parent = $module->parent;
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('execution', 'task', "executionID={$module->root}&type=byModule&param={$module->id}");
-
-        return $data;
-    }
-
-    /**
-     * Create link of project story.
-     *
-     * @param  string $type
-     * @param  object $module
-     * @param  array  $extra
-     * @access public
-     * @return object
-     */
-    public function createProjectStoryLink(string $type, object $module, array $extra): object
-    {
-        $productID = $extra['productID'];
-
-        $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
-        $data->name   = $module->name;
-        $data->url    = helper::createLink('projectstory', 'story', "projectID={$extra['executionID']}&productID=$productID&branch=&browseType=byModule&param={$module->id}");
 
         return $data;
     }
@@ -1188,8 +1165,8 @@ class treeModel extends model
     public function createDocLink(string $type, object $module): object
     {
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('doc', 'browse', "libID={$module->root}&browseType=byModule&param={$module->id}");
 
@@ -1202,12 +1179,12 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  int    $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createBugLink(string $type, object $module, int $parent, array $extra = array()): object
+    public function createBugLink(string $type, object $module, string $parent, array $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
@@ -1222,8 +1199,8 @@ class treeModel extends model
         if($this->app->tab == 'project')   $param = "projectID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$extraType}&param={$module->id}";
 
         $data = new stdclass();
-        $data->id     = $module->id;
-        $data->parent = $parent && empty($module->parent) ? $parent : $module->parent;
+        $data->id     = (string)$module->id;
+        $data->parent = $parent && empty($module->parent) ? $parent : (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink($moduleName, $methodName, $param);
 
@@ -1235,23 +1212,24 @@ class treeModel extends model
      *
      * @param  string       $type
      * @param  object       $module
-     * @param  int          $parent
+     * @param  string       $parent
      * @param  array|string $extra
      * @access public
      * @return object
      */
-    public function createCaseLink(string $type, object $module, int $parent, array|string $extra = array()): object
+    public function createCaseLink(string $type, object $module, string $parent, array|string $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
         $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : "";
         $param      = $this->app->tab == 'execution' ? "executionID={$extra['projectID']}&" : $param;
+        $branch     = isset($extra['branchID']) ? $extra['branchID'] : 'all';
 
         $data = new stdclass();
-        $data->id     = $module->id;
-        $data->parent = $parent && empty($module->parent) ? $parent : $module->parent;
+        $data->id     = (string)$module->id;
+        $data->parent = $parent && empty($module->parent) ? $parent : (string)$module->parent;
         $data->name   = $module->name;
-        $data->url    = helper::createLink($moduleName, $methodName, $param . "productID={$module->root}&branch={$extra['branchID']}&browseType=byModule&param={$module->id}");
+        $data->url    = helper::createLink($moduleName, $methodName, $param . "productID={$module->root}&branch=$branch&browseType=byModule&param={$module->id}");
 
         return $data;
     }
@@ -1261,16 +1239,16 @@ class treeModel extends model
      *
      * @param  string       $type
      * @param  object       $module
-     * @param  int          $parent
+     * @param  string       $parent
      * @param  array|string $extra
      * @access public
      * @return object
      */
-    public function createTestTaskLink(string $type, object $module, int $parent, array|string $extra = array()): object
+    public function createTestTaskLink(string $type, object $module, string $parent, array|string $extra = array()): object
     {
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}");
 
@@ -1417,16 +1395,16 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  int    $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createHostLink(string $type, object $module, int $parent = 0, array $extra = array()): object
+    public function createHostLink(string $type, object $module, string $parent = '0', array $extra = array()): object
     {
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
         $data->name   = $module->name;
 
         $data->url = helper::createLink('host', 'browse', "browseType=bymodule&param={$module->id}");
@@ -1702,9 +1680,9 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  string $type
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function manageChild(int $rootID, string $type): array
+    public function manageChild(int $rootID, string $type): array|false
     {
         if($type == 'line') $rootID = 0;
 
@@ -1714,7 +1692,11 @@ class treeModel extends model
 
         foreach($childs as $moduleID => $moduleName)
         {
-            if(preg_match('/(^\s+$)/', $moduleName)) helper::end(js::alert($this->lang->tree->shouldNotBlank));
+            if(preg_match('/(\s+)/', $moduleName))
+            {
+                dao::$errors['root'] = $this->lang->tree->shouldNotBlank;
+                return false;
+            }
         }
 
         $module         = new stdClass();
@@ -1722,7 +1704,11 @@ class treeModel extends model
         $module->type   = $type;
         $module->parent = $parentModuleID;
         $repeatName     = $this->checkUnique($module, $childs);
-        if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        if($repeatName)
+        {
+            dao::$errors['root'] = sprintf($this->lang->tree->repeatName, $repeatName);
+            return false;
+        }
 
         $parentModule = $this->getByID($parentModuleID);
 
