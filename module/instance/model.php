@@ -342,13 +342,14 @@ class instanceModel extends model
     }
 
     /**
+     * 获取访问应用实例的URL。
      * Get URL for visiting instance service.
      *
      * @param  object $instance
      * @access public
      * @return string
      */
-    public function url($instance)
+    public function url(object $instance): string
     {
         $url  = "//" . $instance->domain;
         $port = getenv('APP_HTTPS_PORT');
@@ -365,7 +366,7 @@ class instanceModel extends model
      * @access public
      * @return string
      */
-    public function randThirdDomain($length = 4, $triedTimes = 0)
+    public function randThirdDomain(int $length = 4, int $triedTimes = 0): string
     {
         if($triedTimes > 16) $length++;
 
@@ -376,25 +377,27 @@ class instanceModel extends model
     }
 
     /**
+     * 返回完整域名。
      * Return full domain.
      *
      * @param  string $thirdDomain
      * @access public
      * @return string
      */
-    public function fullDomain($thirdDomain)
+    public function fullDomain(string $thirdDomain): string
     {
         return $thirdDomain . '.' . $this->cne->sysDomain();
     }
 
     /**
+     * 检查域名是否存在。
      * Check if the domain exists.
      *
      * @param  string $thirdDomain
      * @access public
      * @return bool   true: exists, false: not exist.
      */
-    public function domainExists($thirdDomain)
+    public function domainExists(string $thirdDomain): bool
     {
         $domain = $this->fullDomain($thirdDomain);
         return boolval($this->dao->select('id')->from(TABLE_INSTANCE)->where('domain')->eq($domain)->andWhere('deleted')->eq(0)->fetch());
