@@ -1,0 +1,30 @@
+title: zt_host
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: name
+    fields:
+      - field: name1
+        range: zahost,zanode,zanode
+      - field: name2
+        range: 1-1000
+  - field: type
+    range: zahost,node,node
+  - field: hostType
+    range: physical,[]{2}
+  - field: status
+    range: online,running,running
+  - field: image
+    range: 1
+  - field: parent
+    range: 0,1,1
+  - field: vnc
+    range: 0,0,5900
+  - field: tokenSN
+    range: f9f9220b37bd2a92061417118afe165c,[]{2}
+  - field: zap
+    range: '55001,55156,0'
+  - field: extranet
+    range: "10.0.1.222,[]{2}"

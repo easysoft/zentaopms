@@ -213,4 +213,18 @@ class zanodeTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
     }
+
+    /**
+     * 测试获取远程操控信息。
+     * Test get vnc url.
+     *
+     * @param  int    $nodeID
+     * @access public
+     * @return object
+     */
+    public function getVncUrlTest(int $nodeID): bool|object
+    {
+        $node = $this->getNodeByID($nodeID);
+        return $this->getVncUrl($node);
+    }
 }

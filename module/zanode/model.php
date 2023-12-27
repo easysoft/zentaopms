@@ -639,20 +639,20 @@ class zanodemodel extends model
     }
 
     /**
+     * 获取远程操控信息。
      * Get vnc url.
      *
      * @param  object      $node
      * @access public
      * @return object|bool
      */
-    public function getVncUrl($node)
+    public function getVncUrl(object $node): false|object
     {
-        if(empty($node) or empty($node->parent) or empty($node->vnc)) return false;
+        if(empty($node) || empty($node->parent) || empty($node->vnc)) return false;
 
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
         $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->tokenSN"), 'json', 'POST', 10));
-
-        if(empty($result) or $result->code != 'success') return false;
+        if(empty($result) || $result->code != 'success') return false;
 
         $returnData = new stdClass();
         $returnData->hostIP    = $node->ip;

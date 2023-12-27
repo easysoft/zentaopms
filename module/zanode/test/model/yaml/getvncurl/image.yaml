@@ -1,0 +1,16 @@
+title: zt_image
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: host
+    range: 2
+  - field: name
+    fields:
+      - field: name1
+        range: snapshot
+      - field: name2
+        range: 1-1000
+  - field: status
+    range: completed,restoring,running
