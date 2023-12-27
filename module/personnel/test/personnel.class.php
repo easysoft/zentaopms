@@ -85,6 +85,7 @@ class personnelTest
             ->orderBy('id_desc')
             ->fetchAll('id');
         $accountPairs = $this->objectModel->getInvolvedProjects($projects);
+        arsort($accountPairs);
 
         $objects = $this->objectModel->getRiskInvest($accountPairs, $projects);
 
@@ -116,7 +117,9 @@ class personnelTest
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll('id');
+
         $accountPairs = $this->objectModel->getInvolvedProjects($projects);
+        arsort($accountPairs);
 
         $objects = $this->objectModel->getIssueInvest($accountPairs, $projects);
 

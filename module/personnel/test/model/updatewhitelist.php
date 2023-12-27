@@ -9,6 +9,8 @@ zdTable('project')->config('project')->gen(120);
 zdTable('product')->gen(50);
 zdTable('userview')->gen(50);
 zdTable('user')->gen(20);
+zdTable('group')->gen(0);
+zdTable('usergroup')->gen(0);
 
 /**
 
@@ -63,12 +65,12 @@ r($personnel->updateWhitelistTest($user[2], $objectType[0], $objectID[0], $type[
 r($personnel->updateWhitelistTest($user[2], $objectType[0], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('0');                                                     // 测试更新 空的人员列表 到 project 1 whitelist，source为 update 数据变更类型为 update
 r($personnel->updateWhitelistTest($user[2], $objectType[0], $objectID[0], $type[0], $source[1], $updateType[1])) && p() && e('0');                                                     // 测试更新 空的人员列表 到 project 1 whitelist，source为 add    数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 update 数据变更类型为 update
-r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 add    数据变更类型为 update
-r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[2], $updateType[1])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 sync   数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;views: dev10:,2;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:,2;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:,2;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[0], $objectID[1], $type[0], $source[2], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:,2;'); // 测试更新 admin dev10 到 project 2 whitelist，source为 sync   数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[0], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,11,2,test2:,12,2;'); // 测试更新 test1 test2 到 project 2 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[0], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,2,test1:,11,2,test2:,12,2;'); // 测试更新 test1 test2 到 project 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[0], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,11,2,test2:,12,2;');              // 测试更新 test1 test2 到 project 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[0], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,11,2,test2:,12,2;');              // 测试更新 test1 test2 到 project 2 whitelist，source为 update 数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[0], $objectID[1], $type[0], $source[2], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,11,2,test2:,12,2;');              // 测试更新 test1 test2 到 project 2 whitelist，source为 sync   数据变更类型为 update
@@ -79,57 +81,57 @@ r($personnel->updateWhitelistTest($user[2], $objectType[0], $objectID[1], $type[
 r($personnel->updateWhitelistTest($user[2], $objectType[0], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('0');                                                         // 测试更新 空的人员列表 到 project 2 whitelist，source为 add    数据变更类型为 update
 
 
-r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[0], $type[0], $source[0], $updateType[0])) && p() && e('acls: admin:upgrade,user20:sync,user40:add,user60:upgrade,user80:sync,dev10:update;views: admin:2,3,5,6,8,9;'); // 测试更新 admin dev10 到 program 1 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;');                                                                                          // 测试更新 admin dev10 到 program 1 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[0], $type[0], $source[0], $updateType[0])) && p() && e('acls: admin:upgrade,user20:sync,user40:add,user60:upgrade,user80:sync,dev10:update;views: admin:2,3,5,6,8,9,dev10:;'); // 测试更新 admin dev10 到 program 1 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:;');                                                                                          // 测试更新 admin dev10 到 program 1 whitelist，source为 update 数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[1], $objectID[0], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,1,test2:,2;'); // 测试更新 test1 test2 到 program 1 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[1], $objectID[0], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,test1:,1,test2:,2;'); // 测试更新 test1 test2 到 program 1 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[1], $objectID[0], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,1,test2:,2;');              // 测试更新 test1 test2 到 program 1 whitelist，source为 add    数据变更类型为 update
 
 r($personnel->updateWhitelistTest($user[2], $objectType[1], $objectID[0], $type[0], $source[2], $updateType[0])) && p() && e('acls: test1:add,test2:add;views: test1:,1,test2:,2;'); // 测试更新 空的人员列表 到 program 1 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[2], $objectType[1], $objectID[0], $type[0], $source[2], $updateType[1])) && p() && e('0');                                                   // 测试更新 空的人员列表 到 program 1 whitelist，source为 sync   数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 program 2 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 program 2 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;views: dev10:,2;'); // 测试更新 admin dev10 到 program 2 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[1], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:,2;'); // 测试更新 admin dev10 到 program 2 whitelist，source为 update 数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[1], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,1,2,test2:,2;'); // 测试更新 test1 test2 到 program 2 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[1], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,2,test1:,1,2,test2:,2;'); // 测试更新 test1 test2 到 program 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[1], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,1,2,test2:,2;');              // 测试更新 test1 test2 到 program 2 whitelist，source为 add    数据变更类型为 update
 
 r($personnel->updateWhitelistTest($user[2], $objectType[1], $objectID[1], $type[0], $source[2], $updateType[0])) && p() && e('acls: test1:add,test2:add;views: test1:,1,2,test2:,2;'); // 测试更新 空的人员列表 到 program 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[2], $objectType[1], $objectID[1], $type[0], $source[2], $updateType[1])) && p() && e('0');                                                     // 测试更新 空的人员列表 到 program 2 whitelist，source为 sync   数据变更类型为 update
 
 
-r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[0], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 product 1 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 product 1 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[0], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;views: dev10:;'); // 测试更新 admin dev10 到 product 1 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:;'); // 测试更新 admin dev10 到 product 1 whitelist，source为 update 数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[2], $objectID[0], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,1,test2:,2;'); // 测试更新 test1 test2 到 product 1 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[2], $objectID[0], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,test1:,1,test2:,2;'); // 测试更新 test1 test2 到 product 1 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[2], $objectID[0], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,1,test2:,2;');              // 测试更新 test1 test2 到 product 1 whitelist，source为 add    数据变更类型为 update
 
 r($personnel->updateWhitelistTest($user[2], $objectType[2], $objectID[0], $type[0], $source[2], $updateType[0])) && p() && e('acls: test1:add,test2:add;views: test1:,1,test2:,2;'); // 测试更新 空的人员列表 到 product 1 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[2], $objectType[2], $objectID[0], $type[0], $source[2], $updateType[1])) && p() && e('0');                                                   // 测试更新 空的人员列表 到 product 1 whitelist，source为 sync   数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: user1:add,user21:upgrade,user41:sync,user61:add,user81:upgrade,dev10:update;'); // 测试更新 admin dev10 到 product 2 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;');                                                                // 测试更新 admin dev10 到 product 2 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: user1:add,user21:upgrade,user41:sync,user61:add,user81:upgrade,dev10:update;views: dev10:;'); // 测试更新 admin dev10 到 product 2 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[2], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:;');                                                                // 测试更新 admin dev10 到 product 2 whitelist，source为 update 数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[2], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,1,test2:,2;'); // 测试更新 test1 test2 到 product 2 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[2], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,test1:,1,test2:,2;'); // 测试更新 test1 test2 到 product 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[2], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,1,test2:,2;');              // 测试更新 test1 test2 到 product 2 whitelist，source为 add    数据变更类型为 update
 
 r($personnel->updateWhitelistTest($user[2], $objectType[2], $objectID[1], $type[0], $source[2], $updateType[0])) && p() && e('acls: test1:add,test2:add;views: test1:,1,test2:,2;'); // 测试更新 空的人员列表 到 product 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[2], $objectType[2], $objectID[1], $type[0], $source[2], $updateType[1])) && p() && e('0');                                                   // 测试更新 空的人员列表 到 product 2 whitelist，source为 sync   数据变更类型为 update
 
 
-r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[0], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 sprint 1 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;'); // 测试更新 admin dev10 到 sprint 1 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[0], $type[0], $source[0], $updateType[0])) && p() && e('acls: dev10:update;views: dev10:;'); // 测试更新 admin dev10 到 sprint 1 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[0], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:;'); // 测试更新 admin dev10 到 sprint 1 whitelist，source为 update 数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[3], $objectID[0], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,101,test2:,102;'); // 测试更新 test1 test2 到 sprint 1 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[3], $objectID[0], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,test1:,101,test2:,102;'); // 测试更新 test1 test2 到 sprint 1 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[3], $objectID[0], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,101,test2:,102;');              // 测试更新 test1 test2 到 sprint 1 whitelist，source为 add    数据变更类型为 update
 
 r($personnel->updateWhitelistTest($user[2], $objectType[3], $objectID[0], $type[0], $source[2], $updateType[0])) && p() && e('acls: test1:add,test2:add;views: test1:,101,test2:,102;'); // 测试更新 空的人员列表 到 sprint 1 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[2], $objectType[3], $objectID[0], $type[0], $source[2], $updateType[1])) && p() && e('0');                                                       // 测试更新 空的人员列表 到 sprint 1 whitelist，source为 sync   数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: user11:sync,user31:add,user51:upgrade,user71:sync,user91:add,dev10:update;'); // 测试更新 admin dev10 到 sprint 2 whitelist，source为 update 数据变更类型为increase
-r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;');                                                              // 测试更新 admin dev10 到 sprint 2 whitelist，source为 update 数据变更类型为 update
+r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[1], $type[0], $source[0], $updateType[0])) && p() && e('acls: user11:sync,user31:add,user51:upgrade,user71:sync,user91:add,dev10:update;views: dev10:,2,user11:,2,user31:,2,user51:,2,user71:,2,user91:,2;'); // 测试更新 admin dev10 到 sprint 2 whitelist，source为 update 数据变更类型为increase
+r($personnel->updateWhitelistTest($user[0], $objectType[3], $objectID[1], $type[0], $source[0], $updateType[1])) && p() && e('acls: dev10:update;views: dev10:,2;');                                                              // 测试更新 admin dev10 到 sprint 2 whitelist，source为 update 数据变更类型为 update
 
-r($personnel->updateWhitelistTest($user[1], $objectType[3], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: test1:,101,2,test2:,102,2;'); // 测试更新 test1 test2 到 sprint 2 whitelist，source为 add    数据变更类型为 update
+r($personnel->updateWhitelistTest($user[1], $objectType[3], $objectID[1], $type[0], $source[1], $updateType[0])) && p() && e('acls: dev10:update,test1:add,test2:add;views: dev10:,2,test1:,101,2,test2:,102,2;'); // 测试更新 test1 test2 到 sprint 2 whitelist，source为 add    数据变更类型为 update
 r($personnel->updateWhitelistTest($user[1], $objectType[3], $objectID[1], $type[0], $source[1], $updateType[1])) && p() && e('acls: test1:add,test2:add;views: test1:,101,2,test2:,102,2;');              // 测试更新 test1 test2 到 sprint 2 whitelist，source为 add    数据变更类型为 update
 
 r($personnel->updateWhitelistTest($user[2], $objectType[3], $objectID[1], $type[0], $source[2], $updateType[0])) && p() && e('acls: test1:add,test2:add;views: test1:,101,2,test2:,102,2;'); // 测试更新 空的人员列表 到 sprint 2 whitelist，source为 add    数据变更类型为 update
