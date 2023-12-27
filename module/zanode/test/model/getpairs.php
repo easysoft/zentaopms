@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 chartModel->getPairs().
+title=测试 zanodeModel->getPairs().
 timeout=0
 cid=1
 

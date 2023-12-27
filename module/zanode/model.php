@@ -67,20 +67,18 @@ class zanodemodel extends model
     }
 
     /**
+     * 通过执行节点创建镜像。
      * Create Image by zanode.
      *
-     * @param  int    $zanodeID
+     * @param  int      $zanodeID
+     * @param  object   $data
      * @access public
      * @return int|bool
      */
-    public function createImage($zanodeID = 0)
+    public function createImage(int $zanodeID, object $data): int|bool
     {
-        $data = form::data()->get();
-
-        if(empty($data->name)) dao::$errors['message'][] = $this->lang->zanode->imageNameEmpty;
-        if(dao::isError()) return false;
-
         $node  = $this->getNodeByID($zanodeID);
+        if(!$node) return false;
 
         $newImage = new stdClass();
         $newImage->host        = $node->parent;
@@ -90,11 +88,7 @@ class zanodemodel extends model
         $newImage->from        = $node->id;
         $newImage->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_IMAGE)
-            ->data($newImage)
-            ->autoCheck()
-            ->exec();
-
+        $this->dao->insert(TABLE_IMAGE)->data($newImage)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $newID = $this->dao->lastInsertID();
@@ -109,7 +103,7 @@ class zanodemodel extends model
 
         $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
-        if(!empty($result) and $result->code == 'success')
+        if(!empty($result) && $result->code == 'success')
         {
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
             return $newID;

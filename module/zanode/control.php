@@ -125,7 +125,7 @@ class zanode extends control
     {
         if($_POST)
         {
-            $hostInfo = form::data($this->config->zanode->edit)
+            $hostInfo = form::data($this->config->zanode->form->edit)
                 ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', helper::now())
                 ->get();
@@ -258,7 +258,8 @@ class zanode extends control
     {
         if($_POST)
         {
-            $this->zanode->createImage($nodeID);
+            $imageData = form::data($this->config->zanode->form->createImage)->get();
+            $this->zanode->createImage($nodeID, $imageData);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => true));
         }

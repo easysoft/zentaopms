@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 chartModel->getListByHost().
+title=测试 zanodeModel->getListByHost().
 timeout=0
 cid=1
 
