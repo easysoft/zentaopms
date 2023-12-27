@@ -2221,7 +2221,7 @@ class projectModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t2.vision)")
             ->fetchPairs();
 
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
