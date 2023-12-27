@@ -88,27 +88,26 @@ class solutionModel extends model
     }
 
     /**
-     * 按类别和图表从架构信息中选择应用程序。
-     * Pick App from schema info by category and chart.
+     * 按类别和应用从配置信息中获取应用信息。
+     * Pick App from schema info by category and app.
      *
      * @param  object $schema
      * @param  string $category
-     * @param  string $chart
+     * @param  string $app
      * @param  object $cloudSolution
      * @access public
      * @return object|null
      */
-    public function pickAppFromSchema(object $schema, string $category, string $chart, object $cloudSolution): object|null
+    public function pickAppFromSchema(object $schema, string $category, string $app, object $cloudSolution): object|null
     {
         $categoryList = helper::arrayColumn($schema->category, null, 'name');
         $appGroup     = zget($categoryList, $category, array());
 
         foreach($appGroup->choices as $appInSchema)
         {
+            if($appInSchema->name != $app) continue;
 
-            if($appInSchema->name != $chart) continue;
-
-            $appInfo = zget($cloudSolution->apps, $chart);
+            $appInfo = zget($cloudSolution->apps, $app);
             $appInfo->version     = $appInSchema->version;
             $appInfo->app_version = $appInSchema->app_version;
             $appInfo->status      = 'waiting';

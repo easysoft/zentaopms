@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 class solutionTest
 {
+    private $objectModel;
     public function __construct()
     {
         su('admin');
@@ -117,5 +118,19 @@ class solutionTest
 
         foreach($postData as $key => $value) $app->post->set($key, '');
         return $solution;
+    }
+
+    /**
+     * Test pickAppFromSchema method.
+     *
+     * @param  string $category
+     * @param  string $application
+     * @access public
+     * @return object|null
+     */
+    public function pickAppFromSchemaTest(string $category, string $application): object|null
+    {
+        list($cloudSolution, $components) = $this->initCreateData();
+        return $this->objectModel->pickAppFromSchema($components, $category, $application, $cloudSolution);
     }
 }
