@@ -23,8 +23,8 @@ cid=1
 global $tester;
 $tester->loadModel('kanban');
 
-r(count($tester->kanban->getColumnPairsByGroup(1, true)))  && p() && e('4'); // 查看分组1的看板列数量
-r(count($tester->kanban->getColumnPairsByGroup(2, true)))  && p() && e('4'); // 查看分组2的看板列数量
-r(count($tester->kanban->getColumnPairsByGroup(3, true)))  && p() && e('2'); // 查看分组3的看板列数量
-r(count($tester->kanban->getColumnPairsByGroup(4, false))) && p() && e('0'); // 查看分组4的看板列数量
-r(count($tester->kanban->getColumnPairsByGroup(5, false))) && p() && e('0'); // 查看分组5的看板列数量
+r(count($tester->kanban->getColumnPairsByGroup(1))) && p() && e('4'); // 查看分组1的看板列数量
+r(count($tester->kanban->getColumnPairsByGroup(2))) && p() && e('4'); // 查看分组2的看板列数量
+r(count($tester->kanban->getColumnPairsByGroup(3))) && p() && e('2'); // 查看分组3的看板列数量
+r(count($tester->kanban->getColumnPairsByGroup(4))) && p() && e('0'); // 查看分组4的看板列数量
+r(count($tester->kanban->getColumnPairsByGroup(5))) && p() && e('0'); // 查看分组5的看板列数量
