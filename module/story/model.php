@@ -290,7 +290,7 @@ class storyModel extends model
             $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
             if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 
-            if(empty($project->hasProduct))
+            if(!empty($project) && empty($project->hasProduct))
             {
                 if($project->model !== 'scrum' or !$project->multiple) $requiredFields = str_replace(',plan,', ',', $requiredFields);
             }
