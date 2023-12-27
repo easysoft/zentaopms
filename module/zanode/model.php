@@ -710,37 +710,37 @@ class zanodemodel extends model
     }
 
     /**
+     * 执行ZTF脚本。
      * Run ZTFScript.
      *
      * @param  int    $scriptID
      * @param  int    $caseID
-     * @param  int    $task     //testtaskID
+     * @param  int    $testtaskID
      * @access public
-     * @return void
+     * @return string
      */
-    public function runZTFScript($scriptID = 0, $caseID = 0, $task = 0)
+    public function runZTFScript(int $scriptID = 0, int $caseID = 0, int $testtaskID = 0): string
     {
         $automation = $this->getAutomationByID($scriptID);
         $node       = $this->getNodeByID($automation->node);
 
-        if(empty($node) or $node->status != 'running' or !$node->ip or !$node->ztf or !$node->tokenSN)
+        if(empty($node) || $node->status != 'running' || !$node->ip || !$node->ztf || !$node->tokenSN)
         {
-            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
-            return  dao::$errors = $this->lang->zanode->runTimeout;
+            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($testtaskID)->exec();
+            return dao::$errors = $this->lang->zanode->runTimeout;
         }
 
         $params = array(
             'cmd'  => $automation->shell,
             'ids'  => strval($caseID),
             'path' => $automation->scriptPath,
-            'task' => intval($task)
+            'task' => intval($testtaskID)
         );
-
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
-        if(empty($result) or $result->code != 0)
+        if(empty($result) || $result->code != 0)
         {
-            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
-            return  dao::$errors = $this->lang->zanode->runTimeout;
+            $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($testtaskID)->exec();
+            return dao::$errors = $this->lang->zanode->runTimeout;
         }
     }
 
