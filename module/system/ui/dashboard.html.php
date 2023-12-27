@@ -10,9 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$cpuInfo    = $this->cne->getCpuUsage($cneMetrics->metrics->cpu);
-$memoryInfo = $this->cne->getMemUsage($cneMetrics->metrics->memory);
-$status     = isset($lang->CNE->statusList[$cneMetrics->status]) ? $cneMetrics->status : 'unknown';
+$status = zget($lang->CNE->statusList, $cneMetrics->status, 'unknown');
 
 $cpuInfo['tip']    = trim(substr($cpuInfo['tip'], strpos($cpuInfo['tip'], '=') + 1));
 $memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], '=') + 1));
