@@ -79,6 +79,7 @@ $tester->common->dao->update(TABLE_DOC)->set('addedDate')->eq($now)->exec();
 
 $story = new stdclass();
 $story->title = 'teststory';
+$story->type  = 'requirement';
 r($tester->common->removeDuplicate('story', $story)) && p('stop,duplicate') && e('1,1'); //测试是否是重复需求
 r($tester->common->removeDuplicate('story', $story, 'id!=1')) && p('stop') && e('~~');   //有条件情况下，测试是否是重复需求。
 

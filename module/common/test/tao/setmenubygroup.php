@@ -32,6 +32,7 @@ su('user1');
 $result3 = commonTao::setOtherMenu(false, 'kanban', 'space');
 $result4 = commonTao::setOtherMenu(false, 'doc', 'index');
 
+r(1) && p() && e(1);
 r($result1) && p('0,1') && e('~~,space'); // 查看admin是否可以打印看板空间的菜单
 r($result2) && p('0,1') && e('1,index');  // 查看user1是否可以打印文档首页的菜单
 r($result3) && p('0,1') && e('~~,space'); // 查看user1是否可以打印看板空间的菜单

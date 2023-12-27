@@ -11,10 +11,10 @@ title=测试 commonModel->getPreAndNextObject();
 timeout=0
 cid=1
 
-- 执行common模块的getPreAndNextObject方法，参数是'', 3 
+- 执行common模块的getPreAndNextObject方法，参数是'', 3
  - 属性pre @~~
  - 属性next @~~
-- 执行common模块的getPreAndNextObject方法，参数是'story', 3 
+- 执行common模块的getPreAndNextObject方法，参数是'story', 3
  - 属性pre @~~
  - 属性next @~~
 - 执行$preAndNextObject->pre属性id @2
@@ -27,6 +27,8 @@ cid=1
 global $tester;
 $tester->loadModel('common');
 
+$_SESSION['QueryCondition'] = '';
+r(1) && p() && e('1');
 r((array)$tester->common->getPreAndNextObject('', 3))      && p('pre,next') && e('~~,~~');
 r((array)$tester->common->getPreAndNextObject('story', 3)) && p('pre,next') && e('~~,~~');
 

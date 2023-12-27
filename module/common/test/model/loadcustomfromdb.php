@@ -21,9 +21,10 @@ cid=1
 */
 
 su('admin');
+global $lang;
 $tester->loadModel('common')->loadCustomFromDB();
 
-r(count($lang->db->custom))   && p('')              && e(3);        // 查看设置后的语言项的数量
-r($lang->db->custom->process) && p('section1:key1') && e('value1'); // 查看设置后的语言项的值
-r($lang->db->custom->task)    && p('section8:key8') && e('value8'); // 查看设置后的语言项的值
-r($lang->db->custom->stage)   && p('section6:key6') && e('value6'); // 查看设置后的语言项的值
+r(count($lang->db->custom))   && p('')              && e(3);          // 查看设置后的语言项的数量
+r($lang->db->custom['process']) && p('section1:key1') && e('value1'); // 查看设置后的语言项的值
+r($lang->db->custom['task'])    && p('section8:key8') && e('value8'); // 查看设置后的语言项的值
+r($lang->db->custom['stage'])   && p('section6:key6') && e('value6'); // 查看设置后的语言项的值

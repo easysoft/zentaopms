@@ -22,6 +22,7 @@ $_SESSION['storyOnlyCondition']  = true;
 $preAndNextObject = new stdclass();
 $preAndNextObject->pre  = '';
 $preAndNextObject->next = '';
+r(1) && p() && e('1');
 r((array)$tester->common->fetchPreAndNextObject('', 3, $preAndNextObject))      && p('pre,next') && e('~~,~~');
 r((array)$tester->common->fetchPreAndNextObject('story', 3, $preAndNextObject)) && p('pre,next') && e('~~,~~');
 
@@ -33,8 +34,8 @@ r($preAndNextObject->next) && p('id') && e('4');
 
 $tester->common->app->moduleName = 'product';
 $tester->common->app->methodName = 'browse';
-$_SESSION['storyOnlyCondition']  = false;
-$_SESSION['storyproductbrowseBrowseList'] = array('sql' => 'SELECT * FROM `zt_story` WHERE id <= 5', 'idkey' => 'id', 'objectList' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4));
+$_SESSION['storyOnlyCondition']  =  false;
+$_SESSION['storyBrowseList']     = array('sql' => 'SELECT * FROM `zt_story` WHERE id <= 5', 'idkey' => 'id', 'objectList' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4));
 
 $preAndNextObject->pre  = 2;
 $preAndNextObject->next = 4;

@@ -30,6 +30,6 @@ r(implode('|', $list['objectList'])) && p() && e('1|2|3|4|5');
 $tester->common->app->tab = 'my';
 $tester->common->app->moduleName = 'product';
 $tester->common->app->methodName = 'browse';
-$_SESSION['app-my']['storyproductbrowseBrowseList'] = array('sql' => 'SELECT * FROM `zt_story` WHERE id <= 5', 'idkey' => 'id', 'objectList' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4));
+$_SESSION['app-my']['storyBrowseList'] = array('sql' => 'SELECT * FROM `zt_story` WHERE id <= 5', 'idkey' => 'id', 'objectList' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4));
 $list = $tester->common->queryListForPreAndNext('story', $sql);
 r(implode('|', $list['objectList'])) && p() && e('1|2|3|4');
