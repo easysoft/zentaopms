@@ -414,4 +414,36 @@ class installZen extends install
 
         return $customSession;
     }
+
+    /**
+     * 处理安装应用下拉选择的数据。
+     * Process application options.
+     *
+     * @param  object    $components
+     * @param  object    $cloudSolution
+     * @access protected
+     * @return object
+     */
+    protected function processComponents(object $components, object $cloudSolution): object
+    {
+        foreach($components->category as $key => &$item)
+        {
+            if($item->name === 'pms')
+            {
+                unset($components->category[$key]);
+                continue;
+            }
+
+            if(in_array($item->name, array('analysis', 'artifact'))) array_unshift($item->choices, (object)array('name' => $this->lang->install->solution->skipInstall, 'version' => ''));
+
+            $item->schemaChoices = array();
+            foreach($item->choices as $cloudApp)
+            {
+                $appInfo = zget($cloudSolution->apps, $cloudApp->name, array());
+                $item->schemaChoices[$cloudApp->name] = zget($appInfo, 'alias', $cloudApp->name);
+            }
+        }
+
+        return $components;
+    }
 }

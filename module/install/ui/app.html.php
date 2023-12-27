@@ -18,15 +18,12 @@ h::importJs($app->getWebRoot() . 'js/xterm/xterm.js');
 $formRows = array();
 foreach($components->category as $item)
 {
-    if(in_array($item->name, array('analysis', 'artifact'))) array_unshift($item->choices, (object)array('name' => $lang->install->solution->skipInstall, 'version' => ''));
-    if($item->name === 'pms') continue;
-
     $formRows[] = formGroup
     (
         set::label($item->alias),
         set::name($item->name),
         set::required(true),
-        set::items($this->solution->createSelectOptions($item->choices, $cloudSolution)),
+        set::items($item->schemaChoices),
         on::change('checkMemory(this)')
     );
 }

@@ -464,7 +464,7 @@ class install extends control
 
         $this->view->title         = $this->lang->solution->install;
         $this->view->cloudSolution = $cloudSolution;
-        $this->view->components    = $components;
+        $this->view->components    = $this->installZen->processComponents($components, $cloudSolution);
         $this->view->category      = $category;
 
         $this->display();
