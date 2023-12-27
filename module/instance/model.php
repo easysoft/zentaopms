@@ -316,16 +316,16 @@ class instanceModel extends model
     }
 
     /**
+     * 判断应用实例是否可以进行操作。
      * If actions are allowed to do.
      *
      * @param  string $action
      * @param  object $instance
      * @access public
-     * @return boolean
+     * @return bool
      */
-    public function canDo($action, $instance)
+    public function canDo(string $action, object $instance): bool
     {
-        // $busy = in_array($instance->status, array('creating', 'initializing', 'starting', 'stopping', 'suspending', 'pulling', 'destroying'));
         switch($action)
         {
             case 'start':
