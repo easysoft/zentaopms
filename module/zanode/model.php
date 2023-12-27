@@ -663,36 +663,6 @@ class zanodemodel extends model
     }
 
     /**
-     * 执行节点安装应用（支持ztf,zendata）.
-     * Install service to node by name.
-     *
-     * @param  object $node
-     * @param  string $name
-     * @access public
-     * @return array
-     */
-    public function installService($node, $name)
-    {
-        $param = array(
-            'name'   => strtolower($name),
-            'secret' => $node->secret,
-            'server' => getWebRoot(true),
-        );
-        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
-
-        if(empty($result->data) || $result->code != 'success')
-        {
-            $result = new stdclass;
-            return $this->lang->zanode->init->serviceStatus;
-        }
-
-        return array(
-            'ZenAgent' => 'ready',
-            'ZTF'      => $result->data->ztfStatus,
-        );
-    }
-
-    /**
      * 通过 product id 获取自动化设置。
      * Get automation by product id.
      *

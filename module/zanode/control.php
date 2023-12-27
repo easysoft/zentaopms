@@ -532,7 +532,7 @@ class zanode extends control
     public function ajaxInstallService(int $nodeID, string $service)
     {
         $node   = $this->zanode->getNodeById($nodeID);
-        $result = $this->zanode->installService($node, $service);
+        $result = $this->zanodeZen->installService($node, $service);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }

@@ -155,16 +155,38 @@ class zanodeZen extends zanode
      * Get service status from host.
      *
      * @param  object $node
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getServiceStatus(object $node): array
+    protected function getServiceStatus(object $node): array
     {
         $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array('services' => 'all')), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(empty($result->data->ztfStatus) || $result->code != 'success') return $this->lang->zanode->init->serviceStatus;
 
-        $statusData = array('ZenAgent' => 'ready', 'ZTF' => $result->data->ztfStatus);
-        return $statusData;
+        return array('ZenAgent' => 'ready', 'ZTF' => $result->data->ztfStatus);
+    }
+
+    /**
+     * 执行节点安装应用（支持ztf,zendata）.
+     * Install service to node by name.
+     *
+     * @param  object $node
+     * @param  string $name
+     * @access protected
+     * @return array
+     */
+    protected function installService(object $node, string $name): array
+    {
+        $param = array(
+            'name'   => strtolower($name),
+            'secret' => $node->secret,
+            'server' => getWebRoot(true),
+        );
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/setup", json_encode($param), array(), array("Authorization:$node->tokenSN")));
+
+        if(empty($result->data) || $result->code != 'success') return $this->lang->zanode->init->serviceStatus;
+
+        return array('ZenAgent' => 'ready', 'ZTF' => $result->data->ztfStatus,);
     }
 }
