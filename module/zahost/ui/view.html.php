@@ -192,7 +192,8 @@ detailBody
         section
         (
             set::title($lang->zahost->desc),
-            !empty($zahost->desc) ? html(htmlspecialchars_decode($zahost->desc)) : $lang->noData
+            set::content($zahost->desc),
+            set::useHtml(true)
         )
     ),
     sectionList

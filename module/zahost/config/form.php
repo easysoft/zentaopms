@@ -16,7 +16,7 @@ $config->zahost->form->create['type']        = array('required' => false, 'type'
 $config->zahost->form->create['status']      = array('required' => false, 'type' => 'string', 'default' => 'wait');
 $config->zahost->form->create['createdBy']   = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->zahost->form->create['createdDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
-$config->zahost->form->create['desc']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->zahost->form->create['desc']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 $config->zahost->form->create['zap']         = array('required' => false, 'type' => 'string', 'default' => $config->zahost->defaultPort);
 
 $config->zahost->form->edit = array();
@@ -29,4 +29,4 @@ $config->zahost->form->edit['memory']     = array('required' => true,  'type' =>
 $config->zahost->form->edit['diskSize']   = array('required' => true,  'type' => 'float',  'default' => 0);
 $config->zahost->form->edit['editedBy']   = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->zahost->form->edit['editedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
-$config->zahost->form->edit['desc']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->zahost->form->edit['desc']       = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
