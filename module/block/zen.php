@@ -2048,6 +2048,8 @@ class blockZen extends block
             $count[$objectType] = count($objects);
             $this->view->{$objectList[$objectType]} = $objects;
         }
+        if(isset($hasViewPriv['testcase'])) $this->view->testcases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip|run', 'id_desc', $pager);
+        if(isset($hasViewPriv['testtask'])) $this->view->testtasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'assignedTo');
 
         if(isset($hasViewPriv['meeting']))
         {
