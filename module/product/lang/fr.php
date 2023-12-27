@@ -193,13 +193,13 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Fermé';
 
 global $config;
-if($config->systemMode == 'ALM')
+if($config->systemMode == 'Lite')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 $lang->product->aclList['open']    = "Défaut (Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.)";
 //$lang->product->aclList['custom']  = "Personnalisé (les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.)";
