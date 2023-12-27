@@ -91,11 +91,11 @@ class compileModel extends model
     /**
      * Get last result.
      *
-     * @param  int    $jobID
+     * @param  int          $jobID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getLastResult(int $jobID): object
+    public function getLastResult(int $jobID): object|false
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($jobID)->andWhere('status')->ne('')->orderBy('createdDate_desc')->limit(1)->fetch();
     }
@@ -209,6 +209,7 @@ class compileModel extends model
     public function createByJob(int $jobID, string $data = '', string $type = 'tag'): int|false
     {
         $job = $this->dao->select('id,name')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch();
+        if(!$job) return false;
 
         $build = new stdClass();
         $build->job         = $job->id;
@@ -348,7 +349,7 @@ class compileModel extends model
      */
     public function exec(object $compile): bool
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server,t1.lastTag')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($compile->job)

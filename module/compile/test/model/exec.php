@@ -2,6 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/compile.class.php';
+
+zdTable('compile')->gen(10);
+zdTable('job')->gen(1);
+zdTable('repo')->gen(1);
+zdTable('pipeline')->gen(1);
 su('admin');
 
 /**
@@ -16,19 +21,22 @@ pid=1
 
 */
 $compile1 = new stdclass();
-$compile1->id   = 2;
-$compile1->name = '这是一个compile数据';
-$compile1->job  = 3;
+$compile1->id         = 2;
+$compile1->name       = '这是一个compile数据';
+$compile1->updateDate = NULL;
+$compile1->job        = 3;
 
 $compile2 = new stdclass();
-$compile2->id   = 3;
-$compile2->name = '这是一个compile数据';
-$compile2->job  = 1;
+$compile2->id         = 3;
+$compile2->name       = '这是一个compile数据';
+$compile2->updateDate = NULL;
+$compile2->job        = 1;
 
 $compile3 = new stdclass();
-$compile3->id   = 1;
-$compile3->name = '这是一个compile数据';
-$compile3->job  = 1;
+$compile3->id         = 1;
+$compile3->name       = '这是一个compile数据';
+$compile3->updateDate = NULL;
+$compile3->job        = 1;
 
 $compile = new compileTest();
 

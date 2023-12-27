@@ -26,15 +26,16 @@ class compileTest
     /**
      * Get build list.
      *
+     * @param  int    $repoID
      * @param  int    $jobID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getListTest($jobID, $orderBy = 'id_desc', $pager = null)
+    public function getListTest($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($jobID, $orderBy = 'id_desc', $pager = null);
+        $objects = $this->objectModel->getList($repoID, $jobID, $orderBy = 'id_desc', $pager = null);
 
         if(dao::isError()) return dao::getError();
 
@@ -116,9 +117,9 @@ class compileTest
     public function createByJobTest($jobID, $data = '', $type = 'tag')
     {
         global $tester;
-        $this->objectModel->createByJob($jobID, $data = '', $type = 'tag');
+        $id = $this->objectModel->createByJob($jobID, $data = '', $type = 'tag');
 
-        $objects = $tester->dao->select('name')->from(TABLE_COMPILE)->where($type)->eq($data)->fetchAll();
+        $objects = $tester->dao->select('name')->from(TABLE_COMPILE)->where('id')->eq($id)->fetch();
 
         if(dao::isError()) return dao::getError();
 
