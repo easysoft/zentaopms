@@ -283,11 +283,11 @@ class testreportZen extends testreport
         if($method == 'create')
         {
             /* Get testtasks members. */
-            $tasks       = array_keys($reportData['tasks']);
+            $tasks       = $reportData['tasks'];
             $taskMembers = '';
             foreach($tasks as $testtask)
             {
-                if(!empty($testtask->members)) $taskMembers .= ',' . $testtask->members;
+                if(!empty($testtask->members)) $taskMembers .= ',' . (string)$testtask->members;
             }
             $taskMembers = explode(',', $taskMembers);
             $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
