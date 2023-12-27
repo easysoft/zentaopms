@@ -41,7 +41,8 @@ featureBar
     (
         set::rootClass('ml-2'),
         set::name('involved'),
-        set::text($lang->project->mine)
+        set::text($lang->project->mine),
+        set::checked($this->cookie->involved ? 'checked' : '')
     ),
     li(searchToggle(set::module('project')))
 );
