@@ -184,7 +184,7 @@ class fileModel extends model
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
-        if(!is_array($_FILES[$htmlTagName]['error']) and $_FILES[$htmlTagName]['error'] != 0) return $files;
+        if(!is_array($_FILES[$htmlTagName]['error']) && $_FILES[$htmlTagName]['error'] != 0) return $files;
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
@@ -218,7 +218,7 @@ class fileModel extends model
             $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = (!empty($title) and $title != $name) ? htmlSpecialString($title) : $name;
+            $file['title']     = (!empty($title) && $title != $name) ? htmlSpecialString($title) : $name;
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
@@ -996,14 +996,13 @@ class fileModel extends model
      */
     public function updateTestcaseVersion(object $file): void
     {
-        $oldCase = $this->loadModel('testcase')->getByID($file->objectID);
+        $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch();
         if(empty($oldCase)) return;
 
-        $isLibCase = ($oldCase->lib && empty($oldCase->product));
+        $isLibCase = $oldCase->lib && empty($oldCase->product);
         if($isLibCase)
         {
-            $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch('fromCaseVersion');
-            $fromcaseVersion += 1;
+            $fromcaseVersion = $oldCase->fromCaseVersion + 1;
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
         }
     }

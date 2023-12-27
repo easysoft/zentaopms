@@ -20,10 +20,9 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 $file = zdTable('file');
-$file->objectType->range('task,story,release,doc,traincourse,bug');
+$file->objectType->range('task,story,release,doc,bug');
 $file->objectID->range('1');
 $file->gen(50);
 
@@ -40,18 +39,22 @@ $release->product->range('1');
 $release->project->range('0');
 $release->gen(1);
 
-$doc = zdTable('doc');
-$doc->gen(1);
+zdTable('project')->gen(0);
+zdTable('product')->gen(0);
+zdTable('doc')->gen(1);
+zdTable('user')->gen(5);
+zdTable('userview')->gen(0);
+zdTable('usergroup')->gen(0);
 
-global $tester;
+su('admin');
+
+global $tester, $app;
 $tester->loadModel('file');
 $file1 = $tester->file->getByID(1);
-$file2 = $tester->file->getByID(2);
-$file3 = $tester->file->getByID(3);
-$file4 = $tester->file->getByID(4);
-$file5 = $tester->file->getByID(5);
-
-$tester->file->app->user->admin = true;
+$file2 = $tester->file->getByID(12);
+$file3 = $tester->file->getByID(23);
+$file4 = $tester->file->getByID(34);
+$file5 = $tester->file->getByID(45);
 
 r($tester->file->checkPriv($file1)) && p() && e(1); // 查看超级管理员是否有下载附件1的权限
 r($tester->file->checkPriv($file2)) && p() && e(1); // 查看超级管理员是否有下载附件2的权限
@@ -59,13 +62,9 @@ r($tester->file->checkPriv($file3)) && p() && e(1); // 查看超级管理员是�
 r($tester->file->checkPriv($file4)) && p() && e(1); // 查看超级管理员是否有下载附件4的权限
 r($tester->file->checkPriv($file5)) && p() && e(1); // 查看超级管理员是否有下载附件6的权限
 
-$tester->file->app->user->admin = false;
-$tester->file->app->user->view->products = '';
-$tester->file->app->user->view->projects = '';
-$tester->file->app->user->view->sprints  = '';
-
+su('user1');
 r($tester->file->checkPriv($file1)) && p() && e(0); // 查看没有权限用户是否有下载附件1的权限
 r($tester->file->checkPriv($file2)) && p() && e(0); // 查看没有权限用户是否有下载附件2的权限
 r($tester->file->checkPriv($file3)) && p() && e(0); // 查看没有权限用户是否有下载附件3的权限
-r($tester->file->checkPriv($file4)) && p() && e(1); // 查看没有权限用户是否有下载附件4的权限
-r($tester->file->checkPriv($file5)) && p() && e(1); // 查看没有权限用户是否有下载附件6的权限
+r($tester->file->checkPriv($file4)) && p() && e(0); // 查看没有权限用户是否有下载附件4的权限
+r($tester->file->checkPriv($file5)) && p() && e(0); // 查看没有权限用户是否有下载附件6的权限

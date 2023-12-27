@@ -24,7 +24,7 @@ $file->gen(5);
 
 $file = new fileTest();
 
-$files  = array('name' => 'file3.ppt', 'size' => '2893', 'tmp_name' => '/tmp/phpu2el');
+$files  = array('name' => 'file3.ppt', 'size' => '2893', 'tmp_name' => '/tmp/phpu2el', 'error' => 0);
 $labels = array('file3.ppt');
 
 r($file->replaceFileTest(0, $files, $labels)) && p()                   && e('0');                              // 测试 id = 0 的记录。

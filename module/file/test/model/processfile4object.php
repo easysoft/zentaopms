@@ -25,16 +25,21 @@ $file->gen(5);
 
 $file = new fileTest();
 
+$debug = $config->debug;
+$config->debug = 0;
+
 r($file->processFile4ObjectTest('story', new stdclass(), new stdclass())) && p('count') && e('5'); //传入空对象。
 
 $oldObject = new stdclass();
-$oldObject->id = '1';
+$oldObject->id = 1;
 $oldObject->files = $file->objectModel->getByIdList('1,2,3,4');
 
 $newObject = new stdclass();
-$newObject->id = '1';
+$newObject->id = 1;
 r($file->processFile4ObjectTest('story', $oldObject, $newObject)) && p('count;old:files', ';') && e('5;1,2,3,4'); //没有删除文件字段。
 
 $oldObject->files       = $file->objectModel->getByIdList('1,2,3,4');
 $newObject->deleteFiles = array(1, 2);
 r($file->processFile4ObjectTest('story', $oldObject, $newObject)) && p('count;old:files', ';') && e('3;3,4'); //有删除文件字段。
+
+$config->debug = $debug;
