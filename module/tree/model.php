@@ -2372,6 +2372,7 @@ class treeModel extends model
             ->setDefault('createType', 'child')
             ->setDefault('objectID', 0)
             ->setDefault('order', 10)
+            ->cleanInt('libID,parentID,objectID')
             ->get();
 
         $module         = new stdClass();
