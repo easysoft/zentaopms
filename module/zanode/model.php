@@ -215,7 +215,7 @@ class zanodemodel extends model
      * @access public
      * @return bool
      */
-    public function restoreSnapshot(int $zanodeID = 0, int $snapshotID = 0)
+    public function restoreSnapshot(int $zanodeID = 0, int $snapshotID = 0): bool
     {
         $node = $this->getNodeByID($zanodeID);
         $snap = $this->getImageByID($snapshotID);
@@ -244,7 +244,7 @@ class zanodemodel extends model
 
         /* 若执行成功修改执行节点的状态。*/
         /* Change node status when success. */
-        if(!empty($result) and $result->code == 'success')
+        if(!empty($result) && $result->code == 'success')
         {
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq('restoring')->where('id')->eq($node->id)->exec();
             $this->loadModel('action')->create('zanode', $zanodeID, 'restoredsnapshot', '', $snap->name);
@@ -259,38 +259,33 @@ class zanodemodel extends model
     }
 
     /**
-     * Delete Snapshot.
+     * 删除快照。
+     * Delete snapshot.
      *
-     * @param  int $id
+     * @param  int $snapshotID
      * @access public
      * @return string|bool
      */
-    public function deleteSnapshot($snapshotID)
+    public function deleteSnapshot(int $snapshotID): string|bool
     {
         $snapshot = $this->getImageByID($snapshotID);
         $node     = $this->getNodeByID($snapshot->host);
-
-        if(!$node) return false;
-
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
         $param    = (object)array(
             'name' => $snapshot->name,
             'task' => $snapshotID,
             'vm'   => $node->name
         );
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_REMOVE_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
-        $result = commonModel::http($agnetUrl . static::SNAPSHOT_REMOVE_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
-        $result = json_decode($result);
-
-        if(!empty($result) and $result->code == 'success')
+        if(!empty($result) && $result->code == 'success')
         {
             $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->exec();
             $this->loadModel('action')->create('zanode', $node->id, 'deletesnapshot', '', $snapshot->name);
             return true;
         }
 
-        $error = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->zanode->apiError['fail'];
-
+        $error = !empty($result) && !empty($result->msg) ? $result->msg : $this->lang->zanode->apiError['fail'];
         return $error;
     }
 

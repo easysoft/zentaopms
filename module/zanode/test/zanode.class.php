@@ -185,13 +185,29 @@ class zanodeTest
      * @param  int    $zanodeID
      * @param  int    $snapshotID
      * @access public
-     * @return bool
+     * @return string|object
      */
-    public function restoreSnapshotTest(int $zanodeID = 0, int $snapshotID = 0)
+    public function restoreSnapshotTest(int $zanodeID = 0, int $snapshotID = 0): string|object
     {
         $result = $this->restoreSnapshot($zanodeID, $snapshotID);
         if(!$result) return dao::getError();
 
         return $this->objectModel->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($zanodeID)->fetch();
+    }
+
+    /**
+     * 测试删除快照。
+     * Test Delete snapshot.
+     *
+     * @param  int $snapshotID
+     * @access public
+     * @return string|bool
+     */
+    public function deleteSnapshotTest(int $snapshotID)
+    {
+        $result = $this->deleteSnapshot($snapshotID);
+        if($result !== true) return $result;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->fetch();
     }
 }
