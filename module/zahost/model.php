@@ -129,6 +129,8 @@ class zahostModel extends model
      */
     public function update(object $hostInfo): false|array
     {
+        $oldHost = $this->getByID($hostInfo->id);
+
         $ping = $this->checkAddress($hostInfo->extranet);
         if(!$ping) dao::$errors['extranet'][] = $this->lang->zahost->netError;
 
@@ -142,7 +144,6 @@ class zahostModel extends model
 
         if(dao::isError()) return false;
 
-        $oldHost = $this->getByID($hostInfo->id);
         return common::createChanges($oldHost, $hostInfo);
     }
 
