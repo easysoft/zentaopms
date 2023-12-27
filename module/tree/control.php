@@ -236,7 +236,11 @@ class tree extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if(helper::isAjaxRequest('modal'))
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductModules($rootID);"));
+            }
+
             return $this->sendSuccess(array('load' => true));
         }
     }
