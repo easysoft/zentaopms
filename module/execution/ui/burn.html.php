@@ -118,7 +118,7 @@ panel
                 'data' => $chartData['labels'],
                 'name' => $lang->execution->burnXUnit,
                 'boundaryGap' => false,
-                'axisLabel' => array('interval' => (int)$interval)
+                'axisLabel' => array('interval' => (int)$interval, 'rotate' => count($chartData['labels']) > 27 ? 45 : 0),
             )
         ),
         set::yAxis
