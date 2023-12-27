@@ -148,7 +148,7 @@ class zahostModel extends model
     }
 
     /**
-     * 检查宿主机的IP/域名是否可用。
+     * 检查宿主机的IP/域名是否能 ping 通。
      * Ping ip/domain.
      *
      * @param  string $address
