@@ -550,7 +550,7 @@ class fileModel extends model
         if(!empty($groupName))
         {
             $groupID = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
-            return $this->loadModel($groupName)->checkPriv($groupID);
+            return $this->loadModel($groupName)->checkPriv((int)$groupID);
         }
 
         if($objectType == 'release')
