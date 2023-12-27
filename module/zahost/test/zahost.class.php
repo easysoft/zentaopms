@@ -22,4 +22,16 @@ class zahostTest
         if(dao::isError()) return dao::getError();
         return $zahost;
     }
+
+    /**
+     * 测试获取主机键值对。
+     * Get host pairs test.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairsTest(): array
+    {
+        return $this->objectModel->getPairs();
+    }
 }
