@@ -45,6 +45,7 @@ class picker extends wg
         'disabled?: boolean',               // 是否禁用。
         'readonly?: boolean',               // 是否只读。
         'multiple?: boolean|number=false',  // 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
+        'toolbar?: boolean|array',          // 设置工具栏。
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'placeholder?: string',             // 选择框上的占位文本。
         'valueSplitter?: string',           // 多个值的分隔字符串，默认为 `,`。
