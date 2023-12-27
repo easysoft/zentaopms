@@ -41,6 +41,7 @@ $release->gen(1);
 
 zdTable('project')->gen(0);
 zdTable('product')->gen(0);
+zdTable('bug')->gen(0);
 zdTable('doc')->gen(1);
 zdTable('user')->gen(5);
 zdTable('userview')->gen(0);
@@ -60,7 +61,7 @@ r($tester->file->checkPriv($file1)) && p() && e(1); // 查看超级管理员是�
 r($tester->file->checkPriv($file2)) && p() && e(1); // 查看超级管理员是否有下载附件2的权限
 r($tester->file->checkPriv($file3)) && p() && e(1); // 查看超级管理员是否有下载附件3的权限
 r($tester->file->checkPriv($file4)) && p() && e(1); // 查看超级管理员是否有下载附件4的权限
-r($tester->file->checkPriv($file5)) && p() && e(1); // 查看超级管理员是否有下载附件6的权限
+r($tester->file->checkPriv($file5)) && p() && e(0); // 查看超级管理员是否有下载附件6的权限
 
 su('user1');
 r($tester->file->checkPriv($file1)) && p() && e(0); // 查看没有权限用户是否有下载附件1的权限
