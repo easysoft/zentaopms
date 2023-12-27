@@ -74,4 +74,20 @@ class zahostTest
         $hostID = $return;
         return $this->objectModel->getByID($hostID);
     }
+
+    /**
+     * 测试更新主机。
+     * Test update host.
+     *
+     * @param  object $hostInfo
+     * @access public
+     * @return array
+     */
+    public function updateTest(object $hostInfo): array
+    {
+        $return = $this->objectModel->update($hostInfo);
+        if(dao::isError()) return dao::getError();
+
+        return $return;
+    }
 }
