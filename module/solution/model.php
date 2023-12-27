@@ -32,39 +32,6 @@ class solutionModel extends model
     }
 
     /**
-     * 根据名称获取解决方案。
-     * Get solution by name.
-     *
-     * @param  string $keyword
-     * @access public
-     * @return array
-     */
-    public function search(string $keyword = ''): array
-    {
-        return $this->dao->select('*')->from(TABLE_SOLUTION)
-            ->where('deleted')->eq(0)
-            ->beginIF($keyword)->andWhere('name')->like($keyword)->fi()
-            ->orderBy('createdAt desc')
-            ->fetchAll();
-    }
-
-    /**
-     * 更新解决方案名称。
-     * Update solution name.
-     *
-     * @param  int    $solutionID
-     * @access public
-     * @return bool
-     */
-    public function updateName(int $solutionID): bool
-    {
-        $newSolution = fixer::input('post')->trim('name')->get();
-        $this->dao->update(TABLE_SOLUTION)->data($newSolution)->autoCheck()->where('id')->eq($solutionID)->exec();
-
-        return !dao::isError();
-    }
-
-    /**
      * 根据应用市场的解决方案创建本地解决方案。
      * Create by solution of cloud market.
      *
@@ -475,27 +442,6 @@ class solutionModel extends model
 
         $this->dao->update(TABLE_SOLUTION)->set('status')->eq('uninstalled')->set('deleted')->eq(1)->where('id')->eq($solutionID)->exec();
         return !dao::isError();
-    }
-
-    /**
-     * 转化方案的配置信息为选择项的参数。
-     * Convert schema choices to select options.
-     *
-     * @param  array  $schemaChoices
-     * @param  object $cloudSolution
-     * @access public
-     * @return array
-     */
-    public function createSelectOptions(array $schemaChoices, object $cloudSolution): array
-    {
-        $options = array();
-        foreach($schemaChoices as $cloudApp)
-        {
-            $appInfo = zget($cloudSolution->apps, $cloudApp->name, array());
-            $options[$cloudApp->name] = zget($appInfo, 'alias', $cloudApp->name);
-        }
-
-        return $options;
     }
 
     /**

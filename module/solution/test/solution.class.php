@@ -19,6 +19,13 @@ class solutionTest
         $this->objectModel = $tester->loadModel('solution');
     }
 
+    /**
+     * Test getByID method.
+     *
+     * @param  int    $solutionID
+     * @access public
+     * @return object|null
+     */
     public function getByIdTest(int $solutionID): object|null
     {
         return $this->objectModel->getByID($solutionID);
