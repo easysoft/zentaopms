@@ -110,7 +110,7 @@ function buildBody(array $cols): form
         $ul = zui::sortable
         (
             set::_tag('ul'),
-            set::_class("{$key}-cols")
+            set::_class("{$key}-cols pl-0")
         );
         foreach($items as $item) $ul->add(buildItem($item));
         $body->add($ul);
