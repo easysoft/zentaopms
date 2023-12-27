@@ -147,7 +147,7 @@ else
 
     $content = ul
     (
-        setClass('timeline'),
+        setClass('timeline list-none p-0'),
         $content
     );
 }
