@@ -153,7 +153,7 @@ class zanodemodel extends model
         }
 
         $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($snapshotID)->exec();
-        dao::$errors[] = (!empty($result) and !empty($result->msg)) ? $result->msg : $this->lang->fail;
+        dao::$errors = !empty($result) && !empty($result->msg) ? $result->msg : $this->lang->fail;
         return false;
     }
 
