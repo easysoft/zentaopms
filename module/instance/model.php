@@ -255,6 +255,7 @@ class instanceModel extends model
     }
 
     /**
+     * 更新应用的内存大小。
      * Update instance memory size.
      *
      * @param  object $instnace
@@ -262,7 +263,7 @@ class instanceModel extends model
      * @access public
      * @return bool
      */
-    public function updateMemorySize($instnace, $size = '')
+    public function updateMemorySize(object $instnace, int $size = 0): bool
     {
         $settings = new stdclass;
         $settings->settings_map = new stdclass;
