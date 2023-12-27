@@ -29,7 +29,7 @@ div
     setClass('flex gap-4'),
     sidebar
     (
-        set::width('60'),
+        set::width(240),
         moduleMenu
         (
             set::title($groups[$groupID]),
