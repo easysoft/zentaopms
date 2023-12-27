@@ -1,7 +1,7 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php js::set('latestVersion', $doc->version);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
-<div style="height:100%" id="h-full">
+<div>
   <div class="main-col col-8 flex-content">
     <div class="cell" id="content">
       <div class="detail no-padding">
