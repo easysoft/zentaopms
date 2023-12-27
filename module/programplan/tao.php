@@ -34,7 +34,6 @@ class programplanTao extends programplanModel
             ->autoCheck()
             ->batchCheckIF($requiredFields, $requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
-            ->checkIF(!empty($plan->percent), 'percent', 'float')
             ->checkIF(!empty($plan->name) && $getname, 'name', 'unique', "id in ({$relatedExecutionsID}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$plan->id} and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($plan->id)

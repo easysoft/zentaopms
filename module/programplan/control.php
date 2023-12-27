@@ -181,10 +181,10 @@ class programplan extends control
 
         if($_POST)
         {
-            $formData = form::data($this->config->product->form->create);
-            $this->programplanZen->beforeAjaxCustom($formData, $owner, $module);
+            $settings = form::data($this->config->programplan->form->ajaxCustom)->get();
+            $this->programplan->saveCustomSetting($settings, $owner, $module);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         /* Set Custom. */
@@ -203,9 +203,7 @@ class programplan extends control
     {
         if(!$this->post->id || !$this->post->type) return $this->send(array('result' => 'fail', 'message' => ''));
 
-        $objectID   = $this->post->id;
-        $objectType = $this->post->type;
-        $postData   = form::data($this->config->programplan->form->updateDateByGantt)->get();
+        $postData = form::data($this->config->programplan->form->updateDateByGantt)->get();
         $this->loadModel('task')->updateEsDateByGantt($postData);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

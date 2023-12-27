@@ -197,31 +197,6 @@ class programplanZen extends programplan
     }
 
     /**
-     * 处理请求数据
-     * Processing request data.
-     *
-     * @param  object $formData
-     * @param  string $owner
-     * @param  string $module
-     * @access protected
-     * @return object
-     */
-    protected function beforeAjaxCustom(object $formData, string $owner, string $module): object
-    {
-        $data = $formData->get();
-
-        $zooming     = empty($data->zooming)     ? '' : $data->zooming;
-        $stageCustom = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
-        $ganttFields = empty($data->ganttFields) ? '' : implode(',', $data->ganttFields);
-
-        $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
-        $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
-        $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
-
-        return $data;
-    }
-
-    /**
      * 生成自定义设置视图。
      * Build custom setting view form data.
      *

@@ -936,4 +936,25 @@ class programplanModel extends model
     {
         return $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($stageID)->fetch('attribute');
     }
+
+    /**
+     * 保存自定义配置
+     * Save custom setting.
+     *
+     * @param  object    $settings
+     * @param  string    $owner
+     * @param  string    $module
+     * @access protected
+     * @return void
+     */
+    protected function saveCustomSetting(object $settings, string $owner, string $module): void
+    {
+        $zooming     = zget($settings, 'zooming', '');
+        $stageCustom = zget($settings, 'stageCustom', '');
+        $ganttFields = zget($settings, 'ganttFields', '');
+
+        $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
+        $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
+        $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
+    }
 }
