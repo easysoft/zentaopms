@@ -30,4 +30,16 @@ class solutionTest
     {
         return $this->objectModel->getByID($solutionID);
     }
+
+    /**
+     * Test getLastSolution method.
+     *
+     * @access public
+     * @return object|false
+     */
+    public function getLastSolutionTest(): object|false
+    {
+        dao::$cache = array();
+        return $this->objectModel->getLastSolution();
+    }
 }
