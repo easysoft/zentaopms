@@ -115,13 +115,34 @@ toolbar
         'data-toggle' => "modal",
         'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project")
     ))) : null,
-    hasPriv('execution', 'create') ? item(set(array
+    common::hasPriv('programplan', 'create') && $isStage && empty($product->deleted) ? item(set(array
+    (
+        'icon'  => 'plus',
+        'text'  => $lang->programplan->create,
+        'class' => "primary create-execution-btn",
+        'url'   => $createLink
+    ))) : null,
+    hasPriv('execution', 'create') && !$isStage && $project->model != 'agileplus' ? item(set(array
     (
         'icon'  => 'plus',
         'text'  => $isStage ? $lang->programplan->create : $lang->execution->create,
         'class' => "primary create-execution-btn",
         'url'   => $createLink
-    ))) : null
+    ))) : null,
+    hasPriv('execution', 'create') && !$isStage && $project->model == 'agileplus' ?  btngroup(
+        btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->execution->create),
+        dropdown
+        (
+            btn(setClass('btn primary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items
+            (
+                array('text' => $lang->execution->create, 'url' => $createLink),
+                array('text' => $lang->project->createKanban, 'url' => createLink('execution', 'create', "projectID={$projectID}&executionID=0&copyExecutionID=&planID=0&confirm=no&productID=0&extra=type=kanban"))
+            ),
+            set::placement('bottom-end')
+        )
+    ) : null
 );
 
 dtable
