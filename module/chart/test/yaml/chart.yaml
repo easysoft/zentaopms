@@ -1,0 +1,19 @@
+title: zt_module
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    prefix: 图表
+    range: 1-100
+  - field: type
+    range: 'pie,line,radar,cluBarY,stackedBarY,cluBarX,stackedBar'
+  - field: group
+    range: 1-100
+  - field: stage
+    range: published
+  - field: builtin
+    range: 0-1
+  - field: deleted
+    range: 0

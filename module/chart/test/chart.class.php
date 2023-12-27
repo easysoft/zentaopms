@@ -17,7 +17,7 @@ class chartTest
      */
     public function processChartTest(string $testType): object
     {
-        $chart = $this->objectModel->getByID(1018);
+        $chart = $this->objectModel->getByID(30);
         $chart->langs    = '';
         $chart->filters  = '';
         $chart->settings = '';

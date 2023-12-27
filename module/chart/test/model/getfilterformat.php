@@ -86,4 +86,4 @@ r($chart->getFilterFormat(array($emptyDateFilter))) && p('') && e('0'); //测试
 r($chart->getFilterFormat(array($dateFilter)))      && p('openedDate:operator,value') && e("BETWEEN,'2023-01-01' and '2023-02-01'"); //测试input
 
 r($chart->getFilterFormat(array($inFilter)))      && p('id:operator-value', '-') && e('IN-("1","2","3")'); //测试in
-r($chart->getFilterFormat(array($notNullFilter))) && p('id:operator,value')      && e('IS NOT NULL,N/A');  //测试is not null
+r($chart->getFilterFormat(array($notNullFilter))) && p('id:operator,value')      && e('IS NOT NULL,~~');  //测试is not null
