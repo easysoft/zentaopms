@@ -22,8 +22,8 @@ class sidebar extends wg
         list($maxWidth, $minWidth, $width) = $this->prop(array('maxWidth', 'minWidth', 'width'));
         if(is_numeric($width))
         {
-            if(is_numeric($maxWidth) && $width > $maxWidth) trigger_error('[ZIN] The property "width" value ' . $width . ' must be less than or equal to the property "maxWidth" value ' . $maxWidth . 'in sidebar().', E_USER_WARNING);
-            if(is_numeric($minWidth) && $width < $minWidth) trigger_error('[ZIN] The property "width" value ' . $width . ' must be greater than or equal to the property "minWidth" value ' . $minWidth . 'in sidebar().', E_USER_WARNING);
+            if(is_numeric($maxWidth) && $width > $maxWidth) trigger_error('[ZIN] The property "width" value ' . $width . ' must be less than or equal to the property "maxWidth" value ' . $maxWidth . ' in sidebar().', E_USER_WARNING);
+            if(is_numeric($minWidth) && $width < $minWidth) trigger_error('[ZIN] The property "width" value ' . $width . ' must be greater than or equal to the property "minWidth" value ' . $minWidth . ' in sidebar().', E_USER_WARNING);
         }
     }
 
