@@ -450,14 +450,15 @@ class solutionModel extends model
      *
      * @param  string $message
      * @access public
-     * @return void
+     * @return string
      */
-    public function saveLog(string $message)
+    public function saveLog(string $message): string
     {
         $errorFile = $this->app->logRoot . 'php.' . date('Ymd') . '.log.php';
-        if(!is_file($errorFile)) file_put_contents($errorFile, "<\x3fphp\n die();\n\x3f>\n");
+        if(!is_file($errorFile)) @file_put_contents($errorFile, "<\x3fphp\n die();\n\x3f>\n");
 
-        file_put_contents($errorFile, $message . "\n", FILE_APPEND);
+        @file_put_contents($errorFile, $message . "\n", FILE_APPEND);
+        return $errorFile;
     }
 
     /**
