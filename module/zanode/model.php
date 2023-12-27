@@ -301,8 +301,9 @@ class zanodemodel extends model
     public function destroy(int $id): string
     {
         $node = $this->getNodeByID($id);
+        if(!$node) return '';
 
-        if($node && $node->hostType != 'physics')
+        if($node->hostType != 'physics')
         {
             $req = array( 'name' => $node->name );
             $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;

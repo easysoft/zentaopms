@@ -1,0 +1,32 @@
+title: zt_host
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: hardwareType
+    range: server
+  - field: hostType
+    range: virtual{2},physics
+  - field: type
+    range: node,physics
+  - field: osName
+    range: linux
+  - field: status
+    range: online{3},running,ready,wait,wait,online{2},running,ready,wait
+  - field: provider
+    range: native
+  - field: parent
+    range: 0{2},1-2{5}
+  - field: heartbeat
+    range: "(-2M)-(+1D):-1S"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: extranet
+    range: 10.0.1.222
+  - field: parent
+    range: 2{1},0{1},4{1},0{1}
+  - field: zap
+    range: 0,55001
+  - field: image
+    range: 1
