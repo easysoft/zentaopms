@@ -67,10 +67,11 @@ detailBody
 (
     setID('dataform'),
     set::isForm(true),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     $canEditContent ? set::actions(array
     (
-        array('tag' => 'button', 'class' => 'primary', 'id' => 'saveButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'data-params' => 'event', 'text' => $lang->save),
-        array('tag' => 'button', 'class' => 'secondary', 'id' => 'saveDraftButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'data-params' => 'event', 'text' => $story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft),
+        array('btnType' => 'submit', 'class' => 'primary',   'data-status' => 'active', 'text' => $lang->save),
+        array('btnType' => 'submit', 'class' => 'secondary', 'data-status' => 'draft',  'text' => $story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft),
         isInModal() ? null : array('text' => $lang->goback, 'back' => 'APP')
     )) : null,
     sectionList

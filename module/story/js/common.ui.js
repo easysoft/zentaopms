@@ -18,74 +18,23 @@ $(function()
     }
 });
 
-window.customSubmit = function(e)
+window.clickSubmit = function(e)
 {
-    const $saveButton      = $('#saveButton');
-    const $saveDraftButton = $('#saveDraftButton');
+    const status = $(e.submitter).data('status');
+    if(status === undefined) return;
 
-    $saveButton.attr('disabled', 'disabled');
-    $saveDraftButton.attr('disabled', 'disabled');
-
-    var $dataform = $('#dataform');
-    var $this     = $(e.target);
-    if($this.prop('tagName') != 'BUTTON') $this = $this.closest('button');
-
-    var storyStatus = 'active';
-    if(!$dataform.hasClass('form-batch')) storyStatus = !$('[name^=reviewer]').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
-    if($this.attr('id') == 'saveDraftButton')
+    const method = config.currentMethod;
+    let storyStatus = status;
+    if(status == 'active' && method != 'batchcreate')
     {
-        storyStatus = 'draft';
-        if(config.currentMethod == 'change') storyStatus = 'changing';
-        if(config.currentMethod == 'edit' && $('#status').val() == 'changing') storyStatus = 'changing';
+        storyStatus = !$('[name^=reviewer]').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
     }
-    if($('#dataform #status').length == 0) $('<input />').attr('type', 'hidden').attr('name', 'status').attr('id', 'status').attr('value', storyStatus).appendTo('#dataform .form-actions');
-    $('#dataform #status').val(storyStatus);
-
-    $.ajaxSubmit(
+    if(status == 'draft' && (method == 'change' || (method == 'edit' && $('#status').val() == 'changing')))
     {
-        headers: $this.closest('.modal').length > 0 ? {'X-Zui-Modal': 'modal'} : {},
-        data: new FormData($dataform[0]),
-        url: $dataform.attr('action'),
-        onSuccess: function(result) {loadPage(result.load)},
-        onMessage: function(message) {showMessage(message)},
-        onFail: function(result)
-        {
-            setTimeout(function()
-            {
-                $saveButton.removeAttr('disabled');
-                $saveDraftButton.removeAttr('disabled');
-            }, 500);
-        },
-    });
-
-    e.stopPropagation();
-    e.preventDefault();
-
-    setTimeout(function()
-    {
-        $saveButton.removeAttr('disabled');
-        $saveDraftButton.removeAttr('disabled');
-    }, 10000);
+        storyStatus = 'changing';
+    }
+    $(e.submitter).closest('form').find('[name=status]').val(storyStatus);
 };
-
-function showMessage(message)
-{
-    var varType = typeof message;
-    if(varType === 'object')
-    {
-        for(id in message)
-        {
-            var $this = $('#' + id);
-            if($this.length == 0) return zui.Messager.show({"content": message[id], "type": "success circle"});
-
-            $('#' + id + 'Tip').remove();
-            $this.addClass('has-error');
-            $this.parent().after("<div class='form-tip ajax-form-tip text-danger' id='" + id + "Tip'>" + message[id] + '</div>');
-            document.getElementById(id).focus();
-        }
-    }
-    if(varType === 'string') zui.Messager.show({"content": message, "type": "success circle"});
-}
 
 window.unlinkTwins = function(e)
 {

@@ -171,23 +171,18 @@ $formItems['file'] = formGroup
 );
 if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
 
-$formActions = formRow
-(
-    setClass('form-actions form-group no-label'),
-    btn(setClass('primary'), setID('saveButton'), $lang->save),
-    btn(setClass('secondary'), setID('saveDraftButton'), $lang->story->doNotSubmit),
-    backBtn($lang->goback)
-);
-
 formPanel
 (
-    on::click('#saveButton', 'customSubmit'),
-    on::click('#saveDraftButton', 'customSubmit'),
     setID('dataform'),
-    set::actions(false),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
+    set::actions(array
+    (
+        array('text' => $lang->save,               'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
+        array('text' => $lang->story->doNotSubmit, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
+        array('text' => $lang->goback,             'data-back'   => 'APP',    'class' => 'open-url')
+    )),
     $formTitle,
     $formItems,
-    $formActions,
     h::hr(),
     history()
 );

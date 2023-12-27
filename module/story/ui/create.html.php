@@ -22,9 +22,8 @@ jsVar('branchCount', isset($fields['branches']['options']) ? count($fields['bran
 
 formPanel
 (
-    commonModel::isTutorialMode() ? '' : on::click('#saveButton', 'customSubmit'),
-    on::click('#saveDraftButton', 'customSubmit'),
     setID('dataform'),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     to::heading(div
     (
         setClass('panel-title text-lg'),
@@ -33,9 +32,9 @@ formPanel
     )),
     set::actions(array
     (
-        array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
-        array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
-        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url')
+        array('text' => $lang->save,             'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
+        array('text' => $lang->story->saveDraft, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
+        array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
     )),
     set::customFields(true),
     formRow
