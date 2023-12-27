@@ -301,12 +301,12 @@ class instanceModel extends model
      * 更新应用实例。
      * Update instance by id.
      *
-     * @param  int    $id
-     * @param  object $newInstance
+     * @param  int          $id
+     * @param  object|array $newInstance
      * @access public
      * @return void
      */
-    public function updateByID(int $id, object $newInstance)
+    public function updateByID(int $id, object|array $newInstance)
     {
         return $this->dao->update(TABLE_INSTANCE)->data($newInstance)
             ->autoCheck()
@@ -404,18 +404,20 @@ class instanceModel extends model
     }
 
     /**
+     * 检查k8name是否存在。
      * Check if the k8name exists.
      *
      * @param  string $k8name
      * @access public
      * @return bool   true: exists, false: not exist.
      */
-    public function k8nameExists($k8name)
+    public function k8nameExists(string $k8name)
     {
         return boolval($this->dao->select('id')->from(TABLE_INSTANCE)->where('k8name')->eq($k8name)->andWhere('deleted')->eq(0)->fetch());
     }
 
     /**
+     * 构造安装应用的配置。
      * Mount installation settings by custom data.
      *
      * @param  object  $customData
@@ -424,7 +426,7 @@ class instanceModel extends model
      * @access private
      * @return object
      */
-    private function installationSettingsMap($customData, $dbInfo, $instance)
+    private function installationSettingsMap(object $customData, object $dbInfo, object $instance): object
     {
         $settingsMap = new stdclass;
         if($customData->customDomain)
@@ -476,6 +478,7 @@ class instanceModel extends model
     }
 
     /**
+     * 获取有效的数据库配置。
      * Return valid DBSettings.
      *
      * @param  object  $dbSettings
@@ -485,7 +488,7 @@ class instanceModel extends model
      * @access private
      * @return null|object
      */
-    private function getValidDBSettings($dbSettings, $defaultUser, $defaultDBName, $times = 1)
+    private function getValidDBSettings(object $dbSettings, string $defaultUser, string $defaultDBName, int $times = 1)
     {
         if($times >10) return;
 
@@ -499,16 +502,18 @@ class instanceModel extends model
     }
 
     /**
+     * 安装应用。
      * Install app by request from Web page.
      *
      * @param  object $app
      * @param  object $dbInfo
      * @param  object $customData
      * @param  int    $spaceID
+     * @param  array  $settings
      * @access public
      * @return false|object Failure: return false, Success: return instance
      */
-    public function install($app, $dbInfo, $customData, $spaceID = null, $settings = array())
+    public function install(object $app, object $dbInfo, object $customData, int $spaceID = null, array $settings = array())
     {
         $this->loadModel('space');
         if($spaceID)
@@ -533,15 +538,16 @@ class instanceModel extends model
     }
 
     /**
+     * 安装系统SLB组件。
      * Install System SLB component.
      *
      * @param  object $app
      * @param  string $k8name
      * @param  string $channel
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function installSysSLB($app, $k8name = 'cne-lb', $channel = 'stable')
+    public function installSysSLB(object $app, string $k8name = 'cne-lb', string $channel = 'stable'): object|false
     {
         $this->app->loadLang('system');
 
@@ -565,28 +571,24 @@ class instanceModel extends model
     }
 
     /**
+     * 创建应用实例记录。
      * Create instance recorder for installation.
      *
-     * @param  object $app
-     * @param  object $space
-     * @param  object $thirdDomain
-     * @param  string $name
-     * @param  string $channel
-     * @param  array  $snippets
+     * @param  object      $app
+     * @param  object      $space
+     * @param  string      $thirdDomain
+     * @param  string      $name
+     * @param  string      $channel
+     * @param  array       $snippets
      * @access public
      * @return bool|object
      */
-    public function createInstance($app, $space, $thirdDomain, $name = '', $k8name = '', $channel = 'stable', $snippets = array())
+    public function createInstance(object $app, object $space, string $thirdDomain, string $name = '', string $k8name = '', string $channel = 'stable', array $snippets = array()): object|bool
     {
-        $createdBy = $this->app->user->account;
         if(empty($k8name)) $k8name = "{$app->chart}-" . date('YmdHis'); //name rule: chartName-userAccount-YmdHis;
-        if(defined('IN_INSTALL') && IN_INSTALL && empty($this->app->user->account)) $createdBy = trim($this->app->company->admins, ','); //Set createdBy if in login progress;
 
-        if(!$this->app->user->account)
-        {
-            $this->app->user = new stdclass();
-            $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
-        }
+        $createdBy = $this->app->user->account;
+        if(!$createdBy) $createdBy = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
 
         $instanceData = new stdclass;
         $instanceData->appId           = $app->id;
@@ -604,7 +606,7 @@ class instanceModel extends model
         $instanceData->space           = $space->id;
         $instanceData->k8name          = $k8name;
         $instanceData->status          = 'creating';
-        $instanceData->createdBy       = $this->app->user->account;
+        $instanceData->createdBy       = $createdBy;
         $instanceData->createdAt       = date('Y-m-d H:i:s');
 
         foreach($snippets as $fieldName => $snippetName) $instanceData->$fieldName = $snippetName;
@@ -616,17 +618,18 @@ class instanceModel extends model
     }
 
     /**
+     * 在CNE平台创建应用实例。
      * Create app instance on CNE platform.
      *
-     * @param  object $instance
-     * @param  object $space
-     * @param  object $settingsMap
-     * @param  array  $snippets
-     * @param  object $app
+     * @param  object      $instance
+     * @param  object      $space
+     * @param  object      $settingsMap
+     * @param  array       $snippets
+     * @param  array       $settings
      * @access private
      * @return object|bool
      */
-    private function doCneInstall($instance, $space, $settingsMap, $snippets = array(), $settings = array())
+    private function doCneInstall(object $instance, object $space, object $settingsMap, array $snippets = array(), array $settings = array())
     {
         $apiParams = new stdclass;
         $apiParams->userame           = $instance->createdBy;
@@ -657,17 +660,18 @@ class instanceModel extends model
 
         $this->updateByID($instance->id, array('status' => $instance->status, 'dbSettings' => $instance->dbSettings));
 
-        return  $instance;
+        return $instance;
     }
 
     /*
+     * 卸载应用实例。
      * Uninstall app instance.
      *
      * @param  object $instance
      * @access public
      * @return bool
      */
-    public function uninstall($instance)
+    public function uninstall(object $instance): bool
     {
         if($instance->source == 'external')
         {
@@ -691,13 +695,14 @@ class instanceModel extends model
     }
 
     /*
+     * 启动应用实例。
      * Start app instance.
      *
      * @param  object $instance
      * @access public
      * @return object
      */
-    public function start($instance)
+    public function start(object $instance)
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';
@@ -713,13 +718,14 @@ class instanceModel extends model
     }
 
     /*
+     * 停止应用实例。
      * Stop app instance.
      *
      * @param  object $instance
      * @access public
      * @return object
      */
-    public function stop($instance)
+    public function stop(object $instance)
     {
         $apiParams = new stdclass;
         $apiParams->cluster   = '';// Mulit cluster should set this field.
@@ -735,6 +741,7 @@ class instanceModel extends model
     }
 
     /**
+     * 升级应用实例。
      * Upgrade app instance to higher version.
      *
      * @param  object $instance
@@ -743,7 +750,7 @@ class instanceModel extends model
      * @access public
      * @return bool
      */
-    public function upgrade($instance, $toVersion, $appVersion)
+    public function upgrade(object $instance, string $toVersion, string $appVersion)
     {
         $success = $this->cne->upgradeToVersion($instance, $toVersion);
         if(!$success) return false;
@@ -757,13 +764,14 @@ class instanceModel extends model
     }
 
     /*
+     * 批量更新并获取应用实例的状态。
      * Query and update instances status.
      *
      * @param  array $instances
      * @access public
      * @return array  new status list [{id:xx, status: xx, changed: true/false}]
      */
-    public function batchFresh(&$instances)
+    public function batchFresh(array &$instances): array
     {
         $statusList = $this->cne->batchQueryStatus($instances);
 
@@ -796,13 +804,14 @@ class instanceModel extends model
     }
 
     /*
+     * 更新并获取应用实例的状态。
      * Query and update instance status.
      *
      * @param  object $instance
      * @access public
      * @return object
      */
-    public function freshStatus($instance)
+    public function freshStatus(object $instance): object
     {
         $instance->runDuration = 0;
         $statusResponse = $this->cne->queryStatus($instance);
@@ -827,13 +836,14 @@ class instanceModel extends model
     }
 
     /**
+     * List转键值对。
      * Mount DB name and alias to array for select options.
      *
      * @param  array  $databases
      * @access public
      * @return array
      */
-    public function dbListToOptions($databases)
+    public function dbListToOptions(array $databases): array
     {
         $dbList = array();
         foreach($databases as $database) $dbList[$database->name] = zget($database, 'alias', $database->name);
@@ -842,13 +852,14 @@ class instanceModel extends model
     }
 
     /**
+     * 过滤内存下拉菜单选项。
      * Filter memory options that smaller then current memory size.
      *
      * @param  object $resources
      * @access public
      * @return array
      */
-    public function filterMemOptions($resources)
+    public function filterMemOptions(object $resources): array
     {
         $currentMemory = intval($resources->min->memory / 1024);
 
@@ -862,15 +873,16 @@ class instanceModel extends model
     }
 
     /**
+     * 打印CPU使用信息。
      * Print CPU usage.
      *
      * @param  object $instance
      * @param  object $metrics
      * @static
      * @access public
-     * @return mixed
+     * @return array
      */
-    public static function printCpuUsage($instance, $metrics)
+    public static function printCpuUsage(object $instance, object $metrics): array
     {
         if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
@@ -886,15 +898,16 @@ class instanceModel extends model
     }
 
     /**
+     * 打印内存使用信息。
      * Print memory usage.
      *
      * @param  object $instance
      * @param  object $metrics
      * @static
      * @access public
-     * @return mixed
+     * @return array
      */
-    public static function printMemUsage($instance, $metrics)
+    public static function printMemUsage(object $instance, object $metrics): array
     {
         if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
@@ -910,13 +923,14 @@ class instanceModel extends model
     }
 
     /**
+     * 检查内存是否充足。
      * Check the free memory of cluster is enough to install app.
      *
      * @param  object $cloudApp
      * @access public
      * @return bool
      */
-    public function enoughMemory($cloudApp)
+    public function enoughMemory(object $cloudApp): bool
     {
         $clusterResource = $this->cne->cneMetrics();
         $freeMemory      = intval($clusterResource->metrics->memory->allocatable * 0.9); // Remain 10% memory for system.
@@ -957,6 +971,7 @@ class instanceModel extends model
     }
 
     /**
+     * 检查应用名称的唯一性。
      * Check app name unique.
      *
      * @param  string    $name
@@ -977,9 +992,9 @@ class instanceModel extends model
      *
      * @param  object     $instance
      * @access protected
-     * @return void
+     * @return bool
      */
-    public function saveAuthInfo(object $instance): void
+    public function saveAuthInfo(object $instance)
     {
         if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
 
@@ -1005,7 +1020,6 @@ class instanceModel extends model
         if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
 
         $this->pipeline->create($pipeline);
-        if(dao::isError()) dao::getError();
     }
 
     /**
