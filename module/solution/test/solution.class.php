@@ -62,4 +62,20 @@ class solutionTest
         $file = $this->objectModel->saveLog($message);
         return strlen(file_get_contents($file));
     }
+
+    /**
+     * Test saveStatus method.
+     *
+     * @param  int    $solutionID
+     * @param  string $status
+     * @access public
+     * @return object|null
+     */
+    public function saveStatusTest(int $solutionID, string $status): object|null
+    {
+        $this->objectModel->saveStatus($solutionID, $status);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getByID($solutionID);
+    }
 }

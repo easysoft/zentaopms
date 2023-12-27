@@ -279,13 +279,19 @@ class solutionModel extends model
      * Update status of solution.
      *
      * @param  int    $solutionID
-     * @param  string $status
+     * @param  string $status      waiting|uninstalling|cneError|timeout|notFoundApp|notEnoughResource
      * @access public
      * @return bool
      */
     public function saveStatus(int $solutionID, string $status): bool
     {
-        $this->dao->update(TABLE_SOLUTION)->set('status')->eq($status)->set('updatedDate')->eq(date("Y-m-d H:i:s"))->where('id')->eq($solutionID)->exec();
+        if(!isset($this->lang->solution->installationErrors[$status])) return false;
+
+        $this->dao->update(TABLE_SOLUTION)
+            ->set('status')->eq($status)
+            ->set('updatedDate')->eq(helper::now())
+            ->where('id')->eq($solutionID)
+            ->exec();
         return !dao::isError();
     }
 
