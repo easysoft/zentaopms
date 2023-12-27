@@ -24,7 +24,8 @@
     <form method='post' onsubmit="submit.disabled=1">
       <?php echo html::hidden('fromVersion', $fromVersion);?>
       <?php if(in_array($result, array('fail', 'sqlFail'))):?>
-      <div class='modal-footer text-left'><?php echo $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted;?> <?php echo html::submitButton($lang->refresh, "onclick='refreshPage(this)'", 'btn btn-sm');?></div>
+      <?php $buttonType = $this->app->rawMethod == 'execute' ? 'submitButton' : 'commonButton';?>
+      <div class='modal-footer text-left'><?php echo $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted;?> <?php echo html::{$buttonType}($lang->refresh, "onclick='refreshPage(this)'", 'btn btn-sm');?></div>
       <?php endif;?>
     </form>
   </div>
@@ -47,11 +48,15 @@
 <script>
 function refreshPage(obj)
 {
+    <?php if($this->app->rawMethod == 'execute'):?>
     $(obj).addClass('disabled');
 
     $('#progress').modal('show');
     updateProgressInterval();
     updateProgress();
+    <?php else:?>
+    location.href = location.href;
+    <?php endif;?>
 }
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
