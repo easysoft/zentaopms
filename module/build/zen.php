@@ -63,6 +63,7 @@ class buildZen extends build
         $this->view->executionID   = $executionID;
         $this->view->executions    = $executions;
         $this->view->lastBuild     = $this->build->getLast($executionID, $projectID);
+        $this->view->project       = $this->project->getByID($projectID);
         $this->view->artifactRepos = $artifactRepos;
         $this->display();
     }

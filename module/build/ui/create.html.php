@@ -17,6 +17,7 @@ jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
 jsVar('artifactRepos', !empty($artifactRepos) ? $artifactRepos : '');
 jsVar('today', helper::today());
+jsVar('projectModel', isset($project->model) ? $project->model : '');
 
 $integratedRow = '';
 if($app->tab == 'project' && !empty($multipleProject))

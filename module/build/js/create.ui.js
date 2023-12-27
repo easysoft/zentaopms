@@ -82,7 +82,7 @@ function loadProducts(executionID)
 
     $.getJSON($.createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
     {
-        if(data.length > 0)
+        if(data.length > 0 || executionID == 0 || projectModel == 'waterfall' || projectModel == 'waterfallplus')
         {
             $('#noProductRow').addClass('hidden');
             $('#productRow').removeClass('hidden');
@@ -101,8 +101,6 @@ function loadProducts(executionID)
             $('#noProductRow').find('a').attr('data-url', $.createLink('execution', 'manageProducts', 'executionID=' + executionID));
             $('#noProductRow').removeClass('hidden');
             $('#productRow').addClass('hidden');
-
-            console.log(executionID);
         }
     });
 
