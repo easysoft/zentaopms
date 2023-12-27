@@ -115,123 +115,127 @@ if($isMultiple)
     );
 }
 
+$rowCount = 0;
 if(!empty($task->team)) $rowCount = count($task->team) < 6 ? 6 : 1 + count($task->team);
 $teamForm = array();
 $i        = 1;
-foreach($task->team as $member)
+if(!empty($task->team))
 {
-    $memberDisabled = false;
-    if($member->status == 'done') $memberDisabled = true;
+    foreach($task->team as $member)
+    {
+        $memberDisabled = false;
+        if($member->status == 'done') $memberDisabled = true;
 
-    $hourDisabled = $memberDisabled;
-    if($task->mode == 'multi') $hourDisabled = false;
+        $hourDisabled = $memberDisabled;
+        if($task->mode == 'multi') $hourDisabled = false;
 
-    $teamForm[] = h::tr
-    (
-        setClass("member member-{$member->status}"),
-        set
-        (
-            array
+        $teamForm[] = h::tr
             (
-                'estimate'  =>  (float)$member->estimate,
-                'consumed'  =>  (float)$member->consumed,
-                'left'      =>  (float)$member->left
-            )
-        ),
-        h::td
-        (
-            setClass('team-index'),
-            set::width('32px'),
-            span
-            (
-                setClass('team-number'),
-                $i
-            ),
-            $task->mode == 'linear' ? icon("angle-down") : null
-        ),
-        h::td
-        (
-            set::width('240px'),
-            picker
-            (
-                set::name('team[]'),
-                set::value($member->account),
-                set::items($members),
-                set::placeholder($lang->task->assignedTo),
-                set::disabled($memberDisabled)
-            ),
-            input
-            (
-                set::type('hidden'),
-                set::name('teamSource[]'),
-                set::value($member->account)
-            ),
-            $memberDisabled ? input(
-                set::type('hidden'),
-                set::name('team[]'),
-                set::value($member->account)
-            ) : null
-        ),
-        h::td
-        (
-            inputControl
-            (
-                input
+                setClass("member member-{$member->status}"),
+                set
                 (
-                    set::name('teamEstimate[]'),
-                    set::value((float)$member->estimate),
-                    set::placeholder($lang->task->estimateAB),
-                    set::readonly($hourDisabled),
+                    array
+                    (
+                        'estimate'  =>  (float)$member->estimate,
+                        'consumed'  =>  (float)$member->consumed,
+                        'left'      =>  (float)$member->left
+                    )
                 ),
-                to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20)
-            )
-        ),
-        h::td
-        (
-            inputControl
-            (
-                input
+                h::td
                 (
-                    set::name('teamConsumed[]'),
-                    set::value((float)$member->consumed),
-                    set::placeholder($lang->task->consumed),
-                    set::readonly($hourDisabled)
+                    setClass('team-index'),
+                    set::width('32px'),
+                    span
+                    (
+                        setClass('team-number'),
+                        $i
+                    ),
+                    $task->mode == 'linear' ? icon("angle-down") : null
                 ),
-                to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20)
-            )
-        ),
-        h::td
-        (
-            setClass('required'),
-            inputControl
-            (
-                input
+                h::td
                 (
-                    set::name('teamLeft[]'),
-                    set::value((float)$member->left),
-                    set::placeholder($lang->task->left),
-                    set::readonly($hourDisabled)
+                    set::width('240px'),
+                    picker
+                    (
+                        set::name('team[]'),
+                        set::value($member->account),
+                        set::items($members),
+                        set::placeholder($lang->task->assignedTo),
+                        set::disabled($memberDisabled)
+                    ),
+                    input
+                    (
+                        set::type('hidden'),
+                        set::name('teamSource[]'),
+                        set::value($member->account)
+                    ),
+                    $memberDisabled ? input(
+                        set::type('hidden'),
+                        set::name('team[]'),
+                        set::value($member->account)
+                    ) : null
                 ),
-                to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20)
-            )
-        ),
-        h::td
-        (
-            set::width('100px'),
-            setClass('center'),
-            btnGroup
-            (
-                set::items(array(
-                    array('icon' => 'plus',  'class' => 'btn ghost btn-add text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
-                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : '')
-                ))
-            )
-        )
-    );
-    $i ++;
+                h::td
+                (
+                    inputControl
+                    (
+                        input
+                        (
+                            set::name('teamEstimate[]'),
+                            set::value((float)$member->estimate),
+                            set::placeholder($lang->task->estimateAB),
+                            set::readonly($hourDisabled),
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
+                ),
+                h::td
+                (
+                    inputControl
+                    (
+                        input
+                        (
+                            set::name('teamConsumed[]'),
+                            set::value((float)$member->consumed),
+                            set::placeholder($lang->task->consumed),
+                            set::readonly($hourDisabled)
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
+                ),
+                h::td
+                (
+                    setClass('required'),
+                    inputControl
+                    (
+                        input
+                        (
+                            set::name('teamLeft[]'),
+                            set::value((float)$member->left),
+                            set::placeholder($lang->task->left),
+                            set::readonly($hourDisabled)
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
+                ),
+                h::td
+                (
+                    set::width('100px'),
+                    setClass('center'),
+                    btnGroup
+                    (
+                        set::items(array(
+                            array('icon' => 'plus',  'class' => 'btn ghost btn-add text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
+                            array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : '')
+                        ))
+                    )
+                )
+            );
+        $i ++;
+    }
 }
 
 for($i; $i <= $rowCount; $i ++)
