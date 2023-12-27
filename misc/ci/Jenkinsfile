@@ -441,6 +441,7 @@ pipeline {
                       steps {
                         script {
                           buildZboxLinux.doBuild()
+                          buildZboxLinux.test()
                           buildZboxLinux.uploadInternal()
                         }
                       }
