@@ -112,7 +112,12 @@
     <div class="cell prompt-details">
       <div class="detail">
         <div class="detail-title"><?= $lang->ai->miniPrograms->promptTemplate; ?></div>
-        <div class="detail-content article-content"><?= preg_replace('/<([^>]+)>/', '<strong><$1></strong>', $miniProgram->prompt); ?></div>
+        <?php
+          $formatedPrompt = str_replace('&lt;', '<', $miniProgram->prompt);
+          $formatedPrompt = str_replace('&gt;', '>', $formatedPrompt);
+          $formatedPrompt = preg_replace('/<([^>]+)>/', '<strong><$1></strong>', $formatedPrompt);
+        ?>
+        <div class="detail-content article-content"><?= $formatedPrompt ?></div>
       </div>
     </div>
     <div class="cell"><?php include '../../common/view/action.html.php'; ?></div>
