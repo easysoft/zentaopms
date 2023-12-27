@@ -208,7 +208,10 @@ class build extends control
         if($message) $this->lang->saveSuccess = $message;
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => helper::createLink($from, 'build', "executionID={$build->$from}")));
+
+        $moduleName = $from == 'project' ? 'projectbuild' : $from;
+        $methodName = $from == 'project' ? 'browse' : 'build';
+        return $this->sendSuccess(array('load' => $this->createLink($moduleName, $methodName, "executionID={$build->$from}")));
     }
 
     /**
