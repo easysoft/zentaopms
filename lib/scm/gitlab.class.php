@@ -925,7 +925,7 @@ class gitlab
      */
     public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
     {
-        $params = (array) $params;
+        $params = array();
         $params['private_token'] = $this->token;
         $params['sha']           = $branch;
 
