@@ -580,8 +580,7 @@ class baseHTML
         $purifierConfig->set('Cache.DefinitionImpl', null);
 
         /* 设置a标签允许的特殊属性，应用于高亮左侧导航。 */
-        $def = $purifierConfig->getHTMLDefinition(true);
-        $def->addAttribute('a', 'data-app', 'CDATA');
+        $purifierConfig->getHTMLDefinition(true)->addAttribute('a', 'data-app', 'CDATA');
 
         $purifier = new HTMLPurifier($purifierConfig);
 
