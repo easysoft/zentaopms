@@ -1724,7 +1724,7 @@ class taskZen extends task
         /* Remind whether to update status of the bug, if task which from that bug has been finished. */
         if($changes and $this->task->needUpdateBugStatus($task))
         {
-            $response = $this->taskTao->getRemindBugLink($task, $changes);
+            $response = $this->task->getRemindBugLink($task, $changes);
             if($response) return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $response['confirmed'], $response['canceled'], 'parent', 'parent.parent'));
         }
 
