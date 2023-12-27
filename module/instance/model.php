@@ -146,6 +146,7 @@ class instanceModel extends model
     }
 
     /**
+     * 获取安装的应用数量。
      * Get quantity of total installed services.
      *
      * @access public
@@ -165,6 +166,7 @@ class instanceModel extends model
     }
 
     /**
+     * 根据域名获取服务数量。
      * Count old domain.
      *
      * @access public
