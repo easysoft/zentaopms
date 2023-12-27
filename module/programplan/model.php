@@ -146,8 +146,8 @@ class programplanModel extends model
         }
 
         /* Set plan for gantt view. */
-        $datas = $planIdList = $stageIndex = array();
-        $this->programplanTao->setPlan($plans, $datas, $stageIndex, $planIdList);
+        $datas = $planIdList = $stageIndex = $reviewDeadline = array();
+        $this->programplanTao->setPlan($plans, $datas, $stageIndex, $planIdList, $reviewDeadline);
 
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
@@ -296,12 +296,12 @@ class programplanModel extends model
      * 获取时间段内工作时间间隔天数。
      * Get duration.
      *
-     * @param  string $begin
-     * @param  string $end
-     * @access public
+     * @param  string    $begin
+     * @param  string    $end
+     * @access protected
      * @return int
      */
-    public function getDuration(string $begin, string $end): int
+    protected function getDuration(string $begin, string $end): int
     {
         $duration = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         return count($duration);
@@ -324,11 +324,10 @@ class programplanModel extends model
         if(!$this->isCreateTask($parentID)) dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
         if(dao::isError()) return false;
 
+        /* Get linked product by projectID. */
         $this->loadModel('action');
         $this->loadModel('execution');
-        $project = $this->fetchById($projectID, 'project');
-
-        /* Get linked product by projectID. */
+        $project      = $this->fetchById($projectID, 'project');
         $linkProducts = $this->programplanTao->getLinkProductsForCreate($projectID, $productID);
 
         /* Set each plans. */
@@ -336,49 +335,37 @@ class programplanModel extends model
         $milestone            = 0;
         foreach($plans as $plan)
         {
+            if($plan->milestone) $milestone = 1;
             if($plan->id)
             {
                 $stageID = $plan->id;
                 unset($plan->id, $plan->type, $plan->order);
+                $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
+                if(dao::isError()) return false;
+                if(empty($changes)) continue;
 
-                $oldStage    = $this->getByID($stageID);
-                $planChanged = ($oldStage->name != $plan->name || $oldStage->milestone != $plan->milestone || $oldStage->begin != $plan->begin || $oldStage->end != $plan->end);
-                if($planChanged) $plan->version = $oldStage->version + 1;
-
-                /* Record version change information. */
-                $this->dao->update(TABLE_PROJECT)->data($plan)->where('id')->eq($stageID)->exec();
-                if($planChanged) $this->programplanTao->insertProjectSpec($stageID, $plan);
+                $actionID = $this->action->create('execution', $stageID, 'edited');
+                $this->action->logHistory($actionID, $changes);
 
                 /* Add PM to stage teams and project teams. */
                 if(!empty($plan->PM)) $this->execution->addExecutionMembers($stageID, array($plan->PM));
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
-
-                $changes = common::createChanges($oldStage, $plan);
-                if($changes)
-                {
-                    $actionID = $this->action->create('execution', $stageID, 'edited');
-                    $this->action->logHistory($actionID, $changes);
-                }
             }
             else
             {
                 $stageID = $this->programplanTao->insertStage($plan, $project, $productID, $parentID);
                 if(dao::isError()) return false;
 
-                $extra = '';
-                if($project->hasProduct and !empty($linkProducts['products'])) $extra = implode(',', $linkProducts['products']);
+                $extra = ($project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
                 $this->action->create('execution', $stageID, 'opened', '', $extra);
 
                 $this->execution->updateProducts($stageID, $linkProducts);
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
             }
-            if($plan->milestone) $milestone = 1;
         }
-
         /* If child plans has milestone, update parent plan set milestone eq 0 . */
         if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
-
         return true;
     }
 
@@ -390,7 +377,7 @@ class programplanModel extends model
      * @access public
      * @return bool
      */
-    public function setTreePath($planID): bool
+    public function setTreePath(int $planID): bool
     {
         $stage  = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
         $parent = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($stage->parent)->fetch();
@@ -410,12 +397,10 @@ class programplanModel extends model
         $children = $this->execution->getChildExecutions($planID);
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($stage->id)->exec();
 
-        if(!empty($children))
-        {
-            foreach($children as $id => $child) $this->setTreePath($id);
-        }
+        if(empty($children)) return !dao::isError();
 
-        return (!dao::isError());
+        foreach($children as $id => $child) $this->setTreePath($id);
+        return !dao::isError();
     }
 
     /**
@@ -426,44 +411,24 @@ class programplanModel extends model
      * @param  int       $projectID
      * @param  object    $plan
      * @access public
-     * @return bool|array
+     * @return bool
      */
-    public function update(int $planID = 0, int $projectID = 0, object $plan = null): bool|array
+    public function update(int $planID = 0, int $projectID = 0, object|null $plan = null): bool
     {
-        $oldPlan = $this->getByID($planID);
-
-        /* 判断提交数据是否正确。 */
-        /* Judgment of required items. */
-        if(!$this->programplanTao->checkRequiredItems($oldPlan, $plan, $projectID)) return false;
-
-        $setCode     = isset($this->config->setCode) && $this->config->setCode == 1;
-        $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
-
-        /* 设置计划和真实起始日期间隔时间。 */
-        /* Set planDuration and realDuration. */
-        if(in_array($this->config->edition, array('max', 'ipd')))
+        if($plan->parent > 0)
         {
-            $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
-            if(isset($plan->realBegan) && isset($plan->realEnd)) $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
+            /* 如果子阶段有里程碑，那么父阶段的更新为0。 */
+            /* If child plan has milestone, update parent plan set milestone eq 0 . */
+            $parentStage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($plan->parent)->andWhere('type')->eq('stage')->fetch();
+            if($plan->milestone && $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($plan->parent)->exec();
         }
 
-        if($planChanged) $plan->version = $oldPlan->version + 1;
-        if(empty($plan->parent)) $plan->parent = $projectID;
-        $parentStage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($plan->parent)->andWhere('type')->eq('stage')->fetch();
+        $changes = $this->programplanTao->updateRow($planID, $projectID, $plan);
+        if(dao::isError()) return false;
 
-        /* Fix bug #22030. Reset field name for show dao error. */
-        $this->lang->project->name = $this->lang->programplan->name;
-        $this->lang->project->code = $this->lang->execution->code;
-
-        $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
-        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
-
-        /* Pass and unset the arguments after use. */
-        $plan->relatedExecutionsID = $relatedExecutionsID;
-        $plan->setCode             = $setCode;
-
-        $result = $this->programplanTao->updateRow($plan, $oldPlan, $parentStage);
-        if(!$result) return false;
+        /* Synchronously update sub-phase permissions. */
+        $childIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($planID)->fetchAll('id');
+        if(!empty($childIdList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childIdList))->exec();
 
         $this->setTreePath($planID);
         $this->updateSubStageAttr($planID, $plan->attribute);
@@ -474,106 +439,12 @@ class programplanModel extends model
             $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
         }
 
-        if($planChanged) $this->programplanTao->insertProjectSpec($planID, $plan);
-
-        return common::createChanges($oldPlan, $plan);
-    }
-
-    /**
-     * 输出表格单元 <td></td>。
-     * Print cell.
-     *
-     * @param  object $col
-     * @param  object $plan
-     * @param  array  $users
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function printCell(object $col, object $plan, array $users, int $projectID)
-    {
-        $labelType = $col->id;
-        if($col->show)
+        if($changes)
         {
-            $class  = 'c-' . $labelType;
-            $title  = '';
-            $idList = array('id','name','output','percent','attribute','version','begin','end','realBegan','realEnd', 'openedBy', 'openedDate');
-            if(in_array($labelType, $idList))
-            {
-                $class .= ' text-left';
-                $title  = "title='{$plan->$labelType}'";
-                if($labelType == 'output') $class .= ' text-ellipsis';
-                if(!empty($plan->children)) $class .= ' has-child';
-            }
-            else
-            {
-                $class .= ' text-center';
-            }
-            if($labelType == 'actions') $class .= ' c-actions';
-
-            echo "<td class='{$class}' {$title}>";
-            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('programplan', $plan, $labelType);
-            switch($labelType)
-            {
-                case 'id':
-                    echo sprintf('%03d', $plan->id);
-                    break;
-                case 'name':
-                    $milestoneFlag = $plan->milestone ? " <i class='icon icon-flag red' title={$this->lang->programplan->milestone}'></i>" : '';
-                    if($plan->grade > 1) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
-                    echo $plan->name . $milestoneFlag;
-                    if(!empty($plan->children)) echo '<a class="plan-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
-                    break;
-                case 'percent':
-                    echo $plan->percent . '%';
-                    break;
-                case 'attribute':
-                    echo zget($this->lang->stage->typeList, $plan->attribute, '');
-                    break;
-                case 'begin':
-                case 'end':
-                case 'realBegan':
-                case 'realEnd':
-                case 'output':
-                case 'version':
-                    echo $plan->{$labelType};
-                    break;
-                case 'editedBy':
-                case 'openedBy':
-                    echo zget($users, $plan->{$labelType});
-                    break;
-                case 'editedDate':
-                case 'openedDate':
-                    echo substr($plan->{$labelType}, 5, 11);
-                    break;
-                case 'actions':
-                    common::printIcon('execution', 'start', "executionID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
-                    $class = !empty($plan->children) ? 'disabled' : '';
-                    common::printIcon('task', 'create', "executionID={$plan->id}", $plan, 'list', '', '', $class, false, "data-app='execution'");
-
-                    if($plan->grade == 1 && $this->isCreateTask($plan->id))
-                    {
-                        common::printIcon('programplan', 'create', "program={$plan->parent}&productID=$plan->product&planID=$plan->id", $plan, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
-                    }
-                    else
-                    {
-                        $disabled = ($plan->grade == 2) ? ' disabled' : '';
-                        echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"');
-                    }
-
-                    common::printIcon('programplan', 'edit', "planID=$plan->id&projectID=$projectID", $plan, 'list', '', '', 'iframe', true);
-
-                    $disabled = !empty($plan->children) ? ' disabled' : '';
-                    if(common::hasPriv('execution', 'delete', $plan))
-                    {
-                        common::printIcon('execution', 'delete', "planID=$plan->id&confirm=no", $plan, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
-                    }
-                    break;
-                default:
-                    break;
-            }
-            echo '</td>';
+            $actionID = $this->loadModel('action')->create('execution', $planID, 'edited');
+            $this->action->logHistory($actionID, $changes);
         }
+        return true;
     }
 
     /**
@@ -603,8 +474,7 @@ class programplanModel extends model
     public function getParentChildrenTypes(int $parentID): array|bool
     {
         if(empty($parentID)) return true;
-
-        return $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('type');
+        return $this->dao->select('type')->from(TABLE_EXECUTION)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs();
     }
 
     /**
@@ -619,99 +489,13 @@ class programplanModel extends model
      */
     public static function isClickable(object $plan, string $action): bool
     {
-        if(strtolower($action) == 'create')
-        {
-            global $dao;
-            if(empty($plan->id)) return true;
+        if(strtolower($action) != 'create') return true;
 
-            $task = $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch();
-            return empty($task);
-        }
+        global $dao;
+        if(empty($plan->id)) return true;
 
-        return true;
-    }
-
-    /**
-     * 检查名称唯一性.
-     * Check name unique.
-     *
-     * @param  array  $names
-     * @access public
-     * @return bool
-     */
-    public function checkNameUnique(array $names): bool
-    {
-        $names = array_filter($names);
-        return count(array_unique($names)) == count($names);
-    }
-
-    /**
-     * 根据计划ID列表，检查code的唯一性。
-     * Check code unique by plan id list.
-     *
-     * @param  array  $codes
-     * @param  array  $planIDList
-     * @access public
-     * @return array|bool
-     */
-    public function checkCodeUnique(array $codes, array $planIDList): array|bool
-    {
-        $codes = array_filter($codes);
-
-        $sameCodes = $this->dao->select('code')->from(TABLE_EXECUTION)
-            ->where('type')->in('sprint,stage,kanban')
-            ->andWhere('code')->in($codes)
-            ->andWhere('deleted')->eq('0')
-            ->beginIF(!empty($planIDList))->andWhere('id')->notin($planIDList)->fi()
-            ->fetchPairs('code');
-
-        if(count(array_unique($codes)) != count($codes)) $sameCodes += array_diff_assoc($codes, array_unique($codes));
-
-        return $sameCodes ?: true;
-    }
-
-    /**
-     * 通过项目ID获取里程碑信息。
-     * Get milestones by projetc id.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getMilestones(int $projectID = 0): array
-    {
-        $milestones = $this->dao->select('id, path')->from(TABLE_PROJECT)
-            ->where('project')->eq($projectID)
-            ->andWhere('type')->eq('stage')
-            ->andWhere('milestone')->eq(1)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('begin_desc,path')
-            ->fetchPairs();
-
-        return $this->programplanTao->formatMilestones($milestones, $projectID);
-    }
-
-    /**
-     * 根据product获取里程碑。
-     * Get milestone by product.
-     *
-     * @param  int    $productID
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getMilestoneByProduct(int $productID, int $projectID): array
-    {
-        $milestones = $this->dao->select('t1.id, t1.path')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
-            ->where('t2.product')->eq($productID)
-            ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.milestone')->eq(1)
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.begin asc,path')
-            ->fetchPairs();
-
-        return $this->programplanTao->formatMilestones($milestones, $projectID);
+        $task = $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+        return empty($task);
     }
 
     /**
@@ -765,8 +549,7 @@ class programplanModel extends model
         if(empty($stage) or empty($stage->path) or (!in_array($model, array('waterfall','waterfallplus','ipd','research')))) return false;
 
         $action       = strtolower($action);
-        $parentIdList = explode(',', trim($stage->path, ','));
-        $parentIdList = array_reverse($parentIdList);
+        $parentIdList = array_reverse(explode(',', trim($stage->path, ',')));
         foreach($parentIdList as $id)
         {
             $parent = $this->execution->getByID((int)$id);
@@ -849,15 +632,10 @@ class programplanModel extends model
     {
         if($attribute == 'mix') return true;
 
-        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('parent')->eq($planID)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
-
+        $subStageList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
         if(empty($subStageList)) return true;
 
         $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
-
         foreach($subStageList as $childID => $subStage) $this->updateSubStageAttr($childID, $attribute);
         return true;
     }
@@ -928,7 +706,7 @@ class programplanModel extends model
      * 获取阶段ID的属性。
      * Get stageID attribute.
      *
-     * @param  int   $stageID
+     * @param  int    $stageID
      * @access public
      * @return false|string
      */

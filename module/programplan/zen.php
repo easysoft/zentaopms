@@ -134,37 +134,57 @@ class programplanZen extends programplan
      * 处理编辑阶段的请求数据。
      * Processing edit request data.
      *
-     * @param  object $formData
+     * @param  int       $planID
+     * @param  int       $projectID
      * @access protected
      * @return object
      */
-    protected function beforeEdit(object $formData): object
+    protected function buildPlanForEdit(int $planID, int $projectID): object
     {
-        $rowData = $formData->data;
-        return isset($rowData->output) ? $formData->join('output', ',')->get() : $rowData;
-    }
+        $plan = form::data()->get();
+        if(empty($plan->realBegan)) $plan->realBegan = null;
+        if(empty($plan->realEnd))   $plan->realEnd   = null;
 
-    /**
-     * 阶段编辑后数据处理。
-     * Handle data after edit.
-     *
-     * @param  object    $plan
-     * @param  array    $changes
-     * @access protected
-     * @return void
-     */
-    protected function afterEdit(object $plan, array $changes)
-    {
-        $actionID = $this->loadModel('action')->create('execution', $plan->id, 'edited');
-        $this->action->logHistory($actionID, $changes);
-
-        $newPlan = $this->programplan->getByID($plan->id);
-
-        if($plan->parent != $newPlan->parent)
+        /* 设置计划和真实起始日期间隔时间。 */
+        /* Set planDuration and realDuration. */
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            $this->programplan->computeProgress($plan->id, 'edit');
-            $this->programplan->computeProgress($plan->parent, 'edit', true);
+            $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
+            $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
         }
+
+        if($plan->parent)
+        {
+            $parentStage = $this->programplan->getByID($plan->parent);
+            $plan->acl   = $parentStage->acl;
+            if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
+
+            if(isset($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
+            if(isset($parentStage) && $plan->end > $parentStage->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
+        }
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
+
+        if(!empty($this->config->setPercent))
+        {
+            $oldPlan = $this->programplan->getByID($planID);
+            if($plan->parent > 0)
+            {
+                $childrenTotalPercent = $this->programplan->getTotalPercent($parentStage, true);
+                $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
+                if($childrenTotalPercent > 100) dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            }
+            else
+            {
+                /* 相同父阶段的子阶段工作量占比之和不超过100%。 */
+                /* The workload of the parent plan cannot exceed 100%. */
+                $oldPlan->parent = $plan->parent;
+                $totalPercent    = $this->programplan->getTotalPercent($oldPlan);
+                $totalPercent    = $totalPercent + $plan->percent;
+                if($totalPercent > 100) dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
+            }
+        }
+
+        return $plan;
     }
 
     /**

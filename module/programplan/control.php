@@ -143,24 +143,24 @@ class programplan extends control
      */
     public function edit(int $planID = 0, int $projectID = 0)
     {
-        $plan = $this->programplan->getByID($planID);
-
         if($_POST)
         {
-            $formData = form::data($this->config->programplan->form->edit);
-
-            $postData = $this->programplanZen->beforeEdit($formData);
-            $postData->id = $planID;
-
-            $changes = $this->programplan->update($planID, $projectID, $postData);
-
+            $plan = $this->programplanZen->buildPlanForEdit($planID, $projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes) $this->programplanZen->afterEdit($plan, $changes);
+            $changes = $this->programplan->update($planID, $projectID, $plan);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $newPlan = $this->programplan->fetchByID($plan->id);
+            if($plan->parent != $newPlan->parent)
+            {
+                $this->programplan->computeProgress($planID, 'edit');
+                $this->programplan->computeProgress($plan->parent, 'edit', true);
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage', 'closeModal' => true));
         }
 
+        $plan = $this->programplan->getByID($planID);
         $this->programplanZen->buildEditView($plan);
     }
 

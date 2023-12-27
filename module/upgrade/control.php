@@ -165,7 +165,6 @@ class upgrade extends control
 
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
-        if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
 
         $installedVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
 

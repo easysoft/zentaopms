@@ -292,40 +292,6 @@ class programplanTest
     }
 
     /**
-     * 测试根据项目ID获取里程碑信息。
-     * Test get milestone of project id.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function getMilestonesTest(int $projectID = 0): string
-    {
-        $objects = $this->objectModel->getMilestones($projectID);
-
-        if(dao::isError()) return dao::getError();
-
-        return implode(',', $objects);
-    }
-
-    /**
-     * Test get milestone by product.
-     *
-     * @param  int    $productID
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function getMilestoneByProductTest($productID, $projectID)
-    {
-        $objects = $this->objectModel->getMilestoneByProduct($productID, $projectID);
-
-        if(dao::isError()) return dao::getError();
-
-        return implode(',', $objects);
-    }
-
-    /**
      * Test get parent stage list.
      *
      * @param  int    $executionID
@@ -358,37 +324,6 @@ class programplanTest
         if(dao::isError()) return false;
 
         return $objects;
-    }
-
-    /**
-     * 测试检查code的唯一性，
-     * Test check code unique.
-     *
-     * @param  array  $codes
-     * @param  array  $planIDList
-     * @access public
-     * @return array|bool
-     */
-    public function checkCodeUniqueTest(array $codes, array $planIDList = array()): array|bool
-    {
-        $objects = $this->objectModel->checkCodeUnique($codes, $planIDList);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * 测试检查名称唯一性
-     * Test check name unique.
-     *
-     * @param  array  $names
-     * @access public
-     * @return bool
-     */
-    public function checkNameUniqueTest(array $names): bool
-    {
-        return $this->objectModel->checkNameUnique($names);
     }
 
     /**
@@ -462,22 +397,6 @@ class programplanTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
-    }
-
-    /**
-     * 输出表格单元 <td></td>。
-     * Print cell.
-     *
-     * @param  object $col
-     * @param  object $plan
-     * @param  array  $users
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function printCellTest(object $col, object $plan, array $users, int $projectID)
-    {
-        return $this->objectModel->printCell($col, $plan, $users, $projectID);
     }
 
     /**

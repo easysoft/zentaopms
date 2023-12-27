@@ -25,17 +25,17 @@ $config->programplan->form->create['output']     = array('label' => '',         
 $config->programplan->form->edit = common::formConfig('programplan', 'edit');
 $config->programplan->form->edit['parent']    = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->programplan->form->edit['name']      = array('required' => true,  'type' => 'string', 'default' => '');
-$config->programplan->form->edit['code']      = array('required' => false, 'type' => 'string', 'default' => '');
+$config->programplan->form->edit['code']      = array('required' => true,  'type' => 'string', 'default' => '');
 $config->programplan->form->edit['PM']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->edit['percent']   = array('required' => false, 'type' => 'float',  'default' => 0);
 $config->programplan->form->edit['attribute'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->edit['acl']       = array('required' => false, 'type' => 'string', 'default' => '');
-$config->programplan->form->edit['begin']     = array('required' => false, 'type' => 'string', 'default' => null);
-$config->programplan->form->edit['end']       = array('required' => false, 'type' => 'string', 'default' => null);
+$config->programplan->form->edit['begin']     = array('required' => true,  'type' => 'string', 'default' => null);
+$config->programplan->form->edit['end']       = array('required' => true,  'type' => 'string', 'default' => null);
 $config->programplan->form->edit['realBegan'] = array('required' => false, 'type' => 'string', 'default' => null);
 $config->programplan->form->edit['realEnd']   = array('required' => false, 'type' => 'string', 'default' => null);
 $config->programplan->form->edit['milestone'] = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->programplan->form->edit['output']    = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->programplan->form->edit['output']    = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
 
 $config->programplan->form->ajaxCustom = array();
 $config->programplan->form->ajaxCustom['zooming']     = array('required' => false, 'type' => 'string');
@@ -50,4 +50,8 @@ $config->programplan->form->updateDateByGantt['type']      = array('required' =>
 $config->programplan->form->updateTaskOrderByGantt['id']    = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->updateTaskOrderByGantt['tasks'] = array('required' => false, 'type' => 'array',  'default' => array());
 
-if(empty($config->setCode)) unset($config->programplan->form->create['code']);
+if(empty($config->setCode))
+{
+    unset($config->programplan->form->create['code']);
+    unset($config->programplan->form->edit['code']);
+}
