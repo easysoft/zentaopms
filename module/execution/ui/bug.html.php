@@ -63,7 +63,7 @@ if($canBatchAssignTo)
     $assignedToItems = array();
     foreach ($users as $account => $name)
     {
-        $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
+        if($account != 'closed') $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
     }
 
     menu(
