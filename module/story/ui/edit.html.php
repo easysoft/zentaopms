@@ -189,6 +189,7 @@ detailBody
     (
         tableData
         (
+            setClass('mt-5'),
             set::title($lang->story->legendBasicInfo),
             $story->parent <= 0 ? item
             (
