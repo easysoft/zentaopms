@@ -131,7 +131,7 @@ formPanel
                 zui::width('80px'),
                 set::name('pri'),
                 set::items($lang->testtask->priList),
-                set::value(0)
+                set::value(3)
             )
         )
     ),
