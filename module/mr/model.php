@@ -32,7 +32,7 @@ class mrModel extends model
         {
             foreach($filterProjects as $hostID => $projectID)
             {
-                $filterProjectSql .= "(hostID = {$hostID} and sourceProject = {$projectID}) or ";
+                $filterProjectSql .= "(hostID = {$hostID} AND sourceProject = '{$projectID}') OR ";
             }
 
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
