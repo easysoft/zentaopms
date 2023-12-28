@@ -1619,7 +1619,7 @@ class executionZen extends execution
         }
         if($type == 'bymodule')
         {
-            $module    = $this->loadModel('tree')->getByID($param);
+            $module    = $this->loadModel('tree')->getByID((int)$param);
             $productID = isset($module->root) ? $module->root : 0;
 
             helper::setcookie('storyModuleParam',  $param);

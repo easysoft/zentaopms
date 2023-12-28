@@ -22,7 +22,9 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     postAndLoadPage($('#toTaskForm').attr('action'), formData);
 
     return false;
-}).on('click', '#linkStoryByPlan button[type="submit"]', function()
+});
+
+$(document).off('click', '#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
 {
     var planID = $('[name=plan]').val();
     if(planID)
