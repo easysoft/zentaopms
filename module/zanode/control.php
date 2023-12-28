@@ -490,7 +490,8 @@ class zanode extends control
     {
         if($_POST)
         {
-            $this->zanode->updateImageStatus($imageID);
+            $data = form::data()->get();
+            $this->zanode->updateImageStatus($imageID, $data);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('load' => true));

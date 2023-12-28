@@ -226,4 +226,19 @@ class zanodeTest
         $node = $this->getNodeByID($nodeID);
         return $this->getVncUrl($node);
     }
+
+    /**
+     * 测试更新导出镜像的状态。
+     * Test update Image status.
+     *
+     * @param  int    $imageID
+     * @param  object $data
+     * @access public
+     * @return void
+     */
+    public function updateImageStatusTest(int $imageID, object $data): object
+    {
+        $this->updateImageStatus($imageID, $data);
+        return $this->objectModel->dao->select('status,path')->from(TABLE_IMAGE)->where('id')->eq($imageID)->fetch();
+    }
 }
