@@ -273,35 +273,6 @@ class zahostModel extends model
     }
 
     /**
-     * create image.
-     *
-     * @param  int    $hostID
-     * @param  string $imageName
-     * @access public
-     * @return object
-     */
-    public function createImage($hostID, $imageName)
-    {
-        $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
-
-        $imageData = new stdclass;
-        foreach($imageList  as $item) if($item->name == $imageName) $imageData = $item;
-
-        $imageData->host = $hostID;
-        $imageData->status = 'created';
-        $imageData->osName = $imageData->os;
-        unset($imageData->os);
-
-        $this->dao->insert(TABLE_IMAGE)->data($imageData, 'desc')->autoCheck()->exec();
-        if(dao::isError()) return false;
-
-        $imageID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('image', $imageID, 'Created');
-
-        return $this->getImageByID($imageID);
-    }
-
-    /**
      * 下载镜像。
      * Download image.
      *

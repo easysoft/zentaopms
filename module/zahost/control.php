@@ -196,29 +196,6 @@ class zahost extends control
     }
 
     /**
-     * 创建镜像。
-     * Create Iamge.
-     *
-     * @param  int    $hostID
-     * @access public
-     * @return void
-     */
-    public function createImage(int $hostID)
-    {
-        if($_POST)
-        {
-            $this->zahost->createImage();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inLink('browseTemplate', "id={$hostID}")));
-        }
-
-        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
-        $this->view->host         = $this->zahost->getByID($hostID);
-        $this->display();
-    }
-
-    /**
      * 下载镜像。
      * Sent download image request to Host.
      *
