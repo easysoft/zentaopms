@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of system module of ZenTaoPMS.
  *
@@ -18,7 +19,7 @@ class system extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
@@ -38,6 +39,7 @@ class system extends control
     }
 
     /**
+     * 服务仪表盘。
      * Dashboard page.
      *
      * @param  int    $total
@@ -46,7 +48,7 @@ class system extends control
      * @access public
      * @return void
      */
-    public function dashboard($total = 0, $recPerPage = 20, $pageID = 1)
+    public function dashboard(int $total = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('cne');
         $this->app->loadClass('pager', true);
@@ -77,6 +79,7 @@ class system extends control
     }
 
     /**
+     * 数据库列表。
      * Show database list.
      *
      * @access public
@@ -93,6 +96,7 @@ class system extends control
     }
 
     /**
+     * 对象存储视图。
      * OSS view.
      *
      * @access public
@@ -118,6 +122,7 @@ class system extends control
     }
 
     /**
+     * 自定义域名配置。
      * Config customer's domain.
      *
      * @access public
@@ -131,6 +136,7 @@ class system extends control
     }
 
     /**
+     * 编辑自定义域名。
      * Edit customer's domain.
      *
      * @access public
@@ -157,7 +163,8 @@ class system extends control
     }
 
     /**
-     * AjaxValidCert
+     * 校验证书。
+     * Ajax valid cert.
      *
      * @access public
      * @return void
@@ -165,10 +172,6 @@ class system extends control
     public function ajaxValidateCert()
     {
         $certData = fixer::input('post')->get();
-
-        $this->dao->select('*')->from('system')->data($certData)
-            ->batchCheck('customDomain,certPem,certKey', 'notempty');
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::$errors));
 
         if(!validater::checkREG($certData->customDomain, '/^((?!-)[a-z0-9-]{1,63}(?<!-)\\.)+[a-z]{2,6}$/'))
         {
@@ -183,6 +186,7 @@ class system extends control
     }
 
     /**
+     * 更新域名的进度。
      * Show progress of updating domains.
      *
      * @access public
@@ -197,6 +201,7 @@ class system extends control
     }
 
     /**
+     * 域名设置视图。
      * Domain settings view.
      *
      * @access public
@@ -219,6 +224,7 @@ class system extends control
     }
 
     /**
+     * 生成数据库授权链接。
      * Generate database auth parameters and jump to login page.
      *
      * @access public
@@ -247,6 +253,7 @@ class system extends control
     }
 
     /**
+     * 获取对象存储信息。
      * Get oss account and domain by ajax.
      *
      * @access public
