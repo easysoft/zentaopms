@@ -299,7 +299,7 @@ class zahost extends control
     public function ajaxGetServiceStatus(int $hostID)
     {
         $host          = $this->zahost->getByID($hostID);
-        $serviceStatus = $this->zahost->getServiceStatus($host);
+        $serviceStatus = $this->zahostZen->getServiceStatus($host);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
     }
