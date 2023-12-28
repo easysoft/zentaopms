@@ -1,7 +1,32 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 treeModel->createModule();
+timeout=0
+cid=1
+
+- 测试空数据创建模块 @『目录名称』不能为空。
+- 测试模块名称为空 @『目录名称』不能为空。
+- 测试创建文档模块
+ - 属性name @模块1
+ - 属性grade @1
+- 测试创建名称重复的模块 @目录名“模块1”已经存在！
+- 测试创建文档子模块
+ - 属性name @模块1的子模块1
+ - 属性grade @2
+- 测试创建API模块
+ - 属性name @api的模块1
+ - 属性grade @1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/tree.class.php';
+
+su('admin');
+
 $module = zdTable('module');
 $module->id->range(1);
 $module->name->range('父模块1');
@@ -10,23 +35,6 @@ $module->root->range('1');
 $module->type->range('doc');
 $module->order->range('10');
 $module->gen(1);
-
-su('admin');
-
-/**
-
-title=测试 treeModel->createModule();
-cid=1
-pid=1
-
-测试空数据创建模块 >> 『目录名称』不能为空。
-测试模块名称为空 >> 『目录名称』不能为空。
-测试创建文档模块 >> 模块1,1
-测试创建名称重复的模块 >> 模块名“模块1”已经存在！
-测试创建文档子模块 >> 模块1的子模块1,2
-测试创建API模块 >> api的模块1,1
-
-*/
 
 $nameList       = array('', '模块1', '模块1的子模块1', 'api的模块1');
 $createTypeList = array('','same', 'child');
@@ -44,6 +52,6 @@ $treeTester = new treeTest();
 r($treeTester->createModuleTest($emptyData))       && p()             && e('『目录名称』不能为空。');    // 测试空数据创建模块
 r($treeTester->createModuleTest($nameEmptyData))   && p()             && e('『目录名称』不能为空。');    // 测试模块名称为空
 r($treeTester->createModuleTest($docModuleData))   && p('name,grade') && e('模块1,1');                   // 测试创建文档模块
-r($treeTester->createModuleTest($repeatNameData))  && p()             && e('模块名“模块1”已经存在！'); // 测试创建名称重复的模块
-r($treeTester->createModuleTest($childModuleData)) && p('name,grade') && e('模块1的子模块1,2')         ; // 测试创建文档子模块
+r($treeTester->createModuleTest($repeatNameData))  && p()             && e('目录名“模块1”已经存在！'); // 测试创建名称重复的模块
+r($treeTester->createModuleTest($childModuleData)) && p('name,grade') && e('模块1的子模块1,2');          // 测试创建文档子模块
 r($treeTester->createModuleTest($apiModuleData))   && p('name,grade') && e('api的模块1,1');              // 测试创建API模块

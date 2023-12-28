@@ -227,6 +227,9 @@ class treeTest
      */
     public function getBugTreeMenuTest($rootID, $productID = 0)
     {
+        global $app;
+        $app->tab = 'project';
+
         $objects = $this->objectModel->getBugTreeMenu($rootID, $productID, 0, array('treeModel', 'createBugLink'));
 
         if(dao::isError()) return dao::getError();
@@ -434,7 +437,7 @@ class treeTest
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
-        $link = $this->objectModel->createTestTaskLink($type, $module, $extra);
+        $link = $this->objectModel->createTestTaskLink($type, $module, '0', $extra);
 
         if(dao::isError()) return dao::getError();
 
@@ -469,6 +472,9 @@ class treeTest
      */
     public function createFeedbackLinkTest($moduleID)
     {
+        global $app;
+        $app->methodName = 'browse';
+
         $type   = '';
         $module = $this->objectModel->getByID($moduleID);
 
@@ -476,9 +482,7 @@ class treeTest
 
         if(dao::isError()) return dao::getError();
 
-        $string = preg_replace("/.*(title='.*').*/", '$1', $link);
-        $string = str_replace("\n", '', $string);
-        return $string;
+        return $link;
     }
 
     /**
@@ -532,25 +536,6 @@ class treeTest
     public function getAllChildIdTest($moduleID)
     {
         $objects = $this->objectModel->getAllChildId($moduleID);
-
-        if(dao::isError()) return dao::getError();
-
-        $ids = '';
-        foreach($objects as $objectID) $ids .= ',' . $objectID;
-        return $ids;
-    }
-
-    /**
-     * Test get project module.
-     *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @access public
-     * @return string
-     */
-    public function getProjectModuleTest($projectID, $productID = 0)
-    {
-        $objects = $this->objectModel->getProjectModule($projectID, $productID);
 
         if(dao::isError()) return dao::getError();
 
@@ -708,21 +693,21 @@ class treeTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_STORY)->where('module')->eq($oldRoot)->andWhere('deleted')->eq(0)->fetchAll();
-        return $type == 'story' ? count($objects) : 0;
+        $table = array('case' => TABLE_CASE, 'story' => TABLE_STORY, 'bug' => TABLE_BUG);
+        $objects = $tester->dao->select('*')->from($table[$type])->where('product')->eq($newRoot)->andWhere('deleted')->eq(0)->fetchAll();
+        return count($objects);
     }
 
     /**
-     * Test delete a module.
+     * Test remove a module.
      *
      * @param  int    $moduleID
-     * @param  object $null
      * @access public
      * @return object
      */
-    public function deleteTest($moduleID, $null = null)
+    public function removeTest($moduleID, $null = null)
     {
-        $this->objectModel->delete($moduleID, $null);
+        $this->objectModel->remove($moduleID, $null);
 
         if(dao::isError()) return dao::getError();
 
@@ -745,7 +730,8 @@ class treeTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $objects = $tester->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->andWhere('deleted')->eq(0)->fetchPairs('id');
+        foreach($objects as $id => $object) $objects[$id] = str_replace(',', '+', trim($object, ','));
         return $objects;
     }
 
@@ -761,7 +747,6 @@ class treeTest
     public function checkUniqueTest($module, $modules = array(), $branches = array())
     {
         global $tester;
-        $modules = $tester->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();
 
         $repeatName = $this->objectModel->checkUnique($module, $modules, $branches);
 
@@ -823,7 +808,7 @@ class treeTest
 
         $stmt = $tester->dbh->query($this->objectModel->buildMenuQuery($root, $viewType));
 
-        $objects = $this->objectModel->getDataStructure($stmt, $viewType, $keepModules);
+        $objects = $this->objectModel->getDataStructure($stmt, $viewType, $root, $keepModules);
 
         if(dao::isError()) return dao::getError();
 
@@ -859,10 +844,10 @@ class treeTest
     public function createModuleTest($postData)
     {
         global $tester;
-        foreach($postData as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->createModule();
 
         unset($_POST);
+        foreach($postData as $key => $value) $_POST[$key] = $value;
+        $object = $this->objectModel->createModule();
 
         if(dao::isError())
         {

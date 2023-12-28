@@ -15,16 +15,16 @@ $project->gen(10);
 /**
 
 title=测试 treeModel->isMergeModule();
+timeout=0
 cid=1
-pid=1
 
-测试检查root 1 type bug 合并模块版本 >> 2
-测试检查root 2 type bug 合并模块版本 >> 1
-测试检查root 3 type bug 合并模块版本 >> 1
-测试检查root 1 type case 合并模块版本 >> 2
-测试检查root 2 type case 合并模块版本 >> 1
-测试检查root 3 type case 合并模块版本 >> 1
-测试检查root 1 type task 合并模块版本 >> 2
+- 测试检查root 1 type bug 合并模块版本 @2
+- 测试检查root 2 type bug 合并模块版本 @1
+- 测试检查root 3 type bug 合并模块版本 @1
+- 测试检查root 1 type case 合并模块版本 @2
+- 测试检查root 2 type case 合并模块版本 @1
+- 测试检查root 3 type case 合并模块版本 @1
+- 测试检查root 4 type task 合并模块版本 @2
 
 */
 $root = array(1, 2, 3, 4);

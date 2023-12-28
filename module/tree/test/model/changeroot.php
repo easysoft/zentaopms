@@ -1,44 +1,57 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->changeRoot();
+timeout=0
 cid=1
-pid=1
 
-测试修改module 1821 的root从 1 修改为 2 >> 0
-测试修改module 1822 的root从 1 修改为 2 >> 0
-测试修改module 1825 的root从 2 修改为 1 >> 0
-测试修改module 1826 的root从 2 修改为 1 >> 0
-测试修改module 1981 的root从 41 修改为 42 >> 0
-测试修改module 1982 的root从 41 修改为 42 >> 0
-测试修改module 1985 的root从 42 修改为 41 >> 0
-测试修改module 1986 的root从 42 修改为 41 >> 0
-测试修改module 21 的root从 101 修改为 102 >> 0
-测试修改module 22 的root从 101 修改为 102 >> 0
-测试修改module 24 的root从 102 修改为 101 >> 0
-测试修改module 25 的root从 102 修改为 101 >> 0
+- 测试修改module 12 的root从 1 修改为 2属性id @6
+属性root @6
+- 测试修改module 2 的root从 1 修改为 2，子模块module 7同时修改属性id @20
+属性root @20
+- 测试修改module 14 的 root从 1 修改为 3属性id @6
+属性root @6
+- 测试修改module 4 的root从 1 修改为 3，子模块module 9同时修改属性id @20
+属性root @20
+- 测试修改module 15 的root从 1 修改为 4属性id @6
+属性root @6
+- 测试修改module 5 的root从 1 修改为 4，子模块module 10同时修改属性id @20
+属性root @20
 
 */
-$moduleID = array(1821, 1822, 1825, 1826, 1981, 1982, 1985, 1986, 21, 22, 24, 25);
-$root     = array(1, 2, 41, 42, 101, 102);
-$type     = array('story', 'task');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+su('admin');
+
+zdTable('module')->config('module')->gen(100);
+
+$story = zdTable('story');
+$story->id->range('1-30');
+$story->product->range('1');
+$story->module->range('2,7,12');
+$story->gen(20);
+
+$bug = zdTable('bug');
+$bug->id->range('1-30');
+$bug->product->range('1,2,3');
+$bug->module->range('4,9,14');
+$bug->gen(20);
+
+$case = zdTable('case');
+$case->id->range('1-30');
+$case->product->range('1');
+$case->module->range('5,10,15');
+$case->gen(20);
 
 $tree = new treeTest();
 
-r($tree->changeRootTest($moduleID[0], $root[0], $root[1], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1821 的root从 1 修改为 2
-r($tree->changeRootTest($moduleID[1], $root[0], $root[1], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1822 的root从 1 修改为 2
-r($tree->changeRootTest($moduleID[2], $root[1], $root[0], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1825 的root从 2 修改为 1
-r($tree->changeRootTest($moduleID[3], $root[1], $root[0], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1826 的root从 2 修改为 1
-r($tree->changeRootTest($moduleID[4], $root[2], $root[3], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1981 的root从 41 修改为 42
-r($tree->changeRootTest($moduleID[5], $root[2], $root[3], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1982 的root从 41 修改为 42
-r($tree->changeRootTest($moduleID[6], $root[3], $root[2], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1985 的root从 42 修改为 41
-r($tree->changeRootTest($moduleID[7], $root[3], $root[2], $type[0]))  && p('id,root') && e('0'); // 测试修改module 1986 的root从 42 修改为 41
-r($tree->changeRootTest($moduleID[8], $root[4], $root[5], $type[1]))  && p('id,root') && e('0'); // 测试修改module 21 的root从 101 修改为 102
-r($tree->changeRootTest($moduleID[9], $root[4], $root[5], $type[1]))  && p('id,root') && e('0'); // 测试修改module 22 的root从 101 修改为 102
-r($tree->changeRootTest($moduleID[10], $root[5], $root[4], $type[1])) && p('id,root') && e('0'); // 测试修改module 24 的root从 102 修改为 101
-r($tree->changeRootTest($moduleID[11], $root[5], $root[4], $type[1])) && p('id,root') && e('0'); // 测试修改module 25 的root从 102 修改为 101
+r($tree->changeRootTest(12, 1, 2, 'story')) && p('id,root') && e('6');  // 测试修改module 12 的root从 1 修改为 2
+r($tree->changeRootTest(2,  1, 2, 'story')) && p('id,root') && e('20'); // 测试修改module 2 的root从 1 修改为 2，子模块module 7同时修改
+
+r($tree->changeRootTest(14, 1, 3, 'bug')) && p('id,root') && e('6');  // 测试修改module 14 的 root从 1 修改为 3
+r($tree->changeRootTest(4,  1, 3, 'bug')) && p('id,root') && e('20'); // 测试修改module 4 的root从 1 修改为 3，子模块module 9同时修改
+
+r($tree->changeRootTest(15, 1, 4, 'case')) && p('id,root') && e('6');  // 测试修改module 15 的root从 1 修改为 4
+r($tree->changeRootTest(5,  1, 4, 'case')) && p('id,root') && e('20'); // 测试修改module 5 的root从 1 修改为 4，子模块module 10同时修改

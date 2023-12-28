@@ -7,7 +7,7 @@ fields:
   - field: root
     range: 1{15},41{5}
   - field: branch
-    range: 0
+    range: 0{10},1{10}
   - field: name
     range: 1-100
     prefix: 模块

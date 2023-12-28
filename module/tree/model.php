@@ -715,6 +715,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取项目关联的story。
      * Get project story tree menu.
      *
      * @param  int          $rootID
@@ -834,6 +835,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取某个项目的所有任务模块树。
      * Get full task tree
      * @param  int $executionID, common value is execution id
      * @param  int $productID
@@ -972,6 +974,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取执行的模块。
      * Get execution modules.
      *
      * @param  int    $executionID
@@ -983,13 +986,13 @@ class treeModel extends model
      */
     public function getTaskTreeModules(int $executionID, bool $parent = false, string $linkObject = 'story', array $extra = array()): array
     {
-        $executionModules = array();
         $field = $parent ? 'path' : 'id';
         $paths = array();
 
         if($linkObject)
         {
             $branch = zget($extra, 'branchID', 0);
+
             /* Get object paths of this execution. */
             if($linkObject == 'story' || $linkObject == 'case')
             {
@@ -1055,10 +1058,12 @@ class treeModel extends model
         }
 
         /* Get all modules from paths. */
+        $executionModules = array();
         foreach($paths as $path)
         {
             foreach(explode(',', (string)$path) as $module) $executionModules[$module] = $module;
         }
+
         return array_filter($executionModules);
     }
 
@@ -1299,11 +1304,17 @@ class treeModel extends model
      * @param  string $type
      * @param  object $module
      * @access public
-     * @return string
+     * @return object
      */
-    public function createFeedbackLink(string $type, object $module): string
+    public function createFeedbackLink(string $type, object $module): object
     {
-        return html::a(helper::createLink('feedback', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data = new stdclass();
+        $data->id     = $module->id;
+        $data->parent = $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('feedback', $this->app->methodName, "type=byModule&param={$module->id}");
+
+        return $data;
     }
 
     /**
@@ -1512,33 +1523,6 @@ class treeModel extends model
         if(empty($module)) return array();
 
         return $this->dao->select('id')->from(TABLE_MODULE)->where("CONCAT(',', path, ',')")->like("%$module->path%")->andWhere('deleted')->eq(0)->fetchPairs();
-    }
-
-    /**
-     * Get project module.
-     *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @access public
-     * @return array
-     */
-    public function getProjectModule(int $projectID, int $productID = 0): array
-    {
-        $modules = array();
-        $rootModules = $this->dao->select('path')->from(TABLE_MODULE)
-            ->where('root')->eq($productID)
-            ->andWhere('type')->eq('story')
-            ->andWhere('parent')->eq(0)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
-        foreach($rootModules as $module)
-        {
-            $modules += $this->dao->select('id')->from(TABLE_MODULE)
-                ->where('path')->like($module->path . '%')
-                ->andWhere('deleted')->eq(0)
-                ->fetchPairs();
-        }
-        return $modules;
     }
 
     /**
@@ -1819,6 +1803,7 @@ class treeModel extends model
     }
 
     /**
+     * 更新模块信息。
      * Update a module.
      *
      * @param  int    $moduleID
@@ -1918,13 +1903,14 @@ class treeModel extends model
             }
         }
         $this->fixModulePath(isset($module->root) ? (int)$module->root : $self->root, $self->type);
-        if(isset($module->root) && $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);
+        if(isset($module->root) && $module->root != $self->root) $this->changeRoot($moduleID, $self->root, (int)$module->root, $self->type);
 
         return true;
     }
 
     /**
-     * Change root.
+     * 修改模块下关联事项的root，注意： 修改module本身的root不在该逻辑中。
+     * Change root of items in the module.
      *
      * @param  int    $moduleID
      * @param  int    $oldRoot
@@ -1936,7 +1922,7 @@ class treeModel extends model
     public function changeRoot(int $moduleID, int $oldRoot, int $newRoot, string $type): void
     {
         /* Get all children id list. */
-        $childIdList = $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleID,%")->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+        $childIdList = $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleID,%")->andWhere('deleted')->eq(0)->fetchPairs('id');
 
         /* Update product field for stories, bugs, cases under this module. */
         $this->dao->update(TABLE_STORY)->set('product')->eq($newRoot)->where('module')->in($childIdList)->exec();
@@ -2053,7 +2039,8 @@ class treeModel extends model
                 $this->dao->update(TABLE_DOC)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
                 break;
         }
-        if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
+        $sessionValue = $this->session->{$module->type . 'List'};
+        if($sessionValue && strpos($sessionValue, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $sessionValue));
         if($cookieName) helper::setcookie($cookieName, 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         return true;
@@ -2111,11 +2098,12 @@ class treeModel extends model
     }
 
     /**
+     * 检查模块是否重名。
      * Check unique module name.
      *
-     * @param  object $module
+     * @param  object $module   检查范围，包括root,type,parent
      * @param  array  $modules
-     * @param  array  $branches
+     * @param  array  $branches 检查范围
      * @access public
      * @return string|false
      */
@@ -2124,7 +2112,10 @@ class treeModel extends model
         if(empty($branches)) $branches = $this->post->branch;
         if(empty($branches) && isset($module->branch)) $branches = array($module->branch);
         if(empty($branches)) $branches = array(0);
+
+        /* If no modules to check, check the name of module. */
         if(empty($modules) && isset($module->name)) $modules = array($module->name);
+
         $branches       = array_unique($branches);
         $rootID         = $module->root;
         $viewType       = $module->type;
@@ -2144,23 +2135,15 @@ class treeModel extends model
                 $moduleID = substr($id, 2);
             }
 
-            if(strpos($checkedModules, ",$name,") !== false)
-            {
-                $repeatName = $name;
-                break;
-            }
+            if(strpos($checkedModules, ",$name,") !== false) return $name;
 
             foreach($existsModules as $existsModule)
             {
-                if($name == $existsModule->name && (!$existed || $moduleID != $existsModule->id) && (!isset($branches[$id]) || $branches[$id] == $existsModule->branch))
-                {
-                    $repeatName = $name;
-                    break 2;
-                }
+                if($name == $existsModule->name && (!$existed || $moduleID != $existsModule->id) && (!isset($branches[$id]) || $branches[$id] == $existsModule->branch)) return $name;
             }
             $checkedModules .= "$name,";
         }
-        if($repeatName) return $repeatName;
+
         return false;
     }
 

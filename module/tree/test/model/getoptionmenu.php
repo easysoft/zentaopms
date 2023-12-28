@@ -8,12 +8,12 @@ timeout=0
 cid=1
 
 - 测试获取产品1 type story 的模块列表 @/
-- 测试获取产品2 type story 的模块列表属性47 @/模块47
+- 测试获取产品1 type story 的模块列表属性2 @/模块2
 - 测试获取项目1 type task  的模块列表属性1 @/模块1
-- 测试获取产品1 type task  的模块列表，包括story的模块2属性2 @/模块2
-- 测试获取产品1 type task  的模块列表，包括story的模块2属性2 @/模块2
-- 测试获取项目1 type task  的模块列表属性35 @/模块35
-- 测试获取多分支产品41 type story 的模块列表属性37 @/主干/模块37
+- 测试获取产品1 type bug   的模块列表，包括story的模块2属性4 @/模块4
+- 测试获取产品1 type case  的模块列表，包括story的模块2属性5 @/模块5
+- 测试获取不存在产品 type case  的模块列表，包括根目录 @/
+- 测试获取不存在产品 type case  的模块列表属性5 @~~
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -28,10 +28,10 @@ $root = array(1, 2, 41, 42);
 
 $tree = new treeTest();
 
-r($tree->getOptionMenuTest(1))         && p(0)  && e('/');              // 测试获取产品1 type story 的模块列表
-r($tree->getOptionMenuTest(2))         && p(47) && e('/模块47');        // 测试获取产品2 type story 的模块列表
-r($tree->getOptionMenuTest(1, 'task')) && p(1)  && e('/模块1');         // 测试获取项目1 type task  的模块列表
-r($tree->getOptionMenuTest(1, 'bug'))  && p(2)  && e('/模块2');         // 测试获取产品1 type task  的模块列表，包括story的模块2
-r($tree->getOptionMenuTest(1, 'case')) && p(2)  && e('/模块2');         // 测试获取产品1 type task  的模块列表，包括story的模块2
-r($tree->getOptionMenuTest(1, 'case')) && p(35) && e('/模块35');        // 测试获取项目1 type task  的模块列表
-r($tree->getOptionMenuTest(41))        && p(37) && e('/主干/模块37');   // 测试获取多分支产品41 type story 的模块列表
+r($tree->getOptionMenuTest(1))         && p(0) && e('/');      // 测试获取产品1 type story 的模块列表
+r($tree->getOptionMenuTest(1))         && p(2) && e('/模块2'); // 测试获取产品1 type story 的模块列表
+r($tree->getOptionMenuTest(1, 'task')) && p(1) && e('/模块1'); // 测试获取项目1 type task  的模块列表
+r($tree->getOptionMenuTest(1, 'bug'))  && p(4) && e('/模块4'); // 测试获取产品1 type bug   的模块列表，包括story的模块2
+r($tree->getOptionMenuTest(1, 'case')) && p(5) && e('/模块5'); // 测试获取产品1 type case  的模块列表，包括story的模块2
+r($tree->getOptionMenuTest(5, 'case')) && p(0) && e('/');      // 测试获取不存在产品 type case  的模块列表，包括根目录
+r($tree->getOptionMenuTest(5, 'case')) && p(5) && e('~~');     // 测试获取不存在产品 type case  的模块列表

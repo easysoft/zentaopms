@@ -1,38 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
-su('admin');
 
 /**
 
 title=测试 treeModel->getProduct();
+timeout=0
 cid=1
-pid=1
 
-获取module 1821 的产品 >> 正常产品1
-获取module 1825 的产品 >> 正常产品2
-获取module 2621 的产品 >> 正常产品1
-获取module 21 的产品 >> 0
-获取module 25 的产品 >> 0
-获取module 3021 的产品 >> 0
-获取module 3621 的产品 >> 0
-获取module 3622 的产品 >> 0
-获取module 3722 的产品 >> 0
-获取module 0 的产品 >> 0
+- 获取module 2 的产品属性name @正常产品1
+- 获取module 7 的产品属性name @正常产品1
+- 获取module 19 的产品属性name @多分支产品41
+- 获取module 200 的产品属性name @0
 
 */
-$moduleID = array(1821, 1825, 2621, 21, 25, 3021, 3621, 3622, 3722, 0);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/tree.class.php';
+su('admin');
+
+zdTable('module')->config('module')->gen(100);
+zdTable('product')->gen(100);
+
+$moduleID = array(2, 7, 19, 200);
 
 $tree = new treeTest();
 
-r($tree->getProductTest($moduleID[0])) && p('name') && e('正常产品1'); // 获取module 1821 的产品
-r($tree->getProductTest($moduleID[1])) && p('name') && e('正常产品2'); // 获取module 1825 的产品
-r($tree->getProductTest($moduleID[2])) && p('name') && e('正常产品1'); // 获取module 2621 的产品
-r($tree->getProductTest($moduleID[3])) && p('name') && e('0');         // 获取module 21 的产品
-r($tree->getProductTest($moduleID[4])) && p('name') && e('0');         // 获取module 25 的产品
-r($tree->getProductTest($moduleID[5])) && p('name') && e('0');         // 获取module 3021 的产品
-r($tree->getProductTest($moduleID[6])) && p('name') && e('0');         // 获取module 3621 的产品
-r($tree->getProductTest($moduleID[7])) && p('name') && e('0');         // 获取module 3622 的产品
-r($tree->getProductTest($moduleID[8])) && p('name') && e('0');         // 获取module 3722 的产品
-r($tree->getProductTest($moduleID[9])) && p('name') && e('0');         // 获取module 0 的产品
+r($tree->getProductTest($moduleID[0])) && p('name') && e('正常产品1');    // 获取module 2 的产品
+r($tree->getProductTest($moduleID[1])) && p('name') && e('正常产品1');    // 获取module 7 的产品
+r($tree->getProductTest($moduleID[2])) && p('name') && e('多分支产品41'); // 获取module 19 的产品
+r($tree->getProductTest($moduleID[3])) && p('name') && e('0');            // 获取module 200 的产品

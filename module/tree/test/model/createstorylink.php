@@ -7,11 +7,11 @@ title=测试 treeModel->createStoryLink();
 timeout=0
 cid=1
 
-- 测试获取module 1821 project 11 product 1 的 story link属性url @projectstory-story-1-0--byModule-1-story.html
-- 测试获取module 1821 project 11 product 1 的 story link属性url @projectstory-story-1-1--byModule-1-story.html
-- 测试获取module 1821 project 11 product 1 的 story link属性url @product-browse-1-0-byModule-1-story.html
-- 测试获取module 1821 project 11 product 1 的 story link属性url @execution-story-1-story-order_desc-byModule-1.html
-- 测试获取module 1821 project 11 product 1 的 story link属性url @product-browse-1-0-byModule-1-story.html
+- 测试获取module 1 project 1 的 story link属性url @projectstory-story-1-0--byModule-1-story.html
+- 测试获取module 1 project 1 product 1 的 story link属性url @projectstory-story-1-1--byModule-1-story.html
+- 测试获取module 1 product 1 的 story link属性url @product-browse-1-0-byModule-1-story.html
+- 测试获取module 1 exectution 1 的 story link属性url @execution-story-1-story-order_desc-byModule-1.html
+- 测试获取module 1 的 story link属性url @product-browse-1-0-byModule-1-story.html
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
