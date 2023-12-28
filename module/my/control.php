@@ -1118,25 +1118,26 @@ class my extends control
 
         if(!empty($_POST))
         {
+            /* 设置语言项以便 form 类检查必填项时输出正确的字段名。*/
+            /* Set language item for form class to check required fields. */
+            $this->lang->my->realname       = $this->lang->user->realname;
+            $this->lang->my->verifyPassword = $this->lang->user->verifyPassword;
+
             $user = form::data($this->config->user->form->edit)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->add('id', $this->app->user->id)
                 ->get();
 
             $this->user->update($user);
-
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
         }
 
-        $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);
-
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
-        $this->view->user       = $this->user->getById($this->app->user->account);
-        $this->view->rand       = updateSessionRandom();
-        $this->view->userGroups = implode(',', array_keys($userGroups));
-        $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
+        $this->view->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
+        $this->view->user  = $this->user->getById($this->app->user->account);
+        $this->view->rand  = updateSessionRandom();
         $this->display();
     }
 

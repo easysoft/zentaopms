@@ -31,7 +31,6 @@ if(!empty($config->user->contactField))
 
 formPanel
 (
-    h::import($config->webRoot . 'js/md5.js', 'js'),
     to::heading
     (
         div
@@ -44,6 +43,8 @@ formPanel
             )
         )
     ),
+    on::change('#password1, #password, #verifyPassword', 'changePassword'),
+    on::click('button[type="submit"]', 'encryptPassword'),
     formRowGroup(set::title($lang->my->form->lblBasic)),
     formRow
     (
@@ -110,23 +111,14 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->password),
-            inputGroup
-            (
-                password
-                (
-                    set::id('password1'),
-                    set::name('password1'),
-                    set::checkStrength(true)
-                )
-            )
+            password(set::checkStrength(true))
         ),
         formGroup
         (
             set::width('1/2'),
             set::label($lang->user->password2),
             set::control('password'),
-            set::name('password2'),
-            set::value('')
+            set::name('password2')
         )
     ),
     formRowGroup(set::title($lang->my->form->lblBasic)),
@@ -156,26 +148,17 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->verifyPassword),
             set::control('password'),
+            set::required(true),
             set::name('verifyPassword'),
-            set::value(''),
             set::placeholder($lang->user->placeholder->verify)
         )
     ),
-    formRow
-    (
-        setClass('hidden'),
-        formGroup
-        (
-            set::name('passwordLength'),
-            set::value(0)
-        ),
-        formGroup
-        (
-            set::name('verifyRand'),
-            set::value($rand)
-        )
-    )
+    formHidden('visions[]', $user->visions),
+    formHidden('passwordLength', 0),
+    formHidden('passwordStrength', 0),
 );
+
+formHidden('verifyRand', $rand);
 
 render();
 
