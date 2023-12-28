@@ -38,6 +38,9 @@ class floatToolbar extends wg
 
             $className = 'ghost';
             if(!empty($item['className'])) $className .= ' ' . $item['className'];
+
+            /* Close other modals on open modal from float toolbar. */
+            if(isset($item['data-toggle']) && $item['data-toggle'] === 'modal' && (!empty($item['url']) || !empty($item['data-url'])) && !isset($item['data-close-others'])) $item['data-close-others'] = true;
             $btns[] = btn(set($item), setClass($className));
         }
         return $btns;
