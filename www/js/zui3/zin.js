@@ -1234,7 +1234,7 @@
             }
             if(options.closeModal) zui.Modal.hide(typeof options.closeModal === 'string' ? options.closeModal : $modal);
             let app = options.app;
-            if(!options.app) options.app = getAppCode(url);
+            if(!options.app) options.app = $.apps.getAppCode(url);
             if(app === currentCode)
             {
                 options.load === 'modal';
