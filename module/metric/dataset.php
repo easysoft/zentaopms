@@ -565,7 +565,7 @@ class dataset
      */
     public function getPipeline($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_PIPELINE)->alias('t1')
+        return $this->dao->select($fieldList)->from(TABLE_JOB)->alias('t1')
             ->where('t1.deleted')->eq('0')
             ->query();
     }
