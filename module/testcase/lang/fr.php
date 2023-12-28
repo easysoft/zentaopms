@@ -280,15 +280,15 @@ $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases
 $lang->testcase->featureBar['browse']['wait']        = 'En Attente';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 
-$lang->testcase->importXmind     = "Import XMIND";
-$lang->testcase->exportXmind     = "Export XMIND";
+$lang->testcase->importXmind     = "Import Xmind";
+$lang->testcase->exportXmind     = "Export Xmind";
 $lang->testcase->getXmindImport  = "Get Mindmap";
 $lang->testcase->showXMindImport = "Display Mindmap";
 $lang->testcase->saveXmindImport = "Save Mindmap";
 
-$lang->testcase->xmindImport           = "Imort XMIND";
-$lang->testcase->xmindExport           = "Export XMIND";
-$lang->testcase->xmindImportEdit       = "XMIND Edit";
+$lang->testcase->xmindImport           = "Imort Xmind";
+$lang->testcase->xmindExport           = "Export Xmind";
+$lang->testcase->xmindImportEdit       = "Xmind Edit";
 $lang->testcase->errorFileNotEmpty     = 'The uploaded file cannot be empty';
 $lang->testcase->errorXmindUpload      = 'Upload failed';
 $lang->testcase->errorFileFormat       = 'File format error';

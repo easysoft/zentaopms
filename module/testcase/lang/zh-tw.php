@@ -263,15 +263,15 @@ $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases
 $lang->testcase->featureBar['browse']['wait']        = '待評審';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 
-$lang->testcase->importXmind     = "导入XMIND";
-$lang->testcase->exportXmind     = "导出XMIND";
+$lang->testcase->importXmind     = "导入Xmind";
+$lang->testcase->exportXmind     = "导出Xmind";
 $lang->testcase->getXmindImport  = "获取导图";
 $lang->testcase->showXMindImport = "显示导图";
 $lang->testcase->saveXmindImport = "保存导图";
 
-$lang->testcase->xmindImport           = "导入XMIND";
-$lang->testcase->xmindExport           = "导出XMIND";
-$lang->testcase->xmindImportEdit       = "XMIND 编辑";
+$lang->testcase->xmindImport           = "导入Xmind";
+$lang->testcase->xmindExport           = "导出Xmind";
+$lang->testcase->xmindImportEdit       = "Xmind 编辑";
 $lang->testcase->errorFileNotEmpty     = '上传文件不能为空';
 $lang->testcase->errorXmindUpload      = '上传失败';
 $lang->testcase->errorFileFormat       = '文件格式错误';
