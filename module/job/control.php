@@ -95,6 +95,8 @@ class job extends control
                 ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
                 ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
                 ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
+                ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->get();
             if(dao::isError()) return $this->sendError(dao::getError());
 
@@ -137,6 +139,8 @@ class job extends control
                 ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
                 ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
                 ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
+                ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->get();
             $this->job->update($jobID, $job);
             if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'edited');

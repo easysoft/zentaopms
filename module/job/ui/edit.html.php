@@ -304,7 +304,7 @@ formPanel
                 (
                     setStyle('width', '150px'),
                     set::id('pipelineDropmenu'),
-                    set::text($job->pipeline ? $job->pipeline : $lang->job->selectPipeline),
+                    set::text(urldecode($job->pipeline ? $job->pipeline : $lang->job->selectPipeline)),
                     $job->pipeline ? set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks', "jenkinsID={$job->server}")) : set::data(array('' => ''))
                 )
             )
