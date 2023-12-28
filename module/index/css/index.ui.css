@@ -28,7 +28,7 @@
 #apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: var(--zt-apps-bar-height, 40px); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
 .hide-menu #apps {left: var(--zt-menu-fold-width, 40px)!important;}
 
-#appsBar {position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: var(--zt-apps-bar-height, 40px); background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s;}
+#appsBar {position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: var(--zt-apps-bar-height, 40px); background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
 .hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px)!important;}
 #appTabs {position: absolute; left: 4px; right: 360px; top: 0; bottom: 0; user-select: none;}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .7;}
