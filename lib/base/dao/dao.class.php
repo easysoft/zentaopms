@@ -1684,6 +1684,7 @@ class baseSQL
         global $dbh;
         $this->dbh        = $dbh;
         $this->data       = new stdclass();
+        $this->skipFields = '';
         $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
     }
 
