@@ -41,7 +41,7 @@ class scm
      * @access public
      * @return array
      */
-    public function tags($path, $revision = 'HEAD', $onlyDir = true)
+    public function tags($path = '', $revision = 'HEAD', $onlyDir = true)
     {
         if(!scm::checkRevision($revision)) return array();
         return $this->engine->tags($path, $revision, $onlyDir);

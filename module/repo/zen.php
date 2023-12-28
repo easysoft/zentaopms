@@ -1395,6 +1395,9 @@ class repoZen extends repo
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $branches = $this->scm->branch();
+            $tags     = $this->scm->tags('');
+            foreach($tags as $tag) $branches[$tag] = $tag;
+
             if($branches)
             {
                 /* Init branchID. */
