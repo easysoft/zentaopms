@@ -25,7 +25,8 @@ formPanel
             picker
             (
                 set::name('execution'),
-                set::items($executions)
+                set::items($executions),
+                on::change('onExecutionChange(event, ' . $productID . ')'),
             )
         ),
         formGroup
