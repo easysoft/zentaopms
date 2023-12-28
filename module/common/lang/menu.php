@@ -479,51 +479,29 @@ $lang->qa->menuOrder[35] = 'report';
 $lang->qa->menuOrder[40] = 'caselib';
 $lang->qa->menuOrder[45] = 'automation';
 
-// $lang->qa->menu->automation['subMenu'] = new stdclass();
-// $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
-// $lang->qa->menu->automation['subMenu']->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
-// $lang->qa->menu->automation['subMenu']->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
-// $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
-// $lang->qa->menu->automation['subMenu']->environment = array('link' => '环境|automation|environment|productID=%s', 'alias' => '');
-
 $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
-//$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
 $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
-
 if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
-
 $lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
-
-//$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
-//$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
-//$lang->devops->menuOrder[5]  = 'dashboard';
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'mr';
 $lang->devops->menuOrder[25] = 'compile';
-$lang->devops->menuOrder[30] = 'apps';
-//$lang->devops->menuOrder[35] = 'environment';
-//$lang->devops->menuOrder[40] = 'app';
+$lang->devops->menuOrder[30] = 'artifactrepo';
+$lang->devops->menuOrder[35] = 'apps';
 
 $lang->devops->dividerMenu = ',apps,';
-
-// $lang->devops->homeMenu->environment['subMenu'] = new stdclass();
-// $lang->devops->homeMenu->environment['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
-// $lang->devops->homeMenu->environment['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
-// $lang->devops->homeMenu->environment['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
-// $lang->devops->homeMenu->environment['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
-// $lang->devops->homeMenu->environment['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
