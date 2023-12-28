@@ -62,7 +62,8 @@ class backBtn extends btn
             'compile'        => 'compile-browse',
             'store'          => 'store-browse',
             'space'          => 'space-browse',
-            'serverroom'     => 'serverroom-browse'
+            'serverroom'     => 'serverroom-browse',
+            'gitlab'         => 'gitlab-browseproject'
         );
 
         $props = parent::getProps();
