@@ -475,6 +475,10 @@
                 {
                     if(data.closeModal) zui.Modal.hide(typeof data.closeModal === 'string' ? data.closeModal : undefined);
                     if(data.autoLoad) autoLoad(data.autoLoad);
+                    if(data.result === 'fail')
+                    {
+                        if(data.message) zui.Messager.alert(data.message);
+                    }
                     if(data.open)
                     {
                         openUrl(data.open);
