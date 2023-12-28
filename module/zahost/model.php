@@ -344,27 +344,6 @@ class zahostModel extends model
     }
 
     /**
-     * Query download image status.
-     *
-     * @param  object $image
-     * @access public
-     * @return object
-     */
-    public function downloadImageStatus($image)
-    {
-        $host      = $this->getById($image->host);
-        $statusApi = 'http://' . $host->extranet . ':' . $host->zap . '/api/v1/task/status';
-
-        $response = json_decode(commonModel::http($statusApi, array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$host->tokenSN"), 'json'));
-
-        if($response->code == 200) return true;
-
-        dao::$errors[] = $response->msg;
-        return false;
-
-    }
-
-    /**
      * 取消镜像下载。
      * Send cancel download image command to HOST.
      *
