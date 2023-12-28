@@ -4,7 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/setting.class.php';
 su('admin');
 
-zdTable('config')->gen(20);
+$config = zdTable('config');
+$config->vision->range('``,rnd,lite');
+$config->gen(10);
 
 /**
 

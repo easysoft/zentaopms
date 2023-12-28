@@ -4,6 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/setting.class.php';
 su('admin');
 
+$config = zdTable('config');
+$config->vision->range('``,rnd,lite');
+$config->gen(10);
+
 /**
 
 title=测试 settingModel->updateVersion();

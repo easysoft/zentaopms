@@ -6,7 +6,7 @@ su('admin');
 
 $config = zdTable('config');
 $config->vision->range('``,rnd,lite');
-$config->gen(20);
+$config->gen(10);
 
 /**
 
@@ -21,15 +21,15 @@ $settingModel = $tester->loadModel('setting');
 
 $items     = array();
 $items[0]  = "";
-$items[1]  = "key=key2";
-$items[2]  = "section=section3";
-$items[3]  = "module=story";
+$items[1]  = "key=sn";
+$items[2]  = "section=global";
+$items[3]  = "module=common";
 $items[4]  = "owner=system";
 $items[5]  = "vision=lite";
 
-r(count($settingModel->getItems($items[0])))  && p()          && e('20');     // 查询所有数据的记录数
-r($settingModel->getItems($items[1]))         && p('2:value') && e('value2'); // 查询key条件的所有数据
-r($settingModel->getItems($items[2]))         && p('3:value') && e('value3'); // 查询section条件的所有数据
-r(count($settingModel->getItems($items[3])))  && p()          && e('7');      // 查询module条件的记录数
-r(count($settingModel->getItems($items[4])))  && p()          && e('10');     // 查询owner条件的记录数
-r(count($settingModel->getItems($items[5])))  && p()          && e('6');      // 查询vision条件的记录数
+r(count($settingModel->getItems($items[0])))  && p()          && e('10');   // 查询所有数据的记录数
+r($settingModel->getItems($items[1]))         && p('7:value') && e('f205720305272543052e3d689afdb5b8'); // 查询key条件的所有数据
+r($settingModel->getItems($items[2]))         && p('3:value') && e('1');    // 查询section条件的所有数据
+r(count($settingModel->getItems($items[3])))  && p()          && e('10');   // 查询module条件的记录数
+r(count($settingModel->getItems($items[4])))  && p()          && e('10');   // 查询owner条件的记录数
+r(count($settingModel->getItems($items[5])))  && p()          && e('3');    // 查询vision条件的记录数
