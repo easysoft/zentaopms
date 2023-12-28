@@ -597,12 +597,7 @@ formPanel
     (
         setClass($hiddenMailto),
         set::label($lang->product->mailto),
-        picker
-        (
-            set::multiple(true),
-            set::name('mailto[]'),
-            set::items($users)
-        )
+        mailto(set::items($users))
     ),
     $afterRow,
 );

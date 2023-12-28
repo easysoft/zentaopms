@@ -194,12 +194,7 @@ else
                 formGroup
                 (
                     set::label($lang->doc->mailto),
-                    picker
-                    (
-                        set::multiple(true),
-                        set::name('mailto[]'),
-                        set::items($users)
-                    )
+                    mailto(set::items($users))
                 ),
                 formGroup
                 (

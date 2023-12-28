@@ -279,7 +279,6 @@ class taskZen extends task
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
-        $this->view->contactLists  = $this->loadModel('user')->getContactLists();
         $this->display();
     }
 

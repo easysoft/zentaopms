@@ -32,22 +32,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->mailto),
-        inputGroup
-        (
-            picker
-            (
-                set::name('mailto'),
-                set::items($users),
-                set::value($testtask->mailto ? str_replace(' ', '', $testtask->mailto) : ''),
-                set::multiple(true)
-            ),
-            $contactList ? picker
-            (
-                set::name('contact'),
-                set::items($contactList),
-                on::change("setMailto('mailto', this.value)")
-            ) : null
-        )
+        mailto(set::items($users), set::value($testtask->mailto))
     ),
     set::actions(array('submit'))
 );

@@ -324,29 +324,7 @@ detailBody
             item
             (
                 set::name($lang->story->mailto),
-                inputGroup
-                (
-                    picker(setID('mailto'), set::name('mailto[]'), set::items($fields['mailto']['options']), set::value($fields['mailto']['default']), set::multiple(true)),
-                    isset($contactList) ? picker
-                    (
-                        setID('contactListMenu'),
-                        set::name('contactListMenu'),
-                        set::items($contactList),
-                        set::value()
-                    ) : btn
-                    (
-                        set('url', createLink('my', 'managecontacts', 'listID=0&mode=new')),
-                        set('title', $lang->user->contacts->manage),
-                        setData(array('toggle' => 'modal')),
-                        icon('cog')
-                    ),
-                    isset($contactList) ? null : btn
-                    (
-                        setID('refreshMailto'),
-                        setClass('text-black'),
-                        icon('refresh')
-                    )
-                )
+                mailto(set::items($fields['mailto']['options']), set::value($fields['mailto']['default']))
             ),
         ),
         tableData

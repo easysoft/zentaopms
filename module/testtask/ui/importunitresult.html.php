@@ -147,15 +147,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->mailto),
-        inputGroup
-        (
-            picker
-            (
-                set::name('mailto[]'),
-                set::items($users),
-                set::multiple(true)
-            )
-        )
+        mailto(set::items($users))
     )
 );
 

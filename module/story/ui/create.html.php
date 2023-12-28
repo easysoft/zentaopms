@@ -398,14 +398,7 @@ formPanel
     formGroup
     (
         set::label($lang->story->mailto),
-        picker
-        (
-            setID('mailto'),
-            set::name('mailto[]'),
-            set::items($fields['mailto']['options']),
-            set::value($fields['mailto']['default']),
-            set::multiple(true)
-        )
+        mailto(set::items($fields['mailto']['options']), set::value($fields['mailto']['default']))
     ),
     formGroup
     (

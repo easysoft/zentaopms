@@ -306,49 +306,7 @@ detailBody
             item
             (
                 set::name($lang->task->mailto),
-                inputGroup
-                (
-                    picker
-                    (
-                        setID('mailto'),
-                        set::name('mailto[]'),
-                        set::value($task->mailto),
-                        set::items($mailtoOptions),
-                        set::multiple(true)
-                    ),
-                    span
-                    (
-                        setID('contactBox'),
-                        setClass('input-group-addon'),
-                        $contactListMenuOptions ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
-                        $contactListMenuOptions ? picker
-                        (
-                            setClass('w-20'),
-                            set::name('contactListMenuOptionsMenu'),
-                            set::items($contactListMenuOptions),
-                            set::placeholder($lang->contact->common)
-                        ) :
-                        span
-                        (
-                            setClass('input-group-addon'),
-                            a
-                            (
-                                set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
-                                set('title', $lang->user->contacts->manage),
-                                setClass('mr-2'),
-                                setData(array('toggle' => 'modal')),
-                                icon('cog'),
-                            ),
-                            a
-                            (
-                                setID('refreshMailto'),
-                                setClass('text-black'),
-                                set('href', 'javascript:void(0)'),
-                                icon('refresh')
-                            )
-                        )
-                    )
-                )
+                mailto(set::items($mailtoOptions), set::value($task->mailto))
             )
         ),
         modalTrigger

@@ -644,11 +644,10 @@ class testtask extends control
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
-        $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
-        $this->view->actions      = $this->loadModel('action')->getList('testtask', $taskID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
-        $this->view->contactLists = $this->user->getContactLists();
-        $this->view->testtask     = $testtask;
+        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->close;
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
+        $this->view->testtask = $testtask;
         $this->display();
     }
 

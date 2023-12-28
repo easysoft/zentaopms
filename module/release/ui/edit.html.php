@@ -87,13 +87,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->mailto),
-        picker
-        (
-            set::name('mailto[]'),
-            set::value($release->mailto),
-            set::items($users),
-            set::multiple(true)
-        )
+        mailto(set::items($users), set::value($release->mailto))
     ),
     formGroup
     (

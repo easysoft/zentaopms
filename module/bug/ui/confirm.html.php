@@ -70,7 +70,7 @@ formPanel
     formGroup
     (
         set::label($lang->bug->lblMailto),
-        mailto(set::items($users), set::value(str_replace(' ', '', $bug->mailto ?: '')))
+        mailto(set::items($users), set::value($bug->mailto))
     ),
     formGroup
     (
