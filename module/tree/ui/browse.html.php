@@ -15,6 +15,11 @@ if(strpos($viewType, 'doc') !== false)
 {
     $manageTitle = $lang->doc->manageType;
 }
+elseif($viewType == 'host')
+{
+    $app->loadLang('host');
+    $manageTitle = $lang->host->groupMaintenance;
+}
 elseif(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false)
 {
     $manageChild = 'manage' . ucfirst($viewType) . 'Child';
