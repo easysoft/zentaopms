@@ -50,7 +50,6 @@ $typeOptions            = $lang->task->typeList;
 $statusOptions          = (array)$lang->task->statusList;
 $priOptions             = $lang->task->priList;
 $mailtoOptions          = $users;
-$contactListMenuOptions = $contactLists;
 $finishedByOptions      = $members;
 $canceledByOptions      = $users;
 $closedByOptions        = $users;
