@@ -143,7 +143,7 @@ class userZen extends user
         if($this->get->account)   $account  = trim($this->get->account);
         if($this->get->password)  $password = trim($this->get->password);
 
-        if(!$account) return array();
+        if(!$account) return $this->responseForLoginFail($viewType);
 
         /* 如果用户被锁定返回相关信息。*/
         /* Return related information if the user is locked. */
@@ -372,15 +372,18 @@ class userZen extends user
      * @access public
      * @return array
      */
-    public function responseForLoginFail(string $viewType, string $account): array
+    public function responseForLoginFail(string $viewType, string $account = ''): array
     {
         if($viewType == 'json') return array('status' => 'failed', 'reason' => $this->lang->user->loginFailed);
 
-        $remainTimes = $this->config->user->failTimes - $this->user->failPlus($account);
-        if($remainTimes <= 0) return array('result' => 'fail', 'message' => sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
-        if($remainTimes <= 3) return array('result' => 'fail', 'message' => sprintf($this->lang->user->lockWarning, $remainTimes));
+        if($account)
+        {
+            $remainTimes = $this->config->user->failTimes - $this->user->failPlus($account);
+            if($remainTimes <= 0) return array('result' => 'fail', 'message' => sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
+            if($remainTimes <= 3) return array('result' => 'fail', 'message' => sprintf($this->lang->user->lockWarning, $remainTimes));
 
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        }
 
         return array('result' => 'fail', 'message' => $this->lang->user->loginFailed);
     }
