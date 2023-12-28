@@ -549,7 +549,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
 
-        $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, $log[0]->revision) : '';
+        $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
         if($revision)
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
@@ -612,7 +612,7 @@ class repo extends control
 
         $this->view->title        = $this->lang->repo->common;
         $this->view->repoID       = $repoID;
-        $this->view->branchID     = $this->cookie->repoBranch;
+        $this->view->branchID     = (string)$this->cookie->repoBranch;
         $this->view->objectID     = $objectID;
         $this->view->repo         = $repo;
         $this->view->revision     = $revision;
