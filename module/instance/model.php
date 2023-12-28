@@ -228,9 +228,9 @@ class instanceModel extends model
         $leftDomain = '';
         foreach($expiredDomains as $expiredDomain)
         {
-            if(stripos($instance->domain, $expiredDomain) === false) continue;
+            if(stripos($instance->domain, (string)$expiredDomain) === false) continue;
 
-            $leftDomain = trim(str_replace($expiredDomain, '', $instance->domain), '.'); // Pick left domain.
+            $leftDomain = trim(str_replace((string)$expiredDomain, '', $instance->domain), '.'); // Pick left domain.
             /* If left domain like a.b, skip it, because left domain must be letters without dot(.) . */
             if(stripos($leftDomain, '.') !== false) continue; // Does not pick left domain.
 
