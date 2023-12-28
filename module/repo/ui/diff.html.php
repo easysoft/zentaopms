@@ -39,7 +39,7 @@ jsVar('edition', $config->edition);
 $breadcrumbItems = array();
 $breadcrumbItems[] = h::a
 (
-    set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'"),
+    set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID")),
     set('data-app', $app->tab),
     $repo->name
 );
