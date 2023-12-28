@@ -49,10 +49,7 @@ class artifactrepoModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        foreach($artifactRepos as $repo)
-        {
-            $repo->url .= '/repository/' . $repo->repoName . '/';
-        }
+        foreach($artifactRepos as $repo) $repo->url .= '/#browse/browse:' . $repo->repoName;
 
         return $artifactRepos;
     }
