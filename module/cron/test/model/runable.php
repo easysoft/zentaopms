@@ -1,22 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/cron.class.php';
-su('admin');
 
 /**
 
 title=测试 cronModel->runnable();
+timeout=0
 cid=1
-pid=1
 
-cron配置为空情况 >> 0
-cron配置存在,执行时间大于最大可执行时间情况 >> 1
-cron状态为空情况 >> 1
-cron状态是stop情况 >> 1
-cron状态存在不是stop情况 >> 0
+- cron配置为空情况 @0
+- cron配置存在,执行时间大于最大可执行时间情况 @1
+- cron状态为空情况 @1
+- cron状态是stop情况 @1
+- cron状态存在不是stop情况 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/cron.class.php';
+su('admin');
 
 $cron = new cronTest();
 

@@ -8,6 +8,21 @@ class cronTest
     }
 
     /**
+    ¦* 运行sql重置zt_cron表。
+    ¦* Truncate zt_cron and insert data again.
+    ¦*
+    ¦* @access public
+    ¦* @return void
+    ¦*/
+    public function init()
+    {
+        global $tester, $app;
+        $appPath = $app->getAppRoot();
+        $sqlFile = $appPath . 'test/data/cron.sql';
+        $tester->dbh->exec(file_get_contents($sqlFile));
+    }
+
+    /**
      * Get by id test.
      *
      * @param  int    $cronID
@@ -67,22 +82,6 @@ class cronTest
     public function changeStatusTest($cronID, $status, $changeTime = false)
     {
         $objects = $this->objectModel->changeStatus($cronID, $status, $changeTime);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Change cron status to running test.
-     *
-     * @param int    $cronID
-     * @access public
-     * @return bool|int
-     */
-    public function changeStatusRunningTest($cronID)
-    {
-        $objects = $this->objectModel->changeStatusRunning($cronID);
 
         if(dao::isError()) return dao::getError();
 
@@ -198,53 +197,6 @@ class cronTest
     public function checkRuleTest($cron)
     {
         $objects = $this->objectModel->checkRule($cron);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Mark cron status test.
-     *
-     * @param mixed $status
-     * @param int $configID
-     * @access public
-     * @return void
-     */
-    public function markCronStatusTest($status, $configID = 0)
-    {
-        $objects = $this->objectModel->markCronStatus($status, $configID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get config id test.
-     *
-     * @access public
-     * @return void
-     */
-    public function getConfigIDTest()
-    {
-        $objects = $this->objectModel->getConfigID();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get current cron status test.
-     *
-     * @access public
-     * @return int
-     */
-    public function getTurnonTest()
-    {
-        $objects = $this->objectModel->getTurnon();
 
         if(dao::isError()) return dao::getError();
 
