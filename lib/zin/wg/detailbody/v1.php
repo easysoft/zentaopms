@@ -55,7 +55,7 @@ class detailBody extends wg
             set::actionsClass('h-14 flex flex-none items-center justify-center shadow'),
             setClass('detail-body rounded col overflow-y-hidden bg-white'),
             set($this->getRestProps()),
-            setStyle('height', 'calc(100vh - 120px)'),
+            setStyle('height', 'calc(100vh - 108px)'),
             div
             (
                 setClass('flex-auto overflow-y-auto'),
