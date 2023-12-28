@@ -1,4 +1,5 @@
- <?php
+<?php
+declare(strict_types=1);
 /**
  * The model file of system module of ZenTaoPMS.
  *
@@ -24,7 +25,9 @@ class systemModel extends model
     }
 
     /**
-     * Get customized domain settings. *
+     * 获取自定义的域名设置。
+     * Get customized domain settings.
+     *
      * @access public
      * @return object
      */
@@ -33,28 +36,22 @@ class systemModel extends model
         $settings = new stdclass;
         $settings->customDomain = $this->setting->getItem('owner=system&module=common&section=domain&key=customDomain');
         $settings->https        = $this->setting->getItem('owner=system&module=common&section=domain&key=https');
-        $settings->certPem      = ''; //
-        $settings->certKey      = ''; //
+        $settings->certPem      = '';
+        $settings->certKey      = '';
 
         return $settings;
     }
 
     /**
+     * 保存自定义的域名设置。
      * Save customized somain settings.
      *
+     * @param  object $setting
      * @access public
      * @return void
      */
-    public function saveDomainSettings()
+    public function saveDomainSettings(object $settings)
     {
-        $settings = fixer::input('post')
-            ->setDefault('customDomain', '')
-            ->setDefault('https', 'false')
-            ->setIf(is_array($this->post->https) && in_array('true', $this->post->https), 'https', 'true')
-            ->setDefault('certPem', '')
-            ->setDefault('certKey', '')
-            ->get();
-
         $this->dao->from('system')->data($settings)
             ->check('customDomain', 'notempty')
             ->checkIf($settings->https == 'true', 'certPem', 'notempty')
@@ -83,23 +80,14 @@ class systemModel extends model
         }
 
         $oldSettings = $this->getDomainSettings();
-        if($settings->customDomain == $oldSettings->customDomain)
-        {
-            dao::$errors[] = $this->lang->system->errors->newDomainIsSameWithOld;
-            return;
-        }
-
-        if(stripos($settings->customDomain, 'haogs.cn') !== false)
-        {
-            dao::$errors[] = $this->lang->system->errors->forbiddenOriginalDomain;
-            return;
-        }
+        if($settings->customDomain == $oldSettings->customDomain)  dao::$errors[] = $this->lang->system->errors->newDomainIsSameWithOld;
+        if(stripos($settings->customDomain, 'haogs.cn') !== false) dao::$errors[] = $this->lang->system->errors->forbiddenOriginalDomain;
+        if(dao::isError()) return false;
 
         $expiredDomain   = $this->setting->getItem('owner=system&module=common&section=domain&key=expiredDomain');
         $expiredDomain   = empty($expiredDomain ) ? array(getenv('APP_DOMAIN')) : json_decode($expiredDomain, true);
         $expiredDomain[] = zget($settings, 'customDomain', '');
         $this->setting->setItem('system.common.domain.expiredDomain', json_encode($expiredDomain));
-
         $this->setting->setItem('system.common.domain.customDomain', zget($settings, 'customDomain', ''));
         $this->setting->setItem('system.common.domain.https', zget($settings, 'https', 'false'));
 
@@ -109,6 +97,7 @@ class systemModel extends model
     }
 
     /**
+     * 更新域名。
      * Update minio domain.
      *
      * @access public

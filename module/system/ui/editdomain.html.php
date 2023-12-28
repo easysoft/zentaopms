@@ -70,7 +70,7 @@ formPanel
         set::width('2/3'),
         setClass('cert hidden'),
         set::label($lang->system->certKey),
-        set::name('certPem'),
+        set::name('certKey'),
         set::control('textarea'),
         set::value(zget($domainSettings, 'certKey', ''))
     ),

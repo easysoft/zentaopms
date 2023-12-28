@@ -139,7 +139,12 @@ class system extends control
         if($_POST)
         {
             session_write_close();
-            $this->system->saveDomainSettings();
+            $settings = form::data($this->config->system->form->editDomain)
+                ->setDefault('https', 'false')
+                ->setIf(is_array($this->post->https) && in_array('true', $this->post->https), 'https', 'true')
+                ->get();
+
+            $this->system->saveDomainSettings($settings);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(true)));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->system->notices->updateDomainSuccess, 'locate' => $this->inlink('domainView')));

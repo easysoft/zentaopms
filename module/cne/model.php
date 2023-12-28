@@ -152,9 +152,9 @@ class cneModel extends model
      * @param  string $key
      * @param  string $domain
      * @access public
-     * @return bool
+     * @return object
      */
-    public function validateCert(string $certName, string $pem, string $key, string $domain): bool
+    public function validateCert(string $certName, string $pem, string $key, string $domain)
     {
         $apiParams = array();
         $apiParams['name'] = $certName;
