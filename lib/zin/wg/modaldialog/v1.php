@@ -19,7 +19,8 @@ class modalDialog extends wg
         'footerActions?: array',
         'footerClass?: string',
         'footerProps?: array',
-        'rawContent?: bool'
+        'rawContent?: bool',
+        'autoLoad?: string'
     );
 
     protected static array $defineBlocks = array(
@@ -105,12 +106,32 @@ class modalDialog extends wg
         return setStyle('width', "{$size}px");
     }
 
+    protected function getAutoLoad(): ?string
+    {
+        global $app;
+        $autoLoad = $this->prop('autoLoad');
+        if(!is_null($autoLoad)) return $autoLoad;
+
+        if($app->rawMethod !== 'view') return null;
+        $objectType = $app->rawModule;
+        $objectID    = data($objectType . 'ID');
+        if(empty($objectID))
+        {
+            $object = data($objectType);
+            if(is_object($object) && isset($object->id))      $objectID = $object->id;
+            elseif(is_array($object) && isset($object['id'])) $objectID = $object['id'];
+        }
+        if(empty($objectID)) return null;
+        return "$objectType:$objectID";
+    }
+
     protected function build(): wg
     {
         return div
         (
             setClass('modal-dialog', $this->prop('condensed') ? 'modal-condensed' : ''),
             set($this->getRestProps()),
+            setData('auto-load', $this->getAutoLoad()),
             $this->setSize(),
             div
             (

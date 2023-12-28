@@ -474,6 +474,7 @@
                 else
                 {
                     if(data.closeModal) zui.Modal.hide(typeof data.closeModal === 'string' ? data.closeModal : undefined);
+                    if(data.autoLoad) autoLoad(data.autoLoad);
                     if(data.open)
                     {
                         openUrl(data.open);
@@ -486,6 +487,7 @@
                         else if(data.load === true) loadCurrentPage();
                         else if(typeof data.load === 'object')
                         {
+                            if(data.load.autoLoad) autoLoad(data.load.autoLoad);
                             if('back' in data.load)
                             {
                                 openUrl(data.load);
@@ -859,6 +861,27 @@
         $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
     }
 
+    function autoLoad(id)
+    {
+        const parseID = (x) =>
+        {
+            const parts = x.split(':');
+            return {type: parts[0], ids: parts[1] ? parts[1].split(',') : []};
+        };
+        id = parseID(id);
+        const idSet = new Set(id.ids);
+        const type = id.type;
+        $('[data-auto-load]').each(function()
+        {
+            const $this = $(this);
+            const targetID = parseID($this.attr('data-auto-load'));
+            if(type !== targetID.type || (targetID.ids.length && !targetID.ids.some(x => idSet.has(x)))) return;
+            const modal = zui.Modal.query($this);
+            if(modal) modal.render({loadingClass: ''});
+            else loadCurrentPage();
+        });
+    }
+
     /**
      * Search history and go back to specified path.
      *
@@ -1227,7 +1250,7 @@
         e.preventDefault();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1247,7 +1270,7 @@
             }
             data = {url: data};
         }
-
+        if(data.autoLoad) autoLoad(data.autoLoad);
         if(data.confirm)
         {
             return zui.Modal.confirm(data.confirm).then(confirmed =>
