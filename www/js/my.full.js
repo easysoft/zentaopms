@@ -235,67 +235,6 @@ function showMoreImage(obj)
 }
 
 /**
- * Set mailto list from a contact list..
- *
- * @param  string $mailto
- * @param  int    $contactListID
- * @access public
- * @return void
- */
-function setMailto(mailto, contactListID)
-{
-    var oldUsers = $('#' + mailto).val() ? $('#' + mailto).val() : '';
-    link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID + '&dropdownName=' + mailto + '&oldUsers=' + oldUsers);
-    $.get(link, function(users)
-    {
-        var picker = $('#' + mailto).data('zui.picker');
-        if(picker) picker.destroy();
-
-        $('#' + mailto).replaceWith(users);
-        $('#' + mailto + '_chosen').remove();
-        $('#' + mailto).siblings('.picker').remove();
-
-        if($("[data-pickertype='remote']").length == 0 && $('.picker-select').length == 0)
-        {
-            $('#' + mailto).chosen();
-        }
-        else
-        {
-            $('#' + mailto + "[data-pickertype!='remote']").picker({chosenMode: true});
-            $("[data-pickertype='remote']").each(function()
-            {
-                var pickerremote = $(this).attr('data-pickerremote');
-                $(this).picker({chosenMode: true, remote: pickerremote});
-            });
-        }
-    });
-}
-
-/**
- * Ajax get contacts.
- *
- * @param  object $obj
- * @param  string $dropdownName mailto|whitelist
- * @access public
- * @return void
- */
-function ajaxGetContacts(obj, dropdownName)
-{
-    if(typeof(dropdownName) == 'undefined') dropdownName = 'mailto';
-
-    link = createLink('user', 'ajaxGetContactList', 'dropdownName=' + dropdownName);
-    $.get(link, function(contacts)
-    {
-        if(!contacts) return false;
-
-        $inputgroup = $(obj).closest('.input-group');
-        $inputgroup.find('.input-group-btn').remove();
-        $inputgroup.append(contacts);
-        $inputgroup.find('select:last').chosen().fixInputGroup();
-    });
-}
-
-/**
  * add one option of a select to another select.
  *
  * @param  string $SelectID
