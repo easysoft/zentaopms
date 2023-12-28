@@ -38,6 +38,22 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 获取列表页面的 branch 参数。
+     * Get browse branch param.
+     *
+     * @param  string    $branch
+     * @access protected
+     * @return string
+     */
+    protected function getBrowseBranch(string $branch): string
+    {
+        if($branch === '') $branch = $this->cookie->preBranch;
+        if($branch === '' || $branch === false) $branch = '0';
+
+        return $branch;
+    }
+
+    /**
      * 设置列表页面的 session。
      * Set Browse session.
      *
