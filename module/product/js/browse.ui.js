@@ -19,6 +19,17 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
     }
 });
 
+$(document).off('click','#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
+{
+    var planID = $('[name=plan]').val();
+    if(planID)
+    {
+        $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID)});
+    }
+
+    return false;
+});
+
 $(document).off('click', '.batchUnlinkStory').on('click', '.batchUnlinkStory', function(e)
 {
     const $this       = $(this);

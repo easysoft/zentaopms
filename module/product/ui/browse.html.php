@@ -125,7 +125,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 };
 
 /* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $product, $projectHasProduct, $project, $projectID)
+$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project)
 {
     if(!common::canModify('product', $product)) return null;
 
@@ -143,23 +143,34 @@ $fnBuildLinkStoryButton = function() use($lang, $product, $projectHasProduct, $p
         )));
     }
 
-    $buttonLink  = '';
-    $buttonTitle = '';
-    if(common::hasPriv('projectstory', 'linkStory'))
+    $canLinkStory     = common::hasPriv('projectstory', 'linkStory');
+    $canlinkPlanStory = !empty($product) && common::hasPriv('projectstory', 'importPlanStories');
+    $linkStoryUrl     = $this->createLink('projectstory', 'linkStory', "project=$project->id");
+    $linkItem         = array('text' => $lang->execution->linkStory, 'url' => $linkStoryUrl);
+    $linkPlanItem     = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+    if($canLinkStory && $canlinkPlanStory)
     {
-        $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
-        $buttonTitle = $lang->execution->linkStory;
-    }
-    if(empty($buttonLink)) return null;
+        return btngroup
+        (
+            btn(
+                setClass('btn primary'),
+                set::icon('link'),
+                set::url($linkStoryUrl),
+                setData('app', $app->tab),
+                $lang->execution->linkStory
+            ),
+            dropdown
+            (
+                btn(setClass('btn primary dropdown-toggle'),
+                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+                set::items(array_filter(array($linkItem, $linkPlanItem))),
+                set::placement('bottom-end')
+            )
+        );
 
-    return item(set(array
-    (
-        'id'    => 'linkStoryBtn',
-        'text'  => $buttonTitle,
-        'icon'  => 'link',
-        'class' => 'primary',
-        'url'   => $buttonLink
-    )));
+    }
+    if($canLinkStory && !$canlinkPlanStory) return item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'plus')));
+    if($canlinkPlanStory && !$canLinkStory) return item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus')));
 };
 
 /* DataTable columns. */
@@ -338,5 +349,38 @@ dtable
 );
 
 modal(set::id('#batchUnlinkStoryBox'));
+
+$linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
+if($product && $product->type != 'normal') $linkStoryByPlanTips = sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
+if($isProjectStory) $linkStoryByPlanTips = str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+modal
+(
+    setID('linkStoryByPlan'),
+    set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
+    div
+    (
+        setClass('flex-auto'),
+        icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+        $linkStoryByPlanTips
+    ),
+    form
+    (
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->linkStory),
+        formGroup
+        (
+            set::label($lang->execution->selectStoryPlan),
+            set::required(true),
+            setClass('text-left'),
+            picker
+            (
+                set::name('plan'),
+                set::required(true),
+                set::items($plans)
+            )
+        )
+    )
+);
 
 render();

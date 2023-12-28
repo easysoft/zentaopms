@@ -21,7 +21,7 @@ foreach($executionStories as $story)
     (
         h::td($story->id),
         h::td(a(set::href($storyLink), set::title($story->title), set::style(array('color' => '#5988e2')), $story->title)),
-        h::td(a(set::href($executionLink), set::title($story->execution), set::style(array('color' => '#32579c')), $story->execution))
+        h::td(a(set::href($executionLink), set::title($story->execution), set::style(array('color' => '#32579c')), setData('app', 'execution'), $story->execution))
     );
 }
 
