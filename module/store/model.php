@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of store module of ZenTaoPMS.
  *
@@ -29,8 +30,10 @@ class storeModel extends model
     }
 
     /**
+     * 根据关键字查询应用市场应用列表。
      * Get app list from cloud market.
      *
+     * @param  string $orderBy
      * @param  string $keyword
      * @param  array  $categories
      * @param  int    $page
@@ -38,12 +41,12 @@ class storeModel extends model
      * @access public
      * @return object
      */
-    public function searchApps($sortBy = '', $keyword = '', $categories = array(), $page = 1, $pageSize = 20)
+    public function searchApps(string $orderBy = '', string $keyword = '', array $categories = array(), int $page = 1, int $pageSize = 20): object
     {
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/applist?channel='. $this->config->cloud->api->channel;
         $apiUrl .= "&q=" . rawurlencode(trim($keyword));
-        $apiUrl .= "&sort=" . rawurlencode(trim($sortBy));
+        $apiUrl .= "&sort=" . rawurlencode(trim($orderBy));
         $apiUrl .= "&page=$page";
         $apiUrl .= "&page_size=$pageSize";
         foreach($categories as $category) $apiUrl .= "&category=$category"; // The names of category are same that reason is CNE api is required.
@@ -51,16 +54,17 @@ class storeModel extends model
         $result = commonModel::apiGet($apiUrl, array(), $this->config->cloud->api->headers);
         if($result->code == 200) return $result->data;
 
-        $pagedApps = new stdclass;
+        $pagedApps = new stdclass();
         $pagedApps->apps  = array();
         $pagedApps->total = 0;
         return $pagedApps;
     }
 
     /**
+     * 通过接口获取应用详情。
      * Get app info from cloud market.
      *
-     * @param  int     $id
+     * @param  int     $appID
      * @param  boolean $analysis true: log this request for analysis.
      * @param  string  $name
      * @param  string  $version
@@ -68,13 +72,13 @@ class storeModel extends model
      * @access public
      * @return object|null
      */
-    public function getAppInfo($id, $analysis = false, $name = '', $version ='',  $channel = '')
+    public function getAppInfo(int $appID, bool $analysis = false, string $name = '', string $version ='', string $channel = ''): object|null
     {
-        if(empty($id)) return null;
+        if(empty($appID)) return null;
         $apiParams = array();
         $apiParams['analysis'] = $analysis ? 'true' : 'false' ;
 
-        if($id)      $apiParams['id']      = $id;
+        if($appID)   $apiParams['id']      = $appID;
         if($name)    $apiParams['name']    = $name;
         if($version) $apiParams['version'] = $version;
         if($channel) $apiParams['channel'] = $channel;
@@ -88,14 +92,14 @@ class storeModel extends model
     }
 
     /**
-     * Get app infos map by name array from cloud market.
      * 根据名称查询多个应用信息。
+     * Get app infos map by name array from cloud market.
      *
      * @param  array  $nameList
      * @access public
      * @return object|null
      */
-    public function getAppMapByNames($nameList = array(),  $channel = 'stable')
+    public function getAppMapByNames(array $nameList = array(), string $channel = 'stable'): object|null
     {
         $apiParams = array('name_list' => $nameList, 'channel' => $channel);
 
@@ -110,14 +114,14 @@ class storeModel extends model
     /**
      * Get app version pairs by id.
      *
-     * @param  int    $id
+     * @param  int    $appID
      * @access public
      * @return array
      */
-    public function getVersionPairs(int $id): array
+    public function getVersionPairs(int $appID): array
     {
         $pairs    = array();
-        $versions = $this->appVersionList($id);
+        $versions = $this->appVersionList($appID);
 
         foreach($versions as $version) $pairs[$version->version] = $version->app_version . '-' . $version->version;
 
@@ -125,23 +129,24 @@ class storeModel extends model
     }
 
     /**
+     * 获取应用的可安装版本。
      * Get app version list to install.
      *
-     * @param  int    $id
+     * @param  int    $appID
      * @param  string $name
      * @param  string $channel
      * @param  int    $page
      * @param  int    $pageSize
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function appVersionList($id, $name = '', $channel = '', $page = 1, $pageSize = 3)
+    public function appVersionList(int $appID, string $name = '', string $channel = '', int $page = 1, int $pageSize = 3): array
     {
         $apiParams = array();
         $apiParams['page']      = $page;
         $apiParams['page_size'] = $pageSize;
 
-        if($id)      $apiParams['id']      = $id;
+        if($appID)   $apiParams['id']      = $appID;
         if($name)    $apiParams['name']    = $name;
         if($channel) $apiParams['channel'] = $channel;
 
@@ -154,6 +159,7 @@ class storeModel extends model
     }
 
     /**
+     * 获取应用可以升级到的版本。
      * Get upgradable versions of app from cloud market.
      *
      * @param  string $currentVersion
@@ -161,9 +167,9 @@ class storeModel extends model
      * @param  string $appName        appName is required if no appID.
      * @param  string $channel
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function getUpgradableVersions($currentVersion, $appID = 0, $appName = '', $channel = '')
+    public function getUpgradableVersions(string $currentVersion, int $appID = 0, string $appName = '', string $channel = ''): array
     {
         $channel = $channel ? $channel : $this->config->cloud->api->channel;
         $apiUrl  = $this->config->cloud->api->host;
@@ -179,13 +185,14 @@ class storeModel extends model
             $conditions['name'] = $appName;
         }
 
-        $result  = commonModel::apiGet($apiUrl, $conditions, $this->config->cloud->api->headers);
+        $result = commonModel::apiGet($apiUrl, $conditions, $this->config->cloud->api->headers);
         if(!isset($result->code) || $result->code != 200) return array();
 
         return $result->data;
     }
 
     /**
+     * 获取应用的最新版本。
      * Get the latest versions of app from cloud market.
      *
      * @param  int    $appID
@@ -193,7 +200,7 @@ class storeModel extends model
      * @access public
      * @return object|null
      */
-    public function appLatestVersion($appID, $currentVersion)
+    public function appLatestVersion(int $appID, string $currentVersion): object|null
     {
         $versionList = $this->getUpgradableVersions($currentVersion, $appID);
 
@@ -206,17 +213,18 @@ class storeModel extends model
     }
 
     /**
+     * 从版本列表中选择最高版本并进行比较。
      * Pick highest version from version list and compared version.
      *
      * @param  array       $versionList
      * @access private
      * @return object|null
      */
-    private function pickHighestVersion($versionList)
+    private function pickHighestVersion(array $versionList): object|null
     {
         if(empty($versionList)) return null;
 
-        $highestVersion = new stdclass;
+        $highestVersion = new stdclass();
         $highestVersion->version = '0.0.0';
         foreach($versionList as $version)
         {
@@ -227,17 +235,18 @@ class storeModel extends model
     }
 
     /**
+     * 获取应用市场应用的配置。
      * Get app setting from cloud market.
      *
-     * @param  int $id
+     * @param  int $appID
      * @access public
      * @return array
      */
-    public function getAppSettings($id)
+    public function getAppSettings(int $appID): array
     {
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/appsettings';
-        $result  = commonModel::apiGet($apiUrl, array('id' => $id), $this->config->cloud->api->headers);
+        $result  = commonModel::apiGet($apiUrl, array('id' => $appID), $this->config->cloud->api->headers);
         if($result->code != 200) return array();
 
         /* Convert "." to "_" */
@@ -251,12 +260,13 @@ class storeModel extends model
     }
 
     /**
+     * 从云市场获取类别列表。
      * Get category list from cloud market.
      *
      * @access public
      * @return object
      */
-    public function getCategories()
+    public function getCategories(): object
     {
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/categories';
@@ -270,6 +280,7 @@ class storeModel extends model
     }
 
     /**
+     * 从渠成获取应用动态消息。
      * Get app dynamic news from Qucheng offical site.
      *
      * @param  object $cloudApp
@@ -278,7 +289,7 @@ class storeModel extends model
      * @access public
      * @return object|null
      */
-    public function appDynamic($cloudApp, $pageID = 1, $recPerPage = 20)
+    public function appDynamic(object $cloudApp, int $pageID = 1, int $recPerPage = 20): object|null
     {
         $alias = strtolower(str_replace('-', '', $cloudApp->chart));
         $url   = $this->config->store->quchengSiteHost . "/article-apibrowse-{$alias}-{$pageID}-{$recPerPage}.html";
@@ -290,6 +301,7 @@ class storeModel extends model
     }
 
     /**
+     * 根据参数获取解决方案信息。
      * Get solution info.
      *
      * @param  string     $type
@@ -297,7 +309,7 @@ class storeModel extends model
      * @access public
      * @return object
      */
-    public function getSolution($type, $value)
+    public function getSolution(string $type, string $value): object
     {
         $apiParams = array();
         $apiParams[$type] = $value;
@@ -314,6 +326,7 @@ class storeModel extends model
     }
 
     /**
+     * 获取解决方案的配置信息。
      * Get solution config.
      *
      * @param  string     $type
@@ -321,7 +334,7 @@ class storeModel extends model
      * @access public
      * @return object
      */
-    public function solutionConfig($type, $value)
+    public function solutionConfig(string $type, string $value): object
     {
         $apiParams = array();
         $apiParams[$type] = $value;
