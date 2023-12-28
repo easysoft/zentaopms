@@ -97,6 +97,9 @@ zentaoxx:
 	cp -r xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r xuanxuan/www/* zentaoxx/www/
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
+	rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
+	find zentaoxx/www/data/xuanxuan/web/media/sound -not -name 'message.mp3' -type f -delete
+	find zentaoxx/www/data/xuanxuan/web/lang -not -name 'zh-*.json' -not -name 'en.json' -type f -delete
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
