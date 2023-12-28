@@ -30,7 +30,7 @@ class GitRepo
             $branches = $this->branch();
             $cmd      = escapeCmd("$this->client branch -r");
             execCmd($cmd . ' 2>&1', 'string', $result);
-            if(isset($branches[$branch]) and !empty($result)) $branch = "origin/$branch";
+            if(isset($branches[$branch]) && !empty($result)) $branch = "origin/$branch";
         }
         $this->branch = $branch;
         $this->repo   = $repo;
@@ -586,7 +586,12 @@ class GitRepo
 
 
         chdir($this->root);
-        if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+        if($branch)
+        {
+            execCmd(escapeCmd("$this->client checkout -b $branch"), 'array');
+            execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+            execCmd(escapeCmd("$this->client pull"));
+        }
 
         $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
         $commits = $this->parseLog($list);

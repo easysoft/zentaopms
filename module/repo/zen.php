@@ -1403,14 +1403,10 @@ class repoZen extends repo
                 if(empty($branchID)) $branchID = key($branches);
 
                 /* Get unsynced branches. */
-                unset($branches['master']);
-                if($branchID != 'master')
+                foreach($branches as $branch)
                 {
-                    foreach($branches as $branch)
-                    {
-                        unset($branches[$branch]);
-                        if($branch == $branchID) break;
-                    }
+                    unset($branches[$branch]);
+                    if($branch == $branchID) break;
                 }
 
                 $this->setRepoBranch($branchID);
@@ -1455,6 +1451,8 @@ class repoZen extends repo
 
             if(empty($branchID) || $repo->SCM == 'Gitlab')
             {
+                helper::setcookie("syncBranch", '');
+
                 $this->repo->markSynced($repo->id);
                 return $this->config->repo->repoSyncLog->finish;
             }

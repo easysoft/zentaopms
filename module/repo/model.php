@@ -2045,14 +2045,14 @@ class repoModel extends model
         $allFiles = array();
         if(is_null($diffs))
         {
-            if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+            if($repo->SCM != 'Subversion' && empty($branch)) $branch = $this->cookie->repoBranch;
             $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('t1.repo')->eq($repo->id)
                 ->andWhere('t1.type')->eq('file')
                 ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
-                ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+                ->beginIF($repo->SCM != 'Subversion' && $branch)->andWhere('t3.branch')->eq($branch)->fi()
                 ->orderBy('t2.`time` asc')
                 ->fetchAll('path');
 
@@ -2213,8 +2213,8 @@ class repoModel extends model
                 $currentBranches = $this->getBranches($repo, false, 'database');
                 if(!in_array($branch, $currentBranches))
                 {
-                    $link = $this->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=$branchID", '', false) . '#app=' . $this->app->tab;
-                    return print(js::locate($link));
+                    $link = $this->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=$branchID", '', false);
+                    return $this->app->control->locate($link);
                 }
             }
             $this->loadModel('git')->updateCommit($repo, $commentGroup, false);

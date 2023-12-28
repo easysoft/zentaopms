@@ -1134,6 +1134,12 @@ class repo extends control
         $this->scm->setEngine($repo);
 
         $branchID = $repo->SCM == 'Subversion' ? '' : (string)$this->cookie->syncBranch;
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList) && !$this->cookie->syncBranch)
+        {
+            $branches = $this->scm->branch();
+            $branchID = current($branches);
+        }
+
         $branches = $this->repoZen->getSyncBranches($repo, $branchID);
 
         $logs    = array();

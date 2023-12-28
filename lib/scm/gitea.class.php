@@ -599,6 +599,7 @@ class Gitea
         chdir($this->root);
         if($branch)
         {
+            execCmd(escapeCmd("$this->client checkout -b $branch"));
             execCmd(escapeCmd("$this->client checkout $branch"));
             execCmd(escapeCmd("$this->client pull"));
         }
