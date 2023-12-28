@@ -31,6 +31,10 @@ $config->host->dtable->fieldList['group']['map']      = $optionMenu;
 $config->host->dtable->fieldList['admin']['map']      = $accounts;
 $config->host->dtable->fieldList['serverRoom']['map'] = $rooms;
 $tableData = initTableData($hostList, $config->host->dtable->fieldList, $this->host);
+foreach($tableData as $row)
+{
+    if(!$row->admin) $row->admin = '';
+}
 
 toolbar
 (
