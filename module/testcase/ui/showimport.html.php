@@ -55,7 +55,7 @@ else
         'required' => strpos(",$requiredFields,", ',title,') !== false
     );
 
-    $caseModules = ($branchID and isset($modules[$branchID])) ? $modules[BRANCH_MAIN] + $modules[$branchID] : $modules[BRANCH_MAIN];
+    $caseModules = ($branch and isset($modules[$branch])) ? $modules[BRANCH_MAIN] + $modules[$branch] : $modules[BRANCH_MAIN];
     $items[] = array
     (
         'name'    => 'module',
