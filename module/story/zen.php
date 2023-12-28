@@ -915,7 +915,13 @@ class storyZen extends story
 
         /* Get edited stories. */
         $storyIdList = array_unique($storyIdList);
-        $stories     = $this->story->getByList($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+        $stories = $this->story->getByList($storyIdList);
         if(empty($stories)) return false;
 
         /* Filter twins. */
