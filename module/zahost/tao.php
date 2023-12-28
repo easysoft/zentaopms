@@ -55,7 +55,7 @@ class zahostTao extends zahostModel
                 if($finished) break;
                 if($task->task != $imageID) continue;
 
-                $task->endDate = substr($task->endDate, 0, 19);
+                $task->endDate = $task->endDate ? substr($task->endDate, 0, 19) : '';
                 if(empty($currentTask) || strtotime($task->endDate) > strtotime($currentTask->endDate)) $currentTask = $task;
 
                 if($task->status == 'inprogress')
