@@ -135,4 +135,24 @@ class zahostTest
         if(dao::isError()) return dao::getError();
         return $imageList;
     }
+
+    /**
+     * 测试下载镜像。
+     * Test download image.
+     *
+     * @param  int          $imageID
+     * @access public
+     * @return array|object
+     */
+    public function downloadImageTest(int $imageID): array|object
+    {
+        $image = $this->objectModel->getImageByID($imageID);
+        $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
+
+        $this->objectModel->downloadImage($image);
+        if(dao::isError()) return dao::getError();
+
+        $newImage = $this->objectModel->getImageByID($imageID);
+        return $newImage;
+    }
 }
