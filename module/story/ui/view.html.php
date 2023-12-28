@@ -443,7 +443,7 @@ detailBody
                 set::key('legendProjectAndTask'),
                 set::title($lang->story->legendProjectAndTask),
                 set::active((!$this->config->URAndSR || $hiddenURS) && empty($twins)),
-                h::ul($taskItems)
+                h::ul(setClass('list-unstyled'), $taskItems)
             ) : null,
             $config->vision == 'or' ? tabPane
             (

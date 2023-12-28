@@ -30,7 +30,7 @@ panel
         $lang->webhook->friendlyTips
     ) : null,
     div(setID('loadPrompt'), span(setClass('text-gray'), $lang->webhook->loadPrompt)),
-    h::ul(setID('deptList')),
+    h::ul(setClass('list-unstyled'), setID('deptList')),
     div
     (
         setClass('actions mt-3'),
@@ -40,4 +40,3 @@ panel
 );
 
 render();
-

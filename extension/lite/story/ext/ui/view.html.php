@@ -356,7 +356,7 @@ detailBody
                 set::key('legendProjectAndTask'),
                 set::title($lang->story->legendProjectAndTask),
                 set::active(true),
-                h::ul($taskItems)
+                h::ul(setClass('list-unstyled'), $taskItems)
             ) : null
         )
     )
