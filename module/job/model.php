@@ -294,7 +294,7 @@ class jobModel extends model
      */
     public function exec(int $id, array $extraParam = array()): object|false
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t1.svnDir,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
