@@ -1602,7 +1602,7 @@ class taskTest
         $this->objectModel->createTestChildTasks($taskID, $testTasks);
         if(dao::isError()) return dao::getError();
 
-        $lastTaskID = $this->objectModel->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc')->fetch('objectID');
+        $lastTaskID = $this->objectModel->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc, id asc')->fetch('objectID');
         return $this->objectModel->getByID((int)$lastTaskID);
     }
 

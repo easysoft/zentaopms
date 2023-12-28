@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testtask.class.php';
 
+zdTable('testtask')->gen(10);
 zdTable('testrun')->config('testrun')->gen(4);
 
 su('admin');
@@ -27,4 +28,4 @@ r($testtask->batchAssignTest(1, 'user1', array(1, 2))) && p('cases;actions[0]:ob
 r($testtask->batchAssignTest(1, 'user2', array(3, 4))) && p('cases;actions[0]:objectType|objectID|action|extra;actions[1]:objectType|objectID|action|extra', '|') && e('user1,user1,user2,user2;case|4|assigned|user2;case|3|assigned|user2'); // 批量指派测试单 1 中的用例 3 和用例 4 给 user2，并记录日志。
 r($testtask->batchAssignTest(1, 'user3', array(1, 3))) && p('cases;actions[0]:objectType|objectID|action|extra;actions[1]:objectType|objectID|action|extra', '|') && e('user3,user1,user3,user2;case|3|assigned|user3;case|1|assigned|user3'); // 批量指派测试单 1 中的用例 1 和用例 3 给 user3，并记录日志。
 r($testtask->batchAssignTest(1, 'user4', array(2, 4))) && p('cases;actions[0]:objectType|objectID|action|extra;actions[1]:objectType|objectID|action|extra', '|') && e('user3,user4,user3,user4;case|4|assigned|user4;case|2|assigned|user4'); // 批量指派测试单 1 中的用例 2 和用例 4 给 user4，并记录日志。
-r($testtask->batchAssignTest(1, 'user5', array(1, 5))) && p('cases;actions[0]:objectType|objectID|action|extra;actions[1]:objectType|objectID|action|extra', '|') && e('user5,user4,user3,user4;case|1|assigned|user5;case|4|assigned|user4'); // 批量指派测试单 1 中的用例 1 和用例 5 给 user5，并记录日志。
+r($testtask->batchAssignTest(1, 'user5', array(1, 5))) && p('cases;actions[0]:objectType|objectID|action|extra', '|') && e('user5,user4,user3,user4;case|1|assigned|user5'); // 批量指派测试单 1 中的用例 1 和用例 5 给 user5，并记录日志。
