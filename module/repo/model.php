@@ -1631,7 +1631,8 @@ class repoModel extends model
                 $action->product    = $productsAndExecutions[$taskID]['product'];
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
 
-                $objects['tasks'] = $this->setTaskByCommit($task, $objects['tasks'], $taskActions, $action, $changes, $scm);
+                $this->setTaskByCommit($task, $taskActions, $action, $changes, $scm);
+                unset($objects['tasks'][$taskID]);
             }
         }
 
@@ -2580,46 +2581,55 @@ class repoModel extends model
      * Set task by commit.
      *
      * @param  object $task
-     * @param  array  $tasks
      * @param  array  $taskActions
      * @param  object $action
      * @param  array  $changes
      * @param  string $scm
      * @access public
-     * @return array
+     * @return bool
      */
-    public function setTaskByCommit(object $task, array $tasks, array $taskActions, object $action, array $changes, string $scm): array
+    public function setTaskByCommit(object $task, array $taskActions, object $action, array $changes, string $scm): bool
     {
         $this->loadModel('task');
+        $now = helper::now();
         foreach($taskActions as $taskAction => $params)
         {
-            $newTask = new stdclass();
-            foreach($params as $field => $param) $newTask->$field = $param;
-
             if($taskAction == 'start' && $task->status == 'wait')
             {
-                $newTask->status      = 'doing';
-                $newTask->consumed    = $newTask->consumed + $task->consumed;
-                $newTask->realStarted = date('Y-m-d');
+                $newTask = form::data($this->config->task->form->start)
+                    ->add('id', $task->id)
+                    ->setIF($task->assignedTo != $this->app->user->account, 'assignedDate', $now)
+                    ->get();
+                $newTask->left        = $params['left'];
+                $newTask->consumed    = $params['consumed'] + $task->consumed;
+                $newTask->realStarted = $now;
+                if($newTask->left == 0 && empty($task->team))
+                {
+                    $newTask->status       = 'done';
+                    $newTask->finishedBy   = $this->app->user->account;
+                    $newTask->finishedDate = $now;
+                    $newTask->assignedTo   = $task->openedBy;
+                }
                 $taskChanges = $this->task->start($task, $newTask) + $changes;
                 if($taskChanges)
                 {
-                    $action->action = $this->post->left == 0 ? 'finished' : 'started';
+                    $action->action = $newTask->left == 0 ? 'finished' : 'started';
                     $this->saveRecord($action, $taskChanges);
                 }
             }
-            elseif($taskAction == 'effort' and in_array($task->status, array('wait', 'pause', 'doing')))
+            elseif($taskAction == 'effort' && in_array($task->status, array('wait', 'pause', 'doing')))
             {
                 $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
                 $this->saveEffortForCommit($task->id, $params, $action, $changes);
             }
             elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
             {
-                $newTask->status          = 'done';
-                $newTask->finishedDate    = date('Y-m-d');
-                $newTask->realStarted     = date('Y-m-d');
-                $newTask->currentConsumed = $newTask->consumed;
-                $newTask->consumed        = $newTask->consumed + $task->consumed;
+                $this->post->set('realStarted', $task->realStarted ? $task->realStarted : $now);
+                $newTask = form::data($this->config->task->form->finish)
+                    ->setDefault('assignedTo', $task->openedBy)
+                    ->get();
+                $newTask->left     = zget($params, 'left', 0);
+                $newTask->consumed = $params['consumed'] + $task->consumed;
                 $taskChanges = $this->task->finish($task, $newTask) + $changes;
                 if($taskChanges)
                 {
@@ -2629,8 +2639,7 @@ class repoModel extends model
             }
         }
 
-        unset($tasks[$task->id]);
-        return $tasks;
+        return !dao::isError();
     }
 
     /**
