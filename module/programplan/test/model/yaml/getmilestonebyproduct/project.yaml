@@ -6,6 +6,13 @@ fields:
       range: 1-6
     - field: project
       range: 0, 1, 1, 0, 4, 4
+    - field: name
+      note: "名称"
+      fields:
+      - field: name1
+        range: '项目{100}'
+      - field: name2
+        range: 1-10000
     - field: model
       range: 'waterfall, , ,waterfall, , ,'
     - field: type

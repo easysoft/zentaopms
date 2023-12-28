@@ -1,13 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
-function initData()
-{
-    zdTable('project')->config('project')->gen(6);
-    zdTable('projectproduct')->config('projectproduct')->gen(6);
-}
+zdTable('project')->config('project')->gen(6);
+zdTable('projectproduct')->config('projectproduct')->gen(6);
+
+su('admin');
 
 /**
 
@@ -16,8 +14,6 @@ cid=1
 pid=1
 
 */
-
-initData();
 
 global $tester;
 

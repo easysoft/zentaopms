@@ -109,20 +109,20 @@ class programplanTest
      * 测试获取阶段百分比。
      * Test get total percent.
      *
-     * @param  int    $stageID
-     * @param  bool   $parent
+     * @param  int       $stageID
+     * @param  bool      $parent
      * @access public
-     * @return int
+     * @return int|float
      */
-    public function getTotalPercentTest(int $stageID, bool $parent = false): int
+    public function getTotalPercentTest(int $stageID, bool $parent = false): int|float
     {
         $stage = $this->objectModel->getByID($stageID);
 
-        $int = $this->objectModel->getTotalPercent($stage, $parent);
+        $result = $this->objectModel->getTotalPercent($stage, $parent);
 
         if(dao::isError()) return dao::getError();
 
-        return $int;
+        return $result;
     }
 
     /**

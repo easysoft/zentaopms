@@ -78,11 +78,11 @@ class programplanTao extends programplanModel
      * 根据action获取excution。
      * Get new parent and action.
      *
-     * @param  array $statusCount
-     * @param  object $parent
-     * @param  int    $startTasks
-     * @param  string $action
-     * @param  object $project
+     * @param  array     $statusCount
+     * @param  object    $parent
+     * @param  int       $startTasks
+     * @param  string    $action
+     * @param  object    $project
      * @access protected
      * @return array
      */

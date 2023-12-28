@@ -2,13 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
-su('admin');
 
-function initData()
-{
-    zdTable('project')->config('project')->gen(13);
-    zdTable('task')->config('task')->gen(13);
-}
+zdTable('project')->config('project')->gen(13);
+zdTable('task')->config('task')->gen(13);
+su('admin');
 
 /**
 
@@ -18,27 +15,25 @@ cid=1
 
 */
 
-initData();
-
 global $tester;
 $programplan = new programplanTest();
 $tester->loadModel('programplan')->programplanTao;
 
 $project = $programplan->getByIdTest(2);
-$result  = $tester->programplan->getNewParentAndAction(array('wait' => 1), $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('wait' => 1), $project, 0, 'edit', $project);
 $parent1 = $result['newParent'];
 
 
 $project = $programplan->getByIdTest(5);
-$result  = $tester->programplan->getNewParentAndAction(array('closed' => 1), $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('closed' => 1), $project, 0, 'edit', $project);
 $parent2 = $result['newParent'];
 
 $project = $programplan->getByIdTest(8);
-$result  = $tester->programplan->getNewParentAndAction(array('suspended' => 1), $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('suspended' => 1), $project, 0, 'edit', $project);
 $parent3 = $result['newParent'];
 
 $project = $programplan->getByIdTest(11);
-$result  = $tester->programplan->getNewParentAndAction(array('wait' => 2, 'closed' => 1), $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('wait' => 2, 'closed' => 1), $project, 0, 'edit', $project);
 $parent4 = $result['newParent'];
 
 

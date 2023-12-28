@@ -6,6 +6,9 @@ fields:
       range: 1-6
     - field: project
       range: 0, 1, 1, 0, 4, 4
+    - field: name
+      range: 1-6
+      prefix: 项目
     - field: model
       range: 'waterfall, , ,waterfall, , ,'
     - field: type

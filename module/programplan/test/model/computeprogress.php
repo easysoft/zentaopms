@@ -2,13 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
-su('admin');
 
-function initData()
-{
-    zdTable('project')->config('project')->gen(13);
-    zdTable('task')->config('task')->gen(13);
-}
+zdTable('project')->config('project')->gen(13);
+zdTable('task')->config('task')->gen(13);
+su('admin');
 
 /**
 
@@ -18,11 +15,9 @@ cid=1
 
 */
 
-initData();
-
 $programplan = new programplanTest();
 
-r($programplan->computeProgressTest('1', 'edit', false))   && p() && e('success');           // 测试参数=项目id直接continue
+r($programplan->computeProgressTest('2', 'edit', false))   && p() && e('success');           // 测试参数=项目id直接continue
 r($programplan->computeProgressTest('2', 'edit', true))    && p() && e('success');           // 测试阶段status=suspended子阶段status=wait
 r($programplan->getByIdTest(2))                            && p('status') && e('wait');      // 测试阶段status:suspended=>wait
 r($programplan->computeProgressTest('5', 'edit', true))    && p() && e('success');           // 测试阶段status=suspended子阶段status=closed
