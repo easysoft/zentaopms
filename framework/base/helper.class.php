@@ -1168,8 +1168,12 @@ function getWebRoot($full = false)
         return $http . $_SERVER['HTTP_HOST'] . substr((string) $path, 0, (strrpos((string) $path, '/') + 1));
     }
 
-    $path = substr((string) $path, 0, (strrpos((string) $path, '/') + 1));
+    $pos = strrpos((string) $path, '/');
+    if($pos === false) return '';
+
+    $path = substr((string) $path, 0, ($pos + 1));
     $path = str_replace('\\', '/', $path);
+
     return $path;
 }
 
