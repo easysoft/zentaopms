@@ -1633,8 +1633,8 @@ class testcase extends control
 
             $configResult = $this->testcase->saveXmindConfig($configList);
 
-            $imoduleID = $this->post->imodule ? $this->post->imoduleID : 0;
-            $context   = $this->testcaseZen->getXmindExport($productID, $imoduleID, $branch);
+            $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
+            $context   = $this->testcaseZen->getXmindExport($productID, (int)$imoduleID, $branch);
 
             $productName = '';
             if(count($context['caseList']))
