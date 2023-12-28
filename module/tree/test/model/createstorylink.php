@@ -18,9 +18,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/tree.class.php';
 su('admin');
 
-global $config;
-$config->requestType = 'PATH_INFO';
-
 zdTable('module')->config('module')->gen(20);
 
 $extra1 = array('branchID' => 0, 'projectID' => 1);

@@ -3,8 +3,10 @@ class treeTest
 {
     public function __construct()
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('tree');
+        global $config, $tester;
+
+        $config->requestType = 'PATH_INFO';
+        $this->objectModel = $tester->loadModel('tree');
     }
 
     /**
