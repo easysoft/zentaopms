@@ -98,7 +98,7 @@ $config->repo->repoDtable->fieldList['time']['hint']     = true;
 $config->repo->repoDtable->fieldList['committer']['name']     = 'account';
 $config->repo->repoDtable->fieldList['committer']['title']    = $lang->repo->committer;
 $config->repo->repoDtable->fieldList['committer']['sortType'] = false;
-$config->repo->repoDtable->fieldList['committer']['type']     = 'user';
+$config->repo->repoDtable->fieldList['committer']['width']    = '90';
 $config->repo->repoDtable->fieldList['committer']['hint']     = true;
 
 $config->repo->repoDtable->fieldList['comment']['name']     = 'originalComment';
