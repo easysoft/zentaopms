@@ -6,10 +6,10 @@ $(function()
 });
 
 /* 切换项目管理模型的逻辑. */
-$(document).on('click', '.dropdown-menu .menu-item', function()
+$(document).on('click', '.model-drop', function()
 {
-    let text  = $(this).find('.model-drop').attr('data-value');
-    let model = $(this).find('.model-drop').attr('data-key');
+    let text  = $(this).find('.listitem').attr('data-value');
+    let model = $(this).find('.listitem').attr('data-key');
 
     const btnClass = labelClass[model];
 
