@@ -3,10 +3,10 @@ author: Mengyi Liu
 version: "1.0"
 fields:
   - field: host
-    range: 1-10
+    range: 1-10{2}
   - field: name
     prefix: defaultSnap
-    range: "``{10},1-10"
+    range: 1-10
   - field: from
     range: snapshot{3},zentao
   - field: status
