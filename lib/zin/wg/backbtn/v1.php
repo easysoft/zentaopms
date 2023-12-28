@@ -50,7 +50,7 @@ class backBtn extends btn
             'testsuite'      => 'testsuite-browse,testsuite-view,',
             'testtask'       => 'testtask-browse,testtask-cases,qa-index,',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,',
-            'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story',
+            'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view',
             'design'         => 'design-browse',
             'release'        => 'release-browse,release-view,product-roadmap',
