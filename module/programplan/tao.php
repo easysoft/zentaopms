@@ -82,10 +82,11 @@ class programplanTao extends programplanModel
      * @param  object $parent
      * @param  int    $startTasks
      * @param  string $action
+     * @param  object $project
      * @access protected
      * @return array
      */
-    protected function getNewParentAndAction(array $statusCount, object $parent, int $startTasks, string $action): array
+    protected function getNewParentAndAction(array $statusCount, object $parent, int $startTasks, string $action, object $project): array
     {
         $count        = count($statusCount);
         $newParent    = null;

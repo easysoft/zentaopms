@@ -957,7 +957,7 @@ class programplanModel extends model
 
             if(empty($statusCount)) continue;
 
-            $result       = $this->programplanTao->getNewParentAndAction($statusCount, $parent, (int)$startTasks, $action);
+            $result       = $this->programplanTao->getNewParentAndAction($statusCount, $parent, (int)$startTasks, $action, $project);
             $newParent    = $result['newParent'] ?? null;
             $parentAction = $result['parentAction'] ?? '';
 
