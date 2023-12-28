@@ -152,8 +152,27 @@ class zahostTest
         $this->objectModel->downloadImage($image);
         if(dao::isError()) return dao::getError();
 
-        $newImage = $this->objectModel->getImageByID($imageID);
+        return $this->objectModel->getImageByID($imageID);
         return $newImage;
+    }
+
+    /**
+     * 测试取消下载镜像。
+     * Test cancel download image.
+     *
+     * @param  int          $imageID
+     * @access public
+     * @return array|object
+     */
+    public function cancelDownloadTest(int $imageID): array|object
+    {
+        $image = $this->objectModel->getImageByID($imageID);
+        $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
+
+        $this->objectModel->cancelDownload($image);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getImageByID($imageID);
     }
 
     /**
