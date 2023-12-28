@@ -452,10 +452,10 @@ class transferZen extends transfer
      * @access private
      * @return string
      */
-    private function processEstimate(int $row = 0, object $object)
+    private function processEstimate(int $row = 0, object $object = null): string
     {
         $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskTransferParams['executionID'], 'execution');
-        $html   .= '<td>';
+        $html    = '<td>';
         if(!empty($object->estimate) and is_array($object->estimate))
         {
             $html .= "<table class='table-borderless'>";
