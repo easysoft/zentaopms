@@ -51,7 +51,7 @@ $config->search->fields->productplan = new stdclass();
 $config->search->fields->productplan->id         = 'id';
 $config->search->fields->productplan->title      = 'title';
 $config->search->fields->productplan->content    = 'desc';
-$config->search->fields->productplan->addedDate  = 'addedDate';
+$config->search->fields->productplan->addedDate  = 'createdDate';
 $config->search->fields->productplan->editedDate = 'lastEditedDate';
 
 $config->search->fields->project = new stdclass();
@@ -65,7 +65,7 @@ $config->search->fields->release = new stdclass();
 $config->search->fields->release->id         = 'id';
 $config->search->fields->release->title      = 'name';
 $config->search->fields->release->content    = 'desc';
-$config->search->fields->release->addedDate  = 'addedDate';
+$config->search->fields->release->addedDate  = 'createdDate';
 $config->search->fields->release->editedDate = 'lastEditedDate';
 
 $config->search->fields->story = new stdclass();
@@ -93,7 +93,7 @@ $config->search->fields->testtask = new stdclass();
 $config->search->fields->testtask->id         = 'id';
 $config->search->fields->testtask->title      = 'name';
 $config->search->fields->testtask->content    = 'desc,report';
-$config->search->fields->testtask->addedDate  = 'addedDate';
+$config->search->fields->testtask->addedDate  = 'createdDate';
 $config->search->fields->testtask->editedDate = 'lastEditedDate';
 
 $config->search->fields->todo = new stdclass();

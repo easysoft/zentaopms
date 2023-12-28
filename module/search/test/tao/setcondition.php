@@ -6,6 +6,7 @@ include dirname(__FILE__, 2) . '/search.class.php';
 su('admin');
 
 zdTable('module')->gen(5);
+zdTable('scene')->gen(1);
 
 /**
 
@@ -29,6 +30,7 @@ cid=1
 $operators = array('include', 'notinclude', 'belong', 'between', '=');
 $fields    = array('module', 'title', 'dept', 'scene', 'id', 'date');
 $values    = array(1, 'test', '0', '$thisMonth', '1,2,3');
+$thisMonth = 1;
 
 $search = new searchTest();
 r($search->setConditionTest($fields[0], $operators[0], $values[0])) && p() && e("= '1'");                //测试 module 包含 id 为 1 的条件

@@ -1,0 +1,10 @@
+title: table zt_testtask
+desc: "测试版本"
+author: automated export
+version: "1.0"
+fields:
+  - field: createdDate
+    note: "创建日期"
+    range: "-:60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

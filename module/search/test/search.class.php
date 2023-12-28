@@ -283,6 +283,8 @@ class searchTest
      */
     public function getListTest(string $keywords, string|array $type): int|array
     {
+        zdTable('searchindex')->gen(0);
+        zdTable('searchdict')->gen(0);
         $result = array();
         while(!isset($result['finished']))
         {
@@ -299,10 +301,6 @@ class searchTest
         $objects = $this->objectModel->getList($keywords, $type);
 
         if(dao::isError()) return dao::getError();
-
-        global $tester;
-        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
-        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
         return count($objects);
     }
@@ -610,6 +608,8 @@ class searchTest
 
         $results = $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->fetchAll();
 
+        $tester->app->setModuleName('search');
+        $tester->app->setMethodName('setResultsInPage');
         $tester->app->loadClass('pager', true);
         $pager = new pager(0, $recPerPage, $pageID);
 
@@ -668,9 +668,9 @@ class searchTest
 
         foreach($dataList as $data)
         {
-            $data->comment = str_replace("\n", '', $data->comment);
-            $data->desc    = str_replace("\n", '', $data->desc);
-            $data->expect  = str_replace("\n", '', $data->expect);
+            if(!empty($data->comment)) $data->comment = str_replace("\n", '', $data->comment);
+            if(!empty($data->desc))    $data->desc    = str_replace("\n", '', $data->desc);
+            if(!empty($data->expect))  $data->expect  = str_replace("\n", '', $data->expect);
         }
 
         return $dataList;

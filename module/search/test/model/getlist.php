@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/search.class.php';
-su('admin');
 
 zdTable('task')->gen(10);
 zdTable('bug')->gen(10);
@@ -11,17 +10,23 @@ zdTable('todo')->gen(10);
 zdTable('build')->gen(10);
 zdTable('product')->gen(10);
 zdTable('release')->gen(10);
-zdTable('testtask')->gen(10);
+zdTable('testtask')->config('testtask')->gen(10);
 zdTable('testsuite')->gen(10);
 zdTable('testreport')->gen(10);
 zdTable('productplan')->gen(10);
 zdTable('project')->gen(100);
-zdTable('story')->gen(10);
+zdTable('storyspec')->gen(10);
+zdTable('doccontent')->gen(10);
+
+$story = zdTable('story');
+$story->version->range('1');
+$story->gen(10);
 
 $doc = zdTable('doc');
 $doc->version->range('1');
 $doc->gen(10);
-zdTable('doccontent')->gen(10);
+
+su('admin');
 
 /**
 

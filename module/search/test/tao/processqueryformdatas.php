@@ -38,24 +38,20 @@ $valueName    = 'value1';
 
 $postDatas = array();
 $postData1 = new stdClass();
-$postData1->$field        = 'title';
 $postData1->$andOrName    = 'and';
 $postData1->$operatorName = 'include';
 $postData1->$valueName    = '测试';
 
 $postData2 = new stdClass();
-$postData2->$field        = 'id';
 $postData2->$andOrName    = 'or';
 $postData2->$operatorName = '=';
 $postData2->$valueName    = '1';
 
 $postData3 = new stdClass();
-$postData3->$field        = 'status';
 $postData3->$andOrName    = '';
 $postData3->$operatorName = '';
 
 $postData4 = new stdClass();
-$postData4->$field        = 'activatedCount';
 $postData4->$andOrName    = '';
 $postData4->$operatorName = '';
 $postData4->$valueName    = 'ZERO';
