@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('instance')->gen(1);
+zdTable('space')->gen(1);
 
 $configData = zdTable('config');
 $configData->owner->range('system');
