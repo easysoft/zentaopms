@@ -101,6 +101,8 @@ class form extends fixer
      */
     public function config(array $config, string $type = 'single')
     {
+        $config = $this->processRequiredFields($config);
+
         $this->rawconfig = $config;
         $this->formType  = $type;
 
@@ -124,6 +126,37 @@ class form extends fixer
         }
 
         return $this;
+    }
+
+    /**
+     * 根据必填字段更新表单配置项中的必填属性。
+     * Update the required attribute of the form configuration according to the required fields.
+     *
+     * @param  array $configObject
+     * @access private
+     * @return array
+     */
+    private function processRequiredFields(array $configObject): array
+    {
+        global $app, $config;
+
+        $module = $app->getModuleName();
+        $method = $app->getMethodName();
+        if($method == 'batchcreate') $method = 'create';
+
+        if(empty($config->$module->$method->requiredFields)) return $configObject;
+
+        $requiredFields = array_unique(array_filter(explode(',', $config->$module->$method->requiredFields)));
+
+        foreach($requiredFields as $field)
+        {
+            $field = trim($field);
+            if(!isset($configObject[$field])) continue;
+
+            $configObject[$field]['required'] = true;
+        }
+
+        return $configObject;
     }
 
     /**
