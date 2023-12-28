@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(!empty($permissionError))
+{
+    jsCall('alertJump', array($permissionError, $errorJump));
+    return;
+}
+
 $publicTip = "<span id='publicTip' class='text-danger'>" . $lang->gitlab->group->publicTip . '</span>';
 jsVar('publicTip', $publicTip);
 jsVar('visibility', $group->visibility);

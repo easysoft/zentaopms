@@ -11,6 +11,12 @@ declare(strict_types=1);
 namespace zin;
 jsVar('protectedTag', $lang->gitlab->tag->protected);
 
+if(!empty($permissionError))
+{
+    jsCall('alertJump', array($permissionError, $errorJump));
+    return;
+}
+
 featureBar
 (
     backBtn

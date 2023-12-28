@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(!empty($permissionError))
+{
+    jsCall('alertJump', array($permissionError, $errorJump));
+    return;
+}
+
 jsVar('gitlabUrl', $gitlab->url);
 
 $canCreate = hasPriv('instance', 'manage');

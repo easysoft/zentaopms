@@ -229,4 +229,22 @@ class gitlabZen extends gitlab
 
         return array($addedMembers, $deletedMembers, $updatedMembers);
     }
+
+    /**
+     * 检查是否绑定用户。
+     * Check has binded user.
+     *
+     * @param  int       $gitlabID
+     * @access protected
+     * @return void
+     */
+    protected function checkBindedUser(int $gitlabID): void
+    {
+        $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
+        if(!$openID)
+        {
+            $this->view->permissionError = $this->lang->gitlab->mustBindUser;
+            $this->view->errorJump       = $this->createLink('space', 'browse');
+        }
+    }
 }

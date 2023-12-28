@@ -317,11 +317,7 @@ class gitlab extends control
      */
     public function browseGroup(int $gitlabID, string $orderBy = 'name_asc')
     {
-        if(!$this->app->user->admin)
-        {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
-        }
+        if(!$this->app->user->admin) $this->gitlabZen->checkBindedUser($gitlabID);
 
         $fixOrderBy  = str_replace('fullName', 'name', $orderBy);
         $keyword     = fixer::input('post')->setDefault('keyword', '')->get('keyword');
@@ -351,11 +347,7 @@ class gitlab extends control
      */
     public function createGroup(int $gitlabID)
     {
-        if(!$this->app->user->admin)
-        {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
-        }
+        if(!$this->app->user->admin) $this->gitlabZen->checkBindedUser($gitlabID);
 
         if($_POST)
         {
@@ -387,8 +379,7 @@ class gitlab extends control
     {
         if(!$this->app->user->admin)
         {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('space', 'browse')));
+            $this->gitlabZen->checkBindedUser($gitlabID);
 
             $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, $openID);
             if(empty($members) or $members[0]->access_level < $this->config->gitlab->accessLevel['owner']) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('space', 'browse')));
@@ -522,8 +513,8 @@ class gitlab extends control
         $isAdmin = true;
         if(!$this->app->user->admin)
         {
-            $userID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            $user   = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+            $userID = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
+            $user   = $this->gitlab->apiGetSingleUser($gitlabID, (int)$userID);
             if(!$user->is_admin) $isAdmin = false;
         }
 
@@ -683,8 +674,7 @@ class gitlab extends control
         $openID = 0;
         if(!$this->app->user->admin)
         {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('space', 'browse')));
+            $this->gitlabZen->checkBindedUser($gitlabID);
         }
 
         $this->app->loadClass('pager', true);
@@ -927,11 +917,7 @@ class gitlab extends control
     {
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
 
-        if(!$this->app->user->admin)
-        {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
-        }
+        if(!$this->app->user->admin) $this->gitlabZen->checkBindedUser($gitlabID);
 
         $this->session->set('gitlabTagList', $this->app->getURI(true));
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
@@ -1308,8 +1294,7 @@ class gitlab extends control
     {
         if(!$this->app->user->admin)
         {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            $this->gitlabZen->checkBindedUser($gitlabID);
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
             if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
@@ -1354,8 +1339,7 @@ class gitlab extends control
     {
         if(!$this->app->user->admin)
         {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            $this->gitlabZen->checkBindedUser($gitlabID);
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
             if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));

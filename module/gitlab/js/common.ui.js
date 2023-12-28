@@ -26,3 +26,16 @@ function onAclChange(event)
     if(visibility == 'public') $("#visibilitypublic").parent().append(publicTip);
     if(visibility != 'public') $('#publicTip').remove();
 }
+
+/**
+ * Alert error and jump page.
+ *
+ * @param  string $error
+ * @param  string $errorJump
+ * @access public
+ * @return viod
+ */
+function alertJump(error, errorJump)
+{
+    zui.Modal.alert(error).then((res) => {loadPage(errorJump)});
+}

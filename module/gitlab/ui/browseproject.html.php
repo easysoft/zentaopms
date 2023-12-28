@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(!empty($permissionError))
+{
+    jsCall('alertJump', array($permissionError, $errorJump));
+    return;
+}
+
 jsVar('projectStar', $lang->gitlab->project->star);
 jsVar('projectFork', $lang->gitlab->project->fork);
 
