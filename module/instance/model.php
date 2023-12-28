@@ -54,9 +54,9 @@ class instanceModel extends model
      *
      * @param  string $url
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByUrl(string $url): object
+    public function getByUrl(string $url): object|false
     {
         $url = str_replace(array('https://', 'http://'), '', trim($url));
         return $this->dao->select('id')->from(TABLE_INSTANCE)->where('domain')->eq($url)->fetch();
