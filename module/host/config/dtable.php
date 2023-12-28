@@ -77,6 +77,7 @@ $config->host->actionList['edit']['text']        = $lang->edit;
 $config->host->actionList['edit']['hint']        = $lang->edit;
 $config->host->actionList['edit']['showText']    = true;
 $config->host->actionList['edit']['url']         = array('module' => 'host', 'method' => 'edit', 'params' => 'id={id}');
+if(isInModal()) $config->host->actionList['edit']['data-load'] = 'modal';
 
 $config->host->actionList['delete']['icon']         = 'trash';
 $config->host->actionList['delete']['text']         = $lang->delete;
