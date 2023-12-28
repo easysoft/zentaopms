@@ -12,6 +12,7 @@
 class cron extends control
 {
     /**
+     * 定时任务首页。
      * Index page.
      *
      * @access public
@@ -25,6 +26,7 @@ class cron extends control
     }
 
     /**
+     * 开启/关闭定时任务功能。
      * Turnon cron.
      *
      * @access public
@@ -38,6 +40,7 @@ class cron extends control
     }
 
     /**
+     * 开启进程。
      * Open cron process.
      *
      * @access public
@@ -49,6 +52,7 @@ class cron extends control
     }
 
     /**
+     * 创建一个定时任务。
      * Create cron.
      *
      * @access public
@@ -68,13 +72,14 @@ class cron extends control
     }
 
     /**
+     * 编辑一个定时任务。
      * Edit cron.
      *
      * @param  int    $cronID
      * @access public
      * @return void
      */
-    public function edit($cronID)
+    public function edit(int $cronID)
     {
         if($_POST)
         {
@@ -89,6 +94,7 @@ class cron extends control
     }
 
     /**
+     * 修改一个定时任务状态。
      * Toggle run cron.
      *
      * @param  int    $cronID
@@ -103,13 +109,14 @@ class cron extends control
     }
 
     /**
+     * 删除一个定时任务。
      * Delete cron.
      *
      * @param  int    $cronID
      * @access public
      * @return void
      */
-    public function delete($cronID)
+    public function delete(int $cronID)
     {
         $this->dao->delete()->from(TABLE_CRON)->where('id')->eq($cronID)->exec();
         return $this->sendSuccess(array('load' => true));
@@ -123,7 +130,7 @@ class cron extends control
      * @access public
      * @return void
      */
-    public function ajaxExec($restart = false)
+    public function ajaxExec(bool $restart = false)
     {
         if(empty($this->config->global->cron)) return;
 
@@ -153,6 +160,7 @@ class cron extends control
     }
 
     /**
+     * RoadRunner的调度进程。
      * Schedule cron task by RoadRunner.
      *
      * @access public
@@ -185,6 +193,7 @@ class cron extends control
     }
 
     /**
+     * RoadRunner的消费进程。
      * Consume cron task by RoadRunner.
      *
      * @access public
@@ -221,7 +230,7 @@ class cron extends control
      * @access protected
      * @return bool
      */
-    protected function canSchedule($execId)
+    protected function canSchedule(int $execId)
     {
         $settings = $this->dao->select('`key`,`value`')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->andWhere('section')->eq('scheduler')->fetchPairs();
         if(!isset($settings['execId']) || $settings['execId'] == $execId) return true;
@@ -238,7 +247,7 @@ class cron extends control
      * @access protected
      * @return array
      */
-    protected function applyExecRoles($execId)
+    protected function applyExecRoles(int $execId)
     {
         $roles = array();
 
@@ -281,7 +290,7 @@ class cron extends control
      * @access public
      * @return bool
      */
-    public function schedule($execId)
+    public function schedule(int $execId)
     {
         $this->loadModel('common');
 
@@ -294,6 +303,7 @@ class cron extends control
         $crons = $this->cron->getCrons('nostop');
         foreach($crons as $cron)
         {
+            /* 最后一次创建队列任务的时间作为cron的最新执行时间。 The lasttime of task in queue is the last runtime of cron. */
             $cron->datetime = isset($tasks[$cron->id]) ? $tasks[$cron->id]->datetime : '1970-01-01';
         }
 
@@ -333,7 +343,7 @@ class cron extends control
      * @access public
      * @return bool
      */
-    public function consumeTasks($execId)
+    public function consumeTasks(int $execId)
     {
         while(true)
         {
@@ -358,7 +368,7 @@ class cron extends control
      * @access public
      * @return bool
      */
-    public function consumeTask($execId, $task)
+    public function consumeTask(int $execId, object $task)
     {
         /* Other executor may execute the task at the same time，so we mark execId and wait 500ms to check whether we own it. */
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('doing')->set('execId')->eq($execId)->where('id')->eq($task->id)->exec();
