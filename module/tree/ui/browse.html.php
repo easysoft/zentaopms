@@ -17,7 +17,6 @@ if(strpos($viewType, 'doc') !== false)
 }
 elseif($viewType == 'host')
 {
-    $app->loadLang('host');
     $manageTitle = $lang->host->groupMaintenance;
 }
 elseif(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false)
@@ -169,7 +168,7 @@ div
 
 div
 (
-    setClass('row gap-4'),
+    setClass('row gap-4 mt-2'),
     sidebar
     (
         set::toggleBtn(false),

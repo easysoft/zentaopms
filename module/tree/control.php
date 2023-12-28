@@ -32,14 +32,11 @@ class tree extends control
         $this->updateRawModule($viewType);
 
         /* 可以维护模块的类型：story, bug, case, feedback, caselib, ticket, line, 另外 doc, api在列表页面维护。*/
-        $root = $this->setRoot($rootID, $viewType, $branch);
-
-        /* According to the type, set the module root and modules. */
-        $branches = $this->getBranches($root, $viewType, $currentModuleID);
-
+        $this->app->loadLang('host');
+        $root = $this->treeZen->setRoot($rootID, $viewType, $branch);
         if($viewType == 'story')
         {
-            $products = $this->loadModel('product')->getPairs($mode = '', $programID = 0, $append = '', 'all');
+            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
             $this->session->set('product', $rootID, $this->app->tab);
 
             $this->lang->modulePageNav = '';
@@ -59,7 +56,7 @@ class tree extends control
 
         }
 
-        $this->view->title           = $this->lang->tree->manage;
+        $this->view->title           = $viewType == 'host' ? $this->lang->host->groupMaintenance : $this->lang->tree->manage;
         $this->view->rootID          = $root->id;
         $this->view->root            = $root;
         $this->view->productID       = $root->rootType == 'product' ? $root->id: 0;

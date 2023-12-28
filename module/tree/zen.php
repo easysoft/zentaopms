@@ -36,9 +36,7 @@ class treeZen extends tree
             return $root;
         }
 
-        $this->loadModel('product');
-
-        $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $rootID = $this->product->getAccessibleProductID($rootID, $products);
 
         if($this->app->tab == 'product')
