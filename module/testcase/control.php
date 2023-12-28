@@ -1504,7 +1504,7 @@ class testcase extends control
             if($confirm != 'yes')
             {
                 $confirmURL = inlink('deleteScene', "sceneID={$sceneID}&confirm=yes");
-                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->testcase->hasChildren}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->testcase->hasChildren}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$confirmURL}'});});"));
             }
 
             $this->loadModel('action');
@@ -1514,6 +1514,13 @@ class testcase extends control
         }
         else
         {
+            if($confirm != 'yes')
+            {
+                $confirmURL = inlink('deleteScene', "sceneID={$sceneID}&confirm=yes");
+                $sceneDeleteConfirmMessage = sprintf($this->lang->testcase->confirmDeleteScene, $scene->title);
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$sceneDeleteConfirmMessage}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$confirmURL}'});});"));
+            }
+
             $this->testcase->delete(TABLE_SCENE, $sceneID);
         }
 
