@@ -1,25 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
-su('admin');
-
-function initData()
-{
-    zdTable('project')->config('project')->gen(5);
-    zdTable('task')->config('task')->gen(8);
-    zdTable('projectproduct')->config('projectproduct')->gen(5);
-}
 
 /**
 
 title=测试 programplanModel->getDataForGanttGroupByAssignedTo();
-timeout=0
-cid=1
+cid=0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/programplan.class.php';
+su('admin');
 
-initData();
+zdTable('project')->config('project')->gen(5);
+zdTable('task')->config('task')->gen(8);
+zdTable('projectproduct')->config('projectproduct')->gen(5);
+
 $programplan = new programplanTest();
 
 $selectCustom     = 'date,task';

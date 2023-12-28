@@ -163,14 +163,7 @@ class programplanModel extends model
         if($project->model == 'ipd' and $datas) $datas = $this->programplanTao->buildGanttData4IPD($datas, $projectID, $productID, $selectCustom, $reviewDeadline);
 
         /* Calculate the progress of the phase. */
-        foreach($stageIndex as $index => $stage)
-        {
-            $progress  = empty($stage['progress']['totalConsumed']) ? 0 : round($stage['progress']['totalConsumed'] / $stage['progress']['totalReal'], 3);
-            $datas['data'][$index]->progress     = $progress;
-            $datas['data'][$index]->taskProgress = ($progress * 100) . '%';
-            $datas['data'][$index]->estimate     = $stage['progress']['totalEstimate'];
-            $datas['data'][$index]->consumed     = $stage['progress']['totalConsumed'];
-        }
+        $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
 
         /* Set relation task data. */
         $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
@@ -327,7 +320,6 @@ class programplanModel extends model
         /* Get linked product by projectID. */
         $this->loadModel('action');
         $this->loadModel('execution');
-        $project      = $this->fetchById($projectID, 'project');
         $linkProducts = $this->programplanTao->getLinkProductsForCreate($projectID, $productID);
 
         /* Set each plans. */
@@ -353,10 +345,11 @@ class programplanModel extends model
             }
             else
             {
-                $stageID = $this->programplanTao->insertStage($plan, $project, $productID, $parentID);
+                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $parentID);
                 if(dao::isError()) return false;
 
-                $extra = ($project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
+                $project = $this->fetchByID($projectID, 'project');
+                $extra   = ($project && $project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
                 $this->action->create('execution', $stageID, 'opened', '', $extra);
 
                 $this->execution->updateProducts($stageID, $linkProducts);

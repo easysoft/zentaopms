@@ -8,6 +8,8 @@ class programplanTest
          global $tester;
          $this->objectModel = $tester->loadModel('programplan');
          $tester->dao->delete()->from(TABLE_PROJECTSPEC)->exec();
+
+         $this->objectModel->app->user->admin = true;
     }
 
     /**
@@ -37,17 +39,20 @@ class programplanTest
      * @param  string $browseType
      * @param  string $orderBy
      * @access public
-     * @return string
+     * @return array
      */
-    public function getStageTest(int $executionID = 0, int $productID = 0, string $browseType = 'all', string $orderBy = 'id_asc'): string
+    public function getStageTest(int $executionID = 0, int $productID = 0, string $browseType = 'all', string $orderBy = 'id_asc'): array
     {
         $objects = $this->objectModel->getStage($executionID, $productID, $browseType, $orderBy);
 
-        if(dao::isError()) return dao::getError();
-
-        $title = '';
-        foreach($objects as $object) $title .= ',' . $object->name;
-        return $title;
+        $titles   = array();
+        $products = array();
+        foreach($objects as $object)
+        {
+            $titles[]   = $object->name;
+            $products[] = $object->product;
+        }
+        return array(implode(';', $titles), implode(';', $products));
     }
 
     /**
@@ -102,7 +107,7 @@ class programplanTest
 
         if(dao::isError()) return dao::getError();
 
-        return implode(',', $objects);
+        return implode(';', $objects);
     }
 
     /**
@@ -183,40 +188,47 @@ class programplanTest
      * @access public
      * @return array
      */
-    public function createTest($param = array())
+    public function createTest($param = array(), $projectID = 0, $productID = 0, $parentID = 0)
     {
-        $_POST['planIDList'] = array('131', '221', '311', '401', '491', '581', '671');
-
-        global $tester;
-        $plans = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($_POST['planIDList'])->fetchAll();
-
-
-        $_POST['names']      = array('阶段31', '阶段121', '阶段211', '阶段301', '阶段391', '阶段481', '阶段571', '', '', '', '', '');
+        $date = date('Y-m-d');
+        $_POST['names']      = array('阶段31', '阶段121', '阶段211', '阶段301', '阶段391', '阶段481', '阶段571');
         $_POST['PM']         = array('', '', '', '', '', '', '', '', '', '', '', '');
         $_POST['percents']   = array('0', '0', '0', '0', '0', '0', '0', '', '', '', '', '');
         $_POST['attributes'] = array('request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request');
         $_POST['acl']        = array('private', 'open', 'open', 'private', 'private', 'open', 'open', 'open', 'open', 'open', 'open', 'open');
         $_POST['milestone']  = array('0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-        $_POST['begin']      = (isset($param['begin']) and isset($param['end'])) ? array($plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, '', '', '', '') : array($plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, '', '', '', '', '');
-        $_POST['end']        = (isset($param['begin']) and isset($param['end'])) ? array($plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, '', '', '', '') : array($plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, '', '', '', '', '');
-        $_POST['realBegan']  = array('', '', '', '', '', '', '', '', '', '', '', '');
-        $_POST['realEnd']    = array('', '', '', '', '', '', '', '', '', '', '', '');
 
-        foreach($param as $field => $value)
+        $plans = array();
+        foreach($_POST['names'] as $i => $name)
         {
-            if(count($param) == 1 or ($field != 'begin' and $field != 'end')) $_POST[$field] = $value;
+            $plan = new stdclass();
+            $plan->id        = 0;
+            $plan->type      = 'stage';
+            $plan->name      = $name;
+            $plan->parent    = 1;
+            $plan->PM        = $_POST['PM'][$i];
+            $plan->percent   = $_POST['percents'][$i];
+            $plan->attribute = $_POST['attributes'][$i];
+            $plan->milestone = $_POST['milestone'][$i];
+            $plan->begin     = $date;
+            $plan->end       = $date;
+            $plan->realBegan = null;
+            $plan->realEnd   = null;
+            $plan->acl       = $_POST['acl'][$i];
+
+            $plans[] = $plan;
         }
 
-        $objects = $this->objectModel->create(41, 0, 0);
+        foreach($param as $field => $values)
+        {
+            foreach($values as $i => $value) $plans[$i]->{$field} = $value;
+        }
+
+        $objects = $this->objectModel->create($plans, $projectID, $productID, $parentID);
 
         unset($_POST);
 
-        if(dao::isError())
-        {
-            $error = dao::getError()['message'][0];
-            $error = strpos($error, '所属项目的') > 0 ? preg_replace('/\d{4}-\d{2}-\d{2}/', '', $error) : $error;
-            return $error;
-        }
+        if(dao::isError()) return dao::getError();
 
         $objects = $tester->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($plans[0]->parent)->andWhere('type')->eq('stage')->fetchAll();
         return count($objects);

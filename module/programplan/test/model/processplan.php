@@ -1,6 +1,12 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
+
+/**
+
+title=测试 programplanModel->processPlan();
+cid=0
+
+*/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
@@ -9,14 +15,6 @@ su('admin');
 zdTable('project')->config('project')->gen(5);
 zdTable('projectproduct')->config('projectproduct')->gen(5);
 zdTable('product')->config('product')->gen(2);
-
-/**
-
-title=测试 programplanModel->processPlan();
-cid=1
-pid=1
-
-*/
 $planIDList = array(1, 2, 3);
 
 $programplan = new programplanTest();

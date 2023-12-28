@@ -27,6 +27,10 @@ fields:
       range: 'stage,project'
     - field: grade
       range: 1
+    - field: path
+      range: 11-20
+      prefix: ',1,'
+      postfix: ','
     - field: days
       range: 1
     - field: status

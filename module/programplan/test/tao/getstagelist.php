@@ -1,23 +1,22 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
-
-include dirname(__FILE__, 5). '/test/lib/init.php';
-su('admin');
 
 /**
 
 title=测试 loadModel->getStageList()
-cid=1
-pid=1
+cid=0
 
 */
+
+include dirname(__FILE__, 5). '/test/lib/init.php';
+su('admin');
 
 zdTable('project')->config('project')->gen(5);
 zdTable('projectproduct')->config('projectproduct')->gen(5);
 
 global $tester;
-$tester->loadModel('programplan')->programplanTao;
+$tester->loadModel('programplan');
+$tester->programplan->app->user->admin = true;
 
 $browseType = 'parent';
 $IDList = array(1, 2, 3, 4, 5, 100);

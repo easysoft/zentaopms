@@ -11,6 +11,35 @@ declare(strict_types=1);
 class programplanTao extends programplanModel
 {
     /**
+     * 获取阶段信息。
+     * Get stage list.
+     *
+     * @param  int       $executionID
+     * @param  int       $productID
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @access protected
+     * @return array
+     */
+    protected function getStageList(int $executionID, int $productID, string $browseType, string $orderBy = 'id_asc'): array
+    {
+        if(empty($executionID)) return array();
+        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
+
+        return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('1 = 1')
+            ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
+            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
+            ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+    }
+
+    /**
      * 更新项目阶段。
      * update program plan.
      *
@@ -184,17 +213,17 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $end and $plan->status != 'closed')
+            if($today > $data->endDate and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
+                $data->delayDays = helper::diffDate($today, $data->endDate);
             }
 
-            if($data->endDate > $data->start_date) $data->duration = helper::diffDate(substr($data->endDate, 0, 10), substr($data->start_date, 0, 10)) + 1;
-            if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
+            if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
+            if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
         }
     }
 
@@ -242,47 +271,18 @@ class programplanTao extends programplanModel
                 if($stage['planID'] != $task->execution) continue;
                 if(!isset($stageIndex[$index])) continue;
 
-                $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
-                $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                $stageIndex[$index]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
-
-                if(!isset($stageIndex[$parent])) continue;
+                $stageIndex[$index]['totalEstimate'] += $task->estimate;
+                $stageIndex[$index]['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
+                $stageIndex[$index]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
                 $parent = $stage['parent'];
-                $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
-                $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                $stageIndex[$parent]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                if(!isset($stageIndex[$parent])) continue;
+
+                $stageIndex[$parent]['totalEstimate'] += $task->estimate;
+                $stageIndex[$parent]['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
+                $stageIndex[$parent]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
             }
         }
-    }
-
-    /**
-     * 获取阶段信息。
-     * Get stage list.
-     *
-     * @param  int       $executionID
-     * @param  int       $productID
-     * @param  string    $browseType
-     * @param  string    $orderBy
-     * @access protected
-     * @return array
-     */
-    protected function getStageList(int $executionID, int $productID, string $browseType, string $orderBy = 'id_asc'): array
-    {
-        if(empty($executionID)) return array();
-        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
-
-        return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('1 = 1')
-            ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
-            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
-            ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->fetchAll('id');
     }
 
     /**
@@ -461,7 +461,7 @@ class programplanTao extends programplanModel
         $linkProducts = array();
         $linkBranches = array();
         $productList  = $this->loadModel('product')->getProducts($projectID);
-        if($project->stageBy)
+        if($project && $project->stageBy)
         {
             $linkProducts = array(0 => $productID);
             if(!empty($productList)) $linkBranches = array(0 => $productList[$productID]->branches);
@@ -482,19 +482,20 @@ class programplanTao extends programplanModel
      * 插入阶段数据。
      * Insert stage.
      * @param  object    $plan
-     * @param  object    $project
+     * @param  int       $projectID
      * @param  int       $productID
      * @param  int       $parentID
      * @access protected
      * @return int|false
      */
-    protected function insertStage(object $plan, object $project, int $productID, int $parentID): int|false
+    protected function insertStage(object $plan, int $projectID, int $productID, int $parentID): int|false
     {
+        $project = $this->fetchById($projectID, 'project');
         $account = $this->app->user->account;
 
         unset($plan->id);
         $plan->status        = 'wait';
-        $plan->stageBy       = $project->stageBy;
+        $plan->stageBy       = zget($project, 'stageBy', '');
         $plan->version       = 1;
         $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
         $plan->team          = substr($plan->name,0, 30);
@@ -510,7 +511,7 @@ class programplanTao extends programplanModel
         $this->insertProjectSpec($stageID, $plan);
 
         /* Ipd project create default review points. */
-        if($project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $productID, $plan->attribute);
+        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $productID, $plan->attribute);
 
         if($plan->type == 'kanban')
         {
@@ -518,7 +519,7 @@ class programplanTao extends programplanModel
             $this->loadModel('kanban')->createRDKanban($execution);
         }
 
-        $this->loadModel('execution')->createMainLib($project->id, $stageID);
+        if($project) $this->loadModel('execution')->createMainLib($project->id, $stageID);
         $this->execution->addExecutionMembers($stageID, array($account, $plan->PM));
 
         $this->setTreePath($stageID);
@@ -787,13 +788,13 @@ class programplanTao extends programplanModel
      */
     protected function setStageSummary(array $ganttData, array $stages): array
     {
-        foreach($stages as $groupKey => $stage)
+        foreach($stages as $index => $stage)
         {
             $progress = empty($stage['totalReal']) ? 0 : round($stage['totalConsumed'] / $stage['totalReal'], 3);
-            $ganttData['data'][$groupKey]->progress     = $progress;
-            $ganttData['data'][$groupKey]->taskProgress = ($progress * 100) . '%';
-            $ganttData['data'][$groupKey]->estimate     = $stage['totalEstimate'];
-            $ganttData['data'][$groupKey]->consumed     = $stage['totalConsumed'];
+            $ganttData['data'][$index]->progress     = $progress;
+            $ganttData['data'][$index]->taskProgress = ($progress * 100) . '%';
+            $ganttData['data'][$index]->estimate     = $stage['totalEstimate'];
+            $ganttData['data'][$index]->consumed     = $stage['totalConsumed'];
         }
         return $ganttData;
     }
