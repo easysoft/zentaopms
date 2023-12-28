@@ -900,6 +900,59 @@ class aiModel extends model
     }
 
     /**
+     * Create a mini program php data file.
+     *
+     * @param string $appID
+     * @return string
+     */
+    public function createZtAppPhp($appID)
+    {
+        $miniProgram = $this->getMiniProgramByID($appID);
+        $fields = $this->getMiniProgramFields($appID);
+        unset($miniProgram->id);
+        unset($miniProgram->category);
+        unset($miniProgram->createdBy);
+        unset($miniProgram->createdDate);
+        unset($miniProgram->editedBy);
+        unset($miniProgram->editedDate);
+        unset($miniProgram->publishedDate);
+        $miniProgram->published = '0';
+        $miniProgram->fields = array();
+
+        foreach($fields as $field)
+        {
+            unset($field->id);
+            unset($field->appID);
+            $miniProgram->fields[] = $field;
+        }
+
+        $appJson = json_encode($miniProgram);
+        $content = <<<APP
+<?php
+
+\$ztApp = '$appJson';
+APP;
+        $file = $this->app->getAppRoot() . "tmp/{$miniProgram->name}.ztapp.php";
+        file_put_contents($file, $content);
+        return $file;
+    }
+
+    /**
+     * Create mini program zip.
+     *
+     * @param string $file
+     * @return string
+     */
+    public function createZtAppZip($file)
+    {
+        $this->app->loadClass('pclzip', true);
+        $zipPath = substr($file, 0, -3) . 'zip';
+        $zip = new pclzip($zipPath);
+        $zip->create($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+        return $zipPath;
+    }
+
+    /**
      * Save mini program fields.
      *
      * @param string $appID

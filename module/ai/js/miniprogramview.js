@@ -49,3 +49,42 @@ function unpublishMiniProgram()
 {
     window.location.href = createLink('ai', 'unpublishMiniProgram', `appID=${miniProgramID}`);
 }
+
+/**
+ * Export mini program data.
+ * @param {Event} event
+ */
+function exportMiniProgram(event)
+{
+    const $target = $(event.target);
+    $target.closest('button').attr('disabled', 'disabled');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', createLink('ai', 'exportMiniProgram', `appID=${miniProgramID}`, 'json'), true);
+    xhr.responseType = 'blob';
+    xhr.setRequestHeader('Accept', 'application/zip');
+
+    xhr.onload = function()
+    {
+        if(xhr.status === 200)
+        {
+            const blob = xhr.response;
+            const url = URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = `${miniProgramName}.ztapp.zip`;
+            downloadLink.click();
+
+            URL.revokeObjectURL(url);
+        }
+        $target.closest('button').removeAttr('disabled');
+    };
+
+    xhr.onerror = function()
+    {
+        $target.closest('button').removeAttr('disabled');
+    };
+
+    xhr.send();
+}

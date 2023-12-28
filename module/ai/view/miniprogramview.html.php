@@ -11,7 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-<?php js::set('miniProgramID', $miniProgram->id); ?>
+<?php
+  js::set('miniProgramID', $miniProgram->id);
+  js::set('miniProgramName', $miniProgram->name);
+?>
 <div class="modal fade" id="disable-miniprogram">
   <div class="modal-dialog" style="width: 480px;">
     <div class="modal-content">
@@ -73,11 +76,16 @@
       <?php if ($miniProgram->deleted) echo "<span class='label label-danger'>{$lang->ai->prompts->deleted}</span>"; ?>
     </div>
   </div>
-  <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
-    <div class="btn-toolbar pull-right">
+  <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('ai', 'exportMiniProgram') && $miniProgram->published === '1'): ?>
+      <button class="btn btn-primary" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>">
+        <?= $lang->ai->export; ?>
+      </button>
+    <?php endif; ?>
+    <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
       <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
-    </div>
-  <?php endif; ?>
+    <?php endif; ?>
+  </div>
 </div>
 
 <div id="mainContent" class="main-row">

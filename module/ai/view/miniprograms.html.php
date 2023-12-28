@@ -29,11 +29,16 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
     }
     ?>
   </div>
-  <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
-    <div class="btn-toolbar pull-right">
+  <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('ai', 'importMiniProgram')): ?>
+      <button class="btn btn-primary">
+        <?= $lang->ai->import; ?>
+      </button>
+    <?php endif; ?>
+    <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
       <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
+    <?php endif; ?>
     </div>
-  <?php endif; ?>
 </div>
 <div class="modal fade" id="disable-miniprogram">
   <div class="modal-dialog" style="width: 480px;">
@@ -159,9 +164,9 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                     <i class="icon-ban-circle text-primary"></i>
                   </button>
                 <?php endif; ?>
-                <?php if(common::hasPriv('ai', 'deleteMiniProgram')): ?>
-                  <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>"<?= $isPublished ? ' disabled' : ''; ?>>
-                    <i class="icon-trash text-primary"></i>
+                <?php if(common::hasPriv('ai', 'exportMiniProgram')): ?>
+                  <button class="btn" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
+                    <i class="icon-upload-file text-primary"></i>
                   </button>
                 <?php endif; ?>
               </td>

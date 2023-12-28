@@ -489,14 +489,29 @@ class ai extends control
         $this->display();
     }
 
+    /**
+     * Export a mini program as zip file.
+     *
+     * @param string $appID
+     * @return void
+     */
     public function exportMiniProgram($appID)
     {
+        $php = $this->ai->createZtAppPhp($appID);
+        $zip = $this->ai->createZtAppZip($php);
 
+        header('Content-Type: application/zip');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Disposition: attachment; filename="' . basename($zip) . '"');
+        header('Content-Length: ' . filesize($zip));
+        readfile($zip);
+        unlink($zip);
+        exit;
     }
 
     public function importMiniProgram($appID)
     {
-        
+
     }
 
     /**
