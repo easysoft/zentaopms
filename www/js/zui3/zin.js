@@ -1196,6 +1196,10 @@
             options.target = options.loadId;
             delete options.loadId;
         }
+
+        if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
+        if(!url && $link.is('a') && !options.back && !options.load) return;
+
         if($modal.length)
         {
             if(!options.load && !url) return;
@@ -1206,13 +1210,18 @@
                 if(!options.url) options.url = $modal.data('zui.Modal').options.url;
             }
             if(options.closeModal) zui.Modal.hide(typeof options.closeModal === 'string' ? options.closeModal : $modal);
+            let app = options.app;
+            if(!options.app) options.app = getAppCode(url);
+            if(app === currentCode)
+            {
+                options.load === 'modal';
+                zui.Modal.query($modal).hide();
+            }
         }
         else
         {
             if(options.load === 'modal' && !options.target) delete options.load;
         }
-        if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
-        if(!url && $link.is('a') && !options.back && !options.load) return;
 
         openUrl(url, options, e);
         e.preventDefault();
