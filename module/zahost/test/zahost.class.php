@@ -120,4 +120,19 @@ class zahostTest
         if($ping) return 'yes';
         return 'no';
     }
+
+    /**
+     * 测试获取主机的镜像列表。
+     * Test get image list.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getImageListTest(int $hostID): array
+    {
+        $imageList = $this->objectModel->getImageList($hostID);
+        if(dao::isError()) return dao::getError();
+        return $imageList;
+    }
 }
