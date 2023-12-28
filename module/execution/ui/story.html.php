@@ -136,6 +136,7 @@ $product ? toolbar
             setClass('btn primary'),
             set::icon('link'),
             set::url($linkStoryUrl),
+            setData('app', $app->tab),
             $lang->story->linkStory
         ),
         dropdown
