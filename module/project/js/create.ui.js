@@ -1,6 +1,7 @@
 $(function()
 {
     new zui.Tooltip('#programHover', {title: programTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
+    new zui.Tooltip('#stageByHover', {title: stageByTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
 
     setWhite();
 });

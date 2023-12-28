@@ -22,6 +22,7 @@ jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
 jsVar('programTip', $lang->program->tips);
+jsVar('stageByTip', $lang->project->stageByTips);
 jsVar('projectID', $project->id);
 jsVar('from', $from);
 
@@ -499,7 +500,17 @@ formPanel
                     setClass('project-stageBy-product'),
                     set::disabled($disableStageBy),
                     $lang->project->stageByList['product']
-                )
+                ),
+                div
+                (
+                    setClass('pl-2 flex self-center'),
+                    icon
+                    (
+                        'help',
+                        set('data-toggle', 'tooltip'),
+                        set('id', 'stageByHover')
+                    )
+                ),
             ),
             formHidden('stageBy', $project->stageBy)
         )

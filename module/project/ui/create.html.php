@@ -15,6 +15,7 @@ jsVar('ignore', $lang->project->ignore);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
 jsVar('programTip', $lang->program->tips);
+jsVar('stageByTip', $lang->project->stageByTips);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -530,10 +531,20 @@ formPanel
                     setClass('project-stageBy-product'),
                     set::disabled($copyProjectID),
                     $lang->project->stageByList['product']
-                )
+                ),
+                div
+                (
+                    setClass('pl-2 flex self-center'),
+                    icon
+                    (
+                        'help',
+                        set('data-toggle', 'tooltip'),
+                        set('id', 'stageByHover')
+                    )
+                ),
             ),
-            formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : 'project')
-        )
+            formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : 'project'),
+        ),
     ) : null,
     formGroup
     (
