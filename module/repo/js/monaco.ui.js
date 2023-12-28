@@ -4,7 +4,7 @@ var tabTemp;
 var parentTree = [];
 
 /* Close tab. */
-$('#monacoTabs').on('click', '.monaco-close', function()
+$('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', function()
 {
     var eleId    = $(this).parent().attr('href');
     var tabsEle  = $(this).parent().parent().parent();
@@ -48,7 +48,7 @@ window.afterPageUpdate = function()
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
 
         /* Reload current page when click dropmeu. */
-        $('body').on('click', '.dropmenu-tree .dropmenu-item', function()
+        $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-tree .dropmenu-item', function()
         {
             var branchOrTag = $(this).find('.listitem').data('value');
             var url         = $(this).find('.listitem').data('url');

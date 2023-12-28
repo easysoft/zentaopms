@@ -4,7 +4,7 @@ var tabTemp;
 var diffAppose = $.cookie.get('renderSideBySide') == 'true';
 
 /* Close tab. */
-$('#monacoTabs').on('click', '.monaco-close', function()
+$('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', function()
 {
     var eleId    = $(this).parent().attr('href');
     var tabsEle  = $(this).parent().parent().parent();
@@ -254,7 +254,7 @@ window.loadLinkPage = function(link)
     $('#linkObject').trigger('click');
 }
 
-$('body').on('click', '.dropmenu-tree .dropmenu-item', function()
+$('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-tree .dropmenu-item', function()
 {
     var branchOrTag = $(this).find('.listitem').data('value');
     var url         = $(this).find('.listitem').data('url');
