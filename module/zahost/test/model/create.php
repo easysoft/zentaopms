@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 zahostModel->getList();
+title=测试 zahostModel->create();
 timeout=0
 cid=1
 
