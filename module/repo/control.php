@@ -549,7 +549,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
 
-        $revision = $this->repo->getHistoryRevision($repoID, $log[0]->revision);
+        $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, $log[0]->revision) : '';
         if($revision)
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
@@ -568,7 +568,7 @@ class repo extends control
         if(empty($oldRevision))
         {
             $oldRevision = '^';
-            if($revision and in_array($repo->SCM, $this->config->repo->gitTypeList)) $oldRevision = "{$revision}^";
+            if($revision && in_array($repo->SCM, $this->config->repo->gitTypeList)) $oldRevision = "{$revision}^";
         }
 
         $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$log[0]->revision}"));
