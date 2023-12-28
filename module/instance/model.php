@@ -965,7 +965,7 @@ class instanceModel extends model
         if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
         if($action == 'upgrade')       return !empty($instance->latestVersion) && in_array($instance->status, array('stopped', 'running'));
         if($action == 'edit')          return false;
-        if($action == 'bindUser')      return $instance->status == 'running' && in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
+        if($action == 'bindUser')      return $instance->status == 'running' && $instance->appName == 'GitLab';
 
         return true;
     }
