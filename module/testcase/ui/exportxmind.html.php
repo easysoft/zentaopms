@@ -28,10 +28,13 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->testcase->module),
-        set::name('imodule'),
-        set::control('picker'),
-        set::value($moduleID),
-        set::items($moduleOptionMenu)
+        picker
+        (
+            set::name('imodule'),
+            set::control('picker'),
+            set::value($moduleID),
+            set::items($moduleOptionMenu)
+        )
     ),
     formRowGroup
     (

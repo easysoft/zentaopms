@@ -26,10 +26,13 @@ formPanel
     formGroup
     (
         set::label($lang->testcase->encoding),
-        set::name('encode'),
-        set::value('utf-8'),
-        set::control('picker'),
-        set::items($config->charsets[$this->cookie->lang])
+        picker
+        (
+            set::name('encode'),
+            set::value('utf-8'),
+            set::control('picker'),
+            set::items($config->charsets[$this->cookie->lang])
+        )
     ),
     set::actions(array('submit')),
     set::submitBtnText($lang->export)
@@ -48,7 +51,7 @@ js
         {
             if($.cookie.get('downloading') == 1)
             {
-                $('.modal .modal-actions .close')[0].click();
+                $('.modal').modal('hide');
 
                 $.cookie.set('downloading', null, {expires:config.cookieLife, path:config.webRoot});
 
