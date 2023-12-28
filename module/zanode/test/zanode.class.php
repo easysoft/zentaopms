@@ -139,7 +139,6 @@ class zanodeTest
         $snapshot->fileSize    = 0;
         $snapshot->from        = 'snapshot';
 
-        sleep(20);
         $snapshotID = $this->createSnapshot($node, $snapshot);
         if(dao::isError()) return dao::getError();
 
