@@ -26,11 +26,11 @@ function realChange(event)
 {
     var $target    = $(event.target);
     var $preSelect = $(event.target).closest('table').closest('tr').find('[name^="result"]');
-    if($target.val() == '' && $preSelect.val() == 'fail' && !custom)
+    if($target.val() == '' && $preSelect.val() == 'fail')
     {
         $preSelect.zui('picker').$.changeState({value: 'pass'});
     }
-    else if($target.val() != '' && $preSelect.val() == 'pass' && !custom)
+    else if($target.val() != '' && $preSelect.val() == 'pass')
     {
         $preSelect.zui('picker').$.changeState({value: 'fail'});
         $preSelect.parent().addClass('has-error');
