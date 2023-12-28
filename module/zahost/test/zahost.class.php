@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\on;
+
 class zahostTest
 {
     public function __construct()
@@ -209,5 +212,23 @@ class zahostTest
         if(dao::isError()) return dao::getError();
 
         return zget($nodeGroupHost, $hostID, array());
+    }
+
+    /**
+     * 测试插入镜像数据。
+     * Test insert image list.
+     *
+     * @param  array $imageList
+     * @param  int   $hostID
+     * @param  array $downloadedImageList
+     * @access public
+     * @return array
+     */
+    public function insertImageListTest(array $imageList, int $hostID, array $downloadedImageList): array
+    {
+        $this->objectModel->insertImageList($imageList, $hostID, $downloadedImageList);
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->fetchAll();
     }
 }
