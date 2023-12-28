@@ -50,37 +50,40 @@ ksort($myOrders);
 $myEffortTable  = array();
 foreach($myCountList as $order => $count)
 {
-    foreach($myEfforts[$order] as $effort)
+    $tdDom = h::td
+    (
+        set::rowspan($count),
+        $allOrders[$order]
+    );
+
+    foreach($myEfforts[$order] as $index => $effort)
     {
         $myEffortTable[] = h::tr
+        (
+            $tdDom,
+            h::td($effort->date),
+            h::td(zget($users, $effort->account)),
+            h::td($effort->work),
+            h::td($effort->consumed . ' H'),
+            h::td($effort->left . ' H'),
+            h::td
             (
-                h::td
+                common::hasPriv('task', 'editEffort') ? a
                 (
-                    set::rowspan($count),
-                    $allOrders[$order]
-                ),
-                h::td($effort->date),
-                h::td(zget($users, $effort->account)),
-                h::td($effort->work),
-                h::td($effort->consumed . ' H'),
-                h::td($effort->left . ' H'),
-                h::td
+                    setClass('btn ghost toolbar-item square size-sm'),
+                    set::href(createLink('task', 'editEffort', "id={$effort->id}")),
+                    icon('edit')
+                ) : null,
+                common::hasPriv('task', 'deleteWorkhour') ? a
                 (
-                    common::hasPriv('task', 'editEffort') ? a
-                    (
-                        setClass('btn ghost toolbar-item square size-sm'),
-                        set::href(createLink('task', 'editEffort', "id={$effort->id}")),
-                        icon('edit')
-                    ) : null,
-                    common::hasPriv('task', 'deleteWorkhour') ? a
-                    (
-                        setClass('btn ghost toolbar-item square size-sm ajax-submit'),
-                        setData(array('confirm' => $lang->task->confirmDeleteEffort)),
-                        set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
-                        icon('trash')
-                    ) : null
-                )
-            );
+                    setClass('btn ghost toolbar-item square size-sm ajax-submit'),
+                    setData(array('confirm' => $lang->task->confirmDeleteEffort)),
+                    set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
+                    icon('trash')
+                ) : null
+            )
+        );
+        $tdDom = null;
     }
 }
 
@@ -88,21 +91,25 @@ $allEffortTable = array();
 foreach($recorders as $order => $accounts)
 {
     $count = count($allEfforts[$order]);
+    $tdDom = h::td
+    (
+        set::rowspan($count),
+        $allOrders[$order]
+    );
+
     foreach($allEfforts[$order] as $effort)
     {
         $allEffortTable[] = h::tr
-            (
-                h::td
-                (
-                    set::rowspan($count),
-                    $allOrders[$order]
-                ),
-                h::td($effort->date),
-                h::td(zget($users, $effort->account)),
-                h::td($effort->work),
-                h::td($effort->consumed . ' H'),
-                h::td($effort->left . ' H')
-            );
+        (
+            $tdDom,
+            h::td($effort->date),
+            h::td(zget($users, $effort->account)),
+            h::td($effort->work),
+            h::td($effort->consumed . ' H'),
+            h::td($effort->left . ' H')
+        );
+
+        $tdDom = null;
     }
 }
 
