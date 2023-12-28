@@ -5,8 +5,9 @@ class treeTest
     {
         global $config, $tester;
 
+        $config->webRoot     = '';
         $config->requestType = 'PATH_INFO';
-        $this->objectModel = $tester->loadModel('tree');
+        $this->objectModel   = $tester->loadModel('tree');
     }
 
     /**
