@@ -32,6 +32,7 @@ class colorInput extends inputControl
         'id?: string="$GID"',         // 组件根元素的 ID。
         'name?: string',              // 作为表单项的名称。
         'value?: string=""',          // 默认值。
+        'inputClass?: string=""',     // input 组件样式类名。
         'colorName?: string="color"', // 颜色表单项名称。
         'colorValue?: string=""',     // 颜色默认值。
     );
@@ -48,6 +49,7 @@ class colorInput extends inputControl
             (
                 input
                 (
+                    setClass($props['inputClass']),
                     set::name($props['name']),
                     set::value($props['value']),
                 ),
