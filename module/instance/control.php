@@ -465,7 +465,7 @@ class instance extends control
             ->get();
         if(empty($post->dbName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->dbNameIsEmpty));
 
-        $instance = $this->instance->getByID($post->instanceID);
+        $instance = $this->instance->getByID((int)$post->instanceID);
         if(empty($instance)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->instanceNotExists));
 
         $detail = $this->loadModel('cne')->appDBDetail($instance, $post->dbName);
