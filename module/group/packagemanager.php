@@ -3855,7 +3855,7 @@ $config->group->package->manageRepo->privs['repo-create']          = array('edit
 $config->group->package->manageRepo->privs['repo-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
 $config->group->package->manageRepo->privs['repo-apiGetRepoByUrl'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array());
 $config->group->package->manageRepo->privs['repo-import']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
-//$config->group->package->manageRepo->privs['repo-createBranch']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->manageRepo->privs['repo-createBranch']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->deleteRepo = new stdclass();
 $config->group->package->deleteRepo->order  = 2500;
