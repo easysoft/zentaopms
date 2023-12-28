@@ -212,17 +212,20 @@ else
                     setClass('hidden'),
                     set::label($lang->doc->whiteList),
                     set::id('whitelistBox'),
-                    picker
+                    div
                     (
-                        set::name('groups[]'),
-                        set::items($groups),
-                        set::multiple(true)
-                    ),
-                    picker
-                    (
-                        set::name('users[]'),
-                        set::items($users),
-                        set::multiple(true)
+                        setClass('w-full check-list'),
+                        inputGroup
+                        (
+                            $lang->doc->groups,
+                            picker
+                            (
+                                set::name('groups[]'),
+                                set::items($groups),
+                                set::multiple(true)
+                            )
+                        ),
+                        users(set::label($lang->doc->users), set::items($users))
                     )
                 ),
                 formRow

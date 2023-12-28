@@ -166,19 +166,21 @@ form
                 $doc->acl == 'open' ? setClass('hidden') : null,
                 set::label($lang->doc->whiteList),
                 set::id('whitelistBox'),
-                picker
+                div
                 (
-                    set::name('groups[]'),
-                    set::items($groups),
-                    set::multiple(true),
-                    set::value($doc->groups)
-                ),
-                picker
-                (
-                    set::name('users[]'),
-                    set::items($users),
-                    set::multiple(true),
-                    set::value($doc->users)
+                    setClass('w-full check-list'),
+                    inputGroup
+                    (
+                        $lang->doc->groups,
+                        picker
+                        (
+                            set::name('groups[]'),
+                            set::items($groups),
+                            set::multiple(true),
+                            set::value($doc->groups)
+                        )
+                    ),
+                    users(set::label($lang->doc->users), set::items($users), set::value($doc->users))
                 )
             ),
             formRow
