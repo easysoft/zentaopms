@@ -164,7 +164,7 @@ class projectStory extends control
         {
             if(isset($executionStories[$storyID])) continue;
 
-            $this->execution->unlinkStory($projectID, $storyID);
+            $this->execution->unlinkStory($projectID, (int)$storyID);
             if(dao::isError()) $errors[$storyID] = dao::getError();
         }
         if(empty($errors)) $this->loadModel('score')->create('ajax', 'batchOther');
