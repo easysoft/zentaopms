@@ -193,17 +193,14 @@ class gitModel extends model
         $branches = $this->loadModel('repo')->getBranches($repo);
         $commits  = $repo->commits;
 
-        $scm           = strtolower($repo->SCM);
-        $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->serviceHost, $scm, 'openID,account');
-
         $accountPairs = array();
-        if($scm != 'git')
+        if($repo->SCM != 'Git')
         {
-            $userList = $this->loadModel($scm)->apiGetUsers($repo->serviceHost);
-            if(!empty($userList))
-            {
-                foreach($userList as $user) $accountPairs[$user->realname] = zget($acountIDPairs, $user->id, '');
-            }
+            $scm           = strtolower($repo->SCM);
+            $userList      = $this->loadModel($scm)->apiGetUsers($repo->serviceHost);
+            $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->serviceHost, $scm, 'openID,account');
+
+            foreach($userList as $user) $accountPairs[$user->realname] = zget($acountIDPairs, $user->id, '');
         }
 
         /* Update code commit history. */
