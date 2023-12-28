@@ -23,17 +23,6 @@ class system extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->backupPath = $this->loadModel('backup')->getBackupPath();
-        if(!is_dir($this->backupPath))
-        {
-            if(!mkdir($this->backupPath, 0755, true)) $this->view->error = sprintf($this->lang->system->backup->error->noWritable, $this->backupPath);
-        }
-        else
-        {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
-        }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
-
         $this->loadModel('action');
         $this->loadModel('setting');
     }
