@@ -2034,7 +2034,7 @@ class userModel extends model
     public function grantUserView(string $account = '', array $acls = array(), string $projects = ''): object
     {
         if(empty($account)) $account = $this->session->user->account;
-        if(empty($account)) return array();
+        if(empty($account)) return new stdclass();
         if(empty($acls)     && !empty($this->session->user->rights['acls']))     $acls     = $this->session->user->rights['acls'];
         if(empty($projects) && !empty($this->session->user->rights['projects'])) $projects = $this->session->user->rights['projects'];
 

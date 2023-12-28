@@ -2593,14 +2593,15 @@ class repoModel extends model
         $this->loadModel('task');
         foreach($taskActions as $taskAction => $params)
         {
-            $_POST = array();
-            foreach($params as $field => $param) $this->post->set($field, $param);
+            $newTask = new stdclass();
+            foreach($params as $field => $param) $newTask->$field = $param;
 
-            if($taskAction == 'start' and $task->status == 'wait')
+            if($taskAction == 'start' && $task->status == 'wait')
             {
-                $this->post->set('consumed', $this->post->consumed + $task->consumed);
-                $this->post->set('realStarted', date('Y-m-d'));
-                $taskChanges = $this->task->start($task->id) + $changes;
+                $newTask->status      = 'doing';
+                $newTask->consumed    = $newTask->consumed + $task->consumed;
+                $newTask->realStarted = date('Y-m-d');
+                $taskChanges = $this->task->start($task, $newTask) + $changes;
                 if($taskChanges)
                 {
                     $action->action = $this->post->left == 0 ? 'finished' : 'started';
@@ -2614,11 +2615,12 @@ class repoModel extends model
             }
             elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
             {
-                $this->post->set('finishedDate', date('Y-m-d'));
-                $this->post->set('realStarted', date('Y-m-d'));
-                $this->post->set('currentConsumed', $this->post->consumed);
-                $this->post->set('consumed', $this->post->consumed + $task->consumed);
-                $taskChanges = $this->task->finish($task->id, 'DEVOPS') + $changes;
+                $newTask->status          = 'done';
+                $newTask->finishedDate    = date('Y-m-d');
+                $newTask->realStarted     = date('Y-m-d');
+                $newTask->currentConsumed = $newTask->consumed;
+                $newTask->consumed        = $newTask->consumed + $task->consumed;
+                $taskChanges = $this->task->finish($task, $newTask) + $changes;
                 if($taskChanges)
                 {
                     $action->action = 'finished';

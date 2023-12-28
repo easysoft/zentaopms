@@ -156,11 +156,13 @@ $canViewRevision = common::hasPriv('repo', 'revision');
 $linkedCommits   = array();
 foreach($linkCommits as $commit)
 {
+    if(empty($commit->revision)) continue;
+
     $revision        = substr($commit->revision, 0, 10);
     $linkedCommits[] = $canViewRevision ? a
     (
         set::href(createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}")),
-        "#$MRID $linkMRTitle",
+        "#$revision",
         setData(array('app' => $app->tab))
     ) : div($revision . ' ' . $commit->comment);
 }
