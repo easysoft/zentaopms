@@ -4038,6 +4038,18 @@ class bugModel extends model
                 $bug->$field = "<span $class title='{$bug->$field}'>{$bug->$field}</span>";
             }
 
+            if($this->config->edition != 'open')
+            {
+                $this->loadModel('flow');
+                $extendFields = $this->loadModel('workflowfield')->getList('bug');
+                foreach($extendFields as $fieldCode => $field)
+                {
+                    if(isset($field->buildin) && $field->buildin == 0)
+                    {
+                        $bug->$fieldCode = $this->flow->printFlowCell('bug', $bug, $fieldCode, true);
+                    }
+                }
+            }
             $rows[] = $bug;
         }
         return $rows;
