@@ -91,7 +91,7 @@ pipeline {
               
               def j = job.newJob()
 
-              env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
+              env.GIT_BRANCH = "release-18.10"
 
               zentaopms.setupStaticEnv()
               zentaopms.setupEnvAfterCheckout()
