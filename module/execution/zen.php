@@ -294,7 +294,7 @@ class executionZen extends execution
     protected function assignModuleForStory(string $type, int $param, string $storyType, object $execution, int $productID): void
     {
         $this->loadModel('tree');
-        if($this->cookie->storyModuleParam) $this->view->module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        if($this->cookie->storyModuleParam) $this->view->module = $this->loadModel('tree')->getById((int)$this->cookie->storyModuleParam);
         $showModule  = !empty($this->config->execution->story->showModule) ? $this->config->execution->story->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
