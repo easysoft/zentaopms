@@ -25,13 +25,26 @@ class todoTest
     /**
      * Test batch create todos.
      *
-     * @param  array  $todos
+     * @param  array  $datas
      * @access public
      * @return array|int
      */
-    public function batchCreateTest($todos)
+    public function batchCreateTest($datas)
     {
-        $todos      = json_decode(json_encode($todos));
+        $todos = array();
+        foreach($datas['names'] as $key => $name)
+        {
+            $todo = new stdclass();
+            $todo->name       = $name;
+            $todo->type       = $datas['types'][$key];
+            $todo->pri        = $datas['pris'][$key];
+            $todo->desc       = $datas['descs'][$key];
+            $todo->begin      = $datas['begins'][$key];
+            $todo->end        = $datas['ends'][$key];
+            $todo->assignedTo = $datas['assignedTos'][$key];
+            $todo->date       = $datas['date'];
+            $todos[] = $todo;
+        }
         $todoIDList = $this->objectModel->batchCreate($todos);
 
         if(dao::isError()) return 0;

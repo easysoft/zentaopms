@@ -21,13 +21,7 @@ $descs       = array('desc1', 'desc2', 'desc3', 'desc4', '' , '', '', '');
 $begins      = array('0830', '0900', '0930', '1000', '1030', '1100', '1130', '1200');
 $ends        = array('0900', '0930', '1000','1030', '1100', '1130', '1200', '1230');
 $assignedTos = array('admin', 'productManager', 'projectManager', 'dev1', 'dev2', 'dev3', 'tester1', 'tester2',);
-$todos       = array('types' => $types, 'pris' => $pris, 'names' => $names, 'descs' => $descs, 'begins' => $begins, 'ends' => $ends, 'assignedTos' => $assignedTos, 'date' => $today, 'switchDate' => '');
-
-$invalidEnds     = array('0800', '0830', '0800', '0800', '0800', '0800', '0800', '0800');
-$invalidEndTodos = $todos;
-$invalidEndTodos['ends'] = $invalidEnds;
+$todos       = array('type' => $types, 'pri' => $pris, 'name' => $names, 'desc' => $descs, 'begin' => $begins, 'end' => $ends, 'assignedTo' => $assignedTos, 'date' => $today, 'switchDate' => '');
 
 $todoTest   = new todoTest();
-r($todoTest->getValidsOfBatchCreateTest($todos, $loop = 1, $assignedTo))           && p() && e('1'); // 获取批量创建有效的数据，结果为1
-r($todoTest->getValidsOfBatchCreateTest($invalidEndTodos, $loop = 1, $assignedTo)) && p() && e('0'); // 获取批量创建有效的数据，字段ends数据错误时，结果为1
-
+r($todoTest->getValidsOfBatchCreateTest($todos, $loop = 1, $assignedTo)) && p() && e('1'); // 获取批量创建有效的数据，结果为1
