@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/compile.class.php';
 
 zdTable('compile')->gen(1);
-zdTable('job')->gen(1);
+zdTable('job')->config('job')->gen(1);
 su('admin');
 
 /**

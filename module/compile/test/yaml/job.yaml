@@ -1,0 +1,8 @@
+title: table zt_job
+desc: "构建任务"
+author: automated export
+version: "1.0"
+fields:
+  - field: pipeline
+    note: "流水线"
+    range: simple-job,`{"project":"2","reference":"master"}`

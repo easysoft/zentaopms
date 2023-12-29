@@ -178,8 +178,8 @@ class compileModel extends model
         {
             /* Get jobs by pipeline. */
             $pipeline  = json_decode($job->pipeline);
-            $projectID = isset($pipeline->project) ? $pipeline->project : '';
-            $jobs      = $this->loadModel('gitlab')->apiGetJobs($job->server, $projectID, $compile->queue);
+            $projectID = isset($pipeline->project) ? $pipeline->project : 0;
+            $jobs      = $this->loadModel('gitlab')->apiGetJobs($job->server, (int)$projectID, $compile->queue);
 
             $this->loadModel('ci');
             foreach($jobs as $gitlabJob)
@@ -189,7 +189,7 @@ class compileModel extends model
                 if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
                 $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $gitlabJob->name, Stage: $gitlabJob->stage, Status: $gitlabJob->status, Duration: $gitlabJob->duration Sec\r\n </font>";
                 $logs .= "Job URL: <a href=\"$gitlabJob->web_url\" target='_blank'>$gitlabJob->web_url</a> \r\n";
-                $logs .= $this->ci->transformAnsiToHtml($this->gitlab->apiGetJobLog($job->server, $projectID, $gitlabJob->id));
+                $logs .= $this->ci->transformAnsiToHtml($this->gitlab->apiGetJobLog($job->server, (int)$projectID, $gitlabJob->id));
             }
         }
 
@@ -254,7 +254,7 @@ class compileModel extends model
             else
             {
                 $server = zget($gitlabPairs, $job->server);
-                $this->syncGitLabBuildList($server, $job);
+                $this->syncGitlabBuildList($server, $job);
             }
         }
     }
