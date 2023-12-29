@@ -172,7 +172,7 @@ class pivotModel extends model
      * @access public
      * @return object|array
      */
-    public function processPivot($pivots, $isObject = true)
+    public function processPivot($pivots, $isObject = true, $processFieldSettings = true)
     {
         if($isObject) $pivots = array($pivots);
 
@@ -209,7 +209,7 @@ class pivotModel extends model
                 $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
             }
 
-            if($isObject and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
+            if($isObject and $processFieldSettings and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
         }
 
         return $isObject ? reset($pivots) : $pivots;
@@ -2054,7 +2054,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    public function getSysOptions($type, $object = '', $field = '', $source = '')
     {
         $options = array('' => '');
         switch($type)
@@ -2092,22 +2092,35 @@ class pivotModel extends model
             case 'object':
                 if($field)
                 {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    if(is_array($source))
+                    {
+                        $options = array();
+                        foreach($source as $row) $options[$row->id] = $row->$field;
+
+                    }
+                    else
+                    {
+                        $table = zget($this->config->objectTables, $object, '');
+                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    }
                 }
                 break;
             case 'string':
                 if($field)
                 {
                     $options = array();
-                    if($sql)
+                    if(is_string($source) and !empty($source))
                     {
-                        $cols = $this->dbh->query($sql)->fetchAll();
+                        $cols = $this->dbh->query($source)->fetchAll();
                         foreach($cols as $col)
                         {
                             $data = $col->$field;
                             $options[$data] = $data;
                         }
+                    }
+                    else if(is_array($source))
+                    {
+                        foreach($source as $row) $options[$row->$field] = $row->$field;
                     }
                 }
                 break;
@@ -2415,12 +2428,48 @@ class pivotModel extends model
         return $sql;
     }
 
-    public function getFieldsOptions($fields, $sql)
+    public function getFieldsOptions($fieldSettings, $sql)
     {
         $options = array();
-        foreach($fields as $key => $field)
+        $tableObjects = array();
+        foreach($fieldSettings as $key => $fieldSetting)
         {
-            $options[$key] = $this->getSysOptions($field['type'], $field['object'], $field['field'], $sql);
+            $type   = $fieldSetting['type'];
+            $object = $fieldSetting['object'];
+            $field  = $fieldSetting['field'];
+
+            if($type == 'object')
+            {
+                if(!isset($tableObjects[$object])) $tableObjects[$object] = array();
+                $tableObjects[$object][] = $field;
+            }
+        }
+
+        $tableRecords = array();
+        foreach($tableObjects as $object => $fields)
+        {
+            if(empty($fields)) continue;
+
+            $fieldStr = implode('`,`', $fields);
+            $table    = zget($this->config->objectTables, $object, '');
+            $data     = $this->dao->select("`$fieldStr`")->from($table)->printSQL();
+
+            $tableRecords[$object] = $data;
+        }
+
+        $sqlRecords = $this->dbh->query($sql)->fetchAll();
+
+        foreach($fieldSettings as $key => $fieldSetting)
+        {
+            $type   = $fieldSetting['type'];
+            $object = $fieldSetting['object'];
+            $field  = $fieldSetting['field'];
+
+            $source = $sql;
+            if($type == 'object' and isset($tableRecords[$object])) $source = $tableRecords[$object];
+            if($type == 'string') $source = $sqlRecords;
+
+            $options[$key] = $this->getSysOptions($type, $object, $field, $source);
         }
 
         return $options;
