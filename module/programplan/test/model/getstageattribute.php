@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 programplanModel->getStageAttribute();
 cid=0
+
+- 验证id为0的阶段属性 @0
+- 验证id为2的阶段属性 @review
+- 验证id为3的阶段属性 @release
+- 验证不存在的id 100 阶段属性 @0
 
 */
 

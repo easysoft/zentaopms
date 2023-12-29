@@ -6,6 +6,11 @@
 title=测试 loadModel->buildGroupDataForGantt()
 cid=0
 
+- 检查构建分组Gantt数据。
+ - 属性id @1
+ - 属性type @group
+ - 属性text @开发
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

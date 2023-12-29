@@ -1,9 +1,20 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 programplanModel->getPlans();
 cid=0
+
+- 测试获取执行2 产品2的阶段
+ - 属性type @stage
+ - 属性name @阶段a
+- 测试获取执行3 产品2的阶段
+ - 属性type @stage
+ - 属性name @阶段a子1
+- 测试获取执行4 产品2的阶段
+ - 属性type @stage
+ - 属性name @阶段a子1子1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

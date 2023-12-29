@@ -1,9 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 programplanModel->saveCustomSetting();
 cid=0
+
+- 比较 stageCustom 的值 @2
+- 比较 ganttFields 的值 @3
+- 比较 zooming 的值 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

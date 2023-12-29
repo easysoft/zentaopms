@@ -6,6 +6,35 @@
 title=测试 programplanTao->insertStage();
 cid=0
 
+- 测试值传入plan数据
+ - 属性id @3
+ - 属性name @Test Stage
+ - 属性begin @2023-12-28
+ - 属性end @2024-03-28
+ - 属性parent @0
+ - 属性path @,3,
+ - 属性acl @private
+- 测试创建普通阶段。
+ - 属性id @4
+ - 属性project @1
+ - 属性name @Test Stage
+ - 属性begin @2023-12-28
+ - 属性end @2024-03-28
+ - 属性parent @1
+ - 属性path @,1,4,
+ - 属性grade @1
+ - 属性acl @private
+- 测试创建子阶段。
+ - 属性id @5
+ - 属性project @1
+ - 属性name @Test Stage
+ - 属性begin @2023-12-28
+ - 属性end @2024-03-28
+ - 属性parent @4
+ - 属性path @,1,4,5,
+ - 属性grade @2
+ - 属性acl @private
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

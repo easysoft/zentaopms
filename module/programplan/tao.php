@@ -775,9 +775,10 @@ class programplanTao extends programplanModel
      */
     protected function buildGanttLinks(array $planIdList): array
     {
-        if($this->config->edition == 'open') array();
+        $this->app->loadConfig('execution');
+        if($this->config->edition == 'open') return array();
 
-        $links = array();
+        $links     = array();
         $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
         foreach($relations as $relation)
         {
@@ -803,6 +804,8 @@ class programplanTao extends programplanModel
     {
         foreach($stages as $index => $stage)
         {
+            if(!isset($ganttData['data'][$index])) continue;
+
             $progress = empty($stage['totalReal']) ? 0 : round($stage['totalConsumed'] / $stage['totalReal'], 3);
             $ganttData['data'][$index]->progress     = $progress;
             $ganttData['data'][$index]->taskProgress = ($progress * 100) . '%';
@@ -821,7 +824,7 @@ class programplanTao extends programplanModel
      * @access protected
      * @return array
      */
-    protected function getTaskDateLimit(object $task, object|null $execution): array
+    protected function getTaskDateLimit(object $task, object|null $execution = null): array
     {
         $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
         $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;

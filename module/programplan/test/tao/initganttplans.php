@@ -6,6 +6,25 @@
 title=测试 loadModel->initGanttPlans()
 cid=0
 
+- 传入空数据，检查datas数据。 @0
+- 传入空数据，检查stageIndex数据。 @0
+- 传入空数据，检查planIdList数据。 @0
+- 传入空数据，检查reviewDeadline数据。 @0
+- 传入正常数据，检查 data 数据数量。 @10
+- 传入正常数据，检查 data数据的第一条信息。
+ - 第1条的id属性 @1
+ - 第1条的type属性 @plan
+ - 第1条的start_date属性 @28-09-2023
+ - 第1条的bar_height属性 @24
+- 传入正常数据，检查 stageIndex的第一条信息。
+ - 第1条的planID属性 @1
+ - 第1条的parent属性 @0
+ - 第1条的totalEstimate属性 @0
+ - 第1条的totalConsumed属性 @0
+ - 第1条的totalReal属性 @0
+- 传入正常数据，检查 planIdList 数据数量。 @10
+- 传入正常数据，检查 reviewDeadline的第一条数据。第1条的stageEnd属性 @2024-04-02
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

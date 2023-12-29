@@ -6,6 +6,16 @@
 title=测试 programplanModel->getDataForGanttGroupByAssignedTo();
 cid=0
 
+- 测试获取阶段数据第0条的type属性 @group
+- 测试获取任务数据
+ - 第4条的id属性 @8
+ - 第4条的type属性 @task
+- 测试获取阶段数据(JSON类型返回值)第0条的type属性 @group
+- 测试获取任务数据(JSON类型返回值)
+ - 第4条的id属性 @8
+ - 第4条的type属性 @task
+- 测试自定义参数为空的情况获取任务数据 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

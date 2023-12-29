@@ -6,6 +6,24 @@
 title=测试 loadModel->computeOrders()
 cid=0
 
+- 传入空参数 @0
+- 传入空orders参数
+ -  @30
+ - 属性1 @35
+ - 属性2 @40
+ - 属性3 @45
+- 传入有部分orders参数
+ -  @5
+ - 属性1 @30
+ - 属性2 @35
+ - 属性3 @40
+- 传入orders数量大于计划数
+ -  @5
+ - 属性1 @10
+ - 属性2 @15
+ - 属性3 @20
+ - 属性4 @25
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

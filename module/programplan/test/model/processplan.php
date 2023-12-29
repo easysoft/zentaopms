@@ -6,6 +6,21 @@
 title=测试 programplanModel->processPlan();
 cid=0
 
+- 测试id为1的瀑布项目
+ - 属性id @1
+ - 属性name @瀑布项目1
+ - 属性productName @瀑布产品1
+- 测试id为2的瀑布项目阶段
+ - 属性id @2
+ - 属性name @阶段a
+ - 属性productName @瀑布产品2
+ - 属性attribute @review
+- 测试id为3的瀑布项目阶段
+ - 属性id @3
+ - 属性name @阶段a子1
+ - 属性productName @瀑布产品2
+ - 属性attribute @release
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

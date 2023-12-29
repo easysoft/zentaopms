@@ -35,6 +35,12 @@ r($programplan->getTotalPercentTest($stageIDList[3]))        && p() && e('24'); 
 title=测试 programplanTao->getTotalPercent();
 cid=0
 
+- 统计普通阶段下百分比。 @70
+- 统计含有子阶段百分比。 @80
+- 统计子阶段百分比。 @100
+- 统计只有一个阶段百分比。 @0
+- 统计父阶段下百分比。 @90
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

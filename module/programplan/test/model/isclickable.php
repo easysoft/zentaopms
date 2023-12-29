@@ -6,6 +6,11 @@
 title=测试 programplanModel::isClickable();
 cid=0
 
+- 判断阶段为空时，是否有关闭的点击操作权限 @1
+- 判断阶段为空时，是否有创建的点击操作权限 @1
+- 判断阶段不为空时，是否有关闭的点击操作权限 @1
+- 判断阶段不为空并且该阶段下有任务，是否有创建的点击操作权限 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

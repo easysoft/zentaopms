@@ -6,6 +6,12 @@
 title=测试 loadModel->buildPointDataForGantt()
 cid=0
 
+- 禅道版本为IPD。
+ - 属性id @1-PP-1
+ - 属性reviewID @1
+ - 属性type @point
+ - 属性text @<i class='icon-seal'></i> 这个是评审或基线的标题1
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

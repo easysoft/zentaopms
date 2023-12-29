@@ -6,6 +6,14 @@
 title=测试 programplanTao->buildTaskGroup();
 cid=0
 
+- 传入空数据 @0
+- 检查包含多人任务的admin的分组的任务数。 @4
+- 检查包含多人任务的user1的分组的任务数。 @4
+- 检查包含多人任务的user2的分组的任务数。 @3
+- 检查不包含多人任务的admin的分组的任务数。 @3
+- 检查不包含多人任务的user1的分组的任务数。 @3
+- 检查不包含多人任务的user2的分组的任务数。 @3
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

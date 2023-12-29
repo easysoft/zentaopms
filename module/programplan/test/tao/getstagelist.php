@@ -6,6 +6,10 @@
 title=测试 loadModel->getStageList()
 cid=0
 
+- 获取id为3下的阶段名称属性name @阶段a子1子1
+- 获取的不存的id和项目产品id 的阶段信息 @0
+- 获取id为1下的阶段条数 @2
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

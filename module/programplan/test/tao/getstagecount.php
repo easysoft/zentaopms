@@ -6,6 +6,11 @@
 title=测试 programplanTao->getStageCount();
 cid=0
 
+- 传入空的planID。 @0
+- 传入不存在的planID。 @0
+- 传入planID=1。 @4
+- 传入planID=1, 并且是里程碑。 @2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

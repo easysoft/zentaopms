@@ -6,6 +6,9 @@
 title=测试 programplanModel->getPairs();
 cid=0
 
+- 测试获取执行11 产品11的计划键值对 @;/项目11
+- 测试获取执行12 产品12的计划键值对 @;/项目12
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

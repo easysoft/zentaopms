@@ -6,6 +6,14 @@
 title=测试 loadModel->buildTaskDataForGantt()
 cid=0
 
+- 检查构建分组Gantt数据。
+ - 属性id @1
+ - 属性type @task
+ - 属性text @<span class='label-pri label-pri-1' title='1'>1</span> 开发任务11
+ - 属性owner_id @``
+ - 属性start_date @28-09-2023
+ - 属性parent @0
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

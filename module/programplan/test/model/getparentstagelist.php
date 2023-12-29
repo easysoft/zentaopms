@@ -6,6 +6,10 @@
 title=测试 programplanModel->getParentStageList();
 cid=0
 
+- 测试查询项目1产品2阶段8父阶段信息 @执行1-1
+- 测试查询项目1产品3阶段8父阶段信息 @无
+- 测试查询项目4产品6阶段8父阶段信息 @执行2-1-1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

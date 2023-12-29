@@ -6,6 +6,13 @@
 title=测试 loadModel->getLinkProductsForCreate()
 cid=0
 
+- projectID=0, productID=0，检查产品数据。 @3
+- projectID=0, productID=0，检查分支数据。 @0;1;2;3;4
+- projectID=3, productID=0，检查产品数据。 @0
+- projectID=3, productID=0，检查分支数据。 @0
+- projectID=3, productID=3，检查产品数据。 @3
+- projectID=3, productID=3，检查分支数据。 @1
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

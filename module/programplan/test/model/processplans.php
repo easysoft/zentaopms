@@ -1,9 +1,30 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 programplanModel->processPlans();
 cid=0
+
+- 测试id为1的瀑布项目名称和所属产品
+ - 属性name @瀑布项目1
+ - 属性productName @瀑布产品1
+- 测试id为2的瀑布项目名称和所属产品
+ - 属性name @瀑布项目2
+ - 属性productName @瀑布产品2
+- 测试id为3的瀑布项目名称和所属产品
+ - 属性name @瀑布项目3
+ - 属性productName @瀑布产品2
+- 测试id为4的瀑布项目名称和所属产品
+ - 属性name @瀑布项目4
+ - 属性productName @瀑布产品2
+- 测试id为5的瀑布项目名称和所属产品
+ - 属性name @瀑布项目5
+ - 属性productName @瀑布产品2
+- 测试id为6的瀑布项目名称和所属产品
+ - 属性name @瀑布项目6
+ - 属性productName @瀑布产品2
+- 测试id不存在的瀑布项目 @0
 
 */
 

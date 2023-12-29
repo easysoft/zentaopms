@@ -6,6 +6,15 @@
 title=测试 loadModel->buildGanttData4IPD()
 cid=0
 
+- 禅道版本为开源版。 @0
+- gantt数据数。 @20
+- 禅道版本为IPD。
+ - 属性id @1-PP-1
+ - 属性reviewID @1
+ - 属性type @point
+ - 属性text @<i class='icon-seal'></i> 这个是评审或基线的标题1
+- selectCustom 不包含 point。 @0
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

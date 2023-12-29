@@ -6,6 +6,10 @@
 title=测试programplanModel->checkLeafStage();
 cid=0
 
+- 获取阶段ID为0，判断是是否为叶子节点，结果为0 @0
+- 获取阶段ID为2，判断是是否为叶子节点，结果为0 @0
+- 获取阶段ID为5，判断是否为叶子节点，结果为1 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

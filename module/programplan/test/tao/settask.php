@@ -6,6 +6,23 @@
 title=测试 loadModel->setTask()
 cid=0
 
+- 传入空数据，检查datas数据。 @0
+- 传入空数据，检查stageIndex数据。 @0
+- 传入空任务，检查data数据数。 @10
+- 传入任务， selectCustom为空，检查data数据数。 @10
+- 传入正常数据，检查 data数据数量。 @30
+- 传入正常数据，检查 data数据的第一条信息。
+ - 属性id @1-1
+ - 属性type @task
+ - 属性start_date @28-09-2023
+ - 属性bar_height @24
+- 传入正常数据，检查 stageIndex的第一条信息。
+ - 第1条的planID属性 @1
+ - 第1条的parent属性 @0
+ - 第1条的totalEstimate属性 @10
+ - 第1条的totalConsumed属性 @6
+ - 第1条的totalReal属性 @6
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

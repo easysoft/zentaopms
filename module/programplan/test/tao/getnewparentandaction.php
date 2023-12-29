@@ -6,6 +6,11 @@
 title=测试 programplanTao->computeNewParenAndAction();
 cid=0
 
+- 返回状态为wait属性status @wait
+- 返回状态为closed属性status @closed
+- 返回状态为suspended属性status @suspended
+- 返回状态为doing属性status @doing
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

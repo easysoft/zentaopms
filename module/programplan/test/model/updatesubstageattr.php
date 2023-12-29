@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试programplanModel->updateSubStageAttr();
 cid=0
+
+- 测试更改 id 为 3 存在子阶段的阶段，attribute 更新值为 mix ，结果为 1 @1
+- 测试更改 id 为 5 无子阶段的阶段，更新 attribute 值为 design ，结果为 1 @1
+- 测试更改 id 为 2 存在子阶段的阶段，更新 attribute 值为 design ，结果为 design @design
+- 测试更改 id 为 3 存在子阶段，子阶段下也存在子阶段，更新 attribute 值为 design ，结果为 design @design
 
 */
 

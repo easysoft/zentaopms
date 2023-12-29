@@ -6,6 +6,16 @@
 title=测试 programplanModel->computeProgress();
 cid=0
 
+- 测试参数=项目id直接continue @fail
+- 测试阶段status=suspended子阶段status=wait @success
+- 测试阶段status:suspended=>wait属性status @wait
+- 测试阶段status=suspended子阶段status=closed @success
+- 测试阶段status:suspended=>closed属性status @closed
+- 测试阶段status=doing子阶段status=suspended @success
+- 测试阶段status:doing=>suspended属性status @suspended
+- 测试阶段status更新为doing @success
+- 测试阶段状态更新为donging属性status @doing
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

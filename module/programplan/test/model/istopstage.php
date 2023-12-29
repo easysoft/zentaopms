@@ -6,6 +6,10 @@
 title=测试programplanModel->isTopStage();
 cid=0
 
+- 测试id为2判断是否为顶级阶段 @1
+- 测试id为4判断是否为顶级阶段 @0
+- 测试id为5判断是否为顶级阶段 @1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

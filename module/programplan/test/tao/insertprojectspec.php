@@ -6,6 +6,14 @@
 title=测试 loadModel->insertProjectSpec()
 cid=0
 
+- 传入空参数 @0
+- 检查插入的spec数据。
+ - 属性name @Test plan
+ - 属性version @3
+ - 属性milestone @1
+ - 属性begin @2023-09-28
+ - 属性end @2024-04-28
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

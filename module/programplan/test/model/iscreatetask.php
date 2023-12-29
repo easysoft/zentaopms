@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 programplanModel->isCreateTask();
 cid=0
+
+- 测试 id 为 -1 的阶段下是否创建了任务，结果为 1 @1
+- 测试 id 为 0 的阶段下是否创建了任务，结果为 1 @1
+- 测试 id 为 1 的阶段下是否创建了任务，结果为 0 @0
+- 测试 id 为 6 的阶段下是否创建了任务，结果为 0 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

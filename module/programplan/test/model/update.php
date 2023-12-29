@@ -6,6 +6,10 @@
 title=测试 programplanModel->update();
 cid=0
 
+- 传入空参数 @0
+- 测试修改plan的 name 值属性name @修改后的阶段
+- 测试子阶段的 acl 值第0条的acl属性 @private
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

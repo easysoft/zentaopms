@@ -6,6 +6,19 @@
 title=测试 loadModel->buildPlanDataForGantt()
 cid=0
 
+- 检查普通阶段，构建Gantt数据。
+ - 属性id @1
+ - 属性type @plan
+ - 属性text @项目集1
+ - 属性start_date @28-09-2023
+- 检查是否存在percent字段 @0
+- 里程碑阶段，并设置显示percent，检查构建数据。
+ - 属性id @1
+ - 属性type @plan
+ - 属性text @项目集1<icon class='icon icon-flag icon-sm red'></icon>
+ - 属性start_date @28-09-2023
+ - 属性percent @10
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

@@ -1,9 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试programplanModel->getSelfAndChildrenList();
 cid=0
+
+- 测试id为2时获取自己的状态属性status @doing
+- 测试id为2时获取自己后代的个数 @3
 
 */
 

@@ -6,6 +6,12 @@
 title=测试 loadModel->getPointEndDate()
 cid=0
 
+- 传入point->end不为空 @2023-09-28
+- 传入point->end为空 @2023-12-28
+- 传入point->category为DCP @2023-12-26
+- 传入point->category为TR @2023-12-21
+- 传入reviewDeadline含有taskEnd数据 @2023-12-18
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';

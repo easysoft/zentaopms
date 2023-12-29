@@ -6,6 +6,20 @@
 title=测试 programplanModel->getParentChildrenTypes();
 cid=0
 
+- 查找父ID为 0 未删除的阶段类型 @1
+- 查找父ID为 1 未删除的阶段类型 stage属性stage @stage
+- 查找父ID为 1 未删除的阶段类型 kanban属性kanban @kanban
+- 查找父ID为 1 未删除的阶段类型数量 @2
+- 查找父ID为 2 未删除的阶段类型 sprint属性sprint @sprint
+- 查找父ID为 2 未删除的阶段类型数量 @1
+- 查找父ID为 3 未删除的阶段类型 stage属性stage @stage
+- 查找父ID为 3 未删除的阶段类型 sprint属性sprint @sprint
+- 查找父ID为 3 未删除的阶段类型数量 @2
+- 查找父ID为 1 未删除的阶段类型 stage属性stage @0
+- 查找父ID为 1 未删除的阶段类型 sprint属性sprint @0
+- 查找父ID为 1 未删除的阶段类型 kanban属性kanban @0
+- 查找父ID为 1 未删除的阶段类型数量 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';

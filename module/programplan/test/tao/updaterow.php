@@ -6,6 +6,20 @@
 title=测试 loadModel->updateRow()
 cid=0
 
+- 传入空参数 @0
+- 检查未编辑前的数据。
+ - 属性name @执行3-1
+ - 属性attribute @``
+ - 属性version @0
+- 测试修改plan的 name 和 version 值。
+ - 属性name @修改后的阶段
+ - 属性version @1
+- 测试查看项目下的spec信息。 @1
+- 测试修改plan的 attribute 值。
+ - 属性name @修改后的阶段
+ - 属性attribute @devel
+ - 属性version @1
+
 */
 
 include dirname(__FILE__, 5). '/test/lib/init.php';
