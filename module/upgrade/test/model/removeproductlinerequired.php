@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->saveLogs();
+title=测试 upgradeModel->removeProductLineRequired().
 cid=1
 
 - 检测产品线必填字段是否已经被移除 @1

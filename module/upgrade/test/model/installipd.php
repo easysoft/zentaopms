@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->initUserView();
+title=测试 upgradeModel->installIPD().
 cid=1
 
 - 开源18.2版本低于18.5版本，需要安装IPD，所以应该生成日志文件。@1

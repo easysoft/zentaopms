@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->addAdminInviteField();
+title=测试 upgradeModel->processMergedData().
 cid=1
 
 - 当projectID为空时,返回false @0
