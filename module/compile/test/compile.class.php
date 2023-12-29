@@ -1,6 +1,8 @@
 <?php
 class compileTest
 {
+    private $objectModel;
+
     public function __construct()
     {
          global $tester;
@@ -140,5 +142,19 @@ class compileTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * 魔术方法，调用objectModel一些比较简单的方法。
+     * Magic method, call some simple methods of objectModel.
+     *
+     * @param  string $method
+     * @param  array  $args
+     * @access public
+     * @return mixed
+     */
+    public function __call(string $method, array $args): mixed
+    {
+        return $this->objectModel->$method(...$args);
     }
 }
