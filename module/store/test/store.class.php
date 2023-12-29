@@ -126,4 +126,20 @@ class storeTest
     {
         return $this->getVersionPairs($appID);
     }
+
+    /**
+     * 测试获取应用可以升级到的版本。
+     * Test get upgradable versions of app from cloud market.
+     *
+     * @param  string $currentVersion
+     * @param  int    $appID          appID is required if no appName.
+     * @param  string $appName        appName is required if no appID.
+     * @param  string $channel
+     * @access public
+     * @return array
+     */
+    public function getUpgradableVersionsTest(string $currentVersion, int $appID = 0, string $appName = ''): array
+    {
+        return $this->getUpgradableVersions($currentVersion, $appID, $appName);
+    }
 }
