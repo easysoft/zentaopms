@@ -94,6 +94,7 @@ class sonarqubeTest
         $result = $this->objectModel->getCacheFile($sonarqubeID, $projectKey);
 
         if(strPos($result, '/' . $sonarqubeID . '-' ) !== false) return true;
+        if($result === false) return true;
         return $result;
     }
 }

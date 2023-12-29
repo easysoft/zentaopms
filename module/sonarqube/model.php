@@ -282,9 +282,9 @@ class sonarqubeModel extends model
      * @param  int    $sonarqubeID
      * @param  string $projectKey
      * @access public
-     * @return string
+     * @return string|false
      */
-    public function getCacheFile($sonarqubeID, $projectKey): string
+    public function getCacheFile(int $sonarqubeID, string $projectKey): string|false
     {
         $cachePath = $this->app->getCacheRoot() . '/' . 'sonarqube';
         if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
@@ -301,7 +301,7 @@ class sonarqubeModel extends model
      * @access public
      * @return string
      */
-    public function getLinkedProducts($sonarqubeID, $projectKey): string
+    public function getLinkedProducts(int $sonarqubeID, string $projectKey): string
     {
         return $this->dao->select('t2.product')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
