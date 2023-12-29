@@ -168,4 +168,19 @@ class storeTest
     {
         return $this->getAppSettings($appID);
     }
+
+    /**
+     * 测试从云市场获取类别列表。
+     * Test get category list from cloud market.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCategoriesTest(): string
+    {
+        $result     = $this->getCategories();
+        $categories = '';
+        foreach($result->categories as $categoryList) $categories .= $categoryList->alias . ' ';
+        return $categories;
+    }
 }
