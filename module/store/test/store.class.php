@@ -170,4 +170,19 @@ class storeTest
         foreach($result->categories as $categoryList) $categories .= $categoryList->alias . ' ';
         return $categories;
     }
+
+    /**
+     * 测试获取解决方案的配置信息。
+     * Test get solution config.
+     *
+     * @param  string     $type
+     * @param  int|string $value
+     * @access public
+     * @return object
+     */
+    public function solutionConfigTest(string $type, string $value): string
+    {
+        $result = $this->solutionConfig($type, $value);
+        return empty((array)$result) ? 'No data' : 'Success';
+    }
 }
