@@ -7,22 +7,40 @@ pipeline {
     }
   }
 
+  options {
+    parallelsAlwaysFailFast()
+    overrideIndexTriggers(false)
+    skipDefaultCheckout()
+  }
+
   parameters {
+    separator(name: "action", sectionHeader: "构建动作")
     booleanParam defaultValue: false, description: '执行代码扫描', name: 'code_scan_enabled'
     booleanParam defaultValue: false, description: '全量单元测试', name: 'full_unit_test'
+
+    separator(name: "info", sectionHeader: "webhook自动注入")
+    string description: 'git commit', name: 'commitId', trim: true
+    string description: 'git commit 作者', name: 'commitAuthor', trim: true
+  }
+
+  triggers {
+    GenericTrigger(
+     genericVariables: [
+      [key: 'commitId', value: '$.head_commit.id'],
+      [key: 'commitAuthor', value: '$.head_commit.author.username'],
+      [key: 'commitMsg', value: '$.head_commit.message']
+     ],
+     causeString: 'Triggered by $commitAuthor with msg: $commitMsg',
+     token: 'tmMCfWb24hEQksD578',
+     printContributedVariables: true,
+     printPostContent: true,
+     silentResponse: false,
+     shouldNotFlatten: false,
+    )
   }
 
   environment {
-    ZENTAO_VERSION = """${sh(
-                            returnStdout: true,
-                            script: 'cat VERSION'
-    ).trim()}"""
-
     MIDDLE_IMAGE_REPO = 'hub.qc.oop.cc/zentao-ztf'
-    MIDDLE_IMAGE_TAG = """${sh(
-                            returnStdout: true,
-                            script: 'echo $BUILD_ID-${GIT_COMMIT}'
-    ).trim()}"""
 
     XIM_NOTIFY_USERS = "liyang"
     XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
@@ -31,19 +49,20 @@ pipeline {
   stages {
     stage('prepare') {
       steps {
+        checkout changelog: false, poll: false, scm: scmGit(branches: [[name: "$params.commitId"]], extensions: [], userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zentaopms.git']])
         echo 'checkout code success'
         script {
             env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
-            env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+            env.GIT_COMMIT = params.commitId
 
             def j = job.newJob()
             env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
 
-            sh(returnStdout: false, script: '''curl $JOB_URL$BUILD_ID/api/json > .job.json''')
             env.CHANGED_MODULES= sh(returnStdout: true, script: '''git diff-tree --no-commit-id --name-only -r HEAD | grep 'module/' | awk -F '/' '{print "/apps/zentao/"$1"/"$2}' | sort -u | xargs''').trim()
-            //env.CHANGED_MODULES= sh(returnStdout: true, script: '''jq -r ".changeSets[].items[] | .affectedPaths[]" < .job.json | grep 'module/' | awk -F '/' '{print "/apps/zentao/"$1"/"$2}' | sort -u | xargs''').trim()
-            env.CHANGED_MODULE_AUTHORS = sh(returnStdout: true, script: '''git log -1 --pretty=format:'%ae' | cut -d '@' -f 1 ''').trim()
-            //env.CHANGED_MODULE_AUTHORS = sh(returnStdout: true, script: '''jq -r '.changeSets[].items[] | select(any(.affectedPaths[]; startswith("module"))) | .author.fullName' < .job.json | sort -u | paste -s -d "," - ''').trim()
+            env.CHANGED_MODULE_AUTHORS = params.commitAuthor
+
+            env.ZENTAO_VERSION = sh(returnStdout: true,script: 'cat VERSION').trim()
+            env.MIDDLE_IMAGE_TAG = sh(returnStdout: true,script: 'echo $BUILD_ID-${GIT_COMMIT}').trim()
         }
         sh 'env'
       }
