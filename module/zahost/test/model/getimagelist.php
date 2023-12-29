@@ -18,6 +18,15 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/zahost.class.php';
 su('admin');
 
+$host = zdTable('host');
+$host->id->range('1');
+$host->type->range('zahost');
+$host->name->range('宿主机1');
+$host->extranet->range('10.0.1.222');
+$host->zap->range('55001');
+$host->gen(1);
+
+zdTable('image')->gen(0);
 zdTable('image')->config('image')->gen(2);
 
 $hostID = 1;
