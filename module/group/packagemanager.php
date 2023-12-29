@@ -129,10 +129,6 @@ $config->group->subset->cm = new stdclass();
 $config->group->subset->cm->order = 440;
 $config->group->subset->cm->nav   = 'project';
 
-$config->group->subset->measrecord = new stdclass();
-$config->group->subset->measrecord->order = 480;
-$config->group->subset->measrecord->nav   = 'project';
-
 $config->group->subset->projectreport = new stdclass();
 $config->group->subset->projectreport->order = 490;
 $config->group->subset->projectreport->nav   = 'project';
@@ -2317,17 +2313,6 @@ $config->group->package->pssp->privs  = array();
 $config->group->package->pssp->privs['pssp-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index'), 'recommend' => array());
 $config->group->package->pssp->privs['pssp-update'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pssp-browse'), 'recommend' => array());
 
-$config->group->package->measrecord = new stdclass();
-$config->group->package->measrecord->order  = 5;
-$config->group->package->measrecord->subset = 'measrecord';
-$config->group->package->measrecord->privs  = array();
-$config->group->package->measrecord->privs['measrecord-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array());
-$config->group->package->measrecord->privs['report-show']             = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
-$config->group->package->measrecord->privs['report-customeredReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
-$config->group->package->measrecord->privs['report-viewReport']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('report-customeredReport'), 'recommend' => array());
-$config->group->package->measrecord->privs['report-projectSummary']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->measrecord->privs['report-projectWorkload']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->manageAuditPlan = new stdclass();
 $config->group->package->manageAuditPlan->order  = 5;
 $config->group->package->manageAuditPlan->subset = 'projectauditplan';
@@ -3034,31 +3019,6 @@ $config->group->package->approvalflow->privs['approvalflow-role']       = array(
 $config->group->package->approvalflow->privs['approvalflow-createRole'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-deleteRole', 'approvalflow-editRole'));
 $config->group->package->approvalflow->privs['approvalflow-editRole']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-deleteRole'));
 $config->group->package->approvalflow->privs['approvalflow-deleteRole'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-editRole'));
-
-$config->group->package->measurement = new stdclass();
-$config->group->package->measurement->order  = 15;
-$config->group->package->measurement->subset = 'featureconfig';
-$config->group->package->measurement->privs  = array();
-$config->group->package->measurement->privs['measurement-settips']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->measurement->privs['measurement-setSQL']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('measurement-browse'), 'recommend' => array('measurement-createBasic', 'measurement-delete', 'measurement-editBasic'));
-$config->group->package->measurement->privs['measurement-browse']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->measurement->privs['measurement-createBasic']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('measurement-browse'), 'recommend' => array('measurement-delete', 'measurement-editBasic', 'measurement-setSQL'));
-$config->group->package->measurement->privs['measurement-delete']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('measurement-browse'), 'recommend' => array('measurement-batchEdit', 'measurement-createBasic', 'measurement-editBasic', 'measurement-setSQL'));
-$config->group->package->measurement->privs['measurement-editBasic']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('measurement-browse'), 'recommend' => array('measurement-batchEdit', 'measurement-createBasic', 'measurement-delete', 'measurement-setSQL'));
-$config->group->package->measurement->privs['measurement-searchMeas']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 14, 'depend' => array('measurement-browse'), 'recommend' => array());
-$config->group->package->measurement->privs['measurement-template']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array(), 'recommend' => array());
-$config->group->package->measurement->privs['measurement-createTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 23, 'depend' => array('measurement-template'), 'recommend' => array('measurement-editTemplate', 'measurement-viewTemplate'));
-$config->group->package->measurement->privs['measurement-editTemplate']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('measurement-template'), 'recommend' => array('measurement-createTemplate', 'measurement-viewTemplate'));
-$config->group->package->measurement->privs['measurement-viewTemplate']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['measurement-batchEdit']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('measurement-browse'), 'recommend' => array('measurement-editBasic'));
-$config->group->package->measurement->privs['measurement-saveReport']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 24, 'depend' => array('measurement-viewTemplate'), 'recommend' => array());
-$config->group->package->measurement->privs['report-custom']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 17, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['report-editReport']          = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 18, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['report-useReport']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 19, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['report-deleteReport']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['report-saveReport']          = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 21, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['report-crystalExport']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 22, 'depend' => array('measurement-template'), 'recommend' => array());
-$config->group->package->measurement->privs['report-export']              = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('measurement-template'), 'recommend' => array());
 
 $config->group->package->meetingroom = new stdclass();
 $config->group->package->meetingroom->order  = 30;

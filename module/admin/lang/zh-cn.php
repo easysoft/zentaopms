@@ -101,7 +101,6 @@ $lang->admin->setModule->issue          = '问题';
 $lang->admin->setModule->risk           = '风险';
 $lang->admin->setModule->opportunity    = '机会';
 $lang->admin->setModule->process        = '过程';
-$lang->admin->setModule->measrecord     = '度量';
 $lang->admin->setModule->auditplan      = 'QA';
 $lang->admin->setModule->meeting        = '会议';
 $lang->admin->setModule->roadmap        = '路线图';

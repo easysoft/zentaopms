@@ -19,7 +19,6 @@ $lang->requirement = new stdclass();
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
 $lang->productplan = new stdclass();
-$lang->measurement = new stdclass();
 $lang->review      = new stdclass();
 $lang->milestone   = new stdclass();
 $lang->qa          = new stdclass();

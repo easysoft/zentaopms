@@ -101,7 +101,6 @@ $lang->admin->setModule->issue          = 'Issue';
 $lang->admin->setModule->risk           = 'Risk';
 $lang->admin->setModule->opportunity    = 'Opportunity';
 $lang->admin->setModule->process        = 'Process';
-$lang->admin->setModule->measrecord     = 'Measrecord';
 $lang->admin->setModule->auditplan      = 'QA';
 $lang->admin->setModule->meeting        = 'Meeting';
 $lang->admin->setModule->roadmap        = 'Roadmap';

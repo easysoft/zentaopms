@@ -229,9 +229,6 @@ $lang->system->menu->company  = array('link' => 'User|company|browse|', 'subModu
 $lang->system->menu->team     = array('link' => 'Team|my|team|');
 $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 
-$lang->measurement = new stdclass();
-$lang->measurement->menu = new stdclass();
-
 $lang->devops->compile      = 'Pipelines';
 $lang->devops->mr           = 'Merge Request';
 $lang->devops->repo         = 'Repo';
@@ -639,7 +636,6 @@ $lang->navGroup->job            = 'project';
 $lang->navGroup->jenkins        = 'project';
 $lang->navGroup->compile        = 'project';
 $lang->navGroup->report         = 'project';
-$lang->navGroup->measrecord     = 'project';
 
 $lang->navGroup->execution = 'execution';
 $lang->navGroup->task      = 'execution';

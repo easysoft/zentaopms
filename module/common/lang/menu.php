@@ -614,7 +614,6 @@ $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
 $lang->navGroup->build          = 'project';
-$lang->navGroup->measrecord     = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->researchplan   = 'project';
 $lang->navGroup->workestimation = 'project';
