@@ -202,4 +202,32 @@ class cronTest
 
         return $objects;
     }
+
+    /**
+     * Update time test.
+     *
+     * @param  string $role
+     * @param  int    $execId
+     * @access public
+     * @return int
+     */
+    public function updateTimeTest($role, $execId)
+    {
+        $this->objectModel->updateTime($role, $execId);
+
+        if(dao::isError()) return dao::getError();
+
+        if($role == 'scheduler')
+        {
+            $execId = $this->objectModel->dao->select('value')->from(TABLE_CONFIG)->where('key')->eq('execId')->fetch('value');
+        }
+        else
+        {
+            $execId = $this->objectModel->dao->select('`key`')->from(TABLE_CONFIG)->where('section')->eq('consumer')->orderBy('value_desc')->fetch('key');
+        }
+
+        sleep(1); // Diff time.
+
+        return $execId;
+    }
 }
