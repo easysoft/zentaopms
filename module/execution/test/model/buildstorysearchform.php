@@ -81,6 +81,10 @@ cid=1
 
 */
 
+global $lang;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+
 $executionIdList = array(3, 0);
 $queryIdList     = array(0, 1);
 
