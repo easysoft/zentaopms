@@ -94,56 +94,6 @@ class cneModel extends model
     }
 
     /**
-     * 设置负载均衡。
-     * Config QLB (Server Load Balancing).
-     *
-     * @param  object $settings
-     * @param  string $channel
-     * @access public
-     * @return bool
-     */
-    public function configQLB(object $settings, string $channel = ''): bool
-    {
-        $apiParams = array();
-        $apiParams['cluster']   = '';
-        $apiParams['channel']   = empty($channel) ? $this->config->CNE->api->channel : $channel;
-        $apiParams['namespace'] = $settings->namespace;
-        $apiParams['name']      = $settings->name;
-        $apiParams['ippool']    = $settings->ippool;
-
-        $apiUrl = "/api/cne/system/qlb/config";
-        $result = $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
-        if($result && $result->code == 200) return true;
-
-        return false;
-    }
-
-    /**
-     * 获取负载均衡信息。
-     * Get Qucheng Load Balancer Info
-     *
-     * @param  string $name
-     * @param  string $namespace
-     * @param  string $channel
-     * @access public
-     * @return object
-     */
-    public function getQLBInfo(string $name, string $namespace, string $channel = ''): ?object
-    {
-        $apiParams = array();
-        $apiParams['cluster']   = '';
-        $apiParams['channel']   = empty($channel) ? $this->config->CNE->api->channel : $channel;
-        $apiParams['namespace'] = $namespace;
-        $apiParams['name']      = $name;
-
-        $apiUrl = "/api/cne/system/qlb/config";
-        $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
-        if($result && $result->code == 200) return $result->data;
-
-        return null;
-    }
-
-    /**
      * 校验证书。
      * Valid Certificate.
      *
