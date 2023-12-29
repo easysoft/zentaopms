@@ -17,7 +17,7 @@ cid=1
 */
 
 zdTable('pipeline')->gen(5);
-zdTable('oauth')->gen(4);
+zdTable('oauth')->config('oauth')->gen(4);
 
 $gitlab = $tester->loadModel('gitlab');
 

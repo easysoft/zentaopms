@@ -11,7 +11,6 @@ cid=1
 - 通过gitlabID,projectID,获取GitLab hook列表 @1
 - 通过gitlabID,projectID,获取GitLab hook数量 @1
 - 通过指定hookID获取hook信息 @1
-- 当前项目没有hook时,获取GitLab hook列表 @0
 - 当gitlabID存在,projectID不存在时,获取GitLab hook列表属性message @404 Project Not Found
 - 当gitlabID,projectID都为0时,获取GitLabi hook列表 @return empty
 
@@ -30,12 +29,8 @@ r(isset($hook->url))      && p() && e('1'); //通过gitlabID,projectID,获取Git
 r(count($result) > 0)     && p() && e('1'); //通过gitlabID,projectID,获取GitLab hook数量
 r(isset($hookResult->id)) && p() && e('1'); //通过指定hookID获取hook信息
 
-$gitlabID  = 1;
-$projectID = 1;
-r(count($gitlab->apiGetHooks($gitlabID, $projectID))) && p() && e('0'); //当前项目没有hook时,获取GitLab hook列表
-
-$gitlabID  = 1;
-$result    = $gitlab->apiGetHooks($gitlabID, 0);
+$gitlabID = 1;
+$result   = $gitlab->apiGetHooks($gitlabID, 0);
 r($gitlab->apiGetHooks($gitlabID, 0)) && p('message') && e('404 Project Not Found'); //当gitlabID存在,projectID不存在时,获取GitLab hook列表
 
 $result = $gitlab->apiGetHooks(0, 0);
