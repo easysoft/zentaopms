@@ -13,6 +13,11 @@ namespace zin;
 jsVar('designID', $designID);
 jsVar('errorDate', $lang->design->errorDate);
 
+foreach($revisions as $revision)
+{
+    $revision->commentHint = strip_tags($revision->comment);
+}
+
 modalHeader(set::title($lang->design->linkCommit));
 if(empty($repoID))
 {

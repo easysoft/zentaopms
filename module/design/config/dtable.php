@@ -62,7 +62,7 @@ $config->design->linkcommit->dtable->fieldList['committer']['sortType'] = false;
 $config->design->linkcommit->dtable->fieldList['comment']['title']    = $lang->repo->comment;
 $config->design->linkcommit->dtable->fieldList['comment']['type']     = 'html';
 $config->design->linkcommit->dtable->fieldList['comment']['sortType'] = false;
-$config->design->linkcommit->dtable->fieldList['comment']['hint']     = true;
+$config->design->linkcommit->dtable->fieldList['comment']['hint']     = '{commentHint}';
 
 $config->design->viewcommit->dtable->fieldList['id']['title']    = $lang->design->submission;
 $config->design->viewcommit->dtable->fieldList['id']['format']   = 'RAWJS<function(val){return `#${val}`;}>RAWJS';
@@ -80,6 +80,7 @@ $config->design->viewcommit->dtable->fieldList['time']['sortType'] = false;
 $config->design->viewcommit->dtable->fieldList['comment']['title']    = $lang->design->comment;
 $config->design->viewcommit->dtable->fieldList['comment']['type']     = 'html';
 $config->design->viewcommit->dtable->fieldList['comment']['sortType'] = false;
+$config->design->viewcommit->dtable->fieldList['comment']['hint']     = '{originalComment}';
 
 $config->design->viewcommit->dtable->fieldList['actions']['type'] = 'actions';
 $config->design->viewcommit->dtable->fieldList['actions']['menu'] = array('unlinkCommit');

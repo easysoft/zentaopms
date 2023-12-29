@@ -345,6 +345,13 @@ class designModel extends model
         $design->product = (int)$design->product;
         $design->commit  = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id');
 
+        $this->loadModel('repo');
+        foreach($design->commit as $commit)
+        {
+            $commit->originalComment = $commit->comment;
+            $commit->comment         = $this->repo->replaceCommentLink($commit->comment);
+        }
+
         return $design;
     }
 
