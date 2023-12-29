@@ -24,9 +24,8 @@ class zahostTao extends zahostModel
             $remoteImage->from   = 'zentao';
             $remoteImage->osName = $remoteImage->os;
             $remoteImage->host   = $hostID;
-            unset($remoteImage->os);
 
-            $this->dao->insert(TABLE_IMAGE)->data($remoteImage, 'desc')->autoCheck()->exec();
+            $this->dao->insert(TABLE_IMAGE)->data($remoteImage, 'desc,os')->autoCheck()->exec();
 
             $refreshPageData = true;
         }
