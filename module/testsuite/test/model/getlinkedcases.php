@@ -7,6 +7,7 @@ su('admin');
 zdTable('case')->gen(2);
 zdTable('testsuite')->gen(1);
 zdTable('suitecase')->gen(2);
+zdTable('testresult')->gen(2);
 
 /**
 
