@@ -155,4 +155,17 @@ class storeTest
     {
         return $this->appLatestVersion($appID, $currentVersion);
     }
+
+    /**
+     * 测试获取应用市场应用的配置。
+     * Test get app setting from cloud market.
+     *
+     * @param  int $appID
+     * @access public
+     * @return array
+     */
+    public function getAppSettingsTest(int $appID): array
+    {
+        return $this->getAppSettings($appID);
+    }
 }
