@@ -49,7 +49,7 @@ class compileTao extends compileModel
     }
 
     /**
-     * 创建compile根据构建信息。
+     * 根据构建信息创建compile。
      * Create compile by build info.
      *
      * @param  string    $name
@@ -62,8 +62,8 @@ class compileTao extends compileModel
     protected function createByBuildInfo(string $name, int $jobID, object $build, string $buildType): void
     {
         $data = new stdclass();
-        $data->name        = $name;
-        $data->job         = $jobID;
+        $data->name = $name;
+        $data->job  = $jobID;
 
         if($buildType == 'jenkins')
         {
@@ -78,8 +78,8 @@ class compileTao extends compileModel
             $data->createdDate = date('Y-m-d H:i:s', strtotime($build->created_at));
         }
 
-        $data->createdBy   = 'guest';
-        $data->updateDate  = $data->createdDate;
+        $data->createdBy  = 'guest';
+        $data->updateDate = $data->createdDate ?? date('Y-m-d H:i:s');
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
     }
