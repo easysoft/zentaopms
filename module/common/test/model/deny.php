@@ -13,7 +13,10 @@ cid=1
 
 */
 su('admin');
-global $tester;
+global $tester, $config;
+$config->webRoot     = '';
+$config->requestType = 'PATH_INFO';
+
 $tester->loadModel('common');
 
 try{
@@ -30,4 +33,4 @@ try{
     $result2 = $e->getMessage();
 }
 
-r($result2) && p() && e('{"load":"-deny.php?m=user&f=deny&module=execution&method=create"}0'); // deny中鉴权，无权限时返回跳转的URL
+r($result2) && p() && e('{"load":"user-deny-execution-create.html"}0'); // deny中鉴权，无权限时返回跳转的URL

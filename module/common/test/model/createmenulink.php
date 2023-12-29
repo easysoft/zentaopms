@@ -13,7 +13,10 @@ cid=1
 
 */
 
-global $tester;
+global $tester, $config;
+
+$config->webRoot     = '';
+$config->requestType = 'PATH_INFO';
 
 $menuLink = new stdclass();
 $menuLink->link['module'] = 'task';
@@ -28,5 +31,5 @@ $menuLink1->link['vars']   = 'id=1';
 $link1 = $tester->loadModel('common')->createMenuLink($menuLink);
 $link2 = $tester->loadModel('common')->createMenuLink($menuLink1);
 
-r($link1) && p('') && e('-createmenulink.php?m=task&f=create&executionID=1'); // 查看拼接后的导航链接
-r($link2) && p('') && e('-createmenulink.php?m=execution&f=browse&id=1');     // 查看拼接后的导航链接
+r($link1) && p('') && e('task-create-1.html'); // 查看拼接后的导航链接
+r($link2) && p('') && e('execution-browse-1.html');     // 查看拼接后的导航链接

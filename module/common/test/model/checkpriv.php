@@ -15,11 +15,13 @@ cid=1
 
 */
 
-global $tester, $app;
+global $tester, $app, $config;
 
 su('user1');
-$app->moduleName = 'user';
-$app->methodName = 'create';
+$app->moduleName     = 'user';
+$app->methodName     = 'create';
+$config->webRoot     = '';
+$config->requestType = 'PATH_INFO';
 
 try
 {
@@ -30,7 +32,7 @@ catch (Exception $e)
     $result = '没有权限';
 }
 
-r($result) && p() && e('{"load":"-checkpriv.php?m=user&f=deny&module=user&method=create"}没有权限'); // 用户没有权限时，返回跳转的URL
+r($result) && p() && e('{"load":"user-deny-user-create.html"}没有权限'); // 用户没有权限时，返回跳转的URL
 
 $app->moduleName = 'user';
 $app->methodName = 'login';
