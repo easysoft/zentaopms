@@ -84,9 +84,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: editedDate
-    note: "编辑日期"
-    range: ""
   - field: deleted
     note: "是否删除"
     range: 0
