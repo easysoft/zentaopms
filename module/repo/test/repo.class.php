@@ -437,7 +437,8 @@ class repoTest
 
     public function addLinkTest($comment, $type)
     {
-        $this->objectModel->config->webRoot = '';
+        $this->objectModel->config->webRoot     = '';
+        $this->objectModel->config->requestType = 'PATH_INFO';
 
         $rules     = $this->objectModel->processRules();
         $objectReg = '/' . $rules[$type . 'Reg'] . '/i';
