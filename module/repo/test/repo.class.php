@@ -535,15 +535,6 @@ class repoTest
         return $objects;
     }
 
-    public function getRepoListByClientTest($gitlabID, $projectID = 0)
-    {
-        $objects = $this->objectModel->getRepoListByClient($gitlabID, $projectID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function handleWebhookTest($event, $token, $data, $repo)
     {
         $objects = $this->objectModel->handleWebhook($event, $token, $data, $repo);

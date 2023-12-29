@@ -81,28 +81,6 @@ class repoTao extends repoModel
     }
 
     /**
-     * 根据条件获取版本库列表。
-     * Get repo list by condition.
-     *
-     * @param  string    $repoQuery
-     * @param  string    $SCM
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @access protected
-     * @return array
-     */
-    protected function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', object $pager = null): array
-    {
-        return $this->dao->select('*')->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
-            ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
-            ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-    }
-
-    /**
      * 获取代码库分支的最后提交时间。
      * Get the last commit time of repo branch.
      *

@@ -107,7 +107,7 @@ class repoModel extends model
     public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
         $repoQuery = $type == 'bySearch' ? $this->repoTao->processSearchQuery($param) : '';
-        $repos     = $this->repoTao->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        $repos     = $this->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
 
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
@@ -709,7 +709,7 @@ class repoModel extends model
         $conditions = array();
         foreach($matches as $matched) $conditions[] = "(`serviceHost`='{$matched['gitlab']}' and `serviceProject`='{$matched['project']}')";
 
-        $matchedRepos = $this->repoTao->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
+        $matchedRepos = $this->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
         if(empty($matchedRepos)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
 
         $matchedRepo = '';
@@ -771,7 +771,7 @@ class repoModel extends model
         $conditions = array();
         foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='{$matched['project']}')";
 
-        $matchedRepos = $this->repoTao->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
+        $matchedRepos = $this->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
         foreach($matchedRepos as $key => $repo)
         {
             if(!$this->checkPriv($repo)) unset($matchedRepos[$key]);
@@ -1815,26 +1815,6 @@ class repoModel extends model
     }
 
     /**
-     * 通过服务器ID和项目ID获取代码库列表。
-     * Get repositories which scm is GitLab and specified gitlabID and projectID.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getRepoListByClient(int $gitlabID, int $projectID = 0): array
-    {
-        $server = $this->loadModel('pipeline')->getByID($gitlabID);
-        return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('synced')->eq(1)
-            ->beginIF($server)->andWhere('SCM')->eq(ucfirst($server->type))->fi()
-            ->andWhere('serviceHost')->eq($gitlabID)
-            ->beginIF($projectID)->andWhere('serviceProject')->eq($projectID)->fi()
-            ->fetchAll();
-    }
-
-    /**
      * 处理webhook请求。
      * Handle received GitLab webhook.
      *
@@ -2788,5 +2768,27 @@ class repoModel extends model
             }
         }
         return $diffs;
+    }
+
+    /**
+     * 根据条件获取版本库列表。
+     * Get repo list by condition.
+     *
+     * @param  string    $repoQuery
+     * @param  string    $SCM
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
+            ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 }
