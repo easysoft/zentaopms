@@ -10,10 +10,12 @@ title=测试 repoModel->iconvComment();
 timeout=0
 cid=1
 
-- 执行repo模块的iconvCommentTest方法  @
+- 转换成utf8字符集 @test
+- 转换成GBK字符集 @中文
 
 */
 
 $repo = new repoTest();
 
-r($repo->iconvCommentTest()) && p() && e();
+r($repo->iconvCommentTest('test', 'utf-8')) && p() && e('test'); // 转换成utf8字符集
+r($repo->iconvCommentTest('中文', 'GBK'))   && p() && e('中文'); // 转换成GBK字符集
