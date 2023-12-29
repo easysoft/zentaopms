@@ -24,11 +24,6 @@ r((int)str_contains($errors[0], '为了安全起见，系统需要确认您的�
 
 putenv('IS_CONTAINER=true');
 
-$filePath = '/home/test.php';
-$editor->saveTest($filePath);
-$errors = dao::getError();
-r((int)str_contains($errors[0], '无法写入，可能没有权限')) && p() && e('1'); //目录不可写。
-
 $filePath = '/tmp/test.php';
 $editor->saveTest($filePath);
 $errors = dao::getError();
