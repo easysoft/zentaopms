@@ -10,10 +10,10 @@ title=测试 repoModel->buildURL();
 timeout=0
 cid=1
 
-- 执行repo模块的buildURLTest方法  @
+- 生成svn的跳转地址 @svn-cat--1.html?repoUrl=dGVzdA==
 
 */
 
 $repo = new repoTest();
 
-r($repo->buildURLTest()) && p() && e();
+r($repo->buildURLTest('cat', 'test', '1', 'svn')) && p() && e('svn-cat--1.html?repoUrl=dGVzdA=='); // 生成svn的跳转地址
