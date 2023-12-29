@@ -157,19 +157,6 @@ class storeTest
     }
 
     /**
-     * 测试获取应用市场应用的配置。
-     * Test get app setting from cloud market.
-     *
-     * @param  int $appID
-     * @access public
-     * @return array
-     */
-    public function getAppSettingsTest(int $appID): array
-    {
-        return $this->getAppSettings($appID);
-    }
-
-    /**
      * 测试从云市场获取类别列表。
      * Test get category list from cloud market.
      *

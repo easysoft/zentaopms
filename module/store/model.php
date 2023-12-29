@@ -235,31 +235,6 @@ class storeModel extends model
     }
 
     /**
-     * 获取应用市场应用的配置。
-     * Get app setting from cloud market.
-     *
-     * @param  int $appID
-     * @access public
-     * @return array
-     */
-    public function getAppSettings(int $appID): array
-    {
-        $apiUrl  = $this->config->cloud->api->host;
-        $apiUrl .= '/api/market/appsettings';
-        $result  = commonModel::apiGet($apiUrl, array('id' => $appID), $this->config->cloud->api->headers);
-        if($result->code != 200) return array();
-
-        /* Convert "." to "_" */
-        $components = $result->data->components;
-        foreach($result->data->components as &$component)
-        {
-            foreach($component->settings as $setting) $setting->field = str_replace('.', '_', $setting->field);
-        }
-
-        return $components;
-    }
-
-    /**
      * 从云市场获取类别列表。
      * Get category list from cloud market.
      *
