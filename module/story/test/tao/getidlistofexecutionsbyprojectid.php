@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getIdListOfExecutionsByProjectID();
+cid=0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -18,16 +25,9 @@ $projectstory->gen(50);
 
 su('admin');
 
-/**
-
-title=测试 storyModel->getIdListOfExecutionsByProjectID();
-cid=1
-pid=1
-
-*/
-
 global $tester;
 $storyModel = $tester->loadModel('story');
+$storyModel->app->user->admin = true;
 
 r(count($storyModel->getIdListOfExecutionsByProjectID('unclosed', 0)))           && p() && e('0');  //请求类型是 unclosed，不传入项目。
 r(count($storyModel->getIdListOfExecutionsByProjectID('unclosed', 11)))          && p() && e('0');  //请求类型是 unclosed，项目下有执行。

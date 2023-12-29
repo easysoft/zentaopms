@@ -13,6 +13,10 @@ pid=1
 
 global $tester;
 $tester->loadModel('story');
+$tester->story->lang->SRCommon = '研发需求';
+$tester->story->lang->URCommon = '用户需求';
+include($tester->story->app->basePath . 'module' . DS . 'common' . DS . 'lang' . DS . 'zh-cn.php');
+include($tester->story->app->basePath . 'module' . DS . 'story' . DS . 'lang' . DS . 'zh-cn.php');
 
 $beforeLang = clone $tester->story->lang->story;
 $tester->story->replaceURLang('requirement');

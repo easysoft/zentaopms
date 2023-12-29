@@ -3803,7 +3803,7 @@ class storyModel extends model
         $rejectCount  = 0;
         $revertCount  = 0;
         $clarifyCount = 0;
-        $reviewRule   = !empty($this->config->story->reviewRules) ? $this->config->story->reviewRules : '';
+        $reviewRule   = !empty($this->config->story->reviewRules) ? $this->config->story->reviewRules : 'allpass';
         foreach($reviewerList as $result)
         {
             $passCount    = $result == 'pass'    ? $passCount    + 1 : $passCount;
