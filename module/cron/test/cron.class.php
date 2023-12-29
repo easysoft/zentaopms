@@ -3,8 +3,8 @@ class cronTest
 {
     public function __construct()
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('cron');
+        global $tester;
+        $this->objectModel = $tester->loadModel('cron');
     }
 
     /**

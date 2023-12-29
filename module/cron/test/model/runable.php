@@ -30,6 +30,7 @@ $tester->config->cron->maxRunTime = PHP_INT_MAX;
 unset($tester->config->cron->run->status);
 $res3 = $cron->runableTest();
 
+$tester->config->cron->run = new stdclass();
 $tester->config->cron->run->status = 'stop';
 $res4 = $cron->runableTest();
 

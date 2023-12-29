@@ -26,5 +26,5 @@ $projectproduct->gen(100);
 
 $tree = new treeTest();
 
-r($tree->getTaskTreeMenuTest(1))  && p() && e('6|1|11');  // 测试获取项目1的task模块
-r($tree->getTaskTreeMenuTest(41)) && p() && e('18');      // 测试获取项目1的task模块
+r($tree->getTaskTreeMenuTest(1))  && p() && e('6|6|1|11'); // 测试获取项目1的task模块
+r($tree->getTaskTreeMenuTest(41)) && p() && e('18');       // 测试获取项目1的task模块
