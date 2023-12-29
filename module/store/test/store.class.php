@@ -94,4 +94,23 @@ class storeTest
         $result = $this->getAppMapByNames($nameList);
         return empty((array)$result) ? null : $result;
     }
+
+    /**
+     * 测试获取应用的可安装版本。
+     * Test get app version list to install.
+     *
+     * @param  int    $appID
+     * @param  string $name
+     * @param  string $channel
+     * @param  int    $page
+     * @param  int    $pageSize
+     * @access public
+     * @return array|int
+     */
+    public function appVersionListTest(int $appID, string $name = '', string $channel = '', int $page = 1, int $pageSize = 3): array|int
+    {
+        $versionList = $this->appVersionList($appID, $name, $channel, $page, $pageSize);
+        if($pageSize != 3 && !empty($versionList)) return count($versionList);
+        return $versionList;
+    }
 }
