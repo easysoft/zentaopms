@@ -878,6 +878,8 @@ class kanban extends control
      */
     public function activateCard(int $cardID)
     {
+        $card = $this->kanban->getCardByID($cardID);
+
         if(!empty($_POST))
         {
             $this->kanban->activateCard($cardID);
@@ -888,7 +890,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
-        $this->view->card    = $this->kanban->getCardByID($cardID);
+        $this->view->card    = $card;
         $this->view->actions = $this->loadModel('action')->getList('kanbancard', $cardID);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
