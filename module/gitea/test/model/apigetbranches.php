@@ -20,6 +20,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+zdTable('user')->gen(5);
 zdTable('pipeline')->gen(5);
 zdTable('oauth')->config('oauth')->gen(5);
 su('admin');
