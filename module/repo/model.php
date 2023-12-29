@@ -1701,32 +1701,31 @@ class repoModel extends model
     public function createActionChanges(object $log, string $repoRoot, string $scm = 'svn'): array
     {
         if(empty($log->files)) return array();
-        $diff = '';
 
         $oldSelf = $this->server->PHP_SELF;
         $this->server->set('PHP_SELF', $this->config->webRoot, '', false, true);
 
-        if(!$repoRoot) $repoRoot = $this->repoRoot;
-
+        $diff = '';
         foreach($log->files as $action => $actionFiles)
         {
             foreach($actionFiles as $file)
             {
                 $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, (string) $log->revision, $scm), 'view', '', "class='iframe' data-width='960'"));
                 $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, (string) $log->revision, $scm), 'diff', '', "class='iframe' data-width='960'"));
+
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
         }
+
+        $this->server->set('PHP_SELF', $oldSelf);
+
         $change = new stdclass();
         $change->field = $scm == 'svn' ? 'subversion' : 'git';
         $change->old   = '';
         $change->new   = '';
         $change->diff  = trim($diff);
-        $changes[] = $change;
-
-        $this->server->set('PHP_SELF', $oldSelf);
-        return $changes;
+        return array($change);
     }
 
     /**
