@@ -1,23 +1,17 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试programplanModel->updateSubStageAttr();
+cid=0
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
 
-function initData()
-{
-    zdTable('project')->config('project')->gen(5);
-}
-
-/**
-
-title=测试programplanModel->updateSubStageAttr();
-cid=1
-pid=1
-
-*/
-
-initData();
+zdTable('project')->config('project')->gen(5);
 
 $plan = new programplanTest();
 r($plan->updateSubStageAttrTest(1, 'mix'))    && p() && e('1');      // 测试更改 id 为 3 存在子阶段的阶段，attribute 更新值为 mix ，结果为 1

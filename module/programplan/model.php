@@ -146,8 +146,11 @@ class programplanModel extends model
         }
 
         /* Set plan for gantt view. */
-        $datas = $planIdList = $stageIndex = $reviewDeadline = array();
-        $this->programplanTao->setPlan($plans, $datas, $stageIndex, $planIdList, $reviewDeadline);
+        $result = $this->programplanTao->initGanttPlans($plans);
+        $datas          = $result['datas'];
+        $planIdList     = $result['planIdList'];
+        $stageIndex     = $result['stageIndex'];
+        $reviewDeadline = $result['reviewDeadline'];
 
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
@@ -157,7 +160,9 @@ class programplanModel extends model
         if($baselineID) $this->programplanTao->setTaskBaseline(isset($oldData->task) ? $oldData->task : array(), $tasks); // Set task baseline.
 
         /* Set task for gantt view. */
-        $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
+        $result = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
+        $datas      = $result['datas'];
+        $stageIndex = $result['stageIndex'];
 
         /* Build data for ipd. */
         if($project->model == 'ipd' and $datas) $datas = $this->programplanTao->buildGanttData4IPD($datas, $projectID, $productID, $selectCustom, $reviewDeadline);
@@ -167,7 +172,6 @@ class programplanModel extends model
 
         /* Set relation task data. */
         $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
-
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -376,7 +380,12 @@ class programplanModel extends model
         $parent = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($stage->parent)->fetch();
 
         $this->loadModel('execution');
-        if($parent->type == 'project')
+        if(empty($parent))
+        {
+            $path['path']  =  ",{$stage->id},";
+            $path['grade'] = 1;
+        }
+        elseif($parent && $parent->type == 'project')
         {
             $path['path']  =  ",{$parent->id},{$stage->id},";
             $path['grade'] = 1;
@@ -408,6 +417,7 @@ class programplanModel extends model
      */
     public function update(int $planID = 0, int $projectID = 0, object|null $plan = null): bool
     {
+        if(empty($plan)) return false;
         if($plan->parent > 0)
         {
             /* 如果子阶段有里程碑，那么父阶段的更新为0。 */
@@ -512,7 +522,7 @@ class programplanModel extends model
             $isCreate    = $this->isCreateTask($key);
             $parentTypes = $this->getParentChildrenTypes($key);
 
-            if($isCreate === false && $key != $plan->parent) unset($parentStage[$key]);
+            if(!$isCreate && $key != $plan->parent) unset($parentStage[$key]);
             if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
             if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
@@ -588,6 +598,7 @@ class programplanModel extends model
      */
     public function checkLeafStage(int $stageID): bool
     {
+        if(empty($stageID)) return false;
         $subStageNumbers = $this->dao->select('COUNT(`id`) AS total')->from(TABLE_EXECUTION)
             ->where('parent')->eq($stageID)
             ->andWhere('deleted')->eq(0)
@@ -724,6 +735,7 @@ class programplanModel extends model
         $stageCustom = zget($settings, 'stageCustom', '');
         $ganttFields = zget($settings, 'ganttFields', '');
 
+        $this->loadModel('setting');
         $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
         $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
         $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);

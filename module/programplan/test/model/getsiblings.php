@@ -1,17 +1,15 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
+/**
+
+title=测试programplanModel->getSiblings();
+cid=0
+*/
+
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
-
-/**
-
-title=测试programplanModel->getSiblings();
-cid=1
-pid=0
-*/
 
 zdTable('project')->config('getsiblings')->gen(5);
 $plan = new programplanTest();

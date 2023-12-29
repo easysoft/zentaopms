@@ -593,6 +593,7 @@ $config->objectTables['program']        = TABLE_PROJECT;
 $config->objectTables['project']        = TABLE_PROJECT;
 $config->objectTables['projectstory']   = TABLE_PROJECTSTORY;
 $config->objectTables['execution']      = TABLE_PROJECT;
+$config->objectTables['programplan']    = TABLE_PROJECT;
 $config->objectTables['task']           = TABLE_TASK;
 $config->objectTables['build']          = TABLE_BUILD;
 $config->objectTables['bug']            = TABLE_BUG;

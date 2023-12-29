@@ -31,6 +31,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: template
+    note: "模板ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
   - field: status
     note: "评审状态"
     range: draft,wait,reviewing,pass,fail,auditing,done
@@ -66,7 +73,12 @@ fields:
     note: "创建日期"
     range: "(M)-(w)"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
+  - field: deadline
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: lastReviewedBy
     note: "最后评审者"
     from: common.user.v1.yaml

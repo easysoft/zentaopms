@@ -1,23 +1,16 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-
-function initData()
-{
-    zdTable('project')->config('project')->gen(10);
-}
 
 /**
 
 title=测试 programplanModel->setTreePath();
-cid=1
-pid=1
+cid=0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
 
-initData();
+zdTable('project')->config('project')->gen(10);
 
 global $tester;
 $tester->loadModel('programplan');

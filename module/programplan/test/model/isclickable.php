@@ -1,27 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-function initData()
-{
-    zdTable('project')->config('project')->gen(5);
-    zdTable('project')->config('stage')->gen(5, $isClear = false);
-
-    $task = zdTable('task');
-    $task->execution->range('1-10');
-    $task->gen(10);
-}
 
 /**
 
 title=测试 programplanModel::isClickable();
-cid=1
-pid=1
+cid=0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
 
-initData();
+zdTable('project')->config('project')->gen(5);
+zdTable('project')->config('stage')->gen(5, $isClear = false);
+
+$task = zdTable('task');
+$task->execution->range('1-10');
+$task->gen(10);
 
 global $tester;
 $programplan = $tester->loadModel('programplan');

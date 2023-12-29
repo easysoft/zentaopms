@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programplanModel->getParentChildrenTypes();
+cid=0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
@@ -10,14 +17,6 @@ $programplan->parent->range('1-3');
 $programplan->type->range('stage{3},sprint{2},kanban{2},stage{1},sprint{2}');
 $programplan->deleted->range('0-1');
 $programplan->gen(10);
-
-/**
-
-title=测试 programplanModel->getParentChildrenTypes();
-cid=1
-pid=1
-
-*/
 
 $parentIDList = array(1, 2, 3, 4);
 

@@ -230,8 +230,8 @@ class programplanTest
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $tester->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($plans[0]->parent)->andWhere('type')->eq('stage')->fetchAll();
-        return count($objects);
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($plans[0]->parent)->andWhere('type')->eq('stage')->fetchAll();
+        return $objects;
     }
 
     /**
@@ -257,34 +257,60 @@ class programplanTest
      * @param  int    $planID
      * @param  int    $projectID
      * @param  array  $param
-     * @param  string $index
      * @access public
      * @return array
      */
-    public function updateTest($planID, $projectID, $param = array(), $index = '')
+    public function updateTest($planID, $projectID, $param = array())
     {
         $plan = $this->objectModel->getByID($planID);
 
-        $_POST['parent']       = $plan->parent;
-        $_POST['name']         = $plan->name;
-        $_POST['percent']      = $plan->percent;
-        $_POST['attribute']    = $plan->attribute;
-        $_POST['milestone']    = $plan->milestone;
-        $_POST['acl']          = $plan->acl;
-        $_POST['begin']        = $plan->begin;
-        $_POST['end']          = $plan->end;
-        $_POST['realBegan']    = $plan->realBegan;
-        $_POST['realEnd']      = $plan->realEnd;
+        $newPlan = new stdclass();
+        $newPlan->parent       = $plan->parent;
+        $newPlan->name         = $plan->name;
+        $newPlan->percent      = $plan->percent;
+        $newPlan->attribute    = $plan->attribute;
+        $newPlan->milestone    = $plan->milestone;
+        $newPlan->acl          = $plan->acl;
+        $newPlan->begin        = $plan->begin;
+        $newPlan->end          = $plan->end;
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        foreach($param as $key => $value) $newPlan->{$key} = $value;
 
-        $objects = $this->objectModel->update($planID, $projectID);
+        $this->objectModel->update($planID, $projectID, $newPlan);
 
-        unset($_POST);
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
+    }
 
-        if(dao::isError()) return $index == 'end' ? preg_replace('/『\d{4}-\d{2}-\d{2}』/', '', dao::getError()[$index][0]) : dao::getError()[$index][0];
+    /**
+     * Test updateRow method.
+     *
+     * @param  int    $planID
+     * @param  int    $projectID
+     * @param  array  $param
+     * @access public
+     * @return array|object
+     */
+    public function updateRowTest($planID, $projectID, $param = array()): array|object
+    {
+        $plan = $this->objectModel->getByID($planID);
 
-        return $objects;
+        $newPlan = new stdclass();
+        $newPlan->parent       = $plan->parent;
+        $newPlan->name         = $plan->name;
+        $newPlan->percent      = $plan->percent;
+        $newPlan->attribute    = $plan->attribute;
+        $newPlan->milestone    = $plan->milestone;
+        $newPlan->acl          = $plan->acl;
+        $newPlan->begin        = $plan->begin;
+        $newPlan->end          = $plan->end;
+
+        foreach($param as $key => $value) $newPlan->{$key} = $value;
+
+        $this->objectModel->updateRow($planID, $projectID, $newPlan);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
     }
 
     /**

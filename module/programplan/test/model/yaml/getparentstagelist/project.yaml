@@ -5,7 +5,7 @@ fields:
     - field: id
       range: 1-20
     - field: project
-      range: 0, 1, 1, 0, 4, 4, 0, 7, 7, 0, 10, 10, 10
+      range: 0, 1, 1, 0, 4, 4, 0, 1, 1, 0, 10, 10, 10
     - field: model
       range: 'waterfall, , ,waterfall, , ,waterfall, , ,waterfall, , , ,'
     - field: type
@@ -13,7 +13,7 @@ fields:
     - field: status
       range: 'suspended,suspended,wait,suspended,suspended,closed,doing,doing,suspended,wait,wait,wait,wait'
     - field: parent
-      range: 0, 1, 2, 0, 4, 5, 0, 7, 8, 0, 10, 11, 11
+      range: 0, 1, 2, 0, 4, 5, 0, 2, 2, 0, 10, 11, 11
     - field: path
       range: '`,1,`, `,1,2,`, `,1,2,3`, `,4,`, `,4,5,`, `,4,5,6,`, `,7,`, `,7,8,`, `,7,8,9,`, `,10,`, `,10,11,`, `,10,11,12,`, `,10,11,13,`'
     - field: hasProduct

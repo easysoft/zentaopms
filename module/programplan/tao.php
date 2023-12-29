@@ -50,6 +50,8 @@ class programplanTao extends programplanModel
      */
     protected function updateRow(int $planID, int $projectID, object|null $plan): array|false
     {
+        if(empty($plan)) return false;
+
         $oldPlan     = $this->fetchByID($planID);
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
@@ -59,7 +61,7 @@ class programplanTao extends programplanModel
         $relatedIdList = $this->loadModel('execution')->getRelatedExecutions($planID);
         $relatedIdList = !empty($relatedIdList) ? implode(',', array_keys($relatedIdList)) : '0';
         $setCode       = !empty($this->config->setCode);
-        $getName       = ($relatedExecutionsID && $oldPlan->project && $parentStage && $oldPlan->parent) ? true : false;
+        $getName       = ($relatedIdList && $oldPlan->project && $parentStage && $oldPlan->parent) ? true : false;
 
         /* Fix bug #22030. Reset field name for show dao error. */
         $this->lang->project->name = $this->lang->programplan->name;
@@ -185,16 +187,14 @@ class programplanTao extends programplanModel
      * Set the Gantt chart stage data.
      *
      * @param  array   $plans
-     * @param  array   $datas
-     * @param  array   $stageIndex
-     * @param  array   $planIdList
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function setPlan(array $plans, array &$datas, array &$stageIndex, array &$planIdList, array &$reviewDeadline): void
+    protected function initGanttPlans(array $plans): array
     {
         $this->app->loadLang('stage');
 
+        $datas = $stageIndex = $planIdList = $reviewDeadline = array();
         $today       = helper::today();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
         foreach($plans as $plan)
@@ -225,21 +225,22 @@ class programplanTao extends programplanModel
             $datas['data'][$plan->id] = $data;
             $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
         }
+        return array('datas' => $datas, 'stageIndex' => $stageIndex, 'planIdList' => $planIdList, 'reviewDeadline' => $reviewDeadline);
     }
 
     /**
      * 设置甘特图任务数据。
      * Set the Gantt chart task data.
      *
-     * @param  array   $tasks
-     * @param  array   $plans
-     * @param  string  $selectCustom
-     * @param  array   $datas
-     * @param  array   $stageIndex
+     * @param  array     $tasks
+     * @param  array     $plans
+     * @param  string    $selectCustom
+     * @param  array     $datas
+     * @param  array     $stageIndex
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex): void
+    protected function setTask(array $tasks, array $plans, string $selectCustom, array $datas, array $stageIndex): array
     {
         $this->app->loadLang('task');
         $today     = helper::today();
@@ -283,6 +284,7 @@ class programplanTao extends programplanModel
                 $stageIndex[$parent]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
             }
         }
+        return array('datas' => $datas, 'stageIndex' => $stageIndex);
     }
 
     /**
@@ -298,6 +300,7 @@ class programplanTao extends programplanModel
     {
         return $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)
             ->where('parent')->eq($planID)
+            ->andWhere('type')->eq('stage')
             ->beginIF($mode == 'milestone')->andWhere('milestone')->eq(1)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
@@ -342,6 +345,8 @@ class programplanTao extends programplanModel
      */
     protected function insertProjectSpec(int $planID, object $plan): bool
     {
+        if(empty($planID)) return false;
+
         $spec = new stdclass();
         $spec->project   = $planID;
         $spec->version   = $plan->version;
@@ -383,13 +388,13 @@ class programplanTao extends programplanModel
     /**
      * Get point end date.
      *
-     * @param  int     $planID
-     * @param  object  $point
-     * @param  array   $reviewDeadline
-     * @access private
+     * @param  int       $planID
+     * @param  object    $point
+     * @param  array     $reviewDeadline
+     * @access protected
      * @return string
      */
-    private function getPointEndDate(int $planID, object $point, array $reviewDeadline): string
+    protected function getPointEndDate(int $planID, object $point, array $reviewDeadline): string
     {
         if($point->end and !helper::isZeroDate($point->end)) return $point->end;
 
@@ -417,7 +422,10 @@ class programplanTao extends programplanModel
      */
     protected function buildGanttData4IPD(array $datas, int $projectID, int $productID, string $selectCustom, array $reviewDeadline): array
     {
+        if($this->config->edition != 'ipd') return $datas;
+
         $this->loadModel('review');
+        $this->app->loadConfig('stage');
         $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->where('t1.deleted')->eq('0')
@@ -464,7 +472,7 @@ class programplanTao extends programplanModel
         if($project && $project->stageBy)
         {
             $linkProducts = array(0 => $productID);
-            if(!empty($productList)) $linkBranches = array(0 => $productList[$productID]->branches);
+            if(!empty($productList[$productID])) $linkBranches = array(0 => zget($productList[$productID], 'branches', array()));
         }
         else
         {
@@ -495,7 +503,7 @@ class programplanTao extends programplanModel
 
         unset($plan->id);
         $plan->status        = 'wait';
-        $plan->stageBy       = zget($project, 'stageBy', '');
+        $plan->stageBy       = empty($project) ? 'product' : $project->stageBy;
         $plan->version       = 1;
         $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
         $plan->team          = substr($plan->name,0, 30);
@@ -519,7 +527,8 @@ class programplanTao extends programplanModel
             $this->loadModel('kanban')->createRDKanban($execution);
         }
 
-        if($project) $this->loadModel('execution')->createMainLib($project->id, $stageID);
+        $this->loadModel('execution');
+        if($projectID) $this->execution->createMainLib($projectID, $stageID);
         $this->execution->addExecutionMembers($stageID, array($account, $plan->PM));
 
         $this->setTreePath($stageID);
@@ -586,10 +595,11 @@ class programplanTao extends programplanModel
         $realBegan = helper::isZeroDate($plan->realBegan) ? '' : $plan->realBegan;
         $realEnd   = helper::isZeroDate($plan->realEnd)   ? '' : $plan->realEnd;
 
-        $data = new stdclass();
+        $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
+        $data        = new stdclass();
         $data->id            = $plan->id;
         $data->type          = 'plan';
-        $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
+        $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone;
         $data->name          = $plan->name;
         $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
         $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
@@ -627,6 +637,9 @@ class programplanTao extends programplanModel
      */
     protected function buildPointDataForGantt(int $planID, object $point, array $reviewDeadline): object
     {
+        $statusList = array();
+        if(isset($this->lang->review->statusList)) $statusList = $this->lang->review->statusList;
+
         $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
         $data = new stdclass();
         $data->id            = $planID . '-' . $point->category . '-' . $point->id;
@@ -638,7 +651,7 @@ class programplanTao extends programplanModel
         $data->milestone     = '';
         $data->owner_id      = '';
         $data->rawStatus     = $point->status;
-        $data->status        = $point->status ? zget($this->lang->review->statusList, $point->status) : $this->lang->programplan->wait;
+        $data->status        = $point->status ? zget($statusList, $point->status) : $this->lang->programplan->wait;
         $data->status        = "<span class='status-{$point->status}'>" . $data->status . '</span>';
         $data->begin         = $end;
         $data->deadline      = $end;

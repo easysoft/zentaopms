@@ -10,7 +10,7 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: program
+  - field: project
     note: "所属项目"
     range: 1-10000
     prefix: ""
@@ -73,6 +73,22 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: storyEst
+    range: ""
+  - field: taskEst
+    range: ""
+  - field: requestEst
+    range: ""
+  - field: testEst
+    range: ""
+  - field: devEst
+    range: ""
+  - field: designEst
+    range: ""
+  - field: end
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: createdBy
     note: "创建者"
     from: common.user.v1.yaml
@@ -82,13 +98,9 @@ fields:
     loop: 0
     format: ""
   - field: createdDate
-    note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: deleted
     note: "是否删除"
     range: 0
