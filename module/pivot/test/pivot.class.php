@@ -51,6 +51,8 @@ class pivotTest
         $appPath = $app->getAppRoot();
         $sqlFile = $appPath . 'test/data/pivot.sql';
         $tester->dbh->exec(file_get_contents($sqlFile));
+        $sqlFile = $appPath . 'test/data/screen.sql';
+        $tester->dbh->exec(file_get_contents($sqlFile));
     }
 
     /**
