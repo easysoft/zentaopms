@@ -1070,6 +1070,83 @@ class productZen extends product
     }
 
     /**
+     * 获取产品看板。
+     * Get kanban list for product.
+     *
+     * @param  string    $browseType
+     * @access protected
+     * @return array
+     */
+    protected function getKanbanList(string $browseType = 'my'): array
+    {
+        $kanbanList = array();
+
+        list($productList, $planList, $projectList, $projectProduct, $latestExecutions, $releaseList) = $this->product->getStats4Kanban($browseType);
+        $programPairs = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
+        $productList  = $this->getProductList4Kanban($productList, $planList, $projectList, $releaseList, $projectProduct);
+
+        foreach($productList as $programID => $productList)
+        {
+            $region = array();
+
+            $heading = new stdclass();
+            $heading->title = zget($programPairs, $programID, $programID);
+
+            $region['key']     = $programID;
+            $region['id']      = $programID;
+            $region['heading'] = $heading;
+
+            $lanes       = array();
+            $items       = array();
+            $columnCards = array();
+            foreach($productList as $laneKey => $laneData)
+            {
+                $lanes[] = array('name' => $laneKey, 'title' => $laneData->name);
+                $columns = array();
+
+                foreach(array('unexpiredPlan', 'doing', 'doingProject', 'doingExecution', 'normalRelease') as $columnKey)
+                {
+                    $column = array('name' => $columnKey, 'title' => $this->lang->product->{$columnKey});
+                    if($columnKey == 'doingExecution' || $columnKey == 'doingProject') $column['parentName'] = 'doing';
+                    $columns[] = $column;
+
+                    $cardList = !empty($laneData->{$columnKey}) ? $laneData->{$columnKey} : array();
+                    foreach($cardList as $card)
+                    {
+                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => isset($card->name) ? $card->name : $card->title, 'status' => isset($card->status) ? $card->status : '', 'type' => $columnKey, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => isset($card->progress) ? $card->progress : 0, 'marker' => isset($card->marker) ? $card->marker : 0);
+
+                        if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
+                        $columnCards[$columnKey] ++;
+
+                        if($columnKey == 'doingProject')
+                        {
+                            if(!empty($latestExecutions[$card->id]))
+                            {
+                                $execution = $latestExecutions[$card->id];
+                                $items[$laneKey]['doingExecution'][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'doingExecution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+
+                                if(!isset($columnCards['doingExecution'])) $columnCards['doingExecution'] = 0;
+                                $columnCards['doingExecution'] ++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
+            $groupData['key']           = $programID;
+            $groupData['data']['lanes'] = $lanes;
+            $groupData['data']['cols']  = $columns;
+            $groupData['data']['items'] = $items;
+
+            $region['items'] = array($groupData);
+            $kanbanList[] = $region;
+        }
+
+        return $kanbanList;
+    }
+
+    /**
      * 保存需求页面session变量。
      * Save session variables for browse page.
      *
@@ -1279,48 +1356,39 @@ class productZen extends product
     }
 
     /**
-     * 保存看板的返回链接session。
-     * Save back uri to session.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function saveBackUriSession4Kanban(): void
-    {
-        $uri = $this->app->getURI(true);
-
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
-    }
-
-    /**
      * 获取产品看板页面的产品列表。
      * Get product list for Kanban.
      *
      * @param  array     $productList
+     * @param  array     $planList
+     * @param  array     $projectList
+     * @param  array     $releaseList
+     * @param  array     $projectProduct
      * @access protected
      * @return array
      */
-    protected function getProductList4Kanban(array $productList): array
+    protected function getProductList4Kanban(array $productList, array $planList, array $projectList, array $releaseList, array $projectProduct): array
     {
-        $kanbanList    = array();
-        $myProducts    = array();
-        $otherProducts = array();
+        $kanbanList = array();
         foreach($productList as $productID => $product)
         {
             if($product->status != 'normal') continue;
 
-            if($product->PO == $this->app->user->account)
+            $projects = array();
+            if(isset($projectProduct[$productID]))
             {
-                $myProducts[$product->program][] = $productID;
-                continue;
+                foreach($projectProduct[$productID] as $projectID => $project)
+                {
+                    if(isset($projectList[$projectID])) $projects[$projectID] = $projectList[$projectID];
+                }
             }
 
-            $otherProducts[$product->program][] = $productID;
+            $product->unexpiredPlan = zget($planList, $productID, array());
+            $product->normalRelease = zget($releaseList, $productID, array());
+            $product->doingProject  = $projects;
+
+            $kanbanList[$product->program][$productID] = $product;
         }
-        if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
-        if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
 
         return $kanbanList;
     }

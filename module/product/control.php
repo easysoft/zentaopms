@@ -627,33 +627,16 @@ class product extends control
      * 产品看板。
      * Product kanban.
      *
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function kanban()
+    public function kanban($browseType = 'my')
     {
-        /* Save back URI to session. */
-        $this->productZen->saveBackUriSession4Kanban();
-
-        /* Generate data. */
-        list($productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $releaseList) = $this->product->getStats4Kanban();
-
-        $programPairs = $this->loadModel('program')->getPairs(true);
-        $kanbanList   = $this->productZen->getProductList4Kanban($productList);
-        $emptyHour    = $this->productZen->getEmptyHour();
-
         /* Assign. */
-        $this->view->title            = $this->lang->product->kanban;
-        $this->view->kanbanList       = $kanbanList;
-        $this->view->programList      = array($this->lang->product->emptyProgram) + $programPairs;
-        $this->view->productList      = $productList;
-        $this->view->planList         = $planList;
-        $this->view->projectList      = $projectList;
-        $this->view->projectProduct   = $projectProduct;
-        $this->view->latestExecutions = $projectLatestExecutions;
-        $this->view->executionList    = $executionList;
-        $this->view->emptyHour        = $emptyHour;
-        $this->view->releaseList      = $releaseList;
+        $this->view->title      = $this->lang->product->kanban;
+        $this->view->kanbanList = $this->productZen->getKanbanList($browseType);
+        $this->view->browseType = $browseType;
 
         $this->display();
     }

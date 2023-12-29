@@ -1078,13 +1078,26 @@ class productModel extends model
      * 获取看板页面的产品统计信息。
      * Get stats for product kanban.
      *
+     * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getStats4Kanban(): array
+    public function getStats4Kanban($browseType = 'my'): array
     {
         /* Get base data. */
         $productList    = $this->getList();
+        foreach($productList as $id => $product)
+        {
+            if($browseType == 'my')
+            {
+                if($product->PO != $this->app->user->account) unset($productList[$id]);
+            }
+            else
+            {
+                if($product->PO == $this->app->user->account) unset($productList[$id]);
+            }
+        }
+
         $projectList    = $this->loadModel('program')->getProjectStats(0, 'doing');
         $productIdList  = array_keys($productList);
         $projectProduct = $this->productTao->getProjectProductList($productList);
@@ -1116,7 +1129,7 @@ class productModel extends model
         }
 
         /* Build result. */
-        $statsData = array($productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $releaseList);
+        $statsData = array($productList, $planList, $projectList, $projectProduct, $projectLatestExecutions, $releaseList);
         /* Convert predefined HTML entities to characters. */
         $statsData = $this->convertHtmlSpecialChars($statsData);
 
