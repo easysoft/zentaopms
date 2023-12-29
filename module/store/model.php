@@ -309,7 +309,7 @@ class storeModel extends model
      * @access public
      * @return object
      */
-    public function solutionConfig(string $type, string $value): object
+    public function solutionConfig(string $type, int|string $value): object
     {
         $apiParams = array();
         $apiParams[$type] = $value;

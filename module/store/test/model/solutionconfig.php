@@ -18,7 +18,7 @@ zdTable('user')->gen(5);
 su('admin');
 
 $typeList  = array('name', 'id');
-$valueList = array('devops', '29');
+$valueList = array('devops', 29);
 
 $store = new storeTest();
 r($store->solutionConfigTest($typeList[0], $valueList[0])) && p() && e('Success'); //测试查询成功

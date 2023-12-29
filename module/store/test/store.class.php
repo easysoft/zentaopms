@@ -180,9 +180,24 @@ class storeTest
      * @access public
      * @return object
      */
-    public function solutionConfigTest(string $type, string $value): string
+    public function solutionConfigTest(string $type, int|string $value): string
     {
         $result = $this->solutionConfig($type, $value);
         return empty((array)$result) ? 'No data' : 'Success';
+    }
+
+    /**
+     * 测试根据参数获取解决方案信息。
+     * Test get solution info.
+     *
+     * @param  string $type
+     * @param  string $value
+     * @access public
+     * @return object|string
+     */
+    public function getSolutionTest(string $type, string $value): object|string
+    {
+        $result = $this->getSolution($type, $value);
+        return empty((array)$result) ? 'No data' : $result;
     }
 }
