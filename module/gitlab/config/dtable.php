@@ -143,8 +143,8 @@ $config->gitlab->dtable->group->fieldList['fullName']['name']  = 'fullName';
 $config->gitlab->dtable->group->fieldList['fullName']['type']  = 'avatarBtn';
 $config->gitlab->dtable->group->fieldList['fullName']['sortType'] = true;
 
-$config->gitlab->dtable->group->fieldList['path']['title'] = $lang->gitlab->group->path;
-$config->gitlab->dtable->group->fieldList['path']['name']  = 'full_path';
+$config->gitlab->dtable->group->fieldList['path']['title']    = $lang->gitlab->group->path;
+$config->gitlab->dtable->group->fieldList['path']['name']     = 'path';
 $config->gitlab->dtable->group->fieldList['path']['sortType'] = true;
 
 $config->gitlab->dtable->group->fieldList['createOn']['title'] = $lang->gitlab->group->createOn;

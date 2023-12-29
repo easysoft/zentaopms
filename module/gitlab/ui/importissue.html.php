@@ -21,6 +21,19 @@ foreach($gitlabIssues as $issue)
     $issue->id       = $issue->iid;
 }
 
+if(empty($gitlabIssues))
+{
+    panel
+    (
+        setStyle('--zt-page-form-max-width', 'auto'),
+        setClass('panel-form'),
+        set::size('lg'),
+        set::title($lang->gitlab->importIssue),
+        $lang->gitlab->noImportableIssues
+    );
+}
+else
+{
 formBatchPanel
 (
     h::input
@@ -42,6 +55,7 @@ formBatchPanel
     set::onRenderRowCol(jsRaw('window.renderRowCol')),
     on::change('[data-name="productList"]', 'loadProductExecutions')
 );
+}
 
 render();
 

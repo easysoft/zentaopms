@@ -44,6 +44,7 @@ foreach($config->gitlab->menus as $key => $method)
 foreach($gitlabGroupList as $gitlabGroup)
 {
     $gitlabGroup->fullName = $gitlabGroup->full_name;
+    $gitlabGroup->path     = $gitlabGroup->full_path;
     $gitlabGroup->gitlabID = $gitlabID;
     $gitlabGroup->createOn = substr($gitlabGroup->created_at, 0, 10);
     $gitlabGroup->isAdmin  = $app->user->admin || in_array($gitlabGroup->id, $adminGroupIDList);
