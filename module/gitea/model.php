@@ -258,7 +258,8 @@ class giteaModel extends model
          for($page = 1; true; $page++)
          {
              $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
-             if(empty($results)) break;
+             if(empty($results) || isset($results->message)) break;
+
              $allResults = array_merge($allResults, $results);
              if(count($results) < 50) break;
          }
