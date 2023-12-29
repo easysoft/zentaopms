@@ -2,9 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/datatable.class.php';
-su('admin');
 
 zdTable('product')->gen(1);
+zdTable('lang')->gen(0);
+su('admin');
 
 /**
 
@@ -34,6 +35,11 @@ cid=1
  - 第title条的width属性 @0.44
 
 */
+
+global $app, $lang;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$app::$loadedLangs = array();
 
 $datatable = new datatableTest();
 r($datatable->getFieldListTest('product', 'browse'))  && p('id:title;id:width;title:title;title:width')    && e('ID,80,研发需求名称,0.44');  //获取产品模块browse方法自定义列
