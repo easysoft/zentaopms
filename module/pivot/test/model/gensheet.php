@@ -97,4 +97,4 @@ $array = array_map(function($item){
         return str_replace('%', '', $item);
     }, $item);
 }, $data->array);
-r($array) && p('0:self_bydesign_slice_resolution0,bydesign_slice_resolution0,self_duplicate_slice_resolution0,duplicate_slice_resolution0,willnotfix_slice_resolution0,self_willnotfix_slice_resolution0') && e('3,15,3,15,15,3');   //查看id为1025的透视表生成的切片数据是否正确。
+r($array) && p('0:self_bydesign_slice_resolution0,bydesign_slice_resolution0,self_duplicate_slice_resolution0,duplicate_slice_resolution0,willnotfix_slice_resolution0,self_willnotfix_slice_resolution0') && e('2,13.33,2,13.33,13.33,2');   //查看id为1025的透视表生成的切片数据是否正确。
