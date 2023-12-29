@@ -129,7 +129,7 @@ class treeModel extends model
     }
 
     /**
-     * 获取某个分支模块的OptionMenu。
+     * 获取某个分支模块的下拉菜单。
      * Get option menu by branch.
      *
      * @param  int    $rootID
@@ -194,7 +194,7 @@ class treeModel extends model
     }
 
     /**
-     * 获取模块的OptionMenu。
+     * 获取模块的下拉菜单。
      * Get option menu.
      *
      * @param  int          $rootID
@@ -234,6 +234,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取模块对列表。
      * Get module pairs.
      *
      * @param  int    $rootID
@@ -285,6 +286,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取项目的模块下拉菜单。
      * Get an option menu of task in html.
      *
      * @param  int    $rootID
@@ -370,6 +372,7 @@ class treeModel extends model
     }
 
     /**
+     * 构建模块树数组。
      * Build tree array.
      *
      * @param  array  $&treeMenu
@@ -418,7 +421,8 @@ class treeModel extends model
     }
 
     /**
-     * Get the tree menu in html.
+     * 获取模块树菜单。
+     * Get the tree menu.
      *
      * @param  int    $rootID
      * @param  string $type
@@ -479,7 +483,8 @@ class treeModel extends model
     }
 
     /**
-     * Get the tree menu of task in html.
+     * 获取任务模块树菜单。
+     * Get the tree menu of task.
      *
      * @param  int    $rootID
      * @param  int    $productID
@@ -514,10 +519,13 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
+        $executionModules = $this->getTaskTreeModules($rootID, true);
+
         /* Get module according to product. */
         $productNum = count($products);
         foreach($products as $id => $product)
         {
+            /* 如果一个执行或项目关联了多个产品，产品名也要放在树状菜单上。 If executon/project has multiple products, show the product in tree menu. */
             if($productNum > 1)
             {
                 $menuItem = new stdclass();
@@ -632,6 +640,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取用例模块树菜单。
      * Get the tree menu of case in html.
      *
      * @param  int    $rootID
@@ -793,7 +802,8 @@ class treeModel extends model
     }
 
     /**
-     * Get project story tree menu.
+     * 获取主机模块树菜单。
+     * Get host tree menu.
      *
      * @access public
      * @return array
@@ -821,6 +831,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取模块树。
      * Get tree structure.
      *
      * @param  int    $rootID
@@ -907,6 +918,7 @@ class treeModel extends model
     }
 
     /**
+     * 构造模块树。
      * Build tree.
      *
      * @param  object     $module
@@ -993,8 +1005,8 @@ class treeModel extends model
         {
             $branch = zget($extra, 'branchID', 0);
 
-            /* Get object paths of this execution. */
-            if($linkObject == 'story' || $linkObject == 'case')
+            /* 获取执行下关联Bug、Story、Case的模块。 Get object paths of this execution. */
+            if($linkObject == 'story' || $linkObject == 'case') // Get story or case from projectStory and projectCase, get bug from zt_bug
             {
                 $table1 = TABLE_PROJECTSTORY;
                 $table2 = TABLE_STORY;
@@ -1068,6 +1080,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成需求链接。
      * Create link of a story.
      *
      * @param  string $type
@@ -1104,6 +1117,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成用户需求链接。
      * Create link of requirement for waterfall.
      *
      * @param  string $type
@@ -1141,6 +1155,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成任务链接。
      * Create link of a task.
      *
      * @param  string $type
@@ -1160,6 +1175,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成文档链接。
      * Create link of a doc.
      *
      * @param  string $type
@@ -1213,6 +1229,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成测试用例的链接。
      * Create module of a test case.
      *
      * @param  string       $type
@@ -1240,6 +1257,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成测试任务的链接。
      * Create link of a test task.
      *
      * @param  string       $type
@@ -1261,7 +1279,8 @@ class treeModel extends model
     }
 
     /**
-     * Create case lib link
+     * 生成用例库的链接。
+     * Create case lib link.
      *
      * @param  string $type
      * @param  object $module
@@ -1280,6 +1299,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成分支的链接。
      * Create branch link
      *
      * @param  string $type
@@ -1299,6 +1319,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成反馈的链接。
      * Create link of feedback.
      *
      * @param  string $type
@@ -1318,6 +1339,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成工单的链接。
      * Create link of ticket.
      *
      * @param  string $type
@@ -1331,6 +1353,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成培训技能的链接。
      * Create link of trainskill.
      *
      * @param  string $type
@@ -1345,6 +1368,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成培训课程的链接。
      * Create link of traincourse.
      *
      * @param  string $type
@@ -1359,6 +1383,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成培训评论的链接。
      * Create link of trainpost.
      *
      * @param  string $type
@@ -1373,6 +1398,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成仪表盘的链接。
      * Create dashboard link.
      *
      * @param  string $type
@@ -1387,6 +1413,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成报告的链接。
      * Create report link.
      *
      * @param  string $type
@@ -1402,6 +1429,7 @@ class treeModel extends model
     }
 
     /**
+     * 生成主机的链接。
      * Create link of a host.
      *
      * @param  string $type
@@ -1424,6 +1452,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取一个模块的子模块。
      * Get sons of a module.
      *
      * @param  int    $rootID
@@ -1476,6 +1505,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取一个任务模块的子模块。
      * Get sons of a task module.
      *
      * @param  int    $rootID
@@ -1509,7 +1539,8 @@ class treeModel extends model
     }
 
     /**
-     * Get id list of a module's childs.
+     * 获取所有子模块的ID列表。
+     * Get id list of a module's children.
      *
      * @param  int     $moduleID
      * @access public
@@ -1526,6 +1557,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取一个模块的所有父模块。
      * Get parents of a module.
      *
      * @param  int    $moduleID
@@ -1542,6 +1574,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取一个模块所属的产品。
      * Get product by moduleID.
      *
      * @param  int    $moduleID
@@ -1562,6 +1595,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取一个需求模块。
      * Get the module that its type == 'story'.
      *
      * @param  int    $moduleID
@@ -1582,6 +1616,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取一些模块的名称。
      * Get modules name.
      *
      * @param  array  $moduleIdList
@@ -1627,6 +1662,7 @@ class treeModel extends model
     }
 
     /**
+     * 更新模块排序。
      * Update modules' order.
      *
      * @param  array   $orders
@@ -1659,6 +1695,7 @@ class treeModel extends model
     }
 
     /**
+     * 修改模块的所有子模块。
      * Manage childs of a module.
      *
      * @param  int    $rootID
@@ -1968,6 +2005,7 @@ class treeModel extends model
     }
 
     /**
+     * 删除一个模块。
      * Delete a module.
      *
      * @param  int    $moduleID
@@ -2047,6 +2085,7 @@ class treeModel extends model
     }
 
     /**
+     * 修复模块的Path和Grade。
      * Fix the path, grade fields according to the id && parent fields.
      *
      * @param  int    $rootID
@@ -2148,6 +2187,7 @@ class treeModel extends model
     }
 
     /**
+     * 检查是否是已合并模块。4.1后task,case,bug也会使用story的模块。
      * Check merge module version.
      *
      * @param  int    $rootID
@@ -2157,22 +2197,21 @@ class treeModel extends model
      */
     public function isMergeModule(int $rootID, string $viewType): bool
     {
-        if($viewType == 'bug' || $viewType == 'case' || $viewType == 'task')
-        {
-            /* Get createdVersion. */
-            $table          = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
-            $versionField   = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
-            $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
-            if($createdVersion)
-            {
-                if(is_numeric($createdVersion[0]) && version_compare($createdVersion, '4.1', '<=')) return false;
-                return true;
-            }
-        }
-        return false;
+        if(!in_array($viewType, array('bug', 'case', 'task'))) return false;
+
+        /* Get createdVersion. */
+        $table          = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
+        $versionField   = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
+        $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
+        if(!$createdVersion) return false;
+
+        if(is_numeric($createdVersion[0]) && version_compare($createdVersion, '4.1', '<=')) return false;
+        return true;
+
     }
 
     /**
+     * 获取产品的模块树。
      * Get full trees.
      *
      * @param  int        $rootID
@@ -2192,7 +2231,9 @@ class treeModel extends model
     }
 
     /**
-     * Get full modules tree
+     * 获取模块树。
+     * Get full modules tree.
+     *
      * @param  object $stmt
      * @param  string $viewType
      * @param  int    $rootID
@@ -2254,6 +2295,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取文档模块树。
      * Get all doc structure.
      *
      * @access public
@@ -2299,6 +2341,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取反馈和工单是否已跟产品同步的信息。
      * Get syncProduct module config.
      *
      * @param  string $type feedback|ticket
@@ -2316,11 +2359,12 @@ class treeModel extends model
     }
 
     /**
-      * Load module language.
-      *
-      * @access public
-      * @return void
-      */
+     * 加载模块的语言项。
+     * Load module language.
+     *
+     * @access public
+     * @return void
+     */
     public function setModuleLang(): void
     {
         $this->lang->module        = new stdclass();
@@ -2329,6 +2373,7 @@ class treeModel extends model
     }
 
     /**
+     * 创建模块。
      * Create module.
      *
      * @access public
@@ -2414,6 +2459,7 @@ class treeModel extends model
     }
 
     /**
+     * 获取分组模块对列表。
      * Get group pairs.
      *
      * @param  int    $dimensionID
