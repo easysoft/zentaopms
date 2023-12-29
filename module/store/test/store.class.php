@@ -134,12 +134,25 @@ class storeTest
      * @param  string $currentVersion
      * @param  int    $appID          appID is required if no appName.
      * @param  string $appName        appName is required if no appID.
-     * @param  string $channel
      * @access public
      * @return array
      */
     public function getUpgradableVersionsTest(string $currentVersion, int $appID = 0, string $appName = ''): array
     {
         return $this->getUpgradableVersions($currentVersion, $appID, $appName);
+    }
+
+    /**
+     * 测试获取应用的最新版本。
+     * Test get the latest versions of app from cloud market.
+     *
+     * @param  int    $appID
+     * @param  string $currentVersion
+     * @access public
+     * @return object|null
+     */
+    public function appLatestVersionTest(int $appID, string $currentVersion): object|null
+    {
+        return $this->appLatestVersion($appID, $currentVersion);
     }
 }
