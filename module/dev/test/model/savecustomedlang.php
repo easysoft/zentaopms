@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/dev.class.php';
 
+zdTable('config')->gen(0);
+
 /**
 
 title=测试 devModel']']saveCustomedLang();
@@ -21,6 +23,9 @@ pid=1
 
 */
 
+global $config;
+$config->custom->URSR = 1;
+
 $devTester = new devTest();
 
 $_POST = array();
@@ -29,7 +34,7 @@ $_POST['common_projectCommon']   = '项目2';
 $_POST['common_executionCommon'] = '迭代2';
 $_POST['common_URCommon']        = '用需2';
 $_POST['common_SRCommon']        = '软需2';
-r($devTester->saveCustomedLangTest('common', 'common', '', 'zh-cn')) && p()  && e("产品2|项目2|迭代2");    // 自定义公共语言项
+r($devTester->saveCustomedLangTest('common', 'common', '', 'zh-cn')) && p()  && e("产品2|项目2|迭代2|");    // 自定义公共语言项
 
 $_POST = array();
 $_POST['common_mainNav_my'] = '我的地盘';

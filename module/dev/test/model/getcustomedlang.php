@@ -14,6 +14,8 @@ $ztLang->key->range('productCommon,index,all');
 $ztLang->value->range('1-3')->prefix('测试');
 $ztLang->gen(3);
 
+zdTable('config')->gen(0);
+
 /**
 
 title=测试 devModel::getCustomedLang();
@@ -28,6 +30,9 @@ pid=1
 正确的类型，正确的模块，正确的方法返回数据 >> 测试3
 
 */
+
+global $config;
+$config->custom->URSR = 1;
 
 $failModule = 'module';
 $realModule = 'my';

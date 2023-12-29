@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/dev.class.php';
 
+zdTable('config')->gen(0);
+
 /**
 
 title=测试 devModel::getOriginalLang();
@@ -17,6 +19,9 @@ pid=1
 正确的类型，正确的模块，正确的方法返回数据 >> 全部
 
 */
+
+global $config;
+$config->custom->URSR = 1;
 
 $failModule = 'module';
 $realModule = 'program';
