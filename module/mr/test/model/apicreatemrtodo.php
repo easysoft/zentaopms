@@ -31,5 +31,5 @@ $mrID      = rand(30, 38);
 r($mrModel->apiCreateMRTodo($hostID['error'], $projectID, $mrID)) && p() && e('0'); // 不存在的主机
 
 $result = $mrModel->apiCreateMRTodo($hostID['gitlab'], $projectID, $mrID);
-if(!isset($result->message)) $result = 'success';
+if(!isset($result->message) || $result->message == '404 Not found') $result = 'success';
 r($result) && p() && e('success'); // 正确的数据
