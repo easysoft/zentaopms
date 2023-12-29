@@ -206,6 +206,7 @@ $config->gitlab->dtable->branch->fieldList['lastCommitter']['type']  = 'text';
 
 $config->gitlab->dtable->branch->fieldList['lastCommittedDate']['title'] = $lang->gitlab->branch->lastCommittedDate;
 $config->gitlab->dtable->branch->fieldList['lastCommittedDate']['type']  = 'text';
+$config->gitlab->dtable->branch->fieldList['lastCommittedDate']['sortType'] = true;
 
 $config->gitlab->dtable->tag = new stdclass();
 $config->gitlab->dtable->tag->fieldList['name']['title'] = $lang->gitlab->branch->name;

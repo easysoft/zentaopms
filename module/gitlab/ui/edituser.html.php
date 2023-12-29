@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->gitlab->user->edit),
+    set::back('gitlab-browseuser'),
     h::input
     (
         set::name('id'),

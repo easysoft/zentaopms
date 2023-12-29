@@ -34,6 +34,7 @@ dtable
 (
     set::cols($config->gitlab->dtable->branch->fieldList),
     set::data($branchList),
-    set::sortLink(createLink('gitlab', 'browseBranch', "gitlabID={$gitlabID}&projectID={$projectID}&orderBy={name}_{sortType}")),
-    set::orderBy($orderBy)
+    set::sortLink(createLink('gitlab', 'browseBranch', "gitlabID={$gitlabID}&projectID={$projectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
+    set::footPager(usePager())
 );

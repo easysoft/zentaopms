@@ -381,7 +381,7 @@ class gitlab extends control
         {
             $this->gitlabZen->checkBindedUser($gitlabID);
 
-            $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, $openID);
+            $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, 0);
             if(empty($members) or $members[0]->access_level < $this->config->gitlab->accessLevel['owner']) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('space', 'browse')));
         }
 

@@ -24,6 +24,7 @@ formPanel
 (
     set::title($lang->gitlab->group->edit),
     set::labelWidth($app->clientLang == 'zh-cn' ? '8em' : '13em'),
+    set::back('gitlab-browsegroup'),
     input
     (
         set::type('hidden'),
