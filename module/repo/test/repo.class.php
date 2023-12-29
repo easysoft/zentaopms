@@ -3,7 +3,8 @@ class repoTest
 {
     public function __construct()
     {
-         global $tester;
+         global $tester, $config;
+         $config->requestType = 'PATH_INFO';
          $this->objectModel = $tester->loadModel('repo');
     }
 
