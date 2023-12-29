@@ -217,10 +217,10 @@ class storeModel extends model
      * Pick highest version from version list and compared version.
      *
      * @param  array       $versionList
-     * @access private
+     * @access public
      * @return object|null
      */
-    private function pickHighestVersion(array $versionList): object|null
+    public function pickHighestVersion(array $versionList): object|null
     {
         if(empty($versionList)) return null;
 

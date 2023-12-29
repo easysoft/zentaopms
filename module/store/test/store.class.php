@@ -218,4 +218,19 @@ class storeTest
         if($recPerPage != 20 && !empty($result)) return count($result->articles);
         return 'Success';
     }
+
+    /**
+     * 测试从版本列表中选择最高版本并进行比较。
+     * Test pick highest version from version list and compared version.
+     *
+     * @param  array       $versionList
+     * @access public
+     * @return object|null
+     */
+    public function pickHighestVersionTest(string $currentVersion, int $appID)
+    {
+        $versionList = $this->getUpgradableVersions($currentVersion, $appID);
+        $result      = $this->pickHighestVersion($versionList);
+        return $result;
+    }
 }
