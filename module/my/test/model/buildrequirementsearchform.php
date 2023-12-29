@@ -16,6 +16,10 @@ pid=1
 
 */
 
+global $lang;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+
 $my = new myTest();
 
 $queryID   = array(0, 1);
