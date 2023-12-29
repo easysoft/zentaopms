@@ -246,7 +246,7 @@ class fileTest
         $this->objectModel->setSavePath();
 
         global $tester;
-        return $tester->file->savePath;
+        return substr($tester->file->savePath, strrpos($tester->file->savePath, '/data/'));
     }
 
     /**
