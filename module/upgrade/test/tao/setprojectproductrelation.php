@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->syncProjectInfoForSprints()。
+title=测试 upgradeModel->setProjectProductsRelation().
 cid=1
 
 - 检查isProjectType为false默认值时，项目id为1，产品id为1,2,3,4,100的关联关系已经生成的分支计划id是否正确。@1
