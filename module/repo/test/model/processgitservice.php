@@ -10,10 +10,20 @@ title=测试 repoModel->processGitService();
 timeout=0
 cid=1
 
-- 执行repo模块的processGitServiceTest方法  @
+- 测试获取gitlab版本库
+ - 属性client @https://gitlabdev.qc.oop.cc
+ - 属性codePath @http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml
+ - 属性gitService @1
 
 */
 
+zdTable('pipeline')->gen(5);
+zdTable('repo')->config('repo')->gen(5);
+
 $repo = new repoTest();
 
-r($repo->processGitServiceTest()) && p() && e();
+$gitlabID = 1;
+$giteaID  = 3;
+
+r($repo->processGitServiceTest($gitlabID)) && p('client,codePath,gitService') && e('https://gitlabdev.qc.oop.cc,http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml,1'); //测试获取gitlab版本库
+ r($repo->processGitServiceTest($giteaID)) && p('codePath,project')                   && e('https://giteadev.qc.oop.cc/gitea/unittest,gitea/unittest'); //测试获取gitea版本库

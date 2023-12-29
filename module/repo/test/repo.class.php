@@ -23,13 +23,15 @@ class repoTest
         return $objects;
     }
 
-    public function setMenuTest($repos, $repoID = '', $showSeleter = true)
+    public function setMenuTest(int $repoID = 0)
     {
-        $objects = $this->objectModel->setMenu($repos, $repoID, $showSeleter);
+        $repos  = $this->objectModel->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
+        ob_start();
+        $this->objectModel->setMenu($repos, $repoID);
+        $result = ob_get_clean();
 
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        if($result) return $result;
+        return $this->objectModel->session->repoID;
     }
 
     /**
@@ -276,12 +278,30 @@ class repoTest
         return $objects;
     }
 
-    public function saveCommitTest($repoID, $logs, $version, $branch = '')
+    public function saveCommitTest(int $repoID, int $version, string $branch = '')
     {
+        global $dao;
+        $dao->exec('truncate table zt_repohistory');
+        $dao->exec('truncate table zt_repofiles');
+
+        $repo = $this->objectModel->getByID($repoID);
+
+        $scm = $this->objectModel->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $logs = $scm->getCommits('HEAD', 0);
+
         $objects = $this->objectModel->saveCommit($repoID, $logs, $version, $branch = '');
 
         if(dao::isError()) return dao::getError();
 
+        if($version > 1) return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchAll('id');
+        if($repo->SCM == 'Subversion')
+        {
+            $result = array();
+            $result['count'] = $objects;
+            $result['files'] = $this->objectModel->dao->select('*')->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->fetchAll('id');
+            return $result;
+        }
         return $objects;
     }
 
@@ -348,7 +368,7 @@ class repoTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getByID($repoID);
     }
 
     public function fixCommitTest($repoID)
@@ -510,8 +530,11 @@ class repoTest
         return $objects;
     }
 
-    public function processGitServiceTest($repo)
+    public function processGitServiceTest(int $repoID)
     {
+        $repo = $this->objectModel->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        $repo->codePath = $repo->path;
+
         $objects = $this->objectModel->processGitService($repo);
 
         if(dao::isError()) return dao::getError();

@@ -14,6 +14,19 @@ cid=1
 
 */
 
+zdTable('pipeline')->gen(5);
+zdTable('repo')->config('repo')->gen(4);
+
 $repo = new repoTest();
 
-r($repo->saveCommitTest()) && p() && e();
+$gitlabID = 1;
+$svnID    = 4;
+$version  = 1;
+$version2 = 6;
+
+r($repo->saveCommitTest($gitlabID, $version))  && p()           && e('5'); //保存版gitlab版本库commit
+r($repo->saveCommitTest($gitlabID, $version2)) && p('5:commit') && e('10'); //保存版gitlab版本库commit
+
+$result = $repo->saveCommitTest($svnID, $version);
+r($result['count'])            && p() && e('3'); //保存版svn版本库commit
+r(count($result['files']) > 0) && p() && e('1'); //查看svn版本库files
