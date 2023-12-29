@@ -89,7 +89,7 @@ window.loadProductModules = function(productID, branch)
     var currentModule = 0;
     if(config.currentMethod == 'edit') currentModule = $('[name=module]').val();
 
-    var moduleLink   = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + currentModule);
+    var moduleLink   = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&extra=nodeleted&currentModuleID=' + currentModule);
     var $moduleIdBox = $('#moduleIdBox');
     $.get(moduleLink, function(data)
     {
