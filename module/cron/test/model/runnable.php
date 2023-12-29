@@ -21,21 +21,21 @@ su('admin');
 $cron = new cronTest();
 
 $tester->config->global->cron = 0;
-$res1 = $cron->runableTest();
+$res1 = $cron->runnableTest();
 
 $tester->config->global->cron = 1;
-$res2 = $cron->runableTest();
+$res2 = $cron->runnableTest();
 
 $tester->config->cron->maxRunTime = PHP_INT_MAX;
 unset($tester->config->cron->run->status);
-$res3 = $cron->runableTest();
+$res3 = $cron->runnableTest();
 
 $tester->config->cron->run = new stdclass();
 $tester->config->cron->run->status = 'stop';
-$res4 = $cron->runableTest();
+$res4 = $cron->runnableTest();
 
 $tester->config->cron->run->status = 'running';
-$res5 = $cron->runableTest();
+$res5 = $cron->runnableTest();
 
 r($res1) && p() && e('0'); //cron配置为空情况
 r($res2) && p() && e('1'); //cron配置存在,执行时间大于最大可执行时间情况

@@ -120,12 +120,12 @@ class cronTest
     }
 
     /**
-     * runnable cron test.
+     * Runnable cron test.
      *
      * @access public
      * @return bool
      */
-    public function runableTest()
+    public function runnableTest()
     {
         $objects = $this->objectModel->runnable();
 
