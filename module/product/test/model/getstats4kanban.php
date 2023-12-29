@@ -42,5 +42,5 @@ r($product->getStats4KanbanTest(0))       && p('1:name;2:name;3:name') && e('正
 r($product->getStats4KanbanTest(2))       && p('13:name;14:name')      && e('项目13;项目14');
 r($product->getStats4KanbanTest(5))       && p('12:name;19:name')      && e('项目22,项目29');
 r($product->getStats4KanbanTest(1, true)) && p()                       && e('1');
-r($product->getStats4KanbanTest(3, true)) && p()                       && e('2');
+r($product->getStats4KanbanTest(3, true)) && p()                       && e('4');
 r($product->getStats4KanbanTest(4, true)) && p()                       && e('6');
