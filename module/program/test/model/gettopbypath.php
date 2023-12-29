@@ -1,17 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
 /**
 
 title=测试 programModel::getTopByPath();
-timeout=0
-cid=1
+cid=0
 
 */
 
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('project')->config('program')->gen(15);
+
+su('admin');
+
 global $tester;
 $tester->loadModel('program');
+$path1 = ',2,3,4,';
+$path2 = '100,101';
 
-r($tester->program->getTopByPath(',1,'))   && p() && e('1'); // 获取顶级项目集的顶级id
-r($tester->program->getTopByPath(',2,3,')) && p() && e('2'); // 获取子项目集的顶级父项目集
+r($tester->program->getTopByPath($path1)) && p() && e('2');   // 传入一个path，返回最顶级path
+r($tester->program->getTopByPath($path2)) && p() && e('100'); // 传入一个path，返回最顶级path

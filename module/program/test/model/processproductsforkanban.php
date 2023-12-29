@@ -29,5 +29,5 @@ $productGroup  = $programTester->processProductsForKanbanTest();
 
 r(count($productGroup)) && p()             && e('9');     // 获取产品的数量
 r($productGroup[1][0])  && p('name')       && e('产品1'); // 获取产品的名字
-r($productGroup[1][0])  && p('plans:0')    && e('N/A');   // 获取产品1的计划
-r($productGroup[1][0])  && p('releases:0') && e('N/A');   // 获取产品1的计划
+r($productGroup[1][0])  && p('plans:0')    && e('``');    // 获取产品1的计划
+r($productGroup[1][0])  && p('releases:0') && e('``');    // 获取产品1的发布
