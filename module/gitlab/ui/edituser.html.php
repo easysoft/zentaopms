@@ -41,9 +41,9 @@ formPanel
     (
         set::name('username'),
         set::label($lang->gitlab->user->username),
-        set::required(true),
         set::width('1/2'),
-        set::value($user->username)
+        set::value($user->username),
+        set::readonly(true)
     ),
     formGroup
     (
@@ -57,7 +57,6 @@ formPanel
     (
         set::name('password'),
         set::label($lang->gitlab->user->password),
-        set::required(true),
         set::width('1/2'),
         set::type('password')
     ),
@@ -65,7 +64,6 @@ formPanel
     (
         set::name('password_repeat'),
         set::label($lang->gitlab->user->passwordRepeat),
-        set::required(true),
         set::width('1/2'),
         set::type('password')
     ),
