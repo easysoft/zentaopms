@@ -200,4 +200,22 @@ class storeTest
         $result = $this->getSolution($type, $value);
         return empty((array)$result) ? 'No data' : $result;
     }
+
+    /**
+     * 测试从渠成获取应用动态消息。
+     * Test get app dynamic news from Qucheng offical site.
+     *
+     * @param  int     $appID
+     * @param  int    $pageID
+     * @param  int    $recPerPage
+     * @access public
+     * @return string|int
+     */
+    public function appDynamicTest(int $appID, int $pageID = 1, int $recPerPage = 20): string|int
+    {
+        $appInfo = $this->getAppInfo($appID);
+        $result  = $this->appDynamic($appInfo, $pageID, $recPerPage);
+        if($recPerPage != 20 && !empty($result)) return count($result->articles);
+        return 'Success';
+    }
 }
