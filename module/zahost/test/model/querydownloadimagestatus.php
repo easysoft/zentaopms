@@ -31,6 +31,8 @@ $host->extranet->range('10.0.1.222');
 $host->zap->range('55001');
 $host->gen(1);
 
+zdTable('image')->gen(0);
+
 $image = zdTable('image');
 $image->config('image');
 $image->name->range('Ubuntu20.04,win10,test');
