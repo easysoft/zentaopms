@@ -2561,6 +2561,8 @@ class gitlabModel extends model
         if($action == 'editUser') return $object->isAdmin;
         if($action == 'deleteUser') return $object->isAdmin;
 
+        if($action == 'deleteTag') return !$object->protected;
+
         return true;
     }
 

@@ -62,7 +62,8 @@ dtable
 (
     set::cols($config->gitlab->dtable->tag->fieldList),
     set::data($tagList),
-    set::sortLink(createLink('gitlab', 'browseTag', "gitlabID={$gitlabID}&projectID={$projectID}&orderBy={name}_{sortType}")),
+    set::sortLink(createLink('gitlab', 'browseTag', "gitlabID={$gitlabID}&projectID={$projectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
-    set::onRenderCell(jsRaw('window.renderCell'))
+    set::onRenderCell(jsRaw('window.renderCell')),
+    set::footPager(usePager())
 );
