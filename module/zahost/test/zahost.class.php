@@ -145,18 +145,21 @@ class zahostTest
      *
      * @param  int          $imageID
      * @access public
-     * @return array|object
+     * @return array|bool
      */
-    public function queryDownloadImageStatusTest(int $imageID): array|object
+    public function queryDownloadImageStatusTest(int $imageID): array|bool
     {
         $image = $this->objectModel->getImageByID($imageID);
         $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
 
         $this->imageStatusList = array();
+
         $this->objectModel->queryDownloadImageStatus($image);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getImageByID($imageID);
+        $updatedImage = $this->objectModel->getImageByID($imageID);
+
+        return $updatedImage->status != 'creating';
     }
 
     /**
