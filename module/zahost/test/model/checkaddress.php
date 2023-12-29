@@ -7,7 +7,6 @@ title=测试 zahostModel->checkAddress();
 timeout=0
 cid=1
 
-- 测试不是正常地址得到的结果 @0
 - 测试正常域名得到的结果 @1
 - 测试正常 IP 得到的结果 @1
 
