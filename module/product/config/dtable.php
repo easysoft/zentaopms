@@ -12,7 +12,6 @@ $config->product->dtable->fieldList['name']['sortType']     = true;
 $config->product->dtable->fieldList['name']['align']        = 'left';
 $config->product->dtable->fieldList['name']['border']       = 'right';
 $config->product->dtable->fieldList['name']['link']         = helper::createLink('product', 'browse', "productID={id}");
-$config->product->dtable->fieldList['name']['data-app']     = $app->tab;
 
 $config->product->dtable->fieldList['productLine']['name']     = 'productLine';
 $config->product->dtable->fieldList['productLine']['title']    = $lang->product->belongingLine;
