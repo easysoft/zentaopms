@@ -517,7 +517,8 @@ class fileModel extends model
 
         $file = $files[0];
         $realPathName = $this->savePath . $this->getRealPathName($pathName);
-        if(!is_dir(dirname($realPathName))) mkdir(dirname($realPathName));
+        $parentDir    = dirname($realPathName);
+        if(!is_dir($parentDir) and is_writable(dirname($parentDir))) mkdir($parentDir);
         move_uploaded_file($file['tmpname'], $realPathName);
 
         $file['pathname'] = $pathName;
@@ -635,7 +636,8 @@ class fileModel extends model
                 $file['addedDate'] = helper::today();
                 $file['title']     = str_replace(".$extension", '', basename($file['pathname']));
 
-                file_put_contents($this->savePath . $this->getSaveName($file['pathname']), $imageData);
+                $imagePath = $this->savePath . $this->getSaveName($file['pathname']);
+                if(is_writable($imagePath)) file_put_contents($imagePath, $imageData);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
                 $fileID = $this->dao->lastInsertID();
                 if($uid) $_SESSION['album'][$uid][] = $fileID;

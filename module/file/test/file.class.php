@@ -248,7 +248,7 @@ class fileTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $path = substr($tester->file->savePath, strpos($tester->file->savePath, '/www/'));
+        $path = substr($tester->file->savePath, strrpos($tester->file->savePath, '/www/'));
         return $path;
     }
 

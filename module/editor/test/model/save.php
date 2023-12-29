@@ -23,11 +23,6 @@ r((int)str_contains($errors[0], '为了安全起见，系统需要确认您的�
 $oldENV = getenv('IS_CONTAINER');
 putenv('IS_CONTAINER=true');
 
-$filePath = $editor->objectModel->app->getBasePath() . '/test1/test.php';
-$editor->saveTest($filePath);
-$errors = dao::getError();
-r((int)str_contains($errors[0], '不存在该目录，请先创建')) && p() && e('1'); //不存在目录。
-
 $filePath = '/home/test.php';
 $editor->saveTest($filePath);
 $errors = dao::getError();

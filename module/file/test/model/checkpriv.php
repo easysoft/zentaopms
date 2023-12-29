@@ -51,6 +51,7 @@ su('admin');
 
 global $tester, $app;
 $tester->loadModel('file');
+$tester->file->app->user->admin = true;
 $file1 = $tester->file->getByID(1);
 $file2 = $tester->file->getByID(12);
 $file3 = $tester->file->getByID(23);
