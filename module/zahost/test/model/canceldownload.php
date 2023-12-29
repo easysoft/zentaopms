@@ -18,12 +18,12 @@ include dirname(__FILE__, 2) . '/zahost.class.php';
 su('admin');
 
 $host = zdTable('host');
-$host->id->range('1');
+$host->id->range('1-2');
 $host->type->range('zahost');
-$host->name->range('宿主机1');
-$host->extranet->range('10.0.1.222');
-$host->zap->range('55001');
-$host->gen(1);
+$host->name->range('宿主机1,宿主机2');
+$host->extranet->range('10.0.1.222,a');
+$host->zap->range('55001,0');
+$host->gen(2);
 
 $image = zdTable('image');
 $image->config('image');
