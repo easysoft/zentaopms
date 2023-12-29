@@ -245,11 +245,8 @@ class fileTest
     {
         $this->objectModel->setSavePath();
 
-        if(dao::isError()) return dao::getError();
-
         global $tester;
-        $path = substr($tester->file->savePath, strrpos($tester->file->savePath, '/www/'));
-        return $path;
+        return $tester->file->savePath;
     }
 
     /**

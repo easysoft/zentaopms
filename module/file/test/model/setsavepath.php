@@ -15,4 +15,5 @@ su('admin');
 
 $file = new fileTest();
 
-r($file->setSavePathTest()) && p() && e('/www/data/upload/1/'); // 测试更新savePath
+global $app;
+r($file->setSavePathTest()) && p() && e('/var/web/ztpms/www/data/upload/1/'); // 测试更新savePath
