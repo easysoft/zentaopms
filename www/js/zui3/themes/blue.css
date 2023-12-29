@@ -41,6 +41,29 @@
   --color-secondary-800-rgb: 0,178,216;
   --color-secondary-900-rgb: 14,148,176;
 
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  --color-gray-950: #020617;
+  --color-gray-50-rgb: 248, 250, 252;
+  --color-gray-100-rgb: 241, 245, 249;
+  --color-gray-200-rgb: 226, 232, 240;
+  --color-gray-300-rgb: 203, 213, 225;
+  --color-gray-400-rgb: 148, 163, 184;
+  --color-gray-500-rgb: 100, 116, 139;
+  --color-gray-600-rgb: 71, 85, 105;
+  --color-gray-700-rgb: 51, 65, 85;
+  --color-gray-800-rgb: 30, 41, 59;
+  --color-gray-900-rgb: 15, 23, 42;
+  --color-gray-950-rgb: 2, 6, 23;
+
   --color-link: var(--color-primary-700);
   --color-link-hover: var(--color-primary-600);
   --color-link-visited: var(--color-primary-800);
@@ -49,6 +72,7 @@
   --color-link-visited-rgb: var(--color-primary-800-rgb);
 
   --zt-menu-bg: linear-gradient(180deg, #3B9BF3 0%, #137AF2 100%), url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgOTYgNzgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxtYXNrIGlkPSJhIiB4PSIwIiB5PSIwIiB3aWR0aD0iOTYiIGhlaWdodD0iNzgiIHN0eWxlPSJtYXNrLXR5cGU6YWxwaGEiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iNzgiIGZpbGw9IiNEOUQ5RDkiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI2EpIj4KPGNpcmNsZSBjeD0iNzMuNSIgY3k9IjczLjUiIHI9IjczLjUiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4wNCIvPgo8L2c+Cjwvc3ZnPg==") no-repeat bottom left;
+  --zt-menu-hover-bg: var(--color-primary-700);
   --zt-header-bg: var(--color-canvas);
   --zt-header-color: var(--color-fore);
   --zt-header-border: var(--color-border-light);
