@@ -8,24 +8,6 @@ class projectstoryTest
     }
 
     /**
-     * Set menu test
-     *
-     * @param  array $products
-     * @param  int   $productID
-     * @param  int   $branch
-     * @access public
-     * @return xml
-     */
-    public function setMenuTest($products = array(), $productID = 0, $branch = 0)
-    {
-        $objects = $this->objectModel->setMenu($products, $productID, $branch);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Get execution stories test
      *
      * @param  int   $projectID

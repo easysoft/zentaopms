@@ -13,25 +13,6 @@ declare(strict_types=1);
 class projectstoryModel extends model
 {
     /**
-     * Set the menu.
-     *
-     * @param  array $products
-     * @param  int   $productID
-     * @param  int   $branch
-     * @access public
-     * @return void
-     */
-    public function setMenu($products = array(), $productID = 0, $branch = 0)
-    {
-        /* Determine if the product is accessible. */
-        if($products and (!isset($products[$productID]) or !$this->loadModel('product')->checkPriv($productID))) $this->loadModel('product')->accessDenied();
-
-        if(empty($productID)) $productID = key($products);
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $this->lang->modulePageNav = $this->product->select($products, $productID, 'projectstory', $this->app->rawMethod, '', $branch);
-    }
-
-    /**
      * Get the stories for execution linked.
      *
      * @param  int    $projectID
