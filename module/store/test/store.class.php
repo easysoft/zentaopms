@@ -113,4 +113,17 @@ class storeTest
         if($pageSize != 3 && !empty($versionList)) return count($versionList);
         return $versionList;
     }
+
+    /**
+     * 测试获取版本键值对。
+     * Test get app version pairs by id.
+     *
+     * @param  int    $appID
+     * @access public
+     * @return array
+     */
+    public function getVersionPairsTest(int $appID): array
+    {
+        return $this->getVersionPairs($appID);
+    }
 }
