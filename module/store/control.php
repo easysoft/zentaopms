@@ -65,7 +65,7 @@ class store extends control
             $postCategories = $conditions->categories;
         }
 
-        $pagedApps = $this->store->searchApps($sortType, $keyword, $postCategories, $pageID, $recPerPage);
+        $pagedApps = $this->store->searchApps($sortType, $keyword, $postCategories, $pageID, (int)$recPerPage);
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($pagedApps->total, $recPerPage, $pageID);

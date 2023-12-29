@@ -62,4 +62,21 @@ class storeTest
 
          return empty($searchResult->total) ? 'No data!' : 'Success';
     }
+
+    /**
+     * 测试通过接口获取应用详情。
+     * Test get app info from cloud market.
+     *
+     * @param  int     $appID
+     * @param  boolean $analysis true: log this request for analysis.
+     * @param  string  $name
+     * @param  string  $version
+     * @param  string  $channel
+     * @access public
+     * @return object|null
+     */
+    public function getAppInfoTest(int $appID, bool $analysis = false, string $name = '', string $version ='', string $channel = ''): object|null
+    {
+        return $this->getAppInfo($appID, $analysis, $name, $version, $channel);
+    }
 }
