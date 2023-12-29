@@ -115,10 +115,11 @@ $config->gitlab->dtable->project->fieldList['actions']['list']['manageProjectMem
 $config->gitlab->dtable->project->fieldList['actions']['list']['manageProjectMembers']['hint'] = $lang->gitlab->manageProjectMembers;
 $config->gitlab->dtable->project->fieldList['actions']['list']['manageProjectMembers']['url']  = helper::createLink('gitlab', 'manageProjectMembers', 'repoID={repoID}');
 
-$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['icon']      = 'change';
-$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['hint']      = $lang->gitlab->createWebhook;
-$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['url']       = helper::createLink('gitlab', 'createWebhook', 'repoID={repoID}');
-$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['className'] = 'ajax-submit';
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['icon']         = 'change';
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['hint']         = $lang->gitlab->createWebhook;
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['url']          = helper::createLink('gitlab', 'createWebhook', 'repoID={repoID}&confirm=yes');
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['className']    = 'ajax-submit';
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['data-confirm'] = $lang->gitlab->confirmAddWebhook;
 
 $config->gitlab->dtable->project->fieldList['actions']['list']['importIssue']['icon'] = 'link';
 $config->gitlab->dtable->project->fieldList['actions']['list']['importIssue']['hint'] = $lang->gitlab->importIssue;
@@ -128,10 +129,11 @@ $config->gitlab->dtable->project->fieldList['actions']['list']['editProject']['i
 $config->gitlab->dtable->project->fieldList['actions']['list']['editProject']['hint'] = $lang->gitlab->editProject;
 $config->gitlab->dtable->project->fieldList['actions']['list']['editProject']['url']  = helper::createLink('gitlab', 'editProject', 'gitlabID={gitlabID}&projectID={id}');
 
-$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['icon']      = 'trash';
-$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['hint']      = $lang->gitlab->deleteProject;
-$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['url']       = helper::createLink('gitlab', 'deleteProject', 'gitlabID={gitlabID}&projectID={id}');
-$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['className'] = 'ajax-submit';
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['icon']         = 'trash';
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['hint']         = $lang->gitlab->deleteProject;
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['url']          = helper::createLink('gitlab', 'deleteProject', 'gitlabID={gitlabID}&projectID={id}&confirm=yes');
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['className']    = 'ajax-submit';
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['data-confirm'] = $lang->gitlab->project->confirmDelete;
 
 $config->gitlab->dtable->group = new stdclass();
 
@@ -192,10 +194,11 @@ $config->gitlab->dtable->user->fieldList['actions']['list']['editUser']['icon'] 
 $config->gitlab->dtable->user->fieldList['actions']['list']['editUser']['hint'] = $lang->gitlab->editUser;
 $config->gitlab->dtable->user->fieldList['actions']['list']['editUser']['url']  = helper::createLink('gitlab', 'editUser', 'gitlabID={gitlabID}&userID={id}');
 
-$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['icon']      = 'trash';
-$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['hint']      = $lang->gitlab->deleteUser;
-$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['url']       = helper::createLink('gitlab', 'deleteUser', 'gitlabID={gitlabID}&userID={id}');
-$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['className'] = 'ajax-submit';
+$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['icon']         = 'trash';
+$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['hint']         = $lang->gitlab->deleteUser;
+$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['url']          = helper::createLink('gitlab', 'deleteUser', 'gitlabID={gitlabID}&userID={id}&confirm=yes');
+$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['className']    = 'ajax-submit';
+$config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['data-confirm'] = $lang->gitlab->user->confirmDelete;
 
 $config->gitlab->dtable->branch = new stdclass();
 $config->gitlab->dtable->branch->fieldList['name']['title'] = $lang->gitlab->branch->name;

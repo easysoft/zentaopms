@@ -651,10 +651,10 @@ class gitlab extends control
             /* Delete user bind. */
             $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($userID)->exec();
 
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        echo js::alert($reponse->message);
+        return $this->send(array('result' => 'fail', 'message' => $reponse->message));
     }
 
     /**
@@ -805,10 +805,10 @@ class gitlab extends control
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabproject', $projectID, 'deleted', '', $project->name);
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        echo js::alert($reponse->message);
+        return $this->send(array('result' => 'fail', 'message' => $reponse->message));
     }
 
     /**
@@ -1077,11 +1077,11 @@ class gitlab extends control
 
             if($res or is_array($res))
             {
-                return print(js::alert($this->lang->gitlab->addWebhookSuccess));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->addWebhookSuccess));
             }
             else
             {
-                return print(js::error($this->lang->gitlab->failCreateWebhook));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->failCreateWebhook));
             }
         }
     }
