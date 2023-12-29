@@ -15,6 +15,7 @@
       "gitVersion": "master"
     },
     "downgrade": {
+      "gitVersion": "release-18.10",
       "gitRepo": "devops/zentaopms-downgrade"
     }
   },

@@ -91,8 +91,6 @@ pipeline {
               
               def j = job.newJob()
 
-              env.GIT_BRANCH = "release-18.10"
-
               zentaopms.setupStaticEnv()
               zentaopms.setupEnvAfterCheckout()
 
@@ -101,12 +99,14 @@ pipeline {
                 [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
                 [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}"] ],
-                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
+                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.DOWNGRADE_VERSION}/src"] ]
               ])
 
               zentaopms.setupEnvAfterCheckoutExt()
 
             }
+
+            sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
           
           }
         }
@@ -131,11 +131,12 @@ pipeline {
         }
 
         stage("Build") {
-          when { expression { return params.publish_open || params.publish_biz } }
+          when { expression { return params.publish_open || params.publish_biz || params.publish_plugin_safe } }
           stages {
             stage("增量降级") {
+              when { expression { return params.publish_open } }
               steps {
-                echo "GIT_BRANCH in jenkinsfile is ${env.GIT_BRANCH}"
+                echo "DOWNGRADE_VERSION in jenkinsfile is ${env.DOWNGRADE_VERSION}"
                 script { downgrade.increase() }
               }
               post {
@@ -146,6 +147,7 @@ pipeline {
             }
 
             stage("make ciCommon") {
+              when { expression { return params.publish_open } }
               steps {
                 withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
@@ -341,7 +343,7 @@ pipeline {
         } // End Merge and Upload Max
 
         stage("Notice ZIP") {
-          when { expression { return params.publish_biz } }
+          when { expression { return params.publish_biz || params.publish_plugin_safe } }
           steps {
             checkout scmGit(branches: [[name: "master"]],
               extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
