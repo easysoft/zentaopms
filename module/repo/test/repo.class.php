@@ -513,15 +513,6 @@ class repoTest
         return $objects;
     }
 
-    public function getBugProductsAndExecutionsTest($bugs)
-    {
-        $objects = $this->objectModel->getBugProductsAndExecutions($bugs);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function buildURLTest($methodName, $url, $revision, $scm = 'svn')
     {
         $objects = $this->objectModel->buildURL($methodName, $url, $revision, $scm);

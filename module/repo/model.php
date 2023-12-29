@@ -1756,21 +1756,6 @@ class repoModel extends model
     }
 
     /**
-     * 根据bug列表获取产品和执行。
-     * Get products and executions of bugs.
-     *
-     * @param  array  $bugs
-     * @access public
-     * @return array
-     */
-    public function getBugProductsAndExecutions(array $bugs): array
-    {
-        $records = $this->dao->select('id, execution, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
-        foreach($records as $record) $record->product = ",{$record->product},";
-        return $records;
-    }
-
-    /**
      * 构造git和svn的展示链接。
      * Build url for git and svn.
      *
@@ -2690,8 +2675,7 @@ class repoModel extends model
      */
     public function setBugStatusByCommit(array $bugs, array $actions, object $action, array $changes): array
     {
-        $this->loadModel('bug');
-        $productsAndExecutions = $this->getBugProductsAndExecutions($bugs);
+        $productsAndExecutions = $this->loadModel('bug')->getByIdList($bugs);
         foreach($actions['bug'] as $bugID => $bugActions)
         {
             $bug = $this->bug->getByID($bugID);
@@ -2699,7 +2683,7 @@ class repoModel extends model
 
             $action->objectType = 'bug';
             $action->objectID   = $bugID;
-            $action->product    = $productsAndExecutions[$bugID]->product;
+            $action->product    = ",{$productsAndExecutions[$bugID]->product},";
             $action->execution  = $productsAndExecutions[$bugID]->execution;
             foreach($bugActions as $bugAction => $params)
             {
