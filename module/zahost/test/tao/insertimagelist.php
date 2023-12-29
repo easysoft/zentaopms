@@ -7,6 +7,11 @@ title=测试 zahostTao->insertImageList();
 timeout=0
 cid=1
 
+- 测试镜像已经插入到 image 表中, 不会再次插入 @0
+- 测试 image2 镜像已经插入到 image 表中, image1镜像会被插入第0条的name属性 @image1
+- 测试image1 和 image2 镜像都没有插入, image1 镜像会被插入第0条的name属性 @image1
+- 测试image1 和 image2 镜像都没有插入, image2 镜像会被插入第1条的name属性 @image2
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -55,4 +60,5 @@ unset($downloadedImageList['image1']);
 r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('0:name') && e('image1'); //测试 image2 镜像已经插入到 image 表中, image1镜像会被插入
 
 unset($downloadedImageList['image2']);
-r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('0:name,1:name') && e('image1,image2'); //测试image1 和 image2 镜像都没有插入, image1 和 image2镜像会被插入
+r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('0:name') && e('image1'); //测试image1 和 image2 镜像都没有插入, image1 镜像会被插入
+r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('1:name') && e('image2'); //测试image1 和 image2 镜像都没有插入, image2 镜像会被插入
