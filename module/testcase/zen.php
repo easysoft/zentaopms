@@ -3107,7 +3107,7 @@ class testcaseZen extends testcase
         $this->session->set('xmindImport', $filePath);
         $this->session->set('xmindImportType', $fetchResult['type']);
 
-        return $fetchResult['pID'];
+        return (int)$fetchResult['pID'];
     }
 
     /**

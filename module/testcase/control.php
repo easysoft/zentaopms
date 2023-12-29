@@ -1798,7 +1798,7 @@ class testcase extends control
         $this->view->product          = $product;
         $this->view->branch           = $branch;
         $this->view->scenes           = $scenes;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? '0' : $branch);
 
         $this->display();
     }
