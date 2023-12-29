@@ -87,7 +87,7 @@ detailBody
             set::orderBy($orderBy),
             set::sortLink(createLink('testsuite', 'view', "suiteID={$suite->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footToolbar($footToolbar),
-            set::footPager(usePager('pager', 'short'))
+            set::footPager(usePager('pager'))
         )
     ),
     history(
