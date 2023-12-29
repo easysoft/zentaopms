@@ -79,4 +79,19 @@ class storeTest
     {
         return $this->getAppInfo($appID, $analysis, $name, $version, $channel);
     }
+
+    /**
+     * 测试根据名称查询多个应用信息。
+     * Test get app infos map by name array from cloud market.
+     *
+     * @param  array   $nameList
+     * @param  string  $channel
+     * @access public
+     * @return object|null
+     */
+    public function getAppMapByNamesTest(array $nameList = array()): object|null
+    {
+        $result = $this->getAppMapByNames($nameList);
+        return empty((array)$result) ? null : $result;
+    }
 }
