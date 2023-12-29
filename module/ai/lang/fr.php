@@ -68,6 +68,9 @@ $lang->ai->exportMiniProgram      = 'Export AI Mini Program';
 $lang->ai->importMiniProgram      = 'Import AI Mini Program';
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
+$lang->ai->saveFail               = 'Save failed';
+$lang->ai->installPackage         = 'Installation package';
+$lang->ai->toPublish              = 'Publish after installation';
 
 $lang->ai->chatPlaceholderMessage = 'Hi, I\'m Adao, your AI assistant at ZenTao!';
 $lang->ai->chatPlaceholderInput   = 'type here...';

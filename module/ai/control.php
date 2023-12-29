@@ -493,6 +493,7 @@ class ai extends control
      * Export a mini program as zip file.
      *
      * @param string $appID
+     * @access public
      * @return void
      */
     public function exportMiniProgram($appID)
@@ -509,9 +510,38 @@ class ai extends control
         exit;
     }
 
-    public function importMiniProgram($appID)
+    /**
+     * Import mini program from zip file.
+     *
+     * @access public
+     * @return void
+     */
+    public function importMiniProgram()
     {
+        if(!empty($_POST) && !empty($_FILES))
+        {
+            $file = $_FILES['file'];
+            $filePath = $file['tmp_name'];
+            $result = $this->ai->extractZtAppZip($filePath);
+            if(is_array($result))
+            {
+                $info = $result[0];
+                $fileName = $info['filename'];
+                include_once($fileName);
+                if(isset($ztApp))
+                {
+                    $ztApp = json_decode($ztApp);
+                    $ztApp->name      = $this->ai->getUniqueAppName($ztApp->name);
+                    $ztApp->published = $_POST['published'];
+                    $ztApp->category  = $_POST['category'];
+                    $this->ai->createMiniProgram($ztApp);
+                    unlink($fileName);
+                    return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'miniprograms')));
+                }
+            }
 
+            return $this->send(array('result' => 'fail', 'message' => this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        }
     }
 
     /**

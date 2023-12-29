@@ -31,7 +31,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('ai', 'importMiniProgram')): ?>
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" data-toggle="modal" data-target="#import-miniprogram">
         <?= $lang->ai->import; ?>
       </button>
     <?php endif; ?>
@@ -87,6 +87,52 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
         <button type="button" class="btn btn-primary" onclick="publishMiniProgram()" data-dismiss="modal"><?= $lang->confirm; ?></button>
         <button type="button" class="btn" data-dismiss="modal"><?= $lang->cancel; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="import-miniprogram">
+  <div class="modal-dialog" style="width: 600px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong style="font-size: 20px; color: #0B0F18;"><?= $lang->ai->import; ?></strong>
+        <a data-dismiss="modal" class="close-import-dialog">
+          <i class="icon-close"></i>
+        </a>
+      </div>
+      <div class="modal-body">
+        <form class="form-ajax" method="post" action="<?= $this->createLink('ai', 'importMiniProgram'); ?>" id="import-miniprogram-form">
+          <table class="table table-form">
+            <tr>
+              <th><?= $lang->ai->installPackage; ?></th>
+              <td>
+                <input type="file" name="file" required class="form-control">
+              </td>
+            </tr>
+            <tr>
+              <th><?= $lang->ai->miniPrograms->category; ?></th>
+              <td>
+                <?= html::select('category', array_merge($lang->ai->miniPrograms->categoryList, $categoryList), $category, "class='form-control chosen' required"); ?>
+              </td>
+            </tr>
+            <tr>
+              <th><?= $lang->ai->toPublish; ?></th>
+              <td class="required">
+                <div class="radio" style="display: flex; align-items: center; gap: 4px;">
+                  <label>
+                    <input type="radio" name="published" value="1"><?= $lang->ai->miniPrograms->field->requiredOptions[1]; ?>
+                  </label>
+                  <label>
+                    <input type="radio" name="published" value="0" checked><?= $lang->ai->miniPrograms->field->requiredOptions[0]; ?>
+                  </label>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <div style="display: flex; justify-content: center; border-top: none; padding-top: 10px;">
+            <button type="submit" class="btn btn-primary btn-wide"><?= $lang->save; ?></button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

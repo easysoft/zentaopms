@@ -622,6 +622,7 @@ class aiModel extends model
      * Update custom categories.
      *
      * @access public
+     * @access public
      * @return void
      */
     public function updateCustomCategories()
@@ -737,6 +738,7 @@ class aiModel extends model
 
     /**
      * @param string $appID
+     * @access public
      * @return void
      */
     public function createNewVersionNotification($appID)
@@ -821,15 +823,16 @@ class aiModel extends model
      * @access public
      * @return int|false
      */
-    public function createMiniProgram()
+    public function createMiniProgram($data = null)
     {
-        $data = fixer::input('post')->get();
-        $data->editedBy    = $this->app->user->account;
-        $data->editedDate  = helper::now();
-        $data->published   = '0';
-        $data->createdBy   = $this->app->user->account;
-        $data->createdDate = helper::now();
-        $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
+        if(empty($data)) $data = fixer::input('post')->get();
+        if(!isset($data->editedBy))    $data->editedBy    = $this->app->user->account;
+        if(!isset($data->editedDate))  $data->editedDate  = helper::now();
+        if(!isset($data->published))   $data->published   = '0';
+        if(!isset($data->createdBy))   $data->createdBy   = $this->app->user->account;
+        if(!isset($data->createdDate)) $data->createdDate = helper::now();
+        if(!isset($data->prompt))      $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
+        if($data->published === '1')   $data->publishedDate = helper::now();
 
         if(!empty($data->iconName) && !empty($data->iconTheme))
         {
@@ -838,24 +841,44 @@ class aiModel extends model
             unset($data->iconTheme);
         }
 
+        if(isset($data->fields))
+        {
+            $fields = $data->fields;
+            unset($data->fields);
+        }
+
         $this->dao->insert(TABLE_MINIPROGRAM)
             ->data($data)
             ->exec();
         $appID = $this->dao->lastInsertID();
 
-        $defaultFields = $this->lang->ai->miniPrograms->field->default;
-        for($i = 0; $i < 3; $i++)
+        if(!isset($fields))
         {
-            $field = new stdClass();
-            $field->appID       = $appID;
-            $field->name        = $defaultFields[$i];
-            $field->type        = 'text';
-            $field->placeholder = $this->lang->ai->miniPrograms->placeholder->input;
-            $field->options     = null;
-            $field->required    = '0';
-            $this->dao->insert(TABLE_MINIPROGRAMFIELD)
-                ->data($field)
-                ->exec();
+            $defaultFields = $this->lang->ai->miniPrograms->field->default;
+            $fieldData = new stdClass();
+            $fieldData->fields = array();
+            for($i = 0; $i < 3; $i++)
+            {
+                $field = new stdClass();
+                $field->appID        = $appID;
+                $field->name         = $defaultFields[$i];
+                $field->type         = 'text';
+                $field->placeholder  = $this->lang->ai->miniPrograms->placeholder->input;
+                $field->options      = null;
+                $field->required     = '0';
+                $fieldData->fields[] = $field;
+            }
+            $this->saveMiniProgramFields($appID, $fieldData);
+        }
+        else
+        {
+            $fieldData = new stdClass();
+            $fieldData->fields = $fields;
+            foreach($fields as $field)
+            {
+                if(!isset($field->appID)) $field->appID = $appID;
+            }
+            $this->saveMiniProgramFields($appID, $fieldData);
         }
 
         if(dao::isError()) return false;
@@ -952,6 +975,13 @@ APP;
         return $zipPath;
     }
 
+    public function extractZtAppZip($file)
+    {
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($file);
+        return $zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'tmp/');
+    }
+
     /**
      * Save mini program fields.
      *
@@ -959,35 +989,33 @@ APP;
      * @access public
      * @return void
      */
-    public function saveMiniProgramFields($appID)
+    public function saveMiniProgramFields($appID, $data = null)
     {
-        $data = fixer::input('post')->get();
-        $this->dao->update(TABLE_MINIPROGRAM)
-            ->set('prompt')->eq($data->prompt)
-            ->set('published')->eq($data->toPublish)
-            ->where('id')->eq($appID)
-            ->exec();
+        if(empty($data)) $data = fixer::input('post')->get();
+
+        if(isset($data->prompt) && isset($data->toPublish))
+        {
+            $this->dao->update(TABLE_MINIPROGRAM)
+                ->set('prompt')->eq($data->prompt)
+                ->set('published')->eq($data->toPublish)
+                ->where('id')->eq($appID)
+                ->exec();
+        }
 
         $this->dao->delete()
             ->from(TABLE_MINIPROGRAMFIELD)
             ->where('appID')->eq($appID)
             ->exec();
 
-        $oldFields = $this->getMiniProgramFields($appID);
-        $newFields = array();
         $fields = $data->fields;
         foreach($fields as $field)
         {
+            $field = (array)$field;
             if(is_array($field['options'])) $field['options'] = implode(',', $field['options']);
-            $newFields[] = $field;
             $this->dao->insert(TABLE_MINIPROGRAMFIELD)
                 ->data($field)
                 ->exec();
         }
-
-        $changes = common::createChanges($oldFields, $newFields);
-        $actionID = $this->loadModel('action')->create('miniProgram', $appID, 'edited');
-        $this->action->logHistory($actionID, $changes);
     }
 
     /**
@@ -1007,6 +1035,21 @@ APP;
             ->andWhere('deleted')->eq('0')
             ->fetch();
         return !empty($miniProgram);
+    }
+
+    /**
+     * Get unique app name.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getUniqueAppName($name)
+    {
+        while($this->checkDuplicatedAppName($name))
+        {
+            $name = $name . '_1';
+        }
+        return $name;
     }
 
     /**
