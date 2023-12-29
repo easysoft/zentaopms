@@ -8,7 +8,7 @@ zdTable('kanbancolumn')->gen(5);
 
 /**
 
-title=title=测试修改列1信息 >> name,测试修改列名1,未开始;color,
+title=测试修改列1信息 >> name,测试修改列名1,未开始;color,
 timeout=0
 cid=2
 

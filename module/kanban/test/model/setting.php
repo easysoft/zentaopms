@@ -26,7 +26,7 @@ cid=1
  - 属性archived @0
  - 属性performable @0
  - 属性alignment @left
- - 属性object @``
+ - 属性object @~~
 
 */
 

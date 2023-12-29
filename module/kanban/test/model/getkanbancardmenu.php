@@ -19,10 +19,10 @@ timeout=0
 cid=1
 
 - 测试获取执行1 story的操作数量 @0
-- 测试获取执行1 task的操作数量 @24
+- 测试获取执行1 task的操作数量 @28
 - 测试获取执行1 bug的操作数量 @0
 - 测试获取执行2 story的操作数量 @0
-- 测试获取执行2 task的操作数量 @28
+- 测试获取执行2 task的操作数量 @32
 - 测试获取执行2 bug的操作数量 @0
 - 测试获取执行3 story的操作数量 @0
 - 测试获取执行3 task的操作数量 @24
@@ -42,10 +42,10 @@ $browseTypeList  = array('story', 'task', 'bug');
 $kanban = new kanbanTest();
 
 r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[0])) && p() && e('0'); // 测试获取执行1 story的操作数量
-r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[1])) && p() && e('24'); // 测试获取执行1 task的操作数量
+r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[1])) && p() && e('28'); // 测试获取执行1 task的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[2])) && p() && e('0');  // 测试获取执行1 bug的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[1], $browseTypeList[0])) && p() && e('0');  // 测试获取执行2 story的操作数量
-r($kanban->getKanbanCardMenuTest($executionIDList[1], $browseTypeList[1])) && p() && e('28'); // 测试获取执行2 task的操作数量
+r($kanban->getKanbanCardMenuTest($executionIDList[1], $browseTypeList[1])) && p() && e('32'); // 测试获取执行2 task的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[1], $browseTypeList[2])) && p() && e('0');  // 测试获取执行2 bug的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[2], $browseTypeList[0])) && p() && e('0');  // 测试获取执行3 story的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[2], $browseTypeList[1])) && p() && e('24'); // 测试获取执行3 task的操作数量

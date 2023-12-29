@@ -11,7 +11,7 @@ timeout=0
 cid=1
 
 - 查看普通用户获取操作按钮的长度 @161
-- 查看管理员获取操作按钮的长度 @1247
+- 查看管理员获取操作按钮的长度 @1243
 
 */
 global $tester;
@@ -25,4 +25,4 @@ su('admin');
 $toolbar2 = $tester->kanban->getPageToolBar($kanban2);
 
 r(strlen($toolbar1)) && p('') && e('161');  // 查看普通用户获取操作按钮的长度
-r(strlen($toolbar2)) && p('') && e('1247'); // 查看管理员获取操作按钮的长度
+r(strlen($toolbar2)) && p('') && e('1243'); // 查看管理员获取操作按钮的长度

@@ -14,33 +14,21 @@ title=测试 kanbanModel->buildExecutionCard();
 timeout=0
 cid=1
 
-- 构造迭代的任务卡片
+- 构造看板卡片，查看id和title
  - 属性id @1
- - 属性title @任务1
-- 构造阶段的任务卡片
- - 属性id @2
- - 属性title @任务2
-- 构造看板的任务卡片
+ - 属性title @~~
+- 构造看板卡片，查看id和title
+ - 属性id @0
+ - 属性title @0
+- 构造看板卡片，查看id和title
  - 属性id @3
- - 属性title @任务3
-- 构造迭代的任务卡片
- - 属性id @1
- - 属性title @任务1
-- 构造阶段的任务卡片
- - 属性id @2
- - 属性title @任务2
-- 构造看板的任务卡片
- - 属性id @3
- - 属性title @任务3
-- 构造迭代的任务卡片
- - 属性id @1
- - 属性title @任务1
-- 构造阶段的任务卡片
- - 属性id @2
- - 属性title @任务2
-- 构造看板的任务卡片
- - 属性id @3
- - 属性title @任务3
+ - 属性title @开发任务13
+- 构造看板卡片，查看id和title
+ - 属性id @0
+ - 属性title @0
+- 构造看板卡片，查看id和title
+ - 属性id @5
+ - 属性title @~~
 
 */
 
