@@ -1632,6 +1632,7 @@ class repoModel extends model
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
 
                 $this->setTaskByCommit($task, $taskActions, $action, $changes, $scm);
+                dao::$errors = array();
                 unset($objects['tasks'][$taskID]);
             }
         }
@@ -2658,20 +2659,19 @@ class repoModel extends model
         unset($_POST['consumed']);
         unset($_POST['left']);
 
-        $_POST['id'][1]         = 1;
-        $_POST['dates'][1]      = date('Y-m-d');
-        $_POST['consumed'][1]   = $params['consumed'];
-        $_POST['left'][1]       = $params['left'];
-        $_POST['objectType'][1] = 'task';
-        $_POST['objectID'][1]   = $taskID;
-        $_POST['work'][1]       = str_replace('<br />', "\n", $action->comment);
+        $_POST['date'][1]     = date('Y-m-d');
+        $_POST['consumed'][1] = $params['consumed'];
+        $_POST['left'][1]     = $params['left'];
+        $_POST['work'][1]     = str_replace('<br />', "\n", $action->comment);
         if($this->config->edition != 'open')
         {
             $this->loadModel('effort')->batchCreate();
         }
         else
         {
-            $this->loadModel('task')->recordWorkhour($taskID);
+            $this->loadModel('task');
+            $workhour = form::batchData($this->config->task->form->recordWorkhour)->get();
+            $this->task->recordWorkhour($taskID, $workhour);
         }
 
         $this->saveRecord($action, $changes);
@@ -2709,7 +2709,14 @@ class repoModel extends model
                 {
                     $this->post->set('resolvedBuild', 'trunk');
                     $this->post->set('resolution', 'fixed');
-                    $changes = $this->bug->resolve($bugID);
+
+                    $newBug = form::data($this->config->bug->form->resolve)
+                        ->setDefault('assignedTo', $bug->openedBy)
+                        ->add('id',        $bug->id)
+                        ->add('execution', $bug->execution)
+                        ->get();
+
+                    $changes = $this->bug->resolve($newBug);
                     foreach($changes as $change) $changes[] = $change;
                     if($changes)
                     {
@@ -2720,6 +2727,7 @@ class repoModel extends model
                 }
             }
 
+            dao::$errors = array();
             unset($bugs[$bugID]);
         }
 
