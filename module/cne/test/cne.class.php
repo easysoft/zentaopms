@@ -176,4 +176,22 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getSettingsMapping method.
+     *
+     * @param  array  $maps
+     * @access public
+     * @return object|null
+     */
+    public function getSettingsMappingTest(array $maps = array()): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(1);
+
+        $result = $this->objectModel->getSettingsMapping($instance, $maps);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }
