@@ -15,224 +15,6 @@ jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);
 jsVar('activatedBugTip', $lang->testreport->activatedBugTip);
 jsVar('fromCaseBugTip',  $lang->testreport->fromCaseBugTip);
 
-formPanel
-(
-    set::title($lang->testreport->edit),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->testreport->startEnd),
-            set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",begin,") !== false || strpos(",{$this->config->testreport->edit->requiredFields},", ",end,") !== false),
-            inputGroup
-            (
-                datePicker
-                (
-                    set::name('begin'),
-                    set::value($begin)
-                ),
-                $lang->testtask->to,
-                datePicker
-                (
-                    set::name('end'),
-                    set::value($end)
-                )
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('product'),
-                set::value($productIdList)
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('execution'),
-                set::value($execution->id)
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('tasks'),
-                set::value($report->tasks)
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('bugs'),
-                set::value(implode(',', array_keys($bugs)))
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('builds'),
-                set::value(implode(',', array_keys($builds)))
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('cases'),
-                set::value(implode(',', array_keys($caseList)))
-            ),
-            input
-            (
-                set::className('hidden'),
-                set::name('stories'),
-                set::value(implode(',', array_keys($stories)))
-            )
-        ),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->testreport->owner),
-            set::control('picker'),
-            set::name('owner'),
-            set::items($users),
-            set::value($report->owner)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->testreport->members),
-            set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",members,") !== false),
-            picker
-            (
-                set::multiple(true),
-                set::name('members[]'),
-                set::items($users),
-                set::value($report->members)
-            )
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->testreport->title),
-            set::name('title'),
-            set::value($report->title)
-        )
-    ),
-    !empty($execution->desc) ? formRow
-    (
-        formGroup
-        (
-            set::className('items-center'),
-            set::label($lang->testreport->goal),
-            span
-            (
-                icon
-                (
-                    'help',
-                    set('data-toggle', 'tooltip'),
-                    set('id', 'goalTip'),
-                    set('class', 'text-light')
-                ),
-                $execution->desc
-            )
-        )
-    ) : null,
-    formRow
-    (
-        formGroup
-        (
-            set::className('items-center'),
-            set::label($lang->testreport->profile),
-            div
-            (
-                div(html($storySummary)),
-                div(html(sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary)),
-                div(html(sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), $bugSummary['activatedBugs'],  $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%')))
-            )
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->testreport->report),
-            set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",report,") !== false),
-            editor
-            (
-                set::name('report'),
-                html($report->report)
-            )
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->files),
-            $report->files ? fileList
-            (
-                set::files($report->files),
-                set::fieldset(false)
-            ) : null,
-            upload()
-        )
-    )
-);
-
-panel
-(
-    set::title($lang->testreport->legendStoryAndBug),
-    dtable
-    (
-        set::cols($config->testreport->story->dtable->fieldList),
-        set::data(array_values($stories)),
-        set::emptyTip($lang->story->noStory),
-        set::userMap($users)
-    ),
-    div(set::className('my-6')),
-    dtable
-    (
-        set::cols($config->testreport->bug->dtable->fieldList),
-        set::data(array_values($bugs)),
-        set::emptyTip($lang->bug->notice->noBug),
-        set::userMap($users)
-    )
-);
-
-panel
-(
-    set::className('mt-6'),
-    set::title($lang->testreport->legendBuild),
-    dtable
-    (
-        set::cols($config->testreport->build->dtable->fieldList),
-        set::data(array_values($builds)),
-        set::userMap($users)
-    )
-);
-
-panel
-(
-    set::className('mt-6'),
-    set::title($lang->testreport->legendCase),
-    dtable
-    (
-        set::cols($config->testreport->testcase->dtable->fieldList),
-        set::data(array_values($caseList)),
-        set::userMap($users)
-    )
-);
-
-panel
-(
-    set::className('mt-6'),
-    set::title($lang->testreport->legendLegacyBugs),
-    dtable
-    (
-        set::cols($config->testreport->bug->dtable->fieldList),
-        set::data(array_values($legacyBugs)),
-        set::userMap($users)
-    )
-);
-
 $caseCharts = array();
 foreach($charts as $chartType => $chartOption)
 {
@@ -524,14 +306,236 @@ foreach($bugInfo as $infoKey => $infoValue)
     );
 }
 
+
 panel
 (
-    set::className('mt-6'),
-    set::title($lang->testreport->legendReport),
-    $caseCharts,
-    $bugStageChart,
-    $bugHandleChart,
-    $bugCharts
+    formPanel
+    (
+        set::title($lang->testreport->edit),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->testreport->startEnd),
+                set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",begin,") !== false || strpos(",{$this->config->testreport->edit->requiredFields},", ",end,") !== false),
+                inputGroup
+                (
+                    datePicker
+                    (
+                        set::name('begin'),
+                        set::value($begin)
+                    ),
+                    $lang->testtask->to,
+                    datePicker
+                    (
+                        set::name('end'),
+                        set::value($end)
+                    )
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('product'),
+                    set::value($productIdList)
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('execution'),
+                    set::value($execution->id)
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('tasks'),
+                    set::value($report->tasks)
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('bugs'),
+                    set::value(implode(',', array_keys($bugs)))
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('builds'),
+                    set::value(implode(',', array_keys($builds)))
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('cases'),
+                    set::value(implode(',', array_keys($caseList)))
+                ),
+                input
+                (
+                    set::className('hidden'),
+                    set::name('stories'),
+                    set::value(implode(',', array_keys($stories)))
+                )
+            ),
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->testreport->owner),
+                set::control('picker'),
+                set::name('owner'),
+                set::items($users),
+                set::value($report->owner)
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->testreport->members),
+                set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",members,") !== false),
+                picker
+                (
+                    set::multiple(true),
+                    set::name('members[]'),
+                    set::items($users),
+                    set::value($report->members)
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->testreport->title),
+                set::name('title'),
+                set::value($report->title)
+            )
+        ),
+        !empty($execution->desc) ? formRow
+        (
+            formGroup
+            (
+                set::className('items-center'),
+                set::label($lang->testreport->goal),
+                span
+                (
+                    icon
+                    (
+                        'help',
+                        set('data-toggle', 'tooltip'),
+                        set('id', 'goalTip'),
+                        set('class', 'text-light')
+                    ),
+                    $execution->desc
+                )
+            )
+        ) : null,
+        formRow
+        (
+            formGroup
+            (
+                set::className('items-center'),
+                set::label($lang->testreport->profile),
+                div
+                (
+                    div(html($storySummary)),
+                    div(html(sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary)),
+                    div(html(sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), $bugSummary['activatedBugs'],  $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%')))
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->testreport->report),
+                set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",report,") !== false),
+                editor
+                (
+                    set::name('report'),
+                    html($report->report)
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->files),
+                $report->files ? fileList
+                (
+                    set::files($report->files),
+                    set::fieldset(false)
+                ) : null,
+                upload()
+            )
+        )
+    ),
+    formPanel
+    (
+        set::title($lang->testreport->legendStoryAndBug),
+        set::actions(array()),
+        dtable
+        (
+            set::cols($config->testreport->story->dtable->fieldList),
+            set::data(array_values($stories)),
+            set::emptyTip($lang->story->noStory),
+            set::userMap($users)
+        ),
+        div(set::className('my-6')),
+        dtable
+        (
+            set::cols($config->testreport->bug->dtable->fieldList),
+            set::data(array_values($bugs)),
+            set::emptyTip($lang->bug->notice->noBug),
+            set::userMap($users)
+        )
+    ),
+    formPanel
+    (
+        set::className('mt-6'),
+        set::title($lang->testreport->legendBuild),
+        set::actions(array()),
+        dtable
+        (
+            set::cols($config->testreport->build->dtable->fieldList),
+            set::data(array_values($builds)),
+            set::userMap($users)
+        )
+    ),
+    formPanel
+    (
+        set::className('mt-6'),
+        set::title($lang->testreport->legendCase),
+        set::actions(array()),
+        dtable
+        (
+            set::cols($config->testreport->testcase->dtable->fieldList),
+            set::data(array_values($caseList)),
+            set::userMap($users)
+        )
+    ),
+    formPanel
+    (
+        set::className('mt-6'),
+        set::title($lang->testreport->legendLegacyBugs),
+        set::actions(array()),
+        dtable
+        (
+            set::cols($config->testreport->bug->dtable->fieldList),
+            set::data(array_values($legacyBugs)),
+            set::userMap($users)
+        )
+    ),
+    formPanel
+    (
+        set::className('mt-6'),
+        set::title($lang->testreport->legendReport),
+        set::actions(array()),
+        $caseCharts,
+        $bugStageChart,
+        $bugHandleChart,
+        $bugCharts
+    )
 );
 
 render();
