@@ -223,11 +223,10 @@ class cneModel extends model
      * 获取CNE平台的集群度量。
      * Get cluster metrics of CNE platform.
      *
-     * @param  string $cluster
      * @access public
      * @return object
      */
-    public function cneMetrics(string $cluster = ''): object
+    public function cneMetrics(): object
     {
         $metrics = new stdclass;
         $metrics->cpu = new stdclass;
@@ -247,7 +246,7 @@ class cneModel extends model
         $statistics->node_count = 0;
         $statistics->metrics    = $metrics;
 
-        $result = $this->apiGet('/api/cne/statistics/cluster', array('cluster' => $cluster), $this->config->CNE->api->headers);
+        $result = $this->apiGet('/api/cne/statistics/cluster', array('cluster' => ''), $this->config->CNE->api->headers);
         if($result->code != 200) return $statistics;
 
         $statistics = $result->data;
