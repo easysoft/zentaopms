@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 docModel->getLinkedExecutionData();
@@ -9,6 +8,9 @@ cid=1
 - 获取系统中关联执行ID=106的数据属性2 @6,16
 - 获取系统中关联执行ID=101的数据属性1 @1,11
 - 获取系统中关联执行ID=0的数据 @~~
+- 获取系统中关联执行ID=106的数量 @4
+- 获取系统中关联执行ID=101的数量 @4
+- 获取系统中关联执行ID=0的数量 @4
 
 */
 
@@ -37,3 +39,7 @@ $docTester = new docTest();
 r($docTester->getLinkedExecutionDataTest($executions[2])) && p('2', ';') && e('6,16'); // 获取系统中关联执行ID=106的数据
 r($docTester->getLinkedExecutionDataTest($executions[1])) && p('1', ';') && e('1,11'); // 获取系统中关联执行ID=101的数据
 r($docTester->getLinkedExecutionDataTest($executions[0])) && p('0')      && e('~~');   // 获取系统中关联执行ID=0的数据
+
+r(count($docTester->getLinkedExecutionDataTest($executions[2]))) && p() && e('4'); // 获取系统中关联执行ID=106的数量
+r(count($docTester->getLinkedExecutionDataTest($executions[1]))) && p() && e('4'); // 获取系统中关联执行ID=101的数量
+r(count($docTester->getLinkedExecutionDataTest($executions[0]))) && p() && e('4'); // 获取系统中关联执行ID=0的数量
