@@ -68,11 +68,11 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getByID($screenID, $year = '', $month = '', $dept = '', $account = '')
+    public function getByID($screenID, $year = '', $month = '', $dept = '', $account = '', $withChartData = true)
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
         if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
-        $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
+        if($withChartData) $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
 
         return $screen;
     }
