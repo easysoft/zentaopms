@@ -1381,7 +1381,7 @@ class testtaskModel extends model
         foreach($dbSteps as $stepID)
         {
             $results[$stepID]['result'] = $caseResult == 'pass' ? $caseResult : $postSteps[$stepID];
-            $results[$stepID]['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID];
+            $results[$stepID]['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID] ?? '';
         }
         return $results;
     }

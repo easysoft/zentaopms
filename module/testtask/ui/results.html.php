@@ -101,7 +101,7 @@ foreach($results as $i => $result)
         (
             setClass('text-left flex border-r'),
             width('240px'),
-            nl2br($stepResult['real'])
+            nl2br($stepResult['real'] ?? '')
         ) : div
         (
             setClass('border-r'),
