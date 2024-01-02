@@ -153,6 +153,7 @@ class ai extends control
     public function browseMiniProgram($id)
     {
         $miniProgram = $this->ai->getMiniProgramByID($id);
+        if(empty($miniProgram)) return $this->sendError($this->lang->ai->noMiniProgram);
 
         $this->view->miniProgram  = $miniProgram;
         $this->view->messages     = $this->ai->getHistoryMessages($id);
@@ -174,6 +175,7 @@ class ai extends control
         if(empty($_POST)) return $this->locate($this->createLink('ai', 'browseMiniProgram', "id=$id"));
 
         $miniProgram  = $this->ai->getMiniProgramByID($id);
+        if(empty($miniProgram)) return $this->sendError($this->lang->ai->noMiniProgram);
         if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->unpublishedTip, 'reason' => 'unpublished'));
 
         $history = $this->post->history;
@@ -368,8 +370,11 @@ class ai extends control
             if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
             return print(js::closeModal('parent', 'this'));
         }
+
+        $miniProgram = $this->ai->getMiniProgramByID($appID);
+        if(empty($miniProgram)) return $this->sendError($this->lang->ai->noMiniProgram);
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
-        $this->view->currentPrompt = $this->ai->getMiniProgramByID($appID)->prompt;
+        $this->view->currentPrompt = $miniProgram->prompt;
         $this->view->appID         = $appID;
         $this->display();
     }
@@ -433,6 +438,7 @@ class ai extends control
         }
 
         $miniProgram = $this->ai->getMiniProgramByID($appID);
+        if(empty($miniProgram)) return $this->sendError($this->lang->ai->noMiniProgram);
         $this->view->name     = $miniProgram->name;
         $this->view->desc     = $miniProgram->desc;
         $this->view->model    = $miniProgram->model;
@@ -453,6 +459,7 @@ class ai extends control
     public function miniProgramView($id)
     {
         $miniProgram = $this->ai->getMiniProgramByID($id);
+        if(empty($miniProgram)) return $this->sendError($this->lang->ai->noMiniProgram);
 
         $this->view->miniProgram = $miniProgram;
         $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
@@ -482,6 +489,8 @@ class ai extends control
         }
 
         $program = $this->ai->getMiniProgramByID($appID);
+        if(empty($program)) return $this->sendError($this->lang->ai->noMiniProgram);
+
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
         $this->view->currentPrompt = $program->prompt;
         $this->view->title         = $this->lang->ai->miniPrograms->common;

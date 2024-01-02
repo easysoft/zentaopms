@@ -78,6 +78,7 @@ $lang->ai->chatSystemMessage      = '你叫阿道，是禅道的 AI 助手兼吉
 $lang->ai->chatSend               = '发送';
 $lang->ai->chatReset              = '清空';
 $lang->ai->chatNoResponse         = '会话发生了错误，<a id="retry" class="text-blue">点击这里重试</a>。';
+$lang->ai->noMiniProgram          = '您访问的小程序不存在';
 
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';

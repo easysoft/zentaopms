@@ -78,6 +78,7 @@ $lang->ai->chatSystemMessage      = 'You\'re Adao, the AI assistant and mascot o
 $lang->ai->chatSend               = 'Send';
 $lang->ai->chatReset              = 'Reset';
 $lang->ai->chatNoResponse         = 'Something went wrong, <a id="retry" class="text-blue">click here to retry</a>.';
+$lang->ai->noMiniProgram          = 'The mini program you visited does not exist.';
 
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
