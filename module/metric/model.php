@@ -1537,6 +1537,20 @@ class metricModel extends model
     }
 
     /**
+     * 通过header来判断一个度量项有没有日期的概念。
+     * Judge whether a metric has the concept of an date.
+     *
+     * header 通过 metric 模块的 getViewTableHeader 方法取得
+     * @param  array    $header 表头
+     * @access public
+     * @return bool
+     */
+    public function isDateMetric($header)
+    {
+        return in_array('date', array_column($header, 'name'));
+    }
+
+    /**
      * 获取一个echarts的配置项。
      * Get options of echarts by head and data.
      *
