@@ -81,7 +81,7 @@ $config->gitlab->dtable->project->fieldList['id']['title']    = $lang->gitlab->i
 $config->gitlab->dtable->project->fieldList['id']['sortType'] = true;
 
 $config->gitlab->dtable->project->fieldList['name']['title']    = $lang->gitlab->project->name;
-$config->gitlab->dtable->project->fieldList['name']['name']     = 'name_with_namespace';
+$config->gitlab->dtable->project->fieldList['name']['name']     = 'name';
 $config->gitlab->dtable->project->fieldList['name']['sortType'] = true;
 
 $config->gitlab->dtable->project->fieldList['star']['title'] = '';

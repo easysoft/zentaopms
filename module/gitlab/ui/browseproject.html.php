@@ -49,6 +49,7 @@ foreach($gitlabProjectList as $gitlabProject)
     $gitlabProject->defaultBranch = $gitlabProject->adminer || $gitlabProject->isMaintainer;
     $gitlabProject->repoID        = zget($repoPairs, $gitlabProject->id);
     $gitlabProject->gitlabID      = $gitlabID;
+    $gitlabProject->name          = $gitlabProject->name_with_namespace;
 }
 foreach($config->gitlab->dtable->project->fieldList['actions']['list'] as $action => $gitlabConfig)
 {
