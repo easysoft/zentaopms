@@ -338,9 +338,9 @@ class caselib extends control
         {
             $this->loadModel('testcase');
 
-            $modules = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+            $modules = $this->loadModel('tree')->getOptionMenu($libID, 'caselib', 0);
             $fields  = $this->caselibZen->getFieldsForExportTemplate();
-            $rows    = $this->caselibZen->getRowsForExportTemplate($this->post->num ? $this->post->num : 0, $modules);
+            $rows    = $this->caselibZen->getRowsForExportTemplate($this->post->num ? (int)$this->post->num : 0, $modules);
 
             $this->post->set('fields', $fields);
             $this->post->set('kind', 'testcase');
