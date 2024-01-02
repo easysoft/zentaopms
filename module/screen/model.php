@@ -1709,12 +1709,22 @@ class screenModel extends model
         if(empty($filters)) return $data;
 
         $objectPairs = $this->loadModel('metric')->getPairsByScope($filters[0]['field']);
+
+        foreach($filters as $key => $filter)
+        {
+            $filterSelect  = is_array($filter['default']) ? $filter['default'] : array($filter['default']);
+            $selectObjects = array();
+            foreach($filterSelect as $select) $selectObjects[] = $objectPairs[$select];
+
+            $filters[$key]['selectObjects'] = $selectObjects;
+        }
+
         $filteredData = array();
         foreach($data as $row)
         {
             foreach($filters as $filter)
             {
-                if($row['scope'] == $objectPairs[$filter['default']]) $filteredData[] =  $row;
+                if(in_array($row['scope'], $filter['selectObjects'])) $filteredData[] =  $row;
             }
         }
         return $filteredData;
@@ -1732,11 +1742,10 @@ class screenModel extends model
     {
         $this->loadModel('metric');
 
-        $dateType = $this->metric->getDateTypeByCode($metric->code);
-
         $option = new stdclass();
         $option->displayType = 'normal';
         $option->cardType    = 'A';
+        $option->dateType    = $this->metric->getDateTypeByCode($metric->code);
         $option->bgColor     = '#26292EFF';
         $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
         $option->scope       = $metric->scope;
