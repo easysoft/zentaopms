@@ -438,7 +438,7 @@ $lang->ai->miniPrograms->category          = 'Category';
 $lang->ai->miniPrograms->icon              = 'Icon';
 $lang->ai->miniPrograms->desc              = 'Introduction';
 $lang->ai->miniPrograms->categoryList      = array('writing' => 'Writing', 'statistics' => 'Statistics', 'creative' => 'Creative', 'raiders' => 'Guideline ', 'schedule' => 'Schedule');
-$lang->ai->miniPrograms->modelList         = array('openai-GPT35 ' => 'openai/GPT-3.5');
+$lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'openai / GPT-3.5');
 $lang->ai->miniPrograms->allCategories     = array('' => 'All categories');
 $lang->ai->miniPrograms->squareCategories  = array('collection' => 'My collection', 'discovery' => 'Discovery', 'latest' => 'Latest');
 $lang->ai->miniPrograms->collect           = 'Collect';
