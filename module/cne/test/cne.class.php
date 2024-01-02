@@ -249,4 +249,19 @@ class cneTest
 
         return $this->objectModel->appDBList($instance);
     }
+
+    /**
+     * Test appDBDetail method.
+     *
+     * @param  int    $instanceID
+     * @param  string $dbName
+     * @access public
+     * @return object|false
+     */
+    public function appDBDetailTest(int $instanceID, string $dbName): object|false
+    {
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+
+        return $this->objectModel->appDBDetail($instance, $dbName);
+    }
 }
