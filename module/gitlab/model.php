@@ -79,7 +79,7 @@ class gitlabModel extends model
         if(!$gitlab) return '';
 
         $sudoParam = '';
-        if($sudo == true and !$this->app->user->admin)
+        if($sudo == true && !$this->app->user->admin)
         {
             $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
             if($openID) $sudoParam = "&sudo={$openID}";
