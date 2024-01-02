@@ -174,6 +174,7 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
 };
 
 /* DataTable columns. */
+$config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 $setting = $this->loadModel('datatable')->getSetting('product');
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 $cols = array_values($setting);
