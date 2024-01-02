@@ -70,7 +70,7 @@ dtable
     set::emptyTip($lang->testtask->emptyUnitTip),
     set::userMap($users),
     set::footer(array(array('html' => $summary), 'flex', 'pager')),
-    set::footPager(usePager())
+    set::footPager($browseType !== 'newest' ? usePager() : null)
 );
 
 render();
