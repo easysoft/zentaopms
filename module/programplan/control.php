@@ -102,9 +102,6 @@ class programplan extends control
         $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
         $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
 
-        /* Set programplan typeList. */
-        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
-
         $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'parent', 'order_asc');
         if(!empty($planID) and in_array($project->model, array('ipd', 'waterfallplus')))
         {
@@ -119,6 +116,9 @@ class programplan extends control
                 unset($this->lang->programplan->typeList['stage']);
             }
         }
+
+        /* Set programplan typeList. */
+        if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
         $viewData = new stdclass();
         $viewData->productID     = $productID;

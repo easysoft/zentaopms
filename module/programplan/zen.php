@@ -266,7 +266,7 @@ class programplanZen extends programplan
             if($field) $visibleFields[$field] = '';
         }
 
-        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
+        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
         {
             if($field)
             {

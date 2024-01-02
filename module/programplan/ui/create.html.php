@@ -130,7 +130,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         }
 
         /* Field for agileplus. */
-        if($name == 'type' && $planID != 0 && $executionType == 'agileplus')
+        if($name == 'type' && $planID != 0)
         {
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
