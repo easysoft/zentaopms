@@ -1,4 +1,3 @@
-.h-full-adjust {overflow-y: auto; height: calc(100vh - 125px);}
 .main-col .block-files .panel-heading {padding-right: 20px;}
 .main-col .block-files .panel-heading .panel-title {height: 35px; line-height: 30px;}
 
@@ -55,7 +54,6 @@
 .flex-auto {flex: auto;}
 .flex-full > .panel {box-shadow: none;}
 .float-r {float: right;}
-.h-full {height: 100%;}
 .w-full {width: 100%;}
 .overflow-x-auto {overflow-x: auto;}
 .overflow-auto {overflow: auto;}
@@ -122,3 +120,4 @@
 .history-btn:focus {background-color: rgba(255,255,255,.8)}
 
 #actionbox {margin-left: 30px;}
+#diffContain .CodeMirror.cm-s-paper.CodeMirror-wrap {overflow-y: hidden; height: calc(100vh - 230px);}

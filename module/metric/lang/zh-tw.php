@@ -77,8 +77,8 @@ $lang->metric->scopeList['project']   = "專案";
 $lang->metric->scopeList['execution'] = "執行";
 $lang->metric->scopeList['dept']      = "團隊";
 $lang->metric->scopeList['user']      = "個人";
-$lang->metric->scopeList['code']      = "程式庫";
-$lang->metric->scopeList['pipeline']  = "流水線";
+// $lang->metric->scopeList['code']      = "程式庫";
+// $lang->metric->scopeList['pipeline']  = "流水線";
 
 global $config;
 $lang->metric->objectList = array();

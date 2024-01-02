@@ -29,6 +29,7 @@ class count_of_reviewing_story_in_user extends baseCalc
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('story')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t2.status')->eq('reviewing')
             ->andWhere("NOT FIND_IN_SET('or', t2.vision)")

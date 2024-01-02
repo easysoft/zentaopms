@@ -2,12 +2,12 @@
 /**
  * The search module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->search->common        = 'Rechercher';
 $lang->search->id            = 'ID';
@@ -31,6 +31,7 @@ $lang->search->onMenuBar     = 'Montrer dans le Menu';
 $lang->search->custom        = 'Personnalisation';
 $lang->search->setCommon     = 'Set as public query criteria';
 $lang->search->saveCondition = 'Save search options';
+$lang->search->setCondName   = 'Please enter a save condition name';
 
 $lang->search->account  = 'Compte';
 $lang->search->module   = 'Module';
@@ -71,11 +72,14 @@ $lang->search->index      = 'Full Text Search';
 $lang->search->buildIndex = 'Rebuild Index';
 $lang->search->preview    = 'Preview';
 
+$lang->search->inputWords        = 'Please input search words';
 $lang->search->result            = 'Search Results';
+$lang->search->resultCount       = '<strong>%s</strong> items';
 $lang->search->buildSuccessfully = 'Search index initialized.';
 $lang->search->executeInfo       = '%s search results for you in %s seconds.';
 $lang->search->buildResult       = "Create index %s and created <strong class='%scount'>%s</strong> records.";
 $lang->search->queryTips         = "Separate ids with comma";
+$lang->search->confirmDelete     = 'Are you sure to delete this record';
 
 $lang->search->modules['all']         = 'All';
 $lang->search->modules['task']        = 'Task';

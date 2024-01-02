@@ -3,10 +3,10 @@ class myMisc extends misc
 {
     /**
      * Download zentao client.
-     * 
+     *
      * @access public
      * @param  string $action
-     * @param  string $os 
+     * @param  string $os
      * @return void
      */
     public function downloadClient($action = 'check', $os = '')
@@ -29,7 +29,7 @@ class myMisc extends misc
             if(!is_dir($clientDir))
             {
                 $result = mkdir($clientDir, 0755, true);
-                if($result == false)
+                if($result === false)
                 {
                     $error = true;
                     $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotExist, $clientDir, $clientDir);
@@ -83,7 +83,7 @@ class myMisc extends misc
         if($action == 'getPackage')
         {
             $this->view->os      = $os;
-            $this->view->account = $this->app->user->account; 
+            $this->view->account = $this->app->user->account;
         }
 
         if($action == 'clearTmpPackage')
@@ -113,7 +113,7 @@ class myMisc extends misc
                 $zfile = $this->app->loadClass('zfile');
                 $zfile->removeDir($clientDir);
             }
-            
+
             $this->fetch('file', 'sendDownHeader', array('fileName' => "zentao_chat_client." . $os . '.zip', 'zip', $zipContent));
         }
 

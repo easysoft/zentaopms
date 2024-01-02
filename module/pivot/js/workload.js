@@ -79,7 +79,6 @@ $(function()
         showMeridian: 1,
         minView: 2,
         format: 'yyyy-mm-dd',
-        startDate: new Date()
     };
     $('input#begin,input#end').fixedDate().datetimepicker(options);
 });

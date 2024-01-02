@@ -56,7 +56,7 @@ $(function()
         $('#status').val('normal');
     });
 
-    if(docType == 'html' || docType == 'markdown') docType = docContentType;
+    if(docType == 'html' || docType == 'template') docType = docContentType;
     setTimeout(function(){initPage(docType)}, 50);
     if(typeof(window.editor) != 'undefined')
     {

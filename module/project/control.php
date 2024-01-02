@@ -800,7 +800,7 @@ class project extends control
         $this->view->allProducts              = array('0' => '') + $allProducts;
         $this->view->multiBranchProducts      = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->productPlans             = array_filter($productPlansOrder);
-        $this->view->linkedProducts           = $linkedProducts;
+        $this->view->linkedProducts           = $linkedProducts ? $linkedProducts : array('' => '');
         $this->view->branches                 = $branches;
         $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
@@ -1332,7 +1332,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'sort_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');

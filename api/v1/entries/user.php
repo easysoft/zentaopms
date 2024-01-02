@@ -38,7 +38,11 @@ class userEntry extends entry
         if(!$data) return $this->send404(); // If no user, send 404.
 
         $user = $data->data->user;
-        unset($user->password);
+        if($user)
+        {
+            $user->group = $this->loadModel('group')->getByAccount($user->account);
+            unset($user->password);
+        }
 
         return $this->send(200, $user);
     }

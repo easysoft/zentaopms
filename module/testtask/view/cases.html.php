@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../testcase/view/datatable.fix.html.php';?>
+<?php include '../../common/view/datatable.fix.html.php';?>
 <?php include './caseheader.html.php';?>
 <?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
@@ -63,6 +63,8 @@
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
 
+      $config->testcase->datatable->defaultField = $config->testtask->datatable->defaultField;
+      $config->testcase->datatable->fieldList['actions']['width'] = '120';
 
       $setting = $this->datatable->getSetting('testtask');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
@@ -85,7 +87,7 @@
             </tr>
           </thead>
           <tbody id='caseTableList'>
-            <?php $this->testcase->printRow($runs, $setting, $users, array(), $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
+            <?php $this->testtask->printRow($runs, $setting, $users, $task, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tbody>
         </table>
       <?php if(!$useDatatable) echo '</div>';?>

@@ -49,7 +49,7 @@ class build extends control
 
         if(!empty($_POST))
         {
-            if(empty($executionID) && $this->app->tab == 'execution') dao::$errors['execution'] = $this->lang->build->emptyExecution;
+            if(empty($executionID) && $this->app->tab == 'execution' && (!defined('RUN_MODE') || RUN_MODE != 'api')) dao::$errors['execution'] = $this->lang->build->emptyExecution;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(defined('TUTORIAL')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true)); // Fix bug #21095.

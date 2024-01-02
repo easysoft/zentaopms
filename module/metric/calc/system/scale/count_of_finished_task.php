@@ -22,13 +22,14 @@ class count_of_finished_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.status');
+    public $fieldList = array('t1.status', 't1.closedReason');
 
     public $result = 0;
 
     public function calculate($row)
     {
         if($row->status == 'done') $this->result ++;
+        if($row->status == 'closed' and $row->closedReason == 'done') $this->result ++;
     }
 
     public function getResult($options = array())

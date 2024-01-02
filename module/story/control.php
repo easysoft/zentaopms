@@ -877,7 +877,7 @@ class story extends control
         $story = $this->story->getById($storyID, 0, true);
         $this->commonAction($storyID);
 
-        if($story->status != 'draft' and $story->status != 'changing') unset($this->config->story->edit->requiredFields);
+        if($story->status != 'draft' and $story->status != 'changing') $this->config->story->edit->requiredFields = '';
 
         if(!empty($_POST))
         {
@@ -1436,7 +1436,15 @@ class story extends control
         $story = $this->story->getById($storyID, $version, true);
 
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'all')));
+        if(!$story)
+        {
+            $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+            if($story)
+            {
+                if(strpos($story->vision, $this->config->vision) === false && $story->status == 'active') return print(js::alert($this->lang->story->storyUnlinkRoadmap) . js::reload('parent'));
+            }
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'all')));
+        }
 
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
@@ -1455,6 +1463,7 @@ class story extends control
         $buildApp   = $tab == 'product' ?   'project' : $tab;
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
+        $this->session->set('productPlanList', $uri . "#app={$tab}", 'product');
         if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
 
@@ -3128,6 +3137,13 @@ class story extends control
     {
         $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'active,launched', 'id_desc', 0, '', 'requirement');
 
+        /* 获取当前项目下研发中的需求。*/
+        /* Get developing requirements.*/
+        if($this->config->vision and $this->app->tab == 'project')
+        {
+            $developingURS = $this->story->getExecutionStoryPairs($this->session->project, $productID, $branchID, 0, '', 'developing', 'requirement');
+            $URS = array_merge($developingURS, $URS);
+        }
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }
 

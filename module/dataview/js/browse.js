@@ -96,7 +96,7 @@ function buildTable(resp)
     for(var field in resp.fields)
     {
         var fieldName = field;
-        if(dataview && checkObjProp(dataview, fieldSettings)) fieldName = dataview.fieldSettings[field].name || field;
+        if(dataview && checkObjProp(dataview, 'fieldSettings')) fieldName = dataview.fieldSettings[field].name || field;
         if(dataview && checkObjProp(dataview, langs) && dataview.langs != '')
         {
             var langs = JSON.parse(dataview.langs);

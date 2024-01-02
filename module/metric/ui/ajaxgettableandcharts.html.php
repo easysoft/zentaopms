@@ -22,12 +22,13 @@ div
         (
             dtable
             (
+                setID('ajaxmetric' . $metric->id),
                 $viewType == 'multiple' ? set::height(328) : set::height(jsRaw('window.getTableHeight')),
                 set::rowHeight(32),
                 set::bordered(true),
                 set::cols($groupHeader),
                 set::data(array_values($groupData)),
-                set::footPager(usePager('dtablePager')),
+                set::footPager(usePager('dtablePager', $pagerExtra)),
                 $headerGroup ? set::plugins(array('header-group')) : null,
                 set::onRenderCell(jsRaw('window.renderDTableCell')),
                 set::loadPartial(true)

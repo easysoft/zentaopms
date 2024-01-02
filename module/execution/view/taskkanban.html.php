@@ -238,5 +238,6 @@ js::set('priv',
 <?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
 <?php js::set('teamWords', $lang->execution->teamWords);?>
 <?php js::set('canImportBug', $features['qa']);?>
+<?php js::set('canBeChanged', $canBeChanged);?>
 
 <?php include '../../common/view/footer.html.php';?>

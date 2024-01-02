@@ -114,7 +114,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .xxc-embed .modal-body {min-height: 300px!important;}
 .xxc-embed #userDropDownMenu, .xxc-embed #visionSwitcher {display: none!important;}
 .xxc-embed .book-search {transform: translateX(-112px);}
-
+.xxc-embed #headerBox .btn-tools {padding-right: 124px;}
 
 #downloadMobile .dropdown-menu {top: -31px !important; min-width: 130px; padding: 0;}
 #downloadMobile .dropdown-menu .mobile-qrcode {padding: 10px 0px;}

@@ -318,4 +318,19 @@ class pivot extends control
         $this->pivot->buildPivotTable($data, $configs, $page);
     }
 
+    /**
+     * Set pager param to this->view.
+     *
+     * @access public
+     * @return void
+     */
+    public function setPagerParam2View($pager)
+    {
+        $this->view->recTotal   = $pager->recTotal;
+        $this->view->recPerPage = $pager->recPerPage;
+        $this->view->page       = $pager->pageID;
+        $this->view->leftPage   = $pager->pageID - 1;
+        $this->view->rightPage  = $pager->pageID + 1;
+        $this->view->pageTotal  = ceil($pager->recTotal / $pager->recPerPage);
+    }
 }

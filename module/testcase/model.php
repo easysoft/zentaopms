@@ -1997,7 +1997,7 @@ class testcaseModel extends model
 
             $importedCases[] = $libCaseID;
 
-            $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
+            $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $libID);
         }
 
         if(!empty($importedCases)) print(js::alert(sprintf($this->lang->testcase->importedFromLib, count($importedCases), implode(',', $importedCases))));

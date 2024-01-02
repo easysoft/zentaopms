@@ -85,58 +85,6 @@
         <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
         <div class="detail-content article-content"><?php echo $story->verify;?></div>
       </div>
-      <!--
-      <?php if($execution->model == 'waterfall' and $story->type == 'requirement'):?>
-        <?php if(!empty($track)):?>
-        <div class="detail">
-          <div class="detail-title"><?php echo $lang->story->track;?></div>
-          <div class="detail-content article-content main-table">
-            <table class="table">
-              <thead>
-                  <tr>
-                    <th class="w-120px"><?php echo $lang->story->story;?></th>
-                    <th class="w-120px"><?php echo $lang->story->design;?></th>
-                    <th class="w-120px"><?php echo $lang->story->case;?></th>
-                    <th class="w-60px"><?php echo $lang->story->repoCommit;?></th>
-                    <th class="w-120px"><?php echo $lang->story->bug;?></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach($track as $storyID => $storyInfo):?>
-                  <tr>
-                     <td style='padding-left: 10px;'><?php echo html::a($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type"), $storyInfo->title, '', "title='$storyInfo->title'");?>
-                     </td>
-                     <td>
-                      <?php foreach($storyInfo->design as $designID => $design):?>
-                      <?php echo html::a($this->createLink('design', 'view', "designID=$designID"), $design->name, '', "title='$design->name'") . '<br/>';?>
-                      <?php endforeach;?>
-                     </td>
-                     <td>
-                       <?php foreach($storyInfo->case as $caseID => $case):?>
-                       <?php echo html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title, '', "title='$case->title'") . '<br/>';?>
-                       <?php endforeach;?>
-                     </td>
-                     <td>
-                       <?php foreach($storyInfo->revision as $revision => $repoID):?>
-                       <?php
-                       echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision) . '<br/>';
-                       ?>
-                       <?php endforeach;?>
-                     </td>
-                     <td>
-                       <?php foreach($storyInfo->bug as $bugID => $bug):?>
-                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title, '', "title='$bug->title'") . '<br/>';?>
-                       <?php endforeach;?>
-                     </td>
-                  </tr>
-                  <?php endforeach;?>
-                </tbody>
-            </table>
-          </div>
-        </div>
-        <?php endif;?>
-      <?php endif;?>
-      -->
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('story', $story);
@@ -225,7 +173,18 @@
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->product->branch;?></th>
-                  <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
+                  <td>
+                    <?php
+                    if(isonlybody())
+                    {
+                        echo $branches[$story->branch];
+                    }
+                    else
+                    {
+                        common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");
+                    }
+                    ?>
+                  </td>
                 </tr>
                 <?php endif;?>
                 <tr>
@@ -359,7 +318,7 @@
                 <?php endif;?>
                 <tr class='categoryTR'>
                   <th><?php echo $lang->story->category;?></th>
-                  <td><?php echo zget($lang->story->categoryList, $story->category, $story->category)?></td>
+                  <td><?php echo isset($lang->story->categoryList[$story->category]) ? zget($lang->story->categoryList, $story->category) : zget($lang->story->ipdCategoryList, $story->category)?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
@@ -612,7 +571,6 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <?php if(common::hasPriv($story->type, 'relation')):?>
                 <tr class='text-top linkStoryTr'>
                   <th><?php echo $lang->story->linkStories;?></th>
                   <td>
@@ -638,7 +596,6 @@
                     </ul>
                   </td>
                 </tr>
-                <?php endif;?>
                 <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
@@ -698,6 +655,7 @@
 </div>
 <?php endif;?>
 
+<?php if(in_array($config->edition, array('max', 'ipd'))):?>
 <div class="modal fade" id="importToLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
@@ -733,6 +691,7 @@
     </div>
   </div>
 </div>
+<?php endif;?>
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>

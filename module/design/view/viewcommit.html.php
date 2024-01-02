@@ -58,7 +58,7 @@
         </td>
       </tr>
     <?php endforeach;?>
-    <?php if($changeOnlyBody) $_Get['onlybody'] = 'yes'?>
+    <?php if($changeOnlyBody) $_GET['onlybody'] = 'yes'?>
     </tbody>
   </table>
   <div class='table-footer table-statistic'>

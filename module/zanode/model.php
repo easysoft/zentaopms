@@ -76,6 +76,7 @@ class zanodemodel extends model
         $this->dao->update(TABLE_ZAHOST)->data($data)
             ->batchCheck($data->hostType != 'physics' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
 
+        if(is_numeric($data->name)) dao::$errors['name'] = sprintf($this->lang->error->code, $this->lang->zanode->name);
         if(dao::isError()) return false;
 
         unset($data->osNamePhysics);
@@ -219,6 +220,9 @@ class zanodemodel extends model
         if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
         if(dao::isError()) return false;
 
+        if(is_numeric($data->name)) dao::$errors['name'] = sprintf($this->lang->error->code, $this->lang->zanode->name);
+        if(dao::isError()) return false;
+
         $node  = $this->getNodeByID($zanodeID);
 
         if($node->status != 'running') dao::$errors['name'] = $this->lang->zanode->apiError['notRunning'];
@@ -255,7 +259,7 @@ class zanodemodel extends model
             'vm'   => $node->name
         ));
 
-        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param, JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(!empty($result) and $result->code == 'success')
         {
@@ -336,7 +340,10 @@ class zanodemodel extends model
         $data = fixer::input('post')->get();
 
         if(empty($data->name)) dao::$errors['name'] = $this->lang->zanode->imageNameEmpty;
-        if(dao::isError())     return false;
+        if(dao::isError()) return false;
+
+        if(is_numeric($data->name)) dao::$errors['name'] = sprintf($this->lang->error->code, $this->lang->zanode->name);
+        if(dao::isError()) return false;
 
         $newSnapshot = new stdClass();
         $newSnapshot->localName = $data->name;

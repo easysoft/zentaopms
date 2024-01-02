@@ -237,7 +237,7 @@ class storyModel extends model
             ->setDefault('plan,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setDefault('estimate', '')
+            ->setDefault('estimate', 0)
             ->setIF(strlen($this->post->verify) == 0, 'verify', '')
             ->setIF($this->post->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->plan > 0, 'stage', 'planned')
@@ -290,7 +290,7 @@ class storyModel extends model
             $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
             if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 
-            if(empty($project->hasProduct))
+            if(!empty($project) && empty($project->hasProduct))
             {
                 if($project->model !== 'scrum' or !$project->multiple) $requiredFields = str_replace(',plan,', ',', $requiredFields);
             }
@@ -309,7 +309,7 @@ class storyModel extends model
             if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
             if(strpos($requiredFields, ',estimate,') !== false)
             {
-                if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
+                if(!$story->estimate or strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
                 $requiredFields = str_replace(',estimate,', ',', $requiredFields);
             }
 
@@ -548,7 +548,7 @@ class storyModel extends model
         $productID = (int)$productID;
         $now       = helper::now();
         $mails     = array();
-        $stories   = fixer::input('post')->get();
+        $stories   = fixer::input('post')->setDefault('type', 'story')->get();
 
         $saveDraft = false;
         if(isset($stories->status))
@@ -575,11 +575,14 @@ class storyModel extends model
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : '';
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
-            $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
+            $source = (empty($stories->source[$i]) || $stories->source[$i] == 'ditto') ? $source : $stories->source[$i];
             $stories->module[$i] = (int)$module;
             $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
             $stories->source[$i] = $source;
+            if(empty($stories->category[$i]))   $stories->category[$i] = '';
+            if(empty($stories->sourceNote[$i])) $stories->sourceNote[$i] = '';
+            if(empty($stories->verify[$i]))     $stories->verify[$i] = '';
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -611,7 +614,7 @@ class storyModel extends model
             $story->source     = $stories->source[$i];
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
-            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : '';
+            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : 0;
             $story->spec       = $stories->spec[$i];
             $story->verify     = $stories->verify[$i];
             $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');
@@ -640,7 +643,7 @@ class storyModel extends model
 
                 if(!isset($story->$field)) continue;
                 if(!empty($story->$field)) continue;
-                if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
+                if($field == 'estimate' and $story->estimate and strlen(trim($story->estimate)) != 0) continue;
 
                 dao::$errors["{$field}$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
             }
@@ -1136,7 +1139,7 @@ class storyModel extends model
                 if(!empty($story->plan)) $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
             }
 
-            $changed = $story->parent != $oldStory->parent;
+            $changed = (isset($story->parent) && $story->parent != $oldStory->parent);
             if($oldStory->parent > 0)
             {
                 $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
@@ -1157,7 +1160,7 @@ class storyModel extends model
                 }
             }
 
-            if($story->parent > 0)
+            if(isset($story->parent) && $story->parent > 0)
             {
                 $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
                 $this->dao->update(TABLE_STORY)->set('parent')->eq(-1)->where('id')->eq($story->parent)->exec();
@@ -1228,8 +1231,7 @@ class storyModel extends model
                 if(in_array($changeStoryID, $removeStories))
                 {
                     $linkStories = str_replace(",$storyID,", ',', ",$changeStory,");
-                    $linkStories = trim($linkStories, ',');
-                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
+                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(trim($linkStories, ','))->where('id')->eq((int)$changeStoryID)->exec();
                 }
             }
 
@@ -4766,11 +4768,6 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
-            $disabledFeatures = ",{$this->config->disabledFeatures},";
-            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
-            {
-                $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
-            }
 
             /* Print testcate actions. */
             if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
@@ -4798,7 +4795,23 @@ class storyModel extends model
                 $menu .= "</ul></div>";
             }
 
-            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
+            $moreActions      = '';
+            $disabledFeatures = ",{$this->config->disabledFeatures},";
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
+            {
+                $moreActions .= '<li>' . html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"') . '</li>';
+            }
+
+            if(($this->app->tab == 'execution' or (!empty($execution) and $execution->multiple === '0')) and $story->status == 'active' and $story->type == 'story') $moreActions .= '<li>' . $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody') . '</li>';
+
+            if($moreActions)
+            {
+                $menu .= "<div class='btn-group dropup'>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>" . $this->lang->more . "<span class='caret'></span></button>";
+                $menu .= "<ul class='dropdown-menu' id='moreActions'>";
+                $menu .= $moreActions;
+                $menu .='</ul></div>';
+            }
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
@@ -5645,7 +5658,7 @@ class storyModel extends model
                 }
             }
 
-            $tracks['noRequirement'] = $stories;
+            if(!empty($stories)) $tracks['noRequirement'] = $stories;
             if($this->config->URAndSR) $pager->recTotal += 1;
         }
 
@@ -6209,7 +6222,7 @@ class storyModel extends model
 
         if(isset($story->finalResult))
         {
-            $isChanged = $story->changedBy ? true : false;
+            $isChanged = !empty($story->changedBy) ? true : false;
             if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected', '', $isChanged ? 'changing' : 'draft');
             if($story->finalResult == 'pass')    $this->action->create('story', $story->id, 'ReviewPassed');
             if($story->finalResult == 'clarify') $this->action->create('story', $story->id, 'ReviewClarified');
@@ -6757,10 +6770,11 @@ class storyModel extends model
      * @param  array    $options
      * @param  object   $execution
      * @param  string   $storyType
+     * @param  int      $parentID
      * @access public
      * @return array
      */
-    public function generateRow($stories, $cols, $options, $execution, $storyType)
+    public function generateRow($stories, $cols, $options, $execution, $storyType, $parentID = 0)
     {
         $users         = zget($options, 'users',         array());
         $branches      = zget($options, 'branchOption',  array());
@@ -6817,7 +6831,7 @@ class storyModel extends model
                 if($col->name == 'feedbackBy')   $data->feedbackBy   = $story->feedbackBy;
                 if($col->name == 'notifyEmail')  $data->notifyEmail  = $story->notifyEmail;
                 if($col->name == 'closedReason') $data->closedReason = zget($this->lang->story->reasonList, $story->closedReason, '');
-                if($col->name == 'category')     $data->category     = zget($this->lang->story->categoryList, $story->category);
+                if($col->name == 'category')     $data->category     = isset($this->lang->story->categoryList[$story->category]) ? zget($this->lang->story->categoryList, $story->category) : zget($this->lang->story->ipdCategoryList, $story->category);
                 if($col->name == 'duration')     $data->duration     = zget($this->lang->demand->durationList, $story->duration);
                 if($col->name == 'BSA')          $data->BSA          = zget($this->lang->demand->bsaList, $story->BSA);
                 if($col->name == 'taskCount')    $data->taskCount    = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
@@ -6920,8 +6934,14 @@ class storyModel extends model
                 $data->parent   = 0;
             }
 
+            if($parentID && $data->isParent)
+            {
+                $data->isParent = false;
+                $data->parent   = $parentID;
+            }
+
             $rows[] = $data;
-            if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType));
+            if(!empty($story->children)) $rows = array_merge($rows, $this->generateRow($story->children, $cols, $options, $execution, $storyType, $story->id));
         }
         return $rows;
     }

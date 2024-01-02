@@ -251,6 +251,7 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->category;?></th>
+                <?php if(empty($lang->story->categoryList[$story->category]) && !empty($lang->story->ipdCategoryList[$story->category])) $lang->story->categoryList[$story->category] = $lang->story->ipdCategoryList[$story->category];?>
                 <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen' data-max_drop_width=100%");?></td>
               </tr>
               <tr>

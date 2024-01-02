@@ -65,7 +65,7 @@
       <tr>
         <td colspan='5' class='text-center form-actions'>
           <?php echo html::submitButton();?>
-          <?php echo html::backButton();?>
+          <?php echo $this->session->storyList ? html::a($this->session->storyList, $lang->goback, '', "class='btn btn-back btn-wide'") : html::backButton();?>
         </td>
       </tr>
     </table>

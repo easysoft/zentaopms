@@ -232,13 +232,15 @@ class misc extends control
     {
         if(in_array(strtolower($sessionVar), $this->config->misc->disabledSessionVar)) die("The string {$sessionVar} is not allowed to be defined as a session field.");
 
+        $captcha = $this->app->loadClass('captcha');
+        $this->session->set($sessionVar, $captcha->getPhrase());
+        $captcha->build();
+
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         header('Content-Type: image/jpeg');
-        $captcha = $this->app->loadClass('captcha');
-        $this->session->set($sessionVar, $captcha->getPhrase());
-        $captcha->build()->output();
+        $captcha->output();
     }
 
     /**

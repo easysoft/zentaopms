@@ -58,7 +58,7 @@
           <?php foreach($tracks as $key => $requirement):?>
           <?php $track   = ($key == 'noRequirement') ? $requirement : $requirement->track;?>
           <?php $rowspan = count($track);?>
-          <?php $title   = $lang->story->noRequirement;?>
+          <?php $title   = $lang->story->noRelatedRequirement;?>
           <tr>
             <?php if($config->URAndSR):?>
             <td <?php if($rowspan != 0) echo "rowspan=" . $rowspan;?> class='requirement' title='<?php echo $key != 'noRequirement' ? $requirement->title : $lang->story->noRequirement;?>'>

@@ -15,6 +15,7 @@ include '../../common/view/header.html.php';
 js::set('requiredFields', $config->bug->create->requiredFields);
 js::set('productID', $productID);
 js::set('released', $lang->build->released);
+js::set('titles', !empty($titles) ? $titles : array());
 ?>
 <?php
 $visibleFields  = array();
@@ -109,7 +110,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'project', ' hidden')?> projectBox' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutionsByProject($productID, this.value, $i)'");?></td>
             <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?> executionBox' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
-            <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control picker-select' multiple");?></td>
+            <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control picker-select' multiple");?></td>
             <td>
               <div class='input-group'>
                 <div class="input-control has-icon-right">

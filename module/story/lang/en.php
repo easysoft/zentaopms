@@ -323,6 +323,7 @@ $lang->story->mustChooseResult     = 'Select Result';
 $lang->story->mustChoosePreVersion = 'Select a version to revert to.';
 $lang->story->noStory              = 'No stories yet. ';
 $lang->story->noRequirement        = 'No requirements yet. ';
+$lang->story->noRelatedRequirement = "No related requirements.";
 $lang->story->ignoreChangeStage    = 'The status of %s is Draft or Closed. This operation has been filtered.';
 $lang->story->cannotDeleteParent   = "Can not delete parent {$lang->SRCommon}";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected {$lang->productCommon} when editing the linked {$lang->productCommon} of Parent {$lang->SRCommon}.";
@@ -481,6 +482,10 @@ $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
 
+$lang->story->ipdCategoryList['zhanlue']         = 'strategic';
+$lang->story->ipdCategoryList['maintainability'] = 'maintainability';
+$lang->story->ipdCategoryList['packing']         = 'packing';
+
 $lang->story->changeTip = 'Only active can be changed.';
 
 $lang->story->reviewTip = array();
@@ -545,3 +550,4 @@ $lang->story->notice->branch = 'Each branch will establish a requirement. The re
 $lang->story->relievedTwinsRelation     = 'Relieved twins relationship';
 $lang->story->relievedTwinsRelationTips = 'After the twins relationship is terminated, it cannot be restored and the shutdown of the requirement is no longer synchronized.';
 $lang->story->changeRelievedTwinsTips   = 'After the twins relationship is terminated, the twin stories are no longer synchronized.';
+$lang->story->storyUnlinkRoadmap        = 'This story was launched and then removed from the roadmap, and needs to be launched again before it can be viewed in the IPD rnd management page.';

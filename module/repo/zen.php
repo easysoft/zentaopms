@@ -46,6 +46,7 @@ class repoZen extends repo
             ->setDefault('product', '')->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
+        if(strpos($repo->client, ' ')) $repo->client = "\"{$repo->client}\"";
 
         $acl = $this->checkACL();
         if(!$acl) return false;
@@ -178,6 +179,7 @@ class repoZen extends repo
             ->join('product', ',')
             ->setDefault('projects', '')->join('projects', ',')
             ->get();
+        if(strpos($repo->client, ' ')) $repo->client = "\"{$repo->client}\"";
 
         if($repo->path != $oldRepo->path) $repo->synced = 0;
 
@@ -256,12 +258,6 @@ class repoZen extends repo
         if(!$this->post->client)
         {
             dao::$errors['client'] = sprintf($this->lang->error->notempty, $this->lang->repo->client);
-            return false;
-        }
-
-        if(strpos($this->post->client, ' '))
-        {
-            dao::$errors['client'] = $this->lang->repo->error->clientPath;
             return false;
         }
 
@@ -420,25 +416,27 @@ class repoZen extends repo
      */
     protected function buildCreateForm(int $objectID): void
     {
-        $repoID = $this->repo->saveState(0, $objectID);
+        $this->repo->saveState(0, $objectID);
 
         $this->app->loadLang('action');
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+            if(empty($products)) print(js::alert($this->lang->repo->error->noProduct));
         }
         else
         {
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
+        $projects = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
-        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
+        $this->view->projects        = $projects;
+        $this->view->relatedProjects = (in_array($this->app->tab, array('project', 'execution')) && isset($projects[$objectID])) ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
 
@@ -503,6 +501,7 @@ class repoZen extends repo
     protected function buildEditForm(int $repoID, int $objectID): void
     {
         $repo = $this->repo->getByID($repoID);
+        $repo->client = trim($repo->client, '"');
         $this->app->loadLang('action');
 
         $scm = strtolower($repo->SCM);
@@ -1133,7 +1132,6 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  string    $revision
      * @param  string    $browseType
-     * @param  object    $product
      * @param  string    $orderBy
      * @param  object    $pager
      * @param  int       $queryID
@@ -1141,13 +1139,20 @@ class repoZen extends repo
      * @access protected
      * @return array
      */
-    protected function getLinkTasks(int $repoID, string $revision, string $browseType, object $product, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
+    protected function getLinkTasks(int $repoID, string $revision, string $browseType, string $orderBy, object $pager, int $queryID, array $productExecutionIDs): array
     {
         $allTasks = array();
-        foreach($productExecutionIDs as $productExecutionID)
+        if($browseType == 'bysearch')
         {
-            $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-            $allTasks = array_merge($tasks, $allTasks);
+            $allTasks = $this->loadModel('execution')->getTasks(0, 0, array(), $browseType, $queryID, 0, $orderBy, null);
+        }
+        else
+        {
+            foreach($productExecutionIDs as $productExecutionID)
+            {
+                $tasks    = $this->loadModel('execution')->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+                $allTasks = array_merge($tasks, $allTasks);
+            }
         }
 
         /* Filter linked tasks. */

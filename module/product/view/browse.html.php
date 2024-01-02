@@ -592,7 +592,9 @@ js::set('pageSummary',       $summary);
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <h4 class="modal-title">
           <?php
-          $linkStoryByPlanTips = $product->type == 'normal' ? $lang->project->linkNormalStoryByPlanTips : sprintf($lang->project->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
+          $productType = !empty($product) ? $product->type : '';
+          $branchLang  = $productType ? $lang->product->branchName[$productType] : '';
+          $linkStoryByPlanTips = $productType == 'normal' ? $lang->project->linkNormalStoryByPlanTips : sprintf($lang->project->linkBranchStoryByPlanTips, $branchLang);
           echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';
           ?>
       </div>
@@ -606,6 +608,7 @@ js::set('pageSummary',       $summary);
   </div>
 </div>
 
+<?php if(in_array($config->edition, array('max', 'ipd'))):?>
 <div class="modal fade" id="batchImportToLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
@@ -642,6 +645,7 @@ js::set('pageSummary',       $summary);
     </div>
   </div>
 </div>
+<?php endif;?>
 
 <div class="modal fade" id="batchUnlinkStoryTip">
   <div class="modal-dialog mw-700px">

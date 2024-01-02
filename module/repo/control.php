@@ -51,7 +51,7 @@ class repo extends control
         if($tab == 'project')
         {
             $project = $this->loadModel('project')->getByID($objectID);
-            if($project->model === 'kanban') return print($this->locate($this->createLink('project', 'index', "projectID=$objectID")));
+            if($project && $project->model == 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
 
             $this->loadModel('project')->setMenu($objectID);
             $this->view->projectID = $objectID;
@@ -504,7 +504,8 @@ class repo extends control
         if($repo->SCM == 'Git' and !is_dir($repo->path))
         {
             $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
-            return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
+            $link  = $this->repo->createLink($this->app->tab == 'execution' ? 'create' : 'maintain', "objectID={$objectID}");
+            return print(js::error($error) . js::locate($link));
         }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
@@ -1091,7 +1092,7 @@ class repo extends control
 
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $product, $orderBy, $pager, $queryID, $productExecutionIDs);
+        $this->view->allTasks     = $this->repoZen->getLinkTasks($repoID, $revision, $browseType, $orderBy, $pager, $queryID, $productExecutionIDs);
         $this->view->product      = $product;
         $this->view->repoID       = $repoID;
         $this->view->revision     = $revision;

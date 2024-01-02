@@ -223,10 +223,9 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
-
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
+            if(empty($component)) $component = new stdclass();
             $component->option = new stdclass();
             if($type == 'chart')
             {
@@ -276,6 +275,8 @@ class screenModel extends model
                 $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
             }
         }
+
+        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
         $component = $this->getChartOption($chart, $component, $filters);
         if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
@@ -408,7 +409,7 @@ class screenModel extends model
             {
                 $field     = zget($fields, $metrics[$index]);
                 $fieldName = $field->name;
-                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                if(isset($langs[$field['field']]) and !empty($langs[$field['field']][$clientLang])) $fieldName = $langs[$field['field']][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
 
@@ -460,7 +461,7 @@ class screenModel extends model
             {
                 $field     = zget($fields, $metrics[$index]);
                 $fieldName = $field->name;
-                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                if(isset($langs[$field['field']]) and !empty($langs[$field['field']][$clientLang])) $fieldName = $langs[$field['field']][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
 
@@ -1040,7 +1041,7 @@ class screenModel extends model
                 if($chart->builtin == '0')
                 {
                     $chart->sql = $this->setFilterSQL($chart);
-                    return $this->getLineChartOption($component, $chart, $filters);
+                    return $this->getLineChartOption($component, $chart, array());
                 }
                 return $this->buildLineChart($component, $chart);
                 break;
@@ -1051,7 +1052,7 @@ class screenModel extends model
                 return $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
-                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, $filters);
+                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, array());
                 return $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
@@ -1074,7 +1075,7 @@ class screenModel extends model
                 return $this->getBarChartOption($component, $chart);
                 break;
             case 'waterpolo':
-                return $this->getWaterPoloOption($component, $chart);
+                return $this->getWaterPoloOption($component, $chart, array());
         }
     }
 
@@ -1537,7 +1538,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getWaterPoloOption($component, $chart)
+    public function getWaterPoloOption($component, $chart, $filters)
     {
         if(!$chart->settings)
         {
@@ -1552,7 +1553,7 @@ class screenModel extends model
         else
         {
             $setting = json_decode($chart->settings, true)[0];
-            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fieldSettings, true), $setting, $chart->sql, json_decode($chart->filters, true));
+            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fieldSettings, true), $setting, $chart->sql, $filters);
 
             $component->option->dataset = $options['series'][0]['data'][0];
             return $this->setComponentDefaults($component);

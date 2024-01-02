@@ -106,7 +106,9 @@ foreach(explode(',', $showFields) as $field)
           </td>
 
           <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$storyID]", $story->estimate, "class='form-control'"); ?></td>
+          <?php if(empty($lang->story->categoryList[$story->category]) && !empty($lang->story->ipdCategoryList[$story->category])) $lang->story->categoryList[$story->category] = $lang->story->ipdCategoryList[$story->category];?>
           <td><?php echo html::select("category[$storyID]", $lang->story->categoryList, $story->category, 'class="form-control picker-select" data-drop-width="auto"');?></td>
+          <?php if(!empty($lang->story->ipdCategoryList[$story->category])) unset($lang->story->categoryList[$story->category]);?>
           <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$storyID]",     $priList, $story->pri, 'class=form-control');?></td>
           <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control picker-select' data-drop-width='auto'");?></td>
           <td <?php echo zget($visibleFields, 'source', "class='hidden'")?>><?php echo html::select("sources[$storyID]",  $sourceList, $story->source, "class='form-control picker-select' data-drop-width='auto' id='source_$storyID'");?></td>

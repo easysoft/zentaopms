@@ -2,7 +2,7 @@ window.afterPageUpdate = function($target, info, options)
 {
     window.isDropdown  = false;
     window.lineCount   = 1;
-    window.checkedList = [{id:current.id + '', name:current.name}];
+    window.checkedList = window.initCheckedList();
     window.chartList   = [];
     for(key in chartTypeList) {
         chartList.push({value: key, text: chartTypeList[key]});
@@ -17,6 +17,18 @@ window.afterPageUpdate = function($target, info, options)
 
     window.addTitle2Star();
     window.initFilterPanel();
+}
+
+window.initCheckedList = function()
+{
+    if(typeof window.checkedList !== 'undefined' && Array.isArray(window.checkedList) && window.checkedList.length > 1)
+    {
+        return window.checkedList;
+    }
+    else
+    {
+        return [{id:current.id + '', name:current.name}];
+    }
 }
 
 window.addTitle2Star = function()
