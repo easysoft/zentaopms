@@ -1022,8 +1022,11 @@ class testtask extends control
         }
 
         $this->app->loadLang('job');
-        $this->app->rawModule = 'testcase';
         $this->loadModel('qa')->setMenu($productID);
+
+        /* 确保二级导航高亮的是测试用例。*/
+        /* Make sure the secondary navigation highlights test cases. */
+        $this->lang->qa->menu->testcase['subModule'] .= ',testtask';
 
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk', 0, 'execution', '', false);
