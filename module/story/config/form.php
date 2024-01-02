@@ -151,7 +151,6 @@ $config->story->form->close['status']         = array('type' => 'string',   'req
 $config->story->form->close['stage']          = array('type' => 'string',   'required' => false, 'default' => 'closed');
 $config->story->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->close['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
-$config->story->form->close['changedBy']      = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->story->form->close['closedBy']       = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->story->form->close['closedReason']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->close['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => $now);
