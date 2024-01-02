@@ -317,9 +317,15 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genMetricComponent($metric, $component = null)
+    public function genMetricComponent($metric, $component = null, $filterParams = array())
     {
-        $this->initMetricComponent($metric, $component);
+        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
+        $this->loadModel('metric');
+
+        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+        $resultHeader  = $this->metric->getViewTableHeader($metric);
+        $resultData    = $this->metric->getViewTableData($metric, $result);
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
@@ -1732,7 +1738,7 @@ class screenModel extends model
      */
     public function filterMetricData($data, $filters = array())
     {
-        $filters = array_filter($filters, function($item) 
+        $filters = array_filter($filters, function($item)
         {
             return $item['default'] !== null;
         });
