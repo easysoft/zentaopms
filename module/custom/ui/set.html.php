@@ -492,14 +492,14 @@ div
 (
     setID('mainContent'),
     setClass('row has-sidebar-left'),
-    $sidebarMenu,
+    isset($sidebarMenu) ? $sidebarMenu : null,
     formPanel
     (
         setID('settingForm'),
         set::headingClass('justify-start'),
         to::headingActions($headingTips),
         setClass('flex-auto'),
-        setClass($sidebarMenu ? 'ml-0.5' : null),
+        setClass(!empty($sidebarMenu) ? 'ml-0.5' : null),
         set::actionsClass($actionWidth),
         set::actions($formActions),
         span
