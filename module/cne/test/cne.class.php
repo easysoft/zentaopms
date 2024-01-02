@@ -315,4 +315,16 @@ class cneTest
     {
         return $this->objectModel->validateDB($dbService, $dbUser, $dbName, $namespace);
     }
+
+    /**
+     * Test tryAllocate method.
+     *
+     * @param  array  $resources
+     * @access public
+     * @return object
+     */
+    public function tryAllocateTest(array $resources): object
+    {
+        return $this->objectModel->tryAllocate($resources);
+    }
 }
