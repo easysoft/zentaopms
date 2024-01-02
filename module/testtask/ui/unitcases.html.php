@@ -21,7 +21,7 @@ toolbar
     (
         array
         (
-            $canExport ? array('class' => 'ghost', 'icon' => 'export', 'text' => $lang->export, 'url' => $this->createLink('testcase', 'export', "productID=$productID&orderBy=id&taskID=$taskID&browseType="), 'data-toggle' => 'modal') : null,
+            $canExport ? array('class' => 'ghost', 'icon' => 'export', 'text' => $lang->export, 'url' => $this->createLink('testcase', 'export', "productID=$productID&orderBy=t1.id&taskID=$taskID&browseType="), 'data-toggle' => 'modal') : null,
             array('class' => 'ghost', 'icon' => 'back', 'text' => $lang->goback, 'url' => $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browseUnits'))
         )
     )
