@@ -11,6 +11,30 @@ window.setRole = function(account, roleID)
     const role  = roles[account];
     const $role = $('#role' + roleID);
     $role.val(role);
+
+    let members    = [];
+    let $accounts  = $('#teamForm').find('.picker-box [name^=account]');
+    $accounts.each(function()
+    {
+        let $account       = $(this);
+        let account        = $account.val();
+        let $accountPicker = $account.zui('picker');
+        let accountItems   = $accountPicker.options.items;
+
+        for(i = 0; i < $account.length; i++)
+        {
+            let value = $account.eq(i).val();
+            if(value != '') members.push(value);
+        }
+
+        $.each(accountItems, function(i, item)
+        {
+            if(item.value == '') return;
+            accountItems[i].disabled = members.includes(item.value) && item.value != account;
+        })
+
+        $accountPicker.render({items: accountItems});
+    });
 }
 
 /**
