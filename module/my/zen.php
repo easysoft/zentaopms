@@ -189,7 +189,7 @@ class myZen extends my
         $count['case'] = $pager->recTotal;
 
         /* Get the number of testtasks assigned to me. */
-        $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
+        $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'assignedTo');
         $count['testtask'] = $pager->recTotal;
 
         $count = $this->showWorkCountNotInOpen($count, $pager);
@@ -205,7 +205,7 @@ class myZen extends my
      * @param  array  $count
      * @param  object $pager
      * @access public
-     array @return void
+     * @return array
      */
     protected function showWorkCountNotInOpen(array $count, object $pager): array
     {
