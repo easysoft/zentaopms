@@ -135,4 +135,28 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test stopApp method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function stopAppTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = $instance->k8name;
+        $apiParams->chart     = $instance->chart;
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->channel   = $instance->channel;
+        $result = $this->objectModel->stopApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+         $this->objectModel->startApp($apiParams);
+        return $result;
+    }
 }
