@@ -100,7 +100,7 @@ class system extends control
         $minioInstance->spaceData = new stdclass;
         $minioInstance->spaceData->k8space = $this->config->k8space;
 
-        $ossAccount = $this->cne->getDefaultAccount($minioInstance, '', 'minio');
+        $ossAccount = $this->cne->getDefaultAccount($minioInstance, 'minio');
         $ossDomain  = $this->cne->getDomain($minioInstance, '', 'minio');
 
         $this->view->title      = $this->lang->system->oss->common;
@@ -260,7 +260,7 @@ class system extends control
         $minioInstance->spaceData = new stdclass;
         $minioInstance->spaceData->k8space = $this->config->k8space;
 
-        $ossAccount = $this->loadModel('cne')->getDefaultAccount($minioInstance, '', 'minio');
+        $ossAccount = $this->loadModel('cne')->getDefaultAccount($minioInstance, 'minio');
 
         $ossDomain  = $this->cne->getDomain($minioInstance, '', 'minio');
         $ossDomain->domain = $ossDomain->access_host;

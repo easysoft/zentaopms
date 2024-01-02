@@ -62,4 +62,22 @@ class cneTest
     {
         return $this->objectModel->certInfo($certName);
     }
+
+    /**
+     * Test getDefaultAccount method.
+     *
+     * @param  string $component
+     * @access public
+     * @return object|null
+     */
+    public function getDefaultAccountTest(string $component = ''): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $result = $this->objectModel->getDefaultAccount($instance, $component);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }
