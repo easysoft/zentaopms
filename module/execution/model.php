@@ -2825,7 +2825,7 @@ class executionModel extends model
             if(empty($story)) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
-            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+            $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
             if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
 
