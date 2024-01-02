@@ -1153,7 +1153,7 @@ class projectZen extends project
         {
             if($programID != $topProgramID)
             {
-                $otherProducts = $this->getOtherProducts($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
+                $otherProducts += $this->getOtherProducts($programProducts, $branchGroups, $linkedBranches, $linkedProducts);
             }
             else
             {
