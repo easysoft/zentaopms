@@ -243,9 +243,10 @@ class programplanTao extends programplanModel
     protected function setTask(array $tasks, array $plans, string $selectCustom, array $datas, array $stageIndex): array
     {
         $this->app->loadLang('task');
-        $today     = helper::today();
-        $taskTeams = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
-        $users     = $this->loadModel('user')->getPairs('noletter');
+        $executions = array();
+        $today      = helper::today();
+        $taskTeams  = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
+        $users      = $this->loadModel('user')->getPairs('noletter');
 
         foreach($tasks as $task)
         {
@@ -253,18 +254,19 @@ class programplanTao extends programplanModel
             $data         = $this->buildTaskDataForGantt($task, $dateLimit);
             $data->id     = $task->execution . '-' . $task->id;
             $data->parent = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
+            if(!isset($executions[$task->execution])) $executions[$task->execution] = $this->dao->select('status')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('status');
 
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $dateLimit['end'] and $execution->status != 'closed')
+            if($today > $dateLimit['end'] && $executions[$task->execution] != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
                 $data->delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? $task->finishedDate : $today, $dateLimit['end']);
             }
 
             /* If multi task then show the teams. */
-            if($task->mode == 'multi' and !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
+            if($task->mode == 'multi' && !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             foreach($stageIndex as $index => $stage)
