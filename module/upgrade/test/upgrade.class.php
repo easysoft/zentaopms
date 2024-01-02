@@ -258,9 +258,9 @@ class upgradeTest
 
         /* Init pivot table data. */
         $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
-        $pivotSQL     = explode(";", file_get_contents($pivotSqlFile));
+        $pivotSQLs     = explode(";", file_get_contents($pivotSqlFile));
         $tester->dao->delete()->from(TABLE_PIVOT)->exec();
-        $tester->dbh->exec($pivotSQL[1]);
+        foreach($pivotSQLs as $pivotSQL) if(trim($pivotSQL)) $tester->dbh->exec($pivotSQL);
 
         $tester->dao->update(TABLE_PIVOT)->set('sql')->eq($errorValue)->where('id')->eq($pivotID)->exec();
         $this->objectModel->updateBISQL();
