@@ -98,7 +98,7 @@ $config->bug->form->assignTo['comment']        = array('required' => false, 'typ
 $config->bug->form->resolve = array();
 $config->bug->form->resolve['status']         = array('required' => false, 'type' => 'string', 'default' => 'resolved');
 $config->bug->form->resolve['confirmed']      = array('required' => false, 'type' => 'int',    'default' => 1);
-$config->bug->form->resolve['resolvedBuild']  = array('required' => false, 'type' => 'string', 'default' => 'trunk');
+$config->bug->form->resolve['resolvedBuild']  = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->bug->form->resolve['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => helper::now());
