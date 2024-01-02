@@ -116,17 +116,18 @@ $config->testcase->dtable->fieldList['bugs']['type']        = 'number';
 $config->testcase->dtable->fieldList['bugs']['data-toggle'] = 'modal';
 $config->testcase->dtable->fieldList['bugs']['data-size']   = 'lg';
 $config->testcase->dtable->fieldList['bugs']['group']       = 5;
+$config->testcase->dtable->fieldList['bugs']['sortType']    = false;
 
 $config->testcase->dtable->fieldList['results']['title']      = $lang->testcase->resultsAB;
 $config->testcase->dtable->fieldList['results']['type']       = 'number';
 $config->testcase->dtable->fieldList['results']['group']      = 5;
-$config->testcase->dtable->fieldList['results']['sortType']   = true;
+$config->testcase->dtable->fieldList['results']['sortType']   = false;
 $config->testcase->dtable->fieldList['results']['dataSource'] = array('lang' => 'resultList');
 
 $config->testcase->dtable->fieldList['stepNumber']['title']    = $lang->testcase->stepNumberAB;
 $config->testcase->dtable->fieldList['stepNumber']['type']     = 'number';
 $config->testcase->dtable->fieldList['stepNumber']['group']    = 5;
-$config->testcase->dtable->fieldList['stepNumber']['sortType'] = true;
+$config->testcase->dtable->fieldList['stepNumber']['sortType'] = false;
 
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;
 $config->testcase->dtable->fieldList['version']['type']     = 'text';
