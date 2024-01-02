@@ -207,28 +207,6 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        $chart = clone($chart);
-        if($type == 'pivot' and $chart)
-        {
-            $chart = $this->loadModel('pivot')->processPivot($chart);
-            $chart->settings = json_encode($chart->settings);
-        }
-
-        if(empty($filters) and !empty($chart->filters))
-        {
-            if($type == 'pivot')
-            {
-                list($sql, $filters) = $this->loadModel($type)->getFilterFormat($chart->sql, json_decode($chart->filters, true));
-                $chart->sql = $sql;
-            }
-            else
-            {
-                $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
-            }
-        }
-
-        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
-
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1')) return $this->genNotFoundOrDraftComponentOption($component);
 
         $chart = clone($chart);
