@@ -50,4 +50,16 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test certInfo method.
+     *
+     * @param  string $certName
+     * @access public
+     * @return object
+     */
+    public function certInfoTest(string $certName): ?object
+    {
+        return $this->objectModel->certInfo($certName);
+    }
 }
