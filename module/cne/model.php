@@ -228,20 +228,20 @@ class cneModel extends model
      */
     public function cneMetrics(): object
     {
-        $metrics = new stdclass;
-        $metrics->cpu = new stdclass;
+        $metrics = new stdclass();
+        $metrics->cpu = new stdclass();
         $metrics->cpu->usage       = 0;
         $metrics->cpu->capacity    = 0;
         $metrics->cpu->allocatable = 0;
         $metrics->cpu->rate        = 0;
 
-        $metrics->memory = new stdclass;
+        $metrics->memory = new stdclass();
         $metrics->memory->usage       = 0;
         $metrics->memory->capacity    = 0;
         $metrics->memory->allocatable = 0;
         $metrics->memory->rate        = 0;
 
-        $statistics = new stdclass;
+        $statistics = new stdclass();
         $statistics->status     = 'unknown';
         $statistics->node_count = 0;
         $statistics->metrics    = $metrics;
@@ -280,22 +280,22 @@ class cneModel extends model
         {
             if($instance->source == 'external') continue;
 
-            $appData = new stdclass;
+            $appData = new stdclass();
             $appData->name      = $instance->k8name;
             $appData->namespace = $instance->spaceData->k8space;
             $apiData['apps'][]  = $appData;
 
-            $instanceMetric = new stdclass;
+            $instanceMetric = new stdclass();
             $instanceMetric->id        = $instance->id;
             $instanceMetric->name      = $instance->k8name;
             $instanceMetric->namespace = $instance->spaceData->k8space;
 
-            $instanceMetric->cpu = new stdclass;
+            $instanceMetric->cpu = new stdclass();
             $instanceMetric->cpu->limit = 0;
             $instanceMetric->cpu->usage = 0;
             $instanceMetric->cpu->rate  = 0;
 
-            $instanceMetric->memory = new stdclass;
+            $instanceMetric->memory = new stdclass();
             $instanceMetric->memory->limit = 0;
             $instanceMetric->memory->usage = 0;
             $instanceMetric->memory->rate  = 0;
@@ -402,7 +402,7 @@ class cneModel extends model
     {
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
-        $apiparams = new stdclass;
+        $apiparams = new stdclass();
         $apiparams->cluster   = '';
         $apiparams->namespace = !empty($instance->spacedata->k8space) ? $instance->spacedata->k8space : $defaultSpace->k8space;
         $apiparams->name      = $instance->k8name;
@@ -446,7 +446,7 @@ class cneModel extends model
             )
         );
 
-        $apiParams = new stdclass;
+        $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
@@ -469,7 +469,7 @@ class cneModel extends model
      */
     public function getAppConfig(object $instance): object|false
     {
-        $apiParams = new stdclass;
+        $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
@@ -495,7 +495,7 @@ class cneModel extends model
      */
     public function queryStatus(object $instance): ?object
     {
-        $apiParams = new stdclass;
+        $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->name      = $instance->k8name;
         $apiParams->chart     = $instance->chart;
@@ -519,13 +519,13 @@ class cneModel extends model
      */
     public function batchQueryStatus(array $instanceList): array
     {
-        $apiParams = new stdclass;
+        $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->apps = array();
 
         foreach($instanceList as $instance)
         {
-            $app = new stdclass;
+            $app = new stdclass();
             $app->name      = $instance->k8name;
             $app->chart     = $instance->chart;
             $app->namespace = $instance->spaceData->k8space;
@@ -678,7 +678,7 @@ class cneModel extends model
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
         if($result && $result->code == 200) return $result->data->validation;
 
-        $validation = new stdclass;
+        $validation = new stdclass();
         $validation->user     = true;
         $validation->database = true;
 
@@ -742,7 +742,7 @@ class cneModel extends model
      */
     protected function cneServerError(): object
     {
-        $error = new stdclass;
+        $error = new stdclass();
         $error->code    = 600;
         $error->message = $this->lang->CNE->serverError;
         return $error;
