@@ -275,4 +275,17 @@ class cneTest
     {
         return $this->objectModel->allDBList();
     }
+
+    /**
+     * Test dbDetail method.
+     *
+     * @param  string $dbService
+     * @param  string $namespace
+     * @access public
+     * @return object|false
+     */
+    public function dbDetailTest(string $dbService, string $namespace): object|false
+    {
+        return $this->objectModel->dbDetail($dbService, $namespace);
+    }
 }

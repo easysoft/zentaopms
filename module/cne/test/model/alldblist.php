@@ -18,5 +18,4 @@ include dirname(__FILE__, 2) . '/cne.class.php';
 
 $cneModel = new cneTest();
 
-$logs = $cneModel->allDBListTest();
 r($cneModel->allDBListTest()) && p('zentaopaas-mysql:db_type,release') && e('mysql,zentaopaas'); // 获取数据库列表
