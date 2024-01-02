@@ -7,6 +7,16 @@ title=测试 cneModel->tryAllocate();
 timeout=0
 cid=1
 
+- 空的数据
+ - 第data条的total属性 @0
+ - 第data条的allocated属性 @0
+ - 第data条的failed属性 @0
+- 正常范围的数据
+ - 第data条的total属性 @1
+ - 第data条的allocated属性 @1
+ - 第data条的failed属性 @0
+- 超出范围的数据属性code @41010
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
