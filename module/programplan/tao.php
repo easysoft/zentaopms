@@ -500,6 +500,7 @@ class programplanTao extends programplanModel
      */
     protected function insertStage(object $plan, int $projectID, int $productID, int $parentID): int|false
     {
+        $this->loadModel('execution');
         $project = $this->fetchById($projectID, 'project');
         $account = $this->app->user->account;
 

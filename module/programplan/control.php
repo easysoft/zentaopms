@@ -98,7 +98,7 @@ class programplan extends control
         }
 
         $project     = $this->project->getById($projectID);
-        $programPlan = $this->project->getById($planID, 'stage');
+        $programPlan = $this->project->getById($planID);
         $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
         $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
 
