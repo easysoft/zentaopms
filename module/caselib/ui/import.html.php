@@ -33,7 +33,7 @@ formPanel
         formGroup
         (
             set::label($lang->caselib->encode),
-            set::name('project'),
+            set::name('encode'),
             set::items($config->charsets[$this->cookie->lang]),
             set::value('utf-8')
         )
