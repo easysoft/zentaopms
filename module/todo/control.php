@@ -42,6 +42,11 @@ class todo extends control
 
         if(!empty($_POST))
         {
+            if($this->post->type != 'custom')
+            {
+                $this->config->todo->create->requiredFields = '';
+                $this->config->todo->create->form['name']['required'] = false;
+            }
             $form     = form::data($this->config->todo->create->form);
             $form     = $this->todoZen->addCycleYearConfig($form);
             $todoData = $this->todoZen->beforeCreate($form);
