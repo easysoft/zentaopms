@@ -39,6 +39,7 @@ class doc extends control
      */
     public function index()
     {
+        $this->session->set('docList', $uri, 'doc');
         echo $this->fetch('block', 'dashboard', 'dashboard=doc');
     }
 
