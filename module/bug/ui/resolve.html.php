@@ -57,11 +57,14 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::name('duplicateBug'),
             set::label($lang->bug->duplicateBug),
-            set::items(array()),
-            set::placeholder($lang->bug->placeholder->duplicate),
-            set::value(''),
+            picker
+            (
+                set::name('duplicateBug'),
+                set::items(array()),
+                set::placeholder($lang->bug->placeholder->duplicate),
+                set::value('')
+            ),
             set::required(true)
         )
     ),
