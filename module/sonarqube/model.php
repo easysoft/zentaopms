@@ -233,10 +233,7 @@ class sonarqubeModel extends model
         {
             foreach($response->errors as $error)
             {
-                if(isset($error->msg))
-                {
-                    dao::$errors['name'][] = $this->convertApiError($error->msg);
-                }
+                if(isset($error->msg)) dao::$errors['name'][] = $this->convertApiError($error->msg);
             }
             return false;
         }
@@ -259,17 +256,20 @@ class sonarqubeModel extends model
         if(!is_string($message)) return $message;
 
         if(!isset($this->lang->sonarqube->apiErrorMap)) return $message;
+
+        $this->app->loadLang('mr');
         foreach($this->lang->sonarqube->apiErrorMap as $key => $errorMsg)
         {
-            if(strpos($errorMsg, '/') === 0)
+            if($message == $errorMsg)
+            {
+                $errorMessage = zget($this->lang->mr->errorLang, $key, $message);
+            }
+            elseif(strpos($errorMsg, '/') === 0)
             {
                 $result = preg_match($errorMsg, $message, $matches);
                 if($result) $errorMessage = sprintf(zget($this->lang->sonarqube->errorLang, $key), $matches[1]);
             }
-            elseif($message == $errorMsg)
-            {
-                $errorMessage = zget($this->lang->mr->errorLang, $key, $message);
-            }
+
             if(isset($errorMessage)) break;
         }
         return isset($errorMessage) ? $errorMessage : $message;
@@ -350,7 +350,7 @@ class sonarqubeModel extends model
         $action = strtolower($action);
 
         global $app;
-        if($action == 'execjob')    return $app->rawModule == 'repo' ? !$sonarqube->exec : !empty($sonarqube->jobID);
+        if($action == 'execjob')    return $app->rawModule == 'repo' ? !$sonarqube->exec   : !empty($sonarqube->jobID);
         if($action == 'reportview') return $app->rawModule == 'repo' ? !$sonarqube->report : !empty($sonarqube->reportView);
 
         return true;
@@ -370,12 +370,8 @@ class sonarqubeModel extends model
         $action = strtolower($action);
 
         if(!commonModel::hasPriv('space', 'browse')) return false;
-
-        if(!in_array($action, array('browseproject', 'reportview', 'browseissue')))
-        {
-            if(!commonModel::hasPriv('instance', 'manage')) return false;
-        }
-
+        if(in_array($action, array('browseproject', 'reportview', 'browseissue'))) return true;
+        if(!commonModel::hasPriv('instance', 'manage')) return false;
         return true;
     }
 }
