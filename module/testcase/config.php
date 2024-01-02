@@ -126,7 +126,8 @@ $config->testcase->zerocase->actionList['edit']['text'] = $lang->story->edit;
 $config->testcase->zerocase->actionList['edit']['hint'] = $lang->story->edit;
 $config->testcase->zerocase->actionList['edit']['url']  = array('module' => 'story', 'method' => 'edit', 'params' => 'bugID={id}');
 
-$config->testcase->zerocase->actionList['createcase']['icon'] = 'sitemap';
-$config->testcase->zerocase->actionList['createcase']['text'] = $lang->testcase->create;
-$config->testcase->zerocase->actionList['createcase']['hint'] = $lang->testcase->create;
-$config->testcase->zerocase->actionList['createcase']['url']  = array('module' => 'story', 'method' => 'createCase', 'params' => 'productID={product}&branch=0&module=0&from=0&storyID={id}');
+$config->testcase->zerocase->actionList['createcase']['icon']      = 'sitemap';
+$config->testcase->zerocase->actionList['createcase']['text']      = $lang->testcase->create;
+$config->testcase->zerocase->actionList['createcase']['hint']      = $lang->testcase->create;
+$config->testcase->zerocase->actionList['createcase']['url']       = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch=0&module=0&from=0&storyID={id}');
+$config->testcase->zerocase->actionList['createcase']['data-app']  = 'qa';
