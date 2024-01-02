@@ -168,14 +168,17 @@ class screen extends control
                     $mergeFilters[] = $filter;
                 }
 
-                if($table == TABLE_PIVOT)
+                if($type != 'metric')
                 {
-                    list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
-                    $chart->sql = $sql;
-                }
-                else
-                {
-                    $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+                    if($table == TABLE_PIVOT)
+                    {
+                        list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
+                        $chart->sql = $sql;
+                    }
+                    else
+                    {
+                        $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+                    }
                 }
             }
 
