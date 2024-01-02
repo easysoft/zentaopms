@@ -276,45 +276,6 @@ class programModel extends model
     }
 
     /**
-     * 获取看板数据。
-     * Get kanban group data.
-     *
-     * @access public
-     * @return array
-     */
-    public function getKanbanGroup(): array
-    {
-        $programs = $this->getTopPairs('noclosed');
-
-        /* Group data by product. */
-        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions) = $this->getKanbanStatisticData($programs);
-        $productGroup = $this->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions);
-
-        /* Group data by program. */
-        $kanbanGroup           = array();
-        $kanbanGroup['my']     = array();
-        $kanbanGroup['others'] = array();
-        $involvedPrograms      = $this->getInvolvedPrograms($this->app->user->account);
-        foreach($programs as $programID => $programName)
-        {
-            $programGroup = new stdclass();
-            $programGroup->name     = $programName;
-            $programGroup->products = zget($productGroup, $programID, array());
-
-            if(in_array($programID, $involvedPrograms))
-            {
-                $kanbanGroup['my'][] = $programGroup;
-            }
-            else
-            {
-                $kanbanGroup['others'][] = $programGroup;
-            }
-        }
-
-        return $kanbanGroup;
-    }
-
-    /**
      * 获取看板统计的相关数据。
      * Get Kanban statistics data.
      *

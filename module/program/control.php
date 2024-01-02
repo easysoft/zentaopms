@@ -70,18 +70,15 @@ class program extends control
      * 项目集看板。
      * Program kanban list.
      *
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function kanban()
+    public function kanban($browseType = 'my')
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
-
-        $this->view->title       = $this->lang->program->kanban->common;
-        $this->view->kanbanGroup = array_filter($this->program->getKanbanGroup());
+        $this->view->title      = $this->lang->program->kanban->common;
+        $this->view->kanbanList = $this->programZen->getKanbanList($browseType);
+        $this->view->browseType = $browseType;
         $this->display();
     }
 

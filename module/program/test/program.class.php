@@ -271,17 +271,6 @@ class programTest
     }
 
     /**
-     * Get kanban group.
-     *
-     * @access public
-     * @return array
-     */
-    public function getKanbanGroupTest()
-    {
-        return $this->program->getKanbanGroup();
-    }
-
-    /**
      * Get team member pairs .
      *
      * @param  int    $programID

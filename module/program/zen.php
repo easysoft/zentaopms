@@ -163,6 +163,147 @@ class programZen extends program
     }
 
     /**
+     * 获取项目集看板。
+     * Get kanban list for product.
+     *
+     * @param  string    $browseType
+     * @access protected
+     * @return array
+     */
+    protected function getKanbanList(string $browseType = 'my'): array
+    {
+        $kanbanList = array();
+
+        $programPairs = array(0 => $this->lang->project->noProgram) + $this->program->getPairs(true, 'order_asc');
+        $programList  = $this->getProgramList4Kanban($browseType);
+
+        foreach($programList as $programID => $productList)
+        {
+            $region = array();
+
+            $heading = new stdclass();
+            $heading->title = zget($programPairs, $programID, $programID);
+
+            $region['key']     = $programID;
+            $region['id']      = $programID;
+            $region['heading'] = $heading;
+
+            $lanes       = array();
+            $items       = array();
+            $columnCards = array();
+            foreach($productList as $laneKey => $laneData)
+            {
+                $lanes[] = array('name' => $laneKey, 'title' => $laneData->name);
+                $columns = array();
+
+                foreach(array('unexpiredPlans', 'waitingProjects', 'doing', 'doingProjects', 'doingExecutions', 'normalReleases') as $columnKey)
+                {
+                    $colTitle = $columnKey == 'doing' ? $this->lang->program->statusList['doing'] : $this->lang->program->kanban->{$columnKey};
+                    $column = array('name' => $columnKey, 'title' => $colTitle);
+                    if($columnKey == 'doingExecutions' || $columnKey == 'doingProjects') $column['parentName'] = 'doing';
+                    $columns[] = $column;
+
+                    $cardList = !empty($laneData->{$columnKey}) ? $laneData->{$columnKey} : array();
+                    foreach($cardList as $card)
+                    {
+                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => isset($card->name) ? $card->name : $card->title, 'status' => isset($card->status) ? $card->status : '', 'type' => $columnKey, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => isset($card->progress) ? $card->progress : 0, 'marker' => isset($card->marker) ? $card->marker : 0);
+
+                        if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
+                        $columnCards[$columnKey] ++;
+
+                        if($columnKey == 'doingProjects')
+                        {
+                            if(!empty($latestExecutions[$card->id]))
+                            {
+                                $execution = $latestExecutions[$card->id];
+                                $items[$laneKey]['doingExecutions'][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'doingExecution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+
+                                if(!isset($columnCards['doingExecutions'])) $columnCards['doingExecutions'] = 0;
+                                $columnCards['doingExecutions'] ++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
+            $groupData['key']           = $programID;
+            $groupData['data']['lanes'] = $lanes;
+            $groupData['data']['cols']  = $columns;
+            $groupData['data']['items'] = $items;
+
+            $region['items'] = array($groupData);
+            $kanbanList[] = $region;
+        }
+
+        return $kanbanList;
+    }
+
+    /**
+     * 获取项目集看板的数据。
+     * Get kanban list data for product.
+     *
+     * @param  string    $browseType
+     * @access protected
+     * @return array
+     */
+    protected function getProgramList4Kanban($browseType = 'my'): array
+    {
+        $programs = $this->program->getTopPairs('noclosed');
+        $involvedPrograms = $this->program->getInvolvedPrograms($this->app->user->account);
+        foreach($programs as $programID => $programName)
+        {
+            if($browseType == 'my')
+            {
+                if(!in_array($programID, $involvedPrograms)) unset($programs[$programID]);
+            }
+            else
+            {
+                if(in_array($programID, $involvedPrograms)) unset($programs[$programID]);
+            }
+        }
+
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions) = $this->program->getKanbanStatisticData($programs);
+
+        $programList = array();
+        $today       = helper::today();
+        foreach($productGroup as $programID => $productList)
+        {
+            foreach($productList as $product)
+            {
+                $product->unexpiredPlans = isset($planGroup[$product->id]) ? $planGroup[$product->id] : array();
+
+                if(isset($projectGroup[$product->id]))
+                {
+                    foreach($projectGroup[$product->id] as $project)
+                    {
+                        if(helper::diffDate($today, $project->end) > 0) $project->delay = 1;
+                        if($project->status == 'wait')
+                        {
+                            $product->waitingProjects[$project->id] = $project;
+                        }
+                        elseif($project->status == 'doing')
+                        {
+                            $product->doingProjects[$project->id] = $project;
+                            if(isset($doingExecutions[$project->id]))
+                            {
+                                $doingExecution = $doingExecutions[$project->id];
+                                if(helper::diffDate($today, $doingExecution->end) > 0) $doingExecution->delay = 1;
+                                $product->doingExecutions[$doingExecution->id] = $doingExecution;
+                            }
+                        }
+                    }
+                }
+
+                $product->normalReleases = isset($releaseGroup[$product->id]) ? $releaseGroup[$product->id] : array();
+                $programList[$programID][$product->id] = $product;
+            }
+        }
+
+        return $programList;
+    }
+
+    /**
      * 构造1.5级导航的数据。
      * Build the data of 1.5 level navigation.
      *

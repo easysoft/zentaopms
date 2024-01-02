@@ -45,8 +45,8 @@ featureBar
         a
         (
             $browseType == 'my' ? setClass('active') : null,
-            set::href(createLink('product', 'kanban', "browseType=my")),
-            $lang->product->myProduct,
+            set::href(createLink('program', 'kanban', "browseType=my")),
+            $lang->program->kanban->typeList['my']
         )
     ),
     li
@@ -56,8 +56,8 @@ featureBar
         a
         (
             $browseType == 'other' ? setClass('active') : null,
-            set::href(createLink('product', 'kanban', "browseType=other")),
-            $lang->product->otherProduct,
+            set::href(createLink('program', 'kanban', "browseType=other")),
+            $lang->program->kanban->typeList['others']
         )
     ),
 );
