@@ -112,4 +112,27 @@ class cneTest
 
         return $this->objectModel->instancesMetrics($instances);
     }
+
+    /**
+     * Test startApp method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function startAppTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = $instance->k8name;
+        $apiParams->chart     = $instance->chart;
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->channel   = $instance->channel;
+        $result = $this->objectModel->startApp($apiParams);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }

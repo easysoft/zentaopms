@@ -704,7 +704,7 @@ class instanceModel extends model
      */
     public function start(object $instance)
     {
-        $apiParams = new stdclass;
+        $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->name      = $instance->k8name;
         $apiParams->chart     = $instance->chart;
