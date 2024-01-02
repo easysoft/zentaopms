@@ -37,6 +37,7 @@ formPanel
         set::name('parent'),
         set::label($lang->program->parent),
         set::value($parentID),
+        set::required(true),
         set::items($parents)
     ),
     formGroup

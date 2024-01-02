@@ -36,7 +36,7 @@ class programZen extends program
      */
     protected function buildProgramForCreate(): object
     {
-        $fields  = $this->config->program->form->create;
+        $fields = $this->config->program->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->create->requiredFields, ',')) as $field)
         {
@@ -45,12 +45,12 @@ class programZen extends program
         }
 
         $this->app->loadConfig('project');
+        if($this->post->delta == 999) $_POST['end'] = LONG_TIME;
         $program = form::data($fields)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('code', '')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, 2))
             ->add('type', 'program')
             ->get();
