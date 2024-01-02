@@ -745,7 +745,7 @@ class kanbanModel extends model
 
             $heading = new stdclass();
             $heading->title   = zget($regions, $regionID, '');
-            $heading->actions = $this->getRegionActions($kanbanID, $regionID);
+            $heading->actions = $this->getRegionActions($kanbanID, $regionID, count($regionIDList));
 
             $regionData['key']               = "region{$regionID}";
             $regionData['id']                = $regionID;
@@ -765,10 +765,11 @@ class kanbanModel extends model
      *
      * @param  int        $kanbanID
      * @param  int|string $regionID
+     * @param  int        $regionCount
      * @access public
      * @return array
      */
-    public function getRegionActions(int $kanbanID, int|string $regionID): array
+    public function getRegionActions(int $kanbanID, int|string $regionID, int $regionCount): array
     {
         $action  = array();
         $actions = array();
@@ -782,7 +783,7 @@ class kanbanModel extends model
         if(common::hasPriv('kanban', 'editRegion'))   $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'edit');
         if(common::hasPriv('kanban', 'sortRegion'))   $action['items'][] = array('text' => $this->lang->kanban->sortRegion,   'url' => 'javascript:;', 'icon' => 'move', 'data-on' => 'click', 'data-call' => 'sortItems', 'data-params' => 'event', 'data-type' => 'region', 'data-id' => $regionID);
         if(common::hasPriv('kanban', 'createLane'))   $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'plus');
-        if(common::hasPriv('kanban', 'deleteRegion')) $action['items'][] = array('text' => $this->lang->kanban->deleteRegion, 'url' => helper::createLink('kanban', 'deleteRegion', "regionID=$regionID"), 'data-confirm' => $this->lang->kanbanregion->confirmDelete, 'icon' => 'trash', 'innerClass' => 'ajax-submit');
+        if(common::hasPriv('kanban', 'deleteRegion') and ($regionCount > 1)) $action['items'][] = array('text' => $this->lang->kanban->deleteRegion, 'url' => helper::createLink('kanban', 'deleteRegion', "regionID=$regionID"), 'data-confirm' => $this->lang->kanbanregion->confirmDelete, 'icon' => 'trash', 'innerClass' => 'ajax-submit');
 
         $action['items'][] = array('type' => 'divider');
 
