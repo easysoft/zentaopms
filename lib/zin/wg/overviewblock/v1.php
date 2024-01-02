@@ -25,7 +25,7 @@ class overviewBlock extends wg
 
     protected function buildCard($card): wg
     {
-        $class = array('text-2xl text-center leading-relaxed num', $card->class);
+        $class = array('text-2xl text-center leading-relaxed num', isset($card->class) ? $card->class : '');
 
         return col
         (
