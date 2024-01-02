@@ -38,7 +38,7 @@ toolbar
         btn
         (
             setClass('ghost'),
-            $lang->productplan->orderList[$orderBy]
+            isset($lang->productplan->orderList[$orderBy]) ? $lang->productplan->orderList[$orderBy] : $lang->productplan->orderList['begin_desc'],
         ),
         set::items($orderItems)
     ),
