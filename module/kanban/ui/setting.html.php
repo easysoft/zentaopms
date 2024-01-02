@@ -83,13 +83,15 @@ formPanel
                 set::name('import'),
                 set::items($lang->kanban->importList),
                 set::inline(true),
-                set::value($enableImport)
+                set::value($enableImport),
+                on::change('toggleImportObjectBox')
             )
         )
     ),
     formRow
     (
         set::style(array('margin-top' => '0px')),
+        setID('objectBox'),
         formGroup
         (
             set::label(''),
