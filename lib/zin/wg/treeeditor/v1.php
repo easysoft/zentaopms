@@ -66,7 +66,7 @@ class treeEditor extends wg
 
                 $item['innerClass'] = 'py-0';
                 $item['titleClass'] = 'text-clip';
-                $item['selected']   = !empty($selected) && $selected == $item['id'];
+                $item['selected']   = !empty($selected) && !empty($item['id']) && $selected == $item['id'];
 
                 if(isset($item['type']) && $item['type'] == 'product')
                 {
