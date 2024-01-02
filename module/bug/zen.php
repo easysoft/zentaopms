@@ -1170,6 +1170,7 @@ class bugZen extends bug
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->projectID             = isset($projectID) ? $projectID : $bug->projectID;
         $this->view->executionID           = isset($executionID) ? $executionID : (!empty($bug->execution->id) ? $bug->execution->id : '');
+        $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
     }
 
     /**
