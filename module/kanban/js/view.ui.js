@@ -392,11 +392,7 @@ window.canDrop = function(dragInfo, dropInfo)
     const lane   = this.getLane(dropInfo.lane);
     if(!column || !lane) return false;
 
-    /* 卡片的排序目前仅支持本单元格内排序 */
-    if(dropInfo.type == 'item' && (dropInfo.col != dragInfo.item.col || dropInfo.lane != dragInfo.item.lane)) return false;
-
-    /* 卡片可在同组内拖动。 */
-    return dragInfo.item.group == column.group;
+    return true;
 }
 
 window.onDrop = function(changes, dropInfo)
