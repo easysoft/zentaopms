@@ -149,7 +149,7 @@ class reportModel extends model
             ->andWhere('t1.assignedTo')->ne('closed')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deadline', true)->eq('0000-00-00')
+            ->andWhere('t1.deadline', true)->eq('1970-01-01')
             ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
             ->markRight(1)
             ->fetchGroup('user');
@@ -175,7 +175,7 @@ class reportModel extends model
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,doing')
             ->andWhere('t3.status')->ne('suspended')
-            ->andWhere('t1.deadline', true)->eq('0000-00-00')
+            ->andWhere('t1.deadline', true)->eq('1970-01-01')
             ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
             ->markRight(1)
             ->fetchGroup('user');
