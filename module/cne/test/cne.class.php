@@ -159,4 +159,21 @@ class cneTest
          $this->objectModel->startApp($apiParams);
         return $result;
     }
+
+    /**
+     * Test getAppLogs method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function getAppLogsTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $result = $this->objectModel->getAppLogs($instance);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }
