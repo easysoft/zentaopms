@@ -1890,6 +1890,12 @@ class treeModel extends model
             }
         }
 
+        if(empty($module->name))
+        {
+            dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->tree->name);
+            return false;
+        }
+
         $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : array();
 
         $parent = $this->getById((int)$this->post->parent);
