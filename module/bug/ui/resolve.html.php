@@ -40,11 +40,14 @@ formPanel
     formGroup
     (
         set::width('1/3'),
-        set::name('resolution'),
         set::label($lang->bug->resolution),
-        set::value(''),
-        set::items($lang->bug->resolutionList),
-        on::change('setDuplicate')
+        set::required(true),
+        picker
+        (
+            set::name('resolution'),
+            set::items($lang->bug->resolutionList),
+            on::change('setDuplicate')
+        )
     ),
     formRow
     (
