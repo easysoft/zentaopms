@@ -78,12 +78,12 @@ class programZen extends program
         }
 
         $this->app->loadConfig('project');
+        if($this->post->delta == 999) $_POST['end'] = LONG_TIME;
         $program = form::data($fields)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, 2))
