@@ -98,4 +98,18 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test instancesMetrics method.
+     *
+     * @access public
+     * @return array
+     */
+    public function instancesMetricsTest(): array
+    {
+        $this->objectModel->error = new stdclass();
+        $instances = $this->objectModel->loadModel('instance')->getList();
+
+        return $this->objectModel->instancesMetrics($instances);
+    }
 }
