@@ -99,7 +99,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
         else
         {
             $plans  = !empty($productPlan) ? $productPlan : array();
-            $planID = isset($productPlan[$plan->id]) ? $plan->id : '';
+            $planID = isset($plan) && isset($productPlan[$plan->id]) ? $plan->id : '';
         }
 
         $productsBox[] = formRow
