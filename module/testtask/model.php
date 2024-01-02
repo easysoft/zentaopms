@@ -1372,7 +1372,7 @@ class testtaskModel extends model
         if(empty($stepGroups[$caseID]))
         {
             $results[0]['result'] = $caseResult;
-            $results[0]['real']   = $caseResult == 'pass' ? '' : $postReals[0];
+            $results[0]['real']   = $caseResult == 'pass' || empty($postReals) ? '' : $postReals[0];
             return $results;
         }
 
