@@ -106,6 +106,7 @@ if(!empty($cols['actions']['list']))
 if(isset($cols['title']))  $cols['title']['nestedToggle'] = $topSceneCount > 0;
 if(isset($cols['branch'])) $cols['branch']['map']         = $branchTagOption;
 if(isset($cols['story']))  $cols['story']['map']          = $stories;
+if(isset($cols['scene']))  $cols['scene']['map']          = $iscenes;
 
 foreach($cases as $case)
 {

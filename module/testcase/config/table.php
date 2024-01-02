@@ -30,6 +30,12 @@ $config->testcase->dtable->fieldList['pri']['sortType'] = true;
 $config->testcase->dtable->fieldList['pri']['show']     = true;
 $config->testcase->dtable->fieldList['pri']['group']    = 2;
 
+$config->testcase->dtable->fieldList['scene']['title']    = $lang->testcase->scene;
+$config->testcase->dtable->fieldList['scene']['type']     = 'category';
+$config->testcase->dtable->fieldList['scene']['map']      = $lang->testcase->typeList;
+$config->testcase->dtable->fieldList['scene']['group']    = 2;
+$config->testcase->dtable->fieldList['scene']['sortType'] = true;
+
 $config->testcase->dtable->fieldList['type']['title']    = $lang->testcase->type;
 $config->testcase->dtable->fieldList['type']['type']     = 'category';
 $config->testcase->dtable->fieldList['type']['map']      = $lang->testcase->typeList;

@@ -149,6 +149,7 @@ $cols = $this->loadModel('datatable')->getSetting('testtask');
 if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}';
 if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'caseID={case}';
+if(isset($cols['scene'])) $cols['scene']['map'] = $iscenes;
 
 $runs = initTableData($runs, $cols);
 
