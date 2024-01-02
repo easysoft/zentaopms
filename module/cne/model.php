@@ -55,6 +55,7 @@ class cneModel extends model
         $setting['channel']   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
         $setting['chart']     = $instance->chart;
         $setting['version']   = $toVersion;
+        $setting['settings']  = array();
 
         $apiUrl = "/api/cne/app/settings";
         $result = $this->apiPost($apiUrl, $setting, $this->config->CNE->api->headers);

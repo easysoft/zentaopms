@@ -1,0 +1,65 @@
+---
+title: instance
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: '`1`,`2`'
+  - field: space
+    range: '`1`'
+  - field: solution
+    range: '`1`,0'
+  - field: name
+    range: '`GitLab`,`Subversion`'
+  - field: appID
+    range: '`42`,`156`'
+  - field: appName
+    range: '`GitLab`,`Subversion`'
+  - field: appVersion
+    range: '`15.3.4`,`1.14.2`'
+  - field: chart
+    range: '`gitlab`,`subversion`'
+  - field: logo
+    range: '`//img.qucheng.com/app/g/gitlab-icon.svg`,`//img.qucheng.com/app/s/svn-icon.png`'
+  - field: version
+    range: '`2023.10.901`,`2023.12.1201`'
+  - field: desc
+    range: '`GitLab是由GitLab Inc.开发，使用MIT许可证的基于网络的Git仓库管理工具，且具有wiki和issue跟踪功能。使用Git作为代码管理工具，并在此基础上搭建起来的web服务。`,`Apache®
+      Subversion® 服务，集成了SVNAdmin Web管理服务，可以通过浏览器创建仓库、配置用户权限。`'
+  - field: introduction
+    range: '`GitLab 一款基于Git的一体化软件开发平台。`,`应用广泛的版本控制系统`'
+  - field: source
+    range: '`cloud`'
+  - field: channel
+    range: '`test`'
+  - field: k8name
+    range: '`gitlab-20231226133115`,`subversion-20240102093246`'
+  - field: status
+    range: '`running`'
+  - field: pinned
+    range: "0"
+  - field: domain
+    range: '`jflc.dops.corp.cc`,`rheu.dops.corp.cc`'
+  - field: smtpSnippetName
+    range: ""
+  - field: ldapSnippetName
+    range: ""
+  - field: ldapSettings
+    range: ""
+  - field: dbSettings
+    range: '`{"ingress":{"enabled":true,"host":"jflc.dops.corp.cc"},"global":{"ingress":{"enabled":true,"host":"jflc.dops.corp.cc"}},"ci":{"enabled":true},"mysql":{"enabled":false,"auth":{"user":"user_1","password":"1gZBA25nTS4X","host":"zentaopaas-mysql.quickon-system.svc","port":3306,"database":"db_1","dbservice":{"name":"zentaopaas-mysql","namespace":"quickon-system"}}}}`,`{"ingress":{"enabled":true,"host":"rheu.dops.corp.cc"},"global":{"ingress":{"enabled":true,"host":"rheu.dops.corp.cc"}}}`'
+  - field: autoBackup
+    range: "0"
+  - field: backupKeepDays
+    range: '`1`'
+  - field: autoRestore
+    range: "0"
+  - field: env
+    range: ""
+  - field: createdBy
+    range: '`qadmin`'
+  - field: createdAt
+    range: '`2023-12-26 13:31:15`,`2024-01-02 09:32:46`'
+  - field: deleted
+    range: "0"
+...
