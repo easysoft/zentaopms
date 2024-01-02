@@ -14,6 +14,7 @@ jsVar('bugID',     $bug->id);
 jsVar('productID', $bug->product);
 jsVar('page',      'resolve');
 jsVar('released',  $lang->build->released);
+jsVar('requiredFields', $config->bug->resolve->requiredFields);
 
 $createBuild = '';
 if(common::hasPriv('build', 'create'))

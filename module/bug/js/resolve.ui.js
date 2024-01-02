@@ -18,25 +18,24 @@ function setDuplicate()
     }
 }
 
-$(function()
+$(document).off('change', "[name^='resolution']").on('change', "[name^='resolution']", function()
 {
-    var requiredFields = config.requiredFields;
     if(requiredFields.indexOf('resolvedBuild') == -1)
     {
-        var resolvedBuildGroup = $('#resolvedBuild').closest('.form-group');
-        $('#resolution').on('change', function()
+        var resolvedBuildGroup = $('#resolvedBuildBox').find('label.form-label');
+        if($(this).val() == 'fixed')
         {
-            if($(this).val() == 'fixed')
-            {
-                resolvedBuildGroup.addClass('required');
-            }
-            else
-            {
-                resolvedBuildGroup.removeClass('required');
-            }
-        });
+            resolvedBuildGroup.addClass('required');
+        }
+        else
+        {
+            resolvedBuildGroup.removeClass('required');
+        }
     }
+});
 
+$(function()
+{
     $('#createBuild').on('change', function()
     {
         if($(this).prop('checked'))
