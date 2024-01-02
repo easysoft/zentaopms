@@ -1216,7 +1216,7 @@ class testcaseModel extends model
                     $filePath = pathinfo($file->pathname, PATHINFO_BASENAME);
                     $datePath = substr($file->pathname, 0, 6);
                     $filePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $filePath;
-                    unlink($filePath);
+                    if(file_exists($filePath)) unlink($filePath);
                 }
             }
             if(isset($caseID))
