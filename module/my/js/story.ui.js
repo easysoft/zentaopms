@@ -35,7 +35,7 @@ window.renderCell = function(result, info)
         if(story.parent)
         {
             let html = "<span class='label gray-pale rounded-xl' title='" + children + "'>" + childrenAB + "</span>";
-            result[0] = {html};
+            result.unshift({html});
         }
     }
     return result;
