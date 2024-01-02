@@ -13,7 +13,7 @@ namespace zin;
 
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
 $forceReview    = $this->story->checkForceReview();
-$assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;
+$assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
 $multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1);
@@ -86,7 +86,7 @@ detailBody
                     setClass('filter-none'),
                     set::name('title'),
                     set::value($fields['title']['default']),
-                    set::disabled(!$canEditContent)
+                    set::readonly(!$canEditContent)
                 ),
                 set::suffixWidth('40'),
                 to::suffix
@@ -342,7 +342,7 @@ detailBody
                 (
                     setID('assignedTo'),
                     set::name('assignedTo'),
-                    set::items($fields['assignedTo']['options']),
+                    set::items($assignedToList),
                     set::value($fields['assignedTo']['default'])
                 )
             ),
