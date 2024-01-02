@@ -80,4 +80,22 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getDomain method.
+     *
+     * @param  string $component
+     * @access public
+     * @return object|null
+     */
+    public function getDomainTest(string $component = ''): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $result = $this->objectModel->getDomain($instance, $component);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
 }
