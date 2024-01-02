@@ -182,12 +182,12 @@ class treeZen extends tree
      * 更新 rawModule。
      * Update rawModule.
      *
-     * @param  string $viewType
-     * @static
+     * @param  int       $rootID
+     * @param  string    $viewType
      * @access protected
      * @return void
      */
-    protected function updateRawModule(string $viewType)
+    protected function updateRawModule(int $rootID, string $viewType)
     {
         $manageLangs = array('');
         switch($viewType)

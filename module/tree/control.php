@@ -29,7 +29,7 @@ class tree extends control
     public function browse(int $rootID, string $viewType, int $currentModuleID = 0, string $branch = 'all', string $from = '')
     {
         $this->updateBrowseLang($viewType);
-        $this->updateRawModule($viewType);
+        $this->updateRawModule($rootID, $viewType);
 
         /* 可以维护模块的类型：story, bug, case, feedback, caselib, ticket, line, 另外 doc, api在列表页面维护。*/
         $this->app->loadLang('host');
@@ -60,7 +60,7 @@ class tree extends control
         $this->view->rootID          = $root->id;
         $this->view->root            = $root;
         $this->view->productID       = $root->rootType == 'product' ? $root->id: 0;
-        $this->view->libID           = $root->rootType == 'caselib' ? $root->id : 0;
+        $this->view->libID           = $root->rootType == 'caselib' || $root->rootType == 'lib' ? $root->id : 0;
         $this->view->viewType        = $viewType;
         $this->view->placeholder     = $viewType == 'host' ? $this->lang->tree->groupName : $this->lang->tree->name;
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
