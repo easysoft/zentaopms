@@ -1032,7 +1032,6 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
         $this->view->project             = $project;
-        $this->view->plan                = $this->loadModel('productplan')->fetchByID($planID);
 
         $this->display();
     }

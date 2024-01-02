@@ -1769,6 +1769,8 @@ class executionZen extends execution
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->where('t1.id')->eq($plan->product)
                 ->fetchAll('id');
+
+            $this->view->plan = $plan;
         }
         if(!empty($project) and $project->stageBy == 'project') $products = $this->loadModel('product')->getProducts($project->id);
 

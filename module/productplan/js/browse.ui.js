@@ -130,7 +130,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     }
 });
 
-$(document).on('click', 'button[data-target="#createExecutionModal"]', function()
+$(document).on('click', '[data-target="#createExecutionModal"]', function()
 {
     const planID = $(this).closest('.dtable-cell').data('row');
     $('#createExecutionModal [name=planID]').val(planID);
