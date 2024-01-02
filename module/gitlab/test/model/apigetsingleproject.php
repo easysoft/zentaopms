@@ -19,6 +19,7 @@ cid=1
 
 */
 
+zdTable('user')->gen(10);
 zdTable('pipeline')->gen(5);
 zdTable('oauth')->config('oauth')->gen(5);
 
