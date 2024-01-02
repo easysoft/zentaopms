@@ -274,7 +274,7 @@ CREATE TABLE `zt_artifactrepo` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` tinyint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_assetlib` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -806,7 +806,7 @@ CREATE TABLE `zt_cron` (
   `lastTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_dashboard` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -1271,8 +1271,8 @@ CREATE TABLE `zt_feedback` (
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `repeatFeedback` mediumint(8) NOT NULL DEFAULT '0',
   `mailto` varchar(255) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `keywords` varchar(255) NOT NULL DEFAULT '',
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_feedbackview` (
@@ -2107,8 +2107,7 @@ CREATE TABLE `zt_metric` (
   `fromID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=273 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_metriclib` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2130,8 +2129,8 @@ CREATE TABLE `zt_metriclib` (
   `value` varchar(100) NOT NULL DEFAULT '0',
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `metricCode` (`metricCode`) USING BTREE,
-  KEY `metricID` (`metricID`) USING BTREE
+  KEY `metricID` (`metricID`),
+  KEY `metricCode` (`metricCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_module` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2728,7 +2727,7 @@ CREATE TABLE `zt_prompt` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_promptrole` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
@@ -2738,7 +2737,7 @@ CREATE TABLE `zt_promptrole` (
   `characterization` text,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_queue` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `cron` mediumint(9) NOT NULL,
@@ -2930,8 +2929,8 @@ CREATE TABLE `zt_review` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `object` mediumint(8) NOT NULL DEFAULT '0',
   `template` mediumint(8) NOT NULL DEFAULT '0',
-  `doc` varchar(255) DEFAULT '',
-  `docVersion` varchar(255) DEFAULT '',
+  `doc` varchar(255) NOT NULL DEFAULT '',
+  `docVersion` varchar(255) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL DEFAULT '',
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `auditedBy` varchar(255) NOT NULL DEFAULT '',
@@ -3226,9 +3225,9 @@ CREATE TABLE `zt_solutions` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `contents` text NOT NULL COMMENT '问题描述',
-  `support` text NOT NULL COMMENT '是否需要高层支持',
-  `measures` text NOT NULL COMMENT '解决建议',
+  `contents` text NOT NULL,
+  `support` text NOT NULL,
+  `measures` text NOT NULL,
   `type` char(30) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` date DEFAULT NULL,
@@ -3986,7 +3985,7 @@ CREATE TABLE `zt_workflowaction` (
   `name` varchar(50) NOT NULL DEFAULT '',
   `type` enum('single','batch') NOT NULL DEFAULT 'single',
   `batchMode` enum('same','different') NOT NULL DEFAULT 'different',
-  `extensionType` varchar(10) NOT NULL DEFAULT 'override' COMMENT 'none | extend | override',
+  `extensionType` varchar(10) NOT NULL DEFAULT 'override',
   `open` varchar(20) NOT NULL DEFAULT '',
   `position` enum('menu','browseandview','browse','view') NOT NULL DEFAULT 'browseandview',
   `layout` char(20) NOT NULL DEFAULT '',
@@ -4142,13 +4141,13 @@ CREATE TABLE `zt_workflowrelationlayout` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_workflowreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(30) NOT NULL COMMENT 'module name',
-  `name` varchar(100) NOT NULL COMMENT 'report name',
-  `type` enum('pie','line','bar') NOT NULL DEFAULT 'pie' COMMENT 'report type',
-  `countType` enum('sum','count') NOT NULL DEFAULT 'sum' COMMENT 'report count method',
-  `displayType` enum('value','percent') NOT NULL DEFAULT 'value' COMMENT 'report display method',
-  `dimension` varchar(130) NOT NULL COMMENT 'dimension field code of zt_workflowfield',
-  `fields` text NOT NULL COMMENT 'count fileds code of zt_workflowfield,use comma split',
+  `module` varchar(30) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `type` enum('pie','line','bar') NOT NULL DEFAULT 'pie',
+  `countType` enum('sum','count') NOT NULL DEFAULT 'sum',
+  `displayType` enum('value','percent') NOT NULL DEFAULT 'value',
+  `dimension` varchar(130) NOT NULL,
+  `fields` text NOT NULL,
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
