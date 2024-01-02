@@ -89,9 +89,13 @@ formPanel
             set::width('1/3'),
             setID('resolvedBuildBox'),
             set::label($lang->bug->resolvedBuild),
-            set::name('resolvedBuild'),
-            set::value(''),
-            set::items($builds)
+            set::required(strpos(",{$config->bug->resolve->requiredFields},", ',resolvedBuild,') !== false),
+            picker
+            (
+                set::name('resolvedBuild'),
+                set::value(''),
+                set::items($builds)
+            )
         ),
         formGroup
         (
