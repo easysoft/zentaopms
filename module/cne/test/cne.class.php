@@ -222,4 +222,17 @@ class cneTest
 
         return $this->objectModel->queryStatus($instance);
     }
+
+    /**
+     * Test batchQueryStatus method.
+     *
+     * @access public
+     * @return array
+     */
+    public function batchQueryStatusTest(): array
+    {
+        $instances = $this->objectModel->loadModel('instance')->getList();
+
+        return $this->objectModel->batchQueryStatus($instances);
+    }
 }
