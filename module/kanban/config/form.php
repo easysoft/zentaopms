@@ -84,8 +84,8 @@ $config->kanban->form->createColumn['limit']   = array('type' => 'int',    'requ
 $config->kanban->form->createColumn['group']   = array('type' => 'int',    'required' => true,  'default' => '');
 $config->kanban->form->createColumn['parent']  = array('type' => 'int',    'required' => false, 'default' => 0);
 
-$config->kanban->form->splitColumn['name']    = array('type' => 'string', 'required' => true,  'default' => '', 'base' => 'true');
-$config->kanban->form->splitColumn['color']   = array('type' => 'string', 'required' => false, 'default' => '#333');
+$config->kanban->form->splitColumn['name']    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->kanban->form->splitColumn['color']   = array('type' => 'string', 'required' => false, 'default' => '#333', 'base' => 'true');
 $config->kanban->form->splitColumn['limit']   = array('type' => 'int',    'required' => false, 'default' => '');
 $config->kanban->form->splitColumn['noLimit'] = array('type' => 'int',    'required' => false, 'default' => '');
 
