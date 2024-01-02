@@ -389,7 +389,7 @@ class kanban extends control
     public function delete(int $kanbanID)
     {
         $this->kanban->delete(TABLE_KANBAN, $kanbanID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('kanban', 'space')));
     }
 
     /**
