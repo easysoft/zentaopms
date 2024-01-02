@@ -324,57 +324,6 @@ class programModel extends model
     }
 
     /**
-     * 处理项目集看板中产品数据。
-     * Process product data in program Kanban.
-     *
-     * @param  array  $productGroup
-     * @param  array  $planGroup
-     * @param  array  $releaseGroup
-     * @param  array  $projectGroup
-     * @param  array  $doingExecutions
-     * @access public
-     * @return array
-     */
-    public function processProductsForKanban(array $productGroup, array $planGroup, array $releaseGroup, array $projectGroup, array $doingExecutions): array
-    {
-        if(empty($productGroup)) return $productGroup;
-
-        $today = helper::today();
-        foreach($productGroup as $programID => $products)
-        {
-            foreach($products as $product)
-            {
-                $product->plans = zget($planGroup, $product->id, array());
-
-                /* Convert predefined HTML entities to characters. */
-                foreach($product->plans as $plan) $plan->title = htmlspecialchars_decode($plan->title, ENT_QUOTES);
-                $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
-
-                $product->releases = zget($releaseGroup, $product->id, array());
-                $projects          = zget($projectGroup, $product->id, array());
-                foreach($projects as $project)
-                {
-                    if(helper::diffDate($today, $project->end) > 0) $project->delay = 1;
-                    if($this->config->systemMode == 'ALM' && !$this->config->program->showAllProjects && $project->parent != $product->program && strpos($project->path, ",{$product->program},") !== 0) continue;
-
-                    $status    = $project->status == 'wait' ? 'wait' : 'doing';
-                    $execution = zget($doingExecutions, $project->id, array());
-
-                    if(!empty($execution) && helper::diffDate($today, $execution->end) > 0) $execution->delay = 1;
-
-                    $project->execution = $execution;
-                    $project->hours = array('progress' => $project->progress);
-
-                    /* Convert predefined HTML entities to characters. */
-                    $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
-                    $product->projects[$status][] = $project;
-                }
-            }
-        }
-        return $productGroup;
-    }
-
-    /**
      * 获取用户参与的项目集列表信息。
      * Get involved programs by user.
      *

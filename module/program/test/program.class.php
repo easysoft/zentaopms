@@ -359,20 +359,6 @@ class programTest
     }
 
     /**
-     * 处理项目集看板中产品数据。
-     * Process product data in program Kanban.
-     *
-     * @access public
-     * @return array
-     */
-    public function processProductsForKanbanTest(): array
-    {
-        $programs = $this->program->getTopPairs('noclosed');
-        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, ) = $this->program->getKanbanStatisticData($programs);
-        return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions);
-    }
-
-    /**
      * 获取项目/执行的所属项目集ID。
      * Get the programID of the project/execution.
      *
