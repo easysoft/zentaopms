@@ -716,6 +716,9 @@ class docZen extends doc
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->spaceType         = $objectType;
         $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, (int)$doc->module);
+        $this->view->productID         = $doc->product;
+        $this->view->projectID         = $doc->project;
+        $this->view->executionID       = $doc->execution;
     }
 
     /**
