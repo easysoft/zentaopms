@@ -235,4 +235,18 @@ class cneTest
 
         return $this->objectModel->batchQueryStatus($instances);
     }
+
+    /**
+     * Test appDBList method.
+     *
+     * @param  int    $instanceID
+     * @access public
+     * @return array
+     */
+    public function appDBListTest(int $instanceID): array
+    {
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+
+        return $this->objectModel->appDBList($instance);
+    }
 }
