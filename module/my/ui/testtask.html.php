@@ -18,6 +18,11 @@ featureBar
     set::linkParams("mode=testtask&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
+foreach($config->my->testtask->dtable->fieldList['actions']['list'] as $actionKey => $action)
+{
+    if(!isset($action['data-toggle']) && !isset($action['data-confirm'])) $config->my->testtask->dtable->fieldList['actions']['list'][$actionKey]['data-app'] = 'qa';
+}
+
 $tasks      = initTableData($tasks, $config->my->testtask->dtable->fieldList, $this->testtask);
 $cols       = array_values($config->my->testtask->dtable->fieldList);
 $data       = array_values($tasks);
