@@ -37,6 +37,8 @@ class docMenu extends wg
     {
         $url = zget($item, 'url', '');
         if(!empty($url)) return $url;
+        $objectType = $this->objectType;
+        if($objectType == 'project' && $item->type == 'execution') return '';
         if(in_array($item->type, array('apiLib', 'docLib')))
         {
             $this->libID    = $item->id;
@@ -46,8 +48,6 @@ class docMenu extends wg
 
         $linkParams = sprintf($this->linkParams, "libID={$this->libID}&moduleID={$this->moduleID}");
         if(in_array($this->spaceType, array('product', 'project', 'custom'))) $linkParams = "objectID={$this->objectID}&{$linkParams}";
-
-        $objectType = $this->objectType;
 
         $moduleName = $this->spaceType == 'api' ? 'api' : 'doc';
         $methodName = '';
