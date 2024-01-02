@@ -90,7 +90,7 @@ class blockZen extends block
             if($moduleKey == 'execution') $method = $executionMethod;
 
             /* After obtaining module permissions, it is necessary to verify whether there is permission for the module homepage. */
-            if(!common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
+            if(in_array($moduleKey, array('product', 'project', 'execution', 'qa')) && !common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
 
             /* 被永久关闭的区块删除对应选项。 */
             /* Delete corresponding options for blocks that have been permanently closed. */
