@@ -142,15 +142,14 @@ class reportZen extends report
         }
         else
         {
-            $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
             unset($depts[0]);
-            $depts += $noDepartment;
+            $depts = array('0' => $this->lang->report->annualData->allDept) + $depts;
         }
 
         $this->view->title = sprintf($this->lang->report->annualData->title, ($account ? zget($users, $account, '') : ($dept !== '' ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : '')), $year);
         $this->view->depts = $depts;
         $this->view->users = $users;
-        return array($years, count($users) - 1, $accounts, $dept, $year);
+        return array($years, count($users) - 1, $accounts, $dept, (string)$year);
     }
 
     /**
