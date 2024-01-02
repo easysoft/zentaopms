@@ -276,7 +276,7 @@ detailBody
                     set::items($statusOptions),
                     set::required(true)
                 )
-            ) : null,
+            ) : formHidden('status', $task->status),
             item
             (
                 set::name($lang->task->pri),
