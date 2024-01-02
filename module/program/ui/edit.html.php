@@ -4,6 +4,7 @@ namespace zin;
 $parentID = $program->parent;
 $currency = $parentID ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
 $aclList  = $parentID ? $lang->program->subAclList : $lang->program->aclList;
+$delta    = $program->end == LONG_TIME ? 999 : (strtotime($program->end) - strtotime($program->begin)) / 3600 / 24 + 1;
 
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
@@ -133,7 +134,7 @@ formPanel
             set::name('delta'),
             set::className('pl-4 items-center'),
             set::control(array('type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList)),
-            $program->end == LONG_TIME ? set::value(999) : null,
+            set::value($delta),
             on::change('setDate')
         )
     ),
