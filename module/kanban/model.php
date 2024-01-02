@@ -1851,6 +1851,7 @@ class kanbanModel extends model
         $account = $this->app->user->account;
 
         if($space->type == 'private') $space->owner = $account;
+        if($space->type != 'private') $this->config->kanban->createspace->requiredFields .= ',owner';
         if(strpos(",{$space->team},", ",$account,") === false)      $space->team .= ",$account";
         if(strpos(",{$space->team},", ",$space->owner,") === false) $space->team .= ",$space->owner";
 
@@ -1884,6 +1885,7 @@ class kanbanModel extends model
         $oldSpace = $this->getSpaceById($spaceID);
 
         if($space->type == 'cooperation' || $space->type == 'public') $space->whitelist = '';
+        if($space->type != 'private') $this->config->kanban->editspace->requiredFields .= ',owner';
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
