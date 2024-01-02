@@ -436,7 +436,7 @@ class doc extends control
         if($doc->files) $this->doc->deleteFiles(array_keys($doc->files));
 
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->sendSuccess(array('load' => true));
+        return $this->sendSuccess(array('load' => $this->session->docList));
     }
 
     /**

@@ -154,15 +154,15 @@ $contentDom = div
                     icon('fullscreen'),
                     on::click('fullScreen')
                 ),
-                common::hasPriv('doc', 'collect') ? html($starBtn) : null,
+                common::hasPriv('doc', 'collect') && !$doc->deleted ? html($starBtn) : null,
                 ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
-                common::hasPriv('doc', 'edit') ? btn
+                common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
                 (
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     setClass('btn ghost'),
                     icon('edit')
                 ) : null,
-                common::hasPriv('doc', 'delete') ? btn
+                common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
                 (
                     set::url(createLink('doc', 'delete', "docID=$doc->id")),
                     setClass('btn ghost ajax-submit'),
