@@ -346,7 +346,8 @@ class install extends control
             $this->loadModel('common');
             if($this->config->db->driver == 'dm') $this->install->execDMSQL();
 
-            $this->install->grantPriv();
+            $data = form::data()->get();
+            $this->install->grantPriv($data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->install->updateLang();

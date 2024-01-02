@@ -195,12 +195,17 @@ class installModel extends model
      * 创建公司并设置管理员。
      * Create a comapny, set admin.
      *
+     * @param  object $data
      * @access public
      * @return bool
      */
-    public function grantPriv(): bool
+    public function grantPriv(object $data): bool
     {
-        $data = form::data()->get();
+        /* Check required. */
+        if(empty($data->company))  dao::$errors['company'][]  = sprintf($this->lang->error->notempty, $this->lang->install->company);
+        if(empty($data->account))  dao::$errors['account'][]  = sprintf($this->lang->error->notempty, $this->lang->install->account);
+        if(empty($data->password)) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->install->password);
+        if(dao::isError()) return false;
 
         $this->loadModel('user');
         $this->app->loadConfig('admin');
