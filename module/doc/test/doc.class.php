@@ -685,14 +685,14 @@ class docTest
      * Get the list of doc id list that have been edited.
      *
      * @access public
-     * @return string|array
+     * @return array
      */
-    public function getEditedDocIdListTest(): string|array
+    public function getEditedDocIdListTest(): array
     {
         $docIdList = $this->objectModel->getEditedDocIdList();
 
         if(dao::isError()) return dao::getError();
-        return implode(';', $docIdList);
+        return $docIdList;
     }
 
     /**
