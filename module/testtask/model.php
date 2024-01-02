@@ -284,6 +284,8 @@ class testtaskModel extends model
         if($setImgSize) $testtask->desc = $this->loadModel('file')->setImgSize($testtask->desc);
         $testtask->files = $this->loadModel('file')->getByObject('testtask', $testtask->id);
 
+        if(!$testtask->branch) $testtask->branch = '0';
+
         return $testtask;
     }
 
