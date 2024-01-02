@@ -288,4 +288,16 @@ class cneTest
     {
         return $this->objectModel->dbDetail($dbService, $namespace);
     }
+
+    /**
+     * Test sharedDBList method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function sharedDBListTest(string $type): array
+    {
+        return $this->objectModel->sharedDBList($type);
+    }
 }

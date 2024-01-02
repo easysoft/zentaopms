@@ -635,15 +635,14 @@ class cneModel extends model
      * 获取共享数据库列表。
      * Get shared database list.
      *
-     * @param  string $dbType    database type.
-     * @param  string $namespace
+     * @param  string $dbType
      * @access public
      * @return array
      */
-    public function sharedDBList(string $dbType = 'mysql', string $namespace = 'default'): array
+    public function sharedDBList(string $dbType = 'mysql'): array
     {
         $apiUrl    = "/api/cne/component/gdb";
-        $apiParams =  array('kind' => $dbType, 'namespace' => $namespace, 'channel' => $this->config->CNE->api->channel);
+        $apiParams =  array('kind' => $dbType, 'namespace' => 'default', 'channel' => $this->config->CNE->api->channel);
 
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
