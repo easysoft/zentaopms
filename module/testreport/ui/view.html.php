@@ -472,7 +472,7 @@ div
                 set::title($lang->testreport->legendMore),
                 sectionList
                 (
-                    $lang->testreport->moreNotice
+                    span(html($lang->testreport->moreNotice))
                 )
             )
         )

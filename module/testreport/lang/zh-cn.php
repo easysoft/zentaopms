@@ -75,7 +75,7 @@ $lang->testreport->featureBar['browse']['all'] = '全部';
 $lang->testreport->caseSummary     = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
 $lang->testreport->buildSummary    = '共测试了<strong>%s</strong>个版本。';
 $lang->testreport->confirmDelete   = '是否删除该报告？';
-$lang->testreport->moreNotice      = '更多功能可以参考禅道扩展机制进行扩展，也可以联系我们进行定制。';
+$lang->testreport->moreNotice      = "更多功能可以参考<a href='https://www.zentao.net/page/extension.html' target='_blank'>禅道扩展机制</a>进行扩展，也可以联系我们进行定制。";
 $lang->testreport->exportNotice    = "由<a href='https://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";
 $lang->testreport->noReport        = "暂无报告，请选择测试单生成测试报告。";
 $lang->testreport->foundBugTip     = "影响版本在测试轮次内，并且创建时间在测试时间范围内产生的Bug数。";
