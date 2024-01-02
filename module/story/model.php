@@ -516,7 +516,7 @@ class storyModel extends model
         {
             $storyData->branch = (int)$branchID;
             $storyData->module = $storyData->modules[$key];
-            $storyData->plan   = $storyData->plans[$key];
+            $storyData->plan   = isset($storyData->plans[$key]) ? $storyData->plans[$key] : 0;
 
             $storyID = $this->create($storyData, $objectID, $bugID, $extra, $todoID);
             $storyIdList[$storyID] = $storyID;

@@ -406,7 +406,7 @@ detailBody
                             setClass('twins'),
                             $branch ? label(setClass($labelClass . ' circle branch size-sm'), set::title($branch), $branch) : null,
                             label(setClass('circle size-sm'), $twin->id),
-                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal')), $twin->title) : span(setClass('title'), $twin->title),
+                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal')), setData('size', 'lg'), $twin->title) : span(setClass('title'), $twin->title),
                             label(setClass('size-sm'), set::title($stage), $stage),
                             common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), setData(array('id' => $twin->id)), icon('unlink')) : null
                         );

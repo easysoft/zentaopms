@@ -123,7 +123,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
         $browseType = strtolower($browseType);
 
