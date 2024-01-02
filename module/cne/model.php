@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 class cneModel extends model
 {
-    protected $error;
+    public $error;
 
     /**
      * Construct function: set api headers.
@@ -24,7 +24,7 @@ class cneModel extends model
     {
         parent::__construct($appName);
 
-        $this->error = new stdclass;
+        $this->error = new stdclass();
 
         global $config, $app;
         $config->CNE->api->headers[]   = "{$config->CNE->api->auth}: {$config->CNE->api->token}";
@@ -38,33 +38,6 @@ class cneModel extends model
     }
 
     /**
-     * 升级平台实例倒指定版本。
-     * Upgrade app instance to version.
-     *
-     * @param  object $instance
-     * @param  string $toVersion
-     * @access public
-     * @return bool
-     */
-    public function upgradeToVersion(object $instance, string $toVersion = ''): bool
-    {
-        $setting = array();
-        $setting['cluster']   = '';
-        $setting['namespace'] = $instance->spaceData->k8space;
-        $setting['name']      = $instance->k8name;
-        $setting['channel']   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
-        $setting['chart']     = $instance->chart;
-        $setting['version']   = $toVersion;
-        $setting['settings']  = array();
-
-        $apiUrl = "/api/cne/app/settings";
-        $result = $this->apiPost($apiUrl, $setting, $this->config->CNE->api->headers);
-        if($result && $result->code == 200) return true;
-
-        return false;
-    }
-
-    /**
      * 更新实例配置。例如：cpu、内存大小、LDAP设置...
      * Update instance config. For example: cpu, memory size, LDAP settings...
      *
@@ -73,7 +46,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function updateConfig(object $instance, object $settings): bool
+    public function updateConfig(object $instance, object $settings = null): bool
     {
         $apiParams = array();
         $apiParams['cluster']   = '';

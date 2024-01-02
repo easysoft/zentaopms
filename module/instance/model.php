@@ -752,7 +752,8 @@ class instanceModel extends model
      */
     public function upgrade(object $instance, string $toVersion, string $appVersion)
     {
-        $success = $this->cne->upgradeToVersion($instance, $toVersion);
+        $instance->version = $toVersion;
+        $success = $this->cne->updateConfig($instance);
         if(!$success) return false;
 
         $instanceData = new stdclass;

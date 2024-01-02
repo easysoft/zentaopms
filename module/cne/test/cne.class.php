@@ -26,16 +26,28 @@ class cneTest
     }
 
     /**
-     * Test upgradeToVersion method.
+     * Test updateConfig method.
      *
-     * @param  int $instanceID
      * @param  string $version
+     * @param  bool   $restart
+     * @param  array  $snippets
+     * @param  object $maps
      * @access public
-     * @return bool
+     * @return bool|object
      */
-    public function upgradeToVersionTest(int $instanceID, string $version): bool
+    public function updateConfigTest(string|null $version = null, bool|null $restart = null, array|null $snippets = null, object|null $maps = null): bool|object
     {
-        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
-        return $this->objectModel->upgradeToVersion($instance, $version);
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+        if(!is_null($version)) $instance->version = $version;
+
+        $settings = new stdclass();
+        if(!is_null($restart)) $settings->force_restart = $restart;
+        if(!is_null($snippets)) $settings->settings_snippets = $snippets;
+        if(!is_null($maps)) $settings->settings_map = $maps;
+        $result = $this->objectModel->updateConfig($instance, $settings);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
     }
 }
