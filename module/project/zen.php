@@ -1026,7 +1026,7 @@ class projectZen extends project
         {
             foreach($IdList as $executionID)
             {
-                $this->execution->updateProducts($executionID);
+                $this->execution->updateProducts($executionID, $_POST);
                 if($changes) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', $currentIds));
             }
         }
