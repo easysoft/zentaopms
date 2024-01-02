@@ -15,13 +15,6 @@ jsVar('groupID',  $groupID);
 jsVar('columnID', $columnID);
 jsVar('methodName', $this->app->rawMethod);
 
-foreach($executions2Imported as $execution)
-{
-    $execution->totalEstimate = $execution->hours->totalEstimate;
-    $execution->totalConsumed = $execution->hours->totalConsumed;
-    $execution->totalLeft     = $execution->hours->totalLeft;
-}
-
 featureBar
 (
     inputGroup
