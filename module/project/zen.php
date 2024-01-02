@@ -1017,7 +1017,7 @@ class projectZen extends project
         if(empty($project->multiple))
         {
             $executionID = $this->execution->getNoMultipleID($projectID);
-            if($executionID) $this->execution->updateProducts($executionID);
+            if($executionID) $this->execution->updateProducts($executionID, $_POST);
         }
 
         /* 如果是瀑布项目单套阶段，更新关联产品。*/
