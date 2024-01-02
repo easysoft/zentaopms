@@ -2,8 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/kanban.class.php';
-su('admin');
-
 zdTable('kanban')->gen(1);
 zdTable('kanbanregion')->gen(1);
 
@@ -21,12 +19,12 @@ cid=1
 - 创建私人空间
  - 属性name @测试创建私人看板
  - 属性space @2
- - 属性owner @po16
+ - 属性owner @admin
  - 属性whitelist @user4
 - 创建公共空间
  - 属性name @测试创建公共看板
  - 属性space @3
- - 属性owner @admin
+ - 属性owner @po17
  - 属性whitelist @~~
 - 创建没有名字的公共空间第name条的0属性 @『看板名称』不能为空。
 - 创建没有空间公共空间第space条的0属性 @『所属空间』不能为空。
@@ -89,11 +87,12 @@ $kanban6->fluidBoard  = '1';
 $kanban6->minColWidth = 300;
 $kanban6->desc        = '测试创建重名的公共看板的描述';
 
+su('admin');
 $kanban = new kanbanTest();
 
-r($kanban->createTest($kanban1)) && p('name,space,owner,whitelist') && e('测试创建协作看板,1,po15,~~');    // 创建协同空间
-r($kanban->createTest($kanban2)) && p('name,space,owner,whitelist') && e('测试创建私人看板,2,po16,user4'); // 创建私人空间
-r($kanban->createTest($kanban3)) && p('name,space,owner,whitelist') && e('测试创建公共看板,3,admin,~~');   // 创建公共空间
-r($kanban->createTest($kanban4)) && p('name:0')                     && e('『看板名称』不能为空。');        // 创建没有名字的公共空间
-r($kanban->createTest($kanban5)) && p('space:0')                    && e('『所属空间』不能为空。');        // 创建没有空间公共空间
+r($kanban->createTest($kanban1)) && p('name,space,owner,whitelist') && e('测试创建协作看板,1,po15,~~');     // 创建协同空间
+r($kanban->createTest($kanban2)) && p('name,space,owner,whitelist') && e('测试创建私人看板,2,admin,user4'); // 创建私人空间
+r($kanban->createTest($kanban3)) && p('name,space,owner,whitelist') && e('测试创建公共看板,3,po17,~~');     // 创建公共空间
+r($kanban->createTest($kanban4)) && p('name:0')                     && e('『看板名称』不能为空。');         // 创建没有名字的公共空间
+r($kanban->createTest($kanban5)) && p('space:0')                    && e('『所属空间』不能为空。');         // 创建没有空间公共空间
 r($kanban->createTest($kanban6)) && p('name:0')                     && e('『看板名称』已经有『测试创建公共看板』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 创建重名公共空间
