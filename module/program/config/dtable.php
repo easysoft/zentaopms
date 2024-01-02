@@ -168,16 +168,17 @@ $config->program->productview->dtable->fieldList['fixedRate']['group']    = 'g7'
 
 $config->program->productview->dtable->fieldList['totalReleases']['name']     = 'totalReleases';
 $config->program->productview->dtable->fieldList['totalReleases']['title']    = $lang->release->common;
+$config->program->productview->dtable->fieldList['totalReleases']['minWidth'] = 90;
 $config->program->productview->dtable->fieldList['totalReleases']['type']     = 'number';
 $config->program->productview->dtable->fieldList['totalReleases']['show']     = true;
-$config->program->productview->dtable->fieldList['totalReleases']['sortType'] = true;
+$config->program->productview->dtable->fieldList['totalReleases']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalReleases']['group']    = 'g8';
 
 $config->program->productview->dtable->fieldList['latestReleaseDate']['name']     = 'latestReleaseDate';
 $config->program->productview->dtable->fieldList['latestReleaseDate']['title']    = $lang->program->latestReleaseDate;
 $config->program->productview->dtable->fieldList['latestReleaseDate']['minWidth'] = 120;
 $config->program->productview->dtable->fieldList['latestReleaseDate']['type']     = 'date';
-$config->program->productview->dtable->fieldList['latestReleaseDate']['sortType'] = true;
+$config->program->productview->dtable->fieldList['latestReleaseDate']['sortType'] = false;
 $config->program->productview->dtable->fieldList['latestReleaseDate']['group']    = 'g8';
 
 $config->program->productview->dtable->fieldList['latestRelease']['name']       = 'latestRelease';
