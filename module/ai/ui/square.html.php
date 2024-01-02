@@ -14,7 +14,7 @@ if(count($categoryList) <= 9)
         $navItems[] = array(
             'text'   => $value,
             'active' => $isActive,
-            'url'    => createLink('ai', 'square', "category=$key#app=ai"),
+            'url'    => createLink('ai', 'square', "category=$key" . '#app=ai'),
             'badge'  => $isActive ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => array('data-id' => $key)
         );
@@ -28,7 +28,7 @@ else
         $navItems[] = array(
             'text'   => $value,
             'active' => $isActive,
-            'url'    => createLink('ai', 'square', "category=$key#app=ai"),
+            'url'    => createLink('ai', 'square', "category=$key" . '#app=ai'),
             'badge'  => $isActive ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => array('data-id' => $key)
         );
@@ -41,7 +41,7 @@ else
         $subItems[] = array(
             'text'   => $value,
             'active' => $key === $category,
-            'url'    => createLink('ai', 'square', "category=$key#app=ai"),
+            'url'    => createLink('ai', 'square', "category=$key" . '#app=ai'),
             'attrs'  => array('data-id' => $key)
         );
     }
@@ -79,7 +79,7 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
         : null;
 
     return a(
-        common::hasPriv('ai', 'browseMiniProgram') ? set::href(createLink('ai', 'browseMiniProgram', "id={$miniProgram->id}#app=ai")) : null,
+        common::hasPriv('ai', 'browseMiniProgram') ? set::href(createLink('ai', 'browseMiniProgram', "id={$miniProgram->id}" . '#app=ai')) : null,
         setClass('miniprogram-card'),
         div(
             setClass('program-content'),

@@ -281,7 +281,7 @@ window.aiBrowseMiniProgram.resetInputHeight = function(event)
 
 window.aiBrowseMiniProgram.backToSquare = function()
 {
-    location.href = $.createLink('ai', 'square', '#app=ai');
+    window.location.href = $.createLink('ai', 'square') + '#app=ai';
 };
 
 /**
