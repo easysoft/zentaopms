@@ -539,7 +539,7 @@ class testtaskZen extends testtask
     protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList): array
     {
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
-        $this->app->rawModule = $from;
+        $this->lang->qa->menu->{$from}['subModule'] .= ',testtask';
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('id')->in($caseIdList)
