@@ -1658,7 +1658,7 @@ class screenModel extends model
     {
         $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
-        if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'show' => false, 'titleShow' => false, 'textStyle' => array('color' => '#BFBFBF', 'fontSize' => 18));
+        if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'textStyle' => array('color' => '#BFBFBF'));
         $chartOption['title']['text'] = $metric->name;
         $chartOption['backgroundColor'] = "#0B1727FF";
 
