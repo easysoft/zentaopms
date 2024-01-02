@@ -300,4 +300,19 @@ class cneTest
     {
         return $this->objectModel->sharedDBList($type);
     }
+
+    /**
+     * Test validateDB  method.
+     *
+     * @param  string $dbService
+     * @param  string $dbUser
+     * @param  string $dbName
+     * @param  string $namespace
+     * @access public
+     * @return object
+     */
+    public function validateDBTest(string $dbService, string $dbUser, string $dbName, string $namespace): object
+    {
+        return $this->objectModel->validateDB($dbService, $dbUser, $dbName, $namespace);
+    }
 }
