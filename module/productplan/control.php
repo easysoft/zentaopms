@@ -157,7 +157,11 @@ class productplan extends control
         {
             $parentPlan  = $this->productplan->getByID($plan->parent);
             $branchPairs = array();
-            foreach(explode(',', $parentPlan->branch) as $parentBranchID) $branchPairs[$parentBranchID] = $this->view->branchTagOption[$parentBranchID];
+            foreach(explode(',', $parentPlan->branch) as $parentBranchID)
+            {
+                $parentBranchID = (int)$parentBranchID;
+                $branchPairs[$parentBranchID] = $this->view->branchTagOption[$parentBranchID];
+            }
             $this->view->branchTagOption = $branchPairs;
         }
         $this->view->title     = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
