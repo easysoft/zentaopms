@@ -720,7 +720,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
-        foreach($bugIdList as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+        foreach($bugIdList as $unlinkBugID) $this->action->create('bug', (int)$unlinkBugID, 'unlinkedfrombuild', '', $buildID);
 
         return !dao::isError();
     }
