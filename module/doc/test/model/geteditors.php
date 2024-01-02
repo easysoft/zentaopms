@@ -8,6 +8,9 @@ cid=1
 - 获取编辑过docID=0的用户列表 @0
 - 获取编辑过docID=1的用户列表第0条的account属性 @user2
 - 获取编辑过docID不存在的用户列表 @0
+- 获取编辑过docID=0的用户数量 @0
+- 获取编辑过docID=1的用户数量 @2
+- 获取编辑过docID不存在的用户数量 @0
 
 */
 
@@ -23,3 +26,7 @@ $docTester = new docTest();
 r($docTester->getEditorsTest($docIds[0])) && p()            && e('0');     // 获取编辑过docID=0的用户列表
 r($docTester->getEditorsTest($docIds[1])) && p('0:account') && e('user2'); // 获取编辑过docID=1的用户列表
 r($docTester->getEditorsTest($docIds[2])) && p()            && e('0');     // 获取编辑过docID不存在的用户列表
+
+r(count($docTester->getEditorsTest($docIds[0]))) && p() && e('0'); // 获取编辑过docID=0的用户数量
+r(count($docTester->getEditorsTest($docIds[1]))) && p() && e('2'); // 获取编辑过docID=1的用户数量
+r(count($docTester->getEditorsTest($docIds[2]))) && p() && e('0'); // 获取编辑过docID不存在的用户数量
