@@ -26,7 +26,9 @@ class qaModel extends model
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
         {
             $this->app->loadLang('product');
-            return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+            $productID = key($products);
+            $locate    = $productID ? helper::createLink('bug', 'browse', "productID=$productID") : helper::createLink('qa', 'index');
+            return print(js::error($this->lang->product->accessDenied) . js::locate($locate));
         }
 
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;

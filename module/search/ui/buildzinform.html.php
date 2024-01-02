@@ -24,7 +24,11 @@ foreach($fieldParams as $name => $param)
     if(is_array($param['values']))
     {
         $condition->items = array();
-        foreach($param['values'] as $value => $text) $condition->items[] = array('value' => $value, 'text' => $text);
+        foreach($param['values'] as $value => $text)
+        {
+            if(empty($text)) continue;
+            $condition->items[] = array('value' => $value, 'text' => $text);
+        }
     }
 
     $conditions[] = $condition;

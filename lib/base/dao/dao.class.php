@@ -436,7 +436,7 @@ class baseDAO
         try
         {
             $dbh = $this->slaveDBH ? $this->slaveDBH : $this->dbh;
-            $row = $dbh->rawQuery($sql)->fetch(PDO::FETCH_OBJ);
+            $row = $dbh->query($sql)->fetch(PDO::FETCH_OBJ);
         }
         catch (PDOException $e)
         {
@@ -761,7 +761,7 @@ class baseDAO
         }
         else
         {
-            $sql = $this->processSQL();
+            $sql = $this->dbh->formatSQL($this->processSQL());
         }
 
         try

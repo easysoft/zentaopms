@@ -97,6 +97,9 @@ zentaoxx:
 	cp -r xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r xuanxuan/www/* zentaoxx/www/
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
+	rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
+	find zentaoxx/www/data/xuanxuan/web/media/sound -not -name 'message.mp3' -type f -delete
+	find zentaoxx/www/data/xuanxuan/web/lang -not -name 'zh-*.json' -not -name 'en.json' -type f -delete
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
@@ -109,7 +112,8 @@ zentaoxx:
 	sed -i "/\$$this->dao->update(TABLE_IM_CHAT)->data(\$$chat)->where('gid')->eq(\$$chat->gid)/i foreach(array('dismissDate', 'mergedDate', 'archiveDate') as \$$nullable) if(isset(\$$chat->\$$nullable) && empty(\$$chat->\$$nullable)) \$$chat->\$$nullable = null;" zentaoxx/extension/xuan/im/model/chat.php
 	sed -i -z "s/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\s*\$$this->setting->setItem(\"\$$account\./\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$this->app->user->account = \$$account;\n\$$this->setting->setItem(\"\$$account\./" zentaoxx/extension/xuan/im/model/chat.php
 	sed -i "s/owner=system\&module=chat\&section=settings\&key=\$$account/owner=\$$account\&module=chat\&section=clientSettings\&key=settings/g" zentaoxx/extension/xuan/im/control.php
-	sed -i "s/system.chat.settings.\$$account/\$$account.system.chat.clientSettings.settings/g" zentaoxx/extension/xuan/im/control.php
+	sed -i "s/system.chat.settings.\$$account/\$$account.chat.clientSettings.settings/g" zentaoxx/extension/xuan/im/control.php
+	sed -i 's/\$$this->setting->setItem("\$$account/\$$this->app->user = (object)array("account" => \$$account); \$$this->setting->setItem("\$$account/' zentaoxx/extension/xuan/im/control.php
 	sed -i "s/\$$super = \$$this->dao->select('admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('admin');/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$sysAdmins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$sysAdminArray = explode(',', \$$sysAdmins);\n\$$super = in_array(\$$account, \$$sysAdminArray) ? 'super' : '';/g" zentaoxx/extension/xuan/im/control.php
 	sed -i "/foreach(\$$users as \$$user)/i \$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\$$adminArray = explode(',', \$$admins);" zentaoxx/extension/xuan/im/model/user.php
 	sed -i "/if(\!isset(\$$user->signed)) \$$user->signed  = 0;/a \$$user->admin = in_array(\$$user->account, \$$adminArray) ? 'super' : '';" zentaoxx/extension/xuan/im/model/user.php

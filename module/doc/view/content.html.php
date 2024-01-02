@@ -1,7 +1,7 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php js::set('latestVersion', $doc->version);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
-<div style="height:100%" id="h-full">
+<div>
   <div class="main-col col-8 flex-content">
     <div class="cell" id="content">
       <div class="detail no-padding">
@@ -294,7 +294,10 @@
 <?php if($doc->contentType == 'markdown'):?>
 <?php css::import($jsRoot . "markdown/simplemde.min.css");?>
 <?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
-<?php js::set('markdownText', htmlspecialchars($doc->content));?>
+<?php
+    $markdownText = preg_replace("/(\r\n)+|\r+|\n+/", "\n", $doc->content);
+    js::set('markdownText', htmlspecialchars($markdownText));
+?>
 <script>
 $(function()
 {

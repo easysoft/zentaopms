@@ -2409,12 +2409,12 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
-        $task->openedDate     = substr($task->openedDate, 0, 19);
-        $task->finishedDate   = substr($task->finishedDate, 0, 19);
-        $task->canceledDate   = substr($task->canceledDate, 0, 19);
-        $task->closedDate     = substr($task->closedDate, 0, 19);
-        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19);
-        $task->realStarted    = substr($task->realStarted, 0, 19);
+        $task->openedDate     = substr($task->openedDate, 0, 19)     ? substr($task->openedDate, 0, 19)     : '';
+        $task->finishedDate   = substr($task->finishedDate, 0, 19)   ? substr($task->finishedDate, 0, 19)   : '';
+        $task->canceledDate   = substr($task->canceledDate, 0, 19)   ? substr($task->canceledDate, 0, 19)   : '';
+        $task->closedDate     = substr($task->closedDate, 0, 19)     ? substr($task->closedDate, 0, 19)     : '';
+        $task->lastEditedDate = substr($task->lastEditedDate, 0, 19) ? substr($task->lastEditedDate, 0, 19) : '';
+        $task->realStarted    = substr($task->realStarted, 0, 19)    ? substr($task->realStarted, 0, 19)    : '';
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
@@ -2560,7 +2560,7 @@ class taskModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('myinvolved', 'needconfirm', 'assignedtome', 'finishedbyme'))) ? false : true);
 
         if(empty($tasks)) return array();
 
@@ -4318,17 +4318,17 @@ class taskModel extends model
         $canEdit           = common::hasPriv('task', 'edit');
         $canBatchCreate    = ($this->config->vision != 'lite' and common::hasPriv('task', 'batchCreate'));
 
-        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
-        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
-        $menu .= $this->buildMenu('task', 'finish', $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
-        $menu .= $this->buildMenu('task', 'close',  $params, $task, 'browse', '', '', 'iframe', true, 'data-toggle="modal"');
+        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
+        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'finish', $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'close',  $params, $task, 'browse', '', '', 'iframe', true);
 
         if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
 
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true, 'data-toggle="modal"');
+        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse', 'edit', '', '', false, 'data-app="execution"');
         if($this->config->vision != 'lite')
         {

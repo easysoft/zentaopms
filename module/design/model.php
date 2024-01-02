@@ -449,21 +449,18 @@ class designModel extends model
 
         if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
 
-        if(empty($products) || !$productID) return '';
+        if(empty($products)) return '';
 
-        if($productID)
-        {
-            $currentProduct = $this->loadModel('product')->getById($productID);
-            setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        }
-        else
+        $currentProduct = $this->loadModel('product')->getById($productID);
+        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        $currentProduct = $this->loadModel('product')->getById($productID);
+        if(!empty($currentProduct->shadow)) return '';
+
+        if(!$productID)
         {
             $currentProduct = new stdclass();
             $currentProduct->name = $this->lang->product->all;
         }
-
-        $currentProduct = $this->loadModel('product')->getById($productID);
-        if(!empty($currentProduct->shadow)) return '';
 
         $output = '';
         if(!empty($products))

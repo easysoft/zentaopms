@@ -69,7 +69,7 @@ foreach($products as $product)
 <script>
 $(function()
 {
-    <?php if($currentProduct->status == 'closed'):?>
+    <?php if($productID && $currentProduct->status == 'closed'):?>
     $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
     <?php else:?>
     scrollToSelected();

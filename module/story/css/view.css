@@ -13,3 +13,7 @@
 .linkStoryTr > td {padding-left: 0px !important;}
 .resolution {white-space: nowrap; overflow: hidden;}
 .link-commit {overflow: hidden; white-space: nowrap; margin-right: 5px;}
+
+#moreActions li a {color: #313c52;}
+#moreActions li a:hover {color: #fff; text-decoration: none; background-color: #2e7fff;}
+#moreActions li .btn {height: auto;}

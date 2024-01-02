@@ -3,8 +3,8 @@ class myMisc extends misc
 {
     /**
      * Ajax get client package.
-     * 
-     * @param  string $os 
+     *
+     * @param  string $os
      * @access public
      * @return void
      */
@@ -52,7 +52,7 @@ class myMisc extends misc
                 while(!feof($xxHd))
                 {
                     $result = fwrite($clientHd, fread($xxHd, 1024 * 8 ), 1024 * 8 );
-                    if($result == false)
+                    if($result === false)
                     {
                         $response['result']  = 'fail';
                         $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);

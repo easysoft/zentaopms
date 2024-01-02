@@ -198,12 +198,13 @@ div
         (
             dtable
             (
+                setID('ajaxmetric' . $metric->id),
                 set::height(328),
                 set::rowHeight(32),
                 set::bordered(true),
                 set::cols($groupHeader),
                 set::data(array_values($groupData)),
-                set::footPager(usePager('dtablePager')),
+                set::footPager(usePager('dtablePager', $pagerExtra)),
                 $headerGroup ? set::plugins(array('header-group')) : null,
                 set::onRenderCell(jsRaw('window.renderDTableCell')),
                 set::loadPartial(true)

@@ -323,6 +323,7 @@ $lang->story->mustChooseResult      = '必须选择评审意见';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->noStory               = "暂时没有{$lang->SRCommon}。";
 $lang->story->noRequirement         = "暂时没有{$lang->URCommon}。";
+$lang->story->noRelatedRequirement  = "暂无相关{$lang->URCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 状态为草稿或已关闭，本次操作已被过滤。";
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属{$lang->productCommon}会将其下的子{$lang->SRCommon}也移动到所选{$lang->productCommon}下。";
@@ -481,6 +482,10 @@ $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
 
+$lang->story->ipdCategoryList['zhanlue']         = '战略';
+$lang->story->ipdCategoryList['maintainability'] = '可维护性';
+$lang->story->ipdCategoryList['packing']         = '包装';
+
 $lang->story->changeTip = "只有激活状态的{$lang->SRCommon}，才能进行变更";
 
 $lang->story->reviewTip = array();
@@ -545,3 +550,4 @@ $lang->story->notice->branch = "每个分支会建立一个需求，需求间互
 $lang->story->relievedTwinsRelation     = '解除孪生关系';
 $lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';
 $lang->story->changeRelievedTwinsTips   = '孪生关系解除后无法恢复，孪生需求间内容不再同步。';
+$lang->story->storyUnlinkRoadmap        = '该用户需求立项通过后又从路标中进行了移除，需要再次立项通过后才能在IPD研发管理界面中查看。';

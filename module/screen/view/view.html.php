@@ -2,7 +2,6 @@
 <script type="module" crossorigin src="<?php echo $webRoot;?>static/js/index.js"></script>
 <?php js::set('screen', $screen);?>
 <?php js::set('year', $year);?>
-<?php js::set('month', $month);?>
 <?php js::set('dept', $dept);?>
 <?php js::set('account', $account);?>
 <div id="appProvider" style="display: none;"></div>

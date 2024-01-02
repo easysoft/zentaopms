@@ -71,6 +71,7 @@ class upgradeModel extends model
         {
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
         }
+        if($fromEdition == 'max') return $versions;
 
         /* Update ipd sql only from ipd. */
         foreach($this->config->upgrade->ipdVersion as $ipd => $open)
@@ -164,7 +165,9 @@ class upgradeModel extends model
             }
         }
 
+        $this->saveLogs("Run Method program-refreshStats");
         $this->loadModel('program')->refreshStats(true);
+        $this->saveLogs("Run Method product-refreshStats");
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
     }
@@ -276,7 +279,7 @@ class upgradeModel extends model
         $this->saveLogs("Run Method {$method}");
 
         $class = $this;
-        if(str_contains($method, '-'))
+        if(strpos($method, '-') !== false)
         {
             list($className, $method) = explode('-', $method);
             $class = $this->loadModel($className);
@@ -893,13 +896,13 @@ class upgradeModel extends model
     }
 
     /**
-     * Check consistency.
+     * Get standard SQL.
      *
-     * @param  string $version
-     * @access public
-     * @return string
+     * @param  string version
+     * @access private
+     * @return string;
      */
-    public function checkConsistency($version = '')
+    private function getStandardSQL($version)
     {
         if(empty($version)) $version = $this->config->installedVersion;
 
@@ -910,7 +913,6 @@ class upgradeModel extends model
         $openVersion  = str_replace('_', '.', $openVersion);
         $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
 
-        $alterSQL    = array();
         $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
         if(!file_exists($standardSQL)) return '';
 
@@ -922,141 +924,250 @@ class upgradeModel extends model
             if(file_exists($xStandardSQL)) $sqls .= "\n" . file_get_contents($xStandardSQL);
         }
 
-        $tableExists = true;
+        return $sqls;
+    }
+
+    /**
+     * Check table consistency.
+     *
+     * @param  string $sql
+     * @access private
+     * @return array
+     */
+    private function checkTableConsistency($sql)
+    {
+        $changes = array();
+
+        $lines      = explode("\n", $sql);
+        $createHead = array_shift($lines);
+        $createFoot = array_pop($lines);
+
+        preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
+        $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
+
+        preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+        if(!isset($out[1][0])) return $changes;
+
+        $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+        $fields = array();
+
+        try
+        {
+            $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
+            $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
+            $dbSQLHead   = array_shift($dbSQLLines);
+            $dbSQLFoot   = array_pop($dbSQLLines);
+
+            preg_match_all('/ENGINE=(\w+) /', $dbSQLFoot, $out);
+            $dbEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
+
+            foreach($dbSQLLines as $dbSQLLine)
+            {
+                $dbSQLLine = trim($dbSQLLine);
+                if(!preg_match('/^`([^`]*)` /', $dbSQLLine)) continue;   // Skip no describe field line.
+
+                $dbSQLLine = rtrim($dbSQLLine, ',');
+                $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
+                $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
+
+                list($field) = explode(' ', $dbSQLLine);
+                $fields[$field] = rtrim($dbSQLLine, ',');
+            }
+        }
+        catch(PDOException $e)
+        {
+            $errorInfo = $e->errorInfo;
+            $errorCode = $errorInfo[1];
+
+            /* If table is not extists, try create this table by create sql. */
+            if($errorCode == '1146') return array($sql);
+        }
+
+        $changes = array();
+
+        // MYSQL5.5 dont support InnoDB perfectly, ignore engine changes.
+        // if($stdEngine != $dbEngine) $changes[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
+
+        foreach($lines as $line)
+        {
+            $change = $this->checkFieldConsistency($table, $line, $fields);
+            if($change) $changes[] = $change;
+        }
+
+        return $changes;
+    }
+
+    /**
+     * Check field consistency.
+     *
+     * @param  string $table
+     * @param  string $line
+     * @param  string $fields
+     * @access private
+     * @return array
+     */
+    private function checkFieldConsistency($table, $line, $fields)
+    {
+        $line = trim($line);
+        if(!preg_match('/^`([^`]*)` /', $line)) return '';   // Skip no describe field line.
+
+        $line = rtrim($line, ',');
+        $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
+        $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
+
+        list($field) = explode(' ', $line);
+        if(isset($fields[$field]) and strpos($fields[$field], ' NULL') === false and strpos($line, ' DEFAULT NULL') !== false) $line = str_replace(' DEFAULT NULL', '', $line); // e.g. standard sql like [ `content` text DEFAULT NULL ] , but current db sql like [ `content` text ].
+
+        /* Dont change if matched. */
+        if(isset($fields[$field]) && $line == $fields[$field]) return '';
+
+        if(!isset($fields[$field]))
+        {
+            $execSQL = "ALTER TABLE `$table` ADD $line"; // Add field.
+        }
+        else
+        {
+            $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]); // Modify field.
+        }
+
+        if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
+
+        return $execSQL;
+    }
+
+    /**
+     * Check field SQL.
+     *
+     * @param  string $table
+     * @param  string $stdField
+     * @param  string $dbField
+     * @access private
+     * @return string
+     */
+    private function checkFieldSQL($table, $stdField, $dbField)
+    {
+        $needModify = false;
+
+        if($this->checkFieldTypeDiff($stdField, $dbField))    $needModify = true;
+        if($this->checkFieldNullDiff($stdField, $dbField))    $needModify = true;
+        if($this->checkFieldDefaultDiff($stdField, $dbField)) $needModify = true;
+
+        $fieldName = explode(' ', $dbField)[0];
+        return $needModify ? "ALTER TABLE `$table` CHANGE $fieldName $stdField" : '';
+    }
+
+    /**
+     * Check field null diff.
+     *
+     * @param  string $stdField
+     * @param  string $dbField
+     * @access private
+     * @return bool
+     */
+    private function checkFieldNullDiff($stdField, $dbField)
+    {
+        $dbNotNull  = stripos($dbField, 'NOT NULL') !== false;
+        $stdNotNull = stripos($stdField, 'NOT NULL') !== false;
+
+        if($dbNotNull && !$stdNotNull) return true;
+    }
+
+    /**
+     * Check field default diff.
+     *
+     * @param  string $stdField
+     * @param  string $dbField
+     * @access private
+     * @return bool
+     */
+    private function checkFieldDefaultDiff($stdField, $dbField)
+    {
+        $defaultPos = stripos($stdField, ' DEFAULT ');
+        if($defaultPos === false) return false; // No default in std, don't change.
+
+        $stdDefault = substr($stdField, $defaultPos + 9);
+        if($stdDefault == 'NULL') return false; // Default is NULL, don't change.
+        if(strpos($stdField, 'text') !== false && $stdDefault == "''") return false; // Default is '' and text type, don't change.
+
+        $defaultPos = stripos($dbField,  ' DEFAULT ');
+        if($defaultPos === false) return true; // No default in db, change it.
+
+        $dbDefault = substr($dbField, $defaultPos + 9);
+
+        return $stdDefault != $dbDefault;
+    }
+
+    /**
+     * Check field type diff .
+     *
+     * @param  string $stdField
+     * @param  string $dbField
+     * @access private
+     * @return bool
+     */
+    private function checkFieldTypeDiff($stdField, $dbField)
+    {
+        $stdConfigs = explode(' ', $stdField);
+        $dbConfigs  = explode(' ', $dbField);
+
+        $stdType = $stdConfigs[1];
+        $dbType  = $dbConfigs[1];
+
+        if($stdType == $dbType) return false;
+
+        $stdLength = 0;
+        $dbLength  = 0;
+
+        preg_match_all('/^(\w+)(\((\d+)\))?$/', $stdConfigs[1], $stdOutput);
+        if(!empty($stdOutput[1][0])) $stdType   = $stdOutput[1][0];
+        if(!empty($stdOutput[3][0])) $stdLength = $stdOutput[3][0];
+
+        preg_match_all('/^(\w+)(\((\d+)\))?$/', $dbConfigs[1], $dbOutput);
+        if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
+        if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
+
+        $stdIsInt     = stripos($stdType, 'int') !== false;
+        $stdIsVarchar = stripos($stdType, 'varchar') !== false;
+        $stdIsText    = stripos($stdType, 'text') !== false;
+        $stdIsFloat   = preg_match('/float|decimal|double/i', $stdType);
+        $dbIsInt      = stripos($dbType, 'int') !== false;
+        $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
+        $dbIsText     = stripos($dbType, 'text') !== false;
+        $dbIsFloat    = preg_match('/int|float|decimal|double/i', $dbType);
+
+        if($dbIsInt)
+        {
+            if($stdIsFloat || $stdIsText || $stdIsVarchar) return true;
+            if($dbLength != 0 && $stdLength > $dbLength) return true; // MySQL 8.0 int has no length.
+        }
+        elseif($dbIsVarchar)
+        {
+            if($stdIsText) return true;
+            if($dbLength && $stdLength > $dbLength) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check consistency.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function checkConsistency($version = '')
+    {
+        $alterSQL = array();
+
+        $sqls = $this->getStandardSQL($version);
         foreach(explode(';', $sqls) as $sql)
         {
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE ') !== 0) continue;
 
-            $lines      = explode("\n", $sql);
-            $createHead = array_shift($lines);
-            $createFoot = array_pop($lines);
-
-            preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
-            $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
-
-            preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
-            if(!isset($out[1][0])) continue;
-
-            $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
-            $fields = array();
-            try
-            {
-                $tableExists = true;
-                $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
-                $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
-                $dbSQLHead   = array_shift($dbSQLLines);
-                $dbSQLFoot   = array_pop($dbSQLLines);
-
-                preg_match_all('/ENGINE=(\w+) /', $dbSQLFoot, $out);
-                $dbEengine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
-
-                foreach($dbSQLLines as $dbSQLLine)
-                {
-                    $dbSQLLine = trim($dbSQLLine);
-                    if(!preg_match('/^`([^`]*)` /', $dbSQLLine)) continue;   // Skip no describe field line.
-
-                    $dbSQLLine = rtrim($dbSQLLine, ',');
-                    $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
-                    $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
-
-                    list($field) = explode(' ', $dbSQLLine);
-                    $fields[$field] = rtrim($dbSQLLine, ',');
-                }
-            }
-            catch(PDOException $e)
-            {
-                $errorInfo = $e->errorInfo;
-                $errorCode = $errorInfo[1];
-                if($errorCode == '1146') $tableExists = false;
-            }
-
-            /* If table is not extists, try create this table by create sql. */
-            if(!$tableExists)
-            {
-                $alterSQL[] = $sql;
-                continue;
-            }
-
-            if($stdEngine != $dbEengine) $alterSQL[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
-            foreach($lines as $line)
-            {
-                $line = trim($line);
-                if(!preg_match('/^`([^`]*)` /', $line)) continue;   // Skip no describe field line.
-
-                $line = rtrim($line, ',');
-                $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
-                $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
-
-                list($field) = explode(' ', $line);
-                if(isset($fields[$field]) and strpos($fields[$field], ' NULL') === false and strpos($line, ' DEFAULT NULL') !== false) $line = str_replace(' DEFAULT NULL', '', $line); // e.g. standard sql like [ `content` text DEFAULT NULL ] , but current db sql like [ `content` text ].
-
-                $execSQL = '';
-                if(!isset($fields[$field]))
-                {
-                    $execSQL = "ALTER TABLE `$table` ADD $line";
-                }
-                elseif($line != $fields[$field])
-                {
-                    $stdConfigs = explode(' ', $line);
-                    $dbConfigs  = explode(' ', $fields[$field]);
-
-                    if($stdConfigs[1] != $dbConfigs[1])
-                    {
-                        $stdType   = $stdConfigs[1];
-                        $dbType    = $dbConfigs[1];
-                        $stdLength = 0;
-                        $dbLength  = 0;
-
-                        preg_match_all('/^(\w+)(\((\d+)\))?$/', $stdConfigs[1], $stdOutput);
-                        if(!empty($stdOutput[1][0])) $stdType   = $stdOutput[1][0];
-                        if(!empty($stdOutput[3][0])) $stdLength = $stdOutput[3][0];
-
-                        preg_match_all('/^(\w+)(\((\d+)\))?$/', $dbConfigs[1], $dbOutput);
-                        if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
-                        if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
-
-                        $stdIsInt     = stripos($stdType, 'int') !== false;
-                        $stdIsVarchar = stripos($stdType, 'varchar') !== false;
-                        $stdIsText    = stripos($stdType, 'text') !== false;
-                        $stdIsFloat   = preg_match('/int|float|decimal|double/i', $stdType);
-                        $dbIsInt      = stripos($dbType, 'int') !== false;
-                        $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
-                        $dbIsText     = stripos($dbType, 'text') !== false;
-                        $dbIsFloat    = preg_match('/int|float|decimal|double/i', $dbType);
-                        if($dbIsInt and $dbLength == 0)
-                        {
-                            $intFieldLengths = zget($this->config->upgrade->dbFieldLengths, $dbConfigs[2] == 'unsigned' ? 'unsigned' : 'int', array());
-                            $dbLength = zget($intFieldLengths, $dbType, 0);
-                        }
-
-                        if(($stdIsInt || $stdIsVarchar) && ($dbIsInt || $dbIsVarchar) && $dbLength > $stdLength) $stdConfigs[1] = $dbConfigs[1];   // Only check like int and varchar field type.
-                        if(($stdIsInt || $stdIsVarchar) && $dbIsText) $stdConfigs[1] = $dbConfigs[1];
-                        if($stdIsFloat && $dbIsFloat)
-                        {
-                            if($dbLength && $stdLength && dbLength > $stdLength)  $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float(2,2), and current field type float(3,1)
-                            if($dbLength && $stdLength == 0)                      $stdConfigs[1] = $dbConfigs[1]; // e.g. standard field type like float, and current field type float(3,1)
-                        }
-                        if($stdIsText && $dbIsText)
-                        {
-                            $textFieldLengths = $this->config->upgrade->dbFieldLengths['text'];
-                            if($textFieldLengths[$stdType] < $textFieldLengths[$dbType]) $stdConfigs[1] = $dbConfigs[1];
-                        }
-                        if(!preg_match('/int|float|decimal|double/i', $stdConfigs[1]) && isset($stdConfigs[2]) && $stdConfigs[2] == 'unsigned') unset($stdConfigs[2]);
-
-                        $line = implode(' ', $stdConfigs);
-                        if($line == $fields[$field]) continue;
-                    }
-
-                    $execSQL = "ALTER TABLE `$table` CHANGE $field $line";
-                }
-
-                if($execSQL)
-                {
-                    if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
-                    $alterSQL[] = "$execSQL";
-                }
-            }
+            $changes = $this->checkTableConsistency($sql);
+            if(!empty($changes)) $alterSQL = array_merge($alterSQL, $changes);
         }
 
         return implode(";\n", $alterSQL);
@@ -1077,7 +1188,10 @@ class upgradeModel extends model
         $hasError = false;
         $fixSqls  = $this->checkConsistency($version);
         if($fixSqls) $fixSqls = "SET @@sql_mode= '';\n" . $fixSqls;
-        foreach(explode(';', $fixSqls) as $fixSQL)
+
+        $sqlLines = explode(';', $fixSqls);
+        file_put_contents($logFile, count($sqlLines) . "\n", FILE_APPEND);
+        foreach($sqlLines as $fixSQL)
         {
             file_put_contents($logFile, $fixSQL, FILE_APPEND);
             try
@@ -1896,6 +2010,8 @@ class upgradeModel extends model
      */
     public function addORPriv()
     {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
         $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchAll();
 
         foreach($admins as $key => $admin) $admins[$key] = trim($admin->admins, ',');
@@ -1908,26 +2024,23 @@ class upgradeModel extends model
 
         foreach($user as $account => $visions)
         {
-            if(strpos($visions, 'or') === false)
-            {
-                $visions = 'or,' . $visions;
-                $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
-            }
+            if(strpos($visions, 'or') !== false) continue;
+
+            $visions = 'or,' . $visions;
+            $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
+            $this->saveLogs($this->dao->get());
         }
 
         include('priv.php');
         foreach($orData as $role => $name)
         {
-            $this->dao->insert(TABLE_GROUP)
-                ->set('vision')->eq('or')
-                ->set('name')->eq($name)
-                ->set('role')->eq($role)
-                ->set('desc')->eq($name)
-                ->exec();
+            $this->dao->insert(TABLE_GROUP)->set('vision')->eq('or')->set('name')->eq($name)->set('role')->eq($role)->set('desc')->eq($name)->exec();
+            $this->saveLogs($this->dao->get());
             if(dao::isError()) continue;
             $groupID = $this->dao->lastInsertID();
             $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
             $this->dao->exec($sql);
+            $this->saveLogs($sql);
         }
     }
 
@@ -4396,7 +4509,7 @@ class upgradeModel extends model
         $project->model          = 'scrum';
         $project->parent         = $programID;
         $project->status         = $data->projectStatus;
-        $project->team           = empty($data->team) ? $data->team : $data->projectName;
+        $project->team           = !empty($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
         $project->end            = isset($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);

@@ -1449,6 +1449,31 @@ class pivotModel extends model
     }
 
     /**
+     * Get sql field order.
+     *
+     * @param  string $field
+     * @param  object $statement sql parser statement[0]
+     * @access public
+     * @return string
+     */
+    public function getSqlFieldOrder($field, $statement)
+    {
+        $order = 'ASC';
+        if(!isset($statement->order)) return $order;
+
+        foreach($statement->order as $orderInfo)
+        {
+            if($orderInfo->expr->expr == $field)
+            {
+                $order = $orderInfo->type;
+                break;
+            }
+        }
+
+        return $order;
+    }
+
+    /**
      * Gen sheet.
      *
      * @param  array  $fields
@@ -1461,6 +1486,10 @@ class pivotModel extends model
      */
     public function genSheet($fields, $settings, $sql, $filters, $langs = array())
     {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
         $groups    = array();
         $sqlGroups = array();
 
@@ -1577,8 +1606,16 @@ class pivotModel extends model
                         }
                     }
 
-                    if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
-                    if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                    if($slice != 'noSlice')
+                    {
+                        $order         = $this->getSqlFieldOrder($slice, $statement);
+                        $sliceOrderSQL = " order by tt.`$slice` $order, $groupList";
+                        $columnSQL     = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $sliceOrderSQL;
+                    }
+                    else
+                    {
+                        $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                    }
                 }
 
                 $columnRows = $this->dao->query($columnSQL)->fetchAll();
@@ -2101,7 +2138,11 @@ class pivotModel extends model
                     else
                     {
                         $table = zget($this->config->objectTables, $object, '');
-                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                        $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
+                        foreach($columns as $id => $column) $columns[$id] = (array)$column;
+                        $fieldList = array_column($columns, 'Field');
+
+                        if(in_array($field, $fieldList)) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                     }
                 }
                 break;
@@ -2375,35 +2416,88 @@ class pivotModel extends model
 
         if($page)
         {
-            $recTotal     = $end - $start + 1;
-            $itemCountTip = sprintf($this->lang->pivot->recTotalTip, $itemCount);
-
+            $recTotal  = $end - $start + 1;
             $leftPage  = $page - 1;
             $rightPage = $page + 1;
-            $leftPageClass  = $page == 1 ? 'disabled' : '';
-            $rightPageClass = $page == $pageTotal ? 'disabled' : '';
 
-            if($recTotal) $table .= "<div class='table-footer'>
-                <ul class='pager'>
-                  <li><div class='pager-label recTotal'>{$itemCountTip}</div></li>
-                  <li class='pager-item-left first-page $leftPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
-                  </li>
-                  <li class='pager-item-left left-page $leftPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
-                  </li>
-                  <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
-                  <li class='pager-item-right right-page $rightPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
-                  </li>
-                  <li class='pager-item-right last-page $rightPageClass' onclick='queryPivotByPager(this)'>
-                    <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
-                  </li>
-                </ul>
-              </div>";
+            if($recTotal) $table .= $this->getTablePager($itemCount, $leftPage, $rightPage, $page, $pageTotal);
         }
 
         echo $table;
+    }
+
+    public function getTablePager($itemCount, $leftPage, $rightPage, $page, $pageTotal)
+    {
+        $itemCountTip   = sprintf($this->lang->pivot->recTotalTip, $itemCount);
+        $leftPageClass  = $page == 1 ? 'disabled' : '';
+        $rightPageClass = $page == $pageTotal ? 'disabled' : '';
+
+        $pager = "
+            <div class='table-footer'>
+              <ul class='pager'>
+                <li><div class='pager-label recTotal'>{$itemCountTip}</div></li>
+                <li class='pager-item-left first-page $leftPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+                </li>
+                <li class='pager-item-left left-page $leftPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+                </li>
+                <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
+                <li class='pager-item-right right-page $rightPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+                </li>
+                <li class='pager-item-right last-page $rightPageClass' onclick='queryPivotByPager(this)'>
+                  <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
+                </li>
+              </ul>
+            </div>";
+
+         return $pager;
+    }
+
+    public function getFullTablePager($recTotal, $recPerPage, $page, $leftPage, $rightPage, $pageTotal, $onclick = 'queryPivotByPager(this)')
+    {
+        $recTotalTip    = sprintf($this->lang->pivot->recTotalTip, $recTotal);
+        $recPerPageTip  = sprintf($this->lang->pivot->recPerPageTip, $recPerPage);
+        $leftPageClass  = $page == 1 ? 'disabled' : '';
+        $rightPageClass = $page == $pageTotal ? 'disabled' : '';
+
+        $dropdownMenu = '';
+        foreach($this->config->pivot->recPerPageList as $perPage)
+        {
+            $active = $perPage == $recPerPage ? 'active' : '';
+            $dropdownMenu .= "<li class='recPerPage {$active}' onclick='{$onclick}'><a href='javascript:;' data-size='{$perPage}'>{$perPage}</a></li>";
+        }
+
+        $pager = "
+            <div class='table-footer'>
+              <ul class='pager'>
+                <li class='hidden current-page' data-page='{$page}'></li>
+                <li class='hidden current-recperpage' data-recperpage='{$recPerPage}'></li>
+                <li><div class='pager-label recTotal'>{$recTotalTip}</div></li>
+                <li>
+                  <div class='btn-group pager-size-menu dropup'>
+                    <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' style='border-radius: 4px;'>{$recPerPageTip}<span class='caret'></span></button>
+                    <ul class='dropdown-menu'>{$dropdownMenu}</ul>
+                  </div>
+                </li>
+                <li class='pager-item-left first-page $leftPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+                </li>
+                <li class='pager-item-left left-page $leftPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+                </li>
+                <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
+                <li class='pager-item-right right-page $rightPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+                </li>
+                <li class='pager-item-right last-page $rightPageClass' onclick='{$onclick}'>
+                  <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
+                </li>
+              </ul>
+            </div>";
+
+         return $pager;
     }
 
     /**

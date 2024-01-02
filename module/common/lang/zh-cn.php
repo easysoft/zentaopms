@@ -538,6 +538,8 @@ $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</s
 $lang->pager->totalCountAB = '共 {recTotal} 项';
 $lang->pager->pageSizeAB   = '每页 {recPerPage} 项';
 
+$lang->pager->shortPageSize = '<strong>{recPerPage}</strong> / 页';
+
 $lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 

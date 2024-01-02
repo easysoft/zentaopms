@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php js::set('version', $version);?>
 <?php js::set('execFixSQL', !empty($alterSQL) && !$hasError);?>
 
 <div class='container'>
@@ -21,7 +20,7 @@
         <strong><?php echo $lang->upgrade->consistency;?></strong>
       </div>
       <div class='modal-body'>
-        <h4><?php echo $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog;?></h4>
+        <h4><?php echo $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog . "<span id='progressBox'></span>";?></h4>
         <div id='logBox' style='height:200px; width:100%; overflow:auto'><?php echo $hasError ? $alterSQL : '';?></div>
       </div>
       <?php if($hasError):?>
@@ -30,4 +29,7 @@
     </div>
   </form>
 </div>
+<script>
+version = "<?php echo $version;?>";
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>

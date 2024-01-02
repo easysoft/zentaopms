@@ -543,6 +543,10 @@ class baseHTML
         $app->loadClass('purifier', true);
         $purifierConfig   = HTMLPurifier_Config::createDefault();
         $purifierConfig->set('Cache.DefinitionImpl', null);
+
+        /* 设置a标签允许的特殊属性，应用于高亮左侧导航。 */
+        $purifierConfig->getHTMLDefinition(true)->addAttribute('a', 'data-app', 'CDATA');
+
         $purifier = new HTMLPurifier($purifierConfig);
 
         return $purifier->purify($button);

@@ -44,27 +44,6 @@ class metricTao extends metricModel
     }
 
     /**
-     * 根据范围获取度量项。
-     * Fetch metric by scope.
-     *
-     * @param  string $scope
-     * @param  int    $limit
-     * @access protected
-     * @return array
-     */
-    protected function fetchMetricsByScope($scope, $limit = -1)
-    {
-        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
-            ->where('deleted')->eq('0')
-            ->andWhere('scope')->eq($scope)
-            ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->fetchAll();
-
-        return $metrics;
-    }
-
-    /**
      * 根据编号获取度项。
      * Fetch metric by id.
      *
@@ -280,7 +259,7 @@ class metricTao extends metricModel
         $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
         $dataFieldStr = implode(',', $wrapFields);
 
-        $records =  $this->dao->select($dataFieldStr)
+        $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
@@ -295,11 +274,10 @@ class metricTao extends metricModel
             ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
             ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
-            ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
-            ->beginIF($metricScope == 'system')->page($pager)->fi()
-            ->fetchAll();
+            ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
-        return $records;
+        if($metricScope == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
+        return $stmt->fetchAll();
     }
 
     /**

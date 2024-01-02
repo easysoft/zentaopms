@@ -919,10 +919,10 @@ class actionModel extends model
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
 
-        if(isset($this->session->calllbackActionList[$actionID]))
+        if(isset($this->session->callbackActionList[$actionID]))
         {
-            $callbackMethod = $this->session->calllbackActionList[$actionID];
-            unset($this->session->calllbackActionList[$actionID]);
+            $callbackMethod = $this->session->callbackActionList[$actionID];
+            unset($this->session->callbackActionList[$actionID]);
             if(method_exists($this, $callbackMethod)) call_user_func_array(array($this, $callbackMethod), array($actionID));
         }
     }
@@ -998,21 +998,25 @@ class actionModel extends model
                     $action->newMemory = $action->comment;
                     $action->comment = '';
                 }
+
                 if(!empty($extra))
                 {
-                    $action->oldName    = zget($extra->data, 'oldName', '');
-                    $action->newName    = zget($extra->data, 'newName', '');
-                    $action->oldVersion = zget($extra->data, 'oldVersion', '');
-                    $action->newVersion = zget($extra->data, 'newVersion', '');
-                    $action->oldAppName = zget($extra->data, 'oldAppName', '');
-                    $action->newAppName = zget($extra->data, 'newAppName', '');
-                    $enableAutoBackup   = zget($extra->data, 'autoBackup', 0);
-
-                    if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
                     $action->extra = '';
+                    if(!empty($extra->data))
+                    {
+                        $action->oldName    = zget($extra->data, 'oldName', '');
+                        $action->newName    = zget($extra->data, 'newName', '');
+                        $action->oldVersion = zget($extra->data, 'oldVersion', '');
+                        $action->newVersion = zget($extra->data, 'newVersion', '');
+                        $action->oldAppName = zget($extra->data, 'oldAppName', '');
+                        $action->newAppName = zget($extra->data, 'newAppName', '');
+                        $enableAutoBackup   = zget($extra->data, 'autoBackup', 0);
+
+                        if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
+                    }
 
                     if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
-                    if(is_string($extra->result) && $extra->result != 'fail')
+                    if(is_string($extra->result) && $extra->result != 'fail'  && isset($extra->message))
                     {
                         $action->comment = "\n" . $extra->message;
                     }

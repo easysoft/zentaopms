@@ -34,9 +34,11 @@ class usersEntry extends entry
 
         $users = $this->loadModel('company')->getUsers($this->param('browse', 'inside'), $type, 0, 0, $this->param('order', 'id_desc'), $pager);
         $result = array();
+        $this->loadModel('group');
         foreach($users as $user)
         {
             $user = $this->filterFields($user, 'id,dept,account,realname,role,pinyin,email,' . $appendFields);
+            $user->group = $this->group->getByAccount($user->account);
             $result[] = $this->format($user, 'locked:time');
         }
 
@@ -83,7 +85,11 @@ class usersEntry extends entry
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
         $user = $this->loadModel('user')->getByID($data->id, 'id');
-        unset($user->password);
+        if($user)
+        {
+            $user->group = $this->loadModel('group')->getByAccount($user->account);
+            unset($user->password);
+        }
 
         return $this->send(201, $this->format($user, 'last:time,locked:time'));
     }

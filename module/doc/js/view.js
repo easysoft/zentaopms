@@ -1,7 +1,5 @@
 $(function()
 {
-    if($.cookie('isFullScreen') == 1) fullScreen();
-
     $('.menu-actions > a').click(function()
     {
         $(this).parent().hasClass('open') ? $(this).css('background', 'none') : $(this).css('background', '#f1f1f1');
@@ -82,6 +80,7 @@ function fullScreen()
             $('#content .file-image .right-icon').addClass('hidden');
             $('#content .detail').eq(1).addClass('hidden');
             $.cookie('isFullScreen', 1);
+            $('#diffContain .CodeMirror.cm-s-paper.CodeMirror-wrap').css('height', 'calc(100vh - 120px)');
         };
 
         var whenFailEnterFullscreen = function(error)
@@ -125,6 +124,7 @@ function exitFullScreen()
     $('#content .detail').eq(1).removeClass('hidden');
     $('.main-col iframe').css('min-height', '380px');
     $.cookie('isFullScreen', 0);
+    $('#diffContain .CodeMirror.cm-s-paper.CodeMirror-wrap').css('height', 'calc(100vh - 230px)');
 }
 
 document.addEventListener('fullscreenchange', function (e)

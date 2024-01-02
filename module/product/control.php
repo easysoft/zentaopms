@@ -178,9 +178,10 @@ class product extends control
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
-        /* Load datatable and execution. */
+        /* Load datatable, execution and projectstory. */
         $this->loadModel('datatable');
         $this->loadModel('execution');
+        $this->app->loadLang('projectstory');
 
         /* Set product, module and query. */
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);

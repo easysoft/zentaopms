@@ -2,12 +2,12 @@
 /**
  * The search module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 $lang->search->common        = '搜索';
 $lang->search->id            = '编号';
@@ -31,6 +31,7 @@ $lang->search->onMenuBar     = '显示在菜单栏';
 $lang->search->custom        = '自定义';
 $lang->search->setCommon     = '设为公共查询条件';
 $lang->search->saveCondition = '保存搜索条件';
+$lang->search->setCondName   = '请输入保存条件名称';
 
 $lang->search->account  = '用户名';
 $lang->search->module   = '模块';
@@ -71,11 +72,14 @@ $lang->search->index      = '全文检索';
 $lang->search->buildIndex = '重建索引';
 $lang->search->preview    = '预览';
 
+$lang->search->inputWords        = '请输入检索内容';
 $lang->search->result            = '搜索结果';
+$lang->search->resultCount       = '共计 <strong>%s</strong> 条';
 $lang->search->buildSuccessfully = '初始化搜索索引成功';
 $lang->search->executeInfo       = '为您找到相关结果%s个，耗时%s秒';
 $lang->search->buildResult       = "创建 %s 索引, 已创建  <strong class='%scount'>%s</strong> 条记录；";
 $lang->search->queryTips         = "多个id可用英文逗号分隔";
+$lang->search->confirmDelete     = '是否确认删除该记录';
 
 $lang->search->modules['all']         = '全部';
 $lang->search->modules['task']        = '任务';

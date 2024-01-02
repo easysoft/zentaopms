@@ -181,16 +181,7 @@ class testcase extends control
         }
 
         $sceneCount = count($scenes);
-        $caseCount  = count($cases);
-        if($this->cookie->onlyScene)
-        {
-            $summary = sprintf($this->lang->testcase->summaryScene, $sceneCount);
-        }
-        else
-        {
-            $summary = sprintf($this->lang->testcase->summary, $sceneCount, $caseCount);
-        }
-
+        $caseCount  = 0;
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
@@ -201,6 +192,16 @@ class testcase extends control
             $case->grade   = 1;
             $case->path    = ',' . $case->id . ',';
             $case->isScene = false;
+            if(!$case->scene) $caseCount++;
+        }
+
+        if($this->cookie->onlyScene)
+        {
+            $summary = sprintf($this->lang->testcase->summaryScene, $sceneCount);
+        }
+        else
+        {
+            $summary = sprintf($this->lang->testcase->summary, $sceneCount, $caseCount);
         }
 
         /* Build the search form. */
@@ -693,7 +694,7 @@ class testcase extends control
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&caseType=&orderBy=id_desc"), 'parent'));
+            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&caseType=&orderBy=sort_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -1532,9 +1533,6 @@ class testcase extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'linkBugs', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
-        $objectID  = 0;
-        if($this->app->tab == 'project')   $objectID = $case->project;
-        if($this->app->tab == 'execution') $objectID = $case->execution;
 
         /* Unset search field 'plan' in single project. */
         unset($this->config->bug->search['fields']['product']);
@@ -1544,7 +1542,7 @@ class testcase extends control
             if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
         }
 
-        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL);
 
         /* Get cases to link. */
         $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
@@ -2094,15 +2092,25 @@ class testcase extends control
         $this->loadModel('branch');
         if(!$toLib && $product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
 
-        $libraries = $this->loadModel('caselib')->getLibraries();
+        $libList   = $this->loadModel('caselib')->getLibraries();
+        $libraries = $libList;
         if($toLib)
         {
             $currentLib = $this->session->caseLib;
-            unset($libraries[$currentLib]);
+            $this->loadModel('caselib')->setLibMenu($libList, $currentLib);
+            $libraries = array_diff($libList, array($currentLib => $libList[$currentLib]));
         }
         if(empty($libraries))
         {
-            echo js::alert($this->lang->testcase->noLibrary);
+            if($toLib)
+            {
+                $tips = $this->lang->testcase->noOtherLibrary;
+            }
+            else
+            {
+                $tips = $this->lang->testcase->noLibrary;
+            }
+            echo js::alert($tips);
             return print(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
@@ -2113,7 +2121,7 @@ class testcase extends control
             return print(js::reload('parent'));
         }
 
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        if(!$toLib) $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Build the search form. */
         $actionURL = $this->createLink($toLib ? 'caselib' : 'testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
@@ -2122,7 +2130,7 @@ class testcase extends control
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
         $this->config->testcase->search['fields']['lib'] = $this->lang->testcase->lib;
-        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all));
+        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libList[$libID], 'all' => $this->lang->caselib->all));
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib');
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['product']);

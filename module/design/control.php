@@ -183,9 +183,10 @@ class design extends control
         $this->view->position[] = $this->lang->design->create;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active');
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
         $this->view->type       = $type;
         $this->view->typeList   = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
@@ -231,7 +232,7 @@ class design extends control
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
         $this->view->position[] = $this->lang->design->batchCreate;
 
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active');
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->view->type     = $type;
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
@@ -262,11 +263,11 @@ class design extends control
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
 
-        $this->view->design  = $design;
-        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
-        $this->view->repos   = $this->loadModel('repo')->getRepoPairs('project', $design->project);
+        $this->view->design   = $design;
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active');
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions  = $this->loadModel('action')->getList('design', $design->id);
+        $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $this->view->project  = $project;
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
@@ -319,7 +320,7 @@ class design extends control
 
         $this->view->design  = $design;
         $this->view->project = $project;
-        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
@@ -435,13 +436,12 @@ class design extends control
      */
     public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $design    = $this->design->getCommit($designID, $pager);
-        $productID = $this->commonAction($design->project, $design->product, $designID);
-
         /* Init pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init(0, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $design = $this->design->getCommit($designID, $pager);
+        $this->commonAction($design->project, $design->product, $designID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;

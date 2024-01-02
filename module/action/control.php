@@ -331,6 +331,7 @@ class action extends control
         if(!empty($_POST))
         {
             $isInZinPage = isInModal() || in_array($objectType, $this->config->action->newPageModule);
+
             if(strtolower($objectType) == 'task')
             {
                 $task       = $this->loadModel('task')->getById($objectID);
@@ -353,15 +354,19 @@ class action extends control
                 }
             }
 
-            $actionID = $this->action->create($objectType, $objectID, 'Commented', isset($this->post->actioncomment) ? $this->post->actioncomment : $this->post->comment);
-            if(empty($actionID))
+            $comment = isset($this->post->actioncomment) ? $this->post->actioncomment : $this->post->comment;
+            if($comment)
             {
-                if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
-                return print(js::error($this->lang->error->accessDenied));
-            }
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('status' => 'success', 'data' => $actionID));
+                $actionID = $this->action->create($objectType, $objectID, 'Commented', $comment);
+                if(empty($actionID))
+                {
+                    if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                    return print(js::error($this->lang->error->accessDenied));
+                }
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                {
+                    return $this->send(array('status' => 'success', 'data' => $actionID));
+                }
             }
 
             if($isInZinPage)

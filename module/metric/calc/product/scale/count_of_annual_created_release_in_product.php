@@ -22,15 +22,15 @@ class count_of_annual_created_release_in_product extends baseCalc
 {
     public $dataset = 'getProductReleases';
 
-    public $fieldList = array('t1.id', 't1.product', 't1.createdDate');
+    public $fieldList = array('t1.id', 't1.product', 't1.date');
 
     public $result = array();
 
     public function calculate($row)
     {
-        if(empty($row->createdDate)) return null;
+        if(empty($row->date)) return null;
 
-        $year = substr($row->createdDate, 0, 4);
+        $year = substr($row->date, 0, 4);
         if($year == '0000') return null;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();

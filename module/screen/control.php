@@ -84,7 +84,7 @@ class screen extends control
             return;
         }
 
-        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
 
         $this->view->title  = $screen->name;
         $this->view->screen = $screen;
@@ -106,12 +106,6 @@ class screen extends control
         }
     }
 
-    public function ajaxGetScreenScheme($screenID, $year = 0, $month = 0, $dept = 0, $account = '')
-    {
-        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
-        echo(json_encode($screen));
-    }
-
     /**
      * Ajax get chart.
      *
@@ -125,11 +119,10 @@ class screen extends control
             $chartID      = $this->post->sourceID;
             $type         = $this->post->type;
             $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
-            $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
 
-            $type = $this->screen->getChartType($type);
+            $type = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
 
-            $table = $this->config->objectTables[$type];
+            $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
             $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
             $filterFormat = '';
@@ -174,17 +167,14 @@ class screen extends control
                     $mergeFilters[] = $filter;
                 }
 
-                if($type != 'metric')
+                if($table == TABLE_PIVOT)
                 {
-                    if($table == TABLE_PIVOT)
-                    {
-                        list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
-                        $chart->sql = $sql;
-                    }
-                    else
-                    {
-                        $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
-                    }
+                    list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
+                    $chart->sql = $sql;
+                }
+                else
+                {
+                    $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
                 }
             }
 
@@ -198,51 +188,5 @@ class screen extends control
             }
             print(json_encode($chartData));
         }
-    }
-
-    /**
-     * Ajax get tree data.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetTreeData($screenID)
-    {
-        $dimensions  = $this->screen->getDimensionPairs();
-        $screen      = $this->screen->getByID($screenID);
-        $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($screen->dimension);
-
-        foreach($dimensions as $dimension) $dimension->value = (int)$dimension->value;
-
-        $data = new stdclass();
-        $data->chartData   = $screen->chartData;
-        $data->treeData    = $this->screen->getTreeData($dimensions);
-        $data->dimensions  = $dimensions;
-        $data->dimension   = $screen->dimension;
-        $data->scopeList   = $this->loadModel('metric')->getScopePairs(false);
-        $data->scope       = 'system';
-        $data->fieldConfig = $this->screen->getTreeSelectOptions();
-
-        echo(json_encode($data));
-    }
-
-    /**
-     * 获取度量数据。
-     * Ajax get metric data.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMetricData()
-    {
-        $metricID = $this->post->metricID;
-        $metric   = $this->loadModel('metric')->getByID($metricID);
-        $result   = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
-
-        $metricData = new stdclass();
-        $metricData->header  = $this->metric->getViewTableHeader($metric);
-        $metricData->data    = $this->metric->getViewTableData($metric, $result);
-
-        echo(json_encode($metricData));
     }
 }

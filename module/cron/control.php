@@ -395,6 +395,8 @@ class cron extends control
                 parse_str($task->command, $params);
                 if(isset($params['moduleName']) and isset($params['methodName']))
                 {
+                    $this->viewType = 'html';
+
                     $this->app->loadLang($params['moduleName']);
                     $this->app->loadConfig($params['moduleName']);
                     $output = $this->fetch($params['moduleName'], $params['methodName']);

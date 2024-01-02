@@ -115,8 +115,10 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t2.vision)")
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)", true)
+            ->orWhere("t2.vision IS NULL")->markRight(1)
+            ->andWhere("NOT FIND_IN_SET('lite', t2.vision)", true)
+            ->orWhere("t2.vision IS NULL")->markRight(1)
             ->query();
     }
 
@@ -563,7 +565,7 @@ class dataset
      */
     public function getPipeline($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_PIPELINE)->alias('t1')
+        return $this->dao->select($fieldList)->from(TABLE_JOB)->alias('t1')
             ->where('t1.deleted')->eq('0')
             ->query();
     }

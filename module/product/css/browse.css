@@ -51,3 +51,6 @@ a.removeModule:hover {color: red;}
 .dtable-cell[data-sort='up']   .dtable-sort:before {color: #000; opacity: 1}
 .dtable-cell[data-sort='down'] .dtable-sort:after  {color: #000; opacity: 1}
 .dtable .toggle-icon {border-radius: 50%; border-style: solid;}
+.dtable .label-pri {overflow: hidden;}
+
+#mainContent .scroll-wrapper {z-index: 11;}

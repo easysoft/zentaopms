@@ -306,7 +306,7 @@ function renderTaskItem(item, $item, col)
         $item.html(renderUserAvatar(item.assignedTo, 'task', item.id, 'md'));
     }
 
-    if(scaleSize <= 1)
+    if(canBeChanged && scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
         if(!$actions.length && item.menus && item.menus.length)
@@ -356,8 +356,13 @@ function renderColumnCount($count, count, col)
         return;
     }
 
-    var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
-    $count.html(text + '<i class="icon icon-arrow-up" data-toggle="tooltip" data-original-title="' + kanbanLang.limitExceeded + '"></i>');
+    var text     = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
+    var limitTip = '';
+    if(col.limit >= 0 && count > col.limit)
+    {
+        limitTip = 'data-original-title="' + kanbanLang.limitExceeded + '"';
+    }
+    $count.html(text + '<i class="icon icon-arrow-up" data-toggle="tooltip" ' + limitTip + '"></i>');
 
     if(col.limit != -1 && col.limit < count)
     {
@@ -1238,16 +1243,12 @@ $(function()
         onAction:             handleKanbanAction,
         virtualRenderOptions: {container: '#kanbanContainer>.panel-body,#kanbanContainer'},
         virtualCardList:      true,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop
-        },
         onRenderHeaderCol: renderHeaderCol,
         onRenderLaneName:  renderLaneName,
         onRenderCount:     renderColumnCount,
         sortable:          handleSortCards,
     };
+    if(canBeChanged) commonOptions.droppable = {target: findDropColumns, finish: handleFinishDrop};
 
     /* Create kanban */
     if(groupBy == 'default')

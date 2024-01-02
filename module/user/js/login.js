@@ -19,7 +19,7 @@ $(document).ready(function()
 
     $('#account').focus();
 
-    $("#langs li > a").click(function() 
+    $("#langs li > a").click(function()
     {
         selectLang($(this).data('value'));
     });
@@ -53,9 +53,9 @@ $(document).ready(function()
                 url: link,
                 dataType: 'json',
                 method: 'POST',
-                data: 
+                data:
                 {
-                    "account": account, 
+                    "account": account,
                     "password": hasMD5 ? md5(md5(password) + rand) : password,
                     'passwordStrength' : passwordStrength,
                     'referer' : referer,
@@ -65,7 +65,7 @@ $(document).ready(function()
                 },
                 success:function(data)
                 {
-                    if(data.result == 'fail') 
+                    if(data.result == 'fail')
                     {
                         alert(data.message);
                         if($('.captchaBox').length == 1) $('.captchaBox .input-group .input-group-addon img').click();
@@ -81,7 +81,7 @@ $(document).ready(function()
     });
 
     /**
-     *  Refresh captcha. 
+     *  Refresh captcha.
      */
     $('.captchaBox .input-group .input-group-addon img').click(function()
     {
@@ -95,7 +95,7 @@ $(document).ready(function()
 
 /**
  * Show notice for one click package use weak password.
- * 
+ *
  * @access public
  * @return void
  */

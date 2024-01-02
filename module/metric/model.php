@@ -271,16 +271,11 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getScopePairs($all = true)
+    public function getScopePairs()
     {
         $scopePairs = array();
         foreach($this->config->metric->scopeList as $scope)
         {
-            if(!$all)
-            {
-                $metrics = $this->metricTao->fetchMetricsByScope($scope, 1);
-                if(empty($metrics)) continue;
-            }
             $scopePair = new stdclass();
             $scopePair->value = $scope;
             $scopePair->label = $this->lang->metric->scopeList[$scope];
@@ -1091,7 +1086,7 @@ class metricModel extends model
     {
         foreach($this->lang->metric->scopeList as $scope => $name)
         {
-            $metrics = $this->metricTao->fetchMetricsByScope($scope, 1);
+            $metrics = $this->metricTao->fetchMetrics($scope, $stage);
             if(empty($metrics))
             {
                 unset($this->lang->metric->scopeList[$scope]);
@@ -1539,20 +1534,6 @@ class metricModel extends model
     public function isObjectMetric(array $header): bool
     {
         return in_array('scope', array_column($header, 'name'));
-    }
-
-    /**
-     * 通过header来判断一个度量项有没有日期的概念。
-     * Judge whether a metric has the concept of an date.
-     *
-     * header 通过 metric 模块的 getViewTableHeader 方法取得
-     * @param  array    $header 表头
-     * @access public
-     * @return bool
-     */
-    public function isDateMetric($header)
-    {
-        return in_array('date', array_column($header, 'name'));
     }
 
     /**

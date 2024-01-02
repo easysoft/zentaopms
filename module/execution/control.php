@@ -1605,8 +1605,10 @@ class execution extends control
 
         $execution = $this->execution->getById($executionID);
 
+        if($execution->type == 'stage') $this->lang->execution->placeholder->totalLeft = str_replace($this->lang->executionCommon, $this->lang->execution->stage, $this->lang->execution->placeholder->totalLeft);
+
         $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->fetch();
-        $this->view->execution   = $execution;
+        $this->view->execution = $execution;
         $this->display();
     }
 

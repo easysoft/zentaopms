@@ -665,7 +665,7 @@ if($config->edition == 'ipd')
     $lang->block->visionTitle = '禅道使用界面分为【需求与市场管理界面】【IPD研发管理界面】和【运营管理界面】。';
 
     $lang->block->visions['rnd']->title = 'IPD研发管理界面';
-    $lang->block->visions['rnd']->text  = "正确的做事，集项目集、{$lang->productCommon}、{$lang->projectCommon}、执行、测试等多维度管理于一体，提供全过程{$lang->projectCommon}管理解决方案。";
+    $lang->block->visions['rnd']->text  = "正确地做事，集项目集、{$lang->productCommon}、{$lang->projectCommon}、执行、测试等多维度管理于一体，提供全过程{$lang->projectCommon}管理解决方案。";
 
     $lang->block->visions['or']        = new stdclass();
     $lang->block->visions['or']->key   = 'or';

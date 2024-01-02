@@ -788,6 +788,8 @@ class executionModel extends model
         $parents = array();
         foreach($oldExecutions as $oldExecution) $parents[$oldExecution->id] = $oldExecution->parent;
 
+        $parentAttrs = $this->dao->select('id,attribute')->from(TABLE_PROJECT)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchPairs('id');
+
         /* Replace required language. */
         if($this->app->tab == 'project')
         {
@@ -873,16 +875,8 @@ class executionModel extends model
                 if(isset($project->model) and ($project->model == 'waterfall' or  $project->model == 'waterfallplus'))
                 {
                     $this->app->loadLang('stage');
-                    $attribute = $executions[$executionID]->attribute;
-
-                    if(isset($attributeList[$parentID]))
-                    {
-                        $parentAttr = $attributeList[$parentID];
-                    }
-                    else
-                    {
-                        $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
-                    }
+                    $attribute  = $executions[$executionID]->attribute;
+                    $parentAttr = $parentAttrs[$parentID];
 
                     if($parentAttr and $parentAttr != $attribute and $parentAttr != 'mix')
                     {
@@ -4102,11 +4096,12 @@ class executionModel extends model
         $execution  = $this->getById($executionID);
         $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->andWhere('task')->eq(0)->fetch();
         $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
+        $burnLeft = empty($burn) ? 0 : $burn->left;
 
         $data = fixer::input('post')
             ->add('execution', $executionID)
             ->add('date', $execution->begin)
-            ->add('left', $withLeft ? $this->post->estimate : $burn->left)
+            ->add('left', $withLeft ? $this->post->estimate : $burnLeft)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
             ->remove('withLeft')
             ->get();
@@ -4505,13 +4500,15 @@ class executionModel extends model
      *
      * @param  object    $execution
      * @param  string    $action
+     * @param  string    $module
      * @access public
      * @return bool
      */
-    public static function isClickable($execution, $action)
+    public static function isClickable($execution, $action, $module = 'execution')
     {
+        if($module == 'programplan') $module = 'execution';
         $action    = strtolower($action);
-        $clickable = commonModel::hasPriv('execution', $action);
+        $clickable = commonModel::hasPriv($module, $action);
         if(!$clickable) return false;
 
         if($action == 'start')    return $execution->status == 'wait';
@@ -5417,13 +5414,13 @@ class executionModel extends model
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions text-left">';
 
-        $title = '';
-        $disabled = '';
+        $title    = '';
+        $disabled = $execution->status == 'wait' ? '' : 'disabled';
         $this->app->loadLang('stage');
         if($project and $project->model == 'ipd')
         {
             $title    = ($execution->ipdStage['canStart'] or $execution->ipdStage['isFirst']) ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
-            $disabled = $execution->ipdStage['canStart'] ? '' : 'disabled';
+            $disabled = $execution->ipdStage['canStart'] ? $disabled : 'disabled';
         }
         echo common::buildIconButton('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true, $disabled, $title, '', empty($disabled));
 
@@ -5880,6 +5877,7 @@ class executionModel extends model
                 if($sortType) $set->sortType = $sortType;
 
                 if(isset($set->width)) $set->width = str_replace('px', '', $set->width);
+                if(empty($set->fixed) || $set->fixed == 'no') $set->fixed = 'right';
 
                 unset($set->id);
 
