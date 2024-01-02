@@ -3,8 +3,18 @@
 /**
 
 title=测试 docModel->getEditedDocIdList();
-timeout=0
 cid=1
+
+- 获取编辑过的文档ID列表 @1
+- 获取编辑过的文档ID列表 @2
+- 获取编辑过的文档ID列表 @4
+- 获取编辑过的文档ID列表 @5
+- 获取编辑过的文档ID列表 @7
+- 获取编辑过的文档ID列表 @8
+- 获取编辑过的文档ID列表 @10
+- 获取编辑过的文档ID列表 @13
+- 获取编辑过的文档ID列表 @16
+- 获取编辑过的文档ID列表 @19
 
 */
 
@@ -16,4 +26,15 @@ zdTable('user')->gen(5);
 su('admin');
 
 $docTester = new docTest();
-r($docTester->getEditedDocIdListTest()) && p() && e('1;4;7;10;13;16;19;2;5;8'); // 获取编辑过的文档ID列表
+$docIdList = $docTester->getEditedDocIdListTest();
+
+r($docIdList[1])  && p() && e('1');  // 获取编辑过的文档ID列表
+r($docIdList[2])  && p() && e('2');  // 获取编辑过的文档ID列表
+r($docIdList[4])  && p() && e('4');  // 获取编辑过的文档ID列表
+r($docIdList[5])  && p() && e('5');  // 获取编辑过的文档ID列表
+r($docIdList[7])  && p() && e('7');  // 获取编辑过的文档ID列表
+r($docIdList[8])  && p() && e('8');  // 获取编辑过的文档ID列表
+r($docIdList[10]) && p() && e('10'); // 获取编辑过的文档ID列表
+r($docIdList[13]) && p() && e('13'); // 获取编辑过的文档ID列表
+r($docIdList[16]) && p() && e('16'); // 获取编辑过的文档ID列表
+r($docIdList[19]) && p() && e('19'); // 获取编辑过的文档ID列表
