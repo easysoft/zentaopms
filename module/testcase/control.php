@@ -555,6 +555,7 @@ class testcase extends control
         }
 
         $this->testcaseZen->assignForBatchEdit($productID, $branch, $type, $cases);
+        if($type == 'lib') $this->testcaseZen->assignLibForBatchEdit($productID);
 
         /* 判断要编辑的用例是否太大，设置 session。 */
         /* Judge whether the editedCases is too large and set session. */

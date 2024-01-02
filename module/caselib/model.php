@@ -33,7 +33,7 @@ class caselibModel extends model
         $this->lang->qa->menu->caselib['subModule'] .= ',testcase';
 
         if(!isset($this->lang->qa->menu->testcase['exclude'])) $this->lang->qa->menu->testcase['exclude'] = '';
-        $this->lang->qa->menu->testcase['exclude'] .= ',testcase-view,testcase-edit';
+        $this->lang->qa->menu->testcase['exclude'] .= ',testcase-view,testcase-edit,testcase-batchedit';
 
         if($libraries)
         {

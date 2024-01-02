@@ -998,6 +998,21 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 指派用例库下批量编辑用例的数据。
+     * Assign for batch editing case in caselib.
+     *
+     * @param  int       $libID
+     * @access protected
+     * @return void
+     */
+    protected function assignLibForBatchEdit(int $libID): void
+    {
+        $libraries = $this->loadModel('caselib')->getLibraries();
+        $this->loadModel('caselib')->setLibMenu($libraries, $libID);
+        $this->view->libID = $libID;
+    }
+
+    /**
      * 指定批量编辑用例的页面标题。
      * Assign title for editing case.
      *
