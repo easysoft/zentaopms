@@ -1919,7 +1919,7 @@ class bugZen extends bug
         }
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
-        if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+        if($from && isset($this->config->bug->fromObjects[$from]) && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
     }
 
     /**
