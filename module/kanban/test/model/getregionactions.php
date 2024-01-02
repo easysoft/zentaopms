@@ -22,13 +22,13 @@ global $tester;
 $tester->loadModel('kanban');
 
 su('admin');
-$actions1 = $tester->kanban->getRegionActions(1, 1);
-$actions2 = $tester->kanban->getRegionActions(2, 2);
+$actions1 = $tester->kanban->getRegionActions(1, 1, 2);
+$actions2 = $tester->kanban->getRegionActions(2, 2, 2);
 r(count($actions1[0]['items'])) && p() && e('8'); // 查看admin可以获取到几个操作按钮
 r(count($actions2[0]['items'])) && p() && e('8'); // 查看admin可以获取到几个操作按钮
 
 su('user1');
-$actions3 = $tester->kanban->getRegionActions(1, 1);
-$actions4 = $tester->kanban->getRegionActions(2, 2);
+$actions3 = $tester->kanban->getRegionActions(1, 1, 2);
+$actions4 = $tester->kanban->getRegionActions(2, 2, 2);
 r(count($actions3[0]['items'])) && p() && e('1'); // 查看user1可以获取到几个操作按钮
 r(count($actions4[0]['items'])) && p() && e('1'); // 查看user1可以获取到几个操作按钮
