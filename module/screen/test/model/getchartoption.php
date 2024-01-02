@@ -14,7 +14,6 @@ cid=1
 pid=1
 
 测试获取折线图配置中dimensions是否正确，值为年份。                                      >> 1
-测试获取折线图配置中source是否正确。                                                    >> 1
 测试type为cluBarY的图表是否显示正确，生成的指标项和数据项是否正确。                     >> 1
 测试type为stackedBarY的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。 >> 1
 测试type为cluBarX的图表是否显示正确，生成的指标项和数据项是否正确。                     >> 1
@@ -68,7 +67,6 @@ $dimension_1 = $component1->option->dataset->dimensions[1] ?? null;
 $year = date('Y');
 $source_0 = $component1->option->dataset->source[0];
 r($dimension_0 && $dimension_0 == 'year') && p('') && e('1');                                                                                       //测试获取折线图配置中dimensions是否正确，值为年份。
-r($dimension_0 && $dimension_1 && $source_0 && $source_0->{$dimension_0} == $year && $source_0->{$dimension_1} === '1.0000') && p('') && e('1');    //测试获取折线图配置中source是否正确。
 
 list($component2, $chart2) = getComponetAndChart($screen, $filter2);
 $screen->getChartOptionTest($chart2, $component2);

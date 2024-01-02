@@ -44,7 +44,7 @@ list($component1, $chart1) = getComponetAndChart($screen, $filter1);
 $screen->getLineChartOption($component1, $chart1);
 $dimension_0 = $component1->option->dataset->dimensions[0] ?? null;
 $dimension_1 = $component1->option->dataset->dimensions[1] ?? null;
-$year = date('Y');
+$year = date('Y', strtotime('-1 month'));
 $source_0 = $component1->option->dataset->source[0];
 r($dimension_0 && $dimension_0 == 'year') && p('') && e('1');                                                                                       //测试获取折线图配置中dimensions是否正确，值为年份。
 r($dimension_0 && $dimension_1 && $source_0 && $source_0->{$dimension_0} == $year && $source_0->{$dimension_1} === '1.0000') && p('') && e('1');    //测试获取折线图配置中source是否正确。

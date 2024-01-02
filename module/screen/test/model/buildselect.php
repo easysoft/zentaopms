@@ -10,8 +10,8 @@ cid=1
 
 - 判断生成的年份过滤条件是否正确第testChart条的year属性 @testField
 - 判断不传入年份的情况下，是否生成了默认值。
- - 第0条的label属性 @2023
- - 第0条的value属性 @2023
+ - 第0条的label属性 @2024
+ - 第0条的value属性 @2024
 - 判断最小时间小于2009年的情况下，时间标签是否截断在2009年。 @1
 - 判断不传入部门的情况下，是否生成了所有部门的下拉菜单项。
  - 第0条的label属性 @所有部门
@@ -71,7 +71,7 @@ function addFilterCharts($component)
 addFilterCharts($component1);
 $filter = $screen->buildSelectTest($component1, $yearList[0]);
 r($filter->charts) && p('testChart:year') && e('testField');                //判断生成的年份过滤条件是否正确
-r($component1->option->dataset) && p('0:label,value') && e('2023,2023');    //判断不传入年份的情况下，是否生成了默认值。
+r($component1->option->dataset) && p('0:label,value') && e('2024,2024');    //判断不传入年份的情况下，是否生成了默认值。
 
 zdTable('action')->config('action')->gen(1);
 
