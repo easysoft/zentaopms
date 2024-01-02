@@ -1765,6 +1765,7 @@ class screenModel extends model
         $option = new stdclass();
         $option->displayType = 'normal';
         $option->cardType    = 'A';
+        $option->fontSize    = '56';
         $option->bgColor     = '#26292EFF';
         $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
         $option->scope       = $metric->scope;
