@@ -149,7 +149,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->steps),
-            stepsEditor()
+            stepsEditor(set::data($steps))
         )
     ),
     formRow
