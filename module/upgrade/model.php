@@ -6577,7 +6577,7 @@ class upgradeModel extends model
             $this->upgradeTao->createProjectDocLib($project);
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($sprints))->fetchPairs();
-            $this->processMergedData($programID, $projectID, null, $productIdList, array_keys($sprints));
+            $this->processMergedData($programID, $projectID, 0, $productIdList, array_keys($sprints));
         }
 
         $this->fixProjectPath($programID);
