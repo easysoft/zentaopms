@@ -201,6 +201,7 @@ div(
                 setClass('content flex-1 overflow-hidden'),
                 div(
                     setClass('title pb-2 ellipsis'),
+                    set::title($miniProgram->name),
                     $miniProgram->name
                 ),
                 div(
