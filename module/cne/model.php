@@ -616,15 +616,13 @@ class cneModel extends model
      * 获取数据库列表。
      * Get all database list.
      *
-     * @param  boolean $global true: global database
-     * @param  string  $namespace
      * @access public
      * @return array
      */
-    public function allDBList(bool $global = true, string $namespace = 'quickon-system'): array
+    public function allDBList(): array
     {
         $apiUrl    = "/api/cne/component/dbservice";
-        $apiParams =  array( 'global' => ($global ? 'true' : 'false'), 'namespace' => $namespace, 'channel' => $this->config->CNE->api->channel);
+        $apiParams = array('global' => 'true', 'namespace' => 'quickon-system', 'channel' => $this->config->CNE->api->channel);
 
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();

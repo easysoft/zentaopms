@@ -264,4 +264,15 @@ class cneTest
 
         return $this->objectModel->appDBDetail($instance, $dbName);
     }
+
+    /**
+     * Test allDBList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function allDBListTest(): array
+    {
+        return $this->objectModel->allDBList();
+    }
 }
