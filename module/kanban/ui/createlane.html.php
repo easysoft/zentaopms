@@ -46,7 +46,8 @@ formPanel
             picker
             (
                 set::name('otherLane'),
-                set::items($lanes)
+                set::items($lanes),
+                set::required(true)
             )
         )
     ),
