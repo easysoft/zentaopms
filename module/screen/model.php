@@ -175,6 +175,28 @@ class screenModel extends model
     }
 
     /**
+     * Get the latest chart.
+     *
+     * @param  object  $component
+     * @access public
+     * @return void
+     */
+    public function getLatestChart($component)
+    {
+        if(isset($component->key) and $component->key === 'Select') return $component;
+        $chartID = zget($component->chartConfig, 'sourceID', '');
+        if(!$chartID) return $component;
+
+        $type  = $component->chartConfig->package;
+        $type  = $this->getChartType($type);
+        $table = $this->config->objectTables[$type];
+        $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+
+        if($type == 'metric') return $this->genMetricComponent($chart);
+        return $this->genComponentData($chart, $type, $component);
+    }
+
+    /**
      * Generate a component of screen.
      *
      * @param  object $chart
