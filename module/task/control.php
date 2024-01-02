@@ -963,7 +963,8 @@ class task extends control
 
         $this->executeHooks($taskID);
 
-        return $this->send(array('result' => 'success', 'load' => true));
+        $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
+        return $this->send(array('result' => 'success', 'load' => $link));
     }
 
     /**
