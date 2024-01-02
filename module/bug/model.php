@@ -513,7 +513,7 @@ class bugModel extends model
     {
         $oldBug = parent::fetchByID($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->check('openedBuild', 'notempty')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
         /* Update build. */

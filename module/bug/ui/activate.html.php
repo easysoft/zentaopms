@@ -29,6 +29,7 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->bug->openedBuild),
+        set::required(true),
         picker
         (
             set::name('openedBuild[]'),
