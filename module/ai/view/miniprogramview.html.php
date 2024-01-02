@@ -134,40 +134,42 @@
         <?= html::a($this->createLink('ai', 'miniPrograms'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'"); ?>
         <?php if($miniProgram->deleted !== '1'): ?>
           <?= "<div class='divider'></div>"; ?>
-        <?php if($miniProgram->published === '1' && common::hasPriv('ai', 'unpublishMiniProgram')): ?>
-          <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>">
-            <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->disable; ?>
-          </button>
-        <?php else: ?>
-          <?php if(common::hasPriv('ai', 'editMiniProgram')): ?>
-            <a class='btn' title='<?= $lang->ai->prompts->action->edit; ?>' href='<?= $this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id"); ?>'>
-              <i class='icon-edit icon-sm'></i> <?= $lang->ai->prompts->action->edit; ?>
-            </a>
-          <?php endif; ?>
-          <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
-            <button
-              class="btn iframe"
-              data-toggle="modal"
-              data-width="800"
-              data-height="600"
-              title="<?= $lang->ai->prompts->action->test; ?>"
-              data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
-            >
-              <i class="icon-menu-backend icon-sm"></i> <?= $lang->ai->prompts->action->test; ?>
-            </button>
-          <?php endif; ?>
-          <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
-            <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>">
-              <i class="icon-publish icon-sm"></i> <?= $lang->ai->prompts->action->publish; ?>
-            </button>
-          <?php endif; ?>
-          <?php if(common::hasPriv('ai', 'deleteMiniProgram')): ?>
-            <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>">
-              <i class="icon-trash icon-sm"></i> <?= $lang->ai->prompts->action->delete; ?>
-            </button>
+          <?php if($miniProgram->published === '1'): ?>
+            <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
+              <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>">
+                <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->disable; ?>
+              </button>
+            <?php endif; ?>
+          <?php else: ?>
+            <?php if(common::hasPriv('ai', 'editMiniProgram')): ?>
+              <a class='btn' title='<?= $lang->ai->prompts->action->edit; ?>' href='<?= $this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id"); ?>'>
+                <i class='icon-edit icon-sm'></i> <?= $lang->ai->prompts->action->edit; ?>
+              </a>
+            <?php endif; ?>
+            <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
+              <button
+                class="btn iframe"
+                data-toggle="modal"
+                data-width="800"
+                data-height="600"
+                title="<?= $lang->ai->prompts->action->test; ?>"
+                data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
+              >
+                <i class="icon-menu-backend icon-sm"></i> <?= $lang->ai->prompts->action->test; ?>
+              </button>
+            <?php endif; ?>
+            <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
+              <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>">
+                <i class="icon-publish icon-sm"></i> <?= $lang->ai->prompts->action->publish; ?>
+              </button>
+            <?php endif; ?>
+            <?php if(common::hasPriv('ai', 'deleteMiniProgram')): ?>
+              <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>">
+                <i class="icon-trash icon-sm"></i> <?= $lang->ai->prompts->action->delete; ?>
+              </button>
+            <?php endif; ?>
           <?php endif; ?>
         <?php endif; ?>
-      <?php endif; ?>
       </div>
     </div>
   </div>
