@@ -1,14 +1,10 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/sonarqube.class.php';
-su('admin');
 
 /**
 
 title=测试 sonarqubeModel::apiDeleteProject();
-timeout=0
-cid=1
+cid=0
 
 - 通过不正确的sonarqubeID、projectKey,删除SonarQube项目 @return false
 - 正确的sonarqubeID,空的projectKey,删除SonarQube项目第0条的msg属性 @The 'project' parameter is missing
@@ -16,6 +12,9 @@ cid=1
 - 正确的sonarqubeID、projectKey,删除SonarQube项目 @return true
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/sonarqube.class.php';
+su('admin');
 
 zdTable('pipeline')->config('pipeline')->gen(5);
 

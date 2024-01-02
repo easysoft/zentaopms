@@ -1,20 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/sonarqube.class.php';
-su('admin');
 
 /**
 
 title=测试 sonarqubeModel::apiCreateProject();
-timeout=0
-cid=1
+cid=0
 
 - 使用空的sonarqubeID、项目对象创建sonarqube项目 @return false
 - 使用空的sonarqubeID、正确的项目对象创建sonarqube项目 @return false
 - 使用正确的sonarqubeID,项目对象创建sonarqube项目 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/sonarqube.class.php';
+su('admin');
 
 zdTable('pipeline')->config('pipeline')->gen(5);
 

@@ -1,12 +1,10 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 sonarqubeModel::apiGetReport();
-timeout=0
-cid=1
+cid=0
 
 - 通过错误的sonarqubeID、projectKey，查询sonarqube报告 @return empty
 - 通过正确的sonarqubeID,不存在的projectKey查询sonarqube报告第0条的msg属性 @Component key 'wrong_project' not found
@@ -14,6 +12,7 @@ cid=1
 - 通过正确的sonarqubeID、projectKey、metricKeys，查询sonarqube报告 @success
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('pipeline')->config('pipeline')->gen(5);
 
