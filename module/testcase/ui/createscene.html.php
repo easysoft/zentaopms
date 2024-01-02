@@ -68,7 +68,7 @@ formPanel
                     a
                     (
                         $lang->tree->manage,
-                        set('href', createLink('tree', 'browse', "rootId=$productID&view=case&currentModuleID=0&branch=$branch")),
+                        set('href', createLink('tree', 'browse', "rootId={$product->id}&view=case&currentModuleID=0&branch={$branch}")),
                         setClass('btn'),
                         setData(array('toggle', 'mdoal'))
                     ),
