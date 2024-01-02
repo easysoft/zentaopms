@@ -60,7 +60,8 @@ if(!empty($multipleProject))
         );
 }
 
-$productRow = '';
+$productRow   = '';
+$noProductRow = '';
 if(!$hidden)
 {
     $productRow = formRow(
