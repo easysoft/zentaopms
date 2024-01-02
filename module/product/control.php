@@ -270,7 +270,7 @@ class product extends control
 
         /* 获取要修改的产品ID列表。*/
         $productIdList = $this->post->productIDList;
-        if(empty($productIdList)) return print(js::locate($this->session->productList, 'parent'));
+        if(empty($productIdList)) return $this->locate($this->session->productList);
 
         /* Set menu when page come from program. */
         if($this->app->tab == 'program') common::setMenuVars('program', 0);

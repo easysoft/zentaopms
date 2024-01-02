@@ -541,8 +541,8 @@ class productZen extends product
      * 编辑完成后，做页面跳转。
      * Locate after edit product.
      *
-     * @param  int   $productID
-     * @param  int   $programID
+     * @param  int     $productID
+     * @param  int     $programID
      * @access private
      * @return array
      */
@@ -749,6 +749,7 @@ class productZen extends product
     {
         /* Get location. */
         $location = $this->createLink('program', 'product', "programID=$programID");
+        if(empty($programID)) $location = $this->createLink('program', 'productView');
         if($this->app->tab == 'product') $location = $this->createLink('product', 'all');
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
     }

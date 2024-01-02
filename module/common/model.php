@@ -794,7 +794,7 @@ class commonModel extends model
                         substr_count((string)$old->$key, "\n") > 1 or
                         strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes', strtolower($key)) !== false)
                     {
-                        $diff = commonModel::diff($old->$key, $value);
+                        $diff = commonModel::diff((string)$old->$key, (string)$value);
                     }
                     $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
                 }
