@@ -473,8 +473,7 @@ class cneModel extends model
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
-
-        if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
+        $apiParams->channel   = $this->config->CNE->api->channel;
 
         $apiUrl = "/api/cne/app/settings/common";
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);

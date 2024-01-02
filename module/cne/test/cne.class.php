@@ -194,4 +194,18 @@ class cneTest
 
         return $result;
     }
+
+    /**
+     * Test getAppConfig method.
+     *
+     * @param  int    $instanceID
+     * @access public
+     * @return object|null
+     */
+    public function getAppConfigTest(int $instanceID): object|false
+    {
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+
+        return $this->objectModel->getAppConfig($instance);
+    }
 }
