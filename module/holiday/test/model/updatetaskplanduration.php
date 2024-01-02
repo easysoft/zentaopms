@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 holidayModel->updateTaskPlanDuration();
+cid=1
+
+- 测试插入id为 10 的节假日时任务 1 任务的计划工期 @1
+- 测试插入id为 10 的节假日时任务 2 任务的计划工期 @1
+- 测试插入id为 10 的节假日时任务 3 任务的计划工期 @1
+- 测试插入id为 5 的节假日时任务 1 任务的计划工期 @1
+- 测试插入id为 5 的节假日时任务 2 任务的计划工期 @1
+- 测试插入id为 5 的节假日时任务 3 任务的计划工期 @6
+- 测试插入id为 5 的节假日时任务 1 任务的计划工期 @1
+- 测试插入id为 5 的节假日时任务 2 任务的计划工期 @5
+- 测试插入id为 5 的节假日时任务 3 任务的计划工期 @6
+
+*/
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/holiday.class.php';
@@ -9,14 +25,6 @@ zdTable('task')->config('task')->gen(10);
 zdTable('user')->gen(1);
 
 su('admin');
-
-/**
-
-title=测试 holidayModel->updateTaskPlanDurationTest();
-cid=1
-pid=1
-
-*/
 
 $holiday = new holidayTest();
 

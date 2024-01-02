@@ -1,5 +1,24 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 holidayModel->create();
+cid=1
+
+- 测试创建holiday
+ - 属性id @1
+ - 属性name @测试创建holiday
+ - 属性type @holiday
+- 测试创建working
+ - 属性id @2
+ - 属性name @测试创建working
+ - 属性type @working
+- 测试不传入必填项开始日期第begin条的0属性 @『开始日期』不能为空。
+- 测试不传入必填项结束日期第end条的0属性 @『结束日期』不能为空。
+- 测试不传入必填项名称第name条的0属性 @『名称』不能为空。
+- 测试传入小于开始日期的结束日期第end条的0属性 @『结束日期』应当不小于『2022-01-10』。
+
+*/
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/holiday.class.php';
@@ -8,21 +27,6 @@ zdTable('holiday')->gen(0);
 zdTable('user')->gen(1);
 
 su('admin');
-
-/**
-
-title=测试 holidayModel->create();
-cid=1
-pid=1
-
-测试创建holiday >> 1,测试创建holiday,holiday
-测试创建working >> 2,测试创建working,working
-测试不传入必填项开始日期 >> 『开始日期』不能为空。
-测试不传入必填项结束日期 >> 『结束日期』不能为空。
-测试不传入必填项名称 >> 『名称』不能为空。
-测试传入小于开始日期的结束日期 >> 『结束日期』应当不小于『2022-01-10』。
-
-*/
 
 $holiday = new holidayTest();
 

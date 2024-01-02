@@ -5,9 +5,9 @@
 title=测试 holidayModel->getHolidayByAPI();
 cid=1
 
-- 返回 本年 的节假日。 @11
-- 返回 上年 的节假日。 @12
-- 返回 下年 的节假日。 @14
+- 返回 2023年 的节假日。 @11
+- 返回 2022年 的节假日。 @12
+- 返回 2024年 的节假日。 @14
 - 返回 不设置年份 的节假日。 @14
 
 */
@@ -23,7 +23,7 @@ su('admin');
 $holiday = new holidayTest();
 $year    = array('2023', '2022', '2024', '');
 
-r($holiday->getHolidayByAPITest($year[0])) && p() && e('11'); //返回 本年 的节假日。
-r($holiday->getHolidayByAPITest($year[1])) && p() && e('12'); //返回 上年 的节假日。
-r($holiday->getHolidayByAPITest($year[2])) && p() && e('14'); //返回 下年 的节假日。
+r($holiday->getHolidayByAPITest($year[0])) && p() && e('11'); //返回 2023年 的节假日。
+r($holiday->getHolidayByAPITest($year[1])) && p() && e('12'); //返回 2022年 的节假日。
+r($holiday->getHolidayByAPITest($year[2])) && p() && e('14'); //返回 2024年 的节假日。
 r($holiday->getHolidayByAPITest($year[3])) && p() && e('14'); //返回 不设置年份 的节假日。
