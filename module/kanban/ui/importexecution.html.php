@@ -34,11 +34,11 @@ featureBar
 );
 
 $config->execution->dtable->fieldList['rawID']['name'] = 'id';
-$config->execution->dtable->fieldList['name']['name'] = 'name';
-$config->execution->dtable->fieldList['name']['type'] = 'title';
+$config->execution->dtable->fieldList['nameCol']['name'] = 'name';
+$config->execution->dtable->fieldList['nameCol']['type'] = 'title';
 $config->execution->dtable->fieldList['PM']['type']   = 'user';
-unset($config->execution->dtable->fieldList['name']['link']);
-unset($config->execution->dtable->fieldList['name']['nestedToggle']);
+unset($config->execution->dtable->fieldList['nameCol']['link']);
+unset($config->execution->dtable->fieldList['nameCol']['nestedToggle']);
 unset($config->execution->dtable->fieldList['project']);
 unset($config->execution->dtable->fieldList['openedDate']);
 unset($config->execution->dtable->fieldList['begin']);
