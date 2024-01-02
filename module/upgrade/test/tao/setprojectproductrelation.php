@@ -46,7 +46,7 @@ foreach($relations as $key => $falseRelation)
         break;
     }
 }
-r($check) && p('') && e(1);  //检查isProjectType为false默认值时，项目id为1，产品id为1,2,3,4,100的关联关系以及生成的分支计划id是否正确。
+r($check) && p() && e(1);  //检查isProjectType为false默认值时，项目id为1，产品id为1,2,3,4,100的关联关系以及生成的分支计划id是否正确。
 
 $check = true;
 $upgrade->setProjectProductsRelation($projectIDList[0], $productIDList[1], $sprintIDList[1], true);
@@ -75,4 +75,4 @@ foreach($relations as $key => $relation)
     $startIndex += 3;
 }
 
-r($check) && p('') && e(1);  //检查isProjectType为true的时候，项目id为1，产品id为5,6,7,8的关联关系以及生成的分支计划id是否正确。
+r($check) && p() && e(1);  //检查isProjectType为true的时候，项目id为1，产品id为5,6,7,8的关联关系以及生成的分支计划id是否正确。
