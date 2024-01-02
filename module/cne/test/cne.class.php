@@ -208,4 +208,18 @@ class cneTest
 
         return $this->objectModel->getAppConfig($instance);
     }
+
+    /**
+     * Test queryStatus method.
+     *
+     * @param  int    $instanceID
+     * @access public
+     * @return object|null
+     */
+    public function queryStatusTest(int $instanceID): object|false
+    {
+        $instance = $this->objectModel->loadModel('instance')->getByID($instanceID);
+
+        return $this->objectModel->queryStatus($instance);
+    }
 }
