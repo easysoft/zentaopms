@@ -273,4 +273,41 @@ class repoTao extends repoModel
         array_multisort($pathName, SORT_ASC, $fileName, SORT_ASC, $treeList);
         return $treeList;
     }
+
+    /**
+     * 根据url获取匹配得版本库。
+     * Get matched repos by url.
+     *
+     * @param  string    $url
+     * @access protected
+     * @return array
+     */
+    protected function getMatchedReposByUrl(string $url): array
+    {
+        /* Convert to id by url. */
+        $this->loadModel('gitlab');
+        $matches   = array();
+        $parsedUrl = parse_url($url);
+        $isSSH     = $parsedUrl['scheme'] == 'ssh';
+        $baseURL   = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
+        $url       = str_replace('https://', 'http://', strtolower($url));
+        $gitlabs   = $this->loadModel('pipeline')->getList('gitlab');
+        foreach($gitlabs as $gitlabID => $gitlab)
+        {
+            if((!$isSSH && $gitlab->url != $baseURL) || ($isSSH && strpos($gitlab->url, $parsedUrl['host']) === false))
+            {
+                unset($gitlabs[$gitlabID]);
+                continue;
+            }
+
+            $projects = $this->gitlab->apiGetProjects($gitlabID);
+            foreach($projects as $project)
+            {
+                $urlToRepo = str_replace('https://', 'http://', strtolower($project->http_url_to_repo));
+                if((!$isSSH && $urlToRepo == $url) || ($isSSH && strtolower($project->ssh_url_to_repo) == $url)) $matches[] = array('gitlab' => $gitlabID, 'project' => $project->id);
+            }
+        }
+
+        return $matches;
+    }
 }

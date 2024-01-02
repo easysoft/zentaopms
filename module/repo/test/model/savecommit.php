@@ -10,7 +10,10 @@ title=测试 repoModel->saveCommit();
 timeout=0
 cid=1
 
-- 执行repo模块的saveCommitTest方法  @
+- 保存版gitlab版本库commit @5
+- 保存版gitlab版本库commit第5条的commit属性 @10
+- 保存版svn版本库commit @3
+- 查看svn版本库files @1
 
 */
 

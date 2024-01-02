@@ -243,9 +243,9 @@ class repoTest
         return $objects;
     }
 
-    public function getRevisionsFromDBTest($repoID, $limit = '', $maxRevision = '', $minRevision = '')
+    public function getRevisionsFromDBTest(int $repoID, int $limit = 0, string $maxRevision = '', string $minRevision = '')
     {
-        $objects = $this->objectModel->getRevisionsFromDB($repoID, $limit = '', $maxRevision = '', $minRevision = '');
+        $objects = $this->objectModel->getRevisionsFromDB($repoID, $limit, $maxRevision, $minRevision);
 
         if(dao::isError()) return dao::getError();
 
@@ -344,8 +344,13 @@ class repoTest
         return $this->objectModel->getByID($repoID);
     }
 
-    public function getUnsyncedCommitsTest($repo)
+    public function getUnsyncedCommitsTest(int $repoID)
     {
+        global $dao;
+        $dao->exec('truncate table zt_repohistory');
+
+        $repo = $this->objectModel->getByID($repoID);
+
         $objects = $this->objectModel->getUnsyncedCommits($repo);
 
         if(dao::isError()) return dao::getError();
@@ -428,11 +433,14 @@ class repoTest
 
     public function replaceCommentLinkTest($comment)
     {
+        $this->objectModel->config->webRoot     = '';
+        $this->objectModel->config->requestType = 'PATH_INFO';
+
         $objects = $this->objectModel->replaceCommentLink($comment);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return str_replace(PHP_EOL, '', $objects);
     }
 
     public function addLinkTest($comment, $type)

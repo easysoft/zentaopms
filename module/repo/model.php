@@ -681,29 +681,7 @@ class repoModel extends model
     {
         if(empty($url)) return array('result' => 'fail', 'message' => 'Url is empty.');
 
-        /* Convert to id by url. */
-        $this->loadModel('gitlab');
-        $matches   = array();
-        $parsedUrl = parse_url($url);
-        $isSSH     = $parsedUrl['scheme'] == 'ssh';
-        $baseURL   = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
-        $url       = str_replace('https://', 'http://', strtolower($url));
-        $gitlabs   = $this->loadModel('pipeline')->getList('gitlab');
-        foreach($gitlabs as $gitlabID => $gitlab)
-        {
-            if((!$isSSH && $gitlab->url != $baseURL) || ($isSSH && strpos($gitlab->url, $parsedUrl['host']) === false))
-            {
-                unset($gitlabs[$gitlabID]);
-                continue;
-            }
-
-            $projects = $this->gitlab->apiGetProjects($gitlabID);
-            foreach($projects as $project)
-            {
-                $urlToRepo = str_replace('https://', 'http://', strtolower($project->http_url_to_repo));
-                if((!$isSSH && $urlToRepo == $url) || ($isSSH && strtolower($project->ssh_url_to_repo) == $url)) $matches[] = array('gitlab' => $gitlabID, 'project' => $project->id);
-            }
-        }
+        $matches = $this->repoTao->getMatchedReposByUrl($url);
         if(empty($matches)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
 
         $conditions = array();
@@ -743,33 +721,11 @@ class repoModel extends model
     {
         if(empty($url)) return array('status' => 'fail', 'message' => 'Url is empty.');
 
-        /* Convert to id by url. */
-        $this->loadModel('gitlab');
-        $matches   = array();
-        $parsedUrl = parse_url($url);
-        $isSSH     = $parsedUrl['scheme'] == 'ssh';
-        $baseURL   = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
-        $url       = str_replace('https://', 'http://', strtolower($url));
-        $gitlabs   = $this->loadModel('pipeline')->getList('gitlab');
-        foreach($gitlabs as $gitlabID => $gitlab)
-        {
-            if((!$isSSH && $gitlab->url != $baseURL) || ($isSSH && strpos($gitlab->url, $parsedUrl['host']) === false))
-            {
-                unset($gitlabs[$gitlabID]);
-                continue;
-            }
-
-            $projects = $this->gitlab->apiGetProjects($gitlabID);
-            foreach($projects as $project)
-            {
-                $urlToRepo = str_replace('https://', 'http://', strtolower($project->http_url_to_repo));
-                if((!$isSSH && $urlToRepo == $url) || ($isSSH && strtolower($project->ssh_url_to_repo) == $url)) $matches[] = array('gitlab' => $gitlabID, 'project' => $project->id);
-            }
-        }
+        $matches = $this->repoTao->getMatchedReposByUrl($url);
         if(empty($matches)) return array('status' => 'fail', 'message' => 'No matched gitlab.');
 
         $conditions = array();
-        foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='{$matched['project']}')";
+        foreach($matches as $matched) $conditions[] = "(`serviceHost`='{$matched['gitlab']}' and `serviceProject`='{$matched['project']}')";
 
         $matchedRepos = $this->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
         foreach($matchedRepos as $key => $repo)
@@ -1045,7 +1001,7 @@ class repoModel extends model
     public function getProductsByRepo(int $repoID): array
     {
         $repo = $this->getByID($repoID);
-        if(empty($repo)) return array();
+        if(empty($repo->id)) return array();
 
         return $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('id')->in($repo->product)
