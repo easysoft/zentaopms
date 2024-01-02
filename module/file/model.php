@@ -551,6 +551,7 @@ class fileModel extends model
         if(!empty($groupName))
         {
             $groupID = $this->dao->findByID($objectID)->from($table)->fetch($groupName);
+            if($objectType == 'testcase' && $groupID == 0) return true;
             return $this->loadModel($groupName)->checkPriv((int)$groupID);
         }
 
