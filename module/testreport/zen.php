@@ -248,7 +248,7 @@ class testreportZen extends testreport
 
         $productIdList[$report->product] = $report->product;
 
-        $tasks = $this->testtask->getByList($report->tasks);
+        $tasks = $this->testtask->getByList(explode(',', $report->tasks));
         foreach($tasks as $task) $this->setChartDatas($task->id);
 
         $execution = $this->execution->getById($report->execution);
