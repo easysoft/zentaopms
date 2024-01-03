@@ -19,7 +19,7 @@ $('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', func
     arrowTabs('monacoTabs', -1);
 });
 
-window.afterPageUpdate = function()
+$(function()
 {
     setTimeout(function()
     {
@@ -75,7 +75,7 @@ window.afterPageUpdate = function()
             return;
         })
     }, 200);
-};
+});
 
 /**
  * 点击左侧菜单打开详情tab。

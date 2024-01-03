@@ -17,7 +17,7 @@ $('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', func
     if(!tabsEle.children().length) $('.monaco-dropmenu').addClass('hidden');
 });
 
-window.afterPageUpdate = function()
+$(function()
 {
     setTimeout(function()
     {
@@ -46,7 +46,7 @@ window.afterPageUpdate = function()
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
     }, 300);
-};
+});
 
 window.downloadCode = function()
 {

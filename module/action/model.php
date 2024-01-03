@@ -207,7 +207,7 @@ class actionModel extends model
             {
                 if($history->field == 'subversion' || $history->field == 'git')
                 {
-                    $history->diff = str_replace(array("class='iframe'", '+'), array("data-type='iframe' data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
+                    $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
             }
 

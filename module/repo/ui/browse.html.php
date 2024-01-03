@@ -113,11 +113,12 @@ $downloadWg = div
     !empty($cloneUrl->svn) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->cloneUrl),
-        formRow
+        div
         (
-            formGroup
+            setClass('flex space-between w-96'),
+            div
             (
-                set::width('450px'),
+                setClass('flex-1'),
                 input
                 (
                     set::type('text'),
@@ -126,11 +127,12 @@ $downloadWg = div
                     set::readOnly(true)
                 )
             ),
-            formGroup
+            div
             (
                 set::width('50px'),
                 btn
                 (
+                    set::className('copy-btn'),
                     set::icon('copy')
                 )
             )
@@ -140,11 +142,12 @@ $downloadWg = div
     !empty($cloneUrl->ssh) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->sshClone),
-        formRow
+        div
         (
-            formGroup
+            setClass('flex space-between w-96'),
+            div
             (
-                set::width('450px'),
+                setClass('flex-1'),
                 input
                 (
                     set::type('text'),
@@ -153,7 +156,7 @@ $downloadWg = div
                     set::readOnly(true)
                 )
             ),
-            formGroup
+            div
             (
                 set::width('50px'),
                 btn
@@ -168,11 +171,12 @@ $downloadWg = div
     !empty($cloneUrl->http) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->httpClone),
-        formRow
+        div
         (
-            formGroup
+            setClass('flex space-between w-96'),
+            div
             (
-                set::width('450px'),
+                setClass('flex-1'),
                 input
                 (
                     set::type('text'),
@@ -181,7 +185,7 @@ $downloadWg = div
                     set::readOnly(true)
                 )
             ),
-            formGroup
+            div
             (
                 set::width('50px'),
                 btn
