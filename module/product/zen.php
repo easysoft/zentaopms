@@ -1464,8 +1464,8 @@ class productZen extends product
      */
     protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID)
     {
-        $productID       = $product ? $product->id : 0;
-        $projectID       = $project ? $project->id : 0;
+        $productID       = $product ? (int)$product->id : 0;
+        $projectID       = $project ? (int)$project->id : 0;
         $productName     = ($isProjectStory && empty($product)) ? $this->lang->product->all : $this->products[$productID];
         $storyIdList     = $this->getStoryIdList($stories);
         $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
