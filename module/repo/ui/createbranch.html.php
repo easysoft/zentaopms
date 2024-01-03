@@ -24,6 +24,7 @@ formPanel
         set::required(true),
         picker
         (
+            set::required(true),
             set::name('repoID'),
             set::items($repoPairs),
             set::value($repoID),

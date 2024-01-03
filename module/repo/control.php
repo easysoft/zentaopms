@@ -219,7 +219,7 @@ class repo extends control
      */
     public function createBranch(int $taskID, int $executionID, int $repoID = 0)
     {
-        $repoList = $this->repo->getList($executionID);
+        $repoList = $this->repo->getList($executionID, implode(',', $this->config->repo->gitServiceTypeList));
         if(!$repoList) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
         if(!$repoID) $repoID = $this->post->repoID;
