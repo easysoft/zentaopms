@@ -97,6 +97,7 @@ else
                         set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed),
                         set::disabled(!empty($currentTeam) ? true : false),
                     ),
+                    !empty($currentTeam) ? formHidden('consumed', (float)$currentTeam->consumed) : null,
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)
                 )
