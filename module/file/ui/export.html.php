@@ -280,7 +280,7 @@ window.saveTemplate = function()
     if(!title || !content) return;
 
     const saveTemplateLink = $.createLink('file', 'ajaxSaveTemplate', 'module={$this->moduleName}');
-    $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
+    $.post(saveTemplateLink, {title:title, content:content.join(','), public:isPublic}, function(data)
     {
         if(data.indexOf('alert') == -1)
         {
@@ -301,11 +301,13 @@ window.deleteTemplate = function()
     var templateID = template.val();
     if(templateID == 0) return;
 
-    deleteLink = $.createLink('file', 'ajaxDeleteTemplate', 'templateID=' + templateID);
+    const deleteLink = $.createLink('file', 'ajaxDeleteTemplate', 'templateID=' + templateID);
     $.get(deleteLink, function()
     {
-        template.find('option[value="'+ templateID +'"]').remove();
-        setTemplate(template);
+        const templatePicker = template.zui('picker');
+        const newItems       = templatePicker.options.items.filter(item => item.value != templateID);
+        templatePicker.render({items: newItems, value: ''});
+        templatePicker.$.setValue('').ready(setTemplate(template));
     });
 };
 
