@@ -267,7 +267,7 @@ class wg
                 $data = str_replace('<!-- {{RAW_CONTENT}} -->', $rawContent, $data);
                 $result[$index]['data'] = $data;
             }
-            $result = json_encode($result);
+            $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
         }
         else
         {
