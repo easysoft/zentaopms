@@ -931,6 +931,11 @@ class taskZen extends task
 
         foreach($tasks as $rowIndex => $task)
         {
+            if(!empty($this->post->estimate[$rowIndex]) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $this->post->estimate[$rowIndex]))
+            {
+                dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->estimateNumber;
+            }
+
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
             if(!empty($this->config->limitTaskDate))
             {
