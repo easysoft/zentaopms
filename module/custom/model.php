@@ -1024,7 +1024,7 @@ class customModel extends model
      */
     public function hasProductURData(): int
     {
-        return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
+        return (int)$this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
@@ -1036,7 +1036,7 @@ class customModel extends model
      */
     public function hasWaterfallData(): int
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
+        return (int)$this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
@@ -1048,7 +1048,7 @@ class customModel extends model
      */
     public function hasWaterfallplusData(): int
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
+        return (int)$this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
@@ -1060,7 +1060,7 @@ class customModel extends model
      */
     public function hasAssetlibData(): int
     {
-        if(in_array($this->config->edition, array('max', 'ipd'))) return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
         return 0;
     }
 
@@ -1075,7 +1075,7 @@ class customModel extends model
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            return $this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
+            return (int)$this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
@@ -1097,7 +1097,7 @@ class customModel extends model
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            return $this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
+            return (int)$this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
@@ -1118,7 +1118,7 @@ class customModel extends model
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+            return (int)$this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
         return 0;
     }
@@ -1134,7 +1134,7 @@ class customModel extends model
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
+            return (int)$this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.id = t2.project')
                 ->where('t1.model')->eq('scrum')
                 ->andWhere('t1.deleted')->eq('0')
@@ -1155,7 +1155,7 @@ class customModel extends model
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
+            return (int)$this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.id = t2.project')
                 ->where('t1.model')->eq('scrum')
                 ->andWhere('t1.deleted')->eq('0')
@@ -1176,7 +1176,7 @@ class customModel extends model
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+            return (int)$this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
         return 0;
     }
