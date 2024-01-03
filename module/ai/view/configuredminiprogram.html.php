@@ -215,7 +215,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
 </div>
 <footer style="display: flex; justify-content: center; align-items: center; height: 56px; background: #fff; border-top: 1px solid #eff1f7; position: fixed; bottom: 0; left: 20px; right: 20px; gap: 24px;">
   <a onclick="backToList()" class="btn btn-wide"><?= $lang->ai->miniPrograms->backToListPage; ?></a>
-  <a href="<?= $this->createLink('ai', 'createMiniProgram', "appID=$appID"); ?>" class="btn btn-wide"><?= $lang->ai->miniPrograms->lastStep; ?></a>
+  <a href="<?= $this->createLink('ai', 'editMiniProgram', "appID=$appID"); ?>" class="btn btn-wide"><?= $lang->ai->miniPrograms->lastStep; ?></a>
   <a class="btn btn-wide btn-secondary" onclick="saveMiniProgram('0')"><?= $lang->save; ?></a>
   <a class="btn btn-wide btn-primary" onclick="saveMiniProgram('1')"><?= $lang->ai->prompts->action->publish; ?></a>
 </footer>
