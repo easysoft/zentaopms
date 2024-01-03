@@ -99,7 +99,6 @@ formBatchPanel
                 setClass('duplicate-select hidden'),
                 set::name('duplicateStory'),
                 set::items(array()),
-                set::required(true)
             )
         )
     ),
