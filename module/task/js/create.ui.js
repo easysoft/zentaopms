@@ -293,7 +293,9 @@ function setPreview()
     let storyID = $("input[name='story']").val() ? $("input[name='story']").val() : 0;
     if(parseFloat(storyID) == 0)
     {
+        $('#copyButton').closest('.input-control-suffix').addClass('noCopyBox');
         $('#preview').addClass('hidden');
+        $('#copyButton').closest('.checkbox-primary').addClass('hidden');
         $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
     }
     else
@@ -303,7 +305,9 @@ function setPreview()
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
 
+        $('#copyButton').closest('.input-control-suffix').removeClass('noCopyBox');
         $('#preview').removeClass('hidden');
+        $('#copyButton').closest('.checkbox-primary').removeClass('hidden');
         $('#preview .btn').attr('data-url', storyLink);
         $('#preview .btn').attr('data-size', 'lg');
         $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');

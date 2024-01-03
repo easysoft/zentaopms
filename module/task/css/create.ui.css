@@ -12,3 +12,4 @@
 .assignedToBox .add-team {margin-bottom: 5px}
 .assignedToList {display: flex; align-items: center; flex-wrap: wrap;}
 .assignedToList .picker-multi-selection, .assignedToList .icon{margin-right: 5px; margin-bottom: 5px}
+.noCopyBox {width: 40px !important;}
