@@ -505,6 +505,8 @@ class api extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->get();
+            /* params 字段不进行 Unicode 编码，前端传过来的 params 是 Unicode 编码后的，导致 common::createChanges 时会始终认为 params 改变。 */
+            $formData->params = json_encode(json_decode(html_entity_decode($formData->params), true), JSON_UNESCAPED_UNICODE);
 
             $this->api->update($formData);
 
