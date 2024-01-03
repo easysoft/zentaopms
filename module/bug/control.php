@@ -1075,13 +1075,15 @@ class bug extends control
             $bug = form::data($this->config->bug->form->confirm)->setDefault('confirmed', 1)->remove('pri,type,status,mailto')->get();
             foreach($bugIdList as $bugID)
             {
+                $bugID = (int)$bugID;
+
                 /* 如果 bug 已经确认过，跳过。 */
                 /* If bug has been confirmed, skip it. */
                 if(!empty($bugs[$bugID]->confirmed)) continue;
 
                 /* 构建 bug。 */
                 /* Build bug. */
-                $bug->id         = (int)$bugID;
+                $bug->id         = $bugID;
                 $bug->confirmed  = 1;
                 $bug->assignedTo = $this->app->user->account;
 
