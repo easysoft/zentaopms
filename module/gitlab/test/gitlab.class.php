@@ -54,11 +54,6 @@ class gitlabTest
         return $this->gitlab->getApiRoot($gitlabID, $sudo);
     }
 
-    public function getUserIdRealnamePairsTest(int $gitlabID)
-    {
-        return $this->gitlab->getUserIdRealnamePairs($gitlabID);
-    }
-
     public function getUserIdAccountPairsTest(int $gitlabID)
     {
         return $this->gitlab->getUserIdAccountPairs($gitlabID);

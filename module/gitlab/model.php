@@ -89,25 +89,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 获取gitlab的用户id和真实名字的键值对。
-     * Get gitlab user id and realname pairs of one gitlab.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return array
-     */
-    public function getUserIdRealnamePairs(int $gitlabID): array
-    {
-        return $this->dao->select('oauth.openID as openID,user.realname as realname')
-            ->from(TABLE_OAUTH)->alias('oauth')
-            ->leftJoin(TABLE_USER)->alias('user')
-            ->on("oauth.account = user.account")
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlabID)
-            ->fetchPairs();
-    }
-
-    /**
      * 获取gitlab的 项目id和名称 键值对。
      * Get project pairs of one gitlab.
      *
