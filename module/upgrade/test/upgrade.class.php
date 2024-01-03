@@ -422,17 +422,18 @@ class upgradeTest
      * @access public
      * @return string
      */
-    public function updateFileObjectIDTest(string $type, int $lastID): string
+    public function updateFileObjectIDTest(string $type, int $lastID): object
     {
         global $tester;
         $tester->dao->update(TABLE_FILE)->set('extra')->eq('editor')->exec();
 
         $result = $this->objectModel->updateFileObjectID($type, $lastID);
 
-        $return = '';
-        foreach($result as $key => $value) $return .= "{$key}:{$value},";
+        $return = new stdclass();
+        foreach($result as $key => $value) $return->$key = $value;
         $files = $tester->dao->select('id')->from(TABLE_FILE)->where('extra')->eq('editor')->beginIF($type != '' && $type != 'comment')->andWhere('objectType')->eq($type)->fi()->fetchPairs();
-        return $return . 'files:' . implode(',', $files);
+        $return->files = implode(',', $files);
+        return $return;
     }
 
     /**
