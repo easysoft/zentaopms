@@ -169,4 +169,4 @@ $config->tutorial->tasksConfig['createBug']['nav']['targetPageName'] = $lang->tu
 
 $config->tutorial->tasksConfig['createBug']['desc'] = $lang->tutorial->tasks->createBug->desc;
 
-if($config->systemMode == 'light') unset($config->tutorial->tasks->createProgram);
+if($config->systemMode == 'light') unset($config->tutorial->tasksConfig['createProgram']);

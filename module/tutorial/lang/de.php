@@ -84,6 +84,3 @@ $lang->tutorial->tasks->createBug = new stdclass();
 $lang->tutorial->tasks->createBug->title          = 'Bug melden';
 $lang->tutorial->tasks->createBug->targetPageName = 'Bug erstellen';
 $lang->tutorial->tasks->createBug->desc           = "<p>Bug erstellen: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'> Test <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> Einen Bug erstellen</span>；</li><li data-target='form'>Tragen Sie die Bug Informationen ein:</li><li data-target='submit'>Speichern</li></ul>";
-
-global $config;
-if($config->systemMode == 'light') unset($lang->tutorial->tasks['createProgram']);
