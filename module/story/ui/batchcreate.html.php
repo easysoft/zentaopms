@@ -17,15 +17,16 @@ jsVar('storyType', $type);
 !isAjaxRequest() && dropmenu();
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($lang, $fields, $stories)
+$fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $showFields)
 {
     /* Generate fields with the appropriate properties. */
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
     if($stories) $items[] = array('name' => 'uploadImage', 'label' => '', 'control' => 'hidden', 'hidden' => true);
+    if(strpos(",$showFields,", ",source,") == false) unset($fields['sourceNote']);
     unset($fields['color']);
 
-    return array_merge($items, array_map(function($name, $field)
+    $cols = array_merge($items, array_map(function($name, $field)
     {
         if($name == 'title') $field['control'] = 'colorInput';
 
@@ -38,6 +39,14 @@ $fnGenerateFields = function() use ($lang, $fields, $stories)
 
         return $field;
     }, array_keys($fields), array_values($fields)));
+
+    /* Hide columns that are not displayed. */
+    foreach($cols as $index => $col)
+    {
+        $colName = $col['name'];
+        if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") == false) $cols[$index]['hidden'] = true;
+    }
+    return $cols;
 };
 
 formBatchPanel
