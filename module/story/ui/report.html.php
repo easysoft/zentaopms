@@ -10,112 +10,105 @@ declare(strict_types=1);
  */
 
 namespace zin;
-
+jsVar('params', "productID={$productID}&branchID={$branchID}&storyType={$storyType}&browseType={$browseType}&moduleID={$moduleID}");
+jsVar('projectID', $projectID);
 jsVar('storyType', $storyType);
 
-/* Generate optional fields of report. */
-$fnGenerateFormFields = function() use($lang, $checkedCharts)
-{
-    $fields = array();
-    foreach($lang->story->report->charts as $val => $name)
-    {
-        $fields[] =li(checkbox
+detailHeader
+(
+    to::title
+    (
+        entityLabel
         (
-            set::value($val),
-            set::text($name),
-            set::name('charts[]'),
-            set::checked(str_contains($checkedCharts, $val))
-        ));
-    }
+            set::level(1),
+            set::text($lang->story->report->common)
+        )
+    )
+);
 
-    return ul($fields);
-};
+$reports = array();
+foreach($lang->story->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$fnGenerateTabCharts = function(string $type) use($charts, $lang, $datas)
+$echarts = array();
+foreach($charts as $type => $option)
 {
-    $tabCharts = array();
-    foreach(array_keys($charts) as $chartType)
-    {
-        $tabCharts[] = tableChart
+    $chartData = $datas[$type];
+    $echarts[] = tableChart
+    (
+        set::type($option->type),
+        set::title($lang->story->report->charts[$type]),
+        set::datas((array)$chartData),
+    );
+}
+
+$tabItems = array();
+unset($lang->report->typeList['default']);
+foreach($lang->report->typeList as $type => $typeName)
+{
+    $tabItems[] = tabPane
+    (
+        set::key($type),
+        set::param($type),
+        set::title($typeName),
+        set::active($type == $chartType),
+        to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
+        div(setClass('pb-4 pt-2'), span(setClass('text-gray'), html(str_replace('%tab%', $lang->product->unclosed . $lang->story->common, $lang->report->notice->help)))),
+        div($echarts)
+    );
+}
+
+div
+(
+    setClass('flex items-start'),
+    cell
+    (
+        set::width('240'),
+        setClass('bg-white p-4 mr-5'),
+        div(setClass('pb-2'), span(setClass('font-bold'), $lang->story->report->select)),
+        div
         (
-            set::type($type),
-            set::title($lang->story->report->charts[$chartType]),
-            set::datas($datas[$chartType] ?? null),
-            set::tableHeaders(array
+            setClass('pb-2'),
+            control
             (
-                'item'    => $lang->story->report->$chartType->item,
-                'value'   => $lang->story->report->value,
-                'percent' => $lang->report->percent
-            ))
-        );
-    }
-
-    return $tabCharts;
-};
-
-$fnGenerateTabs = function() use($fnGenerateTabCharts, $lang, $chartType)
-{
-    unset($lang->report->typeList['default']);
-    $notice = str_replace('%tab%', $lang->product->unclosed . $lang->story->common, $lang->report->notice->help);
-
-    $tabs = array();
-    foreach($lang->report->typeList as $type => $typeName)
-    {
-        $tabs[] = tabPane
-        (
-            set::key($type),
-            set::title($typeName),
-            set::active($type == $chartType),
-            to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
-            div(html($notice)),
-            $fnGenerateTabCharts($type)
-        );
-    }
-
-    return $tabs;
-};
-
-/* Layout. */
-featureBar
-(
-    to::before(
-        backBtn
-        (
-            set::icon('back'),
-            set::type('secondary'),
-            $lang->goback
+                set::type('checkList'),
+                set::name('charts'),
+                set::items($reports)
+            )
         ),
-        div(setClass('nav-divider'))
-    ),
-    div
-    (
-        setClass('entity-label flex items-center gap-x-2 text-lg font-bold'),
-        $lang->story->report->common
-    )
-);
-
-sidebar
-(
-    set::showToggle(false),
-    setStyle(array('width' => '240px')),
-    formPanel
-    (
-        set::title($lang->story->report->select),
-        setClass('shadow'),
-        set::actions(array
+        btn
         (
-            array('text'=> $lang->selectAll,             'onclick' => 'window.reportSelectAllFields(this)', 'type' => 'button', 'class' => ''),
-            array('text'=> $lang->story->report->create, 'onclick' => 'window.reportSubmit(this)',          'type' => 'button', 'class' => 'primary')
-        )),
-        $fnGenerateFormFields()
+            setData
+            (
+                array
+                (
+                    'on'   => 'click',
+                    'call' => 'selectAll',
+                )
+            ),
+            $lang->selectAll
+        ),
+        btn
+        (
+            setClass('primary ml-4 inited'),
+            setData
+            (
+                array
+                (
+                    'on'     => 'click',
+                    'call'   => 'clickInit',
+                    'params' => 'event',
+                )
+            ),
+            $lang->story->report->create
+        )
+    ),
+    cell
+    (
+        set::flex('1'),
+        setClass('bg-white px-4 py-2'),
+        setID('report'),
+        tabs($tabItems)
     )
 );
 
-panel(
-    setID('mainPanel'),
-    tabs
-    (
-        set::collapse(false),
-        $fnGenerateTabs()
-    )
-);
+render();

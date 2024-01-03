@@ -1,41 +1,37 @@
-window.reportSelectAllFields = function(btnEle)
+window.selectAll = function(e)
 {
-    for (const [key, ele] of Object.entries($(btnEle).closest('form').find('*').children('input'))) {
-        if(key === 'length')
-        {
-            continue;
-        }
-
-        $(ele).prop('checked', true);
-    }
-};
-
-window.reportSubmit = function(btnEle)
-{
-    const $submitBtn = $(btnEle);
-    const form       = $submitBtn.closest('form')[0];
-    const formData   = new FormData(form);
-    const firstValue = formData.values().next();
-
-    /* Verify if the report fields have been selected. */
-    if(firstValue.done)
+    let allChecked = true;
+    $('input[name=charts]').each(function()
     {
-        return;
-    }
-
-    $submitBtn.prop('disabled', true);
-    setTimeout(function()
-    {
-        $submitBtn.prop('disabled', false);
-    }, 3000);
-
-    postAndLoadPage($(form).prop('action'), formData, ["#mainPanel"]);
-};
-
-$('div.tab-pane').on('show', function(event)
-{
-    $(event.target).find('*').children('canvas').each(function(idx, canvas)
-    {
-        zui.ECharts.query(canvas).chart.resize();
+        if(!$(this).prop('checked')) allChecked = false;
     });
+    $('input[name=charts]').each(function()
+    {
+        $(this).prop('checked', !allChecked);
+    });
+};
+
+window.clickInit = function(e)
+{
+    initReport();
+};
+
+$(document).off('click', 'a[data-toggle=tab].active').on('click', 'a[data-toggle=tab]', function()
+{
+    initReport();
 });
+
+function initReport()
+{
+    const chartType = $('a[data-toggle=tab].active').data('param');
+    const form      = new FormData();
+    $('input[name=charts]').each(function()
+    {
+        if($(this).prop('checked')) form.append('charts[]', $(this).val());
+    })
+    postAndLoadPage($.createLink('story', 'report', params + '&chartType=' + chartType + '&projectID=' + projectID), form, '#report');
+}
+
+
+
+
