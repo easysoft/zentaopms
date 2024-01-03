@@ -12,8 +12,8 @@ window.clickSubmit = function()
     const end         = $('input[name=end]').val();
     const parentBegin = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['begin'] : '';
     const parentEnd   = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['end'] : '';
-    const errorBegin  = begin && parentBegin && begin < parentBegin;
-    const errorEnd    = end && parentEnd && end > parentEnd;
+    const errorBegin  = parentBegin && begin < parentBegin;
+    const errorEnd    = parentEnd && end > parentEnd;
 
     if(parentPlan > 0 && branches && title && !errorBegin && !errorEnd)
     {

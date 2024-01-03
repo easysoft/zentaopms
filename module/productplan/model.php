@@ -499,7 +499,7 @@ class productplanModel extends model
         if(dao::isError()) return false;
 
         $this->file->updateObjectID($this->post->uid, $oldPlan->id, 'plan');
-        if(!empty($plan->parent) && $parentPlan->parent == '0') $this->transferStoriesAndBugs($plan);
+        if(!empty($plan->parent) && isset($parentPlan->parent) && $parentPlan->parent == '0') $this->transferStoriesAndBugs($plan);
         return common::createChanges($oldPlan, $plan);
     }
 

@@ -151,6 +151,7 @@ class productplan extends control
         $parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product);
         unset($parentPlanPairs[$planID]);
         $this->view->parentPlanPairs = $parentPlanPairs;
+        $this->view->parentList      = $this->productplan->getByIDList(array_keys($this->view->parentPlanPairs));
 
         $this->commonAction((int)$plan->product, (int)$plan->branch);
 

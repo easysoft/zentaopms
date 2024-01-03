@@ -24,8 +24,15 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
 $(document).on('click', 'button[type=submit]', function()
 {
     const parentPlan = $('input[name=parent]').val();
-    let branches     = $('[name^=branch]').val();
-    if(parentPlan > 0 && branches)
+    const branches    = $('[name^=branch]').val();
+    const title       = $('input[name=title]').val();
+    const begin       = $('input[name=begin]').val();
+    const end         = $('input[name=end]').val();
+    const parentBegin = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['begin'] : '';
+    const parentEnd   = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['end'] : '';
+    const errorBegin  = parentBegin && begin < parentBegin;
+    const errorEnd    = parentEnd && end > parentEnd;
+    if(parentPlan > 0 && branches && title && !errorBegin && !errorEnd)
     {
         const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
         $.get(link, function(diffBranchesTip)

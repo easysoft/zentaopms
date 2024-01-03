@@ -15,6 +15,7 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('productID', $productID);
 jsVar('oldBranch', $oldBranch);
 jsVar('planID', $plan->id);
+jsVar('parentList', $parentList);
 
 $deltaValue = $plan->end == $config->productplan->future ? 0 : (strtotime($plan->end) - strtotime($plan->begin)) / 3600 / 24 + 1;
 
