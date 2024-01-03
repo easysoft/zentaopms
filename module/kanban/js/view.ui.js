@@ -312,7 +312,7 @@ window.buildCardActions = function(item)
     let actions = [];
 
     if(item.actionList.includes('editCard') && item.fromType == '')   actions.push({text: kanbanLang.editCard, url: $.createLink('kanban', 'editCard', `id=${item.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(item.actionList.includes('deleteCard')) actions.push({text:  item.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, url: $.createLink('kanban', 'deleteCard', `id=${item.id}`), 'data-confirm': cardLang.confirmDelete, 'innerClass': 'ajax-submit', 'icon': 'trash'});
+    if(item.actionList.includes('deleteCard')) actions.push({text:  item.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, url: $.createLink('kanban', 'deleteCard', `id=${item.id}`), 'data-confirm': item.fromType == '' ? cardLang.confirmDelete : cardLang.confirmRemove, 'innerClass': 'ajax-submit', 'icon': 'trash'});
 
     if(kanban.performable == 1 && item.fromType == '')
     {
