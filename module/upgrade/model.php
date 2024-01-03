@@ -8332,7 +8332,7 @@ class upgradeModel extends model
      */
     public function getNoMergedProductCount(): int
     {
-        return $this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
+        return (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
     }
 
     /**
@@ -8344,7 +8344,7 @@ class upgradeModel extends model
      */
     public function getNoMergedSprintCount(): int
     {
-        return  $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
+        return (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
     }
 
     /**
@@ -8358,5 +8358,82 @@ class upgradeModel extends model
     {
         $this->dao->delete()->from(TABLE_METRIC)->where('fromID')->ne(0)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * Add default traincourse priv to each group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addDefaultTraincoursePriv(): bool
+    {
+        $groups      = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->ne('limited')->andWhere('vision')->eq('rnd')->fetchPairs();
+        $sqlTemplate = 'REPLACE INTO ' . TABLE_GROUPPRIV . " (`group`, `module`, `method`) VALUES ('%s', 'traincourse', 'browse'), ('%s', 'traincourse', 'viewCourse'), ('%s', 'traincourse', 'viewChapter'), ('%s', 'traincourse', 'practice'), ('%s', 'traincourse', 'practiceBrowse'), ('%s', 'traincourse', 'practiceView'), ('%s', 'traincourse', 'updatePractice');";
+
+        foreach($groups as $groupID)
+        {
+            $sql = str_replace('%s', $groupID, $sqlTemplate);
+            $this->dbh->exec($sql);
+        }
+
+        return true;
+    }
+
+    /**
+     * Rename BI default module name.
+     *
+     * @access public
+     * @return bool
+     */
+    public function renameBIModule(): bool
+    {
+        $moduleNames  = array('zh' => '默认分组', 'en' => 'Default');
+        $replaceNames = array('zh' => '未分组', 'en' => 'Ungrouped');
+        $BIModules    = array('pivot', 'chart');
+
+        foreach($BIModules as $BImodule)
+        {
+            foreach($moduleNames as $lang => $moduleName)
+            {
+                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('name')->eq($moduleName)->andWhere('type')->eq($BImodule)->fetchAll();
+                if(count($modules) == 2)
+                {
+                    $data = new stdclass();
+                    $data->name  = $replaceNames[$lang];
+                    $data->order = 1000;
+
+                    foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($data)->where('id')->eq($module->id)->exec();
+                    break;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Migrate xuanxuan client settings, make owners user accounts.
+     *
+     * @access public
+     * @return void
+     */
+    public function migrateXuanClientSettings()
+    {
+        $existingSettings = $this->dao->select('`key`, `value`')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('chat')
+            ->andWhere('section')->eq('settings')
+            ->fetchAll();
+        if(empty($existingSettings)) return true;
+
+        foreach($existingSettings as $setting)
+        {
+            $migratedSetting = array('owner' => $setting->key, 'module' => 'chat', 'section' => 'clientSettings', 'key' => 'settings', 'value' => $setting->value);
+            $this->dao->insert(TABLE_CONFIG)->data($migratedSetting)->exec();
+        }
+
+        $this->dao->delete()->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('chat')->andWhere('section')->eq('settings')->exec();
+        return true;
     }
 }
