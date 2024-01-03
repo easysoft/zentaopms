@@ -807,15 +807,15 @@ $.get($.createLink('index', 'app'), html =>
         url = parts[0];
         code = parts[1];
     }
+    if(!code && defaultOpen)
+    {
+        const lastOpenApp = zui.store.session.get('lastOpenApp');
+        if(lastOpenApp && (lastOpenApp.url === url || lastOpenApp.url.endsWith(url) || $.parseLink(lastOpenApp.url).url === $.parseLink(url).url)) code = lastOpenApp.code;
+    }
     if(!url)
     {
         if(!code) url = apps.defaultCode;
         else {url = code; code = '';}
-    }
-    if(!code && defaultOpen)
-    {
-        const lastOpenApp = zui.store.session.get('lastOpenApp');
-        if(lastOpenApp && lastOpenApp.url === url) code = lastOpenApp.code;
     }
     openApp(url, code);
 });
