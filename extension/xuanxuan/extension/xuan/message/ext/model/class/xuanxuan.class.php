@@ -11,26 +11,13 @@ class xuanxuanMessage extends messageModel
             if(isset($messageActions[$objectType]) and in_array($actionType, $messageActions[$objectType]))
             {
                 $this->loadModel('action');
-                if($objectType == 'task')
-                {
-                    $field = 'obj.*,project.name as projectName,execu.name as execuName';
-                }
-                else if($objectType == 'story')
-                {
-                    $field = 'obj.*,product.name as productName';
-                }
-                else if($objectType == 'bug')
-                {
-                    $field = 'obj.*,project.name as projectName,product.name as productName,execu.name as execuName';
-                }
-                else if($objectType == 'feedback')
-                {
-                    $field = 'obj.*,product.name as productName';
-                }
-                else
-                {
-                    $field = 'obj.*';
-                }
+
+                $field = 'obj.*';
+                if($objectType == 'task')     $field = 'obj.*,project.name as projectName,execu.name as execuName';
+                if($objectType == 'story')    $field = 'obj.*,product.name as productName';
+                if($objectType == 'bug')      $field = 'obj.*,project.name as projectName,product.name as productName,execu.name as execuName';
+                if($objectType == 'feedback') $field = 'obj.*,product.name as productName';
+
                 $object = $this->dao->select($field)->from($this->config->objectTables[$objectType])->alias('obj')
                     ->beginIF($objectType == 'task')
                     ->leftJoin($this->config->objectTables['project'])->alias('project')->on('project.id = obj.project')
@@ -55,43 +42,21 @@ class xuanxuanMessage extends messageModel
                 {
                     $notifyExtra = explode(',', $extra);
                     $notifyType  = strtolower($notifyExtra[0]);
-                    if($notifyType == 'pass')
-                    {
-                        $title = sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
-                    }
-                    else if($notifyType == 'clarify')
-                    {
-                        $title = sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
-                    }
-                    else if($notifyType == 'reject')
-                    {
-                        $title = sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
-                    }
+
+                    if($notifyType == 'pass')    $title = sprintf($this->lang->message->notifyPassTitle,    $this->app->user->realname, 1);
+                    if($notifyType == 'clarify') $title = sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
+                    if($notifyType == 'reject')  $title = sprintf($this->lang->message->notifyRejectTitle,  $this->app->user->realname, 1);
                 }
 
                 if($objectType == 'feedback' && ($actionType == 'tobug' || $actionType == 'tostory' || $actionType == 'totask' || $actionType == 'todo'))
                 {
-                    if($actionType == 'tobug')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToBugTitle, $this->app->user->realname, 1);
-                    }
-                    else if($actionType == 'tostory')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToStoryTitle, $this->app->user->realname, 1);
-                    }
-                    else if($actionType == 'totask')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToTaskTitle, $this->app->user->realname, 1);
-                    }
-                    else if($actionType == 'todo')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToDoTitle, $this->app->user->realname, 1);
-                    }
+                    if($actionType == 'tobug')   $title = sprintf($this->lang->message->feedbackToBugTitle,   $this->app->user->realname, 1);
+                    if($actionType == 'tostory') $title = sprintf($this->lang->message->feedbackToStoryTitle, $this->app->user->realname, 1);
+                    if($actionType == 'totask')  $title = sprintf($this->lang->message->feedbackToTaskTitle,  $this->app->user->realname, 1);
+                    if($actionType == 'todo')    $title = sprintf($this->lang->message->feedbackToDoTitle,    $this->app->user->realname, 1);
                 }
 
-                $server   = $this->loadModel('im')->getServer('zentao');
-                $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
-                unset($_GET['onlybody']);
+                $server = $this->loadModel('im')->getServer('zentao');
                 $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
                 $url    = $server . helper::createLink($objectType == 'kanbancard' ? 'kanban' : $objectType, 'view', "id=$dataID", 'html');
 
@@ -100,10 +65,7 @@ class xuanxuanMessage extends messageModel
                 {
                     $feedback   = $this->loadModel('feedback')->getByID($objectID);
                     $senderUser = $this->feedback->getToAndCcList($feedback);
-                    foreach($senderUser as $user)
-                    {
-                        $target .= ',' . $user;
-                    }
+                    foreach($senderUser as $user) $target .= ',' . $user;
                 }
                 else
                 {
@@ -209,9 +171,8 @@ class xuanxuanMessage extends messageModel
                     $target  = $this->dao->select('id')->from(TABLE_USER)->where('account')->eq($object->assignee)->fetch('id');
                     if($target) $this->loadModel('im')->messageCreateNotify(array($target), $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
                 }
-
-                if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }
+        return;
     }
 }
