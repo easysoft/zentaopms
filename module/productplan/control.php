@@ -305,6 +305,9 @@ class productplan extends control
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 
+        if($product->type != 'normal') $this->config->productplan->dtable->fieldList['branch']['title'] = $this->lang->product->branch;
+        if($product->type == 'normal') unset($this->config->productplan->dtable->fieldList['branch']);
+
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
         $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
