@@ -107,6 +107,8 @@ modal
 
 $tableData = initTableData($branchList, $config->branch->dtable->fieldList, $this->branch);
 array_map(function($data){if($data->id == 0) $data->actions = array();}, $tableData); //Remove main branch actions.
+if(count($tableData) === 1) unset($config->branch->dtable->fieldList['id']);
+if(count($tableData) === 1) unset($config->branch->dtable->fieldList['actions']);
 
 $footToolbar  = array();
 if($canBatchEdit)
@@ -134,7 +136,7 @@ dtable
 (
     set::cols($config->branch->dtable->fieldList),
     set::data($tableData),
-    set::checkable(true),
+    set::checkable(count($tableData) > 1 ? true : false),
     set::canRowCheckable(jsRaw("(rowID) => {return rowID == '0' ? false : true}")),
     set::orderBy($orderBy),
     set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
