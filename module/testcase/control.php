@@ -685,13 +685,14 @@ class testcase extends control
     }
 
     /**
+     * 批量修改用例的模块。
      * Batch change the module of case.
      *
      * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID)
+    public function batchChangeModule(int $moduleID)
     {
         $caseIdList  = zget($_POST, 'caseIdList',  array());
         $sceneIdList = zget($_POST, 'sceneIdList', array());
@@ -701,7 +702,7 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

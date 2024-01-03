@@ -60,7 +60,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirm
 if($canBatchChangeModule)
 {
     $moduleItems = array();
-    foreach($modules as $moduleId => $module) $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID={$moduleID}"));
+    foreach($modules as $changeModuleID => $module) $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID={$changeModuleID}"));
 }
 
 if($canBatchChangeBranch)
