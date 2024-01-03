@@ -524,7 +524,7 @@ class executionModel extends model
             if(isset($postData->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $postData->lifetime[$executionID];
 
             $oldExecution = $oldExecutions[$executionID];
-            $projectID    = isset($executions[$executionID]->project) ? $executions[$executionID]->project : $oldExecution->project;
+            $projectID    = isset($executions[$executionID]->project) ? (int)$executions[$executionID]->project : (int)$oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
             /* Check unique code for edited executions. */
@@ -653,12 +653,12 @@ class executionModel extends model
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-            $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
+            $projectID    = isset($execution->project) ? (int)$execution->project : (int)$oldExecution->project;
 
             if(isset($execution->project))
             {
                 $executionProductList   = $this->loadModel('product')->getProducts($executionID);
-                $projectProductList     = $this->product->getProducts($execution->project);
+                $projectProductList     = $this->product->getProducts((int)$execution->project);
                 $executionProductIdList = array_keys($executionProductList);
                 $projectProductIdList   = array_keys($projectProductList);
                 $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
