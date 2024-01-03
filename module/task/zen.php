@@ -432,9 +432,8 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit)->add('id', $task->id)
-            ->setDefault('deleteFiles', array())
-            ->add('lastEditedDate', $now)
+        $task = form::data($this->config->task->form->edit)
+            ->add('id', $task->id)
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')
@@ -456,7 +455,6 @@ class taskZen extends task
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
             ->setIF($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline, 'version', $oldTask->version + 1)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
             ->get();
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], (string)$this->post->uid);

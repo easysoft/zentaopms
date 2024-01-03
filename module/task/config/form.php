@@ -75,7 +75,8 @@ $config->task->form->edit['closedBy']       = array('type' => 'string',   'requi
 $config->task->form->edit['closedReason']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->task->form->edit['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
-$config->task->form->edit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => null);
+$config->task->form->edit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->task->form->edit['deleteFiles']    = array('type' => 'array',    'required' => false, 'default' => array());
 
 $config->task->form->team->create = array();
 $config->task->form->team->create['team']         = array('type' => 'array',  'required' => false, 'default' => array());
