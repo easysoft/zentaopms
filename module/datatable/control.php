@@ -135,6 +135,19 @@ class datatable extends control
             }
         }
 
+        if($module == 'productplan' && $method == 'browse')
+        {
+            if($this->session->currentProductType == 'normal')
+            {
+                unset($cols['branch']);
+            }
+            else
+            {
+                $this->app->loadLang('product');
+                $cols['branch']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
+            }
+        }
+
         if($module == 'project' && $method == 'bug')
         {
             $project = $this->loadModel('project')->getByID($this->session->project);
