@@ -282,9 +282,7 @@ class gitlab extends control
     public function webhook()
     {
         $this->gitlab->webhookCheckToken();
-        $product = $this->get->product;
-        $gitlab  = $this->get->gitlab;
-        $project = $this->get->project;
+        $gitlab = $this->get->gitlab;
 
         $input       = file_get_contents('php://input');
         $requestBody = json_decode($input);
@@ -298,7 +296,7 @@ class gitlab extends control
 
         if($result->action == 'closeissue') $this->gitlab->webhookCloseIssue($result);
 
-        if($result->action == 'updateissue') $this->gitlab->webhookSyncIssue($gitlab, $result);
+        if($result->action == 'updateissue') $this->gitlab->webhookSyncIssue($result);
 
         $this->view->result = 'success';
         $this->view->status = 'ok';

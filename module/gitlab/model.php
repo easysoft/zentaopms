@@ -264,14 +264,13 @@ class gitlabModel extends model
      *
      * @param  object $repo
      * @param  string $entry
-     * @param  string $type
      * @param  object $pager
      * @param  string $begin
      * @param  string $end
      * @access public
      * @return array
      */
-    public function getCommits(object $repo, string $entry, string $type = 'dir', object $pager = null, string $begin = '', string $end = ''): array
+    public function getCommits(object $repo, string $entry, object $pager = null, string $begin = '', string $end = ''): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -321,18 +320,16 @@ class gitlabModel extends model
      *
      * @param  int|string $host gitlab server ID | gitlab host url.
      * @param  string     $api
-     * @param  array      $data
-     * @param  array      $options
      * @access public
-     * @return object|array|null|false
+     * @return object|array|null
      */
-    public function apiGet(int|string $host, string $api, array $data = array(), array $options = array()): object|array|null|false
+    public function apiGet(int|string $host, string $api): object|array|null
     {
         if(is_numeric($host)) $host = $this->getApiRoot($host);
-        if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
+        if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return null;
 
         $url = sprintf($host, $api);
-        return json_decode(commonModel::http($url, $data, $options, $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -371,7 +368,7 @@ class gitlabModel extends model
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
         $url = rtrim($gitlab->url, '/') . "/api/v4/todos?project_id=$projectID&type=MergeRequest&state=pending&private_token={$gitlab->token}&sudo={$sudo}";
-        return json_decode(commonModel::http($url, $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -631,7 +628,7 @@ class gitlabModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100", $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
+            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results) < 100) break;
@@ -694,7 +691,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/members/{$member->user_id}");
-        return json_decode(commonModel::http($url, $member, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return json_decode(commonModel::http($url, $member, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -711,7 +708,7 @@ class gitlabModel extends model
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/members/{$memberID}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -749,7 +746,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/{$groupID}/members/{$member->user_id}");
-        return json_decode(commonModel::http($url, $member, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return json_decode(commonModel::http($url, $member, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -766,7 +763,7 @@ class gitlabModel extends model
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/{$groupID}/members/{$memberID}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -802,7 +799,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/users/{$user->id}");
-        return json_decode(commonModel::http($url, $user, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return json_decode(commonModel::http($url, $user, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -820,7 +817,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/{$group->id}");
-        return json_decode(commonModel::http($url, $group, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return json_decode(commonModel::http($url, $group, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -838,7 +835,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/{$groupID}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -856,7 +853,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$project->id}");
-        return json_decode(commonModel::http($url, $project, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return json_decode(commonModel::http($url, $project, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -874,7 +871,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(),  array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -892,7 +889,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/users/{$userID}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -929,7 +926,7 @@ class gitlabModel extends model
         if(isset($this->projects[$gitlabID][$projectID])) return $this->projects[$gitlabID][$projectID];
 
         $url = sprintf($this->getApiRoot($gitlabID, $useUser), "/projects/$projectID");
-        $this->projects[$gitlabID][$projectID] = json_decode(commonModel::http($url, $data = null, $optionsi = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = false));
+        $this->projects[$gitlabID][$projectID] = json_decode(commonModel::http($url));
         return $this->projects[$gitlabID][$projectID];
     }
 
@@ -1131,7 +1128,7 @@ class gitlabModel extends model
         foreach($hook as $index => $item) $newHook->$index= $item;
 
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
-        return commonModel::http($url, $newHook, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
+        return commonModel::http($url, $newHook, array(CURLOPT_CUSTOMREQUEST => 'PUT'));
     }
 
     /**
@@ -1195,7 +1192,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/labels/{$labelID}");
 
-        return json_decode(commonModel::http($url, null, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -1348,7 +1345,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetBranches(int $gitlabID, int $projectID, object $pager = null): array
+    public function apiGetBranches(int $gitlabID, int $projectID): array
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
         $allResults = array();
@@ -1434,7 +1431,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $tagName = urlencode($tagName);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/tags/{$tagName}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -1482,7 +1479,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $tag     = urlencode($tag);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_tags/{$tag}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -1552,12 +1549,11 @@ class gitlabModel extends model
      * 通过webhook同步issue。
      * Webhook sync issue.
      *
-     * @param  int    $gitlabID
      * @param  object $issue
      * @access public
      * @return void
      */
-    public function webhookSyncIssue(int $gitlabID, object $issue): bool
+    public function webhookSyncIssue(object $issue): bool
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
@@ -1741,54 +1737,8 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
-        commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
+        commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'));
         $this->saveIssueRelation($objectType, $object, $gitlabID, $issue);
-    }
-
-    /**
-     * 解析禅道任务、bug、需求为gitlab issue。
-     * Parse zentao object to issue. object can be task, bug and story.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $objectType
-     * @param  object $object
-     * @access public
-     * @return object
-     */
-    public function parseObjectToIssue(int $gitlabID, int $projectID, string $objectType, object $object): object
-    {
-        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
-        if(empty($gitlabUsers)) return false;
-        $issue = new stdclass;
-        $map   = $this->config->gitlab->maps->$objectType;
-        foreach($map as $objectField => $config)
-        {
-            $value = '';
-            list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field') $value = $object->$objectField;
-            if($optionType == 'fields') $value = $object->$objectField . "\n\n" . $object->$options;
-            if($optionType == 'userPairs')
-            {
-                $value = zget($gitlabUsers, $object->$objectField);
-            }
-            if($optionType == 'configItems')
-            {
-                $value = zget($this->config->gitlab->$options, $object->$objectField, '');
-            }
-            if($value) $issue->$field = $value;
-        }
-        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
-
-        /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
-
-        /* Append this object link in zentao to gitlab issue description */
-        $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");
-        if(strpos($issue->description, $zentaoLink) == false) $issue->description = $issue->description . "\n\n" . $zentaoLink;
-
-        return $issue;
     }
 
     /**
@@ -2251,7 +2201,7 @@ class gitlabModel extends model
         $branch  = urlencode($branch);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -2548,29 +2498,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 判断按钮是否显示在列表页。
-     * Judge an action is displayed in browse page.
-     *
-     * @param  object $sonarqube
-     * @param  string $action
-     * @access public
-     * @return bool
-     */
-    public static function isDisplay(object $sonarqube, string $action): bool
-    {
-        $action = strtolower($action);
-
-        if(!commonModel::hasPriv('space', 'browse')) return false;
-
-        if(!in_array(strtolower(strtolower($action)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
-        {
-            if(!commonModel::hasPriv('instance', 'manage')) return false;
-        }
-
-        return true;
-    }
-
-    /**
      * 通过graphql的api获取数据。
      * Get data by api graphql.
      *
@@ -2600,8 +2527,8 @@ class gitlabModel extends model
      * 获取文件最后一次提交信息。
      * Get file last commit info.
      *
-     * @param  int    $repo
-     * @param  int    $path
+     * @param  object $repo
+     * @param  string $path
      * @param  string $branch
      * @access public
      * @return object|array|null

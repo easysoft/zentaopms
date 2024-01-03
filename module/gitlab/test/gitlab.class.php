@@ -276,10 +276,10 @@ class gitlabTest
         return $this->gitlab->isWebhookExists($repo, $url);
     }
 
-    public function getCommitsTest(int $repoID, string $entry = '', string $type = 'dir', object $pager = null, string $begin = '', string $end = '')
+    public function getCommitsTest(int $repoID, string $entry = '', object $pager = null, string $begin = '', string $end = '')
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
-        return $this->gitlab->getCommits($repo, $entry, $type, $pager, $begin, $end);
+        return $this->gitlab->getCommits($repo, $entry, $pager, $begin, $end);
     }
 
     public function deleteIssueTest(string $objectType, int $objectID, int $issueID)
