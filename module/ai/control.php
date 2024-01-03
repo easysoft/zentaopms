@@ -547,9 +547,10 @@ class ai extends control
                     unlink($fileName);
                     return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'miniprograms')));
                 }
+                unlink($fileName);
             }
 
-            return $this->send(array('result' => 'fail', 'message' => this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
         }
     }
 
