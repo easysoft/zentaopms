@@ -110,6 +110,7 @@ class productplan extends control
         $this->view->branches        = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
         $this->view->parent          = $parent;
         $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($productID, 'done,closed');
+        $this->view->parentList      = $this->productplan->getByIDList(array_keys($this->view->parentPlanPairs));
         $this->display();
     }
 

@@ -14,8 +14,7 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('productID', $product->id);
 jsVar('lastLang', $lang->productplan->last);
 jsVar('parentPlanID', $parent);
-jsVar('parentBegin', isset($parentPlan->begin) ? $parentPlan->begin : '');
-jsVar('parentEnd', isset($parentPlan->end) ? $parentPlan->end : '');
+jsVar('parentList', $parentList);
 
 if($parent)
 {

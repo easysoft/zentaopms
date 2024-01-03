@@ -5,13 +5,15 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
 
 window.clickSubmit = function()
 {
-    const parentPlan = $('input[name=parent]').val();
-    const branches   = $('select[name^=branch]').val();
-    const title      = $('input[name=title]').val();
-    const begin      = $('input[name=begin]').val();
-    const end        = $('input[name=end]').val();
-    const errorBegin = begin && parentBegin && begin < parentBegin;
-    const errorEnd   = end && parentEnd && end > parentEnd;
+    const parentPlan  = $('input[name=parent]').val();
+    const branches    = $('select[name^=branch]').val();
+    const title       = $('input[name=title]').val();
+    const begin       = $('input[name=begin]').val();
+    const end         = $('input[name=end]').val();
+    const parentBegin = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['begin'] : '';
+    const parentEnd   = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['end'] : '';
+    const errorBegin  = begin && parentBegin && begin < parentBegin;
+    const errorEnd    = end && parentEnd && end > parentEnd;
 
     if(parentPlan > 0 && branches && title && !errorBegin && !errorEnd)
     {
