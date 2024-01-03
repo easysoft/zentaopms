@@ -909,7 +909,7 @@ class actionModel extends model
         /* 获取评论用户以及当前登陆用户的本部门用户。 */
         /* Get the commenters and the users of the current user's department. */
         $commiters = $this->loadModel('user')->getCommiters();
-        $deptUsers = isset($this->app->user->dept) ? $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id') : '';
+        $deptUsers = isset($this->app->user->dept) ? $this->loadModel('dept')->getDeptUserPairs((int)$this->app->user->dept, 'id') : '';
 
         /* 通过action获取对象名称，所属项目以及需求。 */
         /* Get object names, object projects and requirements by actions. */
