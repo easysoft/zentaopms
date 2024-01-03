@@ -76,6 +76,7 @@ $lang->file->errorUploadEmpty = '没有等待上传的文件';
 $lang->file->fileNotFound     = '未找到该文件，可能物理文件已被删除！';
 $lang->file->fileContentEmpty = '上传文件内容为空，请检查后重新上传。';
 $lang->file->bizGuide         = '如需使用Excel导入导出功能，可升级到 %s';
+$lang->file->errorFileCount   = " 只能上传 %s 个文件，超出数量限制的文件无法上传。";
 
 $lang->file->uploadError[1] = "上传的文件大小超过了限制，请修改 php.ini 中 upload_max_filesize 与 post_max_size 选项限制的值";
 $lang->file->uploadError[2] = '上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值';

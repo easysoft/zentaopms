@@ -69,6 +69,7 @@ $lang->file->errorFileSize    = " Die Dateigröße übersteigt das Limit. Upload
 $lang->file->errorFileUpload  = " Upload fehlgeschlagen. Die Dateigröße übersteigt das Limit.";
 $lang->file->errorFileFormate = " Upload fehlgeschlagen, Das Dateiformat ist nicht erlaubt.";
 $lang->file->errorFileMove    = " Upload fehlgeschlagen, die Datei konnte nicht verschoben werden.";
+$lang->file->errorFileCount   = " Uploading failed. Files that exceed the limit cannot be uploaded.";
 $lang->file->dangerFile       = " Die Datei wurde aus Sicherheitsgründen abgelehnt.";
 $lang->file->errorSuffix      = 'Format ist falsch. Nur .zip Dateien!';
 $lang->file->errorExtract     = 'Entpacken fehlgeschlagen. Die Datei ist vermutlich defekt.';

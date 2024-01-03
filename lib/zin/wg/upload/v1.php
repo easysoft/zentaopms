@@ -42,10 +42,15 @@ class upload extends wg
 
     protected function build(): zui
     {
-        global $lang;
+        global $lang, $app;
 
         if(!$this->prop('class')) $this->setProp('class', 'w-full');
         if(!$this->prop('tip'))   $this->setProp('tip', sprintf($lang->noticeDrag, strtoupper(ini_get('upload_max_filesize'))));
+        if($this->prop('limitCount') && !$this->prop('exceededCountHint'))
+        {
+            $app->loadLang('file');
+            $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, $this->prop('limitCount')));
+        }
 
         $otherProps = $this->getRestProps();
         return zui::upload(inherit($this), set('_props', $otherProps));
