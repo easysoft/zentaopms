@@ -454,7 +454,7 @@ detailBody
             set::collapse(true),
             tabPane
             (
-                set::key('legendBasicInfo'),
+                set::key('legendBasicInfo' . $case->id),
                 set::title($lang->testcase->legendBasicInfo),
                 set::active(true),
                 tableData
@@ -497,7 +497,7 @@ detailBody
             ),
             tabPane
             (
-                set::key('legendOpenAndEdit'),
+                set::key('legendOpenAndEdit' . $case->id),
                 set::title($lang->testcase->legendOpenAndEdit),
                 tableData
                 (
@@ -529,7 +529,7 @@ detailBody
             isset($linkBugItem) || $linkCaseItem ? set::collapse(true) : true,
             tabPane
             (
-                set::key('otherReleted'),
+                set::key('otherReleted' . $case->id),
                 set::title($lang->testcase->legendOther),
                 set::active(true),
                 tableData

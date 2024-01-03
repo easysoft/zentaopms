@@ -1533,6 +1533,10 @@ class testcaseZen extends testcase
             if(isset($modules[$case->id])) $case->module = $modules[$case->id];
             if(isset($branches[$case->id])) $case->branch = $branches[$case->id];
             unset($case->id);
+            if(!$case->scriptedDate)   unset($case->scriptedDate);
+            if(!$case->reviewedDate)   unset($case->reviewedDate);
+            if(!$case->lastEditedDate) unset($case->lastEditedDate);
+            if(!$case->lastRunDate)    unset($case->lastRunDate);
 
             if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
             {
