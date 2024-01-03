@@ -76,7 +76,7 @@ pipeline {
                   sh '''find module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +'''
                   
                   withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
-                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" framework lib module/*'
+                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" extension framework lib module/*'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
