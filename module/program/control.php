@@ -101,7 +101,7 @@ class program extends control
         if($programID && !isset($programPairs[$programID]))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('program', 'browse')));
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('program', 'browse'))));
         }
 
         $programID = $this->program->checkAccess($programID, $programPairs);
