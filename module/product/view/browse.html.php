@@ -277,7 +277,7 @@ js::set('pageSummary',       $summary);
         $hidden = empty($buttonLink) ? 'hidden' : '';
         echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories') and $projectModel != 'ipd')
+        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories') and $projectModel != 'ipd' and $storyType == 'story')
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";

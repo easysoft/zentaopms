@@ -2843,34 +2843,32 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
-        if(empty($project->hasProduct) or $model == 'ipd')
+        $projectProduct = 0;
+        if(empty($project->hasProduct) || $model == 'ipd') $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
+        $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+        if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
         {
-            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
-            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
-
-            if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
-            {
-                $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
-            }
-            else
-            {
-                unset($lang->project->menu->projectplan);
-            }
-
-            if(!empty($this->config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
-            {
-                $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
-
-                if($project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
-                {
-                    $lang->project->menu->story = $lang->project->menu->storyGroup;
-                    $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
-                    $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
-                    $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
-                }
-            }
+            $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
         }
         else
+        {
+            unset($lang->project->menu->projectplan);
+        }
+
+        if(!empty($this->config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
+        {
+            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+            if($project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
+            {
+                $lang->project->menu->story = $lang->project->menu->storyGroup;
+                $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+                $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
+                $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
+            }
+        }
+        if(!empty($project->hasProduct) && $model != 'ipd')
         {
             unset($lang->project->menu->settings['subMenu']->module);
             unset($lang->project->menu->projectplan);
