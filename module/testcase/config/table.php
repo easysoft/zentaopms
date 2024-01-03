@@ -50,6 +50,7 @@ $config->testcase->dtable->fieldList['status']['sortType']  = true;
 
 $config->testcase->dtable->fieldList['stage']['title']    = $lang->testcase->stage;
 $config->testcase->dtable->fieldList['stage']['type']     = 'text';
+$config->testcase->dtable->fieldList['stage']['map']      = "RAWJS<(value) => {const stageList = JSON.parse('" . json_encode($lang->testcase->stageList) . "'); return value.split(',').map((v) => stageList[v]).join('{$lang->comma}');}>RAWJS";
 $config->testcase->dtable->fieldList['stage']['group']    = 2;
 $config->testcase->dtable->fieldList['stage']['sortType'] = true;
 

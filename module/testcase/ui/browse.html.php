@@ -115,12 +115,6 @@ foreach($cases as $case)
 
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
-
-    if($case->isScene) continue;
-
-    $stages = array_filter(explode(',', $case->stage));
-    foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
-    $case->stage = implode($lang->comma, $stages);
 }
 
 $linkParams = '';
