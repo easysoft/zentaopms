@@ -21,7 +21,7 @@ foreach($lang->doc->createList as $typeKey => $typeName)
     $docType = zget($config->doc->iconList, $typeKey);
     $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
     if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html&from=template";
-    if($typeKey == 'attachment') $method = 'uploadDocs';
+    if($typeKey == 'attachment') continue;;
 
     $buttonItems[] = array
         (
