@@ -10,6 +10,7 @@ declare(strict_types = 1);
  */
 namespace zin;
 
+$currentMenu = $currentMenu ?? '';
 $generateData = function() use ($lang) {return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);};
 
 $viewFile = strtolower($method) . '.html.php';
