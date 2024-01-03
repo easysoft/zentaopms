@@ -132,11 +132,13 @@ $config->testcase->dtable->fieldList['stepNumber']['sortType'] = false;
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;
 $config->testcase->dtable->fieldList['version']['type']     = 'text';
 $config->testcase->dtable->fieldList['version']['group']    = 5;
+$config->testcase->dtable->fieldList['version']['width']    = '80';
 $config->testcase->dtable->fieldList['version']['sortType'] = false;
 
 $config->testcase->dtable->fieldList['lastEditedBy']['title']    = $lang->testcase->lastEditedBy;
 $config->testcase->dtable->fieldList['lastEditedBy']['type']     = 'user';
 $config->testcase->dtable->fieldList['lastEditedBy']['group']    = 6;
+$config->testcase->dtable->fieldList['lastEditedBy']['width']    = '90';
 $config->testcase->dtable->fieldList['lastEditedBy']['sortType'] = true;
 
 $config->testcase->dtable->fieldList['lastEditedDate']['title']    = $lang->testcase->lastEditedDate;
@@ -148,6 +150,7 @@ $config->testcase->dtable->fieldList['product']['title']      = 'product';
 $config->testcase->dtable->fieldList['product']['control']    = 'hidden';
 $config->testcase->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 $config->testcase->dtable->fieldList['product']['display']    = false;
+$config->testcase->dtable->fieldList['product']['hidden']     = true;
 
 $config->testcase->dtable->fieldList['module']['control']    = 'select';
 $config->testcase->dtable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => ['productID' => (int)'$productID']);

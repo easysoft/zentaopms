@@ -401,6 +401,7 @@ class executionZen extends execution
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
         $this->view->cases           = $cases;
+        $this->view->scenes          = $this->testcase->getSceneMenu($productID, $moduleID);;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->title           = $this->lang->execution->testcase;
         $this->view->executionID     = $executionID;
