@@ -107,10 +107,11 @@ $config->task->dtable->fieldList['left']['sortType'] = true;
 $config->task->dtable->fieldList['left']['show']     = true;
 $config->task->dtable->fieldList['left']['group']    = 5;
 
-$config->task->dtable->fieldList['progress']['title'] = $lang->task->progressAB;
-$config->task->dtable->fieldList['progress']['type']  = 'progress';
-$config->task->dtable->fieldList['progress']['show']  = true;
-$config->task->dtable->fieldList['progress']['group'] = 5;
+$config->task->dtable->fieldList['progress']['title']    = $lang->task->progressAB;
+$config->task->dtable->fieldList['progress']['type']     = 'progress';
+$config->task->dtable->fieldList['progress']['show']     = true;
+$config->task->dtable->fieldList['progress']['sortType'] = false;
+$config->task->dtable->fieldList['progress']['group']    = 5;
 
 $config->task->dtable->fieldList['closedBy']['type']     = 'user';
 $config->task->dtable->fieldList['closedBy']['sortType'] = true;
