@@ -1454,6 +1454,12 @@ class projectModel extends model
      */
     public function activate(int $projectID, object $project) :array|false
     {
+        if($project->begin > $project->end)
+        {
+            dao::$errors['end'] = $this->lang->project->error->endLessBegin;
+            return false;
+        }
+
         $oldProject = $this->projectTao->fetchProjectInfo($projectID);
 
         $daoSuccess = $this->projectTao->doActivate($projectID, $project);

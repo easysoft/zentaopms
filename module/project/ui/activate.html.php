@@ -21,14 +21,13 @@ formPanel
             set::label($lang->execution->beginAndEnd),
             inputGroup
             (
-                input
+                datePicker
                 (
-                    set::control('date'),
                     set::name('begin'),
                     set::value($newBegin)
                 ),
                 $lang->execution->to,
-                input
+                datePicker
                 (
                     set::control('date'),
                     set::name('end'),

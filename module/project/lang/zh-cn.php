@@ -244,6 +244,7 @@ $lang->project->error->budgetGe0        = '『预算』金额必须大于等于0
 $lang->project->error->budgetNumber     = '『预算』金额必须为数字。';
 $lang->project->error->productNotEmpty  = "请关联{$lang->productCommon}或创建{$lang->productCommon}。";
 $lang->project->error->emptyBranch      = '分支不能为空！';
+$lang->project->error->endLessBegin     = '计划结束日期不能小于计划开始日期！';
 
 $lang->project->tip = new stdclass();
 $lang->project->tip->closed     = '该项目已是关闭状态，无须关闭。';
