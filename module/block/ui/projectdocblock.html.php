@@ -41,8 +41,8 @@ statisticBlock
                 span(setClass('caret align-middle ml-1'))
             ),
             set::items(array(
-                array('text' => $lang->project->involved, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=involved")), 'data-load' => 'target', 'data-selector' => "#doc-projectdoc-{$block->id}", 'data-partial' => true),
-                array('text' => $lang->project->all, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=all")), 'data-load' => 'target', 'data-selector' => "#doc-projectdoc-{$block->id}", 'data-partial' => true))
+                array('text' => $lang->project->involved, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=involved")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)"),
+                array('text' => $lang->project->all, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=all")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)"))
             )
         )
     ),

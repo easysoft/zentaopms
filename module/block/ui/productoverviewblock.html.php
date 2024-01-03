@@ -73,7 +73,7 @@ if($block->width == 3)
     foreach($years as $year)
     {
         $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("year={$year}"));
-        $items[] = array('text' => $year . $suffix, 'url' => $url, 'data-load' => 'target', 'data-selector' => "#{$id}-annual", 'data-partial' => true);
+        $items[] = array('text' => $year . $suffix, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
     }
 
     blockPanel
