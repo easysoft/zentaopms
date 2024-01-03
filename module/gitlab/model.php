@@ -76,7 +76,7 @@ class gitlabModel extends model
     public function getApiRoot(int $gitlabID, bool $sudo = true): string
     {
         $gitlab = $this->getByID($gitlabID);
-        if(!$gitlab) return '';
+        if(!$gitlab || $gitlab->type != 'gitlab') return '';
 
         $sudoParam = '';
         if($sudo == true && !$this->app->user->admin)
