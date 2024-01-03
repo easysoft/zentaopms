@@ -191,6 +191,8 @@ class todoZen extends todo
         }
         if(empty($todo->cycle)) unset($todo->config);
 
+        if($todo->private) $todo->assignedTo = $todo->assignedBy = $this->app->user->account;
+
         $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
 
         return $todo;
@@ -299,6 +301,8 @@ class todoZen extends todo
         /* Handle cycle configuration item. */
         if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);
         if(empty($oldTodo->cycle))  $todo->config = '';
+
+        if($todo->private) $todo->assignedTo = $todo->assignedBy = $this->app->user->account;
 
         return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
     }
