@@ -148,14 +148,14 @@ formPanel
             (
                 setID('auto'),
                 set::name('auto'),
-                set::value('auto'),
+                set::checked($case->auto == 'auto'),
                 set::text($lang->testcase->automated)
             )
         )
     ),
     formRow
     (
-        setClass('hidden autoScript'),
+        setClass('autoScript', $case->auto != 'auto' ? 'hidden' : ''),
         formGroup
         (
             set::width('1/3'),

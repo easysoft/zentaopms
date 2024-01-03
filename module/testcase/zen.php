@@ -1871,16 +1871,11 @@ class testcaseZen extends testcase
         /* Initialize the testcase. */
         $case = new stdclass();
         $case->type         = 'feature';
-        $case->stage        = '';
         $case->pri          = 3;
         $case->scene        = 0;
         $case->story        = $storyID;
-        $case->title        = '';
-        $case->precondition = '';
-        $case->keywords     = '';
+        $case->stage        = $case->title = $case->precondition = $case->keywords = $case->color = $case->auto = $case->script = '';
         $case->steps        = array();
-        $case->color        = '';
-        $case->auto         = '';
 
         /* 如果用例 id 大于 0，使用这个用例数据作为模板。 */
         /* If testcaseID large than 0, use this testcase as template. */
@@ -1899,6 +1894,7 @@ class testcaseZen extends testcase
             $case->steps        = $testcase->steps;
             $case->color        = $testcase->color;
             $case->auto         = $testcase->auto;
+            $case->script       = $testcase->script;
         }
 
         /* 如果 bug id 大于 0，使用这个 bug 数据作为模板。 */
