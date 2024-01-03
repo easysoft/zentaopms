@@ -683,7 +683,7 @@ class bugZen extends bug
         $legendLife  = array();
         $legendLife['openedBy']      = array('name' => $this->lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . ($bug->openedDate ? $this->lang->at . $bug->openedDate : ''));
         $legendLife['openedBuild']   = array('name' => $this->lang->bug->openedBuild,   'text' => $bug->openedBuild);
-        $legendLife['resolvedBy']    = array('name' => $this->lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $this->lang->at . $bug->resolvedDate : ''));
+        $legendLife['resolvedBy']    = array('name' => $this->lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $this->lang->at . formatTime($bug->resolvedDate, DT_DATE1) : ''));
         $legendLife['resolvedBuild'] = array('name' => $this->lang->bug->resolvedBuild, 'text' => zget($builds, $bug->resolvedBuild));
         $legendLife['resolution']    = array('name' => $this->lang->bug->resolution,    'text' => '');
         $legendLife['closedBy']      = array('name' => $this->lang->bug->closedBy,      'text' => zget($users, $bug->closedBy) . ($bug->closedDate ? $this->lang->at . $bug->closedDate : ''));
