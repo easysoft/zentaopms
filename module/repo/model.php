@@ -2309,6 +2309,8 @@ class repoModel extends model
     public function updateCommitDate(int $repoID): void
     {
         $repo = $this->getByID($repoID);
+        if(empty($repo->id)) return;
+
         if($repo->SCM == 'Gitlab')
         {
             $scm = $this->app->loadClass('scm');

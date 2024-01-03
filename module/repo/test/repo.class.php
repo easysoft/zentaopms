@@ -344,6 +344,16 @@ class repoTest
         return $this->objectModel->getByID($repoID);
     }
 
+    public function updateCommitDateTest(int $repoID)
+    {
+        $this->objectModel->updateCommitDate($repoID);
+
+        if(dao::isError()) return dao::getError();
+
+        $repo = $this->objectModel->getByID($repoID);
+        return !empty($repo->id) ? $repo : 'return empty';
+    }
+
     public function getUnsyncedCommitsTest(int $repoID)
     {
         global $dao;
