@@ -32,12 +32,12 @@ toolbar
         ),
         $user->score
     ),
-    btn
+    hasPriv('score', 'rule') ? btn
     (
         setClass('btn primary'),
         set::url(helper::createLink('score', 'rule')),
         $lang->my->scoreRule
-    )
+    ) : null
 );
 
 dtable
