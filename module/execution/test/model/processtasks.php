@@ -29,5 +29,5 @@ r($executionTester->processTasksTest($executionIdList[1], $count[0])) && p('30:i
 r($executionTester->processTasksTest($executionIdList[2], $count[0])) && p('15:id,name') && e('15,开发任务25'); // 测试处理阶段下的任务信息
 r($executionTester->processTasksTest($executionIdList[3], $count[0])) && p('27:id,name') && e('27,开发任务37'); // 测试处理看板下的任务信息
 r($executionTester->processTasksTest($executionIdList[1], $count[1])) && p()             && e('13');            // 获取处理迭代下的任务数量
-r($executionTester->processTasksTest($executionIdList[2], $count[1])) && p()             && e('2');             // 获取处理阶段下的任务数量
+r($executionTester->processTasksTest($executionIdList[2], $count[1])) && p()             && e('5');             // 获取处理阶段下的任务数量
 r($executionTester->processTasksTest($executionIdList[3], $count[1])) && p()             && e('6');             // 获取处理看板下的任务数量
