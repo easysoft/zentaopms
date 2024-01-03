@@ -8077,7 +8077,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function removeProductLineRequired()
+    public function removeProductLineRequired(): bool
     {
         $createRequired = $this->loadModel('setting')->getItem('owner=system&module=product&section=create&key=requiredFields');
         $editRequired   = $this->setting->getItem('owner=system&module=product&section=edit&key=requiredFields');
@@ -8170,7 +8170,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function upgradeTesttaskMembers()
+    public function upgradeTesttaskMembers(): void
     {
         $memberGroup = $this->dao->select('task,lastRunner')->from(TABLE_TESTRUN)
             ->where('lastRunner')->ne('')
@@ -8257,7 +8257,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function addAdminInviteField()
+    public function addAdminInviteField(): void
     {
         $table  = $this->config->db->prefix . 'im_chat';
         $exists = $this->checkFieldsExists($table, 'adminInvite');
