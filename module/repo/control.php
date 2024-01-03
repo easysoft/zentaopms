@@ -1490,6 +1490,20 @@ class repo extends control
     }
 
     /**
+     * Ajax get executions.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutions(int $productID, int $branch = 0)
+    {
+        $executions = $this->repo->getExecutionPairs($productID, $branch);
+        echo html::select('execution', $executions, '', 'class="form-control chosen"');
+    }
+
+    /**
      * 下载代码。
      * Download zip code.
      *

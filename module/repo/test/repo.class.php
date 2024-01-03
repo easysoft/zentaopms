@@ -500,7 +500,38 @@ class repoTest
         return $objects;
     }
 
-    public function saveAction2PMSTest($log, $repoID, $scm = 'git', $gitlabAccountPairs = array())
+    public function saveObjectToPmsTest(object $log, object $action, int $repoID, string $type)
+    {
+        $repo    = $this->objectModel->getByID($repoID);
+        $objects = $this->objectModel->parseComment($log->msg);
+        $changes = $this->objectModel->createActionChanges($log, $repo->path, 'git');
+
+        $result = $this->objectModel->saveObjectToPms($objects, $action, $changes);
+
+        if(dao::isError()) return dao::getError();
+
+        if($type == 'task')
+        {
+            $records = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq('tasks')
+                ->andWhere('objectID')->in('1,2,8')
+                ->andWhere('extra')->eq($action->extra)
+                ->andWhere('action')->eq($action->action)
+                ->fetchAll('objectID');
+        }
+        elseif($type == 'bug')
+        {
+            $records = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq('bugs')
+                ->andWhere('objectID')->in('1,2')
+                ->andWhere('extra')->eq($action->extra)
+                ->andWhere('action')->eq($action->action)
+                ->fetchAll('objectID');
+        }
+        return $records;
+    }
+
+    public function saveAction2PMSTest(object $log, int $repoID, string $scm = 'git', array $gitlabAccountPairs = array())
     {
         $repo    = $this->objectModel->getByID($repoID);
         $objects = $this->objectModel->parseComment($log->msg);
@@ -508,6 +539,65 @@ class repoTest
         $result = $this->objectModel->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, $scm, $gitlabAccountPairs);
 
         if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    public function setTaskByCommitTest(object $log, object $action, int $repoID, string $scm = 'git')
+    {
+        $action->comment = $this->objectModel->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->objectModel->iconvComment($log->msg, 'utf-8'));
+
+        $repo    = $this->objectModel->getByID($repoID);
+        $objects = $this->objectModel->parseComment($log->msg);
+        $changes = $this->objectModel->createActionChanges($log, $repo->path, $scm);
+
+        $actions = $objects['actions'];
+        foreach($actions['task'] as $taskID => $taskActions)
+        {
+            $task = $this->objectModel->loadModel('task')->getById($taskID);
+            if(empty($task)) continue;
+
+            $action->objectType = 'task';
+            $action->objectID   = $taskID;
+
+            $result = $this->objectModel->setTaskByCommit($task, $taskActions, $action, $changes, $scm);
+            return $result;
+        }
+    }
+
+    public function saveEffortForCommitTest(object $log, object $action, int $repoID, string $scm = 'git')
+    {
+        $action->comment = $this->objectModel->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->objectModel->iconvComment($log->msg, 'utf-8'));
+
+        $repo    = $this->objectModel->getByID($repoID);
+        $objects = $this->objectModel->parseComment($log->msg);
+        $changes = $this->objectModel->createActionChanges($log, $repo->path, $scm);
+
+        $actions = $objects['actions'];
+        foreach($actions['task'] as $taskID => $taskActions)
+        {
+            $task = $this->objectModel->loadModel('task')->getById($taskID);
+            if(empty($task)) continue;
+
+            $action->objectType = 'task';
+            $action->objectID   = $taskID;
+
+            foreach($taskActions as $taskAction => $params)
+            {
+                $result = $this->objectModel->saveEffortForCommit($task->id, $params, $action, $changes);
+                return $result;
+            }
+        }
+    }
+
+    public function setBugStatusByCommitTest(object $log, object $action, int $repoID, string $scm = 'git')
+    {
+        $action->comment = $this->objectModel->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->objectModel->iconvComment($log->msg, 'utf-8'));
+
+        $repo    = $this->objectModel->getByID($repoID);
+        $objects = $this->objectModel->parseComment($log->msg);
+        $changes = $this->objectModel->createActionChanges($log, $repo->path, $scm);
+
+        $result = $this->objectModel->setBugStatusByCommit($objects['bugs'], $objects['actions'], $action, $changes);
         return $result;
     }
 
