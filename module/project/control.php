@@ -1290,6 +1290,7 @@ class project extends control
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
+        $this->app->loadLang('build');
         $this->projectZen->buildSuspendForm($projectID);
     }
 
@@ -1321,6 +1322,7 @@ class project extends control
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
+        $this->app->loadLang('build');
         $this->projectZen->buildClosedForm($projectID);
     }
 
@@ -1350,6 +1352,7 @@ class project extends control
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
+        $this->app->loadLang('build');
         $this->projectZen->buildActivateForm($project);
     }
 
