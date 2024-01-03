@@ -1099,6 +1099,11 @@ class project extends control
         if(!$project->multiple)
         {
             $executionID = $this->execution->getNoMultipleID($projectID);
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                $this->view->executionStats = array($this->execution->getByID($executionID));
+                return $this->display();
+            }
             return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
         }
         if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
