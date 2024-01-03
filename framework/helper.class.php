@@ -694,7 +694,8 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         if(!isset($actionList[$action])) continue;
 
         $actionConfig = $actionList[$action];
-        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
+        $notLoadModel = !empty($actionConfig['notLoadModel']) ? $actionConfig['notLoadModel'] : false;
+        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'] && !$notLoadModel)
         {
             $module = $actionConfig['url']['module'];
             $model  = $app->control->loadModel($module);
@@ -703,7 +704,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         $method = $action;
         if(!empty($actionConfig['url']['method']) && $method != $actionConfig['url']['method']) $method = $actionConfig['url']['method'];
 
-        if(!method_exists($model, 'isClickable') || $model->isClickable($item, $method))
+        if(!method_exists($model, 'isClickable') || $model->isClickable($item, !$notLoadModel ? $method : $action))
         {
             $isClickable = true;
             break;
