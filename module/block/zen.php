@@ -1727,8 +1727,10 @@ class blockZen extends block
         /* 获取有数据的年份，默认显示今年。 */
         $years = array(date('Y') => 0);
         if($createdReleaseGroup || $finishedStoryGroup || $storyScaleGroup) $years = $years + $createdReleaseGroup + $finishedStoryGroup + $storyScaleGroup;
+        $years = array_keys($years);
+        rsort($years);
 
-        $this->view->years       = array_keys($years);
+        $this->view->years       = $years;
         $this->view->currentYear = $year;
         $this->view->data        = $data;
     }
