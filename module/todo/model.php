@@ -334,7 +334,7 @@ class todoModel extends model
             $todo->config = json_decode($todo->config);
 
             $begin      = $todo->config->begin;
-            $end        = $todo->config->end;
+            $end        = zget($todo->config, 'end', '');
             $beforeDays = (int)$todo->config->beforeDays;
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime($begin) - $beforeDays * 24 * 3600);
             if($today < $begin || (!empty($end) && $today > $end)) continue;
