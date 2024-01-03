@@ -11,7 +11,7 @@ $config->productplan->form->batchEdit['end']    = array('type' => 'date',   'con
 
 $now = helper::now();
 $config->productplan->form->create['parent']      = array('type' => 'int',       'required' => false, 'default' => 0);
-$config->productplan->form->create['branch']      = array('type' => 'array',     'required' => false, 'default' => 0,  'filter' => 'join');
+$config->productplan->form->create['branch']      = array('type' => 'array',     'required' => false, 'default' => '0', 'filter' => 'join');
 $config->productplan->form->create['title']       = array('type' => 'string',    'required' => true,  'default' => '', 'filter' => 'trim');
 $config->productplan->form->create['begin']       = array('type' => 'date',      'required' => false, 'default' => null);
 $config->productplan->form->create['end']         = array('type' => 'date',      'required' => false, 'default' => null);
@@ -22,7 +22,7 @@ $config->productplan->form->create['createdDate'] = array('type' => 'datetime ',
 $config->productplan->form->create['order']       = array('type' => 'string',    'required' => false, 'default' => 0);
 
 $config->productplan->form->edit['parent']  = array('type' => 'int',       'required' => false, 'default' => 0);
-$config->productplan->form->edit['branch']  = array('type' => 'array',     'required' => false, 'default' => 0,  'filter' => 'join');
+$config->productplan->form->edit['branch']  = array('type' => 'array',     'required' => false, 'default' => '0', 'filter' => 'join');
 $config->productplan->form->edit['title']   = array('type' => 'string',    'required' => true,  'default' => '', 'filter' => 'trim');
 $config->productplan->form->edit['begin']   = array('type' => 'date',      'required' => false, 'default' => null);
 $config->productplan->form->edit['end']     = array('type' => 'date',      'required' => false, 'default' => null);
