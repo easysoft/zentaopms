@@ -59,7 +59,7 @@ div(
             ),
             div(set::id('tab-' . $currentEntry)),
         ),
-        dropdown
+        $dropMenus ? $dropdown
         (
             set::arrow(false),
             set::staticMenu(true),
@@ -74,7 +74,7 @@ div(
             (
                 $dropMenus
             ),
-        ),
+        ) : null,
         div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
         div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
     )
