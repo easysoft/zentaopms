@@ -557,7 +557,8 @@ class docZen extends doc
         elseif($objectType == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($objectID);
-            $objects   = $this->execution->resetExecutionSorts($objects, array(), array(), $execution->project);
+            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+            $objects   = $this->execution->resetExecutionSorts($objects, array(), $execution->project);
         }
         elseif($objectType == 'product')
         {

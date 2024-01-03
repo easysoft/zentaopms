@@ -4981,20 +4981,22 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $parentExecutions
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function resetExecutionSorts(array $executions, array $parentExecutions = array()): array
+    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), int $projectID = 0): array
     {
         if(empty($executions)) return array();
         if(empty($parentExecutions))
         {
             $execution        = current($executions);
+            $projectID        = isset($execution->project) ? $execution->project : $projectID;
             $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('kanban,sprint,stage')
                 ->andWhere('grade')->eq(1)
-                ->andWhere('project')->eq($execution->project)
+                ->andWhere('project')->eq($projectID)
                 ->orderBy('order_asc')
                 ->fetchAll('id');
         }

@@ -88,10 +88,11 @@ $config->doc->search['params']['editedDate'] = array('operator' => '=',       'c
 $config->doc->search['params']['keywords']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['version']    = array('operator' => '=',       'control' => 'input',  'values' => '');
 
-$config->doc->actionList['edit']['icon'] = 'edit';
-$config->doc->actionList['edit']['hint'] = $lang->edit;
-$config->doc->actionList['edit']['text'] = $lang->edit;
-$config->doc->actionList['edit']['url']  = helper::createLink('doc', 'edit', 'docID={id}');
+$config->doc->actionList['edit']['icon']     = 'edit';
+$config->doc->actionList['edit']['hint']     = $lang->edit;
+$config->doc->actionList['edit']['text']     = $lang->edit;
+$config->doc->actionList['edit']['url']      = helper::createLink('doc', 'edit', 'docID={id}');
+$config->doc->actionList['edit']['data-app'] = $app->tab;
 
 $config->doc->actionList['delete']['icon']         = 'trash';
 $config->doc->actionList['delete']['hint']         = $lang->delete;
