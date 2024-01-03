@@ -1018,7 +1018,8 @@ class storyTest
      */
     public function recordReviewActionTest(object $story): object
     {
-        $actionID = $this->objectModel->recordReviewAction($story);
+        $oldStory = $this->objectModel->getByID(1);
+        $actionID = $this->objectModel->recordReviewAction($oldStory, $story);
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actionID)->fetch();
     }
 }

@@ -1074,7 +1074,7 @@ class storyModel extends model
         if($changes)
         {
             $story->id = $storyID;
-            $actionID  = $this->recordReviewAction($story, $comment);
+            $actionID  = $this->recordReviewAction($oldStory, $story, $comment);
             if($actionID) $this->action->logHistory($actionID, $changes);
         }
 
@@ -1161,7 +1161,7 @@ class storyModel extends model
             $this->setStage((int)$storyID);
 
             $story->id = $storyID;
-            $this->recordReviewAction($story, $result, $reason);
+            $this->recordReviewAction($oldStories[$storyID], $story, $reason);
 
             /* Sync twins. */
             $changes = common::createChanges($oldStory, $story);
@@ -3890,13 +3890,13 @@ class storyModel extends model
     /**
      * Record story review actions.
      *
+     * @param  object $oldStory
      * @param  object $story
-     * @param  string $result
-     * @param  string $reason
+     * @param  string $comment
      * @access public
      * @return int|string
      */
-    public function recordReviewAction(object $story, string $comment = ''): int
+    public function recordReviewAction(object $oldStory, object $story, string $comment = ''): int
     {
         $isSuperReviewer = $this->storyTao->isSuperReviewer();
         $result          = zget($story, 'result', '');
@@ -3912,10 +3912,14 @@ class storyModel extends model
 
         if(isset($story->finalResult))
         {
-            if($story->finalResult == 'reject')  return $this->action->create('story', $story->id, 'ReviewRejected');
-            if($story->finalResult == 'pass')    return $this->action->create('story', $story->id, 'ReviewPassed');
-            if($story->finalResult == 'clarify') return $this->action->create('story', $story->id, 'ReviewClarified');
-            if($story->finalResult == 'revert')  return $this->action->create('story', $story->id, 'ReviewReverted');
+            $preStatus = $oldStory->status;
+            $isChanged = !empty($story->changedBy) ? true : false;
+            if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+
+            if($story->finalResult == 'reject')  return $this->action->create('story', $story->id, 'ReviewRejected', '', "reject|$preStatus");
+            if($story->finalResult == 'pass')    return $this->action->create('story', $story->id, 'ReviewPassed', '', "pass|$preStatus");
+            if($story->finalResult == 'clarify') return $this->action->create('story', $story->id, 'ReviewClarified', '', "clarify|$preStatus");
+            if($story->finalResult == 'revert')  return $this->action->create('story', $story->id, 'ReviewReverted', '', "revert|$preStatus");
         }
 
         return $actionID;
