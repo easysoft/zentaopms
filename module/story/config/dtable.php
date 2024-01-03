@@ -176,7 +176,7 @@ $config->story->dtable->fieldList['URS']['title']       = 'UR';
 $config->story->dtable->fieldList['URS']['sortType']    = false;
 $config->story->dtable->fieldList['URS']['width']       = '50';
 $config->story->dtable->fieldList['URS']['type']        = 'text';
-$config->story->dtable->fieldList['URS']['link']        = helper::createLink('story', 'relation', 'storyID={id}&storyType={type}');
+$config->story->dtable->fieldList['URS']['link']        = $config->edition != 'open' ? helper::createLink('story', 'relation', 'storyID={id}&storyType={type}') : '';
 $config->story->dtable->fieldList['URS']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['URS']['group']       = 6;
 
