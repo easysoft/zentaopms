@@ -35,6 +35,17 @@ function resetBlocks(dashboard, data, block)
 }
 
 /**
+ * Load block from url.
+ *
+ * @param {string} id  Block ID.
+ * @param {string} url Load url.
+ */
+window.loadBlock = function(id, url)
+{
+    $('#dashboard').dashboard('load', id, url);
+};
+
+/**
  * Handle layout change and save to server.
  *
  * @param {object} layout
