@@ -24,7 +24,7 @@ window.setStatistics = function(element, checkedIDList, pageSummary)
             const plan = row.data;
 
             if(plan.parent > 0) totalChild ++;
-            if(plan.isParent)   totalParent ++;
+            if(plan.parent == 0 && plan.isParent) totalParent ++;
         }
     });
 
