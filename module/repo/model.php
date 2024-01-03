@@ -1589,7 +1589,6 @@ class repoModel extends model
 
                 $this->setTaskByCommit($task, $taskActions, $action, $changes, $scm);
                 dao::$errors = array();
-                unset($objects['tasks'][$taskID]);
             }
         }
 
@@ -2674,6 +2673,7 @@ class repoModel extends model
      */
     public function saveObjectToPms(array $objects, object $action, array $changes): bool
     {
+        $singular = array('stories' => 'story', 'tasks' => 'task', 'bugs' => 'bug');
         foreach(array('stories', 'tasks', 'bugs') as $objectType)
         {
             if($objects[$objectType])
@@ -2693,7 +2693,7 @@ class repoModel extends model
                     $objectID = (int)$objectID;
                     if(!isset($objectList[$objectID])) continue;
 
-                    $action->objectType = $objectType;
+                    $action->objectType = $singular[$objectType];
                     $action->objectID   = $objectID;
                     $action->product    = $objectType == 'stories' ? $objectList[$objectID]->product : $objectList[$objectID]['product'];
                     $action->execution  = $objectType == 'stories' ? 0 : $objectList[$objectID]['execution'];
