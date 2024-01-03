@@ -155,11 +155,6 @@ if($confirm != 'yes')
         h::td
         (
             nl2br(zget($run->case, 'precondition', '')),
-            nl2br(zget($run->case, 'precondition', '')),
-            nl2br(zget($run->case, 'precondition', '')),
-            nl2br(zget($run->case, 'precondition', '')),
-            nl2br(zget($run->case, 'precondition', '')),
-            nl2br(zget($run->case, 'precondition', ''))
         )
     )
 ) : '';
