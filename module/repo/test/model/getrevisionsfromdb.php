@@ -10,7 +10,12 @@ title=测试 repoModel->getRevisionsFromDB();
 timeout=0
 cid=1
 
-- 获取提交记录 @
+- 获取版本库提交记录第0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb条的id属性 @3
+- 获取limit为1版本库提交记录数量 @1
+- 获取maxrevision的列表第0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb条的commit属性 @1
+- 获取maxrevision的列表数量 @1
+- 获取minrevision的列表第d30919bdb9b4cf8e2698f4a6a30e41910427c01c条的commit属性 @2
+- 获取minrevision的列表数量 @1
 
 */
 

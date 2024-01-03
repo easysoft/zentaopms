@@ -348,6 +348,7 @@ class repoTest
     {
         global $dao;
         $dao->exec('truncate table zt_repohistory');
+        $dao->exec('truncate table zt_repobranch');
 
         $repo = $this->objectModel->getByID($repoID);
 
@@ -415,11 +416,14 @@ class repoTest
 
     public function rmClientVersionFileTest()
     {
+        file_put_contents('clientFile.txt', 'rmClientVersionFileTest');
+        $this->objectModel->session->set('clientVersionFile', 'clientFile.txt');
+
         $objects = $this->objectModel->rmClientVersionFile();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->session->clientVersionFile == '' && !file_exists('clientFile.txt') ;
     }
 
     public function checkConnectionTest()

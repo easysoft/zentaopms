@@ -16,6 +16,7 @@ cid=8
 
 */
 
+zdTable('pipeline')->gen(5);
 zdTable('product')->gen(20);
 zdTable('project')->gen(20);
 zdTable('repo')->config('repo')->gen(4);

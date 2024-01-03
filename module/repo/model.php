@@ -1343,7 +1343,7 @@ class repoModel extends model
         $clientVersionFile = $this->session->clientVersionFile;
         if($clientVersionFile)
         {
-            session_start();
+            if(!session_id()) session_start();
             $this->session->set('clientVersionFile', '');
             session_write_close();
 
