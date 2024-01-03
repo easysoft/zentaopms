@@ -3757,22 +3757,6 @@ class executionModel extends model
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
         if($this->config->vision == 'lite') $tasks = $this->loadModel('task')->appendLane($tasks);
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
-        }
         return $this->loadModel('task')->processTasks($tasks);
     }
 
