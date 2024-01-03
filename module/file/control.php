@@ -432,10 +432,14 @@ class file extends control
     public function ajaxSaveTemplate(string $module)
     {
         $templateID = (int)$this->file->saveExportTemplate($module);
-        $message    = $this->lang->saveSuccess;
-        if(dao::isError()) $message = dao::getError();
-
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('file', 'buildExportTPL', "module=$module&templateID=$templateID")));
+        if(dao::isError())
+        {
+            $alert = '';
+            $errors = dao::getError();
+            foreach($errors as $errorContent) $alert .= is_array($errorContent) ? implode("\n", $errorContent) : $errorContent;
+            return $this->send(array('alert' => $alert));
+        }
+        return print($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));
     }
 
     /**

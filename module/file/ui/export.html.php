@@ -274,16 +274,24 @@ window.saveTemplate = function()
 {
     var customFieldsBox = $('.customFieldsBox');
     var publicBox       = customFieldsBox.find('input[name="public"]');
-    var title           = customFieldsBox.find('#title').val();
-    var content         = customFieldsBox.find('#exportFields').val();
+    var title           = customFieldsBox.find('[name="title"]').val();
+    var content         = customFieldsBox.find('[name^="exportFields"]').val();
     var isPublic        = (publicBox.length > 0 && publicBox.prop('checked')) ? 1 : 0;
     if(!title || !content) return;
 
-    saveTemplateLink = $.createLink('file', 'ajaxSaveTemplate', 'module={$this->moduleName}');
+    const saveTemplateLink = $.createLink('file', 'ajaxSaveTemplate', 'module={$this->moduleName}');
     $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
     {
-        var defaultValue = $('#tplBox [name="template"]').val();
-        $('#tplBox').html(data);
+        if(data.indexOf('alert') == -1)
+        {
+            $('#tplBox').html(data);
+            customFieldsBox.find('[name=title]').val(title);
+        }
+        else
+        {
+            data = JSON.parse(data);
+            zui.Modal.alert(data.alert);
+        }
     });
 };
 
