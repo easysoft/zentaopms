@@ -8,7 +8,6 @@ title=测试 upgradeModel->fixConsistency().
 cid=1
 
 - 判断修复一致性的sql中是否有失败执行，若有，则会记录HasError。@1
-- 判断是否成功获取了修复一致性的sql，若成功，则会设置sql_mode。@1
 - 判断是否成功的记录了修复一致性的sql。@1
 
 **/
@@ -21,23 +20,36 @@ $upgrade = new upgradeTest();
 $consistencyFile = $upgrade->getConsistencyLogFile();
 if(file_exists($consistencyFile)) unlink($consistencyFile);
 
-$versionList = array("16.0");
+$version = '18.9';
+$standardSqlFile = $tester->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $version . '.sql';
+$standardSqls    = file_get_contents($standardSqlFile);
 
-$upgrade->fixConsistency($versionList[0]);
+$standardSqls = explode(';', $standardSqls);
+$standardSqls[0] = str_replace('`id` smallint(5)', '`id` varchar(10)', $standardSqls[0]);
+$standardSqls = implode(';', $standardSqls);
 
-$file = new SplFileObject($consistencyFile, 'r');
-$file->seek(PHP_INT_MAX);
-$totalLines = $file->key();
+file_put_contents($standardSqlFile, $standardSqls);
 
-$file->seek($totalLines - 1);
-$error = trim($file->current()) === 'HasError';
-r($error) && p('') && e(1);  //判断修复一致性的sql中是否有失败执行，若有，则会记录HasError。
+$upgrade->fixConsistency($version);
 
-$file->rewind();
-$firstLine = $file->current();
-r(strpos($firstLine, 'sql_mode') !== false) && p('') && e(1);   //判断是否成功获取了修复一致性的sql，若成功，则会设置sql_mode。
+$lines = file($consistencyFile);
+$totalLines = count($lines);
+r(trim($lines[$totalLines - 2]) === 'HasError') && p() && e(1);  //判断修复一致性的sql中是否有失败执行，若有，则会记录HasError。
 
-$secondLinePoint = $file->seek(1);
-$secondLine      = $file->current();
-$condition = trim($secondLine) === "ALTER TABLE `zt_acl` CHANGE `objectID` `objectID` mediumint(9) NOT NULL DEFAULT '0'";
-r($condition) && p('') && e(1);  //判断是否成功的记录了修复一致性的sql。
+$standardSqls = explode(';', $standardSqls);
+$standardSqls[0] = str_replace(' unsigned', '', $standardSqls[0]);
+$standardSqls[0] = str_replace(' AUTO_INCREMENT', '', $standardSqls[0]);
+$standardSqls = implode(';', $standardSqls);
+file_put_contents($standardSqlFile, $standardSqls);
+
+$upgrade->fixConsistency($version);
+
+$lines = file($consistencyFile);
+r(trim($lines[1]) === 'ALTER TABLE `zt_account` CHANGE `id` `id` varchar(10) NOT NULL') && p() && e(1);  //判断是否成功的记录了修复一致性的sql。
+
+$standardSqls = explode(';', $standardSqls);
+$standardSqls[0] = str_replace('`id` varchar(10)', '`id` smallint(5) unsigned', $standardSqls[0]);
+$standardSqls[0] = str_replace('NOT NULL', 'NOT NULL AUTO_INCREMENT', $standardSqls[0]);
+$standardSqls = implode(';', $standardSqls);
+file_put_contents($standardSqlFile, $standardSqls);
+$upgrade->fixConsistency($version);

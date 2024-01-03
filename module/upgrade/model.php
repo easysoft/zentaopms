@@ -537,7 +537,7 @@ class upgradeModel extends model
         }
         elseif($dbIsVarchar)
         {
-            if($stdIsText) return true;
+            if($stdIsInt || $stdIsFloat || $stdIsText) return true;
             if($dbLength && $stdLength > $dbLength) return true;
         }
 
