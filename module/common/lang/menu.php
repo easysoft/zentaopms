@@ -360,8 +360,8 @@ $lang->execution->menu->settings   = array('link' => "$lang->settings|execution|
 $lang->execution->menu->more       = array('link' => "$lang->more|execution|more|%s");
 
 $lang->execution->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->execution->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story');
-$lang->execution->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|execution|story|executionID=%s&storyType=requirement", 'subModule' => 'story');
+$lang->execution->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s");
+$lang->execution->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|execution|story|executionID=%s&storyType=requirement");
 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
