@@ -2957,7 +2957,7 @@ class projectModel extends model
         $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
 
         /* Single execution and has no product project menu. */
-        if(!$project->hasProduct and !$project->multiple and !empty($this->config->URAndSR))
+        if(!$project->multiple and !empty($this->config->URAndSR))
         {
             if(isset($this->lang->$navGroup->menu->storyGroup))
             {

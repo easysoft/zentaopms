@@ -20,7 +20,7 @@ $(function()
     });
 
     $(document).on('click', '.story-toggle', function(e)
-    {   
+    {
         var $toggle = $(this);
         var id = $(this).data('id');
         var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
