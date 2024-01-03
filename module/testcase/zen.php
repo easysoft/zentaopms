@@ -2350,7 +2350,7 @@ class testcaseZen extends testcase
             if(!$project->hasProduct && $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
         }
 
-        $this->loadModel('bug')->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $this->loadModel('bug')->buildSearchForm($case->product, $this->products, $queryID, $actionURL, (string)$objectID);
     }
 
     /**

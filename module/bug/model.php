@@ -656,15 +656,15 @@ class bugModel extends model
      * 构造搜索表单。
      * Build search form.
      *
-     * @param  int        $productID
-     * @param  array      $products
-     * @param  int        $queryID
-     * @param  string     $actionURL
-     * @param  string|int $branch
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string|int $branch = '0'): void
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
         $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
