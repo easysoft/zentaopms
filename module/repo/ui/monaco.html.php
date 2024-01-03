@@ -20,6 +20,12 @@ dropmenu
     set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
+if(isonlybody())
+{
+    to::header(false);
+    to::main(false);
+}
+
 jsVar('isonlybody', isonlybody());
 jsVar('entry', $entry);
 jsVar('repoID', $repoID);
@@ -37,8 +43,8 @@ jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=
 \zin\featureBar();
 
 $monacoDropMenus = array();
-if(common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');
-if(common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
+if(!isonlybody() && common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');
+if(!isonlybody() && common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
 
 $tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
 $menuData = $repo->SCM == 'Subversion' ? array() : array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
@@ -87,7 +93,7 @@ div(
     )
 );
 
-helper::isAjaxRequest('modal') ? null : sidebar
+helper::isAjaxRequest('modal') || isonlybody() ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas'),

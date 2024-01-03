@@ -656,14 +656,22 @@ class actionModel extends model
             {
                 foreach($action->history as $history)
                 {
-                    if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);
+                    if($history->field == 'subversion')
+                    {
+                        $history->diff = str_replace('+', '%2B', $history->diff);
+                        $history->diff = str_replace("class='iframe'", "class='iframe' data-height='500'", $history->diff);
+                    }
                 }
             }
             elseif($actionName == 'gitcommited')
             {
                 foreach($action->history as $history)
                 {
-                    if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
+                    if($history->field == 'git')
+                    {
+                        $history->diff = str_replace('+', '%2B', $history->diff);
+                        $history->diff = str_replace("class='iframe'", "class='iframe' data-height='500'", $history->diff);
+                    }
                 }
             }
             elseif(strpos(',linkstory,unlinkstory,createchildrenstory,linkur,unlinkur,', ",$actionName,") !== false)

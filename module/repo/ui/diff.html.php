@@ -24,6 +24,12 @@ jsVar('repo', $repo);
 jsVar('repoLang', $lang->repo);
 jsVar('objectID', $objectID);
 
+if(isonlybody())
+{
+    to::header(false);
+    to::main(false);
+}
+
 /* Prepare repo dropdown data. */
 if($repo->SCM != 'Subversion')
 {
