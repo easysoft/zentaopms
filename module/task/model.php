@@ -540,7 +540,7 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $changes  = common::createChanges($oldTask, $task);
-            $actionID = $this->action->create('task', $taskID, 'Edited');
+            $actionID = $this->action->create('task', (int)$taskID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         return true;
