@@ -1132,7 +1132,7 @@ class testcase extends control
                 $this->testcase->importSteps($caseID, zget($steps, $oldCaseID, array()));
                 $this->testcase->importFiles($caseID, zget($files, $oldCaseID, array()));
 
-                $importedCases[] = $libCaseID;
+                $importedCases[] = $caseID;
 
                 $this->action->create('case', $caseID, 'fromlib', '', $case->lib);
             }
