@@ -415,10 +415,15 @@ class upgradeModel extends model
         if(isset($fields[$field]) && $line == $fields[$field]) return '';
 
         /* Add field. */
-        if(!isset($fields[$field])) $execSQL = "ALTER TABLE `$table` ADD $line";
-
-        /* Modify field. */
-        $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]);
+        if(!isset($fields[$field]))
+        {
+            $execSQL = "ALTER TABLE `$table` ADD $line";
+        }
+        else
+        {
+            /* Modify field. */
+            $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]);
+        }
 
         if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
 
