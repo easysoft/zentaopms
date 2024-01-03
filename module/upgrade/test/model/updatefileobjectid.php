@@ -69,6 +69,7 @@ zdTable('action')->config('action_updatefileobjectid')->gen(11);
 zdTable('doccontent')->config('doccontent_updatefileobjectid')->gen(5);
 zdTable('project')->config('project_updatefileobjectid')->gen(110);
 zdTable('build')->config('build_updatefileobjectid')->gen(5);
+zdTable('file')->config('file_updatefileobjectid')->gen(11);
 su('admin');
 
 $upgrade = new upgradeTest();
