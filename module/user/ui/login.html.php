@@ -156,7 +156,7 @@ div
                         formHidden('referer', $referer),
                         set::actions(array
                         (
-                            array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary', 'btnType' => 'submit')
+                            array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary', 'btnType' => 'button')
                         ))
                     )
                 )

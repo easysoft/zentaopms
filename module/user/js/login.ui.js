@@ -54,6 +54,7 @@ window.safeSubmit = function(e)
         if(timeout) zui.Modal.alert(loginTimeoutTip);
     }, 4000);
 
+    $('#submit').attr('disabled', 'disabled');
     $.get($.createLink('user', 'refreshRandom'), function(rand)
     {
         if(password != '') password = hasMD5 ? md5(md5(password) + rand) : password,
@@ -77,6 +78,7 @@ window.safeSubmit = function(e)
                 zui.Modal.alert(data.message);
                 if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
                 clearTimeout(timeoutID);
+                $('#submit').removeAttr('disabled');
                 return false;
             }
 
