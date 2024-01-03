@@ -213,4 +213,4 @@ $lang->my->featureBar['contribute']['audit']['createdbyme']  = '由我发起';
 $lang->my->featureBar['contribute']['doc']['openedbyme'] = '由我创建';
 $lang->my->featureBar['contribute']['doc']['editedbyme'] = '由我编辑';
 
-$lang->my->featureBar['my']['score']['all'] = '积分记录';
+$lang->my->featureBar['score']['all'] = '我的积分';

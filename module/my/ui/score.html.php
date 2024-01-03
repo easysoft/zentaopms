@@ -15,7 +15,6 @@ jsVar('methods', $lang->score->methods);
 featureBar
 (
     set::current('all'),
-    set::linkParams("date={key}&userID={$app->user->id}&status=undone")
 );
 
 $cols = array_values($config->my->score->dtable->fieldList);
