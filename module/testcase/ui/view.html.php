@@ -180,13 +180,13 @@ else
             (
                 setClass('warning'),
                 $lang->testcase->changed,
-                common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")), $lang->confirm) : ''
+                common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")), setData('app', $app->tab), $lang->confirm) : ''
             );
     }
     $storyItem = item
     (
         set::name($lang->testcase->story),
-        isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), setData(array('toggle' => 'modal')), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''), set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
+        isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), setData(array('toggle' => 'modal', 'size' => 'lg')), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''), set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
         $confirmStatusChange
     );
 
