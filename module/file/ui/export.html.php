@@ -62,7 +62,7 @@ if($isCustomExport)
             set::label($lang->file->tplTitleAB),
             inputGroup
             (
-                select(set::name('template'), set::items($templatePairs), on::change('setTemplate(e.target)'), set::required(true)),
+                picker(set::name('template'), set::items($templatePairs), on::change('setTemplate(e.target)'), set::required(true)),
                 span
                 (
                     setClass('input-group-addon'),
@@ -316,15 +316,10 @@ window.setTemplate = function(obj)
     var exportFields = template.length > 0 ? template.html() : '{$defaultExportFields}';
     exportFields = exportFields.split(',');
 
-    const fieldsPicker = zui.Picker.query('div.modal-body form .form-group .panel .panel-body div');
-    if(fieldsPicker && fieldsPicker.ref && fieldsPicker.ref.current)
-    {
-        fieldsPicker.ref.current.setState({value:exportFields});
-    }
-
-    var customFieldsBox = $('.customFieldsBox');
+    const customFieldsBox = $('.customFieldsBox');
+    customFieldsBox.find('[name^="exportFields"]').zui('picker').$.setValue(exportFields);
     customFieldsBox.find('input[name="public"]').prop('checked', template.data('public'));
-    customFieldsBox.find('#title').val(template.data('title'));
+    customFieldsBox.find('[name="title"]').val(template.data('title'));
 };
 
 window.setExportTPL = function()
