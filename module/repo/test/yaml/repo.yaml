@@ -14,7 +14,7 @@ fields:
 - field: SCM
   range: Gitlab{2},Gitea,Subversion
 - field: client
-  range: "/usr/bin/git{3},/usr/bin/svn{1}"
+  range: "git{3},svn{1}"
 - field: serviceHost
   range: 1{2},4,0
 - field: serviceProject
