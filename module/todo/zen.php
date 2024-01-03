@@ -541,7 +541,7 @@ class todoZen extends todo
             unset($todoData->config['week'], $todoData->config['month']);
             if(empty($todoData->config['specifiedDate']))
             {
-                if(!$todoData->config['day'])
+                if(empty($todoData->config['day']))
                 {
                     dao::$errors['config[day]'] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
                     return false;
@@ -570,7 +570,7 @@ class todoZen extends todo
             $todoData->config['month'] = implode(',', $todoData->config['month']);
         }
 
-        if($todoData->config['beforeDays'] and !validater::checkInt($todoData->config['beforeDays']))
+        if(!empty($todoData->config['beforeDays']) && !validater::checkInt($todoData->config['beforeDays']))
         {
             dao::$errors['config[beforeDays]'] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
             return false;
