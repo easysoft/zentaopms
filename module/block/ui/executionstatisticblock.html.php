@@ -39,7 +39,7 @@ $projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 
 foreach($projects as $projectID => $projectName)
 {
     $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}&project={$projectID}"));
-    $projectItems[] = array('text' => $projectName, 'url' => $url, 'data-load' => 'target', 'data-selector' => "#execution-statistic-{$block->id}", 'data-partial' => true);
+    $projectItems[] = array('text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 }
 
 $burn = center
@@ -94,11 +94,11 @@ statisticBlock
     (
         dropdown
         (
-            a
+            btn
             (
-                setClass('text-gray ml-4'),
+                setClass('ghost text-gray font-normal'),
+                set::caret(true),
                 isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
-                span(setClass('caret align-middle ml-1'))
             ),
             set::items($projectItems)
         )
