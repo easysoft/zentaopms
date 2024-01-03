@@ -27,6 +27,7 @@ if(!$hideStory)
         set::label($lang->task->story),
         set::control('picker'),
         set::items($stories),
+        set::value($storyID),
         set::width('240px'),
         set::ditto(true)
     );
