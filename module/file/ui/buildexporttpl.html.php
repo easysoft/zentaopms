@@ -11,7 +11,7 @@ formGroup
     set::label($lang->file->tplTitleAB),
     inputGroup
     (
-        select(set::name('template'), set::items($templatePairs), set::value($templateID), set::required(true), on::change('setTemplate(e.target)')),
+        picker(set::name('template'), set::items($templatePairs), set::value($templateID), set::required(true), on::change('setTemplate(e.target)')),
         span
         (
             setClass('input-group-addon'),

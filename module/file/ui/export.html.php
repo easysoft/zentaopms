@@ -132,7 +132,7 @@ formPanel
     formGroup
     (
         set::label($lang->file->extension),
-        set::control('select'),
+        set::control('picker'),
         set::name('fileType'),
         set::items($lang->exportFileTypeList),
         on::change('onChangeFileType'),
@@ -141,7 +141,7 @@ formPanel
     formGroup
     (
         set::label($lang->file->encoding),
-        set::control('select'),
+        set::control('picker'),
         set::name('encode'),
         set::items($config->charsets[$this->cookie->lang]),
         set::value($this->config->zin->lang == 'zh-cn' ? 'gbk' : 'utf-8'),
@@ -246,17 +246,17 @@ window.setDownloading = function(event)
 /* If file type is CSV, then user can select encode type. */
 window.onChangeFileType = function(event)
 {
-    var fileType = $(event.target).val();
-    var encode   = $('#encode');
+    var fileType     = $(event.target).val();
+    var encodePicker = $('[name="encode"]').zui('picker');
 
     if(fileType === 'csv')
     {
-        encode.removeAttr('disabled');
+        encodePicker.render({disabled: false});
         return;
     }
 
-    encode.val('utf-8');
-    encode.attr('disabled', 'disabled');
+    encodePicker.$.setValue('utf-8');
+    encodePicker.render({disabled: true});
 }
 
 window.onChangeFileName = function(event)
