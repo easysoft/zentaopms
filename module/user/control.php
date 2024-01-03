@@ -775,7 +775,7 @@ class user extends control
      */
     public function logout(string $referer = '')
     {
-        if(!empty($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
+        if(!empty($this->app->user->id)) $this->loadModel('action')->create('user', (int)$this->app->user->id, 'logout');
 
         helper::setcookie('za',  '', time() - 3600);
         helper::setcookie('zp',  '', time() - 3600);
