@@ -66,6 +66,7 @@ $fnGenerateCols = function() use ($config, $project)
         $fieldList['name']['type'] = 'title';
         if(!in_array($project->model, array('waterfall', 'waterfallplus'))) unset($fieldList['name']['nestedToggle']);
     }
+    if(!$project->hasProduct) unset($fieldList['productName']);
 
     return array_values($fieldList);
 };
@@ -80,14 +81,14 @@ foreach($productList as $key => $value) $productItems[] = array('text' => $value
 $productName = !empty($product) ? $product->name : '';
 featureBar
 (
-    to::leading
+    $project->hasProduct ? to::leading
     (
         dropdown
         (
             to('trigger', btn($productName ? $productName : $lang->product->all, setClass('ghost'))),
             set::items($productItems)
         )
-    ),
+    ) : null,
     set::current($status),
     set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li
