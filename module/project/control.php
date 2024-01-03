@@ -561,7 +561,7 @@ class project extends control
         $this->app->loadLang('build');
 
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
-        if(is_bool($projectID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse')));
+        if(is_bool($projectID)) return $this->send(array('result' => 'sccess', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
         $projectID = $this->project->setMenu($projectID);
@@ -570,7 +570,7 @@ class project extends control
         if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus,ipd', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('project', 'browse')));
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('project', 'browse'))));
         }
 
         $products = $this->loadModel('product')->getProducts($projectID);
