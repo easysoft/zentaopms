@@ -2914,7 +2914,7 @@ class taskModel extends model
     public function updateKanbanCell(int $taskID, array $output, int $executionID): void
     {
         if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($executionID, 'task', $taskID);
-        if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($taskID, (int)$output['fromColID'], (int)$output['toColID'], (int)$output['fromLaneID'], (int)$output['toLaneID']);
     }
 
     /**
