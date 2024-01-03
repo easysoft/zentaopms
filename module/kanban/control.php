@@ -681,7 +681,7 @@ class kanban extends control
         $this->kanban->archiveColumn($columnID);
         if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
 
     /**
@@ -1307,8 +1307,7 @@ class kanban extends control
         $this->kanban->archiveCard($cardID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $card = $this->kanban->getCardByID($cardID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
 
     /**
@@ -1323,7 +1322,7 @@ class kanban extends control
     {
         $region = $this->kanban->getRegionByID($regionID);
 
-        $cards = $this->kanban->getCardsByObject('region', $regionID, 1);
+        $cards = $this->kanban->getCardsByObject('region', $regionID, '1');
         foreach($this->config->kanban->fromType as $fromType)
         {
             $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1, $regionID);
