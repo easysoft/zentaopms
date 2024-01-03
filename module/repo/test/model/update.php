@@ -26,7 +26,9 @@ cid=1
 
 */
 
-zdTable('repo')->config('repo')->gen(1);
+$repo = zdTable('repo')->config('repo');
+$repo->projects->range('');
+$repo->gen(1);
 
 $_SERVER['REQUEST_URI'] = 'http://unittest.com';
 

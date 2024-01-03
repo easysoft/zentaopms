@@ -581,7 +581,7 @@ class repoTest
     {
         $result = $this->objectModel->getCacheFile($repoID, $path, $revision);
 
-        if(strPos($result, 'repo/' . $repoID . '/' ) !== false) return true;
+        if(strpos($result, 'repo/' . $repoID . '/' ) !== false) return true;
         return $result;
     }
 
