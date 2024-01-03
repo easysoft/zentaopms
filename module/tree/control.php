@@ -155,8 +155,31 @@ class tree extends control
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, (string)$module->branch, 'noMainBranch|nodeleted');
         }
 
-        $this->view->name   = $type == 'line' ? $this->lang->tree->line : $this->lang->tree->name;
-        $this->view->title  = $type == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->edit;
+        if($type == 'doc')
+        {
+            $docLib   = $this->loadModel('doc')->getLibById($module->root);
+            $objectID = isset($docLib->{$docLib->type}) ? $docLib->{$docLib->type} : 0;
+            $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
+        }
+
+        if($type == 'doc' or $type == 'api')
+        {
+            $name  = $this->lang->tree->dir;
+            $title = $this->lang->tree->editDir;
+        }
+        elseif($type == 'line')
+        {
+            $name  = $this->lang->tree->line;
+            $title = $this->lang->tree->manageLine;
+        }
+        else
+        {
+            $name  = $this->lang->tree->name;
+            $title = $this->lang->tree->edit;
+        }
+
+        $this->view->name   = $name;
+        $this->view->title  = $title;
         $this->view->module = $module;
         $this->view->type   = $type;
         $this->view->branch = $branch;
