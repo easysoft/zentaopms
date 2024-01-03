@@ -147,8 +147,8 @@ $product ? toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'plus'))) : null,
-    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
+    $canLinkStory && $canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 ) : null;
 
 sidebar
