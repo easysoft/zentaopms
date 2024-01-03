@@ -500,22 +500,37 @@ class repoTest
         return $objects;
     }
 
-    public function saveAction2PMSTest($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array())
+    public function saveAction2PMSTest($log, $repoID, $scm = 'git', $gitlabAccountPairs = array())
     {
-        $objects = $this->objectModel->saveAction2PMS($objects, $log, $repoRoot, $encodings, $scm, $gitlabAccountPairs);
+        $repo    = $this->objectModel->getByID($repoID);
+        $objects = $this->objectModel->parseComment($log->msg);
+
+        $result = $this->objectModel->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, $scm, $gitlabAccountPairs);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $result;
     }
 
-    public function saveRecordTest($action, $changes)
+    public function saveRecordTest(object $action, object $log, string $repoRoot, string $scm, bool $returnHistory = false)
     {
-        $objects = $this->objectModel->saveRecord($action, $changes);
+        $action->comment = $this->objectModel->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->objectModel->iconvComment($log->msg, 'utf-8'));
+
+        $changes = $this->objectModel->createActionChanges($log, $repoRoot, $scm);
+        $this->objectModel->saveRecord($action, $changes);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $record = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq($action->objectType)
+            ->andWhere('objectID')->eq($action->objectID)
+            ->andWhere('extra')->eq($action->extra)
+            ->andWhere('action')->eq($action->action)
+            ->fetch();
+        if($returnHistory)
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($record->id)->fetch();
+        }
+        return $record;
     }
 
     public function createActionChangesTest($log, $repoRoot, $scm = 'svn')

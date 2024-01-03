@@ -2637,7 +2637,14 @@ class repoModel extends model
                         ->add('execution', $bug->execution)
                         ->get();
 
-                    $changes = $this->bug->resolve($newBug);
+                    $changes = array();
+                    $result  = $this->bug->resolve($newBug);
+                    if($result)
+                    {
+                        $newBug  = $this->bug->getByID($bugID);
+                        $changes = common::createChanges($bug, $newBug);
+                    }
+
                     foreach($changes as $change) $changes[] = $change;
                     if($changes)
                     {
