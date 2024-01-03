@@ -3773,7 +3773,7 @@ $config->group->package->manageServiceProvider = new stdclass();
 $config->group->package->manageServiceProvider->order  = 2300;
 $config->group->package->manageServiceProvider->subset = 'ops';
 $config->group->package->manageServiceProvider->privs  = array();
-$config->group->package->manageServiceProvider->privs['ops-provide'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageServiceProvider->privs['ops-provider'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->manageCity = new stdclass();
 $config->group->package->manageCity->order  = 2320;
