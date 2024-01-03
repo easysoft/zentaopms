@@ -577,7 +577,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function fixConsistency($version): void
+    public function fixConsistency(string $version): void
     {
         $logFile = $this->getConsistencyLogFile();
         if(file_exists($logFile)) unlink($logFile);
