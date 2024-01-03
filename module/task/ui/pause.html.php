@@ -15,25 +15,54 @@ namespace zin;
 /* ====== Define the page structure with zin widgets ====== */
 
 modalHeader();
-formPanel
-(
-    setID('taskPauseForm'),
-    formGroup
+if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear')))
+{
+    if($task->assignedTo != $app->user->account && $task->mode == 'linear')
+    {
+        $deniedNotice = sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->pause);
+    }
+    else
+    {
+        $deniedNotice = sprintf($lang->task->deniedNotice, $lang->task->teamMember, $lang->task->pause);
+    }
+
+    div
     (
-        set::label($lang->comment),
-        editor
+        set::className('alert with-icon'),
+        icon('exclamation-sign icon-3x'),
+        div
         (
-            set::name('comment'),
-            set::rows('5')
-        ),
-        input(
-            setClass('hidden'),
-            set::name('status'),
-            set::value('pause')
+            set::className('content'),
+            p
+            (
+                set::className('font-bold'),
+                $deniedNotice
+            )
         )
-    )
-);
-hr();
-history();
+    );
+}
+else
+{
+    formPanel
+    (
+        setID('taskPauseForm'),
+        formGroup
+        (
+            set::label($lang->comment),
+            editor
+            (
+                set::name('comment'),
+                set::rows('5')
+            ),
+            input(
+                setClass('hidden'),
+                set::name('status'),
+                set::value('pause')
+            )
+        )
+    );
+    hr();
+    history();
+}
 
 render();
