@@ -208,7 +208,7 @@ class taskZen extends task
         $executionTeams    = array();
         $executionIdList   = array_unique(array_column($tasks, 'execution'));
         $executionTeamList = $this->execution->getMembersByIdList($executionIdList);
-        foreach($executionIdList as $id) $executionTeams[$id] = array_column($executionTeamList[$id], 'account');
+        foreach($executionIdList as $id) $executionTeams[$id] = array_column((array)$executionTeamList[$id], 'account');
 
         $moduleGroup = array();
         if(!$executionID)
