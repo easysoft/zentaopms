@@ -98,6 +98,25 @@ $duplicateLink = $bug->duplicateBug && $canViewBug ? a
 ) : '';
 $duplicateBug = $bug->duplicateBug ? span("#{$bug->duplicateBug}:", $duplicateLink) : '';
 
+$linkCases = array();
+foreach($legendMisc['toCase']['text'] as $caseID => $caseTitle)
+{
+    $linkCases[] = div(setClass('mb-2'),
+    a
+    (
+        set('href', $this->createLink('testcase', 'view', "bugID={$caseID}")),
+        setData
+        (
+            array
+            (
+                'toggle' => 'modal',
+                'size'   => 'lg',
+            )
+        ),
+        span(label(setClass('dark-outline rounded-full mr-2'), $caseID), $caseTitle)
+    ));
+}
+
 $relatedBugs = array();
 foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
 {
@@ -167,6 +186,7 @@ $legendMain['story']['text']       = $bug->story ? div
     ) : ''
 ) : '';
 $legendMain['task']['text']       = $bug->task  ? div(label(setClass('dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
+$legendMisc['toCase']['text']     = $linkCases;
 $legendMisc['relatedBug']['text'] = $relatedBugs;
 $legendMisc['linkCommit']['text'] = $linkCommits;
 $legendMisc['linkMR']['text']     = $linkMR;
