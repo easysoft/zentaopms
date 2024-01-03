@@ -18,6 +18,8 @@ cid=1
 
 zdTable('user')->gen(20);
 zdTable('pipeline')->gen(5);
+zdTable('project')->gen(5);
+zdTable('oauth')->config('oauth')->gen(20);
 $repo = zdTable('repo')->config('repo');
 $repo->acl->range('[{"acl":"private"}]');
 $repo->product->range('1,1,1000');
