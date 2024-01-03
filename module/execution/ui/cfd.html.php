@@ -90,20 +90,23 @@ featureBar
 $index       = 0;
 $chartColors = array('#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF');
 $chartSeries = array();
-foreach($chartData['line'] as $label => $set)
+if(!empty($chartData['line']))
 {
-    $chartSeries[] = array(
-        'name'      => $label,
-        'type'      => 'line',
-        'stack'     => 'Total',
-        'data'      => array_values($set),
-        'color'     => $chartColors[$index],
-        'areaStyle' => array('color' => $chartColors[$index], 'opacity' => 0.2),
-        'itemStyle' => array('normal' => array('lineStyle' => array('width' => 1))),
-        'emphasis'  => array('focus' => 'series')
-    );
+    foreach($chartData['line'] as $label => $set)
+    {
+        $chartSeries[] = array(
+            'name'      => $label,
+            'type'      => 'line',
+            'stack'     => 'Total',
+            'data'      => array_values($set),
+            'color'     => $chartColors[$index],
+            'areaStyle' => array('color' => $chartColors[$index], 'opacity' => 0.2),
+            'itemStyle' => array('normal' => array('lineStyle' => array('width' => 1))),
+            'emphasis'  => array('focus' => 'series')
+        );
 
-    $index ++;
+        $index ++;
+    }
 }
 
 $cfdChart = null;
