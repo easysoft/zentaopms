@@ -45,7 +45,7 @@ class repo extends control
      */
     public function commonAction(int $repoID = 0, int $objectID = 0)
     {
-        $tab = $this->app->tab;
+        $tab = isonlybody() ? '' : $this->app->tab;
         $this->repos = $this->repo->getRepoPairs($tab, $objectID);
 
         if($tab == 'project')
@@ -65,7 +65,7 @@ class repo extends control
             $this->loadModel('execution')->setMenu($objectID);
             $this->view->executionID = $objectID;
         }
-        elseif($tab != 'admin')
+        elseif($tab != 'admin' && !isonlybody())
         {
             $this->repo->setMenu($this->repos, $repoID);
         }
