@@ -1,0 +1,10 @@
+title: action.
+desc: action data.
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: date
+    note: "日期"
+    range: "(-1D)-(0m):1s"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

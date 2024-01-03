@@ -1,0 +1,16 @@
+title: todo.
+desc: todo data.
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: account
+    fields:
+    - field: account1
+      range: admin,user{3},test{3},dev{3},pm{3},po{3},td{3},pd{3},qd{3},top{3},outside{3}
+    - field: account2
+      range: "[],1-3,1-3,1-3,1-3,1-3,1-3,1-3,1-3,1-3,1-3"
+  - field: date
+    note: "日期"
+    range: "(-1D)-(0m):1s"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

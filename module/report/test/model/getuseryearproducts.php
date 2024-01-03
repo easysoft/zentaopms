@@ -4,7 +4,7 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/report.class.php';
 
-zdTable('action')->gen(200);
+zdTable('action')->config('action_year')->gen(200);
 zdTable('product')->gen(20);
 zdTable('story')->gen(20);
 zdTable('productplan')->gen(20);

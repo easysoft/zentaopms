@@ -4,7 +4,7 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/report.class.php';
 
-zdTable('todo')->config('todo')->gen(50);
+zdTable('todo')->config('todo_year')->gen(50);
 zdTable('user')->gen(1);
 
 su('admin');
