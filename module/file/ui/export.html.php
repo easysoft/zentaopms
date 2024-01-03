@@ -304,10 +304,10 @@ window.deleteTemplate = function()
     const deleteLink = $.createLink('file', 'ajaxDeleteTemplate', 'templateID=' + templateID);
     $.get(deleteLink, function()
     {
-        const templatePicker = template.zui('picker');
-        const newItems       = templatePicker.options.items.filter(item => item.value != templateID);
-        templatePicker.render({items: newItems, value: ''});
-        templatePicker.$.setValue('').ready(setTemplate(template));
+        var templatePicker = template.zui('picker');
+        var newItems       = templatePicker.options.items.filter(item => item.value != templateID);
+        templatePicker.render({items: newItems});
+        templatePicker.$.setValue(newItems.length > 0 ? newItems[0].value : '');
     });
 };
 
@@ -321,7 +321,7 @@ window.setTemplate = function(obj)
     const customFieldsBox = $('.customFieldsBox');
     customFieldsBox.find('[name^="exportFields"]').zui('picker').$.setValue(exportFields);
     customFieldsBox.find('input[name="public"]').prop('checked', template.data('public'));
-    customFieldsBox.find('[name="title"]').val(template.data('title'));
+    customFieldsBox.find('[name="title"]').val(templateID != '0' ? template.data('title') : '{$lang->file->defaultTPL}');
 };
 
 window.setExportTPL = function()
