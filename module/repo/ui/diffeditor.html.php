@@ -77,7 +77,7 @@ div(
     )
 );
 
-sidebar
+isonlybody() ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas p-2'),

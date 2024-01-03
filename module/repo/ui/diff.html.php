@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
-dropmenu
+isonlybody() ? null : dropmenu
 (
     set::module($module),
     set::tab($module),
@@ -137,11 +137,15 @@ else
     );
 }
 
-\zin\featureBar
+div
 (
-    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
-    item(set::type('divider')),
-    ...$breadcrumbItems,
+    setClass(isonlybody() ? 'hidden' : ''),
+    \zin\featureBar
+    (
+        backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
+        item(set::type('divider')),
+        ...$breadcrumbItems,
+    )
 );
 
 if($diffs) include 'diffeditor.html.php';
