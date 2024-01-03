@@ -868,6 +868,46 @@ class screenModel extends model
     }
 
     /**
+     * Process metric filter.
+     *
+     * @param  array  $filterParams
+     * @param  string $dateType
+     * @access public
+     * @return array
+     */
+    public function processMetricFilter($filterParams, $dateType)
+    {
+        $filters = array();
+        foreach($filterParams as $filterParam)
+        {
+            $field = $filterParam['field'];
+            $value = $filterParam['default'];
+            if(empty($value)) continue;
+
+            $filter = new stdclass();
+            $filter->value = $value;
+            if($field == 'begin' || $field == 'end')
+            {
+                $filter->year = date('Y', $value/1000);
+                if($dateType == 'month') $filter->month = date('Y-m', $value/1000);
+                if($dateType == 'week')  $filter->week  = date('Y-W', $value/1000);
+                if($dateType == 'day')   $filter->day   = date('Y-m-d', $value/1000);
+
+                $filters[$field] = $filter;
+            }
+            else
+            {
+                $filter->type = $field;
+                $filters['scope'] = $filter;
+            }
+        }
+
+        if(!isset($filters['begin'], $filters['end'])) unset($filters['begin'], $filters['end']);
+
+        return $filters;
+    }
+
+    /**
      * Get system options.
      *
      * @param string $type
@@ -1680,11 +1720,13 @@ class screenModel extends model
         $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
         $dateType       = $this->metric->getDateTypeByCode($metric->code);
 
+        $filters = $this->processMetricFilter($filterParams, $dateType);
+
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, false);
 
         $tableOption = new stdclass();
-        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType) : array($groupHeader);
-        $tableOption->data    = $this->filterMetricData($groupData, $filterParams);
+        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);
+        $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
 
         if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
         $tableOption->scope   = $metric->scope;
@@ -1696,37 +1738,57 @@ class screenModel extends model
      * Filter metric data.
      *
      * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $isObjectMetric
      * @param  array  $filters
      * @access public
      * @return array
      */
-    public function filterMetricData($data, $filters = array())
+    public function filterMetricData($data, $dateType, $isObjectMetric, $filters = array())
     {
-        $filters = array_filter($filters, function($item)
+        if($isObjectMetric)
         {
-            return $item['default'] !== null;
-        });
-        if(empty($filters)) return $data;
-
-        $objectPairs = $this->loadModel('metric')->getPairsByScope($filters[0]['field']);
-
-        foreach($filters as $key => $filter)
-        {
-            $filterSelect  = is_array($filter['default']) ? $filter['default'] : array($filter['default']);
-            $selectObjects = array();
-            foreach($filterSelect as $select) $selectObjects[] = $objectPairs[$select];
-
-            $filters[$key]['selectObjects'] = $selectObjects;
-        }
-
-        $filteredData = array();
-        foreach($data as $row)
-        {
-            foreach($filters as $filter)
+            if(isset($filters['scope']))
             {
-                if(in_array($row['scope'], $filter['selectObjects'])) $filteredData[] =  $row;
+                $scopeFilter = $filters['scope'];
+                $objectPairs = $this->loadModel('metric')->getPairsByScope($scopeFilter->type);
+
+                foreach($data as $index => $row)
+                {
+                    if($row['scope'] != $objectPairs[$scopeFilter->value]) unset($data[$index]);
+                }
+            }
+
+            $filteredData = array();
+            if(isset($filters['begin'], $filters['end']))
+            {
+                $beginFilter = $filters['begin']->$dateType;
+                $endFilter   = $filters['end']->$dateType;
+                foreach($data as $index => $row)
+                {
+                    $filteredData[$index] = array_filter($row, function($value, $key) use ($beginFilter, $endFilter)
+                    {
+                        if($key == 'scope') return true;
+                        if($key >= $beginFilter && $key <= $endFilter) return true;
+                        return false;
+                    }, ARRAY_FILTER_USE_BOTH);
+                }
+            }
+            else
+            {
+                $filteredData = $data;
             }
         }
+        else
+        {
+            $beginFilter = $filters['begin']->$dateType;
+            $endFilter   = $filters['end']->$dateType;
+            $filteredData = array_filter($data, function($row) use ($beginFilter, $endFilter)
+            {
+                if($row['date'] >= $beginFilter && $row['date'] <= $endFilter) return true;
+            });
+        }
+
         return $filteredData;
     }
 
@@ -1770,10 +1832,11 @@ class screenModel extends model
      *
      * @param  array  $resultHeaders
      * @param  string $dateType
+     * @param  object $filters
      * @access public
      * @return object
      */
-    public function getMetricHeaders($resultHeader, $dateType)
+    public function getMetricHeaders($resultHeader, $dateType, $filters)
     {
         $headers = array_fill(0, 2, array());
 
@@ -1787,6 +1850,9 @@ class screenModel extends model
             else
             {
                 $row = $dateType == 'year' ? 0 : 1;
+
+                $head['type']  = $dateType;
+                $head['value'] = $head['name'];
                 $headers[$row][] = $head;
             }
         }
@@ -1798,12 +1864,56 @@ class screenModel extends model
             $dateGroup['colspan'] = $count;
             $dateGroup['title']   = $date;
             $dateGroup['name']    = $date;
+            $dateGroup['value']   = substr($date, 0, 4);
+            $dateGroup['type']    = 'year';
 
             $headers[0][] = $dateGroup;
         }
 
         if($dateType == 'year') unset($headers[1]);
-        return $headers;
+        if(!isset($filters['begin'], $filters['end'])) return $headers;
+
+        $beginFilter = $filters['begin'];
+        $endFilter   = $filters['end'];
+
+        $filteredHeaders = array();
+        if($dateType == 'year') 
+        {
+            $filteredHeaders[0] = array_filter($headers[0], function($item) use ($beginFilter, $endFilter)
+            {
+                if($item['name'] == 'scope') return true;
+                if($item['value'] >= $beginFilter->year && $item['value'] <= $endFilter->year) return true;
+                return false;
+            });
+        }
+        if($dateType == 'month')
+        {
+            foreach($headers as $index => $headerRow)
+            {
+                $filteredHeaders[$index] = array_filter($headerRow, function($item) use ($beginFilter, $endFilter)
+                {
+                    if($item['name'] == 'scope') return true;
+                    if($item['type'] == 'year'  && $item['value'] >= $beginFilter->year  && $item['value'] <= $endFilter->year)  return true;
+                    if($item['type'] == 'month' && $item['value'] >= $beginFilter->month && $item['value'] <= $endFilter->month) return true;
+                    return false;
+                });
+            }
+        }
+        if($dateType == 'day')
+        {
+            foreach($headers as $index => $headerRow)
+            {
+                $filteredHeaders[$index] = array_filter($headerRow, function($item) use ($beginFilter, $endFilter)
+                {
+                    if($item['name'] == 'scope') return true;
+                    if($item['type'] == 'year' && $item['value'] >= $beginFilter->year && $item['value'] <= $endFilter->year) return true;
+                    if($item['type'] == 'day'  && $item['value'] >= $beginFilter->day  && $item['value'] <= $endFilter->day)  return true;
+                    return false;
+                });
+            }
+        }
+
+        return $filteredHeaders;
     }
 
     /**
