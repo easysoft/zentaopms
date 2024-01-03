@@ -154,7 +154,7 @@ formPanel
         formGroup
         (
             set::label($lang->file->exportRange),
-            set::control('select'),
+            set::control('picker'),
             set::name('exportType'),
             set::items($lang->exportTypeList),
             set::required(true)
