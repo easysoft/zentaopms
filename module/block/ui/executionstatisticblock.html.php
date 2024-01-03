@@ -35,7 +35,7 @@ foreach($executions as $executionItem)
 }
 
 $projectItems = array();
-$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}")), 'data-load' => 'target', 'data-selector' => "#execution-statistic-{$block->id}", 'data-partial' => true);
+$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 foreach($projects as $projectID => $projectName)
 {
     $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}&project={$projectID}"));
