@@ -1451,8 +1451,6 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            a($chart);
-            die;
             $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
             $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
             $component->key         = "PieCommon";
