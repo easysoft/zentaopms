@@ -106,7 +106,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
             <tr>
               <th><?= $lang->ai->installPackage; ?></th>
               <td>
-                <input type="file" name="file" required class="form-control">
+                <input type="file" name="file" accept=".zip" required class="form-control">
               </td>
             </tr>
             <tr>
