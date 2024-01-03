@@ -276,7 +276,7 @@ class blockModel extends model
             ->fetch('top');
 
         if(!$top) $top = 0;
-        return $top;
+        return (int)$top;
     }
 
     /**
@@ -291,12 +291,7 @@ class blockModel extends model
     {
         foreach($layout as $blockID => $block)
         {
-            $this->dao->update(TABLE_BLOCK)
-                ->set('left')->eq($block['left'])
-                ->set('top')->eq($block['top'])
-                ->where('id')->eq($blockID)
-                ->exec();
-
+            $this->dao->update(TABLE_BLOCK)->set('left')->eq($block['left'])->set('top')->eq($block['top'])->where('id')->eq($blockID)->exec();
             if(dao::isError()) return false;
         }
         return true;
