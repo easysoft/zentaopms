@@ -1046,10 +1046,10 @@ class blockZen extends block
         $executions  = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
         if(empty($executions))
         {
-            $this->view->chartData        = array();
+            $this->view->chartData        = array('labels' => array(), 'baseLine' => array(), 'burnLine' => array());
             $this->view->executions       = array();
-            $this->view->projects         = array();
-            $this->view->currentProjectID = 9;
+            $this->view->projects         = $this->loadModel('project')->getPairs();
+            $this->view->currentProjectID = $projectID;
             return;
         }
 

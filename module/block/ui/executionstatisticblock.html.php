@@ -12,7 +12,13 @@ declare(strict_types=1);
 namespace zin;
 
 $active    = isset($params['active']) ? $params['active'] : key($executions);
-$execution = null;
+$execution = new stdclass();
+$execution->progress          = '';
+$execution->doneStory         = '';
+$execution->totalStory        = '';
+$execution->totalTask         = '';
+$execution->undoneTask        = '';
+$execution->yesterdayDoneTask = '';
 
 $items = array();
 foreach($executions as $executionItem)
