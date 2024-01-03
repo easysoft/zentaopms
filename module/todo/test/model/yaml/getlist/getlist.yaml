@@ -3,12 +3,12 @@ author: jukui
 version: "1.0"
 fields:
     - field: id
-      range: 1-9
+      range: 1-1000
     - field: account
-      range: 'admin'
     - field: date
-      range: 1-9
-      prefix: '2023-03-0'
+      range: "(-1Y)-(+1Y):24h"
+      type: timestamp
+      format: "YY/MM/DD"
     - field: begin
       range: 1000-1100
     - field: end
