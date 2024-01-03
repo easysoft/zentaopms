@@ -3541,7 +3541,7 @@ class execution extends control
         }
         else
         {
-            $status = $storyType == 'story' ? 'active' : 'launched';
+            $status     = $storyType == 'story' ? 'active' : ($model == 'ipd' ? 'launched' : 'active,launched');
             $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status, $storyType, 'id_desc', $hasParent = false, '', $pager = null);
         }
 
