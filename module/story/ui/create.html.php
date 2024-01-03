@@ -407,7 +407,8 @@ formPanel
         set::control('input'),
         set::values($fields['keywords']['default'])
     ),
-    formHidden('type', $type)
+    formHidden('type', $type),
+    formHidden('status', 'active')
 );
 
 isset($fields['branches']) && $type == 'story' ? formRow
