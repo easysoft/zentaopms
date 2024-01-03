@@ -763,7 +763,7 @@ class testcaseModel extends model
         if($caseIdList)
         {
             $this->dao->update(TABLE_CASE)->set('deleted')->eq('1')->where('id')->in($caseIdList)->exec();
-            foreach($caseIdList as $caseID) $this->action->create('case', $caseID, 'deleted', '', actionModel::CAN_UNDELETED);
+            foreach($caseIdList as $caseID) $this->action->create('case', (int)$caseID, 'deleted', '', actionModel::CAN_UNDELETED);
         }
 
         /* 删除场景。 */
