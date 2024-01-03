@@ -89,6 +89,20 @@ if(!$hidden)
         )
     );
 }
+else
+{
+    $productRow = formRow
+        (
+            setClass('hidden'),
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('product'),
+                set::label($lang->build->product),
+                set::value(empty($product) ? '' : $product->id),
+            )
+        );
+}
 
 if(empty($product)) $product = new stdclass();
 $productType     = zget($product, 'type', 'normal');
