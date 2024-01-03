@@ -44,8 +44,6 @@ $config->project->labelClass['waterfallplus'] = 'warning-outline';
 $config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
-if(!isset($config->setCode) or $config->setCode == 0) unset($config->project->dtable->fieldList['code']);
-
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum         = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
 $config->project->checkList->waterfall     = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask');
