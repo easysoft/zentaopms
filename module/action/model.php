@@ -652,29 +652,7 @@ class actionModel extends model
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
             $actionName = strtolower($action->action);
-            if($actionName == 'svncommited')
-            {
-                foreach($action->history as $history)
-                {
-                    if($history->field == 'subversion')
-                    {
-                        $history->diff = str_replace('+', '%2B', $history->diff);
-                        $history->diff = str_replace("class='iframe'", "class='iframe' data-height='500'", $history->diff);
-                    }
-                }
-            }
-            elseif($actionName == 'gitcommited')
-            {
-                foreach($action->history as $history)
-                {
-                    if($history->field == 'git')
-                    {
-                        $history->diff = str_replace('+', '%2B', $history->diff);
-                        $history->diff = str_replace("class='iframe'", "class='iframe' data-height='500'", $history->diff);
-                    }
-                }
-            }
-            elseif(strpos(',linkstory,unlinkstory,createchildrenstory,linkur,unlinkur,', ",$actionName,") !== false)
+            if(strpos(',linkstory,unlinkstory,createchildrenstory,linkur,unlinkur,', ",$actionName,") !== false)
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -689,6 +667,17 @@ class actionModel extends model
             elseif($actionName == 'repocreated')
             {
                 $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
+            }
+
+            foreach($action->history as $history)
+            {
+                if(empty($history->diff)) continue;
+
+                if($history->field == 'git' || $history->field == 'subversion')
+                {
+                    $history->diff = str_replace('+', '%2B', $history->diff);
+                    $history->diff = str_replace("class='iframe'", "class='iframe' data-height='500'", $history->diff);
+                }
             }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
