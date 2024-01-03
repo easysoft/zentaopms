@@ -4,7 +4,7 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/report.class.php';
 
-zdTable('bug')->gen('100');
+zdTable('bug')->config('bug')->gen('100');
 zdTable('user')->gen(1);
 
 su('admin');
@@ -34,6 +34,13 @@ $bugsPerSeverity   = $bug->getDataOfBugsPerSeverity();
 $bugsPerResolution = $bug->getDataOfBugsPerResolution();
 $bugsPerPri        = $bug->getDataOfBugsPerPri();
 $bugsPerType       = $bug->getDataOfBugsPerType();
+
+ksort($bugsPerModule);
+ksort($bugsPerBuild);
+ksort($bugsPerSeverity);
+ksort($bugsPerResolution);
+ksort($bugsPerPri);
+ksort($bugsPerType);
 
 r($report->computePercentTest($bugsPerModule))     && p() && e('0:0.91;1821:0.01;1822:0.01;1823:0.01;1825:0.01;1826:0.01;1827:0.01;1831:0.01;1832:0.01;1833:0.01;');                                   // 测试 bug按照 模块 分组 的百分比
 r($report->computePercentTest($bugsPerBuild))      && p() && e('0:0.3333;1:0.6667;');                                                                                                                  // 测试 bug按照 版本 分组 的百分比
