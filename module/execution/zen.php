@@ -908,6 +908,7 @@ class executionZen extends execution
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->execution->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if(!isset($_POST['code'])) $fields['code']['required'] = false;
+        if(!isset($_POST['percent'])) $fields['percent']['required'] = false;
         $this->config->execution->create->requiredFields = implode(',', array_keys(array_filter(array_map(function($config){return $config['required'] == true;}, $fields))));
 
         $this->correctErrorLang();
