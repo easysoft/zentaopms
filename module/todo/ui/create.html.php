@@ -373,7 +373,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/6'),
+            set::width('1/5'),
             setClass('priBox'),
             set::label($lang->todo->pri),
             priPicker
