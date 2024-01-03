@@ -18,6 +18,7 @@ $scoreNotice = '';
 if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
 
 jsVar('scoreNotice', $scoreNotice);
+jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('oldPages',    $config->index->oldPages);
