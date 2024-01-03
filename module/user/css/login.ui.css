@@ -42,3 +42,5 @@ input[name="captcha"] {border-bottom-right-radius: var(--radius-none) !important
 .table-row-extension .alert {margin-bottom: 0px !important;}
 .table-row-extension .content {color: #3c4353;}
 .table-row-extension .expired-tips {cursor: pointer;}
+
+.load-indicator.loading:after, .load-indicator.loading:before {opacity: 0;}
