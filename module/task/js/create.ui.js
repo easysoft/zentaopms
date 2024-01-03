@@ -497,10 +497,18 @@ window.copyStoryTitle = function()
         storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
     }
 
-    $('#name').attr('value', storyTitle);
-    $('#estimate').attr('value', $('input[name=storyEstimate]').val());
-    $('#desc').attr('value', $('input[name=storyDesc]').val());
-    $('input[name=pri]').zui('pripicker').$.setValue($('input[name=storyPri]').val());
+    if($('[name^=copyButton]').prop('checked'))
+    {
+        $('#name').val(storyTitle);
+        $('#estimate').val($('input[name=storyEstimate]').val());
+        $('#desc').val($('input[name=storyDesc]').val());
+        $('input[name=pri]').zui('pripicker').$.setValue($('input[name=storyPri]').val());
+    }
+    else
+    {
+        $('#name, #estimate, #desc').val('');
+        $('input[name=pri]').zui('pripicker').$.setValue(3);
+    }
 }
 
 window.showAllModule = function()
