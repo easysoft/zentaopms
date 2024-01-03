@@ -37,6 +37,9 @@ $(window).on('resize', adjustPanelPos);
 timeoutID = null;
 window.safeSubmit = function(e)
 {
+    e.preventDefault();
+    e.stopPropagation();
+
     let account          = $('#account').val().trim();
     let password         = $('input#password[type="password"]').val().trim();
     let passwordStrength = computePasswordStrength(password);
