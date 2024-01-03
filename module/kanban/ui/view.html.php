@@ -34,7 +34,7 @@ foreach($kanbanList as $current => $region)
         $kanbanList[$current]['kanbanProps']['minColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
         $kanbanList[$current]['kanbanProps']['maxColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
         $kanbanList[$current]['kanbanProps']['maxLaneHeight'] = '500';
-        $kanbanList[$current]['kanbanProps']['colProps']      = array('actions' => jsRaw('window.getColActions'));
+        $kanbanList[$current]['kanbanProps']['colProps']      = array('actions' => jsRaw('window.getColActions'), 'titleAlign' => $kanban->alignment);
         $kanbanList[$current]['kanbanProps']['laneProps']     = array('actions' => jsRaw('window.getLaneActions'));
         $kanbanList[$current]['kanbanProps']['itemProps']     = array('actions' => jsRaw('window.getItemActions'));
     }
