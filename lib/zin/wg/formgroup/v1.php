@@ -54,7 +54,7 @@ class formGroup extends wg
             set::className('form-group', $required ? 'required' : null, ($label === false || $label === null) ? 'no-label' : null, empty($width) ? null : 'grow-0'),
             zui::width($width),
             set($this->getRestProps()),
-            setCssVar('form-grid-label-width', $labelWidth),
+            setCssVar('form-horz-label-width', $labelWidth),
             empty($label) && $label !== '0' ? null : new formLabel
             (
                 set::className($labelClass, $strong ? 'font-bold' : null),

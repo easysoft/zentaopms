@@ -2,7 +2,7 @@
 .have-fix .input-group-addon {width: 42px;}
 .highlight-suffix .input-control-suffix,
 .highlight-prefix .input-control-prefix {opacity: 1;}
-.form-grid .form-group.config-day {padding-left: 50px;}
+.form-horz .form-group.config-day {padding-left: 50px;}
 .config-day>.input-control {width: 64px; flex: none;}
 .config-day>.form-label {width: 50px;}
 .config-day>.form-label::after {content: '';}

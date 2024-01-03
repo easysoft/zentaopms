@@ -276,7 +276,7 @@ formBatchPanel
     ),
     div
     (
-        setClass('form-grid'),
+        setClass('form-horz'),
         formGroup
         (
             setClass('flex verify-box'),

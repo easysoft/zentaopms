@@ -28,7 +28,7 @@ $createProgram = function($data)
         formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items(array())),
         div
         (
-            setClass('programForm mt-4 form-grid'),
+            setClass('programForm mt-4 form-horz'),
             formGroup
             (
                 setClass('programName'),

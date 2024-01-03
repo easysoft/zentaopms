@@ -84,7 +84,7 @@ modal
         ),
         div
         (
-            setClass('hidden form-grid'),
+            setClass('hidden form-horz'),
             setID('createForm'),
             formGroup
             (

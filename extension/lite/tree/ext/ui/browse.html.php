@@ -218,7 +218,7 @@ div
                 ),
                 form
                 (
-                    setClass('flex-1 form-grid'),
+                    setClass('flex-1 form-horz'),
                     set::url(helper::createLink('tree', 'manageChild', "root=$root->id&viewType=$viewType")),
                     $moduleRows,
                     set::actionsClass('justify-start'),

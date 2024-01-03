@@ -1,4 +1,4 @@
-.form-grid .form-row .form-group {padding-left:110px;}
-.form-grid .form-row .form-group.no-label {padding-left:10px; padding-top:5px;}
+.form-horz .form-row .form-group {padding-left:110px;}
+.form-horz .form-row .form-group.no-label {padding-left:10px; padding-top:5px;}
 .form-group .form-label{width:110px;}
 .webhookType{padding-top:6px;}

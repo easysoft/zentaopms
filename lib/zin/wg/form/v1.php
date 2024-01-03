@@ -62,8 +62,8 @@ class form extends formBase
     {
         list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));
         $props = parent::buildProps();
-        if($grid)               $props[] = setClass('form-grid');
-        if(!empty($labelWidth)) $props[] = setCssVar('form-grid-label-width', $labelWidth);
+        if($grid)               $props[] = setClass('form-horz');
+        if(!empty($labelWidth)) $props[] = setCssVar('form-horz-label-width', $labelWidth);
 
         return $props;
     }

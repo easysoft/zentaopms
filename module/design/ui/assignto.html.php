@@ -15,7 +15,7 @@ formPanel
 (
     set::title($lang->design->assignAction),
     set::headingClass('modal-heading'),
-    set::titleClass('form-label .form-grid'),
+    set::titleClass('form-label .form-horz'),
     set::shadow(false),
     to::headingActions
     (

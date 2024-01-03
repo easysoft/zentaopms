@@ -113,9 +113,9 @@ if($isCustomExport)
 
 formPanel
 (
-    css('.form-grid .form-label.required:after{content:""}'), // Remove required tag.
+    css('.form-horz .form-label.required:after{content:""}'), // Remove required tag.
     css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
-    setCssVar('--form-grid-label-width', '4rem'),
+    setCssVar('--form-horz-label-width', '4rem'),
     set::target('_self'),
     set::actions(array()),
     on::submit('setDownloading'),

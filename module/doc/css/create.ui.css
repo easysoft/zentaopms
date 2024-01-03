@@ -3,7 +3,7 @@
 #title:focus {box-shadow: none; outline: unset}
 .titleBox{padding: 7px; background: #fff}
 #modalBasicInfo .form-group {margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));}
-.form-grid>:not([hidden])~:not([hidden]){margin-top: 0;}
+.form-horz>:not([hidden])~:not([hidden]){margin-top: 0;}
 #whitelistBox .form-group-wrapper+.form-group-wrapper {margin-top: 10px;}
 #titleBox:before {position: absolute; --tw-translate-y: .125rem; --tw-scale-x: 1.25; --tw-scale-y: 1.25; --tw-text-opacity: 1; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); content: "*"; display: inline-block; margin-left: 0.25rem; transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
 #titleBox {margin-left: 5px}
