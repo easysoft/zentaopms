@@ -480,6 +480,7 @@ class ai extends control
      */
     public function configuredMiniProgram($appID)
     {
+        if(!common::hasPriv('ai', 'editMiniProgram') && !common::hasPriv('ai', 'createMiniProgram')) return $this->locate($this->createLink('my', 'index'));
         if(!empty($_POST))
         {
             $toPublish = $_POST['toPublish'];
