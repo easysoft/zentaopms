@@ -8200,7 +8200,11 @@ class upgradeModel extends model
             $this->setting->setItem('system.block.closed', $closedBlocks);
         }
 
-        $this->dao->delete()->from(TABLE_BLOCK)->where('code')->eq('waterfallgeneralreport')->exec();
+        $blockDesc = $this->dao->query('DESC ' .  TABLE_BLOCK)->fetchAll();
+        $fields    = array();
+        foreach($blockDesc as $field) $fields[$field->Field] = $field->Field;
+
+        if(isset($fields['block'])) $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
 
         return true;
     }
