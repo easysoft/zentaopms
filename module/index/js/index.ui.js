@@ -794,15 +794,24 @@ $.get($.createLink('index', 'app'), html =>
     apps.frameContent = html;
 
     /* Open default app */
-    let defaultOpenUrl = defaultOpen || apps.defaultCode;
+    let url = defaultOpen || '';
+    let code = '';
     if(location.hash.indexOf('#app=') === 0)
     {
         const params = $.parseUrlParams(location.hash.substring(1));
-        defaultOpenUrl = params.app;
+        code = params.app;
     }
-    const parts = defaultOpenUrl.split(' ');
-    const url = parts[0];
-    let code = parts[1];
+    else if(url.includes(' '))
+    {
+        const parts = url.split(' ');
+        url = parts[0];
+        code = parts[1];
+    }
+    if(!url)
+    {
+        if(!code) url = apps.defaultCode;
+        else {url = code; code = '';}
+    }
     if(!code && defaultOpen)
     {
         const lastOpenApp = zui.store.session.get('lastOpenApp');
