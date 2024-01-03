@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('checkedSummary', $lang->productplan->checkedSummary);
+jsVar('childrenAB', $lang->productplan->childrenAB);
+jsVar('expiredLang', $lang->productplan->expired);
 
 /* zin: Define the set::module('productplan') feature bar on main menu. */
 featureBar

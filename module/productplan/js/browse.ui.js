@@ -183,6 +183,17 @@ window.renderCell = function(result, info)
         }
     }
 
+    if(info.col.name == 'title')
+    {
+        html = '';
+        if(info.row.data.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(html) result.unshift({html});
+
+        html = '';
+        if(info.row.data.expired && ['wait', 'doing'].includes(info.row.data.status)) html += '<span class="label danger-pale ml-1">' + expiredLang + '</span>';
+        if(html) result.push({html});
+    }
+
     return result;
 }
 
