@@ -1295,7 +1295,8 @@ class taskZen extends task
         $executions = $this->loadModel('execution')->fetchPairs(0, 'all', true, true);
 
         /* Get related objects id lists. */
-        $relatedStoryIdList  = array();
+        $relatedStoryIdList = array();
+        $relatedBugIdList   = array();
         foreach($tasks as $task)
         {
             $relatedStoryIdList[$task->story] = $task->story;
