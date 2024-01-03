@@ -84,7 +84,7 @@ foreach($fields as $field => $attr)
     $formItems[$field] = $formGroup;
 }
 
-if(empty($programID)) $formItems['line'] = formRow(set::hidden(true), $formItems['line']);
+if(empty($programID) and isset($formItems['line'])) $formItems['line'] = formRow(set::hidden(true), $formItems['line']);
 
 /* Set whitelist box. */
 $formItems['whitelist'] = formRow
