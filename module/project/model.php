@@ -1072,7 +1072,7 @@ class projectModel extends model
         $this->projectTao->createDocLib($projectID, $project, $program);
         $this->addTeamMembers($projectID, $project, array($project->openedBy));
 
-        if($project->hasProduct)
+        if($project->hasProduct && empty($postData->rawdata->newProduct))
         {
             $this->updateProducts($projectID);
             /* If $_POST has product name, create it. */
