@@ -155,7 +155,7 @@ class build extends control
         if(!$build)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return $this->sendError($this->lang->notFound, $this->createLink('execution', 'all'));
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'all'))));
         }
 
         /* Load pager. */
