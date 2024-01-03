@@ -349,6 +349,7 @@ elseif($module == 'user' && $field == 'deleted')
     $formItems[] = formGroup
     (
         set::width('1/2'),
+        set::labelWidth('100px'),
         set::label($lang->custom->user->fields['deleted']),
         set::name('showDeleted'),
         set::value($showDeleted),
