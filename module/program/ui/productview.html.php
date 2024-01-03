@@ -90,7 +90,7 @@ $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
 /* Closure for generating product line row data. */
 $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$linesCount)
 {
-    if(!isset($line['lineName']) || !isset($line['products']) || !is_array($line['products']) || $config->systemMode != 'ALM' || $config->systemMode != 'PLM') return null;
+    if(!isset($line['lineName']) || !isset($line['products']) || !is_array($line['products']) || ($config->systemMode != 'ALM' && $config->systemMode != 'PLM')) return null;
 
     /* ALM mode with Product Line. */
     $linesCount++;
@@ -160,7 +160,7 @@ foreach($productStructure as $programID => $program)
             if(!isset($program[$lineID]))
             {
                 $program[$lineID] = array();
-                $program[$lineID]['product']  = '';
+                $program[$lineID]['products'] = array();
                 $program[$lineID]['lineName'] = $lineName;
             }
         }

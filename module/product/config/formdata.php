@@ -41,7 +41,6 @@ $config->product->form->edit['whitelist'] = array('type' => 'array',   'control'
 $config->product->form->batchEdit = array();
 $config->product->form->batchEdit['program'] = array('type' => 'int',    'control' => 'select',    'width' => '200px', 'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->batchEdit['name']    = array('type' => 'string', 'control' => 'text',      'width' => '240px', 'required' => true,  'base'    => true);
-$config->product->form->batchEdit['line']    = array('type' => 'int',    'control' => 'select',    'width' => '200px', 'required' => false, 'default' => 0,         'options' => array());
 $config->product->form->batchEdit['PO']      = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => '',        'options' => array());
 $config->product->form->batchEdit['QD']      = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => '',        'options' => array());
 $config->product->form->batchEdit['RD']      = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => '',        'options' => array());
@@ -77,5 +76,5 @@ if($config->systemMode != 'ALM' && $config->systemMode != 'PLM')
 {
     unset($config->product->form->create['program'], $config->product->form->create['line']);
     unset($config->product->form->edit['program'], $config->product->form->edit['line']);
-    unset($config->product->form->batchEdit['program'], $config->product->form->batchEdit['line']);
+    unset($config->product->form->batchEdit['program']);
 }

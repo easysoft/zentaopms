@@ -284,10 +284,10 @@ formPanel
             set::label($lang->project->budget),
             inputGroup
             (
-                set::prefix(zget($lang->project->currencySymbol, $currency)),
-                set::prefixWidth('icon'),
+                $parentProgram ? span(setClass('input-group-addon'), zget($lang->project->currencySymbol, $currency)) : null,
                 input(set::name('budget')),
-                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(
+                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker
+                (
                     set::name('budgetUnit'),
                     set::items($budgetUnitList),
                     set::value($config->project->defaultCurrency),
