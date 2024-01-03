@@ -13,6 +13,7 @@ namespace zin;
 modalHeader();
 formPanel
 (
+    set::labelWidth('100px'),
     formRow
     (
         set::id('WIPCountBox'),
