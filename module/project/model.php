@@ -2204,6 +2204,7 @@ class projectModel extends model
         $planIdList = array();
         foreach($plans as $planList)
         {
+            if(!$planList) continue;
             foreach($planList as $planID)
             {
                 $planIdList[$planID] = $planID;

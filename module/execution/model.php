@@ -4819,7 +4819,7 @@ class executionModel extends model
         $executionData->begin       = $project->begin;
         $executionData->end         = $project->end;
         $executionData->status      = 'wait';
-        $executionData->type        = 'sprint';
+        $executionData->type        = $project->model == 'kanban' ? 'kanban' : 'sprint';
         $executionData->days        = $project->days;
         $executionData->team        = $project->team;
         $executionData->desc        = $project->desc;
