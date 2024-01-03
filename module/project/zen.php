@@ -1126,6 +1126,8 @@ class projectZen extends project
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->allProducts              = $allProducts;
         $this->view->allBranches              = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal');
+
+        if($this->config->systemMode != 'ALM') $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed', $linkedBranchIdList);
     }
 
     /**
