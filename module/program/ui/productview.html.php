@@ -104,17 +104,17 @@ $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$li
     $item->PM                   = '';
     $item->createdDate          = '';
     $item->createdBy            = '';
-    $item->totalUnclosedStories = $line['totalStories'] - $line['closedStories'];
-    $item->totalStories         = $line['totalStories'];
-    $item->closedStoryRate      = ($line['totalStories'] == 0 ? 0 : round(zget($line, 'finishClosedStories', 0) / $line['totalStories'], 3) * 100);
-    $item->totalPlans           = $line['plans'];
+    $item->totalUnclosedStories = zget($line, 'totalStories', 0) - zget($line, 'closedStories', 0);
+    $item->totalStories         = zget($line, 'totalStories', 0);
+    $item->closedStoryRate      = (empty($line['totalStories']) ? 0 : round(zget($line, 'finishClosedStories', 0) / zget($line, 'totalStories', 0), 3) * 100);
+    $item->totalPlans           = zget($line, 'plans', 0);
     $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
-    $item->testCaseCoverage     = $line['coverage'] ?? 0;
+    $item->testCaseCoverage     = zget($line, 'coverage', 0);
     $item->totalActivatedBugs   = 0;
     $item->totalBugs            = 0;
-    $item->fixedRate            = !empty($item->totalBugs) ? round($line['fixedBugs'] / $item->totalBugs, 3) * 100 : 0;
-    $item->totalReleases        = isset($line['releases']) ? $line['releases'] : 0;
+    $item->fixedRate            = !empty($item->totalBugs) ? round(zget($line, 'fixedBugs', 0) / $item->totalBugs, 3) * 100 : 0;
+    $item->totalReleases        = zget($line, 'releases', 0);
     $item->latestReleaseDate    = '';
     $item->latestRelease        = '';
 
@@ -157,12 +157,11 @@ foreach($productStructure as $programID => $program)
     {
         foreach($programLines[$programID] as $lineID => $lineName)
         {
-            if(!isset($program[$lineID]))
-            {
-                $program[$lineID] = array();
-                $program[$lineID]['products'] = array();
-                $program[$lineID]['lineName'] = $lineName;
-            }
+            if(isset($program[$lineID])) continue;
+
+            $program[$lineID] = array();
+            $program[$lineID]['products'] = array();
+            $program[$lineID]['lineName'] = $lineName;
         }
     }
 
