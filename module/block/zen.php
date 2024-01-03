@@ -2282,7 +2282,7 @@ class blockZen extends block
 
         $this->view->type     = $type;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products = $type == 'involveds' ? $hasDataInvolveds : $hasDataProducts;
+        $this->view->products = $type == 'involved' ? $hasDataInvolveds : $hasDataProducts;
         $this->view->docGroup = $docGroup;
     }
 
@@ -2363,7 +2363,7 @@ class blockZen extends block
 
         $this->view->type     = $type;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects = $type == 'involveds' ? $hasDataInvolveds : $hasDataProjects;
+        $this->view->projects = $type == 'involved' ? $hasDataInvolveds : $hasDataProjects;
         $this->view->docGroup = $docGroup;
     }
 
