@@ -74,14 +74,14 @@ if($efforts)
                     (
                         common::hasPriv('task', 'editEffort') ? a
                         (
-                            setClass('btn ghost toolbar-item square size-sm'),
+                            setClass('btn ghost toolbar-item square size-sm text-primary'),
                             set::href(createLink('task', 'editEffort', "id={$effort->id}")),
                             set('data-toggle', 'modal'),
                             icon('edit'),
                         ) : null,
                         common::hasPriv('task', 'deleteWorkhour') ? a
                         (
-                            setClass('btn ghost toolbar-item square size-sm ajax-submit'),
+                            setClass('btn ghost toolbar-item square size-sm ajax-submit text-primary'),
                             set('data-confirm', $lang->task->confirmDeleteEffort),
                             set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
                             icon('trash')
