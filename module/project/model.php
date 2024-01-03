@@ -1367,7 +1367,7 @@ class projectModel extends model
             if(!dao::isError())
             {
                 /* 无产品项目信息变更后更新影子产品的相关字段. */
-                if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project);
+                if(!$oldProject->hasProduct and ($oldProject->name != $project->name or $oldProject->parent != $project->parent or $oldProject->acl != $project->acl)) $this->updateShadowProduct($project, $oldProject);
 
                 if(isset($project->parent))
                 {
