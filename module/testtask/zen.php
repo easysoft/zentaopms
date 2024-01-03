@@ -161,7 +161,7 @@ class testtaskZen extends testtask
         $execution = $this->loadModel('execution')->getByID($task->execution);
         if(!$execution)
         {
-            $build         = $this->loadModel('build')->getById($task->build);
+            $build         = $this->loadModel('build')->getById((int)$task->build);
             $task->project = $build->project;
         }
         else
