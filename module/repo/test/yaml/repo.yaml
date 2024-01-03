@@ -6,7 +6,9 @@ fields:
 - field: id
   range: 1-5
 - field: product
-  range: "1,2,3,4"
+  range: 1-4
+- field: projects
+  range: 11-14
 - field: name
   range: testHtml,project1,unittest,testSvn
 - field: path
