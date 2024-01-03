@@ -31,6 +31,7 @@ class commonModel extends model
         $this->loadCustomFromDB();
 
         /* 用户模块在loadConfigFromDB之前就初始化了，所以要手动加载。 */
+        $this->app->loadLang('user');
         $this->app->loadModuleConfig('user');
 
         if(!$this->checkIP()) return print($this->lang->ipLimited);
