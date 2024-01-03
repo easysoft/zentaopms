@@ -3186,6 +3186,8 @@ class executionModel extends model
         {
             if(in_array($member->account, $accountList)) continue;
 
+            $member->root = isset($member->root) ? $member->root : $execution->id;
+            $member->type = isset($member->type) ? $member->type : 'execution';
             $member->join = isset($oldJoin[$member->account]) ? $oldJoin[$member->account] : helper::today();
             $executionMember[$member->account] = $member;
             $accountList[] = $member->account;
