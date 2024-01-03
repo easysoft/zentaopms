@@ -33,6 +33,7 @@ window.toggleFeedback = function(obj)
     const source = $this.val();
     $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
 }
+$(function(){ toggleFeedback(); })
 
 $(document).on('change', '#module', function(){loadURS();})
 
