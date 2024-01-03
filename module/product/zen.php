@@ -1274,7 +1274,8 @@ class productZen extends product
             return;
         }
 
-        print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'all')));
+        $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('product', 'all'))));
+        return;
     }
 
     /**

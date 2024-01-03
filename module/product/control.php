@@ -359,8 +359,9 @@ class product extends control
     {
         /* Get product. */
         $product = $this->product->getStatByID($productID);
-        if($product->status == 'wait') $product = $this->product->getStatByID($product->id, 'requirement');
         if(!$product) return $this->productZen->responseNotFound4View();
+
+        if($product->status == 'wait') $product = $this->product->getStatByID($product->id, 'requirement');
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if($product->line)    $product->lineName    = $this->loadModel('tree')->getByID($product->line)->name;
