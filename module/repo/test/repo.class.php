@@ -513,7 +513,7 @@ class repoTest
         if($type == 'task')
         {
             $records = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
-                ->where('objectType')->eq('tasks')
+                ->where('objectType')->eq('task')
                 ->andWhere('objectID')->in('1,2,8')
                 ->andWhere('extra')->eq($action->extra)
                 ->andWhere('action')->eq($action->action)
@@ -522,7 +522,7 @@ class repoTest
         elseif($type == 'bug')
         {
             $records = $this->objectModel->dao->select('*')->from(TABLE_ACTION)
-                ->where('objectType')->eq('bugs')
+                ->where('objectType')->eq('bug')
                 ->andWhere('objectID')->in('1,2')
                 ->andWhere('extra')->eq($action->extra)
                 ->andWhere('action')->eq($action->action)

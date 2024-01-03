@@ -12,19 +12,19 @@ cid=1
 
 - 开始任务
  - 第1条的objectID属性 @1
- - 第1条的objectType属性 @tasks
+ - 第1条的objectType属性 @task
 - 完成任务
  - 第8条的objectID属性 @8
- - 第8条的objectType属性 @tasks
+ - 第8条的objectType属性 @task
 - 工时计算
  - 第2条的objectID属性 @2
- - 第2条的objectType属性 @tasks
+ - 第2条的objectType属性 @task
 - 修复bug1
  - 第1条的objectID属性 @1
- - 第1条的objectType属性 @bugs
+ - 第1条的objectType属性 @bug
 - 修复bug2
  - 第2条的objectID属性 @2
- - 第2条的objectType属性 @bugs
+ - 第2条的objectType属性 @bug
 
 */
 
@@ -58,11 +58,11 @@ $action->action = 'gitcommited';
 
 $repo = new repoTest();
 $result = $repo->saveObjectToPmsTest($log, $action, $repoID, 'task');
-r($result) && p('1:objectID,objectType') && e('1,tasks'); //开始任务
-r($result) && p('8:objectID,objectType') && e('8,tasks'); //完成任务
-r($result) && p('2:objectID,objectType') && e('2,tasks'); //工时计算
+r($result) && p('1:objectID,objectType') && e('1,task'); //开始任务
+r($result) && p('8:objectID,objectType') && e('8,task'); //完成任务
+r($result) && p('2:objectID,objectType') && e('2,task'); //工时计算
 
 $log->msg = $log->comment = 'Fix bug#1,2';
 $result = $repo->saveObjectToPmsTest($log, $action, $repoID, 'bug');
-r($result) && p('1:objectID,objectType') && e('1,bugs'); //修复bug1
-r($result) && p('2:objectID,objectType') && e('2,bugs'); //修复bug2
+r($result) && p('1:objectID,objectType') && e('1,bug'); //修复bug1
+r($result) && p('2:objectID,objectType') && e('2,bug'); //修复bug2
