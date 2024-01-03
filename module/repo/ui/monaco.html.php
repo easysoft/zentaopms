@@ -12,13 +12,20 @@ declare(strict_types=1);
 
 namespace zin;
 
-$module = $app->tab == 'devops' ? 'repo' : $app->tab;
-dropmenu
+$module  = $app->tab == 'devops' ? 'repo' : $app->tab;
+$inModal = isInModal() || !empty($fromModal);
+$inModal ? null : dropmenu
 (
     set::module($module),
     set::tab($module),
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
+
+if($inModal)
+{
+    to::header(false);
+    to::main(false);
+}
 
 jsVar('isonlybody', isonlybody());
 jsVar('entry', $entry);
@@ -37,8 +44,8 @@ jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=
 \zin\featureBar();
 
 $monacoDropMenus = array();
-if(common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');
-if(common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
+if(!$inModal && common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');
+if(!$inModal && common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
 
 $tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
 $menuData = $repo->SCM == 'Subversion' ? array() : array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
@@ -87,7 +94,7 @@ div(
     )
 );
 
-helper::isAjaxRequest('modal') ? null : sidebar
+$inModal ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas'),

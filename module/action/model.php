@@ -203,11 +203,15 @@ class actionModel extends model
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
 
             $action->history = zget($histories, $actionID, array());
-            if($actionName == 'svncommited') array_map(function($history) {if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
-            if($actionName == 'gitcommited') array_map(function($history) {if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
+            foreach($action->history as $history)
+            {
+                if($history->field == 'subversion' || $history->field == 'git')
+                {
+                    $history->diff = str_replace(array("class='iframe'", '+'), array("data-type='iframe' data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
+                }
+            }
 
             $action->comment = $this->loadModel('file')->setImgSize($action->comment, $this->config->action->commonImgSize);
-
             $actions[$actionID] = $action;
         }
         return $actions;

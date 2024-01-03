@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+$inModal      = isInModal() || !empty($fromModal);
 $entry        = count($diffs) ? $diffs[0]->fileName : '';
 $currentEntry = $this->repo->encodePath($entry);
 $fileInfo     = $entry ? pathinfo($entry) : array();
@@ -30,10 +31,14 @@ jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldR
 \zin\featureBar();
 
 $dropMenus = array();
-if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'id' => 'repoDownloadCode');
+if(!$inModal)
+{
+    if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'id' => 'repoDownloadCode');
 
-$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
-$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
+    $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
+    $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
+}
+
 div(
     set::id('fileTabs'),
     tabs
@@ -56,7 +61,7 @@ div(
             ),
             div(set::id('tab-' . $currentEntry))
         ),
-        dropdown
+        $inModal ? null : dropdown
         (
             set::arrow(false),
             set::staticMenu(true),
@@ -77,7 +82,7 @@ div(
     )
 );
 
-sidebar
+$inModal ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas p-2'),

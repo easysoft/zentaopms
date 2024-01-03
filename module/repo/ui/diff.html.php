@@ -12,13 +12,20 @@ declare(strict_types=1);
 
 namespace zin;
 
-$module = $app->tab == 'devops' ? 'repo' : $app->tab;
-dropmenu
+$module  = $app->tab == 'devops' ? 'repo' : $app->tab;
+$inModal = isInModal() || !empty($fromModal);
+$inModal ? null : dropmenu
 (
     set::module($module),
     set::tab($module),
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
+
+if($inModal)
+{
+    to::header(false);
+    to::main(false);
+}
 
 jsVar('repo', $repo);
 jsVar('repoLang', $lang->repo);
@@ -130,12 +137,14 @@ else
         on::click('goDiff')
     );
 }
-
-\zin\featureBar
-(
-    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
-    item(set::type('divider')),
-    ...$breadcrumbItems
+div(
+    setClass($inModal ? 'hidden' : ''),
+    \zin\featureBar
+    (
+        backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
+        item(set::type('divider')),
+        ...$breadcrumbItems
+    )
 );
 
 if($diffs) include 'diffeditor.html.php';

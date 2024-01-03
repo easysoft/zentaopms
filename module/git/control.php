@@ -42,13 +42,14 @@ class git extends control
         foreach($repos as $repo)
         {
             if(!empty($repo->path) && strpos($path, $repo->path) === 0) $currentRepo = $repo;
+            if(!empty($repo->apiPath) && strpos($path, $repo->apiPath) === 0) $currentRepo = $repo;
         }
 
         if($currentRepo && common::hasPriv('repo', 'diff'))
         {
-            $entry       = $this->repo->encodePath(str_replace($currentRepo->path, '', $path));
+            $entry       = $this->repo->encodePath(str_replace(array($currentRepo->path, $currentRepo->apiPath), '', $path));
             $oldRevision = "$revision^";
-            return $this->locate($this->repo->createLink('diff', "repoID=$currentRepo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
+            return print($this->fetch('repo', 'diff', "repoID=$currentRepo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision"));
         }
 
         if($currentRepo)
@@ -82,12 +83,13 @@ class git extends control
         foreach($repos as $repo)
         {
             if(!empty($repo->path) && strpos($path, $repo->path) === 0) $currentRepo = $repo;
+            if(!empty($repo->apiPath) && strpos($path, $repo->apiPath) === 0) $currentRepo = $repo;
         }
 
         if($currentRepo && common::hasPriv('repo', 'view'))
         {
-            $entry = $this->repo->encodePath(str_replace($currentRepo->path, '', $path));
-            return $this->locate($this->repo->createLink('view', "repoID=$currentRepo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
+            $entry = $this->repo->encodePath(str_replace(array($currentRepo->path, $repo->apiPath), '', $path));
+            return print($this->fetch('repo', 'view', "repoID=$currentRepo->id&objectID=0&entry=$entry&revision=$revision"));
         }
 
         if($currentRepo)

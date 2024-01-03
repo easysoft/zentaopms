@@ -690,7 +690,7 @@ class repoModel extends model
         $matchedRepos = $this->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
         if(empty($matchedRepos)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
 
-        $matchedRepo = '';
+        $matchedRepo = new stdclass();
         foreach($matchedRepos as $repo)
         {
             if(!empty($repo->preMerge))

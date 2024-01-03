@@ -45,7 +45,8 @@ class repo extends control
      */
     public function commonAction(int $repoID = 0, int $objectID = 0)
     {
-        $tab = $this->app->tab;
+        $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
+        $tab       = $fromModal ? '' :$this->app->tab;
         $this->repos = $this->repo->getRepoPairs($tab, $objectID);
 
         if($tab == 'project')
@@ -61,18 +62,22 @@ class repo extends control
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
-            $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+            if($execution)
+            {
+                $features = $this->execution->getExecutionFeatures($execution);
+                if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+            }
 
             $this->loadModel('execution')->setMenu($objectID);
             $this->view->executionID = $objectID;
         }
-        elseif($tab != 'admin')
+        elseif($tab != 'admin' && !$fromModal)
         {
             $this->repo->setMenu($this->repos, $repoID);
         }
 
         if(empty($this->repos) && !in_array($this->methodName, array('create', 'setrules'))) return $this->locate($this->repo->createLink('create', "objectID=$objectID"));
+        $this->view->fromModal = $fromModal;
     }
 
     /**
