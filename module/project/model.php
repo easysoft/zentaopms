@@ -1172,7 +1172,7 @@ class projectModel extends model
         /* Get old project's team and roles. */
         array_push($newMembers, $project->PM);
         $newMembers = array_unique($newMembers);
-        $roles      = $this->user->getUserRoles(array_values($newMembers));
+        $roles      = $this->loadModel('user')->getUserRoles(array_values($newMembers));
         $projectID  = (int)$oldProject->id;
         $oldMembers = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
 
