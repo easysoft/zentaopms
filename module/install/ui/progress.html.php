@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if(!helper::isAjaxRequest('modal'))
+if(!isInModal())
 {
     set::zui(true);
 

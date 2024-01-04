@@ -128,7 +128,7 @@ $(function()
     term = new Terminal({convertEol: true, rows: 20});
     term.open(document.getElementById('terminal'));
 
-    if(startInstall === 'true') $.get($.createLink('install', 'ajaxInstall', 'id=' + solutionID));
+    if(startInstall) $.get($.createLink('install', 'ajaxInstall', 'id=' + solutionID));
 
     setInterval(getInstallProgress, 4000);
 });

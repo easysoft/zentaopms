@@ -457,7 +457,7 @@ class install extends control
             $solution = $this->solution->create($cloudSolution, $components);
             if(dao::isError()) $this->send(array('result' => 'failure', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->solution->notices->success, 'data' => $solution, 'locate' => $this->inLink('progress', "id={$solution->id}&install=true")));
+            $this->send(array('result' => 'success', 'data' => $solution, 'locate' => $this->inLink('progress', "id={$solution->id}&install=true")));
         }
 
         $category = helper::arrayColumn($components->category, 'name');
