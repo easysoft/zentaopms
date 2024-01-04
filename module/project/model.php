@@ -1615,6 +1615,7 @@ class projectModel extends model
                 if(!$product) continue;
 
                 unset($product->id);
+                unset($product->code);
                 if(empty($product->closedDate)) unset($product->closedDate);
                 $product->program = $newTopProgram;
                 $this->product->update($productID, $product);
