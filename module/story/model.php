@@ -1234,6 +1234,13 @@ class storyModel extends model
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->eq($oldStory->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
+        /* If is requirement recall change, revert its relation. */
+        if($oldStory->type == 'requirement')
+        {
+            $relations = $this->storyTao->getRelation($storyID, 'requirement');
+            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->in($relations)->exec();
+        }
+
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'recalledChange');
     }
