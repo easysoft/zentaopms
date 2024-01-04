@@ -1742,10 +1742,10 @@ class execution extends control
         $lanes       = array();
         $items       = array();
         $columnCards = array();
+        $columns     = array();
         foreach($kanbanGroup as $laneKey => $laneData)
         {
             $lanes[] = array('name' => $laneKey, 'title' => zget($projects, $laneKey, $this->lang->execution->myExecutions));
-            $columns = array();
             foreach(array('wait', 'doing', 'suspended', 'closed') as $columnKey)
             {
                 $columns[] = array('name' => $columnKey, 'title' => $this->lang->execution->kanbanColType[$columnKey]);
