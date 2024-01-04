@@ -302,7 +302,7 @@ class testtaskModel extends model
      */
     public function getByUser(string $account, object $pager = null, string $orderBy = 'id_desc', string $type = ''): array
     {
-        return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName")
+        return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t4.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
