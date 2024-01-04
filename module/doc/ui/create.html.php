@@ -170,7 +170,7 @@ else
                 formGroup
                 (
                     set::width('1/2'),
-                    set::label($lang->doc->lib),
+                    set::label($lang->doc->libAndModule),
                     set::required(true),
                     picker
                     (

@@ -88,19 +88,7 @@ form
     (
         modal
         (
-            div
-            (
-                setClass('flex items-center'),
-                div($lang->doc->edit),
-                entityLabel
-                (
-                    set::entityID($doc->id),
-                    set::level(1),
-                    set::text($doc->title),
-                    set::reverse(true),
-                    setClass('pl-2')
-                )
-            ),
+            modalHeader(),
             set::id('modalBasicInfo'),
             on::change('#product',   "loadObjectModules"),
             on::change('#project',   "loadObjectModules"),
@@ -123,7 +111,7 @@ form
             (
                 set::width('1/2'),
                 set::required(true),
-                set::label($lang->doc->lib),
+                set::label($lang->doc->libAndModule),
                 picker
                 (
                     set::name('module'),
