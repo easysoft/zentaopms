@@ -812,9 +812,10 @@ class baseRouter
 
         $vision  = '';
         $sql     = new sql();
-        $account = $sql->quote($account);
         if($this->config->installed and validater::checkAccount($account))
         {
+            $account = $sql->quote($account);
+
             if(!empty($_COOKIE['vision']))
             {
                 $vision = $_COOKIE['vision'];
