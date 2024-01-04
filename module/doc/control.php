@@ -667,12 +667,14 @@ class doc extends control
         }
 
         $lib = $this->doc->getLibByID((int)$doc->lib);
-        if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->id;
+        if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
+        if($this->app->tab == 'doc' && $lib->type == 'execution') $appendLib = $doc->lib;
+
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($doc, $objectType, 0);
         if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, $appendLib);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
 
         /* Get doc. */
         if($docID)

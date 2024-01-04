@@ -2,7 +2,7 @@
 #title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
 #title:focus {box-shadow: none; outline: unset}
 .titleBox{padding: 7px; background: #fff}
-#modalBasicInfo .form-group {margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)));}
+#modalBasicInfo .form-group {margin-top: 0.5rem}
 .form-horz>:not([hidden])~:not([hidden]){margin-top: 0;}
 #whitelistBox .form-group-wrapper+.form-group-wrapper {margin-top: 10px;}
 #titleBox:before {position: absolute; --tw-translate-y: .125rem; --tw-scale-x: 1.25; --tw-scale-y: 1.25; --tw-text-opacity: 1; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); content: "*"; display: inline-block; margin-left: 0.25rem; transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }

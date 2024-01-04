@@ -2040,7 +2040,7 @@ class docModel extends model
 
             $this->loadModel($type);
             $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
-            $objectID =  method_exists($this->$type, 'saveState') ? $this->{$type}->saveState($objectID, $objects) : $this->{$type}->checkAccess($objectID, $objects);
+            $objectID = method_exists($this->$type, 'saveState') ? $this->{$type}->saveState($objectID, $objects) : $this->{$type}->checkAccess($objectID, $objects);
             $libs     = $this->getLibsByObject($type, $objectID, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if($this->app->tab != 'doc' && isset($libs[$libID]))
