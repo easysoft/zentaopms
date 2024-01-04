@@ -185,10 +185,11 @@ $config->bug->dtable->fieldList['task']['group']      = 8;
 $config->bug->dtable->fieldList['task']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'task&id,name');
 $config->bug->dtable->fieldList['task']['sortType']   = true;
 
-$config->bug->dtable->fieldList['mailto']['title']    = $lang->bug->mailto;
-$config->bug->dtable->fieldList['mailto']['type']     = 'user';
-$config->bug->dtable->fieldList['mailto']['group']    = 9;
-$config->bug->dtable->fieldList['mailto']['sortType'] = true;
+$config->bug->dtable->fieldList['mailto']['title']     = $lang->bug->mailto;
+$config->bug->dtable->fieldList['mailto']['type']      = 'text';
+$config->bug->dtable->fieldList['mailto']['group']     = 9;
+$config->bug->dtable->fieldList['mailto']['sortType']  = true;
+$config->bug->dtable->fieldList['mailto']['delimiter'] = ',';
 
 $config->bug->dtable->fieldList['keywords']['title']    = $lang->bug->keywords;
 $config->bug->dtable->fieldList['keywords']['type']     = 'text';
