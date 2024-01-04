@@ -30,6 +30,8 @@ foreach($fields as $fieldName => $field)
     if($fieldName == 'color') continue;
     if(isset($field['options']) && $field['options'] == 'users') $field['options'] = $users;
     $items[$fieldName] = array('name' => $fieldName, 'label' => zget($lang->story, $fieldName), 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
+    if(isset($customFields[$fieldName]) && strpos(",$showFields,", ",$fieldName,") === false) $items[$fieldName]['hidden'] = true;
+    if($fieldName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $items['sourceNote']['hidden'] = true;
 }
 $items['title']['inputClass']        = 'filter-none';
 $items['assignedTo']['ditto']        = true;
@@ -38,6 +40,12 @@ $items['stage']['ditto']             = true;
 $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
+
+if($storyType == 'requirement')
+{
+    unset($items['plan']);
+    unset($items['stage']);
+}
 
 if(!$branchProduct) unset($items['branch'], $customFields['branch']);
 

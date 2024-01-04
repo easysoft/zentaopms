@@ -23,7 +23,6 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
     if($stories) $items[] = array('name' => 'uploadImage', 'label' => '', 'control' => 'hidden', 'hidden' => true);
-    if(strpos(",$showFields,", ",source,") == false) unset($fields['sourceNote']);
     unset($fields['color']);
 
     $cols = array_merge($items, array_map(function($name, $field)
@@ -44,7 +43,8 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
     foreach($cols as $index => $col)
     {
         $colName = $col['name'];
-        if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") == false) $cols[$index]['hidden'] = true;
+        if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
+        if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
     }
     return $cols;
 };
