@@ -1,7 +1,7 @@
-$(document).on('change', '#begin,#end', function()
+$(document).on('change', '[name="begin"],[name="end"]', function()
 {
-    const begin  = $('#begin').val().replaceAll('-', '');
-    const end    = $('#end').val().replaceAll('-', '');
+    const begin  = $('[name="begin"]').val().replaceAll('-', '');
+    const end    = $('[name="end"]').val().replaceAll('-', '');
     const params = condition + '&beginTime=' + begin + '&endTime=' + end;
     loadPage($.createLink('testtask', 'browse', params), '#mainContent');
 });
