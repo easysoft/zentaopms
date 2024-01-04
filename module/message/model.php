@@ -193,6 +193,7 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'testtask') $toList = $object->owner;
         if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
         if(empty($toList) and $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) and $objectType == 'release')
         {
             /* Get notifiy persons. */

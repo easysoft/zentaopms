@@ -105,6 +105,11 @@ class xuanxuanMessage extends messageModel
                         $target .= ',' . $user;
                     }
                 }
+                elseif($objectType == 'demandpool')
+                {
+                    if(!empty($object->owner))    $target .= trim($object->owner, ',');
+                    if(!empty($object->reviewer)) $target .= ',' . trim($object->reviewer, ',');
+                }
                 else
                 {
                     if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
