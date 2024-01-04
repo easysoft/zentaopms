@@ -18,10 +18,16 @@ class dtable extends wg
         'sortLink?:array|string',                // 排序链接。
         'orderBy?:string',                       // 排序字段。
         'loadPartial?: bool',                    // 启用部分加载，不更新浏览器地址栏 URL。
-        'loadOptions?: array'                    // 分页和排序加载选项。
+        'loadOptions?: array',                   // 分页和排序加载选项。
+        'userMap?: array'                        // 用户账号姓名对应列表
     );
 
     static $dtableID = 0;
+
+    public static function getPageJS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
 
     protected function created()
     {
@@ -104,14 +110,15 @@ class dtable extends wg
      * 格式化表格列配置。
      * Format table column configuration.
      *
-     * @param  int    $module
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function initCols($module)
+    public function initCols(string $module)
     {
         global $app;
         $colConfigs = $this->prop('cols');
+        $dataPairs  = $this->prop('userMap', array());
         foreach($colConfigs as $field => &$config)
         {
             if(is_object($config)) $config = (array)$config;
@@ -122,8 +129,15 @@ class dtable extends wg
             if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
 
             if(!empty($config['type']) && $config['type'] == 'control') $config = $this->initFormCol($config);
-
             if(!empty($config['actionsMap'])) $config['actionsMap'] = $this->initActions($config['actionsMap'], $module);
+
+            if(!empty($config['delimiter']))
+            {
+                if(!empty($config['map']))     $dataPairs = $config['map'];
+                if(!empty($config['userMap'])) $dataPairs = $config['userMap'];
+                $delimiter = is_string($config['delimiter']) ? $config['delimiter'] : ',';
+                $config['map'] = jsRaw("(value) => {return window.setMultipleCell(value, '" . json_encode($dataPairs). "', '{$delimiter}')}");
+            }
         }
 
         $this->setProp('cols', array_values($colConfigs));
