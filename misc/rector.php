@@ -7,6 +7,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Misc\Rector\RemoveReturnType;
 use Misc\Rector\DowngradeParameterType;
+use Misc\Rector\RemoveFunctionType;
 
 $version = getenv('PHP_VERSION');
 $version = $version ?: '72';
@@ -22,6 +23,7 @@ return static function (RectorConfig $rectorConfig) use ($version, $cacheDir): v
     $rectorConfig->sets([constant(DowngradeLevelSetList::class . '::DOWN_TO_PHP_' . $version)]);
     $rectorConfig->rules([
         RemoveReturnType::class,
+        RemoveFunctionType::class,
         DowngradeParameterType::class
     ]);
     // $rectorConfig->sets([constant(DowngradeSetList::class . '::PHP_' . $version)]);
