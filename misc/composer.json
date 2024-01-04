@@ -2,6 +2,11 @@
     "require-dev": {
         "rector/rector": "0.16.*"
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Misc\\Rector\\": "rector/"
+        }
+    },
     "scripts": {
         "rector": [
             "Composer\\Config::disableProcessTimeout",
