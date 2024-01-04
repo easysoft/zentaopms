@@ -359,7 +359,7 @@ div
                                     set('id', 'goalTip'),
                                     set('class', 'text-light')
                                 ),
-                                $execution->desc
+                                strip_tags($execution->desc)
                             ) : null,
                             item
                             (
