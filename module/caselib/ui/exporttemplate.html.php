@@ -27,6 +27,7 @@ formPanel
     (
         set::label($lang->caselib->templateType),
         set::name('encode'),
+        set::required(true),
         set::value('utf-8'),
         set::control(array('type' => 'picker', 'items' => $config->charsets[$this->cookie->lang]))
     ),

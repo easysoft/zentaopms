@@ -29,6 +29,7 @@ formPanel
         picker
         (
             set::name('encode'),
+            set::required(true),
             set::value('utf-8'),
             set::control('picker'),
             set::items($config->charsets[$this->cookie->lang])

@@ -28,6 +28,7 @@ form
     (
         set::label($lang->file->extension),
         set::name('fileType'),
+        set::required(true),
         set::value('xlsx'),
         set::control('picker'),
         set::items(array('xlsx' => 'xlsx', 'xls' => 'xls'))
