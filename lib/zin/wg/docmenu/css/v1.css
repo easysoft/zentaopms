@@ -16,7 +16,18 @@
 .module-menu .tree .tree-item .tree-item-content:hover .tree-actions .icon {display: block;}
 .module-menu .tree .tree-item .tree-item-content .tree-actions .with-popover-show .icon {display: block;}
 
+.module-menu-header.is-fixed {position: absolute; left: 0; top: -44px; width: 168px; height: 32px; border: 1px solid var(--color-border); justify-content: center; padding: 0 24px; border-right: 0;}
+.module-menu-header.is-fixed::before,
+.module-menu-header.is-fixed::after {content: ''; position: absolute; top: 0; right: -12px; width: 0; height: 0; border-style: solid; border-color: transparent transparent transparent var(--color-border); border-width: 15px 0 15px 12px;}
+.module-menu-header.is-fixed::after {right: -11px; border-color: transparent transparent transparent var(--color-canvas);}
+.has-module-menu-header.is-sidebar-left-collapsed .module-menu-header.is-fixed {left: var(--gutter-width)}
+.module-menu-header.is-fixed .module-title {font-size: var(--font-size-base);}
+.module-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
+.module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
+
 .tree > .tree-item.project-tree-title {font-size: 16px; margin-bottom: 0.5rem; pointer-events: none;}
 .tree > .tree-item.project-tree-title .text {margin-left: 0.5rem;}
 .tree > .tree-item.project-tree-title .item-icon {color: var(--nav-active-color); opacity: 1;}
 .tree > .tree-item.project-tree-title > .tree-toggle-icon {display: none;}
+
+.has-module-menu-header #mainMenu {padding-left: 180px;}

@@ -119,62 +119,64 @@ else
 }
 
 include 'lefttree.html.php';
-div
+featureBar
 (
     div
     (
-        setClass('actions-menu flex'),
+        setClass('searchBox'),
+        inputControl
+        (
+            input
+            (
+                set::name('title'),
+                set::value($searchTitle),
+                set::placeholder($lang->doc->fileTitle)
+            ),
+            span
+            (
+                setClass('input-control-suffix'),
+                btn(set(array('icon' => 'search', 'class' => 'ghost', 'onclick' => 'searchTitle()')))
+            )
+        )
+    )
+);
+toolbar
+(
+    div
+    (
+        setClass('flex'),
         div
         (
-            setClass('searchBox'),
-            inputControl
+            setClass('btn-group'),
+            a
             (
-                input
-                (
-                    set::name('title'),
-                    set::value($searchTitle),
-                    set::placeholder($lang->doc->fileTitle)
-                ),
-                span
-                (
-                    setClass('input-control-suffix'),
-                    btn(set(array('icon' => 'search', 'class' => 'ghost', 'onclick' => 'searchTitle()')))
-                )
+                icon('bars'),
+                setClass('btn switchBtn'),
+                setClass($viewType == 'list' ? ' text-primary' : ''),
+                set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
+                set('data-app', $app->tab)
+            ),
+            a
+            (
+                icon('cards-view'),
+                setClass('btn switchBtn'),
+                setClass($viewType != 'list' ? ' text-primary' : ''),
+                set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle")),
+                set('data-app', $app->tab)
             )
         ),
-        div
+        common::hasPriv('doc', 'createLib') ? btn
         (
-            setClass('flex'),
-            div
-            (
-                setClass('btn-group'),
-                a
-                (
-                    icon('bars'),
-                    setClass('btn switchBtn'),
-                    setClass($viewType == 'list' ? ' text-primary' : ''),
-                    set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
-                    set('data-app', $app->tab)
-                ),
-                a
-                (
-                    icon('cards-view'),
-                    setClass('btn switchBtn'),
-                    setClass($viewType != 'list' ? ' text-primary' : ''),
-                    set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            common::hasPriv('doc', 'createLib') ? btn
-            (
-                setClass('ml-4 btn secondary'),
-                set::text($lang->doc->createLib),
-                set::icon('plus'),
-                set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
-                set('data-toggle', 'modal')
-            ) : null
-        )
-    ),
+            setClass('ml-4 btn secondary'),
+            set::text($lang->doc->createLib),
+            set::icon('plus'),
+            set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
+            set('data-toggle', 'modal')
+        ) : null
+    )
+);
+div
+(
     div
     (
         setClass('mt-2'),

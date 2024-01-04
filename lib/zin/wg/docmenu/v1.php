@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'sidebar' . DS . 'v1.php';
 class docMenu extends wg
 {
     private array $modules = array();
@@ -422,14 +424,28 @@ class docMenu extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build(): array
     {
         $this->setMenuTreeProps();
         $title     = $this->getTitle();
         $menuLink  = $this->prop('menuLink', '');
         $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
 
-        return div
+        $isInSidebar = $this->parent instanceof sidebar;
+
+        $header = h::header
+        (
+            setClass('module-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
+            span
+            (
+                setClass('module-title text-lg font-semibold clip'),
+                $title
+            )
+        );
+        return array
+        (
+            $isInSidebar ? $header : null,
+            div
             (
                 $menuLink ? dropmenu
                 (
@@ -441,16 +457,6 @@ class docMenu extends wg
                 div
                 (
                     setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
-                    $title && empty($menuLink) ? h::header
-                    (
-                        setClass('h-10 flex items-center pl-4 flex-none gap-3 clip mr-4'),
-                        span
-                        (
-                            set::title($title),
-                            setClass('module-title text-lg font-semibold'),
-                            html($title)
-                        )
-                    ) : null,
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
@@ -459,7 +465,9 @@ class docMenu extends wg
                         zui::tree(set::_tag('menu'), $treeProps)
                     ),
                     $this->buildBtns()
-                )
+                ),
+                $isInSidebar ? h::js("$('#mainContainer').addClass('has-module-menu-header')") : null
+            )
         );
     }
 }

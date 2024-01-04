@@ -25,7 +25,6 @@ if($app->rawModule == 'doc' && $app->rawMethod == 'myspace')
 
 sidebar
 (
-    set::width('200px'),
     set::preserve(false),
     docMenu
     (
