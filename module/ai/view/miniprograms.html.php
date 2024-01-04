@@ -38,7 +38,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
     <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
       <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
     <?php endif; ?>
-    </div>
+  </div>
 </div>
 <div class="modal fade" id="disable-miniprogram">
   <div class="modal-dialog" style="width: 480px;">

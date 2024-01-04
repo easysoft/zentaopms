@@ -130,3 +130,12 @@ function publishMiniProgram()
     $('input[name="prompt"]').prop('value', $('#autocomplete-textarea').text());
     $('input[name="toPublish"]').prop('value', '1');
 }
+
+/**
+ * Open publish mini program dialog.
+ */
+function openPublishDialog()
+{
+    const $modal = $('#publish-miniprogram');
+    $modal.modal('show', 'fit');
+}
