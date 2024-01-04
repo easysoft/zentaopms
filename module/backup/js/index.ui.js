@@ -95,7 +95,7 @@ window.getCellSpan = function(cell)
 
 window.restore = function(name)
 {
-    zui.Modal.confirm({message: confirmDeleteLang, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmRestoreLang, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res)
         {

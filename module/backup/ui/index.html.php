@@ -18,6 +18,7 @@ jsvar('backupError', empty($backupError) ? '' : $backupError);
 jsvar('startBackup', $lang->backup->backup);
 jsvar('getSpaceLoading', $lang->backup->getSpaceLoading);
 jsvar('confirmDeleteLang', $lang->backup->confirmDelete);
+jsvar('confirmRestoreLang', $lang->backup->confirmRestore);
 
 featureBar
 (
