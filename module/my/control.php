@@ -1675,6 +1675,8 @@ EOF;
 
         $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
 
+        setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+
         echo js::locate($this->createLink('index', 'index'), 'parent');
     }
 }

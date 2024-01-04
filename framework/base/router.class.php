@@ -810,13 +810,20 @@ class baseRouter
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
         if(empty($account))                              $account = $this->cookie->za;
 
-        $vision = '';
+        $vision  = '';
+        $sql     = new sql();
+        $account = $sql->quote($account);
         if($this->config->installed and validater::checkAccount($account))
         {
-            $sql     = new sql();
-            $account = $sql->quote($account);
-            $vision  = $this->dbQuery("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
-            if($vision) $vision = $vision->value;
+            if(!empty($_COOKIE['vision']))
+            {
+                $vision = $_COOKIE['vision'];
+            }
+            else
+            {
+                $vision  = $this->dbQuery("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
+                if($vision) $vision = $vision->value;
+            }
 
             $user = $this->dbQuery("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
             if(!empty($user->visions))
@@ -832,7 +839,10 @@ class baseRouter
         if($defaultVision != 'lite' && $defaultVision != 'or') $defaultVision = 'rnd';
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
-        $this->config->vision = $vision ? $vision : $defaultVision;
+        $vision = $vision ? $vision : $defaultVision;
+        if(empty($_COOKIE['vision'])) setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+
+        $this->config->vision = $vision;
     }
 
     /**
