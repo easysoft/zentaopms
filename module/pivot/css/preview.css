@@ -35,3 +35,5 @@
 .pivot-design {padding-left: 24px; padding-right: 12px;}
 .pivot-edit {padding-left: 12px; padding-right: 12px;}
 .pivot-delete {padding-left: 12px; padding-right: 8px;}
+
+#pivotGroups > li a {white-space: nowrap; overflow: hidden; }
