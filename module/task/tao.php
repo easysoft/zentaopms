@@ -772,7 +772,7 @@ class taskTao extends taskModel
             $newTeamInfo->left   = $currentTeam->estimate;
         }
         $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
-        return $left;
+        return (float)$left;
     }
 
     /**
