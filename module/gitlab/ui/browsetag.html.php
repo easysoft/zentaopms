@@ -17,45 +17,44 @@ if(!empty($permissionError))
     return;
 }
 
-featureBar
+detailHeader
 (
-    backBtn
+    to::title
     (
-        set::text($lang->goback),
-        set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}"))
-    ),
-    form
-    (
-        setID('searchForm'),
-        setClass('ml-4'),
-        set::actions(array()),
-        formRow
+        entityLabel
         (
-            input
+            span($project->name_with_namespace)
+        ),
+        form
+        (
+            setID('searchForm'),
+            setClass('ml-4'),
+            set::actions(array()),
+            formRow
             (
-                set::placeholder($lang->gitlab->tag->placeholderSearch),
-                set::name('keyword'),
-                set::value($keyword)
-            ),
-            btn
-            (
-                setClass('primary'),
-                $lang->gitlab->search,
-                on::click('search')
+                input
+                (
+                    set::placeholder($lang->gitlab->tag->placeholderSearch),
+                    set::name('keyword'),
+                    set::value($keyword)
+                ),
+                btn
+                (
+                    setClass('primary'),
+                    $lang->gitlab->search,
+                    on::click('search')
+                )
             )
         )
-    )
-);
-hasPriv('instance', 'manage') ? toolBar
-(
-    item
+    ),
+    common::hasPriv('instance', 'manage') ? to::suffix(btn
     (
-        setClass('btn primary'),
-        set::text($lang->gitlab->createTag),
         set::icon('plus'),
-        set::url(createLink('gitlab', 'createTag', "gitlabID={$gitlabID}&projectID={$projectID}"))
-    )
-) : null;
+        set::url(createLink('gitlab', 'createTag', "gitlabID={$gitlabID}&projectID={$projectID}")),
+        set::type('primary'),
+        $lang->gitlab->createTag
+    )) : null
+);
 
 $tagList = initTableData($gitlabTagList, $config->gitlab->dtable->tag->fieldList, $this->gitlab);
 dtable

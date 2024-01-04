@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+use backup;
+
 $items = array();
 $items[] = array('name' => 'title', 'label' => $lang->gitlab->gitlabIssue, 'control' => 'static');
 $items[] = array('name' => 'objectTypeList', 'label' => $lang->gitlab->objectType, 'control' => 'picker', 'items' => $objectTypes);
@@ -29,33 +31,36 @@ if(empty($gitlabIssues))
         setClass('panel-form'),
         set::size('lg'),
         set::title($lang->gitlab->importIssue),
+        set::headingActions(array(array(
+            'url'  => createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}"),
+            'type' => 'primary',
+            'icon' => 'back',
+            'text' => $lang->goback
+        ))),
         $lang->gitlab->noImportableIssues
     );
 }
 else
 {
-formBatchPanel
-(
-    h::input
+    formBatchPanel
     (
-        set::type('hidden'),
-        set::name('gitlabID'),
-        set::value($gitlabID)
-    ),
-    h::input
-    (
-        set::type('hidden'),
-        set::name('gitlabProjectID'),
-        set::value($gitlabProjectID)
-    ),
-    set::title($lang->gitlab->importIssue),
-    set::mode('edit'),
-    set::items($items),
-    set::data($gitlabIssues),
-    set::onRenderRowCol(jsRaw('window.renderRowCol')),
-    on::change('[data-name="productList"]', 'loadProductExecutions')
-);
+        h::input
+        (
+            set::type('hidden'),
+            set::name('gitlabID'),
+            set::value($gitlabID)
+        ),
+        h::input
+        (
+            set::type('hidden'),
+            set::name('gitlabProjectID'),
+            set::value($gitlabProjectID)
+        ),
+        set::title($lang->gitlab->importIssue),
+        set::mode('edit'),
+        set::items($items),
+        set::data($gitlabIssues),
+        set::onRenderRowCol(jsRaw('window.renderRowCol')),
+        on::change('[data-name="productList"]', 'loadProductExecutions')
+    );
 }
-
-render();
-

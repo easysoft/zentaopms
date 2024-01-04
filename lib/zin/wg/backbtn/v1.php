@@ -63,7 +63,7 @@ class backBtn extends btn
             'store'          => 'store-browse',
             'space'          => 'space-browse',
             'serverroom'     => 'serverroom-browse',
-            'gitlab'         => 'gitlab-browseproject'
+            'gitlab'         => 'space-browse,gitlab-browseproject'
         );
 
         $props = parent::getProps();

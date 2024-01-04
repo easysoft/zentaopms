@@ -10,24 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
-featureBar
+detailHeader
 (
-    backBtn
+    common::hasPriv('instance', 'manage') ? to::suffix(btn
     (
-        set::text($lang->goback),
-        set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}"))
-    )
-);
-hasPriv('instance', 'manage') ? toolBar
-(
-    item
-    (
-        setClass('btn primary'),
-        set::text($lang->gitlab->createBranch),
         set::icon('plus'),
-        set::url(createLink('gitlab', 'createBranch', "gitlabID={$gitlabID}&projectID={$projectID}"))
-    )
-) : null;
+        set::url(createLink('gitlab', 'createBranch', "gitlabID={$gitlabID}&projectID={$projectID}")),
+        set::type('primary'),
+        $lang->gitlab->createTag
+    )) : null
+);
 
 $branchList = initTableData($gitlabBranchList, $config->gitlab->dtable->branch->fieldList, $this->gitlab);
 dtable
