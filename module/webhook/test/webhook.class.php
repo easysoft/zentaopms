@@ -329,31 +329,6 @@ class webhookTest
     }
 
     /**
-     * Fetch hook Test
-     *
-     * @param  object $webhook
-     * @param  object $sendData
-     * @param  int    $actionID
-     * @access public
-     * @return int
-     */
-    public function fetchHookTest($objectType, $objectID, $actionType, $actionID = 0)
-    {
-        static $webhooks = array();
-        if(!$webhooks) $webhooks = $this->getListTest();
-        if(!$webhooks) return true;
-
-        foreach($webhooks as $webhook)
-        {
-            $postData = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
-            $objects = $this->objectModel->fetchHook($webhook, $postData, $actionID);
-        }
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Save data Test
      *
      * @param  int    $webhookID
