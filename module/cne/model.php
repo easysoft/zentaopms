@@ -402,14 +402,14 @@ class cneModel extends model
     {
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
-        $apiparams = new stdclass();
-        $apiparams->cluster   = '';
-        $apiparams->namespace = !empty($instance->spacedata->k8space) ? $instance->spacedata->k8space : $defaultSpace->k8space;
-        $apiparams->name      = $instance->k8name;
-        $apiparams->tail      = 500;
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = !empty($instance->spaceData->k8space) ? $instance->spaceData->k8space : $defaultSpace->k8space;
+        $apiParams->name      = $instance->k8name;
+        $apiParams->tail      = 500;
 
-        $apiurl = "/api/cne/app/logs";
-        return $this->apiget($apiurl, $apiparams, $this->config->CNE->api->headers);
+        $apiUrl = "/api/cne/app/logs";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
