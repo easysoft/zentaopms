@@ -62,6 +62,7 @@ class userModel extends model
             if(!empty($user->email) && !validater::checkEmail($user->email)) dao::$errors["email[{$key}]"][] = sprintf($this->lang->error->email, $this->lang->user->email);
             if(!empty($user->phone) && !validater::checkPhone($user->phone)) dao::$errors["phone[{$key}]"][] = sprintf($this->lang->error->phone, $this->lang->user->phone);
             if(!empty($user->mobile) && !validater::checkMobile($user->mobile)) dao::$errors["mobile[{$key}]"][] = sprintf($this->lang->error->mobile, $this->lang->user->mobile);
+            if(empty($user->gender)) dao::$errors["gender[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->gender);
 
             /* 检查密码强度是否符合安全设置。*/
             /* Check if the password strength meets the security settings. */
