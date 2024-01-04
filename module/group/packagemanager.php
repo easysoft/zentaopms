@@ -477,9 +477,11 @@ $config->group->subset->roadmap = new stdclass();
 $config->group->subset->roadmap->order = 125;
 $config->group->subset->roadmap->nav   = 'product';
 
+/* TODO(@Wenrui LI): resurrect AI-related features later. *//*
 $config->group->subset->ai = new stdclass();
 $config->group->subset->ai->order = 2020;
 $config->group->subset->ai->nav   = 'admin';
+*/
 
 $config->group->subset->codereview = new stdclass();
 $config->group->subset->codereview->order = 2580;
@@ -3710,6 +3712,7 @@ $config->group->package->exportDatatable->subset = 'dataview';
 $config->group->package->exportDatatable->privs  = array();
 $config->group->package->exportDatatable->privs['dataview-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('dataview-browse', 'dataview-query'), 'recommend' => array());
 
+/* TODO(@Wenrui LI): resurrect AI-related features later. *//*
 $config->group->package->aiChatting = new stdclass();
 $config->group->package->aiChatting->order  = 2020;
 $config->group->package->aiChatting->subset = 'ai';
@@ -3764,6 +3767,7 @@ $config->group->package->deletePrompt->order  = 2140;
 $config->group->package->deletePrompt->subset = 'ai';
 $config->group->package->deletePrompt->privs  = array();
 $config->group->package->deletePrompt->privs['ai-promptDelete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-prompts', 'ai-promptView'), 'recommend' => array());
+*/
 
 $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;

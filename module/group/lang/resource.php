@@ -1873,7 +1873,7 @@ $lang->resource->api->getModel     = 'getModel';
 $lang->resource->api->debug        = 'debug';
 $lang->resource->api->sql          = 'sql';
 
-/* AI methods. */
+/* AI methods. TODO(@Wenrui LI): resurrect AI-related features later. *//*
 $lang->resource->ai = new stdclass();
 $lang->resource->ai->models                 = 'modelBrowse';
 $lang->resource->ai->editModel              = 'modelEdit';
@@ -1885,6 +1885,7 @@ $lang->resource->ai->promptView             = 'promptView';
 $lang->resource->ai->promptExecute          = 'promptExecute';
 $lang->resource->ai->promptExecutionReset   = 'promptExecutionReset';
 $lang->resource->ai->chat                   = 'chat';
+*/
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';

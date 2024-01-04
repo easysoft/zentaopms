@@ -226,6 +226,7 @@ if(helper::hasFeature('devops'))
     $lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
 }
 
+/* TODO(@Wenrui LI): resurrect AI-related features later. *//*
 if($config->vision != 'or')
 {
     $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
@@ -241,6 +242,7 @@ if($config->vision != 'or')
     // $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
     $lang->admin->menuList->ai['menuOrder']['15'] = 'models';
 }
+*/
 
 if($config->edition != 'max' and $config->edition != 'ipd')
 {
