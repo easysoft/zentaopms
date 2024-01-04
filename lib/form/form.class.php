@@ -213,7 +213,7 @@ class form extends fixer
                 if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter']);
 
                 /* 检查必填字段。Check required fields. */
-                if(isset($config['required']) && $config['required'] && empty($rowData->$field))
+                if(isset($config['required']) && $config['required'] && !isset($rowData->$field))
                 {
                     $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
                     $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
@@ -267,7 +267,7 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
 
-        if(isset($config['required']) && $config['required'] && empty($data))
+        if(isset($config['required']) && $config['required'] && !isset($data))
         {
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
             $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
