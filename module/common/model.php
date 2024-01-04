@@ -29,10 +29,7 @@ class commonModel extends model
         $this->setApproval();
         $this->loadConfigFromDB();
         $this->loadCustomFromDB();
-
-        /* 用户模块在loadConfigFromDB之前就初始化了，所以要手动加载。 */
-        $this->app->loadLang('user');
-        $this->app->loadModuleConfig('user');
+        $this->initAuthorize();
 
         if(!$this->checkIP()) return print($this->lang->ipLimited);
     }
@@ -281,7 +278,6 @@ class commonModel extends model
     {
         if($this->session->user)
         {
-            if(!$this->app->upgrading) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
         elseif($this->app->company->guest || (PHP_SAPI == 'cli' && (!isset($_SERVER['RR_MODE']) || $_SERVER['RR_MODE'] == 'jobs')))
@@ -294,9 +290,26 @@ class commonModel extends model
             $user->avatar   = '';
             $user->role     = 'guest';
             $user->admin    = false;
-            $user->rights   = $this->loadModel('user')->authorize('guest');
             $user->groups   = array('group');
             $user->visions  = $this->config->vision;
+            $this->session->set('user', $user);
+            $this->app->user = $this->session->user;
+        }
+    }
+
+    /**
+     * 初始化用户权限和视图。
+     * Init user authorize.
+     *
+     * @access private
+     * @return void
+     */
+    private function initAuthorize()
+    {
+        if(isset($this->app->user))
+        {
+            $user = $this->app->user;
+            $user->rights = $this->loadModel('user')->authorize($user->account);
             if(!$this->app->upgrading) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
