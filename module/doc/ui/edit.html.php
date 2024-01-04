@@ -186,7 +186,7 @@ form
                                 'btnType' => 'submit'
                             )
                         ),
-                        $lang->doc->release
+                        $lang->save
                     )
                 )
             )
