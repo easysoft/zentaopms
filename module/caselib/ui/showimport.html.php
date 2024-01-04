@@ -58,6 +58,7 @@ else
         'label'   => $lang->testcase->module,
         'control' => 'picker',
         'items'   => $modules,
+        'required' => true,
         'width'   => '200px'
     );
 
@@ -67,6 +68,7 @@ else
         'label'   => $lang->testcase->type,
         'control' => 'picker',
         'items'   => $lang->testcase->typeList,
+        'required' => true,
         'width'   => '160px'
     );
 

@@ -303,6 +303,8 @@ class caselibModel extends model
         }
         $this->dao->commit();
 
+        if(dao::isError()) return false;
+
         if($data->isEndPage)
         {
             if($this->session->fileImport) @unlink($this->session->fileImport);
