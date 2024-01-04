@@ -516,6 +516,12 @@ class instanceModel extends model
     public function install(object $app, object $dbInfo, object $customData, int $spaceID = null, array $settings = array())
     {
         $this->loadModel('space');
+        if(!isset($this->app->user->account))
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+        }
+
         if($spaceID)
         {
             $space = $this->space->getByID($spaceID);

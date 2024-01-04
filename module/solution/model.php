@@ -146,24 +146,17 @@ class solutionModel extends model
         $cloudApp->version     = $componentApp->version;
         $cloudApp->app_version = $componentApp->app_version;
 
-        if($componentApp->external)
+        /* Check enough memory to install app, or not.*/
+        if(!$this->loadModel('instance')->enoughMemory($cloudApp))
         {
-            $instance = $this->installExternalApp($cloudApp, $componentApp->external);
+            $this->saveStatus($solution->id, 'notEnoughResource');
+            dao::$errors[] = $this->lang->solution->errors->notEnoughResource;
+            return false;
         }
-        else
-        {
-            /* Check enough memory to install app, or not.*/
-            if(!$this->loadModel('instance')->enoughMemory($cloudApp))
-            {
-                $this->saveStatus($solution->id, 'notEnoughResource');
-                dao::$errors[] = $this->lang->solution->errors->notEnoughResource;
-                return false;
-            }
 
-            if($solution->status != 'installing') return false;
-            $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
-            $instance = $this->installApp($cloudApp, $settings);
-        }
+        if($solution->status != 'installing') return false;
+        $settings = $this->mountSettings($solutionSchema, $componentApp->chart, $components, $allMappings, in_array('sonarqube', $apps));
+        $instance = $this->installApp($cloudApp, $settings);
 
         if(!$instance)
         {
@@ -253,16 +246,6 @@ class solutionModel extends model
 
             $instance = $this->instance->instanceOfSolution($solution, $componentApp->chart);
             if(!$instance && !$this->installInstance($solution, $componentApp, $solutionSchema, $allMappings)) return false;
-
-            if($componentApp->external)
-            {
-                $tempMappings = $this->getExternalMapping($solutionSchema, $componentApp);
-                if($tempMappings) $allMappings[$category] = $tempMappings;
-
-                $componentApp->status = 'configured';
-                $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
-                continue;
-            }
 
             /* Wait instanlled app started. */
             if(!$this->checkSarted($instance, $solutionID, $solutionSchema, $category)) return false;
