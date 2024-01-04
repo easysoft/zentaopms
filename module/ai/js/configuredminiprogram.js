@@ -475,7 +475,7 @@ function updatePromptPreview()
     {
         const result = match.match(/<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/)[1];
         const fieldIndex = words.get(result);
-        const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).prop('value');
+        const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).val();
         if(!fieldValue) return;
         innerHTML = innerHTML.replace(new RegExp(`&lt;${result}&gt;`, 'g'), fieldValue);
     });
@@ -579,7 +579,7 @@ function updateButtonStatus()
     }
 }
 
-$(function ()
+$(function()
 {
     $('#sortable-list').sortable(
         {
