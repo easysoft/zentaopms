@@ -238,6 +238,7 @@ $config->program->browse->dtable->fieldList['budget']['group']    = 3;
 $config->program->browse->dtable->fieldList['invested']['name']     = 'invested';
 $config->program->browse->dtable->fieldList['invested']['title']    = $lang->program->invested;
 $config->program->browse->dtable->fieldList['invested']['minWidth'] = 70;
+$config->program->browse->dtable->fieldList['invested']['width']    = 70;
 $config->program->browse->dtable->fieldList['invested']['type']     = 'format';
 $config->program->browse->dtable->fieldList['invested']['sortType'] = false;
 $config->program->browse->dtable->fieldList['invested']['show']     = true;
