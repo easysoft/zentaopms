@@ -600,8 +600,10 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->title = $this->lang->testcase->review;
-        $this->view->users = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->title      = $this->lang->testcase->review;
+        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->testcaseID = $caseID;
+        $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
         $this->display();
     }
 
