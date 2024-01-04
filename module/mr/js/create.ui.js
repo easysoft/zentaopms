@@ -107,7 +107,7 @@ function onNeedCiChange(event)
 
 function changeRepo()
 {
-    const repoID = $('input[name=changeRepo]').val();
+    const repoID = $('input[name=repoID]').val();
     loadPage($.createLink('mr', 'create', `repoID=${repoID}&objectID=${objectID}`));
 }
 

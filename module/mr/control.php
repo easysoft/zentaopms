@@ -216,7 +216,7 @@ class mr extends control
             $repoList = $this->loadModel('repo')->getList($objectID);
             foreach($repoList as $repoInfo)
             {
-                if(in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) $repoPairs[$repoInfo->id] = $repoInfo->name;
+                if(in_array($repoInfo->SCM, $this->config->repo->gitServiceTypeList)) $repoPairs[$repoInfo->id] = $repoInfo->name;
             }
         }
 
