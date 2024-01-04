@@ -1072,7 +1072,7 @@ class fileModel extends model
         if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
         {
             $imageSize  = $this->getImageSize($file);
-            $imageWidth = $imageSize[0];
+            $imageWidth = $imageSize[0] ?? 0;
         }
 
         $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");

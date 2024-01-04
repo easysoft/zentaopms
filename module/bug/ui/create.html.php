@@ -18,6 +18,31 @@ jsVar('createRelease',         $lang->release->create);
 jsVar('refresh',               $lang->refreshIcon);
 jsVar('projectExecutionPairs', $projectExecutionPairs);
 
+/* 当执行结果存在附件的时候，请求接口获取二进制文件流，并且添加到upload组件中。 */
+/* when the execution result has attachments, request the interface to get the binary file stream and add it to the upload component. */
+$jsonFileResults = json_encode(array_values($resultFiles));
+$readFileUrl     = createLink('file', 'read', "fileID=[ID]&stream=1");
+h::js(
+<<<JAVASCRIPT
+    if(Array.isArray($jsonFileResults) && $jsonFileResults.length == 0) return;
+
+    $.each($jsonFileResults, function(_, file) {
+        var requestUrl = "$readFileUrl".replace('[ID]', file.id);
+        $.get(requestUrl, function(data)
+        {
+            var binaryString = atob(data);
+            var len = binaryString.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
+            var blob = new Blob([bytes], { type: file.type });
+
+            var filePoint = new File([blob], file.title);
+            $('.file-upload').zui('upload').addFileItem([filePoint]);
+        });
+    });
+JAVASCRIPT
+);
+
 formPanel
 (
     on::change('[name="product"]',      'changeProduct'),
@@ -392,7 +417,10 @@ formPanel
         formGroup
         (
             set::label($lang->bug->files),
-            upload()
+            upload
+            (
+                setClass('w-full file-upload'),
+            )
         )
     ),
     formRow

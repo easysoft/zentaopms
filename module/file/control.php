@@ -461,7 +461,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function read(int $fileID)
+    public function read(int $fileID, int $stream = 0)
     {
         if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
 
@@ -473,7 +473,7 @@ class file extends control
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         $mime = (isset($file->extension) and in_array($file->extension, $this->config->file->imageExtensions)) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
-        helper::header('Content-type', $mime);
+        if(!$stream) helper::header('Content-type', $mime);
 
         $cacheMaxAge = 10 * 365 * 24 * 3600;
         helper::header('Cache-Control', 'private');
@@ -481,11 +481,18 @@ class file extends control
         helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
         helper::header('Cache-Control', "max-age=$cacheMaxAge");
 
-        $handle = fopen($file->realPath, "r");
-        if($handle)
+        if($stream)
         {
-            while(!feof($handle)) echo fgets($handle);
-            fclose($handle);
+            echo base64_encode(file_get_contents($file->realPath));
+        }
+        else
+        {
+            $handle = fopen($file->realPath, "r");
+            if($handle)
+            {
+                while(!feof($handle)) echo fgets($handle);
+                fclose($handle);
+            }
         }
     }
 
