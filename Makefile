@@ -284,7 +284,7 @@ ciCommon:
 	cd zentaoalm/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
 	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
 
-	rm -fr zentaopms zentaoalm
+	rm -fr zentaoalm
 
 	# move pms zip to build and release path.
 	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
