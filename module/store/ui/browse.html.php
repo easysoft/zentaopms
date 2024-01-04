@@ -45,8 +45,8 @@ foreach ($cloudApps as $group)
 
         $items[] = div
         (
-            setClass('flex-1 bg-white shadow p-2 content-between flex col store-item state'),
-            on::click("openUrl('" . $this->createLink('store', 'appview', "id=$cloudApp->id") . "')"),
+            setClass('flex-1 bg-white shadow p-2 content-between flex col store-item state open-url'),
+            set('data-url', createLink('store', 'appview', "id=$cloudApp->id")),
             div
             (
                 setStyle('height', '100px'),
