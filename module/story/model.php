@@ -1007,7 +1007,7 @@ class storyModel extends model
             if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
             $this->executeHooks($storyID);
-            if($oldStory->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
+            if($oldStory->type == 'story' && $story->stage != $oldStory->stage) $this->batchChangeStage(array($storyID), $story->stage);
             if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
 
             $changes = common::createChanges($oldStory, $story);

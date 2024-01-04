@@ -1474,6 +1474,7 @@ class storyZen extends story
             $oldStory = $oldStories[$storyID];
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
+            $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
 
             if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
             if($oldStory->parent < 0) $story->plan = '';
