@@ -309,7 +309,7 @@ class commonModel extends model
         if(isset($this->app->user))
         {
             $user = $this->app->user;
-            $user->rights = $this->loadModel('user')->authorize($user->account);
+            if(!$this->app->upgrading) $user->rights = $this->loadModel('user')->authorize($user->account);
             if(!$this->app->upgrading) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
