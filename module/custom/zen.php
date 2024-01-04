@@ -139,6 +139,7 @@ class customZen extends custom
         {
             if(empty($data['unitList']))        return dao::$errors['message'] = $this->lang->custom->currencyNotEmpty;
             if(empty($data['defaultCurrency'])) return dao::$errors['message'] = $this->lang->custom->defaultNotEmpty;
+            $data['unitList'] = implode(',', $data['unitList']);
             $this->loadModel('setting')->setItems("system.$module", $data);
         }
         elseif(($module == 'story' || $module == 'demand') && $field == 'review')
