@@ -26,7 +26,7 @@ toolbar
         'text'  => $lang->bug->export,
         'icon'  => 'export',
         'class' => 'ghost',
-        'url'   => createLink('bug', 'export', "productID={$productID}&orderBy=$orderBy&browseType=&projectID={$project->id}"),
+        'url'   => createLink('bug', 'export', "productID={$productID}&browseType=&projectID={$project->id}"),
         'data-toggle' => 'modal'
     ))) : null,
     $canCreate ? item
