@@ -3,6 +3,16 @@ global $app, $lang;
 $app->loadLang('testcase');
 
 $config->caselib->testcase = new stdclass();
+
+if($config->testcase->needReview || !empty($config->testcase->forceReview))
+{
+    $config->caselib->testcase->actionList['review']['icon']        = 'glasses';
+    $config->caselib->testcase->actionList['review']['text']        = $lang->testcase->review;
+    $config->caselib->testcase->actionList['review']['hint']        = $lang->testcase->review;
+    $config->caselib->testcase->actionList['review']['url']         = array('module' => 'testcase', 'method' => 'review', 'params' => 'caseID={id}');
+    $config->caselib->testcase->actionList['review']['data-toggle'] = 'modal';
+}
+
 $config->caselib->testcase->actionList['edit']['icon']  = 'edit';
 $config->caselib->testcase->actionList['edit']['hint']  = $lang->testcase->edit;
 $config->caselib->testcase->actionList['edit']['text']  = $lang->testcase->edit;
@@ -31,5 +41,5 @@ $config->caselib->dtable->fieldList['lastRunDate']['show']   = false;
 $config->caselib->dtable->fieldList['lastRunResult']['show'] = false;
 
 $config->caselib->dtable->fieldList['actions']['list']  = $config->caselib->testcase->actionList;
-$config->caselib->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
+$config->caselib->dtable->fieldList['actions']['menu']  = array('review', 'edit', 'delete');
 $config->caselib->dtable->fieldList['actions']['width'] = '80';
