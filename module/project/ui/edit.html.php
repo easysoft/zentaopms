@@ -260,18 +260,20 @@ formPanel
         inputGroup
         (
             set::seg(true),
+            $project->hasProduct > 0 ?
             btn
             (
                 $project->hasProduct ? setClass("primary-pale project-type-1") : setClass('project-type-1'),
                 set::disabled(true),
                 $lang->project->projectTypeList[1]
-            ),
+            ) : null,
+            $project->hasProduct == 0 ?
             btn
             (
                 !$project->hasProduct ? setClass("primary-pale project-type-0") : setClass('project-type-0'),
                 set::disabled(true),
                 $lang->project->projectTypeList[0]
-            )
+            ): null
         ),
         formHidden('hasProduct', $project->hasProduct)
     ),
