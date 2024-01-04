@@ -1023,8 +1023,8 @@ class projectTao extends projectModel
             $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
             $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
             $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'story') $lang->project->menu->story['dropMenu']->story['subModule'] .= ',story';
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->project->menu->story['dropMenu']->requirement['subModule'] .= ',story';
+            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'story') $lang->project->menu->story['dropMenu']->story['subModule'] .= ',projectstory,story';
+            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->project->menu->story['dropMenu']->requirement['subModule'] .= ',projectstory,story';
         }
 
         unset($lang->project->menu->settings['subMenu']->products);
