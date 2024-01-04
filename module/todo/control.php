@@ -304,16 +304,21 @@ class todo extends control
         if(!$todo)
         {
             if((defined('RUN_MODE') && RUN_MODE == 'api') or $this->app->viewType == 'json') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            return print(js::error((string)$this->lang->notFound) . (string)js::locate('back'));
+            if(isInModal()) return print(js::start() . "zui.Modal.hide($(document).find('.modal'));zui.Modal.alert('{$this->lang->notFound}');" . js::end());
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound)));
         }
 
         $account = $this->app->user->account;
-        if($todo->private and $todo->account != $account) return print(js::error((string)$this->lang->todo->thisIsPrivate) . (string)js::locate('back'));
+        if($todo->private && $todo->account != $account)
+        {
+            if(isInModal()) return print(js::start() . "zui.Modal.hide($(document).find('.modal'));zui.Modal.alert('{$this->lang->todo->thisIsPrivate}');" . js::end());
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->todo->thisIsPrivate)));
+        }
 
         if(!isInModal()) $this->todoZen->setSessionUri($this->app->getURI(true));
 
         /* Fix bug #936. */
-        if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
+        if($account != $todo->account && $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
         {
             $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
         }

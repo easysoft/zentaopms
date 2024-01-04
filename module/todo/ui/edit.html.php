@@ -21,6 +21,7 @@ jsVar('noOptions', $lang->todo->noOptions);
 jsVar('chosenType', $lang->todo->typeList);
 jsVar('userID', $app->user->id);
 jsVar('userAccount', $app->user->account);
+jsVar('todoAccount', $todo->account);
 
 if($todo->cycle && $todo->config)
 {
@@ -453,7 +454,7 @@ formPanel
                         'checked' => $todo->private
                     )
                 ),
-                set::disabled($todo->assignedTo != $app->user->account),
+                set::disabled($todo->assignedTo != $app->user->account || $todo->assignedTo != $todo->account),
                 on::change('togglePrivate(e.target)')
             ),
             btn

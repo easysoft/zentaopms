@@ -59,7 +59,7 @@ function togglePrivate(switcher)
 function changeAssignedTo()
 {
     var assignedTo = $('[name=assignedTo]').val();
-    if(assignedTo !== userAccount)
+    if(assignedTo != userAccount || todoAccount != userAccount)
     {
         $('#private').prop('disabled', true);
         $('#private').closest('.checkbox-primary').addClass('disabled');

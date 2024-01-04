@@ -136,7 +136,7 @@ $lang->todo->noAssignedTo   = "Le champ Assigné à ne doit pas être vide.";
 $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et ne peuvent pas se fermer.";
 $lang->todo->today          = 'Todo Today';
 $lang->todo->selectProduct  = "Please select a {$lang->productCommon}";
-$lang->todo->privateTip     = "The todo assigned to me can only be set as private, and only the assigned person can see it after it is set as private.";
+$lang->todo->privateTip     = 'Only the todo I create that is assigned to me can be set to private, and only I can see it once it is set to private.';
 
 $lang->todo->periods['all']             = 'Assigned To Yourself';
 $lang->todo->periods['before']          = 'Unfinished';

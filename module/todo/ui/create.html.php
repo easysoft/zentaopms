@@ -21,10 +21,11 @@ jsVar('chosenType', $lang->todo->typeList);
 jsVar('today', date('Y-m-d'));
 jsVar('nowTime', $time);
 jsVar('start', key($times));
-jsVar('userID', $app->user->id);
 jsVar('defaultType', '');
-jsVar('userAccount', $app->user->account);
 jsVar('defaultDate', date('Y-m-d'));
+jsVar('userID', $app->user->id);
+jsVar('userAccount', $app->user->account);
+jsVar('todoAccount', $app->user->account);
 
 $timesKeys  = array_keys($times);
 $defaultEnd = $timesKeys[(array_search($time, $timesKeys) + 3)];

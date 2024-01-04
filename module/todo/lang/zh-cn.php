@@ -136,7 +136,7 @@ $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 $lang->todo->today          = '今日待办';
 $lang->todo->selectProduct  = "请选择{$lang->productCommon}";
-$lang->todo->privateTip     = '指派给我的待办才能设为私人事务，设为私人事务后只有被指派人可以看到';
+$lang->todo->privateTip     = '我创建且指派给我的待办才能设为私人事务，设为私人事务后只有我可以看到';
 
 $lang->todo->periods['all']             = '指派自己';
 $lang->todo->periods['before']          = '未完';
