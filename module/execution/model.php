@@ -111,6 +111,7 @@ class executionModel extends model
         if(!$executionID) $executionID = key($executions);
         if($execution->multiple and !isset($executions[$executionID])) $executionID = key($executions);
         if($execution->multiple and $executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) return $this->accessDenied();
+        if(empty($executionID)) return;
 
         /* Replaces the iterated language with the stage. */
         if($execution->type == 'stage')
