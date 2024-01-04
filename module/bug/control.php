@@ -626,7 +626,7 @@ class bug extends control
                 {
                     $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
                     $projectID = $object->type == 'project' ? $object->id : $object->parent;
-                    $this->config->bug->dtable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => array('projectIdList' => array($projectID)));
                     $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
                 }
             }

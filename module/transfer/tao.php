@@ -19,12 +19,12 @@ class transferTao extends transferModel
      * @param  string $module
      * @param  string $callModule
      * @param  string $method
-     * @param  string|array $params
-     * @param  string|array $pairs
+     * @param  string|array|int $params
+     * @param  string|array     $pairs
      * @access protected
      * @return array
      */
-    protected function getSourceByModuleMethod(string $module, string $callModule, string $method, string|array $params = '', string|array $pairs = ''): array
+    protected function getSourceByModuleMethod(string $module, string $callModule, string $method, string|array|int $params = '', string|array $pairs = ''): array
     {
         /* 获取模块传递的参数。 */
         /* Get params. */
