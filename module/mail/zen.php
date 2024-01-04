@@ -120,7 +120,7 @@ class mailZen extends mail
      * @access protected
      * @return void
      */
-    protected function deleteSentQueues(): void
+    protected function deleteSentQueue()
     {
         $lastMail  = $this->dao->select('id,status')->from(TABLE_NOTIFY)->where('objectType')->eq('mail')->orderBy('id_desc')->limit(1)->fetch();
         if(!empty($lastMail) and $lastMail->id > 1000000)
