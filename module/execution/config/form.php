@@ -31,6 +31,7 @@ $config->execution->form->create['begin']         = array('type' => 'date',   'r
 $config->execution->form->create['end']           = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);
 $config->execution->form->create['days']          = array('type' => 'int',    'required' => false, 'control' => 'text',   'default' => 0);
 $config->execution->form->create['lifetime']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
+$config->execution->form->create['attribute']     = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
 $config->execution->form->create['percent']       = array('type' => 'float',  'required' => false, 'control' => 'text',   'default' => 0);
 $config->execution->form->create['products']      = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array());
 $config->execution->form->create['branch']        = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array());
