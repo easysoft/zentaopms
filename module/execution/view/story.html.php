@@ -20,7 +20,7 @@
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('projectID', $execution->project);?>
 <?php js::set('storyType', $storyType);?>
-<?php js::set('isDropMenu', (!$execution->hasProduct and !$execution->multiple and $config->URAndSR));?>
+<?php js::set('isDropMenu', (!$execution->multiple and $config->URAndSR));?>
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
 <?php js::set('typeNotEmpty', sprintf($this->lang->error->notempty, $this->lang->task->type));?>
@@ -140,7 +140,8 @@
             }
             if(common::hasPriv('execution', 'linkStory'))
             {
-                $buttonLink  = inlink('linkStory', "execution=$execution->id");
+                $buttonLink  = inlink('linkStory', "execution=$execution->id&browseType&param=0&recTotal=0&recPerPage=50&pageID=1&extra&storyType=$storyType");
+                if($storyType == 'requirement') $this->lang->execution->linkStory = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->linkStory);
                 $buttonTitle = $lang->execution->linkStory;
                 $dataToggle  = '';
             }
@@ -151,7 +152,7 @@
             {
                 echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
-                echo '<li>' . html::a(inlink('linkStory', "execution=$execution->id"), $lang->execution->linkStory). "</li>";
+                echo '<li>' . html::a(inlink('linkStory', "execution=$execution->id&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&extra=&storyType=$storyType"), $lang->execution->linkStory). "</li>";
                 echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
                 echo '</ul>';
             }

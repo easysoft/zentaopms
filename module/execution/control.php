@@ -3436,7 +3436,7 @@ class execution extends control
         $object     = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
-        $browseLink = $this->createLink('execution', 'story', "executionID=$objectID");
+        $browseLink = $this->createLink('execution', 'story', "executionID=$objectID&storyType=$storyType");
         if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID&productID=0&branch=0&browseType=&param=0&storyType=$storyType");
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
 
@@ -3525,6 +3525,7 @@ class execution extends control
 
         if($storyType == 'requirement')
         {
+            $this->app->loadLang('projectstory');
             $this->lang->story->title               = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             $this->lang->projectstory->whyNoStories = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->whyNoStories);
             $this->lang->execution->linkStory       = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->linkStory);

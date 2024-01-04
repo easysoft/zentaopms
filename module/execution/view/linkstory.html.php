@@ -49,8 +49,10 @@
           <?php endif;?>
           <th class='c-module'><?php echo $lang->story->module;?></th>
           <th class='c-plan <?php if((empty($project->hasProduct) && $project->model != 'scrum') || $storyType != 'story') echo 'hide';?>'><?php echo $lang->story->plan;?></th>
-          <?php if($object->model == 'ipd' and $storyType == 'requirement'):?>
+          <?php if($storyType == 'requirement'):?>
+          <?php if($object->model == 'ipd'):?>
           <th class='c-plan'><?php echo $lang->story->roadmap;?></th>
+          <?php endif;?>
           <th class='c-status'><?php echo $lang->story->status;?></th>
           <?php else:?>
           <th class='c-stage'><?php echo $lang->story->stage;?></th>
@@ -96,8 +98,10 @@
         <?php endif;?>
         <td class='c-module text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
         <td class='text-ellipsis <?php if((empty($project->hasProduct) && $project->model != 'scrum') || $storyType != 'story') echo 'hide';?>' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
-        <?php if($object->model == 'ipd' and $storyType == 'requirement'):?>
+        <?php if($storyType == 'requirement'):?>
+        <?php if($object->model == 'ipd'):?>
         <td title="<?php echo zget($roadmaps, $story->roadmap, '');?>"><?php echo zget($roadmaps, $story->roadmap, '');?></td>
+        <?php endif;?>
         <td><?php echo zget($lang->story->statusList, $story->status);?></td>
         <?php else:?>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
