@@ -4373,12 +4373,13 @@ class storyModel extends model
      *
      * @param  object $story
      * @param  array  $options
+     * @param  string $storyType sting|requirement
      * @access public
      * @return object
      */
-    public function formatStoryForList(object $story, array $options = array()): object
+    public function formatStoryForList(object $story, array $options = array(), string $storyType = 'story'): object
     {
-        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null));
+        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null), $storyType);
         $story->estimate = $story->estimate . $this->config->hourUnit;
 
         $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);

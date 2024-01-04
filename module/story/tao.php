@@ -1578,6 +1578,15 @@ class storyTao extends storyModel
 
         $tutorialMode = commonModel::isTutorialMode();
 
+        if($storyType == 'requirement')
+        {
+            $this->lang->story->changeTip                = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->changeTip);
+            $this->lang->story->reviewTip['active']      = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->reviewTip['active']);
+            $this->lang->story->reviewTip['notReviewer'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->reviewTip['notReviewer']);
+            $this->lang->story->recallTip['actived']     = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->recallTip['actived']);
+            $this->lang->story->subDivideTip['notWait']  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->subDivideTip['notWait']);
+        }
+
         static $taskGroups = array();
 
         $actSubmitreview = array();
@@ -1620,9 +1629,18 @@ class storyTao extends storyModel
             $title     = $this->lang->story->review;
             if(!$canReview && $story->status != 'closed')
             {
-                if($story->status == 'active') $title = $this->lang->story->reviewTip['active'];
-                if($storyReviewer && in_array($this->app->user->account, $storyReviewer))  $title = $this->lang->story->reviewTip['reviewed'];
                 if($storyReviewer && !in_array($this->app->user->account, $storyReviewer)) $title = $this->lang->story->reviewTip['notReviewer'];
+                if($story->status == 'active')
+                {
+                    if($storyReviewer && in_array($this->app->user->account, $storyReviewer))
+                    {
+                        $title = $this->lang->story->reviewTip['reviewed'];
+                    }
+                    else
+                    {
+                        $title = $this->lang->story->reviewTip['active'];
+                    }
+                }
             }
 
             $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview);

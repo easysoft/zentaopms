@@ -190,14 +190,14 @@ foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
     $options['branches'] = zget($branchOptions, $story->product, array());
-    $data[] = $this->story->formatStoryForList($story, $options);
+    $data[] = $this->story->formatStoryForList($story, $options, $storyType);
     if(!isset($story->children)) continue;
 
     /* Children. */
     foreach($story->children as $key => $child)
     {
         $child->rawModule = $child->module;
-        $data[] = $this->story->formatStoryForList($child, $options);
+        $data[] = $this->story->formatStoryForList($child, $options, $storyType);
     }
 }
 
