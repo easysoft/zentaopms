@@ -17,7 +17,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/zahost.class.php';
 su('admin');
 
-$addressList = array('a', '10.0.0.222', '10.0.1.222');
+$addressList = array('a', '10.0.0.222', '127.0.0.1');
 
 $zahost = new zahostTest();
 r($zahost->pingTest($addressList[0])) && p() && e('no');  //测试不是正常地址得到的结果
