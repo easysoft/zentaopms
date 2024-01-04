@@ -22,8 +22,9 @@ detailHeader
     )
 );
 
-$hasResult = ($compile and !empty($compile->testtask));
-$hasLog    = ($compile and !empty($compile->logs));
+$hasResult = ($compile && !empty($compile->testtask));
+$hasLog    = ($compile && !empty($compile->logs));
+$repo      = $repo ? $repo : new stdclass();
 
 if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
 if(!$job->pipeline) $job->pipeline = '';
