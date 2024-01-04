@@ -69,7 +69,13 @@ foreach($data as $key => $row)
     $isPHP = false;
     foreach($row->files as $file => $attr)
     {
-        if(str_ends_with($file, '.php'))    $isPHP = true;
+        if(!isset($attr['allCount']) || !isset($attr['count']))
+        {
+            unset($row->files[$file]);
+            continue;
+        }
+
+        if(str_ends_with($file, '.php'))        $isPHP = true;
         if($attr['allCount'] != $attr['count']) $isOk  = false;
     }
 
