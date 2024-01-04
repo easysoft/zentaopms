@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-use backup;
-
 $items = array();
 $items[] = array('name' => 'title', 'label' => $lang->gitlab->gitlabIssue, 'control' => 'static');
 $items[] = array('name' => 'objectTypeList', 'label' => $lang->gitlab->objectType, 'control' => 'picker', 'items' => $objectTypes);

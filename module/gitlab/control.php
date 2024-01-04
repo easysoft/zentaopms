@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use function zin\wg;
-
 /**
  * The control file of gitlab module of ZenTaoPMS.
  *
