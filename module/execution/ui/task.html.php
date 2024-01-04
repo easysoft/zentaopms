@@ -50,6 +50,7 @@ if(common::canModify('execution', $execution))
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
+$cols['mailto']['userMap'] = $users;
 $tableData = initTableData($tasks, $cols, $this->task);
 
 toolbar

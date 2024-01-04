@@ -205,6 +205,7 @@ class execution extends control
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, (int)$productID, 0, array('treeModel', 'createTaskLink'), $showAllModule);
         $this->view->memberPairs = $memberPairs;
         $this->view->execution   = $execution;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

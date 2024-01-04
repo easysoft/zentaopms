@@ -179,9 +179,10 @@ $config->task->dtable->fieldList['desc']['title']   = 'desc';
 $config->task->dtable->fieldList['desc']['control'] = 'textarea';
 $config->task->dtable->fieldList['desc']['display'] = false;
 
-$config->task->dtable->fieldList['mailto']['type']     = 'user';
-$config->task->dtable->fieldList['mailto']['sortType'] = true;
-$config->task->dtable->fieldList['mailto']['group']    = 9;
+$config->task->dtable->fieldList['mailto']['type']      = 'text';
+$config->task->dtable->fieldList['mailto']['sortType']  = true;
+$config->task->dtable->fieldList['mailto']['group']     = 9;
+$config->task->dtable->fieldList['mailto']['delimiter'] = ',';
 
 $config->task->dtable->fieldList['actions']['type']     = 'actions';
 $config->task->dtable->fieldList['actions']['width']    = '160px';
