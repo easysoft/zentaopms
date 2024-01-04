@@ -1396,6 +1396,7 @@ class my extends control
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $result = $this->user->uploadAvatar();
+            if($result['result'] == 'fail') $this->send($result);
             return $this->send(array('result' => 'success', 'callback' => "loadModal('" . $this->createLink('user', 'cropavatar', "imageID={$result['fileID']}") . "', 'profile');"));
         }
     }

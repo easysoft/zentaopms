@@ -266,6 +266,7 @@ $lang->user->error->errorEmail       = '用户名和邮箱不匹配，请重新�
 $lang->user->error->emailSetting     = '系统未配置发信邮箱，请联系管理员重置。';
 $lang->user->error->sendMailFail     = '邮件发送失败，请重试！';
 $lang->user->error->loginTimeoutTip  = '系统登录失败，请检查代理服务是否正常';
+$lang->user->error->uploadAvatar     = '上传头像失败，请上传图片类型的文件。';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
