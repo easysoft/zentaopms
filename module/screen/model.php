@@ -304,13 +304,15 @@ class screenModel extends model
 
         $resultHeader  = $this->metric->getViewTableHeader($metric);
         $resultData    = $this->metric->getViewTableData($metric, $result);
+        $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
+        $isDateMetric   = $this->metric->isDateMetric($resultHeader);
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
         $component->chartConfig->chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData);
         $component->chartConfig->tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
         $component->chartConfig->card        = $this->getMetricCardOption($metric, $resultData);
-        $component->chartConfig->filters     = $this->buildMetricFilters($metric);
+        $component->chartConfig->filters     = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
 
         $component->option->chartOption = $component->chartConfig->chartOption;
         $component->option->tableOption = $component->chartConfig->tableOption;
@@ -326,13 +328,13 @@ class screenModel extends model
      * @access public
      * @return array
      */
-    public function buildMetricFilters($metric)
+    public function buildMetricFilters($metric, $isObjectMetric, $isDateMetric)
     {
         $this->loadModel('metric');
         $scope = $metric->scope;
 
         $filters = array();
-        if($scope != 'system')
+        if($isObjectMetric)
         {
             $scopeFilter = new stdclass();
             $scopeFilter->from       = 'query';
@@ -356,8 +358,7 @@ class screenModel extends model
             $filters[] = $scopeFilter;
         }
 
-        $resultHeader = $this->metric->getViewTableHeader($metric);
-        if($this->metric->isDateMetric($resultHeader))
+        if($isDateMetric)
         {
             $beginFilter = new stdclass();
             $beginFilter->from       = 'query';
@@ -1877,7 +1878,7 @@ class screenModel extends model
         $endFilter   = $filters['end'];
 
         $filteredHeaders = array();
-        if($dateType == 'year') 
+        if($dateType == 'year')
         {
             $filteredHeaders[0] = array_filter($headers[0], function($item) use ($beginFilter, $endFilter)
             {
