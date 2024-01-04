@@ -3864,10 +3864,10 @@ class storyModel extends model
         {
             $story->status  = 'active';
             $story->version = $oldStory->version - 1;
-            $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->eq($oldStory->version - 1)->fetch('title');
+            $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($oldStory->id)->andWHere('version')->eq($oldStory->version - 1)->fetch('title');
 
             /* Delete versions that is after this version. */
-            $twinsIdList = $story->id . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+            $twinsIdList = $oldStory->id . ($oldStory->twins ? ",{$oldStory->twins}" : '');
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->in($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->in($oldStory->version)->exec();
         }
