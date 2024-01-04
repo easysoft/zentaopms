@@ -358,6 +358,7 @@ class screenModel extends model
             $filters[] = $scopeFilter;
         }
 
+        /*
         if($isDateMetric)
         {
             $beginFilter = new stdclass();
@@ -376,6 +377,7 @@ class screenModel extends model
             $endFilter->default    = null;
             $filters[] = $endFilter;
         }
+         */
 
         return $filters;
     }
