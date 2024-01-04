@@ -1474,51 +1474,375 @@ class pivotModel extends model
     }
 
     /**
-     * Gen sheet.
+     * Get groups from settings.
      *
-     * @param  array  $fields
-     * @param  array  $settings
-     * @param  string $sql
-     * @param  array  $filters
-     * @param  array  $langs
+     * @param  array    $settings
      * @access public
      * @return array
      */
-    public function genSheet($fields, $settings, $sql, $filters, $langs = array())
+    public function getGroupsFromSettings($settings)
     {
-        $this->app->loadClass('sqlparser', true);
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
-
-        $groups    = array();
-        $sqlGroups = array();
-
+        $groups = array();
         foreach($settings as $key => $value)
         {
             if(strpos($key, 'group') !== false && $value) $groups[] = $value;
         }
 
-        $groups = array_unique($groups);
+        return array_unique($groups);
+    }
 
-        /* Add tt for sql. */
-        foreach($groups as $key => $group) $sqlGroups[$key] = (!empty($settings['filterType']) and $settings['filterType'] == 'query') ? "`$group`" : "tt.`$group`";
+    /**
+     * Implode group keys of record.
+     *
+     * @param  array  $groups
+     * @param  object $record
+     * @access public
+     * @return string
+     */
+    public function getGroupsKey($groups, $record)
+    {
+        $groupsKey = array();
+        foreach($groups as $group) $groupsKey[] = $record->$group;
 
-        $groupList = implode(',', $sqlGroups);
+        return implode('_', $groupsKey);
+    }
 
+    /**
+     * Get slice field key of record.
+     *
+     * @param  int     $index
+     * @param  string  $slice
+     * @param  string  $field
+     * @param  object  $record
+     * @access public
+     * @return string
+     */
+    public function getSliceFieldKey($index, $slice, $field, $record)
+    {
+        if($slice == 'noSlice') return $field . $index;
+        return $record->$slice . '_slice_' . $field . $index;
+    }
+
+    /**
+     * Init statistic column with slice.
+     *
+     * @param  int     $index
+     * @param  string  $field
+     * @param  string  $slice
+     * @param  array   $groups
+     * @param  array   $records
+     * @access public
+     * @return array
+     */
+    public function initSliceColumnRecords($index, $field, $slice, $groups, $records)
+    {
+        $columnRecords = array();
+        $groupUnique   = array();
+        $sliceUnique   = array();
+        foreach($records as $record)
+        {
+            $groupUnionKey = $this->getGroupsKey($groups, $record);
+            $fieldKey  = $this->getSliceFieldKey($index, $slice, $field, $record);
+
+            $sliceUnique[$fieldKey]  = 1;
+            $groupUnique[$groupUnionKey] = $record;
+        }
+
+        $sliceKeys = array_keys($sliceUnique);
+        $groupUnionKeys = array_keys($groupUnique);
+
+        foreach($groupUnionKeys as $groupUnionKey)
+        {
+            $columnRecord = new stdclass();
+            foreach($groups as $group) $columnRecord->$group = $groupUnique[$groupUnionKey]->$group;
+
+            foreach($sliceKeys as $sliceKey)
+            {
+                $columnRecord->$sliceKey = array('count' => 0, 'distinct' => array(), 'sum' => 0, 'avg' => array(), 'max' => array(), 'min' => array());
+            }
+
+            $columnRecords[$groupUnionKey] = $columnRecord;
+        }
+
+        return $columnRecords;
+    }
+
+    /**
+     * Process column stat with slice.
+     *
+     * @param  int       $index
+     * @param  string    $field
+     * @param  string    $slice
+     * @param  string    $stat
+     * @param  array     $groups
+     * @param  array     $records
+     * @access public
+     * @return array
+     */
+    public function processColumnStat($index, $field, $slice, $stat, $groups, $records)
+    {
+        $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
+        foreach($records as $record)
+        {
+            $groupUnionKey = $this->getGroupsKey($groups, $record);
+            $fieldKey  = $this->getSliceFieldKey($index, $slice, $field, $record);
+
+            $sliceGroupRecord = $sliceRecords[$groupUnionKey];
+            $value            = $record->$field;
+            $floatValue       = is_numeric($value) ? (float)$value : 0;
+
+            switch($stat)
+            {
+                case 'sum':
+                    $sliceGroupRecord->$fieldKey[$stat] += $floatValue;
+                    break;
+                case 'avg':
+                case 'max':
+                case 'min':
+                    $sliceGroupRecord->$fieldKey[$stat][] = $floatValue;
+                    break;
+                case 'count':
+                    $sliceGroupRecord->$fieldKey[$stat] += 1;
+                    break;
+                case 'distinct':
+                    $sliceGroupRecord->$fieldKey[$stat][] = $value;
+                    break;
+            }
+        }
+
+        foreach($sliceRecords as $groupUnionKey => $sliceRecord)
+        {
+            $sliceFields = array_keys((array)$sliceRecord);
+            foreach($sliceFields as $sliceField)
+            {
+                /* 分组字段直接跳过。*/
+                /* Skip the group field directly. */
+                if(in_array($sliceField, $groups)) continue;
+
+                $sliceStat = $sliceRecord->$sliceField[$stat];
+                switch($stat)
+                {
+                    case 'sum':
+                        $sliceRecord->$sliceField = round($sliceStat, 2);
+                        break;
+                    case 'avg':
+                        $sliceRecord->$sliceField = round(array_sum($sliceStat) / count($sliceStat), 2);
+                        break;
+                    case 'max':
+                        $sliceRecord->$sliceField = round(max($sliceStat), 2);
+                        break;
+                    case 'min':
+                        $sliceRecord->$sliceField = round(min($sliceStat), 2);
+                        break;
+                    case 'count':
+                        $sliceRecord->$sliceField = $sliceStat;
+                        break;
+                    case 'distinct':
+                        $sliceRecord->$sliceField = count(array_unique($sliceStat));
+                        break;
+                }
+            }
+        }
+
+        return $sliceRecords;
+    }
+
+    /**
+     * Process column original.
+     *
+     * @param  int      $index
+     * @param  string   $field
+     * @param  array    $groups
+     * @param  array    $records
+     * @access public
+     * @return array
+     */
+    public function processColumnOriginal($index, $field, $groups, $records)
+    {
+        $columnRecords = array();
+        foreach($records as $record)
+        {
+            $columnRecord = new stdclass();
+            foreach($groups as $group) $columnRecord->$group = $record->$group;
+            $columnRecord->{$field . $index} = $record->$field;
+
+            $columnRecords[] = $columnRecord;
+        }
+        return $columnRecords;
+    }
+
+    /**
+     * Append where filter to sql from filters.
+     *
+     * @param  string    $sql
+     * @param  array    $filters
+     * @access public
+     * @return string
+     */
+    public function appendWhereFilterToSql($sql, $filters)
+    {
+        $connectSQL = '';
+        if(!empty($filters) && !isset($filters[0]['from']))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter)
+            {
+                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+            }
+
+            $whereStr    = implode(' and ', $wheres);
+            $connectSQL .= " where $whereStr";
+        }
+
+        $sql = "select * from ($sql) tt" . $connectSQL;
+
+        return $sql;
+    }
+
+    /**
+     * Generate group tree.
+     *
+     * @param  array    $groups
+     * @param  array    $records
+     * @access public
+     * @return array
+     */
+    public function generateGroupTree($groups, $records)
+    {
+        $groupTree = array();
+        foreach($records as $record)
+        {
+            $currentGroupTree = &$groupTree;
+            foreach($groups as $group)
+            {
+                $groupValue = $record->$group;
+                if(!isset($currentGroupTree[$groupValue])) $currentGroupTree[$groupValue] = array();
+
+                $currentGroupTree = &$currentGroupTree[$groupValue];
+            }
+        }
+
+        return $groupTree;
+    }
+
+    /**
+     * Flatten group tree.
+     *
+     * @param  array  $groups
+     * @param  array  $groupTree
+     * @access public
+     * @return void
+     */
+    public function flattenGroupTree($groups, $groupTree)
+    {
+        $flattenGroup = array_map(function($key, $value) {
+            return array($key, $value);
+        }, array_keys($groupTree), $groupTree);
+
+        $groupLevels           = count($groups);
+        $currentLevel          = 1;
+        $flattenGroupRecords   = array();
+        while($currentLevel < count($groups))
+        {
+            $nextFlatten = array();
+            foreach($flattenGroup as $flatten)
+            {
+                $lastValue = array_pop($flatten);
+                foreach($lastValue as $key => $value)
+                {
+                    /* 如果value为空，那么说明到了最后一级，直接构建分组键值的数组。*/
+                    /* If the value is empty, it means that the last level has been reached, and the array of the group key value is constructed directly. */
+                    if(empty($value))
+                    {
+                        $unionKey = implode('_', $flatten) . '_' . $key;
+                        $flattenGroupRecords[$unionKey] = array();
+                        continue;
+                    }
+                    $nextFlatten[] = array_merge($flatten, array($key, $value));
+                }
+            }
+            $flattenGroup = $nextFlatten;
+            $currentLevel ++;
+        }
+
+        return $flattenGroupRecords;
+    }
+
+    /**
+     * Sort merge records with group field.
+     *
+     * @param  array    $records
+     * @param  array    $mergeRecords
+     * @param  array    $groups
+     * @access public
+     * @return array
+     */
+    public function orderByRecordsGroups($records, $mergeRecords, $groups)
+    {
+        $groupTree = $this->generateGroupTree($groups, $records);
+        $groupRecords = $this->flattenGroupTree($groups, $groupTree);
+
+        foreach($mergeRecords as $mergeRecord)
+        {
+            $groupUnionKey = $this->getGroupsKey($groups, $mergeRecord);
+            $groupRecords[$groupUnionKey][] = $mergeRecord;
+        }
+
+        $orderRecords = array();
+        foreach($groupRecords as $groupRecord)
+        {
+            $orderRecords = array_merge($orderRecords, $groupRecord);
+        }
+
+        return $orderRecords;
+    }
+
+    /**
+     * Sort array with item length.
+     *
+     * @param  array    $array
+     * @access public
+     * @return array
+     */
+    public function sortWithItemLength($array)
+    {
+        usort($array, function($a, $b) {
+            $lengthA = count($a);
+            $lengthB = count($b);
+
+            if ($lengthA == $lengthB) {
+                return 0;
+            }
+
+            return ($lengthA > $lengthB) ? -1 : 1;
+        });
+
+        return $array;
+    }
+
+    /**
+     * Genereate table cols config.
+     *
+     * @param  array    $fields
+     * @param  array    $groups
+     * @param  array    $langs
+     * @access public
+     * @return array
+     */
+    public function generateTableCols($fields, $groups, $langs)
+    {
         $cols       = array();
-        $rows       = array();
-        $configs    = array();
-        $slices     = array();
         $clientLang = $this->app->getClientLang();
         /* Build cols. */
         foreach($groups as $group)
         {
-            $col = new stdclass();
-            $col->name    = $group;
-            $col->isGroup = true;
-
             $fieldObject  = $fields[$group]['object'];
             $relatedField = $fields[$group]['field'];
+
+            $col = new stdclass();
+            $col->name    = $group;
+            $col->field   = $relatedField;
+            $col->isGroup = true;
 
             $colLabel = $group;
             if($fieldObject)
@@ -1533,151 +1857,148 @@ class pivotModel extends model
             $cols[0][] = $col;
         }
 
-        /* Replace the variable with the default value. */
-        $sql = $this->initVarFilter($filters, $sql);
+        return $cols;
+    }
 
-        /* Create sql. */
-        $sql = str_replace(';', '', $sql);
+    /**
+     * Merge origin records.
+     *
+     * @param  array  $originColumns
+     * @param  array  $mergeRecords
+     * @access public
+     * @return void
+     */
+    public function mergeOriginRecords($originColumns, $mergeRecords)
+    {
+        if(empty($originColumns)) return $mergeRecords;
 
-        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        $originColumns = $this->sortWithItemLength($originColumns);
+
+        foreach($originColumns as $columnIndex => $columnSetting)
         {
-            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
-        }
-
-        /* Process rows. */
-        $connectSQL = '';
-        if(!empty($filters) && !isset($filters[0]['from']))
-        {
-            $wheres = array();
-            foreach($filters as $field => $filter)
+            if(empty($mergeRecords))
             {
-                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+                $mergeRecords = $columnSetting['records'];
+                continue;
             }
 
-            $whereStr    = implode(' and ', $wheres);
-            $connectSQL .= " where $whereStr";
+            $columnRecords = $columnSetting['records'];
+            foreach($mergeRecords as $index => $mergeRecord)
+            {
+                $mergeRecords[$index] = (object)array_merge((array)$mergeRecord, (array)$columnRecords[$index]);
+            }
         }
 
-        $groupSQL = " group by $groupList";
-        $orderSQL = " order by $groupList";
+        return $mergeRecords;
+    }
 
-        $number       = 0;
-        $groupsRow    = array();
-        $showColTotal = zget($settings, 'columnTotal', 'noShow');
-        $showOrigin   = false;
+    /**
+     * Merge statistic records.
+     *
+     * @param  array    $statColumns
+     * @param  array    $groups
+     * @param  array    $mergeRecords
+     * @access public
+     * @return array
+     */
+    public function mergeStatRecords($statColumns, $groups, $mergeRecords)
+    {
+        if(empty($statColumns)) return $mergeRecords;
 
-        foreach($settings['columns'] as $column)
+        $statColumns = $this->sortWithItemLength($statColumns);
+
+        foreach($statColumns as $columnIndex => $columnSetting)
         {
-            if(isset($column['showOrigin']) and $column['showOrigin']) $showOrigin = true;
+            if(empty($mergeRecords))
+            {
+                $mergeRecords = $columnSetting['records'];
+                continue;
+            }
+
+            $columnRecords = $columnSetting['records'];
+            foreach($mergeRecords as $key => $mergeRecord)
+            {
+                $groupUnionKey = $this->getGroupsKey($groups, $mergeRecord);
+                $mergeRecords[$key] = (object)array_merge((array)$mergeRecord, (array)$columnRecords[$groupUnionKey]);
+            }
         }
+
+        return $mergeRecords;
+    }
+
+    /**
+     * Gen sheet.
+     *
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  array  $langs
+     * @access public
+     * @return array
+     */
+    public function genSheet($fields, $settings, $sql, $filters, $langs = array())
+    {
+        $groups = $this->getGroupsFromSettings($settings);
+        $cols   = $this->generateTableCols($fields, $groups, $langs);
+
+        /* Replace the variable with the default value. */
+        $sql = $this->initVarFilter($filters, $sql);
+        $sql = $this->trimSemicolon($sql);
+        $sql = $this->appendWhereFilterToSql($sql, $filters);
+
+        $records = $this->dao->query($sql)->fetchAll();
+
+        $showColTotal = zget($settings, 'columnTotal', 'noShow');
+
+        $originColumns = array();
+        $statColumns   = array();
+        $mergeRecords  = array();
 
         if(isset($settings['columns']))
         {
-            foreach($settings['columns'] as $column)
+            $columnSettings = $settings['columns'];
+            foreach($columnSettings as $columnIndex => $columnSetting)
             {
-                if($column['showOrigin']) $column['slice'] = 'noSlice';
+                $columnShowOrigin = isset($columnSetting['showOrigin']) ? $columnSetting['showOrigin'] : false;
+                $columnStat       = $columnSetting['stat'];
+                $columnField      = $columnSetting['field'];
+                $columnSlice      = zget($columnSetting, 'slice', 'noSlice');
 
-                $stat   = $column['stat'];
-                $field  = $column['field'];
-                $slice  = zget($column, 'slice', 'noSlice');
-                $uuName = $field . $number;
-                $number ++;
+                $cols = $this->getTableHeader($records, $columnSetting, $fields, $cols, $sql, $langs, $columnShowOrigin);
 
-                if($column['showOrigin'])
+                if($columnShowOrigin)
                 {
-                    $columnSQL = "select $groupList, tt.`$field` from ($sql) tt" . $connectSQL . $orderSQL;
+                    $columnRecords = $this->processColumnOriginal($columnIndex, $columnField, $groups, $records);
+                    $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
+
+                    $columnSetting['records']    = $columnRecords;
+                    $originColumns[$columnIndex] = $columnSetting;
                 }
-                else
+                elseif(!empty($columnStat))
                 {
-                    if($stat == 'distinct')
-                    {
-                        $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
-                    }
-                    else
-                    {
-                        if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
-                        {
-                            $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
-                            $columnSQL  = "$stat($convertSql) as `$uuName`";
-                        }
-                        else
-                        {
-                            $columnSQL = "$stat(tt.`$field`) as `$uuName`";
-                        }
-                    }
+                    $columnRecords = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records, $columnRecords);
+                    $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
-                    if($slice != 'noSlice')
-                    {
-                        $order         = $this->getSqlFieldOrder($slice, $statement);
-                        $sliceOrderSQL = " order by tt.`$slice` $order, $groupList";
-                        $columnSQL     = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $sliceOrderSQL;
-                    }
-                    else
-                    {
-                        $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
-                    }
-                }
-
-                $columnRows = $this->dao->query($columnSQL)->fetchAll();
-
-                $rowcount = array_fill(0, count($columnRows), 1);
-                if($showOrigin && !$column['showOrigin'])
-                {
-                    $countSQL = "select $groupList, count(tt.`$field`) as rowCount from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
-                    $countRows = $this->dao->query($countSQL)->fetchAll();
-                    foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
-                }
-
-                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $column['showOrigin']);
-                if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
-                $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
-
-                $rowIndex = 0;
-                foreach($columnRows as $key => $row)
-                {
-                    $count = isset($rowcount[$key]) ? $rowcount[$key] : 1;
-                    for($i = 0; $i < $count; $i++)
-                    {
-                        if(!isset($groupsRow[$rowIndex])) $groupsRow[$rowIndex] = new stdclass();
-                        $groupsRow[$rowIndex] = (object)array_merge((array)$groupsRow[$rowIndex], (array)$row);
-                        $rowIndex += 1;
-                    }
+                    $columnSetting['records']  = $columnRecords;
+                    $statColumns[$columnIndex] = $columnSetting;
                 }
             }
+
+            $mergeRecords = $this->mergeOriginRecords($originColumns, $mergeRecords);
+            $mergeRecords = $this->mergeStatRecords($statColumns, $groups, $mergeRecords);
         }
 
-        /* Get configs. */
-        foreach($groups as $index => $group)
-        {
-            if($index == 0)
-            {
-                $groupRows = array();
-                foreach($groupsRow as $row) $groupRows[$row->$group][] = $row;
-            }
-
-            $haveNext = isset($groups[$index + 1]);
-            $this->getColumnConfig($groupRows, $configs, $groups, $index, $haveNext);
-        }
-
-
-        $groupRows    = json_decode(json_encode($groupsRow), true);
-        $fieldOptions = $this->getFieldsOptions($fields, $sql);
-        foreach($groupRows as $key => $row)
-        {
-            foreach($row as $field => $value)
-            {
-                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
-                $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
-            }
-
-            $groupRows[$key] = $row;
-        }
+        $mergeRecords = array_values($mergeRecords);
+        $mergeRecords = $this->orderByRecordsGroups($records, $mergeRecords, $groups);
 
         $data              = new stdclass();
         $data->groups      = $groups;
         $data->cols        = $cols;
-        $data->array       = $groupRows;
+        $data->array       = $this->mapRecordValueWithFieldOptions($mergeRecords, $fields, $sql);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
+
+        $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
 
         /* $data->groups  array 代表分组，最多三个
          * $data->cols    array thead数据，其中对象有三个属性：name：分组，label：列的名字，isGroup：标识是不是分组
@@ -1690,33 +2011,55 @@ class pivotModel extends model
     }
 
     /**
-     * InitVarFilter.
+     * Map record value with field options.
      *
-     * @param  string $filters
-     * @param  string $sql
+     * @param  array    $records
+     * @param  array    $fields
+     * @param  string   $sql
+     * @access public
+     * @return array
+     */
+    public function mapRecordValueWithFieldOptions($records, $fields, $sql)
+    {
+        $records      = json_decode(json_encode($records), true);
+        $fieldOptions = $this->getFieldsOptions($fields, $sql);
+        foreach($records as $index => $record)
+        {
+            foreach($record as $field => $value)
+            {
+                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+                $record[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
+            }
+
+            $records[$index] = $record;
+        }
+
+        return $records;
+    }
+
+    /**
+     * Calculate merge cell config.
+     *
+     * @param  array    $groups
+     * @param  array    $records
      * @access public
      * @return void
      */
-    public function initVarFilter($filters = '', $sql = '')
+    public function calculateMergeCellConfig($groups, $records)
     {
-        if(empty($filters)) return $sql;
-        foreach($filters as $filter)
+        $configs = array();
+        foreach($groups as $index => $group)
         {
-            if(empty($filter['from'])) continue;
-            $default = isset($filter['default']) ? $filter['default'] : '';
-            if(is_array($default))
+            if($index == 0)
             {
-                $default = array_filter($default, function($val){return !empty($val);});
-                $default = implode("', '", $default);
+                $groupRecords = array();
+                foreach($records as $record) $groupRecords[$record->$group][] = $record;
             }
-            $sql  = str_replace('$' . $filter['field'], "'{$default}'", $sql);
-        }
 
-        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
-        {
-            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+            $haveNext = isset($groups[$index + 1]);
+            $this->getColumnConfig($groupRecords, $configs, $groups, $index, $haveNext);
         }
-        return $sql;
+        return $configs;
     }
 
     /**
@@ -1758,6 +2101,48 @@ class pivotModel extends model
         }
 
         if($haveNext) $groupRows = $newRows;
+    }
+
+    /**
+     * InitVarFilter.
+     *
+     * @param  string $filters
+     * @param  string $sql
+     * @access public
+     * @return void
+     */
+    public function initVarFilter($filters = '', $sql = '')
+    {
+        if(empty($filters)) return $sql;
+        foreach($filters as $filter)
+        {
+            if(empty($filter['from'])) continue;
+            $default = isset($filter['default']) ? $filter['default'] : '';
+            if(is_array($default))
+            {
+                $default = array_filter($default, function($val){return !empty($val);});
+                $default = implode("', '", $default);
+            }
+            $sql  = str_replace('$' . $filter['field'], "'{$default}'", $sql);
+        }
+
+        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        {
+            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+        }
+        return $sql;
+    }
+
+    /**
+     * Trim semicolon of sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return string
+     */
+    public function trimSemicolon($sql)
+    {
+        return str_replace(';', '', $sql);
     }
 
     /**
@@ -1974,7 +2359,7 @@ class pivotModel extends model
             if(empty($columnRows)) return $columnRows;
 
             $colTotalRow = new stdClass();
-            foreach($columnRows[0] as $field => $value)
+            foreach(reset($columnRows) as $field => $value)
             {
                 if(in_array($field, $groups))
                 {
@@ -2012,7 +2397,9 @@ class pivotModel extends model
                     if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
                 }
             }
-            $columnRows[] = $colTotalRow;
+
+            $groupKey = $this->getGroupsKey($groups, $colTotalRow);
+            $columnRows[$groupKey] = $colTotalRow;
         }
 
         return $columnRows;
@@ -2023,60 +2410,49 @@ class pivotModel extends model
      *
      * @param  array  $columnRows
      * @param  array  $groups
-     * @param  string $slice
+     * @param  string $sliceField
      * @param  string $uuName
      * @access public
      * @return array
      */
-    public function processSliceData($columnRows, $groups, $slice, $uuName)
+    public function processSliceData($columnRows, $groups, $sliceField, $uuName)
     {
-        $sliceList = array();
-        foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
-
-        $index     = 0;
         $sliceRows = array();
-        foreach($columnRows as $key => $columnRow)
+        if($sliceField == 'noSlice')
         {
-            $field = $columnRow->$slice . '_slice_' . $uuName;
-            $columnRow->$field = $columnRow->$uuName;
-            if(!in_array($slice, $groups)) unset($columnRow->{$slice});
-            unset($columnRow->{$uuName});
+            foreach($columnRows as $columnRow)
+            {
+                $groupKeys = array();
+                foreach($groups as $group) $groupKeys[$group] = $columnRow->{$group};
 
-            if($key == 0)
-            {
-                $index             = $key;
-                $sliceRows[$index] = $columnRow;
-                continue;
+                $groupKeyStr = implode('_', $groupKeys);
+
+                $sliceRows[$groupKeyStr] = (object)$groupKeys;
+                $sliceRows[$groupKeyStr]->{$uuName} = $columnRow->{$uuName};
             }
-            $sliceFlag = true;
-            foreach($groups as $group)
-            {
-                if($columnRow->{$group} != $sliceRows[$index]->{$group}) $sliceFlag = false;
-            }
-            if(!$sliceFlag)
-            {
-                $index ++;
-                $sliceRows[$index] = $columnRow;
-            }
-            else
-            {
-                $sliceRows[$index]->{$field} = $columnRow->{$field};
-            }
+
+            return $sliceRows;
         }
 
-        foreach($sliceRows as $key => $row)
+        $sliceList = array();
+        foreach($columnRows as $rows) $sliceList[$rows->{$sliceField}] = $rows->{$sliceField};
+
+        foreach($columnRows as $key => $columnRow)
         {
-            $sliceRow = array();
-            foreach($row as $field => $value)
+            $field = $columnRow->$sliceField . '_slice_' . $uuName;
+
+            $groupKeys = array();
+            foreach($groups as $group) $groupKeys[$group] = $columnRow->{$group};
+
+            $groupKeyStr = implode('_', $groupKeys);
+
+            if(!isset($sliceRows[$groupKeyStr]))
             {
-                if(strpos($field, '_slice_' . $uuName) === false) $sliceRow[$field] = $value;
+                $sliceRows[$groupKeyStr] = (object)$groupKeys;
+                foreach($sliceList as $slice) $sliceRows[$groupKeyStr]->{$slice . '_slice_' . $uuName} = '';
             }
-            foreach($sliceList as $field)
-            {
-                $field = $field . '_slice_' . $uuName;
-                $sliceRow[$field] = !empty($row->{$field}) ? $row->{$field} : '';
-            }
-            $sliceRows[$key] = (object)$sliceRow;
+
+            $sliceRows[$groupKeyStr]->{$field} = $columnRow->{$uuName};
         }
 
         return $sliceRows;
@@ -2546,7 +2922,7 @@ class pivotModel extends model
 
             $fieldStr = implode('`,`', $fields);
             $table    = zget($this->config->objectTables, $object, '');
-            $data     = $this->dao->select("`$fieldStr`")->from($table)->printSQL();
+            $data     = $this->dao->select("`$fieldStr`")->from($table)->fetchAll();
 
             $tableRecords[$object] = $data;
         }
@@ -2583,14 +2959,6 @@ class pivotModel extends model
     public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array())
     {
         $sql = $this->initVarFilter($filters, $sql);
-
-        /* Create sql. */
-        $sql = str_replace(';', '', $sql);
-
-        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
-        {
-            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
-        }
 
         /* Process rows. */
         $connectSQL = '';
