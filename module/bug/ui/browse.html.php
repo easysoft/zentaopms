@@ -71,7 +71,7 @@ if(!isonlybody())
             'text'  => $lang->bug->export,
             'icon'  => 'export',
             'class' => 'ghost',
-            'url'   => createLink('bug', 'export', "productID={$product->id}&browseType={$browseType}),
+            'url'   => createLink('bug', 'export', "productID={$product->id}&browseType={$browseType}"),
             'data-toggle' => 'modal'
         ))) : null,
         $canCreate && $canBatchCreate ? btngroup
