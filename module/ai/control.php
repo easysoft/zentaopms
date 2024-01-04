@@ -528,8 +528,13 @@ class ai extends control
      */
     public function importMiniProgram()
     {
-        if(!empty($_POST) && !empty($_FILES))
+        if(empty($_FILES)) return $this->sendError(array('file' => sprintf($this->lang->error->notempty, $this->lang->ai->installPackage)));
+
+        if(!empty($_POST))
         {
+            $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'toPublish' => $this->lang->ai->toPublish));
+            if($errors !== false) return $this->sendError($errors);
+
             $file = $_FILES['file'];
             $filePath = $file['tmp_name'];
             $result = $this->ai->extractZtAppZip($filePath);

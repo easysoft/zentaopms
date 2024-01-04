@@ -2,3 +2,4 @@
 #import-miniprogram .modal-dialog {padding: 10px 20px 10px 20px; position: relative;}
 #import-miniprogram .modal-dialog .modal-header {border: none!important; padding-bottom: 0;}
 .close-import-dialog {position: absolute; right: 20px; top: 20px;}
+input[type="file"]:focus {outline: none!important;}

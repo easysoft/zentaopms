@@ -106,18 +106,18 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
             <tr>
               <th><?= $lang->ai->installPackage; ?></th>
               <td>
-                <input type="file" name="file" accept=".zip" required class="form-control">
+                <?= html::file('file', "accept='.zip' class='form-control'"); ?>
               </td>
             </tr>
             <tr>
               <th><?= $lang->ai->miniPrograms->category; ?></th>
               <td>
-                <?= html::select('category', array_merge($lang->ai->miniPrograms->categoryList, $categoryList), $category, "class='form-control chosen' required"); ?>
+                <?= html::select('category', array_merge($lang->ai->miniPrograms->categoryList, $categoryList), $category, "class='form-control chosen'"); ?>
               </td>
             </tr>
             <tr>
               <th><?= $lang->ai->toPublish; ?></th>
-              <td class="required">
+              <td>
                 <div class="radio" style="display: flex; align-items: center; gap: 4px;">
                   <label>
                     <input type="radio" name="published" value="1"><?= $lang->ai->miniPrograms->field->requiredOptions[1]; ?>
