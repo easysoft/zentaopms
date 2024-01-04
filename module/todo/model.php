@@ -302,11 +302,11 @@ class todoModel extends model
         global $app;
         $action = strtolower($action);
 
-        if($todo->private and $app->user->account != $todo->account) return false;
+        if($todo->private && $app->user->account != $todo->account) return false;
         if($action == 'start')    return $todo->status == 'wait' && !$todo->cycle;
         if($action == 'activate') return $todo->status == 'done' or $todo->status == 'closed';
         if($action == 'close')    return $todo->status == 'done';
-        if($action == 'assignTo') return $todo->status != 'done' && $todo->status != 'closed';
+        if($action == 'assignto') return !$todo->private && $todo->status != 'done' && $todo->status != 'closed';
         if($action == 'finish')   return $todo->status != 'done' && $todo->status != 'closed' && !$todo->cycle;
         return true;
     }

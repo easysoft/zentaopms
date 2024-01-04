@@ -36,6 +36,16 @@ window.renderRowData = function($row, index, row)
         $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${row.id}]`).attr('id', `switchTime_${row.id}`).prop('checked', !row.begin);
         $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${row.id}`);
     }
+
+    $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
+    {
+        if(row.private == 1)
+        {
+            $assignedTo = $(this).zui('picker');
+            $assignedTo.options.disabled = true;
+            $assignedTo.render($assignedTo.options);
+        }
+    });
 };
 
 window.togglePending = function(e)
