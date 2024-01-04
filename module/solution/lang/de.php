@@ -57,6 +57,7 @@ $lang->solution->errors->notEnoughResource    = 'Not enough resource, please inc
 
 $lang->solution->installationErrors = array();
 $lang->solution->installationErrors['waiting']           = 'Installation not started.';
+$lang->solution->installationErrors['installing']        = 'Installing.';
 $lang->solution->installationErrors['uninstalling']      = 'Installation canceled.';
 $lang->solution->installationErrors['cneError']          = 'Installation failed.';
 $lang->solution->installationErrors['timeout']           = 'Installation timeout.';

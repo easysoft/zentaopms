@@ -57,6 +57,7 @@ $lang->solution->errors->notEnoughResource    = '资源不足, 请增加配置�
 
 $lang->solution->installationErrors = array();
 $lang->solution->installationErrors['waiting']           = '安装未开始。';
+$lang->solution->installationErrors['installing']        = '正在安装中。';
 $lang->solution->installationErrors['uninstalling']      = '安装已取消。';
 $lang->solution->installationErrors['cneError']          = '安装失败。';
 $lang->solution->installationErrors['timeout']           = '安装超时。';
