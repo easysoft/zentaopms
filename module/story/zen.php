@@ -695,6 +695,11 @@ class storyZen extends story
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
         if($this->view->hiddenPlan || $storyType == 'requirement') unset($fields['plan']);
+        if($storyType == 'requirement')
+        {
+            unset($fields['parent']);
+            unset($fields['URS']);
+        }
 
         $this->view->branchID = $branch;
         return $fields;
@@ -1756,8 +1761,13 @@ class storyZen extends story
             $config->story->custom->batchCreateFields = trim(sprintf($config->story->custom->batchCreateFields, ''), ',');
         }
 
-        /* User requirement without plan field. */
-        if($storyType == 'requirement') unset($customFields['plan']);
+        /* User requirement without plan/parent/URS field. */
+        if($storyType == 'requirement')
+        {
+            unset($customFields['plan']);
+            unset($customFields['parent']);
+            unset($customFields['URS']);
+        }
 
         return $customFields;
     }
@@ -1780,7 +1790,7 @@ class storyZen extends story
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
-        if($storyType == 'requirement') $showFields = str_replace('plan', '', $showFields);
+        if($storyType == 'requirement') $showFields = str_replace(array(',plan,', ',parent,', ',URS,'), ',', ",$showFields,");
 
         return $showFields;
     }
