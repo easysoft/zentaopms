@@ -17,7 +17,6 @@ jsVar('meeting', isset($meetings) ? $meetings : array());
 jsVar('researchReports', isset($researchReports) ? $researchReports : array());
 jsVar('productStoryList', $productStoryList);
 jsVar('storyType', $storyType);
-jsVar('app', $this->app->tab);
 
 if(!empty($twinsTip)) js("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
