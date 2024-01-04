@@ -51,7 +51,7 @@ foreach($gitlabGroupList as $gitlabGroup)
 }
 foreach($config->gitlab->dtable->group->fieldList['actions']['list'] as $action => $gitlabConfig)
 {
-    if(!$this->gitlab->isDisplay($gitlab, $action)) unset($config->gitlab->dtable->group->fieldList['actions']['list'][$action]);
+    if(!$this->gitlab->isDisplay($action)) unset($config->gitlab->dtable->group->fieldList['actions']['list'][$action]);
 }
 
 $config->gitlab->dtable->group->fieldList['fullName']['avatarProps'] = jsRaw("(col, row) => ({text: row.data.name})");

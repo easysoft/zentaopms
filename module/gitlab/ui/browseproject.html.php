@@ -53,7 +53,7 @@ foreach($gitlabProjectList as $gitlabProject)
 }
 foreach($config->gitlab->dtable->project->fieldList['actions']['list'] as $action => $gitlabConfig)
 {
-    if(!$this->gitlab->isDisplay($gitlab, $action)) unset($config->gitlab->dtable->project->fieldList['actions']['list'][$action]);
+    if(!$this->gitlab->isDisplay($action)) unset($config->gitlab->dtable->project->fieldList['actions']['list'][$action]);
 }
 
 $gitlabProjectList = initTableData($gitlabProjectList, $config->gitlab->dtable->project->fieldList, $this->gitlab);

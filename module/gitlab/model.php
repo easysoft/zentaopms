@@ -2498,6 +2498,28 @@ class gitlabModel extends model
     }
 
     /**
+     * 判断按钮是否显示在列表页。
+     * Judge an action is displayed in browse page.
+     *
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isDisplay(string $action): bool
+    {
+        $action = strtolower($action);
+
+        if(!commonModel::hasPriv('space', 'browse')) return false;
+
+        if(!in_array(strtolower(strtolower($action)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
+        {
+            if(!commonModel::hasPriv('instance', 'manage')) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * 通过graphql的api获取数据。
      * Get data by api graphql.
      *
