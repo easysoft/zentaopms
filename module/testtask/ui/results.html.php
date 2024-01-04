@@ -75,8 +75,11 @@ foreach($results as $i => $result)
     $stepResultTrs = array();
     foreach($result->stepResults as $key => $stepResult)
     {
+        if(empty($stepResult['id']))     $stepResult['id']     = 0;
         if(empty($stepResult['type']))   $stepResult['type']   = 'step';
         if(empty($stepResult['parent'])) $stepResult['parent'] = 0;
+        if(empty($stepResult['result'])) $stepResult['result'] = 0;
+        if(empty($stepResult['grade']))  $stepResult['grade']  = 0;
 
         $itemTds   = array();
         $modalID   = $result->id . '-' . $key;
