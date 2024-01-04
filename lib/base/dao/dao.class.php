@@ -760,9 +760,7 @@ class baseDAO
      */
     public function query($sql = '')
     {
-        /* 如果有错误，返回一个空的PDOStatement对象，确保后续方法能够执行。*/
-        /* If any error, return an empty statement object to make sure the remain method to execute. */
-        if(!empty(dao::$errors)) return new PDOStatement();
+        if(!empty(dao::$errors)) return $this;
 
         if($sql)
         {
@@ -871,7 +869,7 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
+        if(!empty(dao::$errors)) return $this;
 
         if($sql)
         {
