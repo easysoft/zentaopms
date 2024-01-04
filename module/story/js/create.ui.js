@@ -143,6 +143,8 @@ window.loadProductPlans = function(productID, branch)
     $.get(planLink, function(data)
     {
         let items = JSON.parse(data);
+        if(items.length == 0) return;
+
         let $inputGroup = $planIdBox.closest('.input-group');
         $inputGroup.html("<span id='planIdBox'><div class='picker-box'></div></span>")
         new zui.Picker('#planIdBox .picker-box', {items: items, name: 'plan', defaultValue: planID.toString()});
