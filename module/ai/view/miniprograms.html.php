@@ -153,78 +153,87 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
     </div>
   </div>
   <div class="main-col">
-    <div class="main-table">
-      <table class="main-table table has-sort-head table-fixed">
-        <thead>
-          <tr>
-            <?php $vars = "category=$category&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-            <th class="c-id" style="width: 70px;"><?php common::printOrderLink('id', $orderBy, $vars, 'ID'); ?></th>
-            <th class="c-name" style="width: 30%;"><?= $lang->prompt->name; ?></th>
-            <th class="c-status"><?= $lang->prompt->status; ?></th>
-            <th class="c-category"><?= $lang->prompt->module; ?></th>
-            <th class="c-createdby"><?= $lang->prompt->createdBy; ?></th>
-            <th class="c-createddate"><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->prompt->createdDate); ?></th>
-            <th class="c-publisheddate"><?php common::printOrderLink('publishedDate', $orderBy, $vars, $lang->ai->miniPrograms->latestPublishedDate); ?></th>
-            <th class="c-actions" style="width: 160px;"><?= $lang->actions; ?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($miniPrograms as $miniProgram) : ?>
-            <tr>
-              <td class="c-id"><?= $miniProgram->id; ?></td>
-              <td class="c-name"><a href="<?= $this->createLink('ai', 'miniProgramView', "id={$miniProgram->id}"); ?>"><?= $miniProgram->name; ?></a></td>
-              <td class="c-status"><?= $miniProgram->publishedLabel; ?></td>
-              <td class="c-category"><?= $miniProgram->categoryLabel; ?></td>
-              <td class="c-createdby"><?= $miniProgram->createdByLabel; ?></td>
-              <td class="c-createddate"><?= $miniProgram->createdDate; ?></td>
-              <td class="c-publisheddate"><?= $miniProgram->publishedDate; ?></td>
-              <td class="c-actions">
-                <?php $isPublished = $miniProgram->published === '1'; ?>
-                <?php
-                if(common::hasPriv('ai', 'editMiniProgram'))
-                {
-                  echo $isPublished
-                    ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
-                    : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
-                }
-                ?>
-                <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
-                  <button
-                    class="btn iframe"
-                    data-toggle="modal"
-                    data-width="800"
-                    data-height="600"<?= $isPublished ? ' disabled' : ''; ?>
-                    title="<?= $lang->ai->prompts->action->test; ?>"
-                    data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
-                  >
-                    <i class="icon-menu-backend text-primary"></i>
-                  </button>
-                <?php endif; ?>
-                <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
-                  <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
-                    <i class="icon-publish text-primary"></i>
-                  </button>
-                <?php endif; ?>
-                <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
-                  <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
-                    <i class="icon-ban-circle text-primary"></i>
-                  </button>
-                <?php endif; ?>
-                <?php if(common::hasPriv('ai', 'exportMiniProgram')): ?>
-                  <button class="btn" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
-                    <i class="icon-upload-file text-primary"></i>
-                  </button>
-                <?php endif; ?>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-      <div class='table-footer'>
-        <div class="table-statistic"><?= sprintf($lang->ai->miniPrograms->summary, count($miniPrograms)); ?></div>
-        <?php $pager->show('right', 'pagerjs'); ?>
+    <?php if(empty($miniPrograms)): ?>
+      <div class="table-empty-tip">
+        <p>
+          <span class="text-muted"><?php echo $lang->ai->miniPrograms->emptyList;?></span>
+          <?php if(common::hasPriv('ai', 'createMiniProgram')) echo html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-info'");?>
+        </p>
       </div>
-    </div>
+    <?php else: ?>
+      <div class="main-table">
+        <table class="main-table table has-sort-head table-fixed">
+          <thead>
+            <tr>
+              <?php $vars = "category=$category&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+              <th class="c-id" style="width: 70px;"><?php common::printOrderLink('id', $orderBy, $vars, 'ID'); ?></th>
+              <th class="c-name" style="width: 30%;"><?= $lang->prompt->name; ?></th>
+              <th class="c-status"><?= $lang->prompt->status; ?></th>
+              <th class="c-category"><?= $lang->prompt->module; ?></th>
+              <th class="c-createdby"><?= $lang->prompt->createdBy; ?></th>
+              <th class="c-createddate"><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->prompt->createdDate); ?></th>
+              <th class="c-publisheddate"><?php common::printOrderLink('publishedDate', $orderBy, $vars, $lang->ai->miniPrograms->latestPublishedDate); ?></th>
+              <th class="c-actions" style="width: 160px;"><?= $lang->actions; ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($miniPrograms as $miniProgram) : ?>
+              <tr>
+                <td class="c-id"><?= $miniProgram->id; ?></td>
+                <td class="c-name"><a href="<?= $this->createLink('ai', 'miniProgramView', "id={$miniProgram->id}"); ?>"><?= $miniProgram->name; ?></a></td>
+                <td class="c-status"><?= $miniProgram->publishedLabel; ?></td>
+                <td class="c-category"><?= $miniProgram->categoryLabel; ?></td>
+                <td class="c-createdby"><?= $miniProgram->createdByLabel; ?></td>
+                <td class="c-createddate"><?= $miniProgram->createdDate; ?></td>
+                <td class="c-publisheddate"><?= $miniProgram->publishedDate; ?></td>
+                <td class="c-actions">
+                  <?php $isPublished = $miniProgram->published === '1'; ?>
+                  <?php
+                  if(common::hasPriv('ai', 'editMiniProgram'))
+                  {
+                    echo $isPublished
+                      ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
+                      : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
+                  }
+                  ?>
+                  <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
+                    <button
+                      class="btn iframe"
+                      data-toggle="modal"
+                      data-width="800"
+                      data-height="600"<?= $isPublished ? ' disabled' : ''; ?>
+                      title="<?= $lang->ai->prompts->action->test; ?>"
+                      data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
+                    >
+                      <i class="icon-menu-backend text-primary"></i>
+                    </button>
+                  <?php endif; ?>
+                  <?php if(common::hasPriv('ai', 'publishMiniProgram')): ?>
+                    <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
+                      <i class="icon-publish text-primary"></i>
+                    </button>
+                  <?php endif; ?>
+                  <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
+                    <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
+                      <i class="icon-ban-circle text-primary"></i>
+                    </button>
+                  <?php endif; ?>
+                  <?php if(common::hasPriv('ai', 'exportMiniProgram')): ?>
+                    <button class="btn" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
+                      <i class="icon-upload-file text-primary"></i>
+                    </button>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+        <div class='table-footer'>
+          <div class="table-statistic"><?= sprintf($lang->ai->miniPrograms->summary, count($miniPrograms)); ?></div>
+          <?php $pager->show('right', 'pagerjs'); ?>
+        </div>
+      </div>
+    <?php endif; ?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php'; ?>

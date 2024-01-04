@@ -431,6 +431,7 @@ $lang->ai->conversations->common = 'Conversations';
 
 $lang->ai->miniPrograms                    = new stdClass();
 $lang->ai->miniPrograms->common            = 'Mini Programs';
+$lang->ai->miniPrograms->emptyList         = 'There is currently no mini program available.';
 $lang->ai->miniPrograms->create            = 'Create A Program';
 $lang->ai->miniPrograms->configuration     = 'Basic Information Configuration';
 $lang->ai->miniPrograms->downloadTip       = 'Once created, your mini-program will be displayed on the AI Mini-Program Square in the client.';

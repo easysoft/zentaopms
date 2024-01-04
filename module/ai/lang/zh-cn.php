@@ -431,6 +431,7 @@ $lang->ai->conversations->common = '会话';
 
 $lang->ai->miniPrograms                    = new stdClass();
 $lang->ai->miniPrograms->common            = '小程序';
+$lang->ai->miniPrograms->emptyList         = '暂时没有小程序。';
 $lang->ai->miniPrograms->create            = '创建小程序';
 $lang->ai->miniPrograms->configuration     = '基本信息配置';
 $lang->ai->miniPrograms->downloadTip       = '创建完成后，您的小程序将在客户端的AI小程序广场上展示。';
