@@ -2,3 +2,4 @@
 .actions-menu .searchBox {width: 120px;}
 .actions-menu .searchBox .input-control-suffix {padding-right: 0;}
 .actions-menu .btn-group .switchBtn {padding: 6px 10px;}
+#table-doc-showfiles [data-type='title'] .dtable-cell-html img {max-height: 36px;}
