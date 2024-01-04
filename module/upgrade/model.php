@@ -5155,6 +5155,7 @@ class upgradeModel extends model
                     return $response;
                 }
             }
+
             /* Copy from-path to to-path, and replace the load path in the to-path files. */
             copy($fromPath, $toPath);
             $this->replaceIncludePath($toPath);
