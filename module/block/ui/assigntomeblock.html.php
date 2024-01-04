@@ -88,7 +88,7 @@ foreach($hasViewPriv as $type => $bool)
 
             $typeName = '';
             if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-            if($reviewType == 'story')                $typeName = $lang->SRCommon;
+            if($reviewType == 'story')                $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);
