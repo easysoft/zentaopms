@@ -4199,6 +4199,7 @@ class upgradeModel extends model
 
         /* If is project admin, have all project priv. */
         $projectAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
+        if(empty($projectAdminGroupID)) return;
 
         $this->app->loadLang('group');
         foreach($this->lang->resource->program as $method => $methodLang)
