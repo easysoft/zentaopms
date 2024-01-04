@@ -18,7 +18,7 @@ class zahostZen extends zahost
 
         if(empty($result) || $result->code != 'success') return $this->lang->zahost->init->serviceStatus;
 
-        return $result->data;
+        return (array)$result->data;
     }
 }
 
