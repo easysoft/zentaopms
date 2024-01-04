@@ -1588,6 +1588,7 @@ class repoModel extends model
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
 
                 $this->setTaskByCommit($task, $taskActions, $action, $changes, $scm);
+                unset($objects['tasks'][$taskID]);
                 dao::$errors = array();
             }
         }
@@ -2529,6 +2530,117 @@ class repoModel extends model
     }
 
     /**
+     * 通过指令开始任务。
+     * Start task by commit.
+     *
+     * @param  object  $task
+     * @param  array   $params
+     * @param  object  $action
+     * @param  array   $changes
+     * @access private
+     * @return bool
+     */
+    private function startTask(object $task, array $params, object $action, array $changes): bool
+    {
+        $now     = helper::now();
+        $newTask = new stdclass();
+        $newTask->id             = $task->id;
+        $newTask->status         = 'doing';
+        $newTask->left           = $params['left'];
+        $newTask->consumed       = $params['consumed'] + $task->consumed;
+        $newTask->realStarted    = $now;
+        $newTask->lastEditedBy   = $this->app->user->account;
+        $newTask->lastEditedDate = $now;
+        if($newTask->left == 0 && empty($task->team))
+        {
+            $newTask->status       = 'done';
+            $newTask->finishedBy   = $this->app->user->account;
+            $newTask->finishedDate = $now;
+            $newTask->assignedTo   = $task->openedBy;
+        }
+
+        $currentTeam = !empty($task->team) ? $this->loadModel('task')->getTeamByAccount($task->team) : array();
+        $effort      = new stdclass();
+        $effort->date     = helper::today();
+        $effort->task     = $newTask->id;
+        $effort->consumed = zget($newTask, 'consumed', 0);
+        $effort->left     = zget($newTask, 'left', 0);
+        $effort->account  = $this->app->user->account;
+        $effort->consumed = !empty($task->team) && $currentTeam ? $effort->consumed - $currentTeam->consumed : $effort->consumed - $task->consumed;
+        if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+        if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
+
+        $taskChanges = $this->task->start($task, $newTask);
+        if($taskChanges)
+        {
+            $taskChanges    = array_merge($taskChanges, $changes);
+            $action->action = $newTask->left == 0 ? 'finished' : 'started';
+            $this->saveRecord($action, $taskChanges);
+
+            $this->task->afterStart($task, array(), (float)$newTask->left, array());
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 根据指令完成任务。
+     * Finish task by commit.
+     *
+     * @param  object  $task
+     * @param  array   $params
+     * @param  object  $action
+     * @param  array   $changes
+     * @access private
+     * @return bool
+     */
+    private function finishTask(object $task, array $params, object $action, array $changes): bool
+    {
+        $now     = helper::now();
+        $newTask = new stdclass();
+        $newTask->status         = 'done';
+        $newTask->left           = zget($params, 'left', 0);
+        $newTask->consumed       = $params['consumed'] + $task->consumed;
+        $newTask->assignedTo     = $task->openedBy;
+        $newTask->realStarted    = $task->realStarted ? $task->realStarted : $now;
+        $newTask->finishedDate   = $now;
+        $newTask->lastEditedDate = $now;
+        $newTask->assignedDate   = $now;
+        $newTask->finishedBy     = $this->app->user->account;
+        $newTask->lastEditedBy   = $this->app->user->account;
+
+        $this->loadModel('task');
+        if(empty($task->team))
+        {
+            $consumed = $params['consumed'];
+        }
+        else
+        {
+            $currentTeam = $this->task->getTeamByAccount($task->team);
+            $consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $newTask->consumed;
+        }
+
+        $effort = new stdclass();
+        $effort->date     = helper::today();
+        $effort->task     = $task->id;
+        $effort->left     = 0;
+        $effort->account  = $this->app->user->account;
+        $effort->consumed = $consumed > 0 ? $consumed : 0;
+        if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+        if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
+
+        $taskChanges = $this->task->finish($task, $newTask);
+        if($taskChanges)
+        {
+            $taskChanges    = array_merge($taskChanges, $changes);
+            $action->action = 'finished';
+            $this->saveRecord($action, $taskChanges);
+
+            $this->task->afterStart($task, array(), 0, array());
+        }
+        return !dao::isError();
+    }
+
+    /**
      * 根据提交信息设置任务信息。
      * Set task by commit.
      *
@@ -2542,34 +2654,12 @@ class repoModel extends model
      */
     public function setTaskByCommit(object $task, array $taskActions, object $action, array $changes, string $scm): bool
     {
-        $this->loadModel('task');
-        $now = helper::now();
         foreach($taskActions as $taskAction => $params)
         {
             if($taskAction == 'start' && $task->status == 'wait')
             {
-                $newTask = form::data($this->config->task->form->start)
-                    ->add('id', $task->id)
-                    ->setIF($task->assignedTo != $this->app->user->account, 'assignedDate', $now)
-                    ->get();
-                unset($newTask->assignedTo);
-
-                $newTask->left        = $params['left'];
-                $newTask->consumed    = $params['consumed'] + $task->consumed;
-                $newTask->realStarted = $now;
-                if($newTask->left == 0 && empty($task->team))
-                {
-                    $newTask->status       = 'done';
-                    $newTask->finishedBy   = $this->app->user->account;
-                    $newTask->finishedDate = $now;
-                    $newTask->assignedTo   = $task->openedBy;
-                }
-                $taskChanges = $this->task->start($task, $newTask);
-                if($taskChanges)
-                {
-                    $action->action = $newTask->left == 0 ? 'finished' : 'started';
-                    $this->saveRecord($action, $taskChanges);
-                }
+                $this->startTask($task, $params, $action, $changes);
+                dao::$errors = array();
             }
             elseif($taskAction == 'effort' && in_array($task->status, array('wait', 'pause', 'doing')))
             {
@@ -2578,18 +2668,7 @@ class repoModel extends model
             }
             elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
             {
-                $this->post->set('realStarted', $task->realStarted ? $task->realStarted : $now);
-                $newTask = form::data($this->config->task->form->finish)
-                    ->setDefault('assignedTo', $task->openedBy)
-                    ->get();
-                $newTask->left     = zget($params, 'left', 0);
-                $newTask->consumed = $params['consumed'] + $task->consumed;
-                $taskChanges = array_merge($this->task->finish($task, $newTask), $changes);
-                if($taskChanges)
-                {
-                    $action->action = 'finished';
-                    $this->saveRecord($action, $taskChanges);
-                }
+                $this->finishTask($task, $params, $action, $changes);
             }
         }
 
