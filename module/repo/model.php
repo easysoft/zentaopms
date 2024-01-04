@@ -2566,6 +2566,7 @@ class repoModel extends model
         $effort->consumed = zget($newTask, 'consumed', 0);
         $effort->left     = zget($newTask, 'left', 0);
         $effort->account  = $this->app->user->account;
+        $effort->work     = $this->lang->action->label->started . $this->lang->effort->objectTypeList['task'] . " : " . $task->name;
         $effort->consumed = !empty($task->team) && $currentTeam ? $effort->consumed - $currentTeam->consumed : $effort->consumed - $task->consumed;
         if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
         if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
@@ -2625,6 +2626,7 @@ class repoModel extends model
         $effort->left     = 0;
         $effort->account  = $this->app->user->account;
         $effort->consumed = $consumed > 0 ? $consumed : 0;
+        $effort->work     = $this->lang->action->label->finished . $this->lang->effort->objectTypeList['task'] . " : " . $task->name;
         if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
         if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEffortOrder($effortID, $currentTeam->order);
 
