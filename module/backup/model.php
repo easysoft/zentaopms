@@ -430,16 +430,13 @@ class backupModel extends model
      * @access public
      * @return int
      */
-    public function getDirSize(string $dir): string
+    public function getDirSize(string $dir): int
     {
         if(!file_exists($dir)) return 0;
         $totalSize = 0;
         $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS));
 
-        foreach($iterator as $file)
-        {
-            $totalSize += $file->getSize();
-        }
+        foreach($iterator as $file) $totalSize += $file->getSize();
         return $totalSize;
     }
 }
