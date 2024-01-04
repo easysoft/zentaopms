@@ -36,7 +36,7 @@ div
     on::click('.changeBtn', 'closeModal'),
     setClass('actions text-center mt-3'),
     btn(set::url(inlink('processstorychange', "id=$storyID&result=no")), setClass('secondary changeBtn mr-5 btn-wide'), $lang->story->changeList['no']),
-    $story->status != 'active' ? null : btn(set::url(inlink('change', "id=$storyID")), setClass('primary changeBtn btn-wide'), $lang->story->changeList['yes'])
+    btn(set::url(inlink('change', "id=$storyID")), setClass('primary changeBtn btn-wide'), $lang->story->changeList['yes'])
 );
 
 render();
