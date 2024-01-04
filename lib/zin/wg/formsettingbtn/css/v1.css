@@ -1,6 +1,6 @@
 .form-setting-btn {width: 280px;}
 .form-setting-btn .panel-heading, .form-setting-btn .panel-body {padding-left:0px; padding-right:0px;}
 .form-setting-btn .panel-body {padding-top: 0px; padding-bottom: 0px;}
-.form-setting-btn .panel-body form {display: flex; flex-wrap: wrap;}
+.form-setting-btn .panel-body form {display: flex; flex-wrap: wrap; flex-direction: row; gap: 0; margin-bottom: -28px;}
 .form-setting-btn .panel-body form .checkbox-primary {width: 50%; margin-top: 0.5rem; margin-bottom: 0.5rem;}
 .form-setting-btn .panel-body form .form-actions .btn {min-width: auto;}
