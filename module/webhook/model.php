@@ -594,7 +594,7 @@ class webhookModel extends model
         if(empty($table)) return false;
 
         $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
-        $toList = $this->loadModel('message')->getToList($object, $action->objectType, $actionID);
+        $toList = $this->loadModel('message')->getToList((object)$object, $action->objectType, $actionID);
         if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
         if(empty($toList)) return false;
 

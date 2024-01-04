@@ -1,6 +1,22 @@
 window.onRenderRow = function(row, rowIdx, data)
 {
     if(row.children('[data-name=milestone]').find('input[type=radio]:checked').length == 0) row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
+    row.children('[data-name=type]').find('[name^=type]').picker({disabled: true});
+
+    if(data != undefined)
+    {
+        if(data.hasOwnProperty('type'))
+        {
+            row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
+            {
+                let $type = info[0];
+                $type.render({disabled: true});
+            });
+        }
+
+        row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').remove();
+    }
+
     if(!data || !data.planIDList) return;
 
     row.children('.form-batch-row-actions').children('[data-type=delete]').addClass('hidden');
