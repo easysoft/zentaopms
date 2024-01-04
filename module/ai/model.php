@@ -993,11 +993,10 @@ APP;
     {
         if(empty($data)) $data = fixer::input('post')->get();
 
-        if(isset($data->prompt) && isset($data->toPublish))
+        if(isset($data->prompt))
         {
             $this->dao->update(TABLE_MINIPROGRAM)
                 ->set('prompt')->eq($data->prompt)
-                ->set('published')->eq($data->toPublish)
                 ->where('id')->eq($appID)
                 ->exec();
         }
