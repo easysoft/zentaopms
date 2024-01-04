@@ -530,24 +530,24 @@ class upgrade extends control
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
         $alterSQL = $this->upgrade->checkConsistency($this->config->version);
-        if(!empty($alterSQL)) $this->displayConsistency($alterSQL);
+        if(!empty($alterSQL)) return $this->displayConsistency($alterSQL);
 
         /* 如果有扩展文件并且需要移除文件，显示需要移除的文件。*/
         /* If there are extendtion files and need to move them, display them. */
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) && $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
+        if(!empty($extFiles) && $skipMoveFile == 'no') return $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
 
         /* 移除收费版本目录，如果有错误，显示移除命令。*/
         /* Remove encrypted directories. */
         $response = $this->upgrade->removeEncryptedDir();
-        if($response['result'] == 'fail') $this->displayExecuteError($response['command']);
+        if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
 
         unset($_SESSION['user']);
 
         /* 检查是否还有需要处理的。*/
         /* Check if there is anything else that needs to be processed. */
         $needProcess = $this->upgrade->checkProcess();
-        if($processed == 'no') $this->displayExecuteProcess($fromVersion, $needProcess);
+        if($processed == 'no') return $this->displayExecuteProcess($fromVersion, $needProcess);
 
         if(empty($needProcess) || $processed == 'yes') $this->processAfterExecSuccessfully();
     }

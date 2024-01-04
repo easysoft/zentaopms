@@ -29,7 +29,7 @@ div
             div
             (
                 setClass('border p-4 mb-4'),
-                set::style(array('background-color' => 'var(--color-gray-100)')),
+                set::style(array('background-color' => 'var(--color-gray-100)', 'max-height' => '430px', 'overflow' => 'hidden', 'overflow-y' => 'auto')),
                 div(html(nl2br($confirm)))
             ),
             input
