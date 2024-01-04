@@ -1978,6 +1978,7 @@ class productModel extends model
         if($module == 'product'    && $method == 'dynamic')     return helper::createLink($module, $method,       "productID=%s&type=$extra");
         if($module == 'project'    && $method == 'testcase')    return helper::createLink($module, $method,       "projectID={$params[0]}&productID=%s&branch={$branchID}&browseType={$params[1]}");
         if($module == 'testtask'   && $method == 'browseunits') return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
+        if($module == 'testtask'   && $method == 'unitcases')   return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
 
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");

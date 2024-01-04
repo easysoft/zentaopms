@@ -318,7 +318,7 @@ class testtask extends control
         $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->loadModel('qa')->setMenu($productID);
-        $this->app->rawModule = 'testcase';
+        $this->lang->qa->menu->testcase['subModule'] .= ',testtask';
 
         /* 根据测试套件获取测试用例执行结果。*/
         /* Get testrun of test cases by suite. */
