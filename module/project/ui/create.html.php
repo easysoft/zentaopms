@@ -48,7 +48,7 @@ if(!empty($products))
                 set::width($hasBranch ? '1/4' : '1/2'),
                 set('id', 'linkProduct'),
                 set::required(true),
-                $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
+                $i == 0 ? set::label($lang->project->manageProductPlan) : set::label(''),
                 inputGroup
                 (
                     div
@@ -402,7 +402,7 @@ formPanel
         (
             set::width('1/2'),
             set('id', 'linkProduct'),
-            set::label($lang->project->manageProducts),
+            set::label($lang->project->manageProductPlan),
             inputGroup
             (
                 $programID ? setClass('required') : null,
