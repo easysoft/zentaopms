@@ -2073,7 +2073,7 @@ class execution extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
-            return $this->sendSuccess(array('load' => array('back' => true)));
+            return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
         $this->loadModel('dept');
