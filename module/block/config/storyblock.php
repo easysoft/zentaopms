@@ -5,7 +5,7 @@ $app->loadLang('story');
 $config->block->story = new stdclass();
 $config->block->story->dtable = new stdclass();
 $config->block->story->dtable->fieldList = array();
-$config->block->story->dtable->fieldList['id']       = array('name' => 'id',       'title' => $this->lang->idAB,              'type' => 'id',       'sort' => true);
+$config->block->story->dtable->fieldList['id']       = array('name' => 'id',       'title' => $this->lang->idAB,              'type' => 'id',       'sort' => 'number');
 $config->block->story->dtable->fieldList['title']    = array('name' => 'title',    'title' => $this->lang->story->title,      'type' => 'title',    'sort' => true, 'flex' => 1, 'link' => array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}&vision={version}&param=0&storyType={type}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
 $config->block->story->dtable->fieldList['pri']      = array('name' => 'pri',      'title' => $this->lang->priAB,             'type' => 'pri',      'sort' => true);
 $config->block->story->dtable->fieldList['status']   = array('name' => 'status',   'title' => $this->lang->story->statusAB,   'type' => 'status',   'sort' => true, 'statusMap' => $lang->story->statusList);

@@ -7,7 +7,7 @@ $config->block->task->dtable = new stdclass();
 $config->block->task->dtable->fieldList = array();
 $config->block->task->dtable->fieldList['id']['name']  = 'id';
 $config->block->task->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->block->task->dtable->fieldList['id']['type']  = 'id';
+$config->block->task->dtable->fieldList['id']['type']  = 'int';
 $config->block->task->dtable->fieldList['id']['fixed'] = 'left';
 $config->block->task->dtable->fieldList['id']['sort']  = true;
 

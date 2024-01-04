@@ -6,7 +6,7 @@ $app->loadModuleConfig('testcase');
 $config->block->case = new stdclass();
 $config->block->case->dtable = new stdclass();
 $config->block->case->dtable->fieldList = array();
-$config->block->case->dtable->fieldList['id']            = array('name' => 'id',    'title' => $lang->idAB,            'type' => 'id', 'fixed' => false, 'sort' => true);
+$config->block->case->dtable->fieldList['id']            = array('name' => 'id',    'title' => $lang->idAB,            'type' => 'id', 'fixed' => false, 'sort' => 'number');
 $config->block->case->dtable->fieldList['title']         = array('name' => 'title', 'title' => $lang->testcase->title, 'type' => 'title', 'sort' => true, 'link' => array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}"), 'fixed' => false, 'width' => '50%');
 $config->block->case->dtable->fieldList['pri']           = $config->testcase->dtable->fieldList['pri'];
 $config->block->case->dtable->fieldList['status']        = $config->testcase->dtable->fieldList['status'];

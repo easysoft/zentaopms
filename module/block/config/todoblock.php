@@ -11,7 +11,7 @@ $config->block->todo->dtable->fieldList['id']['name']  = 'id';
 $config->block->todo->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->block->todo->dtable->fieldList['id']['type']  = 'id';
 $config->block->todo->dtable->fieldList['id']['fixed'] = 'left';
-$config->block->todo->dtable->fieldList['id']['sort']  = true;
+$config->block->todo->dtable->fieldList['id']['sort']  = 'number';
 
 $config->block->todo->dtable->fieldList['name']          = $config->my->todo->dtable->fieldList['name'];
 $config->block->todo->dtable->fieldList['name']['fixed'] = 'left';

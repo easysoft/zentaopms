@@ -9,7 +9,7 @@ $config->block->build->dtable->fieldList['id']['name']  = 'id';
 $config->block->build->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->block->build->dtable->fieldList['id']['type']  = 'id';
 $config->block->build->dtable->fieldList['id']['fixed'] = false;
-$config->block->build->dtable->fieldList['id']['sort']  = true;
+$config->block->build->dtable->fieldList['id']['sort']  = 'number';
 
 $config->block->build->dtable->fieldList['name']['name']  = 'name';
 $config->block->build->dtable->fieldList['name']['title'] = $lang->build->name;

@@ -8,7 +8,7 @@ $config->block->review->dtable = new stdclass();
 $config->block->review->dtable->fieldList = array();
 $config->block->review->dtable->fieldList = $config->my->audit->dtable->fieldList;
 
-$config->block->review->dtable->fieldList['id']['sort']     = true;
+$config->block->review->dtable->fieldList['id']['sort']     = 'number';
 $config->block->review->dtable->fieldList['title']['sort']  = true;
 $config->block->review->dtable->fieldList['type']['sort']   = true;
 $config->block->review->dtable->fieldList['time']['sort']   = 'date';
