@@ -50,7 +50,6 @@ if(common::canModify('execution', $execution))
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
-$cols['mailto']['userMap'] = $users;
 $tableData = initTableData($tasks, $cols, $this->task);
 
 toolbar
@@ -169,7 +168,7 @@ jsVar('teamLang',       $lang->task->team);
 dtable
 (
     set::groupDivider(true),
-    set::userMap($memberPairs),
+    set::userMap($users),
     set::cols($cols),
     set::data($tableData),
     set::checkable($canBatchAction),
