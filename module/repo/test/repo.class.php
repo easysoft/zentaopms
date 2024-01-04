@@ -709,4 +709,25 @@ class repoTest
         $result = $this->objectModel->filterProject($products, $projects);
         return $result;
     }
+
+    public function getGitlabFilesByPathTest(int $repoID, string $path = '', string $branch = '')
+    {
+        $repo   = $this->objectModel->getByID($repoID);
+        $result = $this->objectModel->getGitlabFilesByPath($repo, $path, $branch);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function getTreeByGraphqlTest(int $repoID, string $path = '', string $branch = '', string $type = 'blobs')
+    {
+        $repo   = $this->objectModel->getByID($repoID);
+        $result = $this->objectModel->getTreeByGraphql($repo, $path, $branch, $type);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
 }

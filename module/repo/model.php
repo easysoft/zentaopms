@@ -2516,9 +2516,9 @@ class repoModel extends model
      * @param  bool   $withCommit
      * @param  string $condition
      * @access public
-     * @return string|false
+     * @return string|object|false
      */
-    public function getHistoryRevision(int $repoID, string $revision, bool $withCommit = false, string $condition = 'eq'): string|false
+    public function getHistoryRevision(int $repoID, string $revision, bool $withCommit = false, string $condition = 'eq'): string|object|false
     {
         $field = $withCommit ? 'revision, commit' : 'revision';
         return $this->dao->select($field)->from(TABLE_REPOHISTORY)
