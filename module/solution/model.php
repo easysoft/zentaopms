@@ -227,6 +227,7 @@ class solutionModel extends model
 
         if(in_array($solution->status, array('installing', 'installed', 'uninstalled'))) return false;
         $this->saveStatus($solutionID, 'installing');
+        $solution->status = 'installing';
 
         $this->loadModel('cne');
         $this->loadModel('instance');
@@ -246,6 +247,8 @@ class solutionModel extends model
 
             $instance = $this->instance->instanceOfSolution($solution, $componentApp->chart);
             if(!$instance && !$this->installInstance($solution, $componentApp, $solutionSchema, $allMappings)) return false;
+
+            $instance = $this->instance->instanceOfSolution($solution, $componentApp->chart);
 
             /* Wait instanlled app started. */
             if(!$this->checkSarted($instance, $solutionID, $solutionSchema, $category)) return false;
