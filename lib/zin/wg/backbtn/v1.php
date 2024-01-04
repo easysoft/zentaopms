@@ -48,7 +48,7 @@ class backBtn extends btn
             'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,',
             'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,',
             'testsuite'      => 'testsuite-browse,testsuite-view,',
-            'testtask'       => 'testtask-browse,testtask-cases,qa-index,',
+            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
