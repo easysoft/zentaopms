@@ -47,7 +47,7 @@ if($job->customParam)
         $paramValue = str_replace('$zentao_version', zget($lang->job->paramValueList, $paramValue). '(' . $this->config->version . ')', $paramValue);
         $paramValue = str_replace('$zentao_account', zget($lang->job->paramValueList, $paramValue). '(' . $this->app->user->account . ')', $paramValue);
         $paramValue = str_replace('$zentao_product', zget($lang->job->paramValueList, $paramValue). '(' . $job->product . ')', $paramValue);
-        $paramValue = str_replace('$zentao_repopath', zget($lang->job->paramValueList, $paramValue). '(' . $repo->path . ')', $paramValue);
+        $paramValue = str_replace('$zentao_repopath', zget($lang->job->paramValueList, $paramValue). '(' . zget($repo, 'path', '') . ')', $paramValue);
 
         $customParam .= "<p>$paramName : $paramValue</p>";
     }
@@ -74,7 +74,7 @@ detailBody
                     item
                     (
                         set::name($lang->job->repo),
-                        $repo->name
+                        zget($repo, 'name', '')
                     ),
                     item
                     (
