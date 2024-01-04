@@ -27,7 +27,7 @@
 .repo-linkstory-title {background-color: #e6f0ff; color: #2e7fff; padding: 12px 6px 12px;}
 #repoBranchDropMenu .dropmenu-btn {justify-content: space-between; width: 100%;}
 #monacoTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}
-#monacoTabs .nav-tabs > li > a > span {margin-right: 5px;}
+#monacoTabs .nav-tabs > li > a > span {margin-right: 5px; max-width: 6rem; text-overflow: clip; overflow: hidden; white-space: nowrap;}
 #monacoTabs .tab-pane {display: none;}
 #monacoTabs {background: #FFFFFF;}
 #monacoTabs .tab-pane.active {display: block;}
