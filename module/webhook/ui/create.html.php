@@ -29,8 +29,9 @@ foreach($fields as $field => $attr)
     if($field == 'executions') $attr['options'] = $executions;
 
     $control['type'] = $attr['control'];
-    if(!empty($attr['options'])) $control['items']  = $attr['options'];
-    if(!empty($attr['inline']))  $control['inline'] = $attr['inline'];
+    if($attr['control'] == 'picker') $control['items']  = array();
+    if(!empty($attr['options']))     $control['items']  = $attr['options'];
+    if(!empty($attr['inline']))      $control['inline'] = $attr['inline'];
     if($attr['control'] == 'checkList') $fieldName = $field . '[]';
     if(!empty($attr['multiple']))
     {
