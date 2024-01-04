@@ -730,4 +730,50 @@ class repoTest
         return $result;
     }
 
+    public function saveTaskRelationTest(int $repoID, int $taskID, string $branch)
+    {
+        $this->objectModel->saveTaskRelation($repoID, $taskID, $branch);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->eq('task')
+            ->andWhere('AID')->eq($taskID)
+            ->andWhere('BID')->eq($repoID)
+            ->andWhere('relation')->eq('linkrepobranch')
+            ->andWhere('BType')->eq('repobranch')
+            ->fetch();
+    }
+
+    public function updateCommitTest(int $repoID, int $objectID = 0, string $branchID = '')
+    {
+        $result = $this->objectModel->updateCommit($repoID, $objectID, $branchID);
+
+        $repo = $this->objectModel->getByID($repoID);
+        if($repo->SCM == 'Gitlab') return $result;
+        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchAll('id');
+    }
+
+    public function checkDeletedBranchesTest(int $repoID, array $latestBranches)
+    {
+        $result = $this->objectModel->checkDeletedBranches($repoID, $latestBranches);
+
+        $repoHistoryCount = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->count();
+        $repoBranchCount  = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->count();
+        $repoFilesCount   = $this->objectModel->dao->select('*')->from(TABLE_REPOFILES)->count();
+
+        return array('repoHistoryCount' => $repoHistoryCount, 'repoBranchCount' => $repoBranchCount, 'repoFilesCount' => $repoFilesCount);
+    }
+
+    public function getFileCommitsTest(int $repoID, string $branch, string $parent = '')
+    {
+        $repo   = $this->objectModel->getByID($repoID);
+        $result = $this->objectModel->getFileCommits($repo, $branch, $parent);
+
+        return $result;
+    }
+
+    public function getFileTreeTest(int $repoID, string $branch = '', array $diffs = null)
+    {
+    }
 }
