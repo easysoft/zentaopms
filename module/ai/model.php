@@ -498,8 +498,8 @@ class aiModel extends model
         {
             $this->dao->delete()
                 ->from(TABLE_MINIPROGRAMSTAR)
-                ->where('userID')->eq($userID)
-                ->andWhere('appID')->eq($appID)
+                ->where('appID')->eq($appID)
+                ->beginIF(!empty($userID))->andWhere('userID')->eq($userID)->fi()
                 ->exec();
             return !dao::isError();
         }
@@ -792,6 +792,8 @@ class aiModel extends model
             ->exec();
 
         $this->loadModel('action')->create('miniProgram', $appID, $published === '1' ? 'published' : 'unpublished');
+
+        if($published !== '1') $this->collectMiniProgram(null, $appID, 'true');
         return !dao::isError();
     }
 
