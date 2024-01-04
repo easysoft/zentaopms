@@ -414,12 +414,12 @@ class pivotZen extends pivot
     /**
      * Project deviation pivot.
      *
-     * @param  int    $begin
-     * @param  int    $end
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return void
      */
-    public function projectDeviation(int $begin = 0, int $end = 0): void
+    public function projectDeviation(string $begin = '', string $end = ''): void
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
