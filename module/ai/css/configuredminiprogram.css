@@ -8,7 +8,7 @@
 #mainContent > div > header > strong {font-size: 16px;}
 #mainContent > div > main {flex-grow: 1; overflow-y: auto;}
 
-.modal-body {padding-top: 0; padding-bottom: 0;}
+.modal-body {padding-top: 0; padding-bottom: 0; max-height: 420px !important; overflow: auto!important;}
 
 .area-title {display: flex; align-items: center; padding-bottom: 20px; overflow: hidden;}
 .area-title > strong {font-size: 14px; text-wrap: nowrap;}
