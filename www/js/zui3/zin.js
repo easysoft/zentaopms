@@ -1294,7 +1294,7 @@
     /* Auto layout UI. */
     $(window).on('resize', updatePageLayout);
 
-    if(!isInAppTab)
+    if(!isInAppTab && !isIndexPage)
     {
         $(window).on('popstate', function(event)
         {
