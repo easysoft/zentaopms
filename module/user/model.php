@@ -1439,7 +1439,7 @@ class userModel extends model
         if(!$uploadResult) return array('result' => 'fail', 'message' => $this->lang->fail);
 
         $fileIdList = array_keys($uploadResult);
-        $file       = $this->file->getByID($fileIdList[0]);
+        $file       = $this->file->getByID(end($fileIdList));
 
         if(!in_array($file->extension, array('jpg', 'jpeg', 'gif', 'png', 'bmp'))) return array('result' => 'fail', 'message' => $this->lang->user->error->uploadAvatar);
         return array('result' => 'success', 'message' => '', 'fileID' => $file->id, 'locate' => helper::createLink('user', 'cropavatar', "image={$file->id}"));
