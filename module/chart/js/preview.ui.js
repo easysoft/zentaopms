@@ -10,6 +10,12 @@ function previewCharts()
     const checkedList = $('#moduleMenu menu').zui('tree').$.getChecks();
     if(checkedList.length > 0)
     {
+        if(checkedList.length > maxPreviewCount)
+        {
+            zui.Modal.alert(maxPreviewTips);
+            return false;
+        }
+
         const form = new FormData();
         checkedList.forEach((itemKey, index) => {
             if(itemKey.includes(':') && itemKey.includes('_'))

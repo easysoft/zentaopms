@@ -13,6 +13,8 @@ namespace zin;
 include 'charts.html.php';
 
 jsVar('previewUrl', inlink('preview', "dimension={$dimensionID}&group={$groupID}"));
+jsVar('maxPreviewCount', $config->chart->chartMaxChecked);
+jsVar('maxPreviewTips', sprintf($lang->chart->chartMaxChecked, $config->chart->chartMaxChecked));
 
 $items = array();
 foreach($groups as $id => $name)
