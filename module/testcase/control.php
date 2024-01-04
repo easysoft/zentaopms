@@ -1133,14 +1133,14 @@ class testcase extends control
                 $this->testcase->importSteps($caseID, zget($steps, $oldCaseID, array()));
                 $this->testcase->importFiles($caseID, zget($files, $oldCaseID, array()));
 
-                $importedCases[] = $caseID;
+                $importedCases[] = $oldCaseID;
 
                 $this->action->create('case', $caseID, 'fromlib', '', $case->lib);
             }
 
             if(!empty($errors)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$errors}');"));
-            if(!empty($importedCases)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedFromLib, count($importedCases), implode(',', $importedCases))));
-            if(!empty($hasImported) && is_string($hasImported)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, trim($hasImported, ','))));
+            if(!empty($importedCases)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedFromLib, count($importedCases), implode(',', $importedCases)), 'load' => true));
+            if(!empty($hasImported) && is_string($hasImported)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, trim($hasImported, ',')), 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true));
         }
 
