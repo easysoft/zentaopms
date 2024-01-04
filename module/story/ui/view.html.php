@@ -116,7 +116,7 @@ if($story->type == 'story')
                 set::title($task->name),
                 (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
                 label(setClass('circle size-sm'), $task->id),
-                common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), setData(array('toggle' => 'modal')), $task->name) : span(setClass('title'), $task->name),
+                common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $task->name) : span(setClass('title'), $task->name),
                 label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status])
             );
         }
