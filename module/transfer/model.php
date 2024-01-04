@@ -195,7 +195,7 @@ class transferModel extends model
     public function initValues(string $model, string $field, array $object, bool $withKey = true)
     {
         $values = $object['values'];
-        if(!$object['dataSource']) return $values;
+        if(!$object['dataSource'] || $this->config->edition == 'open') return $values;
 
         /* 解析dataSource。*/
         /* Parse dataSource. */
