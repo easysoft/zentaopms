@@ -59,6 +59,14 @@ jsVar('unlinkleftbugurl', helper::createLink($releaseModule, 'unlinkBug', "relea
 
 $config->release->dtable->leftBug->fieldList['resolvedBuild']['map'] = $builds;
 $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
+if(commonModel::hasPriv($releaseModule, 'unlinkBug'))
+{
+    foreach($leftBugTableData as $leftBug)
+    {
+        if(!empty($leftBug->actions)) continue;
+        $leftBug->actions[] = array('name' => 'unlinkLeftBug', 'disabled' => false);
+    }
+}
 
 $leftBugFootToolbar = array();
 if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($releaseModule, 'batchUnlinkBug', "release={$release->id}&type=leftBug"));
