@@ -849,7 +849,7 @@ class gitlab extends control
         $this->app->loadClass('pager', true);
         $recTotal   = count($branchList);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $branchList = array_chunk($branchList, $pager->recPerPage);
+        $branchList = array_chunk($branchList, (int)$pager->recPerPage);
 
         $this->view->gitlab            = $this->gitlab->getByID($gitlabID);
         $this->view->pager             = $pager;
