@@ -1665,8 +1665,11 @@ class repoModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, (string) $log->revision, $scm), 'view', '', "class='iframe' data-width='960'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, (string) $log->revision, $scm), 'diff', '', "class='iframe' data-width='960'"));
+                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, (string) $log->revision, $scm), 'view', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
+                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, (string) $log->revision, $scm), 'diff', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
+
+                $catLink  = str_replace('+', '%2B', $catLink);
+                $diffLink = str_replace('+', '%2B', $diffLink);
 
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
@@ -2549,6 +2552,8 @@ class repoModel extends model
                     ->add('id', $task->id)
                     ->setIF($task->assignedTo != $this->app->user->account, 'assignedDate', $now)
                     ->get();
+                unset($newTask->assignedTo);
+
                 $newTask->left        = $params['left'];
                 $newTask->consumed    = $params['consumed'] + $task->consumed;
                 $newTask->realStarted = $now;
@@ -2559,7 +2564,7 @@ class repoModel extends model
                     $newTask->finishedDate = $now;
                     $newTask->assignedTo   = $task->openedBy;
                 }
-                $taskChanges = $this->task->start($task, $newTask) + $changes;
+                $taskChanges = $this->task->start($task, $newTask);
                 if($taskChanges)
                 {
                     $action->action = $newTask->left == 0 ? 'finished' : 'started';
@@ -2579,7 +2584,7 @@ class repoModel extends model
                     ->get();
                 $newTask->left     = zget($params, 'left', 0);
                 $newTask->consumed = $params['consumed'] + $task->consumed;
-                $taskChanges = $this->task->finish($task, $newTask) + $changes;
+                $taskChanges = array_merge($this->task->finish($task, $newTask), $changes);
                 if($taskChanges)
                 {
                     $action->action = 'finished';
