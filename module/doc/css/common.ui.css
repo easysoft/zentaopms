@@ -24,5 +24,5 @@
 .files-grid .icon-paper-clip:before,
 .files-grid .icon-folder:before {display: none;}
 .files-grid .img-holder {height: 64px; line-height: 64px; margin: 0 auto 8px; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: center;}
-.files-grid .img-holder > img {width: 33%; margin: 0 auto;}
+.files-grid .img-holder > img {width: 33%; margin: 0 auto; max-height: 64px;}
 .files-grid .img-holder > img.not-exist {opacity: 0;}
