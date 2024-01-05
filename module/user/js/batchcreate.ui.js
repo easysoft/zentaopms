@@ -78,10 +78,22 @@ function batchChangeVision(event)
     const link = $.createLink('user', 'ajaxGetGroups', 'visions=' + visions);
     $.getJSON(link, function(data)
     {
-        const $currentRow = $(event.target).closest('tr');
-        const group  = $currentRow.find('[name^="group"]').val();
-        const $group = $currentRow.find('[name^="group"]').zui('picker');
+        let $currentRow = $(event.target).closest('tr');
+        let group  = $currentRow.find('[name^="group"]').val();
+        let $group = $currentRow.find('[name^="group"]').zui('picker');
         $group.render({items: data});
         $group.$.setValue(group);
+
+        let $row = $currentRow.next('tr');
+        while($row.length)
+        {
+            if($row.find('[data-name="visions"]').attr('data-ditto') != 'on') break;
+
+            group  = $row.find('[name^="group"]').val();
+            $group = $row.find('[name^="group"]').zui('picker');
+            $group.render({items: data});
+            $group.$.setValue(group);
+            $row = $row.next('tr');
+        }
     });
 }
