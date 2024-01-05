@@ -3847,9 +3847,10 @@ $config->group->package->manageMiniProgram = new stdclass();
 $config->group->package->manageMiniProgram->order = 2150;
 $config->group->package->manageMiniProgram->subset = 'ai';
 $config->group->package->manageMiniProgram->privs  = array();
-$config->group->package->manageMiniProgram->privs['ai-createMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-editMiniProgram', 'ai-testMiniProgram'));
-$config->group->package->manageMiniProgram->privs['ai-editMiniProgram']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram'));
-$config->group->package->manageMiniProgram->privs['ai-testMiniProgram']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'ai-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-createMiniProgram']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-editMiniProgram', 'ai-testMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-editMiniProgram']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-testMiniProgram']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'ai-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-editMiniProgramCategory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-miniPrograms'), 'recommend' => array());
 
 $config->group->package->browseMiniProgram = new stdclass();
 $config->group->package->browseMiniProgram->order  = 2160;

@@ -147,9 +147,11 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
           </li>
         <?php endforeach; ?>
       </ul>
-      <div class="text-center">
-        <a class="btn btn-info btn-wide" href="<?= $this->createLink('ai', 'editMiniProgramCategory'); ?>"><?= $lang->ai->maintenanceGroup; ?></a>
-      </div>
+      <?php if(common::hasPriv('ai', 'editMiniProgramCategory')): ?>
+        <div class="text-center">
+          <a class="btn btn-info btn-wide" href="<?= $this->createLink('ai', 'editMiniProgramCategory'); ?>"><?= $lang->ai->maintenanceGroup; ?></a>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
   <div class="main-col">
