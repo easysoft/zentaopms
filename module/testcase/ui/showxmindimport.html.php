@@ -35,12 +35,19 @@ panel
     set::title("{$lang->testcase->xmindImportEdit}({$product->name})"),
     set::headingClass('p-6'),
     set::bodyClass('px-6 py-0'),
-    mindmap(set::data($scenes), set::height('600px'), set::nodeTeamplate($nodeTemplate)),
+    mindmap
+    (
+        set::data($scenes),
+        set::height('600px'),
+        set::nodeTeamplate($nodeTemplate),
+        set::enableDrag(false),
+        set::manual(true)
+    ),
     div
     (
-        set::className('py-6 text-center'),
-        btn(set::className('primary btn-wide'), $lang->save),
-        backBtn(set::className('btn-wide ml-4'), $lang->goback)
+        setClass('py-6 text-center'),
+        btn(setClass('primary btn-wide'), $lang->save),
+        backBtn(setClass('btn-wide ml-4'), $lang->goback)
     )
 );
 render();

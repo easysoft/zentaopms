@@ -349,7 +349,7 @@ ztmindmap.Wraper.prototype.render = function()
 {
     var that = this;
 
-    that.instance = $('#mindmap').mindmap({
+    that.instance = createMindmap({
         hSpace:80,
         showToggleButton: true,
         nodeTeamplate: ztmindmap.nodeTemplate,
@@ -371,7 +371,7 @@ ztmindmap.Wraper.prototype.render = function()
 
                 e.preventDefault();
 
-                $.zui.ContextMenu.show(contextMenuList,{event:e,onClickItem:function(item)
+                mindmap$.zui.ContextMenu.show(contextMenuList,{event:e,onClickItem:function(item)
                 {
                     if(item.type == undefined)
                         that[item.action] && that[item.action]($node,data);
@@ -380,7 +380,7 @@ ztmindmap.Wraper.prototype.render = function()
                 }});
             });
         }
-    }).data('zui.mindmap');
+    });
 
     for(var key in this.nodeMgrs)
     {
@@ -454,7 +454,7 @@ ztmindmap.Wraper.prototype.setAsScene = function($node, data)
     let parent = this.findParentNode(data);
     if(parent.$.type == "scene" && parent.$.moduleID != undefined)
     {
-        let $parent = $("#node-" + parent.id);
+        let $parent = mindmap$("#node-" + parent.id);
         this.copyScenePropertyAfter($parent,parent);
     }
 
@@ -470,7 +470,7 @@ ztmindmap.Wraper.prototype.copyScenePropertyAfter = function($node, data)
         if(childData.$.typeBy.import == true) continue;
 
         childData.$.moduleID = data.$.moduleID;
-        var $childNode = $("#node-" + childData.id);
+        var $childNode = mindmap$("#node-" + childData.id);
         this.refreshNodeDisplay($childNode,childData);
 
         this.copyScenePropertyAfter($childNode,childData);
@@ -484,7 +484,7 @@ ztmindmap.Wraper.prototype.clearTypeAfter = function($node, data)
     var children = data.children || [];
     for(var child of children)
     {
-        var $child = $("#node-" + child.id);
+        var $child = mindmap$("#node-" + child.id);
         clearTypeImpl($child, child);
     }
 
@@ -494,7 +494,7 @@ ztmindmap.Wraper.prototype.clearTypeAfter = function($node, data)
         var curChildren = curData.children || [];
         for(var curChild of curChildren)
         {
-            var $curChild = $("#node-" + curChild.id);
+            var $curChild = mindmap$("#node-" + curChild.id);
             clearTypeImpl($curChild, curChild);
         }
     }
@@ -509,7 +509,7 @@ ztmindmap.Wraper.prototype.clearBeforeScene = function($node, data)
     {
         if(sceneData.$.type != "scene" || sceneData.$.typeBy.import == true) continue;
 
-        var $sceneNode = $("#node-" + sceneData.id);
+        var $sceneNode = mindmap$("#node-" + sceneData.id);
         this.changeNodeType($sceneNode,sceneData,undefined);
     }
 
@@ -523,7 +523,7 @@ ztmindmap.Wraper.prototype.clearAfterScene = function($node,data)
     var children = data.children || [];
     for(var child of children)
     {
-        var $child = $("#node-" + child.id);
+        var $child = mindmap$("#node-" + child.id);
         this.changeNodeType($child,child,"testcase");
     }
 
@@ -557,7 +557,7 @@ ztmindmap.Wraper.prototype.autoReasoningAfter = function($node,data)
     for(var i=0; i<children.length; i++)
     {
         var childData = children[i];
-        var $childNode = $("#node-" + childData.id);
+        var $childNode = mindmap$("#node-" + childData.id);
 
         if(childData.$.typeBy.import == true) continue;
 
@@ -596,7 +596,7 @@ ztmindmap.Wraper.prototype.autoRemoveSceneAfer = function($node,data)
     for(var i=0; i<children.length; i++)
     {
         var childData  = children[i];
-        var $childNode = $("#node-" + childData.id);
+        var $childNode = mindmap$("#node-" + childData.id);
 
         if(childData.$.typeBy.import == true) continue;
 
@@ -622,7 +622,7 @@ ztmindmap.Wraper.prototype.autoSetSceneModuleAfter = function($node, data)
             child.$.moduleID = data.$.moduleID;
             child.tooltip = data.tooltip;
 
-            $child = $("#node-" + child.id);
+            $child = mindmap$("#node-" + child.id);
             this.refreshNodeDisplay($child,child);
 
             this.autoSetSceneModuleAfter($child,child)
@@ -1342,19 +1342,19 @@ ztmindmap.PriSelector.prototype.init = function()
     htmlStr += "    <a pri='4' class='pri-4' href='javascript:void(0);'>4</a>";
     htmlStr += "</div>";
 
-    var $priDom = $(htmlStr);
+    var $priDom = mindmap$(htmlStr);
 
-    $(".mindmap-container").append($priDom);
+    mindmap$(".mindmap-container").append($priDom);
 
     $priDom.find("a").on("click",function(e)
     {
-        var pri = $(e.currentTarget).attr("pri");
+        var pri = mindmap$(e.currentTarget).attr("pri");
         that.data.$.pri = pri;
         that.mgr.refreshNodeDisplay(that.$node,that.data);
         that.mgr.refreshDisplay();
     });
 
-    $(document).on("click",function(e)
+    mindmap$(document).on("click",function(e)
     {
         that.hide();
     })
@@ -1493,4 +1493,3 @@ ztmindmap.isID = function(str)
 
     return /(^[1-9]\d*$)/.test(str);
 }
-
