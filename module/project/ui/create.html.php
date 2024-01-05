@@ -121,6 +121,7 @@ $currency   = $parentProgram ? $parentProgram->budgetUnit : $config->project->de
 $labelClass = $config->project->labelClass[$model];
 formPanel
 (
+    set::labelWidth('100px'),
     to::heading(div
     (
         setClass('panel-title text-lg'),

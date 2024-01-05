@@ -23,6 +23,7 @@ jsVar('branchCount', isset($fields['branches']['options']) ? count($fields['bran
 formPanel
 (
     setID('dataform'),
+    set::labelWidth('100px'),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     to::heading(div
     (
