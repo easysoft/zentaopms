@@ -43,7 +43,7 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
       <tbody>
         <tr>
           <th><?= $lang->ai->miniPrograms->field->name; ?></th>
-          <td class="required"><input type="text" name="field-name" class="form-control" /></td>
+          <td class="required"><input type="text" name="field-name" maxlength="16" class="form-control" /></td>
         </tr>
         <tr>
           <th><?= $lang->ai->miniPrograms->field->type; ?></th>

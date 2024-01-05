@@ -38,7 +38,7 @@
         <tr>
           <th><?= $lang->prompt->name; ?></th>
           <td colspan="2">
-            <?= html::input('name', $name, "class='form-control' required placeholder='" . $lang->ai->miniPrograms->placeholder->name . "'"); ?>
+            <?= html::input('name', $name, "class='form-control' maxlength='16' required placeholder='" . $lang->ai->miniPrograms->placeholder->name . "'"); ?>
           </td>
         </tr>
         <tr>
