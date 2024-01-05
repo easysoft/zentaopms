@@ -1,0 +1,54 @@
+title: table zt_repofiles
+desc: "代码文件"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-7
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: repo
+    note: "代码库ID"
+    range: 3{3},4{4}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: revision
+    note: "查看版本"
+    range: 2,3{2},4{2},5,6
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: path
+    note: "文件地址"
+    prefix: ""
+    range: "[/LICENSE]{2},[/README.md],[/tag],[/tag/README.md],[/README.md],[/README]"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: parent
+    note: "父级目录"
+    range: "/{4},/tag,/{2}"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: file{3},dir,file{3}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "操作"
+    range: M,A{6}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
