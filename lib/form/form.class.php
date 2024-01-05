@@ -153,7 +153,7 @@ class form extends fixer
             $field = trim($field);
             if(!isset($configObject[$field])) continue;
 
-            $configObject[$field]['required'] = true;
+            if(!isset($configObject[$field]['skipRequired'])) $configObject[$field]['required'] = true;
         }
 
         return $configObject;

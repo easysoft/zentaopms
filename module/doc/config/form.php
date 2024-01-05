@@ -32,7 +32,7 @@ $config->doc->form->create['module']       = array('type' => 'string',   'requir
 $config->doc->form->create['lib']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['status']       = array('type' => 'string',   'required' => false, 'default' => 'normal');
 $config->doc->form->create['type']         = array('type' => 'string',   'required' => false, 'default' => '');
-$config->doc->form->create['keywords']     = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->create['keywords']     = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->create['acl']          = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['vision']       = array('type' => 'string',   'required' => false, 'default' => $config->vision);
 $config->doc->form->create['addedBy']      = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
@@ -43,7 +43,7 @@ $config->doc->form->create['groups']       = array('type' => 'array',    'requir
 $config->doc->form->create['users']        = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['mailto']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['contentType']  = array('type' => 'string',   'required' => false, 'default' => 'html');
-$config->doc->form->create['content']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->doc->form->create['content']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
 $config->doc->form->create['template']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['templateType'] = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['chapterType']  = array('type' => 'string',   'required' => false, 'default' => '');
@@ -56,9 +56,9 @@ $config->doc->form->edit['module']     = array('type' => 'string',   'required' 
 $config->doc->form->edit['lib']        = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['status']     = array('type' => 'string',   'required' => false, 'default' => 'normal');
 $config->doc->form->edit['type']       = array('type' => 'string',   'required' => false, 'default' => '');
-$config->doc->form->edit['keywords']   = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->edit['keywords']   = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->edit['acl']        = array('type' => 'string',   'required' => false, 'default' => '');
-$config->doc->form->edit['content']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->doc->form->edit['content']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
 $config->doc->form->edit['groups']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['users']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['mailto']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
