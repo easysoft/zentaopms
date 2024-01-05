@@ -654,7 +654,7 @@ function initAppsMenu(items)
         item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
         item.text = $link.text().trim();
         $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
-        if(item.code === 'devops' || item.code === 'bi') $link.find('.text').addClass('font-brand');
+        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
         $('<li></li>').attr('data-app', item.code)

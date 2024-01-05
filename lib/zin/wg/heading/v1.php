@@ -43,7 +43,7 @@ class heading extends wg
         (
             set::url($url),
             set::hint($lang->$tab->common),
-            ($tab == 'devops' || $tab == 'bi') ? setClass('font-brand') : null,
+            ($tab == 'devops' || $tab == 'bi' || $tab == 'safe') ? setClass('font-brand') : null,
             set::icon($icon),
             set::text($lang->$tab->common)
         );
