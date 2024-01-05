@@ -265,6 +265,12 @@ js::set('pageSummary',       $summary);
             $buttonTitle = $lang->execution->linkStoryByPlan;
             $dataToggle  = 'data-toggle="modal"';
         }
+        if(common::hasPriv('projectstory', 'importRoadmapStories') and $storyType == 'requirement' and $this->config->edition == 'ipd')
+        {
+            $buttonLink  = empty($productID) ? '' : '#linkStoryByRoadmap';
+            $buttonTitle = $lang->product->linkStoryByRoadmap;;
+            $dataToggle  = 'data-toggle="modal"';
+        }
         if(common::hasPriv('projectstory', 'linkStory'))
         {
             if($storyType == 'requirement') $lang->execution->linkStory = str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->linkStory);
@@ -277,6 +283,14 @@ js::set('pageSummary',       $summary);
         $hidden = empty($buttonLink) ? 'hidden' : '';
         echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
+        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importRoadmapStories') and $storyType == 'requirement' and $this->config->edition == 'ipd')
+        {
+            echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+            echo "<ul class='dropdown-menu pull-right'>";
+            echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), $lang->execution->linkStory). "</li>";
+            echo '<li>' . html::a('#linkStoryByRoadmap', $lang->product->linkStoryByRoadmap . $lang->URCommon, '', 'data-toggle="modal"') . "</li>";
+            echo '</ul>';
+        }
         if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importPlanStories') and $projectModel != 'ipd' and $storyType == 'story')
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
@@ -585,6 +599,25 @@ js::set('pageSummary',       $summary);
     <?php endif;?>
   </div>
 </div>
+<?php if($this->config->edition == 'ipd'):?>
+<div class="modal fade" id="linkStoryByRoadmap">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title">
+          <?php echo $lang->product->linkStoryByRoadmap;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('roadmap', $roadmaps, '', "class='form-control chosen' id='roadmap'");?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='linkRoadmapButton'", 'btn btn-primary');?></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif;?>
 <div class="modal fade" id="linkStoryByPlan">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">

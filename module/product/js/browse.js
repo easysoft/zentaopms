@@ -48,6 +48,12 @@ $(function()
         }
     })
 
+    $('#linkRoadmapButton').on('click', function()
+    {
+        var roadmapID = $('#roadmap').val();
+        if(roadmap) parent.location.href = createLink('projectstory', 'importRoadmapStories', 'projectID=' + projectID + '&roadmapID=' + roadmapID + '&productID=' + productID);
+    })
+
     // Fix state dropdown menu position
     $('.c-stage > .dropdown').each(function()
     {
