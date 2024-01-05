@@ -45,7 +45,10 @@ class mindmap extends wg
         'zoom?: number',
         'zoomMax?: number',
         'zoomMin?: number',
-        'minimapHeight?: number'
+        'minimapHeight?: number',
+        'enableDrag?: bool',
+        'manual?: bool',
+        'afterNodeLoad?: function'
     );
 
     protected function build(): array
@@ -55,7 +58,7 @@ class mindmap extends wg
         list($width, $height) = $this->prop(array('width', 'height'));
         $dataVarName = "_mindmap_$this->gid";
         $mindmapPath = $app->getWebRoot() . 'js/mindmap/index.html?options=' . $dataVarName;
-        $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight'));
+        $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight', 'enableDrag', 'manual', 'afterNodeLoad'));
         return array
         (
             h::iframe
