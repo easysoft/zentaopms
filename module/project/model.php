@@ -2067,7 +2067,6 @@ class projectModel extends model
 
         /* Reset project priv. */
         $this->common->resetProjectPriv($projectID);
-        if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
         /* Set secondary menu. */
         $this->projectTao->setMenuByModel($project->model);
@@ -2076,6 +2075,8 @@ class projectModel extends model
         /* Replace url params. */
         common::setMenuVars('project', $projectID);
         $this->setNoMultipleMenu($projectID);
+
+        if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
         return $projectID;
     }
 
