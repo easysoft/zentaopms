@@ -582,7 +582,9 @@ class upgradeModel extends model
 
         /* 记录执行的sql并且记录执行结果。 */
         /* Record the executed sql and the result. */
-        foreach(explode(';', $fixSqls) as $fixSQL)
+        $sqlLines = explode(';', $fixSqls);
+        file_put_contents($logFile, count($sqlLines) . "\n", FILE_APPEND);
+        foreach($sqlLines as $fixSQL)
         {
             file_put_contents($logFile, $fixSQL, FILE_APPEND);
             try
