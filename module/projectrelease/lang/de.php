@@ -28,6 +28,7 @@ $lang->projectrelease->export           = 'Export as HTML';
 $lang->projectrelease->browseAction     = "Release List";
 $lang->projectrelease->notify           = 'notify';
 $lang->projectrelease->product          = $lang->productCommon;
+$lang->projectrelease->create           = "Name";
 
 $lang->projectrelease->featureBar['browse']['all']       = 'All';
 $lang->projectrelease->featureBar['browse']['normal']    = 'Active';
