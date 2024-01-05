@@ -4,22 +4,12 @@ author: Mengyi Liu
 version: "1.0"
 fields:
   - field: estStarted
-    range: "(-6w)-(+1w):5D"
+    range: "20230901 000000:1D"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"
   - field: deadline
-    range: "(-5w)-(+2w):5D"
+    range: "20230907 000000:1D"
     type: timestamp
-    format: "YY/MM/DD"
-    postfix: "\t"
-  - field: realStarted
-    range: "(-5w)-(+1w):5D"
-    type: timestamp
-    format: "YY/MM/DD"
-    postfix: "\t"
-  - field: finishedDate
-    range: "(-4w)-(+2w):5D"
-    type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD"
     postfix: "\t"

@@ -5,22 +5,12 @@
 title=测试 holidayModel->updateTaskPlanDuration();
 cid=1
 
-- 测试插入id为 10 的节假日时任务 1 任务的计划工期 @1
-- 测试插入id为 10 的节假日时任务 2 任务的计划工期 @1
-- 测试插入id为 10 的节假日时任务 3 任务的计划工期 @1
-- 测试插入id为 5 的节假日时任务 1 任务的计划工期 @1
-- 测试插入id为 5 的节假日时任务 2 任务的计划工期 @1
-- 测试插入id为 5 的节假日时任务 3 任务的计划工期 @6
-- 测试插入id为 5 的节假日时任务 1 任务的计划工期 @1
-- 测试插入id为 5 的节假日时任务 2 任务的计划工期 @5
-- 测试插入id为 5 的节假日时任务 3 任务的计划工期 @6
-
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/holiday.class.php';
 
-zdTable('holiday')->gen(10);
+zdTable('holiday')->config('holiday')->gen(10);
 zdTable('task')->config('task')->gen(10);
 zdTable('user')->gen(1);
 
@@ -40,8 +30,8 @@ r($holiday->updateTaskPlanDurationTest($taskIdList[2], $holidayIdList[0], $updat
 
 r($holiday->updateTaskPlanDurationTest($taskIdList[0], $holidayIdList[1], $updateDuration[0])) && p() && e('1'); //测试插入id为 5 的节假日时任务 1 任务的计划工期
 r($holiday->updateTaskPlanDurationTest($taskIdList[1], $holidayIdList[1], $updateDuration[1])) && p() && e('1'); //测试插入id为 5 的节假日时任务 2 任务的计划工期
-r($holiday->updateTaskPlanDurationTest($taskIdList[2], $holidayIdList[1], $updateDuration[1])) && p() && e('6'); //测试插入id为 5 的节假日时任务 3 任务的计划工期
+r($holiday->updateTaskPlanDurationTest($taskIdList[2], $holidayIdList[1], $updateDuration[1])) && p() && e('1'); //测试插入id为 5 的节假日时任务 3 任务的计划工期
 
 r($holiday->updateTaskPlanDurationTest($taskIdList[0], $holidayIdList[2], $updateDuration[0])) && p() && e('1'); //测试插入id为 5 的节假日时任务 1 任务的计划工期
-r($holiday->updateTaskPlanDurationTest($taskIdList[1], $holidayIdList[2], $updateDuration[1])) && p() && e('5'); //测试插入id为 5 的节假日时任务 2 任务的计划工期
-r($holiday->updateTaskPlanDurationTest($taskIdList[2], $holidayIdList[2], $updateDuration[1])) && p() && e('6'); //测试插入id为 5 的节假日时任务 3 任务的计划工期
+r($holiday->updateTaskPlanDurationTest($taskIdList[1], $holidayIdList[2], $updateDuration[1])) && p() && e('1'); //测试插入id为 5 的节假日时任务 2 任务的计划工期
+r($holiday->updateTaskPlanDurationTest($taskIdList[2], $holidayIdList[2], $updateDuration[1])) && p() && e('1'); //测试插入id为 5 的节假日时任务 3 任务的计划工期
