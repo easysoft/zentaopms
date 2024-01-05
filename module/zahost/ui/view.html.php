@@ -13,7 +13,7 @@ namespace zin;
 jsVar('hostID', $zahost->id);
 jsVar('zahostLang', $lang->zahost);
 
-$imageLink  = html::a($this->createLink('zahost', 'browseImage', "hostID=$zahost->id", '', true), $lang->zahost->image->downloadImage, '', "class='iframe'");
+$imageLink  = html::a($this->createLink('zahost', 'browseImage', "hostID=$zahost->id", '', true), $lang->zahost->image->downloadImage, '', "data-toggle='modal'");
 $createNode = html::a($this->createLink('zanode', 'create', "hostID=$zahost->id"), $lang->zahost->createZanode);
 
 $mainActions   = array();
