@@ -218,7 +218,7 @@ formPanel
                     (
                         setID('preview'),
                         set::href(helper::createLink('story', 'view', "storyID={$case->story}")),
-                        setData(array('toggle' => 'modal')),
+                        setData(array('toggle' => 'modal', 'size' => 'lg')),
                         $lang->preview
                     )
                 )
