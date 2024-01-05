@@ -27,6 +27,7 @@ clean:
 	rm -f *.deb *.rpm
 common:
 	mkdir zentaopms
+	cp -fr api zentaopms/
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
 	cp -fr db zentaopms/
@@ -96,6 +97,9 @@ zentaoxx:
 	cp -r extension/xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r extension/xuanxuan/www/* zentaoxx/www/
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
+	rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
+	find zentaoxx/www/data/xuanxuan/web/media/sound -not -name 'message.mp3' -type f -delete
+	find zentaoxx/www/data/xuanxuan/web/lang -not -name 'zh-*.json' -not -name 'en.json' -type f -delete
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
@@ -105,6 +109,11 @@ zentaoxx:
 	sed -i "s/\$$accountAdmin = \$$this->dao->select('account, admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();/\$$accountAdmin = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();\n\$$sysAdmins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$sysAdminArray = explode(',', \$$sysAdmins);\n\$$accountAdmin->admin = in_array(\$$accountAdmin->account, \$$sysAdminArray) ? 'super' : '';\n/" zentaoxx/extension/xuan/im/model/chat.php
 	sed -i "s/\$$sysAdmins = \$$this->dao->select('id')->from(TABLE_USER)->where('admin')->eq('super')->fetchPairs();/\$$account = \$$this->loadModel('user')->getById(\$$userID);\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\nreturn in_array(\$$account, \$$adminArray);\n/" zentaoxx/extension/xuan/im/model/chat.php
 	sed -i "/->on('tc.ownedBy=tu.account')/{ N ; s/type/tc.type/}" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "/\$$this->dao->update(TABLE_IM_CHAT)->data(\$$chat)->where('gid')->eq(\$$chat->gid)/i foreach(array('dismissDate', 'mergedDate', 'archiveDate') as \$$nullable) if(isset(\$$chat->\$$nullable) && empty(\$$chat->\$$nullable)) \$$chat->\$$nullable = null;" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i -z "s/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\s*\$$this->setting->setItem(\"\$$account\./\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$this->app->user->account = \$$account;\n\$$this->setting->setItem(\"\$$account\./" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "s/owner=system\&module=chat\&section=settings\&key=\$$account/owner=\$$account\&module=chat\&section=clientSettings\&key=settings/g" zentaoxx/extension/xuan/im/control.php
+	sed -i "s/system.chat.settings.\$$account/\$$account.chat.clientSettings.settings/g" zentaoxx/extension/xuan/im/control.php
+	sed -i 's/\$$this->setting->setItem("\$$account/\$$this->app->user = (object)array("account" => \$$account); \$$this->setting->setItem("\$$account/' zentaoxx/extension/xuan/im/control.php
 	sed -i "s/\$$super = \$$this->dao->select('admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('admin');/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$sysAdmins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$sysAdminArray = explode(',', \$$sysAdmins);\n\$$super = in_array(\$$account, \$$sysAdminArray) ? 'super' : '';/g" zentaoxx/extension/xuan/im/control.php
 	sed -i "/foreach(\$$users as \$$user)/i \$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\$$adminArray = explode(',', \$$admins);" zentaoxx/extension/xuan/im/model/user.php
 	sed -i "/if(\!isset(\$$user->signed)) \$$user->signed  = 0;/a \$$user->admin = in_array(\$$user->account, \$$adminArray) ? 'super' : '';" zentaoxx/extension/xuan/im/model/user.php
@@ -149,8 +158,7 @@ zentaoxx:
 	sed -i 's/v\.//g' zentaoxx/extension/xuan/client/js/checkupgrade.js
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/control.php
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/model/conference.php
-	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
-	sed -i 's/commonModel::isLicensedMethod([^\)]*)/false/g' zentaoxx/extension/xuan/conference/model.php
+	sed -i 's/commonModel::isLicensedMethod/extCommonModel::ilMethod/g' zentaoxx/extension/xuan/conference/model.php
 	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
@@ -159,10 +167,10 @@ zentaoxx:
 	sed -i "s/\$$this->getModuleExtPath('', /\$$this->getModuleExtPath(/g" zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
+	sed -i 's/$$conferenceData->\(start\|end\)Time\s*=\s*$$\(start\|end\)Time;/if(!empty($$\1Time)) &/g' zentaoxx/extension/xuan/im/model/conference.php
 	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
-	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	find zentaoxx/extension/xuan/ -name '*.php' -exec sed -i -r 's|->ne(["'\'']0000-00-00 00:00:00["'\''])|->notZeroDatetime()|g; s|["'\'']\)->eq\(["'\'']0000-00-00( 00:00:00)?| is null|g; s|([=!]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|([^!=]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|(["'\''])(,.*)\)->eq\(["'\'']0000-00-00( 00:00:00)?["'\'']| is null\1\2|g; s|["'\'']0000-00-00 00:00:00["'\'']|null|g' {} +
 	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
 	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
