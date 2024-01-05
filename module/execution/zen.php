@@ -1612,7 +1612,6 @@ class executionZen extends execution
     protected function setStorageForStory(string $executionID, string $type, string $param, string $orderBy): int
     {
         $productID = 0;
-        helper::setcookie('storyPreExecutionID', $executionID);
         if($this->cookie->storyPreExecutionID != $executionID)
         {
             $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = $_COOKIE['storyBranchParam'] = 0;
@@ -1653,6 +1652,8 @@ class executionZen extends execution
         $this->session->set('executionStoryList', $uri, 'execution');
 
         helper::setcookie('executionStoryOrder', $orderBy);
+        helper::setcookie('storyPreExecutionID', $executionID);
+        if($this->cookie->storyProductParam != $productID) helper::setcookie('storyProductParam', '0');
 
         return (int)$productID;
     }
