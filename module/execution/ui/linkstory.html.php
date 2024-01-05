@@ -49,7 +49,7 @@ if(!isInModal())
     );
 }
 
-$objectType = $object->type == 'project' ? 'project' : 'execution';
+$objectType = $object->type == 'project' ? 'projectstory' : 'execution';
 dtable
 (
     set::groupDivider(true),
