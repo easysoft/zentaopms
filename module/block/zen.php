@@ -671,6 +671,21 @@ class blockZen extends block
             ->fetchAll();
     }
 
+    protected function printRoadmapBlock(object $block)
+    {
+        $productID = $this->session->product;
+        $product   = $this->loadModel('product')->getByID($productID);
+
+        $roadmaps = $this->product->getRoadmap($productID, 'all');
+        $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
+
+        /* Assign view data. */
+        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->product  = $product;
+        $this->view->roadmaps = $roadmaps;
+        $this->view->branches = $branches;
+    }
+
     /**
      * 打印产品发布统计区块数据。
      * Print product release statistic block.
