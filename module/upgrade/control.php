@@ -242,7 +242,7 @@ class upgrade extends control
             $projectType = isset($_POST['projectType']) ? $_POST['projectType'] : 'project';
             if($type == 'productline') $this->upgradeZen->mergeByProductline($projectType);
             if($type == 'product')     $this->upgradeZen->mergeByProduct($projectType);
-            if($type == 'sprint')      $this->upgradeZen->mergeBySprint();
+            if($type == 'sprint')      $this->upgradeZen->mergeBySprint($projectType);
             if($type == 'moreLink')    $this->upgradeZen->mergeByMoreLink($projectType);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('upgrade', 'mergeProgram', "type={$type}&programID={$programID}&projectType={$projectType}")));

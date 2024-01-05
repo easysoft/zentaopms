@@ -472,10 +472,11 @@ class upgradeZen extends upgrade
      * 合并没有关联产品的迭代。
      * Merge sprints without product.
      *
+     * @param  string    $projectType
      * @access protected
      * @return void
      */
-    protected function mergeBySprint()
+    protected function mergeBySprint(string $projectType)
     {
         $linkedSprints = $this->post->sprints;
 
@@ -543,8 +544,8 @@ class upgradeZen extends upgrade
     /**
      * 显示更改冲突的 sql。
      * Display consistency.
-     * 
-     * @param  string $alterSQL 
+     *
+     * @param  string $alterSQL
      * @access protected
      * @return void
      */
