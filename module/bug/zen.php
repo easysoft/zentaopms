@@ -2402,15 +2402,12 @@ class bugZen extends bug
 
         /* 获取用例的标题、步骤、所属需求、所属模块、版本、所属执行。 */
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
-        if(isset($runID) and $runID and isset($resultID) and $resultID)
+        if(isset($runID) and $runID and isset($resultID) and $resultID) $fields = $this->bug->getBugInfoFromResult($resultID, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+        if(isset($runID) and !$runID and isset($caseID) and $caseID) $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
+        if(isset($fields))
         {
-            $fields = $this->bug->getBugInfoFromResult($resultID, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
-            $bug    = $this->updateBug($bug, $fields);
-        }
-        if(isset($runID) and !$runID and isset($caseID) and $caseID)
-        {
-            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
-            $bug    = $this->updateBug($bug, $fields);
+            if(isset($fields['moduleID']) && !isset($this->view->moduleOptionMenu[$fields['moduleID']])) $fields['moduleID'] = 0;
+            $bug = $this->updateBug($bug, $fields);
         }
 
         /* 获得bug的所属项目、所属模块、所属执行、关联产品、关联任务、关联需求、关联版本、关联用例、标题、步骤、严重程度、类型、指派给、截止日期、操作系统、浏览器、抄送给、关键词、颜色、所属测试单、反馈人、通知邮箱、优先级。 */
