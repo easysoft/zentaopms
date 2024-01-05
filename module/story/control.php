@@ -279,8 +279,9 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'view', $params), 'closeModal' => true, 'message' => $message));
+            $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
+            $params = $this->app->tab == 'project' ? "storyID=$storyID&project={$this->session->project}" : "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($module, 'view', $params), 'closeModal' => true, 'message' => $message));
         }
 
         $story = $this->story->getByID($storyID);
@@ -719,11 +720,15 @@ class story extends control
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'submitReview');
+                a($changes);
                 $this->action->logHistory($actionID, $changes);
             }
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType")));
+
+            $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
+            $params = $this->app->tab == 'project' ? "storyID=$storyID&project={$this->session->project}" : "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($module, 'view', $params), 'message' => $this->lang->saveSuccess));
         }
 
         /* Get story and product. */
@@ -807,7 +812,10 @@ class story extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'closeModal' => true));
+
+            $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
+            $params = $this->app->tab == 'project' ? "storyID=$storyID&project={$this->session->project}" : "storyID=$storyID&version=0&param=0&storyType=$storyType";
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($module, 'view', $params), 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         }
 
         /* Get story and product. */
