@@ -43,25 +43,23 @@ div
                     implode("\n", $errors)
                 )
             ) : null,
-            in_array($result, array('fail', 'sqlFail')) ? div
-            (
-                setClass('mt-4'),
-                $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
-                btn
-                (
-                    on::click('window.reloadPage(this)'),
-                    $lang->refresh
-                )
-            ) : formPanel
+            form
             (
                 on::click('button[type=submit]', "submitConfirm"),
-                set::width('800px'),
-                input
+                on::click('button[type=button]', "loadCurrentPage"),
+                set::target('_self'),
+                set::actions(false),
+                formHidden('fromVersion', $fromVersion),
+                div
                 (
-                    set::type('hidden'),
-                    set::name('fromVersion'),
-                    set::value($fromVersion)
-                ),
+                    setClass('mt-4'),
+                    $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
+                    btn
+                    (
+                        set::btnType($this->app->rawMethod == 'execute' ? 'submit' : 'button'),
+                        $lang->refresh
+                    )
+                )
             )
         )
     )

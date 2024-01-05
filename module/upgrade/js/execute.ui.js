@@ -1,5 +1,5 @@
 window.submitConfirm = function(event) {
-    $(this).addClass('disabled');
+    $(event.target).addClass('disabled');
     zui.Modal.open({id: 'progress'});
 
     updateProgressInterval();

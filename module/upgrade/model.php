@@ -8378,7 +8378,7 @@ class upgradeModel extends model
 
         foreach($groups as $groupID)
         {
-            $sql = str_replace('%s', $groupID, $sqlTemplate);
+            $sql = str_replace('%s', (string)$groupID, $sqlTemplate);
             $this->dbh->exec($sql);
         }
 
