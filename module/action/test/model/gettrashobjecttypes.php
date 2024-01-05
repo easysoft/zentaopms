@@ -9,11 +9,11 @@ zdTable('action')->config('action')->gen(20);
 /**
 
 title=测试 actionModel->getTrashObjectTypes();
+timeout=0
 cid=1
-pid=1
 
-查询type all    的对象类型列表 >> story
-查询type hidden 的对象类型列表 >> testcase
+- 查询type all    的对象类型列表第story条的objectType属性 @story
+- 查询type hidden 的对象类型列表第testcase条的objectType属性 @testcase
 
 */
 

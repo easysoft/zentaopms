@@ -7,17 +7,19 @@ zdTable('action')->config('action')->gen(10);
 zdTable('product')->config('product')->gen(3);
 zdTable('project')->config('execution')->gen(9);
 
-
 /**
 
 title=测试 actionModel->getRepeatObjectTest();
+timeout=0
 cid=1
-pid=1
 
-测试actionID为1，table为zt_product的情况 >> 2
-测试actionID为3，table为zt_product的情况 >> 2
-测试actionID为5，table为zt_product的情况 >> 4
-测试actionID为7，table为zt_product的情况 >> 6
+- 测试actionID为1，table为zt_product的情况属性id @2
+- 测试actionID为1，table为zt_product的情况属性id @1
+- 测试actionID为3，table为zt_project的情况属性id @2
+- 测试actionID为5，table为zt_project的情况属性id @4
+- 测试actionID为5，table为zt_project的情况属性id @3
+- 测试actionID为7，table为zt_project的情况属性id @3
+- 测试actionID为8，table为zt_project的情况属性id @7
 
 */
 

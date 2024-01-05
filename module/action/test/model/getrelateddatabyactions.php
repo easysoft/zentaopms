@@ -30,24 +30,52 @@ su('admin');
 /**
 
 title=测试 actionModel->getRelatedDataByActions();
+timeout=0
 cid=1
-pid=1
 
-获取动态1 2 3 4 5 objectNames的关联信息          >> 正常产品1;用户需求1;1.0;产品正常的正常的发布1;项目集1;guest
-获取动态1 2 3 4 5 relatedProjects的关联信息      >> 1
-获取动态1 2 3 4 5 requirements的关联信息         >> 1
-获取动态6 7 8 9 10 objectNames的关联信息         >> 开发任务11;项目版本版本1;BUG1;这个是测试用例1;这个是测试用例1;guest
-获取动态6 7 8 9 10 relatedProjects的关联信息     >> 11
-获取动态6 7 8 9 10 requirements的关联信息        >> 0
-获取动态11 12 13 14 15 objectNames的关联信息     >> 测试单1;文档标题1;产品主库;自定义1的待办;guest,admin
-获取动态11 12 13 14 15 relatedProjects的关联信息 >> 11
-获取动态11 12 13 14 15 requirements的关联信息    >> 0
-获取动态16 17 18 19 20 objectNames的关联信息     >> 分支1;这是一个模块1;这是测试套件名称1;这是测试套件名称2;guest
-获取动态16 17 18 19 20 relatedProjects的关联信息 >> 11
-获取动态16 17 18 19 20 requirements的关联信息    >> 0
-获取动态21 22 23 24 25 objectNames的关联信息     >> 这是应用名称1;钉钉群机器人;正常产品1;用户需求1;guest
-获取动态21 22 23 24 25 relatedProjects的关联信息 >> ~~
-获取动态21 22 23 24 25 requirements的关联信息    >> 1
+- 获取动态1 2 3 4 5 objectNames的关联信息
+ - 第product条的1属性 @正常产品1
+ - 第story条的1属性 @用户需求1
+ - 第productplan条的1属性 @1.0
+ - 第release条的1属性 @产品正常的正常的发布1
+ - 第project条的1属性 @项目集1
+ - 第user条的0属性 @guest
+- 获取动态1 2 3 4 5 relatedProjects的关联信息第project条的1属性 @0
+- 获取动态1 2 3 4 5 requirements的关联信息属性1 @1
+- 获取动态6 7 8 9 10 objectNames的关联信息
+ - 第task条的1属性 @开发任务11
+ - 第build条的1属性 @项目11版本1
+ - 第bug条的1属性 @BUG1
+ - 第testcase条的1属性 @这个是测试用例1
+ - 第case条的1属性 @这个是测试用例1
+ - 第user条的0属性 @guest
+- 获取动态1 2 3 4 5 relatedProjects的关联信息第task条的1属性 @11
+- 获取动态6 7 8 9 10 requirements的关联信息 @0
+- 获取动态11 12 13 14 15 objectNames的关联信息
+ - 第testtask条的1属性 @测试单1
+ - 第doc条的1属性 @文档标题1
+ - 第doclib条的1属性 @产品主库
+ - 第todo条的1属性 @自定义1的待办
+ - 第user条的0属性 @guest
+ - 第user条的1属性 @admin
+- 获取动态1 2 3 4 5 relatedProjects的关联信息第testtask条的1属性 @11
+- 获取动态11 12 13 14 15 requirements的关联信息 @0
+- 获取动态16 17 18 19 20 objectNames的关联信息
+ - 第branch条的1属性 @分支1
+ - 第module条的1属性 @这是一个模块1
+ - 第testsuite条的1属性 @这是测试套件名称1
+ - 第caselib条的2属性 @这是测试套件名称2
+ - 第user条的0属性 @guest
+- 获取动态16 17 18 19 20 relatedProjects的关联信息第testreport条的1属性 @11
+- 获取动态16 17 18 19 20 requirements的关联信息 @0
+- 获取动态21 22 23 24 25 objectNames的关联信息
+ - 第entry条的1属性 @这是应用名称1
+ - 第webhook条的1属性 @钉钉群机器人
+ - 第product条的1属性 @正常产品1
+ - 第story条的1属性 @用户需求1
+ - 第user条的0属性 @guest
+- 获取动态21 22 23 24 25 relatedProjects的关联信息第story条的0属性 @~~
+- 获取动态21 22 23 24 25 requirements的关联信息属性1 @1
 
 */
 

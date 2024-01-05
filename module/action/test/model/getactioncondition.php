@@ -7,10 +7,10 @@ su('admin');
 /**
 
 title=测试 actionModel->getActionCondition();
+timeout=0
 cid=1
-pid=1
 
-获取用户可以看到的动态的条件 >> 0
+- 获取用户可以看到的动态的条件 @0
 
 */
 

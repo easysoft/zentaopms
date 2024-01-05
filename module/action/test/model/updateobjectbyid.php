@@ -10,12 +10,12 @@ zdTable('project')->gen(3);
 /**
 
 title=测试 actionModel->updateObjectByID();
+timeout=0
 cid=1
-pid=1
 
-测试更新table为zt_execution, id为1的记录的name字段,更新后的值为'修改后的名称1'  >> 修改后的名称1
-测试更新table为zt_execution, id为2的记录的name字段,更新后的值为'修改后的名称2'  >> 修改后的名称2
-测试更新table为zt_execution, id为3的记录的project字段,更新后的值为'12'          >> 12
+- 测试更新table为zt_execution, id为1的记录的name字段,更新后的值为'修改后的名称1'属性name @修改后的名称1
+- 测试更新table为zt_execution, id为2的记录的name字段,更新后的值为'修改后的名称2'属性name @修改后的名称2
+- 测试更新table为zt_execution, id为3的记录的project字段,更新后的值为'12'属性project @12
 
 */
 

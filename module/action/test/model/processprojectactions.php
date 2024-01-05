@@ -9,12 +9,13 @@ zdTable('action')->config('action')->gen(10);
 /**
 
 title=测试 actionModel->processProjectActions();
+timeout=0
 cid=1
-pid=1
 
-测试计算action 1 2 3 4 5      的项目动态 >> 0
-测试计算action 6 7 8 9 10     的项目动态 >> 5
-测试计算action 11 12 13 14 15 的项目动态 >> 0
+- 测试计算action 1 2 3 4 5      的项目动态 >> 0 @0
+- 测试计算action 6 7 8 9 10     的项目动态 >> 5 @7,8,9,10
+
+- 测试计算action 11 12 13 14 15 的项目动态 >> 0 @0
 
 */
 

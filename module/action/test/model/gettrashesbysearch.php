@@ -15,14 +15,32 @@ zdTable('pipeline')->gen(5);
 /**
 
 title=测试 actionModel->getTrashesBySearch();
+timeout=0
 cid=1
-pid=1
 
-搜索objectType all,      type all,    queryID myQueryID, orderBy id_desc的回收站信息 << 0
-搜索objectType story,    type all,    queryID myQueryID, orderBy id_desc的回收站信息 << 1,1,用户需求1;9,9,用户需求9
-搜索objectType all,      type hidden, queryID myQueryID, orderBy id_desc的回收站信息 << 2,2,软件需求2;10,10,软件需求10
-搜索objectType all,      type all,    queryID 1,         orderBy id_desc的回收站信息 << 1,1,用户需求1
-搜索objectType pipeline, type all,    queryID myQueryID, orderBy id_desc的回收站信息 << 1,gitlab,1;3,jenkins,3
+- 搜索objectType all,      type all,    queryID myQueryID, orderBy id_desc的回收站信息 @0
+- 搜索objectType story,    type all,    queryID myQueryID, orderBy id_desc的回收站信息
+ - 第1条的id属性 @1
+ - 第1条的objectID属性 @1
+ - 第1条的objectName属性 @用户需求1
+ - 第9条的id属性 @9
+ - 第9条的objectID属性 @9
+ - 第9条的objectName属性 @用户需求9
+- 搜索objectType all,      type hidden, queryID myQueryID, orderBy id_desc的回收站信息
+ - 第2条的id属性 @2
+ - 第2条的objectID属性 @2
+ - 第2条的objectName属性 @软件需求2
+ - 第10条的id属性 @10
+ - 第10条的objectID属性 @10
+ - 第10条的objectName属性 @软件需求10
+- 搜索objectType all,      type all,    queryID 1,         orderBy id_desc的回收站信息
+ - 第1条的id属性 @1
+ - 第1条的objectID属性 @1
+ - 第1条的objectName属性 @用户需求1
+- 搜索objectType pipeline, type all,    queryID myQueryID, orderBy id_desc的回收站信息
+ - 第1条的id属性 @1
+ - 第1条的objectType属性 @gitlab
+ - 第1条的objectID属性 @1
 
 */
 

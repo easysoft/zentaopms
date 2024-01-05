@@ -26,36 +26,35 @@ zdTable('task')->config('task')->gen(2);
 /**
 
 title=测试 actionModel->undelete();
+timeout=0
 cid=1
-pid=1
 
-测试还原action 0, objectType execution 的数据。                                >> 0
-测试还原action 1, objectType execution 的数据。                                >> 该数据在版本升级过程中未参与数据归并流程，不支持还原。
-测试还原action 2, objectType execution 的数据。                                >> 该执行没有所属的项目，请先还原项目再还原执行
-测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。 >> 1
-测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。 >> 1
-测试还原action 5, objectType repo 的数据。                                     >> 该代码库没有所属的服务器，请先还原服务器再还原代码库
-测试还原action 6, objectType repo 的数据。                                     >> 1
-测试还原action 7, objectType repo 的数据。                                     >> 1
-测试还原action 8, objectType program 的数据,并且测试是否恢复了用户访问权限。   >> 0
-测试还原action 9, objectType program 的数据,并且测试是否恢复了用户访问权限。   >> 1
-测试还原action 10, objectType project 的数据,并且测试是否恢复了用户访问权限。  >> 0
-测试还原action 11, objectType project 的数据,并且测试是否恢复了用户访问权限。  >> 1
-测试还原action 12, objectTyp prodcut 的数据,并且测试是否恢复了用户访问权限。   >> 1
-测试还原action 13, objectType module数据。                                     >> 模块名“模块”已经存在！
-测试还原action 14, objectType module 的数据。                                  >> 1
-测试还原action 15, objectType execution 的数据。                               >> 1
-测试还原action 16, objectType execution 的数据。                               >> 1
-测试还原action 17, objectType release 的数据。                                 >> 1
-测试还原action 18, objectType release 的数据。                                 >> 1
-测试还原action 19, objectType case 的数据。                                    >> 还原用例之前，请先还原该用例所属场景
-测试还原action 20, objectType case 的数据。                                    >> 1
-测试还原action 21, objectType scene 的数据。                                   >> 还原场景之前，请先还原该场景的父场景
-测试还原action 22, objectType scene 的数据。                                   >> 1
-测试还原action 23, objectType doc 的数据。                                     >> 1
+- 测试还原action 0, objectType execution 的数据。 @0
+- 测试还原action 1, objectType execution 的数据。 @该数据在版本升级过程中未参与数据归并流程，不支持还原。
+- 测试还原action 2, objectType execution 的数据。 @该执行没有所属的项目，请先还原项目再还原执行
+- 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。 @1
+- 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。 @1
+- 测试还原action 5, objectType repo 的数据。 @该代码库没有所属的服务器，请先还原服务器再还原代码库
+- 测试还原action 6, objectType repo 的数据。 @1
+- 测试还原action 7, objectType repo 的数据。 @1
+- 测试还原action 8, objectType program 的数据,并且测试是否恢复了用户访问权限。 @0
+- 测试还原action 9, objectType program 的数据,并且测试是否恢复了用户访问权限。 @1
+- 测试还原action 10, objectType project 的数据,并且测试是否恢复了用户访问权限。 @0
+- 测试还原action 11, objectType project 的数据,并且测试是否恢复了用户访问权限。 @1
+- 测试还原action 12, objectTyp prodcut 的数据,并且测试是否恢复了用户访问权限。 @1
+- 测试还原action 13, objectType module数据。 @模块名“模块”已经存在！
+- 测试还原action 14, objectType module 的数据。 @1
+- 测试还原action 17, objectType release 的数据。 @1
+- 测试还原action 18, objectType release 的数据。 @1
+- 测试还原action 19, objectType case 的数据。 @还原用例之前，请先还原该用例所属场景
+- 测试还原action 20, objectType case 的数据。 @1
+- 测试还原action 21, objectType scene 的数据。 @还原场景之前，请先还原该场景的父场景
+- 测试还原action 22, objectType scene 的数据。 @1
+- 测试还原action 23, objectType doc 的数据。 @1
+- 测试还原action 24, objectType productplan 的数据。 @1
+- 测试还原action 25, objectType task 的数据。 @1
 
-
- */
+*/
 
 $actionIDList = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25);
 

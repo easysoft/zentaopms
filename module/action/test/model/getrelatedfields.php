@@ -26,38 +26,129 @@ zdTable('productplan')->gen(1);
 /**
 
 title=测试 actionModel->getRelatedFields();
+timeout=0
 cid=1
 
-测试获取objectType program      ojbectID 1 actionType common                 extra 1  的动态信息  >> ,0,|0|0
-测试获取objectType product      objectId 2 actionType extra                  extra 1  的动态信息  >> ,2,|0|0
-测试获取objectType project      objectId 3 actionType opened                 extra 1  的动态信息  >> ,1,|3|0
-测试获取objectType execution    objectId 4 actionType created                extra 1  的动态信息  >> ,1,|0|4
-测试获取objectType story        objectId 5 actionType linked2build           extra 11 的动态信息  >> ,1,|0|0
-测试获取objectType story        objectId 6 actionType unlinkedfrombuild      extra 11 的动态信息  >> ,1,|0|0
-测试获取objectType story        objectId 7 actionType estimated              extra 11 的动态信息  >> ,1,|0|0
-测试获取objectType story        objectId 8 actionType edited                 extra 11 的动态信息  >> ,2,|0|11
-测试获取objectType productplan  objectId 9 actionType assigned               extra 1  的动态信息  >> ,,|0|0
-测试获取objectType branch       objectId 10 actionType closed                extra 1  的动态信息  >> ,41,|0|0
-测试获取objectType testcase     objectId 11 actionType deleted               extra 1  的动态信息  >> ,1,|~~|101
-测试获取objectType case         objectId 12 actionType deletedfile           extra 1  的动态信息  >> ,1,|~~|101
-测试获取objectType testtask     objectId 13 actionType linked2testtask       extra 11 的动态信息  >> ,2,|12|0
-测试获取objectType testtask     objectId 14 actionType unlinkedfromtesttask  extra 11 的动态信息  >> ,1,|11|101
-测试获取objectType testtask     objectId 15 actionType assigned              extra 11 的动态信息  >> ,1,|11|101
-测试获取objectType doc          objectId 16 actionType run                   extra 1  的动态信息  >> ,1,|0|0
-测试获取objectType repo         objectId 17 actionType commented             extra 1  的动态信息  >> ,0,|0|0
-测试获取objectType release      objectId 18 actionType activated             extra 1  的动态信息  >> ,1,|11|0
-测试获取objectType task         objectId 19 actionType blocked               extra 11 的动态信息  >> ,1,|0|0
-测试获取objectType kanbanlane   objectId 20 actionType moved                 extra 1  的动态信息  >> ,0,|~~|1
-测试获取objectType kanbancolumn objectId 21 actionType confirmed             extra 1  的动态信息  >> ,0,|~~|1
-测试获取objectType team         objectId 22 actionType caseconfirmed         extra 11 的动态信息  >> ,0,|0|11
-测试获取objectType whitelist    objectId 23 actionType bugconfirmed          extra 1  的动态信息  >> ,1,|0|0
-测试获取objectType module       objectId 24 actionType deleted               extra 1  的动态信息  >> ,1,|0|0
-测试获取objectType review       objectId 25 actionType started               extra 1  的动态信息  >> ,0,|1|0
-测试获取objectType story        objectId 26 actionType unlinkedfromproject   extra 11 的动态信息  >> ,1,|1|0
-测试获取objectType story        objectId 27 actionType linked2project        extra 11 的动态信息  >> ,1,|1|0
-测试获取objectType story        objectId 28 actionType unlinkedfromexecution extra 11 的动态信息  >> ,1,|~~|33
-测试获取objectType story        objectId 29 actionType linked2execution      extra 11 的动态信息  >> ,1,|~~|1
-测试获取objectType story        objectId 30 actionType linked2kanban         extra 1  的动态信息  >> ,1,|~~|1
+- 测试获取objectType program      ojbectID 1 actionType common                 extra 1  的动态信息
+ - 属性product @,0,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType product      objectId 2 actionType extra                  extra 1  的动态信息
+ - 属性product @,2,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType project      objectId 3 actionType opened                 extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @3
+ - 属性execution @0
+- 测试获取objectType execution    objectId 4 actionType created                extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @4
+- 测试获取objectType story        objectId 5 actionType linked2build           extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType story        objectId 6 actionType unlinkedfrombuild      extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType story        objectId 7 actionType estimated              extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType story        objectId 8 actionType edited                 extra 11 的动态信息
+ - 属性product @,2,
+ - 属性project @0
+ - 属性execution @11
+- 测试获取objectType productplan  objectId 9 actionType assigned               extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType branch       objectId 10 actionType closed                extra 1  的动态信息
+ - 属性product @,41,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType testcase     objectId 11 actionType deleted               extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @~~
+ - 属性execution @101
+- 测试获取objectType case         objectId 12 actionType deletedfile           extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @~~
+ - 属性execution @101
+- 测试获取objectType testtask     objectId 13 actionType linked2testtask       extra 11 的动态信息
+ - 属性product @,2,
+ - 属性project @12
+ - 属性execution @0
+- 测试获取objectType testtask     objectId 14 actionType unlinkedfromtesttask  extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @11
+ - 属性execution @101
+- 测试获取objectType testtask     objectId 15 actionType assigned              extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @11
+ - 属性execution @101
+- 测试获取objectType doc          objectId 16 actionType run                   extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType repo         objectId 17 actionType commented             extra 1  的动态信息
+ - 属性product @,0,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType release      objectId 18 actionType activated             extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @11
+ - 属性execution @0
+- 测试获取objectType task         objectId 19 actionType blocked               extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @11
+ - 属性execution @101
+- 测试获取objectType kanbanlane   objectId 20 actionType moved                 extra 1 的动态信息
+ - 属性product @,0,
+ - 属性project @~~
+ - 属性execution @1
+- 测试获取objectType kanbancolumn objectId 21 actionType confirmed             extra 1 的动态信息
+ - 属性product @,0,
+ - 属性project @~~
+ - 属性execution @1
+- 测试获取objectType team         objectId 22 actionType caseconfirmed         extra 11 的动态信息
+ - 属性product @,0,
+ - 属性project @0
+ - 属性execution @11
+- 测试获取objectType whitelist    objectId 23 actionType bugconfirmed          extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType module       objectId 24 actionType deleted               extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @0
+ - 属性execution @0
+- 测试获取objectType review       objectId 25 actionType started               extra 1  的动态信息
+ - 属性product @,0,
+ - 属性project @1
+ - 属性execution @0
+- 测试获取objectType story        objectId 26 actionType unlinkedfromproject   extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @1
+ - 属性execution @0
+- 测试获取objectType story        objectId 27 actionType linked2project        extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @1
+ - 属性execution @0
+- 测试获取objectType story        objectId 28 actionType unlinkedfromexecution extra 11 的动态信H息H
+ - 属性product @,1,
+ - 属性project @~~
+ - 属性execution @33
+- 测试获取objectType story        objectId 29 actionType linked2execution      extra 11 的动态信息
+ - 属性product @,1,
+ - 属性project @~~
+ - 属性execution @1
+- 测试获取objectType story        objectId 30 actionType linked2kanban         extra 1  的动态信息
+ - 属性product @,1,
+ - 属性project @~~
+ - 属性execution @1
 
 */
 

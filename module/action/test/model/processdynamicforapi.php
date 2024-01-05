@@ -9,11 +9,14 @@ zdTable('action')->gen(10);
 /**
 
 title=测试 actionModel->processDynamicForAPI();
+timeout=0
 cid=1
-pid=1
 
-测试处理空数据 >> 0
-处理所有动态   >> 1,admin,admin
+- 测试处理空数据 @0
+- 处理所有动态
+ - 第actor条的id属性 @1
+ - 第actor条的account属性 @admin
+ - 第actor条的realname属性 @admin
 
 */
 

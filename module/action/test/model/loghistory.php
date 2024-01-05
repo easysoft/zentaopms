@@ -7,14 +7,32 @@ su('admin');
 /**
 
 title=测试 actionModel->logHistory();
+timeout=0
 cid=1
-pid=1
 
-测试新增actionID 10001 历史记录 >> name,变更前名称,变更后名称;code,变更前编号,变更后编号
-测试新增actionID 10002 历史记录 >> assignedTo,admin,test1
-测试新增actionID 10003 历史记录 >> name,name1,name2
-测试新增actionID 10004 历史记录 >> code,code1,code2
-测试新增actionID 10005 历史记录 >> assignedTo,test2,test1
+- 测试新增actionID 10001 历史记录
+ - 第0条的field属性 @name
+ - 第0条的old属性 @变更前名称
+ - 第0条的new属性 @变更后名称
+ - 第1条的field属性 @code
+ - 第1条的old属性 @变更前编号
+ - 第1条的new属性 @变更后编号
+- 测试新增actionID 10002 历史记录
+ - 第0条的field属性 @assignedTo
+ - 第0条的old属性 @admin
+ - 第0条的new属性 @test1
+- 测试新增actionID 10003 历史记录
+ - 第0条的field属性 @name
+ - 第0条的old属性 @name1
+ - 第0条的new属性 @name2
+- 测试新增actionID 10004 历史记录
+ - 第0条的field属性 @code
+ - 第0条的old属性 @code1
+ - 第0条的new属性 @code2
+- 测试新增actionID 10005 历史记录
+ - 第0条的field属性 @assignedTo
+ - 第0条的old属性 @test2
+ - 第0条的new属性 @test1
 
 */
 

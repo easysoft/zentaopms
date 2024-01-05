@@ -7,18 +7,18 @@ su('admin');
 /**
 
 title=测试 actionModel->computeBeginAndEnd();
+timeout=0
 cid=1
-pid=1
 
-测试计算all的日期         >> 1
-测试计算today的日期       >> 1
-测试计算yesterday的日期   >> 1
-测试计算twodaysago的日期  >> 1
-测试计算latest3days的日期 >> 1
-测试计算thisweek的日期    >> 1
-测试计算lastweek的日期    >> 1
-测试计算thismonth的日期   >> 1
-测试计算lastmonth的日期   >> 1
+- 测试计算all的日期 @1
+- 测试计算today的日期 @1
+- 测试计算yesterday的日期 @1
+- 测试计算twodaysago的日期 @1
+- 测试计算latest3days的日期 @1
+- 测试计算thisweek的日期 @1
+- 测试计算lastweek的日期 @1
+- 测试计算thismonth的日期 @1
+- 测试计算lastmonth的日期 @1
 
 */
 

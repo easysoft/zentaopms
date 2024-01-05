@@ -11,10 +11,10 @@ zdTable('action')->config('action')->gen(4);
 /**
 
 title=测试 actionModel->restoreStages();
+timeout=0
 cid=1
-pid=1
 
-测试还原id为2和3的阶段 >> 1
+- 测试还原id为2和3的阶段 @1
 
 */
 

@@ -13,17 +13,18 @@ zdTable('casestep')->gen(1);
 /**
 
 title=测试 actionModel->saveIndex();
+timeout=0
 cid=1
-pid=1
 
-测试保存空数据 >> 1
-测试保存stroyId为0, action为空的数据 >> 1
-测试保存stroyId为1, action为空的数据 >> 1
-测试保存stroyId为100000, action为空的数据 >> 1
-测试保存stroyId为0, action为created的数据 >> 1
-测试保存stroyId为1, action为created的数据 >> 1
-测试保存stroyId为100000, action为created的数据 >> 1
-测试保存不存在类型的数据 >> 1
+- 测试保存空数据 @0
+- 测试保存$objectId为0, action为空的数据 @0
+- 测试保存$objectId为1, action为空的数据 @0
+- 测试保存$objectId为100000, action为空的数据 @0
+- 测试保存$objectId为1, action为created的数据 @1
+- 测试保存$objectId为100000, action为created的数据 @0
+- 测试保存$objectId为1, action为created的数据 @0
+- 测试保存$objectId为1, action为efforta,评论不为空的数据 @1
+- 测试保存$objectId为1, action为efforta,评论不为空的数据 @0
 
 */
 
@@ -43,4 +44,3 @@ r($action->saveIndexTest($objectTypeList[1], $objectIdList[2], $actionTypeList[1
 r($action->saveIndexTest($objectTypeList[3], $objectIdList[1], $actionTypeList[1])) && p() && e('0');                    // 测试保存$objectId为1, action为created的数据
 r($action->saveIndexTest($objectTypeList[4], $objectIdList[1], $actionTypeList[2], $commentList[0])) && p() && e('1');   // 测试保存$objectId为1, action为efforta,评论不为空的数据
 r($action->saveIndexTest($objectTypeList[3], $objectIdList[1], $actionTypeList[2], $commentList[0])) && p() && e('0');   // 测试保存$objectId为1, action为efforta,评论不为空的数据
-

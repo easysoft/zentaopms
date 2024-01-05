@@ -9,14 +9,14 @@ zdTable('action')->gen(50);
 /**
 
 title=测试 actionModel->getBySQL();
+timeout=0
 cid=1
-pid=1
 
-查询id like %1的动作个数           >> 11
-查询objectType = product的动作个数 >> 3
-查询objectID < 10的动作个数        >> 9
-查询action = opend的动作个数       >> 2
-查询read = 0的动作个数             >> 25
+- 查询id like %1的动作个数 @11
+- 查询objectType = product的动作个数 @3
+- 查询objectID < 10的动作个数 @9
+- 查询action = opend的动作个数 @2
+- 查询read = 0的动作个数 @25
 
 */
 

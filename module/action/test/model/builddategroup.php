@@ -14,25 +14,57 @@ zdTable('actionrecent')->config('action')->gen(60, true, false);
 /**
 
 title=测试 actionModel->buildDateGroup();
+timeout=0
 cid=1
-pid=1
 
-测试创建下一个动作日期组 今天 日期倒序 前一模块 my >> 1,1
-测试创建下一个动作日期组 昨天 日期倒序 前一模块 my >> 1,1
-测试创建下一个动作日期组 今天 日期倒序 前一模块 company >> 1,1
-测试创建下一个动作日期组 昨天 日期倒序 前一模块 company >> 1,1
-测试创建下一个动作日期组 今天 日期正序 前一模块 my >> 1,1
-测试创建下一个动作日期组 昨天 日期正序 前一模块 my >> 1,1
-测试创建下一个动作日期组 今天 日期正序 前一模块 company >> 1,1
-测试创建下一个动作日期组 昨天 日期正序 前一模块 company >> 1,1
-测试创建上一个动作日期组 今天 日期倒序 前一模块 my >> 1,1
-测试创建上一个动作日期组 昨天 日期倒序 前一模块 my >> 1,1
-测试创建上一个动作日期组 今天 日期倒序 前一模块 company >> 1,1
-测试创建上一个动作日期组 昨天 日期倒序 前一模块 company >> 1,1
-测试创建上一个动作日期组 今天 日期正序 前一模块 my >> 1,1
-测试创建上一个动作日期组 昨天 日期正序 前一模块 my >> 1,1
-测试创建上一个动作日期组 今天 日期正序 前一模块 company >> 1,1
-测试创建上一个动作日期组 昨天 日期正序 前一模块 company >> 1,1
+- 测试创建下一个动作日期组 今天 日期倒序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 昨天 日期倒序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 今天 日期倒序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 昨天 日期倒序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 今天 日期正序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 昨天 日期正序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 今天 日期正序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建下一个动作日期组 昨天 日期正序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 今天 日期倒序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 昨天 日期倒序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 今天 日期倒序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 昨天 日期倒序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 今天 日期正序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 昨天 日期正序 前一模块 my
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 今天 日期正序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
+- 测试创建上一个动作日期组 昨天 日期正序 前一模块 company
+ - 属性dateCount @1
+ - 属性dateActions @1
 
 */
 

@@ -7,12 +7,12 @@ su('admin');
 /**
 
 title=测试 actionModel->deleteByType();
+timeout=0
 cid=1
-pid=1
 
-测试删除object为空动态 >> 1
-测试删除objectType为story的动态 >> 1
-测试删除objectType为不存在的test的动态 >> 1
+- 测试删除object为空动态 @1
+- 测试删除objectType为story的动态 @1
+- 测试删除objectType为不存在的test的动态 @1
 
 */
 

@@ -25,8 +25,113 @@ su('admin');
 /**
 
 title=测试 actionModel->getList();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取对象类型 story 对象ID 1 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 2 的动态信息 @link
+- 测试获取对象类型 story 对象ID 3 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 4 的动态信息 @link
+- 测试获取对象类型 story 对象ID 5 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 6 的动态信息 @link
+- 测试获取对象类型 story 对象ID 7 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 8 的动态信息 @link
+- 测试获取对象类型 story 对象ID 9 的动态信息 @link
+- 测试获取对象类型 story 对象ID 10 的动态信息 @link
+- 测试获取对象类型 story 对象ID 11 的动态信息 @link
+- 测试获取对象类型 story 对象ID 12 的动态信息 @link
+- 测试获取对象类型 story 对象ID 13 的动态信息 @link
+- 测试获取对象类型 story 对象ID 14 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 15 的动态信息 @link
+- 测试获取对象类型 story 对象ID 16 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 17 的动态信息 @link
+- 测试获取对象类型 story 对象ID 18 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 19 的动态信息 @link
+- 测试获取对象类型 story 对象ID 20 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 21 的动态信息 @link
+- 测试获取对象类型 story 对象ID 22 的动态信息 @link
+- 测试获取对象类型 story 对象ID 23 的动态信息 @link
+- 测试获取对象类型 story 对象ID 24 的动态信息 @link
+- 测试获取对象类型 story 对象ID 25 的动态信息 @link
+- 测试获取对象类型 story 对象ID 26 的动态信息 @link
+- 测试获取对象类型 story 对象ID 27 的动态信息 @nochanged
+- 测试获取对象类型 bug 对象ID 1 的动态信息 @link
+- 测试获取对象类型 bug 对象ID 2 的动态信息 @link
+- 测试获取对象类型 bug 对象ID 3 的动态信息 @link
+- 测试获取对象类型 feedback 对象ID 1 的动态信息 @nochanged
+- 测试获取对象类型 ticket 对象ID 1 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 1 的动态信息 @link
+- 测试获取对象类型 module 对象ID 1 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 28 的动态信息 @link
+- 测试获取对象类型 task 对象ID 2 的动态信息 @link
+- 测试获取对象类型 task 对象ID 3 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 4 的动态信息 @link
+- 测试获取对象类型 task 对象ID 5 的动态信息 @title
+- 测试获取对象类型 story 对象ID 29 的动态信息 @link
+- 测试获取对象类型 story 对象ID 30 的动态信息 @title
+- 测试获取对象类型 release 对象ID 1 的动态信息 @link
+- 测试获取对象类型 release 对象ID 2 的动态信息 @nochanged
+- 测试获取对象类型 case 对象ID 1 的动态信息 @link
+- 测试获取对象类型 case 对象ID 2 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 31 的动态信息 @nochanged
+- 测试获取对象类型 todo 对象ID 1 的动态信息 @link
+- 测试获取对象类型 todo 对象ID 2 的动态信息 @link
+- 测试获取对象类型 todo 对象ID 3 的动态信息 @link
+- 测试获取对象类型 story 对象ID 32 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 33 的动态信息 @link
+- 测试获取对象类型 story 对象ID 34 的动态信息 @link
+- 测试获取对象类型 story 对象ID 35 的动态信息 @link
+- 测试获取对象类型 todo 对象ID 4 的动态信息 @nochanged
+- 测试获取对象类型 bug 对象ID 4 的动态信息 @link
+- 测试获取对象类型 bug 对象ID 5 的动态信息 @link
+- 测试获取对象类型 bug 对象ID 6 的动态信息 @link
+- 测试获取对象类型 todo 对象ID 5 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 6 的动态信息 @link
+- 测试获取对象类型 task 对象ID 7 的动态信息 @link
+- 测试获取对象类型 task 对象ID 8 的动态信息 @link
+- 测试获取对象类型 task 对象ID 9 的动态信息 @link
+- 测试获取对象类型 task 对象ID 10 的动态信息 @link
+- 测试获取对象类型 task 对象ID 11 的动态信息 @link
+- 测试获取对象类型 feedback 对象ID 2 的动态信息 @nochanged
+- 测试获取对象类型 feedback 对象ID 3 的动态信息 @nochanged
+- 测试获取对象类型 feedback 对象ID 4 的动态信息 @nochanged
+- 测试获取对象类型 feedback 对象ID 5 的动态信息 @nochanged
+- 测试获取对象类型 feedback 对象ID 6 的动态信息 @nochanged
+- 测试获取对象类型 feedback 对象ID 7 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 36 的动态信息 @link
+- 测试获取对象类型 story 对象ID 37 的动态信息 @link
+- 测试获取对象类型 story 对象ID 38 的动态信息 @link
+- 测试获取对象类型 story 对象ID 39 的动态信息 @link
+- 测试获取对象类型 story 对象ID 40 的动态信息 @link
+- 测试获取对象类型 testtask 对象ID 1 的动态信息 @link
+- 测试获取对象类型 testtask 对象ID 2 的动态信息 @link
+- 测试获取对象类型 testtask 对象ID 3 的动态信息 @link
+- 测试获取对象类型 task 对象ID 12 的动态信息 @nochanged
+- 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @nochanged
+- 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @nochanged
+- 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 12 的动态信息 @link
+- 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @link
+- 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @link
+- 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息 @link
+- 测试获取对象类型 execution 对象ID 1 的动态信息 @link
+- 测试获取对象类型 execution 对象ID 2 的动态信息 @link
+- 测试获取对象类型 execution 对象ID 3 的动态信息 @link
+- 测试获取对象类型 execution 对象ID 4 的动态信息 @nochanged
+- 测试获取对象类型 project 对象ID 1 的动态信息 @link
+- 测试获取对象类型 project 对象ID 2 的动态信息 @link
+- 测试获取对象类型 project 对象ID 3 的动态信息 @link
+- 测试获取对象类型 project 对象ID 4 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 41 的动态信息 @link
+- 测试获取对象类型 story 对象ID 42 的动态信息 @link
+- 测试获取对象类型 story 对象ID 43 的动态信息 @link
+- 测试获取对象类型 bug 对象ID 7 的动态信息 @link
+- 测试获取对象类型 bug 对象ID 8 的动态信息 @link
+- 测试获取对象类型 task 对象ID 13 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 14 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 16 的动态信息 @nochanged
+- 测试获取对象类型 task 对象ID 15 的动态信息 @nochanged
+
 */
 
 $objectType  = array('story', 'task', 'bug', 'feedback', 'ticket', 'module', 'release', 'case', 'todo', 'testtask', 'risk', 'issue', 'opportunity', 'execution', 'project');

@@ -9,13 +9,13 @@ zdTable('action')->config('action')->gen(2);
 /**
 
 title=测试 actionModel->hideOne();
+timeout=0
 cid=1
-pid=1
 
-隐藏action1 >> 2
-隐藏action2 >> 1
-检查是否有action1的删除数据 >> 1
-检查是否有action2的删除数据 >> 0
+- 隐藏action1属性extra @2
+- 隐藏action2属性extra @1
+- 检查是否有action1的删除数据属性objectID @1
+- 检查是否有action2的删除数据 @0
 
 */
 $actionIDList                 = array(1, 2);

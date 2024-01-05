@@ -1,0 +1,13 @@
+title: table zt_action
+desc: "系统日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: date
+    note: "日期"
+    range: "(-1M)-(+1w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD hh:mm:ss"

@@ -10,12 +10,20 @@ zdTable('project')->gen(5);
 /**
 
 title=测试 actionModel->updateStageAttributeTest();
+timeout=0
 cid=1
-pid=1
 
-测试attributeList为0,executionID为0          >> 0
-测试attributeList为1,executionID为1          >> 1
-测试attributeList为attribute,executionID为2  >> 3,attribute;4,attribute
+- 测试attributeList为0,executionID为0
+ - 第0条的id属性 @1
+ - 第0条的attribute属性 @0
+- 测试attributeList为1,executionID为1
+ - 第0条的id属性 @2
+ - 第0条的attribute属性 @1
+- 测试attributeList为attribute,executionID为2
+ - 第0条的id属性 @3
+ - 第0条的attribute属性 @attribute
+ - 第1条的id属性 @4
+ - 第1条的attribute属性 @attribute
 
 */
 

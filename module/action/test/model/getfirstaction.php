@@ -12,8 +12,13 @@ su('admin');
 /**
 
 title=测试 actionModel->getFirstAction();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取对象类型 story 对象ID 1 的动态信息
+ - 属性id @1
+ - 属性objectID @1
+ - 属性objectType @product
 
 */
 

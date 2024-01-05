@@ -11,12 +11,11 @@ zdTable('project')->gen(5);
 /**
 
 title=测试 actionModel->getLikeObject();
+timeout=0
 cid=1
-pid=1
 
-获取id为1,2,3的stage >> 1,stage,1;2,stage,1;3,stage,1
-获取id为4,5,6的stage >> 4,stage,1;5,stage,1;6,stage,1
-获取id为7,8,9的stage >> 7,stage,1;8,stage,1;9,stage,1
+- 执行action模块的getLikeObjectTest方法，参数是$table[0], 'name', 'name', $likeName['name']  @5
+- 执行action模块的getLikeObjectTest方法，参数是$table[0], 'code', 'code', $likeName['code']  @5
 
 */
 

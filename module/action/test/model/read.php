@@ -9,14 +9,29 @@ zdTable('action')->config('action')->gen(5);
 /**
 
 title=测试 actionModel->read();
+timeout=0
 cid=1
-pid=1
 
-测试对action 1 进行阅读操作 >> product,1,1
-测试对action 2 进行阅读操作 >> story,2,1
-测试对action 3 进行阅读操作 >> productplan,3,1
-测试对action 4 进行阅读操作 >> release,4,1
-测试对action 5 进行阅读操作 >> project,5,1
+- 测试对action 1 进行阅读操作
+ - 第0条的objectType属性 @product
+ - 第0条的objectID属性 @1
+ - 第0条的read属性 @1
+- 测试对action 2 进行阅读操作
+ - 第0条的objectType属性 @story
+ - 第0条的objectID属性 @2
+ - 第0条的read属性 @1
+- 测试对action 3 进行阅读操作
+ - 第0条的objectType属性 @productplan
+ - 第0条的objectID属性 @3
+ - 第0条的read属性 @1
+- 测试对action 4 进行阅读操作
+ - 第0条的objectType属性 @release
+ - 第0条的objectID属性 @4
+ - 第0条的read属性 @1
+- 测试对action 5 进行阅读操作
+ - 第0条的objectType属性 @project
+ - 第0条的objectID属性 @5
+ - 第0条的read属性 @1
 
 */
 
