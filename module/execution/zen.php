@@ -1653,7 +1653,7 @@ class executionZen extends execution
 
         helper::setcookie('executionStoryOrder', $orderBy);
         helper::setcookie('storyPreExecutionID', $executionID);
-        if($this->cookie->storyProductParam != $productID) helper::setcookie('storyProductParam', '0');
+        if($this->app->tab == 'project' && $this->cookie->storyProductParam != $productID) helper::setcookie('storyProductParam', '0');
 
         return (int)$productID;
     }
