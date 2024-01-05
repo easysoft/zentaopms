@@ -317,6 +317,9 @@ class screenModel extends model
             return $object;
         }, array_keys($objectPairs), array_values($objectPairs));
 
+        $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
+        $component->chartConfig->firstYear = $firstAction->year;
+
         return $component;
     }
 
