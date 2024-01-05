@@ -63,8 +63,10 @@ class adminModel extends model
         if(!$this->session->apiConfig || time() - $this->session->apiConfig->serverTime > $this->session->apiConfig->expiredTime)
         {
             $config = file_get_contents($this->config->admin->apiRoot . "?mode=getconfig");
+            if(empty($config)) return null;
+
             $config = json_decode($config);
-            if(empty($config) || empty($config->sessionID)) return null;
+            if(empty($config->sessionID)) return null;
             $this->session->set('apiConfig', $config);
         }
         return $this->session->apiConfig;
