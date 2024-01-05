@@ -11,5 +11,3 @@
 .productBox div[id^=plan] {flex: 1 1;}
 #mainContent .input-group.required {position: relative;}
 #mainContent .input-group.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 0.5rem; right: 0.125rem;}
-#mainContent .form-horz .form-group {padding-left: 7rem;}
-#mainContent .form-horz .form-label {width: 7rem;}
