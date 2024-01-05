@@ -335,7 +335,7 @@ class header extends wg
 
             if(!common::hasPriv($module, $createMethod)) continue;
 
-            if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
+            if($objectType == 'doc' and !common::hasPriv('doc', 'create')) continue;
 
             /* Determines whether to print a divider. */
             if($needPrintDivider and $showCreateList)
