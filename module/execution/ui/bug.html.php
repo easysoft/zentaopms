@@ -63,16 +63,10 @@ if($canBatchAssignTo)
     $assignedToItems = array();
     foreach ($users as $account => $name)
     {
-        if($account != 'closed') $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
+        if($account != 'closed') $assignedToItems[] = array('text' => $name, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
     }
 
-    menu(
-        set::id('navAssignedTo'),
-        set::className('dropdown-menu'),
-        set::items($assignedToItems)
-    );
-
-    $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
+    $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top');
 }
 
 jsVar('+pageSummary', $summary);
