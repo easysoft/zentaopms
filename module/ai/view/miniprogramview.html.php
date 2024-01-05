@@ -136,8 +136,8 @@
           <?= "<div class='divider'></div>"; ?>
           <?php if($miniProgram->published === '1'): ?>
             <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
-              <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>">
-                <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->disable; ?>
+              <button class="btn" onclick="openDisableDialog(event)">
+                <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->unpublish; ?>
               </button>
             <?php endif; ?>
           <?php else: ?>

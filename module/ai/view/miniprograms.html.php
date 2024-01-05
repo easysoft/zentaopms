@@ -216,7 +216,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                     </button>
                   <?php endif; ?>
                   <?php if(common::hasPriv('ai', 'unpublishMiniProgram')): ?>
-                    <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
+                    <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->unpublish; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
                       <i class="icon-ban-circle text-primary"></i>
                     </button>
                   <?php endif; ?>
