@@ -22,6 +22,7 @@ ALTER TABLE `zt_block` DROP COLUMN `order`;
 DELETE FROM `zt_block` where `module` = 'todo' and `code` = 'list';
 DELETE FROM `zt_block` where `module` = 'contribute' and `code` = 'contribute';
 DELETE FROM `zt_block` where `module` = 'project' and `code` = 'projectteam';
+DELETE FROM `zt_block` where `module` = 'execution' and `code` = 'execution';
 
 ALTER TABLE `zt_todo`  CHANGE `idvalue` `objectID` mediumint(8) unsigned default '0' NOT NULL AFTER `type`;
 ALTER TABLE `zt_todo` CHANGE `config` `config` VARCHAR(1000) NOT NULL  DEFAULT '';
