@@ -45,7 +45,7 @@ file_put_contents($standardSqlFile, $standardSqls);
 $upgrade->fixConsistency($version);
 
 $lines = file($consistencyFile);
-r(trim($lines[1]) === 'ALTER TABLE `zt_account` CHANGE `id` `id` varchar(10) NOT NULL') && p() && e(1);  //判断是否成功的记录了修复一致性的sql。
+r(trim($lines[2]) === 'ALTER TABLE `zt_account` CHANGE `id` `id` varchar(10) NOT NULL') && p() && e(1);  //判断是否成功的记录了修复一致性的sql。
 
 $standardSqls = explode(';', $standardSqls);
 $standardSqls[0] = str_replace('`id` varchar(10)', '`id` smallint(5) unsigned', $standardSqls[0]);

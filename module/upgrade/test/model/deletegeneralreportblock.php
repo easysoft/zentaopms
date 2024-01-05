@@ -20,6 +20,9 @@ $upgrade = new upgradeTest();
 zdTable('config')->config('block_config')->gen(1);
 zdTable('block')->config('waterfall_block')->gen(1);
 
+$block = $tester->dao->select('*')->from('zt_block')->where('code')->eq('waterfallgeneralreport')->fetch();
+if(isset($block->block)) $tester->dao->update('zt_block')->set('block')->eq('waterfallgeneralreport')->where('code')->eq('waterfallgeneralreport')->exec();
+
 $upgrade->deleteGeneralReportBlock();
 
 global $tester;
@@ -34,5 +37,5 @@ $config = $tester->dao->select('*')->from('zt_config')
     ->andWhere('key') ->eq('closed')
     ->fetch();
 
-r(empty($block)) && p() && e('1');                                                 //瀑布通用报表块已经被删除。
-r(strpos($config->value, ',project|waterfallgeneralreport')) && p('') && e('0');   //瀑布通用报表块配置已经被删除。
+r(!isset($block->block) || empty($block))                    && p() && e('1');   //瀑布通用报表块已经被删除。
+r(strpos($config->value, ',project|waterfallgeneralreport')) && p() && e('0');   //瀑布通用报表块配置已经被删除。

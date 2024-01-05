@@ -368,10 +368,13 @@ class upgradeModel extends model
         catch(PDOException $e)
         {
             $errorInfo = $e->errorInfo;
-            $errorCode = $errorInfo[1];
+            if($errorInfo)
+            {
+                $errorCode = $errorInfo[1];
 
-            /* If table is not extists, try create this table by create sql. */
-            if($errorCode == '1146') return array($sql);
+                /* If table is not extists, try create this table by create sql. */
+                if($errorCode == '1146') return array($sql);
+            }
         }
 
         $changes = array();
