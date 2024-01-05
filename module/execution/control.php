@@ -1745,13 +1745,13 @@ class execution extends control
         $items       = array();
         $columnCards = array();
         $columns     = array();
+
         foreach($kanbanGroup as $laneKey => $laneData)
         {
             $lanes[] = array('name' => $laneKey, 'title' => zget($projects, $laneKey, $this->lang->execution->myExecutions));
             foreach(array('wait', 'doing', 'suspended', 'closed') as $columnKey)
             {
-                $columns[] = array('name' => $columnKey, 'title' => $this->lang->execution->kanbanColType[$columnKey]);
-                $cardList  = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
+                $cardList = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
                 foreach($cardList as $card)
                 {
                     $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
@@ -1762,7 +1762,11 @@ class execution extends control
             }
         }
 
-        foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
+        foreach(array('wait', 'doing', 'suspended', 'closed') as $columnKey)
+        {
+            $columns[] = array('name' => $columnKey, 'title' => $this->lang->execution->kanbanColType[$columnKey], 'cards' => !empty($columnCards[$columnKey]) ? $columnCards[$columnKey] : 0);
+        }
+
         $groupData['key']           = 'executionKanban';
         $groupData['data']['lanes'] = $lanes;
         $groupData['data']['cols']  = $columns;
