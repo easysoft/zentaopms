@@ -81,7 +81,7 @@ window.changeApiType = function()
     if(apiType == 'nolink')  loadDocLibs('api', 'api');
     if(apiType == '')
     {
-        const $modulePicker = $('#moduleBox').zui('picker');
+        const $modulePicker = $('selectLibTypeForm .moduleBox').zui('picker');
         $modulePicker.render({items: []});
     }
 }
@@ -100,7 +100,7 @@ window.loadDocLibs = function(space, type)
         if(data)
         {
             data = JSON.parse(data);
-            const $modulePicker = $('#moduleBox').zui('picker');
+            const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
             $modulePicker.render({items: data});
             $modulePicker.$.setValue('');
         }
@@ -150,7 +150,7 @@ window.loadObjectModules = function(objectType, docType, objectID)
     $.get(link, function(data)
     {
         data = JSON.parse(data);
-        const $modulePicker = $('#moduleBox').zui('picker');
+        const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
         $modulePicker.render({items: data});
         $modulePicker.$.setValue('');
     });

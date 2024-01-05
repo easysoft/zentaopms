@@ -21,6 +21,7 @@ to::header
 
 form
 (
+    setID('selectLibTypeForm'),
     set::submitBtnText($lang->doc->nextStep),
     formGroup
     (
@@ -44,7 +45,7 @@ form
             (
                 set::name('type'),
                 set::items($typeList),
-                set::value(''),
+                set::value('doc'),
                 set::inline(true),
                 on::change('changeDocType')
             )
@@ -136,7 +137,7 @@ form
         set::required(true),
         picker
         (
-            setID('moduleBox'),
+            setClass('moduleBox'),
             set::name('module'),
             set::items(array()),
             set::value('')
