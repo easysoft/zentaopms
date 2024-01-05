@@ -3403,9 +3403,10 @@ class executionModel extends model
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
+        $linkRoadmapStory = $this->config->vision == 'ipd' && $storyType == 'requirement' && $this->app->rawModule = 'project' && $this->app->rawMethod == 'create';
+        $notAllowedStatus = ($this->app->rawMethod == 'batchcreate' || $linkRoadmapStory) ? 'closed' : 'draft,reviewing,closed';
         foreach($stories as $key => $storyID)
         {
-            $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
