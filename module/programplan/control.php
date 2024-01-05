@@ -151,7 +151,7 @@ class programplan extends control
             $changes = $this->programplan->update($planID, $projectID, $plan);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $newPlan = $this->programplan->fetchByID($plan->id);
+            $newPlan = $this->programplan->fetchByID($planID);
             if($plan->parent != $newPlan->parent)
             {
                 $this->programplan->computeProgress($planID, 'edit');
