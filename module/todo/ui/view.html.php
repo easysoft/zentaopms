@@ -336,9 +336,9 @@ $fnGenerateFrom = function() use ($app, $lang, $config, $todo)
 list($fromItem, $fromItemData) = $fnGenerateFrom();
 
 /* Generate cycle configuration information. */
+$todo->config = json_decode($todo->config);
 $fnGenerateCycleCfg = function() use ($lang, $todo)
 {
-    $todo->config = json_decode($todo->config);
 
     $cfg = '';
 
@@ -436,7 +436,7 @@ detailBody
             set::active(true),
             tableData
             (
-                item(set::name($lang->todo->beginAndEnd), $todo->config->begin . " ~ " . $todo->config->end),
+                item(set::name($lang->todo->beginAndEnd), $todo->config->begin . " ~ " . zget($todo->config, 'end', '')),
                 item(set::name($lang->todo->cycleConfig), html($fnGenerateCycleCfg()))
             )
         )) : null
