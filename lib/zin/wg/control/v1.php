@@ -18,6 +18,7 @@ require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorinput' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'upload' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -168,6 +169,11 @@ class control extends wg
     protected function buildColorInputGroup(): wg
     {
         return new colorInput(set($this->props->skip('type')));
+    }
+
+    protected function buildFiles(): wg
+    {
+        return new upload(set($this->props->skip('type')));
     }
 
     protected function build(): wg
