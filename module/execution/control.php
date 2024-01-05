@@ -1845,6 +1845,8 @@ class execution extends control
         $project   = $this->project->getById($execution->project);
         if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
 
+        if($this->app->tab == 'project') $this->view->projectID = $execution->project;
+
         $this->view->title       = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;

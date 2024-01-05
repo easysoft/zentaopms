@@ -39,6 +39,10 @@ if(common::canModify('execution', $execution))
         $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug');
     }
 }
+$importItems = !empty($importTaskItem) && empty($importBugItem) ? array($importTaskItem) : array();
+$importItems = empty($importTaskItem) && !empty($importBugItem) ? array($importBugItem) : $importItems;
+$importItems = !empty($importTaskItem) && !empty($importBugItem) ? array_filter(array($importTaskItem, $importBugItem)) : $importItems;
+
 toolbar
 (
     hasPriv('task', 'report') ? item(set(array
@@ -48,13 +52,13 @@ toolbar
         'class' => 'ghost',
         'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
     ))) : null,
-    (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
+    !empty($importItems) ? dropdown(
         btn(
             setClass('ghost btn square btn-default'),
             set::icon('import'),
             set::text($lang->import)
         ),
-        set::items(array_filter(array($importTaskItem, $importBugItem))),
+        set::items($importItems),
         set::placement('bottom-end')
     ) : null,
     hasPriv('task', 'export') ? item(set(array
