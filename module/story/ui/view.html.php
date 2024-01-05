@@ -406,7 +406,7 @@ detailBody
                             setClass('twins'),
                             $branch ? label(setClass($labelClass . ' circle branch size-sm'), set::title($branch), $branch) : null,
                             label(setClass('circle size-sm'), $twin->id),
-                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal')), setData('size', 'lg'), $twin->title) : span(setClass('title'), $twin->title),
+                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal', 'size' => 'lg')), $twin->title) : span(setClass('title'), $twin->title),
                             label(setClass('size-sm'), set::title($stage), $stage),
                             common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), setData(array('id' => $twin->id)), icon('unlink')) : null
                         );
@@ -462,7 +462,7 @@ detailBody
                             (
                                 set::title($fromBug->title),
                                 label(setClass('circle size-sm'), $fromBug->id),
-                                common::hasPriv('bug', 'view') ? a(set::href($this->createLink('bug', 'view', "bugID=$fromBug->id")), setClass('title'), setData(array('toggle' => 'modal')), set::title($fromBug->title), $fromBug->title) : span(setClass('title'), $fromBug->title)
+                                common::hasPriv('bug', 'view') ? a(set::href($this->createLink('bug', 'view', "bugID=$fromBug->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($fromBug->title), $fromBug->title) : span(setClass('title'), $fromBug->title)
                             )
                         )
                     ) : null,
@@ -478,7 +478,7 @@ detailBody
                                 (
                                     set::title($bug->title),
                                     label(setClass('circle size-sm'), $bug->id),
-                                    common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), setData(array('toggle' => 'modal')), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
+                                    common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
                                     label(setClass("status-{$bug->status} size-sm"), $lang->bug->statusList[$bug->status])
                                 );
                             }, $bugs))
@@ -496,7 +496,7 @@ detailBody
                                 (
                                     set::title($case->title),
                                     label(setClass('circle size-sm'), $case->id),
-                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), setData(array('toggle' => 'modal')), set::title($case->title), $case->title) : span(setClass('title'), $case->title)
+                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($case->title), $case->title) : span(setClass('title'), $case->title)
                                 );
                             }, $cases))
                         )
@@ -554,7 +554,7 @@ detailBody
                                 (
                                     set::title($storyTitle),
                                     label(setClass('circle size-sm'), $storyID),
-                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
+                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
                                 );
                             }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                         )
