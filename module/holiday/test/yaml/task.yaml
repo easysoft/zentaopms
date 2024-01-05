@@ -13,3 +13,8 @@ fields:
     type: timestamp
     format: "YYYY-MM-DD"
     postfix: "\t"
+  - field: finishedDate
+    range: "20230905 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
