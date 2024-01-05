@@ -1108,7 +1108,7 @@ class testcase extends control
         /* 获取用例库，设置用例库 id 和分支。 */
         /* Get libraries, set lib id and branch. */
         $libraries = $this->loadModel('caselib')->getLibraries();
-        if(empty($libraries)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->noLibrary, 'load' => $this->session->caseList));
+        if(empty($libraries)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testcase->noLibrary)));
         if(empty($libID) || !isset($libraries[$libID])) $libID = key($libraries);
         if($branch == '') $branch = 0;
 
