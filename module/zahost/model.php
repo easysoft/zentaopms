@@ -163,7 +163,7 @@ class zahostModel extends model
         {
             exec("ping -n 1 {$address}", $outcome, $status);
         }
-        elseif(strcasecmp(PHP_OS, 'Linux') === 0)
+        else
         {
             exec("ping -c 1 {$address}", $outcome, $status);
         }
