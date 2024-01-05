@@ -487,6 +487,7 @@ class ai extends control
             unset($_POST['toPublish']);
             $this->ai->saveMiniProgramFields($appID);
             if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
+            return $this->sendSuccess(array());
         }
 
         $program = $this->ai->getMiniProgramByID($appID);

@@ -523,7 +523,11 @@ function saveMiniProgram(toPublish)
         $modal.modal('show', 'fit');
         return;
     }
-    postMiniProgramData('0', () => location.reload());
+    postMiniProgramData('0', (data) => {
+        data = JSON.parse(data);
+        if(data.result === 'success') $.zui.messager.success(data.message);
+        else $.zui.messager.danger(data.message);
+    });
 }
 
 $('#publish-confirm-modal .btn-primary').on('click', function ()
