@@ -652,7 +652,7 @@ class storyZen extends story
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories   = $this->story->getParentStoryPairs($productID);
 
-        $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'changing,active,reviewing';
+        $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
         $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');
 
         /* 追加字段的label属性。 */
@@ -991,7 +991,7 @@ class storyZen extends story
         if($storyType == 'story')
         {
             $moduleIdList = $this->tree->getAllChildId($this->view->moduleID);
-            $URS          = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+            $URS          = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'active', 'id_desc', 0, '', 'requirement');
         }
         $fields['URS']['options'] = $URS;
 
