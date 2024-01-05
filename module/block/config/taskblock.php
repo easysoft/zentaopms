@@ -9,7 +9,7 @@ $config->block->task->dtable->fieldList['id']['name']  = 'id';
 $config->block->task->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->block->task->dtable->fieldList['id']['type']  = 'int';
 $config->block->task->dtable->fieldList['id']['fixed'] = 'left';
-$config->block->task->dtable->fieldList['id']['sort']  = true;
+$config->block->task->dtable->fieldList['id']['sort']  = 'number';
 
 $config->block->task->dtable->fieldList['name']['name']  = 'name';
 $config->block->task->dtable->fieldList['name']['title'] = $lang->task->name;
