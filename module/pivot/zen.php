@@ -133,9 +133,9 @@ class pivotZen extends pivot
      * @param  string $field
      * @param  string $sql
      * @access public
-     * @return string
+     * @return array
      */
-    public function getFilterOptions($type, $object = '', $field = '', $sql = '')
+    public function getFilterOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
     {
         $result  = array();
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql);
@@ -291,14 +291,14 @@ class pivotZen extends pivot
     /**
      * Bug create pivot.
      *
-     * @param  int    $begin
-     * @param  int    $end
+     * @param  string $begin
+     * @param  string $end
      * @param  int    $product
      * @param  int    $execution
      * @access public
      * @return void
      */
-    public function bugCreate($begin = 0, $end = 0, $product = 0, $execution = 0)
+    public function bugCreate(string $begin = '', string $end = '', int $product = 0, int $execution = 0): void
     {
         $this->app->loadLang('bug');
         $begin = $begin == 0 ? date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01'))) : date('Y-m-d', strtotime($begin));
@@ -322,7 +322,7 @@ class pivotZen extends pivot
      * @access public
      * @return void
      */
-    public function bugAssign()
+    public function bugAssign(): void
     {
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
