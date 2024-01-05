@@ -21,34 +21,40 @@ function updateProgress() {
         var hasInprogress = false;
         for (var imageID in statusList) {
             if (statusList[imageID].statusCode) {
+                imgProgress = $('[data-col="progress"][data-row="' + imageID + '"] .dtable-cell-content')
+                imgPath     = $('[data-col="path"][data-row="' + imageID + '"] .dtable-cell-content')
+                imgStatus   = $('[data-col="status"][data-row="' + imageID + '"] .dtable-cell-content')
+                imgDownload = $('[data-col="actions"][data-row="' + imageID + '"]').find('a').first();
+                imgCancel   = $('[data-col="actions"][data-row="' + imageID + '"]').find('a').last();
+
                 if (statusList[imageID].statusCode == 'inprogress' || statusList[imageID].statusCode == 'created' || statusList[imageID].statusCode == 'pending')
                 {
                     hasInprogress = true;
-                    $('.image-download-' + imageID).addClass('disabled');
-                    $('.image-cancel-' + imageID).removeClass('disabled');
+                    imgDownload.addClass('disabled');
+                    imgCancel.removeClass('disabled');
                 }
                 else if (statusList[imageID].statusCode == 'completed')
                 {
-                    $('.image-path-' + imageID).text(statusList[imageID].path);
-                    $('.image-path-' + imageID).attr('title', statusList[imageID].path);
-                    $('.image-download-' + imageID).addClass('disabled');
-                    $('.image-cancel-' + imageID).addClass('disabled');
-                    $('.image-cancel-' + imageID).attr('href', '#');
-                    $('.image-progress-' + imageID).text("100%");
+                    imgPath.text(statusList[imageID].path);
+                    imgPath.attr('title', statusList[imageID].path);
+                    imgDownload.addClass('disabled');
+                    imgCancel.addClass('disabled');
+                    imgCancel.attr('href', '#');
+                    imgProgress.text("100%");
                 }
                 else
                 {
-                    var link = createLink('zahost', 'downloadImage', "hostID="+hostID+"&imageID="+imageID);
-                    $('.image-download-' + imageID).removeClass('disabled');
-                    $('.image-download-' + imageID).attr('href', link);
-                    $('.image-cancel-' + imageID).addClass('disabled');
-                    $('.image-cancel-' + imageID).attr('href', '#');
-                    $('.image-progress-' + imageID).text('');
+                    var link = $.createLink('zahost', 'downloadImage', "hostID="+hostID+"&imageID="+imageID);
+                    imgDownload.removeClass('disabled');
+                    imgDownload.attr('href', link);
+                    imgCancel.addClass('disabled');
+                    imgCancel.attr('href', '#');
+                    imgProgress.text('');
                 }
-                $('.image-status-' + imageID).text(statusList[imageID].status);
+                imgStatus.text(statusList[imageID].status);
                 if(statusList[imageID].progress != '' && statusList[imageID].statusCode != 'completed')
                 {
-                    $('.image-progress-' + imageID).text(statusList[imageID].progress);
+                    imgProgress.text(statusList[imageID].progress);
                 }
             }
         }

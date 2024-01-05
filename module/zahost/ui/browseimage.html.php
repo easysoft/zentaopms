@@ -16,6 +16,11 @@ foreach($imageList as $image) $image->hostID = $hostID;
 
 $imageList = initTableData($imageList, $config->zahost->imageDtable->fieldList, $this->zahost);
 
+foreach($imageList as &$image)
+{
+    foreach($image->actions as &$action) $action['disabled'] = false;
+}
+
 modalHeader(set::title($lang->zahost->image->browseImage));
 
 dtable
