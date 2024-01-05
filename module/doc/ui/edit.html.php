@@ -149,7 +149,7 @@ form
                     on::change('toggleWhiteList')
                 )
             ),
-            formGroup
+            $lib->type != 'mine' ? formGroup
             (
                 $doc->acl == 'open' ? setClass('hidden') : null,
                 set::label($lang->doc->whiteList),
@@ -170,7 +170,7 @@ form
                     ),
                     users(set::label($lang->doc->users), set::items($users), set::value($doc->users))
                 )
-            ),
+            ) : null,
             formRow
             (
                 div
