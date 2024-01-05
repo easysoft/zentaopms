@@ -10,11 +10,8 @@ title=测试 repoModel::createRepo();
 timeout=0
 cid=1
 
-- 使用空的名字创建repo群组 @return false
-- 使用空的群组URL创建repo群组 @return false
-- 使用错误repoID创建群组 @0
-- 通过repoID,projectID,分支对象正确创建GitLab分支 @1
-- 使用重复的分支信息创建分支第path条的0属性 @已经被使用
+- 使用不符合规则的名字创建repo属性name @名称应该只包含字母数字，破折号，下划线和点。
+- 通过正确数据创建版本库 @1
 
 */
 
@@ -35,11 +32,10 @@ $repo->acl          = '{"acl":"open","groups":[""],"users":[""]}';
 
 $_SERVER['REQUEST_URI'] = 'http://unittest/';
 
-r($repoTest->createRepoTest($repo)) && p('name') && e('名称应该只包含字母数字，破折号，下划线和点。'); //使用不符合规则的名字创建repo群组
+r($repoTest->createRepoTest($repo)) && p('name') && e('名称应该只包含字母数字，破折号，下划线和点。'); //使用不符合规则的名字创建repo
 
 $repo->name = 'unitTestProject17';
 $result = $repoTest->createRepoTest($repo);
 if(is_int($result)) $result = true;
-if(!empty($result->message->name[0]) and $result->message->name[0] == '已经被使用') $result = true;
-r($result) && p() && e('1');         //通过repoID,projectID,分支对象正确创建GitLab分支
-
+if(!empty($result['name'][0]) and $result['name'][0] == '已经被使用') $result = true;
+r($result) && p() && e('1');         //通过正确数据创建版本库
