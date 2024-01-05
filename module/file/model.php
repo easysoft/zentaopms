@@ -1066,7 +1066,7 @@ class fileModel extends model
         $sessionString = session_name() . '=' . session_id();
         $uploadDate    = $this->lang->file->uploadDate . substr($file->addedDate, 0, 10);
         $fileTitle     = "<i class='icon icon-file-text'></i> &nbsp;" . $file->title;
-        $fileSize      = helper::formatKB($file->size);
+        $fileSize      = helper::formatKB((float)$file->size);
         if(strpos($file->title, ".{$file->extension}") === false && $file->extension != 'txt') $fileTitle .= ".{$file->extension}";
         $imageWidth = 0;
         if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
