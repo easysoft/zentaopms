@@ -597,6 +597,8 @@ class storyModel extends model
                 $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
             }
 
+            if(!empty($story->URS)) $this->storyTao->doCreateURRelations($storyID, $story->URS);
+
             $this->setStage($storyID);
             $this->executeHooks($storyID);
 
