@@ -72,7 +72,7 @@ class control extends wg
     protected function buildInputControl(): wg
     {
         $controlProps = array();
-        $allProps     = $this->props->skip('type');
+        $allProps     = $this->props->skip(array('type', 'required', 'name'));
         $propsNames   = array_keys(inputControl::definedPropsList());
 
         foreach($propsNames as $propName)
@@ -94,7 +94,7 @@ class control extends wg
     {
         return new inputGroup
         (
-            set($this->props->skip('type')),
+            set($this->props->skip(array('type', 'required', 'name'))),
         );
     }
 
