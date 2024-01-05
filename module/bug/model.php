@@ -1175,13 +1175,14 @@ class bugModel extends model
      * 获取用例关联的bugs。
      * Get case bugs.
      *
-     * @param  int    $runID
-     * @param  int    $caseID
-     * @param  int    $version
+     * @param  int        $runID
+     * @param  int        $caseID
+     * @param  int        $version
+     * @param  string     $orderBy
      * @access public
      * @return array|null
      */
-    public function getCaseBugs(int $runID, int $caseID = 0, int $version = 0): array|null
+    public function getCaseBugs(int $runID, int $caseID = 0, int $version = 0, string $orderBy = 'id_asc'): array|null
     {
         /* 获取用例关联的bugs。 */
         /* Get case bugs. */
@@ -1191,6 +1192,7 @@ class bugModel extends model
             ->beginIF($runID == 0 and $caseID)->andWhere('`case`')->eq($caseID)->fi()
             ->beginIF($version)->andWhere('`caseVersion`')->eq($version)->fi()
             ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 

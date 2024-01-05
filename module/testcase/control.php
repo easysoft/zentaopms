@@ -1263,14 +1263,16 @@ class testcase extends control
      * @param  int    $runID
      * @param  int    $caseID
      * @param  int    $version
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function bugs(int $runID, int $caseID = 0, int $version = 0)
+    public function bugs(int $runID, int $caseID = 0, int $version = 0, string $orderBy = 'id_asc')
     {
-        $this->view->title = $this->lang->testcase->bugs;
-        $this->view->bugs  = $this->loadModel('bug')->getCaseBugs($runID, $caseID, $version);
-        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title   = $this->lang->testcase->bugs;
+        $this->view->bugs    = $this->loadModel('bug')->getCaseBugs($runID, $caseID, $version, $orderBy);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->orderBy = $orderBy;
         $this->display();
     }
 
