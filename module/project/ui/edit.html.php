@@ -540,11 +540,15 @@ formPanel
             set::value($project->acl)
         )
     ),
-    formGroup
+    formRow
     (
-        set::width('1/2'),
-        set::label($lang->whitelist),
-        whitelist(set::items($users), set::value($project->whitelist))
+        $project->acl == 'open' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->whitelist),
+            whitelist(set::items($users), set::value($project->whitelist))
+        )
     ),
     formGroup
     (
