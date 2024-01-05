@@ -1626,7 +1626,9 @@ class pivotModel extends model
                         $sliceRecord->$sliceField = round($sliceStat, 2);
                         break;
                     case 'avg':
-                        $sliceRecord->$sliceField = round(array_sum($sliceStat) / count($sliceStat), 2);
+                        $sum   = array_sum($sliceStat);
+                        $count = count($sliceStat);
+                        $sliceRecord->$sliceField = $count == 0 ? 0 : round($sum / $count, 2);
                         break;
                     case 'max':
                         $sliceRecord->$sliceField = round(max($sliceStat), 2);
@@ -2236,6 +2238,19 @@ class pivotModel extends model
     }
 
     /**
+     * Get ratio.
+     *
+     * @param  float    $value
+     * @param  float    $total
+     * @access public
+     * @return float
+     */
+    public function getRatio($value, $total)
+    {
+        return $total == 0 ? '0%' : round((float)$value / (float)$total * 100, 2) . '%';
+    }
+
+    /**
      * Process column show mode.
      *
      * @param  array   $columnRows
@@ -2290,12 +2305,12 @@ class pivotModel extends model
                         continue;
                     }
                     if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = round((float)$value / $allTotal * 100, 2) . '%';
+                    $columnRow->{$field} = $this->getRatio($value, $allTotal);
                 }
                 if($showTotal == 'sum')
                 {
                     if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{"sum_$uuName"} = round((float)$rowTotal[$index] / $allTotal * 100, 2) . '%';
+                    $columnRow->{"sum_$uuName"} = $this->getRatio($rowTotal[$index], $allTotal);
                 }
                 $columnRows[$index] = $columnRow;
             }
@@ -2314,12 +2329,12 @@ class pivotModel extends model
                         continue;
                     }
                     if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = round((float)$value / $rowTotal[$index] * 100, 2) . '%';
+                    $columnRow->{$field} = $this->getRatio($value, $rowTotal[$index]);
                 }
                 if($showTotal == 'sum')
                 {
                     if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{'sum_' . $uuName} = round((float)$rowTotal[$index] / $rowTotal[$index] * 100, 2) . '%';
+                    $columnRow->{'sum_' . $uuName} = $this->getRatio($rowTotal[$index], $rowTotal[$index]);
                 }
                 $columnRows[$index] = $columnRow;
             }
@@ -2338,12 +2353,12 @@ class pivotModel extends model
                         continue;
                     }
                     if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = round((float)$value / $colTotal[$field] * 100, 2) . '%';
+                    $columnRow->{$field} = $this->getRatio($value, $colTotal[$field]);
                 }
                 if($showTotal == 'sum')
                 {
                     if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{'sum_' . $uuName} = round((float)$rowTotal[$index] / $allTotal * 100, 2) . '%';
+                    $columnRow->{'sum_' . $uuName} = $this->getRatio($rowTotal[$index], $allTotal);
                 }
                 $columnRows[$index] = $columnRow;
             }
@@ -2375,7 +2390,7 @@ class pivotModel extends model
                         }
                         else
                         {
-                            $colTotalRow->{$field} = round((float)$allTotal / $allTotal * 100, 2) . '%';
+                            $colTotalRow->{$field} = $this->getRatio($allTotal, $allTotal);
                         }
                         continue;
                     }
@@ -2393,8 +2408,8 @@ class pivotModel extends model
                     }
 
                     if($showMode == 'default') $colTotalRow->$field = $colTotal[$field];
-                    if($showMode == 'column')  $colTotalRow->$field = round((float)$colTotal[$field] / $colTotal[$field] * 100, 2) . '%';
-                    if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = round((float)$colTotal[$field] / $allTotal * 100, 2) . '%';
+                    if($showMode == 'column')  $colTotalRow->$field = $this->getRatio($colTotal[$field], $colTotal[$field]);
+                    if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = $this->getRatio($colTotal[$field], $allTotal);
                 }
             }
 
