@@ -166,7 +166,7 @@ class control extends wg
         return new colorPicker(set($this->props->skip('type')));
     }
 
-    protected function buildColorInputGroup(): wg
+    protected function buildColorInput(): wg
     {
         return new colorInput(set($this->props->skip('type')));
     }
