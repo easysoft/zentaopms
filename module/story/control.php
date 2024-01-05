@@ -1933,7 +1933,7 @@ class story extends control
     {
         $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
 
-        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'active', 'id_desc', 0, '', 'requirement');
 
         $items = array();
         foreach($URS as $URID => $URTitle)
