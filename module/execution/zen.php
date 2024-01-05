@@ -917,12 +917,13 @@ class executionZen extends execution
             ->setDefault('openedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('type', $type)
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
             ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->setDefault('type', $type)
+            ->setIF($this->post->type, 'type', $this->post->type)
             ->get();
 
         if(!empty($execution->parent) && ($execution->project == $execution->parent)) $execution->hasProduct = $project->hasProduct;
