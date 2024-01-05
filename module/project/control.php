@@ -1361,12 +1361,11 @@ class project extends control
      * Delete a project and confirm.
      *
      * @param  string  $projectID
-     * @param  string  $from browse|view
      *
      * @access public
      * @return void
      */
-    public function delete(int $projectID, string $from = 'browse')
+    public function delete(int $projectID)
     {
         $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
@@ -1376,7 +1375,7 @@ class project extends control
 
         $response['result']     = 'success';
         $response['closeModal'] = true;
-        $response['load']       = true;
+        $response['load']       = helper::createLink('project', 'browse');
 
         $message = $this->executeHooks($projectID);
         if($message) $response['message'] = $message;
@@ -1387,7 +1386,6 @@ class project extends control
         $this->projectZen->removeAssociatedProducts($project);
 
         $this->session->set('project', '');
-        if($from == 'view') $response['load'] = helper::createLink('project', 'browse');
         return $this->send($response);
     }
 
