@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if(!$lib)
+if(empty($libTree))
 {
     featureBar();
     toolbar
