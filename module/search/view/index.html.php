@@ -35,7 +35,9 @@ adjustMenuWidth();
         <div class='item'>
           <div class='item-heading'>
             <div class="pull-right">
+              <?php if($object->objectType !== 'ai'): ?>
               <span><?php echo html::a($object->url . (strpos($object->url, '?') !== false ? '&onlybody=yes' : '?onlybody=yes'), $lang->search->preview, '', "class='iframe' data-width='90%'")?></span>
+              <?php endif; ?>
             </div>
             <h4>
               <?php
