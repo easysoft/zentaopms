@@ -244,7 +244,7 @@ class helper extends baseHelper
     public static function formatKB($traffic, $precision = 2)
     {
         if(!$traffic) return 0;
-        $base     = log($traffic, 1024);
+        $base     = log((float)$traffic, 1024);
         $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
 
         return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
