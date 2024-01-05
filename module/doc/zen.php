@@ -423,15 +423,14 @@ class docZen extends doc
             $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
             $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
 
-            $this->view->executions = array();
+            $this->view->executions = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
             if($lib->type == 'execution')
             {
                 $execution = $this->loadModel('execution')->getByID($lib->execution);
                 $objectID  = $execution->project;
                 $libs      = $this->doc->getLibs('execution', "withObject,{$unclosed}", $lib->id, $lib->execution);
 
-                $this->view->execution  = $execution;
-                $this->view->executions = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
+                $this->view->execution = $execution;
             }
         }
         elseif($linkType == 'execution')

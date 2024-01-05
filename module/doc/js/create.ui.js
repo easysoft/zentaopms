@@ -24,21 +24,22 @@ $(function()
 window.loadExecutions = function(e)
 {
     const projectID   = e.target.value;
-    const executionID = $('#execution').val();
+    const executionID = $("#modalBasicInfo input[name='execution']").val();
+    let   link        = '';
     if(executionID)
     {
-        const link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
     }
     else
     {
-        const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
     }
-    $.get(link, function(data)
+
+    $.getJSON(link, function(data)
     {
-        data = JSON.parse(data);
-        const $picker = $("[name='execution']").zui('picker');
+        let $picker = $("#modalBasicInfo input[name='execution']").zui('picker');
         $picker.render({items: data});
-        $picker.$.setValue('');
+        $picker.$.setValue(executionID);
     });
 }
 
