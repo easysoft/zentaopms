@@ -173,7 +173,7 @@ function loadProductModules(productID)
     if(typeof(branch) == 'undefined')   branch   = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
 
-    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
+    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&extra=nodeleted&currentModuleID=' + moduleID);
     $.getJSON(link, function(data)
     {
         let moduleID      = $('[name="module"]').val();

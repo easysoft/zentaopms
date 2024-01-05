@@ -141,7 +141,7 @@ window.loadBranches = function(product, obj)
     var storyID         = $this.closest('tr').find('.form-batch-input[data-name="storyIdList"]').val();
     var $module         = $this.closest('tr').find('.form-batch-control[data-name="module"]');
     var currentModuleID = $module.val();
-    var moduleLink      = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=' + storyID + '&needManage=false&extra=nodeleted&currentModuleID=' + currentModuleID);
+    var moduleLink      = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=' + storyID + '&extra=nodeleted&currentModuleID=' + currentModuleID);
     $.get(moduleLink, function(items)
     {
         $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');

@@ -169,7 +169,7 @@ function loadAll()
 function loadModules(executionID)
 {
     const extra         = $('input[name=isShowAllModule]') ? 'allModule' : '';
-    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=' + extra);
+    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=' + extra);
     $.get(getModuleLink, function(modules)
     {
         if(modules)
@@ -514,7 +514,7 @@ window.copyStoryTitle = function()
 window.showAllModule = function()
 {
     $('input[name=isShowAllModule]').val('1');
-    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=allModule');
+    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=allModule');
 
     $.get(getModuleLink, function(modules)
     {

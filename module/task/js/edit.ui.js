@@ -41,7 +41,7 @@ function loadModuleMenu(executionID)
 {
     const oldModuleID = $('[name=module]').val();
     const extra       = $('#showAllModule').is(':checked') ? 'allModule' : '';
-    const link        = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=' + extra);
+    const link        = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=' + extra);
     $.getJSON(link, function(moduleItems)
     {
         let $modulePicker = $('[name=module]').zui('picker');
@@ -92,7 +92,7 @@ window.loadAllModule = function()
     const executionID = $('[name=execution]').val();
     const oldModuleID = $('[name=module]').val();
     const extra       = $('#showAllModule').is(':checked') ? 'allModule' : '';
-    const link        = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=' + extra);
+    const link        = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=' + extra);
     $.getJSON(link, function(moduleItems)
     {
         let $modulePicker = $('[name=module]').zui('picker');
