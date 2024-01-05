@@ -45,7 +45,7 @@ class formPanel extends panel
         'submitBtnText?: string',                      // 表单提交按钮文本，如果不指定则使用 `$lang->save` 的值。
         'cancelBtnText?: string',                      // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
         'items?: array',                               // 使用一个列定义对象数组来定义表单项。
-        'grid?: bool=true',                            // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
+        'layout?: string="horz"',                      // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
         'shadow?: bool=false',                         // 是否显示阴影层。
@@ -162,10 +162,17 @@ class formPanel extends panel
             );
         }
 
+        $props = array_keys(form::definedPropsList());
+        $formProps = array();
+        foreach($props as $propName)
+        {
+            if($this->hasProp($propName)) $formProps[] = $propName;
+        }
+
         return new form
         (
             set::className($this->prop('formClass')),
-            set($this->props->pick(array_keys(form::definedPropsList()))),
+            set($this->props->pick($formProps)),
             $this->children(),
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
         );
@@ -201,7 +208,7 @@ class formPanel extends panel
         (
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
-            $this->buildForm()
+            $this->buildContainer($this->buildForm())
         );
     }
 }
