@@ -6,6 +6,7 @@ class upload extends wg
 {
     protected static array $defineProps = array(
         'name: string="files[]"',          // 字段名
+        'id?: string',                     // 元素 ID
         'icon?: string',                   // 文件图标
         'showIcon?: bool=true',            // 是否展示文件图标
         'showSize?: bool=true',            // 是否展示文件大小
