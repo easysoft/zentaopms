@@ -301,8 +301,8 @@ class pivotZen extends pivot
     public function bugCreate(string $begin = '', string $end = '', int $product = 0, int $execution = 0): void
     {
         $this->app->loadLang('bug');
-        $begin = $begin == 0 ? date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01'))) : date('Y-m-d', strtotime($begin));
-        $end   = $end == 0   ? date('Y-m-d', strtotime('now')) : $end = date('Y-m-d', strtotime($end));
+        $begin = date('Y-m-01', strtotime($begin ?:'last month'));
+        $end   = date('Y-m-d',  strtotime($end ?: 'now'));
 
         $this->view->title       = $this->lang->pivot->bugCreate;
         $this->view->bugs        = $this->pivot->getBugs($begin, $end, $product ? $product : 0, $execution ? $execution : 0);
@@ -423,8 +423,8 @@ class pivotZen extends pivot
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        $begin = date('Y-m-d', ($begin ? strtotime($begin) : time() - (date('j') - 1) * 24 * 3600));
-        $end   = date('Y-m-d', ($end   ? strtotime($end)   : time() + (date('t') - date('j')) * 24 * 3600));
+        $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-01');
+        $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime(date('Y-m-01', strtotime('next month')) . ' -1 day'));
 
         $this->view->title       = $this->lang->pivot->projectDeviation;
         $this->view->executions  = $this->pivot->getExecutions($begin, $end);
