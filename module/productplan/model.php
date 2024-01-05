@@ -104,7 +104,7 @@ class productplanModel extends model
     {
         $this->loadModel('search')->setQuery('productplan', $queryID);
 
-        $products = (strpos($param, 'noproduct') !== false && empty($productID)) ? $this->loadModel('product')->getPairs() : array($productID => $productID);
+        $products = (strpos($param, 'noproduct') !== false && empty($productID)) ? $this->loadModel('product')->getPairs($param) : array($productID => $productID);
         $plans    = $this->productplanTao->getPlanList(array_keys($products), $branch, $browseType, $param, $orderBy, $pager);
         if(empty($plans)) return array();
 

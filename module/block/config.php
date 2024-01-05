@@ -97,9 +97,19 @@ $config->block->params['story']->orderBy['options'] = $lang->block->orderByList-
 $config->block->params['story']->orderBy['control'] = 'picker';
 $config->block->params['story']->count = $config->block->params['default']->count;
 
-$config->block->params['plan'] = $config->block->params['default'];
+$config->block->params['plan'] = new stdclass();
+$config->block->params['plan']->type['name']    = $lang->block->type;
+$config->block->params['plan']->type['options'] = $lang->block->typeList->product;
+$config->block->params['plan']->type['control'] = 'picker';
+$config->block->params['plan']->count = $config->block->params['default']->count;
+unset($config->block->params['plan']->type['options']['involved']);
 
-$config->block->params['release'] = $config->block->params['default'];
+$config->block->params['release'] = new stdclass();
+$config->block->params['release']->type['name']    = $lang->block->type;
+$config->block->params['release']->type['options'] = $lang->block->typeList->product;
+$config->block->params['release']->type['control'] = 'picker';
+$config->block->params['release']->count = $config->block->params['default']->count;
+unset($config->block->params['release']->type['options']['involved']);
 
 $config->block->params['project'] = new stdclass();
 $config->block->params['project']->type['name']       = $lang->block->type;
@@ -214,9 +224,10 @@ $config->block->params['productDoc'] = $config->block->params['default']->count;
 $config->block->params['projectDoc'] = $config->block->params['default']->count;
 
 $config->block->params['singlestory']   = $config->block->params['story'];
-$config->block->params['singlerelease'] = $config->block->params['release'];
-$config->block->params['singleplan']    = $config->block->params['plan'];
 unset($config->block->params['singlestory']->type['options']['reviewedBy']);
+
+$config->block->params['singlerelease'] = $config->block->params['default'];
+$config->block->params['singleplan']    = $config->block->params['default'];
 
 $config->block->modules['project'] = new stdclass();
 $config->block->modules['project']->moreLinkList = new stdclass();

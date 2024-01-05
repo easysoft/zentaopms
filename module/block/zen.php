@@ -639,7 +639,7 @@ class blockZen extends block
         $pager = pager::init(0, $count , 1);
 
         $this->view->products = $this->loadModel('product')->getPairs();
-        $this->view->plans    = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct');
+        $this->view->plans    = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct|' . $block->params->type);
     }
 
     /**
@@ -656,13 +656,15 @@ class blockZen extends block
         $this->session->set('releaseList', $uri, 'product');
         $this->session->set('buildList', $uri, 'execution');
 
+        $type = $block->params->type;
         $this->app->loadLang('release');
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
-            ->beginIF($block->dashboard != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
+            ->beginIF(strpos($type, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
+            ->beginIF(strpos("|$type|", '|closed|') !== false)->andWhere('t2.status')->eq('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()

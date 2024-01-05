@@ -162,16 +162,16 @@ $lang->block->default['product'][] = array('title' => "{$lang->productCommon}月
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}年度工作量统计",   'module' => 'product', 'code' => 'annualworkload',   'width' => '2');
 $lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}列表",     'module' => 'product', 'code' => 'list',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的发布列表", 'module' => 'product', 'code' => 'release',          'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的计划列表", 'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的计划列表", 'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}发布统计",         'module' => 'product', 'code' => 'releasestatistic', 'width' => '1');
 $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",            'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}统计",               'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的Bug数据",          'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}路线图",             'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
-$lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang->productCommon}的需求列表", 'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang->productCommon}的计划列表", 'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang->productCommon}的发布统计", 'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "指派给我的{$lang->SRCommon}",              'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}计划列表",           'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}发布统计",           'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "最新动态",                                 'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}月度推进分析",       'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
 
@@ -249,24 +249,24 @@ $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
-$lang->block->modules['product']->availableBlocks['overview']         = $lang->productCommon . '总览';
-$lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . '统计';
+$lang->block->modules['product']->availableBlocks['overview']         = "{$lang->productCommon}总览";
+$lang->block->modules['product']->availableBlocks['statistic']        = "{$lang->productCommon}统计";
 $lang->block->modules['product']->availableBlocks['releasestatistic'] = "{$lang->productCommon}发布统计";
 $lang->block->modules['product']->availableBlocks['bugstatistic']     = "{$lang->productCommon}Bug统计";
 $lang->block->modules['product']->availableBlocks['annualworkload']   = "{$lang->productCommon}年度工作量统计";
 $lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang->productCommon}月度推进分析";
-$lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks['plan']             = "计划列表";
-$lang->block->modules['product']->availableBlocks['release']          = '发布列表';
+$lang->block->modules['product']->availableBlocks['list']             = "{$lang->productCommon}列表";
+$lang->block->modules['product']->availableBlocks['plan']             = "{$lang->productCommon}的计划列表";
+$lang->block->modules['product']->availableBlocks['release']          = "{$lang->productCommon}的发布列表";
 $lang->block->modules['product']->availableBlocks['story']            = "{$lang->SRCommon}列表";
 
 $lang->block->modules['singleproduct'] = new stdclass();
-$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = $lang->productCommon . '统计';
+$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = "{$lang->productCommon}统计";
 $lang->block->modules['singleproduct']->availableBlocks['singlebugstatistic']    = "{$lang->productCommon}Bug统计";
 $lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "{$lang->productCommon}路线图";
 $lang->block->modules['singleproduct']->availableBlocks['singlestory']           = "{$lang->SRCommon}列表";
-$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "计划列表";
-$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = '发布列表';
+$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "{$lang->productCommon}计划列表";
+$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = "{$lang->productCommon}发布列表";
 $lang->block->modules['singleproduct']->availableBlocks['singledynamic']         = '最新动态';
 $lang->block->modules['singleproduct']->availableBlocks['singlemonthlyprogress'] = "{$lang->productCommon}月度推进分析";
 

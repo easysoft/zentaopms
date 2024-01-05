@@ -162,16 +162,16 @@ $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Mo
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Annual Workload Statistic",  'module' => 'product', 'code' => 'annualworkload',   'width' => '2');
 $lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} List",              'module' => 'product', 'code' => 'list',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} Releases",          'module' => 'product', 'code' => 'release',          'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} Plans",             'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} Plans",             'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Release Statistic",          'module' => 'product', 'code' => 'releasestatistic', 'width' => '1');
 $lang->block->default['product'][] = array('title' => "{$lang->SRCommon} Assigned To Me",                  'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Statistic",                  'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Bug Statistic",              'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Roadmap",                    'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
-$lang->block->default['singleproduct'][] = array('title' => "Unclosed {$lang->productCommon} Stories",           'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['singleproduct'][] = array('title' => "Unclosed {$lang->productCommon} Plans",             'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "Unclosed {$lang->productCommon} Releases",          'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->SRCommon} Assigned To Me",                  'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Plans",                      'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Releases",                   'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "Dynamic",                                           'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Monthly Advancing Analysis", 'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
 
@@ -249,24 +249,24 @@ $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
-$lang->block->modules['product']->availableBlocks['overview']         = $lang->productCommon . ' Overview';
-$lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . ' Statistic';
+$lang->block->modules['product']->availableBlocks['overview']         = "{$lang->productCommon} Overview";
+$lang->block->modules['product']->availableBlocks['statistic']        = "{$lang->productCommon} Statistic";
 $lang->block->modules['product']->availableBlocks['releasestatistic'] = "{$lang->productCommon} Release Statistic";
 $lang->block->modules['product']->availableBlocks['bugstatistic']     = "{$lang->productCommon} Bug Statistic";
 $lang->block->modules['product']->availableBlocks['annualworkload']   = "{$lang->productCommon} Annual Workload Statistic";
 $lang->block->modules['product']->availableBlocks['monthlyprogress']  = "{$lang->productCommon} Monthly Advancing Analysis";
-$lang->block->modules['product']->availableBlocks['list']             = $lang->productCommon . ' List';
-$lang->block->modules['product']->availableBlocks['plan']             = 'Plan';
-$lang->block->modules['product']->availableBlocks['release']          = 'Release';
+$lang->block->modules['product']->availableBlocks['list']             = "{$lang->productCommon} List";
+$lang->block->modules['product']->availableBlocks['plan']             = "{$lang->productCommon} Plans";
+$lang->block->modules['product']->availableBlocks['release']          = "{$lang->productCommon} Releases";
 $lang->block->modules['product']->availableBlocks['story']            = 'Story';
 
 $lang->block->modules['singleproduct'] = new stdclass();
-$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = $lang->productCommon . ' Statistic';
+$lang->block->modules['singleproduct']->availableBlocks['singlestatistic']       = "{$lang->productCommon} Statistic";
 $lang->block->modules['singleproduct']->availableBlocks['singlebugstatistic']    = "{$lang->productCommon} Bug Statistic";
 $lang->block->modules['singleproduct']->availableBlocks['roadmap']               = "{$lang->productCommon} RoadMap";
 $lang->block->modules['singleproduct']->availableBlocks['singlestory']           = "{$lang->SRCommon} List";
-$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "Plan List";
-$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = 'Release List';
+$lang->block->modules['singleproduct']->availableBlocks['singleplan']            = "{$lang->productCommon} Plans";
+$lang->block->modules['singleproduct']->availableBlocks['singlerelease']         = "{$lang->productCommon} Releases";
 $lang->block->modules['singleproduct']->availableBlocks['singledynamic']         = 'Dynamic';
 $lang->block->modules['singleproduct']->availableBlocks['singlemonthlyprogress'] = "{$lang->productCommon} Monthly Advancing Analysis";
 
