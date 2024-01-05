@@ -972,9 +972,9 @@ class commonModel extends model
      * @param  array|object $data
      * @param  string       $condition
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function removeDuplicate(string $type, object|array $data, string $condition = ''): array
+    public function removeDuplicate(string $type, object|array $data, string $condition = ''): array|false
     {
         $table = zget($this->config->objectTables, $type, '');
         if(empty($table)) return array('stop' => false, 'data' => $data);
