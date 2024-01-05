@@ -782,4 +782,18 @@ class repoTest
 
         return $result;
     }
+
+    public function checkGiteaConnectionTest(int $repoID, int|string $serviceProject = '')
+    {
+        if(!$repoID) return $this->objectModel->checkGiteaConnection('', '', '', '');
+
+        $repo = $this->objectModel->getByID($repoID);
+        if($serviceProject) $repo->serviceProject = $serviceProject;
+
+        $path = $this->objectModel->checkGiteaConnection($repo->SCM, $repo->name, $repo->serviceHost, $repo->serviceProject);
+
+        if(dao::isError()) return dao::getError();
+
+        return strpos($path, 'data/repo/unittest_gitea') !== false;
+    }
 }

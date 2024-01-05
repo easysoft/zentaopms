@@ -2389,6 +2389,8 @@ class repoModel extends model
                 return false;
             }
         }
+
+        return false;
     }
 
     /*
