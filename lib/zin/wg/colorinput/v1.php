@@ -51,7 +51,6 @@ class colorInput extends inputControl
         if($syncColor === true)
         {
             if($id == null) $id = $this->gid;
-            if($this->hasP)
             $syncColor = "#$id";
         }
 
