@@ -2055,7 +2055,7 @@ class executionZen extends execution
         $newPlans = array();
         if(isset($_POST['plans']))
         {
-            foreach($_POST['plans'] as $plans)
+            foreach((array)$_POST['plans'] as $plans)
             {
                 foreach($plans as $planID)
                 {
