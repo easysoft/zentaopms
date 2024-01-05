@@ -186,7 +186,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'title')
     {
         html = '';
-        if(info.row.data.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(info.row.data.parent > 0) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
         if(html) result.unshift({html});
 
         html = '';
