@@ -81,7 +81,7 @@ window.changeApiType = function()
     if(apiType == 'nolink')  loadDocLibs('api', 'api');
     if(apiType == '')
     {
-        const $modulePicker = $('selectLibTypeForm .moduleBox').zui('picker');
+        const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
         $modulePicker.render({items: []});
     }
 }
