@@ -391,7 +391,7 @@ class caselib extends control
             }
 
             $this->session->set('fileImport', $fileName);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('showImport', "libID={$libID}"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => inlink('showImport', "libID={$libID}"), 'closeModal' => true));
         }
 
         $this->display();

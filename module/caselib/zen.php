@@ -502,7 +502,7 @@ class caselibZen extends caselib
             unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);
 
-            return $this->send(array('result'=>'fail', 'message' => $this->lang->error->noData, 'load' => $this->createLink('caselib', 'browse', "libID=$libID")));
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->error->noData, 'locate' => $this->createLink('caselib', 'browse', "libID=$libID"))));
         }
 
         /* 如果导入的用例多余设置的最大导入数。*/
