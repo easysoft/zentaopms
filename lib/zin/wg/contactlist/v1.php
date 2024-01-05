@@ -56,7 +56,7 @@ class contactList extends wg
         return span
         (
             setID('contactBox'),
-            setClass('input-group-addon' . ($items ? ' p-0 w-24' : '')),
+            setClass('input-group-' . ($items ? 'addon p-0 w-24' : 'btn')),
             picker
             (
                 $items ? null : setClass('hidden'),
@@ -69,10 +69,11 @@ class contactList extends wg
             (
                 $items ? setClass('hidden') : null,
                 setID('manageContact'),
+                setClass('btn'),
                 setData(array('toggle' => 'modal')),
                 set('href', createLink('my', 'managecontacts')),
                 set('title', $lang->user->contacts->manage),
-                icon('cog')
+                icon('groups')
             )
         );
     }
