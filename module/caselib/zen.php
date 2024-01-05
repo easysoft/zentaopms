@@ -273,15 +273,13 @@ class caselibZen extends caselib
     protected function getImportHeaderAndColumns(string $fileName, array $fields): array
     {
         $rows = $this->loadModel('file')->parseCSV($fileName);
+        if(empty($rows[0])) return array(array(), array());
 
         $header = array();
-        if(!empty($rows[0]))
+        foreach($rows[0] as $i => $rowValue)
         {
-            foreach($rows[0] as $i => $rowValue)
-            {
-                if(empty($rowValue)) break;
-                $header[$i] = $rowValue;
-            }
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
         }
 
         $columns = array();
