@@ -1,0 +1,26 @@
+title: table zt_repobranch
+desc: "代码分支"
+author: automated export
+version: "1.0"
+fields:
+  - field: repo
+    note: "代码库ID"
+    range: 3
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: revision
+    note: "代码库版本"
+    range: 2-3
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: branch
+    note: "对应分支"
+    range: master,main
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

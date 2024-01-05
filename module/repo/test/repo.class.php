@@ -326,13 +326,14 @@ class repoTest
         return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetch();
     }
 
-    public function saveExistCommits4BranchTest($repoID, $branch)
+    public function saveExistCommits4BranchTest(int $repoID, string $branch)
     {
         $objects = $this->objectModel->saveExistCommits4Branch($repoID, $branch);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $result = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->fetchAll();
+        return $result;
     }
 
     public function updateCommitCountTest(int $repoID, int $count)
@@ -795,5 +796,44 @@ class repoTest
         if(dao::isError()) return dao::getError();
 
         return strpos($path, 'data/repo/unittest_gitea') !== false;
+    }
+
+    public function createRepoTest(object $repo)
+    {
+        $result = $this->objectModel->createRepo($repo);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    public function createGitlabRepoTest(object $repo, int $namespace)
+    {
+        $result = $this->objectModel->createGitlabRepo($repo, $namespace);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    public function deleteRepoTest(int $repoID)
+    {
+        $result = $this->objectModel->deleteRepo($repoID);
+
+        $repoCount        = $this->objectModel->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->count();
+        $repoHistoryCount = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->count();
+        $repoBranchCount  = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->count();
+        $repoFilesCount   = $this->objectModel->dao->select('*')->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->count();
+
+        return array('repoCount' => $repoCount, 'repoHistoryCount' => $repoHistoryCount, 'repoBranchCount' => $repoBranchCount, 'repoFilesCount' => $repoFilesCount);
+    }
+
+    public function getApposeDiffTest(int $repoID, string $oldRevision, string $newRevision)
+    {
+        $scm  = $this->objectModel->app->loadClass('scm');
+        $repo = $this->objectModel->getByID($repoID);
+        $scm->setEngine($repo);
+        $diffs = $scm->diff('', $oldRevision, $newRevision, 'yes', 'isBranchOrTag');
+
+        $diffs = $this->objectModel->getApposeDiff($diffs);
+        return $diffs;
     }
 }

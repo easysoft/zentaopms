@@ -12,7 +12,7 @@ fields:
     format: ""
   - field: repo
     note: "代码库ID"
-    range: "1,3{2},4"
+    range: "1,3{2},4{3}"
     prefix: ""
     postfix: ""
     loop: 0
@@ -39,7 +39,7 @@ fields:
     format: ""
   - field: committer
     note: "作者"
-    range: "admin,gitea{2},admin"
+    range: "admin,gitea{2},admin{3}"
     prefix: ""
     postfix: ""
     loop: 0
