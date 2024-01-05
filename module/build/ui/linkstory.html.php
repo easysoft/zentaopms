@@ -40,6 +40,7 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param&orderBy={name}_{sortType}")),
     set::data(array_values($allStories)),
+    set::loadPartial(true),
     set::extraHeight('+144'),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::footToolbar(array('items' => array(array

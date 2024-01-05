@@ -46,6 +46,7 @@ dtable
     set::checkable(true),
     set::cols($cols),
     set::data(array_values($allBugs)),
+    set::loadPartial(true),
     set::extraHeight('+144'),
     set::onRenderCell(jsRaw('window.renderBugCell')),
     set::plugins(array('form')),
