@@ -144,9 +144,11 @@ pipeline {
 
             stage("增量降级") {
               steps {
-                echo "GIT_BRANCH in jenkinsfile is ${env.GIT_BRANCH}"
-                sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" extension framework lib module/*'
-                sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
+                container('package') {
+                  echo "GIT_BRANCH in jenkinsfile is ${env.GIT_BRANCH}"
+                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" extension framework lib module/*'
+                  sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
+                }
               }
               post {
                 failure {
