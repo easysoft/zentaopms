@@ -639,7 +639,7 @@ class blockZen extends block
         $pager = pager::init(0, $count , 1);
 
         $this->view->products = $this->loadModel('product')->getPairs();
-        $this->view->plans    = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct|' . $block->params->type);
+        $this->view->plans    = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct|' . zget($block->params, 'type', ''));
     }
 
     /**
