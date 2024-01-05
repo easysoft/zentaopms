@@ -17,7 +17,8 @@ class input extends wg
         'disabled?: bool'
     );
 
-    protected static array $defaultProps = array(
+    protected static array $defaultProps = array
+    (
         'type' => 'text',
         'class' => 'form-control'
     );

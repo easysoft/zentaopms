@@ -30,7 +30,7 @@ class inputGroup extends wg
             return new inputControl
             (
                 set($item->props->pick($propNames)),
-                new input(set($item->props->skip(array_merge($propNames, ['type']))))
+                new input(set($item->props->skip(array_merge($propNames, array('type')))))
             );
         }
 
