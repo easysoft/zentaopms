@@ -46,7 +46,7 @@ panel
     div
     (
         setClass('py-6 text-center'),
-        btn(setClass('primary btn-wide'), $lang->save),
+        btn(setID('xmindmapSave'), setClass('primary btn-wide'), $lang->save),
         backBtn(setClass('btn-wide ml-4'), $lang->goback)
     )
 );
