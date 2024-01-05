@@ -424,7 +424,11 @@ if(helper::isAjaxRequest('modal')) modalHeader(set::title($lang->execution->edit
 formPanel
 (
     set::className('editPanel'),
-    !helper::isAjaxRequest('modal') ? modalHeader(set::title($lang->execution->edit)) : null,
+    to::heading(div
+    (
+        setClass('panel-title text-lg'),
+        $lang->execution->edit,
+    )),
     on::click('.addLine', 'addNewLine'),
     on::click('.removeLine', 'removeLine'),
     on::change('[name^=products]', 'productChange'),
