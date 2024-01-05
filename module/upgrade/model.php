@@ -339,9 +339,6 @@ class upgradeModel extends model
         $createHead = array_shift($lines);
         $createFoot = array_pop($lines);
 
-        preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
-        $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
-
         preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
@@ -354,9 +351,6 @@ class upgradeModel extends model
             $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
             $dbSQLHead   = array_shift($dbSQLLines);
             $dbSQLFoot   = array_pop($dbSQLLines);
-
-            preg_match_all('/ENGINE=(\w+) /', $dbSQLFoot, $out);
-            $dbEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
 
             foreach($dbSQLLines as $dbSQLLine)
             {
@@ -381,7 +375,6 @@ class upgradeModel extends model
         }
 
         $changes = array();
-        if($stdEngine != $dbEngine) $changes[] = "ALTER TABLE `{$table}` ENGINE='{$stdEngine}'";
         foreach($lines as $line)
         {
             $change = $this->checkFieldConsistency($table, $line, $fields);
