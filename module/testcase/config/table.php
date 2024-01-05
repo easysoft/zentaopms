@@ -217,7 +217,7 @@ $config->testcase->zerocase->dtable->fieldList['id']['type']  = 'checkID';
 
 $config->testcase->zerocase->dtable->fieldList['title']['title'] = $lang->story->title;
 $config->testcase->zerocase->dtable->fieldList['title']['type']  = 'title';
-$config->testcase->zerocase->dtable->fieldList['title']['link']  = array('module' => 'story', 'method' => 'view', "storyID={id}&version=0&param={param}");
+$config->testcase->zerocase->dtable->fieldList['title']['link']  = array('module' => 'story', 'method' => 'view', 'params' => "storyID={id}&version=0");
 
 $config->testcase->zerocase->dtable->fieldList['pri']['title'] = $lang->story->pri;
 $config->testcase->zerocase->dtable->fieldList['pri']['type']  = 'pri';
