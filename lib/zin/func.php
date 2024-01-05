@@ -1839,3 +1839,11 @@ function whitelist(): whitelist
 {
     return createWg('whitelist', func_get_args());
 }
+
+/**
+ * modulePicker widget.
+ */
+function modulePicker(): modulePicker
+{
+    return createWg('modulePicker', func_get_args());
+}
