@@ -428,7 +428,7 @@ class taskZen extends task
         /* Check if the fields is valid. */
         if($task->estimate < 0 or $task->left < 0 or $task->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
         if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, (string)$task->estStarted, (string)$task->deadline);
-        if(!empty($task->lastEditedDate) && $oldTask->lastEditedDate != $task->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if(!empty($_POST['lastEditedDate']) && $oldTask->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
         if(dao::isError()) return false;
 
         $now  = helper::now();
