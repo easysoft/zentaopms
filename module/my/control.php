@@ -1438,6 +1438,8 @@ class my extends control
 
         $_SESSION['user']->rights = $this->user->authorize($this->app->user->account);
 
+        setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
 }
