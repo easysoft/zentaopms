@@ -275,10 +275,13 @@ class caselibZen extends caselib
         $rows = $this->loadModel('file')->parseCSV($fileName);
 
         $header = array();
-        foreach($rows[0] as $i => $rowValue)
+        if(!empty($rows[0]))
         {
-            if(empty($rowValue)) break;
-            $header[$i] = $rowValue;
+            foreach($rows[0] as $i => $rowValue)
+            {
+                if(empty($rowValue)) break;
+                $header[$i] = $rowValue;
+            }
         }
 
         $columns = array();
@@ -294,10 +297,10 @@ class caselibZen extends caselib
     /**
      * 获得用例的步骤和预期结果。
      * Get steps and expects from import file.
-     * 
+     *
      * @param  string    $field
-     * @param  int       $row 
-     * @param  string    $cellValue 
+     * @param  int       $row
+     * @param  string    $cellValue
      * @access protected
      * @return array
      */
@@ -376,9 +379,9 @@ class caselibZen extends caselib
     /**
      * 获取展示导入用例的列。
      * Get columns for show import.
-     * 
-     * @param  array     $firstRow 
-     * @param  array     $fields 
+     *
+     * @param  array     $firstRow
+     * @param  array     $fields
      * @access protected
      * @return array
      */
