@@ -94,6 +94,7 @@ class todoModel extends model
         {
             $oldTodo = $oldTodos[$todoID];
             if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
+            if(!empty($oldTodo->private) && !isset($todo->private)) $todo->assignedTo = $oldTodo->assignedTo;
             $this->todoTao->updateRow($todoID, $todo);
 
             if($oldTodo->status != 'done' and $todo->status == 'done') $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');

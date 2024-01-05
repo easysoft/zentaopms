@@ -119,7 +119,13 @@ formBatchPanel
     (
         set::name('beginAndEnd'),
         set::label($lang->todo->beginAndEnd),
-        set::width('260px')
+        set::width('260px'),
+        set::control('inputGroup'),
+        inputGroup
+        (
+            picker(set::name('begin'), set::items($times)),
+            picker(set::name('end'), set::items($times))
+        )
     ),
     formBatchItem
     (

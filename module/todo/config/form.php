@@ -72,6 +72,10 @@ $config->todo->batchEdit->form['assignedTo'] = array('required' => false, 'type'
 $config->todo->batchEdit->form['begin']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->batchEdit->form['end']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->batchEdit->form['status']     = array('required' => true,  'type' => 'string');
+$config->todo->batchEdit->form['story']      = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['task']       = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['bug']        = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['testtask']   = array('required' => false, 'type' => 'string', 'default'  => 0);
 
 $config->todo->batchFinish = new stdclass();
 $config->todo->batchFinish->form = array();

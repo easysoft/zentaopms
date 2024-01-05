@@ -347,6 +347,7 @@ class todoZen extends todo
         $account = $user->account;
 
         list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($todoIdList, $type, $account, $status);
+        $editedTodos = array_map(function($item) { $item->begin = str_replace(':', '', $item->begin); $item->end = str_replace(':', '', $item->end); return $item;}, $editedTodos);
 
         $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, array(), array(), isset($objectIdList['bug']) ? $objectIdList['bug'] : array());
         $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', array(), isset($objectIdList['task']) ? $objectIdList['task'] : array());
@@ -459,13 +460,15 @@ class todoZen extends todo
         /* Initialize todos from the post data. */
         foreach($todos as $todoID => $todo)
         {
-            $todo->begin = (empty($todo->begin) || $this->post->switchTime) ? 2400 : $todo->begin;
-            $todo->end   = (empty($todo->end) || $this->post->switchTime)   ? 2400 : $todo->end;
             if(in_array($todo->type, $this->config->todo->moduleList))
             {
-                $todo->objectID = $todo->name;
-                $todo->name     = '';
+                $todo->objectID   = $todo->{$todo->type};
+                $todo->name       = '';
             }
+            unset($todo->story, $todo->task, $todo->bug, $todo->testtask);
+
+            $todo->begin = empty($todo->begin) || $this->post->switchTime ? 2400 : $todo->begin;
+            $todo->end   = empty($todo->end) || $this->post->switchTime   ? 2400 : $todo->end;
 
             if($todo->end < $todo->begin)
             {

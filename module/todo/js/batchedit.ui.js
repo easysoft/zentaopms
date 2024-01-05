@@ -15,26 +15,15 @@ window.renderRowData = function($row, index, row)
             let $nameBox = $row.find('td[data-name="name"]');
             $nameBox.html("<div class='picker-box' id='name'></div>");
             data = {};
-            data.name         = 'name';
-            data.multiple     = false;
-            data.items        = nameItems[row.type];
-            data.defaultValue = row.objectID;
+            data.name     = row.type;
+            data.multiple = false;
+            data.items    = nameItems[row.type];
             $nameBox.find('#name').picker(data);
+            $row.find('[data-name="name"]').find('.picker-box').on('inited', function()
+            {
+                $row.find('[name^="'+ row.type + '"]').zui('picker').$.setValue(row.objectID.toString());
+            });
         }
-    }
-
-    if($row.find('td[data-name="beginAndEnd"] .inited').length == 0)
-    {
-        if(row.begin == 2400) row.begin = '';
-
-        $tdDom = $row.find('td[data-name="beginAndEnd"]');
-        $tdDom.empty().html($('#dateCellData').html());
-
-        $tdDom.find('#begin.picker-box').picker({name: 'begin', items: timeItems, defaultValue: row.begin.replace(':', ''), disabled: !row.begin});
-        $tdDom.find('#end.picker-box').picker({name: 'end', items: timeItems, defaultValue: row.end.replace(':', ''), disabled: !row.begin});
-
-        $tdDom.find('input[name="switchTime"]').attr('name', `switchTime[${row.id}]`).attr('id', `switchTime_${row.id}`).prop('checked', !row.begin);
-        $tdDom.find('label[for="switchTime_"]').attr('for', `switchTime_${row.id}`);
     }
 
     $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
@@ -65,13 +54,13 @@ window.changeType = function(e)
 
     if(moduleList.indexOf(type) !== -1)
     {
-            items = nameItems[type];
-            $nameBox.html("<div class='picker-box' id='name'></div>");
-            $nameBox.find('#name').picker({items: items, name: 'name'});
+        items = nameItems[type];
+        $nameBox.html("<div class='picker-box' id='" + type + "'></div>");
+        $nameBox.find('#' + type).picker({items: items, name: type});
     }
     else
     {
-        $nameBox.html($('#nameInputBox').html());
+        $nameBox.html('<input class="form-control form-batch-input" type="text" autocomplete="off" name="name" data-name="name">');
         $nameBox.find('input[name=name]').attr('name', 'name[' + index + ']').attr('id', 'name_' + index);
     }
 };
