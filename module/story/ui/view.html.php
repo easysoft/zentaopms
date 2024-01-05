@@ -445,7 +445,7 @@ detailBody
                 set::active((!$this->config->URAndSR || $hiddenURS) && empty($twins)),
                 h::ul(setClass('list-unstyled'), $taskItems)
             ) : null,
-            $config->vision == 'or' ? tabPane
+            tabPane
             (
                 set::key('legendRelated'),
                 set::title($lang->story->legendRelated),
@@ -608,7 +608,7 @@ detailBody
                         )
                     )
                 )
-            ) : null
+            )
         )
     )
 );
