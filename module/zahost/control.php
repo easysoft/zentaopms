@@ -261,7 +261,7 @@ class zahost extends control
         $this->zahost->cancelDownload($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isInModal()) return $this->send(array('result' => 'success', 'reload' => true));
+        if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'reload' => 'modal'));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('zahost', 'browseImage', array("hostID" => $image->host))));
     }
 
