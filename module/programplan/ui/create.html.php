@@ -130,7 +130,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         }
 
         /* Field for agileplus. */
-        if($name == 'type' && $planID != 0)
+        if($name == 'type' && !empty($planID) && in_array($project->model, array('waterfallplus', 'ipd')))
         {
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
