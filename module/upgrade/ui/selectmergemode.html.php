@@ -32,7 +32,7 @@ foreach($lang->upgrade->mergeModes as $mode => $label)
             span
             (
                 setClass('flex text-gray mt-1'),
-                '(' . $lang->upgrade->{$tipLang} . ($systemMode == 'ALM' && $mode != 'manually' ? $lang->upgrade->createProgramTip : '') . ')'
+                $lang->upgrade->{$tipLang} . ($systemMode == 'ALM' && $mode != 'manually' ? $lang->upgrade->createProgramTip : '')
             )
         )
     );
