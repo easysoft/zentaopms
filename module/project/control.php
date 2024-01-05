@@ -565,7 +565,7 @@ class project extends control
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getById($projectID);
+        $project   = $this->project->getById((int)$projectID);
 
         if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus,ipd', $project->model) === false)
         {
