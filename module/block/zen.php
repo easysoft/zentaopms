@@ -1123,7 +1123,7 @@ class blockZen extends block
 
         $this->view->chartData        = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
         $this->view->executions       = $executions;
-        $this->view->projects         = $this->loadModel('project')->getPairs();
+        $this->view->projects         = $this->loadModel('project')->getPairsByProgram(0);
         $this->view->currentProjectID = $projectID;
     }
 
