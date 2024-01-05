@@ -1,5 +1,49 @@
 <?php
 declare(strict_types=1);
+
+/**
+ * HttpClient of mock.
+ *
+ * @copyright Copyright 2009-2022 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @author    guanxiying <guanxiying@easycorp.ltd>
+ * @package
+ * @license   LGPL
+ * @version   $Id$
+ * @Link      https://www.zentao.net
+ */
+class httpClient
+{
+    /**
+     * Http.
+     *
+     * @param  string              $url
+     * @param  string|array|object $data
+     * @param  array               $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+     * @param  array               $headers   Set request headers.
+     * @param  string              $dataType
+     * @param  string              $method    POST|PATCH|PUT
+     * @param  int                 $timeout
+     * @param  bool                $httpCode  Return a array contains response, http code, body, header. such as [response, http_code, 'body' => body, 'header' => header].
+     * @param  bool                $log       Save to log or not
+     * @static
+     * @access public
+     * @return string|array
+     */
+    public function request(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
+    {
+        $paths = explode('/', $url);
+        $year  = (int)$paths[count($paths)-1];
+
+        $data = new stdclass();
+        $data->days = array();
+        $data->days[] = (object)array('name' => '元旦', 'date' => $year . '-01-01', 'isOffDay' => true);
+        $data->days[] = (object)array('name' => '国庆', 'date' => $year . '-10-01', 'isOffDay' => true);
+        $data->days[] = (object)array('name' => '国庆', 'date' => $year . '-10-02', 'isOffDay' => true);
+
+        return json_encode($data);
+    }
+}
+
 class holidayTest
 {
     public function __construct()
@@ -368,6 +412,8 @@ class holidayTest
      */
     public function getHolidayByAPITest(string $year): int|array
     {
+        common::$httpClient = new httpClient();
+
         if($year == 'this year') $year = date('Y');
         if($year == 'last year') $year = date('Y', strtotime('-1 year'));
         if($year == 'next year') $year = date('Y', strtotime('+1 year'));

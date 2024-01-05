@@ -12,6 +12,22 @@ declare(strict_types=1);
  */
 class commonModel extends model
 {
+    /**
+     * 网络请求客户端。
+     * HTTP client.
+     *
+     * @var object
+     * @access public
+     */
+    public static $httpClient;
+
+    /**
+     * 网络请求错误。
+     * Request errors.
+     *
+     * @var array
+     * @access public
+     */
     public static $requestErrors = array();
 
     /**
@@ -1796,7 +1812,12 @@ class commonModel extends model
     public static function http(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
     {
         global $lang, $app;
-        if(!extension_loaded('curl'))
+
+        if(common::$httpClient)
+        {
+            return common::$httpClient->request($url, $data, $options, $headers, $dataType, $method, $timeout, $httpCode, $log);
+        }
+        elseif(!extension_loaded('curl'))
         {
              if($dataType == 'json') return print($lang->error->noCurlExt);
              return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
