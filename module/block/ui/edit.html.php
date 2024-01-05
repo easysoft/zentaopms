@@ -36,7 +36,7 @@ row
     ) : null,
     cell
     (
-        setClass('flex-auto pr-6 pb-4'),
+        setClass('flex-auto pt-2 pr-6 pb-4'),
         form
         (
             on::change('[name="code"]', 'getForm'),
