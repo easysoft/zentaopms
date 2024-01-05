@@ -34,5 +34,5 @@ $config = $tester->dao->select('*')->from('zt_config')
     ->andWhere('key') ->eq('closed')
     ->fetch();
 
-r($block) && p('') && e('0');                                                      //瀑布通用报表块已经被删除。
+r(empty($block)) && p() && e('1');                                                 //瀑布通用报表块已经被删除。
 r(strpos($config->value, ',project|waterfallgeneralreport')) && p('') && e('0');   //瀑布通用报表块配置已经被删除。
