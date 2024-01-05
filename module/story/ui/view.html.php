@@ -150,7 +150,6 @@ if(!empty($story->children))
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
-    $cols['assignedTo']['type']    = 'users';
 
     $options = array('users' => $users);
     foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options);

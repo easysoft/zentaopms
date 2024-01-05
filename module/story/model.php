@@ -4402,7 +4402,7 @@ class storyModel extends model
         if(empty($options['execution'])) $story->isParent = isset($story->children);
 
         /* Format user list. */
-        foreach(array('mailto', 'reviewer') as $fieldName)
+        foreach(array('mailto', 'reviewer', 'assignedTo') as $fieldName)
         {
             if(!isset($story->{$fieldName})) continue;
 
