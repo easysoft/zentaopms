@@ -34,6 +34,7 @@ $oldStory = new stdclass();
 $oldStory->status  = 'draft';
 $oldStory->version = '3';
 $oldStory->twins   = '';
+$oldStory->id      = 1;
 
 r($storyModel->setStatusByReviewResult($story, $oldStory, 'pass')) && p('status,finalResult') && e('active,pass');
 
