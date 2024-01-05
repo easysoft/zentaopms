@@ -185,7 +185,7 @@ $config->story->dtable->fieldList['SRS']['title']       = 'SR';
 $config->story->dtable->fieldList['SRS']['sortType']    = false;
 $config->story->dtable->fieldList['SRS']['width']       = '50';
 $config->story->dtable->fieldList['SRS']['type']        = 'text';
-$config->story->dtable->fieldList['SRS']['link']        = helper::createLink('story', 'relation', 'storyID={id}&storyType={type}');
+$config->story->dtable->fieldList['SRS']['link']        = $config->edition != 'open' ? helper::createLink('story', 'relation', 'storyID={id}&storyType={type}') : '';
 $config->story->dtable->fieldList['SRS']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['SRS']['group']       = 6;
 
