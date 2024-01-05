@@ -22,6 +22,7 @@ function checkServiceStatus(){
 
                 if(resultData.data[key] == 'ready' || resultData.data[key] == 'not_available')
                 {
+                    $('.service-status').removeClass('hidden');
                     $('.ztf-status').text(zanodeLang.init[resultData.data[key]])
                     $('.ztf-install').text('');
                     $('.ztf-install-icon').hide();
