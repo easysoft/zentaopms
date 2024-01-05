@@ -36,6 +36,7 @@ common:
 	cp -fr module zentaopms/
 	cp -fr extension zentaopms/
 	cp -fr sdk zentaopms/
+	cp -fr roadrunner zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/
