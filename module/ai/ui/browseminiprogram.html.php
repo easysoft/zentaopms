@@ -28,7 +28,8 @@ if(count($fields) !== 0)
                 set::name("field-{$field->id}"),
                 set::placeholder($field->placeholder),
                 set::disabled($isDeleted),
-                setData('name', $field->name)
+                setData('name', $field->name),
+                setData('fid', $field->id)
             );
         }
         elseif($field->type === 'radio')
@@ -38,7 +39,8 @@ if(count($fields) !== 0)
                 set::name("field-{$field->id}"),
                 set::items(array_combine($options, $options)),
                 set::disabled($isDeleted),
-                setData('name', $field->name)
+                setData('name', $field->name),
+                setData('fid', $field->id)
             );
         }
         elseif($field->type === 'checkbox')
@@ -49,7 +51,8 @@ if(count($fields) !== 0)
                 set::items(array_combine($options, $options)),
                 set::multiple(true),
                 set::disabled($isDeleted),
-                setData('name', $field->name)
+                setData('name', $field->name),
+                setData('fid', $field->id)
             );
         }
         else
@@ -58,7 +61,8 @@ if(count($fields) !== 0)
                 set::name("field-{$field->id}"),
                 set::placeholder($field->placeholder),
                 set::disabled($isDeleted),
-                setData('name', $field->name)
+                setData('name', $field->name),
+                setData('fid', $field->id)
             );
         }
 

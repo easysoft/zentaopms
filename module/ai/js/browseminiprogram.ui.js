@@ -168,10 +168,13 @@ window.aiBrowseMiniProgram.startAIChat = function()
     const result = checkRequiredFields(requiredFieldNames, fields);
     if(typeof result === 'string')
     {
-        const $formGroup = $('.form-container').find(`[data-name="${result}"]`).closest('.form-group');
+        const $container = $('.form-container').find(`[data-name="${result}"]`);
+        const fid = $container.attr('data-fid');
+        const $formGroup = $container.closest('.form-group');
         $formGroup
+            .attr('name', `field-${fid}`)
             .addClass('has-error')
-            .append(`<div class="form-tip">${emptyNameWarning.replace('%s', result)}</div>`);
+            .append(`<div class="form-tip" id="field-${fid}Tip">${emptyNameWarning.replace('%s', result)}</div>`);
         return;
     }
 
