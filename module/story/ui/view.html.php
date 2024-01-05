@@ -217,6 +217,7 @@ detailBody
             dtable
             (
                 set::cols($cols),
+                set::userMap($users),
                 set::data(array_values($story->children))
             )
         )
