@@ -60,6 +60,7 @@ $common = $app->loadCommon();
 /* Reset the config params to make sure the install program will be lauched. */
 $config->set('requestType', 'GET');
 $config->set('default.module', 'upgrade');
+if($config->debug > 1) $config->debug = true;
 $app->setDebug();
 
 /* Check the installed version is the latest or not. */

@@ -98,6 +98,7 @@ class upgradeModel extends model
         set_time_limit(0);
 
         if(!isset($this->app->user)) $this->loadModel('user')->su();
+        $this->dao->exec("SET @@sql_mode=''");
 
         /* Get total sqls and write in tmp file. */
         dao::$realTimeFile = $this->getLogFile();
@@ -4496,7 +4497,7 @@ class upgradeModel extends model
     public function uniqueProjectAdmin()
     {
         $projectAdmins = $this->dao->select('*')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->orderBy('id')->fetchAll('id');
-        if(count($projectAdmins) == 1) return true;
+        if(count($projectAdmins) <= 1) return true;
 
         $holdGroup = reset($projectAdmins);
         unset($projectAdmins[$holdGroup->id]);
