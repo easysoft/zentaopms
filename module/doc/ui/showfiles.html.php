@@ -26,6 +26,8 @@ if(!empty($files))
                 set::userMap($users),
                 set::cols($config->doc->showfiles->dtable->fieldList),
                 set::data($tableData),
+                set::sortLink(inlink('showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
+                set::orderBy($orderBy),
                 set::onRenderCell(jsRaw('window.renderCell')),
                 set::footPager(usePager($linkTpl))
             );
