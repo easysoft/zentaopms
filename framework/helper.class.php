@@ -528,7 +528,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
         {
             foreach($actionMenu as $actionMenuKey => $actionName)
             {
-                if($actionMenuKey == 'other')
+                if($actionMenuKey === 'other')
                 {
                     foreach($actionName as $otherActionName) initTableActions($fieldList, $otherActionName);
                 }
