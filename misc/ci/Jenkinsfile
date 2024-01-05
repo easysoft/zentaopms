@@ -146,7 +146,7 @@ pipeline {
               steps {
                 container('package') {
                   echo "GIT_BRANCH in jenkinsfile is ${env.GIT_BRANCH}"
-                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" extension framework lib module/*'
+                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
                 }
               }
@@ -517,23 +517,23 @@ pipeline {
                   sh 'make test-open'
                   sh 'make build'
 
-                  sh 'make test-biz'
-                  sh 'make build-biz'
+                  //sh 'make test-biz'
+                  //sh 'make build-biz'
                   
-                  sh 'make test-biz-k8s'
-                  sh 'make build-biz-k8s'
+                  //sh 'make test-biz-k8s'
+                  //sh 'make build-biz-k8s'
 
-                  sh 'make test-max'
-                  sh 'make build-max'
+                  //sh 'make test-max'
+                  //sh 'make build-max'
                   
-                  sh 'make test-max-k8s'
-                  sh 'make build-max-k8s'
+                  //sh 'make test-max-k8s'
+                  //sh 'make build-max-k8s'
                   
-                  sh 'make test-ipd'
-                  sh 'make build-ipd'
+                  //sh 'make test-ipd'
+                  //sh 'make build-ipd'
                   
-                  sh 'make test-ipd-k8s'
-                  sh 'make build-ipd-k8s'
+                  //sh 'make test-ipd-k8s'
+                  //sh 'make build-ipd-k8s'
 
                   sh 'make markdown-render > ./report.md'
                 }

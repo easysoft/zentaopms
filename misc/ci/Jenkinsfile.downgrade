@@ -76,7 +76,7 @@ pipeline {
                   sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                   sh 'make ciCommon'
                   withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
-                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" extension framework lib module/*'
+                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
