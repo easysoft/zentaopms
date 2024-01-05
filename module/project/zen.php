@@ -1600,7 +1600,6 @@ class projectZen extends project
         $programPairs = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
 
         $kanbanList = array();
-        $regionData = array();
         foreach($kanbanGroup as $regionKey => $region)
         {
             if(!$region) continue;
