@@ -418,8 +418,8 @@ class storyZen extends story
             $products     = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
 
             $productID = (!empty($productID) && isset($products[$productID])) ? $productID : key($products);
-            $product   = $this->product->getById($productID);
-            if($product->type != 'normal')
+            $product   = $this->product->getById((int)$productID);
+            if($product && $product->type != 'normal')
             {
                 $productBranches = $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain');
                 if(isset($productBranches[$productID])) $branches = $productBranches[$productID];
