@@ -33,7 +33,8 @@ div
                 div
                 (
                     setClass('font-bold mb-2'),
-                    $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog
+                    $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog,
+                    $hasError ? null : span(setID('progressBox'))
                 ),
                 div
                 (
