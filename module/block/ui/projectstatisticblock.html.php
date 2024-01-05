@@ -416,7 +416,7 @@ statisticBlock
 (
     set::block($block),
     set::active($active),
-    set::moreLink(createLink('project', 'browse', "browseType={$block->params->type}")),
+    set::moreLink(createLink('project', 'browse', 'browseType=' . zget($block->params, 'type', ''))),
     set::items($items),
     set::className('projectstatistic-block'),
     div
