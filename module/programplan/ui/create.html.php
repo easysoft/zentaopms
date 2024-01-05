@@ -92,7 +92,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType)
+$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
 {
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
