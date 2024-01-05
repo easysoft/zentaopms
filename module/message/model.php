@@ -229,6 +229,18 @@ class messageModel extends model
             $toList  = implode(',', $toList);
         }
 
+        if(empty($toList) and $objectType == 'demand' and $this->config->edition == 'ipd')
+        {
+            $toList  = $object->assignedTo;
+            $toList .= ',' . str_replace(' ', '', trim($object->mailto, ','));
+            $toList .= ",$object->createdBy";
+
+            $reviewers = $this->loadModel('demand')->getReviewerPairs($object->id, $object->version);
+            $reviewers = array_keys($reviewers);
+            if($reviewers) $toList .= ',' . implode(',', $reviewers);
+            $toList = trim($toList, ',');
+        }
+
         return $toList;
     }
 
