@@ -775,5 +775,11 @@ class repoTest
 
     public function getFileTreeTest(int $repoID, string $branch = '', array $diffs = null)
     {
+        $repo   = $this->objectModel->getByID($repoID);
+        $result = $this->objectModel->getFileTree($repo, $branch, $diffs);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 }

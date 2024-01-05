@@ -25,11 +25,32 @@ cid=1
 
 */
 
-zdTable('task')->gen(10);
+$execution = zdTable('project');
+$execution->id->range('1-10');
+$execution->name->range('项目集1,项目1,项目2,项目3,迭代1,迭代2,阶段1,阶段2,看板1,看板2');
+$execution->type->range('program,project,sprint{2},stage{2},kanban{2}');
+$execution->model->range('[],scrum,waterfall,kanban,[]{6}');
+$execution->parent->range('0,1{3},2{2},3{2},4{2}');
+$execution->project->range('0{4},2{2},3{2},4{2}');
+$execution->status->range('doing');
+$execution->vision->range('rnd');
+$execution->openedBy->range('admin,user1');
+$execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
+$execution->gen(10);
+
+$task = zdTable('task');
+$task->execution->range('3');
+$task->gen(10);
+
 $bug = zdTable('bug');
 $bug->execution->range('0');
 $bug->gen(10);
 zdTable('repo')->config('repo')->gen(4);
+
+global $app;
+$app->rawModule = 'repo';
+$app->rawMethod = 'browse';
 
 $repoID   = 1;
 $repoRoot = '';
