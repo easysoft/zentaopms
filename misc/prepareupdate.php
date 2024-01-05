@@ -430,7 +430,6 @@ class prepareUpdate
         }
 
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($curl, CURLOPT_TIMEOUT, 6000);
