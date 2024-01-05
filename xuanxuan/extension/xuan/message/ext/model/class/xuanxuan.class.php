@@ -110,6 +110,16 @@ class xuanxuanMessage extends messageModel
                     if(!empty($object->owner))    $target .= trim($object->owner, ',');
                     if(!empty($object->reviewer)) $target .= ',' . trim($object->reviewer, ',');
                 }
+                elseif($objectType == 'demand')
+                {
+                    $target .= $object->createdBy;
+                    if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? '' : $object->assignedTo;
+                    if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                    $reviewers = $this->loadModel('demand')->getReviewerPairs($object->id, $object->version);
+                    $reviewers = array_keys($reviewers);
+                    if($reviewers) $target .= ',' . implode(',', $reviewers);
+                    $target = trim($target, ',');
+                }
                 else
                 {
                     if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
