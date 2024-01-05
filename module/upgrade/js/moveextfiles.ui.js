@@ -34,3 +34,10 @@ function checkFileClick(event)
         $('#checkAll').prop('checked', false);
     }
 }
+
+window.submit = function()
+{
+    const formUrl  = $('#moveExtFileForm').attr('action');
+    const formData = new FormData($("#moveExtFileForm")[0]);
+    postAndLoadPage(formUrl, formData);
+}

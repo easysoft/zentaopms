@@ -38,6 +38,7 @@ div
         setID('mainContent'),
         formPanel
         (
+            setID('moveExtFileForm'),
             setClass('bg-canvas'),
             width('1000px'),
             set::title($lang->upgrade->compatibleEXT),
@@ -77,7 +78,7 @@ div
                 btn
                 (
                     setClass('px-6'),
-                    set::btnType('submit'),
+                    on::click('submit'),
                     set::type('primary'),
                     set::text($lang->upgrade->next)
                 )
