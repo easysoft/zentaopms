@@ -255,6 +255,26 @@ class cronModel extends model
     }
 
     /**
+     * 重启cron，更新scheduler的execId。
+     * Restart cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function restartCron($execId)
+    {
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq($execId)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('cron')
+            ->andWhere('section')->eq('scheduler')
+            ->andWhere('`key`')->eq($execId)
+            ->exec();
+        $this->dao->delete()->from(TABLE_QUEUE)->where('createdDate')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
+
+        $this->logCron(date('G:i:s') . " restart\n\n");
+    }
+
+    /**
      * 更新定时任务的最后执行时间。
      * Update last time of cron.
      *
