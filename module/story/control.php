@@ -1168,6 +1168,13 @@ class story extends control
 
         if(empty($assignedTo)) $assignedTo = $this->post->assignedTo;
         $storyIdList = array_unique($this->post->storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+
         $oldStories  = $this->story->getByList($storyIdList);
 
         $allChanges = $this->story->batchAssignTo($storyIdList, $assignedTo);
