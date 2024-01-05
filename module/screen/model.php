@@ -287,6 +287,40 @@ class screenModel extends model
     }
 
     /**
+     * 生成全局筛选器的组件。
+     * Generate component of global filters.
+     *
+     * @param  string $filterType
+     * @access public
+     * @return object
+     */
+    public function genFilterComponent($filterType)
+    {
+        $type = ucfirst($filterType);
+
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        $component->chartConfig->id           = $type;
+        $component->chartConfig->key          = "{$type}Filter";
+        $component->chartConfig->chartKey     = "V{$type}Filter";
+        $component->chartConfig->conKey       = "VC{$type}Filter";
+        $component->chartConfig->category     = 'Filters';
+        $component->chartConfig->categoryName = $this->lang->screen->globalFilter;
+        $component->chartConfig->package      = 'Decorates';
+
+        $objectPairs = $this->loadModel('metric')->getPairsByScope($filterType);
+        $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
+        {
+            $object = new stdclass();
+            $object->label = $objectTitle;
+            $object->value = $objectID;
+            return $object;
+        }, array_keys($objectPairs), array_values($objectPairs));
+
+        return $component;
+    }
+
+    /**
      * Generate metric component.
      *
      * @param  object      $metric

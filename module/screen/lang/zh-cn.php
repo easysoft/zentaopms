@@ -9,3 +9,4 @@ $lang->screen->allUsers      = '所有用户';
 $lang->screen->noData        = '暂时没有数据';
 $lang->screen->noDesc        = '暂无描述';
 $lang->screen->bizGuide      = '更多大屏请联系我们';
+$lang->screen->globalFilter  = '全局筛选器';

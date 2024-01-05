@@ -124,8 +124,15 @@ class screen extends control
         {
             $chartID      = $this->post->sourceID;
             $type         = $this->post->type;
-            $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
-            $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
+
+            if($type == 'Filters')
+            {
+                $filterComponent = $this->screen->genFilterComponent($chartID);
+                return print(json_encode($filterComponent));
+            }
+
+            $queryType = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+            $component = isset($_POST['component']) ? json_decode($this->post->component) : null;
 
             $type = $this->screen->getChartType($type);
 
