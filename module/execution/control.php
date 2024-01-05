@@ -391,6 +391,8 @@ class execution extends control
         /* Build the search form. */
         $this->executionZen->buildImportBugSearchForm($execution, $queryID, $products, $executions, $projects);
 
+        if($this->app->tab == 'project') $this->view->projectID = $execution->project;
+
         /* Assign. */
         $this->view->title       = $executions[$executionID] . $this->lang->colon . $this->lang->execution->importBug;
         $this->view->pager       = $pager;

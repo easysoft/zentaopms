@@ -68,9 +68,9 @@ featureBar
     $items
 );
 
-$canCreate      = hasPriv('task', 'create');
-$canImportTask  = hasPriv('task', 'importTask');
-$canImportBug   = hasPriv('task', 'importBug');
+$canCreate     = hasPriv('task', 'create');
+$canImportTask = hasPriv('task', 'importTask');
+$canImportBug  = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
 {
     $createLink      = $this->createLink('task', 'create', "executionID={$execution->id}");
@@ -82,12 +82,16 @@ if(common::canModify('execution', $execution))
 
     $createItem = array('text' => $lang->task->create, 'url' => $createLink);
 
-    if($canImportTask && $execution->multiple) $importTaskItem = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"));
+    if($canImportTask && $execution->multiple) $importTaskItem = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"), 'data-app' => $app->tab);
     if($canImportBug && $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')))
     {
-        $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug');
+        $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug', 'data-app' => $app->tab);
     }
 }
+
+$importItems = !empty($importTaskItem) && empty($importBugItem) ? array($importTaskItem) : array();
+$importItems = empty($importTaskItem) && !empty($importBugItem) ? array($importBugItem) : $importItems;
+$importItems = !empty($importTaskItem) && !empty($importBugItem) ? array_filter(array($importTaskItem, $importBugItem)) : $importItems;
 
 toolbar
 (
@@ -106,13 +110,13 @@ toolbar
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,
-    (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
+    !empty($importItems) ? dropdown(
         btn(
             setClass('ghost btn square btn-default'),
             set::icon('import'),
             set::text($lang->import),
         ),
-        set::items(array_filter(array($importTaskItem, $importBugItem))),
+        set::items($importItems),
         set::placement('bottom-end')
     ) : null,
     $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
