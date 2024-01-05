@@ -63,7 +63,7 @@ row
                         set::name('code'),
                         set::value($code),
                         set::items($codes),
-                        set::required(false),
+                        set::required(true),
                     ) : input
                     (
                         set::name('code'),
