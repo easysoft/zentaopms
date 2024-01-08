@@ -245,7 +245,7 @@ class helper extends baseHelper
     {
         if(!$traffic) return 0;
         $base     = log((float)$traffic, 1024);
-        $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
+        $suffixes = array('B', 'KB', 'MB', 'GB', 'TB');
 
         return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
     }
