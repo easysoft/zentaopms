@@ -102,9 +102,9 @@ foreach($results as $i => $result)
         );
         $itemTds[] = !empty($stepResult['result']) ? div
         (
-            setClass('text-left flex border-r'),
+            setClass('text-left flex border-r break-all'),
             width('240px'),
-            nl2br($stepResult['real'] ?? '')
+            html(nl2br($stepResult['real'] ?? ''))
         ) : div
         (
             setClass('border-r'),
