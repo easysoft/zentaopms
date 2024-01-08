@@ -827,6 +827,17 @@ class repoTest
         return array('repoCount' => $repoCount, 'repoHistoryCount' => $repoHistoryCount, 'repoBranchCount' => $repoBranchCount, 'repoFilesCount' => $repoFilesCount);
     }
 
+    public function deleteInfoByIDTest(int $repoID)
+    {
+        $result = $this->objectModel->deleteInfoByID($repoID);
+
+        $repoHistoryCount = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->count();
+        $repoBranchCount  = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->count();
+        $repoFilesCount   = $this->objectModel->dao->select('*')->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->count();
+
+        return array('repoHistoryCount' => $repoHistoryCount, 'repoBranchCount' => $repoBranchCount, 'repoFilesCount' => $repoFilesCount);
+    }
+
     public function getApposeDiffTest(int $repoID, string $oldRevision, string $newRevision)
     {
         $scm  = $this->objectModel->app->loadClass('scm');
@@ -836,5 +847,37 @@ class repoTest
 
         $diffs = $this->objectModel->getApposeDiff($diffs);
         return $diffs;
+    }
+
+    public function parseTaskCommentTest(string $comment)
+    {
+        $rules   = $this->objectModel->processRules();
+        $actions = array();
+        ob_start();
+        $result = $this->objectModel->parseTaskComment($comment, $rules, $actions);
+        ob_end_clean();
+
+        return $result;
+    }
+
+    public function parseBugCommentTest(string $comment)
+    {
+        $rules   = $this->objectModel->processRules();
+        $actions = array();
+        ob_start();
+        $result = $this->objectModel->parseBugComment($comment, $rules, $actions);
+        ob_end_clean();
+
+        return $result;
+    }
+
+    public function buildFileTreeTest(array $files)
+    {
+        return $this->objectModel->buildFileTree($files);
+    }
+
+    public function buildTreeTest(array $files)
+    {
+        return $this->objectModel->buildTree($files);
     }
 }

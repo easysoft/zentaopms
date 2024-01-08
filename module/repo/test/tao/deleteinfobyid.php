@@ -6,17 +6,15 @@ su('admin');
 
 /**
 
-title=测试 repoModel::deleteRepo();
+title=测试 repoModel::deleteInfoByID();
 timeout=0
 cid=1
 
 - 删除gitlab版本库
- - 属性repoCount @0
  - 属性repoHistoryCount @0
  - 属性repoBranchCount @0
  - 属性repoFilesCount @0
 - 删除gitea版本库
- - 属性repoCount @0
  - 属性repoHistoryCount @0
  - 属性repoBranchCount @0
  - 属性repoFilesCount @0
@@ -33,5 +31,5 @@ $repoTest = new repoTest();
 $gitlabID = 1;
 $giteaID  = 3;
 
-r($repoTest->deleteRepoTest($gitlabID)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0'); //删除gitlab版本库
-r($repoTest->deleteRepoTest($giteaID))  && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0'); //删除gitea版本库
+r($repoTest->deleteInfoByIDTest($gitlabID)) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0'); //删除gitlab版本库
+r($repoTest->deleteInfoByIDTest($giteaID))  && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0'); //删除gitea版本库
