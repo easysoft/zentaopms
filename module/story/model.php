@@ -4727,7 +4727,7 @@ class storyModel extends model
                 }
 
                 $executionID = empty($execution) ? 0 : $execution->id;
-                if($this->config->vision != 'or') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                if($this->config->vision != 'or') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=$storyType", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
             }
 
             if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')

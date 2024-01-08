@@ -582,8 +582,9 @@ class story extends control
         $product = $this->product->getById($productID);
         if($storyID)
         {
-            $story = $this->story->getById($storyID);
-            if(($story->status != 'active' or (empty($product->shadow) && $story->stage != 'wait') or (!empty($product->shadow) && $story->stage != 'projected') or $story->parent > 0) and $this->config->vision != 'lite' and !in_array($story->status, array('launched', 'developing'))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            $story     = $this->story->getById($storyID);
+            $storyType = 'story';
+            if(($story->status != 'active' or (empty($product->shadow) && $story->type == 'story' && $story->stage != 'wait') or (!empty($product->shadow) && $story->stage != 'projected') or $story->parent > 0) and $this->config->vision != 'lite' and !in_array($story->status, array('launched', 'developing'))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         if(!empty($_POST))
