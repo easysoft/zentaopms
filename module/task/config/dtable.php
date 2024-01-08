@@ -321,6 +321,7 @@ $config->task->dtable->children->fieldList['pri']['sortType'] = false;
 $config->task->dtable->children->fieldList['pri']['name']     = 'pri';
 
 $config->task->dtable->children->fieldList['deadline']             = $config->task->dtable->fieldList['deadline'];
+$config->task->dtable->children->fieldList['deadline']['name']     = 'deadline';
 $config->task->dtable->children->fieldList['deadline']['sortType'] = false;
 
 $config->task->dtable->children->fieldList['assignedTo']             = $config->task->dtable->fieldList['assignedTo'];
