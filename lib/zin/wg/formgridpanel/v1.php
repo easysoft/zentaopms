@@ -30,9 +30,12 @@ class formGridPanel extends formPanel
      */
     protected static array $defaultProps = array
     (
-        'size'       => '',
-        'layout'     => 'grid',
-        'container'  => true,
-        'class'   => 'panel-form page-form'
+        'class'         => 'panel-form page-form',
+        'size'          => '',
+        'layout'        => 'grid',
+        'container'     => true,
+        'modeSwitcher'  => true,
+        'foldableItems' => array(),
+        'customBtn'     => true
     );
 }

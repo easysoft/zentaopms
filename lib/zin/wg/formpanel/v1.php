@@ -50,17 +50,12 @@ class formPanel extends panel
         'batch?: bool',                                // 是否为批量操作表单。
         'shadow?: bool=false',                         // 是否显示阴影层。
         'width?: string',                              // 最大宽度。
-        'customFields?: array'                         // 自定义表单项。
-    );
-
-    /**
-     * Define default properties.
-     *
-     * @var    array
-     * @access protected
-     */
-    protected static array $defaultProps = array(
-        'customFields' => array(),
+        'modeSwitcher?: bool',                         // 是否显示表单模式按钮。
+        'defaultMode?: string="lite"',                 // 默认表单模式（lite: 简洁版，full: 完整版）。
+        'foldableItems?: array|string',                // 可折叠的表单项。
+        'pinnedItems?: array|string',                  // 固定显示的表单项。
+        'customBtn?: array|bool',                      // 是否显示表单自定义按钮。
+        'customFields?: array=[]'                      // @deprecated 自定义表单项。
     );
 
     public static function getPageJS(): string|false
@@ -99,6 +94,29 @@ class formPanel extends panel
             $customFields = array('list' => $fields, 'show' => $showFields, 'key' => $key);
 
             $this->setProp('customFields', $customFields);
+        }
+
+        if($this->prop('modeSwitcher'))
+        {
+            global $lang;
+
+            $modeSwitcher = btnGroup
+            (
+                set::size('sm'),
+                btn
+                (
+                    setClass('gray-300-outline text-sm rounded-full btn-lite-form'),
+                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-lite-form\').removeClass(\'is-full-form\')'),
+                    $lang->liteMode
+                ),
+                btn
+                (
+                    setClass('gray-300-outline text-sm rounded-full btn-full-form'),
+                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-full-form\').removeClass(\'is-lite-form\')'),
+                    $lang->fullMode
+                )
+            );
+            $this->addToBlock('headingActions', $modeSwitcher);
         }
     }
 
@@ -162,7 +180,7 @@ class formPanel extends panel
             );
         }
 
-        $props = array_keys(form::definedPropsList());
+        $props     = array_keys(form::definedPropsList());
         $formProps = array();
         foreach($props as $propName)
         {
@@ -186,8 +204,9 @@ class formPanel extends panel
      */
     protected function buildProps(): array
     {
-        list($width, $batch, $shadow) = $this->prop(array('width', 'batch', 'shadow'));
+        list($width, $batch, $shadow, $defaultMode) = $this->prop(array('width', 'batch', 'shadow', 'defaultMode'));
         $props = parent::buildProps();
+        $props[] = setClass("is-$defaultMode-form");
 
         if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
         elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');

@@ -28,12 +28,15 @@ class formGroup extends wg
         'readonly?: bool',
         'hidden?: bool',
         'items?: array',
-        'placeholder?: string'
+        'placeholder?: string',
+        'foldable?: bool',
+        'pinned?: bool',
+        'children?: array|object'
     );
 
     protected function build(): wg
     {
-        list($name, $label, $labelFor, $labelClass, $labelProps, $labelWidth, $required, $requiredFields, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly, $multiple, $id, $hidden) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelWidth', 'required', 'requiredFields', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple', 'id', 'hidden'));
+        list($name, $label, $labelFor, $labelClass, $labelProps, $labelWidth, $required, $requiredFields, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly, $multiple, $id, $hidden, $foldable, $pinned, $children) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelWidth', 'required', 'requiredFields', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple', 'id', 'hidden', 'foldable', 'pinned', 'children'));
 
         if($required === 'auto') $required = isFieldRequired($name, $requiredFields);
 
@@ -57,9 +60,10 @@ class formGroup extends wg
 
         return div
         (
-            set::className('form-group', $required ? 'required' : null, ($label === false || $label === null) ? 'no-label' : null, empty($width) ? null : 'grow-0', $hidden ? 'hidden' : ''),
+            setClass('form-group', array('required' => $required, 'no-label' => $label === false || $label === null, 'grow-0' => !empty($width), 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
             zui::width($width),
             set($this->getRestProps()),
+            setData('name', $name),
             setCssVar('form-horz-label-width', $labelWidth),
             empty($label) && $label !== '0' ? null : new formLabel
             (
@@ -71,6 +75,7 @@ class formGroup extends wg
             ),
             empty($control) ? null : new control(set($control)),
             (isset($control['disabled']) && $control['disabled'] && isset($control['name']) && isset($control['value'])) ? h::input(set::type('hidden'), set::name($control['name']), set::value($control['value'])) : null,
+            $children,
             $this->children(),
             empty($tip) ? null : div
             (

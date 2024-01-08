@@ -14,13 +14,18 @@ class form extends formBase
 {
     protected static array $defineProps = array
     (
-        'items?: array',            // 使用一个列定义对象数组来定义表单项。
-        'layout?: string="horz"',   // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
-        'labelWidth?: int',         // 标签宽度，单位为像素。
-        'submitBtnText?: string',   // 提交按钮文本。
-        'requiredFields?: string',  // 必填项定义。
-        'data?: array|object',      // 表单项值默认数据。
-        'labelData?: array|object', // 表单项标签默认数据。
+        'name?: string',                // 表单内部名称。
+        'items?: array',                // 使用一个列定义对象数组来定义表单项。
+        'foldableItems?: array|string', // 可折叠的表单项。
+        'pinnedItems?: array|string',   // 固定显示的表单项。
+        'customBtn?: array|bool',       // 是否显示表单自定义按钮。
+        'toolbar?: array|bool',         // 额外的自定义按钮。
+        'layout?: string="horz"',       // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
+        'labelWidth?: int',             // 标签宽度，单位为像素。
+        'submitBtnText?: string',       // 提交按钮文本。
+        'requiredFields?: string',      // 必填项定义。
+        'data?: array|object',          // 表单项值默认数据。
+        'labelData?: array|object',     // 表单项标签默认数据。
         'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
     );
 
@@ -51,6 +56,28 @@ class form extends formBase
 
         if(!$this->hasProp('data'))      $this->setProp('data',      data($module));
         if(!$this->hasProp('labelData')) $this->setProp('labelData', $lang->$module);
+
+        if($this->prop('customBtn') && !$this->hasProp('foldableItems'))
+        {
+            global $config;
+            $module = $app->rawModule;
+            $method = $app->rawMethod;
+
+            $app->loadLang($module);
+            $app->loadModuleConfig($module);
+
+            $key           = $method . 'Fields';
+            $listFieldsKey = 'custom' . ucfirst($key);
+            $fieldList     = empty($config->$module->$listFieldsKey) ? $config->$module->list->$listFieldsKey : $config->$module->$listFieldsKey;
+
+            $foldableItems = empty($fieldList) ? array() : explode(',', $fieldList);
+
+            if(!empty($foldableItems))
+            {
+                $this->setProp('foldableItems', $foldableItems);
+                $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
+            }
+        }
     }
 
     protected function getItemLabel(string $name): ?string
@@ -71,50 +98,99 @@ class form extends formBase
         return null;
     }
 
-    public function onBuildItem(item|array $item, string|int $key): wg
+    public function onBuildItem(item $item): wg
     {
-        if(!($item instanceof item))
-        {
-            if($item instanceof wg) return $item;
-            $item = item(set($item));
-        }
+        return new formGroup(inherit($item));
+    }
 
-        if(is_string($key) && !$item->hasProp('name')) $item->setProp('name', $key);
-        $name = $item->prop('name');
+    protected function getItemProps(item|array $item, string|int $key, ?array $foldableItems = null, ?array $pinnedItems = null, bool $isGrid = false, ?string $requiredFields = null): array
+    {
+        if(is_string($key) && !isset($item['name'])) $item['name'] = $key;
+        $name = $item['name'];
+
         if(is_string($name))
         {
-            if(!$item->hasProp('value'))
+            if(!isset($item['value'])) $item['value'] = $this->getItemValue($name);
+            if(!isset($item['label'])) $item['label'] = $this->getItemLabel($name);
+            if(!isset($item['required']) || $item['required'] === 'auto') $item['required'] = isFieldRequired($name, $requiredFields);
+            if(!isset($item['foldable']) && is_array($foldableItems)) $item['foldable'] = in_array($name, $foldableItems);
+            if(!isset($item['pinned']) && is_array($pinnedItems))     $item['pinned'] =   in_array($name, $pinnedItems);
+
+            if($isGrid)
             {
-                $value = $this->getItemValue($name);
-                if(!is_null($value)) $item->setProp('value', $value);
-            }
-            if(!$item->hasProp('label'))
-            {
-                $label = $this->getItemLabel($name);
-                if(!is_null($label)) $item->setProp('label', $label);
-            }
-        }
-        if($this->hasProp('requiredFields') && !$item->hasProp('requiredFields')) $item->setProp('requiredFields', $this->prop('requiredFields'));
+                if(!isset($item['width'])) $item['width'] = '1/2';
 
-        if($this->isLayout('horz')) return new formRow(inherit($item));
-
-        if($this->isLayout('grid'))
-        {
-            if(!$item->hasProp('width')) $item->setProp('width', '1/2');
-
-            if(is_string($name))
-            {
-                $control = $item->prop('control');
-
+                $control = isset($item['control']) ? $item['control'] : array('name' => $name);
                 if(is_string($control)) $control = array('type' => $control, 'name' => $name);
-                if(empty($control))     $control = array('name' => $name);
-
                 if(!isset($control['id'])) $control['id'] = '';
-                $item->setProp('control', $control);
+                $item['control'] = $control;
             }
         }
 
-        return new formGroup(inherit($item));
+        return $item;
+    }
+
+    public function buildItems(): array
+    {
+        global $lang;
+        list($items, $foldableItems, $pinnedItems, $requiredFields, $customBtn, $toolbar) = $this->prop(array('items', 'foldableItems', 'pinnedItems', 'requiredFields', 'customBtn', 'toolbar'));
+
+        if(!is_array($items))                                   $items         = array();
+        if(is_string($pinnedItems) && !empty($pinnedItems))     $pinnedItems   = explode(',', $pinnedItems);
+        if(is_string($foldableItems) && !empty($foldableItems)) $foldableItems = explode(',', $foldableItems);
+        if(is_null($customBtn) && !empty($foldableItems))       $customBtn     = true;
+
+        $isGrid       = $this->isLayout('grid');
+        $list         = array();
+        $foldableList = array();
+
+        foreach($items as $key => $item)
+        {
+            if($item instanceof wg && !($item instanceof item))
+            {
+                $list[] = $item;
+                continue;
+            }
+
+            if($item instanceof item) $item = $item->props->toJson();
+            $itemsProps = $this->getItemProps($item, $key, $foldableItems, $pinnedItems, $isGrid, $requiredFields);
+
+            $formGroup = new formGroup(set($itemsProps));
+            if(isset($itemsProps['foldable']) && $itemsProps['foldable']) $foldableList[] = $formGroup;
+            else $list[] = $formGroup;
+        }
+
+        $toolbarList = array();
+        if(!empty($toolbar))
+        {
+            if(!isset($toolbar['items'])) $toolbar = array('items' => $toolbar);
+            $toolbarList[] = toolbar(set($toolbar));
+        }
+
+        if(!empty($foldableList))
+        {
+            $list[]        = div(setClass('panel-form-divider'));
+            $toolbarList[] = toolbar
+            (
+                setClass('size-sm'),
+                btn
+                (
+                    setClass('gray-300-outline rounded-full btn-toggle-fold'),
+                    setData(array('collapse-text' => $lang->hideMoreInfo, 'expand-text' => $lang->showMoreInfo)),
+                    bind::click('$element.closest(\'.panel-form\').toggleClass(\'show-fold-items\')')
+                ),
+                $customBtn ? btn
+                (
+                    setClass('gray-300-outline rounded-full btn-custom-form'),
+                    set::icon('cog-outline'),
+                    is_array($customBtn) ? set($customBtn) : null
+                ) : null
+            );
+        }
+
+        if(!empty($toolbarList)) $foldableList[] = div(setClass('panel-form-toolbar'), $toolbarList);
+
+        return array_merge($list, $foldableList);
     }
 
     protected function buildActions(): wg|null
@@ -141,20 +217,18 @@ class form extends formBase
 
     protected function buildContent(): array
     {
-        list($items) = $this->prop(array('items'));
-
-        $list     = is_array($items) ? array_map(array($this, 'onBuildItem'), $items, array_keys($items)) : array();
+        $items    = $this->buildItems();
         $children = $this->children();
-        if(!empty($children)) $list = array_merge($list, $children);
+        if(!empty($children)) $items = array_merge($items, $children);
 
         if($this->isLayout('horz'))
         {
-            foreach($list as $key => $item)
+            foreach($items as $key => $item)
             {
-                if($item instanceof formGroup) $list[$key] = new formRow($item);
+                if($item instanceof formGroup) $items[$key] = new formRow($item);
             }
         }
 
-        return $list;
+        return $items;
     }
 }
