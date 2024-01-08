@@ -2114,7 +2114,23 @@ class blockZen extends block
         /* load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager(0, 3, 1);
-        $this->view->projects = $this->loadModel('project')->getList('all', 'id_desc', true, $pager);
+
+        $projects = $this->loadModel('project')->getList('all', 'id_desc', true, $pager);
+        foreach($projects as $project)
+        {
+            $recentExecution = '';
+            $executions      = $project->executions;
+            foreach($executions as $execution)
+            {
+                if($execution->status == 'doing' && (empty($recentExecution) || $execution->realBegan > $recentExecution->realBegan))
+                {
+                    $recentExecution = $execution;
+                }
+            }
+            $project->recentExecution = $recentExecution;
+        }
+
+        $this->view->projects = $projects;
     }
 
     /**

@@ -15,7 +15,7 @@ $cards = array();
 foreach($projects as $projectID => $project)
 {
     $viewLink  = createLink('project', 'index', "projectID=$project->id");
-    $execution = empty($project->executions) ? '' : end($project->executions);
+    $execution = $project->recentExecution;
 
     $cards[] = cell
     (
@@ -36,15 +36,15 @@ foreach($projects as $projectID => $project)
             ),
             div
             (
+                setClass('space-y-3'),
                 ($project->multiple && $execution) ? array
                 (
-                    setClass('space-y-3'),
                     div
                     (
                         span
                         (
                             setClass('text-gray mr-1'),
-                            $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->project->lastIteration . ': '
+                            $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->block->zentaoapp->latestExecution . ': '
                         ),
                         a
                         (
@@ -57,25 +57,25 @@ foreach($projects as $projectID => $project)
                             $lang->execution->statusList[$execution->status]
                         )
                     ),
-                    div
+                ) : null,
+                div
+                (
+                    span
                     (
-                        span
-                        (
-                            setClass('text-gray mr-1'),
-                            $lang->block->projectMember . ': ',
-                        ),
-                        sprintf($lang->block->totalMember, $project->teamCount)
+                        setClass('text-gray mr-1'),
+                        $lang->projectCommon . $lang->project->member . ': ',
                     ),
-                    div
+                    sprintf($lang->block->totalMember, $project->teamCount)
+                ),
+                div
+                (
+                    span
                     (
-                        span
-                        (
-                            setClass('text-gray mr-1'),
-                            $lang->project->end . ': '
-                        ),
-                        $project->end
-                    )
-                ) : null
+                        setClass('text-gray mr-1'),
+                        $lang->project->end . ': '
+                    ),
+                    $project->end
+                )
             )
         )
     );
