@@ -212,8 +212,8 @@ class caselibModel extends model
 
         $moduleIdList = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $stmt         = $this->dao->select('*')->from(TABLE_CASE)
-            ->where('lib')->eq($libID)
-            ->andWhere('product')->eq(0)
+            ->where('product')->eq(0)
+            ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
             ->andWhere('deleted')->eq('0');
         if($browseType == 'bysearch')
         {
