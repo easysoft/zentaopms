@@ -233,7 +233,7 @@ class tutorialModel extends model
         $execution->burns        = array('');
         $execution->type         = 'sprint';
         $execution->projectName  = '';
-        $execution->projectModel = '';
+        $execution->projectModel = 'scrum';
 
         if($browseType && $browseType != 'all') $execution->name .= '-' . $browseType;
 
