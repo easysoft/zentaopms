@@ -591,8 +591,8 @@ class taskModel extends model
                 $taskSpec->task       = $taskID;
                 $taskSpec->version    = $task->version;
                 $taskSpec->name       = $task->name;
-                $taskSpec->estStarted = $task->estStarted;
-                $taskSpec->deadline   = $task->deadline;
+                $taskSpec->estStarted = isset($task->estStarted) ? $task->estStarted : null;
+                $taskSpec->deadline   = isset($task->deadline) ? $task->deadline : null;
 
                 $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             }
