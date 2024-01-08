@@ -208,7 +208,8 @@ class bug extends control
      */
     public function create(int $productID, string $branch = '', string $extras = '')
     {
-        $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extras);
+        $originExtras = $extras;
+        $extras       = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extras);
         parse_str($extras, $params);
 
         $from = isset($params['from']) ? $params['from'] : '';
@@ -248,6 +249,7 @@ class bug extends control
         /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
         /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
         $this->bugZen->buildCreateForm($bug, $params, $from);
+        $this->view->loadUrl = $this->createLink('bug', 'create', "productID={productID}&branch={branch}&extras=$originExtras" . (empty($from) ? '' : "&from=$from"));
 
         $this->display();
     }

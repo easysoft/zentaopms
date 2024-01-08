@@ -22,15 +22,15 @@ jsVar('projectExecutionPairs', $projectExecutionPairs);
 
 formGridPanel
 (
-    on::change('[name="product"]',      'changeProduct'),
-    on::change('[name="branch"]',       'changeBranch'),
-    on::change('[name="project"]',      'changeProject'),
-    on::change('[name="execution"]',    'changeExecution'),
-    on::change('[name="module"]',       'changeModule'),
-    on::change('[name="region"]',       'changeRegion'),
+    set::loadUrl($loadUrl),
+    on::change('[name="product"]', 'loadForm({target: target, items: "product,module,openedBuild,execution,project,story,task,assignedTo"})'),
+    on::change('[name="branch"]', 'loadForm({target: target, items: "module,openedBuild,execution,project,story,task,assignedTo"})'),
+    on::change('[name="module"]', 'loadForm({target: target, items: "assignedTo,story"})'),
+    on::change('[name="project"]', 'loadForm({target: target, items: "openedBuild,execution,story,task,assignedTo"})'),
+    on::change('[name="execution"]', 'loadForm({target: target, items: "openedBuild,story,task,assignedTo"})'),
+    on::change('[name="region"]', 'loadForm({target: target, items: "lane"})'),
     on::click('#allBuilds',             'loadAllBuilds'),
     on::click('#allUsers',              'loadAllUsers'),
-    on::click('#refreshModule',         'refreshModule'),
     on::click('#refreshExecutionBuild', 'refreshExecutionBuild'),
     on::click('#refreshProductBuild',   'refreshProductBuild'),
     set::title($lang->bug->create),
