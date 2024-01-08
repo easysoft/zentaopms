@@ -67,7 +67,7 @@ detailBody
     on::change('#module', 'loadModuleRelated'),
     on::change('#branch', 'loadBranchRelated'),
     on::change('#scriptFile', 'readScriptContent'),
-    on::click('.refresh', $isLibCase ? 'loadLibModules' : 'loadProductModules'),
+    on::click('#refresh', $isLibCase ? 'loadLibModules' : 'loadProductModules'),
     on::click('#auto', 'checkScript'),
     on::click('.autoScript .file-delete', 'showUploadScriptBtn'),
     sectionList

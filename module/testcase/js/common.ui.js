@@ -1,4 +1,4 @@
-function loadProductStories(productID)
+window.loadProductStories = function(productID)
 {
     let branch   = $('[name=branch]').val();
     let moduleID = $('[name=module]').val();
@@ -17,7 +17,7 @@ function loadProductStories(productID)
     })
 }
 
-function loadProductBranches(productID)
+window.loadProductBranches = function(productID)
 {
     var param     = config.currentMethod == 'create' ? 'active' : 'all';
     var oldBranch = config.currentMethod == 'edit' ? caseBranch : 0;
@@ -37,7 +37,7 @@ function loadProductBranches(productID)
     })
 }
 
-function loadProductModules(productID)
+window.loadProductModules = function(productID)
 {
     let branch = $('[name=branch]').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -54,7 +54,7 @@ function loadProductModules(productID)
     })
 }
 
-function loadScenes(productID, sceneName = 'scene')
+window.loadScenes = function(productID, sceneName = 'scene')
 {
     let branchID = $('[name=branch]').val();
     let moduleID = $('[name=module]').val();
@@ -80,7 +80,7 @@ function loadScenes(productID, sceneName = 'scene')
  * @access public
  * @return void
  */
-function onBranchChangedForBatch(event)
+window.onBranchChangedForBatch = function(event)
 {
     const $target     = $(event.target);
     const $currentRow = $target.closest('tr');
@@ -107,7 +107,7 @@ function onBranchChangedForBatch(event)
     loadStoriesForBatch(productID, moduleID, 0, $currentRow);
 }
 
-function onModuleChangedForBatch(event)
+window.onModuleChangedForBatch = function(event)
 {
     const $target     = $(event.target);
     const $currentRow = $target.closest('tr');
@@ -117,7 +117,7 @@ function onModuleChangedForBatch(event)
     loadStoriesForBatch(productID, moduleID, 0, $currentRow);
 }
 
-function loadScenesForBatch(productID, moduleID, $currentRow)
+window.loadScenesForBatch = function(productID, moduleID, $currentRow)
 {
     let branchID = $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val();
     if(!branchID) branchID = 0;
@@ -147,7 +147,7 @@ function loadScenesForBatch(productID, moduleID, $currentRow)
  * @access public
  * @return void
  */
-function loadStoriesForBatch(productID, moduleID, num, $currentRow = null)
+window.loadStoriesForBatch = function(productID, moduleID, num, $currentRow = null)
 {
     const branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
     if(!branchID) branchID = 0;
