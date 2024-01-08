@@ -60,7 +60,7 @@ class formGroup extends wg
 
         return div
         (
-            setClass('form-group', array('required' => $required, 'no-label' => $label === false || $label === null, 'grow-0' => !empty($width), 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
+            setClass('form-group', array('required' => $required, 'no-label' => $label === false || $label === null, 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
             zui::width($width),
             set($this->getRestProps()),
             setData('name', $name),

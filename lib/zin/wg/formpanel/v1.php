@@ -51,6 +51,9 @@ class formPanel extends panel
         'shadow?: bool=false',                         // 是否显示阴影层。
         'width?: string',                              // 最大宽度。
         'modeSwitcher?: bool',                         // 是否显示表单模式按钮。
+        'data?: array|object',                         // 表单项值默认数据。
+        'labelData?: array|object',                    // 表单项标签默认数据。
+        'loadUrl?: string',                            // 动态更新 URL。
         'defaultMode?: string="lite"',                 // 默认表单模式（lite: 简洁版，full: 完整版）。
         'foldableItems?: array|string',                // 可折叠的表单项。
         'pinnedItems?: array|string',                  // 固定显示的表单项。

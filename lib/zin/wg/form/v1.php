@@ -26,6 +26,7 @@ class form extends formBase
         'requiredFields?: string',      // 必填项定义。
         'data?: array|object',          // 表单项值默认数据。
         'labelData?: array|object',     // 表单项标签默认数据。
+        'loadUrl?: string',             // 动态更新 URL。
         'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
     );
 
@@ -218,6 +219,8 @@ class form extends formBase
         }
 
         if($this->hasProp('formID'))  $props[] = setID($this->prop('formID'));
+        if($this->hasProp('loadUrl')) $props[] = setData('load-url', $this->prop('loadUrl'));
+
         return $props;
     }
 
