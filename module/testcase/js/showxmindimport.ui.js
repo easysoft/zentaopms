@@ -29,7 +29,7 @@ $(document).ready(function()
             mindmapMgr.initFromSheet(sheet);
         }
 
-        mindmapMgr.render();
+        setTimeout(() => mindmapMgr.render(), 500)
     });
 
     $("#xmindmapSave").on("click",function(e)
@@ -41,26 +41,14 @@ $(document).ready(function()
             return;
         }
 
-        $.post($.createLink('testcase', 'saveXmindImport'),data,function(res)
-        {
-            var res = JSON.parse(res);
-            if(res.result != "success")
-            {
-                if(res.message && res.message !== '')
-                {
-                    alert(res.message);
-                    return;
-                }
+        var sceneList    = JSON.stringify(data.sceneList);
+        var testcaseList = JSON.stringify(data.testcaseList);
 
-                alert(jsLng.saveFail);
-            }
-            else
-            {
-                //var params = "productID=" + productID + "&branch=" + branch;
-                var params = "productID=" + productID;
-                parent.location = $.createLink('testcase', 'browse',params);
-            }
-        });
+        var form = new FormData();
+        form.append("sceneList", sceneList);
+        form.append("testcaseList", testcaseList);
+
+        postAndLoadPage($.createLink('testcase', 'saveXmindImport'), form);
     })
 });
 

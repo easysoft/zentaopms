@@ -610,7 +610,7 @@ class testcaseTao extends testcaseModel
         $scene->title   = $sceneData['name'];
         $scene->product = $sceneData['product'];
         $scene->branch  = $sceneData['branch'];
-        $scene->module  = $sceneData['module'];
+        $scene->module  = $sceneData['module'] ?? 0;
 
         if(!isset($sceneData['id']))
         {

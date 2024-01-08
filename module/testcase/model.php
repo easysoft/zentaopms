@@ -2045,15 +2045,18 @@ class testcaseModel extends model
      * 保存 xmind 文件内容。
      * Save xmind file content to database.
      *
+     * @param  array  $scenes
+     * @param  array  $testcases
      * @access public
      * @return array
      */
-    public function saveXmindImport(): array
+    public function saveXmindImport(array $scenes, array $testcases): array
     {
         $this->dao->begin();
 
-        $sceneList = array_combine(array_map(function($scene){return $scene['tmpId'];}, $this->post->sceneList), array_map(function($scene){return (array)$scene;}, $this->post->sceneList));
-        foreach($sceneList as $scene)
+        $sceneList   = array_combine(array_map(function($scene){return $scene['tmpId'];}, $scenes), array_map(function($scene){return (array)$scene;}, $scenes));
+        $sceneIDList = array();
+        foreach($sceneList as $key => $scene)
         {
             $result = $this->testcaseTao->saveScene($scene, $sceneList);
             if($result['result'] == 'fail')
@@ -2061,12 +2064,13 @@ class testcaseModel extends model
                 $this->dao->rollBack();
                 return $result;
             }
+            $sceneIDList[$key]['id'] = $result['sceneID'];
         }
 
-        foreach($this->post->testcaseList as $testcase)
+        foreach($testcases as $testcase)
         {
             $testcase = (object)$testcase;
-            $result   = $this->saveTestcase($testcase);
+            $result   = $this->saveTestcase($testcase, $sceneIDList);
             if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();
