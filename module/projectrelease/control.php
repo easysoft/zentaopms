@@ -120,6 +120,9 @@ class projectrelease extends control
             if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if(!empty($_FILES['releaseFiles'])) $_FILES['files'] = $_FILES['releaseFiles'];
+            unset($_FILES['releaseFiles']);
+
             $releaseID = $this->release->create($release, $this->post->sync ? true : false);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

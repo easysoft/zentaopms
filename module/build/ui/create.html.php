@@ -227,7 +227,7 @@ formPanel
         formGroup
         (
             set::label($lang->build->files),
-            upload()
+            upload(set::name('buildFiles[]'))
         )
     ),
     formRow

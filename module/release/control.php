@@ -104,6 +104,9 @@ class release extends control
             $releaseData = $this->releaseZen->buildReleaseForCreate($productID, (int)$branch);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if(!empty($_FILES['releaseFiles'])) $_FILES['files'] = $_FILES['releaseFiles'];
+            unset($_FILES['releaseFiles']);
+
             $releaseID = $this->release->create($releaseData, $this->post->sync ? true : false);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

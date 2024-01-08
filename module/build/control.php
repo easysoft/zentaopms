@@ -50,6 +50,8 @@ class build extends control
         if(!empty($_POST))
         {
             $build = form::data()->get();
+            if(!empty($_FILES['buildFiles'])) $_FILES['files'] = $_FILES['buildFiles'];
+            unset($_FILES['buildFiles']);
             if(dao::isError()) return $this->sendError(dao::getError());
             if(commonModel::isTutorialMode()) return $this->sendSuccess(array('closeModal' => true)); // Fix bug #21095.
 
