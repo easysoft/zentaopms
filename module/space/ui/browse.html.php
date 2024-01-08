@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-h::importCss($app->getWebRoot() . 'js/xterm/xterm.css');
-h::importJs($app->getWebRoot() . 'js/xterm/xterm.js');
-
 $statusMap  = array();
 $canInstall = hasPriv('instance', 'manage');
 

@@ -12,9 +12,6 @@ namespace zin;
 
 set::zui(true);
 
-h::importCss($app->getWebRoot() . 'js/xterm/xterm.css');
-h::importJs($app->getWebRoot() . 'js/xterm/xterm.js');
-
 $formRows = array();
 foreach($components->category as $item)
 {

@@ -15,7 +15,6 @@ if(!isInModal())
     set::zui(true);
 
     h::importCss($app->getWebRoot() . 'js/xterm/xterm.css');
-    h::importJs($app->getWebRoot() . 'js/xterm/xterm.js');
 }
 
 $appList = array();
@@ -57,7 +56,7 @@ if(!helper::isAjaxRequest('modal'))
         'text'  => $lang->solution->background,
         'href'  => createLink('install', 'step6'),
         'id'    => 'skipInstallBtn',
-        'class' => 'btn primary hidden',
+        'class' => 'btn primary',
     );
 }
 
@@ -73,7 +72,7 @@ if(!helper::isAjaxRequest('modal'))
     $actions[] = array(
         'text'    => $lang->solution->cancelInstall,
         'id'      => 'cancelInstallBtn',
-        'class'   => 'btn hidden',
+        'class'   => 'btn',
         'onclick' => 'cancelInstall(this)'
     );
 }

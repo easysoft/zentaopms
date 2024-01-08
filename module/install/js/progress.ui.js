@@ -125,8 +125,11 @@ window.cancelInstall = function()
 
 $(function()
 {
-    term = new Terminal({convertEol: true, rows: 20});
-    term.open(document.getElementById('terminal'));
+    $.getLib(config.webRoot + 'js/xterm/xterm.js', {root: false}, function()
+    {
+        term = new Terminal({convertEol: true, rows: 20});
+        term.open(document.getElementById('terminal'));
+    });
 
     if(startInstall) $.get($.createLink('install', 'ajaxInstall', 'id=' + solutionID));
 
