@@ -974,14 +974,15 @@ class metricModel extends model
      * Get object pairs by scope.
      *
      * @param  string $scope
-     * @param  bool   $deptWithHierarchy
+     * @param  bool   $withHierarchy
      * @access public
      * @return array
      */
-    public function getPairsByScope($scope, $deptWithHierarchy = false)
+    public function getPairsByScope($scope, $withHierarchy = false)
     {
         if(empty($scope) || $scope == 'system') return array();
-        if($scope == 'dept' && $deptWithHierarchy) $scope = 'deptWithHierarchy';
+        if($scope == 'dept'    && $withHierarchy) $scope = 'deptWithHierarchy';
+        if($scope == 'program' && $withHierarchy) $scope = 'programWithHierarchy';
 
         $objectPairs = array();
         switch($scope)
@@ -1000,6 +1001,9 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('program')
                     ->fetchPairs();
+                break;
+            case 'programWithHierarchy':
+                $objectPairs = $this->loadModel('program')->getParentPairs();
                 break;
             case 'product':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
