@@ -63,6 +63,8 @@ class backBtn extends btn
             'store'          => 'store-browse',
             'space'          => 'space-browse',
             'serverroom'     => 'serverroom-browse',
+            'project'        => 'project-browse,program-browse,program-project',
+            'product'        => 'product-all,program-productview,program-product',
             'gitlab'         => 'space-browse,gitlab-browseproject'
         );
 
