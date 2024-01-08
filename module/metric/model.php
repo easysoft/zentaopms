@@ -974,18 +974,23 @@ class metricModel extends model
      * Get object pairs by scope.
      *
      * @param  string $scope
+     * @param  bool   $deptWithHierarchy
      * @access public
      * @return array
      */
-    public function getPairsByScope($scope)
+    public function getPairsByScope($scope, $deptWithHierarchy = false)
     {
         if(empty($scope) || $scope == 'system') return array();
+        if($scope == 'dept' && $deptWithHierarchy) $scope = 'deptWithHierarchy';
 
         $objectPairs = array();
         switch($scope)
         {
             case 'dept':
                 $objectPairs = $this->loadModel('dept')->getDeptPairs();
+                break;
+            case 'deptWithHierarchy':
+                $objectPairs = $this->loadModel('dept')->getOptionMenu();
                 break;
             case 'user':
                 $objectPairs = $this->loadModel('user')->getPairs('noletter');

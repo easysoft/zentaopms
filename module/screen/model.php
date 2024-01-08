@@ -308,7 +308,7 @@ class screenModel extends model
         $component->chartConfig->categoryName = $this->lang->screen->globalFilter;
         $component->chartConfig->package      = 'Decorates';
 
-        $objectPairs = $this->loadModel('metric')->getPairsByScope($filterType);
+        $objectPairs = $this->loadModel('metric')->getPairsByScope($filterType, true);
         $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
         {
             $object = new stdclass();
