@@ -1816,7 +1816,7 @@ class bugZen extends bug
             $this->view->executionMembers = $executionMembers;
         }
 
-        $this->view->users = $this->user->getPairs('devfirst');
+        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
     }
 
     /**
