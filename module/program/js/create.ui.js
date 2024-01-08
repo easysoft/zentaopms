@@ -8,7 +8,7 @@ function onParentChange(event)
 window.onFutureChange = (event) =>
 {
     let checked = $(event.target).prop('checked');
-    $('#budget').attr('disabled', checked ? 'disabled' : null);
+    $('#budget').val('').attr('disabled', checked ? 'disabled' : null);
     $('[name=budgetUnit]').zui('picker').render({'disabled': checked});
     $('#budgetTip').remove();
 };
