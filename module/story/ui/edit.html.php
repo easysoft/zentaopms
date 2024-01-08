@@ -229,20 +229,11 @@ detailBody
             item
             (
                 set::name($lang->story->module),
-                inputGroup
+                modulePicker
                 (
-                    span
-                    (
-                        setID('moduleIdBox'),
-                        picker
-                        (
-                            set::name('module'),
-                            set::items($fields['module']['options']),
-                            set::value($fields['module']['default'])
-                        )
-                    ),
-                    count($moduleOptionMenu) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}")), setData(array('toggle' => 'modal')), $lang->tree->manage) : null,
-                    count($moduleOptionMenu) == 1 ? btn(set('onclick', "loadProductModules({$story->product})"), setClass('refresh'), icon('refresh')) : null
+                    set::items($fields['module']['options']),
+                    set::value($fields['module']['default']),
+                    set::manageLink(createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}"))
                 )
             ),
             $story->parent >= 0 && $story->type == 'story' && $app->tab == 'product' ? item

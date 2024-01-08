@@ -258,7 +258,7 @@ class tree extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
             if(isInModal())
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductModules($rootID);"));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderModulePicker($rootID, '$viewType');"));
             }
 
             return $this->sendSuccess(array('load' => true));

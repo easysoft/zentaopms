@@ -201,35 +201,11 @@ detailBody
                 set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",module,") !== false),
                 formGroup
                 (
-                    inputGroup
+                    modulePicker
                     (
-                        setID('moduleIdBox'),
-                        picker
-                        (
-                            setID('module'),
-                            set::name('module'),
-                            set::items($moduleOptionMenu),
-                            set::value($case->module),
-                            set::required(true)
-                        ),
-                        span
-                        (
-                            set('class', 'input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
-                            a
-                            (
-                                set('class', 'mr-2'),
-                                set('href', $createModuleLink),
-                                set('data-toggle', 'modal'),
-                                set('data-size', 'lg'),
-                                $lang->tree->manage
-                            ),
-                            a
-                            (
-                                set('id', 'refresh'),
-                                set('class', 'text-black'),
-                                icon('refresh')
-                            )
-                        )
+                        set::items($moduleOptionMenu),
+                        set::value($case->module),
+                        set::manageLink(createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}"))
                     )
                 )
             ),

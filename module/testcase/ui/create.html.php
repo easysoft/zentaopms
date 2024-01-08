@@ -66,41 +66,11 @@ formPanel
             set::width('1/3'),
             set::label($lang->testcase->module),
             set::required(strpos(",{$config->testcase->create->requiredFields},", ',module,') !== false),
-            inputGroup
+            modulePicker
             (
-                setID('moduleBox'),
-                picker
-                (
-                    setID('module'),
-                    set::name('module'),
-                    set::items($moduleOptionMenu),
-                    set::value($currentModuleID),
-                    set::required(true)
-                ),
-                span
-                (
-                    setClass('input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
-                    a
-                    (
-                        setClass('mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch={$branch}")),
-                        setData
-                        (
-                            array(
-                                'toggle' => 'modal',
-                                'size'   => 'lg'
-                            )
-                        ),
-                        $lang->tree->manage
-                    ),
-                    a
-                    (
-                        setID('refreshModule'),
-                        setClass('text-black'),
-                        set('href', 'javascript:void(0)'),
-                        icon('refresh')
-                    )
-                )
+                set::items($moduleOptionMenu),
+                set::value($currentModuleID),
+                set::manageLink(createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch={$branch}"))
             )
         )
     ),

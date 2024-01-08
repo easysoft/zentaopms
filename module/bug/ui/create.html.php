@@ -110,41 +110,11 @@ formPanel
             set::width('1/2'),
             set::label($lang->bug->module),
             set::required(strpos(",{$config->bug->create->requiredFields},", ',module,') !== false),
-            inputGroup
+            modulePicker
             (
-                setID('moduleBox'),
-                picker
-                (
-                    set::name('module'),
-                    set::items($moduleOptionMenu),
-                    set::value($bug->moduleID),
-                    set::required('true')
-                ),
-                count($moduleOptionMenu) == 1 ? span
-                (
-                    setClass('input-group-addon'),
-                    a
-                    (
-                        setClass('mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID=$bug->productID&view=bug&currentModuleID=0&branch={$bug->branch}")),
-                        setData
-                        (
-                            array
-                            (
-                                'toggle' => 'modal',
-                                'size'   => 'lg'
-                            )
-                        ),
-                        $lang->tree->manage
-                    ),
-                    a
-                    (
-                        setID('refreshModule'),
-                        setClass('text-black'),
-                        set('href', 'javascript:void(0)'),
-                        icon('refresh')
-                    )
-                ) : null
+                set::items($moduleOptionMenu),
+                set::value($bug->moduleID),
+                set::manageLink(createLink('tree', 'browse', "rootID={$bug->productID}&view=bug&currentModuleID=0&branch={$bug->branch}"))
             )
         ),
         formGroup

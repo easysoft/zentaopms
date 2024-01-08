@@ -131,35 +131,11 @@ detailBody
             item
             (
                 set::name($lang->bug->module),
-                inputGroup
+                modulePicker
                 (
-                    set('id', 'moduleBox'),
-                    picker
-                    (
-                        set::name('module'),
-                        set::items($moduleOptionMenu),
-                        set::value($bug->module),
-                        set::required('true')
-                    ),
-                    count($moduleOptionMenu) == 1 ? span
-                    (
-                        set('class', 'input-group-addon'),
-                        a
-                        (
-                            set('class', 'mr-2'),
-                            set('href', $this->createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}")),
-                            set('data-toggle', 'modal'),
-                            set('data-size', 'lg'),
-                            $lang->tree->manage
-                        ),
-                        a
-                        (
-                            set('id', 'refreshModule'),
-                            set('class', 'text-black'),
-                            set('href', 'javascript:void(0)'),
-                            icon('refresh')
-                        )
-                    ) : null
+                    set::items($moduleOptionMenu),
+                    set::value($bug->module),
+                    set::manageLink(createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}"))
                 )
             ),
             item

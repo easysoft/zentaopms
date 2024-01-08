@@ -65,33 +65,11 @@ formPanel
         (
             set::label($lang->story->module),
             set::required(strpos(",{$this->config->story->create->requiredFields},", ",module,") !== false),
-            inputGroup
+            modulePicker
             (
-                setID('moduleIdBox'),
-                picker
-                (
-                    set::name('module'),
-                    set::name('module'),
-                    set::items($fields['module']['options']),
-                    set::value($fields['module']['default']),
-                    set::required(true)
-                ),
-                count($fields['module']['options']) == 1 ? span
-                (
-                    setClass('input-group-addon'),
-                    a
-                    (
-                        setClass('mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch={$branch}")),
-                        setData(array('toggle' => 'modal', 'size' => 'lg')),
-                        $lang->tree->manage
-                    ),
-                    a
-                    (
-                        set('onclick', "loadProductModules({$productID})"),
-                        icon('refresh')
-                    )
-                ) : null
+                set::items($fields['module']['options']),
+                set::value($fields['module']['default']),
+                set::manageLink(createLink('tree', 'browse', "rootID={$productID}&view=story&currentModuleID=0&branch={$branch}"))
             )
         )
     ),
