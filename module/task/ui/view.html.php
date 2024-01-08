@@ -285,7 +285,19 @@ detailBody
                             set::href(createLink('story', 'view', "id={$task->story}")),
                             set::title($task->storyTitle),
                             $task->storyTitle
-                        )
+                        ),
+                        $task->needConfirm ? span
+                        (
+                            setClass('ml-1'),
+                            '(' . $lang->story->changed,
+                            a
+                            (
+                                setClass('mx-1 rounded primary-pale p-1'),
+                                set::href(createLink('task', 'confirmStoryChange', "taskID={$task->id}")),
+                                $lang->confirm
+                            ),
+                            ')'
+                        ) : null
                     ),
                     item
                     (
