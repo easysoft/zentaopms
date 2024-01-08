@@ -937,7 +937,7 @@ class taskZen extends task
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
             if(!empty($this->config->limitTaskDate))
             {
-                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                $this->task->checkEstStartedAndDeadline($executionID, (string)$task->estStarted, (string)$task->deadline);
             }
 
             /* Check start and end date. */
@@ -990,7 +990,7 @@ class taskZen extends task
             if($task->consumed < 0 ) dao::$errors["consumed[{$taskID}]"] = (array)sprintf($this->lang->task->error->recordMinus, $this->lang->task->consumedThisTime);
             if($task->left < 0)      dao::$errors["left[$taskID]"]       = (array)sprintf($this->lang->task->error->recordMinus, $this->lang->task->leftAB);
 
-            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, $task->estStarted, $task->deadline, "task:{$taskID} ");
+            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, (string)$task->estStarted, (string)$task->deadline, "task:{$taskID} ");
 
             if($task->status == 'cancel') continue;
             if($task->status == 'done' && !$task->consumed) dao::$errors["consumed[{$taskID}]"] = (array)sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
@@ -1039,7 +1039,7 @@ class taskZen extends task
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
             if(!empty($this->config->limitTaskDate))
             {
-                $this->task->checkEstStartedAndDeadline($task->execution, $task->estStarted, $task->deadline);
+                $this->task->checkEstStartedAndDeadline($task->execution, (string)$task->estStarted, (string)$task->deadline);
                 if(dao::isError())
                 {
                     $error = current(dao::getError());
