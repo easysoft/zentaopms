@@ -322,7 +322,7 @@ class screenModel extends model
         }
 
         $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
-        $yearRange = range($firstAction->year, (int)date('Y'));
+        $yearRange = range((int)date('Y'), $firstAction->year);
         $component->chartConfig->yearList = array_map(function($year)
         {
             $yearObject = new stdclass();
