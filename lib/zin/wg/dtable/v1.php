@@ -85,13 +85,14 @@ class dtable extends wg
             global $app;
             $app->loadLang('datatable');
             $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
+            $globalUrl = is_bool($customColsProp) || empty($customColsProp['globalUrl']) ? null : $customColsProp['globalUrl'];
             $this->setProp('customCols', array(
                 'custom' => array(
                     'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
                     'text' => $app->lang->datatable->custom
                 ),
                 'setGlobal' => array(
-                    'url' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
+                    'url' => $globalUrl ? $globalUrl : createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
                     'text' => $app->lang->datatable->setGlobal
                 ),
                 'reset' => array(

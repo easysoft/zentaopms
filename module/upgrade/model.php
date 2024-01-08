@@ -8441,4 +8441,16 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('chat')->andWhere('section')->eq('settings')->exec();
         return true;
     }
+
+    /**
+     * Revert story custom fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function revertStoryCustomFields()
+    {
+        $this->dao->delete()->from(TABLE_CONFIG)->where('section')->eq('productBrowse')->andWhere('module')->eq('datatable')->andWhere('key')->eq('cols')->exec();
+        return true;
+    }
 }

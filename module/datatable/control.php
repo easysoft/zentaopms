@@ -67,10 +67,11 @@ class datatable extends control
      *
      * @param  string $module
      * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function ajaxSaveFields(string $module, string $method)
+    public function ajaxSaveFields(string $module, string $method, string $extra = '')
     {
         if(!empty($_POST))
         {
@@ -97,6 +98,9 @@ class datatable extends control
             $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
             $value = json_encode($fields);
 
+            /* Split story and requirement custom fields. */
+            if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', ",$extra,") !== false) $name = 'datatable.' . $module . ucfirst($method) . "-{$extra}" . '.cols';
+
             /* 保存个人配置信息。 */
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
 
@@ -120,7 +124,7 @@ class datatable extends control
      */
     public function ajaxCustom(string $module, string $method, string $extra = '')
     {
-        $cols = $this->datatable->getSetting($module, $method, true);
+        $cols = $this->datatable->getSetting($module, $method, true, $extra);
         if(!$method) $method = $this->app->getMethodName();
 
         if($module == 'testcase') unset($cols['assignedTo']);
@@ -177,6 +181,7 @@ class datatable extends control
         $this->view->module = $module;
         $this->view->method = $method;
         $this->view->cols   = $cols;
+        $this->view->extra  = $extra;
         $this->display();
     }
 
@@ -196,6 +201,15 @@ class datatable extends control
         $target  = $module . ucfirst($method);
 
         $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$target}&key=cols");
+
+        /* Delete story and requirement custom fields. */
+        if($module == 'product' && $method == 'browse')
+        {
+            $storyCustom       = $module . ucfirst($method) . '-story';
+            $requirementCustom = $module . ucfirst($method) . '-requirement';
+            $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$storyCustom}&key=cols");
+            $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$requirementCustom}&key=cols");
+        }
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
@@ -205,12 +219,15 @@ class datatable extends control
      *
      * @param  string $module
      * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function ajaxSaveGlobal(string $module, string $method)
+    public function ajaxSaveGlobal(string $module, string $method, string $extra = '')
     {
-        $target   = $module . ucfirst($method);
+        $target = $module . ucfirst($method);
+        if($module == 'product' && $method == 'browse' && strpos(',story,requirement', ",$extra,") !== false) $target .= "-{$extra}";
+
         $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
         if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);
 

@@ -726,4 +726,16 @@ class upgradeTest
     {
         return $this->objectModel->getDuplicateProjectName($projectIdList);
     }
+
+    /**
+     * Test revert story custom fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function revertStoryCustomFieldsTest()
+    {
+        $this->objectModel->revertStoryCustomFields();
+        return $this->objectModel->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('datatable')->andWhere('section')->eq('productBrowse')->andWhere('key')->eq('cols')->fetch();
+    }
 }

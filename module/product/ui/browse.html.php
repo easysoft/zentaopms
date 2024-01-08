@@ -177,7 +177,7 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
 $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']['link'] = array('url' => helper::createLink('projectstory', 'view', 'storyID={id}&projectID={project}'), 'style' => array('color' => 'var(--color-link)'));
 
-$setting = $this->loadModel('datatable')->getSetting('product');
+$setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 $cols = array_values($setting);
 
@@ -336,7 +336,7 @@ dtable
     set::id('stories'),
     set::rowKey('uniqueID'),
     set::userMap($users),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
+    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),

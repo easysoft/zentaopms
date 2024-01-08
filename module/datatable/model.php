@@ -81,13 +81,17 @@ class datatableModel extends model
      * @param  string $module
      * @param  string $method
      * @param  bool   $showAll
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function getSetting(string $module, string $method = '', bool $showAll = false): array
+    public function getSetting(string $module, string $method = '', bool $showAll = false, string $extra = ''): array
     {
         if(!$method) $method = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
+
+        /* Split story and requirement custom fields. */
+        if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', $extra) !== false) $datatableId .= "-{$extra}";
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
 
