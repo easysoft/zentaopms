@@ -28,8 +28,9 @@ foreach($cases as $caseID => $case)
                 $stepId ++;
                 $childId = 0;
             }
-            $currentID = $step->type == 'item' ? "{$stepId}.{$childId}" : $stepId;
-            $stepClass = $step->type == 'item' ? 'step-item pl-2' : 'step-group';
+            $currentID  = $step->type == 'item' ? "{$stepId}.{$childId}" : $stepId;
+            $stepClass  = $step->type == 'item' ? 'step-item pl-2' : 'step-group';
+            $stepResult = count($steps[$caseID]) == count($stepItems) + 1 ? 'fail' : 'pass';
 
             $stepItems[] = h::tr
             (
@@ -64,7 +65,7 @@ foreach($cases as $caseID => $case)
                         set::name("steps[$caseID][$stepID]"),
                         set::items($lang->testcase->resultList),
                         set::required(true),
-                        set::value('pass')
+                        set::value($stepResult)
                     )
                 ) : null,
                 $step->type != 'group' ? h::td
