@@ -1117,7 +1117,7 @@ class testcaseZen extends testcase
             if(!isset($moduleScenesPairs[$case->module]))
             {
                 $moduleScenesPairs[$case->module] = array();
-                $moduleScenes                 = $this->testcase->getSceneMenu($productID, $case->module, $branch === 'all' || !isset($branches[$branch]) ? 0 : $branch);
+                $moduleScenes = $this->testcase->getSceneMenu($productID, $case->module, $branch !== 'all' && !isset($branches[$branch]) ? '0' : $branch);
                 foreach($moduleScenes as $sceneID => $scene) $moduleScenesPairs[$case->module][] = array('text' => $scene, 'value' => $sceneID);
             }
             $scenePairs[$case->id][] = $moduleScenesPairs[$case->module];
