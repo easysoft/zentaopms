@@ -88,7 +88,7 @@ $config->testcase->dtable->fieldList['reviewedBy']['group']    = 4;
 $config->testcase->dtable->fieldList['reviewedBy']['sortType'] = true;
 
 $config->testcase->dtable->fieldList['reviewedDate']['title']    = $lang->testcase->reviewedDate;
-$config->testcase->dtable->fieldList['reviewedDate']['type']     = 'datetime';
+$config->testcase->dtable->fieldList['reviewedDate']['type']     = 'date';
 $config->testcase->dtable->fieldList['reviewedDate']['group']    = 4;
 $config->testcase->dtable->fieldList['reviewedDate']['sortType'] = true;
 
