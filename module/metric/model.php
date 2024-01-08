@@ -1933,10 +1933,10 @@ class metricModel extends model
 
     public function getDateTypeByCode(string $code)
     {
-        $dataFields = $this->getMetricRecordDateField($code);
-        $dateType   = $this->getDateType($dataFields);
+        if(isset($this->config->metric->dateType[$code])) return $this->config->metric->dateType[$code];
 
-        return $dateType;
+        $dataFields = $this->getMetricRecordDateField($code);
+        return $this->getDateType($dataFields);
     }
 
     /**
