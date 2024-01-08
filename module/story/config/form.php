@@ -86,7 +86,7 @@ $config->story->form->batchCreate['reviewer']   = array('ditto' => true,  'type'
 $config->story->form->batchCreate['URS']        = array('ditto' => false, 'type' => 'array',  'control' => 'select',   'required' => false, 'default' => '', 'multiple' => true);
 $config->story->form->batchCreate['parent']     = array('ditto' => false, 'type' => 'int',    'control' => 'select',   'required' => false, 'default' => '');
 $config->story->form->batchCreate['keywords']   = array('ditto' => false, 'type' => 'string', 'control' => 'text',     'required' => false, 'default' => '');
-$config->story->form->batchCreate['mailto']     = array('ditto' => false, 'type' => 'array',  'control' => 'select',   'required' => false, 'default' => '', 'multiple' => true, 'options' => 'users', 'filter' => 'join');
+$config->story->form->batchCreate['mailto']     = array('ditto' => false, 'type' => 'array',  'control' => 'select',   'required' => false, 'default' => array(''), 'multiple' => true, 'options' => 'users', 'filter' => 'join');
 
 $config->story->form->batchEdit = array();
 $config->story->form->batchEdit['branch']       = array('type' => 'int',    'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array());

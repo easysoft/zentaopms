@@ -1439,7 +1439,6 @@ class storyZen extends story
             $story->vision     = $this->config->vision;
             $story->openedDate = $now;
             $story->version    = 1;
-            $story->mailto     = is_array($story->mailto) ? implode(',', $story->mailto) : '';
 
             !empty($story->assignedTo) && $story->assignedDate = $now;
             if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
