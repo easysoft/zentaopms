@@ -1843,7 +1843,7 @@ class testcaseModel extends model
         $pager->recTotal  = count($scenes);
         $pager->pageTotal = ceil($pager->recTotal / $pager->recPerPage);
 
-        return array_slice($scenes, $pager->recPerPage * ($pager->pageID - 1), $pager->recPerPage);
+        return array_slice($scenes, $pager->recPerPage * ($pager->pageID - 1), (int)$pager->recPerPage);
     }
 
     /**
