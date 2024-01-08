@@ -35,7 +35,7 @@ class formPanel extends panel
     protected static array $defineProps = array(
         'class?: string="panel-form"', // 类名。
         'size?: string="lg"',                          // 额外尺寸。
-        'id?: string="$GID"',                          // ID，如果不指定则自动生成（使用 zin 部件 GID）。
+        'formID?: string',                             // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'formClass?: string',                          // 表单样式。
         'method?: "get"|"post"="post"',                // 表单提交方式。
         'url?: string',                                // 表单提交地址。

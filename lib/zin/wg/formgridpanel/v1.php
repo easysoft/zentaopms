@@ -36,6 +36,7 @@ class formGridPanel extends formPanel
         'container'     => true,
         'modeSwitcher'  => true,
         'foldableItems' => array(),
+        'formID'        => '$AUTO',
         'customBtn'     => true
     );
 }

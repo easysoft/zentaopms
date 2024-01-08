@@ -5,6 +5,7 @@ namespace zin;
 class panel extends wg
 {
     protected static array $defineProps = array(
+        'id?: string',
         'class?: string="rounded ring-0 bg-canvas"', // 类名。
         'size?: "sm"|"lg"',         // 额外尺寸。
         'title?: string',           // 标题。
@@ -111,8 +112,8 @@ class panel extends wg
 
     protected function buildProps(): array
     {
-        list($class, $size, $shadow) = $this->prop(array('class', 'size', 'shadow'));
-        return array(setClass('panel', $class, empty($size) ? null : "size-$size", $shadow ? 'shadow' : null));
+        list($id, $class, $size, $shadow) = $this->prop(array('id', 'class', 'size', 'shadow'));
+        return array(setID($id), setClass('panel', $class, empty($size) ? null : "size-$size", $shadow ? 'shadow' : null));
     }
 
     protected function build(): wg

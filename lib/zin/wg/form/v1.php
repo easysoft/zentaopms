@@ -14,7 +14,7 @@ class form extends formBase
 {
     protected static array $defineProps = array
     (
-        'name?: string',                // 表单内部名称。
+        'formID?: string',              // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'items?: array',                // 使用一个列定义对象数组来定义表单项。
         'foldableItems?: array|string', // 可折叠的表单项。
         'pinnedItems?: array|string',   // 固定显示的表单项。
@@ -77,6 +77,11 @@ class form extends formBase
                 $this->setProp('foldableItems', $foldableItems);
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
+        }
+
+        if ($this->prop('formID') === '$AUTO')
+        {
+            $this->setProp('formID', "form-$module-$method");
         }
     }
 
@@ -212,6 +217,7 @@ class form extends formBase
             if(!empty($labelWidth)) $props[] = setCssVar('form-horz-label-width', $labelWidth);
         }
 
+        if($this->hasProp('formID'))  $props[] = setID($this->prop('formID'));
         return $props;
     }
 
