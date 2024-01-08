@@ -421,7 +421,10 @@ class gitlabModel extends model
             {
                 $response = array_merge($response, $result);
                 $page += 1;
-                if($httpData['header']['X-Page'] == $httpData['header']['X-Total-Pages']) break;
+
+                $resultPage      = isset($httpData['header']['X-Page']) ? $httpData['header']['X-Page'] : $httpData['header']['x-page'];
+                $resultTotalPage = isset($httpData['header']['X-Total-Pages']) ? $httpData['header']['X-Total-Pages'] : $httpData['header']['x-total-pages'];
+                if($resultPage == $resultTotalPage) break;
             }
             else
             {

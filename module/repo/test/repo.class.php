@@ -663,9 +663,10 @@ class repoTest
         return $objects;
     }
 
-    public function handleWebhookTest($event, $token, $data, $repo)
+    public function handleWebhookTest(string $event, object $data, int $repoID)
     {
-        $objects = $this->objectModel->handleWebhook($event, $token, $data, $repo);
+        $repo    = $this->objectModel->getByID($repoID);
+        $objects = $this->objectModel->handleWebhook($event, $data, $repo);
 
         if(dao::isError()) return dao::getError();
 
