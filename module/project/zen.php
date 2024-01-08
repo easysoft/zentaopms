@@ -95,7 +95,7 @@ class projectZen extends project
         if($hasProduct)
         {
             /* Check if products not empty. */
-            if(!$this->post->products || !count(array_filter($this->post->products)))
+            if(!$this->post->products || empty($this->post->products[0]))
             {
                 dao::$errors['products[0]'] = $this->app->rawMethod == 'create' ? $this->lang->project->error->productNotEmpty : $this->lang->project->errorNoProducts;
                 return false;
