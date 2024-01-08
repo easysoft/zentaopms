@@ -21,11 +21,11 @@ function updateProgress() {
         var hasInprogress = false;
         for (var imageID in statusList) {
             if (statusList[imageID].statusCode) {
-                imgProgress = $('[data-col="progress"][data-row="' + imageID + '"] .dtable-cell-content')
-                imgPath     = $('[data-col="path"][data-row="' + imageID + '"] .dtable-cell-content')
-                imgStatus   = $('[data-col="status"][data-row="' + imageID + '"] .dtable-cell-content')
-                imgDownload = $('[data-col="actions"][data-row="' + imageID + '"]').find('a').first();
-                imgCancel   = $('[data-col="actions"][data-row="' + imageID + '"]').find('a').last();
+                imgProgress = $('.modal [data-col="progress"][data-row="' + imageID + '"] .dtable-cell-content')
+                imgPath     = $('.modal [data-col="path"][data-row="' + imageID + '"] .dtable-cell-content')
+                imgStatus   = $('.modal [data-col="status"][data-row="' + imageID + '"] .dtable-cell-content')
+                imgDownload = $('.modal [data-col="actions"][data-row="' + imageID + '"]').find('a').first();
+                imgCancel   = $('.modal [data-col="actions"][data-row="' + imageID + '"]').find('a').last();
 
                 if (statusList[imageID].statusCode == 'inprogress' || statusList[imageID].statusCode == 'created' || statusList[imageID].statusCode == 'pending')
                 {
