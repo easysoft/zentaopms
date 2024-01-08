@@ -364,7 +364,7 @@ class custom extends control
             if($mode == 'light') $this->custom->processProjectAcl();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->sendSuccess(array('load' => true, 'closeModel' => true));
+            return $this->sendSuccess(array('callback' => 'parent.loadCurrentPage()', 'closeModel' => true));
         }
 
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
