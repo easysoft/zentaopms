@@ -99,7 +99,7 @@ class datatable extends control
             $value = json_encode($fields);
 
             /* Split story and requirement custom fields. */
-            if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', ",$extra,") !== false) $name = 'datatable.' . $module . ucfirst($method) . "-{$extra}" . '.cols';
+            if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', ",$extra,") !== false) $name = 'datatable.' . $module . ucfirst($method) . ucfirst($extra) . '.cols';
 
             /* 保存个人配置信息。 */
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
@@ -205,8 +205,8 @@ class datatable extends control
         /* Delete story and requirement custom fields. */
         if($module == 'product' && $method == 'browse')
         {
-            $storyCustom       = $module . ucfirst($method) . '-story';
-            $requirementCustom = $module . ucfirst($method) . '-requirement';
+            $storyCustom       = $module . ucfirst($method) . 'Story';
+            $requirementCustom = $module . ucfirst($method) . 'Requirement';
             $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$storyCustom}&key=cols");
             $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$requirementCustom}&key=cols");
         }
@@ -226,7 +226,7 @@ class datatable extends control
     public function ajaxSaveGlobal(string $module, string $method, string $extra = '')
     {
         $target = $module . ucfirst($method);
-        if($module == 'product' && $method == 'browse' && strpos(',story,requirement', ",$extra,") !== false) $target .= "-{$extra}";
+        if($module == 'product' && $method == 'browse' && strpos(',story,requirement', ",$extra,") !== false) $target .= ucfirst($extra);
 
         $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
         if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);

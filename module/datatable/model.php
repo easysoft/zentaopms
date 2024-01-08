@@ -91,7 +91,7 @@ class datatableModel extends model
         $datatableId = $module . ucfirst($method);
 
         /* Split story and requirement custom fields. */
-        if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', $extra) !== false) $datatableId .= "-{$extra}";
+        if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', $extra) !== false) $datatableId .= ucfirst($extra);
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
 
