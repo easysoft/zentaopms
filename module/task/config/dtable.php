@@ -25,7 +25,7 @@ $config->task->dtable->fieldList['pri']['group']    = 1;
 
 $config->task->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->task->dtable->fieldList['status']['type']      = 'status';
-$config->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->task->dtable->fieldList['status']['sortType']  = true;
 $config->task->dtable->fieldList['status']['show']      = true;
 $config->task->dtable->fieldList['status']['group']     = 1;
