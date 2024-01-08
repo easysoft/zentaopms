@@ -156,7 +156,8 @@ div
                         formHidden('referer', $referer),
                         set::actions(array
                         (
-                            array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary', 'btnType' => 'submit')
+                            array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary', 'btnType' => 'submit'),
+                            $app->company->guest ? array('text' => $lang->user->asGuest, 'class' => 'w-full not-open-url', 'url' => createLink($config->default->module)) : null
                         ))
                     )
                 )
