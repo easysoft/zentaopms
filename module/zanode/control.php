@@ -353,7 +353,7 @@ class zanode extends control
     public function destroy(int $nodeID)
     {
         $error = $this->zanode->destroy($nodeID);
-        if(!empty($error)) return $this->sendError($error, true);
+        if(!empty($error)) return $this->sendError($error);
 
         return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
     }
