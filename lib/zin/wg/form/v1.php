@@ -27,6 +27,7 @@ class form extends formBase
         'data?: array|object',          // 表单项值默认数据。
         'labelData?: array|object',     // 表单项标签默认数据。
         'loadUrl?: string',             // 动态更新 URL。
+        'autoLoad?: array',             // 自动更新策略。
         'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
     );
 
@@ -220,6 +221,23 @@ class form extends formBase
 
         if($this->hasProp('formID'))  $props[] = setID($this->prop('formID'));
         if($this->hasProp('loadUrl')) $props[] = setData('load-url', $this->prop('loadUrl'));
+
+        $autoLoad = $this->prop('autoLoad');
+        if(is_array($autoLoad) || is_object($autoLoad))
+        {
+            $props[] = bind::change(implode('', array
+            (
+                'const autoLoad = ' . json_encode($autoLoad) . ';',
+                'const $ele = $(event.target);',
+                'Object.keys(autoLoad).forEach(selector => ',
+                '{',
+                    'if(!".[#".includes(selector[0])) selector = `[name="${selector}"]`;',
+                    'if(!$ele.closest(selector).length) return;',
+                    'const setting = autoLoad[selector];',
+                    'loadForm($.extend({target: $ele}, typeof setting === "string" ? {items: setting} : setting));',
+                '});'
+            )));
+        }
 
         return $props;
     }

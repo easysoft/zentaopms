@@ -54,6 +54,7 @@ class formPanel extends panel
         'data?: array|object',                         // 表单项值默认数据。
         'labelData?: array|object',                    // 表单项标签默认数据。
         'loadUrl?: string',                            // 动态更新 URL。
+        'autoLoad?: array',                            // 动态更新策略。
         'defaultMode?: string="lite"',                 // 默认表单模式（lite: 简洁版，full: 完整版）。
         'foldableItems?: array|string',                // 可折叠的表单项。
         'pinnedItems?: array|string',                  // 固定显示的表单项。
