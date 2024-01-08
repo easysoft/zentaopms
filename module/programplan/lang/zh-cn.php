@@ -26,6 +26,7 @@ $lang->programplan->submit        = '提交评审';
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
 $lang->programplan->name             = '阶段名称';
+$lang->programplan->code             = $lang->executionCommon . '代号';
 $lang->programplan->status           = '阶段进度';
 $lang->programplan->PM               = '阶段负责人';
 $lang->programplan->PMAB             = '负责人';

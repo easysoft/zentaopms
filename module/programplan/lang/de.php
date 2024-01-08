@@ -26,6 +26,7 @@ $lang->programplan->submit        = 'Submit';
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
 $lang->programplan->name             = 'Stage Name';
+$lang->programplan->code             = $lang->executionCommon . 'Code';
 $lang->programplan->status           = 'Stage Progress';
 $lang->programplan->PM               = 'Stage Manager';
 $lang->programplan->PMAB             = 'Owner';
