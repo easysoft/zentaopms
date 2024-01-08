@@ -666,6 +666,7 @@ class bugModel extends model
      */
     public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
+        if(commonModel::isTutorialMode()) return;
         $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
         /* Get product params. */
