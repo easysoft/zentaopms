@@ -371,10 +371,11 @@
         }
     }
 
-    function toggleLoading(target, isLoading)
+    function toggleLoading(target, isLoading, loadingClass)
     {
         var $target = $(target);
 
+        loadingClass = loadingClass || 'loading';
         $loginPanel = $target.find('#loginPanel');
         if($loginPanel.length > 0) $target = $loginPanel;
 
@@ -382,8 +383,8 @@
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
 
         if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
-        if(isLoading === undefined) isLoading = !$target.hasClass('loading');
-        $target.toggleClass('loading', isLoading);
+        if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
+        $target.toggleClass(loadingClass, isLoading);
     }
 
     /**
@@ -393,6 +394,7 @@
      * @param {string} options.url
      * @param {string} options.selector
      * @param {string} [options.target]
+     * @param {string} [options.loadingTarget]
      * @param {string} [options.method]
      * @param {FormData|Form|Record<string, unknown>} [options.data]
      * @param {{selector: string, type: string}} [options.zinOptions]
@@ -421,7 +423,8 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                toggleLoading(target, true);
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass);
+                if(options.before) options.before();
             },
             success(data)
             {
@@ -530,7 +533,7 @@
             },
             complete: () =>
             {
-                toggleLoading(target, false);
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
                 const frameElement = window.frameElement;
@@ -852,6 +855,103 @@
     function reloadPage()
     {
         loadPage({url: currentAppUrl, selector: 'body>*,title>*,#configJS'});
+    }
+
+    /**
+     * Load form with zin request.
+     *
+     * @param {{target: string, url?: string, partial?: boolean, keep?: boolean|string, items?: string, updateActionUrl?: string}} options Load form options.
+     */
+    function loadForm(options)
+    {
+        options = $.extend({target: 'form', updateActionUrl: true}, options);
+        const $target = $(options.target);
+        if(!$target.length) return console.warn('[APP] ', `cannot find target with selector "${options.target}"`);
+
+        let $form = $target.closest('form');
+        if(!$form.length) $form = $target.find('form');
+        if(!$form.length) return console.warn('[APP] ', `cannot find form from target "${options.target}"`);
+
+        const id = $form.attr('id');
+        if(!id) return console.warn('[APP] ', `form from "${options.target}" has no id`);
+        const formData = new FormData($form[0]);
+        const data = {};
+        formData.forEach((value, key) =>
+        {
+            if(key.includes('[')) key = key.substring(0, key.indexOf('['));
+            data[key] = value;
+        });
+
+        const $oldItems = $form.children('.form-group[data-name]');
+        let items = options.items || [];
+        if(typeof items === 'string') items = items.split(',');
+        const loadingTarget = items ? $oldItems.filter((_, element) => items.includes($(element).attr('data-name'))) : `#${id}`;
+        let url = options.url || $form.attr('data-load-url');
+        url = url ? zui.formatString(url, data) : currentAppUrl;
+        loadPage(
+        {
+            url:           url,
+            selector:      `#${id}>*`,
+            partial:       options.partial,
+            loadingTarget: loadingTarget,
+            loadingClass:  'disabled',
+            success:       () =>
+            {
+                let updateActionUrl = options.updateActionUrl;
+                if(updateActionUrl === true) updateActionUrl = url;
+                if(updateActionUrl) $form.attr('action', updateActionUrl);
+            },
+            onRender:      (info) =>
+            {
+                if(info.name !== id) return;
+
+                if(!options.items)
+                {
+                    const $data = $(info.data).filter('.form-group[data-name]');
+                    items.forEach(name =>
+                    {
+                        const $item = $data.filter(`[data-name="${name}"]`);
+                        $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
+                    });
+                }
+                else
+                {
+                    $form.html(info.data);
+                }
+
+                let keep = options.items;
+                if(keep === true) keep = Object.keys(data);
+                else if(typeof keep === 'string') keep = keep.split(',');
+
+                if(Array.isArray(keep))
+                {
+                    keep.forEach((name) =>
+                    {
+                        const $item = $form.find(`[name="${name}"]`);
+                        if(!$item.length) return;
+                        const value = data[name];
+                        if($item.is('.pick-value'))
+                        {
+                            const pick = $item.closest('.pick').zui();
+                            if(pick) pick.$.setValue(value, true);
+                        }
+                        else if($item.is('select'))
+                        {
+                            $item.find(`option[value="${value}"]`).prop('selected', true);
+                        }
+                        else if($item.is(':checkbox'))
+                        {
+                            $item.prop('checked', value);
+                        }
+                        else
+                        {
+                            $item.val(value);
+                        }
+                    });
+                }
+                return true;
+            }
+        })
     }
 
     function openPage(url, appCode, options)
@@ -1257,7 +1357,7 @@
         e.preventDefault();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
