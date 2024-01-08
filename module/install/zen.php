@@ -329,42 +329,6 @@ class installZen extends install
     }
 
     /**
-     * DevOps平台版设置session path。
-     * Set session save path.
-     *
-     * @access private
-     * @return bool
-     */
-    private function setSessionPath(): bool
-    {
-        $customSession = false;
-        $checkSession  = ini_get('session.save_handler') == 'files';
-        if($checkSession)
-        {
-            if(!session_save_path())
-            {
-                /* Restart the session because the session save path is null when start the session last time. */
-                session_write_close();
-
-                $tmpRootInfo     = $this->getTmpRoot();
-                $sessionSavePath = $tmpRootInfo['path'] . 'session';
-                if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
-
-                session_save_path($sessionSavePath);
-                $customSession = true;
-
-                $sessionResult = $this->checkSessionSavePath();
-                if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
-
-                session_start();
-                $this->session->set('installing', true);
-            }
-        }
-
-        return $customSession;
-    }
-
-    /**
      * 处理安装应用下拉选择的数据。
      * Process application options.
      *
