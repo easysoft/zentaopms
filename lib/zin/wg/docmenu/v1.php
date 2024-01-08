@@ -122,6 +122,7 @@ class docMenu extends wg
             if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
 
             $moduleName = ($setting->type == 'apiLib' || (isset($setting->objectType) && $setting->objectType == 'api')) ? 'api' : 'doc';
+            $selected   = $itemID && $itemID == $activeKey;
 
             $item = array(
                 'key'         => $itemID,
@@ -135,7 +136,7 @@ class docMenu extends wg
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $moduleName,
-                'selected'    => !empty($itemID) && zget($setting, 'active', $itemID == $activeKey),
+                'selected'    => zget($setting, 'active', $selected),
                 'actions'     => $this->getActions($setting)
             );
 
