@@ -2,7 +2,7 @@ input[name="realEnd"] {width: 150px;}
 
 .table-empty-tip {padding: 80px 10px; text-align: center; background: #fff;}
 .table-empty-tip .btn {background-color: rgba(var(--color-primary-50-rgb),var(--tw-bg-opacity)); color: var(--nav-active-color); --tw-ring-color: rgba(var(--color-primary-50-rgb),var(--tw-bg-opacity));}
-#cards {flex-wrap: wrap; padding: 10px;}
+#cards {flex-wrap: wrap; padding: 10px; background: #FFF;}
 #cards > .col {width: 25%; padding-left: 10px; padding-right: 10px;}
 @media screen and (max-width: 1500px) {#cards > .col {width: 33.3333333%;}}
 #cards .panel {margin: 10px 0; border: 1px solid rgb(var(--color-gray-300-rgb)); border-radius: 4px; box-shadow: none; cursor: pointer; height: 175px; background: #FFF;}
