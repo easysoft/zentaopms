@@ -22,7 +22,7 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $app->installing = true;
 
 /* Check installed or not. */
-if(!isset($_SESSION['installing']) and isset($config->installed) and $config->installed) die(header('location: index.php'));
+if(!isset($_SESSION['installing']) && $app->checkInstalled()) die(header('location: index.php'));
 
 /* Reset the config params to make sure the install program will be lauched. */
 $config->set('requestType', 'GET');

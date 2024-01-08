@@ -386,10 +386,6 @@ class install extends control
             return $this->send(array('result' => 'success', 'load' => $link));
         }
 
-        /* DevOps平台版将配置信息写入my.php。*/
-        /* Save config file when inQuickon is true. */
-        if($this->config->inQuickon) $this->installZen->saveConfigFile();
-
         $this->app->loadLang('upgrade');
         $this->view->title = $this->lang->install->getPriv;
         if(!isset($this->config->installed) || !$this->config->installed) $this->view->error = $this->lang->install->errorNotSaveConfig;

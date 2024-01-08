@@ -905,6 +905,8 @@ class baseRouter
     public function getInstalledVersion()
     {
         $version = $this->dbQuery("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
+        if(!$version && ($this->config->inContainer || $this->config->inQuickon)) return false;
+
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;

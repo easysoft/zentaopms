@@ -736,4 +736,18 @@ class router extends baseRouter
 
         return parent::loadModule();
     }
+
+    /**
+     * 检查是否已安装禅道，主要用于DevOps平台版。
+     * Check zentao is installed.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkInstalled()
+    {
+        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
+
+        return isset($this->config->installed) && $this->config->installed;
+    }
 }
