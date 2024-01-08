@@ -471,7 +471,7 @@ class programplanTao extends programplanModel
         $linkProducts = array();
         $linkBranches = array();
         $productList  = $this->loadModel('product')->getProducts($projectID);
-        if($project && $project->stageBy)
+        if($project && $project->stageBy == 'product')
         {
             $linkProducts = array(0 => $productID);
             if(!empty($productList[$productID])) $linkBranches = array(0 => zget($productList[$productID], 'branches', array()));

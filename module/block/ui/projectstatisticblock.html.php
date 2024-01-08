@@ -411,7 +411,6 @@ else
     );
 }
 
-
 statisticBlock
 (
     set::block($block),
