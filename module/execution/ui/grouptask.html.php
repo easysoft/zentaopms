@@ -125,6 +125,7 @@ toolbar
 $groupList = array();
 foreach($lang->execution->groups as $key => $value)
 {
+    if(empty($key)) continue;
     $link = createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$key}");
     $groupList[] = array(
         'text' => $value,
