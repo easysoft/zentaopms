@@ -28,13 +28,15 @@ class colorInput extends inputControl
      * @var    array
      * @access protected
      */
-    protected static array $defineProps = array(
-        'id?: string="$GID"',         // 组件根元素的 ID。
-        'name?: string',              // 作为表单项的名称。
-        'value?: string=""',          // 默认值。
-        'inputClass?: string=""',     // input 组件样式类名。
-        'colorName?: string="color"', // 颜色表单项名称。
-        'colorValue?: string=""',     // 颜色默认值。
+    protected static array $defineProps = array
+    (
+        'id?: string',                   // 组件根元素的 ID。
+        'name?: string',                 // 作为表单项的名称。
+        'value?: string=""',             // 默认值。
+        'inputClass?: string=""',        // input 组件样式类名。
+        'colorName?: string="color"',    // 颜色表单项名称。
+        'colorValue?: string=""',        // 颜色默认值。
+        'syncColor?: string|bool=true'   // 是否同步颜色
     );
 
     /**
@@ -44,26 +46,34 @@ class colorInput extends inputControl
      */
     protected function build(): wg
     {
-        list($props) = $this->props->split(array_keys(static::definedPropsList()));
+        list($id, $name, $value, $inputClass, $colorName, $colorValue, $syncColor) = $this->prop(array('id', 'name', 'value', 'inputClass', 'colorName', 'colorValue', 'syncColor'));
+
+        if($syncColor === true)
+        {
+            if($id == null) $id = $this->gid;
+            $syncColor = "#$id";
+        }
+
         return inputControl
+        (
+            input
             (
-                input
+                setClass($inputClass),
+                set::id($id),
+                set::name($name),
+                set::value($value),
+            ),
+            set::suffixWidth('icon'),
+            to::suffix
+            (
+                colorPicker
                 (
-                    setClass($props['inputClass']),
-                    set::name($props['name']),
-                    set::value($props['value']),
-                ),
-                set::suffixWidth('icon'),
-                to::suffix
-                (
-                    colorPicker
-                    (
-                        set::name($props['colorName']),
-                        set::value($props['colorValue']),
-                        set::syncColor('#' . $props['name'] . '_{GID}')
-                    )
+                    set::name($colorName),
+                    set::value($colorValue),
+                    set::syncColor($syncColor),
+                    set($this->getRestProps())
                 )
-            );
+            )
+        );
     }
 }
-

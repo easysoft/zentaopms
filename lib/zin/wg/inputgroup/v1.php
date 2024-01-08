@@ -5,6 +5,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 
 class inputGroup extends wg
 {
@@ -13,16 +14,17 @@ class inputGroup extends wg
         'seg?:bool'
     );
 
-    public function onBuildItem($item): wg
+    public function onBuildItem($item): ?wg
     {
         if(is_string($item)) $item = new item(set(array('type' => 'addon', 'text' => $item)));
         elseif(is_array($item)) $item = new item(set($item));
-        elseif($item instanceof wg) return $item;
+        elseif($item instanceof wg || is_null($item)) return $item;
 
         $type = $item->prop('type');
 
-        if($type === 'addon') return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
-        if($type === 'btn')   return new btn(set($item->props->skip('type')));
+        if($type === 'addon')  return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
+        if($type === 'btn')    return new btn(set($item->props->skip('type')));
+        if($type === 'picker') return new picker(set($item->props->skip('type')));
 
         if($type)
         {
@@ -30,7 +32,7 @@ class inputGroup extends wg
             return new inputControl
             (
                 set($item->props->pick($propNames)),
-                new input(set($item->props->skip(array_merge($propNames, ['type']))))
+                new input(set($item->props->skip(array_merge($propNames, array('type')))))
             );
         }
 

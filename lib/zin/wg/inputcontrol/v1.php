@@ -21,7 +21,7 @@ class inputControl extends wg
 
     protected function build(): wg
     {
-        list($prefix, $suffix, $prefixWidth, $suffixWidth, $class) = $this->prop(['prefix', 'suffix', 'prefixWidth', 'suffixWidth', 'class']);
+        list($prefix, $suffix, $prefixWidth, $suffixWidth, $class) = $this->prop(array('prefix', 'suffix', 'prefixWidth', 'suffixWidth', 'class'));
 
         if(empty($prefix)) $prefix = $this->block('prefix');
         if(empty($suffix)) $suffix = $this->block('suffix');

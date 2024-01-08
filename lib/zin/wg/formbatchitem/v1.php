@@ -81,6 +81,7 @@ class formBatchItem extends wg
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';
         if($control['type'] == 'static') $name .= '_static';
+        if($control['type'] === 'colorInput' && !isset($control['syncColor'])) $control['syncColor'] = '#' . $name . '_{GID}';
 
         return array(
             h::th

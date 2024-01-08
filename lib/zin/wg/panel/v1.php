@@ -18,7 +18,8 @@ class panel extends wg
         'bodyProps?: array',        // 主体属性。
         'footerActions?: array[]',  // 底部操作按钮。
         'footerClass?: string',     // 底部类名。
-        'footerProps?: array'       // 底部属性。
+        'footerProps?: array',      // 底部属性。
+        'container?: bool'          // 是否使用 Container 层。
     );
 
     protected static array $defineBlocks = array(
@@ -43,9 +44,16 @@ class panel extends wg
         );
     }
 
+    protected function buildContainer(): array|wg
+    {
+        $content = func_get_args();
+        if(!$this->prop('container')) return $content;
+        return div(setClass('container'), $content);
+    }
+
     protected function buildHeading(): ?wg
     {
-        list($title, $size) = $this->prop(['title', 'size']);
+        list($title, $size) = $this->prop(array('title', 'size'));
         $headingBlock       = $this->block('heading');
         $actions            = $this->buildHeadingActions();
 
@@ -55,26 +63,30 @@ class panel extends wg
         (
             setClass('panel-heading', $this->prop('headingClass')),
             set($this->prop('headingProps')),
-            !empty($title) ? div
+            $this->buildContainer
             (
-                setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")),
-                $this->prop('titleIcon') ? icon($this->prop('titleIcon')) : null,
-                set($this->prop('titleProps')),
-                $title,
-                $this->block('titleSuffix')
-            ) : null,
-            $headingBlock,
-            $actions
+                empty($title) ? null : div
+                (
+                    setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")),
+                    $this->prop('titleIcon') ? icon($this->prop('titleIcon')) : null,
+                    set($this->prop('titleProps')),
+                    $title,
+                    $this->block('titleSuffix')
+                ),
+                $headingBlock,
+                $actions
+            )
         );
     }
 
     protected function buildBody(): wg
     {
+        list($bodyClass, $bodyProps) = $this->prop(array('bodyClass', 'bodyProps'));
         return div
         (
-            setClass('panel-body ' . $this->prop('bodyClass')),
-            set($this->prop('bodyProps')),
-            $this->children()
+            setClass('panel-body', $bodyClass),
+            set($bodyProps),
+            $this->buildContainer($this->children())
         );
     }
 
@@ -89,8 +101,11 @@ class panel extends wg
         (
             setClass('panel-footer', $this->prop('footerClass')),
             set($this->prop('footerProps')),
-            $footerBlock,
-            empty($footerActions) ? null : toolbar(set::items($footerActions))
+            $this->buildContainer
+            (
+                $footerBlock,
+                empty($footerActions) ? null : toolbar(set::items($footerActions))
+            )
         );
     }
 

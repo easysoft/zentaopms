@@ -73,7 +73,7 @@ class colorPicker extends wg
         }
         return zui::colorPicker
         (
-            set::_class('form-group-wrapper'),
+            set::_class('form-group-wrapper center'),
             set::_map(array('value' => 'defaultValue', 'items' => 'colors', 'formID' => 'id')),
             set::_props($restProps),
             set($props),

@@ -174,6 +174,14 @@ function formPanel(): formPanel
 }
 
 /**
+ * Form grid panel widget.
+ */
+function formGridPanel(): formGridPanel
+{
+    return createWg('formGridPanel', func_get_args());
+}
+
+/**
  * Zentao form batch wg.
  *
  * ?string id='$GID'

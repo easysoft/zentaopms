@@ -10,6 +10,7 @@ require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'inputgroup' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'datepicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'timepicker' . DS . 'v1.php';
@@ -17,10 +18,13 @@ require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorinput' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'upload' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'modulepicker' . DS . 'v1.php';
 
 class control extends wg
 {
-    protected static array $defineProps = array(
+    protected static array $defineProps = array
+    (
         'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
         'name: string',          // HTML name 属性
         'id?: string',           // HTML id 属性
@@ -36,11 +40,15 @@ class control extends wg
     {
         $name = $this->prop('name');
         if($this->prop('type') === 'static' && $name === null) $this->setProp('name', '');
-        if($this->prop('id') === null && $this->prop('name') !== null)
+        if(!$this->hasProp('id') && $this->prop('name') !== null)
         {
             $name = $this->prop('name');
             $id   = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
             $this->setProp('id', $id);
+        }
+        elseif($this->prop('id') === '')
+        {
+            $this->setProp('id', null);
         }
     }
 
@@ -69,7 +77,7 @@ class control extends wg
     protected function buildInputControl(): wg
     {
         $controlProps = array();
-        $allProps     = $this->props->skip('type');
+        $allProps     = $this->props->skip(array('type', 'required', 'name'));
         $propsNames   = array_keys(inputControl::definedPropsList());
 
         foreach($propsNames as $propName)
@@ -91,7 +99,7 @@ class control extends wg
     {
         return new inputGroup
         (
-            set($this->props->skip('type')),
+            set($this->props->skip(array('type', 'required', 'name'))),
         );
     }
 
@@ -163,9 +171,14 @@ class control extends wg
         return new colorPicker(set($this->props->skip('type')));
     }
 
-    protected function buildColorInputGroup(): wg
+    protected function buildColorInput(): wg
     {
         return new colorInput(set($this->props->skip('type')));
+    }
+
+    protected function buildFiles(): wg
+    {
+        return new upload(set($this->props->skip('type')));
     }
 
     protected function build(): wg
@@ -179,6 +192,6 @@ class control extends wg
         $wgName = "\\zin\\$type";
         if(class_exists($wgName)) return new $wgName(set($this->props->skip('type')), $this->children());
 
-        return input(set($this->props));
+        return new input(set($this->props));
     }
 }
