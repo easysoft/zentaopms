@@ -1797,6 +1797,8 @@ class screenModel extends model
      */
     public function filterMetricData($data, $dateType, $isObjectMetric, $filters = array())
     {
+        if(empty($filters)) return $data;
+
         if($isObjectMetric)
         {
             if(isset($filters['scope']))
