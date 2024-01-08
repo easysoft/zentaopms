@@ -139,7 +139,8 @@ formPanel
             input
             (
                 set::type('hidden'),
-                set::name('script')
+                set::name('script'),
+                set::value($case->script)
             )
         )
     ),
