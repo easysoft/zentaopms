@@ -296,6 +296,7 @@ class screenModel extends model
      */
     public function genFilterComponent($filterType)
     {
+        $this->loadModel('metric');
         $type = ucfirst($filterType);
 
         $component = new stdclass();
@@ -308,17 +309,27 @@ class screenModel extends model
         $component->chartConfig->categoryName = $this->lang->screen->globalFilter;
         $component->chartConfig->package      = 'Decorates';
 
-        $objectPairs = $this->loadModel('metric')->getPairsByScope($filterType, true);
-        $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
+        if(in_array($filterType, $this->config->metric->scopeList))
         {
-            $object = new stdclass();
-            $object->label = $objectTitle;
-            $object->value = $objectID;
-            return $object;
-        }, array_keys($objectPairs), array_values($objectPairs));
+            $objectPairs = $this->metric->getPairsByScope($filterType, true);
+            $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
+            {
+                $object = new stdclass();
+                $object->label = $objectTitle;
+                $object->value = $objectID;
+                return $object;
+            }, array_keys($objectPairs), array_values($objectPairs));
+        }
 
         $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
-        $component->chartConfig->firstYear = $firstAction->year;
+        $yearRange = range($firstAction->year, (int)date('Y'));
+        $component->chartConfig->yearList = array_map(function($year)
+        {
+            $yearObject = new stdclass();
+            $yearObject->label = $year;
+            $yearObject->value = $year;
+            return $yearObject;
+        }, $yearRange);
 
         return $component;
     }
