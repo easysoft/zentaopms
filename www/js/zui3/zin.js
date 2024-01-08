@@ -875,7 +875,7 @@
         const id = $form.attr('id');
         if(!id) return console.warn('[APP] ', `form from "${options.target}" has no id`);
         const formData = new FormData($form[0]);
-        const data = {};
+        const data = {branch: '0'};
         formData.forEach((value, key) =>
         {
             if(key.includes('[')) key = key.substring(0, key.indexOf('['));

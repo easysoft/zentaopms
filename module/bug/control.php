@@ -249,7 +249,7 @@ class bug extends control
         /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
         /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
         $this->bugZen->buildCreateForm($bug, $params, $from);
-        $this->view->loadUrl = $this->createLink('bug', 'create', "productID={productID}&branch={branch}&extras=$originExtras" . (empty($from) ? '' : "&from=$from"));
+        $this->view->loadUrl = $this->createLink('bug', 'create', "productID={product}&branch={branch}&extras=$originExtras" . (empty($from) ? '' : "&from=$from"));
 
         $this->display();
     }
