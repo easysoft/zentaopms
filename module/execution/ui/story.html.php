@@ -229,12 +229,16 @@ modal
                 set::name('storyIdList')
             )
         ),
-        btn
+        formGroup
         (
-            set::text($lang->execution->next),
-            set::btnType('submit'),
-            set::type('primary'),
-            setData(array('dismiss' => 'modal'))
+            setClass('justify-center'),
+            btn
+            (
+                set::text($lang->execution->next),
+                set::btnType('submit'),
+                set::type('primary'),
+                setData(array('dismiss' => 'modal'))
+            )
         )
     )
 );
