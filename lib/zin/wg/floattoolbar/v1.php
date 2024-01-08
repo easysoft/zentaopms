@@ -33,6 +33,8 @@ class floatToolbar extends wg
         {
             if(!$item) continue;
 
+            if(is_array($item['url'])) $item['url'] = createLink($item['url']['module'], $item['url']['method'], $item['url']['params']);
+
             if(!empty($item['url']))      $item['url']      = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
             if(!empty($item['data-url'])) $item['data-url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['data-url']);
 

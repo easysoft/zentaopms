@@ -355,7 +355,7 @@ class zanode extends control
         $error = $this->zanode->destroy($nodeID);
         if(!empty($error)) return $this->sendError($error);
 
-        return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => true));
+        return $this->sendSuccess(array('message' => $this->lang->zanode->actionSuccess, 'load' => inlink('browse')));
     }
 
     /**
