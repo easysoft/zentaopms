@@ -896,7 +896,7 @@ class taskZen extends task
         /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
         if(!empty($this->config->limitTaskDate))
         {
-            $this->task->checkEstStartedAndDeadline($task->execution, $task->estStarted, $task->deadline);
+            $this->task->checkEstStartedAndDeadline($task->execution, (string)$task->estStarted, (string)$task->deadline);
             if(dao::isError()) return false;
         }
 
