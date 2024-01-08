@@ -60,12 +60,12 @@ function printSystemMode()
                         (
                             set::value($config->programID),
                             set::label($lang->custom->defaultProgram),
-                            set::name('program'),
-                            set::control(array
+                            picker
                             (
-                                'type'  => 'picker',
-                                'items' => $config->programs
-                            ))
+                                set::name('program'),
+                                set::items($config->programs),
+                                set::required(true),
+                            )
                         )
                     )
                 )

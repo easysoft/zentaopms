@@ -78,8 +78,8 @@ formPanel
                         setID('useLight'), 
                         setClass('primary wide'), 
                         set('data-mode', 'light'), 
-                        $mode == 'light' ? null : set('data-toggle', 'modal'), 
-                        $mode == 'light' ? null : set('data-target', '#selectProgramModal'), 
+                        $mode != 'light' && empty($programs) ? null : set('data-toggle', 'modal'), 
+                        $mode != 'light' && empty($programs) ? null : set('data-target', '#selectProgramModal'), 
                         $mode == 'light' ? set('disabled', true) : null, 
                         set('onclick', 'saveMode(this)'), 
                         $lang->custom->useLight
@@ -104,7 +104,7 @@ modal
     form
     (
         div(setClass('alert secondary-pale'), $lang->custom->selectProgramTips),
-        formGroup(set::label($lang->custom->defaultProgram), picker(setID('program'), set::name('program'), set::items($programs), set::value($programID))),
+        formGroup(set::label($lang->custom->defaultProgram), picker(setID('program'), set::name('program'), set::items($programs), set::value(!empty($programs) ? $programID : ''), set::required(true))),
         set::actions(array(array('text' => $lang->save, 'class' => 'primary btn-save', 'onclick' => 'submitMode(this)')))
     )
 );
