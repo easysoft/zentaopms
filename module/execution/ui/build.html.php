@@ -44,10 +44,14 @@ jsVar('changeProductLink', helper::createLink('execution', 'build', "executionID
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
+
+$fieldList = $config->build->dtable->fieldList;
+if($execution->type == 'kanban') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+
 dtable
 (
     set::userMap($users),
-    set::cols($config->build->dtable->fieldList),
+    set::cols($fieldList),
     set::data($builds),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.renderCell')),

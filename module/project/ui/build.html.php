@@ -46,10 +46,14 @@ jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('integratedTip', $lang->build->integrated);
 jsVar('deletedTip', $lang->build->deleted);
+
+$fieldList = $config->build->dtable->fieldList;
+if($project->model == 'kanban' && $this->app->rawModule == 'projectbuild') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+
 dtable
 (
     set::userMap($users),
-    set::cols($config->build->dtable->fieldList),
+    set::cols($fieldList),
     set::data($builds),
     set::plugins(array('cellspan')),
     set::orderBy($orderBy),
