@@ -125,7 +125,7 @@
           $formatedPrompt = str_replace('&gt;', '>', $formatedPrompt);
           $formatedPrompt = preg_replace('/<([^>]+)>/', '<strong><$1></strong>', $formatedPrompt);
         ?>
-        <div class="detail-content article-content"><?= $formatedPrompt ?></div>
+        <div class="detail-content article-content" style="overflow-x: hidden!important;"><?= $formatedPrompt ?></div>
       </div>
     </div>
     <div class="cell"><?php include '../../common/view/action.html.php'; ?></div>
