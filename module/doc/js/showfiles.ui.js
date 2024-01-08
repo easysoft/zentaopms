@@ -22,7 +22,7 @@ window.renderCell = function(result, {col, row})
             titleHtml += row.data.fileIcon;
         }
 
-        titleHtml += `<div class='titleBox'><span class='ml-1'>${row.data.fileName}</span></div>`;
+        titleHtml += `<span class='ml-1'>${row.data.fileName}</span>`;
 
         result[0] = {html: titleHtml};
         return result;
