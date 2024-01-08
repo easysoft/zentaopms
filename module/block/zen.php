@@ -1534,8 +1534,7 @@ class blockZen extends block
         $count  = isset($block->params->count) ? (int)$block->params->count : 0;
 
         /* 测试统计是按产品分组统计的。 */
-        $projectID     = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID, 'all');
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
         $productIdList = array_keys($products);
 
         /* 计算昨日和今日可能包含的日期情况。 */
