@@ -302,6 +302,28 @@ class metricTao extends metricModel
     }
 
     /**
+     * 根据日期获取度量数据。
+     * Fetch metric record by date.
+     *
+     * @param  string $code
+     * @param  string    $date
+     * @param  int    $limit
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricRecordByDate($code = 'all', $date = '', $limit = 100)
+    {
+        $records = $this->dao->select('*')->from(TABLE_METRICLIB)
+            ->where('1 = 1')
+            ->beginIF($code != 'all')->andWhere('metricCode')->eq($code)->fi()
+            ->beginIF(!empty($date))->andWhere('left(date, 10)')->eq($date)->fi()
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->fetchAll();
+
+        return $records;
+    }
+
+    /**
      * 获取度量数据有效字段。
      * Get metric record fields.
      *

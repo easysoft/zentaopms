@@ -65,5 +65,5 @@ div
             )->size('100%', '100%')
         )
     ) : null,
-    $groupData ? null : span($lang->metric->noData, setClass('text-md'))
+    $groupData ? null : span($noDataTip, setClass('text-md'))
 );

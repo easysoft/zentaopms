@@ -68,14 +68,14 @@ class metric extends control
         $allResultData = array();
         if(!empty($current))
         {
-            $metric = $this->metric->getByID($current->id);
+            $current = $this->metric->getByID($current->id);
 
-            $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
-            $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+            $result    = $this->metric->getResultByCode($current->code, array(), 'cron', $pager);
+            $allResult = $this->metric->getResultByCode($current->code, array(), 'cron');
 
-            $resultHeader  = $this->metric->getViewTableHeader($metric);
-            $resultData    = $this->metric->getViewTableData($metric, $result);
-            $allResultData = $this->metric->getViewTableData($metric, $allResult);
+            $resultHeader  = $this->metric->getViewTableHeader($current);
+            $resultData    = $this->metric->getViewTableData($current, $result);
+            $allResultData = $this->metric->getViewTableData($current, $allResult);
         }
 
         $dateType = $current ? $current->dateType : 'nodate';
@@ -103,6 +103,7 @@ class metric extends control
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
         $this->view->metricRecordType = $this->metric->getMetricRecordType($current->code, $current->scope);
+        $this->view->noDataTip     = $this->metric->getNoDataTip($current->code);
 
         $this->display();
     }
@@ -338,6 +339,7 @@ class metric extends control
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        $this->view->noDataTip     = $this->metric->getNoDataTip($metric->code);
 
         $this->display();
     }

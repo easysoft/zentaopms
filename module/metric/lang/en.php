@@ -123,7 +123,10 @@ $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";
 $lang->metric->noCalc    = "The PHP algorithm for this metric has not been implemented yet";
 $lang->metric->noSQL     = "No SQL";
-$lang->metric->noData    = "No data available";
+
+$lang->metric->noData              = "No data available.";
+$lang->metric->noDataBeforeCollect = "No data is available until the time for data collection.";
+$lang->metric->noDataAfterCollect  = "No data is available after the time for data collection.";
 
 $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
