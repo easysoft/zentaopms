@@ -79,12 +79,12 @@ foreach($fields as $field => $attr)
     $formItems[$field] = $formGroup;
 }
 
-$formItems['line'] = formRow
+$formItems['line'] = $formItems['line'] ? formRow
 (
     set::id('lineBox'),
     (isset($fields['program']) && $fields['program']['default'] == 0) ? set::hidden(true) : null,
     $formItems['line']
-);
+) : null;
 
 /* Set whitelist box. */
 $formItems['whitelist'] = formRow
