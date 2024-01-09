@@ -29,7 +29,7 @@ formPanel
             set::label($lang->execution->dateRange),
             inputGroup
             (
-                input
+                datePicker
                 (
                     set::control('date'),
                     set::id('begin'),
@@ -39,7 +39,7 @@ formPanel
                     on::change('computeWorkDays')
                 ),
                 $lang->execution->to,
-                input
+                datePicker
                 (
                     set::control('date'),
                     set::id('end'),
