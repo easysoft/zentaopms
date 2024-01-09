@@ -1782,7 +1782,7 @@ class screenModel extends model
 
         $filters = $this->processMetricFilter($filterParams, $dateType);
 
-        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, false);
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType, false);
 
         $tableOption = new stdclass();
         $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);

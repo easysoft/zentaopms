@@ -69,20 +69,17 @@ class metricModel extends model
      */
     public function getViewTableData($metric, $result)
     {
-        $scope = $metric->scope;
         if(empty($result)) return array();
 
-        if($metric->scope != 'system') $objectPairs = $this->getPairsByScope($scope);
+        $scope    = $metric->scope;
+        $dateType = $metric->dateType;
+        if($scope != 'system') $objectPairs = $this->getPairsByScope($scope);
 
         $tableData = array();
         foreach($result as $record)
         {
             $record = (array)$record;
             if(isset($record['date'])) $record['calcTime'] = date("Y-m-d H:i", strtotime($record['date']));
-
-            $fieldList = array_keys($record);
-            $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
-            $dateType  = $this->getDateType($dateList);
 
             $row = $this->buildDateCell($record, $dateType);
             if($scope != 'system')
@@ -108,7 +105,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getGroupTable($header, $data, $withCalcTime = true)
+    public function getGroupTable($header, $data, $dateType, $withCalcTime = true)
     {
         if(!$header or !$data) return array(array(), array());
 
@@ -116,23 +113,21 @@ class metricModel extends model
 
         if($headerLength == 2)
         {
-            return $this->getTimeTable($data, 'nodate', $withCalcTime);
+            return $this->getTimeTable($data, $dateType, $withCalcTime); // $dateType should eq nodate
         }
         elseif($headerLength == 3)
         {
             if($this->isObjectMetric($header))
             {
-                return $this->getObjectTable($header, $data, 'nodate', $withCalcTime);
+                return $this->getObjectTable($header, $data, $dateType, $withCalcTime); // $dateType should eq nodate
             }
             else
             {
-                $dateType = current($data)->dateType;
                 return $this->getTimeTable($data, $dateType, $withCalcTime);
             }
         }
         elseif($headerLength == 4)
         {
-            $dateType = current($data)->dateType;
             return $this->getObjectTable($header, $data, $dateType, $withCalcTime);
         }
 
@@ -1028,7 +1023,7 @@ class metricModel extends model
      * @param  array  $record
      * @param  string $dateType
      * @access public
-     * @return string
+     * @return object
      */
     public function buildDateCell($record, $dateType)
     {
