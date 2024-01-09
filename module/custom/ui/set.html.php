@@ -496,7 +496,7 @@ div
     isset($sidebarMenu) ? $sidebarMenu : null,
     formPanel
     (
-        setID('settingForm'),
+        set::formID('settingForm'),
         set::headingClass('justify-start'),
         to::headingActions($headingTips),
         setClass('flex-auto'),
