@@ -256,7 +256,7 @@ class admin extends control
                 foreach($features as $feature)
                 {
                     $code = $group . ucfirst($feature);
-                    if(!isset($data->module[$code])) $closedFeatures .= "{$code},";
+                    if(empty($data->module[$code])) $closedFeatures .= "{$code},";
                 }
             }
 
@@ -264,7 +264,7 @@ class admin extends control
             $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));
             $this->setting->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0));
             $this->loadModel('custom')->processMeasrecordCron();
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppsMenu'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppsMenu(true);loadCurrentPage();'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
