@@ -3758,7 +3758,6 @@ class storyModel extends model
         $storyLang->deleteAction       = str_replace($SRCommon, $URCommon, $storyLang->deleteAction);
         $storyLang->view               = str_replace($SRCommon, $URCommon, $storyLang->view);
         $storyLang->linkStory          = str_replace($SRCommon, $URCommon, $storyLang->linkStory);
-        $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
         $storyLang->exportAction       = str_replace($SRCommon, $URCommon, $storyLang->exportAction);
         $storyLang->zeroCase           = str_replace($SRCommon, $URCommon, $storyLang->zeroCase);
         $storyLang->zeroTask           = str_replace($SRCommon, $URCommon, $storyLang->zeroTask);

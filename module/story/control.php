@@ -1970,7 +1970,7 @@ class story extends control
     public function ajaxRelieveTwins()
     {
         $twinID = !empty($_POST['twinID']) ? $_POST['twinID'] : 0;
-        $story  = $this->story->getByID($twinID);
+        $story  = $this->story->getByID((int)$twinID);
         $twins  = explode(',', trim($story->twins, ','));
 
         if(empty($story->twins)) return $this->send(array('result' => 'fail'));
@@ -1982,7 +1982,7 @@ class story extends control
         /* Update twins to empty by twinID and if twins eq ','. */
         $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($twinID)->orWhere('twins')->eq(',')->exec();
 
-        if(!dao::isError()) $this->loadModel('action')->create('story', $twinID, 'relieved');
+        if(!dao::isError()) $this->loadModel('action')->create('story', (int)$twinID, 'relieved');
         return $this->send(array('result' => 'success', 'twinsCount' => count($twins)-1));
     }
 
