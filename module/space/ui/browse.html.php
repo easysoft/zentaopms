@@ -35,7 +35,7 @@ toolBar
         'icon'            => 'spinner-indicator',
         'class'           => 'ghost',
         'url'             => createLink('install', 'progress', "solutionID=$solutionID&install=true"),
-        'data-size'       => 'md',
+        'data-size'       => array('width' => '900', 'height' => '500'),
         'data-class-name' => 'install-progress',
         'data-toggle'     => 'modal'
     ))) : null,

@@ -129,7 +129,7 @@ $(function()
 
     $.getLib(config.webRoot + 'js/xterm/xterm.js', {root: false}, function()
     {
-        const term = new Terminal({convertEol: true, rows: 20});
+        term = new Terminal({convertEol: true, rows: 20});
         term.open(document.getElementById('terminal'));
 
     });

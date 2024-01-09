@@ -49,7 +49,7 @@ if(!helper::isAjaxRequest('modal'))
 {
     $actions[] = array(
         'text'  => $lang->solution->background,
-        'href'  => createLink('install', 'step6'),
+        'url'   => createLink('install', 'step6'),
         'id'    => 'skipInstallBtn',
         'class' => 'btn primary',
     );
