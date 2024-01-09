@@ -3012,18 +3012,18 @@ class executionModel extends model
         {
             if(empty($task)) continue;
 
-            $task->status       = 'cancel';
-            $task->assignedTo   = $task->openedBy;
-            $task->assignedDate = $now;
-            $task->canceledBy   = $task->lastEditedBy = $this->app->user->account;
-            $task->canceledDate = $task->lastEditedDate = $now;
-            $task->finishedBy   = '';
-            $task->finishedDate = null;
+            $cancelTask = new stdclass();
+            $cancelTask->id           = $task->id;
+            $cancelTask->status       = 'cancel';
+            $cancelTask->assignedTo   = $task->openedBy;
+            $cancelTask->assignedDate = $now;
+            $cancelTask->canceledBy   = $task->lastEditedBy = $this->app->user->account;
+            $cancelTask->canceledDate = $task->lastEditedDate = $now;
+            $cancelTask->finishedBy   = '';
+            $cancelTask->finishedDate = null;
+            $cancelTask->parent       = $task->parent;
 
-            if(!$task->closedDate)    unset($task->closedDate);
-            if(!$task->activatedDate) unset($task->activatedDate);
-
-            $this->loadModel('task')->cancel($task);
+            $this->loadModel('task')->cancel($cancelTask);
         }
         return !dao::isError();
     }
