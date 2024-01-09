@@ -978,7 +978,7 @@ class metricModel extends model
                 $objectPairs = $this->loadModel('dept')->getOptionMenu();
                 break;
             case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs('noletter');
+                $objectPairs = $this->loadModel('user')->getPairs('noletter|noempty|noclosed');
                 break;
             case 'program':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
