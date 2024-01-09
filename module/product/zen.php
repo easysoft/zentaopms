@@ -1470,7 +1470,10 @@ class productZen extends product
         $storyIdList     = $this->getStoryIdList($stories);
         $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
-        $showModule      = $isProjectStory ? $this->config->projectstory->story->showModule : $this->config->product->browse->showModule;
+
+        /* Set show module by config. */
+        $showModule = empty($this->config->product->browse->showModule) ? 0 : $this->config->product->browse->showModule;
+        if($isProjectStory) $showModule = empty($this->config->projectstory->story->showModule) ? 0 : $this->config->projectstory->story->showModule;
 
         $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->productID       = $productID;
