@@ -14,7 +14,7 @@ window.onRenderRow = function(row, rowIdx, data)
             });
         }
 
-        row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').remove();
+        if(data.hasOwnProperty('id')) row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').remove();
     }
 
     if(!data || !data.planIDList) return;

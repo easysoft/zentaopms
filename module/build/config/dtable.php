@@ -79,10 +79,6 @@ $config->build->story->dtable->fieldList['status']['name']      = 'status';
 $config->build->story->dtable->fieldList['status']['type']      = 'status';
 $config->build->story->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
 
-$config->build->story->dtable->fieldList['linkedBuild']['title'] = $lang->build->linkedBuild;
-$config->build->story->dtable->fieldList['linkedBuild']['name']  = 'linkedBuild';
-$config->build->story->dtable->fieldList['linkedBuild']['type']  = 'text';
-
 $config->build->story->dtable->fieldList['openedBy']['title'] = $lang->openedByAB;
 $config->build->story->dtable->fieldList['openedBy']['name']  = 'openedBy';
 $config->build->story->dtable->fieldList['openedBy']['type']  = 'user';

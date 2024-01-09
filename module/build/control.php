@@ -454,7 +454,14 @@ class build extends control
             $allStories = $this->story->getExecutionStories($executionID, $build->product, $orderBy, 'byBranch', $build->branch, 'story', $build->allStories, $pager);
         }
 
+        $checkedRows = array();
+        foreach($allStories as $story)
+        {
+            if(in_array($story->stage, array('developed', 'tested', 'closed'))) $checkedRows[] = $story->id;
+        }
+
         $this->view->allStories   = $allStories;
+        $this->view->checkedRows  = $checkedRows;
         $this->view->build        = $build;
         $this->view->buildStories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');

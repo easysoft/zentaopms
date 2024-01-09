@@ -24,6 +24,8 @@ foreach($allStories as $story)
     $story->estimate = $story->estimate . $config->hourUnit;
 }
 
+jsVar('childrenAB', $lang->story->childrenAB);
+
 searchForm
 (
     set::module('story'),
@@ -43,6 +45,7 @@ dtable
     set::loadPartial(true),
     set::extraHeight('+144'),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::checkedRows($checkedRows),
     set::footToolbar(array('items' => array(array
     (
         'text'      => $lang->productplan->linkStory,
@@ -54,23 +57,3 @@ dtable
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink($buildModule, 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager())
 );
-
-h::js
-(
-<<<EOD
-const childrenAB = "{$lang->story->childrenAB}";
-window.renderStoryCell = function(result, info)
-{
-    const story = info.row.data;
-    if(info.col.name == 'title' && result)
-    {
-        let html = '';
-        if(story.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
-        if(html) result.unshift({html});
-    }
-    return result;
-};
-EOD
-);
-
-render();
