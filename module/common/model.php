@@ -2313,6 +2313,7 @@ class commonModel extends model
         $moduleName  = $app->moduleName;
         $methodName  = $app->methodName;
         $actionsMenu = array();
+        $isInModal   = helper::isAjaxRequest('modal');
 
         $this->loadModel($moduleName);
         foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
@@ -2321,6 +2322,7 @@ class commonModel extends model
             foreach($actionList as $action)
             {
                 $actionData = $config->{$moduleName}->actionList[$action];
+                if($isInModal && !empty($actionData['notInModal'])) continue;
 
                 if(!empty($actionData['url']) && is_array($actionData['url']))
                 {

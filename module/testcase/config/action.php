@@ -24,11 +24,12 @@ $config->testcase->actionList['runResult']['url']         = array('module' => 't
 $config->testcase->actionList['runResult']['data-toggle'] = 'modal';
 $config->testcase->actionList['runResult']['data-size']   = 'lg';
 
-$config->testcase->actionList['edit']['icon']     = 'edit';
-$config->testcase->actionList['edit']['text']     = $lang->testcase->edit;
-$config->testcase->actionList['edit']['hint']     = $lang->testcase->edit;
-$config->testcase->actionList['edit']['url']      = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%');
-$config->testcase->actionList['edit']['data-app'] = $app->tab;
+$config->testcase->actionList['edit']['icon']       = 'edit';
+$config->testcase->actionList['edit']['text']       = $lang->testcase->edit;
+$config->testcase->actionList['edit']['hint']       = $lang->testcase->edit;
+$config->testcase->actionList['edit']['url']        = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%');
+$config->testcase->actionList['edit']['data-app']   = $app->tab;
+$config->testcase->actionList['edit']['notInModal'] = true;
 
 $config->testcase->actionList['review']['icon']        = 'glasses';
 $config->testcase->actionList['review']['text']        = $lang->testcase->review;
@@ -41,6 +42,7 @@ $config->testcase->actionList['importToLib']['text']        = $lang->testcase->i
 $config->testcase->actionList['importToLib']['hint']        = $lang->testcase->importToLib;
 $config->testcase->actionList['importToLib']['url']         = array('module' => 'testcase', 'method' => 'importToLib', 'params' => 'caseID={caseID}');
 $config->testcase->actionList['importToLib']['data-toggle'] = 'modal';
+$config->testcase->actionList['importToLib']['notInModal']  = true;
 
 $config->testcase->actionList['createBug']['icon']        = 'bug';
 $config->testcase->actionList['createBug']['text']        = $lang->testcase->createBug;
@@ -49,11 +51,12 @@ $config->testcase->actionList['createBug']['url']         = array('module' => 't
 $config->testcase->actionList['createBug']['data-toggle'] = 'modal';
 $config->testcase->actionList['createBug']['data-size']   = 'lg';
 
-$config->testcase->actionList['create']['icon']     = 'copy';
-$config->testcase->actionList['create']['text']     = $lang->testcase->copy;
-$config->testcase->actionList['create']['hint']     = $lang->testcase->copy;
-$config->testcase->actionList['create']['url']      = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={caseID}');
-$config->testcase->actionList['create']['data-app'] = $app->tab;
+$config->testcase->actionList['create']['icon']       = 'copy';
+$config->testcase->actionList['create']['text']       = $lang->testcase->copy;
+$config->testcase->actionList['create']['hint']       = $lang->testcase->copy;
+$config->testcase->actionList['create']['url']        = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={caseID}');
+$config->testcase->actionList['create']['data-app']   = $app->tab;
+$config->testcase->actionList['create']['notInModal'] = true;
 
 $config->testcase->actionList['unlinkCase']['icon'] = 'unlink';
 $config->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
@@ -84,6 +87,7 @@ $config->testcase->actionList['delete']['hint']         = $lang->testcase->delet
 $config->testcase->actionList['delete']['url']          = array('module' => 'testcase', 'method' => 'delete', 'params' => 'caseID={id}');
 $config->testcase->actionList['delete']['class']        = 'ajax-submit';
 $config->testcase->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
+$config->testcase->actionList['delete']['notInModal']   = true;
 
 $config->scene = new stdclass();
 $config->scene->menu = array('editScene', 'deleteScene');
