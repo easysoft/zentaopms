@@ -13,7 +13,8 @@ namespace zin;
 foreach($snapshotList as $snapshot)
 {
     $snapshot->nodeID    = $nodeID;
-    $snapshot->createdBy = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system' ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy);
+    $snapshot->isDefault = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
+    $snapshot->createdBy = $snapshot->isDefault ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy);
 }
 
 $snapshotList = initTableData($snapshotList, $config->zanode->snapshotDtable->fieldList, $this->zanode);

@@ -470,12 +470,10 @@ detailBody
                 )
             )
         ),
-        !empty($snapshotList) ? h::iframe
+        !empty($snapshotList) ? div
         (
-            set::src(createLink('zanode', 'browseSnapshot', "nodeID={$zanode->id}", '', true)),
-            set::scrolling('auto'),
-            set::frameborder('no'),
-            setStyle('min-height', '300px')
+            setID('snapshotList'),
+            h::js('loadTarget("' . createLink('zanode', 'browseSnapshot', "nodeID={$zanode->id}") . '", "#snapshotList")')
         ) : $lang->noData
     ) : null,
     floatToolbar

@@ -756,6 +756,11 @@ class zanodemodel extends model
     public static function isClickable(object $node, string $action): bool
     {
         $action = strtolower($action);
+        if(isset($node->from) && $node->from == 'snapshot')
+        {
+            if(empty($node->isDefault) && $action == 'editsnapshot') return false;
+            if(empty($node->isDefault) && $action == 'deletesnapshot') return false;
+        }
 
         if($action == 'resume') return $node->status == 'suspend' && $node->hostType != 'physics';
         if($action == 'start')  return $node->status == 'shutoff' && $node->hostType != 'physics';
