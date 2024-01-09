@@ -658,6 +658,7 @@ $config->objectTables['cron']           = TABLE_CRON;
 $config->objectTables['lang']           = TABLE_LANG;
 $config->objectTables['review']         = TABLE_REVIEW;
 $config->objectTables['effort']         = TABLE_EFFORT;
+$config->objectTables['design']         = TABLE_DESIGN;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
