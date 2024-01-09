@@ -1912,6 +1912,35 @@ class metricModel extends model
     }
 
     /**
+     * 根据日期类型和日期，拆解出日期的年、月、周、日。
+     * Get date values by date type and date.
+     *
+     * @param  string  $dateType
+     * @param  string  $date
+     * @access public
+     * @return array
+     */
+    public function generateDateValues($dateType, $date)
+    {
+        if($dateType == 'nodate') return array();
+
+        $timestamp = strtotime($date);
+
+        $year  = date('Y', $timestamp);
+        $month = date('m', $timestamp);
+        $day   = date('d', $timestamp);
+        $week  = date('oW', $timestamp);
+
+        $dateValues = array('year' => $year);
+
+        if(in_array($dateType, array('month', 'week', 'day'))) $dateValues['month'] = $month;
+        if($dateType == 'week') $dateValues['week'] = $week;
+        if($dateType == 'day') $dateValues['day']   = $day;
+
+        return $dateValues;
+    }
+
+    /**
      * 获取度量数据的日期类型。
      * Get date type of metric data.
      *

@@ -186,15 +186,11 @@ class metricZen extends metric
         $records = array();
         foreach($calcList as $code => $calc)
         {
+            $dateType    = $this->metric->getDateTypeByCode($code);
+            $initRecords = $isFirstGenerate ? array() : $this->initMetricRecords($code, $dateType, $now);
+
             $results = $calc->getResult($options);
-            if(!is_array($results) || count($results) == 0) continue;
-
-            $system = (int)$this->metric->isSystemMetric($results);
-
-            $firstRecord = (object)current($results);
-            $cycle = $this->metric->getMetricCycle($firstRecord);
-            $this->metric->clearOutDatedRecords($code, $cycle);
-
+            $system = empty($results) ? 0 : (int)$this->metric->isSystemMetric($results);
             foreach($results as $record)
             {
                 $record = (object)$record;
@@ -205,11 +201,105 @@ class metricZen extends metric
                 $record->date       = $now;
                 $record->system     = $system;
 
-                $records[] = $record;
+                $uniqueKey = $this->getUniqueKeyByRecord($record);
+                if(isset($initRecords[$uniqueKey])) $initRecords[$uniqueKey]->value = $record->value;
+                else $initRecords[$uniqueKey] = $record;
+            }
+
+            $records = array_merge($records, array_values($initRecords));
+        }
+
+        return $records;
+    }
+
+    /**
+     * 根据度量项编码，初始化度量数据。
+     * Initialize metric data based on metric code.
+     *
+     * @param  string    $code
+     * @param  string    $dateType
+     * @param  string    $date
+     * @access protected
+     * @return array
+     */
+    protected function initMetricRecords($code, $dateType, $date)
+    {
+        $metric = $this->metric->getByCode($code);
+        $scope = $metric->scope;
+
+        $dateValues = $this->metric->generateDateValues($dateType, $date);
+
+        $records = array();
+        if($scope == 'system')
+        {
+            list($uniqueKey, $record) = $this->buildMetricRecordCommonFields($metric->id, $code, $scope, '1', $date);
+
+            $records[$uniqueKey] = $record;
+        }
+        else
+        {
+            $scopeList = $this->metric->getPairsByScope($scope);
+            foreach($scopeList as $key => $value)
+            {
+                list($uniqueKey, $record) = $this->buildMetricRecordCommonFields($metric->id, $code, $scope, $key, $date);
+
+                $records[$uniqueKey] = $record;
             }
         }
 
         return $records;
+    }
+
+    /**
+     * 根据度量项范围，构建度量数据的通用字段。
+     * Build common fields of metric data based on metric scope.
+     *
+     * @param  int     $metricID
+     * @param  string  $code
+     * @param  string  $scope
+     * @param  string  $scopeValue
+     * @param  string  $date
+     * @access protected
+     * @return array
+     */
+    protected function buildMetricRecordCommonFields($metricID, $code, $scope, $scopeValue, $date)
+    {
+        $dateType   = $this->metric->getDateTypeByCode($code);
+        $dateValues = $this->metric->generateDateValues($dateType, $date);
+
+        $record = new stdclass();
+        $record->$scope     = $scopeValue;
+        $record->value      = 0;
+        $record->metricID   = $metricID;
+        $record->metricCode = $code;
+        $record->date       = $date;
+
+        $record = (object)array_merge((array)$record, $dateValues);
+        $uniqueKey = $this->getUniqueKeyByRecord($record);
+
+        return array($uniqueKey, $record);
+    }
+
+    /**
+     * 根据度量数据，获取度量数据的唯一键。
+     * Get the unique key of metric data based on metric data.
+     *
+     * @param  object    $record
+     * @access protected
+     * @return string
+     */
+    protected function getUniqueKeyByRecord($record)
+    {
+        $record = (array)$record;
+        $uniqueKeys = array();
+        $ignoreFields = array('value', 'metricID', 'metricCode', 'date');
+        foreach($record as $field => $value)
+        {
+            if(in_array($field, $ignoreFields) || empty($value)) continue;
+            $uniqueKeys[] = $field . $value;
+        }
+
+        return implode('_', $uniqueKeys);
     }
 
     /**
