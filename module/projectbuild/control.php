@@ -96,15 +96,16 @@ class projectBuild extends control
      * @param  int    $buildID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkStory(int $buildID = 0, string $browseType = '', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function linkStory(int $buildID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
-        echo $this->fetch('build', 'linkStory', "buildID=$buildID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('build', 'linkStory', "buildID=$buildID&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
