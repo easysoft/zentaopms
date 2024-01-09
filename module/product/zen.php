@@ -1470,6 +1470,7 @@ class productZen extends product
         $storyIdList     = $this->getStoryIdList($stories);
         $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
+        $showModule      = $isProjectStory ? $this->config->projectstory->story->showModule : $this->config->product->browse->showModule;
 
         $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->productID       = $productID;
@@ -1482,7 +1483,7 @@ class productZen extends product
         $this->view->isProjectStory  = $isProjectStory;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
-        $this->view->modulePairs     = !empty($this->config->product->browse->showModule) ? $this->tree->getModulePairs($productID, 'story', $this->config->product->browse->showModule) : array();
+        $this->view->modulePairs     = !empty($showModule) ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
         $this->view->showBranch      = $this->canShowBranch($projectID, $productID, $storyType, $isProjectStory);
         $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $this->view->branchTagOption = $branchTagOpt;

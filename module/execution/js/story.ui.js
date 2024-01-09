@@ -77,6 +77,7 @@ window.renderStoryCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         let html = '';
+        if(typeof modulePairs[story.moduleID] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.moduleID] + "</span> ";
         if(story.isChild) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
         if(html) result.unshift({html});
     }

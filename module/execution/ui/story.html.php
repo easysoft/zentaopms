@@ -14,6 +14,7 @@ namespace zin;
 data('activeMenuID', $storyType);
 jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->story->childrenAB);
+jsVar('modulePairs', $modulePairs);
 
 /* Show feature bar. */
 featureBar
@@ -378,6 +379,7 @@ if(empty($execution->hasProduct) && empty($execution->multiple))
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus);
 foreach($stories as $story)
 {
+    $story->moduleID = $story->module;
     $story = $this->story->formatStoryForList($story, $options);
     if($story->parent > 0)
     {
