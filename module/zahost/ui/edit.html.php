@@ -57,7 +57,7 @@ formPanel
     (
         set::name('extranet'),
         set::label($lang->zahost->extranet),
-        set::required(true),
+        set::disabled(true),
         set::width('1/2'),
         set::value($host->extranet)
     ),
