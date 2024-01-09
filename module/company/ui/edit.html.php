@@ -17,6 +17,7 @@ formPanel
     set::title($company->name),
     set::headingClass('modal-heading'),
     set::actions(array('submit')),
+    set::submitBtnText($lang->save),
     formRow
     (
         formGroup
