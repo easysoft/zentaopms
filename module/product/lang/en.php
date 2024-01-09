@@ -217,11 +217,13 @@ $lang->product->abbr->aclList['open']    = 'Default';
 $lang->product->aclTips['open']    = "Users with privileges to {$lang->productCommon} can access it.";
 $lang->product->aclTips['private'] = "{$lang->executionCommon} team members only";
 
-$lang->product->storySummary   = "Total <strong>%s</strong> %s on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%s</strong>.";
-$lang->product->checkedSummary = "<strong>%total%</strong> %storyCommon% selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
-$lang->product->noModule       = '<div>You have no modules. </div><div>Manage Now</div>';
-$lang->product->noProduct      = "No {$lang->productCommon} yet. ";
-$lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
+$lang->product->storySummary       = "Total <strong>%s</strong> %s on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%s</strong>.";
+$lang->product->checkedSRSummary   = "<strong>%total%</strong> %storyCommon% selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
+$lang->product->requirementSummary = "Total <strong>%s</strong> %s on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";
+$lang->product->checkedURSummary   = "<strong>%total%</strong> %storyCommon% selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}).";
+$lang->product->noModule           = '<div>You have no modules. </div><div>Manage Now</div>';
+$lang->product->noProduct          = "No {$lang->productCommon} yet. ";
+$lang->product->noMatched          = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;

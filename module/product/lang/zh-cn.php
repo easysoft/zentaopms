@@ -217,11 +217,13 @@ $lang->product->abbr->aclList['open']    = '公开';
 $lang->product->aclTips['open']    = "有{$lang->productCommon}视图权限，即可访问";
 $lang->product->aclTips['private'] = "{$lang->productCommon}相关负责人、所属项目集的干系人、相关联{$lang->projectCommon}的团队成员和干系人可访问";
 
-$lang->product->storySummary   = "本页共 <strong>%s</strong> 个%s，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
-$lang->product->checkedSummary = "选中 <strong>%total%</strong> 个%storyCommon%，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
-$lang->product->noModule       = "<div>您现在还没有模块信息</div><div>请维护模块</div>";
-$lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
-$lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
+$lang->product->storySummary       = "本页共 <strong>%s</strong> 个%s，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
+$lang->product->checkedSRSummary   = "选中 <strong>%total%</strong> 个%storyCommon%，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
+$lang->product->requirementSummary = "本页共 <strong>%s</strong> 个%s，预计 <strong>%s</strong> 个{$lang->hourCommon}。";
+$lang->product->checkedURSummary   = "选中 <strong>%total%</strong> 个%storyCommon%，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}。";
+$lang->product->noModule           = "<div>您现在还没有模块信息</div><div>请维护模块</div>";
+$lang->product->noProduct          = "暂时没有{$lang->productCommon}。";
+$lang->product->noMatched          = '找不到包含"%s"的' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = '全部';
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;

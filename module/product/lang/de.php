@@ -217,11 +217,13 @@ $lang->product->abbr->aclList['open']    = 'Default';
 $lang->product->aclTips['open']    = "Benutzer mit Rechten für {$lang->productCommon} können zugreifen.";
 $lang->product->aclTips['private'] = "{$lang->executionCommon} Nur Teammitglieder";
 
-$lang->product->storySummary   = " <strong>%s</strong> %s, <strong>%s</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%s</strong> auf dieser Seite.";
-$lang->product->checkedSummary = " <strong>%total%</strong> geprüft, <strong>%estimate%</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%rate%</strong>.";
-$lang->product->noModule       = '<div>Kein Modul</div><div>Jetzt verwalten</div>';
-$lang->product->noProduct      = 'Kein Produkt. ';
-$lang->product->noMatched      = '"%s" kann nicht gefunden werden.' . $lang->productCommon;
+$lang->product->storySummary       = " <strong>%s</strong> %s, <strong>%s</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%s</strong> auf dieser Seite.";
+$lang->product->checkedSRSummary   = " <strong>%total%</strong> geprüft, <strong>%estimate%</strong> Stunde(n) geplant, Fallabdeckung ist <strong>%rate%</strong>.";
+$lang->product->requirementSummary = " <strong>%s</strong> %s, <strong>%s</strong> Stunde(n) geplant.";
+$lang->product->checkedURSummary   = " <strong>%total%</strong> geprüft, <strong>%estimate%</strong> Stunde(n) geplant.";
+$lang->product->noModule           = '<div>Kein Modul</div><div>Jetzt verwalten</div>';
+$lang->product->noProduct          = 'Kein Produkt. ';
+$lang->product->noMatched          = '"%s" kann nicht gefunden werden.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;

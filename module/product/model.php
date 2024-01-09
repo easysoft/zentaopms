@@ -1221,7 +1221,8 @@ class productModel extends model
         $storyCommon = $this->lang->SRCommon;
         if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
 
-        return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
+        $summary = $storyType == 'story' ? $this->lang->product->storySummary : $this->lang->product->requirementSummary;
+        return sprintf($summary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
 
     /**

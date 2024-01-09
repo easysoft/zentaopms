@@ -217,11 +217,13 @@ $lang->product->abbr->aclList['open']    = 'Défaut';
 $lang->product->aclTips['open']    = "Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.";
 $lang->product->aclTips['private'] = "les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.";
 
-$lang->product->storySummary   = "Total de <strong>%s</strong> %s sur cette page. Estimé: <strong>%s</strong> (h), et couverture de la recette: <strong>%s</strong>.";
-$lang->product->checkedSummary = "<strong>%total%</strong> %storyCommon% sélectionnées, Estimé: <strong>%estimate%</strong>, et couverture de la recette: <strong>%rate%</strong>.";
-$lang->product->noModule       = "<div>Vous n'avez aucun modules. </div><div>Gérer Maintenant</div>";
-$lang->product->noProduct      = "No {$lang->productCommon} à ce jour. ";
-$lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
+$lang->product->storySummary       = "Total de <strong>%s</strong> %s sur cette page. Estimé: <strong>%s</strong> (h), et couverture de la recette: <strong>%s</strong>.";
+$lang->product->checkedSRSummary   = "<strong>%total%</strong> %storyCommon% sélectionnées, Estimé: <strong>%estimate%</strong>, et couverture de la recette: <strong>%rate%</strong>.";
+$lang->product->requirementSummary = "Total de <strong>%s</strong> %s sur cette page. Estimé: <strong>%s</strong> (h),.";
+$lang->product->checkedURSummary   = "<strong>%total%</strong> %storyCommon% sélectionnées, Estimé: <strong>%estimate%</strong>,.";
+$lang->product->noModule           = "<div>Vous n'avez aucun modules. </div><div>Gérer Maintenant</div>";
+$lang->product->noProduct          = "No {$lang->productCommon} à ce jour. ";
+$lang->product->noMatched          = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
