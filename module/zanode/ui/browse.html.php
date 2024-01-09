@@ -29,6 +29,7 @@ $nodeList = initTableData($nodeList, $config->zanode->dtable->fieldList, $this->
         icon('help'),
         $lang->help,
         set('data-app', 'qa'),
+        set('target', '_blank'),
         set::href('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao')
     )
 );
