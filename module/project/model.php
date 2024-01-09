@@ -1547,7 +1547,7 @@ class projectModel extends model
         if($oldProject->name != $project->name || $oldProject->parent != $project->parent || $oldProject->acl != $project->acl)
         {
             $product    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($oldProject->id)->fetch('product');
-            $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID($project->parent) : 0;
+            $topProgram = !empty($project->parent) ? $this->loadModel('program')->getTopByID((int)$project->parent) : 0;
             $this->dao->update(TABLE_PRODUCT)
                 ->set('name')->eq($project->name)
                 ->set('program')->eq($topProgram)
