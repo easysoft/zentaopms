@@ -313,4 +313,31 @@ class gitlabTest
         $result = $this->gitlab->saveIssueRelation($objectType, $object, $gitlabID, $issue);
         return $result ? $this->gitlab->getRelationByObject($objectType, $object->id) : $result;
     }
+
+    public function createUserTest(int $gitlabID, object $gitlabUser)
+    {
+        $result = $this->gitlab->createUser($gitlabID, $gitlabUser);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function createProjectTest(int $gitlabID, object $project)
+    {
+        $result = $this->gitlab->createProject($gitlabID, $project);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function editProjectTest(int $gitlabID, object $project)
+    {
+        $result = $this->gitlab->editProject($gitlabID, $project);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
