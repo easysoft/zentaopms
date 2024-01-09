@@ -37,35 +37,55 @@ foreach($kanbanList as $current => $region)
 jsVar('privs',   $privs);
 jsVar('delayed', $lang->project->statusList['delay']);
 
-featureBar
-(
-    li
+if(empty($kanbanList))
+{
+    panel
     (
-        setClass('nav-item item'),
-        a
+        div
         (
-            $browseType == 'my' ? setClass('active') : null,
-            set::href(createLink('product', 'kanban', "browseType=my")),
-            $lang->product->myProduct,
+            setClass('dtable-empty-tip'),
+            div
+            (
+                setClass('row gap-4 items-center'),
+                span
+                (
+                    setClass('text-gray'),
+                    $lang->noData
+                ),
+            )
         )
-    ),
-    li
+    );
+}
+else
+{
+    featureBar
     (
-        setClass('nav-item item'),
-        set::active($browseType == 'other'),
-        a
+        li
         (
-            $browseType == 'other' ? setClass('active') : null,
-            set::href(createLink('product', 'kanban', "browseType=other")),
-            $lang->product->otherProduct,
-        )
-    ),
-);
-zui::kanbanList
-(
-    set::key('kanban'),
-    set::items($kanbanList),
-    set::height('calc(100vh - 120px)')
-);
-
-render();
+            setClass('nav-item item'),
+            a
+            (
+                $browseType == 'my' ? setClass('active') : null,
+                set::href(createLink('product', 'kanban', "browseType=my")),
+                $lang->product->myProduct,
+            )
+        ),
+        li
+        (
+            setClass('nav-item item'),
+            set::active($browseType == 'other'),
+            a
+            (
+                $browseType == 'other' ? setClass('active') : null,
+                set::href(createLink('product', 'kanban', "browseType=other")),
+                $lang->product->otherProduct,
+            )
+        ),
+    );
+    zui::kanbanList
+    (
+        set::key('kanban'),
+        set::items($kanbanList),
+        set::height('calc(100vh - 120px)')
+    );
+}

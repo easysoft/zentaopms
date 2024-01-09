@@ -36,11 +36,32 @@ foreach($kanbanList as $current => $region)
 
 jsVar('privs',   $privs);
 jsVar('delayed', $lang->project->statusList['delay']);
-zui::kanbanList
-(
-    set::key('kanban'),
-    set::items($kanbanList),
-    set::height('calc(100vh - 120px)')
-);
 
-render();
+if(empty($kanbanList))
+{
+    panel
+    (
+        div
+        (
+            setClass('dtable-empty-tip'),
+            div
+            (
+                setClass('row gap-4 items-center'),
+                span
+                (
+                    setClass('text-gray'),
+                    $lang->noData
+                ),
+            )
+        )
+    );
+}
+else
+{
+    zui::kanbanList
+    (
+        set::key('kanban'),
+        set::items($kanbanList),
+        set::height('calc(100vh - 120px)')
+    );
+}
