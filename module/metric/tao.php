@@ -317,7 +317,7 @@ class metricTao extends metricModel
             ->limit(1)
             ->fetch();
 
-        if(!$record) return false;
+        if(!$record) return array();
 
         $fields = array();
         foreach(array_keys((array)$record) as $field)

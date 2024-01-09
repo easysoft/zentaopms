@@ -673,7 +673,9 @@ class metricModel extends model
      */
     public function deduplication(string $code): bool
     {
+        $metric = $this->getByCode($code);
         $fields = $this->metricTao->getRecordFields($code);
+        if(!in_array($metric->scope, $fields)) $fields[] = $metric->scope;
 
         if(empty($fields)) return false;
 
@@ -733,20 +735,6 @@ class metricModel extends model
                 ->andWhere('day')->eq($day)
                 ->exec();
         }
-    }
-
-    /**
-     * 是否为第一次生成度量数据。
-     * Whether it is the first time to generate metric data.
-     *
-     * @access public
-     * @return bool
-     */
-    public function isFirstGenerate(): bool
-    {
-        $record = $this->dao->select('id')->from(TABLE_METRICLIB)->limit(1)->fetch();
-
-        return !$record;
     }
 
     /**
@@ -1916,15 +1904,12 @@ class metricModel extends model
      * 根据日期类型和日期，拆解出日期的年、月、周、日。
      * Get date values by date type and date.
      *
-     * @param  string  $dateType
      * @param  string  $date
      * @access public
-     * @return array
+     * @return object
      */
-    public function generateDateValues($dateType, $date)
+    public function generateDateValues($date)
     {
-        if($dateType == 'nodate') return array();
-
         $timestamp = strtotime($date);
 
         $year  = date('Y', $timestamp);
@@ -1932,11 +1917,13 @@ class metricModel extends model
         $day   = date('d', $timestamp);
         $week  = date('oW', $timestamp);
 
-        $dateValues = array('year' => $year);
+        $dateValues = new stdClass();
 
-        if(in_array($dateType, array('month', 'week', 'day'))) $dateValues['month'] = $month;
-        if($dateType == 'week') $dateValues['week'] = $week;
-        if($dateType == 'day') $dateValues['day']   = $day;
+        $dateValues->year   = array('year' => $year);
+        $dateValues->month  = array('year' => $year, 'month' => $month);
+        $dateValues->week   = array('year' => $year, 'week' => $week);
+        $dateValues->day    = array('year' => $year, 'month' => $month, 'day' => $day);
+        $dateValues->nodate = array();
 
         return $dateValues;
     }

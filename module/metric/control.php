@@ -164,7 +164,6 @@ class metric extends control
     {
         // 保存当前的错误报告级别和显示错误的设置
         $originalDebug = $this->config->debug;
-        $isFirstGenerate = $this->metric->isFirstGenerate();
 
         // 开启调试模式
         $this->config->debug = 2;
@@ -184,7 +183,7 @@ class metric extends control
                 $rows = $statement->fetchAll();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList, $isFirstGenerate);
+                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
                 $this->metric->insertMetricLib($records);
             }
             catch(Exception $e)

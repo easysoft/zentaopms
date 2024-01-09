@@ -174,36 +174,43 @@ class metricZen extends metric
      * Build measurements that can be inserted into tables based on the results of the measurements computed.
      *
      * @param  array     $calcList
-     * @param  bool      $isFirstGenerate
      * @access protected
      * @return array
      */
-    protected function prepareMetricRecord($calcList, $isFirstGenerate = false)
+    protected function prepareMetricRecord($calcList)
     {
-        $options = $isFirstGenerate ? array() : array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
 
-        $now = helper::now();
+        $now        = helper::now();
+        $dateValues = $this->metric->generateDateValues($now);
+
         $records = array();
         foreach($calcList as $code => $calc)
         {
-            $dateType    = $this->metric->getDateTypeByCode($code);
-            $initRecords = $isFirstGenerate ? array() : $this->initMetricRecords($code, $dateType, $now);
+            $metric       = $this->metric->getByCode($code);
+            $dateType     = $this->metric->getDateTypeByCode($code);
+            $recordCommon = $this->buildMetricRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
+            $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
 
             $results = $calc->getResult($options);
-            $system = empty($results) ? 0 : (int)$this->metric->isSystemMetric($results);
             foreach($results as $record)
             {
                 $record = (object)$record;
+                if(empty($record->value)) continue;
 
-                if(empty($record->value)) $record->value = 0;
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
                 $record->date       = $now;
-                $record->system     = $system;
+                $record->system     = $metric->scope == 'system' ? 1 : 0;
 
                 $uniqueKey = $this->getUniqueKeyByRecord($record);
-                if(isset($initRecords[$uniqueKey])) $initRecords[$uniqueKey]->value = $record->value;
-                else $initRecords[$uniqueKey] = $record;
+                if(!isset($initRecords[$uniqueKey]))
+                {
+                    $initRecords[$uniqueKey] = $record;
+                    continue;
+                }
+
+                $initRecords[$uniqueKey]->value = $record->value;
             }
 
             $records = array_merge($records, array_values($initRecords));
@@ -222,17 +229,14 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function initMetricRecords($code, $dateType, $date)
+    protected function initMetricRecords($recordCommon, $scope)
     {
-        $metric = $this->metric->getByCode($code);
-        $scope = $metric->scope;
-
-        $dateValues = $this->metric->generateDateValues($dateType, $date);
-
         $records = array();
         if($scope == 'system')
         {
-            list($uniqueKey, $record) = $this->buildMetricRecordCommonFields($metric->id, $code, $scope, '1', $date);
+            $record = clone $recordCommon;
+            $record->system = 1;
+            $uniqueKey = $this->getUniqueKeyByRecord($record);
 
             $records[$uniqueKey] = $record;
         }
@@ -241,7 +245,9 @@ class metricZen extends metric
             $scopeList = $this->metric->getPairsByScope($scope);
             foreach($scopeList as $key => $value)
             {
-                list($uniqueKey, $record) = $this->buildMetricRecordCommonFields($metric->id, $code, $scope, $key, $date);
+                $record = clone $recordCommon;
+                $record->$scope = $key;
+                $uniqueKey = $this->getUniqueKeyByRecord($record);
 
                 $records[$uniqueKey] = $record;
             }
@@ -262,22 +268,17 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function buildMetricRecordCommonFields($metricID, $code, $scope, $scopeValue, $date)
+    protected function buildMetricRecordCommonFields($metricID, $code, $date, $dateValues)
     {
-        $dateType   = $this->metric->getDateTypeByCode($code);
-        $dateValues = $this->metric->generateDateValues($dateType, $date);
-
         $record = new stdclass();
-        $record->$scope     = $scopeValue;
         $record->value      = 0;
         $record->metricID   = $metricID;
         $record->metricCode = $code;
         $record->date       = $date;
 
         $record = (object)array_merge((array)$record, $dateValues);
-        $uniqueKey = $this->getUniqueKeyByRecord($record);
 
-        return array($uniqueKey, $record);
+        return $record;
     }
 
     /**
