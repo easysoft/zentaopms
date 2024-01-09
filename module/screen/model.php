@@ -371,9 +371,11 @@ class screenModel extends model
         $component->chartConfig->filters     = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
         $component->chartConfig->scope       = $metric->scope;
 
-        $component->option->chartOption = $component->chartConfig->chartOption;
-        $component->option->tableOption = $component->chartConfig->tableOption;
-        $component->option->card        = $component->chartConfig->card;
+        $component->option->chartOption    = $component->chartConfig->chartOption;
+        $component->option->tableOption    = $component->chartConfig->tableOption;
+        $component->option->card           = $component->chartConfig->card;
+        $component->option->isDateMetric   = $isDateMetric;
+        $component->option->isObjectMetric = $isObjectMetric;
 
         return $component;
     }
