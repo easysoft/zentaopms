@@ -18,6 +18,7 @@ namespace zin;
   <div class="doc-list table-row w-full">
     <?php $rank = 1;?>
     <?php foreach($docList as $doc):?>
+    <?php if(!$doc->views) continue;?>
     <div class='doc-title'>
       <span class="pri-<?php echo $rank;?> label-pri label-rank label-rank-<?php echo $rank;?>"><?php echo $rank;?></span>
       <?php
