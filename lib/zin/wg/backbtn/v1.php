@@ -65,7 +65,9 @@ class backBtn extends btn
             'serverroom'     => 'serverroom-browse',
             'project'        => 'project-browse,program-browse,program-project',
             'product'        => 'product-all,program-productview,program-product',
-            'gitlab'         => 'space-browse,gitlab-browseproject'
+            'gitlab'         => 'space-browse,gitlab-browseproject',
+            'zanode'         => 'zanode-browse,zanode-view',
+            'zahost'         => 'zahost-browse,zahost-view',
         );
 
         $props = parent::getProps();
