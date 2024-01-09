@@ -2,7 +2,7 @@
 global $app, $lang;
 $app->loadLang('testtask');
 
-$config->testcase->menu       = array(array('confirmStoryChange'), array('review', 'runCase', 'runResult', 'edit', 'createBug', 'create', 'showScript'));
+$config->testcase->menu       = array(array('confirmStoryChange'), array('review', 'runCase|ztfRun', 'runResult', 'edit', 'createBug', 'create', 'showScript'));
 $config->testcase->actionList = array();
 $config->testcase->actionList['confirmStoryChange']['icon']      = 'ok';
 $config->testcase->actionList['confirmStoryChange']['text']      = $lang->confirm;
@@ -10,12 +10,20 @@ $config->testcase->actionList['confirmStoryChange']['hint']      = $lang->confir
 $config->testcase->actionList['confirmStoryChange']['url']       = array('module'  => 'testcase', 'method' => 'confirmStoryChange', 'params' => 'caseID={caseID}');
 $config->testcase->actionList['confirmStoryChange']['className'] = 'ajax-submit';
 
-$config->testcase->actionList['runCase']['icon']        = 'play';
-$config->testcase->actionList['runCase']['text']        = $lang->testtask->runCase;
-$config->testcase->actionList['runCase']['hint']        = $lang->testtask->runCase;
-$config->testcase->actionList['runCase']['url']         = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={caseID}&version={version}');
-$config->testcase->actionList['runCase']['data-toggle'] = 'modal';
-$config->testcase->actionList['runCase']['data-size']   = 'lg';
+$config->testcase->actionList['runCase']['icon']         = 'play';
+$config->testcase->actionList['runCase']['text']         = $lang->testtask->runCase;
+$config->testcase->actionList['runCase']['hint']         = $lang->testtask->runCase;
+$config->testcase->actionList['runCase']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={caseID}&version={version}');
+$config->testcase->actionList['runCase']['notLoadModel'] = true;
+$config->testcase->actionList['runCase']['data-toggle']  = 'modal';
+$config->testcase->actionList['runCase']['data-size']    = 'lg';
+
+$config->testcase->actionList['ztfRun']['icon']         = 'play';
+$config->testcase->actionList['ztfRun']['text']         = $lang->testtask->runCase;
+$config->testcase->actionList['ztfRun']['hint']         = $lang->testtask->runCase;
+$config->testcase->actionList['ztfRun']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={caseID}&version={version}');
+$config->testcase->actionList['ztfRun']['notLoadModel'] = true;
+$config->testcase->actionList['ztfRun']['className']    = 'ajax-submit';
 
 $config->testcase->actionList['runResult']['icon']        = 'list-alt';
 $config->testcase->actionList['runResult']['text']        = $lang->testtask->results;

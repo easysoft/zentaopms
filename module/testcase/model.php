@@ -1133,6 +1133,8 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
+        if($action == 'runcase')            return $case->auto == 'no';
+        if($action == 'ztfrun')             return $case->auto == 'auto';
         if($action == 'confirmchange')      return isset($case->caseStatus) && isset($case->caseVersion) && $case->caseStatus != 'wait' && $case->version < $case->caseVersion;
         if($action == 'confirmstorychange') return !empty($case->needconfirm) || (isset($case->browseType) && $case->browseType == 'needconfirm');
         if($action == 'createbug')          return isset($case->caseFails) && $case->caseFails > 0;
