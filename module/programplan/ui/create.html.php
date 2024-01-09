@@ -135,6 +135,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
             $field['hidden'] = $executionType == 'stage';
             $field['items']  = $lang->execution->typeList;
         }
+        if($name == 'milestone') $field['width'] = '100px';
 
         $items[] = $field;
     }
