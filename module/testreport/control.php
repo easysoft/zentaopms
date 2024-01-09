@@ -199,6 +199,7 @@ class testreport extends control
         if($_POST)
         {
             $report  = $this->testreportZen->prepareTestreportForEdit($reportID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $changes = $this->testreport->update($report, $oldReport);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
