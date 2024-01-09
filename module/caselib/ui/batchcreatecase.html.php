@@ -39,7 +39,7 @@ $items[] = array
     'label'    => $lang->testcase->type,
     'control'  => 'picker',
     'items'    => $lang->testcase->typeList,
-    'value'    => 1,
+    'value'    => 'feature',
     'width'    => '160px',
     'required' => true,
     'ditto'    => true
@@ -79,7 +79,7 @@ $items[] = array
     'control'  => 'priPicker',
     'items'    => $priList,
     'value'    => 3,
-    'width'    => '90px',
+    'width'    => '100px',
     'required' => strpos($config->testcase->create->requiredFields, 'pri') !== false,
     'ditto'    => true
 );
