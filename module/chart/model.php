@@ -509,7 +509,7 @@ class chartModel extends model
                     if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
-            case 'string':
+            default:
                 if($field and $sql)
                 {
                     $cols = $this->dbh->query($sql)->fetchAll();
