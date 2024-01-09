@@ -714,8 +714,7 @@ $('#branch' + branchID).closest('li').addClass('active');
 $(function()
 {
     // Update table summary text.
-    <?php $storyCommon = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;?>
-    var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
+    var checkedSummary = '<?php echo $storyType == 'requirement' ? $lang->product->checkedURSummary : $lang->product->checkedSRSummary;?>';
     $('#productStoryForm').table(
     {
         statisticCreator: function(table)

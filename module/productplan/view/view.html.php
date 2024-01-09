@@ -22,7 +22,7 @@
 <?php js::set('storyRecTotal', $storyPager->recTotal);?>
 <?php js::set('storySummary', $summary);?>
 <?php js::set('storyCommon', $lang->SRCommon);?>
-<?php js::set('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));?>
+<?php js::set('checkedSummary', $lang->product->checkedSRSummary);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->product");?>

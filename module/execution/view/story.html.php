@@ -462,7 +462,6 @@
     </div>
   </div>
 </div>
-<?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('orderBy', $orderBy)?>
 <script>
@@ -473,7 +472,7 @@ $(function()
 
     /* Update table summary text. */
     <?php $storyCommon = $lang->SRCommon;?>
-    var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
+    var checkedSummary = '<?php echo $lang->product->checkedSRSummary?>';
     $('#executionStoryForm').table(
     {
         statisticCreator: function(table)

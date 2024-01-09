@@ -28,7 +28,7 @@ jsVar('releaseID', $release->id);
 jsVar('summary', $summary);
 jsVar('storyCases', $storyCases);
 jsVar('confirmunlinkstory', $lang->release->confirmUnlinkStory);
-jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));
+jsVar('checkedSummary', $lang->product->checkedSRSummary);
 jsVar('unlinkstoryurl', helper::createLink($releaseModule, 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
 $storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
 

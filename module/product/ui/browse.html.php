@@ -303,7 +303,7 @@ jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
 jsVar('showBranch',     $showBranch);
 jsVar('storyType',      $storyType);
-jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $storyType == 'story' ? $lang->product->checkedSRSummary : $lang->product->checkedURSummary));
+jsVar('checkedSummary', $storyType == 'story' ? $lang->product->checkedSRSummary : $lang->product->checkedURSummary);
 
 if($isProjectStory and $storyType == 'requirement')
 {
