@@ -758,8 +758,8 @@ class zanodemodel extends model
         $action = strtolower($action);
         if(isset($node->from) && $node->from == 'snapshot')
         {
-            if(empty($node->isDefault) && $action == 'editsnapshot') return false;
-            if(empty($node->isDefault) && $action == 'deletesnapshot') return false;
+            if(!empty($node->isDefault) && $action == 'editsnapshot') return false;
+            if(!empty($node->isDefault) && $action == 'deletesnapshot') return false;
         }
 
         if($action == 'resume') return $node->status == 'suspend' && $node->hostType != 'physics';
