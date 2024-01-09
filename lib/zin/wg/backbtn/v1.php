@@ -77,12 +77,6 @@ class backBtn extends btn
         elseif(isset($backs[$app->rawModule]))
         {
             $props['data-back'] = $backs[$app->rawModule];
-
-            if(!$this->prop('url'))
-            {
-                $backLinks = explode(',', $backs[$app->rawModule]);
-                $props['data-url'] = $backLinks[0];
-            }
         }
         else
         {
