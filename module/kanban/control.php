@@ -1350,7 +1350,7 @@ class kanban extends control
         $this->kanban->restoreCard($cardID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->send(array('result' => 'success', 'load' => true));
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**
