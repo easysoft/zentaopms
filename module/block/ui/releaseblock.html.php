@@ -20,6 +20,8 @@ if(!$longBlock)
     unset($config->block->release->dtable->fieldList['buildName']);
 }
 
+$this->config->block->release->dtable->fieldList['build']['map'] = $builds;
+
 blockPanel
 (
     setClass('list-block'),

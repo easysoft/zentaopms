@@ -658,9 +658,8 @@ class blockZen extends block
 
         $type = $block->params->type;
         $this->app->loadLang('release');
-        $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
+        $this->view->releases = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
             ->beginIF(strpos($type, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
@@ -669,6 +668,7 @@ class blockZen extends block
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
             ->fetchAll();
+        $this->view->builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('deleted')->eq(0)->fetchPairs();
     }
 
     protected function printRoadmapBlock(object $block)
@@ -2987,14 +2987,14 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->app->loadLang('release');
-        $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
+        $this->view->releases = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
             ->fetchAll();
+        $this->view->builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchPairs();
     }
 
     /**
