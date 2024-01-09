@@ -337,56 +337,56 @@ $config->story->taskTable->fieldList['id']['name']     = 'id';
 $config->story->taskTable->fieldList['id']['title']    = $lang->idAB;
 $config->story->taskTable->fieldList['id']['fixed']    = 'left';
 $config->story->taskTable->fieldList['id']['type']     = 'checkID';
-$config->story->taskTable->fieldList['id']['sortType'] = true;
+$config->story->taskTable->fieldList['id']['sortType'] = false;
 $config->story->taskTable->fieldList['id']['group']    = 1;
 
 $config->story->taskTable->fieldList['name']['name']     = 'name';
 $config->story->taskTable->fieldList['name']['title']    = $lang->task->name;
 $config->story->taskTable->fieldList['name']['type']     = 'text';
-$config->story->taskTable->fieldList['name']['sortType'] = true;
+$config->story->taskTable->fieldList['name']['sortType'] = false;
 $config->story->taskTable->fieldList['name']['group']    = 2;
 
 $config->story->taskTable->fieldList['pri']['name']     = 'pri';
 $config->story->taskTable->fieldList['pri']['title']    = $lang->priAB;
 $config->story->taskTable->fieldList['pri']['type']     = 'pri';
 $config->story->taskTable->fieldList['pri']['group']    = 3;
-$config->story->taskTable->fieldList['pri']['sortType'] = true;
+$config->story->taskTable->fieldList['pri']['sortType'] = false;
 
 $config->story->taskTable->fieldList['status']['name']      = 'status';
 $config->story->taskTable->fieldList['status']['title']     = $lang->statusAB;
 $config->story->taskTable->fieldList['status']['type']      = 'status';
 $config->story->taskTable->fieldList['status']['statusMap'] = $lang->task->statusList;
 $config->story->taskTable->fieldList['status']['group']     = 3;
-$config->story->taskTable->fieldList['status']['sortType']  = true;
+$config->story->taskTable->fieldList['status']['sortType']  = false;
 
 $config->story->taskTable->fieldList['assignedTo']['name']     = 'assignedTo';
 $config->story->taskTable->fieldList['assignedTo']['title']    = $lang->task->assignedToAB;
 $config->story->taskTable->fieldList['assignedTo']['type']     = 'user';
-$config->story->taskTable->fieldList['assignedTo']['sortType'] = true;
+$config->story->taskTable->fieldList['assignedTo']['sortType'] = false;
 $config->story->taskTable->fieldList['assignedTo']['group']    = 3;
 
 $config->story->taskTable->fieldList['estimate']['name']     = 'estimate';
 $config->story->taskTable->fieldList['estimate']['title']    = $lang->task->estimateAB;
 $config->story->taskTable->fieldList['estimate']['type']     = 'number';
-$config->story->taskTable->fieldList['estimate']['sortType'] = true;
+$config->story->taskTable->fieldList['estimate']['sortType'] = false;
 $config->story->taskTable->fieldList['estimate']['group']    = 4;
 
 $config->story->taskTable->fieldList['consumed']['name']     = 'consumed';
 $config->story->taskTable->fieldList['consumed']['title']    = $lang->task->consumedAB;
 $config->story->taskTable->fieldList['consumed']['type']     = 'number';
-$config->story->taskTable->fieldList['consumed']['sortType'] = true;
+$config->story->taskTable->fieldList['consumed']['sortType'] = false;
 $config->story->taskTable->fieldList['consumed']['group']    = 4;
 
 $config->story->taskTable->fieldList['left']['name']     = 'left';
 $config->story->taskTable->fieldList['left']['title']    = $lang->task->leftAB;
 $config->story->taskTable->fieldList['left']['type']     = 'number';
-$config->story->taskTable->fieldList['left']['sortType'] = true;
+$config->story->taskTable->fieldList['left']['sortType'] = false;
 $config->story->taskTable->fieldList['left']['group']    = 4;
 
 $config->story->taskTable->fieldList['progress']['name']     = 'progress';
 $config->story->taskTable->fieldList['progress']['title']    = $lang->task->progress;
 $config->story->taskTable->fieldList['progress']['type']     = 'progress';
-$config->story->taskTable->fieldList['progress']['sortType'] = true;
+$config->story->taskTable->fieldList['progress']['sortType'] = false;
 $config->story->taskTable->fieldList['progress']['group']    = 5;
 
 $app->loadLang('bug');
