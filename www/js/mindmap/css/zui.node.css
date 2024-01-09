@@ -1,0 +1,110 @@
+.mindmap-container
+{
+    border: none !important;
+}
+
+.mindmap-node
+{
+    display: flex;
+    align-items: center;
+}
+
+.pri-level,.testcase-pri-root a
+{
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align:center;
+    line-height:16px;
+    display: block;
+}
+
+.pri-1
+{
+    color: #d50000;
+    border-color: #d50000;
+}
+
+.pri-2
+{
+    color: #ff9800;
+    border-color: #ff9800;
+}
+
+.pri-3
+{
+    color: #2098ee;
+    border-color: #2098ee;
+}
+
+.pri-4
+{
+    color: #009688;
+    border-color: #009688;
+}
+
+.pri-empty
+{
+    background-color: lightgray;
+}
+
+.testcase-pri-root a
+{
+    margin: 8px;
+}
+
+.testcase-pri-root
+{
+    display: flex;
+    position: absolute;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 20;
+}
+
+.effect
+{
+    z-index: 15;
+    box-shadow:0px 1px 4px rgba(0,0,0,0.8),0px 0px 40px rgba(0,0,0,0.1) inset;
+    background-color: white;
+}
+
+.effect a
+{
+    width: 24px;
+    height: 24px;
+    line-height: 20px;
+}
+
+.effect:before,.effect:after
+{
+    content:"";
+    border-radius:100px/10px;
+    box-shadow:0 0px 20px rgba(0,0,0,0.8);
+}
+
+.scene-indicator
+{
+    margin-left: 5px;
+    color: lightgray;
+}
+
+.scene-indicator-yes
+{
+    color: darkgreen;
+}
+
+.suffix
+{
+    color: darkred;
+    display: none;
+}
+
+#productName
+{
+    height: 32px;
+    width: 100%;
+    padding-left: 10px;
+}
