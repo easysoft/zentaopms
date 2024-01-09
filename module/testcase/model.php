@@ -2056,7 +2056,7 @@ class testcaseModel extends model
 
         $sceneList   = array_combine(array_map(function($scene){return $scene['tmpId'];}, $scenes), array_map(function($scene){return (array)$scene;}, $scenes));
         $sceneIDList = array();
-        foreach($sceneList as $key => $scene)
+        foreach($sceneList as $key => &$scene)
         {
             $result = $this->testcaseTao->saveScene($scene, $sceneList);
             if($result['result'] == 'fail')
@@ -2064,6 +2064,7 @@ class testcaseModel extends model
                 $this->dao->rollBack();
                 return $result;
             }
+            $scene['id']             = $result['sceneID'];
             $sceneIDList[$key]['id'] = $result['sceneID'];
         }
 
