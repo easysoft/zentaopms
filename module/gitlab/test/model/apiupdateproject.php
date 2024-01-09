@@ -33,7 +33,7 @@ $gitlab->apiCreateProject($gitlabID, $project);
 $gitlabProjects = $gitlab->apiGetProjects($gitlabID);
 foreach($gitlabProjects as $gitlabProject)
 {
-    if($gitlabProject->path == 'unit_test_project17')
+    if($gitlabProject->name == 'unitTestProject17')
     {
         $projectID = $gitlabProject->id;
         break;
