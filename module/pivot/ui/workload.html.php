@@ -36,17 +36,13 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
             ),
             inputGroup
             (
-                setClass('w-1/3'),
+                setClass('w-1/2'),
                 $lang->pivot->beginAndEnd,
                 datePicker(set(array('name' => 'begin', 'value' => $begin))),
                 $lang->pivot->to,
-                datePicker(set(array('name' => 'end', 'value' => $end)))
-            ),
-            inputGroup
-            (
-                setClass('w-1/6'),
+                datePicker(set(array('name' => 'end', 'value' => $end))),
                 $lang->pivot->diffDays,
-                input(set(array('name' => 'days', 'value' => $days, 'class' => 'text-right')))
+                input(set(array('name' => 'days', 'value' => $days, 'class' => 'text-right readonly w-1/6')))
             ),
             div
             (
