@@ -14,6 +14,7 @@ formPanel
 (
     set::title($lang->release->export),
     set::ajax(array('closeModal' => 'onlySuccess')),
+    set::target('_self'),
     formGroup
     (
         set::label($lang->release->fileName),
