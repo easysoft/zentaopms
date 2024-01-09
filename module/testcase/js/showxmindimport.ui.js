@@ -201,8 +201,9 @@ ztmindmap.SceneProperyManager.prototype.init = function()
 {
     var that = this;
 
-    this.$modal = $('#moduleSelector');
-    this.$modal.find("#sceneProperySave").on("click",function(){ that.save();});
+    this.$modal = new zui.ModalBase('#moduleSelector', {show: false});
+    this.$modal.$element.find("#sceneProperySave").on("click",function(){ that.save();});
+    this.$modal.$element.find("#moduleSelectorCancel").on("click",function(){ that.$modal.hide();});
 };
 
 ztmindmap.SceneProperyManager.prototype.show = function($node,data)
@@ -213,14 +214,13 @@ ztmindmap.SceneProperyManager.prototype.show = function($node,data)
     if(data.$.type != "scene") return;
 
     var initScene = data.$.sceneID || 0;
-    this.$modal.find("#module").val(initScene);
-    this.$modal.find("#module").trigger('chosen:updated');
-    this.$modal.modal("show");
+    this.$modal.$element.find(".picker").zui('picker').$.setValue(initScene);
+    this.$modal.show();
 };
 
 ztmindmap.SceneProperyManager.prototype.save = function()
 {
-    var moduleID = this.$modal.find("#module").val();
+    var moduleID = this.$modal.$element.find("[name='module']").val();
 
     if(moduleID == undefined || moduleID == 0)
     {
@@ -228,7 +228,7 @@ ztmindmap.SceneProperyManager.prototype.save = function()
         return;
     }
 
-    var moduleName = this.$modal.find(".chosen-single>span").html();
+    var moduleName = this.$modal.$element.find(".picker-single-selection").html();
 
     this.data.$.moduleID = moduleID;
     this.data.tooltip = moduleName;
@@ -237,7 +237,7 @@ ztmindmap.SceneProperyManager.prototype.save = function()
     this.mgr.wraper.autoSetSceneModuleAfter(this.$node,this.data);
     this.mgr.refreshDisplay();
 
-    this.$modal.modal("hide");
+    this.$modal.hide();
 };
 
 

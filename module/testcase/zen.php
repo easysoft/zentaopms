@@ -437,7 +437,7 @@ class testcaseZen extends testcase
         $scenes = array();
         $sort   = common::appendOrder($orderBy);
         if(strpos($sort, 'caseID') !== false) $sort = str_replace('caseID', 'id', $sort);
-        if($browseType == 'all' || $browseType == 'onlyscene')
+        if($browseType == 'all' || $browseType == 'onlyscene' || $browseType == 'bymodule')
         {
             $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
 

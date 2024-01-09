@@ -50,4 +50,61 @@ panel
         backBtn(setClass('btn-wide ml-4'), $lang->goback)
     )
 );
+
+modal
+(
+    setID('moduleSelector'),
+    set::modalProps(array('title' => $lang->testcase->moduleSelector)),
+    formPanel
+    (
+        set::url('###'),
+        set::actions(array()),
+        formRow
+        (
+
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->testcase->product),
+                input
+                (
+                    setClass('form-control disabled'),
+                    set::name('productName'),
+                    set::value($product->name),
+                )
+            ),
+
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->testcase->module),
+                modulePicker
+                (
+                    set::items($moduleOptionMenu),
+                    set::manageLink(createLink('tree', 'browse', "rootID={$productID}&view=case&currentModuleID=0&branch={$branch}"))
+                )
+            )
+        ),
+    ),
+    set::footerClass('flex'),
+    to::footer
+    (
+        div
+        (
+            setClass('w-full flex justify-end space-x-1.5'),
+            btn
+            (
+                setID('sceneProperySave'),
+                setClass('primary'),
+                $lang->save
+            ),
+            btn
+            (
+                setID('moduleSelectorCancel'),
+                $lang->cancel
+            )
+        )
+    )
+);
+
 render();

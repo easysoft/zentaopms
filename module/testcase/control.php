@@ -1805,6 +1805,7 @@ class testcase extends control
         $this->view->title            = $this->lang->testcase->xmindImport;
         $this->view->settings         = $this->testcase->getXmindConfig();
         $this->view->product          = $product;
+        $this->view->productID        = $productID;
         $this->view->branch           = $branch;
         $this->view->scenes           = $scenes;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? '0' : $branch);
