@@ -2035,7 +2035,7 @@ class docModel extends model
         $appendObject   = $objectID;
         if(in_array($type, array('project', 'product', 'execution')))
         {
-            $object = $this->dao->select('id,name,project,status,deleted')->from($this->config->objectTables[$type])->where('id')->eq($objectID)->fetch();
+            $object = $this->dao->select('id,name,status,deleted' . ($isExecution ? ',project' : ''))->from($this->config->objectTables[$type])->where('id')->eq($objectID)->fetch();
             $objectID = $isExecution ? (int)$object->project : $objectID;
             if(empty($object)) return helper::createLink($type, $type == 'project' && $this->config->vision != 'lite' ? 'createGuide' : 'create', $type == 'project' && $this->config->vision == 'lite' ? 'model=kanban' : '');
 
