@@ -2017,7 +2017,7 @@ class execution extends control
             if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            return $this->send(array('result' => 'success', 'load' => true));
+            return $this->send(array('result' => 'success', 'load' => $execution->type == 'kanban' ? $this->createLink('execution', 'all') : true));
         }
     }
 
