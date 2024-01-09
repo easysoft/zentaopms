@@ -2991,13 +2991,21 @@ class story extends control
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
         }
 
-        /* Unset product field when in single project.  */
+        $filterFields = array();
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
-            $filterFields = array(', product,', ', branch,');
+            $filterFields[] = ', product,';
+            $filterFields[] = ', branch,';
+
             if($project->model != 'scrum') $filterFields[] = ', plan,';
-            $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
+
+        if($storyType == 'requirement')
+        {
+            $filterFields[] = ', stage,';
+            $filterFields[] = ', plan,';
+        }
+        if(!empty($filterFields)) $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
