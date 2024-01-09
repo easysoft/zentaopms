@@ -1946,8 +1946,8 @@ class metricModel extends model
     public function getDateTypeByCode(string $code)
     {
         /* Get dateType form db first. */
-        $dateType = $this->getByCode($code, 'dateType');
-        if(!empty($dateType)) return $dateType;
+        $metric = $this->getByCode($code, 'dateType');
+        if(!empty($metric->dateType)) return $metric->dateType;
 
         /* Get dateType from config second. */
         if(isset($this->config->metric->dateType[$code])) return $this->config->metric->dateType[$code];
