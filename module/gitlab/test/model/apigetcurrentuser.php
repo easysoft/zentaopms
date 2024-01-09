@@ -8,7 +8,7 @@ title=测试 gitlabModel::apiGetCurrentUser();
 timeout=0
 cid=1
 
-- 使用空的数据获取用户信息 @return false
+- 使用空的数据获取用户信息 @0
 - 使用错误的host获取用户信息 @return null
 - 使用正确的host,错误的token获取用户信息属性message @401 Unauthorized
 - 通过host,token获取用户信息属性id @1
@@ -21,9 +21,7 @@ $gitlab = $tester->loadModel('gitlab');
 $host      = '';
 $token     = '';
 
-$result = $gitlab->apiGetCurrentUser($host, $token);
-if($result === false) $result = 'return false';
-r($result) && p() && e('return false'); //使用空的数据获取用户信息
+r($gitlab->apiGetCurrentUser($host, $token)) && p() && e('0'); //使用空的数据获取用户信息
 
 $host   = 'http://10.0.1.161:5108';
 $result = $gitlab->apiGetCurrentUser($host, $token);
