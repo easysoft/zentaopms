@@ -1187,8 +1187,10 @@ class productModel extends model
 
         $rateCount = 0;
         $allCount  = 0;
+        $SRTotal   = 0;
         foreach($stories as $story)
         {
+            if($storyType == 'requirement' && $story->type == 'story') $SRTotal += 1;
             if(!empty($story->type) && $story->type != $storyType) continue;
 
             $totalEstimate += $story->estimate;
@@ -1204,6 +1206,7 @@ class productModel extends model
             if(empty($story->children)) continue;
             foreach($story->children as $child)
             {
+                if($storyType == 'requirement' && $child->type == 'story') $SRTotal += 1;
                 if($child->type != $storyType) continue;
 
                 $allCount ++;
@@ -1218,11 +1221,8 @@ class productModel extends model
         $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
         $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
-        $storyCommon = $this->lang->SRCommon;
-        if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
-
-        $summary = $storyType == 'story' ? $this->lang->product->storySummary : $this->lang->product->requirementSummary;
-        return sprintf($summary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
+        if($storyType == 'story') return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
+        return sprintf($this->lang->product->requirementSummary, $allCount, $SRTotal, $totalEstimate);
     }
 
     /**

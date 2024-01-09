@@ -84,11 +84,12 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
 {
     if(checkedIdList.length == 0) return {html: pageSummary};
 
-    let total     = checkedIdList.length;
+    let total     = 0;
+    let SRTotal   = 0;
     let estimate  = 0;
     let rate      = '0%';
     let hasCase   = 0;
-    let rateCount = total;
+    let rateCount = checkedIdList.length;
 
     const rows  = element.layout.allRows;
     rows.forEach((row) => {
@@ -104,10 +105,13 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
             {
                 rateCount -= 1;
             }
+
+            if(storyType == story.type) total += 1;
+            if(storyType == 'requirement' && story.type == 'story') SRTotal += 1;
         }
     })
 
     if(rateCount) rate = Math.round(hasCase / rateCount * 10000 / 100) + '' + '%';
 
-    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate)};
+    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate).replace('%SRTotal%', SRTotal)};
 };
