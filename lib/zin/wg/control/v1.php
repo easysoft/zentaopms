@@ -77,7 +77,7 @@ class control extends wg
     protected function buildInputControl(): wg
     {
         $controlProps = array();
-        $allProps     = $this->props->skip(array('type', 'required', 'name'));
+        $allProps     = $this->props->skip(array('type'));
         $propsNames   = array_keys(inputControl::definedPropsList());
 
         foreach($propsNames as $propName)
