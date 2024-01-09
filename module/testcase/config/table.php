@@ -161,7 +161,7 @@ $config->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testcase->dtable->fieldList['actions']['type']     = 'actions';
 $config->testcase->dtable->fieldList['actions']['list']     = $config->testcase->actionList;
 $config->testcase->dtable->fieldList['actions']['menu']     = array();
-$config->testcase->dtable->fieldList['actions']['width']    = '140';
+$config->testcase->dtable->fieldList['actions']['width']    = '185';
 $config->testcase->dtable->fieldList['actions']['required'] = true;
 $config->testcase->dtable->fieldList['actions']['group']    = 7;
 
