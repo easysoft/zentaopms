@@ -84,11 +84,11 @@ if($zanode->hostType == 'physics')
                 ),
                 on::click('sshCopy')
             ) : null,
-            h::textarea
+            h::input
             (
-                setClass('hidden'),
+                set::type('hidden'),
                 setID('ssh-copy'),
-                $ssh
+                set::value($ssh)
             )
         )
     );
@@ -304,11 +304,11 @@ else
                 ),
                 on::click('pwdShow')
             ),
-            h::textarea
+            h::input
             (
                 setID('pwd-copy'),
-                setClass('hidden'),
-                $config->zanode->defaultPwd
+                set::type('hidden'),
+                set::value($config->zanode->defaultPwd)
             )
         )
     );

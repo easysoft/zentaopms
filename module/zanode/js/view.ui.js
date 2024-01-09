@@ -107,13 +107,19 @@ function checkServiceStatus(){
     return
 }
 
+function copyToClipboard(text) {
+   var tempInput = document.createElement("input");
+   document.body.appendChild(tempInput);
+   tempInput.value = text;
+   tempInput.select();
+   document.execCommand("copy");
+   document.body.removeChild(tempInput);
+}
+
 function sshCopy()
 {
-    var copyText = $('#ssh-copy');
-    copyText.removeClass('hidden');
-    document.getElementById('ssh-copy').select();
-    document.execCommand("Copy");
-    copyText.addClass('hidden');
+    copyToClipboard($('#ssh-copy').val());
+
     $('.btn-ssh-copy').tooltip({
         trigger: 'click',
         placement: 'bottom',
@@ -131,11 +137,8 @@ function sshCopy()
 
 function pwdCopy()
 {
-    var copyText = $('#pwd-copy');
-    copyText.show();
-    document.getElementById('pwd-copy').select();
-    document.execCommand("Copy");
-    copyText.hide();
+    copyToClipboard($('#pwd-copy').val());
+
     $('.btn-pwd-copy').tooltip({
         trigger: 'click',
         placement: 'bottom',
