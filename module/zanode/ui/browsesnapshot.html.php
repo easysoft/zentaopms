@@ -15,7 +15,9 @@ foreach($snapshotList as $snapshot)
     $snapshot->nodeID    = $nodeID;
     $snapshot->isDefault = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
     $snapshot->createdBy = $snapshot->isDefault ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy);
+
     if($snapshot->isDefault) $snapshot->name = $lang->zanode->snapshot->defaultSnapName;
+    if($snapshot->localName) $snapshot->name = $snapshot->localName;
 }
 
 $snapshotList = initTableData($snapshotList, $config->zanode->snapshotDtable->fieldList, $this->zanode);
