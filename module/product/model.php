@@ -575,17 +575,17 @@ class productModel extends model
         foreach($productList as $product)
         {
             if(!$this->app->user->admin and !$this->checkPriv($product->id)) continue;
-            if($product->status == 'normal' and $product->PO == $this->app->user->account)
+            if($product->status == 'closed')
+            {
+                $closedProducts[$product->id] = $product;
+            }
+            elseif(($this->config->vision == 'or' or $product->status == 'normal') and $product->PO == $this->app->user->account)
             {
                 $mineProducts[$product->id] = $product;
             }
-            elseif($product->status == 'normal' and $product->PO != $this->app->user->account)
+            elseif(($this->config->vision == 'or' or $product->status == 'normal') and $product->PO != $this->app->user->account)
             {
                 $otherProducts[$product->id] = $product;
-            }
-            elseif($product->status == 'closed')
-            {
-                $closedProducts[$product->id] = $product;
             }
         }
         $products = $mineProducts + $otherProducts + $closedProducts;
