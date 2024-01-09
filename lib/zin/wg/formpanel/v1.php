@@ -175,9 +175,12 @@ class formPanel extends panel
 
         if($this->prop('batch'))
         {
+            $props = formBatch::definedPropsList();
+            unset($props['id']);
+
             return new formBatch
             (
-                set($this->props->pick(array_keys(formBatch::definedPropsList()))),
+                set($this->props->pick(array_keys($props))),
                 $this->children(),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
