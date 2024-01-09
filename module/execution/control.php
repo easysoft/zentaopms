@@ -1710,6 +1710,7 @@ class execution extends control
 
         $this->executionZen->assignTaskKanbanVars($execution);
 
+        if($this->app->tab == 'project') $this->view->projectID = $executionID;
         $this->view->storyOrder   = $orderBy;
         $this->view->orderBy      = 'id_asc';
         $this->view->executionID  = $executionID;
