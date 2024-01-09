@@ -345,13 +345,13 @@ class screenModel extends model
      */
     public function genMetricComponent($metric, $component = null, $filterParams = array())
     {
-        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
         $this->loadModel('metric');
+        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
         $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
 
-        $resultHeader  = $this->metric->getViewTableHeader($metric);
-        $resultData    = $this->metric->getViewTableData($metric, $result);
+        $resultHeader   = $this->metric->getViewTableHeader($metric);
+        $resultData     = $this->metric->getViewTableData($metric, $result);
         $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
         $isDateMetric   = $this->metric->isDateMetric($resultHeader);
 
@@ -361,6 +361,7 @@ class screenModel extends model
         $component->chartConfig->tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
         $component->chartConfig->card        = $this->getMetricCardOption($metric, $resultData);
         $component->chartConfig->filters     = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
+        $component->chartConfig->scope       = $metric->scope;
 
         $component->option->chartOption = $component->chartConfig->chartOption;
         $component->option->tableOption = $component->chartConfig->tableOption;
