@@ -77,6 +77,7 @@ foreach($results as $object)
 form
 (
     setClass('w-1/2'),
+    setStyle(array('margin' => '0 auto')),
     set::actions(false),
     inputGroup
     (
