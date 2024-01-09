@@ -68,6 +68,7 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
 
 window.footerSummary = function(element, checkedIdList)
 {
+    if(typeof(checkedIdList) == 'undefined') return {};
     if(!checkedIdList.length) return {html: element.options.customData.pageSummary, className: 'text-dark'};
 
     const dtable      = zui.DTable.query($('#projectviews'));

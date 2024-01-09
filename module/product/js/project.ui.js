@@ -17,32 +17,28 @@ window.renderCustomCell = function(result, {col, row})
 window.link2Project = function(e)
 {
     let $link2Project    = $(e.target).closest('#link2Project');
-    let selectProjectID  = $link2Project.find('#project').val();
+    let selectProjectID  = $link2Project.find('[name="project"]').val();
     let currentProductID = $link2Project.find('#product').val();
     let currentBranchID  = $link2Project.find('#branch').val();
-  console.log('')
 
     $.get($.createLink('project', 'ajaxGetLinkedProducts', 'projectID=' + selectProjectID), function(product)
     {
-        var products = [];
-        var branches = [];
+        let   products = [];
+        let   branches = [];
+        const formData = new FormData();
 
         var linkedProducts = JSON.parse(product);
         for(var productID in linkedProducts)
         {
             for(var branchID in linkedProducts[productID])
             {
-                products.push(productID);
-                branches.push(branchID);
+                formData.append('products[]', productID);
+                formData.append('branch[' + productID + '][]', branchID);
             }
         }
 
-        products.push(currentProductID);
-        branches.push(currentBranchID);
-
-        const formData = new FormData();
-        formData.append('products', products);
-        formData.append('branch', branches);
+        formData.append('products[]', currentProductID);
+        formData.append('branch[' + currentProductID + '][]', currentBranchID);
 
         $.ajaxSubmit({
             url:  $.createLink('project', 'manageProducts', 'projectID=' + selectProjectID),

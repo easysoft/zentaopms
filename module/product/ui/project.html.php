@@ -72,12 +72,7 @@ modal
         btn(setClass('primary'), set::id('saveButton'), $lang->save),
         btn(setClass('default'), set('data-dismiss', 'modal'), $lang->cancel)
     ),
-    inputGroup
-    (
-        setClass('pt-2'),
-        $lang->product->link2Project,
-        select(set::name('project'), set::items($projects))
-    ),
+    picker(setClass('pt-2'), set::name('project'), set::items($projects)),
     input(set::type('hidden'), set::name('product'), set::value($product->id)),
     input(set::type('hidden'), set::name('branch'), set::value($branchID))
 );
