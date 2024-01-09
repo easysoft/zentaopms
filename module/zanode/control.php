@@ -319,7 +319,7 @@ class zanode extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('zanode', $snapshot->host, 'editSnapshot', '', $snapshot->localName ? $snapshot->localName : $snapshot->name);
-            return $this->sendSuccess(array('load' => true));
+            return $this->sendSuccess(array('load' => inLink('view', "id=$snapshot->host")));
         }
 
         $this->view->snapshot = $snapshot;
