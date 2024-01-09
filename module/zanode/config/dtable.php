@@ -97,6 +97,7 @@ $config->zanode->dtable->fieldList['actions']['list']['destroy']['icon']        
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']         = $lang->zanode->destroy;
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['url']          = array('module' => 'zanode', 'method' => 'destroy', 'params' => 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['innerClass']   = 'ajax-submit';
+$config->zanode->dtable->fieldList['actions']['list']['destroy']['className']    = 'ajax-submit';
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['data-confirm'] = $lang->zanode->confirmDelete;
 
 $config->zanode->snapshotDtable = new stdclass();
