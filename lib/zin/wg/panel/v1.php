@@ -7,20 +7,21 @@ class panel extends wg
     protected static array $defineProps = array(
         'id?: string',
         'class?: string="rounded ring-0 bg-canvas"', // 类名。
-        'size?: "sm"|"lg"',         // 额外尺寸。
-        'title?: string',           // 标题。
-        'shadow?: bool=true',       // 阴影效果。
-        'titleClass?: string',      // 标题类名。
-        'titleProps?: array',       // 标题属性。
-        'headingClass?: string',    // 标题栏类名。
-        'headingProps?: array',     // 标题栏属性。
-        'headingActions?: array[]', // 标题栏操作按钮。
-        'bodyClass?: string',       // 主体类名。
-        'bodyProps?: array',        // 主体属性。
-        'footerActions?: array[]',  // 底部操作按钮。
-        'footerClass?: string',     // 底部类名。
-        'footerProps?: array',      // 底部属性。
-        'container?: bool'          // 是否使用 Container 层。
+        'size?: "sm"|"lg"',             // 额外尺寸。
+        'title?: string',               // 标题。
+        'shadow?: bool=true',           // 阴影效果。
+        'titleClass?: string',          // 标题类名。
+        'titleProps?: array',           // 标题属性。
+        'headingClass?: string',        // 标题栏类名。
+        'headingProps?: array',         // 标题栏属性。
+        'headingActions?: array[]',     // 标题栏操作按钮。
+        'headingActionsClass?: string', // 头部操作按钮栏类名。
+        'bodyClass?: string',           // 主体类名。
+        'bodyProps?: array',            // 主体属性。
+        'footerActions?: array[]',      // 底部操作按钮。
+        'footerClass?: string',         // 底部类名。
+        'footerProps?: array',          // 底部属性。
+        'container?: bool'              // 是否使用 Container 层。
     );
 
     protected static array $defineBlocks = array(
@@ -32,14 +33,15 @@ class panel extends wg
 
     protected function buildHeadingActions(): ?wg
     {
-        $actionsBlock = $this->block('headingActions');
-        $actions      = $this->prop('headingActions');
+        $actionsBlock        = $this->block('headingActions');
+        $actions             = $this->prop('headingActions');
+        $headingActionsClass = $this->prop('headingActionsClass');
 
         if(empty($actions) && empty($actionsBlock)) return null;
 
         return div
         (
-            setClass('panel-actions'),
+            setClass('panel-actions', $headingActionsClass),
             empty($actions) ? null : toolbar(set::items($actions)),
             $actionsBlock
         );
