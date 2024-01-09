@@ -9537,4 +9537,19 @@ class upgradeModel extends model
             ->andWhere('section')->eq('settings')
             ->exec();
     }
+
+    /**
+     * Update metric datetype.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateMetricDateType()
+    {
+        $this->loadModel('metric');
+        foreach($this->config->metric->dateType as $code => $dateType)
+        {
+            $this->dao->update(TABLE_METRIC)->set('dateType')->eq($dateType)->where('code')->eq($code)->exec();
+        }
+    }
 }
