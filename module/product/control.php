@@ -225,7 +225,7 @@ class product extends control
         /* If in project story and not chose product, get project story mdoules. */
         if($isProjectStory and empty($productID))
         {
-            $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink), $storyType);
         }
         else
         {

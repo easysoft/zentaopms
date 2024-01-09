@@ -829,10 +829,11 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $startModule
      * @param  string $userFunc
+     * @param  string $storyType
      * @access public
      * @return string
      */
-    public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc = '')
+    public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc = '', $storyType = 'story')
     {
         $this->app->loadLang('branch');
 
@@ -856,8 +857,8 @@ class treeModel extends model
         foreach($products as $id => $product)
         {
             $extra['productID']   = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all");
-            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType=story&orderBy=&type=byProduct&praram=$id");
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all&browseType=&param=0&storyType=$storyType");
+            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType=$storyType&orderBy=&type=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id' title=$product");
 

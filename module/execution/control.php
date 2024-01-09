@@ -952,7 +952,7 @@ class execution extends control
         }
         else
         {
-            $moduleTree = $this->tree->getProjectStoryTreeMenu($executionID, 0, array('treeModel', $createModuleLink));
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($executionID, 0, array('treeModel', $createModuleLink), $storyType);
         }
 
         $executionProductList  = $this->loadModel('product')->getProducts($executionID);
