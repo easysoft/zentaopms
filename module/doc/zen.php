@@ -702,7 +702,7 @@ class docZen extends doc
         $this->view->object            = $object;
         $this->view->objectType        = $objectType;
         $this->view->lib               = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs              = $this->doc->getLibsByObject($type, (int)$objectID);
+        $this->view->libs              = $libs;
         $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->actions           = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users             = $this->loadModel('user')->getPairs('noclosed,noletter');
