@@ -179,7 +179,7 @@ else
         $confirmStatusChange = span
             (
                 setClass('warning'),
-                $lang->testcase->changed,
+                $lang->story->changed,
                 common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")), setData('app', $app->tab), $lang->confirm) : ''
             );
     }
