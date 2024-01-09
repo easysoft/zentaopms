@@ -10,12 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if(!isInModal())
-{
-    set::zui(true);
-
-    h::importCss($app->getWebRoot() . 'js/xterm/xterm.css');
-}
+if(!isInModal()) set::zui(true);
 
 $appList = array();
 $components = json_decode($solution->components);
@@ -83,6 +78,7 @@ div
     div
     (
         set::id('mainContent'),
+        h::importCss($app->getWebRoot() . 'js/xterm/xterm.css'),
         set('data-loading', $lang->solution->notices->uninstallingSolution),
         formPanel
         (
@@ -104,4 +100,4 @@ div
     )
 );
 
-if(!helper::isAjaxRequest('modal')) render('pagebase');
+if(!isInModal()) render('pagebase');

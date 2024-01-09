@@ -34,7 +34,7 @@ div
         set::id('mainContent'),
         formPanel
         (
-            setID('solutionForm'),
+            set::formID('solutionForm'),
             setClass('bg-canvas m-auto mw-auto'),
             set::title($lang->install->solution->title),
             set::submitBtnText($lang->solution->install),

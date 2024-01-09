@@ -400,6 +400,11 @@ class cneModel extends model
      */
     public function getAppLogs(object $instance): ?object
     {
+        if(!isset($this->app->user->account))
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+        }
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
         $apiParams = new stdclass();

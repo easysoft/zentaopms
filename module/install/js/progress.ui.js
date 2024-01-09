@@ -115,7 +115,7 @@ window.cancelInstall = function()
         toggleLoading('#mainContent', true);
         $.ajaxSubmit({
             url: $.createLink('install', 'ajaxUninstall', 'id=' + solutionID),
-            onComplete: function(response)
+            onComplete: function()
             {
                 toggleLoading('#mainContent', false);
             }
@@ -125,13 +125,13 @@ window.cancelInstall = function()
 
 $(function()
 {
-    $.getLib(config.webRoot + 'js/xterm/xterm.js', {root: false}, function()
-    {
-        term = new Terminal({convertEol: true, rows: 20});
-        term.open(document.getElementById('terminal'));
-    });
-
     if(startInstall) $.get($.createLink('install', 'ajaxInstall', 'id=' + solutionID));
 
+    $.getLib(config.webRoot + 'js/xterm/xterm.js', {root: false}, function()
+    {
+        const term = new Terminal({convertEol: true, rows: 20});
+        term.open(document.getElementById('terminal'));
+
+    });
     setInterval(getInstallProgress, 4000);
 });

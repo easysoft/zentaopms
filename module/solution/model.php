@@ -166,7 +166,10 @@ class solutionModel extends model
         }
         $this->dao->update(TABLE_INSTANCE)->set('solution')->eq($solution->id)->where('id')->eq($instance->id)->exec();
 
-        $componentApp->status = 'installing';
+        foreach($components as &$app)
+        {
+            if($app->id == $componentApp->id) $app->status = 'installing';
+        }
         $this->dao->update(TABLE_SOLUTION)->set('components')->eq(json_encode($components))->where('id')->eq($solution->id)->exec();
 
         return !dao::isError();
