@@ -197,7 +197,8 @@ class screen extends control
 
             if($type == 'metric')
             {
-                $chartData = $this->screen->genMetricComponent($chart, $component, (array)$filterParams);
+                $metric = $this->loadModel('metric')->getByID($chartID);
+                $chartData = $this->screen->genMetricComponent($metric, $component, (array)$filterParams);
             }
             else
             {
