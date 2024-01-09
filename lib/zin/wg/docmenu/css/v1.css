@@ -3,11 +3,10 @@
 .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
 .module-menu .tree-item * {white-space: nowrap;}
 
-#docDropmenu {padding-bottom: 0.5rem;}
 #docDropmenu .primary {--tw-ring-color: var(--btn-border-color); background-color: var(--btn-bg); color: inherit; width: 100%;}
-#pick-docDropmenuMenu {width: 100%; border: solid 1px; border-radius: 4px; border-color: var(--color-primary-500); --skin-ghost-rgb: #FFF; justify-content: flex-start;}
-#pick-docDropmenuMenu > .icon.is-leading {width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--color-primary-500); display: flex; align-items: center; justify-content: center; transform: rotate(90deg); transition: .2s all; left: 1rem;}
-#pick-docDropmenuMenu > .text {flex: auto; display: flex; align-items: center; justify-content: flex-start; font-size: 16px; padding: 0 4px; padding-left: 2rem;}
+#pick-docDropmenuMenu {width: 100%; border: solid 1px; border-radius: 4px; border-color: var(--color-primary-500); --skin-ghost-rgb: #FFF; justify-content: flex-start; position: absolute; top: -44px;}
+#pick-docDropmenuMenu > .icon.is-leading {width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--color-primary-500); display: flex; align-items: center; justify-content: center; transform: rotate(90deg); transition: .2s all; left: 0.75rem;}
+#pick-docDropmenuMenu > .text {flex: auto; display: flex; align-items: center; justify-content: flex-start; font-size: 14px; padding: 0 4px; padding-left: 1.75rem;}
 #pick-docDropmenuMenu .is-caret {display: none;}
 
 .module-menu .tree .tree-item .item-content {overflow: clip;}

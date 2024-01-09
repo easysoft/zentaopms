@@ -445,7 +445,7 @@ class docMenu extends wg
         );
         return array
         (
-            $isInSidebar ? $header : null,
+            $isInSidebar && !$menuLink ? $header : null,
             div
             (
                 $menuLink ? dropmenu
