@@ -1479,16 +1479,14 @@ class metricModel extends model
      * @access public
      * @return string|false
      */
-    public function getMetricRecordType(array|bool $tableData): string|false
+    public function getMetricRecordType($code, $scope)
     {
-        if(!$tableData) return false;
-        $fields = array_column($tableData, 'name');
-
         $type = array();
-        if(in_array('scope', $fields)) $type[] = 'scope';
-        if(in_array('date', $fields)) $type[] = 'date';
+        $dateType = $this->getDateTypeByCode($code);
 
-        if(empty($type)) $type[] = 'system';
+        $type[] = $scope == 'system' ? 'system' : 'scope';
+        if($dateType != 'nodate') $type[] = 'date';
+
         return implode('-', $type);
     }
 

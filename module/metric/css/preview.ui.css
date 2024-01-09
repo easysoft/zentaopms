@@ -53,6 +53,8 @@ i.star {color: var(--color-warning-300);}
 .table-and-chart .table-side {flex-shrink: 1; max-width: 50%; border-style: solid; border-width: 1px 0px 1px 1px; border-color: var(--color-gray-300);}
 .table-and-chart .chart-side {flex-grow: 1; border: 1px solid var(--color-gray-300); padding: 20px;}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
+.table-and-chart.no-data {justify-content: center; align-items: center;}
+.table-and-chart.no-data span {color: var(--color-gray-400);}
 
 .icon-18 {font-size: 18px;}
 .primary-hover-500 {color: var(--color-gray-800)}

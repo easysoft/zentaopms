@@ -13,7 +13,7 @@ jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 
 div
 (
-    setClass("table-and-chart table-and-chart-{$viewType}"),
+    setClass("table-and-chart table-and-chart-{$viewType}" . ($groupData ? '' : ' no-data')),
     $groupData ? div
     (
         setClass('table-side'),
@@ -64,5 +64,6 @@ div
                 set::tooltip($echartOptions['tooltip'])
             )->size('100%', '100%')
         )
-    ) : null
+    ) : null,
+    $groupData ? null : span($lang->metric->noData, setClass('text-md'))
 );

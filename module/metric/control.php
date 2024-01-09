@@ -102,7 +102,8 @@ class metric extends control
         $this->view->dtablePager   = $pager;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($current->code, $current->scope);
+
         $this->display();
     }
 
@@ -301,7 +302,7 @@ class metric extends control
         $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
         $this->view->dtablePager   = $pager;
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($metric->code, $metric->scope);
 
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
@@ -331,7 +332,7 @@ class metric extends control
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($metric->code, $metric->scope);
 
         $this->view->viewType      = $viewType;
         $this->view->metric        = $metric;

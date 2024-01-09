@@ -386,7 +386,7 @@ $metricBoxs = div
     $fnGenerateQueryForm(),
     div
     (
-        setClass('table-and-chart table-and-chart-multiple'),
+        setClass('table-and-chart table-and-chart-multiple' . ($groupData ? '' : ' no-data')),
         $groupData ? div
         (
             setClass('table-side'),
@@ -436,7 +436,8 @@ $metricBoxs = div
                     set::tooltip($echartOptions['tooltip'])
                 )->size('100%', '100%')
             )
-        ) : null
+        ) : null,
+        $groupData ? null : span($lang->metric->noData, setClass('text-md'))
     )
 );
 

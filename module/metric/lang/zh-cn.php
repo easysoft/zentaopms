@@ -123,6 +123,7 @@ $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";
 $lang->metric->noCalc    = "暂未实现度量项PHP算法";
 $lang->metric->noSQL     = "暂无";
+$lang->metric->noData    = "暂时没有数据。";
 
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
