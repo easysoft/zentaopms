@@ -127,13 +127,13 @@ if($execution->type == 'kanban')
     );
 }
 
-
 /* ====== Define the page structure with zin widgets ====== */
 
 formBatchPanel
 (
     set::title($lang->task->batchCreate),
     set::pasteField('name'),
+    set::headingActionsClass('flex-auto'),
     formBatchItem
     (
         set::name('id'),
