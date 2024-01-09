@@ -262,6 +262,7 @@ $lang->testcase->noModule         = '<div>您现在还没有模块信息</div><d
 $lang->testcase->noCase           = '暂时没有用例。';
 $lang->testcase->importedCases    = 'ID为 %s 的用例在相同模块已经导入，已忽略。';
 $lang->testcase->importedFromLib  = '导入成功%s项：%s。';
+$lang->testcase->noStep           = '暂时没有步骤。';
 
 $lang->testcase->searchStories = "键入来搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '请选择库';

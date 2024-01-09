@@ -263,6 +263,7 @@ $lang->testcase->noModule         = "<div>Vous n'avez aucun modules.</div><div>G
 $lang->testcase->noCase           = "Aucun CasTest pour l'instant. ";
 $lang->testcase->importedCases    = 'Le cas d\'utilisation avec l\'ID %s est déjà importé dans le même module, il est donc ignoré.';
 $lang->testcase->importedFromLib  = '%s items imported successfully: %s.';
+$lang->testcase->noStep           = 'No steps yet.';
 
 $lang->testcase->searchStories = 'Rechercher des stories';
 $lang->testcase->selectLib     = 'Sélectionner Library';

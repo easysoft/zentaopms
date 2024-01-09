@@ -29,14 +29,19 @@ if($confirm != 'yes')
     $steps = $run->case->steps;
     if(empty($steps))
     {
-        $step = new stdclass();
-        $step->id     = 0;
-        $step->parent = 0;
-        $step->case   = $run->case->id;
-        $step->type   = 'step';
-        $step->desc   = '';
-        $step->expect = '';
-        $steps[] = $step;
+        $stepTrs[] = h::tr
+            (
+                h::td
+                (
+                    setClass('border'),
+                    set('colspan', '4'),
+                    div
+                    (
+                        setClass('text-center text-gray py-4'),
+                        $lang->testcase->noStep
+                    )
+                )
+            );
     }
     foreach($steps as $key => $step)
     {
