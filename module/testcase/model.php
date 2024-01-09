@@ -272,6 +272,8 @@ class testcaseModel extends model
 
         if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
 
+        $showAutoCase = ($this->cookie->showAutoCase && !(defined('RUN_MODE') && RUN_MODE == 'api'));
+
         return $stmt ->where('t1.product')->eq((int)$productID)
             ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
@@ -280,7 +282,7 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($this->cookie->showAutoCase)->andWhere('t1.auto')->eq('auto')->fi()
+            ->beginIF($showAutoCase)->andWhere('t1.auto')->eq('auto')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
