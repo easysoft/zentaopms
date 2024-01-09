@@ -323,6 +323,15 @@ class gitlabTest
         return $result;
     }
 
+    public function editUserTest(int $gitlabID, object $gitlabUser)
+    {
+        $result = $this->gitlab->editUser($gitlabID, $gitlabUser);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     public function createProjectTest(int $gitlabID, object $project)
     {
         $result = $this->gitlab->createProject($gitlabID, $project);
