@@ -464,13 +464,13 @@ if($canBeChanged && common::hasPriv('doc', 'createLib') && $execution->type != '
 div
 (
     setClass('my-4 flex w-full items-start'),
-    ($execution->projectInfo->hasProduct || $features['plan']) ? div
+    div
     (
         setClass('w-2/3 canvas p-4 flex-auto'),
         div
         (
             /* Linked product and plan.  */
-            h::table
+            ($execution->projectInfo->hasProduct || $features['plan']) ? h::table
             (
                 setClass('table condensed bordered'),
                 h::thead
@@ -510,7 +510,7 @@ div
                     )
                 ),
                 h::tbody($relatedProducts)
-            ),
+            ) : null,
 
             /* Execution team. */
             h::table
@@ -784,7 +784,7 @@ div
                 )
             ) : null
         )
-    ) : null,
+    ),
     div
     (
         setClass('ml-4 w-1/3 flex-none'),
