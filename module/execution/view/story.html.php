@@ -132,7 +132,7 @@
             $buttonLink  = '';
             $buttonTitle = '';
             $dataToggle  = '';
-            if(common::hasPriv('execution', 'importPlanStories'))
+            if(common::hasPriv('execution', 'importPlanStories') && $storyType == 'story')
             {
                 $buttonLink  = '#linkStoryByPlan';
                 $buttonTitle = $lang->execution->linkStoryByPlan;
@@ -148,7 +148,7 @@
             $hidden = empty($buttonLink) ? 'hidden' : '';
             echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories') and ($execution->hasProduct or $execution->type == 'sprint'))
+            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories') and ($execution->hasProduct or $execution->type == 'sprint') and $storyType == 'story')
             {
                 echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
