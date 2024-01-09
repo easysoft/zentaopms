@@ -206,7 +206,7 @@ foreach($results as $i => $result)
                         (
                             width('80px'),
                             setClass('text-center border-r'),
-                            $lang->testcase->result
+                            $lang->testcase->resultAB
                         ),
                         div
                         (
@@ -274,7 +274,7 @@ div
         set::id('casesResults'),
         $case->auto != 'unit' && $type != 'fail' ? formRowGroup
         (
-            set::title($lang->testcase->result),
+            set::title($lang->testcase->resultAB),
             set::items
             (
                 $resultItem

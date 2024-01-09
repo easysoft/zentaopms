@@ -191,7 +191,7 @@ form
                 (
                     setClass('result-td'),
                     width('96px'),
-                    $lang->testcase->result
+                    $lang->testcase->resultAB
                 ),
                 h::td
                 (

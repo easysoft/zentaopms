@@ -29,7 +29,7 @@
         <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->testcase->reviewResultAB;?></th>
+        <th><?php echo $lang->testcase->result;?></th>
         <td><?php echo html::select('result', $lang->testcase->reviewResultList, '', 'class=form-control required');?></td><td></td>
       </tr>
       <tr class='hide'>

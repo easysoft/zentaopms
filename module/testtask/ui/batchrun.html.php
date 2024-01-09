@@ -184,7 +184,7 @@ formPanel
                 h::th
                 (
                     set::width('100px'),
-                    $lang->testcase->result
+                    $lang->testcase->resultAB
                 ),
                 h::th
                 (

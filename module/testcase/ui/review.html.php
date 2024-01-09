@@ -27,7 +27,7 @@ formPanel
     formGroup
     (
         set::width('1/3'),
-        set::label($lang->testcase->reviewResultAB),
+        set::label($lang->testcase->result),
         set::required(true),
         picker
         (
