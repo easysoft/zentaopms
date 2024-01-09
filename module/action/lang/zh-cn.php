@@ -863,6 +863,7 @@ $lang->action->label->host         = '主机|host|view|id=%s';
 $lang->action->label->account      = "账号|account|view|id=%s";
 $lang->action->label->instance     = '应用|instance|view|id=%s';
 $lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
+$lang->action->label->holiday      = '节假日|holiday|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();

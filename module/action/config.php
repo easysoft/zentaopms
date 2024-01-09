@@ -64,6 +64,7 @@ $config->action->objectNameFields['space']        = 'name';
 $config->action->objectNameFields['solution']     = 'name';
 $config->action->objectNameFields['artifactrepo'] = 'name';
 $config->action->objectNameFields['prompt']       = 'name';
+$config->action->objectNameFields['holiday']      = 'name';
 
 $config->action->commonImgSize = 870;
 

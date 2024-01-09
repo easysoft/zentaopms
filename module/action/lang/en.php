@@ -862,6 +862,7 @@ $lang->action->label->host         = 'Host|host|view|id=%s';
 $lang->action->label->account      = "Account|account|view|id=%s";
 $lang->action->label->instance     = 'Application|instance|view|id=%s';
 $lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
+$lang->action->label->holiday      = 'Holiday|holiday|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();
