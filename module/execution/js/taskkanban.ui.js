@@ -108,7 +108,7 @@ window.getCol = function(col)
     if(col.limit != -1 && cards > col.limit)
     {
         col.subtitleClass += ' text-danger';
-        wip += ' <i class="icon icon-exclamation-sign"></i>';
+        wip += ' <i class="icon icon-exclamation-sign" data-toggle="tooltip" data-title="' + kanbanLang.limitExceeded + '"></i>';
     }
 
     col.subtitle = {html: wip};

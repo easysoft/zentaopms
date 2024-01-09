@@ -4,4 +4,4 @@
 .dropdown-menu .menu-divider a{display:none;}
 .dropdown-menu .menu-divider {border-top:1px solid #dedede;}
 .kanban-header-col-actions{top:unset;}
-.as-subtitle {color: rgb(139, 145, 162); opacity: 0.5; text-wrap: nowrap; font-weight: 700;}
+.as-subtitle {opacity: 0.5; text-wrap: nowrap; font-weight: 700;}
