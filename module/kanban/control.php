@@ -1367,7 +1367,7 @@ class kanban extends control
         if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
         if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => ($card->archived ? true : false), 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
     }
 
     /**
