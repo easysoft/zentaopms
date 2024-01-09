@@ -80,7 +80,6 @@ class solutionModel extends model
         $solution->createdBy    = $this->app->user->account;
         $solution->createdAt    = helper::now();
         $solution->channel      = $this->app->session->cloudChannel ? $this->app->session->cloudChannel : $this->config->cloud->api->channel;
-        a($solution); die;
 
         $this->dao->insert(TABLE_SOLUTION)->data($solution)->exec();
         if(dao::isError()) return null;
