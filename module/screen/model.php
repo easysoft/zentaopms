@@ -190,7 +190,15 @@ class screenModel extends model
         $type  = $component->chartConfig->package;
         $type  = $this->getChartType($type);
         $table = $this->config->objectTables[$type];
-        $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+
+        if($type == 'metric')
+        {
+            $chart = $this->loadModel('metric')->getByID($chartID);
+        }
+        else
+        {
+            $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+        }
 
         if($type == 'metric') return $this->genMetricComponent($chart);
         return $this->genComponentData($chart, $type, $component);
@@ -1770,7 +1778,7 @@ class screenModel extends model
         $this->loadModel('metric');
 
         $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
-        $dateType       = $this->metric->getDateTypeByCode($metric->code);
+        $dateType       = $metric->dateType;
 
         $filters = $this->processMetricFilter($filterParams, $dateType);
 
@@ -1861,7 +1869,7 @@ class screenModel extends model
         $option = new stdclass();
         $option->displayType = 'normal';
         $option->cardType    = 'A';
-        $option->dateType    = $this->metric->getDateTypeByCode($metric->code);
+        $option->dateType    = $metric->dateType;
         $option->bgColor     = '#26292EFF';
         $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
         $option->scope       = $metric->scope;

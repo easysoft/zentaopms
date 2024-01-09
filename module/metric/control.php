@@ -81,7 +81,7 @@ class metric extends control
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
-        $this->view->dateType      = $current ? $this->metric->getDateTypeByCode($current->code) : 'nodate';
+        $this->view->dateType      = $current ? $current->dateType : 'nodate';
         $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
@@ -293,7 +293,7 @@ class metric extends control
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
-        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
+        $this->view->dateType      = $metric->dateType;
         $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);

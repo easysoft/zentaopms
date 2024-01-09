@@ -454,6 +454,7 @@ class metricModel extends model
             $metric->collectConf = $oldMetric->collectConf;
             $metric->execTime    = $oldMetric->execTime;
         }
+        if(empty($metric->dateType)) $metric->dateType = $this->getDateTypeByCode($metric->code);
 
         return $metric;
     }
@@ -1962,8 +1963,14 @@ class metricModel extends model
 
     public function getDateTypeByCode(string $code)
     {
+        /* Get dateType form db first. */
+        $dateType = $this->getByCode($code, 'dateType');
+        if(!empty($dateType)) return $dateType;
+
+        /* Get dateType from config second. */
         if(isset($this->config->metric->dateType[$code])) return $this->config->metric->dateType[$code];
 
+        /* At last, infer dateType by code. */
         $dataFields = $this->getMetricRecordDateField($code);
         return $this->getDateType($dataFields);
     }
