@@ -1026,6 +1026,7 @@ class storyTao extends storyModel
         $bug->closedDate   = $now;
         $bug->assignedTo   = 'closed';
         $bug->assignedDate = $now;
+        $bug->confirmed    = 1;
         $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
 
         $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
