@@ -208,9 +208,10 @@ elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->mo
 }
 else
 {
-    $productsBox [] = formRow
+    $hidden = empty($project->hasProduct) ? 'hidden' : '';
+    $productsBox[] = formRow
     (
-        set::className('productsBox'),
+        set::className("productsBox $hidden"),
         formGroup
         (
             set::width('1/2'),
@@ -220,7 +221,8 @@ else
             picker
             (
                 set::name('products[0]'),
-                set::items($allProducts)
+                set::items($allProducts),
+                empty($project->hasProduct) ? set::value(current(array_keys($allProducts))) : null,
             )
         ),
         formGroup
