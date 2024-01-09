@@ -186,7 +186,7 @@ class kanban extends control
     public function deleteSpace(int $spaceID)
     {
         $this->kanban->delete(TABLE_KANBANSPACE, $spaceID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
