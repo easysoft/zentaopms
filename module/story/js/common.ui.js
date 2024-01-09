@@ -5,7 +5,7 @@ $(function()
     if(typeof(rawMethod) == 'undefined') rawMethod = '';
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
     app = $.cookie.get('tab');
-    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask')
+    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask' && storyType)
     {
         let $storyNavbar    = $("#navbar .nav li a[data-id=" + storyType + ']');
         let $storySubNavbar = $('#subNavbar li a[data-id="' + storyType + '"]')
