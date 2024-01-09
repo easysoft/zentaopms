@@ -1994,7 +1994,7 @@ class productModel extends model
         if($module == 'feedback')    return helper::createLink('feedback',    'admin',  "browseType=byProduct&productID=%s");
         if($module == 'programplan') return helper::createLink('programplan', 'browse', "projectID=%s&productID=%s&type=" . ($extra ? $extra : 'gantt'));
         if($module == 'project')     return helper::createLink('project',     $method,  "objectID=$extra&productID=%s");
-        if($module == 'tree')        return helper::createLink('tree',        $method,  "productID=%s&type=$extra&currentModuleID=0{$branchParam}");
+        if($module == 'tree')        return helper::createLink('tree',        $method,  "productID=%s&view=story&currentModuleID=0{$branchParam}");
         if($module == 'ticket')      return helper::createLink('ticket',      $method,  'productID=%s');
         if($module == 'testtask')    return helper::createLink('testtask',    'browse', "productID=%s&branch={$branchID}");
 
