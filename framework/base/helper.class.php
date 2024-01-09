@@ -1050,6 +1050,19 @@ class baseHelper
 
         return $ret;
     }
+
+    /**
+     * 代替 die、exit 函数终止并输出。
+     * Instead of die, exit function to terminate and output.
+     *
+     * @param string $content
+     * @return never
+     * @throws EndResponseException
+     */
+    public static function end(string $content = ''): never
+    {
+        throw EndResponseException::create($content);
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//

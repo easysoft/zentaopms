@@ -306,19 +306,6 @@ class helper extends baseHelper
     }
 
     /**
-     * 代替 die、exit 函数终止并输出。
-     * Instead of die, exit function to terminate and output.
-     *
-     * @param string $content
-     * @return never
-     * @throws EndResponseException
-     */
-    public static function end(string $content = ''): never
-    {
-        throw EndResponseException::create($content);
-    }
-
-    /**
      * Get date interval.
      *
      * @param  string     $format  %Y-%m-%d %H:%i:%s
