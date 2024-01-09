@@ -45,7 +45,7 @@ cid=0
 - 当前页面是execution-view，切换1.5级导航时跳转链接。 @/execution-view--%s.html
 - 当前页面是programplan-view，切换1.5级导航时跳转链接。 @/programplan-browse-%s-%s-gantt.html
 - 当前页面是project-view，切换1.5级导航时跳转链接。 @/project-view--%s.html
-- 当前页面是tree-browse，切换1.5级导航时跳转链接。 @/tree-browse-%s--0.html
+- 当前页面是tree-browse，切换1.5级导航时跳转链接。 @/tree-browse-%s-story-0.html
 - 当前页面是ticket-create，切换1.5级导航时跳转链接。 @/ticket-create-%s.html
 - 当前页面是testtask-create，切换1.5级导航时跳转链接。 @/testtask-browse-%s-all.html
 - 当前页面是api-browse，切换1.5级导航时跳转链接。 @/doc-productSpace-%s.html
@@ -109,7 +109,7 @@ r($productModel->getProductLink('design',      'view'))        && p() && e('/des
 r($productModel->getProductLink('execution',   'view'))        && p() && e('/execution-view--%s.html');                           //当前页面是execution-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('programplan', 'view'))        && p() && e('/programplan-browse-%s-%s-gantt.html');               //当前页面是programplan-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('project',     'view'))        && p() && e('/project-view--%s.html');                             //当前页面是project-view，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('tree',        'browse'))      && p() && e('/tree-browse-%s--0.html');                            //当前页面是tree-browse，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('tree',        'browse'))      && p() && e('/tree-browse-%s-story-0.html');                       //当前页面是tree-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('ticket',      'create'))      && p() && e('/ticket-create-%s.html');                             //当前页面是ticket-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testtask',    'create'))      && p() && e('/testtask-browse-%s-all.html');                       //当前页面是testtask-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('api',         'browse'))      && p() && e('/doc-productSpace-%s.html');                          //当前页面是api-browse，切换1.5级导航时跳转链接。
