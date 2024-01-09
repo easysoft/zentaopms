@@ -84,7 +84,7 @@ formPanel
     formGroup
     (
         set::label($lang->zanode->shell),
-        editor
+        textarea
         (
             set::name('shell'),
             set::value(isset($automation->shell) ? $automation->shell : ''),

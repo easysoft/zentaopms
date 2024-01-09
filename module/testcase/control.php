@@ -1319,7 +1319,7 @@ class testcase extends control
             $this->zanode->setAutomationSetting($automation);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', "productID={$automation->product}")));
+            return $this->sendSuccess(array('load' => inlink('browse', "productID={$automation->product}")));
         }
 
         $this->view->title      = $this->lang->testcase->automation;
