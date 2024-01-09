@@ -3535,10 +3535,12 @@ class kanbanModel extends model
                 return $object->deleted == '0';
             case 'sortcolumn':
                 return $object->deleted == '0';
+            case 'editcard':
+                return $object->deleted == '0' && $object->archived == '0';
             case 'finishcard':
-                return $object->status != 'done';
+                return $object->status != 'done' && $object->deleted == '0' && $object->archived == '0';
             case 'activatecard':
-                return $object->status == 'done';
+                return $object->status == 'done' && $object->deleted == '0' && $object->archived == '0';
             case 'deletecard':
                 return $object->deleted == '0';
             case 'archivecard':
