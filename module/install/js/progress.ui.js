@@ -65,8 +65,21 @@ function getInstallProgress()
 
             if(installed)
             {
+                clearInterval(logTimer);
                 $('.progress-message').text(notices.installationSuccess);
-                if(!isModal) loadPage($.createLink('install', 'step6'));
+                if(!isModal)
+                {
+                    loadPage($.createLink('install', 'step6'));
+                }
+                else
+                {
+                    zui.Modal.alert(notices.installationSuccess).then(() => {
+                        const modal = zui.Modal.query('#installProgress');
+                        if(modal) modal.hide();
+
+                        loadPage($.createLink('space', 'browse'));
+                    })
+                }
             }
         }
         else
@@ -133,5 +146,6 @@ $(function()
         term.open(document.getElementById('terminal'));
 
     });
-    setInterval(getInstallProgress, 4000);
+
+    logTimer = setInterval(getInstallProgress, 4000);
 });

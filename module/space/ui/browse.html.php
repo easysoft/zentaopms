@@ -37,6 +37,7 @@ toolBar
         'url'             => createLink('install', 'progress', "solutionID=$solutionID&install=true"),
         'data-size'       => array('width' => '900', 'height' => '500'),
         'data-class-name' => 'install-progress',
+        'data-id'         => 'installProgress',
         'data-toggle'     => 'modal'
     ))) : null,
     $config->inQuickon && $canInstall ? item(set(array
