@@ -106,7 +106,7 @@ if(!empty($execution->hasProduct))
         (
             set::href($this->createLink('execution', 'linkStory', "executionID=$execution->id")),
             setClass('text-primary'),
-            on::click('closeModal'),
+            isInModal() ? set('data-toggle', 'modal') : null,
             $lang->execution->linkStory
         )
     );
