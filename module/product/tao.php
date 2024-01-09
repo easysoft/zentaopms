@@ -929,7 +929,7 @@ class productTao extends productModel
         foreach($bugs as $bug)
         {
             if(!isset($productBugs[$bug->product])) $productBugs[$bug->product] = array('unresolved' => 0, 'fixed' => 0, 'closed' => 0, 'total' => 0);
-            if($bug->status == 'active' || ($bug->status != 'closed' && $bug->resolution == 'postponed')) $productBugs[$bug->product]['unresolved'] += $bug->c;
+            if($bug->status == 'active' || ($bug->status == 'closed' && $bug->resolution == 'postponed')) $productBugs[$bug->product]['unresolved'] += $bug->c;
 
             if($bug->status == 'closed' && $bug->resolution == 'fixed') $productBugs[$bug->product]['fixed']  += $bug->c;
             if($bug->status == 'closed')                                $productBugs[$bug->product]['closed'] += $bug->c;
