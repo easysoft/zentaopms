@@ -698,7 +698,9 @@ class zanodemodel extends model
      */
     public function setAutomationSetting(object $object): int|bool
     {
-        $this->dao->replace(TABLE_AUTOMATION)
+        $this->dao->delete()->from(TABLE_AUTOMATION)->where('node')->eq($object->node)->andWhere('product')->eq($object->product)->exec();
+
+        $this->dao->insert(TABLE_AUTOMATION)
             ->data($object)
             ->batchCheck('node,scriptPath', 'notempty')
             ->autoCheck()
