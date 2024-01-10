@@ -35,6 +35,7 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
+    set::loadPartial(true),
     set::footToolbar(array
     (
         'items' => array(array

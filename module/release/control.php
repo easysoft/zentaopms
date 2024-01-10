@@ -386,6 +386,7 @@ class release extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
