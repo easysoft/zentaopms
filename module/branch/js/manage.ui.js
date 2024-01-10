@@ -17,23 +17,6 @@ window.changeStatus = function(branchID, changeStatus)
     });
 }
 
-/**
- * 设置合并分支按钮是否显示。
- * Set merge btn display.
- *
- * @access public
- * @return void
- */
-window.checkedChange = function()
-{
-    const dtable = zui.DTable.query($(this).target);
-    const checkedList = dtable.$.getChecks();
-    if(!checkedList.length) return;
-
-    $('#mergeBranch').hide();
-    if(checkedList.length == 2) $('#mergeBranch').show();
-}
-
 $(document).on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);

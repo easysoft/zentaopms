@@ -141,7 +141,6 @@ dtable
     set::canRowCheckable(jsRaw("(rowID) => {return rowID == '0' ? false : true}")),
     set::orderBy($orderBy),
     set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
-    set::onCheckChange(jsRaw('checkedChange')),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );
