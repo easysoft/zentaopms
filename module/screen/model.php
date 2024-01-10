@@ -360,8 +360,8 @@ class screenModel extends model
 
         $resultHeader   = $this->metric->getViewTableHeader($metric);
         $resultData     = $this->metric->getViewTableData($metric, $result);
-        $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
-        $isDateMetric   = $this->metric->isDateMetric($resultHeader);
+        $isObjectMetric = $metric->scope != 'system';
+        $isDateMetric   = $metric->dateType != 'nodate';
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
