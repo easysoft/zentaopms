@@ -106,9 +106,7 @@ modal
 );
 
 $tableData = initTableData($branchList, $config->branch->dtable->fieldList, $this->branch);
-array_map(function($data){if($data->id == 0) $data->actions = array();}, $tableData); //Remove main branch actions.
-if(count($tableData) === 1) unset($config->branch->dtable->fieldList['id']);
-if(count($tableData) === 1) unset($config->branch->dtable->fieldList['actions']);
+$tableData = array_map(function($data){if($data->id == 0) $data->actions = array(); return $data;}, $tableData); //Remove main branch actions.
 
 $footToolbar  = array();
 if($canBatchEdit)
