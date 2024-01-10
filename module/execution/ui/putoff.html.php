@@ -36,7 +36,7 @@ formPanel
                     set::name('begin'),
                     set::value($execution->begin),
                     set::placeholder($lang->execution->begin),
-                    on::change('computeWorkDays')
+                    on::change('computeWorkDays(NaN)')
                 ),
                 $lang->execution->to,
                 datePicker
@@ -46,7 +46,7 @@ formPanel
                     set::name('end'),
                     set::value($execution->end),
                     set::placeholder($lang->execution->end),
-                    on::change('computeWorkDays')
+                    on::change('computeWorkDays(NaN)')
                 )
             )
         ),

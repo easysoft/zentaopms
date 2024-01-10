@@ -58,7 +58,7 @@ function computeEndDate()
 
     let endDate = formatDate(beginDate, delta - 1);
 
-    $('#end').zui('datePicker').$.changeState({value: endDate});
+    $('input[name=end]').zui('datePicker').$.setValue(endDate);
     computeWorkDays();
     setTimeout(function(){$('[name=delta]').val(`${currentDelta}`)}, 0);
 }
