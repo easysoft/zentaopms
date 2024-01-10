@@ -62,7 +62,7 @@ $config->tutorial->tasksConfig['createStory']['nav']['menuModule']     = 'story'
 $config->tutorial->tasksConfig['createStory']['nav']['vars']           = 'productID=1';
 $config->tutorial->tasksConfig['createStory']['nav']['menu']           = '#products > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell > .dtable-cell-content > a, #heading > .toolbar > .toolbar-item, .create-story-btn';
 $config->tutorial->tasksConfig['createStory']['nav']['form']           = '#mainContent';
-$config->tutorial->tasksConfig['createStory']['nav']['submit']         = '#saveButton';
+$config->tutorial->tasksConfig['createStory']['nav']['submit']         = 'button[type=submit]';
 $config->tutorial->tasksConfig['createStory']['nav']['target']         = '.create-story-btn';
 $config->tutorial->tasksConfig['createStory']['nav']['targetPageName'] = $lang->tutorial->tasks->createStory->targetPageName;
 
