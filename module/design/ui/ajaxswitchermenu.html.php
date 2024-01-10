@@ -21,7 +21,7 @@ $defaultItem['text']   = $lang->product->all;
 $defaultItem['active'] = $productID == 0;
 $defaultItem['type']   = 'product';
 
-$data = array('normal' => array($defaultItem), 'closed' => array());
+$data = array('normal' => array($defaultItem));
 
 foreach($products as $product)
 {
@@ -32,14 +32,7 @@ foreach($products as $product)
     $item['type']   = 'product';
     $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
 
-    if($product->status == 'closed')
-    {
-        $data['closed'][] = $item;
-    }
-    else
-    {
-        $data['normal'][] = $item;
-    }
+    if($product->status != 'closed') $data['normal'][] = $item;
 }
 
 /**
@@ -47,14 +40,12 @@ foreach($products as $product)
  * Define every group name, include expanded group.
  */
 $tabs   = array();
-$tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProduct);
 $tabs[] = array('name' => 'normal', 'text' => '');
 
 $json = array();
 $json['data']       = $data;
 $json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
-$json['expandName'] = 'closed';
 $json['itemType']   = 'product';
 $json['link']       = array('product' => sprintf($link, '{id}'));
 
