@@ -454,7 +454,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($programID and in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($programID);
+        if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($programID, true);
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
@@ -541,7 +541,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($product->program and in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($product->program);
+        if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $lines = array('') + $this->product->getLinePairs($product->program, true);
 
         /* Get programs. */
         $programs = $this->loadModel('program')->getTopPairs('', 'noclosed');
@@ -1123,7 +1123,7 @@ class product extends control
     public function ajaxGetLine($programID, $productID = 0)
     {
         $lines = array();
-        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
+        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID, true);
 
         if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
         if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));
@@ -1430,7 +1430,7 @@ class product extends control
         $this->view->title      = $this->lang->product->line;
         $this->view->position[] = $this->lang->product->line;
 
-        $this->view->programs = array('null' => $this->lang->null) + $this->loadModel('program')->getTopPairs('', 'withDeleted', true);
+        $this->view->programs = array(0 => $this->lang->null) + $this->loadModel('program')->getTopPairs('', 'withDeleted', true);
         $this->view->lines    = $this->product->getLines();
         $this->display();
     }

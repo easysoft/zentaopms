@@ -2,8 +2,6 @@ $(function()
 {
     $('#lineName').css('border-left-color', '');
     $('[name=newLine]').change();
-
-    if(programID == 0) $("#line").closest('tr').addClass('hidden');
 })
 /**
   * Load product Lines.

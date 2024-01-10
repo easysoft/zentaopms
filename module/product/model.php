@@ -1035,11 +1035,6 @@ class productModel extends model
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and empty($data->programs[$id]))
-            {
-                dao::$errors[] = $this->lang->product->programEmpty;
-                return false;
-            }
 
             $programID = $data->programs[$id];
             if(!isset($lines[$programID])) $lines[$programID] = array();
@@ -2091,14 +2086,15 @@ class productModel extends model
      * Get product line pairs.
      *
      * @param  int    $programID
+     * @param  bool   $withZero
      * @access public
      * @return array
      */
-    public function getLinePairs($programID = 0)
+    public function getLinePairs($programID = 0, $withZero = false)
     {
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
+            ->beginIF($withZero || $programID)->andWhere('root')->eq($programID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
     }
