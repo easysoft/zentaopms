@@ -852,17 +852,17 @@ class buildModel extends model
         $module = $from == 'projectbuild' ? 'projectbuild' : 'build';
         $build->executionDeleted = $execution ? $execution->deleted : 0;
 
-        if(common::hasPriv($module, 'linkstory') && common::canBeChanged('build', $build)) $actions[] = $from == 'projectbuild' ? 'linkProjectStory' : 'linkStory';
+        if(common::hasPriv($module, 'linkstory', $build)) $actions[] = $from == 'projectbuild' ? 'linkProjectStory' : 'linkStory';
 
-        if(common::hasPriv('testtask', 'create')) $actions[] = $execution && $execution->deleted === '1' ? '-createTest' : 'createTest';
+        if(common::hasPriv('testtask', 'create', $build)) $actions[] = $execution && $execution->deleted === '1' ? '-createTest' : 'createTest';
 
         $isNotKanban   = $from == 'execution' && !empty($execution->type) && $execution->type != 'kanban';
         $isFromProject = $from == 'projectbuild' || empty($execution->type) || $execution->type == 'kanban';
-        if($isNotKanban && common::hasPriv('execution', 'bug')) $actions[] = 'viewBug';
-        if($isFromProject && common::hasPriv($module, 'view'))  $actions[] = $from == 'projectbuild' ? 'projectBugList' : 'bugList';
+        if($isNotKanban && common::hasPriv('execution', 'bug', $build)) $actions[] = 'viewBug';
+        if($isFromProject && common::hasPriv($module, 'view', $build))  $actions[] = $from == 'projectbuild' ? 'projectBugList' : 'bugList';
 
-        if(common::hasPriv($module, 'edit'))   $actions[] = $module . 'Edit';
-        if(common::hasPriv($module, 'delete')) $actions[] = 'delete';
+        if(common::hasPriv($module, 'edit', $build))   $actions[] = $module . 'Edit';
+        if(common::hasPriv($module, 'delete', $build)) $actions[] = 'delete';
 
         return $actions;
     }
