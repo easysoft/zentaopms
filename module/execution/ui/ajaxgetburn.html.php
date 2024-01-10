@@ -140,7 +140,7 @@ div
                         )
                     )
                 ),
-                array
+                !empty($chartData['delayLine']) ? array
                 (
                     'data' => $chartData['delayLine'],
                     'type' => 'line',
@@ -164,7 +164,7 @@ div
                             'borderWidth' => 2
                         )
                     )
-                )
+                ) : null
             )
         )
     )->size('100%', '150%') : null
