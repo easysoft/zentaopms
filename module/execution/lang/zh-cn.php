@@ -403,7 +403,6 @@ $lang->execution->accessDenied                 = "您无权访问该{$lang->exec
 $lang->execution->tips                         = '提示';
 $lang->execution->afterInfo                    = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";
 $lang->execution->setTeam                      = '设置团队';
-$lang->execution->linkStory                    = "关联{$lang->SRCommon}";
 $lang->execution->createTask                   = '创建任务';
 $lang->execution->goback                       = "返回任务列表";
 $lang->execution->gobackExecution              = "返回{$lang->executionCommon}列表";
