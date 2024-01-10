@@ -3816,7 +3816,12 @@ class executionModel extends model
      */
     public static function isClickable(object $execution, string $action): bool
     {
-        if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create');
+        if($action == 'createChildStage')
+        {
+            global $dao;
+            $tasks = $dao->select('id')->from(TABLE_TASK)->where('execution')->eq($execution->rawID)->andWhere('deleted')->eq(0)->fetchPairs();
+            return commonModel::hasPriv('programplan', 'create') && empty($tasks);
+        }
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
 
