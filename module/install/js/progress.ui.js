@@ -149,5 +149,6 @@ $(function()
 
     });
 
+    if(typeof logTimer != 'undefined') clearInterval(logTimer);
     logTimer = setInterval(getInstallProgress, 4000);
 });
