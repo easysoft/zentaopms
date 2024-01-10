@@ -268,6 +268,7 @@ class productZen extends product
     {
         $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
         $fields['program']['default'] = $programID;
+        $fields['PO']['default']      = $this->app->user->account;
 
         /* Set required. */
         foreach($fields as $field => $attr)
