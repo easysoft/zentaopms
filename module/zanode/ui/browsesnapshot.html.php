@@ -12,24 +12,19 @@ namespace zin;
 
 foreach($snapshotList as $snapshot)
 {
-    $snapshot->nodeID    = $nodeID;
-    $snapshot->isDefault = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
-    $snapshot->createdBy = $snapshot->isDefault ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy);
+    $snapshot->nodeID     = $nodeID;
+    $snapshot->nodeStatus = $node->status;
+    $snapshot->isDefault  = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
+    $snapshot->createdBy  = $snapshot->isDefault ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy);
 
     if($snapshot->isDefault) $snapshot->name = $lang->zanode->snapshot->defaultSnapName;
     if($snapshot->localName) $snapshot->name = $snapshot->localName;
 }
 
 $snapshotList = initTableData($snapshotList, $config->zanode->snapshotDtable->fieldList, $this->zanode);
-
-to::header('');
-
 dtable
 (
     set::cols($config->zanode->snapshotDtable->fieldList),
     set::data($snapshotList),
     set::afterRender(jsRaw('window.afterRender'))
 );
-
-render();
-

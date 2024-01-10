@@ -63,7 +63,7 @@ if($zanode->hostType == 'physics')
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3'),
+        setClass('w-1/2'),
         span
         (
             setClass('text-gray'),
@@ -94,7 +94,7 @@ if($zanode->hostType == 'physics')
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3'),
+        setClass('w-1/6'),
         span
         (
             setClass('text-gray'),
@@ -122,7 +122,7 @@ if($zanode->hostType == 'physics')
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3 mt-4'),
+        setClass('w-1/2 mt-4'),
         span
         (
             setClass('text-gray'),
@@ -136,7 +136,7 @@ if($zanode->hostType == 'physics')
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3 mt-4'),
+        setClass('w-1/6 mt-4'),
         span
         (
             setClass('text-gray'),
@@ -167,7 +167,7 @@ else
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3'),
+        setClass('w-1/2'),
         span
         (
             setClass('text-gray'),
@@ -198,7 +198,7 @@ else
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3'),
+        setClass('w-1/6'),
         span
         (
             setClass('text-gray'),
@@ -226,7 +226,7 @@ else
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3 mt-4'),
+        setClass('w-1/2 mt-4'),
         span
         (
             setClass('text-gray'),
@@ -240,7 +240,7 @@ else
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3 mt-4'),
+        setClass('w-1/6 mt-4'),
         span
         (
             setClass('text-gray'),
@@ -262,13 +262,14 @@ else
         ),
         span
         (
-            setClass('ml-2'),
+            setClass('ml-2 clip w-36 inline-flex'),
+            set::title($zanode->hostName),
             $zanode->hostName
         )
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3 mt-4'),
+        setClass('w-1/2 mt-4'),
         span
         (
             setClass('text-gray'),
