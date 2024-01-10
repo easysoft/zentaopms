@@ -19,6 +19,8 @@ $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id
 $cols['title']['nestedToggle'] = false;
 $cols['title']['data-size']    = 'lg';
 
+foreach($cols as $colKey => $colConfig) $cols[$colKey]['sort'] = true;
+
 searchForm
 (
     set::module('story'),
