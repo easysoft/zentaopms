@@ -2007,7 +2007,6 @@ class execution extends control
             $execution = $this->execution->fetchByID($executionID);
             $this->execution->delete(TABLE_EXECUTION, $executionID);
             $this->execution->updateUserView($executionID);
-            $this->loadModel('common')->syncPPEStatus($executionID);
 
             $project = $this->loadModel('project')->getByID($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID);
