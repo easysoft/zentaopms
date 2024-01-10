@@ -64,6 +64,7 @@ formPanel
         (
             set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu')),
             set::name('URSR'),
+            set::required(true),
             set::items($URSRItems),
             set::value($URSR)
         )
@@ -74,6 +75,7 @@ formPanel
         picker
         (
             set::name('programLink'),
+            set::required(true),
             set::items($programItems),
             set::value($programLink)
         )
@@ -84,6 +86,7 @@ formPanel
         picker
         (
             set::name('productLink'),
+            set::required(true),
             set::items($productItems),
             set::value($productLink)
         )
@@ -94,6 +97,7 @@ formPanel
         picker
         (
             set::name('projectLink'),
+            set::required(true),
             set::items($projectItems),
             set::value($projectLink)
         )
@@ -104,6 +108,7 @@ formPanel
         picker
         (
             set::name('executionLink'),
+            set::required(true),
             set::items($executionItems),
             set::value($executionLink)
         )
