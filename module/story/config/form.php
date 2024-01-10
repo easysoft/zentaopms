@@ -122,15 +122,15 @@ $config->story->form->change['status']         = array('type' => 'string',  'con
 $config->story->form->change['lastEditedDate'] = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => '');
 
 $config->story->form->review = array();
-$config->story->form->review['reviewedDate']   = array('type' => 'date',    'control' => 'text',      'required' => false, 'default' => '');
-$config->story->form->review['result']         = array('type' => 'string',  'control' => 'picker',    'required' => true,  'default' => '', 'options' => '', 'title' => $lang->story->reviewResult);
-$config->story->form->review['assignedTo']     = array('type' => 'string',  'control' => 'picker',    'required' => false, 'default' => '', 'options' => 'users');
-$config->story->form->review['closedReason']   = array('type' => 'string',  'control' => 'picker',    'required' => false, 'default' => '', 'options' => $lang->story->reasonList, 'title' => $lang->story->rejectedReason);
-$config->story->form->review['pri']            = array('type' => 'int',     'control' => 'priPicker', 'required' => false, 'default' => '', 'options' => $lang->story->priList);
-$config->story->form->review['estimate']       = array('type' => 'float',   'control' => 'text',      'required' => false, 'default' => '');
-$config->story->form->review['duplicateStory'] = array('type' => 'string',  'control' => 'text',      'required' => false, 'default' => '');
-$config->story->form->review['childStories']   = array('type' => 'string',  'control' => 'text',      'required' => false, 'default' => '');
-$config->story->form->review['status']         = array('type' => 'string',  'control' => 'hidden',    'required' => false, 'default' => '');
+$config->story->form->review['reviewedDate']   = array('type' => 'date',   'control' => 'datetimePicker', 'required' => false, 'default' => '');
+$config->story->form->review['result']         = array('type' => 'string', 'control' => 'picker',         'required' => true,  'default' => '', 'options' => '', 'title' => $lang->story->reviewResult);
+$config->story->form->review['assignedTo']     = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '', 'options' => 'users');
+$config->story->form->review['closedReason']   = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '', 'options' => $lang->story->reasonList, 'title' => $lang->story->rejectedReason);
+$config->story->form->review['pri']            = array('type' => 'int',    'control' => 'priPicker',      'required' => false, 'default' => '', 'options' => $lang->story->priList);
+$config->story->form->review['estimate']       = array('type' => 'float',  'control' => 'text',           'required' => false, 'default' => '');
+$config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
+$config->story->form->review['childStories']   = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
+$config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
 
 $config->story->form->activate = array();
 $config->story->form->activate['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');

@@ -20,6 +20,7 @@ require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorinput' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'upload' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'modulepicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'datetimepicker' . DS . 'v1.php';
 
 class control extends wg
 {
