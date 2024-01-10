@@ -62,10 +62,13 @@ $().ready(function()
         }
     });
     loadBranches();
-    window.waitDom('[name=execution]', function()
+    if(multipleProject)
     {
-        loadProducts();
-    })
+        window.waitDom('[name=execution]', function()
+        {
+            loadProducts();
+        })
+    }
 });
 
 /**

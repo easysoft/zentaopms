@@ -4818,6 +4818,7 @@ class executionModel extends model
         $executionData = new stdclass();
         $executionData->project     = $projectID;
         $executionData->name        = $project->name;
+        $executionData->grade       = 1;
         $executionData->begin       = $project->begin;
         $executionData->end         = $project->end;
         $executionData->status      = 'wait';

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 /* zin: Set variables to define picker options for form. */
+jsVar('multipleProject', !empty($multipleProject));
 jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 jsVar('autoRelationTip', $lang->build->notice->autoRelation);
 jsVar('projectID', $projectID);
@@ -38,27 +39,24 @@ if($app->tab == 'project' && !empty($multipleProject))
     );
 }
 
-$executionRow = '';
-if(!empty($multipleProject))
-{
-    $executionRow = formRow
+$executionRow = formRow
+(
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->executionCommon),
+        set::required(true),
+        set::hidden(empty($multipleProject)),
+        picker
         (
-            formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->executionCommon),
-                set::required(true),
-                picker
-                (
-                    set::name('execution'),
-                    set::value($executionID),
-                    set::items($executions),
-                    set::required(true),
-                    on::change('loadProducts')
-                )
-            )
-        );
-}
+            set::name('execution'),
+            set::value($executionID),
+            set::items($executions),
+            set::required(true),
+            !empty($multipleProject) ? on::change('loadProducts') : null
+        )
+    )
+);
 
 $productRow   = '';
 $noProductRow = '';
