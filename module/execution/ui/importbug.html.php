@@ -34,6 +34,8 @@ if(!isInModal())
 }
 
 $config->execution->importBug->dtable->fieldList['assignedTo']['controlItems'] = $users;
+unset($config->execution->importBug->dtable->fieldList['taskPri']['controlItems'][0]);
+
 formBase
 (
     setID('importForm'),
