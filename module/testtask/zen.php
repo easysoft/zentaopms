@@ -665,6 +665,9 @@ class testtaskZen extends testtask
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'load' => $this->createLink('zanode', 'browse')));
 
             $this->zanode->runZTFScript($automation->id, $caseID, $resultID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'load' => $this->createLink('zanode', 'browse')));
+
+            if($this->server->request_method == 'POST' && empty($_POST)) return $this->sendSuccess();
         }
     }
 

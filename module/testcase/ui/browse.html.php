@@ -120,25 +120,28 @@ foreach($cases as $case)
 $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
-dtable
-(
-    set::customCols(!$isOnlyScene),
-    set::userMap($users),
-    set::cols($cols),
-    set::nested(true),
-    set::data(array_values($cases)),
-    set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::checkable($canBatchAction),
-    set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
-    set::orderBy($orderBy),
-    set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
-    set::nested(true),
-    set::footToolbar($footToolbar),
-    set::footPager(usePager()),
-    set::emptyTip($lang->testcase->noCase),
-    set::createTip($lang->testcase->create),
-    set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', 'productID=' . zget($product, 'id', 0) . "&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
-    set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
+div(
+    on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
+    dtable
+    (
+        set::customCols(!$isOnlyScene),
+        set::userMap($users),
+        set::cols($cols),
+        set::nested(true),
+        set::data(array_values($cases)),
+        set::onRenderCell(jsRaw('window.onRenderCell')),
+        set::checkable($canBatchAction),
+        set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
+        set::orderBy($orderBy),
+        set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
+        set::nested(true),
+        set::footToolbar($footToolbar),
+        set::footPager(usePager()),
+        set::emptyTip($lang->testcase->noCase),
+        set::createTip($lang->testcase->create),
+        set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', 'productID=' . zget($product, 'id', 0) . "&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+        set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
+    )
 );
 
 modal

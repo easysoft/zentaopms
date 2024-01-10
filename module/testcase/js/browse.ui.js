@@ -124,3 +124,34 @@ function getCheckedCaseIdList()
     });
     $('#caseIdList').val(caseIdList);
 }
+
+/**
+ * Check ztf script run result.
+ *
+ * @param  e
+ * @access public
+ * @return void
+ */
+window.checkZtf = function(e)
+{
+    e.preventDefault();
+
+    const url = $(this).attr('href');
+    $.get(url, function(result)
+    {
+        const load = result.load;
+        if(!load) return loadModal(url, null, {size: 'lg'});
+
+        zui.Modal.confirm(load.confirm).then((res) => {
+            if(!res) return loadModal(load.canceled, null, {size: 'lg'});
+
+            $.post(load.confirmed, {}, function(result)
+            {
+                result = JSON.parse(result);
+                if(result.result == 'fail') return zui.Modal.alert(result.message);
+
+                loadModal(load.canceled, null, {size: 'lg'});
+            });
+        });
+    }, 'json');
+}
