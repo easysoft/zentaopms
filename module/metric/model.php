@@ -1488,8 +1488,9 @@ class metricModel extends model
         $type = array();
         $dateType = $this->getDateTypeByCode($code);
 
-        $type[] = $scope == 'system' ? 'system' : 'scope';
+        if($scope != 'system') $type[] = 'scope';
         if($dateType != 'nodate') $type[] = 'date';
+        if(empty($type)) $type[] = 'system';
 
         return implode('-', $type);
     }
