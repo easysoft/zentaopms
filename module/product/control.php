@@ -1430,7 +1430,7 @@ class product extends control
         $this->view->title      = $this->lang->product->line;
         $this->view->position[] = $this->lang->product->line;
 
-        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs('', 'withDeleted');
+        $this->view->programs = array('null' => $this->lang->null) + $this->loadModel('program')->getTopPairs('', 'withDeleted', true);
         $this->view->lines    = $this->product->getLines();
         $this->display();
     }
