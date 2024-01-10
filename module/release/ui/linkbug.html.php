@@ -39,6 +39,7 @@ dtable
     set::checkable(true),
     set::cols($cols),
     set::data($allBugs),
+    set::loadPartial(true),
     set::footToolbar(array
     (
         'items' => array(array
