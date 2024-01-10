@@ -349,4 +349,22 @@ class gitlabTest
 
         return $result;
     }
+
+    public function createGroupTest(int $gitlabID, object $project)
+    {
+        $result = $this->gitlab->createGroup($gitlabID, $project);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function editGroupTest(int $gitlabID, object $project)
+    {
+        $result = $this->gitlab->editGroup($gitlabID, $project);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
