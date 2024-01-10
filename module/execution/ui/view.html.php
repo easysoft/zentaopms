@@ -289,7 +289,7 @@ div
             div
             (
                 setClass('flex mt-4'),
-                $config->systemMode == 'ALM' ? div
+                $programDom ? div
                 (
                     setClass('clip w-1/2'),
                     $programDom
