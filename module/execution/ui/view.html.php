@@ -413,7 +413,7 @@ if(common::hasPriv('execution', 'manageMembers'))
             setClass('mb-2'),
             set::size('36'),
             set::foreColor('var(--color-primary-500-rgb)'),
-            set::background('var(--menu-active-bg)'),
+            set::background('var(--color-primary-50)'),
             icon('plus')
         ),
         $lang->project->manage
