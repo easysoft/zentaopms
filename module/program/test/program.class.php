@@ -24,11 +24,11 @@ class programTest
      * @access public
      * @return array
      */
-    public function getListBySearchTest($orderBy = 'id_asc', $queryID = 0, $sql = '')
+    public function getListBySearchTest($orderBy = 'id_asc', $queryID = 0, $sql = '', $hasProject = false, $pager = null)
     {
         if(!empty($sql)) $_SESSION['programQuery'] = $sql;
 
-        return $this->program->getListBySearch($orderBy, $queryID);
+        return $this->program->getListBySearch($orderBy, $queryID, $hasProject, $pager);
     }
 
     /**

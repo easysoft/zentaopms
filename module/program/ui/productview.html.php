@@ -246,6 +246,9 @@ $fnGenerateCols = function() use ($canBatchEdit)
     return $cols;
 };
 
+$pageSummary = sprintf($lang->product->lineSummary, $linesCount, count($productStats));
+jsVar('checkedSummary', $lang->program->checkedProducts);
+
 /* ZIN: layout. */
 featureBar
 (
@@ -283,13 +286,10 @@ dtable
             ) : null
         )
     )),
-    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}")),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$pageSummary}');}")),
     set::emptyTip($lang->product->noProduct),
     set::createTip($lang->product->create),
     set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null)
 );
-
-jsVar('pageSummary', sprintf($lang->product->lineSummary, $linesCount, count($productStats)));
-jsVar('checkedSummary', $lang->program->checkedProducts);
 
 render();

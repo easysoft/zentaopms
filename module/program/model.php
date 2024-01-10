@@ -230,10 +230,12 @@ class programModel extends model
      *
      * @param string  $orderBy
      * @param int     $queryID
+     * @param bool    $hasProject
+     * @param object  $pager
      * @access public
      * @return array
      */
-    public function getListBySearch(string $orderBy = 'id_asc', int $queryID = 0): array
+    public function getListBySearch(string $orderBy = 'id_asc', int $queryID = 0, bool $hasProject = false, object|null $pager = null): array
     {
         if($this->session->programQuery == false) $this->session->set('programQuery', ' 1 = 1');
         if($queryID)
@@ -268,10 +270,12 @@ class programModel extends model
 
         return $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('type')->eq('program')
+            ->beginIF(!$hasProject)->andWhere('type')->eq('program')->fi()
+            ->beginIF($hasProject)->andWhere('type')->in('program,project')->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 

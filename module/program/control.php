@@ -45,7 +45,7 @@ class program extends control
 
         $this->program->refreshStats(); // Refresh stats fields of projects.
 
-        $programs = $this->programZen->getProgramsByType($status, $orderBy, $param, $pager);
+        $programs = $this->programZen->getProgramsByType($status, $orderBy, (int)$param, $pager);
         $PMList   = $this->programZen->getPMListByPrograms($programs);
 
         /* Build the search form. */
@@ -695,19 +695,18 @@ class program extends control
         $this->loadModel('user');
         $this->session->set('productList', $this->app->getURI(true), 'program');
 
-        if($this->app->viewType == 'mhtml')
-        {
-            $productID = $this->product->checkAccess(0, $this->products);
-            $this->product->setMenu($productID);
-        }
-
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Process product structure. */
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
-        $queryID  = strtolower($browseType) == 'bysearch' ? $param : 0;
-        $products = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch($queryID) : $this->product->getList();
+
+        $products = $this->product->getList();
+        if(strtolower($browseType) == 'bysearch')
+        {
+            $programs = $this->program->getListBySearch('id', (int)$param);
+            array_map(function($product) use($programs, &$products){ if(!isset($programs[$product->program])) unset($products[$product->id]);}, $products);
+        }
         $products = $this->programZen->getProductsByBrowseType($browseType, $products); /* Filter the program by browse type. */
 
         $productStats     = $this->product->getStats(array_keys($products), $orderBy, $pager); /* The product stats list with program data and product data. */

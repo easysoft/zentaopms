@@ -15,11 +15,7 @@ window.renderCellProductView = function(result, {col, row})
         if(row.data.latestReleaseDate === '') return [''];
     }
 
-    if(col.name == 'totalProjects' && row.data.type !== 'product')
-    {
-        return [row.data.totalProjects];
-    }
-
+    if(col.name == 'totalProjects' && row.data.type !== 'product') return [row.data.totalProjects];
     return result;
 }
 
@@ -31,12 +27,9 @@ window.iconRenderProductView = function(value, row)
     return '';
 }
 
-window.footerSummary = function(checkedIdList)
+window.footerSummary = function(checkedIdList, pageSummary)
 {
-    if(!checkedIdList.length)
-    {
-        return {html: pageSummary, className: 'text-dark'};
-    }
+    if(!checkedIdList.length) return {html: pageSummary, className: 'text-dark'};
 
     let totalProducts = 0;
     checkedIdList.forEach(function(id)

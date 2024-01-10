@@ -194,7 +194,6 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('program', 'browse', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&param={$param}")),
-    $status == 'bySearch' ? set::footer(false) : null,
     set::footToolbar(array
     (
         'type'  => 'btn-group',

@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programModel::getListBySearch();
+cid=0
+
+- 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集第17条的name属性 @项目集17
+- 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集第2条的name属性 @项目集2
+- 按照id正序查看，符合搜索条件id=1，的第一个项目集第1条的name属性 @项目集1
+- 按照id正序查看，所有名称包含项目集的项目类型的数据。第18条的name属性 @项目集18
+- 加分页参数后，检查结果条目数。 @2
+- 检查分页总条目。 @5
+- 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集第1条的name属性 @项目集1
+- 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集第2条的name属性 @项目集2
+- 按照id正序查看，符合搜索条件id=1，的第一个项目集第1条的name属性 @项目集1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/program.class.php';
 zdTable('user')->gen(5);
@@ -8,7 +25,7 @@ su('admin');
 $program = zdTable('project');
 $program->id->range('1-20');
 $program->name->range('1-20')->prefix('项目集');
-$program->type->range('program');
+$program->type->range('program{17},project{3}');
 $program->path->range('1-20')->prefix(',')->postfix(',');
 $program->grade->range('1');
 $program->status->range('wait,doing,suspended,closed');
@@ -26,18 +43,6 @@ $query->form->range('`a:41:{s:9:"fieldname";s:0:"";s:11:"fieldstatus";s:0:"";s:9
 $query->sql->range("`(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `status` = 'wait'  ))`");
 $query->gen(1);
 
-/**
-
-title=测试 programModel::getListBySearch();
-cid=1
-pid=1
-
-按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集 >> 项目集17
-按照id正序查看，所有名称包含项目集并且进行中的第一个项目集 >> 项目集1
-按照id正序查看，符合搜索条件id=1，的第一个项目集           >> 项目集1
-
-*/
-
 global $tester;
 $programTester = new programTest();
 
@@ -46,9 +51,17 @@ $sql2 = "(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `status` = 'doing'
 
 $programTester->program->app->user->admin = true;
 
-r($programTester->getListBySearchTest('id_desc', 0, $sql1)) && p('17:name') && e('项目集17'); // 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集
-r($programTester->getListBySearchTest('id_asc',  0, $sql2)) && p('2:name')  && e('项目集2');  // 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集
-r($programTester->getListBySearchTest('id_asc',  1))        && p('1:name')  && e('项目集1');  // 按照id正序查看，符合搜索条件id=1，的第一个项目集
+r($programTester->getListBySearchTest('id_desc', 0, $sql1))       && p('17:name') && e('项目集17'); // 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  0, $sql2))       && p('2:name')  && e('项目集2');  // 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  1))              && p('1:name')  && e('项目集1');  // 按照id正序查看，符合搜索条件id=1，的第一个项目集
+r($programTester->getListBySearchTest('id_asc',  0, $sql2, true)) && p('18:name') && e('项目集18'); // 按照id正序查看，所有名称包含项目集的项目类型的数据。
+
+$programTester->program->app->moduleName = 'program';
+$programTester->program->app->methodName = 'browse';
+$programTester->program->app->loadClass('pager', true);
+$pager = new pager(0, 2, 1);
+r(count($programTester->getListBySearchTest('id_asc',  0, $sql2, true, $pager))) && p() && e('2'); // 加分页参数后，检查结果条目数。
+r($pager->recTotal) && p() && e('5');                                                              // 检查分页总条目。
 
 $programTester->program->app->rawMethod            = 'browse';
 $programTester->program->app->user->admin          = false;
