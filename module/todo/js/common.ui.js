@@ -121,9 +121,9 @@ function loadList(type, id, todoDefaultType, objectID)
         $.get(link, function(data)
         {
             data = JSON.parse(data);
+            if(todoDefaultType && type == todoDefaultType && objectID != 0) data.defaultValue = objectID;
             $(nameBoxClass).find('#nameInputBox').html("<div class='picker-box' id='" + type + "'></div>");
             const $typePicker = $('#nameInputBox #' + type).picker(data);
-            if(todoDefaultType && type == todoDefaultType && objectID != 0) $typePicker.$.setValue(objectID);
         });
     }
     else
