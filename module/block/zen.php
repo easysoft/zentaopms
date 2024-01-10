@@ -2110,6 +2110,8 @@ class blockZen extends block
      */
     protected function printRecentProjectBlock(): void
     {
+        $this->app->loadLang('program');
+
         /* load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager(0, 3, 1);

@@ -74,7 +74,7 @@ foreach($projects as $projectID => $project)
                         setClass('text-gray mr-1'),
                         $lang->project->end . ': '
                     ),
-                    $project->end
+                    $project->end == LONG_TIME ? $lang->program->longTime : $project->end
                 )
             )
         )
