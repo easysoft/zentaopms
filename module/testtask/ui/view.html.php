@@ -19,7 +19,8 @@ detailHeader
         entityLabel
         (
             set(array('entityID' => $task->id, 'level' => 1, 'text' => $task->name))
-        )
+        ),
+        $task->deleted ? span(setClass('label danger'), $lang->testtask->deleted) : null
     )
 );
 
