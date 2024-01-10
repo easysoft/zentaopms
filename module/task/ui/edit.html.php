@@ -242,7 +242,7 @@ detailBody
                             !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null
                         )
                     ),
-                    div
+                    !empty($task->team) && $task->mode == 'linear' ? div
                     (
                         btn
                         (
@@ -252,7 +252,7 @@ detailBody
                             setData('toggle', 'modal'),
                             $task->mode == 'multi' ? on::click('disableMembers') : null
                         )
-                    )
+                    ) : null
                 )
             ),
             item
