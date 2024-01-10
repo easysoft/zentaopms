@@ -200,7 +200,7 @@ window.loadPlans = function(product, branch)
             new zui.Picker(`#plans${productID}`, {
                 items: data,
                 multiple: true,
-                name: `plans[${productID}]`,
+                name: `plans[${productID}][]`,
             });
         }
     });
