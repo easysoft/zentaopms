@@ -991,7 +991,9 @@ class metricModel extends model
                 break;
             case 'product':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
-                    ->where('deleted')->eq(0)->fetchPairs();
+                    ->where('deleted')->eq(0)
+                    ->andWhere('shadow')->eq(0)
+                    ->fetchPairs();
                 break;
             case 'project':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
