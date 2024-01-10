@@ -246,22 +246,16 @@ class Project
     /**
      * Test manage members.
      *
-     * @param  int    $projectID
-     * @param  array  $members
+     * @param  int          $projectID
+     * @param  array        $members
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function manageMembers(int $projectID, array $members): array
+    public function manageMembers(int $projectID, array $members): array|string
     {
         $this->project->manageMembers($projectID, $members);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $this->project->getTeamMembers($projectID);
-        }
+        if(dao::isError()) return dao::getError();
+        return $this->project->getTeamMembers($projectID);
     }
 
     /**
