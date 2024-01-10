@@ -45,3 +45,8 @@ window.onRenderLinkStoryCell = function(result, {row, col})
 
     return [''];
 };
+
+window.onSearchLinks = function(type, result)
+{
+    loadComponent('#table-execution-linkstory', {url: result.load, component: 'dtable', partial: true});
+};
