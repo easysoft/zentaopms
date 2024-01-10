@@ -415,35 +415,6 @@ class kanbanTao extends kanbanModel
      * 获取专业研发看板分组视图下的看板数据。
      * Get kanban data for group view of RD kanban.
      *
-     * @param  object $execution
-     * @param  string $browseType
-     * @param  string $groupBy
-     * @param  string $searchValue
-     * @param  string $orderBy
-     * @access public
-     * @return array
-     */
-    protected function getRDKanbanByGroup(object $execution, string $browseType, string $orderBy, int $regionID, string $groupBy, string $searchValue): array
-    {
-        $regionData = array();
-        $heading          = new stdclass();
-        $heading->title   = $execution->name;
-        $heading->actions = $this->getRDRegionActions($execution->id, $regionID);
-
-        $regionData['key']               = "region{$execution->id}";
-        $regionData['id']                = $execution->id;
-        $regionData['heading']           = $heading;
-        $regionData['toggleFromHeading'] = true;
-        $regionData['items']             = $this->getKanban4Group($execution->id, $browseType, $groupBy, $searchValue, $orderBy);
-
-        $kanbanList[] = $regionData;
-        return $kanbanList;
-    }
-
-    /**
-     * 获取专业研发看板分组视图下的看板数据。
-     * Get kanban data for group view of RD kanban.
-     *
      * @param  array  $regionData
      * @param  array  $groups
      * @param  array  $laneGroup

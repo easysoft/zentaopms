@@ -901,7 +901,7 @@ class kanbanModel extends model
         $kanbanList = array();
         $execution  = $this->loadModel('execution')->getByID($executionID);
 
-        if($groupBy != 'default' && $groupBy != '') return $this->kanbanTao->getRDKanbanByGroup($execution, $browseType, $orderBy, $regionID, $groupBy, $searchValue);
+        if($groupBy != 'default' && $groupBy != '') return $this->getRDKanbanByGroup($execution, $browseType, $orderBy, $regionID, $groupBy, $searchValue);
 
         $regions      = $this->getRegionPairs($executionID, $regionID, 'execution');
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
@@ -943,6 +943,35 @@ class kanbanModel extends model
             if(!empty($regionData['items'])) $kanbanList[] = $regionData;
         }
 
+        return $kanbanList;
+    }
+
+    /**
+     * 获取专业研发看板分组视图下的看板数据。
+     * Get kanban data for group view of RD kanban.
+     *
+     * @param  object  $execution
+     * @param  string  $browseType
+     * @param  string  $groupBy
+     * @param  string  $searchValue
+     * @param  string  $orderBy
+     * @access private
+     * @return array
+     */
+    private function getRDKanbanByGroup(object $execution, string $browseType, string $orderBy, int $regionID, string $groupBy, string $searchValue): array
+    {
+        $regionData = array();
+        $heading          = new stdclass();
+        $heading->title   = $execution->name;
+        $heading->actions = $this->getRDRegionActions($execution->id, $regionID);
+
+        $regionData['key']               = "region{$execution->id}";
+        $regionData['id']                = $execution->id;
+        $regionData['heading']           = $heading;
+        $regionData['toggleFromHeading'] = true;
+        $regionData['items']             = $this->getKanban4Group($execution->id, $browseType, $groupBy, $searchValue, $orderBy);
+
+        $kanbanList[] = $regionData;
         return $kanbanList;
     }
 
