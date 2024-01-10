@@ -844,7 +844,7 @@ class taskTao extends taskModel
             {
                 $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
                 $cancelURL  = helper::createLink('task', 'view', "taskID={$task->id}");
-                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $task->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $task->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL), 'closeModal' => true);
             }
         }
 
