@@ -750,6 +750,8 @@ class branchModel extends model
             foreach($this->config->branch->form->create as $field => $setting) $branch->$field = $data->$field;
 
             $targetBranch = $this->create($productID, $branch);
+            if(dao::isError()) return false;
+
             $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
         }
         else

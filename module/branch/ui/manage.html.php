@@ -28,6 +28,8 @@ toolbar
 
 jsVar('confirmclose',    $lang->branch->confirmClose);
 jsVar('confirmactivate', $lang->branch->confirmActivate);
+jsVar('confirmMerge',    $lang->branch->confirmMerge);
+jsVar('branchNamePairs', array_flip($branchPairs));
 
 modal
 (
@@ -47,7 +49,7 @@ modal
     form
     (
         setID('mergeForm'),
-        set::ajax(array('beforeSubmit' => jsRaw("() => zui.Modal.confirm('{$lang->branch->confirmMerge}')"))),
+        set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
         setClass('text-center', 'py-4'),
         set::actions(array('submit')),
         set::url(createLink('branch', 'mergeBranch', "productID={$product->id}")),
@@ -65,7 +67,7 @@ modal
                 ),
                 div
                 (
-                    setClass('input-control-suffix opacity-100 bg-white z-10 form-batch-ditto-btn mr-1'),
+                    setClass('input-control-suffix opacity-100 bg-white z-10 mr-1'),
                     checkbox
                     (
                         setID('createBranch'),
@@ -94,6 +96,7 @@ modal
             ),
             formGroup
             (
+                setClass('mt-4'),
                 set::label(sprintf($lang->branch->desc, $lang->product->branchName[$product->type])),
                 textarea
                 (

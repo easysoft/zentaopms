@@ -73,3 +73,30 @@ function createBranch()
         $('#createForm').removeClass('hidden');
     }
 }
+
+window.clickSubmit = function()
+{
+    let mergedBranchName = '';
+    let targetBranchName = $('#mergeForm .picker-single-selection').text();
+
+    $(".is-checked[data-col='name']").each(function()
+    {
+        mergedBranchName += ',' + $(this).find('.dtable-cell-content').attr('title');
+    });
+
+    mergedBranchName = mergedBranchName.substr(1);
+    targetBranchName = $('#createBranch').prop('checked') ? $('#mergeForm input[name=name]').val() : targetBranchName;
+
+    let confirmMergeMessage = confirmMerge.replace(/(.*)mergedBranch(.*)targetBranch(.*)/, "$1" + mergedBranchName + "$2" + targetBranchName + "$3");
+
+    const formUrl  = $('#mergeForm').attr('action');
+    const formData = new FormData($("#mergeForm")[0]);
+    console.log(branchNamePairs);
+    if(targetBranchName && typeof branchNamePairs[targetBranchName] === 'undefined')
+    {
+        zui.Modal.confirm(confirmMergeMessage).then((res) => {
+            if(res) $.ajaxSubmit({url: formUrl, data: formData})
+        });
+        return false;
+    }
+}
