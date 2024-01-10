@@ -1178,7 +1178,7 @@ class mrModel extends model
         }
 
         $users          = $this->loadModel('user')->getPairs('noletter');
-        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . $MR->id);
+        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . $MR->id;
         $product        = $this->getMRProduct($MR);
 
         $this->loadModel('action');
