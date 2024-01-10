@@ -292,11 +292,19 @@ class todoZen extends todo
             if(isset($object->title)) $todo->name = $object->title;
         }
 
-        if($todo->end < $todo->begin)
+        $requiredFields = isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList) ? str_replace(',name,', ',', ",{$this->config->todo->edit->requiredFields},") : $this->config->todo->edit->requiredFields;
+        $requiredFields = trim($requiredFields, ',');
+        foreach(explode(',', $requiredFields) as $field)
         {
-            dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-            return false;
+            if(!empty($field) && empty($todo->$field)) dao::$errors[$field] = sprintf($this->lang->error->notempty, $this->lang->todo->$field);
         }
+        if($hasObject && !$objectID)
+        {
+            dao::$errors[$todo->type] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
+            unset(dao::$errors['objectID']);
+        }
+        if($todo->end < $todo->begin) dao::$errors['end']       = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+        if(dao::isError()) return false;
 
         /* Handle cycle configuration item. */
         if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);

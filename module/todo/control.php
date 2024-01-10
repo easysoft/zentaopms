@@ -126,6 +126,11 @@ class todo extends control
     {
         if(!empty($_POST))
         {
+            if($this->post->type != 'custom')
+            {
+                if($this->post->type && in_array($this->post->type, $this->config->todo->moduleList)) $this->config->todo->edit->requiredFields = str_replace(',name,', ',', ",{$this->config->todo->edit->requiredFields},");
+                $this->config->todo->edit->form['name']['required'] = false;
+            }
             $form = form::data($this->config->todo->edit->form);
             $form = $this->todoZen->addCycleYearConfig($form);
 

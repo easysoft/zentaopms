@@ -116,8 +116,7 @@ class todoTao extends todoModel
      */
     protected function updateRow(int $todoID, object $todo): bool
     {
-        $requiredFields = isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList) ? str_replace(',name,', '', ",{$this->config->todo->edit->requiredFields},") : $this->config->todo->edit->requiredFields;
-        if(isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList)) $requiredFields .= ',objectID';
+        $requiredFields = isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList) ? str_replace(',name,', ',objectID,', ",{$this->config->todo->edit->requiredFields},") : $this->config->todo->edit->requiredFields;
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($requiredFields, $requiredFields, 'notempty')
