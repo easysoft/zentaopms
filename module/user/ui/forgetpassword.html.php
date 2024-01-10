@@ -56,7 +56,7 @@ div
                 toolbar
                 (
                     btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'mx-4'))),
-                    btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4')))
+                    btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'class' => 'mx-4 not-open-url')))
                 )
             )
         )
