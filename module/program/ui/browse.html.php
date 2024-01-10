@@ -152,7 +152,7 @@ foreach($data as $programID => $program)
 featureBar
 (
     set::current($status),
-    set::linkParams("status={key}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("status={key}&orderBy={$orderBy}"),
     li(searchToggle(set::module('program'), set::open($status == 'bySearch')))
 );
 
