@@ -14,7 +14,7 @@ detailHeader
 (
     to::prefix(''),
     to::title(entityLabel(set(array('level' => 1, 'text' => $lang->company->view)))),
-    to::suffix(
+    hasPriv('company', 'edit') ? to::suffix(
         btn
         (
             setClass('btn primary'),
@@ -23,7 +23,7 @@ detailHeader
             setData(array('toggle' => 'modal', 'size' => 'sm')),
             $lang->edit
         )
-    )
+    ) : null
 );
 
 detailBody
