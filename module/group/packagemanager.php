@@ -654,7 +654,7 @@ $config->group->package->manageProductLine = new stdclass();
 $config->group->package->manageProductLine->order  = 10;
 $config->group->package->manageProductLine->subset = 'product';
 $config->group->package->manageProductLine->privs  = array();
-$config->group->package->manageProductLine->privs['product-manageLine'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 90, 'depend' => array('product-all'), 'recommend' => array('product-create', 'product-edit', 'product-updateOrder'));
+$config->group->package->manageProductLine->privs['product-manageLine'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 90, 'depend' => array('product-all'), 'recommend' => array('product-create', 'product-edit', 'product-updateOrder'));
 
 $config->group->package->createProduct = new stdclass();
 $config->group->package->createProduct->order  = 15;
