@@ -26,10 +26,10 @@ function loadExecutionRelated()
  */
 window.loadExecutionBuilds = function()
 {
-    const productID   = $('[name=product]').val();
-    const executionID = $('[name=execution]').val();
-    var selectedBuild = $('[name=build]').val();
-    if(!selectedBuild) selectedBuild = 0;
+    const productID   = $('[name=product]').val() || 0;
+    const executionID = $('[name=execution]').val() || 0;
+    const projectID   = $('[name=project]').val() || 0;
+    var selectedBuild = $('[name=build]').val() || 0;
 
     var link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=testTaskBuild&build=' + selectedBuild);
     if(executionID == 0) link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=build&build=' + selectedBuild + '&branch=&needCreate=&type=noempty,notrunk,withexecution');

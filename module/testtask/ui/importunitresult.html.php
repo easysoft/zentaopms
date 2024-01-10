@@ -18,15 +18,21 @@ formPanel
 
     formRow
     (
+        input
+        (
+            setClass('hidden'),
+            set::name('product'),
+            set::value($productID)
+        ),
         formGroup
         (
             set::label($lang->testtask->execution),
             set::width('1/2'),
             picker
             (
+                setID('execution'),
                 set::name('execution'),
                 set::items($executions),
-                on::change('onExecutionChange(event, ' . $productID . ')'),
             )
         ),
         formGroup
@@ -41,16 +47,15 @@ formPanel
                     set::name('build'),
                     set::items($builds)
                 ),
-                !empty($executionID) && empty($builds) ? span
+                span
                 (
-                    set::className('input-group-addon'),
+                    setClass('input-group-addon' . (!empty($builds) ? ' hidden' : '')),
                     a
                     (
-                        set::url(createLink('build', 'create', "executionID=$executionID")),
                         set('data-toggle', 'modal'),
                         $lang->build->create
                     )
-                ) : null
+                )
             )
         )
     ),
