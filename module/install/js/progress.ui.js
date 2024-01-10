@@ -94,6 +94,7 @@ function getInstallProgress()
             if(res.message instanceof Object) errMessage = Object.values(res.message).join('<br/>');
 
             $('.error-message').text(errMessage);
+            clearInterval(logTimer);
         }
     });
 }
@@ -125,6 +126,7 @@ window.cancelInstall = function()
         $('#cancelInstallBtn').removeAttr('disabled');
         if(!result) return;
 
+        clearInterval(logTimer);
         toggleLoading('#mainContent', true);
         $.ajaxSubmit({
             url: $.createLink('install', 'ajaxUninstall', 'id=' + solutionID),
