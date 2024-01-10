@@ -29,9 +29,9 @@ class dimensionModel extends model
      * Get the first dimension object.
      *
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getFirst(): object
+    public function getFirst(): object|false
     {
         return $this->dao->select('*')->from(TABLE_DIMENSION)->where('deleted')->eq('0')->orderBy('id')->limit(1)->fetch();
     }
