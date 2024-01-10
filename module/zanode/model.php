@@ -760,8 +760,7 @@ class zanodemodel extends model
         $action = strtolower($action);
         if(isset($node->from) && $node->from == 'snapshot')
         {
-            $nodeStatus = zget($node, 'status', 'running');
-            if((!empty($node->isDefault) || $nodeStatus != 'running') && in_array($action, array('editsnapshot', 'deletesnapshot'))) return false;
+            if(!empty($node->isDefault) && in_array($action, array('editsnapshot', 'deletesnapshot'))) return false;
         }
 
         if($action == 'resume') return $node->status == 'suspend' && $node->hostType != 'physics';
