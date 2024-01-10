@@ -200,6 +200,7 @@ $config->bug->dtable->fieldList['lastEditedBy']['title']    = $lang->bug->lastEd
 $config->bug->dtable->fieldList['lastEditedBy']['type']     = 'user';
 $config->bug->dtable->fieldList['lastEditedBy']['group']    = 10;
 $config->bug->dtable->fieldList['lastEditedBy']['sortType'] = true;
+$config->bug->dtable->fieldList['lastEditedBy']['width']    = '90px';
 
 $config->bug->dtable->fieldList['lastEditedDate']['title']    = $lang->bug->abbr->lastEditedDate;
 $config->bug->dtable->fieldList['lastEditedDate']['type']     = 'date';
