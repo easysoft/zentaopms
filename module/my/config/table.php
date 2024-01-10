@@ -887,6 +887,7 @@ $config->my->audit->dtable->fieldList['title']['name']        = 'title';
 $config->my->audit->dtable->fieldList['title']['title']       = $lang->my->auditField->title;
 $config->my->audit->dtable->fieldList['title']['type']        = 'title';
 $config->my->audit->dtable->fieldList['title']['fixed']       = 'left';
+$config->my->audit->dtable->fieldList['title']['link']        = array('module' => '{module}', 'method' => 'view', 'params' => 'id={id}&from=my');
 $config->my->audit->dtable->fieldList['title']['data-toggle'] = 'modal';
 $config->my->audit->dtable->fieldList['title']['data-size']   = 'lg';
 $config->my->audit->dtable->fieldList['title']['sortType']    = true;

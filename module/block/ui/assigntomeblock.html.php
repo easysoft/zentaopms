@@ -83,6 +83,8 @@ foreach($hasViewPriv as $type => $bool)
         $statusList = array();
         foreach($data as $review)
         {
+            $review->module = $review->type;
+
             $reviewType = $review->type;
             if($reviewType == 'projectreview') $reviewType = 'review';
 
