@@ -33,7 +33,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse(string $status = 'unclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1, int $param = 0)
+    public function browse(string $status = 'unclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, int $param = 0)
     {
         $uri = $this->app->getURI(true);
         $this->session->set('programList', $uri, 'program');
@@ -688,7 +688,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function productView(string $browseType = 'unclosed', string $orderBy = 'program_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function productView(string $browseType = 'unclosed', string $orderBy = 'program_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         /* Load module and set session. */
         $this->loadModel('product');
