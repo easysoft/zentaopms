@@ -1481,6 +1481,8 @@ class metricModel extends model
      */
     public function getMetricRecordType($code, $scope)
     {
+        if(!$code) return false;
+
         $type = array();
         $dateType = $this->getDateTypeByCode($code);
 
