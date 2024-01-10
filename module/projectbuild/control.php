@@ -40,7 +40,14 @@ class projectBuild extends control
      */
     public function create(int $projectID = 0)
     {
-        echo $this->fetch('build', 'create', "executionID=0&productID=0&projectID=$projectID");
+        $executionID = 0;
+        $project     = $this->loadModel('project')->fetchById($projectID);
+        if(strpos('stage,sprint,kanban', $project->type) !== false)
+        {
+            $executionID = $projectID;
+            $projectID   = $project->project;
+        }
+        echo $this->fetch('build', 'create', "executionID=$executionID&productID=0&projectID=$projectID");
     }
 
     /**
