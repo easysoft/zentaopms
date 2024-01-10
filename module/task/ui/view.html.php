@@ -40,7 +40,8 @@ detailHeader
                 span('/'),
                 span(setStyle(array('color' => $task->color)), $task->name)
             ) : span(setStyle(array('color' => $task->color)), $task->name)
-        )
+        ),
+        $task->deleted ? span(setClass('label danger'), $lang->task->deleted) : null
     ),
     !isAjaxRequest('modal') && common::hasPriv('task', 'create', $task) ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
