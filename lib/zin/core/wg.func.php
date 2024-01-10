@@ -14,6 +14,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once __DIR__ . DS . 'props.class.php';
 require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'setting.class.php';
 require_once __DIR__ . DS . 'rawcontent.class.php';
 require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'context.func.php';
