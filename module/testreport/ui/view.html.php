@@ -190,7 +190,7 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
     $xAxisData[]  = $date;
     $tableTR[]    = h::tr
     (
-        h::td($date),
+        h::td(setClass('text-center'), $date),
         h::td($generated),
         h::td($legacy),
         h::td($resolved)
@@ -355,9 +355,9 @@ div
                                 icon
                                 (
                                     'help',
-                                    set('data-toggle', 'tooltip'),
-                                    set('id', 'goalTip'),
-                                    set('class', 'text-light')
+                                    setID('goalTip'),
+                                    setClass('text-light mr-0.5'),
+                                    setData('toggle', 'tooltip'),
                                 ),
                                 strip_tags($execution->desc)
                             ) : null,

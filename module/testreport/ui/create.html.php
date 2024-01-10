@@ -173,7 +173,7 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
     $xAxisData[]  = $date;
     $tableTR[]    = h::tr
     (
-        h::td($date),
+        h::td(setClass('text-center'), $date),
         h::td($generated),
         h::td($legacy),
         h::td($resolved)
@@ -446,12 +446,14 @@ panel
                 span
                 (
                     setClass('flex items-center'),
-                    html($execution->desc),
                     icon
                     (
                         'help',
-                        toggle::tooltip(array('title' => $lang->testreport->goalTip))
+                        setID('goalTip'),
+                        setClass('text-light mr-0.5'),
+                        setData('toggle', 'tooltip'),
                     ),
+                    strip_tags($execution->desc)
                 )
             )
         ) : null,
@@ -545,6 +547,7 @@ panel
     ),
     formPanel
     (
+        setID('tabReport'),
         set::className('mt-6'),
         set::title($lang->testreport->legendReport),
         set::actions(array()),
