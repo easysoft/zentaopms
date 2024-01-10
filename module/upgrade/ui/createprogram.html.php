@@ -31,7 +31,7 @@ $createProgram = function($data)
             setClass('programForm mt-4 form-horz'),
             formGroup
             (
-                setClass('programName'),
+                setClass('programName my-2'),
                 set::label($lang->upgrade->programName),
                 set::required(true),
                 inputGroup
@@ -48,7 +48,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass($data->systemMode == 'light' ? 'programStatus hidden' : 'programStatus'),
+                setClass($data->systemMode == 'light' ? 'programStatus hidden' : 'programStatus', 'my-2'),
                 set::label($lang->program->common . $lang->program->status),
                 inputGroup
                 (
@@ -57,7 +57,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('projectName hidden'),
+                setClass('projectName hidden my-2'),
                 set::label($lang->upgrade->projectName),
                 inputGroup
                 (
@@ -72,7 +72,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('programParams hidden projectStatus'),
+                setClass('programParams hidden projectStatus my-2'),
                 set::label($lang->project->status),
                 inputGroup
                 (
@@ -81,7 +81,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('lineName'),
+                setClass('lineName my-2'),
                 set::label($lang->upgrade->line),
                 inputGroup
                 (
@@ -96,7 +96,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('programParams hidden'),
+                setClass('programParams hidden my-2'),
                 set::label($lang->project->PM),
                 inputGroup
                 (
@@ -105,7 +105,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('programParams hidden'),
+                setClass('programParams hidden my-2'),
                 set::label($lang->project->dateRange),
                 set::required(true),
                 inputGroup
@@ -118,7 +118,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('programParams hidden'),
+                setClass('programParams hidden my-2'),
                 set::label($lang->project->acl),
                 radioList(set::name('programAcl'), set::items($lang->program->aclList), set::value('open')),
                 radioList(set::name('projectAcl'), setClass('hidden'), set::items($lang->project->subAclList), set::value('open'))
