@@ -13,23 +13,23 @@ declare(strict_types=1);
 namespace zin\utils;
 
 /**
- * Manage dataset properties for html element and widgets
+ * Manage dataset properties for html element and widgets.
  */
 class dataset
 {
     /**
-     * Store dataset properties list in an array
+     * Store dataset properties list in an array.
      *
      * @var    array
      * @access protected
      */
-    protected array $data = array();
+    protected array $_data = array();
 
     /**
-     * Create an instance, the initialed data can be passed
+     * Create an instance, the initialed data can be passed.
      *
      * @access public
-     * @param array $data - Properties list array
+     * @param array $data  Properties list array.
      */
     public function __construct(array $data = array())
     {
@@ -48,149 +48,231 @@ class dataset
     }
 
     /**
-     * Method for sub class to modify value on setting it
+     * Method for sub class to hook on setting it.
      *
      * @access protected
-     * @param string   $prop        - Property name or properties list
-     * @param mixed          $value       - Property value
+     * @param string    $prop         Property name or properties list.
+     * @param mixed     $value        Property value.
      * @return dataset
      */
     protected function setVal(string $prop, mixed $value): dataset
     {
-        $this->data[$prop] = $value;
+        $this->_data[$prop] = $value;
         return $this;
     }
 
+    /**
+     * Method for sub class to hook on getting it.
+     *
+     * @access protected
+     * @param string $prop  Property name.
+     * @return mixed
+     */
     protected function getVal(string $prop): mixed
     {
-        return isset($this->data[$prop]) ? $this->data[$prop] : null;
+        return isset($this->_data[$prop]) ? $this->_data[$prop] : null;
     }
 
     /**
-     * Get properties count
+     * Get properties count.
      *
      * @access public
-     * @param bool $skipEmpty - Whether to skip to count empty value
+     * @param bool $skipEmpty  Whether to skip to count empty value.
      * @return int
      */
-    public function count($skipEmpty = false): int
+    public function getCount(bool $skipEmpty = false): int
     {
-        if(!$skipEmpty) return count($this->data);
+        if(!$skipEmpty) return count($this->_data);
 
         $count = 0;
-        foreach($this->data as $value)
-        {
-            if($value !== null) $count++;
-        }
+        foreach($this->_data as $value) if($value !== null) $count++;
         return $count;
     }
 
     /**
-     * Convert dataset to json string
+     * Get properties count.
+     *
+     * @deprecated Use getCount instead.
+     * @access public
+     * @param bool $skipEmpty  Whether to skip to count empty value.
+     * @return int
+     */
+    public function count(bool $skipEmpty = false): int
+    {
+        return $this->getCount($skipEmpty);
+    }
+
+    /**
+     * Convert dataset to json string.
      *
      * @access public
      * @return string
      */
     public function toStr(): string
     {
-        return json_encode($this->toJSON());
-    }
-
-    public function toJSON(): array
-    {
-        return $this->data;
+        return json_encode($this->toArray());
     }
 
     /**
-     * Set property, an array can be passed to set multiple properties
+     * Convert dataset to array.
      *
      * @access public
-     * @param array|string   $prop        - Property name or properties list
-     * @param mixed          $value       - Property value
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->_data;
+    }
+
+    /**
+     * Convert dataset to json array.
+     *
+     * @deprecated Use toArray instead.
+     * @access public
+     * @return array
+     */
+    public function toJSON(): array
+    {
+        return $this->_data;
+    }
+
+    /**
+     * Set property, an array can be passed to set multiple properties.
+     *
+     * @access public
+     * @param array|object|string   $prop  Property name or properties list.
+     * @param mixed                 $value Property value.
      * @return dataset
      */
-    public function set(array|string $prop, mixed $value = null): dataset
+    public function set(array|object|string $prop, mixed $value = null): dataset
     {
+        if(is_string($prop)) return $this->setVal($prop, $value);
+
+        if(is_object($prop)) $prop = get_object_vars($prop);
         if(is_array($prop))
         {
             foreach($prop as $name => $val) $this->set($name, $val);
-            return $this;
         }
-
-        return $this->setVal($prop, $value);
+        return $this;
     }
 
     /**
-     * Get property value by name
+     * Get property value by name, if the value not exists, return defaultValue.
+     * If not property name passed, return all properties.
      *
      * @access public
-     * @param string $prop         - Property name
-     * @param mixed  $defaultValue - Optional default value if actual value is null
+     * @param string|array $prop          Property name.
+     * @param mixed        $defaultValue  Optional default value if actual value is null.
      * @return mixed
      */
-    public function get($prop, $defaultValue = null)
+    public function get(string|array $prop = null, mixed $defaultValue = null): mixed
     {
+        if(is_null($prop)) return $this->_data;
+
+        if(is_array($prop))
+        {
+            $values = array();
+            foreach($prop as $name)
+            {
+                $value = $this->getVal($name);
+                $values[$name] = (is_null($value) && is_array($defaultValue)) ? (isset($defaultValue[$name]) ? $defaultValue[$name] : null) : $value;
+            }
+            return $values;
+        }
+
         $val = $this->getVal($prop);
         return $val === null ? $defaultValue : $val;
     }
 
-    public function addToList($prop, $values)
+    /**
+     * Add value to array list.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @param mixed  $values        Array list value.
+     * @return mixed
+     */
+    public function addToList(string $prop, mixed $values): dataset
     {
         if(!is_array($values)) $values = array($values);
 
         $list = $this->getList($prop);
         $this->set($prop, array_merge($list, $values));
+        return $this;
     }
 
-    public function getList($prop)
+    /**
+     * Get array list value by name, if not exists, return an empty array.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @return mixed
+     */
+    public function getList(string $prop): array
     {
         return $this->get($prop, array());
     }
 
     /**
-     * Delete property by name
+     * Delete property by name.
      *
      * @access public
-     * @param string $prop - Property name
+     * @param string $prop  Property name.
      * @return dataset
      */
-    public function remove($prop)
+    public function remove(string $prop): dataset
     {
         return $this->setVal($prop, null);
     }
 
-    public function clear()
+    /**
+     * Clear all properties.
+     *
+     * @access public
+     * @return dataset
+     */
+    public function clear(): dataset
     {
-        $this->data = array();
+        $this->_data = array();
+        return $this;
     }
 
     /**
-     * Check whether has specified property
+     * Check whether has specified property.
      *
      * @access public
-     * @param string $prop - Property name
-     * @return boolean
+     * @param string $prop  Property name.
+     * @return bool
      */
-    public function has($prop)
+    public function has(string $prop): bool
     {
         return $this->getVal($prop) !== null;
     }
 
     /**
-     * Clone a new instance
+     * Clone a new instance.
      *
      * @access public
      * @return object
      */
-    public function copy()
+    public function copy(): object
     {
         $className = get_called_class();
-        return new $className($this->data);
+        return new $className($this->_data);
     }
 
-    public function merge($data)
+    /**
+     * Merge data to current dataset.
+     *
+     * @access public
+     * @param array|object $data  Data to merge.
+     * @return dataset
+     */
+    public function merge(array|object $data): dataset
     {
+        if($data instanceof dataset)               return $this->set($data->toArray());
         if(is_object($data) && isset($data->data)) return $this->set($data->data);
+
         return $this->set($data);
     }
 }

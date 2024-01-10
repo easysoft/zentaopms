@@ -88,7 +88,7 @@ class props extends \zin\utils\dataset
         }
         if($prop === 'style' || $prop === '~')
         {
-            if(!$this->style->count(true)) return null;
+            if(!$this->style->getCount(true)) return null;
             return $this->style->toStr();
         }
         return parent::getVal($prop);
@@ -130,7 +130,7 @@ class props extends \zin\utils\dataset
     public function events(): array
     {
         $events = array();
-        foreach($this->data as $name => $value)
+        foreach($this->_data as $name => $value)
         {
             if(str_starts_with($name, '@')) $events[substr($name, 1)] = $value;
         }
@@ -140,7 +140,7 @@ class props extends \zin\utils\dataset
 
     public function hasEvent(): bool
     {
-        foreach($this->data as $name => $value)
+        foreach($this->_data as $name => $value)
         {
             if(str_starts_with($name, '@')) return true;
         }
@@ -182,9 +182,9 @@ class props extends \zin\utils\dataset
         $pairs = array();
 
         if($this->class->count())     $pairs[] = 'class="' . $this->class->toStr() . '"';
-        if($this->style->count(true)) $pairs[] = 'style="' . $this->style->toStr() . '"';
+        if($this->style->getCount(true)) $pairs[] = 'style="' . $this->style->toStr() . '"';
 
-        foreach($this->data as $name => $value)
+        foreach($this->_data as $name => $value)
         {
             /* Handle boolean attributes */
             if(in_array($name, static::$booleanAttrs)) $value = $value ? true : null;
@@ -210,8 +210,10 @@ class props extends \zin\utils\dataset
 
     public function toJSON(bool $skipEvents = false): array
     {
-        $data = $this->data;
-        if(!empty($this->style->data)) $data['style'] = $this->style->data;
+        $data      = $this->_data;
+        $styleData = $this->style->get();
+
+        if(!empty($styleData)) $data['style'] = $styleData;
         if(!empty($this->class->toJSON())) $data['class'] = $this->class->toStr();
 
         if($skipEvents)
@@ -276,7 +278,7 @@ class props extends \zin\utils\dataset
      */
     public function copy(): props
     {
-        $props = new props($this->data);
+        $props = new props($this->_data);
         $props->style = clone $this->style;
         $props->class = clone $this->class;
         return $props;

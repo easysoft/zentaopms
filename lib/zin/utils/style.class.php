@@ -99,7 +99,7 @@ class style extends dataset
         if(empty($name))
         {
             $vars = array();
-            foreach ($this->data as $prop => $value)
+            foreach ($this->_data as $prop => $value)
             {
                 if(!str_starts_with($name, '--')) continue;
                 $vars[substr($prop, 2)] = $value;
@@ -127,7 +127,7 @@ class style extends dataset
     {
         $pairs = array();
 
-        foreach($this->data as $prop => $value)
+        foreach($this->_data as $prop => $value)
         {
             /* Skip any empty value */
             if($value === null || $value === '') continue;
