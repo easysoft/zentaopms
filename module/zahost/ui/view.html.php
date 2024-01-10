@@ -253,9 +253,10 @@ detailBody
         (
             set::title($lang->zahost->browseNode)
         ),
-        !empty($nodeList) ? h::iframe
+        !empty($nodeList) ? div
         (
-            set::src(createLink('zanode', 'nodeList', "hostID={$zahost->id}", '', true)),
+            setID('nodeList'),
+            h::js('loadTarget("' . createLink('zanode', 'nodeList', "hostID={$zahost->id}") . '", "#nodeList")')
         ) : $lang->noData
     ) : null,
     floatToolbar
