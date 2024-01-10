@@ -576,7 +576,7 @@ class story extends control
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $this->story->replaceURLang($storyType);
+        if(empty($storyID)) $this->story->replaceURLang($storyType);
 
         /* Check can subdivide or not. */
         $product = $this->product->getById($productID);
