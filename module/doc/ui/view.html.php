@@ -105,7 +105,7 @@ if(!empty($editors))
         $items[] = array('text' => $info);
     }
 
-    $editorGroup = count($items) > 1 ? dropdown
+    $editorGroup = count($items) > 0 ? dropdown
     (
         btn
         (
