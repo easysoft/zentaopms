@@ -682,10 +682,10 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
         $actionConfig = $actionList[$action];
         $notLoadModel = !empty($actionConfig['notLoadModel']) ? $actionConfig['notLoadModel'] : false;
-        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'] && !$notLoadModel)
+        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
         {
             $module = $actionConfig['url']['module'];
-            $model  = $app->control->loadModel($module);
+            if(!$notLoadModel) $model  = $app->control->loadModel($module);
         }
 
         $method = $action;
