@@ -105,7 +105,7 @@ if(!empty($editors))
         $items[] = array('text' => $info);
     }
 
-    $editorGroup = dropdown
+    $editorGroup = count($items) > 1 ? dropdown
     (
         btn
         (
@@ -113,6 +113,10 @@ if(!empty($editors))
             $editorInfo
         ),
         set::items($items)
+    ) : btn
+    (
+        setClass('ghost btn square btn-default'),
+        $editorInfo
     );
 }
 
