@@ -18,7 +18,11 @@ $canBeChanged = common::canBeChanged($releaseModule, $release);
 $menus        = $this->release->buildOperateViewMenu($release);
 detailHeader
 (
-    to::title(entityLabel(set(array('entityID' => $release->id, 'level' => 1, 'text' => $release->name)))),
+    to::title
+    (
+        entityLabel(set(array('entityID' => $release->id, 'level' => 1, 'text' => $release->name))),
+        $release->deleted ? span(setClass('label danger'), $lang->release->deleted) : null
+    ),
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
