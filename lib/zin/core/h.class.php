@@ -24,6 +24,12 @@ class h extends wg
         'selfClose?: bool'
     );
 
+    protected function onSetProp(array|string $prop, mixed $value)
+    {
+        if($prop === 'className') $prop = 'class';
+        return parent::onSetProp($prop, $value);
+    }
+
     public function getTagName(): string
     {
         return $this->props->get('tagName');
@@ -49,9 +55,9 @@ class h extends wg
         return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
-    public function toJsonData(): array
+    public function toJSON(): array
     {
-        $data = parent::toJsonData();
+        $data = parent::toJSON();
         $data['type'] = 'h:' . $this->getTagName();
         return $data;
     }
