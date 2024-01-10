@@ -462,7 +462,7 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            $this->action->create($type, (int)$linkID, 'linked2revision', '', $revisionID, $committer);
+            $this->action->create($type, (int)$linkID, 'linked2revision', '', substr($revisionInfo->revision, 0, 10), $committer);
         }
         return !dao::isError();
     }
@@ -506,7 +506,7 @@ class repoModel extends model
             ->andWhere('BType')->eq($objectType)
             ->andWhere('BID')->eq($objectID)->exec();
 
-        if(!dao::isError()) $this->loadModel('action')->create($objectType, $objectID, 'unlinkedfromrevision', '', $revisionID);
+        if(!dao::isError()) $this->loadModel('action')->create($objectType, $objectID, 'unlinkedfromrevision', '', substr($revision, 0, 10));
         return !dao::isError();
     }
 
