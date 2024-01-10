@@ -435,6 +435,8 @@ class api extends control
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel();
         $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->object   = $object;
+
         $this->display();
     }
 
