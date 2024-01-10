@@ -686,7 +686,7 @@ class execution extends control
         $this->view->title    = $execution->name . $this->lang->colon . $this->lang->execution->build;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->view->builds   = $this->executionZen->processBuildListData($builds, $executionID);
-        $this->view->product  = $type == 'product' ? $param : 'all';
+        $this->view->product  = $type == 'product' ? $param : '';
         $this->view->products = $products;
         $this->view->type     = $type;
         $this->view->param    = $param;

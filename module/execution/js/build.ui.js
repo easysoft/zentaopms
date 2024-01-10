@@ -39,7 +39,7 @@ window.renderCell = function(result, {col, row})
  */
 window.changeProduct = function()
 {
-    const link = changeProductLink.replace('{productID}', $(this).val());
+    const link = changeProductLink.replace('{productID}', $(this).find('[name="product"]').val());
     loadPage(link);
 }
 

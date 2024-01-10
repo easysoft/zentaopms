@@ -19,12 +19,13 @@ featureBar
     set::method('build'),
     div
     (
-        set::className('select-product-box'),
-        select
+        set::className('w-44 mr-4'),
+        picker
         (
             set::name('product'),
             set::value($product),
             set::items($products),
+            set::placeholder($lang->product->common),
             on::change('changeProduct')
         )
     ),
