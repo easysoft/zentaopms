@@ -24,7 +24,8 @@ detailHeader
             set::entityID($report->id),
             set::level(1),
             set::text($report->title)
-        )
+        ),
+        $report->deleted ? span(setClass('label danger'), $lang->testreport->deleted) : null
     )
 );
 
