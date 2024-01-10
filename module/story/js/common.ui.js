@@ -4,8 +4,9 @@ $(function()
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
     if(typeof(rawMethod) == 'undefined') rawMethod = '';
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
+    if(typeof(isInModal) != 'undefined') isInModal = false;
     app = $.cookie.get('tab');
-    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask' && storyType)
+    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask' && storyType && !isInModal)
     {
         let $storyNavbar    = $("#navbar .nav li a[data-id=" + storyType + ']');
         let $storySubNavbar = $('#subNavbar li a[data-id="' + storyType + '"]')

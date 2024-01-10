@@ -17,6 +17,7 @@ jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
 jsVar('storyType', $story->type);
+jsVar('isInModal', isInModal());
 
 $isInModal  = isInModal();
 $otherParam = 'storyID=&projectID=';
