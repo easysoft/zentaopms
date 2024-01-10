@@ -13,11 +13,11 @@ namespace zin;
 $confirmDelete = $this->lang->story->confirmDelete;
 if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
 
+data('activeMenuID', $story->type);
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
 jsVar('storyType', $story->type);
-jsVar('isInModal', isInModal());
 
 $isInModal  = isInModal();
 $otherParam = 'storyID=&projectID=';

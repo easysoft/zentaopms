@@ -1,24 +1,3 @@
-$(function()
-{
-    if(typeof(storyType) == 'undefined') storyType = '';
-    if(typeof(rawModule) == 'undefined') rawModule = 'product';
-    if(typeof(rawMethod) == 'undefined') rawMethod = '';
-    if(typeof(execution) != 'undefined') rawModule = 'projectstory';
-    if(typeof(isInModal) != 'undefined') isInModal = false;
-    app = $.cookie.get('tab');
-    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask' && storyType && !isInModal)
-    {
-        let $storyNavbar    = $("#navbar .nav li a[data-id=" + storyType + ']');
-        let $storySubNavbar = $('#subNavbar li a[data-id="' + storyType + '"]')
-        if($storyNavbar.length > 0 || $storySubNavbar.length > 0)
-        {
-            $('#navbar .nav li a').removeClass('active');
-            $storyNavbar.addClass('active');
-            $storySubNavbar.addClass('active');
-        }
-    }
-});
-
 window.clickSubmit = function(e)
 {
     const status = $(e.submitter).data('status');

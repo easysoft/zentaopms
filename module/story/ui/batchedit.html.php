@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+data('activeMenuID', $storyType);
 jsVar('branchTagOption', $branchTagOption);
 jsVar('moduleList', $moduleList);
 jsVar('planGroups', $plans);

@@ -34,6 +34,7 @@ if(!empty($story->stages) && isset($fields['stage']['options']))
     }
 }
 
+data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);

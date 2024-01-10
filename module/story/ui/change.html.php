@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 include './affected.html.php';
 
+data('activeMenuID', $story->type);
 jsVar('lastReviewer', explode(',', $lastReviewer));
 jsVar('storyID', $story->id);
 jsVar('oldStoryTitle', $story->title);
