@@ -113,6 +113,7 @@ $lang->gitlab->apiError[7]  = '403 Forbidden';
 $lang->gitlab->apiError[8]  = 'is invalid';
 $lang->gitlab->apiError[9]  = 'admin is a reserved name';
 $lang->gitlab->apiError[10] = 'has already been taken';
+$lang->gitlab->apiError[11] = 'Missing CI config file';
 
 $lang->gitlab->errorLang[0]  = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1]  = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
@@ -125,6 +126,7 @@ $lang->gitlab->errorLang[7]  = $lang->gitlab->noAccess;
 $lang->gitlab->errorLang[8]  = "Is invalid";
 $lang->gitlab->errorLang[9]  = 'admin is a reserved name';
 $lang->gitlab->errorLang[10] = 'has already been taken';
+$lang->gitlab->errorLang[11] = 'Missing CI config file';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = 'Email has already been taken';
 $lang->gitlab->errorResonse['Username has already been taken'] = 'Username has already been taken';
