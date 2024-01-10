@@ -367,4 +367,25 @@ class gitlabTest
 
         return $result;
     }
+
+    public function apiErrorHandlingTest(object $response)
+    {
+        $result = $this->gitlab->apiErrorHandling($response);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function updateCodePathTest(int $gitlabID, int $projectID, int $repoID)
+    {
+        $result = $this->gitlab->updateCodePath($gitlabID, $projectID, $repoID);
+
+        if($result)
+        {
+            return $this->gitlab->loadModel('repo')->getByID($repoID);
+        }
+
+        return $result;
+    }
 }
