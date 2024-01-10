@@ -17,15 +17,8 @@ $canBatchChangeStage = hasPriv('story', 'batchChangeStage');
 $canBatchReview      = hasPriv('story', 'batchReview');
 $canBatchAction      = $canBatchEdit || $canBatchChangeStage || $canBatchReview;
 
-$footToolbar = $canBatchAction ? array('items' => array
-(
-    array('text' => $lang->edit, 'className' => 'batch-btn' . ($canBatchEdit ? '': 'hidden'), 'data-url' => createLink('story', 'batchEdit', "productID={$productID}&projectID={$projectID}&branch={$branch}")),
-    array('text' => $lang->story->review,  'className' => ($canBatchReview ? '' : 'hidden') ,     'caret' => 'up', 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('text' => $lang->story->stageAB, 'className' => ($canBatchChangeStage ? '' : 'hidden'), 'caret' => 'up', 'url' => '#navStage',  'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
-
 $rejectItems = array();
-foreach($lang->story->reasonList as $key => $reason) $rejectItems[] = array('text' => $reason, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('story', 'batchReview', "result=reject&reason=$key")) ;
+foreach($lang->story->reasonList as $key => $reason) $rejectItems[] = array('text' => $reason, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('story', 'batchReview', "result=reject&reason=$key")) ;
 
 $reviewItems = array();
 foreach($lang->story->reviewResultList as $key => $result)
@@ -34,31 +27,25 @@ foreach($lang->story->reviewResultList as $key => $result)
 
     if($key == 'reject')
     {
-        $reviewItems[] = array('text' => $result, 'class' => 'not-hide-menu', 'items' => $rejectItems);
+        $reviewItems[] = array('text' => $result, 'innerClass' => 'not-hide-menu', 'items' => $rejectItems);
     }
     else
     {
-        $reviewItems[] = array('text' => $result, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchReview', "result=$key"));
+        $reviewItems[] = array('text' => $result, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchReview', "result=$key"));
     }
 }
 
-menu
-(
-    setID('navReview'),
-    setClass('dropdown-menu'),
-    set::items($reviewItems)
-);
-
 $stageItems = array();
 $lang->story->stageList[''] = $lang->null;
-foreach($lang->story->stageList as $key => $stage) $stageItems[] = array('text' => $stage, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchChangeStage', "stage=$key"));
+foreach($lang->story->stageList as $key => $stage) $stageItems[] = array('text' => $stage, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchChangeStage', "stage=$key"));
 
-menu
+$footToolbar = $canBatchAction ? array('items' => array
 (
-    setID('navStage'),
-    setClass('dropdown-menu'),
-    set::items($stageItems)
-);
+    array('text' => $lang->edit, 'className' => 'batch-btn' . ($canBatchEdit ? '': 'hidden'), 'data-url' => createLink('story', 'batchEdit', "productID={$productID}&projectID={$projectID}&branch={$branch}")),
+    array('text' => $lang->story->review,  'className' => ($canBatchReview ? '' : 'hidden') ,     'caret' => 'up', 'items' => $reviewItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('text' => $lang->story->stageAB, 'className' => ($canBatchChangeStage ? '' : 'hidden'), 'caret' => 'up', 'items' => $stageItems,  'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
+
 
 $stories = initTableData($stories, $config->testcase->zerocase->dtable->fieldList, $this->story);
 
