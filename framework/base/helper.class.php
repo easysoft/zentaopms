@@ -1161,7 +1161,7 @@ function isLocalIP()
  */
 function getWebRoot($full = false)
 {
-    if(getenv('APP_WEB_ROOT')) return '/' . trim(getenv('APP_WEB_ROOT'), '/') . '/';
+    if(getenv('ZT_WEB_ROOT')) return '/' . trim(getenv('ZT_WEB_ROOT'), '/') . '/';
 
     $path = $_SERVER['SCRIPT_NAME'];
 

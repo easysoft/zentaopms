@@ -202,6 +202,7 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 /* 读取环境变量的配置。 Read the env config. */
 if($config->inContainer || $config->inQuickon)
 {
+    $webRoot = getenv('ZT_WEB_ROOT') ? trim($webRoot, '/') : '';
     $config->installed     = (bool)getenv('ZT_INSTALLED');
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
@@ -214,7 +215,7 @@ if($config->inContainer || $config->inQuickon)
     $config->db->encoding  = getenv('ZT_DB_ENCODING');
     $config->db->password  = getenv('ZT_DB_PASSWORD');
     $config->db->prefix    = getenv('ZT_DB_PREFIX');
-    $config->webRoot       = getenv('ZT_WEB_ROOT');
+    $config->webRoot       = $webRoot ? "/{$webRoot}/" : '/';
     $config->default->lang = getenv('ZT_DEFAULT_LANG');
 }
 
