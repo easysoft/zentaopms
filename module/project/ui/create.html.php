@@ -597,7 +597,7 @@ if(!empty($copyProjects))
                 setClass('text-gray'),
                 $lang->icons['project']
             ),
-            span($name)
+            span($name, set::title($name))
         );
     }
 }

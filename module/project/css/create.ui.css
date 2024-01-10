@@ -2,6 +2,7 @@
 #copyProjectModal .copy-title {min-width: 120px;}
 #copyProjectModal #projectName {width: 32%;}
 #copyProjectModal .project-block {flex: 0 1 30%; padding: 20px 10px; margin: 4px 12px; overflow: hidden;}
+#copyProjectModal .project-block > span {width: 70%; overflow: hidden;}
 #copyProjects .btn:hover {--tw-ring-color: var(--color-primary-500);}
 #copyProjects .btn:before {background: none;}
 #copyProjects .btn.primary-outline {background-color: var(--color-primary-50);}
