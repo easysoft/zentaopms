@@ -477,11 +477,11 @@ class testtask extends control
      * Browse the cases associated with a testtask in groups.
      *
      * @param  int    $taskID
-     * @param  string $groupBy
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function groupCase(int $taskID, string $groupBy = 'story')
+    public function groupCase(int $taskID, string $browseType = 'all')
     {
         /* 检查测试单是否存在。*/
         /* Check if the testtask exists. */
@@ -509,8 +509,8 @@ class testtask extends control
 
         /* 从数据库中查询一个测试单下关联的测试用例。*/
         /* Query the cases associated with a testtask from the database. */
-        $groupBy = $groupBy ?: 'story';
-        $cases   = $this->testtask->getRuns($taskID, array(0), $groupBy);
+        if(!isset($this->lang->testtask->featureBar['groupcase'][$browseType])) $browseType = 'all';
+        $cases = $this->testtask->getTaskCases($productID, $browseType, 0, 0, 'story', null, $task);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->loadModel('testcase')->appendData($cases, 'run');
 
@@ -524,7 +524,7 @@ class testtask extends control
         $this->view->productID    = $productID;
         $this->view->cases        = $cases;
         $this->view->task         = $task;
-        $this->view->groupBy      = $groupBy;
+        $this->view->browseType   = $browseType;
         $this->display();
     }
 

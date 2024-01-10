@@ -1054,7 +1054,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getTaskCases(int $productID, string $browseType, int $queryID, int $moduleID, string $sort, object $pager, object $task): array
+    public function getTaskCases(int $productID, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null, object $task = null): array
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : array();
         $browseType = ($browseType == 'bymodule' && $this->session->taskCaseBrowseType && $this->session->taskCaseBrowseType != 'bysearch') ? $this->session->taskCaseBrowseType : $browseType;

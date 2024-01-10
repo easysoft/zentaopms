@@ -73,7 +73,7 @@ featureBar
 
 $viewItems   = array();
 $viewItems[] = array('text' => $lang->testcase->listView,  'url' => inlink('cases',     "taskID={$task->id}"),               'active' => true, 'data-app' => $app->tab);
-$viewItems[] = array('text' => $lang->testcase->groupView, 'url' => inlink('groupCase', "taskID={$task->id}&groupBy=story"), 'active' => false, 'data-app' => $app->tab);
+$viewItems[] = array('text' => $lang->testcase->groupView, 'url' => inlink('groupCase', "taskID={$task->id}&browseType={$browseType}"), 'active' => false, 'data-app' => $app->tab);
 toolbar
 (
     dropdown

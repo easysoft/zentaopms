@@ -19,26 +19,7 @@ $canView        = hasPriv('testtask',  'view');
 
 featureBar
 (
-    li
-    (
-        set::className('nav-item'),
-        a
-        (
-            set::href(inlink('cases', "taskID={$task->id}&browseType=all")),
-            set('data-app', $app->tab),
-            $lang->testtask->allCases
-        )
-    ),
-    li
-    (
-        set::className('nav-item'),
-        a
-        (
-            set::href(inlink('cases', "taskID={$task->id}&browseType=assignedtome")),
-            set('data-app', $app->tab),
-            $lang->testtask->assignedToMe
-        )
-    )
+    set::linkParams("taskID={$task->id}&browseType={key}"),
 );
 
 $viewItems   = array();
@@ -95,6 +76,8 @@ $config->testcase->group->dtable->fieldList['id']['name']              = 'case';
 $config->testcase->group->dtable->fieldList['actions']['menu']         = array('runCase', 'edit', 'unlinkCase');
 $config->testcase->group->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
 $config->testcase->group->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
+
+foreach($config->testcase->group->dtable->fieldList as $colName => $col) $cols[$colName]['sortType'] = false;
 
 $cases = initTableData($cases, $config->testcase->group->dtable->fieldList);
 
