@@ -28,17 +28,22 @@ $config->caselib->testcase->actionList['delete']['className']    = 'ajax-submit'
 $config->caselib->testcase->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
 
 $config->caselib->dtable = new stdclass();
-$config->caselib->dtable->fieldList = $config->testcase->dtable->fieldList;
+$config->caselib->dtable->fieldList = array();
+$config->caselib->dtable->fieldList['id']       = $config->testcase->dtable->fieldList['id'];
+$config->caselib->dtable->fieldList['title']    = $config->testcase->dtable->fieldList['title'];
+$config->caselib->dtable->fieldList['pri']      = $config->testcase->dtable->fieldList['pri'];
+$config->caselib->dtable->fieldList['type']     = $config->testcase->dtable->fieldList['type'];
+$config->caselib->dtable->fieldList['status']   = $config->testcase->dtable->fieldList['status'];
+$config->caselib->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
+$config->caselib->dtable->fieldList['actions']  = $config->testcase->dtable->fieldList['actions'];
+
 $config->caselib->dtable->fieldList['id']['name'] = 'id';
 
 $config->caselib->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 $config->caselib->dtable->fieldList['title']['nestedToggle'] = false;
 
-$config->caselib->dtable->fieldList['type']['show']          = true;
-$config->caselib->dtable->fieldList['status']['show']        = true;
-$config->caselib->dtable->fieldList['lastRunner']['show']    = false;
-$config->caselib->dtable->fieldList['lastRunDate']['show']   = false;
-$config->caselib->dtable->fieldList['lastRunResult']['show'] = false;
+$config->caselib->dtable->fieldList['type']['show']   = true;
+$config->caselib->dtable->fieldList['status']['show'] = true;
 
 $config->caselib->dtable->fieldList['actions']['list']  = $config->caselib->testcase->actionList;
 $config->caselib->dtable->fieldList['actions']['menu']  = array('review', 'edit', 'delete');

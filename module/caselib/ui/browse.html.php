@@ -150,7 +150,6 @@ dtable
     set::data(array_values($tableData)),
     set::userMap($users),
     set::checkable($canBatchAction),
-    set::customCols(true),
     set::emptyTip($lang->testcase->noCase),
     set::createTip($lang->testcase->create),
     set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
