@@ -493,6 +493,8 @@ class actionModel extends model
             {
                 $mrAction = str_replace('mr', '', $action->action) . 'Action';
                 list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                if(!$mrActor) $mrActor = $action->actor;
+                if(is_numeric($mrLink)) $mrLink = helper::createLink('mr', 'view', "mrID={$mrLink}");
 
                 if(isInModal()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 

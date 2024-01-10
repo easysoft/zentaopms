@@ -1132,7 +1132,7 @@ class mrModel extends model
 
         /* Set link action text. */
         $user    = $this->loadModel('user')->getRealNameAndEmails($MR->createdBy);
-        $comment = $MR->createdDate . '::' . zget($user, 'realname', '') . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
+        $comment = $MR->createdDate . '::' . zget($user, 'realname', $this->app->user->realname) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
         $this->loadModel('action');
         foreach($objects as $objectID)
@@ -1178,7 +1178,7 @@ class mrModel extends model
         }
 
         $users          = $this->loadModel('user')->getPairs('noletter');
-        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
+        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . $MR->id);
         $product        = $this->getMRProduct($MR);
 
         $this->loadModel('action');
