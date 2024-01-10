@@ -29,11 +29,12 @@ class dataset
      * Create an instance, the initialed data can be passed.
      *
      * @access public
-     * @param array $data  Properties list array.
+     * @param array|object|string $data  Properties list array.
+     * @param mixed               $value Property value.
      */
-    public function __construct(array $data = array())
+    public function __construct(array|string $data = null, mixed $value = null)
     {
-        if($data !== null) $this->set($data);
+        if($data !== null) $this->set($data, $value);
     }
 
     /**
@@ -45,6 +46,17 @@ class dataset
     public function __toString(): string
     {
         return $this->toStr();
+    }
+
+    /**
+     * Get debug info.
+     *
+     * @access public
+     * @return string
+     */
+    public function __debugInfo(): array
+    {
+        return $this->_data;
     }
 
     /**
