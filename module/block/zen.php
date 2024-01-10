@@ -1503,7 +1503,7 @@ class blockZen extends block
         $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.auto')->ne('unit')
