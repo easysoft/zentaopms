@@ -38,7 +38,7 @@ class section extends wg
                 setClass('font-bold text-md', 'mb-2', 'inline-flex'),
                 $required ? h::label
                 (
-                    setClass('form-label required mr-1'),
+                    setClass('form-label required mr-1 pb-3'),
                 ) : null,
                 $title
             );
