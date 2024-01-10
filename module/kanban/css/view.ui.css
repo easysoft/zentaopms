@@ -11,7 +11,7 @@
 .kanban-header-title .as-subtitle {font-weight: 700;}
 .kanban-header-title .text-danger {color:rgb(255, 93, 93); opacity: 1;}
 
-.regionMenu {display: inline-flex; border-bottom: none; margin-bottom: -3px; width: 100%; overflow-y: auto;}
+.regionMenu {display: inline-flex; border-bottom: none; margin-bottom: -3px; width: 100%; overflow-y: auto; padding-left: 0;}
 .regionMenu li {text-align: center; float: left; position: relative; display: block;}
 .regionMenu li a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 0.8rem; margin-left: -10px; background: none; outline: 0; cursor: pointer !important; display: block; color: rgba(var(--color-black-rgb),var(--tw-text-opacity))}
 .regionMenu li:first-child > a {margin-left: 0px}

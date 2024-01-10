@@ -745,7 +745,7 @@ class kanbanModel extends model
 
             $heading = new stdclass();
             $heading->title   = zget($regions, $regionID, '');
-            $heading->actions = $this->getRegionActions($kanbanID, $regionID, count($regionIDList));
+            $heading->actions = $this->getRegionActions($kanbanID, $regionID, count($regions));
 
             $regionData['key']               = "region{$regionID}";
             $regionData['id']                = $regionID;
