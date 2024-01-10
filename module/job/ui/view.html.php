@@ -26,7 +26,7 @@ $hasResult = ($compile && !empty($compile->testtask));
 $hasLog    = ($compile && !empty($compile->logs));
 $repo      = $repo ? $repo : new stdclass();
 
-if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
+if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, json_decode($job->pipeline)->project);
 if(!$job->pipeline) $job->pipeline = '';
 
 if($compile and $compile->status)
