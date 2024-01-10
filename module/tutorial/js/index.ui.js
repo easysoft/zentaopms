@@ -49,7 +49,7 @@ $(function()
 
     var getAppWindow = function()
     {
-        var app = appsWindow.$.apps.getLastApp();
+        var app = appsWindow.$ ? appsWindow.$.apps.getLastApp() : null;
         return app ? appsWindow.frames['app-' + app.code] : null;
     };
 
@@ -656,7 +656,7 @@ $(function()
     {
         if(finishCount >= totalCount) showModal(true);
 
-        $(document).on('click', '.btn-task', function()
+        $(document).off('click', '.btn-task').on('click', '.btn-task', function()
         {
             showTask($(this).data('name'));
             tryCheckStatus();
