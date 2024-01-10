@@ -645,8 +645,9 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
         if(dao::isError()) return false;
 
-        $specChanged = $oldStory->version != $story->version;
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
+
+        $specChanged = $oldStory->version != $story->version;
         if($specChanged)
         {
             $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $story->version);
@@ -674,12 +675,6 @@ class storyModel extends model
                 $newStory = $this->fetchById($storyID);
                 $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
                 $this->updateStoryVersion($newStory);
-            }
-            else
-            {
-                /* IF is requirement changed, notify its relation. */
-                $relations = $this->storyTao->getRelation($storyID, 'requirement');
-                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
             }
 
             if($story->reviewerHasChanged)
@@ -1078,6 +1073,13 @@ class storyModel extends model
             $story->id = $storyID;
             $actionID  = $this->recordReviewAction($oldStory, $story, $comment);
             if($actionID) $this->action->logHistory($actionID, $changes);
+        }
+
+        if($story->result == 'pass' && $oldStory->type == 'requirement')
+        {
+            /* IF is requirement changed, notify its relation. */
+            $relations = $this->storyTao->getRelation($storyID, 'requirement');
+            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
         }
 
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Reviewed');
