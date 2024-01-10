@@ -3145,11 +3145,11 @@ class story extends control
     public function ajaxGetProductUserStories($productID, $branchID = 0, $requirementList = 0)
     {
         $URS     = $this->story->getProductStoryPairs($productID, $branchID, 0, 'active,launched', 'id_desc', 0, '', 'requirement');
-        $project = $this->loadModel('project')->getById($this->session->project);
+        $project = isset($_SESSION['project']) ? $this->loadModel('project')->getById($this->session->project) : 0;
 
         /* 获取ipd项目下研发中的需求。*/
         /* Get ipd project developing requirements.*/
-        if($project->model == 'ipd' and $this->app->tab == 'project')
+        if(!empty($project) and $project->model == 'ipd' and $this->app->tab == 'project')
         {
             $developingURS = $this->story->getExecutionStoryPairs($this->session->project, $productID, $branchID, 0, '', 'developing', 'requirement');
             $URS = $developingURS + $URS;
