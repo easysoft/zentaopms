@@ -1500,7 +1500,7 @@ class blockZen extends block
         $this->app->loadLang('testtask');
 
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
-        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as executionName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
