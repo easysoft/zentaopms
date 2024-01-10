@@ -5,7 +5,7 @@ input[name="realEnd"] {width: 150px;}
 #cards {flex-wrap: wrap; padding: 10px; background: #FFF;}
 #cards > .col {width: 25%; padding-left: 10px; padding-right: 10px;}
 @media screen and (max-width: 1500px) {#cards > .col {width: 33.3333333%;}}
-#cards .panel {margin: 10px 0; border: 1px solid rgb(var(--color-gray-300-rgb)); border-radius: 4px; box-shadow: none; cursor: pointer; height: 175px; background: #FFF;}
+#cards .panel {margin: 10px 0; border: 1px solid rgb(var(--color-gray-300-rgb)); border-radius: 4px; box-shadow: none; height: 175px; background: #FFF;}
 #cards .panel:hover {border-color: rgb(var(--color-primary-500-rgb)); box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel .panel-heading {justify-content: start; padding: 12px 24px 10px 16px;}
 #cards .panel .panel-heading .project-name {margin: 0 -8px; overflow: hidden; white-space: nowrap;}
