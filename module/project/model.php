@@ -1675,12 +1675,12 @@ class projectModel extends model
 
             if(!empty($project->days) and (int)$member->days > $project->days)
             {
-                dao::$errors["days{$key}"] = sprintf($this->lang->project->daysGreaterProject, $project->days);
+                dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
                 return false;
             }
             if((float)$member->hours > 24)
             {
-                dao::$errors["hours{$key}"] = $this->lang->project->errorHours;
+                dao::$errors = $this->lang->project->errorHours;
                 return false;
             }
         }
