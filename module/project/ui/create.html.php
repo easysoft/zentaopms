@@ -214,7 +214,6 @@ formPanel
         set::width('1/2'),
         set::label($lang->project->name),
         set::required(true),
-        set::strong(true),
         input
         (
             set::name('name'),
@@ -228,7 +227,6 @@ formPanel
         set::width('1/2'),
         set::label($lang->project->code),
         set::required(true),
-        set::strong(true),
         input
         (
             set::name('code'),

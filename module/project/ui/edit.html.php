@@ -233,7 +233,6 @@ formPanel
         set::name('name'),
         set::value($project->name),
         set::label($lang->project->name),
-        set::strong(true)
     ),
     (isset($config->setCode) && $config->setCode == 1) ? formGroup
     (
@@ -241,7 +240,6 @@ formPanel
         set::name('code'),
         set::value($project->code),
         set::label($lang->project->code),
-        set::strong(true)
     ) : null,
     (in_array($model, array('scrum', 'kanban'))) ? formGroup
     (
