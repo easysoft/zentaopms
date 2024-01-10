@@ -1028,7 +1028,7 @@ class testtask extends control
         /* Make sure the secondary navigation highlights test cases. */
         $this->lang->qa->menu->testcase['subModule'] .= ',testtask';
 
-        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID);
+        $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, '', 0, '', array('review', 'design', 'request'));
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;

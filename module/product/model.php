@@ -899,11 +899,12 @@ class productModel extends model
      * @param  int    $productID
      * @param  string $branch
      * @param  int    $projectID
-     * @param  string $mode      stagefilter|noclosed|multiple
+     * @param  string $mode           stagefilter|noclosed|multiple
+     * @param  array  $unAllowedStage
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct(int $productID, string $branch = '', int $projectID = 0, string $mode = ''): array
+    public function getExecutionPairsByProduct(int $productID, string $branch = '', int $projectID = 0, string $mode = '', array $unAllowedStage = array()): array
     {
         if(empty($productID)) return array();
 
@@ -923,6 +924,7 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('t2.multiple')->eq('1')->fi()
+            ->beginIF(!empty($unAllowedStage))->andWhere('t2.attribute')->notIn($unAllowedStage)->fi()  //针对瀑布项目，过滤掉不允许的阶段
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($waterfallOrderBy)
             ->fetchAll('id');
