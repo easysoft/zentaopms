@@ -354,7 +354,6 @@ class screenModel extends model
     public function genMetricComponent($metric, $component = null, $filterParams = array())
     {
         $this->loadModel('metric');
-        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
         $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
 
@@ -363,17 +362,23 @@ class screenModel extends model
         $isObjectMetric = $metric->scope != 'system';
         $isDateMetric   = $metric->dateType != 'nodate';
 
+        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        $tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
+        $card        = $this->getMetricCardOption($metric, $resultData);
+
+        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
+
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
-        $component->chartConfig->chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData);
-        $component->chartConfig->tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
-        $component->chartConfig->card        = $this->getMetricCardOption($metric, $resultData);
+        $component->chartConfig->chartOption = $chartOption;
+        $component->chartConfig->tableOption = $tableOption;
+        $component->chartConfig->card        = $card;
         $component->chartConfig->filters     = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
         $component->chartConfig->scope       = $metric->scope;
 
-        $component->option->chartOption          = $component->chartConfig->chartOption;
-        $component->option->tableOption          = $component->chartConfig->tableOption;
-        $component->option->card                 = $component->chartConfig->card;
+        $component->option->chartOption          = $chartOption;
+        $component->option->tableOption          = $tableOption;
+        $component->option->card                 = $card;
         $component->option->card->isDateMetric   = $isDateMetric;
         $component->option->card->isObjectMetric = $isObjectMetric;
 
@@ -1752,13 +1757,20 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getMetricChartOption($metric, $resultHeader, $resultData)
+    public function getMetricChartOption($metric, $resultHeader, $resultData, $component = null)
     {
         $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
         if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'textStyle' => array('color' => '#BFBFBF'));
         $chartOption['title']['text'] = $metric->name;
         $chartOption['backgroundColor'] = "#0B1727FF";
+
+        if(!empty($component))
+        {
+            $preChartOption = $component->option->chartOption;
+            $preChartOption->series = $chartOption['series'];
+            return $preChartOption;
+        }
 
         return $chartOption;
     }
@@ -1851,7 +1863,7 @@ class screenModel extends model
             });
         }
 
-        return $filteredData;
+        return array_values($filteredData);
     }
 
     /**
