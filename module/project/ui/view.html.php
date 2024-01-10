@@ -380,14 +380,14 @@ div
         (
             setClass('w-full'),
             /* Linked product and plan.  */
-            h::table
+            $project->hasProduct ? h::table
             (
                 setClass('table condensed bordered productsBox'),
                 h::thead
                 (
                     h::tr
                     (
-                        $project->hasProduct ? h::th
+                        h::th
                         (
                             setClass('w-1/3'),
                             div
@@ -407,7 +407,7 @@ div
                                     span($lang->more, setClass('font-normal'))
                                 ) : null
                             )
-                        ) : null,
+                        ),
                         h::th
                         (
                             span
@@ -420,11 +420,11 @@ div
                     )
                 ),
                 h::tbody($relatedProducts)
-            ),
+            ) : null,
             /* Project team. */
             h::table
             (
-                setClass('table condensed bordered mt-4 teams'),
+                setClass('table condensed bordered teams ' . ($project->hasProduct ? 'mt-4' : '')),
                 h::thead
                 (
                     h::tr
