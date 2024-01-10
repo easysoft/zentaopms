@@ -57,7 +57,7 @@ function refreshStatus()
                     }
                     if(currentStatus != instance.status)
                     {
-                        loadCurrentPage();
+                        loadTarget(createLink('instance', 'view', `instanceID=${instanceID}`), '#instanceInfoContainer');
                         currentStatus = instance.status;
                         return;
                     }

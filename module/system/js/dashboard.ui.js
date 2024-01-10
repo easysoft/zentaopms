@@ -70,7 +70,7 @@ window.afterPageUpdate = function()
                     if($("#instance-status-" + instance.id).data('status') != instance.status)
                     {
                         clearInterval(timer);
-                        loadCurrentPage();
+                        loadTable();
                     }
                 });
             }

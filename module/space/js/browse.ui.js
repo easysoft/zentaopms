@@ -64,7 +64,7 @@ function refreshStatus()
                 {
                     if(statusMap[instance.id] != instance.status)
                     {
-                        loadCurrentPage();
+                        loadTable();
                         statusMap[instance.id] = instance.status;
                         return;
                     }
