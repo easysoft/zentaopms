@@ -57,12 +57,14 @@ toolbar
         (
             'icon'      => 'list',
             'class'     => 'switchButton btn-icon',
-            'data-type' => 'bylist'
+            'data-type' => 'bylist',
+            'hint'      => $lang->project->bylist
         ), array
         (
             'icon'      => 'cards-view',
             'class'     => 'btn-icon switchButton text-primary',
-            'data-type' => 'bycard'
+            'data-type' => 'bycard',
+            'hint'      => $lang->project->bycard
         ))
     ))),
     hasPriv('project', 'export') ? item(set(array
