@@ -209,7 +209,8 @@ detailHeader
             set::entityID($bug->id),
             set::level(1),
             span(setStyle('color', $bug->color), $bug->title)
-        )
+        ),
+        $bug->deleted ? span(setClass('label danger'), $lang->bug->deleted) : null
     ),
     to::suffix
     (
