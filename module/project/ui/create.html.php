@@ -54,7 +54,7 @@ if(!empty($products))
                     div
                     (
                         setClass('grow'),
-                        select
+                        picker
                         (
                             set::name("products[$i]"),
                             set::value($product->id),
@@ -73,7 +73,7 @@ if(!empty($products))
                 inputGroup
                 (
                     $lang->product->branchName['branch'],
-                    select
+                    picker
                     (
                         set::name("branch[$i][]"),
                         set::items($branches),
@@ -88,7 +88,7 @@ if(!empty($products))
                 (
                     set::id("plan{$i}"),
                     $lang->project->associatePlan,
-                    select
+                    picker
                     (
                         set::name("plans[$product->id][]"),
                         set::items($plans),
@@ -165,7 +165,7 @@ formPanel
     on::change('#parent, #budget', 'checkBudget(0)'),
     on::change('#begin, [name=delta]', 'computeEndDate'),
     on::change('#begin, #end', 'computeWorkDays'),
-    on::change('[name^=products]', 'productChange'),
+    on::change('[name^=products]', 'productChange(e.target)'),
     on::change('[name^=branch]', 'branchChange'),
     on::change('[name=multiple]', 'toggleMultiple'),
     on::change('[name=future]', 'toggleBudget'),
@@ -411,7 +411,8 @@ formPanel
                     picker
                     (
                         set::name('products[0]'),
-                        set::items($allProducts)
+                        set::items($allProducts),
+                        set::value($productID)
                     )
                 ),
                 div

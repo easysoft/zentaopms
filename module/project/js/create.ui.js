@@ -49,25 +49,25 @@ window.addProduct = function(e)
     }
 }
 
-window.productChange = function(e)
+window.productChange = function(target)
 {
-    loadBranches(e.target);
+    loadBranches(target);
 
-    let current    = $(e.target).val();
-    let last       = $(e.target).attr('last');
-    let lastBranch = $(e.target).attr('data-lastBranch');
+    let current    = $(target).val();
+    let last       = $(target).attr('last');
+    let lastBranch = $(target).attr('data-lastBranch');
 
-    $(e.target).attr('data-last', current);
+    $(target).attr('data-last', current);
 
-    let $branch = $(e.target).closest('.has-branch').find("[name^='branch']");
+    let $branch = $(target).closest('.has-branch').find("[name^='branch']");
     if($branch.length)
     {
         let branchID = $branch.val();
-        $(e.target).attr('data-lastBranch', branchID);
+        $(target).attr('data-lastBranch', branchID);
     }
     else
     {
-        $(e.target).removeAttr('data-lastBranch');
+        $(target).removeAttr('data-lastBranch');
     }
 
     let chosenProducts = 0;
@@ -148,3 +148,9 @@ window.setParentProgram = function()
     loadPage(link, '#aclList');
     $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
 }
+
+/* Init product. */
+window.waitDom('[name^=products]', function()
+{
+    if($('.newProductBox').length > 0) productChange($('[name^=products]').eq(0));
+});

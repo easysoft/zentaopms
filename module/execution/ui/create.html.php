@@ -82,7 +82,7 @@ if((empty($project) || $project->model != 'kanban') && $execution->type != 'kanb
 }
 
 $productsBox = null;
-if(!empty($project->hasProduct) && $products && $copyExecutionID > 0)
+if(!empty($project->hasProduct) && ($products || $copyExecutionID > 0))
 {
     $i = 0;
     foreach($products as $product)
