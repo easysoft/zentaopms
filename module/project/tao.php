@@ -1055,8 +1055,8 @@ class projectTao extends projectModel
             $lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $project->id);
             $lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $project->id);
 
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'story') $lang->$navGroup->menu->story['dropMenu']->story['subModule'] = 'story';
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->$navGroup->menu->story['dropMenu']->requirement['subModule'] = 'story';
+            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'story') $lang->$navGroup->menu->story['dropMenu']->story['subModule'] = 'story,execution';
+            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->$navGroup->menu->story['dropMenu']->requirement['subModule'] = 'story,execution';
         }
 
         if(isset($lang->$navGroup->menu->storyGroup)) unset($lang->$navGroup->menu->storyGroup);

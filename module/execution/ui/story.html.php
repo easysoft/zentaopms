@@ -361,11 +361,10 @@ foreach($setting as $col)
     if(!$execution->hasProduct && !$execution->multiple && $col['name'] == 'plan') continue;
     if(!$execution->hasProduct && !$execution->multiple && $storyType == 'requirement' && $col['name'] == 'stage') continue;
 
-    if($col['name'] == 'title') $col['link'] = sprintf(zget($col['link'], 'url'), createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
+    if($col['name'] == 'title') $col['link'] = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
 
     $cols[] = $col;
 }
-
 
 /* DataTable data. */
 $data = array();

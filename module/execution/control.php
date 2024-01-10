@@ -486,7 +486,7 @@ class execution extends control
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $story = $this->loadModel('story')->getByID($storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . ($executionID ? $executionID : $this->session->execution));
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . ($executionID ? $executionID : $this->session->execution) . "&storyType={$story->type}");
     }
 
     /**
