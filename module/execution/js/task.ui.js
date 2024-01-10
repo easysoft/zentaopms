@@ -111,6 +111,13 @@ window.renderCell = function(result, info)
             html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
         }
         if(html) result.unshift({html});
+
+        if(task.fromBug > 0)
+        {
+            const bugLink  = $.createLink('bug', 'view', `id=${task.fromBug}`);
+            const bugTitle = `<a class="bug" href='${bugLink}'>[BUG#${task.fromBug}]</a>`;
+            result.push({html: bugTitle});
+        }
     }
     if(info.col.name == 'deadline' && result[0])
     {
