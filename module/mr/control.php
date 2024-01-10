@@ -605,7 +605,7 @@ class mr extends control
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), '', $pager);
         }
         else
         {

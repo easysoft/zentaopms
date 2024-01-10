@@ -374,7 +374,7 @@ class release extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $release->stories, $pager);
+            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $release->stories, 'draft,reviewing,changing', $pager);
         }
         else
         {

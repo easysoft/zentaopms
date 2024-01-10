@@ -1910,7 +1910,7 @@ class storyModel extends model
 
         if($browseType == 'bySearch')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', 0, $tmpStoryType, $storyIDList, $pager);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', 0, $tmpStoryType, $storyIDList, '', $pager);
         }
         elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
         {
@@ -2229,11 +2229,12 @@ class storyModel extends model
      * @param  int|array   $executionID
      * @param  string      $type requirement|story
      * @param  string      $excludeStories
+     * @param  string      $excludeStatus
      * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getBySearch(int|string $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function getBySearch(int|string $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', string $excludeStatus = '', object|null $pager = null): array
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
@@ -2270,6 +2271,7 @@ class storyModel extends model
             $dbIN = strpos($dbIN, '=') === 0 ? "`id` !{$dbIN}" : "`id` NOT {$dbIN}";
             $storyQuery = $storyQuery . ' AND ' . $dbIN;
         }
+        if($excludeStatus) $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))

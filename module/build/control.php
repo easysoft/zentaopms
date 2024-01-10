@@ -447,7 +447,7 @@ class build extends control
         $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $build->allStories, '', $pager);
         }
         else
         {

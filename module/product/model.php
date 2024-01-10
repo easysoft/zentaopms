@@ -659,7 +659,7 @@ class productModel extends model
         if($browseType == 'unplan')         return $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
         if($browseType == 'allstory')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
         if($browseType == 'bymodule')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', $pager);
+        if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', '', $pager);
         if($browseType == 'willclose')      return $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
 
         if($browseType == 'fromfeedback')   return $this->story->getFeedbackStories($productID, $branch, $modules, $type, $sort, $pager);
