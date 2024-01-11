@@ -814,7 +814,7 @@ class kanbanModel extends model
         $action['caret'] = false;
         $action['items'] = array();
 
-        if(common::hasPriv('kanban', 'createRegion')) $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'createRegion')) $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
         if(common::hasPriv('kanban', 'editRegion'))   $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'edit');
         if(common::hasPriv('kanban', 'createLane'))   $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
 
@@ -935,12 +935,13 @@ class kanbanModel extends model
             $regionData['id']                = $regionID;
             $regionData['heading']           = $heading;
             $regionData['toggleFromHeading'] = true;
+            $regionData['items']             = array();
 
             $groups = zget($groupGroup, $regionID, array());
 
             $regionData = $this->kanbanTao->buildRDRegionData($regionData, $groups, $laneGroup, $columnGroup, $cardGroup, $searchValue);
 
-            if(!empty($regionData['items'])) $kanbanList[] = $regionData;
+            $kanbanList[] = $regionData;
         }
 
         return $kanbanList;

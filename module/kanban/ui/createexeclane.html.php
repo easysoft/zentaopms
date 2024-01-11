@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 modalHeader(set::title($lang->kanban->createLane), set::titleClass('text-lg font-bold'));
+if(empty($lanes)) unset($lang->kanbanlane->modeList['sameAsOther']);
+$mode = empty($lanes) ? 'independent' : 'sameAsOther';
 
 jsVar('regionID', $regionID);
 
@@ -50,13 +52,14 @@ formPanel
                 set::name('mode'),
                 set::items($lang->kanbanlane->modeList),
                 set::inline(true),
-                set::value('sameAsOther')
+                set::value($mode)
             )
         )
     ),
     formRow
     (
         setID('otherLaneBox'),
+        setClass(empty($lanes) ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->kanbanlane->otherlane),
