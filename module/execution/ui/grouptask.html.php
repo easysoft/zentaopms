@@ -73,7 +73,7 @@ $canImportTask = hasPriv('task', 'importTask');
 $canImportBug  = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
 {
-    $createLink      = $this->createLink('task', 'create', "executionID={$execution->id}");
+    $createLink = $this->createLink('task', 'create', "executionID={$execution->id}" . ($app->tab == 'project' ? '#app=project' : ''));
     if(commonModel::isTutorialMode())
     {
         $wizardParams   = helper::safe64Encode("executionID={$execution->id}");

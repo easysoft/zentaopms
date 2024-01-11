@@ -74,7 +74,7 @@ toolbar
         'icon' => 'plus',
         'text' => $lang->task->create,
         'class' => 'primary create-execution-btn',
-        'url'   => createLink('task', 'create', "execution={$executionID}")
+        'url'   => createLink('task', 'create', "execution={$executionID}" . ($app->tab == 'project' ? '#app=project' : ''))
     ))) : null
 );
 
@@ -94,7 +94,7 @@ if(empty($tree))
         (
             set::text($lang->task->create),
             set::icon('plus'),
-            set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : ''))),
+            set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '' . ($app->tab == 'project' ? '#app=project' : '')))),
             setClass('primary ml-2')
         ) : null
     );
