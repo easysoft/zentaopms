@@ -88,7 +88,7 @@ class floatToolbar extends wg
         $mainBtns   = $this->mergeBtns($mainBtns, $mainBlock);
         $suffixBtns = $this->mergeBtns($suffixBtns, $suffixBlock);
 
-        return div
+        return ($prefixBtns || $mainBtns || $suffixBtns) ? div
         (
             setClass('toolbar bg-black text-fore-in-dark backdrop-blur bg-opacity-60 text-canvas float-toolbar rounded p-1.5'),
             $prefixBtns,
@@ -96,6 +96,6 @@ class floatToolbar extends wg
             $mainBtns,
             $this->buildDivider($mainBtns, $suffixBtns),
             $suffixBtns
-        );
+        ) : div();
     }
 }
