@@ -29,12 +29,14 @@ searchForm
     set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'story')"))
 );
 
+$checkedRows = array_values(array_filter(array_map(function($story){return in_array($story->stage, array('developed', 'closed', 'tested')) ? $story->id : 0;}, $allStories)));
 dtable
 (
     setID('unlinkStoryList'),
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
+    set::checkedRows($checkedRows),
     set::loadPartial(true),
     set::footToolbar(array
     (
