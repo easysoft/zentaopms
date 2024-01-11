@@ -73,6 +73,8 @@ $tasks      = initTableData($tasks, $config->testtask->dtable->fieldList, $this-
 $cols       = array_values($config->testtask->dtable->fieldList);
 $data       = array_values($tasks);
 $footerHTML = strtolower($status) == 'totalstatus' ? $allSummary : $pageSummary;
+$beginTime  = str_replace('-', '', $beginTime);
+$endTime    = str_replace('-', '', $endTime);
 dtable
 (
     set::cols($cols),
