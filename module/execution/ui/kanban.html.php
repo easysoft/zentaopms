@@ -175,6 +175,8 @@ featureBar
     ) : null,
 );
 
+$editModule = $execution->multiple ? 'execution' : 'project';
+
 toolbar
 (
     inputGroup
@@ -223,14 +225,14 @@ toolbar
             ),
             $lang->settings
         ) : null,
-        common::hasPriv('execution', 'edit') ? btn
+        common::hasPriv($editModule, 'edit') ? btn
         (
             set
             (
                 array
                 (
                     'class' => 'btn ghost btn-default',
-                    'url'   => inlink('edit', "id=$execution->id"),
+                    'url'   => createLink($editModule, 'edit', "id=$execution->id"),
                     'icon'  => 'edit',
                     'data-toggle' => 'modal',
                     'data-size' => 'lg'
