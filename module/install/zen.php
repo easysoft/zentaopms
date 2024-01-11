@@ -294,6 +294,47 @@ class installZen extends install
     }
 
     /**
+     * DevOps平台版将配置信息写入my.php。
+     * Save config file when inQuickon is true.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function saveConfigFile(): bool
+    {
+        $configRoot   = $this->app->getConfigRoot();
+        $myConfigFile = $configRoot . 'my.php';
+        if(file_exists($myConfigFile) && trim(file_get_contents($myConfigFile))) return false;
+
+        /* Set the session save path when the session save path is null. */
+        $customSession = $this->setSessionPath();
+        $configContent = <<<EOT
+        <?php
+        \$config->installed     = (bool)getenv('ZT_INSTALLED');
+        \$config->debug         = (int)getenv('ZT_DEBUG');
+        \$config->requestType   = getenv('ZT_REQUEST_TYPE');
+        \$config->timezone      = getenv('ZT_TIMEZONE');
+        \$config->db->driver    = getenv('ZT_DB_DRIVER');
+        \$config->db->host      = getenv('ZT_DB_HOST');
+        \$config->db->port      = getenv('ZT_DB_PORT');
+        \$config->db->name      = getenv('ZT_DB_NAME');
+        \$config->db->user      = getenv('ZT_DB_USER');
+        \$config->db->encoding  = getenv('ZT_DB_ENCODING');
+        \$config->db->password  = getenv('ZT_DB_PASSWORD');
+        \$config->db->prefix    = getenv('ZT_DB_PREFIX');
+        \$config->webRoot       = getWebRoot();
+        \$config->default->lang = getenv('ZT_DEFAULT_LANG');
+        EOT;
+
+        if($customSession) $configContent .= "\n\$config->customSession = true;";
+
+        if(is_writable($configRoot)) @file_put_contents($myConfigFile, $configContent);
+        $this->config->installed = true;
+
+        return true;
+    }
+
+    /**
      * 写入数据库配置信息。
      * Set database params.
      *
@@ -326,6 +367,43 @@ class installZen extends install
         file_put_contents($this->install->buildDBLogFile('config'), json_encode(array('db' => $this->config->db, 'post' => $data)));
 
         return true;
+    }
+
+    /**
+     * DevOps平台版设置session path。
+     * Set session save path.
+     *
+     * @access private
+     * @return bool
+     */
+    private function setSessionPath(): bool
+    {
+        $customSession = false;
+        $checkSession  = ini_get('session.save_handler') == 'files';
+        if($checkSession)
+        {
+            if(!session_save_path())
+            {
+                /* Restart the session because the session save path is null when start the session last time. */
+                session_write_close();
+
+                $tmpRootInfo     = $this->getTmpRoot();
+                $sessionSavePath = $tmpRootInfo['path'] . 'session';
+                if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
+
+                session_save_path($sessionSavePath);
+                $customSession = true;
+
+                $sessionResult = $this->checkSessionSavePath();
+                if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
+
+                session_start();
+                $this->session->set('installing', true);
+                $_SESSION['installing'] = true;
+            }
+        }
+
+        return $customSession;
     }
 
     /**

@@ -202,7 +202,7 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 /* 读取环境变量的配置。 Read the env config. */
 if($config->inContainer || $config->inQuickon)
 {
-    $webRoot = getenv('ZT_WEB_ROOT') ? trim($webRoot, '/') : '';
+    $webRoot = getenv('ZT_WEB_ROOT') ? trim(getenv('ZT_WEB_ROOT'), '/') : '';
     $config->installed     = (bool)getenv('ZT_INSTALLED');
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
