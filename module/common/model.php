@@ -2433,6 +2433,65 @@ class commonModel extends model
         return false;
     }
 
+    /**
+     * Replace menu lang.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function replaceMenuLang()
+    {
+        global $lang;
+        if(empty($lang->db->custom)) return;
+        foreach($lang->db->custom as $moduleName => $sectionMenus)
+        {
+            if(strpos($moduleName, 'Menu') === false) continue;
+
+            $isSecondMenu = strpos($moduleName, 'SubMenu') === false;
+            $moduleName   = str_replace($isSecondMenu ? 'Menu' : 'SubMenu', '', $moduleName);
+
+            foreach($sectionMenus as $section => $menus)
+            {
+                foreach($menus as $key => $value)
+                {
+                    /* Get second menu. */
+                    if($isSecondMenu)
+                    {
+                        $isDropMenu = strpos($section, 'DropMenu') !== false;
+                        if(!$isDropMenu)
+                        {
+                            if(!isset($lang->{$moduleName}->{$section})) break;
+                            if(is_object($lang->{$moduleName}->{$section}) and isset($lang->{$moduleName}->{$section}->{$key})) $settingMenu = &$lang->{$moduleName}->{$section}->{$key};
+                            if(is_array($lang->{$moduleName}->{$section})  and isset($lang->{$moduleName}->{$section}[$key]))   $settingMenu = &$lang->{$moduleName}->{$section}[$key];
+                        }
+                        else
+                        {
+                            /* Get drop menu in second menu. */
+                            $dropMenuKey = str_replace('DropMenu', '', $section);
+                            if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) break;
+                            $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
+                        }
+                    }
+                    /* Get third menu. */
+                    elseif(isset($lang->{$moduleName}->menu->{$section}['subMenu']))
+                    {
+                        $subMenu = $lang->{$moduleName}->menu->{$section}['subMenu'];
+                        if(is_object($subMenu) and isset($subMenu->{$key})) $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu']->{$key};
+                        if(is_array($subMenu)  and isset($subMenu[$key]))   $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu'][$key];
+                    }
+
+                    /* Set custom menu lang. */
+                    if(!empty($settingMenu))
+                    {
+                        if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
+                        if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
+                        unset($settingMenu);
+                    }
+                }
+            }
+        }
+    }
 }
 
 class common extends commonModel

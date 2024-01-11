@@ -7,7 +7,7 @@
  */
 function addActive(id)
 {
-    $('[data-id=' + id + ']').addClass('active');
+    $('[data-id=' + id + ']').addClass('selected');
 }
 
 /**
@@ -19,7 +19,7 @@ function addActive(id)
  */
 function removeActive(id)
 {
-    $('[data-id=' + id + ']').removeClass('active');
+    $('[data-id=' + id + ']').removeClass('selected');
 }
 
 /**
@@ -31,7 +31,7 @@ function removeActive(id)
  */
 function handleClickItem(clickId)
 {
-    var clearId = $('.form-item.active').attr('data-id');
+    var clearId = $('.form-item.selected').attr('data-id');
     if(clearId !== clickId)
     {
         if(clearId) removeActive(clearId);

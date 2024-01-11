@@ -22,15 +22,12 @@
 .form-item-content {padding-left: 44px;}
 .form-item-content  .form-item {gap: 64px; height: 56px; align-items: center; position: relative; width: 500px;}
 .form-item-content  .form-item.w-expand {width: 700px;}
-.form-item-content  .form-item  .item-label {flex: 0 0 180px; padding-left: 40px; background: #F8F8F8; display: flex; align-items: center; color: currentColor; font-size: 13px; overflow: hidden;}
-.form-item-content  .form-item  .item-label.lg {flex: 0 0 180px;}
-.form-item-content  .form-item  .input-group {margin-left: 20px; width:180px; height:32px;}
-.form-item-content  .form-item  .input-group > .input-group-addon {flex: 1 1 30%; overflow: hidden;}
-.form-item-content  .form-item  .input-control > input {margin-left: 40px;}
+.form-item-content  .form-item .item-label {flex: 0 0 180px; padding-left: 40px; background: #F8F8F8; display: flex; align-items: center; color: currentColor; font-size: 13px; overflow: hidden;}
+.form-item-content  .form-item .item-label.lg {flex: 0 0 180px;}
+.form-item-content  .form-item .input-group {margin-left: 20px; width:180px; height:32px;}
+.form-item-content  .form-item .input-group > .input-group-addon {flex: 1 1 30%; overflow: hidden;}
+.form-item-content  .form-item .input-control > input {margin-left: 40px;}
 .form-item-content  .form-item .icon {display: none; position: absolute; left: 200px; top: 16px; font-size: 25px;}
-.form-item-content  .form-item.active .icon {display: unset;}
-.form-item-content.hover-color-primary > .form-item.active > .label {color: blue;}
-.form-item-content.hover-color-primary > .form-item.active .form-control {border-color: blue;}
 .form-item-content.border-color-primary > .form-item .form-control {border: 1px solid blue;}
 
 #menuTree > li > a, #menuTree > li > ul > li > a {white-space: nowrap; text-overflow: clip; overflow: hidden;}

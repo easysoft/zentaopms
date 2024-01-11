@@ -109,8 +109,9 @@ if(in_array($type, $config->dev->navTypes))
             }
             if($menu->active)
             {
+                $menu->selected = $menu->active;
                 $active[$level] = $menu->id;
-                if($parent) $parent->active = 1;
+                if($parent) $parent->selected = 1;
             }
             unset($menu->children);
         }

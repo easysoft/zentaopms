@@ -53,6 +53,7 @@ class mainNavbar extends nav
         $currentMethod = $app->getMethodName();
         if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
 
+        \commonModel::replaceMenuLang();
         \commonModel::setMainMenu();
         $activeMenu = \commonModel::getActiveMainMenu();
         if(empty($activeMenu)) return false;
