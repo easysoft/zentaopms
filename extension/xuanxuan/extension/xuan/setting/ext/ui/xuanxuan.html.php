@@ -266,7 +266,7 @@ else
                 (
                     setID('downloadXXD'),
                     setClass('btn not-open-url' . ($disabled ? ' disabled' : ' primary')),
-                    $disabled ? null : set::href(inlink('downloadXXD', 'type=package')),
+                    $disabled ? null : set::href(inlink('downloadXXD', "type=package&os={$os}")),
                     $lang->im->downloadXXD
                 ) : null,
                 a
