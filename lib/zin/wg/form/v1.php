@@ -14,20 +14,21 @@ class form extends formBase
 {
     protected static array $defineProps = array
     (
-        'formID?: string',              // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
-        'items?: array',                // 使用一个列定义对象数组来定义表单项。
-        'foldableItems?: array|string', // 可折叠的表单项。
-        'pinnedItems?: array|string',   // 固定显示的表单项。
-        'customBtn?: array|bool',       // 是否显示表单自定义按钮。
-        'toolbar?: array|bool',         // 额外的自定义按钮。
-        'layout?: string="horz"',       // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
-        'labelWidth?: int',             // 标签宽度，单位为像素。
-        'submitBtnText?: string',       // 提交按钮文本。
-        'requiredFields?: string',      // 必填项定义。
-        'data?: array|object',          // 表单项值默认数据。
-        'labelData?: array|object',     // 表单项标签默认数据。
-        'loadUrl?: string',             // 动态更新 URL。
-        'autoLoad?: array',             // 自动更新策略。
+        'formID?: string',                 // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
+        'items?: array',                   // 使用一个列定义对象数组来定义表单项。
+        'fields?: string|array|fieldList', // 表单字段配置。
+        'foldableItems?: array|string',    // 可折叠的表单项。
+        'pinnedItems?: array|string',      // 固定显示的表单项。
+        'customBtn?: array|bool',          // 是否显示表单自定义按钮。
+        'toolbar?: array|bool',            // 额外的自定义按钮。
+        'layout?: string="horz"',          // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
+        'labelWidth?: int',                // 标签宽度，单位为像素。
+        'submitBtnText?: string',          // 提交按钮文本。
+        'requiredFields?: string',         // 必填项定义。
+        'data?: array|object',             // 表单项值默认数据。
+        'labelData?: array|object',        // 表单项标签默认数据。
+        'loadUrl?: string',                // 动态更新 URL。
+        'autoLoad?: array',                // 自动更新策略。
         'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
     );
 
@@ -85,7 +86,19 @@ class form extends formBase
         {
             $this->setProp('formID', "form-$module-$method");
         }
-    }
+
+        $fields = $this->prop('fields');
+        if(is_string($fields)) $fields = explode(',', $fields);
+        if(is_array($fields))  $fields = useFields($fields);
+
+        if($fields instanceof fieldList)
+        {
+            $items = $fields->toList();
+            $this->setProp('items', $items);
+            if(!is_null($fields->labelData)) $this->setProp('labelData', $fields->labelData);
+            if(!is_null($fields->valueData)) $this->setProp('data',      $fields->valueData);
+        }
+   }
 
     protected function getItemLabel(string $name): ?string
     {
@@ -133,7 +146,6 @@ class form extends formBase
                 $item['control'] = $control;
             }
         }
-
         return $item;
     }
 
@@ -159,7 +171,8 @@ class form extends formBase
                 continue;
             }
 
-            if($item instanceof item) $item = $item->props->toJson();
+            if($item instanceof item)      $item = $item->props->toJson();
+            elseif($item instanceof field) $item = $item->toArray();
             $itemsProps = $this->getItemProps($item, $key, $foldableItems, $pinnedItems, $isGrid, $requiredFields);
 
             $formGroup = new formGroup(set($itemsProps));
