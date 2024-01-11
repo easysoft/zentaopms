@@ -96,9 +96,12 @@ formPanel
             set::label($lang->testtask->resultFile),
             set::width('1/2'),
             set::required(true),
-            fileInput
+            upload
             (
-                set::name('resultFile')
+                set::name('resultFile'),
+                set::multiple(false),
+                set::limitCount('1'),
+                set::accept('.xml')
             )
         ),
         div
