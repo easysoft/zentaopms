@@ -976,7 +976,7 @@ class testtask extends control
         $this->view->type      = $type;
         $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($case->product), $case->branch);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed, noletter');
-        $this->view->testtasks = $this->testtask->getPairs($case->product);
+        $this->view->testtasks = $this->testtask->getPairs($case->product, 0, 0, false);
 
         $this->display();
     }

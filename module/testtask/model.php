@@ -204,13 +204,13 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getPairs(int $productID, int $executionID = 0, int $appendTaskID = 0): array
+    public function getPairs(int $productID, int $executionID = 0, int $appendTaskID = 0, bool $unit = true): array
     {
         $pairs = $this->dao->select('id, name')->from(TABLE_TESTTASK)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
-            ->andWhere('auto')->ne('unit')
+            ->beginIF($unit)->andWhere('auto')->ne('unit')->fi()
             ->orderBy('id_desc')
             ->fetchPairs();
 
