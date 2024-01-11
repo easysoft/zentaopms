@@ -63,6 +63,7 @@ $osList = explode(',', $legendBasic['os']['text']);
 foreach($osList as $os)
 {
     $osHTML[] = span(zget($lang->bug->osList, $os));
+    $osHTML[] = ' ';
 }
 
 $browserHTML = array();
@@ -70,6 +71,7 @@ $browserList = explode(',', $legendBasic['browser']['text']);
 foreach($browserList as $browser)
 {
     $browserHTML[] = span(zget($lang->bug->browserList, $browser));
+    $browserHTML[] = ' ';
 }
 
 $mailtoHTML = array();
