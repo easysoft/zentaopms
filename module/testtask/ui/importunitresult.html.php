@@ -49,7 +49,7 @@ formPanel
                 ),
                 span
                 (
-                    setClass('input-group-addon' . (!empty($builds) ? ' hidden' : '')),
+                    setClass('input-group-addon hidden'),
                     a
                     (
                         set('data-toggle', 'modal'),
