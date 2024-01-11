@@ -41,10 +41,10 @@ $content = $needCreateFile ? div
                 set::url(inlink('reset')),
                 $lang->refresh
             ),
-            backBtn
+            btn
             (
-                setClass('px-8 mx-4'),
-                set::back('GLOBAL'),
+                setClass('px-8 mx-4 not-open-url'),
+                set::url(inlink('login')),
                 $lang->goback
             )
         )
@@ -56,6 +56,12 @@ $content = $needCreateFile ? div
     (
         setClass('reset-form w-full'),
         set::title($lang->user->resetPwdByAdmin),
+        set::actions(
+            array(
+                btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'px-8 mx-4'))),
+                btn(set(array('text' => $lang->goback, 'url' => inlink('login'), 'class' => 'px-8 mx-4 not-open-url')))
+            )
+        ),
         on::change('#password1,#password2', 'changePassword'),
         on::click('button[type=submit]', 'encryptPassword'),
         !empty($config->resetPWDByMail) ? to::headingActions
