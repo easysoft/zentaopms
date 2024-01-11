@@ -1914,6 +1914,7 @@ class metricModel extends model
         $month = date('m', $timestamp);
         $day   = date('d', $timestamp);
         $week  = date('oW', $timestamp);
+        $week  = substr($week, -2);
 
         $dateValues = new stdClass();
 

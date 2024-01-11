@@ -179,7 +179,7 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
-        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => date('j'));
 
         $now        = helper::now();
         $dateValues = $this->metric->generateDateValues($now);

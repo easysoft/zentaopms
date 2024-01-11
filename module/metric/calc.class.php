@@ -297,7 +297,7 @@ class baseCalc
         if(strlen($dateStr) > 10) $dateStr = substr($dateStr, 0, 10);
         $date = DateTime::createFromFormat('Y-m-d', $dateStr);
 
-        return $date->format('W');
+        return substr($date->format('oW'), -2);
     }
 
     /**
