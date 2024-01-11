@@ -1028,8 +1028,8 @@ class baseControl
         /* 加载 common.field.php 和 method.field.php。 */
         $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
         $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
-        include $commonFieldFile;
-        include $methodFieldFile;
+        helper::import($commonFieldFile);
+        helper::import($methodFieldFile);
 
         ob_start();
         include $viewFile;
