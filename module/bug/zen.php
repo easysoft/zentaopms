@@ -654,10 +654,10 @@ class bugZen extends bug
         $legendBasic['pri']            = array('name' => $this->lang->bug->pri,            'text' => zget($this->lang->bug->priList, $bug->pri));
         $legendBasic['status']         = array('name' => $this->lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
         $legendBasic['activatedCount'] = array('name' => $this->lang->bug->activatedCount, 'text' => $bug->activatedCount);
-        $legendBasic['activatedDate']  = array('name' => $this->lang->bug->activatedDate,  'text' => $bug->activatedDate);
+        $legendBasic['activatedDate']  = array('name' => $this->lang->bug->activatedDate,  'text' => formatTime($bug->activatedDate));
         $legendBasic['confirmed']      = array('name' => $this->lang->bug->confirmed,      'text' => $this->lang->bug->confirmedList[$bug->confirmed]);
-        $legendBasic['assignedTo']     = array('name' => $this->lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $this->lang->at . $bug->assignedDate);
-        $legendBasic['deadline']       = array('name' => $this->lang->bug->deadline,       'text' => $bug->deadline . (isset($bug->delay) ? sprintf($this->lang->bug->notice->delayWarning, $bug->delay) : ''));
+        $legendBasic['assignedTo']     = array('name' => $this->lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $this->lang->at . formatTime($bug->assignedDate));
+        $legendBasic['deadline']       = array('name' => $this->lang->bug->deadline,       'text' => formatTime($bug->deadline) . (isset($bug->delay) ? sprintf($this->lang->bug->notice->delayWarning, $bug->delay) : ''));
         $legendBasic['feedbackBy']     = array('name' => $this->lang->bug->feedbackBy,     'text' => $bug->feedbackBy);
         $legendBasic['notifyEmail']    = array('name' => $this->lang->bug->notifyEmail,    'text' => $bug->notifyEmail);
         $legendBasic['os']             = array('name' => $this->lang->bug->os,             'text' => $bug->os);
@@ -681,13 +681,13 @@ class bugZen extends bug
         extract((array)$view);
 
         $legendLife  = array();
-        $legendLife['openedBy']      = array('name' => $this->lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . ($bug->openedDate ? $this->lang->at . $bug->openedDate : ''));
+        $legendLife['openedBy']      = array('name' => $this->lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . (formatTime($bug->openedDate) ? $this->lang->at . $bug->openedDate : ''));
         $legendLife['openedBuild']   = array('name' => $this->lang->bug->openedBuild,   'text' => $bug->openedBuild);
-        $legendLife['resolvedBy']    = array('name' => $this->lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $this->lang->at . formatTime($bug->resolvedDate, DT_DATE1) : ''));
+        $legendLife['resolvedBy']    = array('name' => $this->lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . (formatTime($bug->resolvedDate) ? $this->lang->at . formatTime($bug->resolvedDate, DT_DATE1) : ''));
         $legendLife['resolvedBuild'] = array('name' => $this->lang->bug->resolvedBuild, 'text' => zget($builds, $bug->resolvedBuild));
         $legendLife['resolution']    = array('name' => $this->lang->bug->resolution,    'text' => '');
-        $legendLife['closedBy']      = array('name' => $this->lang->bug->closedBy,      'text' => zget($users, $bug->closedBy) . ($bug->closedDate ? $this->lang->at . $bug->closedDate : ''));
-        $legendLife['lastEditedBy']  = array('name' => $this->lang->bug->lblLastEdited, 'text' => zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . ($bug->lastEditedDate ? $this->lang->at . $bug->lastEditedDate : ''));
+        $legendLife['closedBy']      = array('name' => $this->lang->bug->closedBy,      'text' => zget($users, $bug->closedBy) . (formatTime($bug->closedDate) ? $this->lang->at . $bug->closedDate : ''));
+        $legendLife['lastEditedBy']  = array('name' => $this->lang->bug->lblLastEdited, 'text' => zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . (formatTime($bug->lastEditedDate) ? $this->lang->at . $bug->lastEditedDate : ''));
 
         return $legendLife;
     }
