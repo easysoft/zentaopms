@@ -1241,7 +1241,11 @@ class testcase extends control
         if(!empty($_POST))
         {
             $libID = (int)$this->post->lib;
-            if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->testcase->caselib)));
+            if(empty($libID))
+            {
+                dao::$errors['lib'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->caselib);
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             list($cases, $steps, $files) = $this->testcaseZen->buildDataForImportToLib($caseID, $libID);
 
