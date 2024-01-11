@@ -42,7 +42,7 @@ formPanel
     (
         on::change('[name=product]', 'loadProduct'),
         on::change('[name=branch]', 'loadBranch'),
-        formGroup
+        $product->shadow ? formHidden('product', $product->id) : formGroup
         (
             set::label($lang->story->product),
             set::width('1/2'),
