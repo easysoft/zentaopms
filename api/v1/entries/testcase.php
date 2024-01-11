@@ -48,6 +48,7 @@ class testcaseEntry extends entry
         /* Set $_POST variables. */
         $fields = 'title,pri,story,type,stage,product,module,branch,precondition,script';
         $this->batchSetPost($fields, $oldCase);
+        if(isset($this->requestBody->auto)) $this->setPost('auto', 'auto');
         if(isset($this->requestBody->script)) $this->setPost('auto', 'auto');
 
         /* Set steps and expects. */

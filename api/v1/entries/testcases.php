@@ -74,9 +74,11 @@ class testcasesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'module,type,stage,story,title,precondition,pri';
+        $fields = 'module,type,stage,story,title,precondition,pri,script';
         $this->batchSetPost($fields);
         $this->setPost('product', $productID);
+        if(isset($this->requestBody->auto)) $this->setPost('auto', 'auto');
+        if(isset($this->requestBody->script)) $this->setPost('auto', 'auto');
 
         /* Set steps and expects. */
         if(isset($this->requestBody->steps))
