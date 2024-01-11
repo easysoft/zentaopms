@@ -337,13 +337,13 @@ class gitlabModel extends model
      * Send an api post request.
      *
      * @param  int|string $host gitlab server ID | gitlab host url.
-     * @param  string     $api
-     * @param  array      $data
-     * @param  array      $options
+     * @param  string       $api
+     * @param  array|object $data
+     * @param  array        $options
      * @access public
      * @return object|array|null
      */
-    public function apiPost(int|string $host, string $api, array $data = array(), array $options = array()): object|array|null
+    public function apiPost(int|string $host, string $api, array|object $data = array(), array $options = array()): object|array|null
     {
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;

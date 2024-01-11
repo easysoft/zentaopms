@@ -412,20 +412,29 @@ class gitlabTest
         return $result->data->project->repository->tree;
     }
 
-    /**
-     * Test getFileLastCommit method.
-     *
-     * @param  string $path
-     * @param  string $branch
-     * @access public
-     * @return object|null|array
-     */
-    public function getFileLastCommitTest(string $path, string $branch): object|array|null
+    public function getFileLastCommitTest(int $repoID, string $path, string $branch = 'HEAD')
     {
-        $repo   = $this->gitlab->loadModel('repo')->getByID(1);
+        $repo = $this->gitlab->loadModel('repo')->getByID($repoID);
+
         $result = $this->gitlab->getFileLastCommit($repo, $path, $branch);
-        if(!$result) return $result;
-        if(isset($result->errors)) return array_column($result->errors, 'message');
+        return $result;
+    }
+
+    public function apiGetTest(int|string $host, string $api)
+    {
+        $result = $this->gitlab->apiGet($host, $api);
+
+        if(is_null($result)) return 'return null';
+        if(isset($result->id)) return 'success';
+        return $result;
+    }
+
+    public function apiPostTest(int|string $host, string $api, array|object $data = array(), array $options = array())
+    {
+        $result = $this->gitlab->apiGet($host, $api, $data, $options);
+
+        if(is_null($result)) return 'return null';
+        if(isset($result->name)) return 'success';
         return $result;
     }
 }
