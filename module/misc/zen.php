@@ -27,10 +27,11 @@ class miscZen extends misc
      * 获取缓存文件。
      * Get cache files.
      *
-     * @param  string $directory
+     * @param  string    $directory
+     * @access protected
      * @return void
      */
-    public function cleanCachaFiles(string $directory)
+    protected function cleanCachaFiles(string $directory): void
     {
         $files = glob($directory . DS . '*.cache');
 
@@ -45,10 +46,11 @@ class miscZen extends misc
      * 删除过期文件。
      * Delete expired file.
      *
-     * @param  string $file
+     * @param  string    $file
+     * @access protected
      * @return bool
      */
-    public function deleteExpiredFile(string $file): bool
+    protected function deleteExpiredFile(string $file): bool
     {
         $content = file_get_contents($file);
         $content = unserialize($content);
