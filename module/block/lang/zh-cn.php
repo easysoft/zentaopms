@@ -356,7 +356,7 @@ $lang->block->taskCount     = '任务数';
 $lang->block->bugCount      = 'Bug数';
 $lang->block->riskCount     = '风险数';
 $lang->block->issueCount    = '问题数';
-$lang->block->storyCount    = '需求数';
+$lang->block->storyCount    = $lang->SRCommon . '数';
 $lang->block->reviewCount   = '审批数';
 $lang->block->meetingCount  = '会议数';
 $lang->block->feedbackCount = '反馈数';
@@ -526,12 +526,12 @@ $lang->block->welcome->reviewByMe = '待我评审';
 $lang->block->welcome->assignToMe = '指派给我';
 
 $lang->block->welcome->reviewList = array();
-$lang->block->welcome->reviewList['story'] = '需求数';
+$lang->block->welcome->reviewList['story'] = $lang->SRCommon . '数';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']     = '任务数';
 $lang->block->welcome->assignList['bug']      = 'BUG数';
-$lang->block->welcome->assignList['story']    = '研发需求数';
+$lang->block->welcome->assignList['story']    = $lang->SRCommon . '数';
 $lang->block->welcome->assignList['testcase'] = '用例数';
 
 $lang->block->customModeTip = new stdClass();
