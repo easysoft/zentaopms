@@ -2072,21 +2072,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 获取项目类型是gitlab的产品。
-     * Get products which scm is GitLab by projects.
-     *
-     * @param  array $projectIDs
-     * @return array
-     */
-    public function getProductsByProjects(array $projectIDs): array
-    {
-        return $this->dao->select('path,product')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq('Gitlab')
-            ->andWhere('path')->in($projectIDs)
-            ->fetchPairs('path', 'product');
-    }
-
-    /**
      * 获取项目保护分支。
      * Get protect branches of one project.
      *

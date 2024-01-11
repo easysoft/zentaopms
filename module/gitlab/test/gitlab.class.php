@@ -388,4 +388,11 @@ class gitlabTest
 
         return $result;
     }
+
+    public function apiUpdateHookTest(int $gitlabID, int $projectID, int $hookID, object $hook)
+    {
+        $result = $this->gitlab->apiUpdateHook($gitlabID, $projectID, $hookID, $hook);
+
+        return json_decode($result);
+    }
 }
