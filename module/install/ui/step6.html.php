@@ -42,6 +42,7 @@ div
                 (
                     setClass('px-4'),
                     set::url($lang->install->officeDomain),
+                    set::target('_blank'),
                     set::type('success'),
                     $lang->install->register
                 ),
