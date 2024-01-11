@@ -768,7 +768,7 @@ class bug extends control
 
                 /* 批量创建后的一些其他操作。*/
                 /* Processing other operations after batch creation. */
-                $uploadImage = !empty($this->post->uploadImage[$index]) ? $this->post->uploadImages[$index] : '';
+                $uploadImage = !empty($this->post->uploadImage[$index]) ? $this->post->uploadImage[$index] : '';
                 $file        = $this->bugZen->processImageForBatchCreate($bug, $uploadImage, $bugImagesFile);
                 $this->bugZen->afterBatchCreate($bug, $output, $uploadImage, $file);
 
