@@ -64,7 +64,7 @@ formPanel
         set::label($lang->task->work),
         set::control('textarea'),
         set::name('work'),
-        set::value(html($effort->work)),
+        set::value(strip_tags($effort->work)),
         set::rows('1')
     )
 );
