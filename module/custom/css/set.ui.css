@@ -1,4 +1,6 @@
 .form-row .key-row {height: 1.92rem;}
 .form-horz .form-group {padding-left: 8rem;}
+.form-horz .form-group > .form-label {width: 8rem;}
 .lang-row .form-group {padding-left: 0; justify-content: center;}
+.lang-row .form-group > .form-label {width: var(--form-horz-label-width);}
 .unit-box .checkbox-primary {flex: 0 1 15%;}
