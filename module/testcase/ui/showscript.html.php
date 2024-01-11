@@ -31,7 +31,7 @@ foreach($lines as $key => $line)
         h::td
         (
             setClass('px-1 py-0'),
-            html_entity_decode($line)
+            html_entity_decode(str_replace(' ', '&nbsp;', $line))
         )
     );
 }
