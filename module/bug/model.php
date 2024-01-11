@@ -177,14 +177,16 @@ class bugModel extends model
      *
      * @param  int|array|string $bugIdList
      * @param  string           $fields
+     * @param  string           $orderBy
      * @access public
      * @return array
      */
-    public function getByIdList(int|array|string $bugIdList = 0, string $fields = '*'): array
+    public function getByIdList(int|array|string $bugIdList = 0, string $fields = '*', string $orderBy = ''): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->beginIF($bugIdList)->andWhere('id')->in($bugIdList)->fi()
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->fetchAll('id');
     }
 

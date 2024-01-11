@@ -210,12 +210,14 @@ class bugTest
      * Test get bug by id list.
      *
      * @param  string $bugIDList
+     * @param  string $fields
+     * @param  string $orderBy
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getByIdListTest($bugIDList)
+    public function getByIdListTest(string $bugIDList, string $fields, string $orderBy = ''): array|string
     {
-        $bugs = $this->objectModel->getByIdList($bugIDList);
+        $bugs = $this->objectModel->getByIdList($bugIDList, $fields, $orderBy);
 
         foreach($bugs as $bug)
         {
@@ -228,6 +230,7 @@ class bugTest
         }
         else
         {
+            if($orderBy) return implode(',', array_keys($bugs));
             return $bugs;
         }
     }

@@ -1596,7 +1596,7 @@ class bugZen extends bug
     {
         /* Initialize vars.*/
         $bugIdList = array_unique($this->post->bugIdList);
-        $bugs      = $this->bug->getByIdList($bugIdList);
+        $bugs      = $this->bug->getByIdList($bugIdList, '*', 'id_desc');
 
         /* Set menu and get product id list. */
         if($this->app->tab == 'product') $this->product->setMenu($productID);
