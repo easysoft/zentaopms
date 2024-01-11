@@ -63,31 +63,31 @@ if($efforts)
         foreach($efforts as $effort)
         {
             $effortRows[] = h::tr
+            (
+                h::td($effort->id),
+                h::td($effort->date),
+                h::td(zget($users, $effort->account)),
+                h::td(html($effort->work)),
+                h::td($effort->consumed . ' H'),
+                h::td($effort->left . ' H'),
+                h::td
                 (
-                    h::td($effort->id),
-                    h::td($effort->date),
-                    h::td(zget($users, $effort->account)),
-                    h::td(html($effort->work)),
-                    h::td($effort->consumed . ' H'),
-                    h::td($effort->left . ' H'),
-                    h::td
+                    common::hasPriv('task', 'editEffort') ? a
                     (
-                        common::hasPriv('task', 'editEffort') ? a
-                        (
-                            setClass('btn ghost toolbar-item square size-sm text-primary'),
-                            set::href(createLink('task', 'editEffort', "id={$effort->id}")),
-                            set('data-toggle', 'modal'),
-                            icon('edit'),
-                        ) : null,
-                        common::hasPriv('task', 'deleteWorkhour') ? a
-                        (
-                            setClass('btn ghost toolbar-item square size-sm ajax-submit text-primary'),
-                            set('data-confirm', $lang->task->confirmDeleteEffort),
-                            set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
-                            icon('trash')
-                        ) : null
-                    )
-                );
+                        setClass('btn ghost toolbar-item square size-sm text-primary'),
+                        set::href(createLink('task', 'editEffort', "id={$effort->id}")),
+                        set('data-toggle', 'modal'),
+                        icon('edit'),
+                    ) : null,
+                    common::hasPriv('task', 'deleteWorkhour') ? a
+                    (
+                        setClass('btn ghost toolbar-item square size-sm ajax-submit text-primary'),
+                        set('data-confirm', $lang->task->confirmDeleteEffort),
+                        set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
+                        icon('trash')
+                    ) : null
+                )
+            );
         }
         div
         (
@@ -176,6 +176,7 @@ else
         ),
         formBatchItem
         (
+            set::required(true),
             set::name('date'),
             set::label($lang->task->date),
             set::width('120px'),
@@ -191,6 +192,7 @@ else
         ),
         formBatchItem
         (
+            set::required(true),
             set::name('consumed'),
             set::label($lang->task->consumedHours),
             set::width('80px'),
@@ -205,6 +207,7 @@ else
         ),
         formBatchItem
         (
+            set::required(true),
             set::name('left'),
             set::label($lang->task->leftAB),
             set::width('80px'),

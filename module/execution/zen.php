@@ -1557,11 +1557,11 @@ class executionZen extends execution
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
         }
-        elseif($module == 'execution' and $method == 'storyview')
+        elseif($module == 'execution' && $method == 'storyview')
         {
             $link = helper::createLink($module, 'story', "executionID=%s");
         }
-        elseif($module == 'execution' and in_array($method, array('kanban', 'cfd')))
+        elseif($module == 'execution' && in_array($method, array('kanban', 'cfd')))
         {
             $link = helper::createLink($module, 'view', "executionID=%s");
         }
