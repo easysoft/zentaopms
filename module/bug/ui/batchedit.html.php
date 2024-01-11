@@ -55,7 +55,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('32px')
+        set::width('50px')
     ),
     /* Field of type. */
     formBatchItem
