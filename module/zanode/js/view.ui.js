@@ -1,4 +1,3 @@
-checkServiceStatus();
 function checkServiceStatus(){
     toggleLoading('#serviceContent', true);
     $.get($.createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
@@ -95,7 +94,6 @@ function checkServiceStatus(){
         }
         else
         {
-            clearInterval(checkInterval)
             $('.init-success').removeClass('hidden');
             $('.init-fail').addClass('hidden');
         }
@@ -196,6 +194,8 @@ function onCopy()
 $(function()
 {
     $('.create-snapshot i').replaceWith("<img src='static/svg/snapshot.svg' />");
+
+    checkServiceStatus();
 });
 
 window.editSnapshot = function(url)
