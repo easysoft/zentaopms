@@ -51,14 +51,27 @@ window.getColActions = function(col)
 
     if(firstCol.includes(col.type))
     {
-        actionList.push(
-            {
-                type: 'dropdown',
-                icon: 'expand-alt text-primary',
-                caret: false,
-                items: buildColCardActions(col),
-            }
-        );
+        if(productID)
+        {
+            actionList.push(
+                {
+                    type: 'dropdown',
+                    icon: 'expand-alt text-primary',
+                    caret: false,
+                    items: buildColCardActions(col),
+                }
+            );
+        }
+        else
+        {
+            actionList.push(
+                {
+                    type: 'ghost',
+                    icon: 'expand-alt text-primary',
+                    onClick: checkProducts
+                }
+            );
+        }
     }
 
     actionList.push(
@@ -92,22 +105,21 @@ window.buildColCardActions = function(col)
 {
     let actions = [];
 
-    const toggle = productID ? 'modal' : false;
     if(col.type == 'backlog')
     {
         if(priv.canCreateStory)
         {
-            action = {text: storyLang.create, url: productID ? $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id) : 'javascript::', 'data-toggle': toggle, 'data-size': 'lg', 'data-on': 'click', 'data-call': 'checkProducts'};
+            action = {text: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'};
             actions.push(action);
         }
-        if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productID ? (productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id)) : 'javascript:;', 'data-toggle': toggle, 'data-size' : 'lg', 'data-on': 'click', 'data-call': 'checkProducts'});
-        if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: productID ? $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id) : 'javascript:;', 'data-toggle': toggle, 'data-size' : 'lg', 'data-on': 'click', 'data-call': 'checkProducts'});
-        if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: productID ? '#linkStoryByPlan' : 'javascript:;', 'data-toggle': toggle, 'data-on': 'click', 'data-call': 'checkProducts'});
+        if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal'});
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) actions.push({text: bugLang.create, url: productID ? $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id + ',executionID=' + executionID) : 'javascript:;', 'data-toggle': toggle, 'data-size' : 'lg', 'data-on': 'click', 'data-call': 'checkProducts'});
-        if(priv.canBatchCreateBug) actions.push({text: bugLang.batchCreate, url: productID ? (productCount > 1 ? '#batchCreateBug' : $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=all&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id)) : 'javascript:;', 'data-toggle': 'modal', 'data-size': 'lg', 'data-on': 'click', 'data-call': 'checkProducts'});
+        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canBatchCreateBug) actions.push({text: bugLang.batchCreate, url: productCount > 1 ? '#batchCreateBug' : $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=all&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     }
     else if(col.type == 'wait')
     {
