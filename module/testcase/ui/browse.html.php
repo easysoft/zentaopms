@@ -110,6 +110,8 @@ if(isset($cols['scene']))  $cols['scene']['map']          = $iscenes;
 
 foreach($cases as $case)
 {
+    $case->lastRunDate = formatTime($case->lastRunDate);
+
     $actionType = $case->isScene ? 'scene' : 'testcase';
     $cols['actions']['menu'] = $config->$actionType->menu;
 
