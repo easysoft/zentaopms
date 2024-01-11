@@ -201,3 +201,17 @@ function checkRemove(removeIndex)
 
     return true;
 }
+
+window.confirmBug = function(confirmTip, taskID, bugID)
+{
+    zui.Modal.confirm(confirmTip).then((res) => {
+        if(res)
+        {
+            loadPage($.createLink('bug', 'view', `bugID=${bugID}`));
+        }
+        else
+        {
+            loadPage($.createLink('task', 'view', `taskID=${taskID}`));
+        }
+    });
+}
