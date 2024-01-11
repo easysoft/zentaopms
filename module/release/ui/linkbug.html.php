@@ -32,6 +32,7 @@ searchForm
     set::onSearch(jsRaw("window.onSearchLinks.bind(null, '{$type}')"))
 );
 
+$checkedRows = array_values(array_filter(array_map(function($bug) use($type) {return ($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : 0;}, $allBugs)));
 dtable
 (
     set::id('unlinkBugList'),
@@ -39,6 +40,7 @@ dtable
     set::checkable(true),
     set::cols($cols),
     set::data($allBugs),
+    set::checkedRows($checkedRows),
     set::loadPartial(true),
     set::footToolbar(array
     (
