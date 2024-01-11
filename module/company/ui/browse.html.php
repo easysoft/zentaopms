@@ -73,6 +73,11 @@ $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
 
 if(common::hasPriv('user', 'batchEdit')) $this->config->company->user->dtable->fieldList['id']['type'] = 'checkID';
 
+foreach($users as $user)
+{
+    if(!$user->last) $user->last = '';
+}
+
 $tableData = initTableData($users, $this->config->company->user->dtable->fieldList, $this->loadModel('user'));
 dtable
 (
