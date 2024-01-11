@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The properties setter class file of zin lib.
+ * The setting class file of zin lib.
  *
  * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'classlist.class.php';
 
 class setting extends \zin\utils\dataset
 {
@@ -48,6 +49,22 @@ class setting extends \zin\utils\dataset
             $value = array_shift($args);
         }
         return $this->setVal($name, $value);
+    }
+
+    /**
+     * Set property value as class list.
+     *
+     * @access public
+     * @param  string $name  - Property name.
+     * @param  mixed  $class - Class list.
+     * @return setting
+     */
+    public function setClass(string $name, mixed ...$class): setting
+    {
+        if(empty($class)) return $this;
+
+        $classList = new \zin\utils\classlist($this->getVal($name), ...$class);
+        return $this->setVal($name, $classList->toStr());
     }
 
     /**
