@@ -877,9 +877,12 @@ class story extends control
         $this->storyZen->setMenuForBatchClose($productID, $executionID, $from, $storyType);
 
         /* Get the skipped and already closed stories, and the count of stories which have a twin. */
-        $stories     = $this->story->getByList($storyIdList);
-        $ignoreTwins = array();
-        $twinsCount  = array();
+        $stories      = $this->story->getByList($storyIdList);
+        $closedStory  = array();
+        $skippedStory = array();
+        $ignoreTwins  = array();
+        $twinsCount   = array();
+        $storyCount   = count($stories);
         foreach($stories as $story)
         {
             if(!empty($ignoreTwins) and isset($ignoreTwins[$story->id]))
@@ -903,9 +906,11 @@ class story extends control
             }
         }
 
+        if($storyCount == count($closedStory)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->notice->closed, 'locate' => $this->session->storyList)));
+
         $errorTips = '';
-        if(isset($closedStory))  $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
-        if(isset($skippedStory)) $errorTips .= sprintf($this->lang->story->skipStory,   implode(',', $skippedStory));
+        if($closedStory)  $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
+        if($skippedStory) $errorTips .= sprintf($this->lang->story->skipStory,   implode(',', $skippedStory));
 
         $this->view->productID  = $productID;
         $this->view->stories    = $stories;
