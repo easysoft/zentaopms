@@ -46,10 +46,13 @@ foreach($projectExecutions as $projectID => $executions)
         $group = $getExecutionGroup($execution);
 
         $item = array();
-        $item['id']    = $execution->id;
-        $item['text']  = $execution->name;
-        $item['keys']  = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
+        $item['id']       = $execution->id;
+        $item['text']     = $execution->name;
+        $item['keys']     = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
         $item['data-app'] = $app->tab;
+        $item['url']      = sprintf($link, $execution->id);
+
+        if($execution->type == 'kanban') $item['url'] = helper::createLink('execution', 'kanban', "execution={$execution->id}");
 
         if(!isset($data[$group][$projectID])) $data[$group][$projectID] = $projectItem;
         $data[$group][$projectID]['items'][] = $item;
@@ -76,7 +79,6 @@ $json = array();
 $json['data']       = $data;
 $json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
-$json['link']       = array('execution' => sprintf($link, '{id}'));
 $json['labelMap']   = array('project' => $lang->project->common);
 $json['expandName'] = 'closed';
 $json['itemType']   = 'execution';
