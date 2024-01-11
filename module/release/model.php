@@ -78,6 +78,10 @@ class releaseModel extends model
             ->page($pager)
             ->fetchAll();
 
+        $projectIdList = '';
+        foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
+        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
+
         $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -95,19 +99,18 @@ class releaseModel extends model
             }
             $release->builds = $releaseBuilds;
 
-            $branchName = '';
+            $branchName = array();
             if($release->productType != 'normal')
             {
-                foreach(explode(',', trim($release->branch, ',')) as $releaseBranch)
-                {
-                    $branchName .= $releaseBranch === '0' ? $this->lang->branch->main : $this->branch->getByID($releaseBranch);
-                    $branchName .= ',';
-                }
-                $branchName = trim($branchName, ',');
+                foreach(explode(',', trim($release->branch, ',')) as $releaseBranch) $branchName[] = $releaseBranch === '0' ? $this->lang->branch->main : $this->branch->getByID($releaseBranch);
+                $branchName = implode(',', $branchName);
             }
             $release->branchName = empty($branchName) ? $this->lang->branch->main : $branchName;
-        }
 
+            $release->projectName = array();
+            foreach(explode(',', trim($release->project, ',')) as $projectID) $release->projectName[$projectID] = zget($projectPairs, $projectID, '');
+            $release->projectName = implode(' ', $release->projectName);
+        }
         return $releases;
     }
 

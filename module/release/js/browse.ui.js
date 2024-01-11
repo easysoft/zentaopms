@@ -21,10 +21,7 @@ window.renderCell = function(result, {col, row})
 
     if(col.name == 'project')
     {
-        result[0] = '';
-        if(row.data.builds.length == 0) return result;
-
-        result[result.length] = {html: `<span title='${row.data.build.projectName}'>${row.data.build.projectName}</span>`};
+        result[0] = {html: `<span title='${row.data.projectName}'>${row.data.projectName}</span>`};
         return result;
     }
 
