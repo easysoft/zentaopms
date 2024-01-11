@@ -26,6 +26,7 @@ class formGroup extends wg
         'value?: string|array',
         'disabled?: bool',
         'readonly?: bool',
+        'multiple?: bool',
         'hidden?: bool',
         'items?: array',
         'placeholder?: string',
