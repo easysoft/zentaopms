@@ -10,29 +10,39 @@ title=测试 gitlabModel::getFileLastCommit();
 timeout=0
 cid=1
 
-- 获取版本库1 unitfile文件最后一次提交信息
- - 属性message @unitfile
- - 属性authorName @Administrator
-- 获取版本库1 public文件夹最后一次提交信息
- - 属性message @2023-12-21
- - 属性authorName @Administrator
-- 获取版本库1 public文件夹最后一次提交信息
- - 属性message @getFileLastCommit单测
- - 属性authorName @Administrator
+- 空的路径和分支 @0
+- 错误的分支 @0
+- 正确的分支属性sha @1b9405639ddef9585b3743b0637b4f79775409b7
+- 错误的路径 @0
+- 正确的路径属性sha @2e0dd521b4a29930d5670a2c142a4400d7cffc1a
+- 带/的路径属性sha @0fd3978da3be5969ef39ff2517cc69cb3a23811c
+- 带/的路径属性sha @0fd3978da3be5969ef39ff2517cc69cb3a23811c
 
 */
 
 zdTable('pipeline')->gen(5);
-zdTable('repo')->config('repo')->gen(5);
+zdTable('repo')->config('repo')->gen(1);
 
 $gitlab = new gitlabTest();
 
-$repoID = 1;
-$path   = 'unitfile';
-$path2  = 'public';
-$path3  = 'getfilelastcommit';
-$branch = 'branch1';
+$path   = '';
+$branch = '';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p() && e('0'); // 空的路径和分支
 
-r($gitlab->getFileLastCommitTest($repoID, $path))           && p('message,authorName') && e('unitfile,Administrator'); //获取版本库1 unitfile文件最后一次提交信息
-r($gitlab->getFileLastCommitTest($repoID, $path2))          && p('message,authorName') && e('2023-12-21,Administrator'); //获取版本库1 public文件夹最后一次提交信息
-r($gitlab->getFileLastCommitTest($repoID, $path3, $branch)) && p('message,authorName') && e('getFileLastCommit单测,Administrator'); //获取版本库1 public文件夹最后一次提交信息
+$branch = 'test_error';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p() && e('0'); // 错误的分支
+
+$branch = 'master';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p('sha') && e('1b9405639ddef9585b3743b0637b4f79775409b7'); // 正确的分支
+
+$path = 'test_error';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p() && e('0'); // 错误的路径
+
+$path = 'README.md';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p('sha') && e('2e0dd521b4a29930d5670a2c142a4400d7cffc1a'); // 正确的路径
+
+$path = '/public';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p('sha') && e('0fd3978da3be5969ef39ff2517cc69cb3a23811c'); // 带/的路径
+
+$path = '/public/';
+r($gitlab->getFileLastCommitTest($path, $branch)) && p('sha') && e('0fd3978da3be5969ef39ff2517cc69cb3a23811c'); // 带/的路径

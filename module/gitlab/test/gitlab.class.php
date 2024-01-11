@@ -411,4 +411,21 @@ class gitlabTest
         if(isset($result->errors)) return array_column($result->errors, 'message');
         return $result->data->project->repository->tree;
     }
+
+    /**
+     * Test getFileLastCommit method.
+     *
+     * @param  string $path
+     * @param  string $branch
+     * @access public
+     * @return object|null|array
+     */
+    public function getFileLastCommitTest(string $path, string $branch): object|array|null
+    {
+        $repo   = $this->gitlab->loadModel('repo')->getByID(1);
+        $result = $this->gitlab->getFileLastCommit($repo, $path, $branch);
+        if(!$result) return $result;
+        if(isset($result->errors)) return array_column($result->errors, 'message');
+        return $result;
+    }
 }
