@@ -176,6 +176,7 @@ featureBar
 );
 
 $editModule = $execution->multiple ? 'execution' : 'project';
+$editParams = $execution->multiple ? "executionID={$execution->id}" : "projectID={$execution->project}";
 
 toolbar
 (
@@ -232,7 +233,7 @@ toolbar
                 array
                 (
                     'class' => 'btn ghost btn-default',
-                    'url'   => createLink($editModule, 'edit', "id=$execution->id"),
+                    'url'   => createLink($editModule, 'edit', $editParams),
                     'icon'  => 'edit',
                     'data-toggle' => 'modal',
                     'data-size' => 'lg'
