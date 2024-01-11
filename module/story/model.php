@@ -1873,6 +1873,7 @@ class storyModel extends model
         /* 根据需求关联的任务状态统计，计算需求的阶段。 */
         $taskStat = $this->storyTao->getLinkedTaskStat($storyID, $linkedProjects);
         $stages   = $this->storyTao->computeStagesByTasks($storyID, $taskStat, $stages, $linkedProjects);
+        $stages   = $this->storyTao->computeStagesByRelease($storyID, $stages);
 
         $this->storyTao->updateStage($storyID, $stages, $oldStages, $linkedProjects);
         return true;

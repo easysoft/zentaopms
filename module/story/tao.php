@@ -1177,7 +1177,8 @@ class storyTao extends storyModel
         $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->exec();
         foreach($stages as $branchID => $stage)
         {
-            $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('planned')->exec();
+            $branchID = (int)$branchID;
+            $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('planned')->exec();
             if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy)) $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
         }
         return true;
@@ -1277,11 +1278,11 @@ class storyTao extends storyModel
         if($planIdList)
         {
             $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIdList)->fetchPairs('branch', 'branch');
-            foreach($plans as $branchID) $stages[$branchID] = 'planned';
+            foreach($plans as $branchID) $stages[(int)$branchID] = 'planned';
         }
         if(empty($linkedBranches)) return $stages;
 
-        foreach($linkedBranches as $branchID) $stages[$branchID] = 'projected';
+        foreach($linkedBranches as $branchID) $stages[(int)$branchID] = 'projected';
         return $stages;
     }
 
@@ -1320,6 +1321,7 @@ class storyTao extends storyModel
                 $branches = $linkedProjects[$task->execution]->branches;
                 foreach($branches as $branch)
                 {
+                    $branch = (int)$branch;
                     if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
 
                     $branchStatusList[$branch][$type][$status] ++;
@@ -1369,7 +1371,7 @@ class storyTao extends storyModel
         {
             foreach($linkedProjects as $linkedProject)
             {
-                foreach($linkedProject->branches as $branchID) $stages[$branchID] = 'projected';
+                foreach($linkedProject->branches as $branchID) $stages[(int)$branchID] = 'projected';
             }
             return $stages;
         }
@@ -1378,6 +1380,7 @@ class storyTao extends storyModel
         list($branchStatusList, $branchDevelCount, $branchTestCount) = $taskStat;
         foreach($branchStatusList as $branch => $statusList)
         {
+            $branch     = (int)$branch;
             $stage      = 'projected';
             $testCount  = isset($branchTestCount[$branch])  ? $branchTestCount[$branch]  : 0;
             $develCount = isset($branchDevelCount[$branch]) ? $branchDevelCount[$branch] : 0;
@@ -1398,15 +1401,28 @@ class storyTao extends storyModel
             if($hasDoingTestTask)                    $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
             if($doneDevelTask && $doneTestTask)      $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
 
-            $stages[$branch] = $stage;
+            $stages[(int)$branch] = $stage;
         }
 
+        return $stages;
+    }
+
+    /**
+     * 根据需求是否已经发布，计算需求阶段。
+     * Compute stages by release.
+     *
+     * @param  int       $storyID
+     * @param  array     $stages
+     * @access protected
+     * @return array
+     */
+    protected function computeStagesByRelease(int $storyID, array $stages): array
+    {
         /* 检查该需求是否已经发布，如果已经发布，阶段则为已发布。 */
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
         foreach($releases as $branches)
         {
-            $branches = trim($branches, ',');
-            foreach(explode(',', $branches) as $branch) $stages[(int)$branch] = 'released';
+            foreach(explode(',', trim($branches, ',')) as $branch) $stages[(int)$branch] = 'released';
         }
 
         return $stages;
