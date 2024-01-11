@@ -98,13 +98,13 @@ $app->loadLang('product');
 $config->product->all = new stdclass();
 $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
-if(isset($config->setCode) and $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
-$config->product->all->search['fields']['id']          = $lang->product->id;
-if($config->systemMode == 'ALM')
+if($config->systemMode == 'ALM' || $config->systemMode == 'PLM')
 {
     $config->product->all->search['fields']['program'] = $lang->product->program;
     $config->product->all->search['fields']['line']    = $lang->product->line;
 }
+if(isset($config->setCode) and $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
+$config->product->all->search['fields']['id']          = $lang->product->id;
 $config->product->all->search['fields']['desc']        = $lang->product->desc;
 $config->product->all->search['fields']['PO']          = $lang->product->PO;
 $config->product->all->search['fields']['QD']          = $lang->product->QD;
@@ -115,13 +115,13 @@ $config->product->all->search['fields']['createdDate'] = $lang->product->created
 $config->product->all->search['fields']['createdBy']   = $lang->product->createdBy;
 
 $config->product->all->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-if(isset($config->setCode) and $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
-if($config->systemMode == 'ALM')
+if($config->systemMode == 'ALM' || $config->systemMode == 'PLM')
 {
     $config->product->all->search['params']['program'] = array('operator' => '=', 'control' => 'select', 'values' => '');
     $config->product->all->search['params']['line']    = array('operator' => '=', 'control' => 'select', 'values' => '');
 }
+if(isset($config->setCode) and $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->product->all->search['params']['desc']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['PO']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['QD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
