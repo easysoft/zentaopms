@@ -17,6 +17,7 @@ formPanel
     formGroup
     (
         set::label($lang->testcase->selectLibAB),
+        set::required(true),
         picker
         (
             set::name('lib'),
