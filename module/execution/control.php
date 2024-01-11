@@ -2243,6 +2243,8 @@ class execution extends control
                 $productName = count($products) > 1 ? $products[$story->product]->name : '';
                 $modules[$story->module] = $productName . zget($storyModule, $story->module, '');
             }
+
+            $story->estimate = $story->estimate . $this->config->hourUnit;
         }
 
         /* Set the pager. */
