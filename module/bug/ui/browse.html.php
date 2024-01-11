@@ -10,8 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('productID', $product->id);
-jsVar('branch',    $branch);
+jsVar('productID',      $product->id);
+jsVar('branch',         $branch);
+jsVar('caseCommonLang', $this->lang->testcase->common);
 
 $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
 $currentType   = $browseType == 'bysearch' ? $param : ($browseType == 'bymodule' ? $this->session->bugBrowseType : $browseType);
