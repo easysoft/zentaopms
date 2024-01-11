@@ -6,7 +6,7 @@ window.checkUnlink = function()
     const productID = +$elem.val();
     if(unmodifiableProducts.includes(productID))
     {
-        const $branch = $elem.closest('.product-block').find('[name^=branch]');
+        const $branch = $elem.closest('.product-block').find('.pick-value[name^=branch]');
         if($branch.length)
         {
             const branchID = +$branch.val();
