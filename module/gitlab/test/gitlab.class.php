@@ -395,4 +395,20 @@ class gitlabTest
 
         return json_decode($result);
     }
+
+    /**
+     * Test apiGetByGraphql method.
+     *
+     * @param  string $query
+     * @access public
+     * @return object|null|array
+     */
+    public function apiGetByGraphqlTest(string $query): object|null|array
+    {
+        $repo   = $this->gitlab->loadModel('repo')->getByID(1);
+        $result = $this->gitlab->apiGetByGraphql($repo, $query);
+        if(!$result) return $result;
+        if(isset($result->errors)) return array_column($result->errors, 'message');
+        return $result->data->project->repository->tree;
+    }
 }
