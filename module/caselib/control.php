@@ -82,8 +82,8 @@ class caselib extends control
             $message = $this->executeHooks($libID);
             if(!$message) $message = $this->lang->saveSuccess;
 
-            $link = inlink('view', "libID={$libID}");
-            return $this->sendSuccess(array('message' => $message, 'callback' => "loadModal(\"$link\", 'viewLibModal');"));
+            $link = inlink('browse', "libID={$libID}");
+            return $this->sendSuccess(array('message' => $message, 'closeModal' => true, 'callback' => "loadPage(\"$link\", '#heading #dropmenu, #main');"));
         }
 
         /* Set lib menu. */
