@@ -61,6 +61,7 @@ $config->testcase->dtable->fieldList['precondition']['sortType'] = true;
 
 $config->testcase->dtable->fieldList['story']['title']      = $lang->testcase->story;
 $config->testcase->dtable->fieldList['story']['type']       = 'desc';
+$config->testcase->dtable->fieldList['story']['hint']       = '{storyTitle}';
 $config->testcase->dtable->fieldList['story']['link']       = array('module' => 'story', 'method' => 'view', 'params' => "storyID={story}");
 $config->testcase->dtable->fieldList['story']['group']      = 3;
 $config->testcase->dtable->fieldList['story']['control']    = 'select';
