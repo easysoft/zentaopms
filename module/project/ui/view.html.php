@@ -19,11 +19,12 @@ if($project->grade > 1)
     {
         if(common::hasPriv('program', 'product'))
         {
-            $programList[$programID] = html::a
-            (
-                $this->createLink('program', 'product', "programID={$programID}"),
-                $name
-            );
+            $programLink = $this->createLink('program', 'product', "programID={$programID}");
+            $programList[$programID] = "<a href='{$programLink}' title='{$name}'>{$name}</a>";
+        }
+        else
+        {
+            $programList[$programID] = "<span title='{$name}'>{$name}</span>";
         }
     }
 
@@ -362,7 +363,7 @@ div
                 setClass('flex mt-4'),
                 div
                 (
-                    setClass('clip text-secondary programBox'),
+                    setClass('clip programBox'),
                     $programDom
                 )
             ),

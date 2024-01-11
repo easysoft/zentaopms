@@ -45,15 +45,12 @@ if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
     {
         if(common::hasPriv('program', 'product'))
         {
-            $programList[$programID] = html::a
-            (
-                $this->createLink('program', 'product', "programID={$programID}"),
-                $name
-            );
+            $programLink = $this->createLink('program', 'product', "programID={$programID}");
+            $programList[$programID] = "<a href='{$programLink}' title='{$name}'>{$name}</a>";
         }
         else
         {
-            $programList[$programID] = span($name);
+            $programList[$programID] = "<span title='{$name}'>{$name}</span>";
         }
     }
 
@@ -302,10 +299,12 @@ div
                     (
                         setClass('clip'),
                         set::href($this->createLink('project', 'index', "projectID={$execution->project}")),
+                        set::title($execution->projectInfo->name),
                         $execution->projectInfo->name
                     ) : span
                     (
                         setClass('clip w-full'),
+                        set::title($execution->projectInfo->name),
                         $execution->projectInfo->name
                     )
                 )
