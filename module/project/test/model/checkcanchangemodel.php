@@ -5,6 +5,13 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 zdTable('project')->config('project')->gen(4);
+zdTable('bug')->gen(0);
+zdTable('doc')->gen(0);
+zdTable('case')->gen(0);
+zdTable('build')->gen(0);
+zdTable('release')->gen(0);
+zdTable('testtask')->gen(0);
+zdTable('design')->gen(0);
 
 /**
 
