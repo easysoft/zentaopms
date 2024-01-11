@@ -4,6 +4,11 @@ window.setHeight = function()
     $('.panel').height(codeHeight);
 }
 
+window.openInEditWin = function(url)
+{
+    parent.$('#editWin').attr('src', url);
+};
+
 setHeight();
 window.addEventListener('resize', function()
 {

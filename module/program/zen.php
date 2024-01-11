@@ -268,7 +268,7 @@ class programZen extends program
             }
         }
 
-        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions) = $this->program->getKanbanStatisticData($programs);
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions) = $this->program->getKanbanStatisticData(array(0 => '') + $programs);
 
         $programList = array();
         $today       = helper::today();

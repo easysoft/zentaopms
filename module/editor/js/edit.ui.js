@@ -80,7 +80,7 @@ window.setHeight = function()
         codeHeight -= contentHeight + 30;
         if(codeHeight < 300) codeHeight = 300;
     }
-    $('#fileContentEditor').height(codeHeight - 30);
+    $('#fileContentEditor').height(codeHeight - 70);
 };
 
 initContentEditor();

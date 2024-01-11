@@ -74,8 +74,9 @@ class editor extends control
         if($filePath)
         {
             $filePath = helper::safe64Decode($filePath);
-            $filePath = realpath($filePath);
-            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
+            $realPath = realpath($filePath);
+            if($realPath) $filePath = $realPath;
+            if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->editFileError));
             if($action == 'extendOther' and file_exists($filePath)) $this->view->showContent = file_get_contents($filePath);
 
             if(($action == 'edit' or $action == 'override') && !file_exists($filePath)) $filePath = '';
@@ -113,11 +114,11 @@ class editor extends control
         if($_POST)
         {
             $saveFilePath = $this->editor->getSavePath($filePath, 'newMethod');
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode(dao::getError())));
 
             $extendLink = $this->editor->getExtendLink($saveFilePath, 'newPage');
             if(file_exists($saveFilePath) and !$this->post->override) return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm('{$this->lang->editor->repeatPage}').then((res) => {if(res) loadPage('{$extendLink}');});"));
-            return $this->send(array('result' => 'success', 'load' => $extendLink));
+            return $this->send(array('result' => 'success', 'callback' => "openInEditWin('{$extendLink}')"));
         }
         $this->view->filePath = $filePath;
         $this->display();
@@ -143,12 +144,12 @@ class editor extends control
             if($action != 'edit' and $action != 'newPage')
             {
                 $filePath = $this->editor->getSavePath($filePath, $action);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode(dao::getError())));
             }
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->repeatFile));
 
             $result = $this->editor->save($filePath);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode(dao::getError())));
 
             return $this->send(array('result' => 'success', 'load' => inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'callback' => 'reloadExtendWin()'));
         }
