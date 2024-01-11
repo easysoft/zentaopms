@@ -15,9 +15,51 @@ namespace zin;
  * 展示个性化设置页面。
  * Print preference page.
  */
-function printPreference()
+function printPreference(array $URSRList)
 {
     global $lang, $config;
+
+    $imageList = array();
+    $imageList['program-browse']  = 'list';
+    $imageList['program-project'] = 'list-recent';
+    $imageList['program-kanban']  = 'kanban';
+
+    $imageList['product-index']     = 'panel-recent-browse';
+    $imageList['product-all']       = 'list';
+    $imageList['product-dashboard'] = 'panel';
+    $imageList['product-browse']    = 'list-recent';
+    $imageList['product-kanban']    = 'kanban';
+
+    $imageList['project-browse']    = 'list';
+    $imageList['project-execution'] = 'list-recent';
+    $imageList['project-index']     = 'panel-recent-browse';
+    $imageList['project-kanban']    = 'kanban';
+
+    $imageList['execution-all']             = 'list';
+    $imageList['execution-task']            = 'list-recent';
+    $imageList['execution-executionkanban'] = 'kanban';
+
+    $URSRItems = array();
+    foreach($URSRList as $URSRKey => $URSRValue)
+    {
+        $contentHtml = "<div class=''><span class='label light-pale circle mr-4'>{$URSRKey}</span>{$URSRValue}</div>";
+        $URSRItems[] = array('value' => $URSRKey, 'text' => $URSRValue, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border p-4 preference-box'));
+    }
+
+    foreach(array('program', 'product', 'project', 'execution') as $objectType)
+    {
+        $itemsName    = $objectType . 'Items';
+        $linkListName = $objectType . 'LinkList';
+
+        $$itemsName = array();
+        foreach($lang->my->$linkListName as $value => $label)
+        {
+            list($title, $desc) = explode('/', $label);
+
+            $contentHtml    = "<div class='basis-20'><img src='theme/default/images/guide/{$imageList[$value]}.png' /></div><div class='pl-2 col justify-around'><div class='text-black'>{$title}</div><div class='text-gray text-sm'>{$desc}</div></div>";
+            ${$itemsName}[] = array('value' => $value, 'text' => $title, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border no-wrap pl-1 py-4 preference-box'));
+        }
+    }
 
     return div
     (
@@ -29,58 +71,60 @@ function printPreference()
             set::actions(array('submit')),
             formGroup
             (
-                set::value($config->URSR),
                 set::label($lang->my->storyConcept),
-                set::name('URSR'),
-                set::control(array
+                picker
                 (
-                    'type'  => 'picker',
-                    'items' => $config->URSRList
-                ))
+                    set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu')),
+                    set::name('URSR'),
+                    set::required(true),
+                    set::items($URSRItems),
+                    set::value($config->URSR)
+                )
             ),
             in_array($config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
-                set::value($config->programLink),
                 set::label($lang->my->programLink),
-                set::name('programLink'),
-                set::control(array
+                picker
                 (
-                    'type'  => 'picker',
-                    'items' => $lang->my->programLinkList
-                ))
+                    set::name('programLink'),
+                    set::required(true),
+                    set::items($programItems),
+                    set::value($config->programLink)
+                )
             ) : null,
             formGroup
             (
-                set::value($config->productLink),
                 set::label($lang->my->productLink),
-                set::name('productLink'),
-                set::control(array
+                picker
                 (
-                    'type'  => 'picker',
-                    'items' => $lang->my->productLinkList
-                ))
+                    set::name('productLink'),
+                    set::required(true),
+                    set::items($productItems),
+                    set::value($productLink)
+                )
             ),
             $config->vision != 'or' ? formGroup
             (
-                set::value($config->projectLink),
                 set::label($lang->my->projectLink),
-                set::name('projectLink'),
-                set::control(array
+                picker
                 (
-                    'type'  => 'picker',
-                    'items' => $lang->my->projectLinkList
-                ))
+                    set::name('projectLink'),
+                    set::required(true),
+                    set::items($projectItems),
+                    set::value($projectLink)
+                )
+
             ) : null,
             $config->vision != 'or' ? formGroup
             (
-                set::value($config->executionLink),
                 set::label($lang->my->executionLink),
-                set::name('executionLink'),
-                set::control(array
+                picker
                 (
-                    'type'  => 'picker',
-                    'items' => $lang->my->executionLinkList
-                ))
+                    set::name('executionLink'),
+                    set::required(true),
+                    set::items($executionItems),
+                    set::value($executionLink)
+                )
             ) : null
         )
     );

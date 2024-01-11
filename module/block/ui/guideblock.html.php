@@ -56,7 +56,7 @@ $getGuideTabs = function(string $blockNavCode): array
  * @param  string $blockNavCode
  * @return array
  */
-$getGuideInfo = function($blockNavID): array
+$getGuideInfo = function($blockNavID, $URSRList): array
 {
     global $lang;
 
@@ -70,7 +70,7 @@ $getGuideInfo = function($blockNavID): array
         (
             set('class', 'tab-pane h-full' . ($tab == $selected ? ' active' : '')),
             set('id', "tab{$blockNavID}Content{$tab}"),
-            $function()
+            $function($URSRList)
         );
     }
 
@@ -123,7 +123,7 @@ blockPanel
         (
             set('class', 'tab-content'),
             set('width', '82%'),
-            $getGuideInfo($blockNavCode)
+            $getGuideInfo($blockNavCode, $URSRList)
         )
     )
 );

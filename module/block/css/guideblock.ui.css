@@ -32,3 +32,8 @@
 .guide-block .block:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
 .guide-block .block.active {box-shadow: 0 0 0 2px #2E7FFF; border-radius: 2px;}
 
+.picker-menu-list .menu-item>a.active, .picker-menu-list .menu-item>a.hover, .picker-menu-list .menu-item>a:hover{background: unset}
+.picker-menu-list .menu-item>a.active .preference-box{background: var(--menu-active-bg); color: var(--menu-active-color)}
+.picker-menu-list .menu-item>a:hover .preference-box, .picker-menu-list .menu-item>a.hover .preference-box{background: var(--menu-active-bg); color: var(--menu-active-color); box-shadow: 0px 0px 1px 1px #2E7FFF;}
+.picker-menu-list .menu-item>a.active .preference-box .label, .picker-menu-list .menu-item>a:hover .preference-box .label, .picker-menu-list .menu-item>a.hover .preference-box .label{background: var(--menu-active-bg); color: var(--menu-active-color);}
+.ursr-menu > li{width: 50%;}
