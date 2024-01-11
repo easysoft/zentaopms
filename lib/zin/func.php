@@ -16,6 +16,7 @@ require_once __DIR__ . DS . 'core' . DS . 'h.func.php';
 require_once __DIR__ . DS . 'core' . DS . 'render.func.php';
 require_once __DIR__ . DS . 'zui' . DS . 'zui.func.php';
 require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
+require_once __DIR__ . DS . 'zentao' . DS . 'field.func.php';
 require_once __DIR__ . DS . 'zentao' . DS . 'bind.class.php';
 
 /* Form */
