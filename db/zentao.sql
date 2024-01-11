@@ -15735,7 +15735,7 @@ CREATE TABLE `zt_demand` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `pool` int(8) NOT NULL DEFAULT '0',
   `module` int(8) NOT NULL DEFAULT '0',
-  `product` mediumint(8) NOT NULL DEFAULT '0',
+  `product` varchar(255) NOT NULL DEFAULT '',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `pri` char(30) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
