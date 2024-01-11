@@ -54,6 +54,9 @@ foreach($projects as $programID => $programProjects)
         $item['text']  = $project->name;
         $item['icon']  = $project->model == 'scrum' ? 'sprint' : $project->model;
         $item['keys']  = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
+        $item['url']   = sprintf($link, $project->id);
+
+        if(empty($project->multiple) || $project->type == 'kanban') $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
 
         if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
         $data[$group][$programID]['items'][] = $item;
@@ -80,7 +83,6 @@ $json = array();
 $json['data']       = $data;
 $json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
-$json['link']       = array('project' => sprintf($link, '{id}'));
 $json['labelMap']   = array('program' => $lang->program->common);
 $json['expandName'] = 'closed';
 $json['itemType']   = 'project';
