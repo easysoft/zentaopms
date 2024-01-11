@@ -1188,13 +1188,17 @@ class blockZen extends block
      * 打印瀑布项目计划甘特图区块。
      * Print waterfall gantt block.
      *
+     * @param  object    $block
+     * @param  array     $params
      * @access protected
      * @return void
      */
-    protected function printWaterfallGanttBlock(): void
+    protected function printWaterfallGanttBlock(object $block, array $params = array()): void
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($this->session->project);
         $productID = $this->session->product ? $this->session->product : 0;
+        if(isset($params['productID'])) $productID = (int)$params['productID'];
+
         $productID = isset($products[$productID]) ? $productID : key($products);
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->project, $productID, 0, 'task', false);

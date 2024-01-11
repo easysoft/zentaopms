@@ -306,7 +306,7 @@ $config->block->size['scrumproject']['scrumtest']      = array(2 => 6, 1 => 6);
 $config->block->size['scrumproject']['sprint']         = array(1 => 3);
 $config->block->size['scrumproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 
-$config->block->size['waterfallproject']['waterfallgantt'] = array(2 => 5, 1 => 8);
+$config->block->size['waterfallproject']['waterfallgantt'] = array(2 => 8, 1 => 8);
 $config->block->size['waterfallproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 
 $config->block->size['execution']['overview']  = array(1 => 3);

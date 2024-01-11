@@ -1,0 +1,19 @@
+.gantt-product-tips {position: absolute; top: -32px; left: 250px; opacity: 0.5;}
+.gantt-product-tips i {vertical-align: middle;}
+.block-waterfallgantt > .panel-body {overflow: visible!important}
+.gantt-plans {padding: 20px 0 22px; max-height: 380px; overflow: hidden;}
+.gantt-plan {width: 70px; height: 50px; line-height: 50px}
+.gantt-plan div {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.gantt-container {left: 100px; top: 0; right: 0; bottom: -10px; overflow: auto; padding-top: 20px; max-height: 380px;}
+.gantt-canvas {border: 1px solid #dddee4; border-style: solid dotted; position: relative}
+.gantt-row {height: 50px; position: relative; z-index: 1}
+.gantt-row:hover {background-color: rgba(0,0,0,.05)}
+.gantt-bar {height: 15px; background: #dddee4; position: absolute; left: 0; top: 10px}
+.gantt-bar-progress {height: 15px; margin-bottom: 5px}
+.gantt-task-info {white-space: nowrap; width: 100%; overflow: visible}
+.gantt-col {position: absolute; z-index: 0; top: 0; border-right: 1px dotted #dddee4}
+.gantt-col-time {position: absolute; top: -18px; left: 0}
+.gantt-today {position: absolute; top: -16px; left: 0; bottom: 0; border-left: #00da88 dotted 1px;}
+.gantt-today > div {position: absolute; top: 0; left: 0; font-size: 12px; line-height: 14px; padding: 0 3px; background: #00da88; color: #fff; white-space: nowrap; z-index: 10;}
+.waterfall-gantt {position: relative}
+.waterfall-gantt .picker {position: absolute; top: -39px; left: 120px; width: 150px!important}
