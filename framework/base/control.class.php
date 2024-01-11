@@ -1025,6 +1025,12 @@ class baseControl
         /* 将 hooks 文件添加到当前 context 中。 */
         if(!empty($hookFiles)) \zin\context::current()->addHookFiles($hookFiles);
 
+        /* 加载 common.field.php 和 method.field.php。 */
+        $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
+        $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
+        include $commonFieldFile;
+        include $methodFieldFile;
+
         ob_start();
         include $viewFile;
 
