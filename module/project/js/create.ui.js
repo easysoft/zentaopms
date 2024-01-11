@@ -53,21 +53,24 @@ window.productChange = function(target)
 {
     loadBranches(target);
 
-    let current    = $(target).val();
-    let last       = $(target).attr('last');
-    let lastBranch = $(target).attr('data-lastBranch');
+    let $this       = $(target);
+    let current     = $this.val();
+    let last        = $this.attr('last');
+    let lastBranch  = $this.attr('data-lastBranch');
+    let $newProduct = $this.closest('.productBox').find('[name=newProduct]').closest('.checkbox-primary').parent();
 
-    $(target).attr('data-last', current);
+    if($newProduct.length > 0) $newProduct.toggleClass('hidden', current > 0);
+    $this.attr('data-last', current);
 
-    let $branch = $(target).closest('.has-branch').find("[name^='branch']");
+    let $branch = $this.closest('.has-branch').find("[name^='branch']");
     if($branch.length)
     {
         let branchID = $branch.val();
-        $(target).attr('data-lastBranch', branchID);
+        $this.attr('data-lastBranch', branchID);
     }
     else
     {
-        $(target).removeAttr('data-lastBranch');
+        $this.removeAttr('data-lastBranch');
     }
 
     let chosenProducts = 0;
@@ -108,7 +111,7 @@ $(document).on('click', '#copyProjects button', function()
  */
 function setCopyProject(copyProjectID)
 {
-    const programID = $('#parent').val();
+    const programID = $('[name=parent]').val();
     loadPage($.createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID));
 }
 

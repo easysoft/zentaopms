@@ -47,10 +47,10 @@ if(!empty($products))
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
                 set('id', 'linkProduct'),
-                set::required(true),
                 $i == 0 ? set::label($lang->project->manageProductPlan) : set::label(''),
                 inputGroup
                 (
+                    $programID ? setClass('required') : null,
                     div
                     (
                         setClass('grow'),
@@ -72,6 +72,7 @@ if(!empty($products))
                 $hasBranch ? null : setClass('hidden'),
                 inputGroup
                 (
+                    $programID ? setClass('required') : null,
                     $lang->product->branchName['branch'],
                     picker
                     (
@@ -433,6 +434,7 @@ formPanel
             inputGroup
             (
                 $lang->product->branchName['branch'],
+                $programID ? setClass('required') : null,
                 div
                 (
                     setClass('grow'),
@@ -586,16 +588,13 @@ if(!empty($copyProjects))
 {
     foreach($copyProjects as $id => $name)
     {
-        $copyProjectsBox[] = btn(
+        $copyProjectsBox[] = btn
+        (
             setClass('project-block justify-start'),
             setClass($copyProjectID == $id ? 'primary-outline' : ''),
             set('data-id', $id),
             set('data-pinyin', zget($copyPinyinList, $name, '')),
-            icon
-            (
-                setClass('text-gray'),
-                $lang->icons['project']
-            ),
+            icon(setClass('text-gray'), $lang->icons['project']),
             span($name, set::title($name))
         );
     }
@@ -603,15 +602,15 @@ if(!empty($copyProjects))
 else
 {
     $copyProjectsBox[] = div
+    (
+        setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
+        icon('exclamation-sign icon-2x pl-2 text-warning'),
+        span
         (
-            setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
-            icon('exclamation-sign icon-2x pl-2 text-warning'),
-            span
-            (
-                set::className('font-bold ml-2'),
-                $lang->project->copyNoProject
-            )
-        );
+            set::className('font-bold ml-2'),
+            $lang->project->copyNoProject
+        )
+    );
 }
 
 modalTrigger
