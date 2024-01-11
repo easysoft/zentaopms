@@ -373,7 +373,6 @@ class actionTao extends actionModel
         elseif($type == 'project')
         {
             $project = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name, model, multiple');
-            if(empty($project->multiple)) return false;
 
             $name = $project->name;
             if($project->model == 'kanban') $method = 'kanban';
