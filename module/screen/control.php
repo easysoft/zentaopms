@@ -23,8 +23,12 @@ class screen extends control
         $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
         $this->checkShowGuide();
 
+        $screens = $this->screen->getList($dimensionID);
+        $screens = $this->screen->getThumbnail($screens);
+        $screens = $this->screen->removeScheme($screens);
+
         $this->view->title      = $this->lang->screen->common;
-        $this->view->screens    = $this->screen->getList($dimensionID);
+        $this->view->screens    = $screens;
         $this->view->dimension  = $dimensionID;
         $this->display();
     }

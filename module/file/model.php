@@ -67,6 +67,30 @@ class fileModel extends model
     }
 
     /**
+     * Delete files by object.
+     *
+     * @param  string    $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function deleteByObject($objectType, $objectID)
+    {
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+
+        foreach($files as $file)
+        {
+            $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
      * Get info of a file.
      *
      * @param  int    $fileID
@@ -261,10 +285,11 @@ class fileModel extends model
      * get uploaded file from zui.uploader.
      *
      * @param  string $htmlTagName
+     * @param  string $name
      * @access public
      * @return array
      */
-    public function getUploadFile($htmlTagName = 'file')
+    public function getUploadFile($htmlTagName = 'file', $name = '')
     {
         if(!isset($_FILES[$htmlTagName]) || empty($_FILES[$htmlTagName]['name'])) return;
 
@@ -275,7 +300,7 @@ class fileModel extends model
 
         extract($_FILES[$htmlTagName]);
         if(!validater::checkFileName($name)) return array();
-        if($this->post->name) $name = $this->post->name;
+        if(empty($name) && $this->post->name) $name = $this->post->name;
 
         $file = array();
         $file['id'] = 0;

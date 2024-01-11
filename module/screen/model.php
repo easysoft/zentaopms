@@ -51,11 +51,48 @@ class screenModel extends model
     {
         $hasUsageReport = $this->config->edition !== 'open';
 
-        return $this->dao->select('*')->from(TABLE_SCREEN)
+        $screens = $this->dao->select('*')->from(TABLE_SCREEN)
             ->where('dimension')->eq($dimensionID)
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$hasUsageReport)->andWhere('id')->ne(1001)->fi()
             ->fetchAll('id');
+
+        return $screens;
+    }
+
+    /**
+     * Get screen thumbnail.
+     *
+     * @param  array    $screens
+     * @access public
+     * @return array
+     */
+    public function getThumbnail($screens)
+    {
+        foreach($screens as $screen)
+        {
+            $images = $this->loadModel('file')->getByObject('screen', $screen->id);
+            if(empty($images)) continue;
+
+            $image = end($images);
+            $screen->cover = helper::createLink('file', 'read', "fileID={$image->id}", 'png');
+        }
+
+        return $screens;
+    }
+
+    /**
+     * Remove scheme field of screen.
+     *
+     * @param  array    $screens
+     * @access public
+     * @return array
+     */
+    public function removeScheme($screens)
+    {
+        foreach($screens as $screen) unset($screen->scheme);
+
+        return $screens;
     }
 
     /**
