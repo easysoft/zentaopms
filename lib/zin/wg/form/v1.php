@@ -244,9 +244,9 @@ class form extends formBase
                 'const $ele = $(event.target);',
                 'Object.keys(autoLoad).forEach(selector => ',
                 '{',
+                    'const setting = autoLoad[selector];',
                     'if(!".[#".includes(selector[0])) selector = `[name="${selector}"]`;',
                     'if(!$ele.closest(selector).length) return;',
-                    'const setting = autoLoad[selector];',
                     'loadForm($.extend({target: $ele}, typeof setting === "string" ? {items: setting} : setting));',
                 '});'
             )));
