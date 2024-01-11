@@ -292,7 +292,7 @@ class taskTao extends taskModel
             }
 
             /* Check left hours. */
-            if(!$left) dao::$errors["left[$id]"] = $this->lang->task->error->left;
+            if($left === '') dao::$errors["left[$id]"] = $this->lang->task->error->left;
             if(!is_numeric($left)) dao::$errors["left[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
             if(is_numeric($left) && $left < 0) dao::$errors["left[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->left, '0');
         }
