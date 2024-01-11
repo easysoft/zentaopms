@@ -30,6 +30,7 @@ $reviewed   = $lang->noData;
 $reviewedBy = explode(',', $story->reviewedBy);
 if(count($reviewedBy) > 1)
 {
+    $reviewed = '';
     foreach($reviewedBy as $account) $reviewed .= ' ' . zget($users, trim($account));
 }
 
