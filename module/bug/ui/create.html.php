@@ -11,7 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include './create.item.php';
+$fields = useFields('bug.create');
+
+if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
 jsVar('bug',                   $bug);
 jsVar('moduleID',              $bug->moduleID);
@@ -20,22 +22,22 @@ jsVar('createRelease',         $lang->release->create);
 jsVar('refresh',               $lang->refreshIcon);
 jsVar('projectExecutionPairs', $projectExecutionPairs);
 
-$loadRule = array();
-$loadRule['product']   = 'product,module,openedBuild,execution,project,story,task,assignedTo';
-$loadRule['branch']    = 'module,openedBuild,execution,project,story,task,assignedTo';
-$loadRule['module']    = 'assignedTo,story';
-$loadRule['project']   = 'openedBuild,execution,story,task,assignedTo';
-$loadRule['execution'] = 'openedBuild,story,task,assignedTo';
-$loadRule['region']    = 'lane';
+$autoLoad = array();
+$autoLoad['product']   = 'product,module,openedBuild,execution,project,story,task,assignedTo';
+$autoLoad['branch']    = 'module,openedBuild,execution,project,story,task,assignedTo';
+$autoLoad['module']    = 'assignedTo,story';
+$autoLoad['project']   = 'openedBuild,execution,story,task,assignedTo';
+$autoLoad['execution'] = 'openedBuild,story,task,assignedTo';
+$autoLoad['region']    = 'lane';
 
 formGridPanel
 (
+    set::title($lang->bug->create),
+    set::fields($fields),
     set::loadUrl($loadUrl),
-    set::loadRule($loadRule),
+    set::autoLoad($autoLoad),
     on::click('#allBuilds',             'loadAllBuilds'),
     on::click('#allUsers',              'loadAllUsers'),
     on::click('#refreshExecutionBuild', 'refreshExecutionBuild'),
     on::click('#refreshProductBuild',   'refreshProductBuild'),
-    set::title($lang->bug->create),
-    set::items($items)
 );
