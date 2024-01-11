@@ -100,6 +100,7 @@ foreach($hasViewPriv as $type => $bool)
         }
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
+    if($type == 'requirement') $config->block->story->dtable->fieldList['title']['title'] = str_replace($lang->story->story, $lang->story->requirement, $lang->story->title);
 
     $selected  = key($hasViewPriv);
     $contents[] = div
