@@ -197,6 +197,58 @@ class dataset
     }
 
     /**
+     * Add data to map.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @param mixed  $map           Map data.
+     * @return dataset
+     */
+    public function addToMap(string $prop, object|array $map): dataset
+    {
+        if($map instanceof dataset) $map = $map->toArray();
+        elseif(is_object($map)) $map = get_object_vars($map);
+        elseif(!is_array($map)) return $this;
+
+        $this->set($prop, array_merge($this->get($prop, array()), $map));
+        return $this;
+    }
+
+    /**
+     * Get map value by name, if not exists, return an empty array.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @return array
+     */
+    public function getMap(string $prop): array
+    {
+        return $this->get($prop, array());
+    }
+
+    /**
+     * Remove value from map.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @param mixed  $keys          Map keys.
+     * @return mixed
+     */
+    public function removeFromMap(string $prop, string|array $keys)
+    {
+        $map = $this->getMap($prop);
+        if(is_string($keys))
+        {
+            unset($map[$keys]);
+        }
+        elseif(is_array($keys))
+        {
+            foreach($keys as $key) unset($map[$key]);
+        }
+        return $this->set($prop, $map);
+    }
+
+    /**
      * Add value to array list.
      *
      * @access public
@@ -209,8 +261,29 @@ class dataset
         if(!is_array($values)) $values = array($values);
 
         $list = $this->getList($prop);
-        $this->set($prop, array_merge($list, $values));
-        return $this;
+        return $this->set($prop, array_merge($list, $values));
+    }
+
+    /**
+     * Remove value from array list.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @param mixed  $keys          Array list keys.
+     * @return mixed
+     */
+    public function removeFromList(string $prop, string|array $keys): dataset
+    {
+        $list = $this->getList($prop);
+        if(is_string($keys))
+        {
+            unset($list[$keys]);
+        }
+        elseif(is_array($keys))
+        {
+            foreach($keys as $key) unset($list[$key]);
+        }
+        return $this->set($prop, $list);
     }
 
     /**
