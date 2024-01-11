@@ -49,11 +49,17 @@ class tree extends control
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
         }
 
+        /* 无产品项目也可以维护模块。 */
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+            $this->view->projectID = $this->session->project;
+        }
+
         if($viewType == 'feedback' or $viewType == 'ticket')
         {
             $syncConfig             = json_decode($this->config->global->syncProduct, true);
             $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
-
         }
 
         $this->view->title           = $viewType == 'host' ? $this->lang->host->groupMaintenance : $this->lang->tree->manage;
