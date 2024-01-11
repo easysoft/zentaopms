@@ -56,8 +56,8 @@ $lang->story->caseCount          = 'CasTests';
 $lang->story->taskCountAB        = 'T';
 $lang->story->bugCountAB         = 'B';
 $lang->story->caseCountAB        = 'C';
-$lang->story->linkStory          = 'Lier Requirement';
-$lang->story->unlinkStory        = "Dissocier {$lang->URCommon}";
+$lang->story->linkStory          = "Lier {$lang->SRCommon}";
+$lang->story->unlinkStory        = "Dissocier {$lang->SRCommon}";
 $lang->story->linkStoriesAB      = "Lier {$lang->SRCommon}";
 $lang->story->linkRequirementsAB = "Lier {$lang->URCommon}";
 $lang->story->export             = "Exporter Données";
@@ -461,8 +461,8 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choisir valideur';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed           = 'La Story que vous avez sélectionnée est malheureusement fermée !';
-$lang->story->notice->reviewerNotEmpty = 'This requirement needs to be reviewed, and the reviewedby is required.';
+$lang->story->notice->closed           = "La {$lang->SRCommon} que vous avez sélectionnée est malheureusement fermée !";
+$lang->story->notice->reviewerNotEmpty = "This {$lang->SRCommo} needs to be reviewed, and the reviewedby is required.";
 $lang->story->notice->changePlan       = 'The plan can be changed to only one item.';
 
 $lang->story->convertToTask = new stdClass();
